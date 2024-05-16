@@ -12,67 +12,34 @@
                 {{ questions[indexQuestion].title }}
             </p>
             <template v-if="questions[indexQuestion].image != null">
-                <img
-                    class="image_question"
-                    :src="questions[indexQuestion].image"
-                    alt="question photo"
-                />
+                <img class="image_question" :src="questions[indexQuestion].image" alt="question photo" />
             </template>
-            <template
-                v-if="questions[indexQuestion].answer_options[0].image != null"
-            >
-                <div
-                    class="radio_field"
-                    v-for="(answ, index) in questions[indexQuestion]
-                        .answer_options"
-                    :key="index"
-                >
+            <template v-if="questions[indexQuestion].answer_options[0].image != null">
+                <div class="radio_field" v-for="(answ, index) in questions[indexQuestion]
+                    .answer_options" :key="index">
                     <div>
-                        <input
-                            class="radio_button"
-                            type="radio"
-                            :id="index"
-                            :value="index"
-                            name="answers"
-                            v-model="choosenAnswer"
-                        />
+                        <input class="radio_button" type="radio" :id="index" :value="index" name="answers"
+                            v-model="choosenAnswer" />
                     </div>
                     <label :for="index">
-                        <img
-                            class="image_answer"
-                            :src="answ.image"
-                            alt="answer photo"
-                        />
+                        <img class="image_answer" :src="answ.image" alt="answer photo" />
                     </label>
                 </div>
             </template>
-            <div
-                v-else
-                class="radio_field"
-                v-for="(answ, index) in questions[indexQuestion].answer_options"
-                :key="index"
-            >
+            <div v-else class="radio_field" v-for="(answ, index) in questions[indexQuestion].answer_options"
+                :key="index">
                 <div>
-                    <input
-                        class="radio_button"
-                        type="radio"
-                        :id="index"
-                        :value="index"
-                        name="answers"
-                        v-model="choosenAnswer"
-                    />
+                    <input class="radio_button" type="radio" :id="index" :value="index" name="answers"
+                        v-model="choosenAnswer" />
                 </div>
                 <label :for="index" class="answer_text">{{ answ.text }}</label>
             </div>
 
             <div class="button">
-                <button
-                    @click="onAction"
-                    :class="{
-                        submit_button: selected,
-                        inactive_button: !selected,
-                    }"
-                >
+                <button @click="onAction" :class="{
+                    submit_button: selected,
+                    inactive_button: !selected,
+                }">
                     Ответить
                 </button>
             </div>
@@ -113,18 +80,14 @@
                 </p>
                 <div class="border_result" v-if="status.best_score > 0">
                     <p class="text_result">
-                        <template v-if="status.left_attempts == 2"
-                            >Ваш результат:
-                            {{ status.best_score }} баллов</template
-                        >
-                        <template v-else
-                            >Ваш лучший результат:
-                            {{ status.best_score }} баллов</template
-                        >
+                        <template v-if="status.left_attempts == 2">Ваш результат:
+                            {{ status.best_score }} баллов</template>
+                        <template v-else>Ваш лучший результат:
+                            {{ status.best_score }} баллов</template>
                     </p>
                 </div>
                 <div class="start_button">
-                    <button @click="onStart" class="submit_button">
+                    <button @click="onStart" :class="{ submit_button: !stoppedTest, inactive_button: stoppedTest }">
                         Начать тестирование
                     </button>
                 </div>
@@ -175,12 +138,15 @@ const choosenAnswer = ref(null);
 const started = ref(false);
 const solved = ref(false);
 
+const stoppedTest = ref(true);
+
 const status = ref({
     left_attempts: null,
     best_score: null,
 });
 
 const onStart = async () => {
+    if (stoppedTest.value) return;
     started.value = true;
     try {
         const { data } = await HTTP.get(
@@ -292,15 +258,18 @@ onMounted(async () => {
     height: auto;
     padding-left: 16px;
 }
+
 .image_question {
     max-width: 250px;
     height: auto;
     margin-bottom: 40px;
 }
+
 .solved__wrapper {
     display: flex;
     flex-direction: column;
 }
+
 .border_result_finally {
     margin: 0 auto;
     text-align: center;
@@ -310,6 +279,7 @@ onMounted(async () => {
     margin-bottom: 214px;
     margin-top: 20px;
 }
+
 .border_result {
     margin: 0 auto;
     text-align: center;
@@ -319,6 +289,7 @@ onMounted(async () => {
     margin-bottom: 60px;
     margin-top: 20px;
 }
+
 .text_result {
     display: inline-block;
     font-family: Akrobat;
@@ -327,12 +298,15 @@ onMounted(async () => {
     line-height: 22px;
     text-align: center;
 }
+
 .text_result:first-child {
     margin-bottom: 32px;
 }
+
 .container {
     margin: 0 auto;
 }
+
 .main_title {
     padding-bottom: 40px;
 
@@ -343,6 +317,7 @@ onMounted(async () => {
     text-align: left;
     color: #35383f;
 }
+
 .subtitle {
     font-family: Akrobat;
     font-size: 24px;
@@ -351,6 +326,7 @@ onMounted(async () => {
     text-align: left;
     color: #35383f;
 }
+
 .question_text {
     margin-bottom: 40px;
     color: #35383f;
@@ -362,6 +338,7 @@ onMounted(async () => {
     letter-spacing: 0em;
     text-align: left;
 }
+
 .answer_text {
     padding-left: 16px;
 
@@ -372,11 +349,13 @@ onMounted(async () => {
     letter-spacing: 0em;
     text-align: left;
 }
+
 .radio_field {
     display: flex;
     flex-wrap: nowrap;
     margin-bottom: 24px;
 }
+
 .inactive_button {
     cursor: not-allowed;
     border-radius: 10px;
@@ -384,19 +363,14 @@ onMounted(async () => {
     padding: 16px 32px;
     color: #fff;
 }
-.inactive_button {
-    cursor: not-allowed;
-    border-radius: 10px;
-    background: grey;
-    padding: 16px 32px;
-    color: #fff;
-}
+
 .submit_button {
     border-radius: 10px;
     background: #39bfbf;
     padding: 16px 32px;
     color: #fff;
 }
+
 .button {
     margin-top: 80px;
     font-size: 16px;
@@ -406,6 +380,7 @@ onMounted(async () => {
     text-align: center;
     margin-bottom: 60px;
 }
+
 .start_button {
     margin-top: 60px;
     font-size: 16px;
@@ -415,6 +390,7 @@ onMounted(async () => {
     text-align: center;
     margin-bottom: 224px;
 }
+
 .button_result {
     font-size: 16px;
     font-style: normal;
@@ -423,10 +399,12 @@ onMounted(async () => {
     text-align: center;
     margin-bottom: 60px;
 }
+
 .line {
     display: flex;
     justify-content: space-between;
 }
+
 .curr_question {
     color: #b6b6b6;
 
@@ -436,7 +414,9 @@ onMounted(async () => {
     letter-spacing: 0em;
     text-align: right;
 }
-input[type='radio'] + label {
-    word-wrap: break-word; /* автоматически перемещает слова на следующую строку при необходимости */
+
+input[type='radio']+label {
+    word-wrap: break-word;
+    /* автоматически перемещает слова на следующую строку при необходимости */
 }
 </styel>
