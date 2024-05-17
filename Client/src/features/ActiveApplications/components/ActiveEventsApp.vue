@@ -1,6 +1,6 @@
 <template>
     <p v-if="loading">Загрузка...</p>
-    <p v-else-if="!loading && (!eventsList.length || !groupEventsList.length)">Список заявок пуст</p>
+    <p v-else-if="!loading && (!eventsList.length && !groupEventsList.length)">Список заявок пуст</p>
     <template v-else>
         <div class="participants__actions">
             <div class="participants__actions-select mr-3">
