@@ -26,14 +26,19 @@
                     @update:value="changeOption"></Select>
                 <!-- {{ positionMember }} -->
             </div>
+            <div class="member__block">
+                <div class="member__confidant">
+                    <FormCheckbox label="Доверенное лицо" :id="item.id" :value="item.user.last_name"
+                        v-model:checked="confidant" @update:checked="changeConfidant"></FormCheckbox>
 
-            <div class="member__confidant">
-                <FormCheckbox label="Доверенное лицо" :id="item.id" :value="item.user.last_name"
-                    v-model:checked="confidant" @update:checked="changeConfidant"></FormCheckbox>
+                </div>
+                <div v-if="roleStore.roles.detachment_commander?.id" class="member__delete"
+                    @click="deleteMember(item.id)">
+                    <img src="@app/assets/closeDel.png" alt="del">
+                </div>
             </div>
-            <div v-if="roleStore.roles.detachment_commander?.id" class="member__delete" @click="deleteMember(item.id)">
-                <img src="@app/assets/closeDel.png" alt="del">
-            </div>
+
+
         </div>
 
 

@@ -14,7 +14,7 @@
                         name: 'editAction',
                         params: { id: eventsStore.event.id },
                     }" class="user-data__link">Редактировать мероприятие</router-link>
-                    <Button
+                    <!-- <Button
                         v-else-if="(!eventsStore.status.is_participant && !eventsStore.status.is_applicant) && eventsStore.event.application_type === 'Персональная'"
                         class="form-button" type="button" @click="AddApplication()" label="Подать заявку" variant="text"
                         size="large"></Button>
@@ -28,7 +28,11 @@
                         v-else-if="(!eventsStore.status.is_participant && !eventsStore.status.is_applicant) && eventsStore.event.application_type === 'Мультиэтапная'"
                         :to="{ name: 'MultiStageSubmit' }">
                         <Button class="form-button" type="button" label="Подать заявку" variant="text"
-                            size="large"></Button></router-link>
+                            size="large"></Button></router-link> -->
+
+                    <Button v-else-if="(!eventsStore.status.is_participant && !eventsStore.status.is_applicant)"
+                        class="form-button" type="button" @click="AddApp()" label="Подать заявку" variant="text"
+                        size="large"></Button>
 
                     <Button v-else-if="eventsStore.status.is_applicant" type="button"
                         class="form-button form-button--grey" variant="text" label="Заявка на рассмотрении"
@@ -38,6 +42,7 @@
                         Вы участник
                     </div>
                 </div>
+                <modalErrorEvent v-show="showModal === true" :commander="comName" @close="close"></modalErrorEvent>
             </div>
             <h2 class="title event_about">О мероприятии</h2>
             <div class="d-flex">
@@ -47,57 +52,84 @@
             <div class="text event_type_wrap">
                 {{ eventsStore.event.description }}
             </div>
+            <div class="wrap">
+                <div class="wrap__item">
 
-            <div class="event">
-                <div class="event-cols-2">
-                    <img src="@app/assets/icon_items/list.svg" class="mr-3" alt="" />
-                    Форма заявки: {{ eventsStore.event.application_type }}
+                    <div class="event-cols-2">
+                        <img src="@app/assets/icon_items/list.svg" class="mr-3" alt="" />
+                        <div> Форма заявки: <p>{{ eventsStore.event.application_type }}</p>
+                        </div>
+
+
+                    </div>
+                    <div class="event-cols-2">
+                        <img src="@app/assets/icon_items/group.svg" class="mr-3" alt="" />
+                        <div> Планируемое число участников:
+                            <p>{{ eventsStore.event.participants_number }}</p>
+                        </div>
+
+                    </div>
+                    <div class="event-cols-2">
+                        <img src="@app/assets/icon_items/label.svg" class="mr-3" alt="" />
+                        <div> Адрес: <p>{{ eventsStore.event.address }}</p>
+                        </div>
+
+                    </div>
+                    <div class="event-cols-2">
+                        <img src="@app/assets/icon/linkRef.svg" class="mr-3 event-cols-2_ref" alt="linkRef" />
+                        <a :href="eventsStore.event.conference_link">Ссылка на мероприятие</a>
+                    </div>
+
+
                 </div>
-                <div class="event-cols-2">
-                    <img src="@app/assets/icon_items/clock.svg" class="mr-3" alt="" />
-                    Начало мероприятия:
-                    {{ eventsStore.event.time_data?.start_date }},
-                    {{ eventsStore.event.time_data?.start_time }}
+                <div class="wrap__item">
+                    <div class="event-cols-2">
+                        <img src="@app/assets/icon_items/clock.svg" class="mr-3" alt="" />
+
+                        <div>
+                            Начало мероприятия:
+                            <p>{{ eventsStore.event.time_data?.start_date }},
+                                {{ eventsStore.event.time_data?.start_time }}</p>
+                        </div>
+
+                    </div>
+                    <div class="event-cols-2">
+                        <img src="@app/assets/icon_items/clock.svg" class="mr-3" alt="g" />
+
+                        <div>
+                            Окончание мероприятия:
+                            <p>{{ eventsStore.event.time_data?.end_date }},
+                                {{ eventsStore.event.time_data?.end_time }}</p>
+                        </div>
+
+                    </div>
+                    <div class="event-cols-2">
+                        <img src="@app/assets/icon_items/clock.svg" class="mr-3" alt="" />
+
+                        <div>
+                            Начало регистрации:
+                            <p>{{ eventsStore.event.time_data?.start_date }},
+                                {{ eventsStore.event.time_data?.start_time }}</p>
+                        </div>
+
+                    </div>
+                    <div class="event-cols-2">
+                        <img src="@app/assets/icon_items/clock.svg" class="mr-3" alt="" />
+
+                        <div>
+                            Окончание регистрации:
+                            <p>{{ eventsStore.event.time_data?.registration_end_date }},
+                                {{ eventsStore.event.time_data?.registration_end_time }}</p>
+                        </div>
+
+                    </div>
                 </div>
+
+
+
             </div>
 
-            <div class="event">
-                <div class="event-cols-2">
-                    <img src="@app/assets/icon_items/group.svg" class="mr-3" alt="" />
-                    Планируемое число участников:
-                    {{ eventsStore.event.participants_number }}
-                </div>
-                <div class="event-cols-2">
-                    <img src="@app/assets/icon_items/clock.svg" class="mr-3" alt="g" />
-                    Окончание мероприятия:
-                    {{ eventsStore.event.time_data?.end_date }},
-                    {{ eventsStore.event.time_data?.end_time }}
-                </div>
-            </div>
-            <div class="event">
-                <div class="event-cols-2">
-                    <img src="@app/assets/icon_items/label.svg" class="mr-3" alt="" />
-                    Адрес: {{ eventsStore.event.address }}
-                </div>
-                <div class="event-cols-2">
-                    <img src="@app/assets/icon_items/clock.svg" class="mr-3" alt="" />
-                    Начало регистрации:
-                    {{ eventsStore.event.time_data?.start_date }},
-                    {{ eventsStore.event.time_data?.start_time }}
-                </div>
-            </div>
-            <div class="event">
-                <div class="event-cols-2">
-                    <img src="@app/assets/icon/linkRef.svg" class="mr-3 event-cols-2_ref" alt="linkRef" />
-                    <a :href="eventsStore.event.conference_link">Ссылка на мероприятие</a>
-                </div>
-                <div class="event-cols-2">
-                    <img src="@app/assets/icon_items/clock.svg" class="mr-3" alt="" />
-                    Окончание регистрации:
-                    {{ eventsStore.event.time_data?.registration_end_date }},
-                    {{ eventsStore.event.time_data?.registration_end_time }}
-                </div>
-            </div>
+
 
             <!-- Организаторы -->
             <div
@@ -298,10 +330,13 @@ import { useRegionalsStore } from '@features/store/regionals';
 import { useSquadsStore } from '@features/store/squads';
 import { useLocalsStore } from '@features/store/local';
 import { useEducationalsStore } from '@features/store/educationals';
+import { modalErrorEvent } from '@shared/components/dropdown';
 const route = useRoute();
 const router = useRouter();
 const { replaceTargetObjects } = usePage();
 const data = ref({});
+const comName = ref('');
+const showModal = ref(false);
 
 const picked = ref(true);
 const swal = inject('$swal');
@@ -318,6 +353,10 @@ const isAuth = ref(!!localStorage.getItem('Token'));
 const next = () => {
     eventsStore.getNextFilteredEvents();
 };
+const close = () => {
+    showModal.value = false;
+}
+
 const prev = () => {
     eventsStore.getFilteredEvents(
         eventsStore.event.scale,
@@ -397,8 +436,6 @@ const DetLevel = computed(() => {
     );
 });
 
-
-
 const isOrganizer = computed(() => {
     return eventsStore.organizators.find(
         (item) => item.organizer.id === userId.value,
@@ -408,6 +445,37 @@ const isOrganizer = computed(() => {
 const IsMember = computed(() => {
     return eventsStore.members.find((item) => item.user.id === userId.value);
 });
+
+const AddApp = () => {
+
+    if (eventsStore.event.application_type === 'Персональная') {
+        AddApplication()
+    }
+    if (eventsStore.event.application_type === 'Групповая') {
+        if ((eventsStore.event.available_structural_units === 'Отряды' && roleStore.roles.detachment_commander) || (eventsStore.event.available_structural_units === 'Образовательные штабы' && roleStore.roles.educationalheadquarter_commander	) || (eventsStore.event.available_structural_units === 'Окружные штабы' && roleStore.roles.districtheadquarter_commander) || (eventsStore.event.available_structural_units === 'Региональные штабы' && roleStore.roles.regionalheadquarter_commander) || (eventsStore.event.available_structural_units === 'Местные штабы' && roleStore.roles.localheadquarter_commander)) {
+            router.push({ name: 'GroupSubmit' })
+        } else {
+            showModal.value = true;
+            if (eventsStore.event.available_structural_units === 'Отряды') {
+                comName.value = 'Командир ЛСО';
+            } else if (eventsStore.event.available_structural_units === 'Образовательные штабы') {
+                comName.value = 'Командир СО ОО';
+            }
+            else if (eventsStore.event.available_structural_units === 'Региональные штабы') {
+                comName.value = 'Командир РШ';
+            }
+            else if (eventsStore.event.available_structural_units === 'Местные штабы') {
+                comName.value = 'Командир МШ';
+            }
+            else if (eventsStore.event.available_structural_units === 'Окружные штабы') {
+                comName.value = 'Командир ОШ';
+            }
+        }
+    }
+    if (eventsStore.event.application_type === 'Мультиэтапная') {
+        router.push({ name: 'MultiStageSubmit' })
+    }
+}
 
 const AddApplication = async () => {
     try {
@@ -490,6 +558,35 @@ watch(
 </script>
 
 <style lang="scss" scoped>
+.banner__wrap {
+    position: relative;
+
+}
+
+.wrap {
+    display: flex;
+    column-gap: 120px;
+
+    @media (max-width: 1024px) {
+        column-gap: 40px;
+    }
+
+    @media (max-width: 834px) {
+        flex-direction: column;
+        column-gap: 0px;
+        row-gap: 20px;
+    }
+
+    &__item {
+        display: flex;
+        flex-direction: column;
+        max-width: 443px;
+        row-gap: 20px;
+
+
+    }
+}
+
 .event {
     width: 100%;
     height: 40px;
@@ -526,6 +623,16 @@ watch(
             margin-bottom: 26px;
             font-family: 'Bert-Sans';
             word-wrap: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -moz-box;
+            height: 63px;
+            -moz-box-orient: vertical;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            line-clamp: 3;
+            box-orient: vertical;
         }
 
         &_date {
@@ -578,12 +685,30 @@ watch(
 
     &-cols-2 {
         display: flex;
-        flex-direction: row;
-        justify-content: start;
-        width: 48%;
-        height: 24px;
+        font-size: 18px;
+        font-family: Bert Sans;
+        color: #35383f;
+        font-weight: 400;
+        line-height: 23.74px;
+        div {
+            display: flex;
+            @media (max-width: 575px) {
+                display: block;
+                max-width: 292px;
+            }
+        }
+        p {
+            margin-left: 12px;
 
-        margin-right: 1%;
+            @media (max-width: 575px) {
+                margin-left: 5px;
+            }
+        }
+
+        @media (max-width: 575px) {
+            display: flex;
+            flex-wrap: wrap;
+        }
     }
 
     &-cols-2_ref {
@@ -669,7 +794,10 @@ watch(
     }
 
     @media (max-width: 430px) {
-        padding: 10px 32px;
+        padding: 5px 12px;
+        font-size: 14px;
+        font-family: Bert Sans;
+        max-width: 168px;
     }
 }
 

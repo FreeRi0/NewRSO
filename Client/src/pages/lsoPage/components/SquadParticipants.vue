@@ -5,45 +5,27 @@
             <nav class="squad__navigation">
                 <h3 class="squad-participants__title">Участники</h3>
                 <div class="d-flex">
-                    <Button
-                        type="button"
-                        label="Уже в отряде"
-                        class="memberBtn mr-2"
-                        :class="{ active: picked === true }"
-                        @click="picked = true"
-                    ></Button>
+                    <Button type="button" label="Уже в отряде" class="memberBtn mr-2"
+                        :class="{ active: picked === true }" @click="picked = true"></Button>
 
-                    <Button
-                        type="button"
-                        label="Ожидают одобрение"
-                        class="memberBtn"
-                        :class="{ active: picked === false }"
-                        @click="picked = false"
-                    ></Button>
+                    <Button type="button" label="Ожидают одобрение" class="memberBtn"
+                        :class="{ active: picked === false }" @click="picked = false"></Button>
                 </div>
             </nav>
             <div class="squad__wrapper">
                 <div class="squad__wrapper-container">
-                    <ParticipantsList
-                        v-if="picked === true"
-                        :participants="member.slice(0, 6)"
-                    />
-                    <VerifiedList
-                        v-else="picked === false"
-                        :verified="isVerified.slice(0, 6)"
-                    ></VerifiedList>
+                    <ParticipantsList v-if="picked === true" :participants="member.slice(0, 6)" />
+                    <VerifiedList v-else="picked === false" :verified="isVerified.slice(0, 6)"></VerifiedList>
                 </div>
                 <div v-if="props.member.length > 3 || isVerified.length > 6">
-                    <router-link
-                        :to="{
-                            name: 'allparticipants',
-                            params: { id: squad.id },
-                        }"
-                    >
+                    <router-link :to="{
+                        name: 'allparticipants',
+                        params: { id: squad.id },
+                    }">
                         <div class="squad__wrapper-route">
                             Показать всех
-                        </div></router-link
-                    >
+                        </div>
+                    </router-link>
                 </div>
             </div>
         </section>
@@ -110,6 +92,20 @@ onMounted(() => {
 
 <style scoped lang="scss">
 /* Табы */
+.notFound {
+    font-size: 18px;
+    font-family: 'Akrobat';
+
+    @media screen and (max-width: 768px) {
+        font-size: 16px;
+    }
+
+    @media screen and (max-width: 575px) {
+        font-size: 14px;
+        text-align: center;
+    }
+
+}
 
 .squad__navigation {
     display: flex;
@@ -125,15 +121,19 @@ onMounted(() => {
     background: #fff;
     box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.05);
     margin-bottom: 80px;
+
     @media screen and (max-width: 1024px) {
         padding: 24px 34px 24px 34px;
     }
+
     @media screen and (max-width: 768px) {
         padding: 24px 24px 24px 24px;
     }
+
     @media screen and (max-width: 575px) {
         padding: 24px 7px 24px 7px;
     }
+
     &-route {
         margin-top: 40px;
         text-align: center;
@@ -145,12 +145,15 @@ onMounted(() => {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
         grid-row-gap: 40px;
+
         @media screen and (max-width: 1024px) {
             grid-template-columns: 1fr 1fr 1fr 1fr;
         }
+
         @media screen and (max-width: 768px) {
             grid-template-columns: 1fr 1fr 1fr;
         }
+
         @media screen and (max-width: 575px) {
             grid-template-columns: 1fr 1fr;
         }
@@ -161,6 +164,7 @@ onMounted(() => {
     border-radius: 10px;
     box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.05);
 }
+
 .squad-participants__title {
     color: #212121;
     font-family: 'Akrobat';
@@ -180,6 +184,12 @@ onMounted(() => {
     padding: 7px 12px;
     margin: 7px;
     height: 38px;
+
+    @media (max-width: 575px) {
+        font-size: 14px;
+        font-family: 'Akrobat';
+    }
+
 }
 
 .active {
@@ -210,6 +220,7 @@ onMounted(() => {
 .squad-participants__list {
     margin-bottom: 40px;
 }
+
 .squad-participant_box {
     align-items: center;
     display: flex;
@@ -266,13 +277,16 @@ onMounted(() => {
 }
 
 @media (max-width: 660px) {
+
     .position-tab,
     .tab-position {
         position: static;
         margin-right: 8px;
     }
 }
+
 @media (max-width: 646px) {
+
     .already_in_squad,
     .wait_squad {
         grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -281,15 +295,18 @@ onMounted(() => {
 }
 
 @media (max-width: 612px) {
+
     .already_in_squad,
     .wait_squad {
         grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
         height: 212px;
     }
+
     .squad-participant_box img {
         padding: 8px 16px 0px 16px;
         max-width: 130px;
     }
+
     .squad-participant_box h5 {
         font-size: 20px;
         width: 130px;
@@ -297,12 +314,14 @@ onMounted(() => {
 }
 
 @media (max-width: 493px) {
+
     .already_in_squad,
     .wait_squad {
         grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
         height: 169px;
         padding: 16px;
     }
+
     .squad-participant_box h5 {
         font-size: 20px;
         width: 95.5px;
@@ -317,13 +336,16 @@ onMounted(() => {
         max-width: 95.5px;
     }
 }
+
 @media (max-width: 450px) {
-    .squad__navigation > label {
+    .squad__navigation>label {
         font-size: 16px;
         padding: 8px 15px;
     }
 }
+
 @media (max-width: 393px) {
+
     .already_in_squad,
     .wait_squad {
         grid-template-columns: repeat(auto-fill, minmax(95.5px, 1fr));
@@ -331,5 +353,4 @@ onMounted(() => {
     }
 }
 
-// /////////////////////////////////////////////////////////////////////////////////////
-</style>
+// /////////////////////////////////////////////////////////////////////////////////////</style>
