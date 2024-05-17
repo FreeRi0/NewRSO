@@ -41,7 +41,6 @@ export const useUserStore = defineStore('user', {
         },
 
         async getCountApp() {
-            if (Object.keys(this.count).length) return;
             try {
                 const responseCount = await HTTP.get(
                     'rsousers/me_notifications_count/',

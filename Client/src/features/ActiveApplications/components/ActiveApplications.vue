@@ -71,8 +71,9 @@ import { checkedReferencesItem } from '@entities/ReferencesPeoples';
 import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
 import { sortByEducation } from '@shared/components/selects';
+import { useUserStore } from "@features/store/index";
 import { ParticipantsList } from '@features/Participants/components';
-
+const userStore = useUserStore();
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
 const participantList = ref([]);
@@ -228,8 +229,10 @@ const onAction = async () => {
             if (action.value === 'Одобрить') {
 
                 await confirmApplication(application.user.id);
+                await userStore.getCountApp();
             } else {
                 await cancelApplication(application.user.id);
+                await userStore.getCountApp();
             }
 
                 participantList.value = participantList.value.filter(

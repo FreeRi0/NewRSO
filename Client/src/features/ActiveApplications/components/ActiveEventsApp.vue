@@ -349,9 +349,10 @@ const onAction = async () => {
         for (const application of selectedEventList.value) {
             if (action.value === "Одобрить") {
                 await confirmApplication(application.event.id, application.id);
-
+                await userStore.getCountApp();
             } else {
                 await cancelApplication(application.event.id, application.id);
+                await userStore.getCountApp();
             }
 
             eventsList.value = eventsList.value.filter((event) => event.id != application.id);
@@ -363,9 +364,10 @@ const onAction = async () => {
         for (const applicationGroup of selectedGroupEventsList.value) {
             if (action.value === "Одобрить") {
                 await confirmGroupApplication(applicationGroup.event.id, applicationGroup.id);
-
+                await userStore.getCountApp();
             } else {
                 await cancelGroupApplication(applicationGroup.event.id, applicationGroup.id);
+                await userStore.getCountApp();
             }
 
             groupEventsList.value = groupEventsList.value.filter((event) => event.id != applicationGroup.id);

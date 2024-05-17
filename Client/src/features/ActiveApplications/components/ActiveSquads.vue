@@ -72,10 +72,12 @@ import { ref, onMounted, onActivated, inject } from 'vue';
 import { enteredSquad } from '@entities/Squads/components';
 import { checkedEnteredSquadItem } from '@entities/Squads';
 import { useRoleStore } from '@layouts/store/role';
+import { useUserStore } from "@features/store/index";
 import { storeToRefs } from 'pinia';
 
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
+const userStore = useUserStore();
 const detachmentList = ref([]);
 const selectedDetachmentList = ref([]);
 const checkboxAll = ref(false);
@@ -217,11 +219,13 @@ const onAction = async () => {
                     roles.roles.value.detachment_commander?.id,
                     application.id,
                 );
+                await userStore.getCountApp();
             } else {
                 await cancelApplication(
                     roles.roles.value.detachment_commander?.id,
                     application.id,
                 );
+                await userStore.getCountApp();
             }
             detachmentList.value = detachmentList.value.filter(
                 (detachment) => detachment.id != application.id,
