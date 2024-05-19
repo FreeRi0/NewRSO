@@ -42,6 +42,7 @@ const roleStore = useRoleStore();
 
 
 const picked = ref('Верификация аккаунтов');
+
 const tabs = ref([
     {
         id: '1',
