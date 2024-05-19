@@ -2,16 +2,9 @@
     <div class="member">
         <ul class="member__wrapper">
             <template v-if="items.length > 0">
-                <ItemMember
-                    class="member__item"
-                    v-for="item in items"
-                    :key="item.id"
-                    :item="item"
-                    :functions="functions"
-                    :is-error-members="isErrorMembers"
-                    @update-member="onUpdateMember"
-                    @delete-member="onDeleteMember"
-                ></ItemMember>
+                <ItemMember class="member__item" v-for="item in items" :key="item.id" :item="item"
+                    :functions="functions" :is-error-members="isErrorMembers" @update-member="onUpdateMember"
+                    @delete-member="onDeleteMember"></ItemMember>
             </template>
 
             <p v-else>В {{ unit }} еще никто не вступил...</p>
@@ -119,17 +112,35 @@ const onDeleteMember = (memId) => {
         }
     }
 
+    &__block {
+        display: flex;
+        align-items: center;
+        column-gap: 12px;
+
+        @media (max-width: 1024px) {
+            column-gap: 8px;
+            width: 100%;
+
+        }
+    }
+
     &__wrap {
         display: flex;
         column-gap: 12px;
 
+        @media (max-width: 1024px) {
+            column-gap: 8px;
+            width: 100%;
+        }
+
         @media (max-width: 768px) {
             flex-wrap: wrap;
-            align-items: center;
+            width: 100%;
+            row-gap: 12px;
+
         }
 
         @media (max-width: 575px) {
-            column-gap: 8px;
             row-gap: 5px;
             margin-top: 4px;
         }
@@ -144,9 +155,15 @@ const onDeleteMember = (memId) => {
         margin-top: -8px;
         padding-right: 16px;
 
+        @media (max-width: 1024px) {
+            padding-right: 0;
+
+        }
+
         @media (max-width: 768px) {
             padding-right: 0;
         }
+
         @media (max-width: 360px) {
             font-size: 14px;
         }
@@ -187,8 +204,14 @@ const onDeleteMember = (memId) => {
 
         @media (max-width: 768px) {
             flex-direction: column;
-            margin-left: 5px;
-            row-gap: 8px;
+
+            row-gap: 12px;
+        }
+
+        @media (max-width: 575px) {
+            flex-direction: column;
+
+            row-gap: 5px;
         }
     }
 
@@ -207,6 +230,7 @@ const onDeleteMember = (memId) => {
 
         @media (max-width: 1024px) {
             margin-bottom: 12px;
+            max-width: 748px;
         }
 
         @media (max-width: 768px) {
@@ -214,7 +238,7 @@ const onDeleteMember = (memId) => {
         }
 
         @media (max-width: 575px) {
-            max-width: 264px;
+
             width: 100%;
             margin-bottom: 0;
         }
@@ -323,6 +347,20 @@ const onDeleteMember = (memId) => {
         margin-left: 12px;
         min-width: 224px;
         width: 224px;
+
+        @media (max-width: 1024px) {
+            width: 100%;
+            max-width: 344px;
+
+        }
+
+        @media (max-width: 768px) {
+            max-width: 100%;
+            width: 100%;
+        }
+
+
+
         // position: relative;
 
         .v-select__selection {
@@ -349,7 +387,7 @@ const onDeleteMember = (memId) => {
         }
 
         @media (max-width: 575px) {
-            max-width: 264px;
+
             width: 100%;
         }
     }
@@ -379,7 +417,7 @@ const onDeleteMember = (memId) => {
     // }
 
     &__confidant {
-        margin-left: 12px;
+
         padding: 4px 16px;
         display: flex;
         align-items: center;
@@ -390,13 +428,28 @@ const onDeleteMember = (memId) => {
         // align-self: start;
         min-height: 48px;
 
+        @media (max-width: 1024px) {
+            width: 100%;
+            max-width: 344px;
+
+        }
+
         @media (max-width: 768px) {
             margin-left: 0;
+            width: 100%;
+            max-width: 575px;
         }
 
         @media (max-width: 575px) {
-            max-width: 212px;
             width: 100%;
+
+
+        }
+
+        @media (max-width: 360px) {
+            width: 100%;
+            max-width: 212px;
+
         }
 
         label {

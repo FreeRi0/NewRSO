@@ -1,10 +1,5 @@
 <template>
-    <v-progress-circular
-        class="circleLoader"
-        v-if="loading"
-        indeterminate
-        color="blue"
-    ></v-progress-circular>
+    <p v-if="loading">Загрузка...</p>
     <p v-else-if="!loading && !participantList.length">Список заявок пуст</p>
 
     <template v-else>
@@ -76,8 +71,9 @@ import { checkedReferencesItem } from '@entities/ReferencesPeoples';
 import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
 import { sortByEducation } from '@shared/components/selects';
+import { useUserStore } from "@features/store/index";
 import { ParticipantsList } from '@features/Participants/components';
-
+const userStore = useUserStore();
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
 const participantList = ref([]);
@@ -231,10 +227,12 @@ const onAction = async () => {
     try {
         for (const application of selectedParticipantList.value) {
             if (action.value === 'Одобрить') {
-   
+
                 await confirmApplication(application.user.id);
+                await userStore.getCountApp();
             } else {
                 await cancelApplication(application.user.id);
+                await userStore.getCountApp();
             }
 
                 participantList.value = participantList.value.filter(
