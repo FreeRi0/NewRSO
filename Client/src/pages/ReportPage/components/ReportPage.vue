@@ -794,7 +794,7 @@ s
                                         <sortByEducation
                                             placeholder="Например, да"
                                             v-model="
-                                                report[61]
+                                                report[61].demonstration_block
                                                     .first_may_demonstration
                                             "
                                             :options="mayDemonstrationChoose"
@@ -816,13 +816,13 @@ s
                                             placeholder="Например, 10"
                                             :maxlength="5"
                                             v-model:value="
-                                                report[61]
+                                                report[61].demonstration_block
                                                     .first_may_demonstration_participants
                                             "
                                         />
                                         <div class="form__counter">
                                             {{
-                                                report[61]
+                                                report[61].demonstration_block
                                                     .first_may_demonstration_participants
                                                     .length
                                             }}
@@ -872,7 +872,9 @@ s
                                         <sortByEducation
                                             placeholder="Например, да"
                                             v-model="
-                                                report[62].patriotic_action
+                                                report[62]
+                                                    .patriotic_action_block
+                                                    .patriotic_action
                                             "
                                             :options="patrioticActionChoose"
                                             optionLabel="name"
@@ -896,12 +898,14 @@ s
                                             :maxlength="5"
                                             v-model:value="
                                                 report[62]
+                                                    .patriotic_action_block
                                                     .patriotic_action_participants
                                             "
                                         />
                                         <div class="form__counter">
                                             {{
                                                 report[62]
+                                                    .patriotic_action_block
                                                     .patriotic_action_participants
                                                     .length
                                             }}
@@ -949,7 +953,9 @@ s
                                         <sortByEducation
                                             placeholder="Например, да"
                                             v-model="
-                                                report[63].safety_work_week
+                                                report[63]
+                                                    .safety_work_week_block
+                                                    .safety_work_week
                                             "
                                             :options="SafetyWeekChoose"
                                             optionLabel="name"
@@ -1001,6 +1007,7 @@ s
                                             placeholder="Например, да"
                                             v-model="
                                                 report[64]
+                                                    .commander_commissioner_school_block
                                                     .commander_commissioner_school
                                             "
                                             :options="
@@ -1054,6 +1061,7 @@ s
                                             placeholder="Например, да"
                                             v-model="
                                                 report[65]
+                                                    .working_semester_opening_block
                                                     .working_semester_opening
                                             "
                                             :options="semesterOpeningChoose"
@@ -1077,12 +1085,14 @@ s
                                             :maxlength="5"
                                             v-model:value="
                                                 report[65]
+                                                    .working_semester_opening_block
                                                     .working_semester_opening_participants
                                             "
                                         />
                                         <div class="form__counter">
                                             {{
                                                 report[65]
+                                                    .working_semester_opening_block
                                                     .working_semester_opening_participants
                                                     .length
                                             }}
@@ -1131,7 +1141,9 @@ s
                                             placeholder="Например, да"
                                             optionLabel="name"
                                             v-model="
-                                                report[66].creative_festival
+                                                report[66]
+                                                    .creative_festival_block
+                                                    .creative_festival
                                             "
                                             :options="festivalChoose"
                                             class="invents-select"
@@ -1180,7 +1192,10 @@ s
                                         >
                                         <sortByEducation
                                             placeholder="Например, да"
-                                            v-model="report[67].spartakiad"
+                                            v-model="
+                                                report[67].spartakiad_block
+                                                    .spartakiad
+                                            "
                                             :options="spartakiadChoose"
                                             optionLabel="name"
                                             class="invents-select"
@@ -1232,6 +1247,7 @@ s
                                             placeholder="Например, да"
                                             v-model="
                                                 report[68]
+                                                    .professional_competition_block
                                                     .professional_competition
                                             "
                                             :options="competitionProChoose"
@@ -4432,25 +4448,48 @@ const report = ref({
         disabledBtn: false,
     },
     61: {
-        first_may_demonstration: null,
-        first_may_demonstration_participants: '',
-        disabledBtn: false,
+        demonstration_block: {
+            first_may_demonstration: null,
+            first_may_demonstration_participants: '',
+            disabledBtn: false,
+        },
     },
     62: {
-        patriotic_action: null,
-        patriotic_action_participants: '',
-        disabledBtn: false,
+        patriotic_action_block: {
+            patriotic_action: null,
+            patriotic_action_participants: '',
+            disabledBtn: false,
+        },
     },
-    63: { safety_work_week: null, disabledBtn: false },
-    64: { commander_commissioner_school: null, disabledBtn: false },
+    63: {
+        safety_work_week_block: { safety_work_week: null, disabledBtn: false },
+    },
+    64: {
+        commander_commissioner_school_block: {
+            commander_commissioner_school: null,
+            disabledBtn: false,
+        },
+    },
     65: {
-        working_semester_opening: null,
-        working_semester_opening_participants: '',
-        disabledBtn: false,
+        working_semester_opening_block: {
+            working_semester_opening: null,
+            working_semester_opening_participants: '',
+            disabledBtn: false,
+        },
     },
-    66: { creative_festival: null, disabledBtn: false },
-    67: { spartakiad: null, disabledBtn: false },
-    68: { professional_competition: null, disabledBtn: false },
+    66: {
+        creative_festival_block: {
+            creative_festival: null,
+            disabledBtn: false,
+        },
+    },
+    67: { spartakiad_block: { spartakiad: null, disabledBtn: false } },
+    68: {
+        professional_competition_block: {
+            professional_competition: null,
+            disabledBtn: false,
+        },
+    },
     7: {
         participation_data: [
             {
@@ -4579,44 +4618,65 @@ const getParameters = async (id) => {
                 id == 6 &&
                 route.params.id == response.data.results[0].detachment
             ) {
-                if (response.data.results[0].first_may_demonstration)
+                if (
+                    response.data.results[0].demonstration_block
+                        .first_may_demonstration
+                )
                     report.value[61].disabledBtn = true;
-                if (response.data.results[0].patriotic_action_participants)
+                if (
+                    response.data.results[0].patriotic_action_block
+                        .patriotic_action_participants
+                )
                     report.value[62].disabledBtn = true;
-                if (response.data.results[0].safety_work_week)
+                if (
+                    response.data.results[0].safety_work_week_block
+                        .safety_work_week
+                )
                     report.value[63].disabledBtn = true;
-                if (response.data.results[0].commander_commissioner_school)
+                if (
+                    response.data.results[0].commander_commissioner_school_block
+                        .commander_commissioner_school
+                )
                     report.value[64].disabledBtn = true;
-                if (response.data.results[0].working_semester_opening)
+                if (
+                    response.data.results[0].working_semester_opening_block
+                        .working_semester_opening
+                )
                     report.value[65].disabledBtn = true;
-                if (response.data.results[0].creative_festival)
+                if (
+                    response.data.results[0].creative_festival_block
+                        .creative_festival
+                )
                     report.value[66].disabledBtn = true;
-                if (response.data.results[0].spartakiad)
+                if (response.data.results[0].spartakiad_block.spartakiad)
                     report.value[67].disabledBtn = true;
-                if (response.data.results[0].professional_competition)
+                if (
+                    response.data.results[0].professional_competition_block
+                        .professional_competition
+                )
                     report.value[68].disabledBtn = true;
-                report.value[61].first_may_demonstration =
-                    response.data.results[0].first_may_demonstration;
-                report.value[61].first_may_demonstration_participants =
-                    response.data.results[0].first_may_demonstration_participants;
-                report.value[62].patriotic_action =
-                    response.data.results[0].patriotic_action;
-                report.value[62].patriotic_action_participants =
-                    response.data.results[0].patriotic_action_participants;
-                report.value[63].safety_work_week =
-                    response.data.results[0].safety_work_week;
-                report.value[64].commander_commissioner_school =
-                    response.data.results[0].commander_commissioner_school;
-                report.value[65].working_semester_opening =
-                    response.data.results[0].working_semester_opening;
-                report.value[65].working_semester_opening_participants =
-                    response.data.results[0].working_semester_opening_participants;
-                report.value[66].creative_festival =
-                    response.data.results[0].creative_festival;
-                report.value[67].spartakiad =
-                    response.data.results[0].spartakiad;
-                report.value[68].professional_competition =
-                    response.data.results[0].professional_competition;
+                report.value[61].demonstration_block.first_may_demonstration =
+                    response.data.results[0].demonstration_block.first_may_demonstration;
+                report.value[61].demonstration_block.first_may_demonstration_participants =
+                    response.data.results[0].demonstration_block.first_may_demonstration_participants;
+                report.value[62].patriotic_action_block.patriotic_action =
+                    response.data.results[0].patriotic_action_block.patriotic_action;
+                report.value[62].patriotic_action_block.patriotic_action_participants =
+                    response.data.results[0].patriotic_action_block.patriotic_action_participants;
+                report.value[63].safety_work_week_block.safety_work_week =
+                    response.data.results[0].safety_work_week_block.safety_work_week;
+                report.value[64].commander_commissioner_school_block.commander_commissioner_school =
+                    response.data.results[0].commander_commissioner_school_block.commander_commissioner_school;
+                report.value[65].working_semester_opening_block.working_semester_opening =
+                    response.data.results[0].working_semester_opening_block.working_semester_opening;
+                report.value[65].working_semester_opening_block.working_semester_opening_participants =
+                    response.data.results[0].working_semester_opening_block.working_semester_opening_participants;
+                report.value[66].creative_festival_block.creative_festival =
+                    response.data.results[0].creative_festival_block.creative_festival;
+                report.value[67].spartakiad_block.spartakiad =
+                    response.data.results[0].spartakiad_block.spartakiad;
+                report.value[68].professional_competition_block.professional_competition =
+                    response.data.results[0].professional_competition_block.professional_competition;
             } else {
                 if (report.value[id].participation_data) {
                     report.value[id].participation_data = response.data.results;
