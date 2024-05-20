@@ -193,7 +193,8 @@
                             </v-icon>
                         </template>
                     </v-expansion-panel-title>
-                    <v-expansion-panel-text class="form__inner-content" v-if="applicationData.demonstration_block">
+                    <v-expansion-panel-text class="form__inner-content"
+                        v-if="applicationData.demonstration_block && !applicationData.demonstration_block?.is_verified">
                         <div class="form__field-group">
                             <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
@@ -216,7 +217,8 @@
                             </div>
                         </div>
                     </v-expansion-panel-text>
-                    <v-expansion-panel-text class="form__inner-content" v-if="applicationData.patriotic_action_block">
+                    <v-expansion-panel-text class="form__inner-content"
+                        v-if="applicationData.patriotic_action_block && !applicationData.patriotic_action_block?.is_verified">
                         <div class="form__field-group">
                             <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
@@ -240,7 +242,8 @@
                             </div>
                         </div>
                     </v-expansion-panel-text>
-                    <v-expansion-panel-text class="form__inner-content" v-if="applicationData.safety_work_week_block">
+                    <v-expansion-panel-text class="form__inner-content"
+                        v-if="applicationData.safety_work_week_block && !applicationData.safety_work_week_block?.is_verified">
                         <div class="form__field-group">
                             <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
@@ -257,7 +260,7 @@
                         </div>
                     </v-expansion-panel-text>
                     <v-expansion-panel-text class="form__inner-content"
-                        v-if="applicationData.commander_commissioner_school_block">
+                        v-if="applicationData.commander_commissioner_school_block && !applicationData.commander_commissioner_school_block?.is_verified">
                         <div class="form__field-group">
                             <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
@@ -275,7 +278,7 @@
                         </div>
                     </v-expansion-panel-text>
                     <v-expansion-panel-text class="form__inner-content"
-                        v-if="applicationData.working_semester_opening_block">
+                        v-if="applicationData.working_semester_opening_block && !applicationData.working_semester_opening_block?.is_verified">
                         <div class="form__field-group">
                             <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
@@ -297,7 +300,8 @@
                             </div>
                         </div>
                     </v-expansion-panel-text>
-                    <v-expansion-panel-text class="form__inner-content" v-if="applicationData.creative_festival_block">
+                    <v-expansion-panel-text class="form__inner-content"
+                        v-if="applicationData.creative_festival_block && !applicationData.creative_festival_block?.is_verified">
                         <div class="form__field-group">
                             <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
@@ -313,7 +317,8 @@
                             </div>
                         </div>
                     </v-expansion-panel-text>
-                    <v-expansion-panel-text class="form__inner-content" v-if="applicationData.spartakiad_block">
+                    <v-expansion-panel-text class="form__inner-content"
+                        v-if="applicationData.spartakiad_block && !applicationData.spartakiad_block?.is_verified">
                         <div class="form__field-group">
                             <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
@@ -330,7 +335,7 @@
                         </div>
                     </v-expansion-panel-text>
                     <v-expansion-panel-text class="form__inner-content"
-                        v-if="applicationData.professional_competition_block">
+                        v-if="applicationData.professional_competition_block && !applicationData.professional_competition_block?.is_verified">
                         <div class="form__field-group">
                             <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
