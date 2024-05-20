@@ -8,39 +8,22 @@
         <template v-else>
             <div class="competitions__actions">
                 <div class="horizontal__confidant">
-                    <input
-                        type="checkbox"
-                        v-model="isCheckedAll"
-                        @change="onChooseAll"
-                    />
+                    <input type="checkbox" v-model="isCheckedAll" @change="onChooseAll" />
                 </div>
-                <v-select
-                    variant="outlined"
-                    class="form__field competitions__actions-select"
-                    :items="actionsList"
-                    v-model="action"
-                    placeholder="Выберите действие"
-                />
+                <v-select variant="outlined" class="form__field competitions__actions-select" :items="actionsList"
+                    v-model="action" placeholder="Выберите действие" />
             </div>
 
             <div class="competitions__list">
-                <template
-                    v-for="(competition, index) in competitionsList"
-                    :key="competition.id"
-                >
-                    <active-competition-item
-                        v-if="
-                            competition.is_confirmed_by_junior ||
-                            (competition.junior_detachment?.id ==
-                                commanderIds.detachment_commander?.id &&
-                                !competition.is_confirmed_by_junior) ||
-                            !competition.detachment
-                        "
-                        :competition="competition"
-                        :commander-ids="commanderIds"
-                        :position="index"
-                        @select="onToggleSelectCompetition"
-                    />
+                <template v-for="(competition, index) in competitionsList" :key="competition.id">
+                    <active-competition-item v-if="
+                        competition.is_confirmed_by_junior ||
+                        (competition.junior_detachment?.id ==
+                            commanderIds.detachment_commander?.id &&
+                            !competition.is_confirmed_by_junior) ||
+                        !competition.detachment
+                    " :competition="competition" :commander-ids="commanderIds" :position="index"
+                        @select="onToggleSelectCompetition" />
                 </template>
                 <template v-for="index in 20" :key="index">
                     <div class="competition__item">
@@ -54,24 +37,16 @@
                             </template>
                         </div>
                     </div>
-                    <template
-                        v-for="report in allReporting[index]"
-                        :key="report.id"
-                    >
-                        <active-competition-item-report
-                            :report="report"
-                            :position="index"
-                            @select="onToggleSelectReport"
-                        />
+                    <template v-for="report in allReporting[index]" :key="report.id">
+                        <active-competition-item-report :report="report" :position="index"
+                            @select="onToggleSelectReport" />
                     </template>
                 </template>
 
-                <template
-                    v-if="
-                        selectedCompetitionsList.length ||
-                        selectedReportingList.length
-                    "
-                >
+                <template v-if="
+                    selectedCompetitionsList.length ||
+                    selectedReportingList.length
+                ">
                     <p class="text_total">
                         Итого:
                         {{
@@ -80,37 +55,19 @@
                         }}
                     </p>
 
-                    <active-competition-item-select
-                        v-for="competition in selectedCompetitionsList"
-                        :key="competition.id"
-                        :competition="competition"
-                        :action="action"
-                        :commander-ids="commanderIds"
-                        @select="onToggleSelectCompetition"
-                    />
-                    <active-competition-item-select-report
-                        v-for="report in selectedReportingList"
-                        :key="report.id"
-                        :action="action"
-                        :report="report"
-                        @select="onToggleSelectReport"
-                    />
+                    <active-competition-item-select v-for="competition in selectedCompetitionsList"
+                        :key="competition.id" :competition="competition" :action="action" :commander-ids="commanderIds"
+                        @select="onToggleSelectCompetition" />
+                    <active-competition-item-select-report v-for="report in selectedReportingList" :key="report.id"
+                        :action="action" :report="report" @select="onToggleSelectReport" />
                 </template>
             </div>
 
-            <div
-                class="competitions__btns"
-                v-if="
-                    selectedCompetitionsList.length ||
-                    selectedReportingList.length
-                "
-            >
-                <Button
-                    class="save"
-                    type="button"
-                    label="Сохранить"
-                    @click="onAction"
-                ></Button>
+            <div class="competitions__btns" v-if="
+                selectedCompetitionsList.length ||
+                selectedReportingList.length
+            ">
+                <Button class="save" type="button" label="Сохранить" @click="onAction"></Button>
             </div>
             <div class="clear_select" v-else></div>
         </template>
@@ -328,6 +285,22 @@ const confirmIndicator = async (id, applicationId, pointId) => {
                 },
             },
         );
+    } else if (id == 6) {
+        for (let key in allReporting.value[6][0]) {
+            if (key.indexOf('block') != -1 && allReporting.value[6][0][key] && !allReporting.value[6][0][key].is_verified) {
+                key = key.replaceAll('_', '-');
+                await HTTP.post(
+                    `/competitions/1/reports/q${id}/${applicationId}/verify-${key}/`,
+                    {},
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: 'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
+            }
+        }
     } else {
         await HTTP.post(
             `/competitions/1/reports/q${id}/${applicationId}/accept/`,
@@ -354,6 +327,22 @@ const cancelIndicator = async (id, applicationId, pointId) => {
             },
             {},
         );
+    } else if (id == 6) {
+        for (let key in allReporting.value[6][0]) {
+            if (key.indexOf('block') != -1 && allReporting.value[6][0][key] && !allReporting.value[6][0][key].is_verified) {
+                key = key.replaceAll('_', '-');
+                await HTTP.delete(
+                    `/competitions/1/reports/q${id}/${applicationId}/verify-${key}/`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: 'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                    {},
+                );
+            }
+        }
     } else {
         await HTTP.delete(
             `/competitions/1/reports/q${id}/${applicationId}/accept/`,
@@ -582,6 +571,13 @@ const getAllReporting = async () => {
                     }
                     report.participants_data = tempArr;
                     if (tempArr.length) allReporting.value[index].push(report);
+                } else if (index == 6) {
+                    for (const key in report) {
+                        if (key.indexOf('block') && !(report[key] && !report[key].is_verified)) {
+                            delete report[key]
+                        }
+                    }
+                    allReporting.value[index].push(report);
                 } else if (index == 13) {
                     let tempArr = [];
                     for (const tempData of report.organization_data) {
@@ -621,7 +617,6 @@ const getAllReporting = async () => {
             console.log('getAllReporting error', e);
         }
     }
-    console.log(allReporting.value);
     loading.value = false;
 };
 
@@ -648,21 +643,13 @@ onMounted(async () => {
         await getCompetitionsJunior();
     else await getCompetitions();
 });
-
-onActivated(async () => {
-    await getAllCompetition();
-    await getMeCommander();
-    if (commanderIds.value.regionalheadquarter_commander?.id == null)
-        if (commanderIds.value.regionalheadquarter_commander?.id == null)
-            await getCompetitionsJunior();
-        else await getCompetitions();
-});
 </script>
 
 <style scoped lang="scss">
 .clear_select {
     margin-bottom: 100px;
 }
+
 .competitions__actions {
     display: grid;
     width: 100%;
@@ -694,9 +681,11 @@ onActivated(async () => {
     letter-spacing: 0em;
     text-align: left;
 }
+
 :deep(.v-field) {
     border-radius: 10px;
 }
+
 .competitions__btns {
     display: grid;
     width: 100%;
@@ -709,6 +698,7 @@ onActivated(async () => {
     letter-spacing: 0em;
     text-align: left;
 }
+
 .text_total {
     width: 1180px;
     height: 26px;
@@ -721,6 +711,7 @@ onActivated(async () => {
     text-align: left;
     color: #35383f;
 }
+
 :deep(.v-select__selection-text) {
     font-family: Bert Sans;
     font-size: 16px;
@@ -729,11 +720,13 @@ onActivated(async () => {
     letter-spacing: 0em;
     text-align: left;
 }
+
 .competition__item {
     display: grid;
     width: 100%;
     gap: 12px;
 }
+
 .competition__content {
     display: grid;
     width: 100%;
@@ -747,10 +740,12 @@ onActivated(async () => {
     letter-spacing: 0em;
     text-align: left;
 }
+
 .horizontal__confidant {
     padding: 10px 10px;
     border: 1px solid #b6b6b6;
     border-radius: 10px;
+
     input {
         width: 100%;
         height: 100%;
