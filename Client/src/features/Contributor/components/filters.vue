@@ -104,7 +104,7 @@
             <p v-if="educRef">Выбрано: {{ educRef }}</p>
         </v-expansion-panel>
         <v-expansion-panel >
-            <v-expansion-panel-title v-if="educRef !== null" >
+            <v-expansion-panel-title v-if="educRef !== null || regRef">
                 <template v-slot:default="{ expanded }">
                     <v-row no-gutters>
                         <v-col cols="4" class="d-flex justify-start">
