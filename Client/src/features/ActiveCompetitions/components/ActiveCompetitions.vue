@@ -572,13 +572,10 @@ const getAllReporting = async () => {
                     report.participants_data = tempArr;
                     if (tempArr.length) allReporting.value[index].push(report);
                 } else if (index == 6) {
-                    console.log(report);
                     for (const key in report) {
-                        console.log(key);
                         if (key.indexOf('block') && !(report[key] && !report[key].is_verified)) {
                             delete report[key]
                         }
-                        console.log("end");
                     }
                     allReporting.value[index].push(report);
                 } else if (index == 13) {
@@ -620,7 +617,6 @@ const getAllReporting = async () => {
             console.log('getAllReporting error', e);
         }
     }
-    console.log(allReporting.value);
     loading.value = false;
 };
 
