@@ -4,24 +4,21 @@
             <h2 class="profile-title">Активные заявки</h2>
 
             <div class="d-flex mt-9 mb-9 active-tabs">
-                <button
-                    class="contributorBtn"
-                    :class="{ active: picked === tab.name }"
-                    v-for="tab in tabs"
-                    :key="tab.id"
-                    @click="picked = tab.name"
-                >
+                <button class="contributorBtn" :class="{ active: picked === tab.name }" v-for="tab in tabs"
+                    v-show="tab.name === 'Верификация аккаунтов' && (roleStore.roles.detachment_commander || roleStore.roles.regionalheadquarter_commander) || tab.name === 'Заявка на вступление в отряд' && (roleStore.roles.detachment_commander) || tab.name === 'Заявка на участие в мероприятии' || tab.name === 'Конкурсы'"
+                    :key="tab.id" @click="picked = tab.name">
                     {{ tab.name }}
                 </button>
             </div>
-            <div v-if="picked == 'Верификация аккаунтов' || picked == ''">
+            <div v-if="(picked == 'Верификация аккаунтов') && roleStore.roles?.regionalheadquarter_commander?.id">
                 <activeApplications />
             </div>
-            <div v-else-if="picked == 'Заявка на вступление в отряд'">
+            <div
+                v-else-if="picked == 'Заявка на вступление в отряд' && (roleStore.roles?.regionalheadquarter_commander?.id || roleStore.roles?.detachment_commander?.id)">
                 <ActiveSquads />
             </div>
 
-             <div v-else-if="picked == 'Заявка на участие в мероприятии'">
+            <div v-else-if="picked == 'Заявка на участие в мероприятии'">
                 <ActiveEventsApp />
             </div>
 
@@ -32,34 +29,47 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, watch } from 'vue';
-import { HTTP } from '@app/http';
-import { useRoute } from 'vue-router';
+import { ref } from 'vue';
+import { useRoleStore } from '@layouts/store/role';
 import { Button } from '@shared/components/buttons';
 import { activeApplications } from '@features/ActiveApplications/components';
 import { ActiveSquads } from '@features/ActiveApplications/components';
 import { ActiveCompetitions } from '@features/ActiveCompetitions';
 import { ActiveEventsApp } from '@features/ActiveApplications/components';
 
+
+const roleStore = useRoleStore();
+
+
 const picked = ref('Верификация аккаунтов');
+
 const tabs = ref([
     {
         id: '1',
         name: 'Верификация аккаунтов',
+
+
     },
     {
         id: '2',
         name: 'Заявка на вступление в отряд',
+
+
     },
-     {
-         id: '3',
+    {
+        id: '3',
         name: 'Заявка на участие в мероприятии',
-     },
+
+
+    },
     {
         id: '4',
         name: 'Конкурсы',
+
+
     },
 ]);
+
 
 
 </script>
@@ -68,6 +78,7 @@ const tabs = ref([
 .profile-title {
     font-size: 40px;
     margin-bottom: 40px;
+
     @media screen and (max-width: 575px) {
         font-size: 32px;
         margin-bottom: 20px;
@@ -82,6 +93,7 @@ const tabs = ref([
     margin: 0px;
     padding: 10px 24px;
     margin: 7px;
+
     @media screen and (max-width: 768px) {
         font-size: 12px;
         padding: 8px 16px;
@@ -111,6 +123,7 @@ const tabs = ref([
     border-radius: 10px;
     height: 48px;
     width: 48px;
+
     input {
         width: 24px;
         height: 24px;
@@ -122,6 +135,7 @@ const tabs = ref([
     margin-bottom: 12px;
     display: grid;
     grid-template-columns: 1fr 1fr;
+
     p {
         font-size: 16px;
         color: #35383f;
@@ -131,6 +145,7 @@ const tabs = ref([
 .selectedItems {
     padding-top: 60px;
     padding-bottom: 80px;
+
     h3 {
         margin-bottom: 20px;
     }

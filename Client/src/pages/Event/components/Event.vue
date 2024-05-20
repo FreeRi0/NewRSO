@@ -452,7 +452,7 @@ const AddApp = () => {
         AddApplication()
     }
     if (eventsStore.event.application_type === 'Групповая') {
-        if ((eventsStore.event.available_structural_units === 'Отряды' && roleStore.roles.detachment_commander) || (eventsStore.event.available_structural_units === 'Образовательные штабы' && roleStore.roles.educational_headquarter_commander) || (eventsStore.event.available_structural_units === 'Окружные штабы' && roleStore.roles.districtheadquarter_commander) || (eventsStore.event.available_structural_units === 'Региональные штабы' && roleStore.roles.regional_headquarter_commander) || (eventsStore.event.available_structural_units === 'Местные штабы' && roleStore.roles.local_headquarter_commander)) {
+        if ((eventsStore.event.available_structural_units === 'Отряды' && roleStore.roles.detachment_commander) || (eventsStore.event.available_structural_units === 'Образовательные штабы' && roleStore.roles.educationalheadquarter_commander	) || (eventsStore.event.available_structural_units === 'Окружные штабы' && roleStore.roles.districtheadquarter_commander) || (eventsStore.event.available_structural_units === 'Региональные штабы' && roleStore.roles.regionalheadquarter_commander) || (eventsStore.event.available_structural_units === 'Местные штабы' && roleStore.roles.localheadquarter_commander)) {
             router.push({ name: 'GroupSubmit' })
         } else {
             showModal.value = true;
