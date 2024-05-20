@@ -3,180 +3,97 @@
         <div class="contributor">
             <h2 class="contributor-title">Членский взнос</h2>
             <div class="d-flex mt-7 buttonWrapper">
-                <button
-                    type="button"
-                    class="contributorBtn"
-                    :class="{ activee: picked === true }"
-                    @click="picked = true"
-                >
+                <button type="button" class="contributorBtn" :class="{ activee: picked === true }"
+                    @click="picked = true">
                     Мой членский взнос
                 </button>
 
-                <button
-                    type="button"
-                    class="contributorBtn"
-                    :class="{ activee: picked === false }"
-                    @click="picked = false"
-                >
+                <button type="button" class="contributorBtn" :class="{ activee: picked === false }"
+                    @click="picked = false">
                     Данные об оплате членского взноса пользователями системы
                 </button>
             </div>
 
-            <div
-                class="contributor-info"
-                v-if="
-                    picked === true &&
-                    userStore.currentUser.membership_fee === false
-                "
-            >
+            <div class="contributor-info" v-if="
+                picked === true &&
+                userStore.currentUser.membership_fee === false
+            ">
                 Уважаемый пользователь, ваш членский взнос не оплачен.
             </div>
 
-            <div
-                class="contributor-info"
-                v-else-if="
-                    picked === true &&
-                    userStore.currentUser.membership_fee === true
-                "
-            >
+            <div class="contributor-info" v-else-if="
+                picked === true &&
+                userStore.currentUser.membership_fee === true
+            ">
                 Уважаемый пользователь, ваш членский взнос оплачен.
             </div>
 
             <div v-else-if="picked === false">
                 <div class="contributor-search">
-                    <input
-                        type="text"
-                        id="search"
-                        class="contributor-search__input"
-                        @keyup="searchContributors"
-                        v-model="name"
-                        placeholder="Поищем пользователей?"
-                    />
+                    <input type="text" id="search" class="contributor-search__input" @keyup="searchContributors"
+                        v-model="name" placeholder="Поищем пользователей?" />
                     <img src="@app/assets/icon/search.svg" alt="search" />
                 </div>
 
                 <div class="contributor-container">
                     <div class="filters">
-                        <filters
-                            @update-district="updateDistrict"
-                            @update-reg="updateReg"
-                            @update-local="updateLocal"
-                            @update-educ="updateEduc"
-                            @update-detachment="updateDetachment"
-                            :district="district"
-                            :districts="districts"
-                            :reg="reg"
-                            :regionals="regionals"
-                            :local="local"
-                            :locals="locals"
-                            :educ="educ"
-                            :educ-head="educHead"
-                            :detachment="detachment"
-                            :detachments="detachments"
-                            :roles="roles.roles.value"
-                            :sorted-participants="sortedParticipants"
-                        />
+                        <filters @update-district="updateDistrict" @update-reg="updateReg" @update-local="updateLocal"
+                            @update-educ="updateEduc" @update-detachment="updateDetachment" :district="district"
+                            :districts="districts" :reg="reg" :regionals="regionals" :local="local" :locals="locals"
+                            :educ="educ" :educ-head="educHead" :detachment="detachment" :detachments="detachments"
+                            :roles="roles.roles.value" :sorted-participants="sortedParticipants" />
                     </div>
                     <div class="contributor-items">
                         <div class="contributor-sort">
-                            <div
-                                class="d-flex align-center"
-                                v-if="
-                                    roleStore.roles
-                                        .regionalheadquarter_commander
-                                "
-                            >
+                            <div class="d-flex align-center" v-if="
+                                roleStore.roles
+                                    .regionalheadquarter_commander
+                            ">
                                 <div class="contributor-sort__all">
-                                    <input
-                                        type="checkbox"
-                                        @click="select"
-                                        placeholder="Выбрать все"
-                                        v-model="checkboxAll"
-                                    />
+                                    <input type="checkbox" @click="select" placeholder="Выбрать все"
+                                        v-model="checkboxAll" />
                                 </div>
                                 <div class="ml-3">Выбрать всё</div>
                             </div>
                             <div class="participants__actions">
                                 <div class="participants__actions-select mr-3">
-                                    <sortByEducation
-                                        placeholder="Выберете действие"
-                                        variant="outlined"
-                                        clearable
-                                        v-model="action"
-                                        :options="actionsList"
-                                    ></sortByEducation>
+                                    <sortByEducation placeholder="Выберете действие" variant="outlined" clearable
+                                        v-model="action" :options="actionsList"></sortByEducation>
                                 </div>
                             </div>
 
                             <div class="sort-filters">
                                 <div class="sort-select">
-                                    <sortByEducation
-                                        variant="outlined"
-                                        clearable
-                                        v-model="sortBy"
-                                        :options="sortOptionss"
-                                        :sorts-boolean="false"
-                                        class="Sort-alphabet"
-                                    ></sortByEducation>
+                                    <sortByEducation variant="outlined" clearable v-model="sortBy"
+                                        :options="sortOptionss" :sorts-boolean="false" class="Sort-alphabet">
+                                    </sortByEducation>
                                 </div>
 
-                                <Button
-                                    type="button"
-                                    class="ascend"
-                                    iconn="iconn"
-                                    @click="ascending = !ascending"
-                                    color="white"
-                                ></Button>
+                                <Button type="button" class="ascend" iconn="iconn" @click="ascending = !ascending"
+                                    color="white"></Button>
                             </div>
                         </div>
                         <div class="contributor-wrapper" v-if="!isLoading">
-                            <template
-                                v-for="participant in sortedParticipants"
-                                :key="participant.id"
-                            >
-                                <contributionAccessItem
-                                    :participant="participant"
-                                    @select="onToggleSelectCompetition"
-                                />
+                            <template v-for="participant in sortedParticipants" :key="participant.id">
+                                <contributionAccessItem :participant="participant"
+                                    @select="onToggleSelectCompetition" />
                             </template>
                         </div>
-                        <v-progress-circular
-                            class="circleLoader"
-                            v-else
-                            indeterminate
-                            color="blue"
-                        ></v-progress-circular>
-                        <Button
-                            @click="participantsVisible += step"
-                            v-if="participantsVisible < participants.length"
-                            label="Показать еще"
-                        ></Button>
-                        <Button
-                            @click="participantsVisible -= step"
-                            v-else
-                            label="Свернуть все"
-                        ></Button>
+                        <v-progress-circular class="circleLoader" v-else indeterminate
+                            color="blue"></v-progress-circular>
+                        <Button @click="participantsVisible += step" v-if="participantsVisible < participants.length"
+                            label="Показать еще"></Button>
+                        <Button @click="participantsVisible -= step" v-else label="Свернуть все"></Button>
                     </div>
                 </div>
                 <div class="selectedItems" v-if="selectedPeoples.length > 0">
                     <h3>Итого: {{ selectedPeoples.length }}</h3>
-                    <selectedContributionAccessItem
-                        v-for="participant in selectedPeoples"
-                        :action="action"
-                        :participant="participant"
-                        :key="participant.id"
-                        @select="onToggleSelectCompetition"
-                    />
+                    <selectedContributionAccessItem v-for="participant in selectedPeoples" :action="action"
+                        :participant="participant" :key="participant.id" @select="onToggleSelectCompetition" />
                 </div>
                 <div class="participants__btn" v-if="selectedPeoples.length">
-                    <Button
-                        :loaded="isLoading"
-                        :disabled="isLoading || !action"
-                        class="save"
-                        type="button"
-                        label="Сохранить"
-                        @click="onAction"
-                    ></Button>
+                    <Button :loaded="isLoading" :disabled="isLoading || !action" class="save" type="button"
+                        label="Сохранить" @click="onAction"></Button>
                 </div>
             </div>
         </div>
@@ -315,9 +232,6 @@ const updateDistrict = (districtVal) => {
     viewContributorsData(search);
     getFiltersData('/regionals/', search);
 
-    // let districtId = districtsStore.districts.find(
-    //     (dis) => dis.name == districtVal,
-    // )?.id;
     district.value = districtVal;
 };
 
@@ -332,6 +246,7 @@ const updateReg = (regVal) => {
     viewContributorsData(search);
     getFiltersData('/locals/', search);
     getFiltersData('/educationals/', search);
+    getFiltersData('/detachments/', search);
 
     reg.value = regVal;
 };
@@ -362,7 +277,6 @@ const updateEduc = (educVal) => {
     }
     if (name.value) search += '&search=' + name.value;
     viewContributorsData(search);
-    getFiltersData('/detachments/', search);
 
     educ.value = educVal;
 };
@@ -371,11 +285,15 @@ const updateDetachment = (detachmentVal) => {
     let search = '';
     if (detachmentVal) {
         search = '?detachment__name=' + detachmentVal;
+
+    } else if (levelAccess.value === 2) {
+        search = '?regional_headquarter__name=' + reg.value;
     } else if (levelAccess.value < 5) {
         search = '?educational_headquarter__name=' + educ.value;
     }
     if (name.value) search += '&search=' + name.value;
     viewContributorsData(search);
+
     detachment.value = detachmentVal;
 };
 
@@ -497,9 +415,12 @@ const getUsersByRoles = () => {
             locals.value = localsStore.locals.filter(
                 (loc) => loc.regional_headquarter == reg.value,
             );
+            detachments.value = squadsStore.squads.filter((det) => det.regional_headquarter == reg.value,
+            );
             levelAccess.value = 2;
             getFiltersData('/educationals/', search);
             getFiltersData('/locals/', search);
+            getFiltersData('/detachments/', search);
         } else if (roles.roles.value.localheadquarter_commander) {
             local.value = roles.roles.value.localheadquarter_commander.name;
             search =
@@ -604,8 +525,8 @@ const sortedParticipants = computed(() => {
 
     tempParticipants = tempParticipants.sort((a, b) => {
         if (sortBy.value == 'alphabetically') {
-            let fa = a.first_name.toLowerCase(),
-                fb = b.first_name.toLowerCase();
+            let fa = a.last_name.toLowerCase(),
+                fb = b.last_name.toLowerCase();
 
             if (fa < fb) {
                 return -1;
@@ -656,8 +577,8 @@ watch(
     () => {
         let districtID = districtsStore.districts.length
             ? districtsStore.districts.find(
-                  (dis) => (dis.name = district.value),
-              )?.id
+                (dis) => (dis.name = district.value),
+            )?.id
             : roleStore.roles.districtheadquarter_commander?.id;
         regionals.value = regionalsStore.regionals.filter(
             (reg) => reg.district_headquarter == district.value,
@@ -721,6 +642,7 @@ p {
     padding: 10px 24px;
     margin: 7px;
 }
+
 .buttonWrapper {
     @media (max-width: 1024px) {
         flex-wrap: wrap;
@@ -742,34 +664,41 @@ p {
 
 .contributor {
     padding: 0px 0px 60px 0px;
+
     &-title {
         font-size: 52px;
     }
+
     &-sort {
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
+
         @media (max-width: 1024px) {
             flex-direction: column;
             align-items: flex-start;
             margin-top: 60px;
         }
     }
+
     &-container {
         display: grid;
         grid-template-columns: 0.5fr 1.5fr;
         align-items: baseline;
         grid-column-gap: 36px;
     }
+
     &-search {
         position: relative;
         box-sizing: border-box;
         margin: 60px 0px 0px 0px;
+
         img {
             position: absolute;
             top: 15px;
             left: 16px;
         }
+
         &__input {
             width: 100%;
             padding: 13px 0px 10px 60px;
@@ -777,11 +706,13 @@ p {
             border: 1px solid black;
         }
     }
+
     &-info {
         font-size: 18px;
         font-weight: 400;
         margin-top: 60px;
     }
+
     &-wrapper {
         padding-top: 40px;
     }
@@ -797,6 +728,7 @@ p {
 .another {
     margin-top: 50px;
 }
+
 .form-field label {
     font-size: 16px;
     font-family: BERTSANS;
@@ -833,6 +765,7 @@ p {
     border-radius: 10px;
     height: 48px;
     width: 48px;
+
     input {
         width: 24px;
         height: 24px;
@@ -843,21 +776,26 @@ p {
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
 .filters-title {
     font-size: 24px;
     font-weight: 600;
     line-height: 31px;
     margin-bottom: 24px;
 }
+
 .selectedItems {
     margin-top: 60px;
+
     h3 {
         margin-bottom: 40px;
     }
 }
+
 .sort {
     &-filters {
         align-items: flex-start;
+
         @media (max-width: 1024px) {
             margin-top: 20px;
         }
@@ -878,7 +816,7 @@ p {
         margin: 0;
     }
 
-    &--active + .v-expansion-panel {
+    &--active+.v-expansion-panel {
         margin: 0;
     }
 
@@ -906,6 +844,7 @@ p {
 .participants__actions {
     width: 230px;
 }
+
 .option-select .v-field__input input::placeholder,
 .form__select .v-field__input input::placeholder {
     color: #35383f;
@@ -916,9 +855,11 @@ p {
 .v-field--variant-outlined .v-field__outline__start {
     border: none;
 }
+
 .v-input {
     border: 1px solid #35383f;
 }
+
 .Sort-alphabet {
     margin-right: 8px;
 }

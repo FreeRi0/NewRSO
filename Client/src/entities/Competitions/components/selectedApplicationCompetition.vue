@@ -48,7 +48,7 @@
                 <img src="@app/assets/foto-leader-squad/foto-leader-squad-01.png" alt="photo" v-else />
             </div>
             <div class="containerHorizontal">
-                <p class="horizontallso-item__list-full">
+                <p class="horizontallso-item__list-full evname">
                     {{ event.event.name }}
                 </p>
             </div>
@@ -230,5 +230,11 @@ const updateCheckEvents = (e) => {
         width: 24px;
         height: 24px;
     }
+}
+
+.evname {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 </style>
