@@ -193,7 +193,7 @@
                             </v-icon>
                         </template>
                     </v-expansion-panel-title>
-                    <v-expansion-panel-text class="form__inner-content">
+                    <v-expansion-panel-text class="form__inner-content" v-if="applicationData.demonstration_block">
                         <div class="form__field-group">
                             <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
@@ -216,7 +216,7 @@
                             </div>
                         </div>
                     </v-expansion-panel-text>
-                    <v-expansion-panel-text class="form__inner-content">
+                    <v-expansion-panel-text class="form__inner-content" v-if="applicationData.patriotic_action_block">
                         <div class="form__field-group">
                             <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
@@ -240,7 +240,7 @@
                             </div>
                         </div>
                     </v-expansion-panel-text>
-                    <v-expansion-panel-text class="form__inner-content">
+                    <v-expansion-panel-text class="form__inner-content" v-if="applicationData.safety_work_week_block">
                         <div class="form__field-group">
                             <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
@@ -256,7 +256,8 @@
                             </div>
                         </div>
                     </v-expansion-panel-text>
-                    <v-expansion-panel-text class="form__inner-content">
+                    <v-expansion-panel-text class="form__inner-content"
+                        v-if="applicationData.commander_commissioner_school_block">
                         <div class="form__field-group">
                             <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
@@ -273,7 +274,8 @@
                             </div>
                         </div>
                     </v-expansion-panel-text>
-                    <v-expansion-panel-text class="form__inner-content">
+                    <v-expansion-panel-text class="form__inner-content"
+                        v-if="applicationData.working_semester_opening_block">
                         <div class="form__field-group">
                             <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
@@ -295,7 +297,7 @@
                             </div>
                         </div>
                     </v-expansion-panel-text>
-                    <v-expansion-panel-text class="form__inner-content">
+                    <v-expansion-panel-text class="form__inner-content" v-if="applicationData.creative_festival_block">
                         <div class="form__field-group">
                             <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
@@ -311,7 +313,7 @@
                             </div>
                         </div>
                     </v-expansion-panel-text>
-                    <v-expansion-panel-text class="form__inner-content">
+                    <v-expansion-panel-text class="form__inner-content" v-if="applicationData.spartakiad_block">
                         <div class="form__field-group">
                             <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
@@ -327,7 +329,8 @@
                             </div>
                         </div>
                     </v-expansion-panel-text>
-                    <v-expansion-panel-text class="form__inner-content">
+                    <v-expansion-panel-text class="form__inner-content"
+                        v-if="applicationData.professional_competition_block">
                         <div class="form__field-group">
                             <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
@@ -400,7 +403,7 @@
                                             мероприятия и наименованием ЛСО,
                                             принявшем в нем участие<span>&nbsp;*</span></label>
                                         <Input type="text" v-model:value="applicationData.links[index]
-                                                .link
+                                            .link
                                             " readonly />
                                     </div>
                                     <div class="form__field" v-if="applicationData.certificate_scans">
