@@ -95,6 +95,11 @@ const props = defineProps({
         type: String,
         default: 'Ничего не найдено...',
     },
+    isReg: {
+        type: Boolean,
+        required: false,
+        default: true,
+    }
 });
 
 const selected = ref(null);
@@ -116,21 +121,40 @@ const customFilter = (itemTitle, queryText, item) => {
 const items = ref(props.items);
 
 const onChangeItem = async () => {
-    await HTTP.get(`rsousers?regional_headquarter__name=${props.headVal}`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-
-        .then((res) => {
-            // console.log(props.address);
-            items.value = res.data.results;
-            console.log(res.data);
+    if (props.isReg === false) {
+        await HTTP.get(`rsousers?regional_headquarter__name=${props.headVal}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
+
+            .then((res) => {
+                // console.log(props.address);
+                items.value = res.data.results;
+                console.log(res.data);
+            })
+            .catch(function (error) {
+                console.log('an error occured ' + error);
+            });
+    } else {
+        await HTTP.get(`rsousers?region=${props.headVal}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        })
+
+            .then((res) => {
+                // console.log(props.address);
+                items.value = res.data.results;
+                console.log(res.data);
+            })
+            .catch(function (error) {
+                console.log('an error occured ' + error);
+            });
+    }
+
 };
 
 watch(() => props.headVal,
