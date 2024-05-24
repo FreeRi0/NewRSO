@@ -499,7 +499,7 @@ const searchContributors = (event) => {
         search = '?district_headquarter__name=' + district.value;
     }
     if (reg.value) {
-        search = '?regional_headquarter__name=' + reg.value;
+        search += '?search=' + name.value;
     }
     if (local.value) {
         search = '?local_headquarter__name=' + local.value;
@@ -510,7 +510,7 @@ const searchContributors = (event) => {
     if (detachment.value) {
         search = '?detachment__name=' + detachment.value;
     }
-    if (search) {
+    if (search && !reg.value) {
         search += '&search=' + name.value;
     }
 

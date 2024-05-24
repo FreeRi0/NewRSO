@@ -165,6 +165,7 @@
                             <SearchSelect
                                 :items="regionals.regionals.value"
                                 open-on-clear
+                        
                                 id="select-regional-office"
                                 name="select_regional-office"
                                 placeholder="Например, Карачаево-Черкесское региональное отделение"
@@ -202,8 +203,9 @@
                                 name="edit_beast"
                                 placeholder="Поиск по ФИО"
                                 v-model="headquarter.commander"
+                                :head-val="regionalsStore.regionals.find((item) => item.id == headquarter?.regional_headquarter).name"
                                 @update:value="changeValue"
-                                address="users/"
+
                             ></Dropdown>
                             <v-progress-circular
                                 class="circleLoader"
@@ -940,7 +942,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onBeforeMount } from 'vue';
+import { ref, computed, onBeforeMount, watch } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 // import { Select } from '@shared/components/selects';
@@ -1014,6 +1016,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    isId: {
+        type: Boolean,
+        default: false,
+    }
 });
 
 const getErrorField = (field) => {
@@ -1026,6 +1032,13 @@ const getErrorField = (field) => {
 };
 
 const headquarter = ref(props.headquarter);
+
+
+const regName = computed(() => {
+    return regionalsStore.regionals.find((item) => item.id == headquarter?.regional_headquarter).name
+});
+
+
 
 //--------------------------Валидация полей-----------------------------
 
@@ -1166,6 +1179,8 @@ const resetBanner = () => {
     fileBanner.value = null;
     emit('resetBanner', fileBanner.value);
 };
+
+
 
 onBeforeMount(async () => {
     regionalsStore.getRegionals();

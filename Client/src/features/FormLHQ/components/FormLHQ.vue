@@ -169,8 +169,9 @@
                                 name="edit_beast"
                                 placeholder="Поиск по ФИО"
                                 v-model="headquarter.commander"
+                                :head-val="regionalsStore.regionals.find((item) => item.id == headquarter?.regional_headquarter).name"
                                 @update:value="changeValue"
-                                address="users/"
+                              
                             ></Dropdown>
                             <v-progress-circular
                                 class="circleLoader"

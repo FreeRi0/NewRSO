@@ -3,6 +3,7 @@
         v-model="selected"
         :items="items"
         chips
+        v-if="props.isId === false"
         clearable
         variant="outlined"
         item-title="name"

@@ -197,7 +197,7 @@
                                     placeholder="Поиск по ФИО"
                                     v-model="headquarter.commander"
                                     @update:value="changeValue"
-                                    address="users/"
+                                    :head-val="regionalsStore.regions.find((item) => item.id == headquarter.region).name"
                                 ></Dropdown>
                             </div>
                             <!-- здесь поменяла -->

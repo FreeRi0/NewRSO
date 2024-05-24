@@ -179,7 +179,7 @@
                                 placeholder="Поиск по ФИО"
                                 v-model="headquarter.commander"
                                 @update:value="changeValue"
-                                address="users/"
+                                :head-val="regionalsStore.regionals.find((item) => item.id == headquarter?.regional_headquarter).name"
                             ></Dropdown>
                             <p
                                 class="form__error form__error--commander"
