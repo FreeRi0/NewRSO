@@ -72,11 +72,6 @@ s
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
                             <div class="form__field">
-                                <!-- <label
-                                    v-if="report[1]?.place"
-                                    class="form__label"
-                                    >{{ report[1]?.place }}
-                                </label> -->
                                 <label class="form__label"
                                     >Численность членов линейного студенческого
                                     отряда в соответствии с объемом уплаченных
@@ -99,7 +94,13 @@ s
                                         <td v-if="report[1]?.number_of_members">
                                             {{ report[1]?.number_of_members }}
                                         </td>
-                                        <td v-else>0</td>
+                                        <td v-if="isLoading">
+                                            <v-progress-circular
+                                                class="circleLoader"
+                                                indeterminate
+                                                color="blue"
+                                            ></v-progress-circular>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>
@@ -115,7 +116,13 @@ s
                                         >
                                             {{ report[1]?.number_of_payments }}
                                         </td>
-                                        <td v-else>0</td>
+                                        <td v-if="isLoading">
+                                            <v-progress-circular
+                                                class="circleLoader"
+                                                indeterminate
+                                                color="blue"
+                                            ></v-progress-circular>
+                                        </td>
                                     </tr>
                                 </table>
                             </div>
