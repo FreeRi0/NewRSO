@@ -165,6 +165,7 @@
                             <SearchSelect
                                 :items="regionals.regionals.value"
                                 open-on-clear
+
                                 id="select-regional-office"
                                 name="select_regional-office"
                                 placeholder="Например, Карачаево-Черкесское региональное отделение"
@@ -201,10 +202,10 @@
                                 id="beast"
                                 name="edit_beast"
                                 placeholder="Поиск по ФИО"
-                                v-model="headquarter.commander"
                                 :is-reg="false"
-                                :head-val="regionalsStore.regionals.find((item) => item.id == headquarter.regional_headquarter)?.name"
+                                v-model="headquarter.commander"
                                 @update:value="changeValue"
+                                :head-val="regionalsStore.regionals.find((item) => item.id == headquarter.regional_headquarter)?.name"
 
                             ></Dropdown>
                             <v-progress-circular
@@ -1016,6 +1017,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    isId: {
+        type: Boolean,
+        default: false,
+    }
 });
 
 const getErrorField = (field) => {
