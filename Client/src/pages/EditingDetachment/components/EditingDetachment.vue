@@ -275,7 +275,7 @@ const changeDetachment = async () => {
     formData.append('slogan', detachment.value.slogan);
     formData.append('about', detachment.value.about);
 
-    for (let member of members.value) {
+    for (let member of SquadsStore.members) {
         if (member.change) {
             await HTTP.patch(
                 `/detachments/${id}/members/${member.id}/`,
