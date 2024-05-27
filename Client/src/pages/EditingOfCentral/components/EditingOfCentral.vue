@@ -35,7 +35,6 @@ import { storeToRefs } from 'pinia';
 
 const userStore = useUserStore();
 const user = storeToRefs(userStore);
-
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
 

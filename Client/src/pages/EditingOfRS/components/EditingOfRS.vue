@@ -161,12 +161,12 @@ onMounted(() => {
 });
 
 const onUpdateMember = (event, id) => {
-    const memberIndex = members.value.findIndex((member) => member.id === id);
+    const memberIndex = regionalsStore.members.findIndex((member) => member.id === id);
     const firstkey = Object.keys(event)[0];
-    members.value[memberIndex].change = true;
+    regionalsStore.members[memberIndex].change = true;
     if (firstkey == 'position')
-        members.value[memberIndex].position.id = event[firstkey];
-    else members.value[memberIndex][firstkey] = event[firstkey];
+    regionalsStore.members[memberIndex].position.id = event[firstkey];
+    else regionalsStore.members[memberIndex][firstkey] = event[firstkey];
 };
 
 const submited = ref(false);
@@ -244,7 +244,7 @@ const changeHeadquarter = async () => {
         formData.append('slogan', headquarter.value.slogan);
         formData.append('about', headquarter.value.about);
 
-        for (let member of members.value) {
+        for (let member of regionalsStore.members) {
             if (member.change) {
                 await HTTP.patch(
                     `/regionals/${id}/members/${member.id}/`,

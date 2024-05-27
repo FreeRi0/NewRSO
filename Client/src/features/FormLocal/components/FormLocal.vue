@@ -325,6 +325,7 @@
                                 variant="outlined"
                                 type="text"
                                 placeholder="Поиск по ФИО"
+                                @keyup="searchMembersLH"
                                 v-model="searchMembers"
                             >
                                 <template #prepend-inner>
@@ -338,7 +339,7 @@
                                 </template>
                             </v-text-field>
                             <MembersList
-                                :items="sortedMembers"
+                                :items="props.members"
                                 :submited="submited"
                                 :functions="positions.positions.value"
                                 :is-error-members="isErrorMembers"
@@ -875,6 +876,7 @@ import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 import { useRoleStore } from '@layouts/store/role';
 import { useRegionalsStore } from '@features/store/regionals';
+import { useLocalsStore } from '@features/store/local';
 import { usePositionsStore } from '@features/store/positions';
 import { storeToRefs } from 'pinia';
 import { Cropper } from 'vue-advanced-cropper';
@@ -883,6 +885,7 @@ import 'vue-advanced-cropper/dist/style.css';
 const positionsStore = usePositionsStore();
 const positions = storeToRefs(positionsStore);
 const regionalsStore = useRegionalsStore();
+const localsStore = useLocalsStore();
 
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
@@ -984,14 +987,16 @@ const showButtonPrev = computed(() => {
 
 //-----------------------------------------------------------------------
 const searchMembers = ref('');
+const timerSearch = ref(null);
 
-const sortedMembers = computed(() => {
-    return props.members.filter((item) => {
-        return item.user.last_name
-            .toUpperCase()
-            .includes(searchMembers.value.toUpperCase());
-    });
-});
+const searchMembersLH = () =>{
+    clearTimeout(timerSearch.value);
+   timerSearch.value = setTimeout(() => {
+        localsStore.getSearchLocalsMembers(props.headquarter.id, searchMembers.value)
+   }, 400);
+}
+
+
 
 const onUpdateMember = (event, id) => {
     emit('updateMember', event, id);
