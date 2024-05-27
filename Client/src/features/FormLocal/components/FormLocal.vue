@@ -126,7 +126,7 @@
                                 >Выберите региональное отделение
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Select
+                            <!-- <Select
                                 clearable
                                 variant="outlined"
                                 name="regional_headquarter"
@@ -134,7 +134,17 @@
                                 placeholder="Например, Московское региональное отделение"
                                 v-model="headquarter.regional_headquarter"
                                 address="/regionals/"
-                            ></Select>
+                            ></Select> -->
+                            <SearchSelect
+                                :items="regionalsStore.regionals"
+                                open-on-clear
+
+                                id="select-regional-office"
+                                name="select_regional-office"
+                                placeholder="Например, Карачаево-Черкесское региональное отделение"
+                                v-model="headquarter.regional_headquarter"
+                                @update:value="changeValue"
+                            ></SearchSelect>
                             <p
                                 class="form__error"
                                 v-if="isError.regional_headquarter"
@@ -860,7 +870,7 @@
 import { ref, computed, onBeforeMount } from 'vue';
 import { Input, TextareaAbout } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { Select, Dropdown } from '@shared/components/selects';
+import { Select, Dropdown, SearchSelect } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 import { useRoleStore } from '@layouts/store/role';
@@ -1065,6 +1075,7 @@ const deleteBanner = () => {
 onBeforeMount(async () => {
     roleStore.getRoles();
     positionsStore.getPositions();
+    regionalsStore.getRegionals();
 });
 </script>
 

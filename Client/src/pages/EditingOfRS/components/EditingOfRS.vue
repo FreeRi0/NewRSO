@@ -5,7 +5,7 @@
         <FormRS
             :participants="true"
             :headquarter="headquarter"
-            :members="members"
+            :members="regionalsStore.members"
             :submited="submited"
             :is-commander-loading="isCommanderLoading"
             :is-members-loading="isMembersLoading"
@@ -31,10 +31,12 @@ import { usePage } from '@shared';
 // здесь поменяла
 import { useUserStore } from '@features/store/index';
 import { useRoleStore } from '@layouts/store/role';
+import { useRegionalsStore } from '@features/store/regionals';
 import { storeToRefs } from 'pinia';
 
 // здесь поменяла
 const userStore = useUserStore();
+const regionalsStore = useRegionalsStore();
 const user = storeToRefs(userStore);
 const meId = user.currentUser.value.id;
 
@@ -54,7 +56,7 @@ const route = useRoute();
 let id = route.params.id;
 
 const headquarter = ref(null);
-const members = ref([]);
+// const members = ref(regionalsStore.members);
 
 // const positions = ref([]);
 // const regions = ref([]);
@@ -127,34 +129,34 @@ onBeforeRouteUpdate(async (to, from) => {
 
 const isMembersLoading = ref(false);
 
-const getMembers = async () => {
-    try {
-        isMembersLoading.value = true;
-        setTimeout(async () => {
-            const membersResponse = await HTTP.get(`regionals/${id}/members/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
+// const getMembers = async () => {
+//     try {
+//         isMembersLoading.value = true;
+//         setTimeout(async () => {
+//             const membersResponse = await HTTP.get(`regionals/${id}/members/`, {
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                     Authorization: 'Token ' + localStorage.getItem('Token'),
+//                 },
+//             });
 
-            members.value = membersResponse.data.results;
-            /*if (members.value.length) {
-                members.value.forEach((member) => {
-                    member.position = member.position?.id;
-                });
-            }*/
-            isMembersLoading.value = false;
-        }, 1000);
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
+//             members.value = membersResponse.data.results;
+//             /*if (members.value.length) {
+//                 members.value.forEach((member) => {
+//                     member.position = member.position?.id;
+//                 });
+//             }*/
+//             isMembersLoading.value = false;
+//         }, 1000);
+//     } catch (error) {
+//         console.log('an error occured ' + error);
+//     }
+// };
 
 onMounted(() => {
     // getRegions();
     // getPositions();
-    getMembers();
+    regionalsStore.getRegionalsMembers(id)
     getHeadquarter();
 });
 
