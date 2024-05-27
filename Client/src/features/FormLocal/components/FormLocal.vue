@@ -179,7 +179,8 @@
                                 placeholder="Поиск по ФИО"
                                 v-model="headquarter.commander"
                                 @update:value="changeValue"
-                                address="users/"
+                                :is-reg="false"
+                                :head-val="regionalsStore.regionals.find((item) => item.id == headquarter.regional_headquarter)?.name"
                             ></Dropdown>
                             <p
                                 class="form__error form__error--commander"
@@ -863,6 +864,7 @@ import { Select, Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 import { useRoleStore } from '@layouts/store/role';
+import { useRegionalsStore } from '@features/store/regionals';
 import { usePositionsStore } from '@features/store/positions';
 import { storeToRefs } from 'pinia';
 import { Cropper } from 'vue-advanced-cropper';
@@ -870,6 +872,7 @@ import 'vue-advanced-cropper/dist/style.css';
 
 const positionsStore = usePositionsStore();
 const positions = storeToRefs(positionsStore);
+const regionalsStore = useRegionalsStore();
 
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);

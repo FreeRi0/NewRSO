@@ -72,11 +72,6 @@ s
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
                             <div class="form__field">
-                                <!-- <label
-                                    v-if="report[1]?.place"
-                                    class="form__label"
-                                    >{{ report[1]?.place }}
-                                </label> -->
                                 <label class="form__label"
                                     >Численность членов линейного студенческого
                                     отряда в соответствии с объемом уплаченных
@@ -99,7 +94,13 @@ s
                                         <td v-if="report[1]?.number_of_members">
                                             {{ report[1]?.number_of_members }}
                                         </td>
-                                        <td v-else>0</td>
+                                        <td v-if="isLoading">
+                                            <v-progress-circular
+                                                class="circleLoader"
+                                                indeterminate
+                                                color="blue"
+                                            ></v-progress-circular>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>
@@ -115,7 +116,13 @@ s
                                         >
                                             {{ report[1]?.number_of_payments }}
                                         </td>
-                                        <td v-else>0</td>
+                                        <td v-if="isLoading">
+                                            <v-progress-circular
+                                                class="circleLoader"
+                                                indeterminate
+                                                color="blue"
+                                            ></v-progress-circular>
+                                        </td>
                                     </tr>
                                 </table>
                             </div>
@@ -209,7 +216,16 @@ s
                                             variant="outlined"
                                             :disabled="report[2].is_verified"
                                         />
+                                        <p
+                                            class="error"
+                                            v-if="isError.commander_achievement"
+                                        >
+                                            {{
+                                                isError.commander_achievement[0]
+                                            }}
+                                        </p>
                                     </div>
+
                                     <div class="form__field">
                                         <label class="form__label"
                                             >Ссылка на публикацию из группы
@@ -238,6 +254,12 @@ s
                                             }}
                                             / 100
                                         </div>
+                                        <p
+                                            class="error"
+                                            v-if="isError.commander_link"
+                                        >
+                                            {{ isError.commander_link[0] }}
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="form__field-group-right">
@@ -260,6 +282,17 @@ s
                                             variant="outlined"
                                             :disabled="report[2].is_verified"
                                         />
+                                        <p
+                                            class="error"
+                                            v-if="
+                                                isError.commissioner_achievement
+                                            "
+                                        >
+                                            {{
+                                                isError
+                                                    .commissioner_achievement[0]
+                                            }}
+                                        </p>
                                     </div>
                                     <div class="form__field">
                                         <label class="form__label"
@@ -290,6 +323,12 @@ s
                                             }}
                                             / 100
                                         </div>
+                                        <p
+                                            class="error"
+                                            v-if="isError.commissioner_link"
+                                        >
+                                            {{ isError.commissioner_link[0] }}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -587,6 +626,9 @@ s
                                         <div class="form__counter">
                                             {{ block.name.length }} / 100
                                         </div>
+                                        <p class="error" v-if="isError.name">
+                                            {{ isError.name[0] }}
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="form__field-group-right">
@@ -654,6 +696,12 @@ s
                                                 </div>
                                             </div>
                                         </div>
+                                        <p
+                                            class="error"
+                                            v-if="isError.document"
+                                        >
+                                            {{ isError.document[0] }}
+                                        </p>
                                     </div>
                                 </div>
                                 <div type="button" v-if="!block.is_verified">
@@ -4191,7 +4239,7 @@ const route = useRoute();
 
 const swal = inject('$swal');
 
-const isError = ref('');
+const isError = ref({});
 const isLoading = ref(false);
 
 const Choose = ref([
@@ -5076,5 +5124,11 @@ td {
 }
 .btn_large {
     padding: 12px 32px !important;
+}
+.error {
+    color: #db0000;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Acrobat';
 }
 </style>
