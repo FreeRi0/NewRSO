@@ -163,7 +163,7 @@
                                 <sup class="valid-red">*</sup>
                             </label>
                             <SearchSelect
-                                :items="regionals.regionals.value"
+                                :items="regionalsStore.regionals"
                                 open-on-clear
 
                                 id="select-regional-office"

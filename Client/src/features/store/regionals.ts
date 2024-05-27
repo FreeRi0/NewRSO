@@ -7,6 +7,7 @@ export const useRegionalsStore = defineStore('regionals', {
         regionals: [],
         filteredRegional: [],
         filteredMyRegional: [],
+        filteredMembers: [],
         members: [],
         regional: {},
         institutions: [],
@@ -159,6 +160,26 @@ export const useRegionalsStore = defineStore('regionals', {
                 console.log('an error occured ' + error);
             }
         },
+
+        async getSearchMembers(id: String, name: String) {
+            try {
+                const responseMembers = await HTTP.get(
+                    `/regionals/${id}/members/?search=${name}`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
+                this.members = responseMembers.data.results;
+
+            } catch (error) {
+                console.log('an error occured ' + error);
+            }
+        },
+
 
         async searchRegions(name: String) {
             const responseSearchRegions = await HTTP.get(
