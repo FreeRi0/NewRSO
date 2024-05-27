@@ -350,6 +350,7 @@
                                 variant="outlined"
                                 type="text"
                                 placeholder="Поиск по ФИО"
+                                @keyup="searchMemberHQ"
                                 v-model="searchMembers"
                             >
                                 <template #prepend-inner>
@@ -363,7 +364,7 @@
                                 </template>
                             </v-text-field>
                             <MembersList
-                                :items="sortedMembers"
+                                :items="props.members"
                                 :submited="submited"
                                 :functions="positions.positions.value"
                                 :is-error-members="isErrorMembers"
@@ -953,6 +954,7 @@ import { educInstitutionDropdown } from '@shared/components/selects';
 import { Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
+import { useEducationalsStore } from '@features/store/educationals';
 import { TextareaAbout } from '@shared/components/inputs';
 import { useRegionalsStore } from '@features/store/regionals';
 import { usePositionsStore } from '@features/store/positions';
@@ -962,6 +964,7 @@ import 'vue-advanced-cropper/dist/style.css';
 
 const regionalsStore = useRegionalsStore();
 const regionals = storeToRefs(regionalsStore);
+const educationalsStore = useEducationalsStore();
 
 const positionsStore = usePositionsStore();
 const positions = storeToRefs(positionsStore);
@@ -1035,10 +1038,6 @@ const getErrorField = (field) => {
 const headquarter = ref(props.headquarter);
 
 
-const regName = computed(() => {
-    return regionalsStore.regionals.find((item) => item.id == headquarter?.regional_headquarter).name
-});
-
 
 
 //--------------------------Валидация полей-----------------------------
@@ -1080,14 +1079,22 @@ const showButtonPrev = computed(() => {
 
 const searchMembers = ref('');
 
-const sortedMembers = computed(() => {
-    return props.members.filter((item) => {
-        // return item.title
-        return item.user.last_name
-            .toUpperCase()
-            .includes(searchMembers.value.toUpperCase());
-    });
-});
+// const sortedMembers = computed(() => {
+//     return props.members.filter((item) => {
+//         // return item.title
+//         return item.user.last_name
+//             .toUpperCase()
+//             .includes(searchMembers.value.toUpperCase());
+//     });
+// });
+const timerSearch = ref(null);
+
+const searchMemberHQ = () => {
+   clearTimeout(timerSearch.value);
+   timerSearch.value = setTimeout(() => {
+        educationalsStore.getSearchEducationalsMembers(props.headquarter.id, searchMembers.value)
+   }, 400);
+}
 
 const onUpdateMember = (event, id) => {
     emit('updateMember', event, id);

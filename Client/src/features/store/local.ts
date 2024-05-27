@@ -5,6 +5,7 @@ export const useLocalsStore = defineStore('local', {
         locals: [],
         local: {},
         isLoading: false,
+        members: [],
         totalLocals: 0,
         nextLocals: '',
         localsLimit: 20,
@@ -48,6 +49,44 @@ export const useLocalsStore = defineStore('local', {
             }
         },
 
+        async getLocalsMembers(id: String) {
+            try {
+
+                const responseMembers = await HTTP.get(
+                    `/locals/${id}/members/`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
+                this.members = responseMembers.data.results;
+            } catch (error) {
+
+                console.log('an error occured ' + error);
+            }
+        },
+        async getSearchLocalsMembers(id: String, name: String) {
+            try {
+                const responseMembers = await HTTP.get(
+                    `/locals/${id}/members/?search=${name}`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
+                this.members = responseMembers.data.results;
+
+            } catch (error) {
+
+                console.log('an error occured ' + error);
+            }
+        },
 
 
         async getNextLocals() {

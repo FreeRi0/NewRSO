@@ -298,6 +298,7 @@
                                 variant="outlined"
                                 type="text"
                                 placeholder="Поиск по ФИО"
+                                @keyup="searchMembersDH"
                                 v-model="searchMembers"
                             >
                                 <template #prepend-inner>
@@ -311,7 +312,7 @@
                                 </template>
                             </v-text-field>
                             <MembersList
-                                :items="sortedMembers"
+                                :items="props.members"
                                 :submited="submited"
                                 :functions="positions.positions.value"
                                 :is-error-members="isErrorMembers"
@@ -847,6 +848,7 @@ import { Select, Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 import { useRoleStore } from '@layouts/store/role';
+import { useDistrictsStore } from '@features/store/districts';
 import { usePositionsStore } from '@features/store/positions';
 import { storeToRefs } from 'pinia';
 import { Cropper } from 'vue-advanced-cropper';
@@ -854,6 +856,7 @@ import 'vue-advanced-cropper/dist/style.css';
 
 const positionsStore = usePositionsStore();
 const positions = storeToRefs(positionsStore);
+const districtsStore = useDistrictsStore();
 
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
@@ -956,13 +959,15 @@ const showButtonPrev = computed(() => {
 //-----------------------------------------------------------------------
 const searchMembers = ref('');
 
-const sortedMembers = computed(() => {
-    return props.members.filter((item) => {
-        return item.user.last_name
-            .toUpperCase()
-            .includes(searchMembers.value.toUpperCase());
-    });
-});
+const timerSearch = ref(null);
+
+const searchMembersDH = () =>{
+    clearTimeout(timerSearch.value);
+   timerSearch.value = setTimeout(() => {
+        districtsStore.getSearchDHMembers(props.headquarter.id, searchMembers.value)
+   }, 400);
+}
+
 
 const onUpdateMember = (event, id) => {
     emit('updateMember', event, id);

@@ -124,10 +124,29 @@ export const useEducationalsStore = defineStore('educationals', {
                         },
                     },
                 );
-                this.members = responseMembers.data;
+                this.members = responseMembers.data.results;
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;
+                console.log('an error occured ' + error);
+            }
+        },
+        async getSearchEducationalsMembers(id: String, name: String) {
+            try {
+                const responseMembers = await HTTP.get(
+                    `/educationals/${id}/members/?search=${name}`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
+                this.members = responseMembers.data.results;
+
+            } catch (error) {
+
                 console.log('an error occured ' + error);
             }
         },
