@@ -157,9 +157,6 @@ const LoginUser = async () => {
     }
 };
 
-// onMounted (() => {
-//     console.log(VkIdSdkOneTap.value)
-// })
 </script>
 <script>
 import * as VKID from '@vkid/sdk';
