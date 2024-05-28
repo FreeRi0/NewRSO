@@ -1,38 +1,21 @@
 <template>
     <div class="d-flex justify-end align-self-center">
-        <v-card>
-            <v-card-title class="text-center"
-                >Вход в личный кабинет</v-card-title
-            >
+        <!-- <v-card>
+            <v-card-title class="text-center">Вход в личный кабинет</v-card-title>
 
             <v-form action="#" method="post" @submit.prevent="LoginUser">
-                <v-card-text class="text-center goReg"
-                    >У вас еще нет аккаунта?
-                    <router-link class="authLinks" to="/Register"
-                        >Зарегистрироваться</router-link
-                    >
-                </v-card-text>
 
-                <Input
-                    placeholder="Логин"
-                    name="login"
-                    v-model:value="data.username"
-                    class="username-input"
-                />
+
+                <Input placeholder="Логин" name="login" v-model:value="data.username" class="username-input" />
 
                 <p class="error" v-if="isError.username">
                     {{ '' + isError.username }}
                 </p>
-                <v-text-field
-                    class="password-input"
-                    :append-inner-icon="!visible ? 'mdi-eye-off' : 'mdi-eye'"
-                    :type="visible ? 'text' : 'password'"
-                    density="compact"
-                    v-model="data.password"
-                    placeholder="Пароль"
-                    variant="outlined"
-                    @click:append-inner="visible = !visible"
-                ></v-text-field>
+                <v-text-field class="password-input" :append-inner-icon="!visible ? 'mdi-eye-off' : 'mdi-eye'"
+                    :type="visible ? 'text' : 'password'" density="compact" v-model="data.password" placeholder="Пароль"
+                    variant="outlined" @click:append-inner="visible = !visible"></v-text-field>
+                    <v-card-text class="text-center">Забыли пароль?
+                    </v-card-text>
 
                 <p class="error" v-if="isError.password">
                     {{ '' + isError.password }}
@@ -42,34 +25,85 @@
                     {{ '' + isError.non_field_errors }}
                 </p>
 
-                <Button
-                    class="login_btn"
-                    type="submit"
-                    label="Войти"
-                    :loaded="isLoading"
-                    :disabled="isLoading"
-                    color="primary"
-                ></Button>
+                <Button class="login_btn" type="submit" label="Войти" :loaded="isLoading" :disabled="isLoading"
+                    color="primary"></Button>
+                <v-card-text class="text-center goReg">У вас еще нет аккаунта?
+                    <router-link class="authLinks" to="/Register">Зарегистрироваться</router-link>
+                </v-card-text>
 
-                <v-card-text class="text-center"
-                    >Забыли пароль?
-                    <router-link class="authLinks" to="/RecoveryPass"
-                        >Восстановить</router-link
-                    ></v-card-text
-                >
+
             </v-form>
-        </v-card>
+        </v-card> -->
+
+        <div class="Login">
+
+            <form action="#" class="Login_form" method="post" @submit.prevent="LoginUser">
+                <h2 class="Login_title">Вход в личный кабинет</h2>
+                <Input placeholder="Логин" name="login" v-model:value="data.username" class="username-input mb-3" />
+
+                <p class="error" v-if="isError.username">
+                    {{ '' + isError.username }}
+                </p>
+                <v-text-field class="password-input" :append-inner-icon="!visible ? 'mdi-eye-off' : 'mdi-eye'"
+                    :type="visible ? 'text' : 'password'" density="compact" v-model="data.password" placeholder="Пароль"
+                    variant="outlined" @click:append-inner="visible = !visible"></v-text-field>
+                <p class="text-right mt-3"><router-link to="/RecoveryPass">Забыли пароль?</router-link>
+                </p>
+
+                <p class="error" v-if="isError.password">
+                    {{ '' + isError.password }}
+                </p>
+
+                <p class="error" v-if="isError.non_field_errors">
+                    {{ '' + isError.non_field_errors }}
+                </p>
+
+
+                <Button class="Login_btn" type="submit" label="Войти" :loaded="isLoading" :disabled="isLoading"
+                    color="primary"></Button>
+                <p class="text-center Login_and">или</p>
+                <div id="VkIdSdkOneTap"></div>
+                <div class="text-center goReg">У вас нет аккаунта?
+                    <router-link class="Login_link" to="/Register">Зарегистрироваться</router-link>
+                </div>
+            </form>
+        </div>
     </div>
 </template>
 
 <script setup>
-import { ref, inject } from 'vue';
+import { ref, inject, onMounted } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { Input } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@features/store/index';
+
 import { storeToRefs } from 'pinia';
+
+const router = useRouter();
+
+// const VkIdSdkOneTap = ref();
+
+
+// VKID.Config.set({
+//     app: APP_ID, // Идентификатор приложения.
+//     redirectUrl: REDIRECT_URL, // Адрес для перехода после авторизации.
+//     state: 'dj29fnsadjsd82...' // Произвольная строка состояния приложения.
+// });
+
+// Создание экземпляра кнопки.
+// const oneTap = new VKID.OneTap();
+
+// Получение контейнера из разметки.
+// const container = document.getElementById('VkIdSdkOneTap');
+
+// Проверка наличия кнопки в разметке.
+// if (VkIdSdkOneTap.value) {
+//     // Отрисовка кнопки в контейнере с именем приложения APP_NAME, светлой темой и на русском языке.
+//     oneTap.render({ container: VkIdSdkOneTap.value, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
+// }
+
 const userStore = useUserStore();
 const user = storeToRefs(userStore);
 const data = ref({
@@ -81,7 +115,7 @@ const visible = ref(false);
 const isError = ref([]);
 const isLoading = ref(false);
 const swal = inject('$swal');
-const router = useRouter();
+
 
 const LoginUser = async () => {
     try {
@@ -122,12 +156,95 @@ const LoginUser = async () => {
         }
     }
 };
+
+// onMounted (() => {
+//     console.log(VkIdSdkOneTap.value)
+// })
+</script>
+<script>
+import * as VKID from '@vkid/sdk';
+const APP_ID = 51932483
+const REDIRECT_URL = 'https://rso.sprint.1t.ru/MyPage'
+const oneTap = new VKID.OneTap();
+
+
+VKID.Config.set({
+    app: APP_ID, // Идентификатор приложения.
+    redirectUrl: REDIRECT_URL, // Адрес для перехода после авторизации.
+    state: 'dj29fnsadjsd82...' // Произвольная строка состояния приложения.
+});
+
+// Получение контейнера из разметки.
+const container = document.getElementById('VkIdSdkOneTap');
+
+// Проверка наличия кнопки в разметке.
+if (container) {
+    // Отрисовка кнопки в контейнере с именем приложения APP_NAME, светлой темой и на русском языке.
+    oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
+}
 </script>
 
 <style lang="scss">
 .justify-end {
     @media screen and (max-width: 768px) {
         justify-content: center !important;
+    }
+}
+
+.Login {
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 592px;
+
+    &_title {
+        font-size: 40px;
+        font-weight: 600;
+        font-family: 'Akrobat';
+        line-height: 48px;
+        margin-bottom: 48px;
+        text-align: center;
+
+        @media screen and (max-width: 575px) {
+            font-size: 32px;
+            margin-bottom: 40px;
+        }
+    }
+
+    &_form {
+        padding: 80px 60px;
+        width: 100%;
+
+        @media screen and (max-width: 1024px) {
+            padding: 68px 60px;
+        }
+
+        @media screen and (max-width: 1024px) {
+            padding: 48px 16px;
+        }
+
+    }
+
+    &_btn {
+        width: 100%;
+        margin: 0px;
+        margin-top: 40px;
+    }
+
+    &_and {
+        margin-bottom: 20px;
+        color: #A3A3A3;
+        font-weight: 400;
+        font-family: 'Bert Sans';
+    }
+
+    &_link {
+        text-decoration: underline;
+        font-family: 'Bert Sans';
+        color: #35383F;
+        font-size: 18px;
+        font-weight: 500;
     }
 }
 
@@ -144,6 +261,7 @@ const LoginUser = async () => {
 .v-field--no-label {
     --v-field-padding-top: 5px;
 }
+
 // .login_btn {
 //     margin-top: 40px;
 // }
@@ -153,21 +271,29 @@ const LoginUser = async () => {
     font-weight: 600;
     font-family: Akrobat;
     padding-top: 0rem;
+
     @media screen and (max-width: 575px) {
         font-size: 28px;
     }
 }
+
 .v-card-text {
     padding: 0;
     font-size: 18px;
+
     @media screen and (max-width: 575px) {
         font-size: 16px;
     }
 }
 
 .goReg {
-    margin-bottom: 20px;
+    font-family: 'Bert Sans';
+    font-size: 18px;
+    font-weight: 400;
+    color: #35383F;
+
 }
+
 .error {
     color: #db0000;
     font-size: 14px;
@@ -195,9 +321,11 @@ const LoginUser = async () => {
 
 .v-card {
     padding: 98px;
+
     @media screen and (max-width: 768px) {
         padding: 60px 98px;
     }
+
     @media screen and (max-width: 575px) {
         padding: 60px 16px;
     }
@@ -213,6 +341,7 @@ const LoginUser = async () => {
 .v-field--variant-outlined .v-field__outline__start {
     border: none;
 }
+
 .v-input__control {
     font-weight: 500;
 }
@@ -222,10 +351,12 @@ const LoginUser = async () => {
     font-weight: bold;
     font-size: 18px;
 }
+
 :global(.v-input__control) {
     min-height: 45px;
     font-weight: 500;
 }
+
 :global(.v-text-field input.v-field__input) {
     padding: 12px 6px 9px 16px;
 }
@@ -234,12 +365,19 @@ const LoginUser = async () => {
 .v-text-field .v-field--active input {
     border-radius: 10px;
 }
+
+@font-face {
+    font-family: 'Akrobat';
+    src: url('@app/assets/fonts/Akrobat.woff2');
+}
+
 @media ((max-width: 768px)) {
     .AuthWrapper {
         min-height: 0;
         padding: 100px 0;
     }
 }
+
 @media ((max-width: 550px)) {
     .AuthWrapper {
         padding: 60px 0;
