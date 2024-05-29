@@ -114,7 +114,6 @@ const LoginUser = async () => {
 
 onMounted(() => {
     const container = document.getElementById('VkIdSdkOneTap');
-    console.log(container, oneTap)
     if (container) {
         console.log(container, oneTap)
         // Отрисовка кнопки в контейнере с именем приложения APP_NAME, светлой темой и на русском языке.
