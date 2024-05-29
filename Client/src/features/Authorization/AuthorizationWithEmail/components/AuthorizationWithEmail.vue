@@ -2,7 +2,7 @@
     <div class="d-flex justify-end align-self-center">
         <div class="Login">
 
-            <form action="#" class="Login_form" method="post">
+            <form action="#" class="Login_form" method="post" @submit.prevent="Click">
                 <h2 class="Login_title">Вход в личный кабинет</h2>
                 <Input placeholder="Логин" name="login" height="40px" v-model:value="data.username"
                     class="username-input mb-3 Login_input" />
@@ -72,6 +72,10 @@ VKID.Config.set({
     state: 'dj29fnsadjsd82...' // Произвольная строка состояния приложения.
 });
 
+
+const Click = () => {
+console.log("Click");
+}
 
 const LoginUser = async () => {
     try {
