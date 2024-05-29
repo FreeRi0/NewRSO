@@ -163,8 +163,9 @@
                                 <sup class="valid-red">*</sup>
                             </label>
                             <SearchSelect
-                                :items="regionals.regionals.value"
+                                :items="regionalsStore.regionals"
                                 open-on-clear
+
                                 id="select-regional-office"
                                 name="select_regional-office"
                                 placeholder="Например, Карачаево-Черкесское региональное отделение"
@@ -201,9 +202,11 @@
                                 id="beast"
                                 name="edit_beast"
                                 placeholder="Поиск по ФИО"
+                                :is-reg="false"
                                 v-model="headquarter.commander"
                                 @update:value="changeValue"
-                                address="users/"
+                                :head-val="regionalsStore.regionals.find((item) => item.id == headquarter.regional_headquarter)?.name"
+
                             ></Dropdown>
                             <v-progress-circular
                                 class="circleLoader"
@@ -347,6 +350,7 @@
                                 variant="outlined"
                                 type="text"
                                 placeholder="Поиск по ФИО"
+                                @keyup="searchMemberHQ"
                                 v-model="searchMembers"
                             >
                                 <template #prepend-inner>
@@ -360,7 +364,7 @@
                                 </template>
                             </v-text-field>
                             <MembersList
-                                :items="sortedMembers"
+                                :items="props.members"
                                 :submited="submited"
                                 :functions="positions.positions.value"
                                 :is-error-members="isErrorMembers"
@@ -940,7 +944,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onBeforeMount } from 'vue';
+import { ref, computed, onBeforeMount, watch } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 // import { Select } from '@shared/components/selects';
@@ -950,6 +954,7 @@ import { educInstitutionDropdown } from '@shared/components/selects';
 import { Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
+import { useEducationalsStore } from '@features/store/educationals';
 import { TextareaAbout } from '@shared/components/inputs';
 import { useRegionalsStore } from '@features/store/regionals';
 import { usePositionsStore } from '@features/store/positions';
@@ -959,6 +964,7 @@ import 'vue-advanced-cropper/dist/style.css';
 
 const regionalsStore = useRegionalsStore();
 const regionals = storeToRefs(regionalsStore);
+const educationalsStore = useEducationalsStore();
 
 const positionsStore = usePositionsStore();
 const positions = storeToRefs(positionsStore);
@@ -1014,6 +1020,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    isId: {
+        type: Boolean,
+        default: false,
+    }
 });
 
 const getErrorField = (field) => {
@@ -1026,6 +1036,9 @@ const getErrorField = (field) => {
 };
 
 const headquarter = ref(props.headquarter);
+
+
+
 
 //--------------------------Валидация полей-----------------------------
 
@@ -1066,14 +1079,22 @@ const showButtonPrev = computed(() => {
 
 const searchMembers = ref('');
 
-const sortedMembers = computed(() => {
-    return props.members.filter((item) => {
-        // return item.title
-        return item.user.last_name
-            .toUpperCase()
-            .includes(searchMembers.value.toUpperCase());
-    });
-});
+// const sortedMembers = computed(() => {
+//     return props.members.filter((item) => {
+//         // return item.title
+//         return item.user.last_name
+//             .toUpperCase()
+//             .includes(searchMembers.value.toUpperCase());
+//     });
+// });
+const timerSearch = ref(null);
+
+const searchMemberHQ = () => {
+   clearTimeout(timerSearch.value);
+   timerSearch.value = setTimeout(() => {
+        educationalsStore.getSearchEducationalsMembers(props.headquarter.id, searchMembers.value)
+   }, 400);
+}
 
 const onUpdateMember = (event, id) => {
     emit('updateMember', event, id);
@@ -1166,6 +1187,8 @@ const resetBanner = () => {
     fileBanner.value = null;
     emit('resetBanner', fileBanner.value);
 };
+
+
 
 onBeforeMount(async () => {
     regionalsStore.getRegionals();

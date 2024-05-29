@@ -4,7 +4,7 @@
         <FormDH
             :participants="true"
             :headquarter="headquarter"
-            :members="members"
+            :members="districtsStore.members"
             :submited="submited"
             :is-commander-loading="isCommanderLoading"
             :is-members-loading="isMembersLoading"
@@ -28,11 +28,13 @@ import { FormDH } from '@features/FormDH';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router';
 import { usePage } from '@shared';
+import { useDistrictsStore } from '@features/store/districts';
 import { useUserStore } from '@features/store/index';
 import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
 
 const userStore = useUserStore();
+const districtsStore = useDistrictsStore();
 const user = storeToRefs(userStore);
 const meId = user.currentUser.value.id;
 
@@ -52,7 +54,6 @@ const route = useRoute();
 let id = route.params.id;
 
 const headquarter = ref(null);
-const members = ref([]);
 const positions = ref([]);
 
 const { replaceTargetObjects } = usePage();
@@ -91,42 +92,20 @@ onBeforeRouteUpdate(async (to, from) => {
 
 const isMembersLoading = ref(false);
 
-const getMembers = async () => {
-    try {
-        isMembersLoading.value = true;
-        setTimeout(async () => {
-            const membersResponse = await HTTP.get(`districts/${id}/members/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
 
-            members.value = membersResponse.data.results;
-            /*if (members.value.length) {
-                members.value.forEach((member) => {
-                    member.position = member.position?.id;
-                });
-            }*/
-            isMembersLoading.value = false;
-        }, 1000);
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
 
 onMounted(() => {
-    getMembers();
+    districtsStore.getDHMembers(id)
     getHeadquarter();
 });
 
 const onUpdateMember = (event, id) => {
-    const memberIndex = members.value.findIndex((member) => member.id === id);
+    const memberIndex = districtsStore.members.findIndex((member) => member.id === id);
     const firstkey = Object.keys(event)[0];
-    members.value[memberIndex].change = true;
+    districtsStore.members[memberIndex].change = true;
     if (firstkey == 'position')
-        members.value[memberIndex].position.id = event[firstkey];
-    else members.value[memberIndex][firstkey] = event[firstkey];
+    districtsStore.members[memberIndex].position.id = event[firstkey];
+    else districtsStore.members[memberIndex][firstkey] = event[firstkey];
 };
 
 const submited = ref(false);
@@ -190,7 +169,7 @@ const changeHeadquarter = async () => {
         formData.append('slogan', headquarter.value.slogan);
         formData.append('about', headquarter.value.about);
 
-        for (let member of members.value) {
+        for (let member of districtsStore.members) {
             if (member.change) {
                 await HTTP.patch(
                     `/districts/${id}/members/${member.id}/`,

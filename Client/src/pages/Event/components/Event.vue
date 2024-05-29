@@ -224,8 +224,10 @@
                     </div>
                 </div>
             </section>
-            <section class="section_wrap" v-else="picked === false">
-                <ul class="list_wrap" v-if="eventsStore.status.is_applicant">
+            <section class="section_wrap"
+                v-else-if="picked === false && eventsStore.event.application_type === 'Персональная'">
+                <ul class="list_wrap" v-if="eventsStore.applications.length">
+
                     <li v-for="participant in eventsStore.applications.slice(
                         0,
                         6,
@@ -240,8 +242,11 @@
 
                         </router-link>
                     </li>
+
                 </ul>
-                <p class="text-center mt-10" v-else>Участников не найдено...</p>
+                <p class="text-center mt-10" v-else>Участников не найдено..</p>
+
+                <!-- <p class="text-center mt-10" v-else>Участников не найдено...</p> -->
                 <div v-if="eventsStore.applications.length >= 6" class="squad-participants__link">
                     <router-link :to="{
                         name: 'actionparticipants',
@@ -253,6 +258,39 @@
                     </router-link>
                 </div>
             </section>
+            <section class="section_wrap"
+                v-else="picked === false && eventsStore.event.application_type === 'Групповая'">
+                <ul v-if="eventsStore.groupApplications.length" class="list_wrap">
+                    <template v-for="participant in eventsStore.groupApplications">
+                        <li v-for="item in participant.applicants.slice(
+                            0,
+                            6,
+                        )" :key="item">
+                            <router-link :to="{ name: 'userpage', params: { id: item.user.id } }">
+                                <img class="participant_img" :src="item.user?.avatar?.photo"
+                                    v-if="item.user?.avatar?.photo" alt="avatar" />
+                                <img class="participant_img" src="@app/assets/user-avatar.png" v-else alt="avatar" />
+                                <div class="text text--participant_name mt-7">
+                                    {{ item.user.first_name }}
+                                </div>
+                            </router-link>
+                        </li>
+                    </template>
+
+                </ul>
+                <p class="text-center mt-10" v-else>Участников не найдено..</p>
+                <div v-if="eventsStore.groupApplications.length >= 6" class="squad-participants__link">
+                    <router-link :to="{
+                        name: 'actionparticipants',
+                        params: { id: participant.applicants.id },
+                    }">
+                        <div class="squad__wrapper-route text-center mt-10">
+                            Показать всех
+                        </div>
+                    </router-link>
+                </div>
+            </section>
+
             <!-- Другие мероприятия -->
             <h2 class="title event_others event_border">Другие мероприятия</h2>
             <div class="other_events_wrap">
@@ -452,7 +490,7 @@ const AddApp = () => {
         AddApplication()
     }
     if (eventsStore.event.application_type === 'Групповая') {
-        if ((eventsStore.event.available_structural_units === 'Отряды' && roleStore.roles.detachment_commander) || (eventsStore.event.available_structural_units === 'Образовательные штабы' && roleStore.roles.educationalheadquarter_commander	) || (eventsStore.event.available_structural_units === 'Окружные штабы' && roleStore.roles.districtheadquarter_commander) || (eventsStore.event.available_structural_units === 'Региональные штабы' && roleStore.roles.regionalheadquarter_commander) || (eventsStore.event.available_structural_units === 'Местные штабы' && roleStore.roles.localheadquarter_commander)) {
+        if ((eventsStore.event.available_structural_units === 'Отряды' && roleStore.roles.detachment_commander) || (eventsStore.event.available_structural_units === 'Образовательные штабы' && roleStore.roles.educationalheadquarter_commander) || (eventsStore.event.available_structural_units === 'Окружные штабы' && roleStore.roles.districtheadquarter_commander) || (eventsStore.event.available_structural_units === 'Региональные штабы' && roleStore.roles.regionalheadquarter_commander) || (eventsStore.event.available_structural_units === 'Местные штабы' && roleStore.roles.localheadquarter_commander)) {
             router.push({ name: 'GroupSubmit' })
         } else {
             showModal.value = true;
@@ -521,17 +559,19 @@ watch(
         if (!newId) return;
         await eventsStore.getEventId(newId);
         await eventsStore.getStatus(newId, userStore.currentUser?.id);
-        await eventsStore.getEventMembers(newId);
         await eventsStore.getEventOrganizators(newId);
-        await eventsStore.getAppEvents(newId);
+        await eventsStore.getEventMembers(newId);
+        if (eventsStore.event.application_type === 'Персональная') {
+            await eventsStore.getAppEvents(newId);
+        } else if (eventsStore.event.application_type === 'Групповая') {
+            await eventsStore.getGroupApp(newId);
+        }
         await replaceTargetObjects([eventsStore.event]);
     },
     {
         immediate: true,
     },
 );
-
-
 
 
 watch(
@@ -555,6 +595,9 @@ watch(
         );
     },
 );
+onMounted(() => {
+    eventsStore.getStatus(eventsStore.event.id, userStore.currentUser?.id);
+})
 </script>
 
 <style lang="scss" scoped>
@@ -690,13 +733,16 @@ watch(
         color: #35383f;
         font-weight: 400;
         line-height: 23.74px;
+
         div {
             display: flex;
+
             @media (max-width: 575px) {
                 display: block;
                 max-width: 292px;
             }
         }
+
         p {
             margin-left: 12px;
 
@@ -757,15 +803,21 @@ watch(
 }
 
 .text--organizer {
-    line-height: normal;
-    margin: 0px;
+    font-size: 20px;
+    margin: 16px 0;
+    font-family: Bert Sans;
+    font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    line-height: 26px;
+    color: #35383f;
 }
 
 .text--position {
     color: #676767;
     font-size: 16px;
     font-weight: 400;
-    margin-top: 16px;
     font-family: 'Bert-Sans';
 }
 
@@ -917,6 +969,7 @@ watch(
     flex-direction: column;
     align-items: center;
     padding: 24px 22px;
+    border-radius: 10px;
 }
 
 .event_card_wrap img {

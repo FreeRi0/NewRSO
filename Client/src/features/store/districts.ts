@@ -5,6 +5,7 @@ export const useDistrictsStore = defineStore('districts', {
     state: () => ({
         districts: [],
         district: {},
+        members: [],
         isLoading: false,
     }),
     actions: {
@@ -25,5 +26,45 @@ export const useDistrictsStore = defineStore('districts', {
                 console.log('an error occured ' + error);
             }
         },
+
+        async getDHMembers(id: String) {
+            try {
+
+                const responseMembers = await HTTP.get(
+                    `/districts/${id}/members/`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
+                this.members = responseMembers.data.results;
+            } catch (error) {
+
+                console.log('an error occured ' + error);
+            }
+        },
+        async getSearchDHMembers(id: String, name: String) {
+            try {
+                const responseMembers = await HTTP.get(
+                    `/districts/${id}/members/?search=${name}`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
+                this.members = responseMembers.data.results;
+
+            } catch (error) {
+
+                console.log('an error occured ' + error);
+            }
+        },
+
     },
 });

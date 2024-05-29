@@ -5,7 +5,7 @@
         <FormUnit
             :participants="true"
             :detachment="detachment"
-            :members="members"
+            :members="SquadsStore.members"
             :submited="submited"
             :is-commander-loading="isCommanderLoading"
             :is-members-loading="isMembersLoading"
@@ -38,18 +38,19 @@ import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router';
 import { usePage } from '@shared';
 import { useUserStore } from '@features/store/index';
+import { useSquadsStore } from '@features/store/squads';
 import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
 
 const userStore = useUserStore();
 const user = storeToRefs(userStore);
+const SquadsStore = useSquadsStore();
 const meId = user.currentUser.value.id;
-console.log(meId);
+
 
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
 const meRoles = roles.roles.value;
-console.log(meRoles);
 
 const educComId = roles.roles.value.educationalheadquarter_commander?.id;
 const regionComId = roles.roles.value.regionalheadquarter_commander?.id;
@@ -64,7 +65,7 @@ const route = useRoute();
 let id = route.params.id;
 
 const detachment = ref(null);
-const members = ref([]);
+// const members = ref([]);
 
 const { replaceTargetObjects } = usePage();
 
@@ -115,50 +116,23 @@ onBeforeRouteUpdate(async (to, from) => {
 
 const isMembersLoading = ref(false);
 
-const getMembers = async () => {
-    try {
-        isMembersLoading.value = true;
-        setTimeout(async () => {
-            const membersResponse = await HTTP.get(
-                `detachments/${id}/members/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
-            );
-
-            members.value = membersResponse.data.results;
-            /*if (members.value.length) {
-                members.value.forEach((member) => {
-                    member.position = member.position?.id;
-                });
-            }*/
-            isMembersLoading.value = false;
-        }, 1000);
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
-
 onMounted(() => {
-    getMembers();
+   SquadsStore.getSquadMembersNoLimit(id)
     getDetachment();
 });
 
 const onUpdateMember = (event, id) => {
-    const memberIndex = members.value.findIndex((member) => member.id === id);
+    const memberIndex = SquadsStore.members.findIndex((member) => member.id === id);
     const firstkey = Object.keys(event)[0];
-    members.value[memberIndex].change = true;
+    SquadsStore.members[memberIndex].change = true;
     if (firstkey == 'position')
-        members.value[memberIndex].position.id = event[firstkey];
-    else members.value[memberIndex][firstkey] = event[firstkey];
+    SquadsStore.members[memberIndex].position.id = event[firstkey];
+    else SquadsStore.members[memberIndex][firstkey] = event[firstkey];
 };
 
 const onDeleteMember = (id) => {
-    const memberIndex = members.value.findIndex((member) => member.id === id);
-    members.value.splice(memberIndex, 1);
+    const memberIndex = SquadsStore.members.findIndex((member) => member.id === id);
+    SquadsStore.members.splice(memberIndex, 1);
     // members.value[memberIndex].change = true;
 }
 
@@ -274,7 +248,7 @@ const changeDetachment = async () => {
     formData.append('slogan', detachment.value.slogan);
     formData.append('about', detachment.value.about);
 
-    for (let member of members.value) {
+    for (let member of SquadsStore.members) {
         if (member.change) {
             await HTTP.patch(
                 `/detachments/${id}/members/${member.id}/`,

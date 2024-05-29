@@ -293,7 +293,7 @@ const onDeleteMember = (memId) => {
             font-size: 14px;
             line-height: 18.5px;
             flex-wrap: wrap;
-            justify-content: flex-start;
+           
         }
     }
 

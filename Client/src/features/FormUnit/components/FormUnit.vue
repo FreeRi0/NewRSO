@@ -403,6 +403,7 @@
                                 variant="outlined"
                                 type="text"
                                 placeholder="Поиск по ФИО"
+                                @keyup="searchDMembers"
                                 v-model="searchMembers"
                             >
                                 <template #prepend-inner>
@@ -425,7 +426,7 @@
                             >
                             </DeleteModal>
                             <MembersList
-                                :items="sortedMembers"
+                                :items="props.members"
                                 :submited="submited"
                                 :unit="'отряд'"
                                 :functions="positions.positions.value"
@@ -2239,14 +2240,14 @@ const showButtonPrev = computed(() => {
 
 const searchMembers = ref('');
 
-const sortedMembers = computed(() => {
-    return props.members.filter((item) => {
-        // return item.title
-        return item.user.last_name
-            .toUpperCase()
-            .includes(searchMembers.value.toUpperCase());
-    });
-});
+const timerSearch = ref(null);
+
+const searchDMembers = () => {
+   clearTimeout(timerSearch.value);
+   timerSearch.value = setTimeout(() => {
+        areasStore.getSearchSquadMembers(props.detachment.id, searchMembers.value)
+   }, 400);
+}
 
 const onUpdateMember = (event, id) => {
     emit('updateMember', event, id);
