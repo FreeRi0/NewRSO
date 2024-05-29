@@ -47,7 +47,7 @@ import {
     userPhoto4,
 } from '@shared/components/imagescomp';
 
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { HTTP } from '@app/http';
 import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
@@ -57,10 +57,30 @@ const isLoading = storeToRefs(userStore);
 const education = ref({});
 const region = ref({});
 
+
 const query = new URLSearchParams(window.location.search);
 const { payload } = Object.fromEntries(query.entries());
 
 console.log(payload, 'pay');
+
+const TokenData = ref({
+    silent_token: payload.token,
+    uuid: payload.uuid,
+})
+
+console.log(TokenData, 'token');
+
+const exchangeToken = async () => {
+    try {
+        const resp = await HTTP.post('/exchange-token/', TokenData.value, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+    } catch (e) {
+        console.log('error:', e)
+    }
+}
 
 const uploadAva = (imageAva) => {
 
@@ -91,6 +111,10 @@ const deleteWall = (imageWall) => {
 
     currentUser.currentUser.value.media.banner = imageWall;
 };
+
+onMounted(() => {
+    exchangeToken();
+})
 </script>
 <style lang="scss" scoped>
 .user-wrapper {
