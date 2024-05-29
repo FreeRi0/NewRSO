@@ -154,7 +154,7 @@
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" >
 .v-field {
     border-radius: 10px;
 }
@@ -230,10 +230,10 @@
 
 .password-input,
 .region-input {
-    border: 2px solid #a3a3a3;
+    border: 1px solid #a3a3a3;
     border-radius: 10px;
     font-size: 16px;
-    color: #35383f;
+    color: hsl(222, 9%, 23%);
     font-family: 'Bert Sans';
     margin-bottom: 8px;
 }
@@ -332,7 +332,7 @@ input {
 .form-input input,
 .dateInput input {
     box-sizing: border-box;
-    border: 2px solid #a3a3a3;
+    border: 1px solid #a3a3a3;
     border-radius: 10px;
     display: block;
     font-size: 16px;
@@ -352,7 +352,7 @@ input {
 }
 
 .form-input-requisites input {
-    border: 2px solid #a3a3a3;
+    border: 1px solid #a3a3a3;
     border-radius: 10px;
     display: block;
     font-size: 12px;
@@ -386,6 +386,10 @@ input {
 .v-field--variant-outlined .v-field__outline__end,
 .v-field--variant-outlined .v-field__outline__start {
     border: none;
+}
+
+.v-text-field input.v-field__input {
+    padding: 5px 6px 5px 16px;
 }
 </style>
 
