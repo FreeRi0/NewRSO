@@ -61,7 +61,7 @@ const region = ref({});
 const query = new URLSearchParams(window.location.search);
 const { payload } = Object.fromEntries(query.entries());
 
-console.log(payload, 'pay');
+console.log(payload, 'pay', payload.uuid, payload.token);
 
 const TokenData = ref({
     silent_token: payload.token,
