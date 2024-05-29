@@ -9,6 +9,7 @@ export const useEventsStore = defineStore('events', {
         organizators: [],
         event: {},
         applications: [],
+        groupApplications: [],
         isLoading: false,
         totalEvents: 0,
         MembersLimit: 7,
@@ -70,6 +71,28 @@ export const useEventsStore = defineStore('events', {
                 this.isLoading = false;
                 console.log('an error occured' + error);
             }
+        },
+
+        async getGroupApp(id: String) {
+            try {
+                this.isLoading = true;
+                const responseGroupEvents = await HTTP.get(
+                    `/events/${id}/group_applications/all/`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
+                this.groupApplications = responseGroupEvents.data.results;
+                this.isLoading = false;
+            } catch (error) {
+                this.isLoading = false;
+                console.log('an error occured' + error);
+            }
+
         },
         async getEventMembers(id: String) {
             try {

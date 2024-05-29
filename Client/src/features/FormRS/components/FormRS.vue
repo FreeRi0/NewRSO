@@ -197,7 +197,8 @@
                                     placeholder="Поиск по ФИО"
                                     v-model="headquarter.commander"
                                     @update:value="changeValue"
-                                    address="users/"
+                                    :is-reg="true"
+                                    :head-val="regionalsStore.regions.find((item) => item.id == headquarter?.region)?.name"
                                 ></Dropdown>
                             </div>
                             <!-- здесь поменяла -->
@@ -340,6 +341,7 @@
                                 class="form__field-search"
                                 variant="outlined"
                                 type="text"
+                                @keyup="searchMemberEd"
                                 placeholder="Поиск по ФИО"
                                 v-model="searchMembers"
                             >
@@ -355,7 +357,7 @@
                             </v-text-field>
                             <!-- здесь поменяла -->
                             <MembersList
-                                :items="sortedMembers"
+                                :items="props.members"
                                 :functions="positions.positions.value"
                                 :submited="submited"
                                 :is-error-members="isErrorMembers"
@@ -1199,13 +1201,22 @@ const showButtonPrev = computed(() => {
 // const members = ref(props.members);
 const searchMembers = ref('');
 
-const sortedMembers = computed(() => {
-    return props.members.filter((item) => {
-        return item.user.last_name
-            .toUpperCase()
-            .includes(searchMembers.value.toUpperCase());
-    });
-});
+const timerSearch = ref(null);
+
+const searchMemberEd = () => {
+   clearTimeout(timerSearch.value);
+   timerSearch.value = setTimeout(() => {
+        regionalsStore.getSearchMembers(props.headquarter.id, searchMembers.value)
+   }, 400);
+}
+
+// const sortedMembers = computed(() => {
+//     return props.members.filter((item) => {
+//         return item.user.last_name
+//             .toUpperCase()
+//             .includes(searchMembers.value.toUpperCase());
+//     });
+// });
 
 const onUpdateMember = (event, id) => {
     emit('updateMember', event, id);

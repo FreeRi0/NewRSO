@@ -13,9 +13,10 @@
                         item.user?.first_name
 
                     }}
+                    {{ item.user.patronymic_name = null ? item.user.patronymic_name = ' ' :
+                        item.user.patronymic_name }}
                 </p>
-                <p class="ml-1">{{ item.user.patronymic_name = null ? item.user.patronymic_name = ' ' :
-                    item.user.patronymic_name }}</p>
+             
                 <p class="member__date">{{ item.user?.date_of_birth }}</p>
             </div>
         </div>

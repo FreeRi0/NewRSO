@@ -5,7 +5,7 @@
         <FormHQ
             :participants="true"
             :headquarter="headquarter"
-            :members="members"
+            :members="educationalsStore.members"
             :submited="submited"
             :is-commander-loading="isCommanderLoading"
             :is-members-loading="isMembersLoading"
@@ -27,6 +27,7 @@ import { ref, onMounted, inject } from 'vue';
 import { FormHQ } from '@features/FormHQ';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router';
+import { useEducationalsStore } from '@features/store/educationals';
 
 const router = useRouter();
 const route = useRoute();
@@ -35,7 +36,7 @@ let id = route.params.id;
 const submited = ref(false);
 
 const headquarter = ref(null);
-const members = ref([]);
+const educationalsStore = useEducationalsStore();
 
 const isCommanderLoading = ref(false);
 
@@ -72,45 +73,20 @@ onBeforeRouteUpdate(async (to, from) => {
 
 const isMembersLoading = ref(false);
 
-const getMembers = async () => {
-    try {
-        isMembersLoading.value = true;
-        setTimeout(async () => {
-            const membersResponse = await HTTP.get(
-                `educationals/${id}/members/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
-            );
 
-            members.value = membersResponse.data.results;
-            /*if (members.value.length) {
-                members.value.forEach((member) => {
-                    member.position = member.position?.id;
-                });
-            }*/
-            isMembersLoading.value = false;
-        }, 1000);
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
 
 onMounted(() => {
-    getMembers();
+    educationalsStore.getEducationalsMembers(id);
     getHeadquarter();
 });
 
 const onUpdateMember = (event, id) => {
-    const memberIndex = members.value.findIndex((member) => member.id === id);
+    const memberIndex = educationalsStore.members.findIndex((member) => member.id === id);
     const firstkey = Object.keys(event)[0];
-    members.value[memberIndex].change = true;
+    educationalsStore.members[memberIndex].change = true;
     if (firstkey == 'position')
-        members.value[memberIndex].position.id = event[firstkey];
-    else members.value[memberIndex][firstkey] = event[firstkey];
+    educationalsStore.members[memberIndex].position.id = event[firstkey];
+    else educationalsStore.members[memberIndex][firstkey] = event[firstkey];
 };
 
 const isEmblemChange = ref(false);
@@ -165,7 +141,7 @@ const changeHeadquarter = async () => {
     formData.append('slogan', headquarter.value.slogan);
     formData.append('about', headquarter.value.about);
 
-    for (let member of members.value) {
+    for (let member of educationalsStore.members) {
         if (member.change) {
             await HTTP.patch(
                 `/educationals/${id}/members/${member.id}/`,

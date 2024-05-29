@@ -199,6 +199,49 @@ export const useSquadsStore = defineStore('squads', {
             }
         },
 
+        async getSquadMembersNoLimit(id: String) {
+            try {
+
+                const responseMembers = await HTTP.get(
+                    `/detachments/${id}/members/`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
+                this.members = responseMembers.data.results;
+            } catch (error) {
+
+                console.log('an error occured ' + error);
+            }
+        },
+
+        async getSearchSquadMembers(id: String, name: String) {
+            try {
+
+                const responseMembers = await HTTP.get(
+                    `/detachments/${id}/members/?search=${name}`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
+                    },
+                );
+                this.totalMembers = responseMembers.data.count;
+                this.members = responseMembers.data.results;
+                this.nextSquads = responseMembers.data.next;
+
+            } catch (error) {
+
+                console.log('an error occured ' + error);
+            }
+        },
+
         async getNextMembers() {
             try {
                 this.isLoading = true;
@@ -222,7 +265,7 @@ export const useSquadsStore = defineStore('squads', {
             }
         },
 
-       
+
 
         async searchSquads(name: String) {
             const searchSquadsResp = await HTTP.get(

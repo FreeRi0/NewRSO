@@ -1,39 +1,17 @@
 <template>
-    <v-autocomplete
-        v-model="selected"
-        :items="items"
-        chips
-        clearable
-        variant="outlined"
-        item-title="last_name"
-        item-value="id"
-        :custom-filter="customFilter"
-        v-bind="$attrs"
-        @update:value="changeValue"
-        :address="address"
-        :no-data-text="noDataText"
-        class="option"
-    >
+    <v-autocomplete v-model="selected" :items="items" chips clearable variant="outlined" item-title="last_name"
+        item-value="id" :custom-filter="customFilter" v-bind="$attrs" @update:value="changeValue" :address="address"
+        :no-data-text="noDataText" class="option">
         <template #prepend-inner>
-            <Icon
-                icon="clarity-search-line"
-                color="#222222"
-                width="24"
-                height="24"
-                class="option__icon"
-            >
+            <Icon icon="clarity-search-line" color="#222222" width="24" height="24" class="option__icon">
             </Icon>
         </template>
         <template v-slot:chip="{ props, item }">
             <div class="option__content">
                 <div class="option__image">
-                    <img
-                        :src="
-                            item.raw?.media?.photo ??
-                            '/assets/foto-leader-squad/foto-leader-squad-stub.png'
-                        "
-                        alt="Фото бойца"
-                    />
+                    <img :src="item.raw?.media?.photo ??
+                        '/assets/foto-leader-squad/foto-leader-squad-stub.png'
+                        " alt="Фото бойца" />
                 </div>
 
                 <div class="option__wrapper">
@@ -57,13 +35,9 @@
             <v-container v-bind="props">
                 <div class="option__content option__content--option">
                     <div class="option__image">
-                        <img
-                            :src="
-                                item.raw?.media?.photo ??
-                                '/assets/foto-leader-squad/foto-leader-squad-stub.png'
-                            "
-                            alt="Фото бойца"
-                        />
+                        <img :src="item.raw?.media?.photo ??
+                            '/assets/foto-leader-squad/foto-leader-squad-stub.png'
+                            " alt="Фото бойца" />
                     </div>
                     <div class="option__wrapper">
                         <p class="option__title">
@@ -91,7 +65,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { Icon } from '@iconify/vue';
 import axios from 'axios';
 import { HTTP } from '@app/http';
@@ -103,14 +77,15 @@ defineOptions({
 const emit = defineEmits(['update:value']);
 
 const props = defineProps({
-    // error: {
-    //     type: Array,
-    //     required: false,
-    // },
 
     items: {
         type: Array,
         default: () => [],
+    },
+    headVal: {
+        type: String,
+        required: false,
+        default: '',
     },
     address: {
         type: String,
@@ -120,6 +95,11 @@ const props = defineProps({
         type: String,
         default: 'Ничего не найдено...',
     },
+    isReg: {
+        type: Boolean,
+        required: false,
+        default: true,
+    }
 });
 
 const selected = ref(null);
@@ -141,22 +121,48 @@ const customFilter = (itemTitle, queryText, item) => {
 const items = ref(props.items);
 
 const onChangeItem = async () => {
-    await HTTP.get(props.address, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
-
-        .then((res) => {
-            // console.log(props.address);
-            items.value = res.data.results;
-            console.log(res.data);
+    if (props.isReg === false) {
+        await HTTP.get(`rsousers?regional_headquarter__name=${props.headVal}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
         })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
+
+            .then((res) => {
+                // console.log(props.address);
+                items.value = res.data.results;
+                console.log(res.data);
+            })
+            .catch(function (error) {
+                console.log('an error occured ' + error);
+            });
+    } else {
+        await HTTP.get(`rsousers?region=${props.headVal}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + localStorage.getItem('Token'),
+            },
+        })
+
+            .then((res) => {
+                // console.log(props.address);
+                items.value = res.data.results;
+                console.log(res.data);
+            })
+            .catch(function (error) {
+                console.log('an error occured ' + error);
+            });
+    }
+
 };
+
+watch(() => props.headVal,
+    (newRegName) => {
+        console.log('Reg', newRegName)
+        onChangeItem();
+    }
+)
 
 onMounted(() => {
     onChangeItem();
@@ -168,6 +174,7 @@ onMounted(() => {
 .error-wrapper {
     position: relative;
 }
+
 .form-error__message {
     position: absolute;
     right: 0;
@@ -189,6 +196,7 @@ onMounted(() => {
         min-height: 40px;
         // max-height: 40px;
     }
+
     // &__icon {
 
     // }
@@ -234,6 +242,7 @@ onMounted(() => {
             height: 36px;
         }
     }
+
     &__status {
         position: absolute;
         bottom: 0;
