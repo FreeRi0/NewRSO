@@ -13,7 +13,7 @@
                 <v-text-field class="password-input" :append-inner-icon="!visible ? 'mdi-eye-off' : 'mdi-eye'"
                     :type="visible ? 'text' : 'password'" density="compact" v-model="data.password" placeholder="Пароль"
                     variant="outlined" @click:append-inner="visible = !visible"></v-text-field>
-                <p class="text-right mt-3"><router-link to="/RecoveryPass">Забыли пароль?</router-link>
+                <p class="text-right mt-3 mb-8"><router-link to="/RecoveryPass">Забыли пароль?</router-link>
                 </p>
 
                 <p class="error" v-if="isError.password">
@@ -138,13 +138,12 @@ onMounted(() => {
     border-radius: 10px;
     width: 100%;
     max-width: 500px;
-    max-height: 592px;
 
     &_title {
         font-size: 40px;
         font-weight: 600;
         font-family: 'Akrobat';
-        line-height: 48px;
+        line-height: 28px;
         margin-bottom: 48px;
         text-align: center;
 
@@ -174,7 +173,7 @@ onMounted(() => {
         width: 100%;
         margin: 0px;
         height: 44px;
-        margin-top: 40px;
+
     }
 
     &_and {
