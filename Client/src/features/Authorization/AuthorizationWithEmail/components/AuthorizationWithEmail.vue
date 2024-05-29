@@ -2,7 +2,7 @@
     <div class="d-flex justify-end align-self-center">
         <div class="Login">
 
-            <form action="#" class="Login_form" method="post" @submit.prevent="LoginUser">
+            <form action="#" class="Login_form" method="post">
                 <h2 class="Login_title">Вход в личный кабинет</h2>
                 <Input placeholder="Логин" name="login" height="40px" v-model:value="data.username"
                     class="username-input mb-3 Login_input" />
@@ -25,7 +25,7 @@
                 </p>
 
 
-                <Button class="Login_btn" type="submit" label="Войти" :loaded="isLoading" :disabled="isLoading"
+                <Button class="Login_btn" type="submit" @click="LoginUser" label="Войти" :loaded="isLoading" :disabled="isLoading"
                     color="primary"></Button>
                 <p class="text-center Login_and">или</p>
                 <div id="VkIdSdkOneTap"></div>
@@ -55,6 +55,7 @@ const data = ref({
     password: '',
 });
 const visible = ref(false);
+
 
 const isError = ref([]);
 const isLoading = ref(false);

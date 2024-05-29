@@ -85,7 +85,7 @@
                     {{ isError.username }}
                 </p>
                 <v-text-field
-                    class="password-input"
+                    class="passwordReg-input"
                     :append-inner-icon="!visible ? 'mdi-eye-off' : 'mdi-eye'"
                     :type="visible ? 'text' : 'password'"
                     density="compact"
@@ -99,7 +99,7 @@
                     {{ isError.password }}
                 </p>
                 <v-text-field
-                    class="password-input"
+                    class="passwordReg-input"
                     :append-inner-icon="!visibleRe ? 'mdi-eye-off' : 'mdi-eye'"
                     :type="visibleRe ? 'text' : 'password'"
                     density="compact"
@@ -228,7 +228,7 @@
     text-align: center;
 }
 
-.password-input,
+.passwordReg-input,
 .region-input {
     border: 1px solid #a3a3a3;
     border-radius: 10px;
@@ -238,7 +238,7 @@
     margin-bottom: 8px;
 }
 
-.password-input::placeholder,
+.passwordReg-input::placeholder,
 .region-input::placeholder {
     color: #898989;
     font-size: 16px;
@@ -377,7 +377,7 @@ input {
 .dateInput.mx-datepicker svg {
     margin-right: 6px;
 }
-.password-input input.v-field__input::placeholder,
+.passwordReg-input input.v-field__input::placeholder,
 .option-select .v-field__input input::placeholder {
     color: #a3a3a3;
     opacity: revert;
