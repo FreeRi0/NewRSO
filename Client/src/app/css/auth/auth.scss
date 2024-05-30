@@ -6,6 +6,7 @@
     background-position: center bottom;
     padding-top: 60px;
     padding-bottom: 60px;
+
     @media screen and (max-width: 768px) {
         background-image: url(../assets/authBG.jpg);
     }
@@ -19,21 +20,22 @@
     background-position: center bottom;
     padding-top: 60px;
     padding-bottom: 60px;
+
     @media screen and (max-width: 1440px) {
         background-image: url(/assets/regBR1440.jpg);
     }
+
     @media screen and (max-width: 1024px) {
         background-image: url(/assets/regBR1024.jpg);
     }
+
     @media screen and (max-width: 768px) {
         background-image: none;
         background-color: #d1d5d8;
     }
 }
 
-// .LoginForm {
-//    width: 384px;
-// }
+
 
 .v-card--variant-elevated {
     box-shadow: none;
@@ -42,6 +44,7 @@
 .text-field {
     border-radius: 10px;
 }
+
 .v-input__details {
     display: none !important;
 }
@@ -66,3 +69,4 @@
     align-items: flex-end;
     margin-bottom: 28px;
 }
+

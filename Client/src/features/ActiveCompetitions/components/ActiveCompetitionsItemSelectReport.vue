@@ -3,10 +3,7 @@
         <div class="competition__content">
             <div class="horizontal-item__wrapper">
                 <div class="containerHorizontal">
-                    <p
-                        class="cursor_redirect"
-                        @click="clickIndicator(report.indicator)"
-                    >
+                    <p class="cursor_redirect" @click="clickIndicator(report.indicator)">
                         {{ indicator.name[report.indicator - 1] }}
                     </p>
                 </div>
@@ -14,23 +11,13 @@
 
             <div class="competition__detachments">
                 <div class="horizontal-item__wrapper">
-                    <img
-                        v-if="detachmentData.banner"
-                        class="competition__avatar_circle"
-                        :src="detachmentData.banner"
-                        alt="Banner"
-                    />
+                    <img v-if="detachmentData.banner" class="competition__avatar_circle" :src="detachmentData.banner"
+                        alt="Banner" />
 
-                    <div
-                        v-else
-                        class="competition__avatar_circle blue-bg"
-                    ></div>
+                    <div v-else class="competition__avatar_circle blue-bg"></div>
 
                     <div class="containerHorizontal">
-                        <p
-                            class="cursor_redirect"
-                            @click="clickDetacment(detachmentData.id)"
-                        >
+                        <p class="cursor_redirect" @click="clickDetacment(detachmentData.id)">
                             {{ detachmentData.name }}
                         </p>
                     </div>
@@ -38,11 +25,7 @@
             </div>
 
             <div class="horizontal-item__wrapper competitition">
-                <img
-                    class="competition__avatar_square"
-                    src="@app/assets/competition/tablet-promo.png"
-                    alt=""
-                />
+                <img class="competition__avatar_square" src="@app/assets/competition/tablet-promo.png" alt="" />
 
                 <div class="containerHorizontal">
                     <p class="cursor_redirect" @click="onCompetition">
@@ -52,17 +35,13 @@
             </div>
 
             <div class="horizontal-item__wrapper competition__nomination">
-                {{ detachmentData ? 'Дебют' : 'Тандем' }}
+                {{ isTandem ? 'Тандем' : 'Дебют' }}
             </div>
 
             <div class="horizontal-item__wrapper">{{ action }}</div>
 
             <div class="horizontal__confidant">
-                <input
-                    type="checkbox"
-                    v-model="isChecked"
-                    @change="onCheckbox"
-                />
+                <input type="checkbox" v-model="isChecked" @change="onCheckbox" />
             </div>
         </div>
     </div>
@@ -222,19 +201,21 @@ onMounted(async () => {
     border: 1px solid #b6b6b6;
     border-radius: 10px;
     margin-bottom: 12px;
+
     input {
         width: 100%;
         height: 100%;
     }
 }
+
 .competition__content {
     display: grid;
     grid-gap: 12px;
     //grid-template-columns: 1fr minmax(142px, 276px) 96px 118px 50px;
     grid-template-columns:
-        minmax(200px, 286px) minmax(200px, 286px) minmax(200px, 286px)
-        96px 118px 50px;
+        minmax(200px, 286px) minmax(200px, 286px) minmax(200px, 286px) 96px 118px 50px;
 }
+
 .competition__detachments {
     display: flex;
     grid-gap: 12px;
@@ -247,17 +228,20 @@ onMounted(async () => {
     letter-spacing: 0em;
     text-align: left;
 }
+
 .competition__avatar_circle {
     border-radius: 50%;
     width: 38px;
     height: 38px;
 }
+
 .competition__avatar_square {
     object-fit: cover;
     border-radius: 10px;
     width: 52px;
     height: 40px;
 }
+
 .horizontal-item__wrapper {
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -273,18 +257,22 @@ onMounted(async () => {
     margin-bottom: 12px;
     width: 100%;
 }
+
 .containerHorizontal {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
+
 .cursor_redirect {
     cursor: pointer;
 }
+
 .competition__nomination {
     display: flex;
     justify-content: center;
 }
+
 .blue-bg {
     background-color: #c7e3fa;
 }

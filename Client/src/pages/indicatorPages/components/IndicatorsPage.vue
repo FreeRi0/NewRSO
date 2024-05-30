@@ -865,14 +865,18 @@
                             <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left" v-for="event in applicationData.organization_data"
                                     :key="event.id">
-                                    <div class="form__field">
-                                        <label class="form__label">Выберите тип мероприятия<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="event.event_type" readonly />
+                                    <div v-if="!event.is_verified" class="form__block">
+                                        <div class="form__field">
+                                            <label class="form__label">Выберите тип
+                                                мероприятия<span>&nbsp;*</span></label>
+                                            <Input type="text" v-model:value="event.event_type" readonly />
+                                        </div>
+                                        <div class="form__field">
+                                            <label class="form__label">Ссылка на публикацию<span>&nbsp;*</span></label>
+                                            <Input type="text" v-model:value="event.event_link" readonly />
+                                        </div>
                                     </div>
-                                    <div class="form__field">
-                                        <label class="form__label">Ссылка на публикацию<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="event.event_link" readonly />
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -1434,6 +1438,10 @@ onMounted(async () => {
 
 .form__field-group-bottom {
     margin-top: 50px;
+}
+
+.form__block {
+    margin-bottom: 60px;
 }
 
 .form__field-group-bottom p {

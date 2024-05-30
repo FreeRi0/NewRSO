@@ -116,33 +116,6 @@ onBeforeRouteUpdate(async (to, from) => {
 
 const isMembersLoading = ref(false);
 
-// const getMembers = async () => {
-//     try {
-//         isMembersLoading.value = true;
-//         setTimeout(async () => {
-//             const membersResponse = await HTTP.get(
-//                 `detachments/${id}/members/`,
-//                 {
-//                     headers: {
-//                         'Content-Type': 'application/json',
-//                         Authorization: 'Token ' + localStorage.getItem('Token'),
-//                     },
-//                 },
-//             );
-
-//             members.value = membersResponse.data.results;
-//             /*if (members.value.length) {
-//                 members.value.forEach((member) => {
-//                     member.position = member.position?.id;
-//                 });
-//             }*/
-//             isMembersLoading.value = false;
-//         }, 1000);
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-// };
-
 onMounted(() => {
    SquadsStore.getSquadMembersNoLimit(id)
     getDetachment();

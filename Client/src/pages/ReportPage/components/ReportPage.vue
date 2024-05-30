@@ -5,9 +5,9 @@ s
         <form class="form" action="#" method="post">
             <v-expansion-panels>
                 <v-expansion-panel>
-                    <v-expansion-panel-title>
+                    <v-expansion-panel-title @click="getParameters(1)">
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters @click="getParameters(1)">
+                            <v-row no-gutters>
                                 <v-col class="d-flex justify-start">
                                     1.&nbsp;Численность членов линейного
                                     студенческого отряда в соответствии
@@ -91,12 +91,19 @@ s
                                                 ).toLocaleDateString()
                                             }}
                                         </td>
-                                        <td v-if="report[1]?.number_of_members">
-                                            {{ report[1]?.number_of_members }}
-                                        </td>
-                                        <td v-if="isLoading">
+                                        <td>
+                                            <p
+                                                v-if="
+                                                    report[1]?.number_of_members
+                                                "
+                                            >
+                                                {{
+                                                    report[1]?.number_of_members
+                                                }}
+                                            </p>
                                             <v-progress-circular
                                                 class="circleLoader"
+                                                v-if="isLoading"
                                                 indeterminate
                                                 color="blue"
                                             ></v-progress-circular>
@@ -111,14 +118,21 @@ s
                                                 ).toLocaleDateString()
                                             }}
                                         </td>
-                                        <td
-                                            v-if="report[1]?.number_of_payments"
-                                        >
-                                            {{ report[1]?.number_of_payments }}
-                                        </td>
-                                        <td v-if="isLoading">
+                                        <td>
+                                            <p
+                                                v-if="
+                                                    report[1]
+                                                        ?.number_of_payments
+                                                "
+                                            >
+                                                {{
+                                                    report[1]
+                                                        ?.number_of_payments
+                                                }}
+                                            </p>
                                             <v-progress-circular
                                                 class="circleLoader"
+                                                v-if="isLoading"
                                                 indeterminate
                                                 color="blue"
                                             ></v-progress-circular>
@@ -130,9 +144,9 @@ s
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
-                    <v-expansion-panel-title>
+                    <v-expansion-panel-title @click="getParameters(2)">
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters @click="getParameters(2)">
+                            <v-row no-gutters>
                                 <v-col class="d-flex justify-start">
                                     2.&nbsp;Прохождение Командиром и Комиссаром
                                     студенческого отряда региональной школы
@@ -358,9 +372,9 @@ s
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
-                    <v-expansion-panel-title>
+                    <v-expansion-panel-title @click="getParameters(3)">
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters @click="getParameters(3)">
+                            <v-row no-gutters>
                                 <v-col class="d-flex justify-start">
                                     3.&nbsp;Получение командным составом отряда
                                     образования в корпоративном университете РСО
@@ -448,9 +462,9 @@ s
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
-                    <v-expansion-panel-title>
+                    <v-expansion-panel-title @click="getParameters(4)">
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters @click="getParameters(4)">
+                            <v-row no-gutters>
                                 <v-col class="d-flex justify-start">
                                     4.&nbsp;Прохождение обучения по охране труда
                                     и пожарной безопасности в рамках недели
@@ -538,9 +552,9 @@ s
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
-                    <v-expansion-panel-title>
+                    <v-expansion-panel-title @click="getParameters(5)">
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters @click="getParameters(5)">
+                            <v-row no-gutters>
                                 <v-col class="d-flex justify-start">
                                     5.&nbsp;Процент членов студенческого отряда,
                                     прошедших профессиональное обучение
@@ -763,9 +777,9 @@ s
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
-                    <v-expansion-panel-title>
+                    <v-expansion-panel-title @click="getParameters(6)">
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters @click="getParameters(6)">
+                            <v-row no-gutters>
                                 <v-col class="d-flex justify-start">
                                     6.&nbsp;Участие членов студенческого отряда
                                     в обязательных общесистемных мероприятиях на
@@ -1334,9 +1348,9 @@ s
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
-                    <v-expansion-panel-title>
+                    <v-expansion-panel-title @click="getParameters(7)">
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters @click="getParameters(7)">
+                            <v-row no-gutters>
                                 <v-col class="d-flex justify-start">
                                     7.&nbsp;Участие членов студенческого отряда
                                     в окружных и межрегиональных мероприятиях
@@ -1632,9 +1646,9 @@ s
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
-                    <v-expansion-panel-title>
+                    <v-expansion-panel-title @click="getParameters(8)">
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters @click="getParameters(8)">
+                            <v-row no-gutters>
                                 <v-col class="d-flex justify-start">
                                     8.&nbsp;Участие членов студенческого отряда
                                     во всероссийских мероприятиях РСО
@@ -1928,9 +1942,9 @@ s
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
-                    <v-expansion-panel-title>
+                    <v-expansion-panel-title @click="getParameters(9)">
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters @click="getParameters(9)">
+                            <v-row no-gutters>
                                 <v-col class="d-flex justify-start">
                                     9.&nbsp;Призовые места отряда в окружных и
                                     межрегиональных мероприятиях и конкурсах РСО
@@ -2160,9 +2174,9 @@ s
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
-                    <v-expansion-panel-title>
+                    <v-expansion-panel-title @click="getParameters(10)">
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters @click="getParameters(10)">
+                            <v-row no-gutters>
                                 <v-col class="d-flex justify-start">
                                     10.&nbsp;Призовые места отряда во
                                     Всероссийских мероприятиях и конкурсах РСО
@@ -2392,9 +2406,9 @@ s
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
-                    <v-expansion-panel-title>
+                    <v-expansion-panel-title @click="getParameters(11)">
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters @click="getParameters(11)">
+                            <v-row no-gutters>
                                 <v-col class="d-flex justify-start">
                                     11.&nbsp;Призовые места отряда на окружных и
                                     межрегиональных трудовых проектах
@@ -2627,9 +2641,9 @@ s
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
-                    <v-expansion-panel-title>
+                    <v-expansion-panel-title @click="getParameters(12)">
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters @click="getParameters(12)">
+                            <v-row no-gutters>
                                 <v-col class="d-flex justify-start">
                                     12.&nbsp;Призовые места отряда на
                                     всероссийских трудовых проектах
@@ -2857,9 +2871,9 @@ s
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
-                    <v-expansion-panel-title>
+                    <v-expansion-panel-title @click="getParameters(13)">
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters @click="getParameters(13)">
+                            <v-row no-gutters>
                                 <v-col class="d-flex justify-start">
                                     13.&nbsp;Организация собственных мероприятий
                                     отряда
@@ -3019,9 +3033,9 @@ s
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
-                    <v-expansion-panel-title>
+                    <v-expansion-panel-title @click="getParameters(14)">
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters @click="getParameters(14)">
+                            <v-row no-gutters>
                                 <v-col class="d-flex justify-start">
                                     14.&nbsp;Отношение количества бойцов,
                                     отработавших в летнем трудовом семестре к
@@ -3187,9 +3201,9 @@ s
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
-                    <v-expansion-panel-title>
+                    <v-expansion-panel-title @click="getParameters(15)">
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters @click="getParameters(15)">
+                            <v-row no-gutters>
                                 <v-col class="d-flex justify-start">
                                     15.&nbsp;Победы членов отряда в
                                     региональных, окружных и всероссийских
@@ -3398,9 +3412,9 @@ s
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
-                    <v-expansion-panel-title>
+                    <v-expansion-panel-title @click="getParameters(16)">
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters @click="getParameters(16)">
+                            <v-row no-gutters>
                                 <v-col class="d-flex justify-start">
                                     16.&nbsp;Активность отряда в социальных
                                     сетях
@@ -3627,9 +3641,9 @@ s
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
-                    <v-expansion-panel-title>
+                    <v-expansion-panel-title @click="getParameters(17)">
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters @click="getParameters(17)">
+                            <v-row no-gutters>
                                 <v-col class="d-flex justify-start">
                                     17.&nbsp;Количество упоминаний в СМИ о
                                     прошедших творческих, добровольческих и
@@ -3789,9 +3803,9 @@ s
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
-                    <v-expansion-panel-title>
+                    <v-expansion-panel-title @click="getParameters(18)">
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters @click="getParameters(18)">
+                            <v-row no-gutters>
                                 <v-col class="d-flex justify-start">
                                     18.&nbsp;Охват бойцов, принявших участие во
                                     Всероссийском дне ударного труда
@@ -3908,9 +3922,9 @@ s
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
-                    <v-expansion-panel-title>
+                    <v-expansion-panel-title @click="getParameters(19)">
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters @click="getParameters(19)">
+                            <v-row no-gutters>
                                 <v-col class="d-flex justify-start">
                                     19.&nbsp;Отсутствие нарушений техники
                                     безопасности, охраны труда и противопожарной
@@ -4024,9 +4038,9 @@ s
                     </v-expansion-panel-text>
                 </v-expansion-panel>
                 <v-expansion-panel>
-                    <v-expansion-panel-title>
+                    <v-expansion-panel-title @click="getParameters(20)">
                         <template v-slot="{ expanded }">
-                            <v-row no-gutters @click="getParameters(20)">
+                            <v-row no-gutters>
                                 <v-col class="d-flex justify-start">
                                     20.&nbsp;Соответствие требованиям и
                                     положения символики и атрибутике форменной
