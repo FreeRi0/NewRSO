@@ -8,7 +8,7 @@ export const useLocalsStore = defineStore('local', {
         members: [],
         totalLocals: 0,
         nextLocals: '',
-        localsLimit: 4,
+        localsLimit: 20,
     }),
     actions: {
         async searchLocals(name: String) {

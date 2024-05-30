@@ -27,11 +27,11 @@
                                 <Dropdown title="Структура" :items="pages" />
                             </div>
                         </li>
-                        <li class="header__nav-item">
+                        <!-- <li class="header__nav-item">
                             <a class="header__nav-link" href="/actionSquads">
                                 Мероприятия
                             </a>
-                        </li>
+                        </li> -->
                         <li class="header__nav-item competition__nav-item">
                             <a class="header__nav-link competition__link" href="/Competition">
                                 Конкурс
@@ -303,15 +303,15 @@ const userPages = computed(() => [
 
         ,
     },
-    {
-        title: 'Поиск участников',
-        link: '/roster',
-        show:
-            roleStore.roles?.centralheadquarter_commander ||
-            roleStore.roles?.districtheadquarter_commander ||
-            roleStore.roles?.regionalheadquarter_commander ||
-            roleStore.roles?.detachment_commander,
-    },
+    // {
+    //     title: 'Поиск участников',
+    //     link: '/roster',
+    //     show:
+    //         roleStore.roles?.centralheadquarter_commander ||
+    //         roleStore.roles?.districtheadquarter_commander ||
+    //         roleStore.roles?.regionalheadquarter_commander ||
+    //         roleStore.roles?.detachment_commander,
+    // },
     {
         title: 'Членский взнос',
         name: 'contributorPay',
@@ -331,6 +331,7 @@ const userPages = computed(() => [
             roleStore.roles.regionalheadquarter_commander ||
             roleStore.roles.centralheadquarter_commander,
     },
+
     {
         title: 'Охрана труда и техника безопасности',
         name: 'Safety',
@@ -338,6 +339,7 @@ const userPages = computed(() => [
             true
 
     },
+
 
     { title: 'Настройки профиля', name: 'personaldata', show: true },
     { title: 'Выйти из ЛК', button: true, show: true },

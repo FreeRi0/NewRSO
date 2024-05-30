@@ -13,7 +13,7 @@ export const useRegionalsStore = defineStore('regionals', {
         institutions: [],
         isLoading: false,
         totalRegionals: 0,
-        regionalsLimit: 4,
+        regionalsLimit: 20,
         nextRegionals: '',
     }),
     actions: {
