@@ -61,9 +61,9 @@ const isError = ref([]);
 const isLoading = ref(false);
 const swal = inject('$swal');
 
-const APP_ID = 51932483
-const REDIRECT_URL = 'https://rso.sprint.1t.ru/MyPage'
-const oneTap = new VKID.OneTap();
+// const APP_ID = 51932483
+// const REDIRECT_URL = 'https://rso.sprint.1t.ru/MyPage'
+// const oneTap = new VKID.OneTap();
 
 
 VKID.Config.set({
@@ -117,14 +117,14 @@ const LoginUser = async () => {
     }
 };
 
-onMounted(() => {
-    const container = document.getElementById('VkIdSdkOneTap');
-    if (container) {
-        console.log(container, oneTap)
-        // Отрисовка кнопки в контейнере с именем приложения APP_NAME, светлой темой и на русском языке.
-        oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
-    }
-})
+// onMounted(() => {
+//     const container = document.getElementById('VkIdSdkOneTap');
+//     if (container) {
+//         console.log(container, oneTap)
+//         // Отрисовка кнопки в контейнере с именем приложения APP_NAME, светлой темой и на русском языке.
+//         oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
+//     }
+// })
 
 </script>
 
