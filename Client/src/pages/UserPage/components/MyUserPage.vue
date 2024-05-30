@@ -61,14 +61,14 @@ const region = ref({});
 const query = new URLSearchParams(window.location.search);
 const { payload } = Object.fromEntries(query.entries());
 
-console.log(payload, 'pay', payload.uuid, payload.token);
+//console.log(payload, 'pay', payload.uuid, payload.token);
 
 const TokenData = ref({
     silent_token: payload.token,
     uuid: payload.uuid,
 })
 
-console.log(TokenData, 'token');
+//console.log(TokenData, 'token');
 
 const exchangeToken = async () => {
     try {
@@ -112,9 +112,9 @@ const deleteWall = (imageWall) => {
     currentUser.currentUser.value.media.banner = imageWall;
 };
 
-onMounted(() => {
-    exchangeToken();
-})
+//onMounted(() => {
+   // exchangeToken();
+//})
 </script>
 <style lang="scss" scoped>
 .user-wrapper {
