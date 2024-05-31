@@ -59,17 +59,15 @@ const region = ref({});
 
 
 const query = new URLSearchParams(window.location.search);
-const { payload } = JSON.parse(query.get("payload"));
+const payload  = JSON.parse(query.get("payload"));
 
 
-console.log(payload, 'pay', payload.uuid, payload.token);
 
 const TokenData = ref({
     silent_token: payload.token,
     uuid: payload.uuid,
 })
 
-console.log(TokenData, 'token');
 
 const exchangeToken = async () => {
     try {
