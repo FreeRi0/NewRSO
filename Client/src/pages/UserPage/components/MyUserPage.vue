@@ -64,8 +64,8 @@ const payload  = JSON.parse(query.get("payload"));
 
 
 const TokenData = ref({
-    silent_token: payload.token,
-    uuid: payload.uuid,
+    silent_token: payload?.silent_token,
+    uuid: payload?.uuid,
 })
 
 
