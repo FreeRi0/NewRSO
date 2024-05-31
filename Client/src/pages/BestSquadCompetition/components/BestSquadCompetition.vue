@@ -169,6 +169,7 @@
                 }"><Button class="competition__safety-text_btn"
                         label="Обучение по охране труда и технике безопасности" /></router-link>
             </div>
+
             <img src="@app/assets/SafetyBgMini.png" alt="bg" />
         </div>
         <router-link :to="{

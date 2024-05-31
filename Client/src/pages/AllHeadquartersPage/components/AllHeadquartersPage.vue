@@ -236,7 +236,7 @@ const timerSearch = ref(null);
 const vertical = ref(true);
 const isLoading = ref(false);
 const educationals = ref({});
-const limit = 4;
+const limit = 20;
 
 const name = ref('');
 

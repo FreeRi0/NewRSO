@@ -10,10 +10,9 @@ export const useSquadsStore = defineStore('squads', {
         competitionSquads: [],
         isLoading: false,
         totalMembers: 0,
-        SquadsLimit: 4,
-        MembersLimit: 6,
+        SquadsLimit: 20,
+        MembersLimit: 10,
         totalSquads: 0,
-        CompetitionsLimit: 12,
         nextSquads: '',
         totalCompetitions: 0,
     }),
@@ -88,6 +87,9 @@ export const useSquadsStore = defineStore('squads', {
                 const responseCompetitionSquads = await HTTP.get(
                     `/competitions/1/participants/`,
                     {
+                       params:{
+                        limit: 351
+                       },
 
                         headers: {
                             'Content-Type': 'application/json',
@@ -134,9 +136,6 @@ export const useSquadsStore = defineStore('squads', {
             const searchCompSquads = await HTTP.get(
                 `/competitions/1/participants/?search=${name}`,
                 {
-                    params: {
-                        limit: this.CompetitionsLimit,
-                    },
                     headers: {
                         'Content-Type': 'application/json',
                     },
