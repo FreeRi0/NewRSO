@@ -4510,47 +4510,61 @@ const report = ref({
         disabledBtn: false,
     },
     61: {
-        demonstration_block: {
-            first_may_demonstration: null,
-            first_may_demonstration_participants: '',
-            disabledBtn: false,
-        },
+        demonstration_block: [
+            {
+                first_may_demonstration: null,
+                first_may_demonstration_participants: '',
+                disabledBtn: false,
+            },
+        ],
     },
     62: {
-        patriotic_action_block: {
-            patriotic_action: null,
-            patriotic_action_participants: '',
-            disabledBtn: false,
-        },
+        patriotic_action_block: [
+            {
+                patriotic_action: null,
+                patriotic_action_participants: '',
+                disabledBtn: false,
+            },
+        ],
     },
     63: {
-        safety_work_week_block: { safety_work_week: null, disabledBtn: false },
+        safety_work_week_block: [
+            { safety_work_week: null, disabledBtn: false },
+        ],
     },
     64: {
-        commander_commissioner_school_block: {
-            commander_commissioner_school: null,
-            disabledBtn: false,
-        },
+        commander_commissioner_school_block: [
+            {
+                commander_commissioner_school: null,
+                disabledBtn: false,
+            },
+        ],
     },
     65: {
-        working_semester_opening_block: {
-            working_semester_opening: null,
-            working_semester_opening_participants: '',
-            disabledBtn: false,
-        },
+        working_semester_opening_block: [
+            {
+                working_semester_opening: null,
+                working_semester_opening_participants: '',
+                disabledBtn: false,
+            },
+        ],
     },
     66: {
-        creative_festival_block: {
-            creative_festival: null,
-            disabledBtn: false,
-        },
+        creative_festival_block: [
+            {
+                creative_festival: null,
+                disabledBtn: false,
+            },
+        ],
     },
-    67: { spartakiad_block: { spartakiad: null, disabledBtn: false } },
+    67: { spartakiad_block: [{ spartakiad: null, disabledBtn: false }] },
     68: {
-        professional_competition_block: {
-            professional_competition: null,
-            disabledBtn: false,
-        },
+        professional_competition_block: [
+            {
+                professional_competition: null,
+                disabledBtn: false,
+            },
+        ],
     },
     7: {
         participation_data: [
@@ -5145,5 +5159,4 @@ td {
     font-weight: 600;
     font-family: 'Acrobat';
 }
-/*  */
 </style>
