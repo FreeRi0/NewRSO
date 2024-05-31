@@ -67,7 +67,7 @@ const payload = JSON.parse(query.get("payload"));
 const TokenData = ref({
     silent_token: payload?.token,
     uuid: payload?.uuid,
-    access_token: process.env.SERVICE_TOKEN
+    access_token: import.meta.env.VITE_API_SERVICE_TOKEN
 })
 
 
