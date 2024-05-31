@@ -58,29 +58,28 @@ const education = ref({});
 const region = ref({});
 
 
-const query = new URLSearchParams(window.location.search);
-const { payload } = Object.fromEntries(query.entries());
+// const query = new URLSearchParams(window.location.search);
+// const payload = JSON.parse(query.get("payload"));
 
-//console.log(payload, 'pay', payload.uuid, payload.token);
 
-const TokenData = ref({
-    silent_token: payload.token,
-    uuid: payload.uuid,
-})
 
-//console.log(TokenData, 'token');
+// const TokenData = ref({
+//     silent_token: payload?.token,
+//     uuid: payload?.uuid,
+// })
 
-const exchangeToken = async () => {
-    try {
-        const resp = await HTTP.post('/exchange-token/', TokenData.value, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-    } catch (e) {
-        console.log('error:', e)
-    }
-}
+
+// const exchangeToken = async () => {
+//     try {
+//         const resp = await HTTP.post('/exchange-token/', TokenData.value, {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//         })
+//     } catch (e) {
+//         console.log('error:', e)
+//     }
+// }
 
 const uploadAva = (imageAva) => {
 
@@ -112,9 +111,9 @@ const deleteWall = (imageWall) => {
     currentUser.currentUser.value.media.banner = imageWall;
 };
 
-//onMounted(() => {
-   // exchangeToken();
-//})
+// onMounted(() => {
+//     exchangeToken();
+// })
 </script>
 <style lang="scss" scoped>
 .user-wrapper {

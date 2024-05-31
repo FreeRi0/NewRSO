@@ -25,10 +25,10 @@
                 </p>
 
 
-                <Button class="Login_btn" type="submit" @click="LoginUser" label="Войти" :loaded="isLoading" :disabled="isLoading"
-                    color="primary"></Button>
-                <!--<p class="text-center Login_and">или</p>
-                <div id="VkIdSdkOneTap"></div>-->
+                <Button class="Login_btn" type="submit" @click="LoginUser" label="Войти" :loaded="isLoading"
+                    :disabled="isLoading" color="primary"></Button>
+                <!-- <p class="text-center Login_and">или</p> -->
+                <!-- <div id="VkIdSdkOneTap"></div> -->
                 <div class="text-center goReg">У вас нет аккаунта?
                     <router-link class="Login_link ml-1" to="/Register">Зарегистрироваться</router-link>
                 </div>
@@ -66,15 +66,15 @@ const swal = inject('$swal');
 // const oneTap = new VKID.OneTap();
 
 
-VKID.Config.set({
-    app: APP_ID, // Идентификатор приложения.
-    redirectUrl: REDIRECT_URL, // Адрес для перехода после авторизации.
-    state: 'dj29fnsadjsd82...' // Произвольная строка состояния приложения.
-});
+// VKID.Config.set({
+//     app: APP_ID, // Идентификатор приложения.
+//     redirectUrl: REDIRECT_URL, // Адрес для перехода после авторизации.
+//     state: 'dj29fnsadjsd82...' // Произвольная строка состояния приложения.
+// });
 
 
 const Click = () => {
-console.log("Click");
+    // console.log("Click");
 }
 
 const LoginUser = async () => {
@@ -87,7 +87,6 @@ const LoginUser = async () => {
         });
         data.value = response.data;
         localStorage.setItem('Token', response.data.auth_token);
-        console.log(response.data);
         isLoading.value = false;
         router.push({
             name: 'mypage',
@@ -174,9 +173,11 @@ const LoginUser = async () => {
 
 
     &_btn {
+        border-radius: 8px !important;
         width: 100%;
         margin: 0px;
         height: 44px;
+        padding: 0px 24px !important;
 
     }
 
@@ -195,16 +196,20 @@ const LoginUser = async () => {
         font-size: 18px;
         font-weight: 500;
     }
+
+    &_input {
+        border-radius: 8px !important;
+    }
 }
 
 
 .v-field {
-    border-radius: 10px;
+    border-radius: 8px;
 }
 
 .password-input {
     border: 1px solid #a3a3a3;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 16px;
     height: 40px;
     color: #35383f;
@@ -314,7 +319,7 @@ const LoginUser = async () => {
 
 
 .v-text-field input.v-field__input {
-    padding: 0px 6px 6px 16px;
+    padding: 0px 7.5px 6px 16px;
 }
 
 // :global(.v-input__control) {
@@ -322,9 +327,23 @@ const LoginUser = async () => {
 //     font-weight: 400;
 // }
 
+.v-field--center-affix .v-field__append-inner,
+.v-field--center-affix .v-field__clearable,
+.v-field--center-affix .v-field__prepend-inner {
+    padding-bottom: 5px;
+}
+
 
 :global(.v-text-field .v-field--no-label input,
     .v-text-field .v-field--active input) {
+    border-radius: 8px;
+}
+
+.VkIdWebSdk__button_mltngh {
+    border-radius: 10px;
+}
+
+#flelhu .VkIdWebSdk__button_flelhu {
     border-radius: 10px;
 }
 

@@ -4682,63 +4682,100 @@ const getParameters = async (id) => {
             ) {
                 if (
                     response.data.results[0].demonstration_block
-                        .first_may_demonstration
-                )
+                        ?.first_may_demonstration
+                ) {
+                    report.value[61].demonstration_block.first_may_demonstration =
+                        response.data.results[0].demonstration_block.first_may_demonstration;
+                    report.value[61].demonstration_block.first_may_demonstration_participants =
+                        response.data.results[0].demonstration_block.first_may_demonstration_participants;
                     report.value[61].disabledBtn = true;
+                } else {
+                    report.value[61].demonstration_block.first_may_demonstration =
+                        null;
+                    report.value[61].demonstration_block.first_may_demonstration_participants =
+                        '';
+                }
                 if (
                     response.data.results[0].patriotic_action_block
-                        .patriotic_action_participants
-                )
+                        ?.patriotic_action_participants
+                ) {
+                    report.value[62].patriotic_action_block.patriotic_action =
+                        response.data.results[0].patriotic_action_block.patriotic_action;
+                    report.value[62].patriotic_action_block.patriotic_action_participants =
+                        response.data.results[0].patriotic_action_block.patriotic_action_participants;
                     report.value[62].disabledBtn = true;
+                } else {
+                    report.value[62].patriotic_action_block.patriotic_action =
+                        null;
+                    report.value[62].patriotic_action_block.patriotic_action_participants =
+                        '';
+                }
                 if (
                     response.data.results[0].safety_work_week_block
-                        .safety_work_week
-                )
+                        ?.safety_work_week
+                ) {
                     report.value[63].disabledBtn = true;
+                    report.value[63].safety_work_week_block.safety_work_week =
+                        response.data.results[0].safety_work_week_block.safety_work_week;
+                } else {
+                    report.value[63].safety_work_week_block.safety_work_week =
+                        null;
+                }
                 if (
                     response.data.results[0].commander_commissioner_school_block
-                        .commander_commissioner_school
-                )
+                        ?.commander_commissioner_school
+                ) {
                     report.value[64].disabledBtn = true;
+                    report.value[64].commander_commissioner_school_block.commander_commissioner_school =
+                        response.data.results[0].commander_commissioner_school_block.commander_commissioner_school;
+                } else {
+                    report.value[64].commander_commissioner_school_block.commander_commissioner_school =
+                        null;
+                }
                 if (
                     response.data.results[0].working_semester_opening_block
-                        .working_semester_opening
-                )
+                        ?.working_semester_opening
+                ) {
                     report.value[65].disabledBtn = true;
+                    report.value[65].working_semester_opening_block.working_semester_opening =
+                        response.data.results[0].working_semester_opening_block.working_semester_opening;
+                    report.value[65].working_semester_opening_block.working_semester_opening_participants =
+                        response.data.results[0].working_semester_opening_block.working_semester_opening_participants;
+                } else {
+                    report.value[65].working_semester_opening_block.working_semester_opening =
+                        null;
+                    report.value[65].working_semester_opening_block.working_semester_opening_participants =
+                        '';
+                }
                 if (
                     response.data.results[0].creative_festival_block
-                        .creative_festival
-                )
+                        ?.creative_festival
+                ) {
                     report.value[66].disabledBtn = true;
-                if (response.data.results[0].spartakiad_block.spartakiad)
+                    report.value[66].creative_festival_block.creative_festival =
+                        response.data.results[0].creative_festival_block.creative_festival;
+                } else {
+                    report.value[66].creative_festival_block.creative_festival =
+                        null;
+                }
+                if (response.data.results[0].spartakiad_block?.spartakiad) {
                     report.value[67].disabledBtn = true;
+                    report.value[67].spartakiad_block.spartakiad =
+                        response.data.results[0].spartakiad_block.spartakiad;
+                } else {
+                    report.value[67].spartakiad_block.spartakiad = null;
+                }
                 if (
                     response.data.results[0].professional_competition_block
-                        .professional_competition
-                )
+                        ?.professional_competition
+                ) {
                     report.value[68].disabledBtn = true;
-                report.value[61].demonstration_block.first_may_demonstration =
-                    response.data.results[0].demonstration_block.first_may_demonstration;
-                report.value[61].demonstration_block.first_may_demonstration_participants =
-                    response.data.results[0].demonstration_block.first_may_demonstration_participants;
-                report.value[62].patriotic_action_block.patriotic_action =
-                    response.data.results[0].patriotic_action_block.patriotic_action;
-                report.value[62].patriotic_action_block.patriotic_action_participants =
-                    response.data.results[0].patriotic_action_block.patriotic_action_participants;
-                report.value[63].safety_work_week_block.safety_work_week =
-                    response.data.results[0].safety_work_week_block.safety_work_week;
-                report.value[64].commander_commissioner_school_block.commander_commissioner_school =
-                    response.data.results[0].commander_commissioner_school_block.commander_commissioner_school;
-                report.value[65].working_semester_opening_block.working_semester_opening =
-                    response.data.results[0].working_semester_opening_block.working_semester_opening;
-                report.value[65].working_semester_opening_block.working_semester_opening_participants =
-                    response.data.results[0].working_semester_opening_block.working_semester_opening_participants;
-                report.value[66].creative_festival_block.creative_festival =
-                    response.data.results[0].creative_festival_block.creative_festival;
-                report.value[67].spartakiad_block.spartakiad =
-                    response.data.results[0].spartakiad_block.spartakiad;
-                report.value[68].professional_competition_block.professional_competition =
-                    response.data.results[0].professional_competition_block.professional_competition;
+                    report.value[68].professional_competition_block.professional_competition =
+                        response.data.results[0].professional_competition_block.professional_competition;
+                } else {
+                    report.value[68].professional_competition_block.professional_competition =
+                        null;
+                }
             } else {
                 if (report.value[id].participation_data) {
                     report.value[id].participation_data = response.data.results;
@@ -4764,7 +4801,7 @@ const getParameters = async (id) => {
             report.value[id].disabledBtn = false;
         }
     } catch (error) {
-        isError.value = error.response.data;
+        isError.value = error.response;
     }
 };
 const postParameters = async (id) => {

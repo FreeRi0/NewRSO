@@ -572,12 +572,15 @@ const getAllReporting = async () => {
                     report.participants_data = tempArr;
                     if (tempArr.length) allReporting.value[index].push(report);
                 } else if (index == 6) {
+                    let del = true;
                     for (const key in report) {
-                        if (key.indexOf('block') && !(report[key] && !report[key].is_verified)) {
+                        if (key.indexOf('block') != -1 && !(report[key] && !report[key].is_verified)) {
                             delete report[key]
+                        } else if (key.indexOf('block') != -1 && !(report[key] && report[key].is_verified)) {
+                            del = false;
                         }
                     }
-                    allReporting.value[index].push(report);
+                    if (!del) allReporting.value[index].push(report);
                 } else if (index == 13) {
                     let tempArr = [];
                     for (const tempData of report.organization_data) {
