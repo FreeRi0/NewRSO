@@ -1,18 +1,8 @@
 <template>
     <div class="form-input" :style="{ width: width }">
-        <input
-            :type="type"
-            :name="name"
-            :value="value"
-            :id="name"
-            :placeholder="placeholder"
-            :maxlength="maxLength"
-            :readonly="readonly"
-            max="9999-12-31"
-            class="mb-2"
-            @input="updateValue"
-            v-bind="$attrs"
-        />
+        <input :type="type" :name="name" :style="{ height: height }" :value="value" :id="name" :placeholder="placeholder"
+            :maxlength="maxLength" :readonly="readonly" max="9999-12-31" class="mb-2" @input="updateValue"
+            v-bind="$attrs" />
     </div>
 </template>
 
@@ -41,6 +31,10 @@ const props = defineProps({
         type: String,
         default: '',
     },
+    height: {
+        type: String,
+        default: '',
+    },
     maxLength: {
         type: Number,
     },
@@ -65,6 +59,7 @@ const updateValue = (event) => {
     // margin-bottom: 5px;
     position: relative;
 }
+
 .form-error__message {
     position: absolute;
     right: 0;
@@ -76,9 +71,13 @@ input {
     font: normal;
 }
 
+input:focus {
+    outline: none;
+}
+
 .form-input input {
     box-sizing: border-box;
-    border: 2px solid #a3a3a3;
+    border: 1px solid #a3a3a3;
     border-radius: 10px;
     display: block;
     font-size: 16px;

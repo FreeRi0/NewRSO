@@ -1,45 +1,11 @@
 <template>
     <div class="d-flex justify-end align-self-center">
-        <!-- <v-card>
-            <v-card-title class="text-center">Вход в личный кабинет</v-card-title>
-
-            <v-form action="#" method="post" @submit.prevent="LoginUser">
-
-
-                <Input placeholder="Логин" name="login" v-model:value="data.username" class="username-input" />
-
-                <p class="error" v-if="isError.username">
-                    {{ '' + isError.username }}
-                </p>
-                <v-text-field class="password-input" :append-inner-icon="!visible ? 'mdi-eye-off' : 'mdi-eye'"
-                    :type="visible ? 'text' : 'password'" density="compact" v-model="data.password" placeholder="Пароль"
-                    variant="outlined" @click:append-inner="visible = !visible"></v-text-field>
-                    <v-card-text class="text-center">Забыли пароль?
-                    </v-card-text>
-
-                <p class="error" v-if="isError.password">
-                    {{ '' + isError.password }}
-                </p>
-
-                <p class="error" v-if="isError.non_field_errors">
-                    {{ '' + isError.non_field_errors }}
-                </p>
-
-                <Button class="login_btn" type="submit" label="Войти" :loaded="isLoading" :disabled="isLoading"
-                    color="primary"></Button>
-                <v-card-text class="text-center goReg">У вас еще нет аккаунта?
-                    <router-link class="authLinks" to="/Register">Зарегистрироваться</router-link>
-                </v-card-text>
-
-
-            </v-form>
-        </v-card> -->
-
         <div class="Login">
 
-            <form action="#" class="Login_form" method="post" @submit.prevent="LoginUser">
+            <form action="#" class="Login_form" method="post" @submit.prevent="Click">
                 <h2 class="Login_title">Вход в личный кабинет</h2>
-                <Input placeholder="Логин" name="login" v-model:value="data.username" class="username-input mb-3" />
+                <Input placeholder="Логин" name="login" height="40px" v-model:value="data.username"
+                    class="username-input mb-3 Login_input" />
 
                 <p class="error" v-if="isError.username">
                     {{ '' + isError.username }}
@@ -47,7 +13,7 @@
                 <v-text-field class="password-input" :append-inner-icon="!visible ? 'mdi-eye-off' : 'mdi-eye'"
                     :type="visible ? 'text' : 'password'" density="compact" v-model="data.password" placeholder="Пароль"
                     variant="outlined" @click:append-inner="visible = !visible"></v-text-field>
-                <p class="text-right mt-3"><router-link to="/RecoveryPass">Забыли пароль?</router-link>
+                <p class="text-right mt-3 mb-8"><router-link to="/RecoveryPass">Забыли пароль?</router-link>
                 </p>
 
                 <p class="error" v-if="isError.password">
@@ -59,12 +25,12 @@
                 </p>
 
 
-                <Button class="Login_btn" type="submit" label="Войти" :loaded="isLoading" :disabled="isLoading"
-                    color="primary"></Button>
+                <Button class="Login_btn" type="submit" @click="LoginUser" label="Войти" :loaded="isLoading"
+                    :disabled="isLoading" color="primary"></Button>
                 <p class="text-center Login_and">или</p>
                 <div id="VkIdSdkOneTap"></div>
                 <div class="text-center goReg">У вас нет аккаунта?
-                    <router-link class="Login_link" to="/Register">Зарегистрироваться</router-link>
+                    <router-link class="Login_link ml-1" to="/Register">Зарегистрироваться</router-link>
                 </div>
             </form>
         </div>
@@ -78,32 +44,10 @@ import { Input } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@features/store/index';
-
+import * as VKID from '@vkid/sdk';
 import { storeToRefs } from 'pinia';
 
 const router = useRouter();
-
-// const VkIdSdkOneTap = ref();
-
-
-// VKID.Config.set({
-//     app: APP_ID, // Идентификатор приложения.
-//     redirectUrl: REDIRECT_URL, // Адрес для перехода после авторизации.
-//     state: 'dj29fnsadjsd82...' // Произвольная строка состояния приложения.
-// });
-
-// Создание экземпляра кнопки.
-// const oneTap = new VKID.OneTap();
-
-// Получение контейнера из разметки.
-// const container = document.getElementById('VkIdSdkOneTap');
-
-// Проверка наличия кнопки в разметке.
-// if (VkIdSdkOneTap.value) {
-//     // Отрисовка кнопки в контейнере с именем приложения APP_NAME, светлой темой и на русском языке.
-//     oneTap.render({ container: VkIdSdkOneTap.value, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
-// }
-
 const userStore = useUserStore();
 const user = storeToRefs(userStore);
 const data = ref({
@@ -112,10 +56,26 @@ const data = ref({
 });
 const visible = ref(false);
 
+
 const isError = ref([]);
 const isLoading = ref(false);
 const swal = inject('$swal');
 
+const APP_ID = 51932483
+const REDIRECT_URL = 'https://rso.sprint.1t.ru/MyPage'
+const oneTap = new VKID.OneTap();
+
+
+VKID.Config.set({
+    app: APP_ID, // Идентификатор приложения.
+    redirectUrl: REDIRECT_URL, // Адрес для перехода после авторизации.
+    state: 'dj29fnsadjsd82...' // Произвольная строка состояния приложения.
+});
+
+
+const Click = () => {
+    console.log("Click");
+}
 
 const LoginUser = async () => {
     try {
@@ -157,29 +117,17 @@ const LoginUser = async () => {
     }
 };
 
+onMounted(() => {
+    const container = document.getElementById('VkIdSdkOneTap');
+    if (container) {
+        console.log(container, oneTap)
+        // Отрисовка кнопки в контейнере с именем приложения APP_NAME, светлой темой и на русском языке.
+        oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
+    }
+})
+
 </script>
-<script>
-import * as VKID from '@vkid/sdk';
-const APP_ID = 51932483
-const REDIRECT_URL = 'https://rso.sprint.1t.ru/MyPage'
-const oneTap = new VKID.OneTap();
 
-
-VKID.Config.set({
-    app: APP_ID, // Идентификатор приложения.
-    redirectUrl: REDIRECT_URL, // Адрес для перехода после авторизации.
-    state: 'dj29fnsadjsd82...' // Произвольная строка состояния приложения.
-});
-
-// Получение контейнера из разметки.
-const container = document.getElementById('VkIdSdkOneTap');
-
-// Проверка наличия кнопки в разметке.
-if (container) {
-    // Отрисовка кнопки в контейнере с именем приложения APP_NAME, светлой темой и на русском языке.
-    oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
-}
-</script>
 
 <style lang="scss">
 .justify-end {
@@ -190,16 +138,16 @@ if (container) {
 
 .Login {
     background-color: #FFFFFF;
+    box-shadow: 0px 4px 30px 0px #0000000D;
     border-radius: 10px;
     width: 100%;
     max-width: 500px;
-    max-height: 592px;
 
     &_title {
         font-size: 40px;
         font-weight: 600;
         font-family: 'Akrobat';
-        line-height: 48px;
+        line-height: 28px;
         margin-bottom: 48px;
         text-align: center;
 
@@ -223,18 +171,24 @@ if (container) {
 
     }
 
+
+
     &_btn {
+        border-radius: 8px !important;
         width: 100%;
         margin: 0px;
-        margin-top: 40px;
+        height: 44px;
+        padding: 0px 24px !important;
+
     }
 
     &_and {
-        margin-bottom: 20px;
+        margin: 20px 0px;
         color: #A3A3A3;
         font-weight: 400;
         font-family: 'Bert Sans';
     }
+
 
     &_link {
         text-decoration: underline;
@@ -243,10 +197,28 @@ if (container) {
         font-size: 18px;
         font-weight: 500;
     }
+
+    &_input {
+        border-radius: 8px !important;
+    }
 }
 
+
 .v-field {
-    border-radius: 10px;
+    border-radius: 8px;
+}
+
+.password-input {
+    border: 1px solid #a3a3a3;
+    border-radius: 8px;
+    font-size: 16px;
+    height: 40px;
+    color: #35383f;
+    font-family: 'Bert Sans';
+}
+
+.goReg {
+    margin-top: 40px;
 }
 
 .v-field.v-field--appended {
@@ -259,9 +231,7 @@ if (container) {
     --v-field-padding-top: 5px;
 }
 
-// .login_btn {
-//     margin-top: 40px;
-// }
+
 
 .v-card-title {
     font-size: 40px;
@@ -300,20 +270,16 @@ if (container) {
     text-align: center;
 }
 
-.password-input {
-    border: 2px solid #a3a3a3;
-    border-radius: 10px;
-    font-size: 16px;
-    color: #35383f;
-    font-weight: normal;
-    font-family: 'Bert Sans';
-}
 
 .password-input::placeholder {
     color: #898989;
     font-size: 16px;
     font-weight: 500;
     font-family: 'Bert-Sans';
+}
+
+.password-input:focus {
+    outline: none;
 }
 
 .v-card {
@@ -334,13 +300,15 @@ if (container) {
     font-weight: lighter;
 }
 
+.password-input input.v-field__input::placeholder,
+.option-select .v-field__input input::placeholder {
+    color: #a3a3a3;
+    opacity: revert;
+}
+
 .v-field--variant-outlined .v-field__outline__end,
 .v-field--variant-outlined .v-field__outline__start {
     border: none;
-}
-
-.v-input__control {
-    font-weight: 500;
 }
 
 .authLinks {
@@ -349,17 +317,28 @@ if (container) {
     font-size: 18px;
 }
 
-:global(.v-input__control) {
-    min-height: 45px;
-    font-weight: 500;
+
+
+.v-text-field input.v-field__input {
+    padding: 0px 6px 6px 16px;
 }
 
-:global(.v-text-field input.v-field__input) {
-    padding: 12px 6px 9px 16px;
+// :global(.v-input__control) {
+//     min-height: 40px !important;
+//     font-weight: 400;
+// }
+
+
+:global(.v-text-field .v-field--no-label input,
+    .v-text-field .v-field--active input) {
+    border-radius: 8px;
 }
 
-.v-text-field .v-field--no-label input,
-.v-text-field .v-field--active input {
+.VkIdWebSdk__button_mltngh {
+    border-radius: 10px;
+}
+
+#flelhu .VkIdWebSdk__button_flelhu {
     border-radius: 10px;
 }
 

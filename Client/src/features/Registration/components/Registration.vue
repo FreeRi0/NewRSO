@@ -85,7 +85,7 @@
                     {{ isError.username }}
                 </p>
                 <v-text-field
-                    class="password-input"
+                    class="passwordReg-input"
                     :append-inner-icon="!visible ? 'mdi-eye-off' : 'mdi-eye'"
                     :type="visible ? 'text' : 'password'"
                     density="compact"
@@ -99,7 +99,7 @@
                     {{ isError.password }}
                 </p>
                 <v-text-field
-                    class="password-input"
+                    class="passwordReg-input"
                     :append-inner-icon="!visibleRe ? 'mdi-eye-off' : 'mdi-eye'"
                     :type="visibleRe ? 'text' : 'password'"
                     density="compact"
@@ -154,7 +154,7 @@
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" >
 .v-field {
     border-radius: 10px;
 }
@@ -228,17 +228,17 @@
     text-align: center;
 }
 
-.password-input,
+.passwordReg-input,
 .region-input {
-    border: 2px solid #a3a3a3;
+    border: 1px solid #a3a3a3;
     border-radius: 10px;
     font-size: 16px;
-    color: #35383f;
+    color: hsl(222, 9%, 23%);
     font-family: 'Bert Sans';
     margin-bottom: 8px;
 }
 
-.password-input::placeholder,
+.passwordReg-input::placeholder,
 .region-input::placeholder {
     color: #898989;
     font-size: 16px;
@@ -332,7 +332,7 @@ input {
 .form-input input,
 .dateInput input {
     box-sizing: border-box;
-    border: 2px solid #a3a3a3;
+    border: 1px solid #a3a3a3;
     border-radius: 10px;
     display: block;
     font-size: 16px;
@@ -352,7 +352,7 @@ input {
 }
 
 .form-input-requisites input {
-    border: 2px solid #a3a3a3;
+    border: 1px solid #a3a3a3;
     border-radius: 10px;
     display: block;
     font-size: 12px;
@@ -377,7 +377,7 @@ input {
 .dateInput.mx-datepicker svg {
     margin-right: 6px;
 }
-.password-input input.v-field__input::placeholder,
+.passwordReg-input input.v-field__input::placeholder,
 .option-select .v-field__input input::placeholder {
     color: #a3a3a3;
     opacity: revert;
@@ -386,6 +386,10 @@ input {
 .v-field--variant-outlined .v-field__outline__end,
 .v-field--variant-outlined .v-field__outline__start {
     border: none;
+}
+
+.v-text-field input.v-field__input {
+    padding: 5px 6px 5px 16px;
 }
 </style>
 
