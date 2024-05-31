@@ -25,8 +25,8 @@
                 </p>
 
 
-                <Button class="Login_btn" type="submit" @click="LoginUser" label="Войти" :loaded="isLoading" :disabled="isLoading"
-                    color="primary"></Button>
+                <Button class="Login_btn" type="submit" @click="LoginUser" label="Войти" :loaded="isLoading"
+                    :disabled="isLoading" color="primary"></Button>
                 <p class="text-center Login_and">или</p>
                 <div id="VkIdSdkOneTap"></div>
                 <div class="text-center goReg">У вас нет аккаунта?
@@ -74,7 +74,7 @@ VKID.Config.set({
 
 
 const Click = () => {
-console.log("Click");
+    console.log("Click");
 }
 
 const LoginUser = async () => {
@@ -174,9 +174,12 @@ onMounted(() => {
 
 
     &_btn {
+        border-radius: 8px !important;
         width: 100%;
         margin: 0px;
         height: 44px;
+        font-size: 16px;
+
 
     }
 
@@ -195,16 +198,20 @@ onMounted(() => {
         font-size: 18px;
         font-weight: 500;
     }
+
+    &_input {
+        border-radius: 8px !important;
+    }
 }
 
 
 .v-field {
-    border-radius: 10px;
+    border-radius: 8px;
 }
 
 .password-input {
     border: 1px solid #a3a3a3;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 16px;
     height: 40px;
     color: #35383f;
@@ -325,6 +332,14 @@ onMounted(() => {
 
 :global(.v-text-field .v-field--no-label input,
     .v-text-field .v-field--active input) {
+    border-radius: 8px;
+}
+
+.VkIdWebSdk__button_mltngh {
+    border-radius: 10px;
+}
+
+#flelhu .VkIdWebSdk__button_flelhu {
     border-radius: 10px;
 }
 
