@@ -2,7 +2,7 @@
     <div class="d-flex justify-end align-self-center">
         <div class="Login">
 
-            <form action="#" class="Login_form" method="post" @submit.prevent="LoginUser">
+            <form action="#" class="Login_form" method="post" @submit.prevent="Click">
                 <h2 class="Login_title">Вход в личный кабинет</h2>
                 <Input placeholder="Логин" name="login" height="40px" v-model:value="data.username"
                     class="username-input mb-3 Login_input" />
@@ -13,7 +13,7 @@
                 <v-text-field class="password-input" :append-inner-icon="!visible ? 'mdi-eye-off' : 'mdi-eye'"
                     :type="visible ? 'text' : 'password'" density="compact" v-model="data.password" placeholder="Пароль"
                     variant="outlined" @click:append-inner="visible = !visible"></v-text-field>
-                <p class="text-right mt-3"><router-link to="/RecoveryPass">Забыли пароль?</router-link>
+                <p class="text-right mt-3 mb-8"><router-link to="/RecoveryPass">Забыли пароль?</router-link>
                 </p>
 
                 <p class="error" v-if="isError.password">
@@ -25,8 +25,8 @@
                 </p>
 
 
-                <Button class="Login_btn" type="submit" label="Войти" :loaded="isLoading" :disabled="isLoading"
-                    color="primary"></Button>
+                <Button class="Login_btn" type="submit" @click="LoginUser" label="Войти" :loaded="isLoading"
+                    :disabled="isLoading" color="primary"></Button>
                 <p class="text-center Login_and">или</p>
                 <div id="VkIdSdkOneTap"></div>
                 <div class="text-center goReg">У вас нет аккаунта?
@@ -56,6 +56,7 @@ const data = ref({
 });
 const visible = ref(false);
 
+
 const isError = ref([]);
 const isLoading = ref(false);
 const swal = inject('$swal');
@@ -71,6 +72,10 @@ VKID.Config.set({
     state: 'dj29fnsadjsd82...' // Произвольная строка состояния приложения.
 });
 
+
+const Click = () => {
+    console.log("Click");
+}
 
 const LoginUser = async () => {
     try {
@@ -137,13 +142,12 @@ onMounted(() => {
     border-radius: 10px;
     width: 100%;
     max-width: 500px;
-    max-height: 592px;
 
     &_title {
         font-size: 40px;
         font-weight: 600;
         font-family: 'Akrobat';
-        line-height: 48px;
+        line-height: 28px;
         margin-bottom: 48px;
         text-align: center;
 
@@ -170,10 +174,12 @@ onMounted(() => {
 
 
     &_btn {
+        border-radius: 8px !important;
         width: 100%;
         margin: 0px;
         height: 44px;
-        margin-top: 40px;
+        padding: 0px 24px !important;
+
     }
 
     &_and {
@@ -191,16 +197,20 @@ onMounted(() => {
         font-size: 18px;
         font-weight: 500;
     }
+
+    &_input {
+        border-radius: 8px !important;
+    }
 }
 
 
 .v-field {
-    border-radius: 10px;
+    border-radius: 8px;
 }
 
 .password-input {
     border: 1px solid #a3a3a3;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 16px;
     height: 40px;
     color: #35383f;
@@ -321,6 +331,14 @@ onMounted(() => {
 
 :global(.v-text-field .v-field--no-label input,
     .v-text-field .v-field--active input) {
+    border-radius: 8px;
+}
+
+.VkIdWebSdk__button_mltngh {
+    border-radius: 10px;
+}
+
+#flelhu .VkIdWebSdk__button_flelhu {
     border-radius: 10px;
 }
 
