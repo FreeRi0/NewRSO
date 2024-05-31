@@ -178,8 +178,7 @@ onMounted(() => {
         width: 100%;
         margin: 0px;
         height: 44px;
-        font-size: 16px;
-
+        padding: 0px 24px !important;
 
     }
 
