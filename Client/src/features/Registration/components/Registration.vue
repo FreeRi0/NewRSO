@@ -364,7 +364,11 @@ input {
 .dateInput .mx-input:focus {
     border-color: #a3a3a3;
 }
-
+.v-field--center-affix .v-field__append-inner,
+.v-field--center-affix .v-field__clearable,
+.v-field--center-affix .v-field__prepend-inner {
+    padding-bottom: 0px;
+}
 .dateInput.mx-datepicker {
     width: 100%;
 }
