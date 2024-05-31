@@ -74,7 +74,7 @@ VKID.Config.set({
 
 
 const Click = () => {
-    console.log("Click");
+    // console.log("Click");
 }
 
 const LoginUser = async () => {
@@ -87,7 +87,6 @@ const LoginUser = async () => {
         });
         data.value = response.data;
         localStorage.setItem('Token', response.data.auth_token);
-        console.log(response.data);
         isLoading.value = false;
         router.push({
             name: 'mypage',
@@ -120,7 +119,6 @@ const LoginUser = async () => {
 onMounted(() => {
     const container = document.getElementById('VkIdSdkOneTap');
     if (container) {
-        console.log(container, oneTap)
         // Отрисовка кнопки в контейнере с именем приложения APP_NAME, светлой темой и на русском языке.
         oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
     }
@@ -320,13 +318,19 @@ onMounted(() => {
 
 
 .v-text-field input.v-field__input {
-    padding: 0px 6px 6px 16px;
+    padding: 0px 7.5px 6px 16px;
 }
 
 // :global(.v-input__control) {
 //     min-height: 40px !important;
 //     font-weight: 400;
 // }
+
+.v-field--center-affix .v-field__append-inner,
+.v-field--center-affix .v-field__clearable,
+.v-field--center-affix .v-field__prepend-inner {
+    padding-bottom: 5px;
+}
 
 
 :global(.v-text-field .v-field--no-label input,
