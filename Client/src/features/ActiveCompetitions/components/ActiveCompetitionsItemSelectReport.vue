@@ -181,7 +181,7 @@ const getIsTandemInfo = async () => {
                 },
             },
         );
-        console.log(data);
+        // console.log(data);
         isTandem.value = data.is_tandem;
     } catch (e) {
         console.log(`getIsTandemInfo error`, e);
