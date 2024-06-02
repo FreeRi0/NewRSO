@@ -1,5 +1,5 @@
 import { fileURLToPath, URL } from 'url';
-import { defineConfig, type Alias } from 'vite';
+import { defineConfig, type Alias, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
 
 const getAliasObject = (findName: string, path: string): Alias => {
