@@ -60,7 +60,7 @@ const region = ref({});
 
 const query = new URLSearchParams(window.location.search);
 const payload = JSON.parse(query.get("payload"));
-const access_token = import.meta.env.VITE_SERVICE_TOKEN;
+const access_token = process.env.VITE_SERVICE_TOKEN;
 console.log(access_token, 'token')
 
 
