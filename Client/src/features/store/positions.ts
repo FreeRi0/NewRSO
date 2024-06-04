@@ -11,12 +11,7 @@ export const usePositionsStore = defineStore('positions', {
             if (this.positions.length) return;
             try {
                 this.isLoading = true;
-                const responsePositions = await HTTP.get('positions/', {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                });
+                const responsePositions = await HTTP.get('positions/');
                 this.positions = responsePositions.data.results;
                 this.isLoading = false;
             } catch (error) {

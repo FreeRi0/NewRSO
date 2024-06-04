@@ -168,12 +168,7 @@ const sortBy = ref('alphabetically');
 const viewContributorsData = async (search) => {
     try {
         isLoading.value = true;
-        const viewParticipantsResponse = await HTTP.get('/rsousers' + search, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const viewParticipantsResponse = await HTTP.get('/rsousers' + search,);
         participants.value = viewParticipantsResponse.data.results;
         isLoading.value = false;
         selectedPeoples.value = [];
@@ -197,12 +192,7 @@ const viewContributorsData = async (search) => {
 const getFiltersData = async (resp, search) => {
     try {
         isLoading.value = true;
-        const viewHeadquartersResponse = await HTTP.get(resp + search, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const viewHeadquartersResponse = await HTTP.get(resp + search,);
         isLoading.value = false;
 
         if (resp.indexOf('districts') >= 0) {

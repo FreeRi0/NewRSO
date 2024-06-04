@@ -223,12 +223,7 @@ const userCommander = ref({});
 
 const getUserCommander = async () => {
     try {
-        const response = await HTTP.get(`rsousers/me_commander/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const response = await HTTP.get(`rsousers/me_commander/`,);
 
         userCommander.value = response.data;
         console.log('конкурс', response);

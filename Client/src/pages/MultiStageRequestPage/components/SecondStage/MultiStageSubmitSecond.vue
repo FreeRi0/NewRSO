@@ -1,39 +1,19 @@
 <template>
     <div class="form__field">
         <div class="contributor-search">
-            <input
-                type="text"
-                id="search"
-                class="contributor-search__input"
-                @keyup="searchUsers"
-                v-model="name"
-                placeholder="Начните вводить"
-            />
+            <input type="text" id="search" class="contributor-search__input" @keyup="searchUsers" v-model="name"
+                placeholder="Начните вводить" />
             <img src="@app/assets/icon/search.svg" alt="search" />
         </div>
     </div>
 
     <div id="wrapper">
         <div id="left">
-            <filters
-                @update-district="updateDistrict"
-                @update-reg="updateReg"
-                @update-local="updateLocal"
-                @update-educ="updateEduc"
-                @update-detachment="updateDetachment"
-                :district="district"
-                :districts="districts"
-                :reg="reg"
-                :regionals="regionals"
-                :local="local"
-                :locals="locals"
-                :educ="educ"
-                :educ-head="educHead"
-                :detachment="detachment"
-                :detachments="detachments"
-                :roles="roles.roles.value"
-                :sorted-participants="sortedParticipants"
-            />
+            <filters @update-district="updateDistrict" @update-reg="updateReg" @update-local="updateLocal"
+                @update-educ="updateEduc" @update-detachment="updateDetachment" :district="district"
+                :districts="districts" :reg="reg" :regionals="regionals" :local="local" :locals="locals" :educ="educ"
+                :educ-head="educHead" :detachment="detachment" :detachments="detachments" :roles="roles.roles.value"
+                :sorted-participants="sortedParticipants" />
 
             <!-- <div class="uploads">
                 <div
@@ -67,11 +47,7 @@
         <div id="right">
             <div class="additional_line">
                 <div class="horizontallso__confidant">
-                    <input
-                        type="checkbox"
-                        v-model="isChecked"
-                        @change="onCheckbox"
-                    />
+                    <input type="checkbox" v-model="isChecked" @change="onCheckbox" />
                 </div>
 
                 <p class="choose_all">Выделить все</p>
@@ -82,22 +58,13 @@
                 </a>
 
                 <div class="sort_line">
-                    <Button
-                        type="button"
-                        class="ascend"
-                        iconn="iconn"
-                        @click="ascending = !ascending"
-                        color="white"
-                    ></Button>
+                    <Button type="button" class="ascend" iconn="iconn" @click="ascending = !ascending"
+                        color="white"></Button>
                 </div>
             </div>
 
-            <multi-stage-submit-item
-                v-for="user in sortedParticipants"
-                :key="user.id"
-                :user="user"
-                @select="onToggleSelectUser"
-            />
+            <multi-stage-submit-item v-for="user in sortedParticipants" :key="user.id" :user="user"
+                @select="onToggleSelectUser" />
             <p class="subtitle" v-if="!sortedParticipants.length">
                 Ничего не найдено
             </p>
@@ -107,20 +74,11 @@
     <template v-if="selectedUsersList.length">
         <p class="text_total">Итого:</p>
 
-        <multi-stage-submit-select
-            v-for="user in selectedUsersList"
-            :key="user.id"
-            :user="user"
-            @select="onToggleSelectUser"
-        />
+        <multi-stage-submit-select v-for="user in selectedUsersList" :key="user.id" :user="user"
+            @select="onToggleSelectUser" />
 
         <div class="competitions__btns">
-            <Button
-                class="save"
-                type="button"
-                label="Подать заявку"
-                @click="onAction"
-            ></Button>
+            <Button class="save" type="button" label="Подать заявку" @click="onAction"></Button>
         </div>
     </template>
 </template>
@@ -288,12 +246,7 @@ const sortBy = ref('alphabetically');
 const viewContributorsData = async (search) => {
     try {
         isLoading.value = true;
-        const viewParticipantsResponse = await HTTP.get('/rsousers' + search, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const viewParticipantsResponse = await HTTP.get('/rsousers' + search,);
         participants.value = viewParticipantsResponse.data.results;
         isLoading.value = false;
         selectedPeoples.value = [];
@@ -317,12 +270,7 @@ const viewContributorsData = async (search) => {
 const getFiltersData = async (resp, search) => {
     try {
         isLoading.value = true;
-        const viewHeadquartersResponse = await HTTP.get(resp + search, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const viewHeadquartersResponse = await HTTP.get(resp + search,);
         isLoading.value = false;
 
         if (resp.indexOf('districts') >= 0) {
@@ -534,8 +482,8 @@ watch(
     () => {
         let districtID = districtsStore.districts.length
             ? districtsStore.districts.find(
-                  (dis) => (dis.name = district.value),
-              )?.id
+                (dis) => (dis.name = district.value),
+            )?.id
             : roleStore.roles.districtheadquarter_commander?.id;
         regionals.value = regionalsStore.regionals.filter(
             (reg) => reg.district_headquarter == district.value,
@@ -600,12 +548,14 @@ onMounted(async () => {
     grid-template-columns: 276px auto;
     gap: 24px;
 }
+
 @media screen and (max-width: 769px) {
     #wrapper {
         display: grid;
         grid-template-columns: auto;
     }
 }
+
 .form-input-container {
     border: 1px solid #b6b6b6;
     border-radius: 15px;
@@ -619,6 +569,7 @@ onMounted(async () => {
     letter-spacing: 0px;
     text-align: left;
 }
+
 .form__field {
     display: flex;
     flex-direction: column;
@@ -639,6 +590,7 @@ onMounted(async () => {
     text-align: left;
     color: #35383f;
 }
+
 .competitions__btns {
     display: grid;
     width: 100%;
@@ -651,17 +603,20 @@ onMounted(async () => {
     letter-spacing: 0em;
     text-align: left;
 }
+
 .horizontallso__confidant {
     padding: 10px 10px;
     border: 1px solid #b6b6b6;
     border-radius: 10px;
     width: 48px;
     height: 48px;
+
     input {
         width: 100%;
         height: 100%;
     }
 }
+
 .choose_all {
     font-family: Bert Sans;
     font-size: 16px;
@@ -671,6 +626,7 @@ onMounted(async () => {
     text-align: left;
     color: #35383f;
 }
+
 .additional_line {
     display: grid;
     grid-template-columns: 48px 1fr minmax(auto, 150px) minmax(auto, 300px);
@@ -678,6 +634,7 @@ onMounted(async () => {
     align-items: center;
     margin-bottom: 40px;
 }
+
 .download_text {
     display: flex;
     flex-wrap: nowrap;
@@ -688,45 +645,54 @@ onMounted(async () => {
     font-weight: 500;
     line-height: normal;
 }
+
 .download_img {
     display: inline-block;
     width: 24px;
     height: 24px;
     margin-right: 4px;
 }
+
 .ascend {
     background-image: url('@app/assets/icon/switch.svg');
     background-repeat: no-repeat;
     background-position: center;
 }
+
 .sort-select {
     &--width {
         width: 193px;
     }
-    & > .form__select {
+
+    &>.form__select {
         margin-bottom: 0px;
     }
 }
+
 .sort_line {
     display: flex;
     align-items: center;
 }
+
 .contributor-search__input {
     width: 100%;
     padding: 13px 0px 10px 60px;
     border-radius: 10px;
     border: 1px solid black;
 }
+
 .contributor-search {
     position: relative;
     box-sizing: border-box;
     margin-bottom: 40px;
 }
+
 .contributor-search img {
     position: absolute;
     top: 15px;
     left: 16px;
 }
+
 .form {
     &-fileupload {
         display: flex;
@@ -740,17 +706,20 @@ onMounted(async () => {
         gap: 10px;
         text-align: left;
         color: #1f7cc0;
-        & > :deep(.p-) {
+
+        &> :deep(.p-) {
             display: none;
         }
 
         & :deep(.p-button-label) {
             text-decoration: underline;
         }
+
         & :deep(svg) {
             display: none;
         }
     }
+
     &-col {
         margin-left: 4px;
         margin-top: 36px;

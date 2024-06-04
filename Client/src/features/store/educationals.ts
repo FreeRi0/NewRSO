@@ -14,14 +14,9 @@ export const useEducationalsStore = defineStore('educationals', {
         async searchEducationals(name: String) {
             const responseSearchEducationals = await HTTP.get(
                 `/educationals/?search=${name}`,
-
                 {
                     params: {
                         limit: this.EducationalsLimit,
-                    },
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
                     },
                 },
             );
@@ -33,10 +28,6 @@ export const useEducationalsStore = defineStore('educationals', {
                 const responseEducationals = await HTTP.get(`/educationals/?ordering=${name}`, {
                     params: {
                         limit: this.EducationalsLimit,
-                    },
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
                     },
                 });
                 this.totalEducationals = responseEducationals.data.count;
@@ -55,13 +46,6 @@ export const useEducationalsStore = defineStore('educationals', {
 
                 const responseEducNext = await HTTP.get(
                     this.nextEducationals.replace('http', 'https'),
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token' + localStorage.getItem('Token'),
-                        },
-                    },
                 );
                 this.educationals = this.educationals.concat(
                     responseEducNext.data.results,
@@ -77,15 +61,7 @@ export const useEducationalsStore = defineStore('educationals', {
             try {
                 this.isLoading = true;
                 const responseEducational = await HTTP.get(
-                    `/educationals/${id}`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    },
-                );
+                    `/educationals/${id}` );
                 this.educational = responseEducational.data;
                 this.isLoading = false;
             } catch (error) {
@@ -94,36 +70,11 @@ export const useEducationalsStore = defineStore('educationals', {
             }
         },
 
-        // async sortedEducationals(name: String) {
-        //     const sortEducResp = await HTTP.get(
-        //         `/educationals/?ordering=${name}`,
-
-        //         {
-        //             params: {
-        //                 limit: this.EducationalsLimit,
-        //             },
-        //             headers: {
-        //                 'Content-Type': 'application/json',
-        //             },
-        //         },
-        //     );
-        //     this.totalEducationals = sortEducResp.data.count;
-        //     this.nextEducationals = sortEducResp.data.next;
-        //     this.educationals = sortEducResp.data.results;
-        // },
         async getEducationalsMembers(id: String) {
             try {
                 this.isLoading = true;
                 const responseMembers = await HTTP.get(
-                    `/educationals/${id}/members/`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    },
-                );
+                    `/educationals/${id}/members/`);
                 this.members = responseMembers.data.results;
                 this.isLoading = false;
             } catch (error) {
@@ -134,15 +85,7 @@ export const useEducationalsStore = defineStore('educationals', {
         async getSearchEducationalsMembers(id: String, name: String) {
             try {
                 const responseMembers = await HTTP.get(
-                    `/educationals/${id}/members/?search=${name}`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    },
-                );
+                    `/educationals/${id}/members/?search=${name}`);
                 this.members = responseMembers.data.results;
 
             } catch (error) {

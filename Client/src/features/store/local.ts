@@ -96,11 +96,7 @@ export const useLocalsStore = defineStore('local', {
                 const responseLocalsNext = await HTTP.get(
                     this.nextLocals.replace('http', 'https'),
                     {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token' + localStorage.getItem('Token'),
-                        },
+                  
                     },
                 );
                 this.locals = this.locals.concat(

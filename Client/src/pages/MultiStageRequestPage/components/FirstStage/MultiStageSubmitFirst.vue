@@ -2,64 +2,28 @@
     <div v-if="!permissonDeny">
         <div class="form__field">
             <div class="contributor-search">
-                <input
-                    type="text"
-                    id="search"
-                    class="contributor-search__input"
-                    @keyup="searchHeadquarters"
-                    v-model="name"
-                    placeholder="Начните вводить"
-                />
+                <input type="text" id="search" class="contributor-search__input" @keyup="searchHeadquarters"
+                    v-model="name" placeholder="Начните вводить" />
                 <img src="@app/assets/icon/search.svg" alt="search" />
             </div>
         </div>
 
         <div id="wrapper">
             <div id="left" v-if="width > 768">
-                <filters
-                    @update-district="updateDistrict"
-                    @update-reg="updateReg"
-                    @update-local="updateLocal"
-                    @update-educ="updateEduc"
-                    @update-detachment="updateDetachment"
-                    :district="district"
-                    :districts="districts"
-                    :reg="reg"
-                    :regionals="regionals"
-                    :local="local"
-                    :locals="locals"
-                    :educ="educ"
-                    :educ-head="educHead"
-                    :detachment="detachment"
-                    :detachments="detachments"
-                    :roles="roles.roles.value"
-                    :sorted-participants="sortedHeadquarters"
-                />
+                <filters @update-district="updateDistrict" @update-reg="updateReg" @update-local="updateLocal"
+                    @update-educ="updateEduc" @update-detachment="updateDetachment" :district="district"
+                    :districts="districts" :reg="reg" :regionals="regionals" :local="local" :locals="locals"
+                    :educ="educ" :educ-head="educHead" :detachment="detachment" :detachments="detachments"
+                    :roles="roles.roles.value" :sorted-participants="sortedHeadquarters" />
 
                 <div class="uploads">
-                    <div
-                        class="form-col"
-                        v-for="(file, index) in files.length + 1"
-                        :key="file"
-                    >
+                    <div class="form-col" v-for="(file, index) in files.length + 1" :key="file">
                         <div class="form-fileupload" v-if="index < 6">
-                            <img
-                                class="paper-clip"
-                                src="@app/assets/icon/addFile.svg"
-                                alt="addFile"
-                            />
+                            <img class="paper-clip" src="@app/assets/icon/addFile.svg" alt="addFile" />
 
-                            <FileUpload
-                                class="file-upload-text"
-                                mode="basic"
-                                name="demo[]"
-                                accept=".pdf, .jpeg, .png"
-                                :maxFileSize="7000000"
-                                :customUpload="true"
-                                chooseLabel="Выбрать файл"
-                                @select="onUpload"
-                                @clear="onRemove(index)"
-                            ></FileUpload>
+                            <FileUpload class="file-upload-text" mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
+                                :maxFileSize="7000000" :customUpload="true" chooseLabel="Выбрать файл"
+                                @select="onUpload" @clear="onRemove(index)"></FileUpload>
                         </div>
                     </div>
                 </div>
@@ -68,11 +32,7 @@
             <div id="right" v-if="sortedHeadquartersJunior.length">
                 <div class="additional_line">
                     <div class="horizontallso__confidant">
-                        <input
-                            type="checkbox"
-                            v-model="isChecked"
-                            @change="onCheckbox"
-                        />
+                        <input type="checkbox" v-model="isChecked" @change="onCheckbox" />
                     </div>
 
                     <p class="choose_all">Выделить все</p>
@@ -84,30 +44,16 @@
 
                     <div class="sort_line">
                         <div class="sort-select">
-                            <sortByEducation
-                                variant="outlined"
-                                clearable
-                                v-model="sortBy"
-                                :options="sortOptionss"
-                                class="Sort-alphabet"
-                            ></sortByEducation>
+                            <sortByEducation variant="outlined" clearable v-model="sortBy" :options="sortOptionss"
+                                class="Sort-alphabet"></sortByEducation>
                         </div>
-                        <Button
-                            type="button"
-                            class="ascend"
-                            iconn="iconn"
-                            @click="ascending = !ascending"
-                            color="white"
-                        ></Button>
+                        <Button type="button" class="ascend" iconn="iconn" @click="ascending = !ascending"
+                            color="white"></Button>
                     </div>
                 </div>
 
-                <multi-stage-submit-item
-                    v-for="headquarter in sortedHeadquarters"
-                    :key="headquarter"
-                    :headquarter="headquarter"
-                    @select="onToggleSelectCompetition"
-                />
+                <multi-stage-submit-item v-for="headquarter in sortedHeadquarters" :key="headquarter"
+                    :headquarter="headquarter" @select="onToggleSelectCompetition" />
                 <p class="subtitle" v-if="!sortedParticipants.length">
                     Ничего не найдено
                 </p>
@@ -120,20 +66,11 @@
                 Итого: {{ selectedCompetitionsList.length }} ({{ memberCount }}
                 участников)
             </p>
-            <multi-stage-submit-select
-                v-for="headquarter in selectedCompetitionsList"
-                :key="headquarter.id"
-                :headquarter="headquarter"
-                @select="onToggleSelectCompetition"
-            />
+            <multi-stage-submit-select v-for="headquarter in selectedCompetitionsList" :key="headquarter.id"
+                :headquarter="headquarter" @select="onToggleSelectCompetition" />
         </template>
         <div class="competitions__btns" v-if="selectedCompetitionsList.length">
-            <Button
-                class="save"
-                type="button"
-                label="Подать заявку"
-                @click="onAction"
-            ></Button>
+            <Button class="save" type="button" label="Подать заявку" @click="onAction"></Button>
         </div>
     </div>
     <p class="subtitle" v-else>Вы не можете подавать заявку</p>
@@ -242,12 +179,7 @@ const viewHeadquartersData = async (resp, search, join) => {
         } else if (resp.indexOf('rsousers') >= 0) {
             routeName = 'userpage';
         }
-        const viewHeadquartersResponse = await HTTP.get(resp + search, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const viewHeadquartersResponse = await HTTP.get(resp + search,);
 
         let response = viewHeadquartersResponse.data.results;
         for (let i in response) {
@@ -347,8 +279,8 @@ const updateEduc = (educVal) => {
     let resp = educVal
         ? '/detachments/'
         : local.value
-        ? '/educationals/'
-        : '/locals/';
+            ? '/educationals/'
+            : '/locals/';
     if (educVal) {
         search = '?educational_headquarter__name=' + educVal;
     } else if (local.value) {
@@ -482,8 +414,8 @@ watch(
     () => {
         let districtID = districtsStore.districts.length
             ? districtsStore.districts.find(
-                  (dis) => (dis.name = district.value),
-              )?.id
+                (dis) => (dis.name = district.value),
+            )?.id
             : roleStore.roles.districtheadquarter_commander?.id;
         regionals.value = regionalsStore.regionals.filter(
             (reg) => reg.district_headquarter == district.value,
@@ -763,17 +695,20 @@ onMounted(() => {
     margin: 0px auto;
     padding-bottom: 60px;
 }
+
 #wrapper {
     display: grid;
     grid-template-columns: 276px auto;
     gap: 24px;
 }
+
 @media screen and (max-width: 769px) {
     #wrapper {
         display: grid;
         grid-template-columns: auto;
     }
 }
+
 .form-input-container {
     border: 1px solid #b6b6b6;
     border-radius: 15px;
@@ -787,6 +722,7 @@ onMounted(() => {
     letter-spacing: 0px;
     text-align: left;
 }
+
 .form__field {
     display: flex;
     flex-direction: column;
@@ -807,6 +743,7 @@ onMounted(() => {
     text-align: left;
     color: #35383f;
 }
+
 .competitions__btns {
     display: grid;
     width: 100%;
@@ -819,17 +756,20 @@ onMounted(() => {
     letter-spacing: 0em;
     text-align: left;
 }
+
 .horizontallso__confidant {
     padding: 10px 10px;
     border: 1px solid #b6b6b6;
     border-radius: 10px;
     width: 48px;
     height: 48px;
+
     input {
         width: 100%;
         height: 100%;
     }
 }
+
 .choose_all {
     font-family: Bert Sans;
     font-size: 16px;
@@ -839,6 +779,7 @@ onMounted(() => {
     text-align: left;
     color: #35383f;
 }
+
 .additional_line {
     display: grid;
     grid-template-columns: 48px 1fr minmax(auto, 150px) minmax(auto, 300px);
@@ -846,6 +787,7 @@ onMounted(() => {
     align-items: center;
     margin-bottom: 40px;
 }
+
 .download_text {
     display: flex;
     flex-wrap: nowrap;
@@ -856,45 +798,54 @@ onMounted(() => {
     font-weight: 500;
     line-height: normal;
 }
+
 .download_img {
     display: inline-block;
     width: 24px;
     height: 24px;
     margin-right: 4px;
 }
+
 .ascend {
     background-image: url('@app/assets/icon/switch.svg');
     background-repeat: no-repeat;
     background-position: center;
 }
+
 .sort-select {
     &--width {
         width: 193px;
     }
-    & > .form__select {
+
+    &>.form__select {
         margin-bottom: 0px;
     }
 }
+
 .sort_line {
     display: flex;
     align-items: center;
 }
+
 .contributor-search__input {
     width: 100%;
     padding: 13px 0px 10px 60px;
     border-radius: 10px;
     border: 1px solid black;
 }
+
 .contributor-search {
     position: relative;
     box-sizing: border-box;
     margin-bottom: 40px;
 }
+
 .contributor-search img {
     position: absolute;
     top: 15px;
     left: 16px;
 }
+
 .form {
     &-fileupload {
         display: flex;
@@ -908,22 +859,26 @@ onMounted(() => {
         gap: 10px;
         text-align: left;
         color: #1f7cc0;
-        & > :deep(.p-) {
+
+        &> :deep(.p-) {
             display: none;
         }
 
         & :deep(.p-button-label) {
             text-decoration: underline;
         }
+
         & :deep(svg) {
             display: none;
         }
     }
+
     &-col {
         margin-left: 4px;
         margin-top: 36px;
     }
 }
+
 .subtitle {
     font-style: normal;
     height: 26px;
@@ -936,6 +891,7 @@ onMounted(() => {
     color: #35383f;
     margin-bottom: 24px;
 }
+
 .Sort-alphabet {
     margin-right: 8px;
 }

@@ -1,22 +1,13 @@
 <template>
     <div class="privateProfile">
         <div class="privateProfile-sort">
-            <form
-                class="privateProfile-filters"
-                method="post"
-                @submit.prevent="ChangePrivate"
-            >
+            <form class="privateProfile-filters" method="post" @submit.prevent="ChangePrivate">
                 <div class="privateProfile-select">
                     <div class="privateProfile-text">
                         Кто видит мой номер телефона
                     </div>
-                    <sortByEducation
-                        placeholder="Все"
-                        variant="outlined"
-                        clearable
-                        v-model="privateData.privacy_telephone"
-                        :options="privacies"
-                    ></sortByEducation>
+                    <sortByEducation placeholder="Все" variant="outlined" clearable
+                        v-model="privateData.privacy_telephone" :options="privacies"></sortByEducation>
 
                     <p class="error" v-if="isError.privacy_telephone">
                         {{ 'Настройка ' + isError.privacy_telephone }}
@@ -27,13 +18,8 @@
                         Кто видит мою электронную почту
                     </div>
 
-                    <sortByEducation
-                        placeholder="Все"
-                        variant="outlined"
-                        clearable
-                        v-model="privateData.privacy_email"
-                        :options="privacies"
-                    ></sortByEducation>
+                    <sortByEducation placeholder="Все" variant="outlined" clearable v-model="privateData.privacy_email"
+                        :options="privacies"></sortByEducation>
                     <p class="error" v-if="isError.privacy_email">
                         {{ '' + isError.privacy_email }}
                     </p>
@@ -43,13 +29,8 @@
                     <div class="privateProfile-text">
                         Кто видит мои ссылки на соцсети
                     </div>
-                    <sortByEducation
-                        placeholder="Все"
-                        variant="outlined"
-                        clearable
-                        v-model="privateData.privacy_social"
-                        :options="privacies"
-                    ></sortByEducation>
+                    <sortByEducation placeholder="Все" variant="outlined" clearable v-model="privateData.privacy_social"
+                        :options="privacies"></sortByEducation>
 
                     <p class="error" v-if="isError.privacy_social">
                         {{ '' + isError.privacy_social }}
@@ -59,13 +40,8 @@
                     <div class="privateProfile-text">
                         Кто видит информацию обо мне
                     </div>
-                    <sortByEducation
-                        placeholder="Все"
-                        variant="outlined"
-                        clearable
-                        v-model="privateData.privacy_about"
-                        :options="privacies"
-                    ></sortByEducation>
+                    <sortByEducation placeholder="Все" variant="outlined" clearable v-model="privateData.privacy_about"
+                        :options="privacies"></sortByEducation>
 
                     <p class="error" v-if="isError.privacy_about">
                         {{ '' + isError.privacy_about }}
@@ -75,13 +51,8 @@
                     <div class="privateProfile-text">
                         Кто видит мои фотографии
                     </div>
-                    <sortByEducation
-                        placeholder="Все"
-                        variant="outlined"
-                        clearable
-                        v-model="privateData.privacy_photo"
-                        :options="privacies"
-                    ></sortByEducation>
+                    <sortByEducation placeholder="Все" variant="outlined" clearable v-model="privateData.privacy_photo"
+                        :options="privacies"></sortByEducation>
 
                     <p class="error" v-if="isError.privacy_photo">
                         {{ '' + isError.privacy_photo }}
@@ -91,11 +62,7 @@
                 <p class="error" v-if="isError.detail">
                     {{ '' + isError.detail }}
                 </p>
-                <Button
-                    type="submit"
-                    label="Сохранить"
-                    color="primary"
-                ></Button>
+                <Button type="submit" label="Сохранить" color="primary"></Button>
             </form>
         </div>
     </div>
@@ -130,12 +97,7 @@ const privateData = ref({
 
 const getPrivate = async () => {
     try {
-        const response = await HTTP.get('/rsousers/me/privacy/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const response = await HTTP.get('/rsousers/me/privacy/',);
         privateData.value = response.data;
     } catch (error) {
         console.log('failed ' + error);
@@ -189,10 +151,12 @@ onMounted(() => {
     grid-template-columns: 1fr 0.5fr;
     padding-bottom: 28px;
     align-items: center;
+
     @media screen and (max-width: 575px) {
         grid-template-columns: 1fr;
     }
 }
+
 .changePrivate {
     width: 200px;
 }
@@ -214,6 +178,7 @@ onMounted(() => {
     margin-bottom: 80px;
     margin-top: 40px;
     max-width: 680px;
+
     @media screen and (max-width: 575px) {
         padding-right: 16px;
         padding-left: 16px;
