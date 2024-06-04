@@ -48,6 +48,7 @@ import {
 } from '@shared/components/imagescomp';
 
 import { ref, onMounted } from 'vue';
+import axios from 'axios';
 import { HTTP } from '@app/http';
 import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
@@ -65,8 +66,22 @@ const payload = JSON.parse(query.get("payload"));
 const TokenData = ref({
     silent_token: payload?.token,
     uuid: payload?.uuid,
-    access_token: '1f27b3ae1f27b3ae1f27b3ae8c1c3f9ae011f271f27b3ae7908c555e6e44cf69a21a992'
 })
+
+
+// const getTokenData = async () => {
+//     try {
+//         const resp = await axios.post('https://api.vk.com/method/auth.getProfileInfoBySilentToken', payload?.token,  {
+//             headers: {
+//                 'Content-Type': 'application/json',
+
+//             },
+//         })
+//         console.log('yeah')
+//     } catch (e) {
+//         console.log('error:', e)
+//     }
+// }
 
 
 const exchangeToken = async () => {
