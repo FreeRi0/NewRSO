@@ -273,8 +273,10 @@ const cancelApplication = async (id, competitionId) => {
     );
 };
 
+const firstTypeIndicator = [5, 13, 14, 15, 17];
+
 const confirmIndicator = async (id, applicationId, pointId) => {
-    if (id == 5 || id == 13 || id == 14 || id == 15 || id == 17) {
+    if (firstTypeIndicator.includes(id)) {
         await HTTP.post(
             `/competitions/1/reports/q${id}/${applicationId}/accept/${pointId}/`,
             {},
@@ -316,7 +318,7 @@ const confirmIndicator = async (id, applicationId, pointId) => {
 };
 
 const cancelIndicator = async (id, applicationId, pointId) => {
-    if (id == 5 || id == 13 || id == 14 || id == 15 || id == 17) {
+    if (firstTypeIndicator.includes(id)) {
         await HTTP.delete(
             `/competitions/1/reports/q${id}/${applicationId}/accept/${pointId}`,
             {
