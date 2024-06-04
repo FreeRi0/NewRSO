@@ -1354,12 +1354,7 @@ const getApplicationData = async (_id, applicationId) => {
     try {
         const { data } = await HTTP.get(
             `/competitions/1/reports/q${_id}/${applicationId}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         applicationData.value = data;
         // console.log(applicationData.value);

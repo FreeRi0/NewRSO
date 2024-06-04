@@ -2,23 +2,11 @@
     <div class="container">
         <h1 class="title title--mb">Редактирование штаба СО ОО</h1>
 
-        <FormHQ
-            :participants="true"
-            :headquarter="headquarter"
-            :members="educationalsStore.members"
-            :submited="submited"
-            :is-commander-loading="isCommanderLoading"
-            :is-members-loading="isMembersLoading"
-            :is-error="isError"
-            :is-error-members="isErrorMembers"
-            v-if="headquarter && isError && isErrorMembers"
-            @submit.prevent="changeHeadquarter"
-            @select-file="onSelectFile"
-            @reset-emblem="onResetEmblem"
-            @select-banner="onSelectBanner"
-            @reset-banner="onResetBanner"
-            @update-member="onUpdateMember"
-        ></FormHQ>
+        <FormHQ :participants="true" :headquarter="headquarter" :members="educationalsStore.members"
+            :submited="submited" :is-commander-loading="isCommanderLoading" :is-members-loading="isMembersLoading"
+            :is-error="isError" :is-error-members="isErrorMembers" v-if="headquarter && isError && isErrorMembers"
+            @submit.prevent="changeHeadquarter" @select-file="onSelectFile" @reset-emblem="onResetEmblem"
+            @select-banner="onSelectBanner" @reset-banner="onResetBanner" @update-member="onUpdateMember"></FormHQ>
     </div>
 </template>
 
@@ -42,12 +30,7 @@ const isCommanderLoading = ref(false);
 
 const getHeadquarter = async () => {
     isCommanderLoading.value = true;
-    HTTP.get(`educationals/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    HTTP.get(`educationals/${id}/`,)
         .then((response) => {
             headquarter.value = response.data;
             if (headquarter.value.educational_institution.name) {
@@ -85,7 +68,7 @@ const onUpdateMember = (event, id) => {
     const firstkey = Object.keys(event)[0];
     educationalsStore.members[memberIndex].change = true;
     if (firstkey == 'position')
-    educationalsStore.members[memberIndex].position.id = event[firstkey];
+        educationalsStore.members[memberIndex].position.id = event[firstkey];
     else educationalsStore.members[memberIndex][firstkey] = event[firstkey];
 };
 

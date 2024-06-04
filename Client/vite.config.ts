@@ -1,9 +1,6 @@
 import { fileURLToPath, URL } from 'url';
 import { defineConfig, type Alias } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import dotenv from 'dotenv'
-
-dotenv.config();
 
 const getAliasObject = (findName: string, path: string): Alias => {
     return {
@@ -16,13 +13,16 @@ const getAliasObject = (findName: string, path: string): Alias => {
 export default defineConfig({
     plugins: [vue()],
     root: './src/app',
-    define: {
-        'process.env.VITE_SERVICE_TOKEN': JSON.stringify(process.env.VITE_SERVICE_TOKEN),
-    },
     server: {
         port: 8080,
         proxy: {
             "/api": {
+                //changeOrigin: true,
+                target: "http://127.0.0.1:8000",
+                changeOrigin: true,
+                secure: false,
+            },
+            "https://api.vk.com/method/auth.getProfileInfoBySilentToken": {
                 //changeOrigin: true,
                 target: "http://127.0.0.1:8000",
                 changeOrigin: true,

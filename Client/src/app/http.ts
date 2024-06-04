@@ -1,13 +1,26 @@
 import axios from 'axios';
-
 export const HTTP = axios.create({
-    // baseURL: 'https://rso.sprint.1t.ru/api/v1', // -> DEV-веткаHEAD
     // baseURL: 'https://xn--j1ab.xn--d1amqcgedd.xn--p1ai/api/v1/'
+    baseURL: 'https://rso.sprint.1t.ru/api/v1/',
+    headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+    },
+})
 
-    // baseURL: 'https://rso.sprint.1t.ru/api/v1/', // ->
+HTTP.interceptors.request.use(
+    (config) => {
+        console.log(config.headers.Accept);
+        if (config.url == '/token/login/' || config.url == '/register/' || config.url == '/exchange-token/') {
+            delete config.headers.Authorization;
+        } else {
+            config.headers.Authorization = 'Token ' + localStorage.getItem('Token');
+        }
+        return config;
 
-     //baseURL: 'https://xn--j1ab.xn--d1amqcgedd.xn--p1ai/api/v1/'
-
-     baseURL: 'https://rso.sprint.1t.ru/api/v1/', // ->
-    // baseURL: 'http://127.0.0.1:8000/api/v1',
-});
+    },
+    function (error) {
+        console.log('aborted')
+        return error;
+    }
+);

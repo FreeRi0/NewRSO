@@ -365,12 +365,7 @@ const getDetachments = async (pagination, orderLimit) => {
             data.push(
                 'ordering=' + (ascending.value ? '' : '-') + sortBy.value,
             );
-        const viewHeadquartersResponse = await HTTP.get(url + data.join('&'), {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const viewHeadquartersResponse = await HTTP.get(url + data.join('&'));
         isLoading.value = false;
 
         let response = viewHeadquartersResponse.data;

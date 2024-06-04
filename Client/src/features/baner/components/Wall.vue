@@ -364,26 +364,14 @@ const getUserData = async () => {
     try {
         if (props.user.detachment_id) {
             const responseSquad = await HTTP.get(
-                `/detachments/${props.user.detachment_id}/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
+                `/detachments/${props.user.detachment_id}/`
             );
             detachment.value = responseSquad.data;
         }
 
         if (props.user.educational_headquarter_id) {
             const responseEducHead = await HTTP.get(
-                `/educationals/${props.user.educational_headquarter_id}/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
+                `/educationals/${props.user.educational_headquarter_id}/`
             );
 
             educationalHeadquarter.value = responseEducHead.data;
@@ -400,7 +388,6 @@ watch(
         if (Object.keys(props.user).length === 0) {
             return;
         }
-        // getUserData();
         regionalsStore.searchRegionals(props.user.region);
     },
 );

@@ -15,14 +15,6 @@ import { Button } from '@shared/components/buttons';
 
 const emit = defineEmits(['close', 'delete']);
 
-// const props = defineProps({
-//   open: {
-//     type: Boolean,
-//     required: true,
-//     default: false,
-//   },
-// });
-
 function close() {
   emit('close');
 }

@@ -122,12 +122,7 @@ const items = ref(props.items);
 
 const onChangeItem = async () => {
     if (props.isReg === false) {
-        await HTTP.get(`rsousers?regional_headquarter__name=${props.headVal}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
+        await HTTP.get(`rsousers?regional_headquarter__name=${props.headVal}`)
 
             .then((res) => {
                 // console.log(props.address);
@@ -138,12 +133,7 @@ const onChangeItem = async () => {
                 console.log('an error occured ' + error);
             });
     } else {
-        await HTTP.get(`rsousers?region=${props.headVal}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
+        await HTTP.get(`rsousers?region=${props.headVal}`)
 
             .then((res) => {
                 // console.log(props.address);

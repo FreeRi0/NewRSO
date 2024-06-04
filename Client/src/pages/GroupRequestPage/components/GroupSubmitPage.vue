@@ -3,14 +3,8 @@
         <p class="main_title">Групповая заявка</p>
         <div class="form__field">
             <div class="contributor-search">
-                <input
-                    type="text"
-                    id="search"
-                    class="contributor-search__input"
-                    @keyup="searchUsers"
-                    v-model="name"
-                    placeholder="Начните вводить"
-                />
+                <input type="text" id="search" class="contributor-search__input" @keyup="searchUsers" v-model="name"
+                    placeholder="Начните вводить" />
                 <img src="@app/assets/icon/search.svg" alt="search" />
             </div>
         </div>
@@ -24,29 +18,13 @@
                 </p>
 
                 <div class="uploads">
-                    <div
-                        class="form-col"
-                        v-for="(file, index) in files.length + 1"
-                        :key="file"
-                    >
+                    <div class="form-col" v-for="(file, index) in files.length + 1" :key="file">
                         <div class="form-fileupload" v-if="index < 6">
-                            <img
-                                class="paper-clip"
-                                src="@app/assets/icon/addFile.svg"
-                                alt="addFile"
-                            />
+                            <img class="paper-clip" src="@app/assets/icon/addFile.svg" alt="addFile" />
 
-                            <FileUpload
-                                class="file-upload-text"
-                                mode="basic"
-                                name="demo[]"
-                                accept=".pdf, .jpeg, .png"
-                                :maxFileSize="7000000"
-                                :customUpload="true"
-                                chooseLabel="Выбрать файл"
-                                @select="onUpload"
-                                @clear="onRemove(index)"
-                            ></FileUpload>
+                            <FileUpload class="file-upload-text" mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
+                                :maxFileSize="7000000" :customUpload="true" chooseLabel="Выбрать файл"
+                                @select="onUpload" @clear="onRemove(index)"></FileUpload>
                         </div>
                     </div>
                 </div>
@@ -55,11 +33,7 @@
             <div id="right">
                 <div class="additional_line">
                     <div class="horizontallso__confidant">
-                        <input
-                            type="checkbox"
-                            v-model="isChecked"
-                            @change="onCheckbox"
-                        />
+                        <input type="checkbox" v-model="isChecked" @change="onCheckbox" />
                     </div>
 
                     <p class="choose_all">Выделить все</p>
@@ -71,50 +45,27 @@
 
                     <div class="sort_line">
                         <div class="sort-select">
-                            <sortByEducation
-                                variant="outlined"
-                                v-model="sortBy"
-                                :options="sortOptions"
-                                :sorts-boolean="false"
-                                selected="sortBy"
-                                placeholder="Выберите фильтр"
-                            ></sortByEducation>
+                            <sortByEducation variant="outlined" v-model="sortBy" :options="sortOptions"
+                                :sorts-boolean="false" selected="sortBy" placeholder="Выберите фильтр">
+                            </sortByEducation>
                         </div>
-                        <Button
-                            type="button"
-                            class="ascend"
-                            icon="switch"
-                            @click="ascending = !ascending"
-                            color="white"
-                        ></Button>
+                        <Button type="button" class="ascend" icon="switch" @click="ascending = !ascending"
+                            color="white"></Button>
                     </div>
                 </div>
 
-                <group-submit-item
-                    v-for="user in sortedUsersList"
-                    :key="user.id"
-                    :user="user"
-                    @select="onToggleSelectUser"
-                />
+                <group-submit-item v-for="user in sortedUsersList" :key="user.id" :user="user"
+                    @select="onToggleSelectUser" />
             </div>
         </div>
         <template v-if="selectedUsersList.length">
             <p class="text_total">Итого: {{ selectedUsersList.length }}</p>
 
-            <group-submit-select
-                v-for="user in selectedUsersList"
-                :key="user.id"
-                :user="user"
-                @select="onToggleSelectUser"
-            />
+            <group-submit-select v-for="user in selectedUsersList" :key="user.id" :user="user"
+                @select="onToggleSelectUser" />
 
             <div class="competitions__btns">
-                <Button
-                    class="save"
-                    type="button"
-                    label="Подать заявку"
-                    @click="onAction"
-                ></Button>
+                <Button class="save" type="button" label="Подать заявку" @click="onAction"></Button>
             </div>
         </template>
     </div>
@@ -217,12 +168,7 @@ const getUsersList = async (search) => {
     try {
         const { data } = await HTTP.get(
             `/events/${route.params.id}/group_applications/${search}`,
-            {
-                headers: {
-                    'Content-type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         console.log(data);
         usersList.value = [];
@@ -248,12 +194,7 @@ const onAction = async () => {
         await HTTP.post(
             `/events/${route.params.id}/group_applications/`,
             { user_ids },
-            {
-                headers: {
-                    'Content-type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
 
         router.push({
@@ -341,6 +282,7 @@ onMounted(async () => {
     margin: 0 auto;
     padding-bottom: 60px;
 }
+
 .main_title {
     font-family: Akrobat;
     font-size: 52px;
@@ -351,6 +293,7 @@ onMounted(async () => {
     margin: 40px 0px;
     line-height: normal;
 }
+
 .subtitle {
     margin: 20px 0px;
     font-size: 20px;
@@ -364,17 +307,20 @@ onMounted(async () => {
     letter-spacing: 0em;
     text-align: left;
 }
+
 #wrapper {
     display: grid;
     grid-template-columns: 276px auto;
     gap: 24px;
 }
+
 @media screen and (max-width: 769px) {
     #wrapper {
         display: grid;
         grid-template-columns: auto;
     }
 }
+
 .form-input-container {
     border: 1px solid #b6b6b6;
     border-radius: 15px;
@@ -388,6 +334,7 @@ onMounted(async () => {
     letter-spacing: 0px;
     text-align: left;
 }
+
 .form__field {
     display: flex;
     flex-direction: column;
@@ -408,6 +355,7 @@ onMounted(async () => {
     text-align: left;
     color: #35383f;
 }
+
 .competitions__btns {
     display: grid;
     width: 100%;
@@ -420,17 +368,20 @@ onMounted(async () => {
     letter-spacing: 0em;
     text-align: left;
 }
+
 .horizontallso__confidant {
     padding: 10px 10px;
     border: 1px solid #b6b6b6;
     border-radius: 10px;
     width: 48px;
     height: 48px;
+
     input {
         width: 100%;
         height: 100%;
     }
 }
+
 .choose_all {
     font-family: Bert Sans;
     font-size: 16px;
@@ -440,6 +391,7 @@ onMounted(async () => {
     text-align: left;
     color: #35383f;
 }
+
 .additional_line {
     display: grid;
     grid-template-columns: 48px 1fr minmax(auto, 150px) minmax(auto, 300px);
@@ -447,6 +399,7 @@ onMounted(async () => {
     align-items: center;
     margin-bottom: 40px;
 }
+
 .download_text {
     display: flex;
     flex-wrap: nowrap;
@@ -457,49 +410,59 @@ onMounted(async () => {
     font-weight: 500;
     line-height: normal;
 }
+
 .download_img {
     display: inline-block;
     width: 24px;
     height: 24px;
     margin-right: 4px;
 }
+
 .ascend {
     background-image: url('@app/assets/icon/switch.svg');
     background-repeat: no-repeat;
     background-position: center;
 }
+
 .sort-select {
     &--width {
         width: 193px;
     }
-    & > .form__select {
+
+    &>.form__select {
         margin-bottom: 0px;
     }
 }
+
 .sort_line {
     display: flex;
     align-items: center;
     justify-content: flex-end;
 }
+
 :deep(.btn_icon) {
     border-radius: 10px;
 }
+
 .contributor-search__input {
     width: 100%;
     padding: 13px 0px 10px 60px;
     border-radius: 10px;
     border: 1px solid black;
 }
+
 .contributor-search {
     position: relative;
     box-sizing: border-box;
     margin-bottom: 40px;
 }
+
 .contributor-search img {
     position: absolute;
     top: 15px;
     left: 16px;
 }
+
 .form {
     &-fileupload {
         display: flex;
@@ -513,22 +476,26 @@ onMounted(async () => {
         gap: 10px;
         text-align: left;
         color: #1f7cc0;
-        & > :deep(.p-) {
+
+        &> :deep(.p-) {
             display: none;
         }
 
         & :deep(.p-button-label) {
             text-decoration: underline;
         }
+
         & :deep(svg) {
             display: none;
         }
     }
+
     &-col {
         margin-left: 4px;
         margin-top: 36px;
     }
 }
+
 .count {
     margin-top: 36px;
     font-family: Bert Sans;
@@ -537,11 +504,13 @@ onMounted(async () => {
     line-height: 21.1px;
     color: #898989;
 }
+
 :deep(.v-field__outline__start) {
     border-top-width: 0px;
     border-bottom-width: 0px;
     border-inline-start-width: 0px;
 }
+
 :deep(.v-field__outline__end) {
     border-top-width: 0px;
     border-bottom-width: 0px;

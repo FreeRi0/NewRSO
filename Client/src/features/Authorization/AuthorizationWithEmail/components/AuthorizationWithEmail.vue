@@ -62,7 +62,7 @@ const isLoading = ref(false);
 const swal = inject('$swal');
 
  const APP_ID = 51932483
- const REDIRECT_URL = 'https://rso.sprint.1t.ru/MyPage'
+ const REDIRECT_URL = 'https://rso.sprint.1t.ru/my-page'
  const oneTap = new VKID.OneTap();
 
 
@@ -80,11 +80,7 @@ const Click = () => {
 const LoginUser = async () => {
     try {
         isLoading.value = true;
-        const response = await HTTP.post('/token/login/', data.value, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+        const response = await HTTP.post('/token/login/', data.value);
         data.value = response.data;
         localStorage.setItem('Token', response.data.auth_token);
         isLoading.value = false;

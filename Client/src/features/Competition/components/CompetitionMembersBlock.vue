@@ -112,12 +112,7 @@ const verified = ref([]);
 
 const getMembers = async () => {
     // HTTP.get(`competitions/${id}/`, {
-    HTTP.get(`competitions/1/participants/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    HTTP.get(`competitions/1/participants/`)
         .then((response) => {
             // members.value = response.data;
 
@@ -139,12 +134,7 @@ const getMembers = async () => {
 
 const getVerified = async () => {
     // HTTP.get(`competitions/${id}/`, {
-    HTTP.get(`competitions/1/applications/all/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    HTTP.get(`competitions/1/applications/all/`)
         .then((response) => {
             // verified.value = response.data;
 

@@ -103,12 +103,7 @@ const hasReports = ref(false);
 
 const getMeCommander = async () => {
     try {
-        const { data } = await HTTP.get('/rsousers/me_commander/', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const { data } = await HTTP.get('/rsousers/me_commander/');
         commanderIds.value = data;
     } catch (e) {
         console.log('error getMeCommander', e);
@@ -117,12 +112,7 @@ const getMeCommander = async () => {
 
 const getAllCompetition = async () => {
     try {
-        const { data } = await HTTP.get(`/competitions/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const { data } = await HTTP.get(`/competitions/`);
         allCompetition.value = data.results;
     } catch (e) {
         console.log('error getAllCompetition', e);
@@ -132,22 +122,16 @@ const getAllCompetition = async () => {
 const getCompetitionsJunior = async () => {
     for (const competitionId of allCompetition.value) {
         try {
-            //loading.value = true;
+
             const { data } = await HTTP.get(
-                `/competitions/${competitionId.id}/applications/me`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
+                `/competitions/${competitionId.id}/applications/me`
             );
             if (!data.is_confirmed_by_junior)
                 competitionsList.value = [...competitionsList.value, data];
         } catch (e) {
             console.log('error getCompetitionsJunior', e);
         } finally {
-            //loading.value = false;
+
         }
     }
 };
@@ -155,15 +139,9 @@ const getCompetitionsJunior = async () => {
 const getCompetitions = async () => {
     for (const competitionId of allCompetition.value) {
         try {
-            //loading.value = true;
+
             const { data } = await HTTP.get(
-                `/competitions/${competitionId.id}/applications/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
+                `/competitions/${competitionId.id}/applications/`
             );
             competitionsList.value = data.results.filter(
                 (c) => c.is_confirmed_by_junior || !c.detachment,
@@ -171,7 +149,7 @@ const getCompetitions = async () => {
         } catch (e) {
             console.log('error getCompetitions', e);
         } finally {
-            //loading.value = false;
+
         }
     }
 };
@@ -239,23 +217,11 @@ const confirmApplication = async (id, competitionId) => {
             {
                 is_confirmed_by_junior: true,
             },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
         );
     } else {
         await HTTP.post(
             `/competitions/${competitionId}/applications/${id}/confirm/`,
             {},
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
         );
     }
 };
@@ -263,12 +229,6 @@ const confirmApplication = async (id, competitionId) => {
 const cancelApplication = async (id, competitionId) => {
     await HTTP.delete(
         `/competitions/${competitionId}/applications/${id}`,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        },
         {},
     );
 };
@@ -280,12 +240,6 @@ const confirmIndicator = async (id, applicationId, pointId) => {
         await HTTP.post(
             `/competitions/1/reports/q${id}/${applicationId}/accept/${pointId}/`,
             {},
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
         );
     } else if (id == 6) {
         for (let key in allReporting.value[6][0]) {
@@ -294,12 +248,6 @@ const confirmIndicator = async (id, applicationId, pointId) => {
                 await HTTP.post(
                     `/competitions/1/reports/q${id}/${applicationId}/verify-${key}/`,
                     {},
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: 'Token ' + localStorage.getItem('Token'),
-                        },
-                    },
                 );
             }
         }
@@ -307,12 +255,6 @@ const confirmIndicator = async (id, applicationId, pointId) => {
         await HTTP.post(
             `/competitions/1/reports/q${id}/${applicationId}/accept/`,
             {},
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
         );
     }
 };
@@ -321,12 +263,6 @@ const cancelIndicator = async (id, applicationId, pointId) => {
     if (firstTypeIndicator.includes(id)) {
         await HTTP.delete(
             `/competitions/1/reports/q${id}/${applicationId}/accept/${pointId}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
             {},
         );
     } else if (id == 6) {
@@ -335,12 +271,6 @@ const cancelIndicator = async (id, applicationId, pointId) => {
                 key = key.replaceAll('_', '-');
                 await HTTP.delete(
                     `/competitions/1/reports/q${id}/${applicationId}/verify-${key}/`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: 'Token ' + localStorage.getItem('Token'),
-                        },
-                    },
                     {},
                 );
             }
@@ -348,12 +278,6 @@ const cancelIndicator = async (id, applicationId, pointId) => {
     } else {
         await HTTP.delete(
             `/competitions/1/reports/q${id}/${applicationId}/accept/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
             {},
         );
     }
@@ -553,12 +477,6 @@ const getAllReporting = async () => {
         try {
             const { data } = await HTTP.get(
                 `/competitions/1/reports/q${index}/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
             );
             for (let report of data.results) {
                 if (report.is_verified) continue;

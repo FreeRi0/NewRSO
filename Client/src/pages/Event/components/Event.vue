@@ -521,12 +521,7 @@ const AddApplication = async () => {
         const sendResponse = await HTTP.post(
             `/events/${id}/applications/`,
             data.value,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         swal.fire({
             position: 'top-center',

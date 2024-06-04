@@ -1,27 +1,9 @@
 <template>
-    <v-autocomplete
-        v-model="selected"
-        :items="items"
-        chips
-        clearable
-        v-model:search.trim="userName"
-        variant="outlined"
-        item-title="last_name"
-        item-value="id"
-        v-bind="$attrs"
-        @keyup="searchUser"
-        @update:value="changeValue"
-        :no-data-text="noDataText"
-        class="option"
-    >
+    <v-autocomplete v-model="selected" :items="items" chips clearable v-model:search.trim="userName" variant="outlined"
+        item-title="last_name" item-value="id" v-bind="$attrs" @keyup="searchUser" @update:value="changeValue"
+        :no-data-text="noDataText" class="option">
         <template #prepend-inner>
-            <Icon
-                icon="clarity-search-line"
-                color="#222222"
-                width="24"
-                height="24"
-                class="option__icon"
-            >
+            <Icon icon="clarity-search-line" color="#222222" width="24" height="24" class="option__icon">
             </Icon>
         </template>
         <template v-slot:chip="{ props, item }">
@@ -37,13 +19,9 @@
                         src="@app/assets/foto-leader-squad/foto-leader-squad-stub.png'"
                         alt="Фото бойца"
                     /> -->
-                    <img
-                        :src="
-                            item.raw?.media?.photo ??
-                            '@app/assets/foto-leader-squad/foto-leader-squad-stub.png'
-                        "
-                        alt="Фото бойца"
-                    />
+                    <img :src="item.raw?.media?.photo ??
+                        '@app/assets/foto-leader-squad/foto-leader-squad-stub.png'
+                        " alt="Фото бойца" />
                 </div>
 
                 <div class="option__wrapper">
@@ -77,13 +55,9 @@
                             src="@app/assets/foto-leader-squad/foto-leader-squad-stub.png"
                             alt="Фото бойца"
                         /> -->
-                        <img
-                            :src="
-                                item.raw?.media?.photo ??
-                                '@app/assets/foto-leader-squad/foto-leader-squad-stub.png'
-                            "
-                            alt="Фото бойца"
-                        />
+                        <img :src="item.raw?.media?.photo ??
+                            '@app/assets/foto-leader-squad/foto-leader-squad-stub.png'
+                            " alt="Фото бойца" />
                     </div>
                     <div class="option__wrapper">
                         <p class="option__title">
@@ -157,21 +131,15 @@ const changeValue = (event) => {
 const onChangeItem = async () => {
     await HTTP.get(
         `/rsousers/?search=${userName.value}&regional_headquarter__name=${regHeadquarterName.value}`,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        },
     )
 
         .then((res) => {
             props.items = res.data;
             console.log(res.data);
         })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
+    .catch(function (error) {
+        console.log('an error occured ' + error);
+    });
 };
 
 const searchUser = (val) => {
@@ -194,6 +162,7 @@ onMounted(() => {
 .error-wrapper {
     position: relative;
 }
+
 .form-error__message {
     position: absolute;
     right: 0;
@@ -215,6 +184,7 @@ onMounted(() => {
         min-height: 40px;
         // max-height: 40px;
     }
+
     // &__icon {
 
     // }
@@ -260,6 +230,7 @@ onMounted(() => {
             height: 36px;
         }
     }
+
     &__status {
         position: absolute;
         bottom: 0;

@@ -14,64 +14,44 @@
                 </div>
                 <div class="squad__list-wrapper">
                     <ul class="Squad-HQ__list">
-                        <li
-                            class="Squad-HQ__university"
-                            v-if="squad.educational_institution?.short_name"
-                        >
+                        <li class="Squad-HQ__university" v-if="squad.educational_institution?.short_name">
                             <p>
                                 {{ squad.educational_institution?.short_name }}
                             </p>
                         </li>
                         <li class="Squad-HQ__date">
                             <p>Дата создания ЛСО</p>
-                            <img
-                                src="@/app/assets/icon/calendar.svg"
-                                alt="calendar"
-                            />
+                            <img src="@/app/assets/icon/calendar.svg" alt="calendar" />
                             <time datetime="2022-09-10">{{
                                 squad.founding_date
-                            }}</time>
+                                }}</time>
                         </li>
                     </ul>
                 </div>
                 <div class="squad-data__contacts-wrapper">
                     <div class="squad-data__contacts">
                         <div class="squad-data__participant-counter">
-                            <span
-                                >{{ squad.participants_count }}
-                                {{ getEnding }}</span
-                            >
+                            <span>{{ squad.participants_count }}
+                                {{ getEnding }}</span>
                         </div>
                         <div class="squad-data__social-network">
-                            <div
-                                class="squad-data__link-vk"
-                                v-if="
-                                    squad.social_vk && squad.social_vk != 'null'
-                                "
-                            >
+                            <div class="squad-data__link-vk" v-if="
+                                squad.social_vk && squad.social_vk != 'null'
+                            ">
                                 <a :href="squad.social_vk" target="_blank">
                                     <img src="@/app/assets/icon/vk-blue.svg" />
                                 </a>
                             </div>
-                            <div
-                                class="squad-data__link-telegram"
-                                v-if="
-                                    squad.social_tg && squad.social_tg != 'null'
-                                "
-                            >
+                            <div class="squad-data__link-telegram" v-if="
+                                squad.social_tg && squad.social_tg != 'null'
+                            ">
                                 <a :href="squad.social_tg" target="_blank">
-                                    <img
-                                        src="@/app/assets/icon/telegram-blue.svg"
-                                        alt=""
-                                    />
+                                    <img src="@/app/assets/icon/telegram-blue.svg" alt="" />
                                 </a>
                             </div>
                             <div class="squad-data__link-share-link">
                                 <a @click="copyL">
-                                    <img
-                                        src="@/app/assets/icon/to-share-link.svg"
-                                        alt=""
-                                    />
+                                    <img src="@/app/assets/icon/to-share-link.svg" alt="" />
                                 </a>
                                 <div class="copy-message" hidden>
                                     Ссылка скопирована
@@ -85,36 +65,23 @@
                     <!-- <pre>{{ regional?.commander?.id }}</pre>
                     <pre>{{ squad?.commander?.id }}</pre> -->
 
-                    <router-link
-                        v-if="
-                            userId == squad.commander?.id ||
-                            userId == regional.commander?.id ||
-                            IsTrusted
-                        "
-                        :to="{
+                    <router-link v-if="
+                        userId == squad.commander?.id ||
+                        userId == regional.commander?.id ||
+                        IsTrusted
+                    " :to="{
                             name: 'EditLSO',
                             params: { id: squad.id },
-                        }"
-                        class="user-data__link"
-                        >Редактировать отряд</router-link
-                    >
+                        }" class="user-data__link">Редактировать отряд</router-link>
 
-                    <Button
-                        v-else-if="!IsMember && !UserApplication"
-                        @click="AddApplication()"
-                        label="Подать заявку"
-                        class="AddApplication"
-                    ></Button>
+                    <Button v-else-if="!IsMember && !UserApplication" @click="AddApplication()" label="Подать заявку"
+                        class="AddApplication"></Button>
 
                     <div v-else-if="UserApplication" class="d-flex">
                         <div class="user-data__link mr-2">
                             Заявка на рассмотрении
                         </div>
-                        <Button
-                            @click="DeleteApplication()"
-                            label="Удалить заявку"
-                            class="AddApplication"
-                        ></Button>
+                        <Button @click="DeleteApplication()" label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
                     <!--find искать id в computed-->
@@ -190,12 +157,7 @@ const swal = inject('$swal');
 const viewDetachments = async () => {
     let id = route.params.id;
     console.log('idRoute', id);
-    await HTTP.get(`/detachments/${id}/applications/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    await HTTP.get(`/detachments/${id}/applications/`)
         .then((response) => {
             applications.value = response.data;
             console.log(response);
@@ -208,12 +170,7 @@ const viewDetachments = async () => {
 const viewRegionals = async () => {
     let id = props.squad.regional_headquarter;
     console.log('idRouteReg', id);
-    await HTTP.get(`/regionals/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    await HTTP.get(`/regionals/${id}/`)
         .then((response) => {
             regional.value = response.data;
             console.log(response);
@@ -255,13 +212,7 @@ const AddApplication = async () => {
         let id = props.squad.id;
         const sendResponse = await HTTP.post(
             `/detachments/${id}/apply/`,
-            data.value,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+            data.value
         );
         swal.fire({
             position: 'top-center',
@@ -291,12 +242,7 @@ const AddApplication = async () => {
 const DeleteApplication = async () => {
     try {
         let id = props.squad.id;
-        const delApplyResp = await HTTP.delete(`/detachments/${id}/apply/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const delApplyResp = await HTTP.delete(`/detachments/${id}/apply/`,);
         swal.fire({
             position: 'top-center',
             icon: 'success',
@@ -347,9 +293,11 @@ const copyL = () => {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     border-left: 1px solid rgba(0, 0, 0, 0.1);
     background: rgba(244, 244, 244, 0);
+
     @media screen and (max-width: 575px) {
         display: block;
     }
+
     &__bottom {
         grid-column-start: 1;
         grid-column-end: 5;
@@ -371,12 +319,14 @@ const copyL = () => {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
+
     @media screen and (max-width: 575px) {
         align-items: center;
         margin: 0px 0 16px 0;
         flex-wrap: wrap;
     }
 }
+
 .user-metric__avatar-wrapper {
     @media screen and (max-width: 575px) {
         grid-template-columns: 125px 125px;
@@ -407,6 +357,7 @@ const copyL = () => {
     max-width: 700px;
     margin-bottom: 32px;
 }
+
 .error {
     color: #db0000;
     font-size: 14px;
@@ -474,35 +425,42 @@ const copyL = () => {
     font-style: normal;
     font-weight: 600;
     line-height: normal;
+
     @media screen and (max-width: 575px) {
         text-align: center;
     }
 }
+
 .slogan {
     margin-top: 20px;
     margin-bottom: 9.5px;
 }
+
 .Squad-HQ__list {
     margin-bottom: 20px;
     // display: grid;
     // grid-template-columns: 360px 250px;
     display: flex;
     flex-wrap: wrap;
+
     @media screen and (max-width: 575px) {
         text-align: center;
         display: block;
     }
 }
+
 .Squad-HQ__list li {
     border-right: none;
     height: auto;
     margin: 0;
 }
+
 .Squad-HQ__university p {
     border-right: 1px solid #35383f;
     margin-right: 8px;
     padding-right: 8px;
     display: inline-block;
+
     @media screen and (max-width: 1024px) {
         border-right: none;
         margin-bottom: 10px;
@@ -510,12 +468,15 @@ const copyL = () => {
         padding-right: 0;
     }
 }
+
 .Squad-HQ__date {
     display: flex;
 }
+
 .Squad-HQ__date p {
     margin-right: 22px;
 }
+
 .user-data__link {
     border-radius: 10px;
     background: #39bfbf;
@@ -529,12 +490,15 @@ const copyL = () => {
     color: white;
     padding: 16px 32px;
 }
+
 .squad-data__contacts-wrapper {
     display: flex;
     justify-content: space-between;
+
     @media screen and (max-width: 768px) {
         flex-wrap: wrap;
     }
+
     @media screen and (max-width: 575px) {
         flex-wrap: wrap;
         flex-direction: column;
@@ -544,18 +508,22 @@ const copyL = () => {
 .squad-data__contacts {
     display: flex;
     flex-direction: column;
+
     @media screen and (max-width: 768px) {
         margin-bottom: 20px;
     }
+
     @media screen and (max-width: 575px) {
         align-items: center;
     }
 }
+
 .squad-data__social-network {
     display: flex;
     column-gap: 12px;
     margin-top: 17px;
 }
+
 .copy-message {
     position: fixed;
     top: 50%;

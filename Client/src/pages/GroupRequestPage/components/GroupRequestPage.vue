@@ -66,12 +66,7 @@ const getApplicatonsList = async () => {
     try {
         const { data } = await HTTP.get(
             `/events/${route.params.id}/group_applications/all/`,
-            {
-                headers: {
-                    'Content-type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         applicationsList.value = data.results;
         loading.value = false;
@@ -85,12 +80,7 @@ const onSubmit = async () => {
         await HTTP.post(
             `/events/${route.params.id}/group_applications/all/${applicationsList.value[0].id}/approve/`,
             {},
-            {
-                headers: {
-                    'Content-type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
 
         await relocate();
@@ -103,12 +93,7 @@ const onDeny = async () => {
     try {
         await HTTP.delete(
             `/events/${route.params.id}/group_applications/all/${applicationsList.value[0].id}/reject/`,
-            {
-                headers: {
-                    'Content-type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
 
         await relocate();
