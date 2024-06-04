@@ -129,12 +129,7 @@ const onSubmit = async () => {
         await HTTP.post(
             `/events/${route.params.id}/applications/`,
             {},
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
 
         //console.log('Заявка отправлена');

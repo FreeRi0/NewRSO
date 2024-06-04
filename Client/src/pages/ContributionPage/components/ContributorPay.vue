@@ -323,12 +323,7 @@ const ChangeStatus = async (id) => {
         const changeStatus = await HTTP.post(
             `rsousers/${id}/membership_fee_status/`,
             {},
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         checkboxAll.value = false;
 
@@ -356,12 +351,7 @@ const ChangeCancelStatus = async (id) => {
     try {
         const changeCancelStatus = await HTTP.delete(
             `rsousers/${id}/membership_fee_status/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
             {},
         );
 

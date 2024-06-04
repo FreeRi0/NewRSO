@@ -151,13 +151,7 @@ const onStart = async () => {
     started.value = true;
     try {
         const { data } = await HTTP.get(
-            `/questions/?category=${testName.value}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+            `/questions/?category=${testName.value}`
         );
         questions.value = data;
     } catch (e) {
@@ -211,12 +205,7 @@ const submitAnswers = async () => {
         const { data } = await HTTP.post(
             `/submit_answers/`,
             { answers, category: `${testName.value}` },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         result.value = data;
     } catch (e) {
@@ -228,12 +217,7 @@ const getAttempts = async () => {
     try {
         const { data } = await HTTP.get(
             `/get_attempts_status/?category=${testName.value}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         status.value = data;
     } catch (e) {

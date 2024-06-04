@@ -6,46 +6,17 @@
                 {{ show ? 'Скрыть' : 'Изменить' }}
             </button>
         </div>
-        <Input
-            v-show="show"
-            placeholder="login"
-            name="login"
-            v-model:value="username"
-        />
+        <Input v-show="show" placeholder="login" name="login" v-model:value="username" />
         <p class="error" v-if="isError.username">{{ '' + isError.username }}</p>
-        <Button
-            @click="updateUsername"
-            v-show="show"
-            class="save"
-            label="Сохранить"
-            color="primary"
-        ></Button>
+        <Button @click="updateUsername" v-show="show" class="save" label="Сохранить" color="primary"></Button>
     </div>
     <div class="change_Password" @submit.prevent="changePasswordForm">
         <p class="pass-title">Изменить пароль</p>
-        <Input
-            placeholder="Введите старый пароль"
-            name="password"
-            v-model:value="current_password"
-            class="pass"
-        ></Input>
-        <Input
-            placeholder="Придумайте новый пароль"
-            name="newPass"
-            v-model:value="new_password"
-        ></Input>
-        <Input
-            placeholder="Повторите пароль"
-            name="confirm"
-            v-model:value="re_password"
-        ></Input>
-        <Button
-            @click="changePasswordForm"
-            class="save"
-            label="Сохранить"
-            color="primary"
-            type="submit"
-        ></Button>
+        <Input placeholder="Введите старый пароль" name="password" v-model:value="current_password"
+            class="pass"></Input>
+        <Input placeholder="Придумайте новый пароль" name="newPass" v-model:value="new_password"></Input>
+        <Input placeholder="Повторите пароль" name="confirm" v-model:value="re_password"></Input>
+        <Button @click="changePasswordForm" class="save" label="Сохранить" color="primary" type="submit"></Button>
     </div>
 </template>
 <script setup>
@@ -72,12 +43,7 @@ const updateUsername = async () => {
         const response = await HTTP.patch(
             '/rsousers/me/',
             { username: username.value },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         swal.fire({
             position: 'top-center',
@@ -117,12 +83,7 @@ const changePasswordForm = async () => {
                 new_password: new_password.value,
                 current_password: current_password.value,
             },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         console.log(response.data);
         localStorage.setItem('Token', response.data);
@@ -155,9 +116,11 @@ const changePasswordForm = async () => {
     border-radius: 6px;
     padding: 30px;
     max-width: 480px;
+
     @media screen and (max-width: 575px) {
         padding: 20px 16px 40px 16px;
     }
+
     &_title {
         display: flex;
         justify-content: space-between;
@@ -172,6 +135,7 @@ const changePasswordForm = async () => {
     margin-top: 40px;
     margin-bottom: 80px;
     max-width: 480px;
+
     @media screen and (max-width: 575px) {
         padding: 20px 16px 40px 16px;
     }

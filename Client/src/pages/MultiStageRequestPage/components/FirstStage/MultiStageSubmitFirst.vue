@@ -509,12 +509,7 @@ const onAction = async () => {
         await HTTP.post(
             `/events/${props.route.params.id}/multi_applications/`,
             selectedCompetitionsList.value,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
 
         router.push({
@@ -579,12 +574,7 @@ const getHeadquartersJunior = async () => {
     try {
         const { data } = await HTTP.get(
             `/events/${props.route.params.id}/multi_applications`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         let i = 0;
         console.log(data);

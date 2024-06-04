@@ -238,12 +238,7 @@ const getVerificationLogs = async (q_number) => {
     try {
         const { data } = await HTTP.get(
             `/competitions/1/verification_logs/${q_number}/?verified_detachment_id=${detachment_id.value}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         // console.log(data);
 

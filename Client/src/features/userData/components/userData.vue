@@ -104,12 +104,7 @@ const AddAbout = async () => {
         const response = await HTTP.patch(
             '/rsousers/me/',
             { bio: bio.value },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         isLoading.value = false;
         swal.fire({

@@ -124,12 +124,7 @@ const getCompileList = async () => {
     try {
         const { data } = await HTTP.get(
             `/events/${props.route.params.id}/multi_applications/compile_lists/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         console.log(data);
         usersList.value = data;
@@ -198,12 +193,7 @@ const onAction = async () => {
         HTTP.post(
             `/events/${props.route.params.id}/multi_applications/compile_lists/`,
             payload,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         router.push({
             name: 'Action',

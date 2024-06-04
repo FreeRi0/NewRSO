@@ -110,12 +110,7 @@ const ChangePrivate = async () => {
         const response = await HTTP.patch(
             '/rsousers/me/privacy/',
             privateData.value,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         swal.fire({
             position: 'top-center',
