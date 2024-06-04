@@ -5,11 +5,7 @@
             <p class="subtitle">Подал:</p>
             <div class="horizontallso-item__wrapper">
                 <div class="horizontallso-img">
-                    <img
-                        class="avatar_circle"
-                        :src="applicationsList[0].headquarter_author.banner"
-                        alt="logo"
-                    />
+                    <img class="avatar_circle" :src="applicationsList[0].headquarter_author.banner" alt="logo" />
                 </div>
                 <div class="containerHorizontal">
                     <p class="horizontallso-item__list-full">
@@ -23,29 +19,19 @@
                     скачать список
                 </a>
             </div>
-            <div
-                class="horizontallso-item__wrapper"
-                v-for="user in applicationsList[0].applicants"
-                :key="user.id"
-            >
+            <div class="horizontallso-item__wrapper" v-for="user in applicationsList[0].applicants" :key="user.id">
                 <div class="horizontallso-img">
-                    <img
-                        class="avatar_circle"
-                        :src="user.user.avatar.photo"
-                        alt="avatar"
-                    />
+                    <img class="avatar_circle" :src="user.user.avatar.photo" alt="avatar" />
                 </div>
                 <div class="containerHorizontal">
                     <p class="horizontallso-item__list-full">
                         {{ user.user.first_name + ' ' + user.user.last_name }}
                     </p>
                     <div class="horizontallso-item__list-date">
-                        <span
-                            style="
+                        <span style="
                                 border-left: 2px solid #b6b6b6;
                                 padding-right: 8px;
-                            "
-                        ></span>
+                            "></span>
                         <p>{{ user.user.date_of_birth }}</p>
                     </div>
                 </div>
@@ -76,7 +62,7 @@ const router = useRouter();
 const loading = ref(true);
 const applicationsList = ref({});
 
-const getApplciatonsList = async () => {
+const getApplicatonsList = async () => {
     try {
         const { data } = await HTTP.get(
             `/events/${route.params.id}/group_applications/all/`,
@@ -90,7 +76,7 @@ const getApplciatonsList = async () => {
         applicationsList.value = data.results;
         loading.value = false;
     } catch (e) {
-        console.log('getApplciatonsList error', e);
+        console.log('getApplicatonsList error', e);
     }
 };
 
@@ -150,7 +136,7 @@ const relocate = async () => {
 };
 
 onMounted(async () => {
-    await getApplciatonsList();
+    await getApplicatonsList();
     console.log(applicationsList.value);
 });
 </script>
@@ -162,6 +148,7 @@ onMounted(async () => {
     height: 24px;
     margin-right: 8px;
 }
+
 .file_name {
     display: flex;
     flex-wrap: nowrap;
@@ -173,11 +160,13 @@ onMounted(async () => {
     line-height: 20px;
     text-decoration-line: underline;
 }
+
 .download {
     float: right;
     margin-bottom: 12px;
     margin-top: 40px;
 }
+
 .download_text {
     display: flex;
     flex-wrap: nowrap;
@@ -188,6 +177,7 @@ onMounted(async () => {
     font-weight: 500;
     line-height: normal;
 }
+
 .download_img {
     display: inline-block;
     width: 24px;
@@ -195,16 +185,19 @@ onMounted(async () => {
     margin-left: 40px;
     margin-right: 4px;
 }
+
 .container {
     margin: 0 auto;
     padding-bottom: 60px;
     padding-top: 0px;
 }
+
 .deny_button {
     border-radius: 10px;
     border: 2px solid #35383f;
     padding: 16px 32px;
 }
+
 .submit_button {
     border-radius: 10px;
     background: #39bfbf;
@@ -212,6 +205,7 @@ onMounted(async () => {
     margin-left: 20px;
     color: #fff;
 }
+
 .button {
     padding-top: 60px;
     //margin-left: 20px;
@@ -221,6 +215,7 @@ onMounted(async () => {
     line-height: 20px;
     text-align: center;
 }
+
 .main_title {
     // margin: 40px 0px;
     font-size: 52px;
@@ -229,6 +224,7 @@ onMounted(async () => {
     line-height: normal;
     margin-bottom: 40px;
 }
+
 .subtitle {
     margin-bottom: 24px;
     font-size: 20px;
@@ -243,11 +239,13 @@ onMounted(async () => {
     border-radius: 10px;
     height: 48px;
     width: 48px;
+
     input {
         width: 24px;
         height: 24px;
     }
 }
+
 .horizontallso-item__wrapper {
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -261,29 +259,35 @@ onMounted(async () => {
     width: 100%;
     margin-top: 12px;
 }
+
 .containerHorizontal {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
+
 .horizontallso-item__list-date {
     width: 95px;
     display: grid;
     grid-template-columns: auto 1fr 0fr;
 }
+
 .horizontallso-item__list-full {
     color: #35383f;
     font-size: 16px;
     font-weight: 400;
     margin-left: 10px;
 }
+
 .horizontallso {
     display: flex;
+
     &-img {
         align-items: center;
         width: 36px;
         height: 36px;
         justify-content: start;
+
         img {
             display: flex;
             position: relative;
@@ -291,6 +295,7 @@ onMounted(async () => {
         }
     }
 }
+
 .avatar_circle {
     border-radius: 50%;
     width: 38px;
