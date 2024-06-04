@@ -61,13 +61,11 @@ const region = ref({});
 const query = new URLSearchParams(window.location.search);
 const payload = JSON.parse(query.get("payload"));
 
-// console.log(payload, payload?.silent_token, payload?.token)
-
 
 const TokenData = ref({
     silent_token: payload?.token,
     uuid: payload?.uuid,
-    access_token: process.env.SERVICE_TOKEN
+    access_token: '1f27b3ae1f27b3ae1f27b3ae8c1c3f9ae011f271f27b3ae7908c555e6e44cf69a21a992'
 })
 
 
