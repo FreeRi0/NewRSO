@@ -2155,12 +2155,7 @@ regionName.value = getRegionName;
 const headquarterItems = ref(props.headquarterItems);
 
 const getHeadquarter = async () => {
-    await HTTP.get('educationals', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    await HTTP.get('educationals', )
         .then((res) => {
             headquarterItems.value = res.data.results;
         })

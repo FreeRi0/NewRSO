@@ -95,12 +95,7 @@ const place = ref([]);
 let id = props.member?.junior_detachment?.id;
 
 const getPlaces = async () => {
-    const response = await HTTP.get(`detachments/${id}/competitions/1/place/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    });
+    const response = await HTTP.get(`detachments/${id}/competitions/1/place/`);
     let data = response.data;
     place.value = data;
 };

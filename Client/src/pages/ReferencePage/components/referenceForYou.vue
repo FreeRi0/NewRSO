@@ -282,12 +282,7 @@ const updateDetachment = (detachmentVal) => {
 };
 
 const SendReference = async () => {
-    await HTTP.post('/membership_certificates/internal/', refData.value, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    await HTTP.post('/membership_certificates/internal/', refData.value,)
         .then((response) => {
             refData.value = response.data;
             const url = new Blob([response.data], { type: 'application/zip' });

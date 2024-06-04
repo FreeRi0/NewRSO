@@ -157,12 +157,7 @@ const swal = inject('$swal');
 const viewDetachments = async () => {
     let id = route.params.id;
     console.log('idRoute', id);
-    await HTTP.get(`/detachments/${id}/applications/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    await HTTP.get(`/detachments/${id}/applications/`)
         .then((response) => {
             applications.value = response.data;
             console.log(response);
@@ -175,12 +170,7 @@ const viewDetachments = async () => {
 const viewRegionals = async () => {
     let id = props.squad.regional_headquarter;
     console.log('idRouteReg', id);
-    await HTTP.get(`/regionals/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    await HTTP.get(`/regionals/${id}/`)
         .then((response) => {
             regional.value = response.data;
             console.log(response);
@@ -222,13 +212,7 @@ const AddApplication = async () => {
         let id = props.squad.id;
         const sendResponse = await HTTP.post(
             `/detachments/${id}/apply/`,
-            data.value,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+            data.value
         );
         swal.fire({
             position: 'top-center',

@@ -10,6 +10,7 @@ export const HTTP = axios.create({
 
 HTTP.interceptors.request.use(
     (config) => {
+        console.log(config.headers.Accept);
         if (config.url == '/token/login/' || config.url == '/register/') {
             delete config.headers.Authorization;
         } else {

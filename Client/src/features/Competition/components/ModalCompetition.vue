@@ -153,12 +153,7 @@ const closeAll = () => {
 const squadsJunour = ref([]);
 
 const getSquads = async () => {
-    HTTP.get(`competitions/${id}/junour_detachments/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    HTTP.get(`competitions/${id}/junour_detachments/`)
         .then((response) => {
             squadsJunour.value = response.data;
             console.log('Юниор-отряды', response);

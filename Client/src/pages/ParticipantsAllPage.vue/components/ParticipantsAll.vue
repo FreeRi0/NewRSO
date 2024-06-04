@@ -87,12 +87,7 @@ const limit = 10;
 const timerSearch = ref(null);
 
 const aboutVerified = async () => {
-    await HTTP.get(`/detachments/${id}/applications/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    await HTTP.get(`/detachments/${id}/applications/`,)
         .then((response) => {
             verified.value = response.data;
             console.log(response);

@@ -1,23 +1,11 @@
 <template>
     <div class="container">
         <h1 class="title title--lso">Редактирование окружного штаба</h1>
-        <FormDH
-            :participants="true"
-            :headquarter="headquarter"
-            :members="districtsStore.members"
-            :submited="submited"
-            :is-commander-loading="isCommanderLoading"
-            :is-members-loading="isMembersLoading"
-            :is-error="isError"
-            :is-error-members="isErrorMembers"
-            v-if="headquarter && isError && isErrorMembers && !loading"
-            @submit.prevent="changeHeadquarter"
-            @select-emblem="onSelectEmblem"
-            @select-banner="onSelectBanner"
-            @delete-emblem="onDeleteEmblem"
-            @delete-banner="onDeleteBanner"
-            @update-member="onUpdateMember"
-        >
+        <FormDH :participants="true" :headquarter="headquarter" :members="districtsStore.members" :submited="submited"
+            :is-commander-loading="isCommanderLoading" :is-members-loading="isMembersLoading" :is-error="isError"
+            :is-error-members="isErrorMembers" v-if="headquarter && isError && isErrorMembers && !loading"
+            @submit.prevent="changeHeadquarter" @select-emblem="onSelectEmblem" @select-banner="onSelectBanner"
+            @delete-emblem="onDeleteEmblem" @delete-banner="onDeleteBanner" @update-member="onUpdateMember">
         </FormDH>
     </div>
 </template>
@@ -64,12 +52,7 @@ const isCommanderLoading = ref(false);
 const getHeadquarter = async () => {
     loading.value = true;
     isCommanderLoading.value = true;
-    await HTTP.get(`districts/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    await HTTP.get(`districts/${id}/`,)
         .then((response) => {
             headquarter.value = response.data;
             if (headquarter.value.commander) {
@@ -104,7 +87,7 @@ const onUpdateMember = (event, id) => {
     const firstkey = Object.keys(event)[0];
     districtsStore.members[memberIndex].change = true;
     if (firstkey == 'position')
-    districtsStore.members[memberIndex].position.id = event[firstkey];
+        districtsStore.members[memberIndex].position.id = event[firstkey];
     else districtsStore.members[memberIndex][firstkey] = event[firstkey];
 };
 
