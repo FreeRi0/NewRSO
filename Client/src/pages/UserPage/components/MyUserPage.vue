@@ -69,28 +69,10 @@ const TokenData = ref({
 })
 
 
-// const getTokenData = async () => {
-//     try {
-//         const resp = await axios.post('https://api.vk.com/method/auth.getProfileInfoBySilentToken', payload?.token,  {
-//             headers: {
-//                 'Content-Type': 'application/json',
-
-//             },
-//         })
-//         console.log('yeah')
-//     } catch (e) {
-//         console.log('error:', e)
-//     }
-// }
-
 
 const exchangeToken = async () => {
     try {
-        const resp = await HTTP.post('/exchange-token/', TokenData.value, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
+        const resp = await HTTP.post('/exchange-token/', TokenData.value)
     } catch (e) {
         console.log('error:', e)
     }
