@@ -77,7 +77,7 @@
 <script setup>
 import { Button } from '@shared/components/buttons';
 import { HTTP } from '@app/http';
-import { ref, onMounted, onActivated, inject, watch, computed } from 'vue';
+import { ref, onMounted, inject, watch, computed } from 'vue';
 import ActiveCompetitionItem from './ActiveCompetitionItem.vue';
 import ActiveCompetitionItemSelect from './ActiveCompetitionItemSelect.vue';
 import ActiveCompetitionItemReport from './ActiveCompetitionsItemReport.vue';
@@ -130,8 +130,6 @@ const getCompetitionsJunior = async () => {
                 competitionsList.value = [...competitionsList.value, data];
         } catch (e) {
             console.log('error getCompetitionsJunior', e);
-        } finally {
-
         }
     }
 };
@@ -148,8 +146,6 @@ const getCompetitions = async () => {
             );
         } catch (e) {
             console.log('error getCompetitions', e);
-        } finally {
-
         }
     }
 };
@@ -233,8 +229,10 @@ const cancelApplication = async (id, competitionId) => {
     );
 };
 
+const firstTypeIndicator = [5, 13, 14, 15, 17];
+
 const confirmIndicator = async (id, applicationId, pointId) => {
-    if (id == 5 || id == 13 || id == 14 || id == 15 || id == 17) {
+    if (firstTypeIndicator.includes(id)) {
         await HTTP.post(
             `/competitions/1/reports/q${id}/${applicationId}/accept/${pointId}/`,
             {},
@@ -258,7 +256,7 @@ const confirmIndicator = async (id, applicationId, pointId) => {
 };
 
 const cancelIndicator = async (id, applicationId, pointId) => {
-    if (id == 5 || id == 13 || id == 14 || id == 15 || id == 17) {
+    if (firstTypeIndicator.includes(id)) {
         await HTTP.delete(
             `/competitions/1/reports/q${id}/${applicationId}/accept/${pointId}`,
             {},
@@ -286,49 +284,12 @@ const onAction = async () => {
         try {
             for (const application of selectedReportingList.value) {
                 if (action.value === 'Одобрить') {
-                    if (application.participants_data) {
-                        //5
-                        for (const participant of application.participants_data) {
+                    if (application.information) {
+                        for (const temp of application.information) {
                             await confirmIndicator(
                                 application.indicator,
                                 application.id,
-                                participant.id,
-                            );
-                        }
-                    } else if (application.organization_data) {
-                        //13
-                        for (const organizator of application.organization_data) {
-                            await confirmIndicator(
-                                application.indicator,
-                                application.id,
-                                organizator.id,
-                            );
-                        }
-                    } else if (application.q14_labor_projects) {
-                        //14
-                        for (const project of application.q14_labor_projects) {
-                            await confirmIndicator(
-                                application.indicator,
-                                application.id,
-                                project.id,
-                            );
-                        }
-                    } else if (application.grants_data) {
-                        //15
-                        for (const grant of application.grants_data) {
-                            await confirmIndicator(
-                                application.indicator,
-                                application.id,
-                                grant.id,
-                            );
-                        }
-                    } else if (application.source_data) {
-                        //17
-                        for (const source of application.source_data) {
-                            await confirmIndicator(
-                                application.indicator,
-                                application.id,
-                                source.id,
+                                temp.id,
                             );
                         }
                     } else {
@@ -339,49 +300,12 @@ const onAction = async () => {
                         );
                     }
                 } else {
-                    if (application.participants_data) {
-                        //5
-                        for (const participant of application.participants_data) {
+                    if (application.information) {
+                        for (const temp of application.information) {
                             await cancelIndicator(
                                 application.indicator,
                                 application.id,
-                                participant.id,
-                            );
-                        }
-                    } else if (application.organization_data) {
-                        //13
-                        for (const organizator of application.organization_data) {
-                            await cancelIndicator(
-                                application.indicator,
-                                application.id,
-                                organizator.id,
-                            );
-                        }
-                    } else if (application.q14_labor_projects) {
-                        //14
-                        for (const project of application.q14_labor_projects) {
-                            await cancelIndicator(
-                                application.indicator,
-                                application.id,
-                                project.id,
-                            );
-                        }
-                    } else if (application.grants_data) {
-                        //15
-                        for (const grant of application.grants_data) {
-                            await cancelIndicator(
-                                application.indicator,
-                                application.id,
-                                grant.id,
-                            );
-                        }
-                    } else if (application.source_data) {
-                        //17
-                        for (const source of application.source_data) {
-                            await cancelIndicator(
-                                application.indicator,
-                                application.id,
-                                source.id,
+                                temp.id,
                             );
                         }
                     } else {
@@ -478,18 +402,12 @@ const getAllReporting = async () => {
             );
             for (let report of data.results) {
                 if (report.is_verified) continue;
+                report = renameObject(report, index);
                 report.indicator = index;
                 if (!allReporting.value[index]) {
                     allReporting.value[index] = [];
                 }
-                if (index == 5) {
-                    let tempArr = [];
-                    for (const tempData of report.participants_data) {
-                        if (!tempData.is_verified) tempArr.push(tempData);
-                    }
-                    report.participants_data = tempArr;
-                    if (tempArr.length) allReporting.value[index].push(report);
-                } else if (index == 6) {
+                if (index == 6) {
                     let del = true;
                     for (const key in report) {
                         if (key.indexOf('block') != -1 && !(report[key] && !report[key].is_verified)) {
@@ -499,33 +417,12 @@ const getAllReporting = async () => {
                         }
                     }
                     if (!del) allReporting.value[index].push(report);
-                } else if (index == 13) {
+                } else if (report.information) {
                     let tempArr = [];
-                    for (const tempData of report.organization_data) {
+                    for (const tempData of report.information) {
                         if (!tempData.is_verified) tempArr.push(tempData);
                     }
-                    report.organization_data = tempArr;
-                    if (tempArr.length) allReporting.value[index].push(report);
-                } else if (index == 14) {
-                    let tempArr = [];
-                    for (const tempData of report.q14_labor_projects) {
-                        if (!tempData.is_verified) tempArr.push(tempData);
-                    }
-                    report.q14_labor_projects = tempArr;
-                    if (tempArr.length) allReporting.value[index].push(report);
-                } else if (index == 15) {
-                    let tempArr = [];
-                    for (const tempData of report.grants_data) {
-                        if (!tempData.is_verified) tempArr.push(tempData);
-                    }
-                    report.grants_data = tempArr;
-                    if (tempArr.length) allReporting.value[index].push(report);
-                } else if (index == 17) {
-                    let tempArr = [];
-                    for (const tempData of report.source_data) {
-                        if (!tempData.is_verified) tempArr.push(tempData);
-                    }
-                    report.source_data = tempArr;
+                    report.information = tempArr;
                     if (tempArr.length) allReporting.value[index].push(report);
                 } else {
                     allReporting.value[index].push(report);
@@ -540,6 +437,41 @@ const getAllReporting = async () => {
     }
     loading.value = false;
 };
+
+const renameObject = function (obj, index) {
+    let tempProperty;
+    switch (index) {
+        case 5:
+            tempProperty = obj.participants_data;
+            delete obj.participants_data;
+            obj.information = tempProperty;
+            break;
+        case 13:
+            tempProperty = obj.organization_data;
+            delete obj.organization_data;
+            obj.information = tempProperty;
+            break;
+        case 14:
+            tempProperty = obj.q14_labor_projects;
+            delete obj.q14_labor_projects;
+            obj.information = tempProperty;
+            break;
+        case 15:
+            tempProperty = obj.grants_data;
+            delete obj.grants_data;
+            obj.information = tempProperty;
+            break;
+        case 17:
+            tempProperty = obj.source_data;
+            delete obj.source_data;
+            obj.information = tempProperty;
+            break;
+        default:
+            break;
+    }
+
+    return obj;
+}
 
 const lengthAllReporting = computed(() => {
     let sum = 0;

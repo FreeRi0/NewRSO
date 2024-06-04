@@ -62,7 +62,7 @@ const router = useRouter();
 const loading = ref(true);
 const applicationsList = ref({});
 
-const getApplciatonsList = async () => {
+const getApplicatonsList = async () => {
     try {
         const { data } = await HTTP.get(
             `/events/${route.params.id}/group_applications/all/`,
@@ -71,7 +71,7 @@ const getApplciatonsList = async () => {
         applicationsList.value = data.results;
         loading.value = false;
     } catch (e) {
-        console.log('getApplciatonsList error', e);
+        console.log('getApplicatonsList error', e);
     }
 };
 
@@ -121,7 +121,7 @@ const relocate = async () => {
 };
 
 onMounted(async () => {
-    await getApplciatonsList();
+    await getApplicatonsList();
     console.log(applicationsList.value);
 });
 </script>
