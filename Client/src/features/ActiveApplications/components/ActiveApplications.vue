@@ -100,13 +100,7 @@ const viewParticipants = async () => {
 
         if (roles.roles.value.regionalheadquarter_commander?.id) {
             const regComReq = await HTTP.get(
-                `/regionals/${roles.roles.value.regionalheadquarter_commander?.id}/verifications/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
+                `/regionals/${roles.roles.value.regionalheadquarter_commander?.id}/verifications/`
             );
             participantList.value = regComReq.data;
             loading.value = false;
@@ -160,12 +154,6 @@ const confirmApplication = async (id) => {
         const approveReq = await HTTP.post(
             `rsousers/${id}/verify/`,
             {},
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
         );
         swal.fire({
             position: 'top-center',
@@ -193,12 +181,6 @@ const cancelApplication = async (id) => {
     try {
         const rejectReq = await HTTP.delete(
             `/rsousers/${id}/verify/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
             {},
         );
         swal.fire({

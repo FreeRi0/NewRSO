@@ -3,74 +3,36 @@
 
     <div class="competition__send-application">
         <form @submit.prevent class="competition__form">
-            <button
-                type="button"
-                @click="closeSendApplication"
-                class="competition__button-close"
-            >
+            <button type="button" @click="closeSendApplication" class="competition__button-close">
                 x
             </button>
             <p>Выберите номинацию</p>
             <div class="competition__group-button">
-                <Button
-                    type="button"
-                    class="nav-user__button-agree mt-2 mx-auto"
-                    label="Тандем"
-                    color="primary"
-                    size="large"
-                    @click="SendInvitation"
-                ></Button>
-                <Button
-                    type="submit"
-                    class="nav-user__button-agree mt-2 mx-auto"
-                    label="Дебют"
-                    color="primary"
-                    size="large"
-                    @click="SendApplication"
-                ></Button>
+                <Button type="button" class="nav-user__button-agree mt-2 mx-auto" label="Тандем" color="primary"
+                    size="large" @click="SendInvitation"></Button>
+                <Button type="submit" class="nav-user__button-agree mt-2 mx-auto" label="Дебют" color="primary"
+                    size="large" @click="SendApplication"></Button>
             </div>
         </form>
     </div>
 
     <div v-if="isChooseSquad" class="competition__send-invitation">
         <form @submit.prevent class="competition__form">
-            <button
-                type="button"
-                @click="closeChooseSquad"
-                class="competition__button-close"
-            >
+            <button type="button" @click="closeChooseSquad" class="competition__button-close">
                 x
             </button>
             <p>Выберите отряд</p>
             <!-- <pre>{{ juniorDetachment }}</pre> -->
-            <v-select
-                variant="outlined"
-                clearable
-                v-model="juniorDetachment"
-                item-value="id"
-                item-title="name"
-                name="select_squad"
-                id="select-squad"
-                placeholder="Например, ССО Дружба"
-                :items="squadsJunour"
-            ></v-select>
-            <Button
-                type="submit"
-                class="nav-user__button-agree mx-auto"
-                label="Отправить приглашение"
-                color="primary"
-                size="large"
-                @click="sendAppl(juniorDetachment)"
-            ></Button>
+            <v-select variant="outlined" clearable v-model="juniorDetachment" item-value="id" item-title="name"
+                name="select_squad" id="select-squad" placeholder="Например, ССО Дружба"
+                :items="squadsJunour"></v-select>
+            <Button type="submit" class="nav-user__button-agree mx-auto" label="Отправить приглашение" color="primary"
+                size="large" @click="sendAppl(juniorDetachment)"></Button>
         </form>
     </div>
 
     <div v-if="errorIsStatusMentor" class="competition__info">
-        <button
-            type="button"
-            @click="errorIsStatusMentor = !errorIsStatusMentor"
-            class="competition__button-close"
-        >
+        <button type="button" @click="errorIsStatusMentor = !errorIsStatusMentor" class="competition__button-close">
             x
         </button>
         <p class="competition__message">
@@ -81,11 +43,7 @@
     </div>
 
     <div v-if="errorIsStatusStart" class="competition__info">
-        <button
-            type="button"
-            @click="errorIsStatusStart = !errorIsStatusStart"
-            class="competition__button-close"
-        >
+        <button type="button" @click="errorIsStatusStart = !errorIsStatusStart" class="competition__button-close">
             x
         </button>
         <p class="competition__message">
@@ -96,11 +54,7 @@
     </div>
 
     <div v-if="isSucsess" class="competition__info">
-        <button
-            type="button"
-            @click="closeSucsessMessage"
-            class="competition__button-close"
-        >
+        <button type="button" @click="closeSucsessMessage" class="competition__button-close">
             x
         </button>
         <p class="competition__message">Заявка успешно отправлена!</p>
@@ -199,12 +153,7 @@ const closeAll = () => {
 const squadsJunour = ref([]);
 
 const getSquads = async () => {
-    HTTP.get(`competitions/${id}/junour_detachments/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    HTTP.get(`competitions/${id}/junour_detachments/`)
         .then((response) => {
             squadsJunour.value = response.data;
             console.log('Юниор-отряды', response);
@@ -242,12 +191,7 @@ const SendApplication = async () => {
     }
 
     try {
-        await HTTP.post(`/competitions/${id}/applications/`, body, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        await HTTP.post(`/competitions/${id}/applications/`, body,);
         isSucsess.value = true;
         emit('sucsess');
     } catch (e) {
@@ -284,12 +228,7 @@ const sendAppl = async (juniorDetacmentId) => {
     }
 
     try {
-        await HTTP.post(`/competitions/${id}/applications/`, body, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        await HTTP.post(`/competitions/${id}/applications/`, body,);
         isSucsess.value = true;
         emit('sucsess');
     } catch (e) {

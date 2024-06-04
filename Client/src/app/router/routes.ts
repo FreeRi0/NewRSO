@@ -28,7 +28,7 @@ const routes: RouteRecordRaw[] = [
                     import('@pages/RegisterPage/components/RegisterPage.vue'),
             },
             {
-                path: '/RecoveryPass',
+                path: '/recovery-pass',
                 name: 'RecoveryPassword',
                 component: () =>
                     import(
@@ -44,13 +44,13 @@ const routes: RouteRecordRaw[] = [
                     ),
             },
             {
-                path: '/terms_of_use',
+                path: '/terms-of-use',
                 name: 'terms_of_use',
                 component: () =>
                     import('@pages/terms_of_use/components/termsPage.vue'),
             },
             {
-                path: '/privacy_policy',
+                path: '/privacy-policy',
                 name: 'privacy_policy',
                 component: () =>
                     import('@pages/privacy_policy/components/PolicyPage.vue'),
@@ -69,7 +69,7 @@ const routes: RouteRecordRaw[] = [
                 },
                 children: [
                     {
-                        path: '/AllSquads',
+                        path: '/all-squads',
                         meta: {
                             requiresAuth: true,
                             redirectTo: 'allsquads',
@@ -86,7 +86,7 @@ const routes: RouteRecordRaw[] = [
                             },
 
                             {
-                                path: '/CreateLSO',
+                                path: '/create-lso',
                                 name: 'CreateLSO',
                                 component: () =>
                                     import(
@@ -108,7 +108,7 @@ const routes: RouteRecordRaw[] = [
                                 children: [
                                     {
                                         path: 'reporting',
-                                        //name: 'debut',
+
                                         meta: {
                                             redirectTo: 'debut',
                                             label: 'Отчетность',
@@ -123,14 +123,7 @@ const routes: RouteRecordRaw[] = [
                                                         '@pages/DetachmentReport/components/DetachmentReport.vue'
                                                     ),
                                             },
-                                            // {
-                                            //     path: ':reporting_name',
-                                            //     name: 'reporting',
-                                            //     component: () =>
-                                            //         import(
-                                            //             '@pages/DetachmentReport/components/DetachmentReport.vue'
-                                            //         ),
-                                            // },
+
                                             {
                                                 path: 'report/:competition_pk',
                                                 meta: {
@@ -153,7 +146,7 @@ const routes: RouteRecordRaw[] = [
                                             ),
                                     },
                                     {
-                                        path: 'EditLSO',
+                                        path: 'edit-lso',
                                         name: 'EditLSO',
                                         component: () =>
                                             import(
@@ -164,7 +157,7 @@ const routes: RouteRecordRaw[] = [
                                         },
                                     },
                                     {
-                                        path: 'AllParticipants',
+                                        path: 'all-participants',
                                         meta: {
                                             label: 'Участники отряда',
                                         },
@@ -202,7 +195,7 @@ const routes: RouteRecordRaw[] = [
                     },
                     // Штабы СО ОО
                     {
-                        path: '/AllHeadquarters',
+                        path: '/all-headquarters',
                         meta: {
                             requiresAuth: true,
                             redirectTo: 'AllHeadquarters',
@@ -218,7 +211,7 @@ const routes: RouteRecordRaw[] = [
                                     ),
                             },
                             {
-                                path: '/createhq',
+                                path: '/create-hq',
                                 name: 'createhq',
                                 component: () =>
                                     import(
@@ -244,7 +237,7 @@ const routes: RouteRecordRaw[] = [
                                             import('@pages/HQPage/HQPage.vue'),
                                     },
                                     {
-                                        path: 'EditHQ',
+                                        path: 'edit-hq',
                                         name: 'EditHQ',
                                         component: () =>
                                             import(
@@ -260,7 +253,7 @@ const routes: RouteRecordRaw[] = [
                     },
                     // Местные штабы
                     {
-                        path: '/LocalHeadquarters',
+                        path: '/local-headquarters',
                         meta: {
                             requiresAuth: true,
                             redirectTo: 'LocalHeadquarters',
@@ -276,7 +269,7 @@ const routes: RouteRecordRaw[] = [
                                     ),
                             },
                             {
-                                path: '/CreateLHQ',
+                                path: '/create-lhq',
                                 name: 'CreateLHQ',
                                 component: () =>
                                     import(
@@ -304,7 +297,7 @@ const routes: RouteRecordRaw[] = [
                                             ),
                                     },
                                     {
-                                        path: 'EditingOfLocal',
+                                        path: 'editing-local',
                                         name: 'FormLocal',
                                         component: () =>
                                             import(
@@ -320,7 +313,7 @@ const routes: RouteRecordRaw[] = [
                     },
                     // Региональные штабы
                     {
-                        path: '/RegionalHeadquarters',
+                        path: '/regional-headquarters',
                         meta: {
                             requiresAuth: true,
                             redirectTo: 'regionalHeadquarters',
@@ -336,7 +329,7 @@ const routes: RouteRecordRaw[] = [
                                     ),
                             },
                             {
-                                path: '/CreationOfRS',
+                                path: '/creation-rs',
                                 name: 'CreationOfRS',
                                 component: () =>
                                     import(
@@ -364,7 +357,7 @@ const routes: RouteRecordRaw[] = [
                                             ),
                                     },
                                     {
-                                        path: 'EditingOfRS',
+                                        path: 'editing-rs',
                                         name: 'EditingOfRS',
                                         component: () =>
                                             import(
@@ -380,7 +373,7 @@ const routes: RouteRecordRaw[] = [
                     },
                     // Окружные штабы
                     {
-                        path: '/DistrictHeadquarters',
+                        path: '/district-headquarters',
                         meta: {
                             requiresAuth: true,
                             redirectTo: 'districtHeadquarters',
@@ -412,7 +405,7 @@ const routes: RouteRecordRaw[] = [
                                             ),
                                     },
                                     {
-                                        path: 'EditingOfDH',
+                                        path: 'editing-dh',
                                         name: 'FormDH',
                                         component: () =>
                                             import(
@@ -428,7 +421,7 @@ const routes: RouteRecordRaw[] = [
                     },
                     // Центральный штаб
                     {
-                        path: '/CentralHQ/:id',
+                        path: '/central-hq/:id',
                         meta: {
                             label: 'centralHeadquarter.name',
                             redirectTo: 'CentralHQ',
@@ -444,7 +437,7 @@ const routes: RouteRecordRaw[] = [
                                     ),
                             },
                             {
-                                path: 'EditingOfCentral',
+                                path: 'editing-central',
                                 name: 'FormCentral',
                                 component: () =>
                                     import(
@@ -462,7 +455,7 @@ const routes: RouteRecordRaw[] = [
 
             //Мероприятия
             {
-                path: '/actionSquads',
+                path: '/action-squads',
                 meta: {
                     requiresAuth: true,
                     redirectTo: 'actionSquads',
@@ -494,7 +487,7 @@ const routes: RouteRecordRaw[] = [
                                     import('@pages/Event/components/Event.vue'),
                             },
                             {
-                                path: 'EditAction',
+                                path: 'edit-action',
                                 name: 'editAction',
                                 component: () =>
                                     import(
@@ -503,7 +496,7 @@ const routes: RouteRecordRaw[] = [
                             },
 
                             {
-                                path: 'ActionParticipants',
+                                path: 'action-participants',
                                 meta: {
                                     label: 'Участники мероприятия',
                                 },
@@ -624,7 +617,7 @@ const routes: RouteRecordRaw[] = [
                 ],
             },
             {
-                path: 'createAction',
+                path: 'create-action',
                 name: 'createAction',
                 component: () =>
                     import(
@@ -632,7 +625,7 @@ const routes: RouteRecordRaw[] = [
                     ),
             },
             {
-                path: '/AllParticipants/:id',
+                path: '/all-participants/:id',
                 name: 'allParticipants',
                 component: () =>
                     import(
@@ -664,7 +657,7 @@ const routes: RouteRecordRaw[] = [
                     import('@entities/Invents/components/InventSquads.vue'),
             },
             {
-                path: '/FAQ',
+                path: '/faq',
                 name: 'faq',
                 component: () =>
                     import('@pages/HelpInfoData/components/helpInfoData.vue'),
@@ -690,7 +683,7 @@ const routes: RouteRecordRaw[] = [
                             ),
                     },
                     {
-                        path: '/CompetitionParticipants',
+                        path: '/competition-participants',
                         name: 'CompetitionParticipants',
                         component: () =>
                             import(
@@ -705,7 +698,7 @@ const routes: RouteRecordRaw[] = [
             },
 
             {
-                path: '/CorpUniver',
+                path: '/corp-univer',
                 meta: {
                     redirectTo: 'CorpUniver',
                     label: 'Корпоративный университет',
@@ -719,24 +712,6 @@ const routes: RouteRecordRaw[] = [
                                 '@pages/CorpUniverPage/component/CorpUniverPage.vue'
                             ),
                     },
-
-                    // {
-                    //     path: 'test',
-                    //     meta: {
-                    //         redirectTo: 'testPage',
-                    //         label: 'Тестирование по обучению',
-                    //     },
-                    //     children: [
-                    //         {
-                    //             name: 'testPage',
-                    //             path: ':name',
-                    //             component: () =>
-                    //                 import(
-                    //                     '@pages/TestingPages/components/TestingPages.vue'
-                    //                 ),
-                    //         },
-                    //     ],
-                    // },
                 ],
             },
         ],
@@ -751,7 +726,7 @@ const routes: RouteRecordRaw[] = [
         },
         children: [
             {
-                path: '/MyPage',
+                path: '/my-page',
                 meta: {
                     redirectTo: 'mypage',
                     label: 'Моя страница',
@@ -781,7 +756,7 @@ const routes: RouteRecordRaw[] = [
                 ],
             },
             {
-                path: '/PersonalData',
+                path: '/personal-data',
                 name: 'personaldata',
                 component: () =>
                     import(
@@ -793,7 +768,7 @@ const routes: RouteRecordRaw[] = [
             },
 
             {
-                path: '/contributorPay',
+                path: '/contributor-pay',
                 meta: {
                     label: 'Членский взнос',
                     redirectTo: 'contributorPay',
@@ -837,7 +812,7 @@ const routes: RouteRecordRaw[] = [
                 },
             },
             {
-                path: '/CorpUniver',
+                path: '/corp-univer',
                 meta: {
                     redirectTo: 'CorpUniver',
                     label: 'Корпоративный университет',
@@ -854,7 +829,7 @@ const routes: RouteRecordRaw[] = [
                 ],
             },
             {
-                path: '/Safety',
+                path: '/safety',
                 meta: {
                     redirectTo: 'Safety',
                     label: 'Охрана труда и техника безопасности',

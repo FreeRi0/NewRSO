@@ -5,11 +5,7 @@
 
             <div class="containers_result">
                 <div class="inline-container">
-                    <div
-                        class="indicator-container"
-                        v-for="(result, index) in mainResults.data"
-                        :key="index"
-                    >
+                    <div class="indicator-container" v-for="(result, index) in mainResults.data" :key="index">
                         <div class="horizontal-item__wrapper">
                             <div class="containerHorizontal">
                                 <p class="horizontal-item__list-full">
@@ -47,12 +43,7 @@
             </div>
 
             <template class="data__btns">
-                <Button
-                    type="button"
-                    class="input_data"
-                    label="Внести данные"
-                    @click="onAction"
-                ></Button>
+                <Button type="button" class="input_data" label="Внести данные" @click="onAction"></Button>
             </template>
 
             <div class="indicators">
@@ -60,11 +51,7 @@
                     <p>Показатель</p>
                     <p>Место</p>
                 </template>
-                <div
-                    class="indicator-container"
-                    v-for="(indicator, index) in resultData.indicators"
-                    :key="index"
-                >
+                <div class="indicator-container" v-for="(indicator, index) in resultData.indicators" :key="index">
                     <div class="horizontal-item__wrapper">
                         <div class="containerHorizontal">
                             <p class="horizontal-item__list-full">
@@ -168,28 +155,23 @@ const onAction = async () => {
 const getPlaceRegionalCommander = async () => {
     const { data } = await HTTP.get(
         `/competitions/1/get-detachment-places/${detachment_id.value}/`,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        },
+         ,
     );
-    if (data.is_tandem) {
-        mainResults.value.place.push(
-            data.places_sum ? data.places_sum : 'Рейтинг еще не сформирован',
-        );
-        mainResults.value.data.push(
-            `Сумма мест отряд «${data.partner_detachment.name}»`,
-        );
-    }
-    mainResults.value.place[0] = data.overall_place;
-    for (let i = 1; i <= 20; ++i) {
-        let index = `q${i}_place`;
-        resultData.value.places[i - 1] = data[index];
-    }
-    console.log(data);
-    loading.value = false;
+if (data.is_tandem) {
+    mainResults.value.place.push(
+        data.places_sum ? data.places_sum : 'Рейтинг еще не сформирован',
+    );
+    mainResults.value.data.push(
+        `Сумма мест отряд «${data.partner_detachment.name}»`,
+    );
+}
+mainResults.value.place[0] = data.overall_place;
+for (let i = 1; i <= 20; ++i) {
+    let index = `q${i}_place`;
+    resultData.value.places[i - 1] = data[index];
+}
+console.log(data);
+loading.value = false;
 };
 
 const getPostitions = async () => {
@@ -256,12 +238,7 @@ const getVerificationLogs = async (q_number) => {
     try {
         const { data } = await HTTP.get(
             `/competitions/1/verification_logs/${q_number}/?verified_detachment_id=${detachment_id.value}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         // console.log(data);
 
@@ -280,12 +257,7 @@ const getVerificationLogs = async (q_number) => {
 
 const getMeCommander = async () => {
     try {
-        const { data } = await HTTP.get(`/rsousers/me_commander/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const { data } = await HTTP.get(`/rsousers/me_commander/`,);
         // console.log(data);
         if (data.detachment_commander) {
             commander.value = true;
@@ -299,12 +271,7 @@ const getMeCommander = async () => {
 
 const getMainResults = async () => {
     try {
-        const { data } = await HTTP.get(`/competitions/1/get-place/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const { data } = await HTTP.get(`/competitions/1/get-place/`,);
         console.log(data);
         // Вернуть 1 в индекс для суммы мест
         if (data.place) {
@@ -351,6 +318,7 @@ onMounted(async () => {
     border: 1px solid #b6b6b6;
     background: #fff;
 }
+
 .horizontal-item__result {
     display: grid;
     font-family: Bert Sans;
@@ -362,6 +330,7 @@ onMounted(async () => {
 
     text-align: center;
 }
+
 .indicator-container {
     display: grid;
     width: 100%;
@@ -376,6 +345,7 @@ onMounted(async () => {
     letter-spacing: 0em;
     text-align: left;
 }
+
 // .indicator-container:last-child {
 //     padding-bottom: 80px;
 // }
@@ -393,6 +363,7 @@ onMounted(async () => {
     letter-spacing: 0em;
     text-align: left;
 }
+
 .result-container {
     display: grid;
     width: 100%;
@@ -407,6 +378,7 @@ onMounted(async () => {
     letter-spacing: 0em;
     text-align: left;
 }
+
 .horizontal-item__wrapper {
     min-height: 48px;
     display: grid;
@@ -417,32 +389,38 @@ onMounted(async () => {
     border: 1px solid #b6b6b6;
     background: #fff;
 }
+
 .containerHorizontal {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
+
 .horizontal-item__list-full {
     color: #35383f;
     font-size: 16px;
     font-weight: 400;
     margin-left: 10px;
 }
+
 .horizontallso__confidant {
     padding: 10px 10px;
     border: 1px solid #b6b6b6;
     border-radius: 10px;
     margin-bottom: 12px;
+
     input {
         width: 100%;
         height: 100%;
     }
 }
+
 .competition__avatar_circle {
     border-radius: 50%;
     width: 38px;
     height: 38px;
 }
+
 .main_text {
     font-family: Akrobat;
     font-size: 52px;
@@ -451,6 +429,7 @@ onMounted(async () => {
     letter-spacing: 0em;
     text-align: left;
 }
+
 .data__btns {
     display: grid;
     width: 100%;
@@ -461,10 +440,12 @@ onMounted(async () => {
     line-height: 21px;
     letter-spacing: 0em;
     text-align: left;
+
     :deep(.btn) {
         margin: 0px;
     }
 }
+
 .containers_result {
     display: flex;
     flex-wrap: wrap;
@@ -473,15 +454,18 @@ onMounted(async () => {
     padding-top: 28px;
     padding-bottom: 60px;
 }
+
 .indicators {
     display: grid;
     grid-template-rows: repeat(auto-fill, minmax(48px, 1fr));
     padding-top: 80px;
 }
+
 .inline-container {
     padding-right: 0px minmax(12px, 80px);
     font-size: 80px;
 }
+
 .container {
     padding-bottom: 80px;
 }

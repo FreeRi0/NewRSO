@@ -80,10 +80,6 @@ const props = defineProps({
         type: Boolean,
         required: false
     }
-    // position: {
-    //     type: Number,
-    //     default: 0,
-    // },
 });
 
 const emit = defineEmits({
@@ -94,8 +90,6 @@ const checked = ref(false);
 const updateCheckEvents = (e) => {
     emit('select', props.event, e.target.checked);
 };
-
-// const selectedEvent = ref(props.selectedCompetitions);
 
 watch(
     () => props.event.selected,
@@ -237,7 +231,7 @@ watch(
 }
 
 .evname {
-    white-space: nowrap; 
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }

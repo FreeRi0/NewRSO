@@ -62,12 +62,7 @@ const props = defineProps({
 
 const getVerified = async () => {
     try {
-        const verified = await HTTP.get(`/detachments/${id}/applications/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const verified = await HTTP.get(`/detachments/${id}/applications/`,);
         isVerified.value = verified.data;
     } catch (error) {
         console.log('an error occured ' + error);

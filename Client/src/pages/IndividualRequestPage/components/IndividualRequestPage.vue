@@ -4,28 +4,18 @@
         <p class="subtitle">Подал:</p>
         <div class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
-                <img
-                    :src="request.user?.media.photo"
-                    alt="logo"
-                    v-if="request.user?.media"
-                />
-                <img
-                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
-                    alt="photo"
-                    v-else
-                />
+                <img :src="request.user?.media.photo" alt="logo" v-if="request.user?.media" />
+                <img src="@app/assets/foto-leader-squad/foto-leader-squad-01.png" alt="photo" v-else />
             </div>
             <div class="containerHorizontal">
                 <p class="horizontallso-item__list-full">
                     {{ request.user?.first_name }}
                 </p>
                 <div class="horizontallso-item__list-date">
-                    <span
-                        style="
+                    <span style="
                             border-left: 2px solid #b6b6b6;
                             padding-right: 8px;
-                        "
-                    ></span>
+                        "></span>
                     <p>{{ request.user?.date_of_birth }}</p>
                 </div>
             </div>
@@ -44,7 +34,7 @@
                     <img class="file_img" src="/assets/file_dock.svg" />
                     <a :href="file.document" target="_blank">{{
                         file.document.slice(file.document.indexOf('_') + 1)
-                    }}</a>
+                        }}</a>
                 </div>
                 <a class="download_text" :href="file.document" target="_blank">
                     <img class="download_img" src="/assets/download.svg" />
@@ -77,12 +67,7 @@ const getIndividualApplication = async () => {
     try {
         const { data } = await HTTP.get(
             `/events/${route.params.id}/applications/${currentApplicationId.value}/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
 
         request.value = data;
@@ -95,23 +80,13 @@ const onCancel = async () => {
     try {
         await HTTP.delete(
             `/events/${route.params.id}/applications/${currentApplicationId.value}/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
             {},
         );
 
         const { data } = await HTTP.get(
             `/events/${route.params.id}/applications/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
 
         if (data.length) {
@@ -139,12 +114,7 @@ const getFilesInfo = async () => {
     try {
         const { data } = await HTTP.get(
             `/events/${route.params.id}/user_documents/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         for (const file of data) {
             if (
@@ -165,22 +135,12 @@ const onAccept = async () => {
         await HTTP.post(
             `/events/${route.params.id}/applications/${currentApplicationId.value}/confirm/`,
             {},
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
 
         const { data } = await HTTP.get(
             `/events/${route.params.id}/applications/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
 
         if (data.length) {
@@ -229,6 +189,7 @@ onMounted(async () => {
     height: 24px;
     margin-right: 8px;
 }
+
 .file_name {
     display: flex;
     flex-wrap: nowrap;
@@ -240,6 +201,7 @@ onMounted(async () => {
     line-height: 20px;
     text-decoration-line: underline;
 }
+
 .download_text {
     display: flex;
     flex-wrap: nowrap;
@@ -250,6 +212,7 @@ onMounted(async () => {
     font-weight: 500;
     line-height: normal;
 }
+
 .download_img {
     display: inline-block;
     width: 24px;
@@ -257,19 +220,23 @@ onMounted(async () => {
     margin-left: 40px;
     margin-right: 4px;
 }
+
 .file {
     display: flex;
     flex-wrap: nowrap;
 }
+
 .container {
     margin: 0 auto;
     padding: 0px 130px 60px 130px;
 }
+
 .deny_button {
     border-radius: 10px;
     border: 2px solid #35383f;
     padding: 16px 32px;
 }
+
 .submit_button {
     border-radius: 10px;
     background: #39bfbf;
@@ -277,6 +244,7 @@ onMounted(async () => {
     margin-left: 20px;
     color: #fff;
 }
+
 .button {
     padding-top: 60px;
     //margin-left: 20px;
@@ -286,6 +254,7 @@ onMounted(async () => {
     line-height: 20px;
     text-align: center;
 }
+
 .main_title {
     margin: 40px 0px;
     font-size: 52px;
@@ -293,6 +262,7 @@ onMounted(async () => {
     font-weight: 700;
     line-height: normal;
 }
+
 .subtitle {
     margin: 20px 0px;
     font-size: 20px;
@@ -300,17 +270,20 @@ onMounted(async () => {
     font-weight: 600;
     line-height: normal;
 }
+
 .horizontallso__confidant {
     padding: 10px 10px;
     border: 1px solid #b6b6b6;
     border-radius: 10px;
     height: 48px;
     width: 48px;
+
     input {
         width: 24px;
         height: 24px;
     }
 }
+
 .horizontallso-item__wrapper {
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -324,29 +297,35 @@ onMounted(async () => {
     width: 100%;
     margin-bottom: 12px;
 }
+
 .containerHorizontal {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
+
 .horizontallso-item__list-date {
     width: 95px;
     display: grid;
     grid-template-columns: auto 1fr 0fr;
 }
+
 .horizontallso-item__list-full {
     color: #35383f;
     font-size: 16px;
     font-weight: 400;
     margin-left: 10px;
 }
+
 .horizontallso {
     display: flex;
+
     &-img {
         align-items: center;
         width: 36px;
         height: 36px;
         justify-content: start;
+
         img {
             display: flex;
             position: relative;

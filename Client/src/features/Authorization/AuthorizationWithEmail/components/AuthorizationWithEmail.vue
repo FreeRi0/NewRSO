@@ -80,11 +80,7 @@ const Click = () => {
 const LoginUser = async () => {
     try {
         isLoading.value = true;
-        const response = await HTTP.post('/token/login/', data.value, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+        const response = await HTTP.post('/token/login/', data.value);
         data.value = response.data;
         localStorage.setItem('Token', response.data.auth_token);
         isLoading.value = false;

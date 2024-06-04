@@ -11,14 +11,8 @@
                 <label class="form-label" for="name-hq">
                     {{ issue.issue }}
                 </label>
-                <InputText
-                    id="name-hq"
-                    v-model="answers[index]"
-                    class="form__input form-input-container"
-                    placeholder="Ваш ответ"
-                    name="name_hq"
-                    :maxlength="100"
-                />
+                <InputText id="name-hq" v-model="answers[index]" class="form__input form-input-container"
+                    placeholder="Ваш ответ" name="name_hq" :maxlength="100" />
                 <div class="form__counter" style="text-align: right">
                     <p v-if="answers[index] != undefined">
                         {{ answers[index].length }}/100
@@ -31,35 +25,16 @@
         <p class="file_text">Загрузи сопутствующие документы:</p>
 
         <div class="uploads">
-            <div
-                class="form-col"
-                v-for="(file, index) in files.length + 1"
-                :key="file"
-            >
+            <div class="form-col" v-for="(file, index) in files.length + 1" :key="file">
                 <div class="form-fileupload" v-if="index < 6">
-                    <img
-                        class="file-upload-svg"
-                        src="@app/assets/icon/file.svg"
-                        alt="file"
-                    />
+                    <img class="file-upload-svg" src="@app/assets/icon/file.svg" alt="file" />
 
-                    <FileUpload
-                        class="file-upload-text"
-                        mode="basic"
-                        name="demo[]"
-                        accept=".pdf, .jpeg, .png"
-                        :maxFileSize="7000000"
-                        :customUpload="true"
-                        chooseLabel="Файл формата pdf, png, jpeg размером не более 7 мб"
-                        @select="onUpload"
-                        @clear="onRemove(index)"
-                    ></FileUpload>
+                    <FileUpload class="file-upload-text" mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
+                        :maxFileSize="7000000" :customUpload="true"
+                        chooseLabel="Файл формата pdf, png, jpeg размером не более 7 мб" @select="onUpload"
+                        @clear="onRemove(index)"></FileUpload>
 
-                    <img
-                        class="paper-clip"
-                        src="@app/assets/icon/addFile.svg"
-                        alt="addFile"
-                    />
+                    <img class="paper-clip" src="@app/assets/icon/addFile.svg" alt="addFile" />
 
                     <div class="clip-text">
                         <p v-if="index < files.length">Удалить файл</p>
@@ -104,12 +79,7 @@ const submitAnswers = async () => {
         }
         payload = Array.from(payload);
         console.log(payload);
-        await HTTP.post(`/events/${route.params.id}/answers/`, payload, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        await HTTP.post(`/events/${route.params.id}/answers/`, payload,);
     } catch (e) {
         console.log('submitAnswers error', e);
     }
@@ -117,12 +87,7 @@ const submitAnswers = async () => {
 
 const getEventInfo = async () => {
     try {
-        const { data } = await HTTP.get(`/events/${route.params.id}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const { data } = await HTTP.get(`/events/${route.params.id}`,);
         eventInfo.value = data;
     } catch (e) {
         console.log('getEventInfo error', e);
@@ -131,12 +96,7 @@ const getEventInfo = async () => {
 
 const getMeInfo = async () => {
     try {
-        const { data } = await HTTP.get(`/users/me/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const { data } = await HTTP.get(`/users/me/`,);
         meInfo.value = data;
     } catch (e) {
         console.log('getMeInfo error', e);
@@ -169,12 +129,7 @@ const onSubmit = async () => {
         await HTTP.post(
             `/events/${route.params.id}/applications/`,
             {},
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
 
         //console.log('Заявка отправлена');
@@ -207,9 +162,11 @@ onMounted(async () => {
 .file-upload-svg {
     margin-right: 8px;
 }
+
 .paper-clip {
     margin-left: 20px;
 }
+
 .file-upload-text {
     font-family: Bert Sans;
     font-size: 16px;
@@ -218,10 +175,12 @@ onMounted(async () => {
     letter-spacing: 0em;
     text-align: center;
     color: #b6b6b6;
-    & > :deep(.p-) {
+
+    &> :deep(.p-) {
         display: none;
     }
 }
+
 .file_text {
     font-family: Bert Sans;
     font-size: 20px;
@@ -231,9 +190,11 @@ onMounted(async () => {
     text-align: left;
     color: #35383f;
 }
+
 .form__field {
     margin-bottom: 24px;
 }
+
 .form {
     &-input-container {
         border: 1px solid #b6b6b6;
@@ -242,6 +203,7 @@ onMounted(async () => {
         //margin-bottom: 24px;
         margin-bottom: 4px;
     }
+
     &-label {
         font-family: Bert Sans;
         font-size: 16px;
@@ -253,6 +215,7 @@ onMounted(async () => {
         text-align: left;
         color: #35383f;
     }
+
     &-fileupload {
         display: flex;
         flex-direction: row;
@@ -260,20 +223,24 @@ onMounted(async () => {
         & :deep(.p-button-label) {
             text-decoration: underline;
         }
+
         & :deep(svg) {
             display: none;
         }
     }
+
     &-col {
         padding-right: 15px;
         margin-top: 25px;
     }
 }
+
 .uploads {
-    & > .form-col:last-child {
+    &>.form-col:last-child {
         color: #b6b6b6;
     }
 }
+
 .main_title {
     font-family: Akrobat;
     font-size: 52px;
@@ -284,6 +251,7 @@ onMounted(async () => {
     margin: 40px 0px;
     line-height: normal;
 }
+
 .subtitle {
     margin: 20px 0px;
     font-size: 20px;
@@ -297,6 +265,7 @@ onMounted(async () => {
     letter-spacing: 0em;
     text-align: left;
 }
+
 .submit_button {
     border-radius: 10px;
     background: #39bfbf;
@@ -304,6 +273,7 @@ onMounted(async () => {
     margin-left: 20px;
     color: #fff;
 }
+
 .button {
     padding-top: 60px;
     //margin-left: 20px;
@@ -314,6 +284,7 @@ onMounted(async () => {
     text-align: center;
     margin-bottom: 60px;
 }
+
 .clip-text {
     margin-left: 4px;
     font-family: Bert Sans;

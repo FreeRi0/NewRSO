@@ -223,12 +223,7 @@ const userCommander = ref({});
 
 const getUserCommander = async () => {
     try {
-        const response = await HTTP.get(`rsousers/me_commander/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const response = await HTTP.get(`rsousers/me_commander/`,);
 
         userCommander.value = response.data;
         console.log('конкурс', response);
@@ -242,12 +237,7 @@ const getMeSquad = async () => {
     try {
         const response = await HTTP.get(
             `detachments/${userCommander.value.detachment_commander.id}/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
 
         squad.value = response.data;
@@ -332,12 +322,7 @@ const getSquadStatus = async () => {
     try {
         const response = await HTTP.get(
             `competitions/${id}/check_detachment_status/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
 
         currentStatus.value = response.data;
