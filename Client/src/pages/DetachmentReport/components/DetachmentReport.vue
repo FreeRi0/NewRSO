@@ -155,7 +155,6 @@ const onAction = async () => {
 const getPlaceRegionalCommander = async () => {
     const { data } = await HTTP.get(
         `/competitions/1/get-detachment-places/${detachment_id.value}/`,
-         ,
     );
 if (data.is_tandem) {
     mainResults.value.place.push(
@@ -173,7 +172,6 @@ for (let i = 1; i <= 20; ++i) {
 console.log(data);
 loading.value = false;
 };
-
 const getPostitions = async () => {
     await getMainResults();
 
