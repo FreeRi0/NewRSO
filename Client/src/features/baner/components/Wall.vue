@@ -25,30 +25,9 @@
             </div>
         </div>
 
-        <Avatar v-if="
-            (props.user.privacy?.privacy_photo === 'Члены отряда' &&
-                props.user.detachment_id ===
-                currentUser.currentUser.value.detachment_id) ||
-            (props.user.privacy?.privacy_email === 'Руководство' &&
-                ((roleStore.roles.detachment_commander &&
-                    roleStore.roles.detachment_commander?.id ===
-                    props.user.detachment_id) ||
-                    (roleStore.roles.regionalheadquarter_commander &&
-                        roleStore.roles.regionalheadquarter_commander
-                            ?.id === props.user.regional_headquarter_id) ||
-                    roleStore.roles.localheadquarter_commander ||
-                    roleStore.roles.educationalheadquarter_commander ||
-                    roleStore.roles.districtheadquarter_commander ||
-                    roleStore.roles.centralheadquarter_commander)) ||
-            props.user.privacy?.privacy_email === 'Все' ||
-            props.user.privacy?.privacy_email === 'all'
-        " :avatar="user.media?.photo" @upload="uploadAva" @update="updateAva" @delete="deleteAva" :edited="false">
+        <Avatar
+         :avatar="user.avatar?.photo" @upload="uploadAva" @update="updateAva" @delete="deleteAva" :edited="false">
         </Avatar>
-        <div class="user-metric__avatar-wrapper" v-else>
-            <div class="user-metric__avatar">
-                <img id="profile-pic" src="@app/assets/user-avatar.png" alt="Аватарка(пусто)" />
-            </div>
-        </div>
 
         <div class="user-metric__bottom">
             <!-- Данные пользователя  -->
