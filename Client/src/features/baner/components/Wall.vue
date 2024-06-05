@@ -17,15 +17,16 @@
                     roleStore.roles.centralheadquarter_commander)) ||
             props.user.privacy?.privacy_email === 'Все' ||
             props.user.privacy?.privacy_email === 'all'
-        " :banner="user.media?.banner" @upload-wall="uploadWall" @update-wall="updateWall"
-            @delete-wall="deleteWall" :edited="false"></bannerPhoto>
+        " :banner="user.media?.banner" @upload-wall="uploadWall" @update-wall="updateWall" @delete-wall="deleteWall"
+            :edited="false"></bannerPhoto>
         <div class="user-metric__top" v-else>
             <div class="user-metric__top-img-wrapper">
                 <img src="@/app/assets/user-banner.jpg" alt="Баннер личной страницы(пусто)" />
             </div>
         </div>
 
-        <Avatar :avatar="user.media?.photo" @upload="uploadAva" @update="updateAva" @delete="deleteAva" :edited="false">
+        <Avatar :avatar="user.avatar?.photo" @upload="uploadAva" @update="updateAva" @delete="deleteAva"
+            :edited="false">
         </Avatar>
 
         <div class="user-metric__bottom">
