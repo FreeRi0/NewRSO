@@ -19,7 +19,6 @@ export function createAction(data: object) {
     return HTTP.post('/events/', data, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     });
 }
@@ -30,7 +29,6 @@ export function putAction(id: number, data: object) {
     return HTTP.put(`/events/${id}/`, data, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     });
 }

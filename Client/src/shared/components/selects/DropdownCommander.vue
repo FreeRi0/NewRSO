@@ -139,10 +139,6 @@ const onChangeItem = async () => {
         params: {
             region: queryRegion.value,
         },
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
     })
         .then((res) => {
             items.value = res.data.results;

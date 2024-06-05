@@ -1226,12 +1226,7 @@ onActivated(() => {
         });
   const getUsers = async () => {
     try {
-      const usersRes = await HTTP.get('users/', {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-      })
+      const usersRes = await HTTP.get('users/')
       usersList.value = await usersRes.data.results;
     } catch (e) {
       console.log(e)

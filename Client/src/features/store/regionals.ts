@@ -120,11 +120,7 @@ export const useRegionalsStore = defineStore('regionals', {
             if (this.regions.length) return;
             try {
                 this.isLoading = true;
-                const responseRegions = await HTTP.get(`/regions/`, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
+                const responseRegions = await HTTP.get(`/regions/`);
                 this.regions = responseRegions.data.results;
                 this.isLoading = false;
             } catch (error) {

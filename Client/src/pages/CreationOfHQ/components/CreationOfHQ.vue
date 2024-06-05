@@ -102,8 +102,7 @@ const changeHeadquarter = async () => {
 
     HTTP.post('educationals/', formData, {
         headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+            'Content-Type': 'multipart/form-data'
         },
     })
         .then((response) => {

@@ -131,13 +131,7 @@ const changeHeadquarter = async () => {
                 {
                     position: member.position.id,
                     is_trusted: member.is_trusted,
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
+                }
             )
                 .then((response) => {
                     member.position = response.data.position;

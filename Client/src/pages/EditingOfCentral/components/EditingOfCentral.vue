@@ -191,14 +191,7 @@ const changeHeadquarter = async () => {
                     {
                         position: member.position.id,
                         is_trusted: member.is_trusted,
-                    },
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    },
+                    }
                 )
                     .then((response) => {
                         member.position = response.data.position;
@@ -223,7 +216,6 @@ const changeHeadquarter = async () => {
         await HTTP.patch(`/centrals/1/`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
             },
         });
         swal.fire({

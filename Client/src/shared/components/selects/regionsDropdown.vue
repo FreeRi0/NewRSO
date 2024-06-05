@@ -170,11 +170,7 @@ const onChangeItem = async () => {
     try {
         isLoading.value = true;
         setTimeout(async () => {
-            const ItemResponse = await HTTP.get(props.address, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+            const ItemResponse = await HTTP.get(props.address);
             items.value = ItemResponse.data.results;
             isLoading.value = false;
         }, 500);

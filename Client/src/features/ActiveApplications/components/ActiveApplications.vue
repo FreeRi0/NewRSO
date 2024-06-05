@@ -106,13 +106,7 @@ const viewParticipants = async () => {
             loading.value = false;
         } else if (roles.roles.value.detachment_commander?.id) {
             const detComReq = await HTTP.get(
-                `/detachments/${roles.roles.value.detachment_commander?.id}/verifications/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
+                `/detachments/${roles.roles.value.detachment_commander?.id}/verifications/`
             );
             participantList.value = detComReq.data;
             loading.value = false;

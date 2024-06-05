@@ -144,13 +144,7 @@ const getCompetition = async () => {
             competition.value = props.report.detachment_report.competition;
         } else {
             const { data } = await HTTP.get(
-                `/competitions/${props.report.competition}/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
+                `/competitions/${props.report.competition}/`
             );
             competition.value = data;
         }
@@ -166,13 +160,7 @@ const getDetachmentData = async () => {
             detachmentData.value = props.report.detachment_report.detachment;
         } else {
             const { data } = await HTTP.get(
-                `/detachments/${props.report.detachment}/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
+                `/detachments/${props.report.detachment}/`
             );
             detachmentData.value = data;
         }

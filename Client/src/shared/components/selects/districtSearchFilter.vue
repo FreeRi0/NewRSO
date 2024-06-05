@@ -164,15 +164,12 @@ const changeValue = (event) => {
 };
 
 const items = ref(props.items);
-
+console.log(items);
 const onChangeItem = async () => {
   try {
       isLoading.value = true;
-      const ItemResponse = await HTTP.get(addressRef.value, {
-          headers: {
-              'Content-Type': 'application/json',
-          },
-      });
+      console.log(123);
+      const ItemResponse = await HTTP.get(addressRef.value);
       items.value = ItemResponse.data.results;
       isLoading.value = false;
   } catch (error) {

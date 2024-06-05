@@ -198,7 +198,6 @@ const uploadAvatar = async () => {
     await HTTP.patch('/rsousers/me/media/', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     })
         .then((response) => {
@@ -234,7 +233,6 @@ const updateAvatar = async () => {
     await HTTP.put('/rsousers/me/media/', fd, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     })
         .then((response) => {

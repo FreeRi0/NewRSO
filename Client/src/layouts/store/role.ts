@@ -14,54 +14,29 @@ export const useRoleStore = defineStore('role', {
         async getRoles() {
             // if (Object.keys(this.roles).length || this.isLoadingRoles) return;
             this.isLoadingRoles = true;
-            const data = await HTTP.get('/rsousers/me_commander/', {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
+            const data = await HTTP.get('/rsousers/me_commander/');
             this.roles = data.data;
             this.isLoadingRoles = false;
         },
 
         async getUserRoles(id: String) {
-            const dataUserRoles = await HTTP.get(`/rsousers/${id}/commander/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
+            const dataUserRoles = await HTTP.get(`/rsousers/${id}/commander/`);
             this.userRoles = dataUserRoles.data;
         },
 
         async getUserParticipantsStatus(competition_pk: string) {
-            const dataUserStatus = await HTTP.get(`/competitions/${competition_pk}/participants/status/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
+            const dataUserStatus = await HTTP.get(`/competitions/${competition_pk}/participants/status/`);
             this.status = dataUserStatus.data;
         },
 
 
         async getMyPositions() {
-            const dataMyPositions = await HTTP.get('/rsousers/me_positions/', {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
+            const dataMyPositions = await HTTP.get('/rsousers/me_positions/');
             this.myPositions = dataMyPositions.data;
         },
 
         async getPositions(id: String) {
-            const dataPositions = await HTTP.get(`/rsousers/${id}/positions/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
+            const dataPositions = await HTTP.get(`/rsousers/${id}/positions/`);
             this.positions = dataPositions.data;
         },
     },

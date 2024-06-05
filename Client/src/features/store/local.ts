@@ -18,10 +18,6 @@ export const useLocalsStore = defineStore('local', {
                     params: {
                         limit: this.localsLimit,
                     },
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
                 },
             );
             this.locals = responseSearchLocals.data.results;
@@ -33,10 +29,6 @@ export const useLocalsStore = defineStore('local', {
                 const responseLocals = await HTTP.get(`/locals/?ordering=${name}`, {
                     params: {
                         limit: this.localsLimit,
-                    },
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
                     },
                 });
                 this.totalLocals = responseLocals.data.count;
@@ -53,14 +45,7 @@ export const useLocalsStore = defineStore('local', {
             try {
 
                 const responseMembers = await HTTP.get(
-                    `/locals/${id}/members/`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    },
+                    `/locals/${id}/members/`
                 );
                 this.members = responseMembers.data.results;
             } catch (error) {
@@ -71,14 +56,7 @@ export const useLocalsStore = defineStore('local', {
         async getSearchLocalsMembers(id: String, name: String) {
             try {
                 const responseMembers = await HTTP.get(
-                    `/locals/${id}/members/?search=${name}`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    },
+                    `/locals/${id}/members/?search=${name}`
                 );
                 this.members = responseMembers.data.results;
 
@@ -94,10 +72,7 @@ export const useLocalsStore = defineStore('local', {
                 this.isLoading = true;
 
                 const responseLocalsNext = await HTTP.get(
-                    this.nextLocals.replace('http', 'https'),
-                    {
-                  
-                    },
+                    this.nextLocals.replace('http', 'https')
                 );
                 this.locals = this.locals.concat(
                     responseLocalsNext.data.results,

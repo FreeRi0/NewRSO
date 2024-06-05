@@ -62,7 +62,6 @@ const submitForm = async () => {
     await HTTP.post('/users/me/media/', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
         },
     })
         .then(function (response) {

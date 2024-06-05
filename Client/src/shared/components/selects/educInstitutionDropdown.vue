@@ -167,12 +167,7 @@ const onChangeItem = async (name) => {
     try {
         isLoading.value = true;
         const ItemResponse = await HTTP.get(
-            addressRef.value + (name ? '?search=' + name : ''),
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            },
+            addressRef.value + (name ? '?search=' + name : '')
         );
         items.value = ItemResponse.data.results;
         isLoading.value = false;

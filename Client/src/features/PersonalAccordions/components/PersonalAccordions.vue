@@ -3009,13 +3009,7 @@ const updateData = async () => {
                     region: props.user.parent.region,
                     city: props.user.parent.city,
                     address: props.user.parent.address,
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
+                }
             );
             axiosrequestParent.value = parentRequest.data;
         }
@@ -3032,13 +3026,7 @@ const updateData = async () => {
                     snils: props.foreignParent.snils,
                     inn: props.foreignParent.inn,
                     work_book_num: props.foreignParent.work_book_num,
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
+                }
             );
         }
 
@@ -3089,13 +3077,7 @@ const updateData = async () => {
                     snils: props.foreignUserDocs.snils,
                     inn: props.foreignUserDocs.inn,
                     work_book_num: props.foreignUserDocs.work_book_num,
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
+                }
             );
         }
 
@@ -3129,13 +3111,7 @@ const updateData = async () => {
         ) {
             const axiosrequest6 = await HTTP.post(
                 '/rsousers/me/apply_for_verification/',
-                data.value,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
+                data.value
             );
         }
 

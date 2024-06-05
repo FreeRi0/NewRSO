@@ -278,10 +278,6 @@ const updateDetachment = (detachmentVal) => {
 
 const SendReference = async () => {
     await HTTP.post('/membership_certificates/external/', refData.value, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
         responseType: 'blob'
     })
         .then((response) => {

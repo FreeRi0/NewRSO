@@ -160,12 +160,7 @@ const limit = 10;
 const timerSearch = ref(null);
 
 const aboutVerified = async () => {
-  await HTTP.get(`/events/${id}/applications/`, {
-      headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Token ' + localStorage.getItem('Token'),
-      },
-  })
+  await HTTP.get(`/events/${id}/applications/`)
       .then((response) => {
           verified.value = response.data;
         //   console.log(response);
@@ -218,12 +213,7 @@ const getMembers = async (pagination, orderLimit) => {
           data.push(
               'ordering=' + (ascending.value ? '' : '-') + sortBy.value,
           );
-      const viewHeadquartersResponse = await HTTP.get(url + data.join('&'), {
-          headers: {
-              'Content-Type': 'application/json',
-              Authorization: 'Token ' + localStorage.getItem('Token'),
-          },
-      });
+      const viewHeadquartersResponse = await HTTP.get(url + data.join('&'));
 
       let response = viewHeadquartersResponse.data;
       if (pagination) {

@@ -63,11 +63,7 @@ const data = ref({
 const submitForm = async () => {
     try {
         isLoading.value = false;
-        const response = await HTTP.post('/reset_password/', data.value, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+        const response = await HTTP.post('/reset_password/', data.value);
         data.value = response.data;
         // console.log(response.data);
         isLoading.value = false;
