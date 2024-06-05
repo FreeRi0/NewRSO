@@ -59,7 +59,7 @@ const getPrivate = async () => {
     await HTTP.get('/rsousers/me/',)
         .then((response) => {
             user.value = response.data;
-            console.log(response.data);
+            // console.log(response.data);
         })
         .catch(function (error) {
             console.log('failed ' + error);

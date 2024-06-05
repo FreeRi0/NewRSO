@@ -120,12 +120,12 @@ const getMembers = async () => {
                 if (member.detachment) acc.push(member.detachment);
                 acc.push(member.junior_detachment);
 
-                console.log('acc', acc);
+                // console.log('acc', acc);
 
                 return acc;
             }, []);
 
-            console.log('Участвуют в конкурсе -', response);
+            // console.log('Участвуют в конкурсе -', response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -142,11 +142,11 @@ const getVerified = async () => {
                 if (member.detachment) acc.push(member.detachment);
                 acc.push(member.junior_detachment);
 
-                console.log('acc', acc);
+                // console.log('acc', acc);
 
                 return acc;
             }, []);
-            console.log('Ожидают одобрения - ', response);
+            // console.log('Ожидают одобрения - ', response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);

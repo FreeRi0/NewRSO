@@ -39,67 +39,67 @@ const userStore = useUserStore();
 const currentUser = storeToRefs(userStore);
 
 const uploadAva = (imageAva) => {
-    console.log('photo', imageAva);
+    // console.log('photo', imageAva);
     currentUser.currentUser.value.media.photo = imageAva;
 };
 
 const updateAva = (imageAva) => {
-    console.log('photoUpdate', imageAva);
+    // console.log('photoUpdate', imageAva);
     currentUser.currentUser.value.media.photo = imageAva;
 };
 
 const uploadWall = (imageWall) => {
-    console.log('ban', imageWall);
+    // console.log('ban', imageWall);
     currentUser.currentUser.value.media.banner = imageWall;
 };
 
 const updateWall = (imageWall) => {
-    console.log('banUpdate', imageWall);
+    // console.log('banUpdate', imageWall);
     currentUser.currentUser.value.media.banner = imageWall;
 };
 
 const updateUser = (userData) => {
-    console.log('UserUpdate', userData);
+    // console.log('UserUpdate', userData);
     currentUser.currentUser.value = userData;
 };
 const updateRegion = (userRegion) => {
-    console.log('UserRegion', userRegion);
+    // console.log('UserRegion', userRegion);
     currentUser.currentUser.value.user_region = userRegion;
 };
 const updateDoc = (userDoc) => {
-    console.log('UserDoc', userDoc);
+    // console.log('UserDoc', userDoc);
     currentUser.currentUser.value.documents = userDoc;
 };
 const updateEduc = (userEduc) => {
-    console.log('UserEduc', userEduc);
+    // console.log('UserEduc', userEduc);
     currentUser.currentUser.value.education = userEduc;
 };
 const updateFile = (userFile) => {
-    console.log('UserFile', userFile);
+    // console.log('UserFile', userFile);
     currentUser.currentUser.value.statement = userFile;
 };
 const updateStatus = (userStatus) => {
-    console.log('UserStatus', userStatus);
+    // console.log('UserStatus', userStatus);
     currentUser.currentUser.value.sent_verification = userStatus;
 };
 const updateParent = (userParent) => {
-    console.log('userParent', userParent);
+    // console.log('userParent', userParent);
     currentUser.currentUser.value.parent = userParent;
 };
 
 const uploadUserPic = (userPic) => {
-    console.log('photoUser', userPic);
+    // console.log('photoUser', userPic);
     currentUser.currentUser.value.media.photo1 = userPic;
-    console.log('Phot Uploadeddd');
+    // console.log('Phot Uploadeddd');
 };
 
 const changeBio = (bio) => {
-    console.log('bio', bio);
+    // console.log('bio', bio);
     currentUser.currentUser.value.bio = bio;
 };
 
 const changeUsername = (username) => {
-    console.log('username', username);
+    // console.log('username', username);
     currentUser.currentUser.value.username = username;
 };
 

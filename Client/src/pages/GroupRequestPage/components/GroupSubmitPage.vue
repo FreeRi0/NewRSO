@@ -112,9 +112,9 @@ const sortOptions = ref([
 const timerSearch = ref(null);
 
 const onUpdateFilter = (filterData) => {
-    console.log(filterData);
-    console.log(filterData.toAge == null);
-    console.log(filterData.toAge == '');
+    // console.log(filterData);
+    // console.log(filterData.toAge == null);
+    // console.log(filterData.toAge == '');
 
     let search = '?';
 
@@ -143,7 +143,7 @@ const onUpdateFilter = (filterData) => {
         search += `birth_date_from=${formattedDate}`;
     }
 
-    console.log(search);
+    // console.log(search);
 
     getUsersList(search);
 };
@@ -170,11 +170,11 @@ const getUsersList = async (search) => {
             `/events/${route.params.id}/group_applications/${search}`,
 
         );
-        console.log(data);
+        // console.log(data);
         usersList.value = [];
         for (const obj of data) {
             obj.name = obj.first_name + ' ' + obj.last_name;
-            console.log(obj);
+            // console.log(obj);
             usersList.value.push(obj);
         }
         // usersList.value = data;
@@ -218,7 +218,7 @@ const onToggleSelectUser = (user, isChecked) => {
             (u) => u.id !== user.id,
         );
     }
-    console.log(selectedUsersList.value);
+    // console.log(selectedUsersList.value);
 };
 
 const onCheckbox = async (event) => {
@@ -245,7 +245,7 @@ const onRemove = (index) => {
 
 const onResize = () => {
     width.value = window.innerWidth;
-    console.log(width.value);
+    // console.log(width.value);
 };
 
 watch(selectedUsersList, (newSelectedUsersList) => {

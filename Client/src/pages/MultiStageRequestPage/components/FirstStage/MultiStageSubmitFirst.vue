@@ -489,8 +489,8 @@ const onAction = async () => {
             payload.user = props.me;
             payload.event = props.event.value?.name;
             for (let file of files.value) {
-                console.log(file);
-                console.log(payload);
+                // console.log(file);
+                // console.log(payload);
                 payload.document = file;
                 await HTTP.post(
                     `/events/${props.route.params.id}/user_documents/`,
@@ -563,11 +563,11 @@ const searchHeadquarters = () => {
 };
 
 const sortedByName = async (name) => {
-    console.log(name);
+    // console.log(name);
     sortedHeadquartersJunior.value = headquartersJunior.value.filter((obj) =>
         obj.name.includes(name),
     );
-    console.log(sortedHeadquartersJunior.value);
+    // console.log(sortedHeadquartersJunior.value);
 };
 
 const getHeadquartersJunior = async () => {
@@ -577,7 +577,7 @@ const getHeadquartersJunior = async () => {
 
         );
         let i = 0;
-        console.log(data);
+        // console.log(data);
         if (data[0].district_headquarters) {
             headquartersJunior.value.push(
                 ...data[0].district_headquarters.map((item) => {
@@ -640,11 +640,11 @@ const getHeadquartersJunior = async () => {
             );
         }
         sortedHeadquartersJunior.value = headquartersJunior.value;
-        console.log(headquartersJunior.value);
-        console.log(headquartersJunior.value);
+        // console.log(headquartersJunior.value);
+        // console.log(headquartersJunior.value);
     } catch (e) {
         permissonDeny.value = true;
-        console.log('getApplications error', e);
+        // console.log('getApplications error', e);
     }
 };
 
@@ -663,13 +663,13 @@ watch(selectedCompetitionsList, () => {
     memberCount.value = 0;
     for (const obj of headquartersJunior.value) {
         if (obj.selected) memberCount.value += obj.members_count;
-        console.log(selectedCompetitionsList.value);
+        // console.log(selectedCompetitionsList.value);
     }
 });
 
 const onResize = () => {
     width.value = window.innerWidth;
-    console.log(width.value);
+    // console.log(width.value);
 };
 
 onMounted(() => {

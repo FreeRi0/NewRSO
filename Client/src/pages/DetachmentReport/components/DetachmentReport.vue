@@ -156,21 +156,21 @@ const getPlaceRegionalCommander = async () => {
     const { data } = await HTTP.get(
         `/competitions/1/get-detachment-places/${detachment_id.value}/`,
     );
-if (data.is_tandem) {
-    mainResults.value.place.push(
-        data.places_sum ? data.places_sum : 'Рейтинг еще не сформирован',
-    );
-    mainResults.value.data.push(
-        `Сумма мест отряд «${data.partner_detachment.name}»`,
-    );
-}
-mainResults.value.place[0] = data.overall_place;
-for (let i = 1; i <= 20; ++i) {
-    let index = `q${i}_place`;
-    resultData.value.places[i - 1] = data[index];
-}
-console.log(data);
-loading.value = false;
+    if (data.is_tandem) {
+        mainResults.value.place.push(
+            data.places_sum ? data.places_sum : 'Рейтинг еще не сформирован',
+        );
+        mainResults.value.data.push(
+            `Сумма мест отряд «${data.partner_detachment.name}»`,
+        );
+    }
+    mainResults.value.place[0] = data.overall_place;
+    for (let i = 1; i <= 20; ++i) {
+        let index = `q${i}_place`;
+        resultData.value.places[i - 1] = data[index];
+    }
+    // console.log(data);
+    loading.value = false;
 };
 const getPostitions = async () => {
     await getMainResults();
@@ -180,27 +180,13 @@ const getPostitions = async () => {
         try {
             if (commander.value) {
                 const { data } = await HTTP.get(
-                    `/competitions/1/reports/q${index}/get-place/`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    },
+                    `/competitions/1/reports/q${index}/get-place/`
                 );
                 //console.log(data);
                 resultData.value.places[index - 1] = data.place;
             } else {
                 const { data } = await HTTP.get(
-                    `/competitions/1/reports/q${index}/me/`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    },
+                    `/competitions/1/reports/q${index}/me/`
                 );
                 if (data.results) {
                     resultData.value.places[index - 1] = 'Данные не отправлены';
@@ -236,7 +222,6 @@ const getVerificationLogs = async (q_number) => {
     try {
         const { data } = await HTTP.get(
             `/competitions/1/verification_logs/${q_number}/?verified_detachment_id=${detachment_id.value}`,
-
         );
         // console.log(data);
 
@@ -270,7 +255,7 @@ const getMeCommander = async () => {
 const getMainResults = async () => {
     try {
         const { data } = await HTTP.get(`/competitions/1/get-place/`,);
-        console.log(data);
+        // console.log(data);
         // Вернуть 1 в индекс для суммы мест
         if (data.place) {
             mainResults.value.place[0] = data.place;

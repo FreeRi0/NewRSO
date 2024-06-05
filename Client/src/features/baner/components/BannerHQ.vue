@@ -617,12 +617,12 @@ const props = defineProps({
 const aboutEduc = async () => {
     try {
         let id = props.headquarter?.educational_institution.id;
-        console.log('headquarter', props.headquarter);
-        console.log('id', id);
+        // console.log('headquarter', props.headquarter);
+        // console.log('id', id);
         const response = await HTTP.get(`/eduicational_institutions/${id}/`);
 
         edict.value = response.data;
-        console.log(response);
+        // console.log(response);
     } catch (error) {
         console.log(error);
     }

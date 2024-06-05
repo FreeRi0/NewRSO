@@ -192,7 +192,7 @@ const selectFile = (event) => {
 const uploadAvatar = async () => {
     dialog.value = true;
     const formData = new FormData();
-    console.log('upload');
+    // console.log('upload');
 
     formData.append('photo', media.value);
     await HTTP.patch('/rsousers/me/media/', formData, {
@@ -210,9 +210,9 @@ const uploadAvatar = async () => {
                 timer: 1500,
             });
             dialog.value = false;
-            console.log('resp', response.data);
+            // console.log('resp', response.data);
             emit('upload', response.data.photo);
-            console.log(response, 'avatar uploaded');
+            // console.log(response, 'avatar uploaded');
         })
         .catch(({ response }) => {
             console.log('err', response);
@@ -247,7 +247,7 @@ const updateAvatar = async () => {
             });
             dialog.value = false;
             emit('update', response.data.photo);
-            console.log(response, 'updated');
+            // console.log(response, 'updated');
         })
         .catch(({ response }) => {
             isError.value = response.data;
@@ -277,7 +277,7 @@ const deleteAvatar = async () => {
             });
 
             emit('delete', response.data.photo);
-            console.log(response, 'deleted');
+            // console.log(response, 'deleted');
         })
     .catch(({ response }) => {
         isError.value = response.data;

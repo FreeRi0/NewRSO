@@ -65,7 +65,7 @@ const getApplicationsInfo = async () => {
 
         );
         for (const obj of data) {
-            console.log(obj);
+            // console.log(obj);
             if (!obj.is_approved) applications.value.push(obj);
         }
         //console.log(applications.value);
@@ -89,8 +89,8 @@ const getFilesInfo = async () => {
                 files.value.push(file);
         }
         //files.value = data;
-        console.log(data);
-        console.log(applications.value);
+        // console.log(data);
+        // console.log(applications.value);
     } catch (e) {
         console.log('getFilesInfo error', e);
     }
@@ -137,7 +137,7 @@ const onAccept = async () => {
 };
 
 const redirect = async () => {
-    console.log(applications.value);
+    // console.log(applications.value);
     if (applications.value.length == 0)
         router.push({
             name: 'MultiStageRequest',

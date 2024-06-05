@@ -59,7 +59,7 @@ const isCommanderLoading = ref(false);
 const getDetachment = async () => {
     loading.value = true;
     isCommanderLoading.value = true;
-    console.log('id отряда для редактирования - ', id);
+    // console.log('id отряда для редактирования - ', id);
     HTTP.get(`/detachments/${id}/`,)
         .then((response) => {
             detachment.value = response.data;
@@ -77,7 +77,7 @@ const getDetachment = async () => {
                 detachment.value.commander = detachment.value.commander.id;
             }
             replaceTargetObjects([detachment.value]);
-            console.log(response);
+            // console.log(response);
             loading.value = false;
             isCommanderLoading.value = false;
         })
@@ -294,7 +294,7 @@ const changeDetachment = async () => {
     })
         .then((response) => {
             // submited.value = true;
-            console.log(response.data);
+            // console.log(response.data);
             swal.fire({
                 position: 'center',
                 icon: 'success',

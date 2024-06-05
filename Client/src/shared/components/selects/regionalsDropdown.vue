@@ -200,7 +200,7 @@ const searchRegionals = (val) => {
         return;
     }
     regionalsStore.searchRegionals(name.value);
-    console.log('val', val);
+    // console.log('val', val);
 };
 
 watch(

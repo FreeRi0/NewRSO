@@ -321,38 +321,38 @@ const squad = storeToRefs(squadsStore);
 const emit = defineEmits(['upload', 'update', 'delete']);
 
 const uploadAva = (imageAva) => {
-    console.log('photo', imageAva);
+    // console.log('photo', imageAva);
     emit('upload', imageAva);
-    console.log('ghhhgh');
+    // console.log('ghhhgh');
 };
 
 const updateAva = (imageAva) => {
-    console.log('photoUpdate', imageAva);
+    // console.log('photoUpdate', imageAva);
     emit('update', imageAva);
-    console.log('update');
+    // console.log('update');
 };
 
 const deleteAva = (imageAva) => {
-    console.log('photoDel', imageAva);
+    // console.log('photoDel', imageAva);
     emit('delete', imageAva);
-    console.log('del');
+    // console.log('del');
 };
 
 const uploadWall = (imageWall) => {
-    console.log('ban', imageWall);
+    // console.log('ban', imageWall);
     emit('uploadWall', imageWall);
-    console.log('ghhhgh');
+    // console.log('ghhhgh');
 };
 
 const updateWall = (imageWall) => {
-    console.log('banUpdate', imageWall);
+    // console.log('banUpdate', imageWall);
     emit('updateWall', imageWall);
-    console.log('update');
+    // console.log('update');
 };
 const deleteWall = (imageWall) => {
-    console.log('banDelete', imageWall);
+    // console.log('banDelete', imageWall);
     emit('deleteWall', imageWall);
-    console.log('delete');
+    // console.log('delete');
 };
 
 const regionalsStore = useRegionalsStore();

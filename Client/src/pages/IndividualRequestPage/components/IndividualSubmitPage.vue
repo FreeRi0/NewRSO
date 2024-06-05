@@ -69,16 +69,15 @@ const meInfo = ref({});
 const submitAnswers = async () => {
     try {
         let payload = eventInfo.value.additional_issues;
-        console.log('zalupa');
-        console.log(payload);
+        // console.log(payload);
         for (let index in answers.value) {
             payload[index].issue = payload[index].id;
             delete payload[index].id;
             payload[index].answer = answers.value[index];
-            console.log(answers.value[index]);
+            // console.log(answers.value[index]);
         }
         payload = Array.from(payload);
-        console.log(payload);
+        // console.log(payload);
         await HTTP.post(`/events/${route.params.id}/answers/`, payload,);
     } catch (e) {
         console.log('submitAnswers error', e);
@@ -110,8 +109,8 @@ const submitFiles = async () => {
     payload.user = meInfo.value;
     payload.event = eventInfo.value?.name;
     for (let file of files.value) {
-        console.log(file);
-        console.log(payload);
+        // console.log(file);
+        // console.log(payload);
         payload.document = file;
         await HTTP.post(`/events/${route.params.id}/user_documents/`, payload, {
             headers: {

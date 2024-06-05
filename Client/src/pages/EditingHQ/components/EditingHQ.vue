@@ -40,7 +40,7 @@ const getHeadquarter = async () => {
             if (headquarter.value.commander) {
                 headquarter.value.commander = headquarter.value.commander;
             }
-            console.log(response);
+            // console.log(response);
             isCommanderLoading.value = false;
         })
         .catch(function (error) {
@@ -147,7 +147,7 @@ const changeHeadquarter = async () => {
                 .catch(function ({ response }) {
                     isErrorMembers.value = response.data;
                     console.error('There was an error!', response.data);
-                    console.log('Ошибки отправки формы', isErrorMembers.value);
+                    // console.log('Ошибки отправки формы', isErrorMembers.value);
                     swal.fire({
                         position: 'center',
                         icon: 'error',
@@ -176,7 +176,7 @@ const changeHeadquarter = async () => {
     })
         .then((response) => {
             // submited.value = true;
-            console.log(response.data);
+            // console.log(response.data);
             swal.fire({
                 position: 'center',
                 icon: 'success',

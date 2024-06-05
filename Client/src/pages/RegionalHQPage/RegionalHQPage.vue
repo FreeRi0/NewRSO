@@ -75,7 +75,7 @@ const fetchCommander = async () => {
         const response = await HTTP.get(`/users/${id}/`,);
 
         commander.value = response.data;
-        console.log(response);
+        // console.log(response);
     } catch (error) {
         console.log('An error occurred:', error);
     }

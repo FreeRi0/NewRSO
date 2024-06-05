@@ -1187,7 +1187,7 @@ let selectedUser = ref([])
 
 onActivated( () => {
     getRoles().then((resp) => {
-        console.log(resp.data);
+        // console.log(resp.data);
         rules.value = resp.data;
         Object.entries(resp.data).forEach(([key, value]) => {
             if (value !== null) {
@@ -1478,7 +1478,7 @@ function SubmitEvent() {
     }
     createAction(fd)
         .then((resp) => {
-            console.log('Форма передалась успешно', resp.data);
+            // console.log('Форма передалась успешно', resp.data);
             putDocuments(resp.data.id, document_data.value)
                 .then(() => {})
                 .catch((e) => {

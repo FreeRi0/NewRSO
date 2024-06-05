@@ -156,11 +156,11 @@ const swal = inject('$swal');
 
 const viewDetachments = async () => {
     let id = route.params.id;
-    console.log('idRoute', id);
+    // console.log('idRoute', id);
     await HTTP.get(`/detachments/${id}/applications/`)
         .then((response) => {
             applications.value = response.data;
-            console.log(response);
+            // console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -169,11 +169,11 @@ const viewDetachments = async () => {
 
 const viewRegionals = async () => {
     let id = props.squad.regional_headquarter;
-    console.log('idRouteReg', id);
+    // console.log('idRouteReg', id);
     await HTTP.get(`/regionals/${id}/`)
         .then((response) => {
             regional.value = response.data;
-            console.log(response);
+            // console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -194,7 +194,7 @@ const IsTrusted = computed(() => {
     );
 });
 
-console.log('member', IsMember);
+// console.log('member', IsMember);
 
 watch(
     () => props.squad,
@@ -222,7 +222,7 @@ const AddApplication = async () => {
             timer: 1500,
         });
         viewDetachments();
-        console.log('responseee', sendResponse.data);
+        // console.log('responseee', sendResponse.data);
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;

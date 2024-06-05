@@ -119,7 +119,7 @@ const changeHeadquarter = async () => {
     })
         .then((response) => {
             submited.value = true;
-            console.log(response.data);
+            // console.log(response.data);
             swal.fire({
                 position: 'center',
                 icon: 'success',

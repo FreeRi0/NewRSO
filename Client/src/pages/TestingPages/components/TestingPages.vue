@@ -123,7 +123,7 @@ const titleName = ref(
 );
 // const testName = ref('university');
 
-console.log(testName.value);
+// console.log(testName.value);
 
 const swal = inject('$swal');
 

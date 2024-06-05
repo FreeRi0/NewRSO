@@ -122,7 +122,7 @@ const relocate = async () => {
 
 onMounted(async () => {
     await getApplicatonsList();
-    console.log(applicationsList.value);
+    // console.log(applicationsList.value);
 });
 </script>
 

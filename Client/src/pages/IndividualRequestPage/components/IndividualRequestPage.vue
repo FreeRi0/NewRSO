@@ -124,7 +124,7 @@ const getFilesInfo = async () => {
                 files.value.push(file);
         }
         //files.value = data;
-        console.log(files.value);
+        // console.log(files.value);
     } catch (e) {
         console.log('getFilesInfo error', e);
     }

@@ -289,7 +289,7 @@ const updateDetachment = (detachmentVal) => {
 
 const select = (event) => {
     selectedPeoples.value = [];
-    console.log('fffss', checkboxAll.value, event);
+    // console.log('fffss', checkboxAll.value, event);
     if (event.target.checked) {
         // console.log('fffss', checkboxAll.value, event);
         for (let index in participants.value) {
@@ -434,7 +434,7 @@ const onAction = async () => {
     try {
         for (const application of selectedPeoples.value) {
             if (action.value === 'Оплачен') {
-                console.log('app', application);
+                // console.log('app', application);
                 await ChangeStatus(application.id);
             } else {
                 await ChangeCancelStatus(application.id);

@@ -60,7 +60,7 @@ const fetchCommander = async () => {
         const response = await HTTP.get(`/users/${id}/`,);
 
         commander.value = response.data;
-        console.log(response);
+        // console.log(response);
     } catch (error) {
         console.log(error);
     }
@@ -72,7 +72,7 @@ watch(
     async (newId) => {
         if (!newId || route.name !== 'HQ') return;
         // id = newId;
-        console.log('успешно', !newId, route.name, route.name !== 'HQ');
+        // console.log('успешно', !newId, route.name, route.name !== 'HQ');
         await educationalsStore.getEducationalsId(newId);
         await educationalsStore.getEducationalsMembers(newId);
         await replaceTargetObjects([headquarter.educational.value]);

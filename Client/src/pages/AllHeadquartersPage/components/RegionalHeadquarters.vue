@@ -201,7 +201,7 @@ onBeforeRouteLeave(async (to, from) => {
     const pageName = 'regionalHeadquarters';
     const filtersPropertiesToRemove = ['districtName'];
 
-    console.log('leave regional');
+    // console.log('leave regional');
 
     crosspageFilters.removeFilters(pageName, filtersPropertiesToRemove);
 });

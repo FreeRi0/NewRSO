@@ -53,7 +53,7 @@ const updateUsername = async () => {
             timer: 1500,
         });
         emit('changeUsername', response.data.username);
-        console.log('username changed!');
+        // console.log('username changed!');
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
@@ -85,7 +85,7 @@ const changePasswordForm = async () => {
             },
 
         );
-        console.log(response.data);
+        // console.log(response.data);
         localStorage.setItem('Token', response.data);
         swal.fire({
             position: 'top-center',
