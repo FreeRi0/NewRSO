@@ -189,9 +189,9 @@ const uploadBanner = async () => {
                 timer: 1500,
             });
             dialog.value = false;
-            console.log('resp', response.data);
+            // console.log('resp', response.data);
             emit('uploadWall', response.data.banner);
-            console.log(response, 'banner uploaded');
+            // console.log(response, 'banner uploaded');
         })
         .catch(({ response }) => {
             isError.value = response.data;
@@ -226,7 +226,7 @@ const updateBanner = async () => {
             });
             dialog.value = false;
             emit('updateWall', response.data.banner);
-            console.log(response, 'banner uploaded');
+            // console.log(response, 'banner uploaded');
         })
         .catch(({ response }) => {
             isError.value = response.data;
@@ -254,7 +254,7 @@ const deleteBanner = async () => {
                 timer: 1500,
             });
             emit('deleteWall', response.data.banner);
-            console.log(response, 'deleted');
+            // console.log(response, 'deleted');
         })
     .catch(({ response }) => {
         isError.value = response.data;

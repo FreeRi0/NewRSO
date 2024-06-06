@@ -67,7 +67,7 @@ const aboutDistrictHQ = async () => {
 
         districtHeadquarter.value = response.data;
         replaceTargetObjects([districtHeadquarter.value]);
-        console.log(response);
+        // console.log(response);
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -78,7 +78,7 @@ const aboutMembers = async () => {
         const response = await HTTP.get(`/districts/${id}/members/`,);
 
         member.value = response.data.results;
-        console.log(response);
+        // console.log(response);
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -91,7 +91,7 @@ const fetchCommander = async () => {
         const response = await HTTP.get(`/users/${id}/`,);
 
         commander.value = response.data;
-        console.log(response);
+        // console.log(response);
     } catch (error) {
         console.log('An error occurred:', error);
     }

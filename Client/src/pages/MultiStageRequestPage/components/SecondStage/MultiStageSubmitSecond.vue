@@ -126,13 +126,13 @@ const getCompileList = async () => {
             `/events/${props.route.params.id}/multi_applications/compile_lists/`,
 
         );
-        console.log(data);
+        // console.log(data);
         usersList.value = data;
         for (let obj of data) {
             obj.selected = false;
             sortedUsersList.value.push(obj);
         }
-        console.log(sortedUsersList.value);
+        // console.log(sortedUsersList.value);
     } catch (e) {
         console.log('getCompileList error', e);
     }
@@ -148,7 +148,7 @@ const onToggleSelectUser = (user, isChecked) => {
             (u) => u.id !== user.id,
         );
     }
-    console.log(selectedUsersList.value);
+    // console.log(selectedUsersList.value);
 };
 
 const onCheckbox = async (event) => {
@@ -177,11 +177,11 @@ const searchUsers = () => {
 };
 
 const sortedByName = async (name) => {
-    console.log(name);
+    // console.log(name);
     sortedUsersList.value =
         usersList.value.filter((user) => user.first_name.includes(name)) ||
         usersList.value.filter((user) => user.last_name.includes(name));
-    console.log(sortedUsersList.value);
+    // console.log(sortedUsersList.value);
 };
 
 const onAction = async () => {
@@ -521,7 +521,7 @@ watch(selectedUsersList, (newSelectedUserrsList) => {
 
 const onResize = () => {
     width.value = window.innerWidth;
-    console.log(width.value);
+    // console.log(width.value);
 };
 
 onMounted(async () => {

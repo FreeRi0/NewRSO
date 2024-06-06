@@ -156,7 +156,7 @@ const getSquads = async () => {
     HTTP.get(`competitions/${id}/junour_detachments/`)
         .then((response) => {
             squadsJunour.value = response.data;
-            console.log('Юниор-отряды', response);
+            // console.log('Юниор-отряды', response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);

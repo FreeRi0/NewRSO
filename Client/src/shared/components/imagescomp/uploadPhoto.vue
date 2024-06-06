@@ -188,10 +188,10 @@ const uploadPhoto = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
-            console.log('resp', response.data);
+            // console.log('resp', response.data);
             emit('uploadUserPic', response.data.photo1);
             dialog.value = false;
-            console.log(response, 'photoUser uploaded');
+            // console.log(response, 'photoUser uploaded');
         })
         .catch(({ response }) => {
             isError.value = response.data;
@@ -225,7 +225,7 @@ const updatePhoto = async () => {
             });
             dialog.value = false;
             emit('updateUserPic', response.data.photo1);
-            console.log(response, 'updated');
+            // console.log(response, 'updated');
         })
         .catch(({ response }) => {
             isError.value = response.data;
@@ -250,7 +250,7 @@ const deletePhoto = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
-            console.log(response, 'deleted');
+            // console.log(response, 'deleted');
         })
         .catch(({ response }) => {
             isError.value = response.data;

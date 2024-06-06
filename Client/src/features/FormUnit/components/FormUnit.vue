@@ -1129,7 +1129,7 @@ const deleteMember = (id, membership_pk) => {
 
         );
         showModal.value = false;
-        console.log(responseDelete);
+        // console.log(responseDelete);
         emit('deleteMember', membership_pk);
         // areasStore.getSquadMembers(props.detachment.id);
     } catch (error) {
@@ -1312,7 +1312,7 @@ const onUpdateMember = (event, id) => {
 };
 
 const changeValue = (event) => {
-    console.log(event);
+    // console.log(event);
     emit('update:value', event);
 };
 //--Обрезание фото----------------------------------------------------------------------------------
@@ -1483,7 +1483,7 @@ const urlPhotoOne = ref(null);
 
 const selectPhotoOne = (event) => {
     filePhotoOne.value = event.target.files[0];
-    console.log('значение file после изм - ', filePhotoOne.value);
+    // console.log('значение file после изм - ', filePhotoOne.value);
     photoOnePreview.value = URL.createObjectURL(filePhotoOne.value);
 };
 const resetPhotoOne = () => {
@@ -1498,7 +1498,7 @@ const urlPhotoTwo = ref(null);
 
 const selectPhotoTwo = (event) => {
     filePhotoTwo.value = event.target.files[0];
-    console.log('значение file после изм - ', filePhotoTwo.value);
+    // console.log('значение file после изм - ', filePhotoTwo.value);
     photoTwoPreview.value = URL.createObjectURL(filePhotoTwo.value);
 };
 const resetPhotoTwo = () => {
@@ -1513,7 +1513,7 @@ const urlPhotoThree = ref(null);
 
 const selectPhotoThree = (event) => {
     filePhotoThree.value = event.target.files[0];
-    console.log('значение file после изм - ', filePhotoThree.value);
+    // console.log('значение file после изм - ', filePhotoThree.value);
     photoThreePreview.value = URL.createObjectURL(filePhotoThree.value);
 };
 const resetPhotoThree = () => {
@@ -1528,7 +1528,7 @@ const urlPhotoFour = ref(null);
 
 const selectPhotoFour = (event) => {
     filePhotoFour.value = event.target.files[0];
-    console.log('значение file после изм - ', filePhotoFour.value);
+    // console.log('значение file после изм - ', filePhotoFour.value);
     photoFourPreview.value = URL.createObjectURL(filePhotoFour.value);
 };
 const resetPhotoFour = () => {

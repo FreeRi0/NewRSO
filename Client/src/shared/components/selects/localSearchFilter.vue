@@ -160,7 +160,7 @@ const addressRef = ref(props.address)
 const selected = ref(null);
 const isLoading = ref(false);
 const changeValue = (event) => {
-  console.log(event);
+//   console.log(event);
   emit('update:value', event);
 };
 

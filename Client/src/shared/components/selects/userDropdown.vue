@@ -122,7 +122,7 @@ const regHeadquarterName = ref('Московский региональный ш
 const selected = ref(null);
 
 const changeValue = (event) => {
-    console.log(event);
+    // console.log(event);
     emit('update:value', event);
 };
 
@@ -135,7 +135,7 @@ const onChangeItem = async () => {
 
         .then((res) => {
             props.items = res.data;
-            console.log(res.data);
+            // console.log(res.data);
         })
     .catch(function (error) {
         console.log('an error occured ' + error);
@@ -149,7 +149,7 @@ const searchUser = (val) => {
     // usersRegionalsStore.searchUsers(userName.value);
     onChangeItem();
 
-    console.log('val', val);
+    // console.log('val', val);
 };
 
 onMounted(() => {

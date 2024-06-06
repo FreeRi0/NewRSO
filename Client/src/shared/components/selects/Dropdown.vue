@@ -105,7 +105,7 @@ const props = defineProps({
 const selected = ref(null);
 
 const changeValue = (event) => {
-    console.log(event);
+    // console.log(event);
     emit('update:value', event);
 };
 
@@ -127,7 +127,7 @@ const onChangeItem = async () => {
             .then((res) => {
                 // console.log(props.address);
                 items.value = res.data.results;
-                console.log(res.data);
+                // console.log(res.data);
             })
             .catch(function (error) {
                 console.log('an error occured ' + error);
@@ -138,7 +138,7 @@ const onChangeItem = async () => {
             .then((res) => {
                 // console.log(props.address);
                 items.value = res.data.results;
-                console.log(res.data);
+                // console.log(res.data);
             })
             .catch(function (error) {
                 console.log('an error occured ' + error);
@@ -149,7 +149,7 @@ const onChangeItem = async () => {
 
 watch(() => props.headVal,
     (newRegName) => {
-        console.log('Reg', newRegName)
+        // console.log('Reg', newRegName)
         onChangeItem();
     }
 )

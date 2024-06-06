@@ -168,7 +168,7 @@ const aboutVerified = async () => {
   })
       .then((response) => {
           verified.value = response.data;
-          console.log(response);
+        //   console.log(response);
       })
       .catch(function (error) {
           console.log('an error occured ' + error);

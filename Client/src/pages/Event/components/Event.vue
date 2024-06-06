@@ -531,7 +531,7 @@ const AddApplication = async () => {
             timer: 1500,
         });
         eventsStore.getAppEvents(route.params.id);
-        console.log('responseee', sendResponse.data);
+        // console.log('responseee', sendResponse.data);
     } catch (error) {
         console.error('There was an error!', error);
     }

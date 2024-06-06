@@ -92,7 +92,7 @@ const getMedia = async () => {
     try {
         const response = await HTTP.get(`/rsousers/me/media/`,);
         media.value = response.data;
-        console.log(response.data);
+        // console.log(response.data);
     } catch (error) {
         console.log('failed ' + error);
     }
