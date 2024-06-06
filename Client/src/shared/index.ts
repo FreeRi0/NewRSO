@@ -13,3 +13,5 @@ export { usePageStore } from './stores/pageStore';
 export { default as usePage } from './composables/usePage';
 export { default as useCrosspageFilter } from './composables/useCrosspageFilter';
 /* exports composables */
+
+export { default as AppIcon } from './components/AppIcon/AppIcon.vue';
