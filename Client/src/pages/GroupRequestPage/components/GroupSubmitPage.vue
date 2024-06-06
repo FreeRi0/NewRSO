@@ -75,6 +75,7 @@
 import { HTTP } from '@app/http';
 import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import qs from 'qs';
 
 import { sortByEducation } from '@shared/components/selects';
 import { Button } from '@shared/components/buttons';
@@ -112,38 +113,10 @@ const sortOptions = ref([
 const timerSearch = ref(null);
 
 const onUpdateFilter = (filterData) => {
-    // console.log(filterData);
-    // console.log(filterData.toAge == null);
-    // console.log(filterData.toAge == '');
-
-    let search = '?';
-
-    if (filterData.gender == 'man') {
-        search += 'gender=male&';
-    } else if (filterData.gender == 'woman') {
-        search += 'gender=female&';
+    for(let property in filterData){
+        if(!filterData[property]) delete filterData[property]
     }
-
-    if (filterData.fee == 'paid') {
-        search += 'membership_fee=True&';
-    } else if (filterData.fee == 'notPaid') {
-        search += 'membership_fee=False&';
-    }
-
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const day = String(currentDate.getDate()).padStart(2, '0');
-    if (filterData.toAge != null && filterData.toAge != '') {
-        const formattedDate = `${year - filterData.toAge}-${month}-${day}`;
-        search += `birth_date_to=${formattedDate}`;
-    }
-    if (filterData.fromAge != null && filterData.fromAge != '') {
-        const formattedDate = `${year - filterData.fromAge}-${month}-${day}`;
-        search += `birth_date_from=${formattedDate}`;
-    }
-
-    // console.log(search);
+    const search = '?' + qs.stringify(filterData);
 
     getUsersList(search);
 };

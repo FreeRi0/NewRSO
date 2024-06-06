@@ -14,7 +14,7 @@
                         type="radio"
                         id="gender1"
                         name="gender"
-                        value="allGender"
+                        value=""
                         v-model="filter.gender"
                         @update:model-value="sendEmits"
                     />
@@ -25,7 +25,7 @@
                         type="radio"
                         id="gender2"
                         name="gender"
-                        value="man"
+                        value="male"
                         v-model="filter.gender"
                         @update:model-value="sendEmits"
                     />
@@ -36,7 +36,7 @@
                         type="radio"
                         id="gender3"
                         name="gender"
-                        value="woman"
+                        value="female"
                         v-model="filter.gender"
                         @update:model-value="sendEmits"
                     />
@@ -93,7 +93,7 @@
                         type="radio"
                         id="fee1"
                         name="fee"
-                        value="all"
+                        value=""
                         v-model="filter.fee"
                         @update:model-value="sendEmits"
                     />
@@ -104,8 +104,8 @@
                         type="radio"
                         id="fee2"
                         name="fee"
-                        value="paid"
-                        v-model="filter.fee"
+                        value="True"
+                        v-model="filter.membership_fee"
                         @update:model-value="sendEmits"
                     />
                     <label for="fee2">Оплачен</label>
@@ -115,8 +115,8 @@
                         type="radio"
                         id="fee3"
                         name="fee"
-                        value="notPaid"
-                        v-model="filter.fee"
+                        value="False"
+                        v-model="filter.membership_feee"
                         @update:model-value="sendEmits"
                     />
                     <label for="fee3">Не оплачен</label>
@@ -132,10 +132,10 @@ import { ref } from 'vue';
 const emit = defineEmits({ updateFilter: null });
 
 const filter = ref({
-    gender: 'allGender',
-    fee: 'all',
-    toAge: '',
-    fromAge: '',
+    gender: '',
+    membership_fee: '',
+    birth_date_to: '',
+    birth_date_from: '',
 });
 
 const sendEmits = () => {
