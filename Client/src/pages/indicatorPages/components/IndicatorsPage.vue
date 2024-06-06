@@ -554,7 +554,7 @@
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one">
+                            <div class="form__field-column-one">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
                                         <label class="form__label">Наименование мероприятия или
@@ -574,12 +574,12 @@
                                         <div class="file">
                                             <div class="file_name">
                                                 <img class="file_img" src="/assets/file_dock.svg" />
-                                                <a :href="applicationData.certificate_scans
-                                                    " target="_blank">{{
+                                                <a :href="applicationData.certificate_scans 
+                                                    " target="_blank"  class="file_title">{{
                                                         applicationData.certificate_scans.slice(
                                                             applicationData.certificate_scans.indexOf(
-                                                                'ksk_',
-                                                            ) + 4,
+                                                                '/Q9/',
+                                                            ) + 19,
                                                         )
                                                     }}</a>
                                             </div>
@@ -631,7 +631,7 @@
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one">
+                            <div class="form__field-column-one">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
                                         <label class="form__label">Наименование мероприятия или
@@ -652,7 +652,7 @@
                                             <div class="file_name">
                                                 <img class="file_img" src="/assets/file_dock.svg" />
                                                 <a :href="applicationData.certificate_scans
-                                                    " target="_blank">{{
+                                                    " target="_blank"  class="file_title">{{
                                                         applicationData.certificate_scans.slice(
                                                             applicationData.certificate_scans.indexOf(
                                                                 'ksk_',
@@ -708,7 +708,7 @@
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one">
+                            <div class="form__field-column-one">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
                                         <label class="form__label">Наименование трудового
@@ -729,7 +729,7 @@
                                             <div class="file_name">
                                                 <img class="file_img" src="/assets/file_dock.svg" />
                                                 <a :href="applicationData.certificate_scans
-                                                    " target="_blank">{{
+                                                    " target="_blank" class="file_title">{{
                                                         applicationData.certificate_scans.slice(
                                                             applicationData.certificate_scans.indexOf(
                                                                 'ksk_',
@@ -785,7 +785,7 @@
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one">
+                            <div class="form__field-column-one">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
                                         <label class="form__label">Наименование трудового
@@ -806,7 +806,7 @@
                                             <div class="file_name">
                                                 <img class="file_img" src="/assets/file_dock.svg" />
                                                 <a :href="applicationData.certificate_scans
-                                                    " target="_blank">{{
+                                                    " target="_blank" class="file_title">{{
                                                         applicationData.certificate_scans.slice(
                                                             applicationData.certificate_scans.indexOf(
                                                                 'ksk_',
@@ -1349,6 +1349,9 @@ const id = ref(route.params.id);
 
 const applicationData = ref({});
 const loading = ref(true);
+
+const idHasCert = ['7','8','9','10','11','12'];
+
 const getApplicationData = async (_id, applicationId) => {
     id.value = _id;
     try {
@@ -1366,8 +1369,10 @@ const getApplicationData = async (_id, applicationId) => {
                     );
             }
         }
+        if(idHasCert.includes(_id)){
+            applicationData.value.certificate_scans = decodeURI(applicationData.value.certificate_scans);
+        }
 
-        console.log(applicationData.value);
     } catch (e) {
         console.log(`getApplicationData error`, e);
     } finally {
@@ -1493,6 +1498,7 @@ onMounted(async () => {
     font-weight: 400;
     line-height: 20px;
     text-decoration-line: underline;
+    max-width: 80%
 }
 
 .download_text {
