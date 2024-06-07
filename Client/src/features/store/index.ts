@@ -20,7 +20,12 @@ export const useUserStore = defineStore('user', {
             try {
                 this.isLoading = true;
                 setTimeout(async () => {
-                    const responseUser = await HTTP.get('rsousers/me/');
+                    const responseUser = await HTTP.get('rsousers/me/', {
+                        headers: {
+                            Authorization:
+                                'Token ' + localStorage.getItem('Token'),
+                        },
+                    });
                     if (!Number.isInteger(localStorage.getItem('user'))) {
                         localStorage.setItem('user', responseUser.data.id);
                     }

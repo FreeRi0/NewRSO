@@ -68,18 +68,18 @@ const TokenData = ref({
     uuid: payload?.uuid,
 })
 
-// const getVkUser = async () => {
-//     try {
-//         const resp = await HTTP.get('rsousers/me/', {
-//             headers: {
-//                 Authorization: '',
-//             }
-//         })
-//         console.log(resp, resp.data)
-//     } catch (e) {
-//         console.log('error:', e)
-//     }
-// }
+const getVkUser = async () => {
+    try {
+        const resp = await HTTP.get('rsousers/me/', {
+            headers: {
+                Authorization: 'Bearer' + localStorage.getItem('Bearer'),
+            }
+        })
+        console.log(resp, resp.data)
+    } catch (e) {
+        console.log('error:', e)
+    }
+}
 
 
 
@@ -88,7 +88,7 @@ const exchangeToken = async () => {
         const resp = await HTTP.post('/exchange-token/', TokenData.value)
         localStorage.setItem('Bearer', resp.data.access_token);
         console.log(resp.data.access_token);
-        userStore.getUser();
+        getVkUser();
 
     } catch (e) {
         console.log('error:', e)
