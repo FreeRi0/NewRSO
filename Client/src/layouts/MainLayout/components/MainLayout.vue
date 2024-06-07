@@ -58,7 +58,6 @@ import { useSquadsStore } from '@features/store/squads';
 import { useDistrictsStore } from '@features/store/districts';
 
 const roleStore = useRoleStore();
-const userStore = useUserStore();
 const regionsStore = useRegionalsStore();
 const positionsStore = usePositionsStore();
 const competition_pk = 1;
@@ -70,7 +69,7 @@ const isAuth = ref(!!localStorage.getItem('Token'));
 
 onMounted(() => {
     if (localStorage.getItem('Token')) {
-        userStore.getUser();
+
         roleStore.getRoles();
         positionsStore.getPositions();
         squadsStore.getAreas();

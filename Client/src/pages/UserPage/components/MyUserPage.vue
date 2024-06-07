@@ -58,7 +58,7 @@ const isLoading = storeToRefs(userStore);
 const education = ref({});
 const region = ref({});
 const tokenUser = ref("");
-
+const isAuth = ref(!!localStorage.getItem('Token'));
 const query = new URLSearchParams(window.location.search);
 const payload = JSON.parse(query.get("payload"));
 
@@ -72,7 +72,7 @@ const getVkUser = async () => {
     try {
         const resp = await HTTP.get('rsousers/me/', {
             headers: {
-                Authorization: 'Bearer' + localStorage.getItem('Bearer'),
+                Authorization: 'Bearer ' + localStorage.getItem('Bearer'),
             }
         })
         console.log(resp, resp.data)
@@ -127,6 +127,9 @@ const deleteWall = (imageWall) => {
 
 onMounted(() => {
     exchangeToken();
+    if(isAuth) {
+        userStore.getUser();
+    }
 })
 </script>
 <style lang="scss" scoped>
