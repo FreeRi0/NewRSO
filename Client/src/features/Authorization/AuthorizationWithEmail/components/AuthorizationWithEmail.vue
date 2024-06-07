@@ -27,7 +27,7 @@
 
                 <Button class="Login_btn" type="submit" @click="LoginUser" label="Войти" :loaded="isLoading"
                     :disabled="isLoading" color="primary"></Button>
-                <p class="text-center Login_and">или</p>
+                <p class="text-center Login_and">ИЛИ</p>
                 <div id="VkIdSdkOneTap"></div>
                 <div class="text-center goReg">У вас нет аккаунта?
                     <router-link class="Login_link ml-1" to="/Register">Зарегистрироваться</router-link>
