@@ -57,7 +57,7 @@ const currentUser = storeToRefs(userStore);
 const isLoading = storeToRefs(userStore);
 const education = ref({});
 const region = ref({});
-
+const tokenUser = ref("");
 
 const query = new URLSearchParams(window.location.search);
 const payload = JSON.parse(query.get("payload"));
@@ -73,6 +73,8 @@ const TokenData = ref({
 const exchangeToken = async () => {
     try {
         const resp = await HTTP.post('/exchange-token/', TokenData.value)
+        tokenUser.value = resp.data;
+        console.log(resp, resp.data, tokenUser.value);
     } catch (e) {
         console.log('error:', e)
     }
