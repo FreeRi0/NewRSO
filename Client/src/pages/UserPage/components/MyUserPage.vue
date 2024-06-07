@@ -86,7 +86,7 @@ const TokenData = ref({
 const exchangeToken = async () => {
     try {
         const resp = await HTTP.post('/exchange-token/', TokenData.value)
-        localStorage.setItem('Token', resp.data.access_token);
+        localStorage.setItem('Bearer', resp.data.access_token);
         console.log(resp.data.access_token);
         userStore.getUser();
 
