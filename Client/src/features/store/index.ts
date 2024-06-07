@@ -23,7 +23,7 @@ export const useUserStore = defineStore('user', {
                     const responseUser = await HTTP.get('rsousers/me/', {
                         headers: {
                             Authorization:
-                                'Token ' + localStorage.getItem('Token'),
+                                'Bearer ' + localStorage.getItem('Bearer'),
                         },
                     });
                     if (!Number.isInteger(localStorage.getItem('user'))) {
