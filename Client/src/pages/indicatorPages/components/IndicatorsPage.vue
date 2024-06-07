@@ -16,7 +16,7 @@
                         </template>
                         <template v-slot:actions="{ expanded }">
                             <svg-icon 
-                                name="test"
+                                name="wrap"
                                 :flip="expanded"
                             />
                         </template>
@@ -81,7 +81,7 @@
                         </template>
                         <template v-slot:actions="{ expanded }">
                             <svg-icon 
-                                name="test"
+                                name="wrap"
                                 :flip="expanded"
                             />
                         </template>
@@ -137,7 +137,7 @@
                         </template>
                         <template v-slot:actions="{ expanded }">
                             <svg-icon 
-                                name="test"
+                                name="wrap"
                                 :flip="expanded"
                             />
                         </template>
@@ -313,7 +313,7 @@
                         </template>
                         <template v-slot:actions="{ expanded }">
                             <svg-icon 
-                                name="test"
+                                name="wrap"
                                 :flip="expanded"
                             />
                         </template>
@@ -381,7 +381,7 @@
                         </template>
                         <template v-slot:actions="{ expanded }">
                             <svg-icon 
-                                name="test"
+                                name="wrap"
                                 :flip="expanded"
                             />
                         </template>
@@ -445,7 +445,7 @@
                         </template>
                         <template v-slot:actions="{ expanded }">
                             <svg-icon 
-                                name="test"
+                                name="wrap"
                                 :flip="expanded"
                             />
                         </template>
@@ -505,7 +505,7 @@
                         </template>
                         <template v-slot:actions="{ expanded }">
                             <svg-icon 
-                                name="test"
+                                name="wrap"
                                 :flip="expanded"
                             />
                         </template>
@@ -565,7 +565,7 @@
                         </template>
                         <template v-slot:actions="{ expanded }">
                             <svg-icon 
-                                name="test"
+                                name="wrap"
                                 :flip="expanded"
                             />
                         </template>
@@ -625,7 +625,7 @@
                         </template>
                         <template v-slot:actions="{ expanded }">
                             <svg-icon 
-                                name="test"
+                                name="wrap"
                                 :flip="expanded"
                             />
                         </template>
@@ -685,7 +685,7 @@
                         </template>
                         <template v-slot:actions="{ expanded }">
                             <svg-icon 
-                                name="test"
+                                name="wrap"
                                 :flip="expanded"
                             />
                         </template>
@@ -725,7 +725,7 @@
                         </template>
                         <template v-slot:actions="{ expanded }">
                             <svg-icon 
-                                name="test"
+                                name="wrap"
                                 :flip="expanded"
                             />
                         </template>
@@ -765,7 +765,7 @@
                         </template>
                         <template v-slot:actions="{ expanded }">
                             <svg-icon 
-                                name="test"
+                                name="wrap"
                                 :flip="expanded"
                             />
                         </template>
@@ -814,7 +814,7 @@
                         </template>
                         <template v-slot:actions="{ expanded }">
                             <svg-icon 
-                                name="test"
+                                name="wrap"
                                 :flip="expanded"
                             />
                         </template>
@@ -890,7 +890,7 @@
                         </template>
                         <template v-slot:actions="{ expanded }">
                             <svg-icon 
-                                name="test"
+                                name="wrap"
                                 :flip="expanded"
                             />
                         </template>
@@ -929,7 +929,7 @@
                         </template>
                         <template v-slot:actions="{ expanded }">
                             <svg-icon 
-                                name="test"
+                                name="wrap"
                                 :flip="expanded"
                             />
                         </template>
@@ -964,7 +964,7 @@
                         </template>
                         <template v-slot:actions="{ expanded }">
                             <svg-icon 
-                                name="test"
+                                name="wrap"
                                 :flip="expanded"
                             />
                         </template>
@@ -999,7 +999,7 @@
                         </template>
                         <template v-slot:actions="{ expanded }">
                             <svg-icon 
-                                name="test"
+                                name="wrap"
                                 :flip="expanded"
                             />
                         </template>
