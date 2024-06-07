@@ -68,6 +68,19 @@ const TokenData = ref({
     uuid: payload?.uuid,
 })
 
+const getVkUser = async () => {
+    try {
+        const resp = await HTTP.get('rsousers/me/', {
+            headers: {
+                Authorization: `Bearer ${tokenUser.value}`,
+            }
+        })
+        console.log(resp, resp.data)
+    } catch (e) {
+        console.log('error:', e)
+    }
+}
+
 
 
 const exchangeToken = async () => {
@@ -75,6 +88,8 @@ const exchangeToken = async () => {
         const resp = await HTTP.post('/exchange-token/', TokenData.value)
         tokenUser.value = resp.data;
         console.log(resp, resp.data, tokenUser.value);
+        getVkUser();
+
     } catch (e) {
         console.log('error:', e)
     }
