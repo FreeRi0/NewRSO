@@ -13,8 +13,6 @@ HTTP.interceptors.request.use(
         // console.log(config.headers.Accept);
         if (config.url == '/token/login/' || config.url == '/register/' || config.url == '/exchange-token/') {
             delete config.headers.Authorization;
-        } else if(config.url == 'rsousers/me/') {
-            config.headers.Authorization = `Bearer ${localStorage.getItem('Bearer')}`;
         } else {
             config.headers.Authorization = 'Token ' + localStorage.getItem('Token');
         }
@@ -26,3 +24,6 @@ HTTP.interceptors.request.use(
         return error;
     }
 );
+
+// } else if(config.url == 'rsousers/me/') {
+    //config.headers.Authorization = `Bearer ${localStorage.getItem('Bearer')}`;
