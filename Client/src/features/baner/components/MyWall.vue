@@ -85,7 +85,7 @@
                         <li class="user-data__title" v-if="detachment?.name">
                             <p>{{ detachment?.name }}</p>
                         </li>
-               
+
                         <li
                             class="user-data__title"
                             v-if="educationalHeadquarter?.name"
@@ -215,38 +215,38 @@ const props = defineProps({
 const emit = defineEmits(['upload', 'update', 'delete']);
 
 const uploadAva = (imageAva) => {
-    console.log('photo', imageAva);
+    // console.log('photo', imageAva);
     emit('upload', imageAva);
-    console.log('ghhhgh');
+    // console.log('ghhhgh');
 };
 
 const updateAva = (imageAva) => {
-    console.log('photoUpdate', imageAva);
+    // console.log('photoUpdate', imageAva);
     emit('update', imageAva);
-    console.log('update');
+    // console.log('update');
 };
 
 const deleteAva = (imageAva) => {
-    console.log('photoDel', imageAva);
+    // console.log('photoDel', imageAva);
     emit('delete', imageAva);
-    console.log('del');
+    // console.log('del');
 };
 
 const uploadWall = (imageWall) => {
-    console.log('ban', imageWall);
+    // console.log('ban', imageWall);
     emit('uploadWall', imageWall);
-    console.log('ghhhgh');
+    // console.log('ghhhgh');
 };
 
 const updateWall = (imageWall) => {
-    console.log('banUpdate', imageWall);
+    // console.log('banUpdate', imageWall);
     emit('updateWall', imageWall);
-    console.log('update');
+    // console.log('update');
 };
 const deleteWall = (imageWall) => {
-    console.log('banDelete', imageWall);
+    // console.log('banDelete', imageWall);
     emit('deleteWall', imageWall);
-    console.log('delete');
+    // console.log('delete');
 };
 
 const regionalsStore = useRegionalsStore();
@@ -263,26 +263,14 @@ const getUserData = async () => {
     try {
         if (props.user.detachment_id) {
             const responseSquad = await HTTP.get(
-                `/detachments/${props.user.detachment_id}/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
+                `/detachments/${props.user.detachment_id}/`
             );
             detachment.value = responseSquad.data;
         }
 
         if (props.user.educational_headquarter_id) {
             const responseEducHead = await HTTP.get(
-                `/educationals/${props.user.educational_headquarter_id}/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
+                `/educationals/${props.user.educational_headquarter_id}/`
             );
 
             educationalHeadquarter.value = responseEducHead.data;
@@ -299,17 +287,14 @@ watch(
         if (Object.keys(props.user).length === 0) {
             return;
         }
-        // getUserData();
-        // getEducData();
         regionalsStore.searchMyRegionals(props.user.region);
     },
 );
 
 onMounted(() => {
-    // getUserData();
     roleStore.getMyPositions();
     getUserData();
-    // getEducData();
+
 });
 
 const copyL = () => {

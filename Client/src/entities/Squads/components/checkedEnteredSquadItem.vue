@@ -99,17 +99,12 @@ const squad = ref({});
 
 const viewSquad = async () => {
     let id = roles?.roles?.value?.detachment_commander.id;
-    console.log('roles', roles.roles.value);
-    console.log('id', id);
-    await HTTP.get(`/detachments/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    // console.log('roles', roles.roles.value);
+    // console.log('id', id);
+    await HTTP.get(`/detachments/${id}/`)
         .then((response) => {
             squad.value = response.data;
-            console.log(response);
+            // console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -119,7 +114,7 @@ onMounted(() => {
     viewSquad();
 });
 
-console.log('squad', props.squad);
+// console.log('squad', props.squad);
 </script>
 <style lang="scss" scoped>
 .horizontalSquad {

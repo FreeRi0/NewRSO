@@ -99,13 +99,7 @@ const viewDetachments = async () => {
         loading.value = true;
         let id = roles.roles.value.detachment_commander?.id;
         const detComRequest = await HTTP.get(
-            `/detachments/${id}/applications/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+            `/detachments/${id}/applications/`
         );
         detachmentList.value = detComRequest.data;
         loading.value = false;
@@ -146,12 +140,6 @@ const confirmApplication = async (id, application_pk) => {
         const approveReq = await HTTP.post(
             `/detachments/${id}/applications/${application_pk}/accept/`,
             {},
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
         );
         swal.fire({
             position: 'top-center',
@@ -180,12 +168,6 @@ const cancelApplication = async (id, application_pk) => {
     try {
         const rejectReq = await HTTP.delete(
             `/detachments/${id}/applications/${application_pk}/accept/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
             {},
         );
         swal.fire({
@@ -244,9 +226,6 @@ onMounted(async () => {
     await viewDetachments();
 });
 
-// onActivated(async () => {
-//     await viewDetachments();
-// });
 </script>
 <style lang="scss">
 .v-field--variant-outlined .v-field__outline__end,

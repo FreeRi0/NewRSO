@@ -3,44 +3,20 @@
         <v-container>
             <div class="d-flex">
                 <v-card class="px-14 py-15" max-width="580">
-                    <img
-                        src="@/app/assets/icon/cross.svg"
-                        alt="cross"
-                        class="card_cross"
-                        @click="onBack"
-                    />
-                    <v-card-title class="text-center"
-                        >Создание нового пароля</v-card-title
-                    >
-                    <v-form
-                        class="LoginForm"
-                        action="#"
-                        method="post"
-                        @submit.prevent="resetPasswordForm"
-                    >
+                    <img src="@/app/assets/icon/cross.svg" alt="cross" class="card_cross" @click="onBack" />
+                    <v-card-title class="text-center">Создание нового пароля</v-card-title>
+                    <v-form class="LoginForm" action="#" method="post" @submit.prevent="resetPasswordForm">
                         <p>
                             Пароль должен быть не короче 8 букв и цифр.
                             Используйте только буквы (a–z, A–Z), цифры и символы
                             ! @ # $ % ^ & * ( ) - _ + = ; : , . / ? \ | ` ~ { }
                         </p>
 
-                        <Input
-                            class="creaturePass__input"
-                            placeholder="Введите новый пароль"
-                            name="password"
-                            v-model:value="new_password"
-                        ></Input>
-                        <Input
-                            class="creaturePass__input"
-                            placeholder="Повторите новый пароль"
-                            name="confirm"
-                            v-model:value="current_password"
-                        ></Input>
-                        <Button
-                            label="Сохранить"
-                            color="primary"
-                            type="submit"
-                        ></Button>
+                        <Input class="creaturePass__input" placeholder="Введите новый пароль" name="password"
+                            v-model:value="new_password"></Input>
+                        <Input class="creaturePass__input" placeholder="Повторите новый пароль" name="confirm"
+                            v-model:value="current_password"></Input>
+                        <Button label="Сохранить" color="primary" type="submit"></Button>
                     </v-form>
                 </v-card>
             </div>
@@ -80,15 +56,10 @@ const onBack = () => {
 };
 
 const getPrivate = async () => {
-    await HTTP.get('/rsousers/me/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    await HTTP.get('/rsousers/me/',)
         .then((response) => {
             user.value = response.data;
-            console.log(response.data);
+            // console.log(response.data);
         })
         .catch(function (error) {
             console.log('failed ' + error);
@@ -168,10 +139,12 @@ const resetPasswordForm = async () => {
     padding-top: 98px !important;
     padding-bottom: 98px !important;
 }
+
 .px-14 {
     padding-right: 98px !important;
     padding-left: 98px !important;
 }
+
 .d-flex {
     justify-content: end;
 }
@@ -198,17 +171,20 @@ const resetPasswordForm = async () => {
     font-weight: 500;
     font-family: 'Bert-Sans';
 }
+
 .v-card-title {
     padding: 0;
     overflow: visible;
     font-family: 'Akrobat';
 }
+
 .v-card-title {
     overflow: visible;
     font-size: 40px;
     font-weight: 600;
     font-family: Akrobat;
     padding-top: 0rem;
+
     @media screen and (max-width: 575px) {
         font-size: 32px;
     }
@@ -223,38 +199,46 @@ const resetPasswordForm = async () => {
     line-height: normal;
     margin-bottom: 20px;
 }
+
 .creaturePass__input {
     text-indent: 16px;
     width: 100%;
 }
+
 @media ((max-width: 768px)) {
     .d-flex {
         justify-content: center;
     }
+
     .AuthWrapper {
         min-height: 0;
         padding-top: 100px;
         padding-bottom: 138px;
     }
 }
+
 @media ((max-width: 625px)) {
     .py-15 {
         padding-top: 60px !important;
         padding-bottom: 40px !important;
     }
+
     .px-14 {
         padding-right: 40px !important;
         padding-left: 40px !important;
     }
+
     .card_cross {
         right: 8px;
     }
 }
+
 @media ((max-width: 440px)) {
     .px-14 {
         padding-right: 15px !important;
         padding-left: 15px !important;
     }
+
     .v-card-title {
         font-size: 30px;
     }

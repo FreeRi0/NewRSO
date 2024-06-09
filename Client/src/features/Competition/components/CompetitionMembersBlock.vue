@@ -112,12 +112,7 @@ const verified = ref([]);
 
 const getMembers = async () => {
     // HTTP.get(`competitions/${id}/`, {
-    HTTP.get(`competitions/1/participants/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    HTTP.get(`competitions/1/participants/`)
         .then((response) => {
             // members.value = response.data;
 
@@ -125,12 +120,12 @@ const getMembers = async () => {
                 if (member.detachment) acc.push(member.detachment);
                 acc.push(member.junior_detachment);
 
-                console.log('acc', acc);
+                // console.log('acc', acc);
 
                 return acc;
             }, []);
 
-            console.log('Участвуют в конкурсе -', response);
+            // console.log('Участвуют в конкурсе -', response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -139,12 +134,7 @@ const getMembers = async () => {
 
 const getVerified = async () => {
     // HTTP.get(`competitions/${id}/`, {
-    HTTP.get(`competitions/1/applications/all/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    HTTP.get(`competitions/1/applications/all/`)
         .then((response) => {
             // verified.value = response.data;
 
@@ -152,11 +142,11 @@ const getVerified = async () => {
                 if (member.detachment) acc.push(member.detachment);
                 acc.push(member.junior_detachment);
 
-                console.log('acc', acc);
+                // console.log('acc', acc);
 
                 return acc;
             }, []);
-            console.log('Ожидают одобрения - ', response);
+            // console.log('Ожидают одобрения - ', response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);

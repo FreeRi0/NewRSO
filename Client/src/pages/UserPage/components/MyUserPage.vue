@@ -48,6 +48,7 @@ import {
 } from '@shared/components/imagescomp';
 
 import { ref, onMounted } from 'vue';
+import axios from 'axios';
 import { HTTP } from '@app/http';
 import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
@@ -56,30 +57,44 @@ const currentUser = storeToRefs(userStore);
 const isLoading = storeToRefs(userStore);
 const education = ref({});
 const region = ref({});
+const tokenUser = ref("");
+const isAuth = ref(!!localStorage.getItem('Token'));
+const query = new URLSearchParams(window.location.search);
+const payload = JSON.parse(query.get("payload"));
 
 
-// const query = new URLSearchParams(window.location.search);
-// const payload = JSON.parse(query.get("payload"));
+const TokenData = ref({
+    silent_token: payload?.token,
+    uuid: payload?.uuid,
+})
 
-
-
-// const TokenData = ref({
-//     silent_token: payload?.token,
-//     uuid: payload?.uuid,
-// })
-
-
-// const exchangeToken = async () => {
+// const getVkUser = async () => {
 //     try {
-//         const resp = await HTTP.post('/exchange-token/', TokenData.value, {
+//         const resp = await HTTP.get('rsousers/me/', {
 //             headers: {
-//                 'Content-Type': 'application/json',
-//             },
+//                 Authorization: 'Bearer ' + localStorage.getItem('Bearer'),
+//             }
 //         })
+
+//         console.log(resp, resp.data)
 //     } catch (e) {
 //         console.log('error:', e)
 //     }
 // }
+
+
+
+const exchangeToken = async () => {
+    try {
+        const resp = await HTTP.post('/exchange-token/', TokenData.value)
+        localStorage.setItem('Bearer', resp.data.access_token);
+        console.log(resp.data.access_token);
+       userStore.getUser()
+
+    } catch (e) {
+        console.log('error:', e)
+    }
+}
 
 const uploadAva = (imageAva) => {
 
@@ -111,9 +126,9 @@ const deleteWall = (imageWall) => {
     currentUser.currentUser.value.media.banner = imageWall;
 };
 
-// onMounted(() => {
-//     exchangeToken();
-// })
+onMounted(() => {
+    exchangeToken();
+})
 </script>
 <style lang="scss" scoped>
 .user-wrapper {
@@ -201,4 +216,3 @@ const deleteWall = (imageWall) => {
     }
 }
 </style>
-@shared/components/inputs/imagescomp

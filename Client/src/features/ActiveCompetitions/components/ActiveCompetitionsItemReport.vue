@@ -187,12 +187,7 @@ const getIsTandemInfo = async () => {
     try {
         const { data } = await HTTP.get(
             `/detachments/${props.report.detachment}/competitions/1/is_tandem/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         // console.log(data);
         isTandem.value = data.is_tandem;

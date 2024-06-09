@@ -1,5 +1,5 @@
 <template>
-    <div class="avatar-edit my_photo__add" >
+    <div class="avatar-edit my_photo__add">
         <v-menu min-width="200px" rounded v-if="!props.photo">
             <template v-slot:activator="{ props }">
                 <v-btn class="user-metric__baner-add" icon v-bind="props">
@@ -20,29 +20,17 @@
                             </template>
                             <v-card>
                                 <v-card-title>
-                                    <span class="text-h5"
-                                        >Загрузите ваше фото</span
-                                    >
+                                    <span class="text-h5">Загрузите ваше фото</span>
                                 </v-card-title>
                                 <v-card-text>
                                     <v-container>
                                         <v-row>
-                                            <v-file-input
-                                                @change="selectFile"
-                                                type="file"
-                                                show-size
-                                                prepend-icon="mdi-camera"
-                                                counter
-                                            />
+                                            <v-file-input @change="selectFile" type="file" show-size
+                                                prepend-icon="mdi-camera" counter />
                                         </v-row>
                                         <v-row class="align-center justify-end">
-                                            <v-btn
-                                                v-if="preview"
-                                                class="button-wrapper mt-5"
-                                                @click="cropImage()"
-                                                prepend-icon="crop"
-                                                variant="plain"
-                                            >Обрезать фото</v-btn>
+                                            <v-btn v-if="preview" class="button-wrapper mt-5" @click="cropImage()"
+                                                prepend-icon="crop" variant="plain">Обрезать фото</v-btn>
                                         </v-row>
                                         <v-row>
                                             <Cropper ref="cropper" class="cropper mt-5 mx-auto" :src="preview" />
@@ -51,20 +39,11 @@
                                 </v-card-text>
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
-                                    <v-btn
-                                        color="blue-darken-1"
-                                        variant="text"
-                                        @click="dialog = false"
-                                    >
+                                    <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
                                         Закрыть
                                     </v-btn>
-                                    <v-btn
-                                        :disabled="!userPhotos"
-                                        color="blue-darken-1"
-                                        variant="text"
-                                        type="submit"
-                                        @click="uploadPhoto()"
-                                    >
+                                    <v-btn :disabled="!userPhotos" color="blue-darken-1" variant="text" type="submit"
+                                        @click="uploadPhoto()">
                                         Загрузить
                                     </v-btn>
                                 </v-card-actions>
@@ -91,39 +70,23 @@
                         <v-row justify="center">
                             <v-dialog v-model="dialog" width="1024">
                                 <template v-slot:activator="{ props }">
-                                    <v-btn
-                                        rounded
-                                        variant="text"
-                                        v-bind="props"
-                                    >
+                                    <v-btn rounded variant="text" v-bind="props">
                                         Редактировать фото
                                     </v-btn>
                                 </template>
                                 <v-card>
                                     <v-card-title>
-                                        <span class="text-h5"
-                                            >Загрузите ваше фото</span
-                                        >
+                                        <span class="text-h5">Загрузите ваше фото</span>
                                     </v-card-title>
                                     <v-card-text>
                                         <v-container>
                                             <v-row>
-                                                <v-file-input
-                                                    @change="selectFile"
-                                                    type="file"
-                                                    show-size
-                                                    prepend-icon="mdi-camera"
-                                                    counter
-                                                />
+                                                <v-file-input @change="selectFile" type="file" show-size
+                                                    prepend-icon="mdi-camera" counter />
                                             </v-row>
                                             <v-row class="align-center justify-end">
-                                                <v-btn
-                                                    v-if="preview"
-                                                    class="button-wrapper mt-5"
-                                                    @click="cropImage()"
-                                                    prepend-icon="crop"
-                                                    variant="plain"
-                                                >Обрезать фото</v-btn>
+                                                <v-btn v-if="preview" class="button-wrapper mt-5" @click="cropImage()"
+                                                    prepend-icon="crop" variant="plain">Обрезать фото</v-btn>
                                             </v-row>
                                             <v-row>
                                                 <Cropper ref="cropper" class="cropper mt-5 mx-auto" :src="preview" />
@@ -132,21 +95,11 @@
                                     </v-card-text>
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
-                                        <v-btn
-                                            color="blue-darken-1"
-                                            variant="text"
-                                            @click="dialog = false"
-                                        >
+                                        <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
                                             Закрыть
                                         </v-btn>
-                                        <v-btn
-
-                                            :disabled="!userPhotos"
-                                            color="blue-darken-1"
-                                            variant="text"
-                                            type="submit"
-                                            @click="updatePhoto()"
-                                        >
+                                        <v-btn :disabled="!userPhotos" color="blue-darken-1" variant="text"
+                                            type="submit" @click="updatePhoto()">
                                             Загрузить
                                         </v-btn>
 
@@ -226,7 +179,7 @@ const uploadPhoto = async () => {
             });
             emit('uploadUserPic', response.data.photo2);
             dialog.value = false;
-            console.log(response, 'photo uploaded');
+            // console.log(response, 'photo uploaded');
         })
         .catch(({ response }) => {
             isError.value = response.data;
@@ -260,7 +213,7 @@ const updatePhoto = async () => {
             });
             emit('uploadUserPic', response.data.photo2);
             dialog.value = false;
-            console.log(response, 'updated');
+            // console.log(response, 'updated');
         })
         .catch(({ response }) => {
             isError.value = response.data;
@@ -276,12 +229,7 @@ const updatePhoto = async () => {
 };
 
 const deletePhoto = async () => {
-    await HTTP.put('/rsousers/me/media/', userPhotos.value, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    await HTTP.put('/rsousers/me/media/', userPhotos.value,)
         .then((response) => {
             swal.fire({
                 position: 'top-center',
@@ -290,7 +238,7 @@ const deletePhoto = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
-            console.log(response, 'deleted');
+            // console.log(response, 'deleted');
         })
         .catch(({ response }) => {
             isError.value = response.data;
@@ -305,4 +253,3 @@ const deletePhoto = async () => {
         });
 };
 </script>
-

@@ -2,32 +2,15 @@
     <div class="container">
         <h1 class="title title--mb">Редактирование ЛСО</h1>
 
-        <FormUnit
-            :participants="true"
-            :detachment="detachment"
-            :members="SquadsStore.members"
-            :submited="submited"
-            :is-commander-loading="isCommanderLoading"
-            :is-members-loading="isMembersLoading"
-            :is-error="isError"
-            :is-error-members="isErrorMembers"
-            v-if="detachment && isError && isErrorMembers && !loading"
-            @submit.prevent="changeDetachment"
-            @select-file="onSelectFile"
-            @reset-emblem="onResetEmblem"
-            @select-banner="onSelectBanner"
-            @reset-banner="onResetBanner"
-            @select-photo-one="onSelectPhotoOne"
-            @reset-photo-one="onResetPhotoOne"
-            @select-photo-two="onSelectPhotoTwo"
-            @reset-photo-two="onResetPhotoTwo"
-            @select-photo-three="onSelectPhotoThree"
-            @reset-photo-three="onResetPhotoThree"
-            @select-photo-four="onSelectPhotoFour"
-            @reset-photo-four="onResetPhotoFour"
-            @update-member="onUpdateMember"
-            @delete-member="onDeleteMember"
-        ></FormUnit>
+        <FormUnit :participants="true" :detachment="detachment" :members="SquadsStore.members" :submited="submited"
+            :is-commander-loading="isCommanderLoading" :is-members-loading="isMembersLoading" :is-error="isError"
+            :is-error-members="isErrorMembers" v-if="detachment && isError && isErrorMembers && !loading"
+            @submit.prevent="changeDetachment" @select-file="onSelectFile" @reset-emblem="onResetEmblem"
+            @select-banner="onSelectBanner" @reset-banner="onResetBanner" @select-photo-one="onSelectPhotoOne"
+            @reset-photo-one="onResetPhotoOne" @select-photo-two="onSelectPhotoTwo" @reset-photo-two="onResetPhotoTwo"
+            @select-photo-three="onSelectPhotoThree" @reset-photo-three="onResetPhotoThree"
+            @select-photo-four="onSelectPhotoFour" @reset-photo-four="onResetPhotoFour" @update-member="onUpdateMember"
+            @delete-member="onDeleteMember"></FormUnit>
     </div>
 </template>
 
@@ -76,13 +59,8 @@ const isCommanderLoading = ref(false);
 const getDetachment = async () => {
     loading.value = true;
     isCommanderLoading.value = true;
-    console.log('id отряда для редактирования - ', id);
-    HTTP.get(`/detachments/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    // console.log('id отряда для редактирования - ', id);
+    HTTP.get(`/detachments/${id}/`,)
         .then((response) => {
             detachment.value = response.data;
             if (detachment.value.area) {
@@ -99,7 +77,7 @@ const getDetachment = async () => {
                 detachment.value.commander = detachment.value.commander.id;
             }
             replaceTargetObjects([detachment.value]);
-            console.log(response);
+            // console.log(response);
             loading.value = false;
             isCommanderLoading.value = false;
         })
@@ -117,7 +95,7 @@ onBeforeRouteUpdate(async (to, from) => {
 const isMembersLoading = ref(false);
 
 onMounted(() => {
-   SquadsStore.getSquadMembersNoLimit(id)
+    SquadsStore.getSquadMembersNoLimit(id)
     getDetachment();
 });
 
@@ -126,7 +104,7 @@ const onUpdateMember = (event, id) => {
     const firstkey = Object.keys(event)[0];
     SquadsStore.members[memberIndex].change = true;
     if (firstkey == 'position')
-    SquadsStore.members[memberIndex].position.id = event[firstkey];
+        SquadsStore.members[memberIndex].position.id = event[firstkey];
     else SquadsStore.members[memberIndex][firstkey] = event[firstkey];
 };
 
@@ -316,7 +294,7 @@ const changeDetachment = async () => {
     })
         .then((response) => {
             // submited.value = true;
-            console.log(response.data);
+            // console.log(response.data);
             swal.fire({
                 position: 'center',
                 icon: 'success',

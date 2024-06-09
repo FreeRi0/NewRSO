@@ -13,12 +13,7 @@ export const useDistrictsStore = defineStore('districts', {
             if (this.districts.length) return;
             try {
                 this.isLoading = true;
-                const responseDistricts = await HTTP.get(`/districts/`, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                });
+                const responseDistricts = await HTTP.get(`/districts/`);
                 this.districts = responseDistricts.data.results;
                 this.isLoading = false;
             } catch (error) {
@@ -31,15 +26,7 @@ export const useDistrictsStore = defineStore('districts', {
             try {
 
                 const responseMembers = await HTTP.get(
-                    `/districts/${id}/members/`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    },
-                );
+                    `/districts/${id}/members/`);
                 this.members = responseMembers.data.results;
             } catch (error) {
 
@@ -49,15 +36,7 @@ export const useDistrictsStore = defineStore('districts', {
         async getSearchDHMembers(id: String, name: String) {
             try {
                 const responseMembers = await HTTP.get(
-                    `/districts/${id}/members/?search=${name}`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    },
-                );
+                    `/districts/${id}/members/?search=${name}`);
                 this.members = responseMembers.data.results;
 
             } catch (error) {

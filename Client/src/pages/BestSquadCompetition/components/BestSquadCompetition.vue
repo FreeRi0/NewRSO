@@ -223,15 +223,10 @@ const userCommander = ref({});
 
 const getUserCommander = async () => {
     try {
-        const response = await HTTP.get(`rsousers/me_commander/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const response = await HTTP.get(`rsousers/me_commander/`,);
 
         userCommander.value = response.data;
-        console.log('конкурс', response);
+        // console.log('конкурс', response);
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -242,16 +237,11 @@ const getMeSquad = async () => {
     try {
         const response = await HTTP.get(
             `detachments/${userCommander.value.detachment_commander.id}/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
 
         squad.value = response.data;
-        console.log('конкурс', response);
+        // console.log('конкурс', response);
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -259,10 +249,6 @@ const getMeSquad = async () => {
 
 const downloadDocument = async () => {
     HTTP.get('competitions/download_regulation_file/', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
         responseType: 'blob',
     })
         .then((response) => {
@@ -274,7 +260,7 @@ const downloadDocument = async () => {
             docUrl.setAttribute('type', 'application/pdf');
             document.body.appendChild(docUrl);
             docUrl.click();
-            console.log(response, 'success');
+            // console.log(response, 'success');
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -286,7 +272,7 @@ const downloadDocument = async () => {
 let sizeImage = ref('desktop');
 
 const getSizeImage = () => {
-    console.log('ширина экрана', window.innerWidth);
+    // console.log('ширина экрана', window.innerWidth);
     if (window.innerWidth <= 360) {
         sizeImage.value = 'mobile';
     }
@@ -322,7 +308,7 @@ const getCompetition = async () => {
         });
 
         competition.value = response.data;
-        console.log('конкурс', response);
+        // console.log('конкурс', response);
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -332,16 +318,11 @@ const getSquadStatus = async () => {
     try {
         const response = await HTTP.get(
             `competitions/${id}/check_detachment_status/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
 
         currentStatus.value = response.data;
-        console.log('конкурс', response);
+        // console.log('конкурс', response);
     } catch (error) {
         console.log('an error occured ' + error);
     }

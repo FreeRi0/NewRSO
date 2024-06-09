@@ -43,7 +43,7 @@ const viewAvatar = async () => {
     })
         .then((response) => {
             imageUrl.value = response.data;
-            console.log(response);
+            // console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);

@@ -521,12 +521,7 @@ const AddApplication = async () => {
         const sendResponse = await HTTP.post(
             `/events/${id}/applications/`,
             data.value,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         swal.fire({
             position: 'top-center',
@@ -536,7 +531,7 @@ const AddApplication = async () => {
             timer: 1500,
         });
         eventsStore.getAppEvents(route.params.id);
-        console.log('responseee', sendResponse.data);
+        // console.log('responseee', sendResponse.data);
     } catch (error) {
         console.error('There was an error!', error);
     }

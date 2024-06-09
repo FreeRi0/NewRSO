@@ -944,7 +944,7 @@
                                           organizer.last_name = item.last_name
                                           organizer.first_name = item.first_name
                                           organizer.patronymic_name = item.patronymic_name
-                                          console.log('selectedUser: ', selectedUser)
+                                          // console.log('selectedUser: ', selectedUser)
                                         }"
                                         style="border: 1px solid #b6b6b6;
                                         border-radius: 10px;
@@ -1180,11 +1180,11 @@ let deletedUser =  ref([]);
 
 onActivated(() => {
     getRoles().then((resp) => {
-        console.log(resp.data);
+        // console.log(resp.data);
         rules.value = resp.data;
         Object.entries(resp.data).forEach(([key, value]) => {
             if (value !== null) {
-                console.log(`${key} + ${value}`);
+                // console.log(`${key} + ${value}`);
                 const filted = scale_massive.value.find(
                     (commander) => commander.value === key,
                 );
@@ -1268,7 +1268,7 @@ onActivated(() => {
                 if (key === 'detachment_commander') {
                     Object.entries(value).forEach(([key, value]) => {
                         if (key === 'id') {
-                            console.log(value);
+                            // console.log(value);
                             maininfo.value.org_central_headquarter = null;
                             maininfo.value.org_district_headquarter = null;
                             maininfo.value.org_regional_headquarter = null;
@@ -1285,7 +1285,7 @@ onActivated(() => {
                 if (key === 'educationalheadquarter_commander') {
                     Object.entries(value).forEach(([key, value]) => {
                         if (key === 'id') {
-                            console.log(value);
+                            // console.log(value);
                             maininfo.value.org_central_headquarter = null;
                             maininfo.value.org_district_headquarter = null;
                             maininfo.value.org_regional_headquarter = null;
@@ -1302,7 +1302,7 @@ onActivated(() => {
                 if (key === 'localheadquarter_commander') {
                     Object.entries(value).forEach(([key, value]) => {
                         if (key === 'id') {
-                            console.log(value);
+                            // console.log(value);
                             maininfo.value.org_central_headquarter = null;
                             maininfo.value.org_district_headquarter = null;
                             maininfo.value.org_regional_headquarter = null;
@@ -1320,7 +1320,7 @@ onActivated(() => {
                 if (key === 'regionalheadquarter_commander') {
                     Object.entries(value).forEach(([key, value]) => {
                         if (key === 'id') {
-                            console.log(value);
+                            // console.log(value);
                             maininfo.value.org_central_headquarter = null;
                             maininfo.value.org_district_headquarter = null;
                             maininfo.value.org_regional_headquarter = value;
@@ -1337,7 +1337,7 @@ onActivated(() => {
                 if (key === 'districtheadquarter_commander') {
                     Object.entries(value).forEach(([key, value]) => {
                         if (key === 'id') {
-                            console.log(value);
+                            // console.log(value);
                             maininfo.value.org_central_headquarter = null;
                             maininfo.value.org_district_headquarter = value;
                             maininfo.value.org_regional_headquarter = null;

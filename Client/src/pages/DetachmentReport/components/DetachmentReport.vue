@@ -31,7 +31,7 @@
                     <p>Показатель</p>
                     <p>Место</p>
                 </template>
-                <div class="indicator-container" v-for="(indicators, index) in resultData" :key="index">
+                <div class="indicator-container" v-for="(indicator, index) in resultData.indicators" :key="index">
                     <div class="horizontal-item__wrapper">
                         <div class="containerHorizontal">
                             <p class="horizontal-item__list-full">
@@ -166,12 +166,6 @@ const onAction = async () => {
 const getPlaceRegionalCommander = async () => {
     const { data } = await HTTP.get(
         `/competitions/1/get-detachment-places/${detachment_id.value}/`,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        },
     );
     if (data.is_tandem) {
         mainResults.value.place.push(
@@ -186,9 +180,9 @@ const getPlaceRegionalCommander = async () => {
         let index = `q${i}_place`;
         resultData.value[i].place = data[index]
     }
+    // console.log(data);
     loading.value = false;
 };
-
 const getPostitions = async () => {
     await getMainResults();
 
@@ -198,17 +192,11 @@ const getPostitions = async () => {
                 const { data } = await HTTP.get(
                     `/competitions/1/reports/q${index}/get-place/`
                 );
-                resultData.value[index].place = data.place;
+                //console.log(data);
+                resultData.value.places[index - 1] = data.place;
             } else {
                 const { data } = await HTTP.get(
-                    `/competitions/1/reports/q${index}/me/`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    },
+                    `/competitions/1/reports/q${index}/me/`
                 );
                 if (data.results) {
                     resultData.value[index].place = 'Данные не отправлены';
@@ -237,6 +225,7 @@ const getVerificationLogs = async (q_number) => {
         const { data } = await HTTP.get(
             `/competitions/1/verification_logs/${q_number}/?verified_detachment_id=${detachment_id.value}`,
         );
+        // console.log(data);
 
         if (data.results.length != 0) {
             const temp = data.results.pop();
@@ -252,6 +241,7 @@ const getVerificationLogs = async (q_number) => {
 const getMeCommander = async () => {
     try {
         const { data } = await HTTP.get(`/rsousers/me_commander/`,);
+        // console.log(data);
         if (data.detachment_commander) {
             commander.value = true;
         } else if (data.regionalheadquarter_commander) {
@@ -265,6 +255,8 @@ const getMeCommander = async () => {
 const getMainResults = async () => {
     try {
         const { data } = await HTTP.get(`/competitions/1/get-place/`,);
+        // console.log(data);
+        // Вернуть 1 в индекс для суммы мест
         if (data.place) {
             mainResults.value.place[0] = data.place;
         } else {

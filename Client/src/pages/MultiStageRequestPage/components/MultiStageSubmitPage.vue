@@ -2,11 +2,7 @@
     <div class="container" v-if="!loading">
         <p class="main_title">Многоэтапная заявка</p>
         <div v-if="!processApplication">
-            <multi-stage-submit-first
-                :me="meInfo"
-                :event="eventInfo"
-                :route="route"
-            />
+            <multi-stage-submit-first :me="meInfo" :event="eventInfo" :route="route" />
         </div>
         <div v-else><multi-stage-submit-second :route="route" /></div>
     </div>
@@ -41,12 +37,7 @@ const checkApplicationOnProcess = async () => {
 
 const getEventInfo = async () => {
     try {
-        const { data } = await HTTP.get(`/events/${route.params.id}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const { data } = await HTTP.get(`/events/${route.params.id}`,);
         eventInfo.value = data;
     } catch (e) {
         console.log('getEventInfo error', e);
@@ -55,12 +46,7 @@ const getEventInfo = async () => {
 
 const getMeInfo = async () => {
     try {
-        const { data } = await HTTP.get(`/users/me/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const { data } = await HTTP.get(`/users/me/`,);
         meInfo.value = data;
     } catch (e) {
         console.log('getMeInfo error', e);
@@ -71,12 +57,7 @@ const getMeCommander = async () => {
     try {
         const { data } = await HTTP.get(
             `/rsousers/${meInfo.value.id}/commander/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         meCommander.value = data;
     } catch (e) {
@@ -88,12 +69,7 @@ const getApplicationinfo = async () => {
     try {
         const { data } = await HTTP.get(
             `/events/${route.params.id}/multi_applications/all`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         applications.value = data;
         await checkApplicationOnProcess();
@@ -120,6 +96,7 @@ onMounted(async () => {
     font-weight: 700;
     line-height: normal;
 }
+
 .subtitle {
     font-style: normal;
     height: 26px;
@@ -132,6 +109,7 @@ onMounted(async () => {
     color: #35383f;
     margin-bottom: 24px;
 }
+
 .container {
     margin: 0 auto;
     padding-bottom: 60px;
