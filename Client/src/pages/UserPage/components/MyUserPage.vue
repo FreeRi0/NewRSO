@@ -84,6 +84,7 @@ const TokenData = ref({
 
 
 
+
 const exchangeToken = async () => {
     try {
         const resp = await HTTP.post('/exchange-token/', TokenData.value)
@@ -95,6 +96,8 @@ const exchangeToken = async () => {
         console.log('error:', e)
     }
 }
+
+console.log('token', localStorage.getItem('Bearer'));
 
 const uploadAva = (imageAva) => {
 
