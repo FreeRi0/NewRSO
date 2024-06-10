@@ -73,7 +73,6 @@ const getAccessToken = async (token) => {
         const resp = await HTTP.post('/jwt/vk-login/', { access_token: token })
         console.log('access', resp.data.access, 'refresh', resp.data.refresh);
         localStorage.setItem('jwt_token', resp.data.access );
-        userStore.getUser()
     } catch (e) {
         console.log('error:', e)
     }
