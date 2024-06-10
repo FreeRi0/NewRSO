@@ -188,12 +188,6 @@ const viewHeadquartersData = async (resp, search, join) => {
         if (join) {
             const viewHeadquartersResponsetTwo = await HTTP.get(
                 '/educationals/' + search,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
             );
             educHead.value = viewHeadquartersResponsetTwo.data.results;
             let response2 = viewHeadquartersResponsetTwo.data.results;

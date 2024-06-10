@@ -170,7 +170,7 @@
                                                     " />
                                         <label :for="id">{{
                                             passP.name
-                                        }}</label>
+                                            }}</label>
                                     </div>
                                 </div>
                                 <div class="addres" id="pass-no-addr" v-if="props.user.parent.russian_passport">
@@ -1011,7 +1011,7 @@
                                                         class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                         <span class="font-semibold">{{
                                                             statement.name
-                                                            }}</span>
+                                                        }}</span>
                                                         <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1066,7 +1066,7 @@
                                                         class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                         <span class="font-semibold">{{
                                                             consent_personal_data.name
-                                                            }}</span>
+                                                        }}</span>
                                                         <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1125,7 +1125,7 @@
                                                         class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                         <span class="font-semibold">{{
                                                             consent_personal_data_representative.name
-                                                            }}</span>
+                                                        }}</span>
                                                         <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1187,7 +1187,7 @@
                                                         class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                         <span class="font-semibold">{{
                                                             passportUpload.name
-                                                            }}</span>
+                                                        }}</span>
                                                         <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1238,7 +1238,7 @@
                                                         class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                         <span class="font-semibold">{{
                                                             passport_representative.name
-                                                            }}</span>
+                                                        }}</span>
                                                         <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1292,7 +1292,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         snils_file.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1331,7 +1331,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         military_document.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1374,7 +1374,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         inn_file.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1413,7 +1413,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         international_passport.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1456,7 +1456,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         employment_document.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1562,7 +1562,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         passportUpload.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1605,7 +1605,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         passport_representative.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1655,7 +1655,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         snils_file.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1694,7 +1694,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         military_document.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1737,7 +1737,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         inn_file.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1776,7 +1776,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         international_passport.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1820,7 +1820,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         employment_document.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1928,7 +1928,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         statement.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1975,7 +1975,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         consent_personal_data.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2034,7 +2034,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         passportUpload.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2080,7 +2080,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         snils_file.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2119,7 +2119,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         inn_file.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2158,7 +2158,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         employment_document.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2266,7 +2266,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         passportUpload.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2308,7 +2308,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         passport_representative.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2358,7 +2358,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         snils_file.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2397,7 +2397,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         inn_file.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2437,7 +2437,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         employment_document.name
-                                                        }}</span>
+                                                    }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2805,7 +2805,7 @@ const downloadBlankPersonal = async () => {
         {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+                 Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
             },
             responseType: 'blob',
         },
@@ -2830,7 +2830,7 @@ const downloadBlankMembership = async () => {
         {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+                 Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
             },
             responseType: 'blob',
         },
@@ -2854,7 +2854,7 @@ const downloadBlankParent = async () => {
         {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+                 Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
             },
             responseType: 'blob',
         },
@@ -2877,7 +2877,7 @@ const downloadAll = async () => {
     await HTTP.get('/rsousers/me/statement/download_all_forms/', {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+             Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
         },
         responseType: 'blob',
     })
@@ -3010,12 +3010,6 @@ const updateData = async () => {
                     city: props.user.parent.city,
                     address: props.user.parent.address,
                 },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
             );
             axiosrequestParent.value = parentRequest.data;
         }
@@ -3032,12 +3026,6 @@ const updateData = async () => {
                     snils: props.foreignParent.snils,
                     inn: props.foreignParent.inn,
                     work_book_num: props.foreignParent.work_book_num,
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
                 },
             );
         }
@@ -3090,12 +3078,6 @@ const updateData = async () => {
                     inn: props.foreignUserDocs.inn,
                     work_book_num: props.foreignUserDocs.work_book_num,
                 },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
             );
         }
 
@@ -3118,7 +3100,7 @@ const updateData = async () => {
         const axiosrequest5 = await HTTP.patch('/rsousers/me/statement/', fd, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+                Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
             },
         });
         const axiosrequest6 = ref(null);
@@ -3130,12 +3112,6 @@ const updateData = async () => {
             const axiosrequest6 = await HTTP.post(
                 '/rsousers/me/apply_for_verification/',
                 data.value,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
             );
         }
 

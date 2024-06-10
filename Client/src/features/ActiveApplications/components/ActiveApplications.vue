@@ -5,59 +5,32 @@
     <template v-else>
         <div class="participants__actions">
             <div class="participants__actions-select mr-3">
-                <sortByEducation
-                    placeholder="Выберите действие"
-                    variant="outlined"
-                    clearable
-                    v-model="action"
-                    :options="actionsList"
-                ></sortByEducation>
+                <sortByEducation placeholder="Выберите действие" variant="outlined" clearable v-model="action"
+                    :options="actionsList"></sortByEducation>
             </div>
             <div class="d-flex align-center">
                 <div class="contributor-sort__all">
-                    <input
-                        type="checkbox"
-                        @click="select"
-                        placeholder="Выбрать все"
-                        v-model="checkboxAll"
-                    />
+                    <input type="checkbox" @click="select" placeholder="Выбрать все" v-model="checkboxAll" />
                 </div>
                 <div class="ml-3">Выбрать всё</div>
             </div>
         </div>
         <div class="participants__list">
-            <template
-                v-for="participant in participantList"
-                :key="participant.id"
-            >
-                <referenceItem
-                    :participant="participant"
-                    @select="onToggleSelectCompetition"
-                />
+            <template v-for="participant in participantList" :key="participant.id">
+                <referenceItem :participant="participant" @select="onToggleSelectCompetition" />
             </template>
             <template v-if="selectedParticipantList.length">
                 <p class="text_total">
                     Итого: {{ selectedParticipantList.length }}
                 </p>
 
-                <checkedReferencesItem
-                    v-for="participant in selectedParticipantList"
-                    :action="action"
-                    :participant="participant"
-                    :key="participant.id"
-                    @select="onToggleSelectCompetition"
-                />
+                <checkedReferencesItem v-for="participant in selectedParticipantList" :action="action"
+                    :participant="participant" :key="participant.id" @select="onToggleSelectCompetition" />
             </template>
         </div>
 
         <div class="participants__btn" v-if="selectedParticipantList.length">
-            <Button
-                class="save"
-                type="button"
-                label="Сохранить"
-                @click="onAction"
-                :disabled="!action"
-            ></Button>
+            <Button class="save" type="button" label="Сохранить" @click="onAction" :disabled="!action"></Button>
         </div>
         <div class="clear_select" v-else></div>
     </template>
@@ -107,12 +80,6 @@ const viewParticipants = async () => {
         } else if (roles.roles.value.detachment_commander?.id) {
             const detComReq = await HTTP.get(
                 `/detachments/${roles.roles.value.detachment_commander?.id}/verifications/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
             );
             participantList.value = detComReq.data;
             loading.value = false;
@@ -217,13 +184,13 @@ const onAction = async () => {
                 await userStore.getCountApp();
             }
 
-                participantList.value = participantList.value.filter(
+            participantList.value = participantList.value.filter(
+                (participant) => participant.id != application.user.id,
+            );
+            selectedParticipantList.value =
+                selectedParticipantList.value.filter(
                     (participant) => participant.id != application.user.id,
                 );
-                selectedParticipantList.value =
-                    selectedParticipantList.value.filter(
-                        (participant) => participant.id != application.user.id,
-                    );
         }
         await viewParticipants();
     } catch (e) {
@@ -261,11 +228,13 @@ onMounted(async () => {
     border-radius: 10px;
     height: 48px;
     width: 48px;
+
     input {
         width: 24px;
         height: 24px;
     }
 }
+
 // .participants__list {
 //     padding-bottom: 80px;
 // }

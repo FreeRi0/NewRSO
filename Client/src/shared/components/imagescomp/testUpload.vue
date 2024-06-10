@@ -38,7 +38,7 @@ const imageUrl = ref(null);
 const viewAvatar = async () => {
     await HTTP.get(`/users/${id}/`, {
         headers: {
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+             Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
         },
     })
         .then((response) => {
@@ -62,7 +62,7 @@ const submitForm = async () => {
     await HTTP.post('/users/me/media/', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+             Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
         },
     })
         .then(function (response) {

@@ -303,7 +303,7 @@ const getCompetition = async () => {
         const response = await HTTP.get(`competitions/${id}/`, {
             // headers: {
             //     'Content-Type': 'application/json',
-            //     Authorization: 'Token ' + localStorage.getItem('Token'),
+            //      Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
             // },
         });
 

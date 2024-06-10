@@ -115,7 +115,7 @@ const submitFiles = async () => {
         await HTTP.post(`/events/${route.params.id}/user_documents/`, payload, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+                 Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
             },
         });
     }

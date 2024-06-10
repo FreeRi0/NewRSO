@@ -163,7 +163,7 @@ const aboutVerified = async () => {
   await HTTP.get(`/events/${id}/applications/`, {
       headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Token ' + localStorage.getItem('Token'),
+           Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
       },
   })
       .then((response) => {
@@ -221,7 +221,7 @@ const getMembers = async (pagination, orderLimit) => {
       const viewHeadquartersResponse = await HTTP.get(url + data.join('&'), {
           headers: {
               'Content-Type': 'application/json',
-              Authorization: 'Token ' + localStorage.getItem('Token'),
+               Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
           },
       });
 
