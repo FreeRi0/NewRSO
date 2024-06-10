@@ -15,10 +15,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon 
-                                name="test"
-                                :flip="expanded"
-                            />
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -80,10 +77,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon 
-                                name="test"
-                                :flip="expanded"
-                            />
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -107,11 +101,11 @@
                                                 <img class="file_img" src="/assets/file_dock.svg" />
                                                 <a :href="participant.document" target="_blank" class="file_title">{{
                                                     participant.document_name.slice(
-                                                        participant.document_name.indexOf(
-                                                            '/media/',
-                                                        ) + 7,
+                                                    participant.document_name.indexOf(
+                                                    '/media/',
+                                                    ) + 7,
                                                     )
-                                                }}</a>
+                                                    }}</a>
                                             </div>
                                             <a class="download_text" :href="participant.document" target="_blank">
                                                 <img class="download_img" src="/assets/download.svg" />
@@ -136,10 +130,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon 
-                                name="test"
-                                :flip="expanded"
-                            />
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content"
@@ -312,10 +303,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon 
-                                name="test"
-                                :flip="expanded"
-                            />
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -350,11 +338,11 @@
                                                 <img class="file_img" src="/assets/file_dock.svg" />
                                                 <a :href="applicationData.certificate_scans
                                                     " target="_blank">{{
-                                                        applicationData.certificate_scans.slice(
-                                                            applicationData.certificate_scans.indexOf(
-                                                                'ksk_',
-                                                            ) + 4,
-                                                        )
+                                                    applicationData.certificate_scans.slice(
+                                                    applicationData.certificate_scans.indexOf(
+                                                    'ksk_',
+                                                    ) + 4,
+                                                    )
                                                     }}</a>
                                             </div>
                                             <a class="download_text" :href="applicationData.certificate_scans
@@ -380,10 +368,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon 
-                                name="test"
-                                :flip="expanded"
-                            />
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -414,11 +399,11 @@
                                                 <img class="file_img" src="/assets/file_dock.svg" />
                                                 <a :href="applicationData.certificate_scans
                                                     " target="_blank">{{
-                                                        applicationData.certificate_scans.slice(
-                                                            applicationData.certificate_scans.indexOf(
-                                                                'ksk_',
-                                                            ) + 4,
-                                                        )
+                                                    applicationData.certificate_scans.slice(
+                                                    applicationData.certificate_scans.indexOf(
+                                                    'ksk_',
+                                                    ) + 4,
+                                                    )
                                                     }}</a>
                                             </div>
                                             <a class="download_text" :href="applicationData.certificate_scans
@@ -444,10 +429,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon 
-                                name="test"
-                                :flip="expanded"
-                            />
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -473,12 +455,12 @@
                                             <div class="file_name">
                                                 <img class="file_img" src="/assets/file_dock.svg" />
                                                 <a :href="applicationData.certificate_scans 
-                                                    " target="_blank"  class="file_title">{{
-                                                        applicationData.certificate_scans.slice(
-                                                            applicationData.certificate_scans.indexOf(
-                                                                '/Q9/',
-                                                            ) + 19,
-                                                        )
+                                                    " target="_blank" class="file_title">{{
+                                                    applicationData.certificate_scans.slice(
+                                                    applicationData.certificate_scans.indexOf(
+                                                    '/Q9/',
+                                                    ) + 19,
+                                                    )
                                                     }}</a>
                                             </div>
                                             <a class="download_text" :href="applicationData.certificate_scans
@@ -504,10 +486,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon 
-                                name="test"
-                                :flip="expanded"
-                            />
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -533,12 +512,12 @@
                                             <div class="file_name">
                                                 <img class="file_img" src="/assets/file_dock.svg" />
                                                 <a :href="applicationData.certificate_scans
-                                                    " target="_blank"  class="file_title">{{
-                                                        applicationData.certificate_scans.slice(
-                                                            applicationData.certificate_scans.indexOf(
-                                                                'ksk_',
-                                                            ) + 4,
-                                                        )
+                                                    " target="_blank" class="file_title">{{
+                                                    applicationData.certificate_scans.slice(
+                                                    applicationData.certificate_scans.indexOf(
+                                                    'ksk_',
+                                                    ) + 4,
+                                                    )
                                                     }}</a>
                                             </div>
                                             <a class="download_text" :href="applicationData.certificate_scans
@@ -564,10 +543,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon 
-                                name="test"
-                                :flip="expanded"
-                            />
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -594,11 +570,11 @@
                                                 <img class="file_img" src="/assets/file_dock.svg" />
                                                 <a :href="applicationData.certificate_scans
                                                     " target="_blank" class="file_title">{{
-                                                        applicationData.certificate_scans.slice(
-                                                            applicationData.certificate_scans.indexOf(
-                                                                'ksk_',
-                                                            ) + 4,
-                                                        )
+                                                    applicationData.certificate_scans.slice(
+                                                    applicationData.certificate_scans.indexOf(
+                                                    'ksk_',
+                                                    ) + 4,
+                                                    )
                                                     }}</a>
                                             </div>
                                             <a class="download_text" :href="applicationData.certificate_scans
@@ -624,10 +600,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon 
-                                name="test"
-                                :flip="expanded"
-                            />
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -654,11 +627,11 @@
                                                 <img class="file_img" src="/assets/file_dock.svg" />
                                                 <a :href="applicationData.certificate_scans
                                                     " target="_blank" class="file_title">{{
-                                                        applicationData.certificate_scans.slice(
-                                                            applicationData.certificate_scans.indexOf(
-                                                                'ksk_',
-                                                            ) + 4,
-                                                        )
+                                                    applicationData.certificate_scans.slice(
+                                                    applicationData.certificate_scans.indexOf(
+                                                    'ksk_',
+                                                    ) + 4,
+                                                    )
                                                     }}</a>
                                             </div>
                                             <a class="download_text" :href="applicationData.certificate_scans
@@ -684,10 +657,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon 
-                                name="test"
-                                :flip="expanded"
-                            />
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -724,10 +694,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon 
-                                name="test"
-                                :flip="expanded"
-                            />
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -764,10 +731,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon 
-                                name="test"
-                                :flip="expanded"
-                            />
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -813,10 +777,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon 
-                                name="test"
-                                :flip="expanded"
-                            />
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -889,10 +850,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon 
-                                name="test"
-                                :flip="expanded"
-                            />
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -928,10 +886,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon 
-                                name="test"
-                                :flip="expanded"
-                            />
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -963,10 +918,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon 
-                                name="test"
-                                :flip="expanded"
-                            />
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -998,10 +950,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon 
-                                name="test"
-                                :flip="expanded"
-                            />
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
