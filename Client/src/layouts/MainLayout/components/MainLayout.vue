@@ -55,6 +55,7 @@ import { useEducationalsStore } from '@features/store/educationals';
 import { useSquadsStore } from '@features/store/squads';
 import { HTTP } from '@app/http';
 import { useDistrictsStore } from '@features/store/districts';
+import { verify } from 'crypto';
 
 const roleStore = useRoleStore();
 const userStore = useUserStore();
@@ -82,7 +83,7 @@ const verifyToken = async () => {
             positionsStore.getPositions();
             squadsStore.getAreas();
             roleStore.getUserParticipantsStatus(competition_pk);
-        } else {
+        } else if (resp.status == 401) {
             updateToken()
         }
 
@@ -97,7 +98,10 @@ const squadsStore = useSquadsStore();
 const currentUser = storeToRefs(userStore);
 
 onMounted(() => {
-    verifyToken()
+    setTimeout(() => {
+        verifyToken();
+    }, 2000)
+
     regionsStore.getRegions();
 });
 

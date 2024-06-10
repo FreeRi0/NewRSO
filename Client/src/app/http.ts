@@ -23,7 +23,3 @@ HTTP.interceptors.request.use(
         return error;
     }
 );
-
-//else if (config.url == 'rsousers/me/') {
-//config.headers.Authorization = 'JWT ' + localStorage.getItem('jwt_token');
-//}
