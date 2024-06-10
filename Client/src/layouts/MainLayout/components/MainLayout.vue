@@ -10,7 +10,9 @@
                 то&nbsp;сообщите нам об&nbsp;этом по&nbsp;адресу электронной
                 почты:
                 <a href="mailto:rso.login@yandex.ru">rso.login@yandex.ru</a> или
-                <a href="https://t.me/LK_RSO_Support">напишите нам в&nbsp;Телеграм</a>.
+                <a href="https://t.me/LK_RSO_Support"
+                    >напишите нам в&nbsp;Телеграм</a
+                >.
             </p>
             <!-- <div
                 v-if="
@@ -55,7 +57,6 @@ import { useEducationalsStore } from '@features/store/educationals';
 import { useSquadsStore } from '@features/store/squads';
 import { HTTP } from '@app/http';
 import { useDistrictsStore } from '@features/store/districts';
-import { verify } from 'crypto';
 
 const roleStore = useRoleStore();
 const userStore = useUserStore();
@@ -66,7 +67,9 @@ const competition_pk = 1;
 
 const updateToken = async () => {
     try {
-        const resp = await HTTP.post('/jwt/refresh/', { refresh: localStorage.getItem('refresh_token') });
+        const resp = await HTTP.post('/jwt/refresh/', {
+            refresh: localStorage.getItem('refresh_token'),
+        });
         localStorage.setItem('jwt_token', resp.data.access);
         localStorage.setItem('refresh_token', resp.data.refresh);
     } catch (e) {
@@ -76,7 +79,9 @@ const updateToken = async () => {
 
 const verifyToken = async () => {
     try {
-        const resp = await HTTP.post('/jwt/verify/', { token: localStorage.getItem('jwt_token') })
+        const resp = await HTTP.post('/jwt/verify/', {
+            token: localStorage.getItem('jwt_token'),
+        });
         if (resp.status == 200) {
             userStore.getUser(currentUser);
             roleStore.getRoles();
@@ -84,15 +89,12 @@ const verifyToken = async () => {
             squadsStore.getAreas();
             roleStore.getUserParticipantsStatus(competition_pk);
         } else if (resp.status == 401) {
-            updateToken()
+            updateToken();
         }
-
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
-}
-
-
+};
 
 const squadsStore = useSquadsStore();
 const currentUser = storeToRefs(userStore);
@@ -100,11 +102,10 @@ const currentUser = storeToRefs(userStore);
 onMounted(() => {
     setTimeout(() => {
         verifyToken();
-    }, 2000)
+    }, 2000);
 
     regionsStore.getRegions();
 });
-
 </script>
 
 <style scoped lang="scss">
@@ -117,7 +118,7 @@ onMounted(() => {
     line-height: 22px;
     color: #35383f;
 
-    &>a {
+    & > a {
         text-decoration: underline;
     }
 

@@ -1,1 +1,1 @@
-export {default as EndingWord} from "./components/EndingWord.vue"
+export { default as EndingWord } from './components/EndingWord.vue';
