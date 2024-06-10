@@ -60,24 +60,12 @@ const roleStore = useRoleStore();
 const userStore = useUserStore();
 const regionsStore = useRegionalsStore();
 const positionsStore = usePositionsStore();
+const isVerify = ref(false);
 const competition_pk = 1;
 
-const verifyToken = async () => {
-    try {
-        const resp = await HTTP.post('/jwt/verify/', { token: localStorage.getItem('jwt_token') })
-        userStore.getUser(currentUser);
-        roleStore.getRoles();
-        positionsStore.getPositions();
-        squadsStore.getAreas();
-        roleStore.getUserParticipantsStatus(competition_pk);
-    } catch (error) {
-        console.log(error)
-    }
-}
 const updateToken = async () => {
     try {
         const resp = await HTTP.post('/jwt/refresh/', { refresh: localStorage.getItem('refresh_token') });
-        console.log(resp.data)
         localStorage.setItem('jwt_token', resp.data.access);
         localStorage.setItem('refresh_token', resp.data.refresh);
     } catch (e) {
@@ -85,7 +73,25 @@ const updateToken = async () => {
     }
 };
 
-setInterval(updateToken, 1800000);
+const verifyToken = async () => {
+    try {
+        const resp = await HTTP.post('/jwt/verify/', { token: localStorage.getItem('jwt_token') })
+        if (resp.status == 200) {
+            userStore.getUser(currentUser);
+            roleStore.getRoles();
+            positionsStore.getPositions();
+            squadsStore.getAreas();
+            roleStore.getUserParticipantsStatus(competition_pk);
+        } else {
+            updateToken()
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
 
 const squadsStore = useSquadsStore();
 const currentUser = storeToRefs(userStore);
@@ -95,7 +101,6 @@ onMounted(() => {
     regionsStore.getRegions();
 });
 
-//запрос на коммандира
 </script>
 
 <style scoped lang="scss">
