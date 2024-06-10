@@ -11,10 +11,8 @@ export const HTTP = axios.create({
 HTTP.interceptors.request.use(
     (config) => {
         // console.log(config.headers.Accept);
-        if (config.url == '/token/login/' || config.url == '/register/' || config.url == '/exchange-token/') {
+        if (config.url == '/token/login/' || config.url == '/register/' || config.url == '/exchange-token/' || config.url == '/jwt/vk-login') {
             delete config.headers.Authorization;
-        } else if(config.url == 'rsousers/me/') {
-            config.headers.Authorization = `Bearer ${localStorage.getItem('Bearer')}`;
         } else {
             config.headers.Authorization = 'Token ' + localStorage.getItem('Token');
         }
@@ -26,3 +24,6 @@ HTTP.interceptors.request.use(
         return error;
     }
 );
+
+// } else if(config.url == 'rsousers/me/') {
+    //config.headers.Authorization = `Bearer ${localStorage.getItem('Bearer')}`;
