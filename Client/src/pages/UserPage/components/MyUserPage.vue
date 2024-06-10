@@ -13,7 +13,7 @@
                     верификацию. Верификация — это документальное подтверждение
                     ваших личных данных. Она займет всего несколько минут.
                 </div>
-                <router-link to="/PersonalData">
+                <router-link to="/personal-data">
                     <Button class="user-verify__btn" name="verify-btn" label="Пройти верификацию"
                         color="primary"></Button></router-link>
             </div>
@@ -58,7 +58,7 @@ const isLoading = storeToRefs(userStore);
 const education = ref({});
 const region = ref({});
 const tokenUser = ref("");
-const isAuth = ref(!!localStorage.getItem('Token'));
+const isAuth = ref(!!localStorage.getItem('jwt_token'));
 const query = new URLSearchParams(window.location.search);
 const payload = JSON.parse(query.get("payload"));
 
@@ -71,10 +71,8 @@ const TokenData = ref({
 const getAccessToken = async (token) => {
     try {
         const resp = await HTTP.post('/jwt/vk-login/', { access_token: token })
-        console.log('access', resp.data.access_token, 'refresh', resp.data.refresh_token);
-
-        //userStore.getUser()
-
+        console.log('access', resp.data.access, 'refresh', resp.data.refresh);
+        localStorage.setItem('jwt_token', resp.data.access );
     } catch (e) {
         console.log('error:', e)
     }
@@ -84,8 +82,6 @@ const getAccessToken = async (token) => {
 const exchangeToken = async () => {
     try {
         const resp = await HTTP.post('/exchange-token/', TokenData.value)
-        // localStorage.setItem('VK-Token', resp.data.access_token);
-        // console.log(resp.data.access_token);
         getAccessToken(resp.data.access_token);
     } catch (e) {
         console.log('error:', e)
@@ -93,8 +89,6 @@ const exchangeToken = async () => {
 }
 
 
-
-// console.log('token', localStorage.getItem('Bearer'));
 
 const uploadAva = (imageAva) => {
 
@@ -128,7 +122,6 @@ const deleteWall = (imageWall) => {
 
 onMounted(() => {
     exchangeToken();
-    // getAccessToken();
 
 })
 </script>

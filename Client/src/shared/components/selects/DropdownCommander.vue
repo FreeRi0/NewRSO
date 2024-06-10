@@ -141,7 +141,7 @@ const onChangeItem = async () => {
         },
         headers: {
             'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+             Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
         },
     })
         .then((res) => {

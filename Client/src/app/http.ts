@@ -10,11 +10,10 @@ export const HTTP = axios.create({
 
 HTTP.interceptors.request.use(
     (config) => {
-        // console.log(config.headers.Accept);
-        if (config.url == '/token/login/' || config.url == '/register/' || config.url == '/exchange-token/' || config.url == '/jwt/vk-login') {
+        if (config.url == '/jwt/create/' || config.url == '/register/' || config.url == '/exchange-token/' || config.url == '/jwt/vk-login/' || config.url == '/jwt/verify/' || config.url == '/jwt/refresh/') {
             delete config.headers.Authorization;
         } else {
-            config.headers.Authorization = 'Token ' + localStorage.getItem('Token');
+            config.headers.Authorization = 'JWT ' + localStorage.getItem('jwt_token');
         }
         return config;
 
@@ -25,5 +24,6 @@ HTTP.interceptors.request.use(
     }
 );
 
-// } else if(config.url == 'rsousers/me/') {
-    //config.headers.Authorization = `Bearer ${localStorage.getItem('Bearer')}`;
+//else if (config.url == 'rsousers/me/') {
+//config.headers.Authorization = 'JWT ' + localStorage.getItem('jwt_token');
+//}

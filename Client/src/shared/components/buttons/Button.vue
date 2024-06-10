@@ -172,6 +172,7 @@ const clickOnButton = () => {
         width: 20px;
         height: 20px;
         display: block;
+        margin: 0px auto;
     }
 }
 </style>

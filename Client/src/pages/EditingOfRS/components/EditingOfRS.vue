@@ -119,7 +119,7 @@ const isMembersLoading = ref(false);
 //             const membersResponse = await HTTP.get(`regionals/${id}/members/`, {
 //                 headers: {
 //                     'Content-Type': 'application/json',
-//                     Authorization: 'Token ' + localStorage.getItem('Token'),
+//                      Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
 //                 },
 //             });
 
@@ -270,7 +270,7 @@ const changeHeadquarter = async () => {
         await HTTP.patch(`/regionals/${id}/`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+                 Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
             },
         });
         swal.fire({

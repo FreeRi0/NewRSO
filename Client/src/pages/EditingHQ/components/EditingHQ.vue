@@ -132,12 +132,6 @@ const changeHeadquarter = async () => {
                     position: member.position.id,
                     is_trusted: member.is_trusted,
                 },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
             )
                 .then((response) => {
                     member.position = response.data.position;
@@ -171,7 +165,7 @@ const changeHeadquarter = async () => {
     HTTP.patch(`/educationals/${id}/`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+             Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
         },
     })
         .then((response) => {
