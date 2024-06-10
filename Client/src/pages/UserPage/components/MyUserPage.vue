@@ -71,10 +71,9 @@ const TokenData = ref({
 const getAccessToken = async (token) => {
     try {
         const resp = await HTTP.post('/jwt/vk-login/', { access_token: token })
-        console.log('access', resp.data.access_token, 'refresh', resp.data.refresh_token);
-
-        //userStore.getUser()
-
+        console.log('access', resp.data.access, 'refresh', resp.data.refresh);
+        localStorage.setItem('jwt_token', resp.data.access );
+        userStore.getUser()
     } catch (e) {
         console.log('error:', e)
     }
@@ -84,8 +83,6 @@ const getAccessToken = async (token) => {
 const exchangeToken = async () => {
     try {
         const resp = await HTTP.post('/exchange-token/', TokenData.value)
-        // localStorage.setItem('VK-Token', resp.data.access_token);
-        // console.log(resp.data.access_token);
         getAccessToken(resp.data.access_token);
     } catch (e) {
         console.log('error:', e)

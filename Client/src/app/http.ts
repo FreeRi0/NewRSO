@@ -12,6 +12,8 @@ HTTP.interceptors.request.use(
     (config) => {
         if (config.url == '/token/login/' || config.url == '/register/' || config.url == '/exchange-token/' || config.url == '/jwt/vk-login/') {
             delete config.headers.Authorization;
+        } else if (config.url == 'rsousers/me/') {
+            config.headers.Authorization = 'JWT ' + localStorage.getItem('JWT');
         } else {
             config.headers.Authorization = 'Token ' + localStorage.getItem('Token');
         }
@@ -24,5 +26,3 @@ HTTP.interceptors.request.use(
     }
 );
 
-// } else if(config.url == 'rsousers/me/') {
-    //config.headers.Authorization = `Bearer ${localStorage.getItem('Bearer')}`;
