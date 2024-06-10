@@ -70,7 +70,7 @@ const TokenData = ref({
 
 const getAccessToken = async (token) => {
     try {
-        const resp = await HTTP.post('/jwt/vk-login/', token)
+        const resp = await HTTP.post('/jwt/vk-login/', { access_token: token })
         console.log('access', resp.data.access_token, 'refresh', resp.data.refresh_token);
 
         //userStore.getUser()
