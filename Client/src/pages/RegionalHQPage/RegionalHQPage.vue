@@ -2,32 +2,10 @@
     <div class="container">
         <h1 class="title title--hq">Региональный штаб</h1>
         <BannerHQ
-            v-if="showHQ"
-            :headquarter="headquarter"
-            :edict="edict"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else-if="showDistrictHQ"
-            :districtHeadquarter="districtHeadquarter"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else-if="showLocalHQ"
-            :localHeadquarter="localHeadquarter"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else-if="showRegionalHQ"
             :regionalHeadquarter="regionalHeadquarter.regional.value"
             :member="member.members.value"
-            :getEnding="getEnding"
-            :getEndingMembers="getEndingMembers"
-        ></BannerHQ>
-        <BannerHQ
-            v-else
-            :centralHeadquarter="centralHeadquarter"
-            :member="member"
+            :ending="ending"
+            :endingMember="endingMember"
         ></BannerHQ>
         <section
             class="about-hq"
@@ -37,15 +15,9 @@
             "
         >
             <h3>Описание регионального штаба</h3>
-            <p v-if="showHQ">
-                {{ headquarter.about }}
-            </p>
-            <p v-else-if="showDistrictHQ">{{ districtHeadquarter.about }}</p>
-            <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
-            <p v-else-if="showRegionalHQ">
+            <p>
                 {{ regionalHeadquarter.regional.value.about }}
             </p>
-            <p v-else>{{ centralHeadquarter.about }}</p>
         </section>
         <ManagementHQ
             :commander="commander"
@@ -54,7 +26,6 @@
             :position="position"
             :leadership="regionalHeadquarter.regional.value.leadership"
         ></ManagementHQ>
-        <!-- <HQandSquad></HQandSquad> -->
         <section class="headquarters_squads">
             <h3>Штабы и отряды регионального штаба</h3>
             <div class="headquarters_squads__container">
@@ -86,14 +57,13 @@ import { useCrosspageFilter } from '@shared';
 import { useRegionalsStore } from '@features/store/regionals';
 import { storeToRefs } from 'pinia';
 import { usePage } from '@shared';
+import {
+    getEnding,
+    getEndingMembers,
+} from '@features/EndingWord/components/EndingWord.vue';
 
 const regionalsStore = useRegionalsStore();
 const crosspageFilters = useCrosspageFilter();
-const showRegionalHQ = ref(true);
-const showDistrictHQ = ref(false);
-const showLocalHQ = ref(false);
-const showHQ = ref(false);
-
 const commander = ref({});
 const position = ref({});
 const regionalHeadquarter = storeToRefs(regionalsStore);
@@ -181,30 +151,12 @@ const HQandSquads = ref([
         },
     },
 ]);
-
-const getEnding = computed(() => {
-    const count = regionalsStore.regional.participants_count;
-
-    if (count === 1 && count % 100 !== 11) {
-        return 'участник';
-    } else if ([2, 3, 4].includes(count)) {
-        return 'участника';
-    } else {
-        return 'участников';
-    }
-});
-
-const getEndingMembers = computed(() => {
-    const count = regionalsStore.regional.members_count;
-
-    if (count === 1 && count % 100 !== 11) {
-        return 'действующий член';
-    } else if ([2, 3, 4].includes(count)) {
-        return 'действующих члена';
-    } else {
-        return 'действующих членов';
-    }
-});
+const ending = computed(() =>
+    getEnding(regionalsStore.regional.participants_count),
+);
+const endingMember = computed(() =>
+    getEndingMembers(regionalsStore.regional.members_count),
+);
 </script>
 <style scoped lang="scss">
 .title {

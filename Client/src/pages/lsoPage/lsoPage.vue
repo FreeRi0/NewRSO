@@ -5,7 +5,7 @@
             <BannerSquad
                 :squad="squad.squad.value"
                 :member="member.members.value"
-                :getEnding="getEnding"
+                :ending="ending"
             ></BannerSquad>
             <section
                 class="about-squad"
@@ -73,6 +73,7 @@ import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { usePage } from '@shared';
+import { getEnding } from '@features/EndingWord/components/EndingWord.vue';
 
 const squadsStore = useSquadsStore();
 const squad = storeToRefs(squadsStore);
@@ -123,18 +124,7 @@ watch(
         immediate: true,
     },
 );
-
-const getEnding = computed(() => {
-    const count = squadsStore.squad.participants_count;
-
-    if (count === 1 && count % 100 !== 11) {
-        return 'участник';
-    } else if ([2, 3, 4].includes(count)) {
-        return 'участника';
-    } else {
-        return 'участников';
-    }
-});
+const ending = computed(() => getEnding(squadsStore.squad.participants_count));
 </script>
 <style scoped lang="scss">
 .Squad-HQ__name {

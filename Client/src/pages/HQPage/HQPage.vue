@@ -1,32 +1,11 @@
 <template>
     <div class="container">
-        <h1 class="title title--hq" v-if="showHQ">Штаб</h1>
+        <h1 class="title title--hq">Штаб</h1>
         <BannerHQ
-            v-if="showHQ"
             :headquarter="headquarter.educational.value"
             :edict="edict"
             :member="member"
-            :getEnding="getEnding"
-        ></BannerHQ>
-        <BannerHQ
-            v-else-if="showDistrictHQ"
-            :districtHeadquarter="districtHeadquarter"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else-if="showLocalHQ"
-            :localHeadquarter="localHeadquarter"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else-if="showRegionalHQ"
-            :regionalHeadquarter="regionalHeadquarter"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else
-            :centralHeadquarter="centralHeadquarter"
-            :member="member"
+            :ending="ending"
         ></BannerHQ>
         <section
             class="about-hq"
@@ -36,13 +15,9 @@
             "
         >
             <h3>Описание штаба</h3>
-            <p v-if="showHQ">
+            <p>
                 {{ headquarter.educational.value.about }}
             </p>
-            <p v-else-if="showDistrictHQ">{{ districtHeadquarter.about }}</p>
-            <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
-            <p v-else-if="showRegionalHQ">{{ regionalHeadquarter.about }}</p>
-            <p v-else>{{ centralHeadquarter.about }}</p>
         </section>
         <ManagementHQ
             :commander="commander"
@@ -66,14 +41,10 @@ import { useEducationalsStore } from '@features/store/educationals';
 import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router';
 import { usePage } from '@shared';
+import { getEnding } from '@features/EndingWord/components/EndingWord.vue';
 
 // banner condition
 const educationalsStore = useEducationalsStore();
-const showHQ = ref(true);
-const showDistrictHQ = ref(false);
-const showLocalHQ = ref(false);
-const showRegionalHQ = ref(false);
-
 const commander = ref({});
 const position = ref({});
 const headquarter = storeToRefs(educationalsStore);
@@ -123,22 +94,12 @@ watch(
 onMounted(() => {
     educationalsStore.getEducationalsId(id);
     educationalsStore.getEducationalsMembers(id);
-    // await aboutEduc();
     replaceTargetObjects([headquarter.educational.value]);
     fetchCommander();
 });
-
-const getEnding = computed(() => {
-    const count = educationalsStore.educational.participants_count;
-
-    if (count === 1 && count % 100 !== 11) {
-        return 'участник';
-    } else if ([2, 3, 4].includes(count)) {
-        return 'участника';
-    } else {
-        return 'участников';
-    }
-});
+const ending = computed(() =>
+    getEnding(educationalsStore.educational.participants_count),
+);
 </script>
 <style scoped lang="scss">
 .title {

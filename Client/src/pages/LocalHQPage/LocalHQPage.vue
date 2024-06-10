@@ -3,45 +3,17 @@
         <Breadcrumbs :items="pages"></Breadcrumbs>
         <h1 class="title title--hq">Местный штаб</h1>
         <BannerHQ
-            v-if="showHQ"
-            :headquarter="headquarter"
-            :edict="edict"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else-if="showDistrictHQ"
-            :districtHeadquarter="districtHeadquarter"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else-if="showLocalHQ"
             :localHeadquarter="localHeadquarter"
             :member="member"
-            :getEnding="getEnding"
-            :getEndingMembers="getEndingMembers"
-        ></BannerHQ>
-        <BannerHQ
-            v-else-if="showRegionalHQ"
-            :regionalHeadquarter="regionalHeadquarter"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else
-            :centralHeadquarter="centralHeadquarter"
-            :member="member"
+            :ending="ending"
+            :endingMember="endingMember"
         ></BannerHQ>
         <section
             class="about-hq"
             v-if="localHeadquarter.about && localHeadquarter.about != 'null'"
         >
             <h3>Описание местного штаба</h3>
-            <p v-if="showHQ">
-                {{ headquarter.about }}
-            </p>
-            <p v-else-if="showDistrictHQ">{{ districtHeadquarter.about }}</p>
-            <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
-            <p v-else-if="showRegionalHQ">{{ regionalHeadquarter.about }}</p>
-            <p v-else>{{ centralHeadquarter.about }}</p>
+            <p>{{ localHeadquarter.about }}</p>
         </section>
         <ManagementHQ
             :commander="commander"
@@ -78,13 +50,12 @@ import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
 import { usePage } from '@shared';
+import {
+    getEnding,
+    getEndingMembers,
+} from '@features/EndingWord/components/EndingWord.vue';
 
 const crosspageFilters = useCrosspageFilter();
-const showLocalHQ = ref(true);
-const showHQ = ref(false);
-const showDistrictHQ = ref(false);
-const showRegionalHQ = ref(false);
-
 const commander = ref({});
 const position = ref({});
 const localHeadquarter = ref({});
@@ -197,30 +168,12 @@ const HQandSquads = ref([
         },
     },
 ]);
-
-const getEnding = computed(() => {
-    const count = localHeadquarter.value.participants_count;
-
-    if (count === 1 && count % 100 !== 11) {
-        return 'участник';
-    } else if ([2, 3, 4].includes(count)) {
-        return 'участника';
-    } else {
-        return 'участников';
-    }
-});
-
-const getEndingMembers = computed(() => {
-    const count = localHeadquarter.value.members_count;
-
-    if (count === 1 && count % 100 !== 11) {
-        return 'действующий член';
-    } else if ([2, 3, 4].includes(count)) {
-        return 'действующих члена';
-    } else {
-        return 'действующих членов';
-    }
-});
+const ending = computed(() =>
+    getEnding(localHeadquarter.value.participants_count),
+);
+const endingMember = computed(() =>
+    getEndingMembers(localHeadquarter.value.members_count),
+);
 </script>
 <style scoped lang="scss">
 .title {

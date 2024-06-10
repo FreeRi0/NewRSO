@@ -3,32 +3,10 @@
         <Breadcrumbs :items="pages"></Breadcrumbs>
         <h1 class="title title--hq">Окружной штаб</h1>
         <BannerHQ
-            v-if="showHQ"
-            :headquarter="headquarter"
-            :edict="edict"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else-if="showDistrictHQ"
             :districtHeadquarter="districtHeadquarter"
             :member="member"
-            :getEnding="getEnding"
-            :getEndingMembers="getEndingMembers"
-        ></BannerHQ>
-        <BannerHQ
-            v-else-if="showLocalHQ"
-            :localHeadquarter="localHeadquarter"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else-if="showRegionalHQ"
-            :regionalHeadquarter="regionalHeadquarter"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else
-            :centralHeadquarter="centralHeadquarter"
-            :member="member"
+            :ending="ending"
+            :endingMember="endingMember"
         ></BannerHQ>
         <section
             class="about-hq"
@@ -37,13 +15,7 @@
             "
         >
             <h3>Описание окружного штаба</h3>
-            <p v-if="showHQ">
-                {{ headquarter.about }}
-            </p>
-            <p v-else-if="showDistrictHQ">{{ districtHeadquarter.about }}</p>
-            <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
-            <p v-else-if="showRegionalHQ">{{ regionalHeadquarter.about }}</p>
-            <p v-else>{{ centralHeadquarter.about }}</p>
+            <p>{{ districtHeadquarter.about }}</p>
         </section>
         <ManagementHQ
             :commander="commander"
@@ -80,13 +52,12 @@ import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
 import { usePage } from '@shared';
+import {
+    getEnding,
+    getEndingMembers,
+} from '@features/EndingWord/components/EndingWord.vue';
 
 const crosspageFilters = useCrosspageFilter();
-const showDistrictHQ = ref(true);
-const showLocalHQ = ref(false);
-const showHQ = ref(false);
-const showRegionalHQ = ref(false);
-
 const commander = ref({});
 const position = ref({});
 const districtHeadquarter = ref({});
@@ -226,29 +197,12 @@ const HQandSquads = ref([
     },
 ]);
 
-const getEnding = computed(() => {
-    const count = districtHeadquarter.value.participants_count;
-
-    if (count === 1 && count % 100 !== 11) {
-        return 'участник';
-    } else if ([2, 3, 4].includes(count)) {
-        return 'участника';
-    } else {
-        return 'участников';
-    }
-});
-
-const getEndingMembers = computed(() => {
-    const count = districtHeadquarter.value.members_count;
-
-    if (count === 1 && count % 100 !== 11) {
-        return 'действующий член';
-    } else if ([2, 3, 4].includes(count)) {
-        return 'действующих члена';
-    } else {
-        return 'действующих членов';
-    }
-});
+const ending = computed(() =>
+    getEnding(districtHeadquarter.value.participants_count),
+);
+const endingMember = computed(() =>
+    getEndingMembers(districtHeadquarter.value.members_count),
+);
 </script>
 <style lang="scss" scoped>
 .title {

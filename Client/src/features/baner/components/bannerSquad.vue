@@ -39,7 +39,7 @@
                         <div class="squad-data__participant-counter">
                             <span
                                 >{{ squad.participants_count }}
-                                {{ getEnding }}</span
+                                {{ ending }}</span
                             >
                         </div>
                         <div class="squad-data__social-network">
@@ -160,7 +160,7 @@ const props = defineProps({
     applications: {
         type: Array,
     },
-    getEnding: {
+    ending: {
         type: Number,
     },
 });

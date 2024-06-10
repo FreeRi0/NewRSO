@@ -4,8 +4,8 @@
         <BannerHQ
             :centralHeadquarter="centralHeadquarter"
             :member="centralHeadquarter.leadership"
-            :getEnding="getEnding"
-            :getEndingMembers="getEndingMembers"
+            :ending="ending"
+            :endingMember="endingMember"
         ></BannerHQ>
         <section
             class="about-hq"
@@ -35,6 +35,10 @@ import { ref, onMounted, watch, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { usePage } from '@shared';
+import {
+    getEnding,
+    getEndingMembers,
+} from '@features/EndingWord/components/EndingWord.vue';
 
 const position = ref({});
 const centralHeadquarter = ref({});
@@ -72,29 +76,12 @@ watch(
     },
 );
 
-const getEnding = computed(() => {
-    const count = centralHeadquarter.value.participants_count;
-
-    if (count === 1 && count % 100 !== 11) {
-        return 'участник';
-    } else if ([2, 3, 4].includes(count)) {
-        return 'участника';
-    } else {
-        return 'участников';
-    }
-});
-
-const getEndingMembers = computed(() => {
-    const count = centralHeadquarter.value.members_count;
-
-    if (count === 1 && count % 100 !== 11) {
-        return 'действующий член';
-    } else if ([2, 3, 4].includes(count)) {
-        return 'действующих члена';
-    } else {
-        return 'действующих членов';
-    }
-});
+const ending = computed(() =>
+    getEnding(centralHeadquarter.value.participants_count),
+);
+const endingMember = computed(() =>
+    getEndingMembers(centralHeadquarter.value.members_count),
+);
 </script>
 <style lang="scss" scoped>
 .title {
