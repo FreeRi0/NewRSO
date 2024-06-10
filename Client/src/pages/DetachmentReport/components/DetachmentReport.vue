@@ -31,7 +31,7 @@
                     <p>Показатель</p>
                     <p>Место</p>
                 </template>
-                <div class="indicator-container" v-for="(indicator, index) in resultData.indicators" :key="index">
+                <div class="indicator-container" v-for="(indicators, index) in resultData" :key="index">
                     <div class="horizontal-item__wrapper">
                         <div class="containerHorizontal">
                             <p class="horizontal-item__list-full">
@@ -172,7 +172,7 @@ const getPlaceRegionalCommander = async () => {
             data.places_sum ? data.places_sum : 'Рейтинг еще не сформирован',
         );
         mainResults.value.data.push(
-            `Сумма мест отряд «${data.tandem_partner?.name}»`,
+            `Сумма мест отряд «${data.partner_detachment?.name}»`,
         );
     }
     mainResults.value.place[0] = data.overall_place;
@@ -193,7 +193,7 @@ const getPostitions = async () => {
                     `/competitions/1/reports/q${index}/get-place/`
                 );
                 //console.log(data);
-                resultData.value.places[index - 1] = data.place;
+                resultData.value[index].place = data.place;
             } else {
                 const { data } = await HTTP.get(
                     `/competitions/1/reports/q${index}/me/`
@@ -210,13 +210,17 @@ const getPostitions = async () => {
                     resultData.value[index].place = 'Рейтинг еще не сформирован';
                     await getVerificationLogs(index);
                 }
-                if (resultData.value[index].place[index - 1] == '-')
-                resultData.value[index].place[index - 1] = 'Данные не отправлены';
+                if (resultData.value[index].place == '-')
+                resultData.value[index].place = 'Данные не отправлены';
+            } else if(e.request?.status == 400){
+                console.log();
+                resultData.value[index].place = 'Показатель в обработке';
             } else {
                 console.log(`!!!\n${index}: getPostions error`, e);
             }
         }
     }
+    console.log(resultData.value);
     loading.value = false;
 };
 
