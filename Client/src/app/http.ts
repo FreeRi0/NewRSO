@@ -13,7 +13,7 @@ HTTP.interceptors.request.use(
         if (config.url == '/token/login/' || config.url == '/register/' || config.url == '/exchange-token/' || config.url == '/jwt/vk-login/') {
             delete config.headers.Authorization;
         } else if (config.url == 'rsousers/me/') {
-            config.headers.Authorization = 'JWT ' + localStorage.getItem('JWT');
+            config.headers.Authorization = 'JWT ' + localStorage.getItem('jwt_token');
         } else {
             config.headers.Authorization = 'Token ' + localStorage.getItem('Token');
         }
