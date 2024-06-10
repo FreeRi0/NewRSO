@@ -5,11 +5,7 @@
 
             <img v-if="banner" :src="banner" alt="Баннер личной страницы" />
 
-            <img
-                v-else
-                src="@/app/assets/user-banner.jpg"
-                alt="Баннер личной страницы(пусто)"
-            />
+            <img v-else src="@/app/assets/user-banner.jpg" alt="Баннер личной страницы(пусто)" />
         </div>
         <v-menu min-width="200px" rounded v-if="!props.banner && props.edited">
             <template v-slot:activator="{ props }">
@@ -30,29 +26,17 @@
                             </template>
                             <v-card>
                                 <v-card-title>
-                                    <span class="text-h5"
-                                        >Загрузите ваш баннер</span
-                                    >
+                                    <span class="text-h5">Загрузите ваш баннер</span>
                                 </v-card-title>
                                 <v-card-text>
                                     <v-container>
                                         <v-row>
-                                            <v-file-input
-                                                @change="selectBanner"
-                                                type="file"
-                                                show-size
-                                                prepend-icon="mdi-camera"
-                                                counter
-                                            />
+                                            <v-file-input @change="selectBanner" type="file" show-size
+                                                prepend-icon="mdi-camera" counter />
                                         </v-row>
                                         <v-row class="align-center justify-end">
-                                            <v-btn
-                                                v-if="preview"
-                                                class="button-wrapper mt-5"
-                                                @click="cropImage()"
-                                                prepend-icon="crop"
-                                                variant="plain"
-                                            >Обрезать фото</v-btn>
+                                            <v-btn v-if="preview" class="button-wrapper mt-5" @click="cropImage()"
+                                                prepend-icon="crop" variant="plain">Обрезать фото</v-btn>
                                         </v-row>
                                         <v-row>
                                             <Cropper ref="cropper" class="cropper mt-5 mx-auto" :src="preview" />
@@ -61,20 +45,11 @@
                                 </v-card-text>
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
-                                    <v-btn
-                                        color="blue-darken-1"
-                                        variant="text"
-                                        @click="dialog = false"
-                                    >
+                                    <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
                                         Закрыть
                                     </v-btn>
-                                    <v-btn
-                                        :disabled="!media"
-                                        color="blue-darken-1"
-                                        variant="text"
-                                        type="submit"
-                                        @click="uploadBanner()"
-                                    >
+                                    <v-btn :disabled="!media" color="blue-darken-1" variant="text" type="submit"
+                                        @click="uploadBanner()">
                                         Загрузить
                                     </v-btn>
                                 </v-card-actions>
@@ -101,39 +76,23 @@
                         <v-row justify="center">
                             <v-dialog v-model="dialog" width="1024">
                                 <template v-slot:activator="{ props }">
-                                    <v-btn
-                                        rounded
-                                        variant="text"
-                                        v-bind="props"
-                                    >
+                                    <v-btn rounded variant="text" v-bind="props">
                                         Редактировать баннер
                                     </v-btn>
                                 </template>
                                 <v-card>
                                     <v-card-title>
-                                        <span class="text-h5"
-                                            >Загрузите ваш банер</span
-                                        >
+                                        <span class="text-h5">Загрузите ваш банер</span>
                                     </v-card-title>
                                     <v-card-text>
                                         <v-container>
                                             <v-row>
-                                                <v-file-input
-                                                    @change="selectBanner"
-                                                    type="file"
-                                                    show-size
-                                                    prepend-icon="mdi-camera"
-                                                    counter
-                                                />
+                                                <v-file-input @change="selectBanner" type="file" show-size
+                                                    prepend-icon="mdi-camera" counter />
                                             </v-row>
                                             <v-row class="align-center justify-end">
-                                                <v-btn
-                                                    v-if="preview"
-                                                    class="button-wrapper mt-5"
-                                                    @click="cropImage()"
-                                                    prepend-icon="crop"
-                                                    variant="plain"
-                                                >Обрезать фото</v-btn>
+                                                <v-btn v-if="preview" class="button-wrapper mt-5" @click="cropImage()"
+                                                    prepend-icon="crop" variant="plain">Обрезать фото</v-btn>
                                             </v-row>
                                             <v-row>
                                                 <Cropper ref="cropper" class="cropper mt-5 mx-auto" :src="preview" />
@@ -142,20 +101,11 @@
                                     </v-card-text>
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
-                                        <v-btn
-                                            color="blue-darken-1"
-                                            variant="text"
-                                            @click="dialog = false"
-                                        >
+                                        <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
                                             Закрыть
                                         </v-btn>
-                                        <v-btn
-                                            :disabled="!media"
-                                            color="blue-darken-1"
-                                            variant="text"
-                                            type="submit"
-                                            @click="updateBanner()"
-                                        >
+                                        <v-btn :disabled="!media" color="blue-darken-1" variant="text" type="submit"
+                                            @click="updateBanner()">
                                             Загрузить
                                         </v-btn>
                                     </v-card-actions>
@@ -227,7 +177,7 @@ const uploadBanner = async () => {
     await HTTP.patch('/rsousers/me/media/', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+            Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
         },
     })
         .then((response) => {
@@ -239,9 +189,9 @@ const uploadBanner = async () => {
                 timer: 1500,
             });
             dialog.value = false;
-            console.log('resp', response.data);
+            // console.log('resp', response.data);
             emit('uploadWall', response.data.banner);
-            console.log(response, 'banner uploaded');
+            // console.log(response, 'banner uploaded');
         })
         .catch(({ response }) => {
             isError.value = response.data;
@@ -263,7 +213,7 @@ const updateBanner = async () => {
     await HTTP.put('/rsousers/me/media/', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+            Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
         },
     })
         .then((response) => {
@@ -276,7 +226,7 @@ const updateBanner = async () => {
             });
             dialog.value = false;
             emit('updateWall', response.data.banner);
-            console.log(response, 'banner uploaded');
+            // console.log(response, 'banner uploaded');
         })
         .catch(({ response }) => {
             isError.value = response.data;
@@ -294,12 +244,6 @@ const deleteBanner = async () => {
     await HTTP.put(
         '/rsousers/me/media/',
         { banner: null },
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        },
     )
         .then((response) => {
             swal.fire({
@@ -310,19 +254,19 @@ const deleteBanner = async () => {
                 timer: 1500,
             });
             emit('deleteWall', response.data.banner);
-            console.log(response, 'deleted');
+            // console.log(response, 'deleted');
         })
-        .catch(({ response }) => {
-            isError.value = response.data;
-            console.error('There was an error!', response.data);
-            swal.fire({
-                position: 'top-center',
-                icon: 'error',
-                title: 'ошибка',
-                showConfirmButton: false,
-                timer: 1500,
-            });
+    .catch(({ response }) => {
+        isError.value = response.data;
+        console.error('There was an error!', response.data);
+        swal.fire({
+            position: 'top-center',
+            icon: 'error',
+            title: 'ошибка',
+            showConfirmButton: false,
+            timer: 1500,
         });
+    });
 };
 </script>
 
@@ -336,6 +280,7 @@ const deleteBanner = async () => {
     grid-row-start: 1;
     grid-row-end: 2;
     border-radius: 10px 10px 0px 0px;
+
     &-img-wrapper {
         display: grid;
         grid-template-columns: 3fr;
@@ -345,6 +290,7 @@ const deleteBanner = async () => {
         grid-row-start: 1;
         grid-row-end: 3;
     }
+
     img {
         width: 100%;
         height: 100%;

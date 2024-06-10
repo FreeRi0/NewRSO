@@ -114,12 +114,12 @@ const changeHeadquarter = async () => {
     HTTP.post('regionals/', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+             Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
         },
     })
         .then((response) => {
             submited.value = true;
-            console.log(response.data);
+            // console.log(response.data);
             swal.fire({
                 position: 'center',
                 icon: 'success',

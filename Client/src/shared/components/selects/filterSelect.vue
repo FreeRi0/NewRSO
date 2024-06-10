@@ -62,7 +62,7 @@ const props = defineProps({
 const emit = defineEmits(['update:value']);
 
 const changeOption = (event) => {
-  console.log(event);
+  // console.log(event);
   emit('update:value', event);
 };
 

@@ -2805,7 +2805,7 @@ const downloadBlankPersonal = async () => {
         {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+                 Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
             },
             responseType: 'blob',
         },
@@ -2830,7 +2830,7 @@ const downloadBlankMembership = async () => {
         {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+                 Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
             },
             responseType: 'blob',
         },
@@ -2854,7 +2854,7 @@ const downloadBlankParent = async () => {
         {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+                 Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
             },
             responseType: 'blob',
         },
@@ -2877,7 +2877,7 @@ const downloadAll = async () => {
     await HTTP.get('/rsousers/me/statement/download_all_forms/', {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+             Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
         },
         responseType: 'blob',
     })
@@ -2968,12 +2968,7 @@ const updateData = async () => {
                 social_tg: props.user.social_tg,
                 is_rso_member: props.user.is_rso_member,
             },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
 
         const axiosrequestParent = ref({
@@ -3015,12 +3010,6 @@ const updateData = async () => {
                     city: props.user.parent.city,
                     address: props.user.parent.address,
                 },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
             );
             axiosrequestParent.value = parentRequest.data;
         }
@@ -3038,12 +3027,6 @@ const updateData = async () => {
                     inn: props.foreignParent.inn,
                     work_book_num: props.foreignParent.work_book_num,
                 },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
             );
         }
 
@@ -3060,12 +3043,7 @@ const updateData = async () => {
                 fact_house: props.user.user_region.fact_house,
             },
 
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         const axiosrequest3 = await HTTP.patch(
             '/rsousers/me/documents/',
@@ -3084,12 +3062,7 @@ const updateData = async () => {
                 mil_reg_doc_type: props.user.documents.mil_reg_doc_type,
                 mil_reg_doc_ser_num: props.user.documents.mil_reg_doc_ser_num,
             },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
 
         const axiosrequestForeignDocs = ref(null);
@@ -3104,12 +3077,6 @@ const updateData = async () => {
                     snils: props.foreignUserDocs.snils,
                     inn: props.foreignUserDocs.inn,
                     work_book_num: props.foreignUserDocs.work_book_num,
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
                 },
             );
         }
@@ -3127,18 +3094,13 @@ const updateData = async () => {
                 study_year: props.user.education.study_year,
                 study_specialty: props.user.education.study_specialty,
             },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
 
         const axiosrequest5 = await HTTP.patch('/rsousers/me/statement/', fd, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+                Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
             },
         });
         const axiosrequest6 = ref(null);
@@ -3150,12 +3112,6 @@ const updateData = async () => {
             const axiosrequest6 = await HTTP.post(
                 '/rsousers/me/apply_for_verification/',
                 data.value,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
             );
         }
 
@@ -3503,7 +3459,6 @@ const passport = ref([
     border-radius: 10px;
     width: 465px;
     min-height: 40px;
-    text-indent: 16px;
     outline: none;
     font-family: 'BertSans';
     font-weight: 500;
@@ -3520,6 +3475,7 @@ const passport = ref([
     font-size: 16px;
     color: #35383f;
     font-weight: 400;
+    font-family: "Bert Sans";
 }
 
 .how {
@@ -3748,7 +3704,7 @@ const passport = ref([
 .passport-number input,
 .input-big input {
     box-sizing: border-box;
-    border: 2px solid #a3a3a3;
+    border: 1px solid #a3a3a3;
     border-radius: 10px;
     display: block;
     font-size: 16px;
@@ -3759,37 +3715,6 @@ const passport = ref([
     color: #35383f;
 }
 
-// .data-form {
-//     grid-template-columns: 1fr 1fr;
-//     grid-column-gap: 80px;
-// }
-// .docs {
-//     grid-template-columns: 1fr;
-//     column-gap: 40px;
-// }
-// .parents-about {
-//     grid-column-gap: 80px;
-// }
-// #passport-parent-yes {
-//     margin-right: 40px;
-//     @media screen and (max-width: 1215px) {
-//         margin-right: 0;
-//     }
-// }
-// #pass-no-addr {
-//     margin-left: -30px;
-//     @media screen and (max-width: 1215px) {
-//         margin-right: auto;
-//         margin-left: 0;
-//     }
-// }
-// .izm {
-//     display: grid;
-//     grid-template-columns: 1fr 1fr;
-//     @media screen and (max-width: 1024px) {
-//         grid-column-gap: 80px;
-//     }
-// }
 
 @media (max-width: 768px) {
 
@@ -3798,348 +3723,4 @@ const passport = ref([
         font-size: 18px;
     }
 }
-
-// @media (max-width: 1439px) {
-//     a:not([href]):not([class]),
-//     a:not([href]):not([class]):hover {
-//         color: #ffffff;
-//     }
-//     .input-big {
-//         width: 100%;
-//     }
-
-//     .input-full {
-//         width: 100%;
-//     }
-
-//     .data-form {
-//         grid-template-columns: 1fr 1fr;
-//         grid-column-gap: 80px;
-//     }
-
-//     .parents-about {
-//         grid-column-gap: 80px;
-//     }
-
-//     .izm {
-//         grid-template-columns: 1fr 1fr;
-//         grid-column-gap: 80px;
-//     }
-
-//     #no-passport-parent {
-//         column-gap: 80px;
-//     }
-//     #no-passport {
-//         column-gap: 80px;
-//     }
-// }
-
-// @media (max-width: 1024px) {
-//     .input-big {
-//         width: 386px;
-//     }
-
-//     .input-small {
-//         width: 386px;
-//     }
-
-//     .select-big {
-//         width: 386px;
-//     }
-
-//     .select-small {
-//         width: 386px;
-//     }
-
-//     .data-form {
-//         grid-template-columns: 1fr 1fr;
-//         grid-column-gap: 40px;
-//     }
-
-//     .parents-about {
-//         grid-column-gap: 40px;
-//     }
-
-//     .izm {
-//         grid-template-columns: 1fr 1fr;
-//         grid-column-gap: 40px;
-//     }
-
-//     #no-passport-parent {
-//         column-gap: 40px;
-//     }
-//     #no-passport {
-//         column-gap: 40px;
-//     }
-//     .pass-details__wrapper {
-//         flex-direction: column;
-//     }
-
-//     .other-docs__wrapper {
-//         grid-template-columns: none;
-//     }
-
-//     .small-svg svg {
-//         position: absolute;
-//         right: 2rem;
-//         top: 2.4rem;
-//         cursor: pointer;
-//     }
-// }
-
-// @media (max-width: 991px) {
-//     .input-big {
-//         width: 290px;
-//     }
-
-//     .input-small {
-//         width: 290px;
-//     }
-
-//     .input-full {
-//         width: 100%;
-//     }
-
-//     .select-big {
-//         width: 290px;
-//     }
-
-//     .select-small {
-//         width: 290px;
-//     }
-
-//     .data-form {
-//         grid-column-gap: 40px;
-//     }
-
-//     .parents-about {
-//         grid-column-gap: 40px;
-//     }
-
-//     .izm {
-//         grid-column-gap: 40px;
-//     }
-
-//     #no-passport-parent {
-//         column-gap: 40px;
-//     }
-//     #no-passport {
-//         column-gap: 40px;
-//     }
-//     .pass-details__wrapper {
-//         flex-direction: column;
-//     }
-
-//     .RSO-title {
-//         font-size: 20px;
-//         width: 100%;
-//     }
-
-//     .other-docs__wrapper {
-//         grid-template-columns: none;
-//     }
-// }
-
-// @media (max-width: 767px) {
-//     .input-big {
-//         width: 100%;
-//     }
-//     .accordion-button {
-//         font-size: 20px;
-//     }
-
-//     .form-field label {
-//         font-size: 12px;
-//     }
-//     .input-small {
-//         width: 100%;
-//     }
-
-//     .input-full {
-//         width: 100%;
-//     }
-
-//     .select-big {
-//         width: 100%;
-//     }
-
-//     .select-small {
-//         width: 100%;
-//     }
-
-//     .parents-wrapper__title {
-//         text-align: center;
-//         font-size: 18px;
-//     }
-
-//     .izm {
-//         display: flex;
-//         flex-direction: column;
-//     }
-
-//     #no-passport-parent {
-//         column-gap: 40px;
-//     }
-//     #no-passport {
-//         column-gap: 40px;
-//     }
-//     .pass-details__wrapper {
-//         flex-direction: column;
-//     }
-
-//     .other-docs__wrapper {
-//         grid-template-columns: none;
-//     }
-
-//     .RSO-title {
-//         font-size: 17px;
-//         width: 100%;
-//     }
-
-//     .dowmload-all {
-//         display: none;
-//     }
-
-//     .blanks-wrapper {
-//         grid-template-columns: none;
-//     }
-
-//     .statement-title {
-//         font-size: 14px;
-//         width: 100%;
-//     }
-
-//     .accordion-block-title {
-//         font-size: 18px;
-//     }
-
-//     .docs {
-//         grid-template-columns: 1fr;
-//     }
-
-//     .checkbox {
-//         font-size: 14px;
-//     }
-
-//     .checkbox-title {
-//         font-size: 14px;
-//         margin-bottom: 12px;
-//     }
-
-//     .right-check {
-//         margin-left: 8px;
-//     }
-
-//     input[type='radio'] {
-//         width: 15px;
-//         height: 12px;
-//     }
-
-//     .nav-prev,
-//     .nav-next {
-//         padding: 12px 25px 12px 25px;
-//     }
-
-//     .add-education {
-//         font-size: 14px;
-//         margin: 10px auto;
-//     }
-
-//     .statement-item p,
-//     .statement-item a {
-//         font-size: 12px;
-//     }
-
-//     .download-blanks .file-choose {
-//         font-size: 14px;
-//     }
-
-//     .education-wrapper {
-//         column-gap: 15px;
-//     }
-// }
-
-// @media (max-width: 575px) {
-//     .accordion-title {
-//         text-align: center;
-//         font-size: 18px;
-//     }
-//     .box {
-//         padding: 12px;
-//     }
-//     .accordion-button {
-//         font-size: 16px;
-//     }
-//     .data-form {
-//         display: block;
-//         padding: 25px;
-//     }
-
-//     .form-field label {
-//         font-size: 12px;
-//     }
-//     .parents-about {
-//         grid-template-columns: none;
-//         grid-column-gap: 20px;
-//     }
-//     .izm {
-//         grid-template-columns: none;
-//         grid-column-gap: 20px;
-//     }
-//     #no-passport-parent {
-//         column-gap: 20px;
-//     }
-//     #no-passport {
-//         column-gap: 20px;
-//     }
-//     .add-education {
-//         font-size: 12px;
-//     }
-
-//     .small {
-//         margin-top: 20px;
-//     }
-
-//     .checkbox {
-//         margin-bottom: 20px;
-//     }
-
-//     .checkbox-title {
-//         font-size: 14px;
-//     }
-//     .statement-wrapper {
-//         flex-wrap: wrap;
-//     }
-
-//     .rso-question {
-//         margin: 30px auto;
-//         /*width: 100%;*/
-//         padding: 20px;
-//     }
-
-//     .rso-question__title {
-//         text-align: center;
-//     }
-
-//     #check-RSO {
-//         text-align: center;
-//     }
-//     input[type='checkbox'] {
-//         width: 50px;
-//         height: 50px;
-//         display: inline-block;
-//     }
-
-//     .addres {
-//         margin-top: 20px;
-//         margin-bottom: 15px;
-//     }
-
-//     .RSO-title {
-//         margin-bottom: 28px;
-//     }
-//     .agree-check p {
-//         margin-left: 8px;
-//         font-size: 11px;
-//     }
-// }</style>
+</style>

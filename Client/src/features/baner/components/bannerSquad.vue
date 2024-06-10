@@ -189,16 +189,11 @@ const swal = inject('$swal');
 
 const viewDetachments = async () => {
     let id = route.params.id;
-    console.log('idRoute', id);
-    await HTTP.get(`/detachments/${id}/applications/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    // console.log('idRoute', id);
+    await HTTP.get(`/detachments/${id}/applications/`)
         .then((response) => {
             applications.value = response.data;
-            console.log(response);
+            // console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -207,16 +202,11 @@ const viewDetachments = async () => {
 
 const viewRegionals = async () => {
     let id = props.squad.regional_headquarter;
-    console.log('idRouteReg', id);
-    await HTTP.get(`/regionals/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    // console.log('idRouteReg', id);
+    await HTTP.get(`/regionals/${id}/`)
         .then((response) => {
             regional.value = response.data;
-            console.log(response);
+            // console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -237,7 +227,7 @@ const IsTrusted = computed(() => {
     );
 });
 
-console.log('member', IsMember);
+// console.log('member', IsMember);
 
 watch(
     () => props.squad,
@@ -256,12 +246,6 @@ const AddApplication = async () => {
         const sendResponse = await HTTP.post(
             `/detachments/${id}/apply/`,
             data.value,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
         );
         swal.fire({
             position: 'top-center',
@@ -271,7 +255,7 @@ const AddApplication = async () => {
             timer: 1500,
         });
         viewDetachments();
-        console.log('responseee', sendResponse.data);
+        // console.log('responseee', sendResponse.data);
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
@@ -291,12 +275,7 @@ const AddApplication = async () => {
 const DeleteApplication = async () => {
     try {
         let id = props.squad.id;
-        const delApplyResp = await HTTP.delete(`/detachments/${id}/apply/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const delApplyResp = await HTTP.delete(`/detachments/${id}/apply/`);
         swal.fire({
             position: 'top-center',
             icon: 'success',
@@ -347,9 +326,11 @@ const copyL = () => {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     border-left: 1px solid rgba(0, 0, 0, 0.1);
     background: rgba(244, 244, 244, 0);
+
     @media screen and (max-width: 575px) {
         display: block;
     }
+
     &__bottom {
         grid-column-start: 1;
         grid-column-end: 5;
@@ -371,12 +352,14 @@ const copyL = () => {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
+
     @media screen and (max-width: 575px) {
         align-items: center;
         margin: 0px 0 16px 0;
         flex-wrap: wrap;
     }
 }
+
 .user-metric__avatar-wrapper {
     @media screen and (max-width: 575px) {
         grid-template-columns: 125px 125px;
@@ -407,6 +390,7 @@ const copyL = () => {
     max-width: 700px;
     margin-bottom: 32px;
 }
+
 .error {
     color: #db0000;
     font-size: 14px;
@@ -474,35 +458,42 @@ const copyL = () => {
     font-style: normal;
     font-weight: 600;
     line-height: normal;
+
     @media screen and (max-width: 575px) {
         text-align: center;
     }
 }
+
 .slogan {
     margin-top: 20px;
     margin-bottom: 9.5px;
 }
+
 .Squad-HQ__list {
     margin-bottom: 20px;
     // display: grid;
     // grid-template-columns: 360px 250px;
     display: flex;
     flex-wrap: wrap;
+
     @media screen and (max-width: 575px) {
         text-align: center;
         display: block;
     }
 }
+
 .Squad-HQ__list li {
     border-right: none;
     height: auto;
     margin: 0;
 }
+
 .Squad-HQ__university p {
     border-right: 1px solid #35383f;
     margin-right: 8px;
     padding-right: 8px;
     display: inline-block;
+
     @media screen and (max-width: 1024px) {
         border-right: none;
         margin-bottom: 10px;
@@ -510,12 +501,15 @@ const copyL = () => {
         padding-right: 0;
     }
 }
+
 .Squad-HQ__date {
     display: flex;
 }
+
 .Squad-HQ__date p {
     margin-right: 22px;
 }
+
 .user-data__link {
     border-radius: 10px;
     background: #39bfbf;
@@ -529,12 +523,15 @@ const copyL = () => {
     color: white;
     padding: 16px 32px;
 }
+
 .squad-data__contacts-wrapper {
     display: flex;
     justify-content: space-between;
+
     @media screen and (max-width: 768px) {
         flex-wrap: wrap;
     }
+
     @media screen and (max-width: 575px) {
         flex-wrap: wrap;
         flex-direction: column;
@@ -544,18 +541,22 @@ const copyL = () => {
 .squad-data__contacts {
     display: flex;
     flex-direction: column;
+
     @media screen and (max-width: 768px) {
         margin-bottom: 20px;
     }
+
     @media screen and (max-width: 575px) {
         align-items: center;
     }
 }
+
 .squad-data__social-network {
     display: flex;
     column-gap: 12px;
     margin-top: 17px;
 }
+
 .copy-message {
     position: fixed;
     top: 50%;

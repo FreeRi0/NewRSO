@@ -88,12 +88,7 @@ const viewEvents = async (event_pk) => {
     loading.value = true;
     try {
 
-        const eventsRequest = await HTTP.get(`/events/${event_pk}/applications/`, {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: "Token " + localStorage.getItem("Token"),
-            },
-        });
+        const eventsRequest = await HTTP.get(`/events/${event_pk}/applications/`);
         eventsList.value = [...eventsList.value, ...eventsRequest.data.results];
 
         selectedEventList.value = [];
@@ -111,13 +106,7 @@ const viewGroupEvents = async (event_pk) => {
     try {
 
         const eventsGroupRequest = await HTTP.get(
-            `/events/${event_pk}/group_applications/all/`,
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: "Token " + localStorage.getItem("Token"),
-                },
-            }
+            `/events/${event_pk}/group_applications/all/`
         );
         groupEventsList.value = [
             ...groupEventsList.value,
@@ -134,12 +123,7 @@ const viewGroupEvents = async (event_pk) => {
 const events = async (id) => {
     try {
 
-        const eventsRequest = await HTTP.get(`/events/?active_organizer_user_id=${id}`, {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: "Token" + localStorage.getItem("Token"),
-            },
-        });
+        const eventsRequest = await HTTP.get(`/events/?active_organizer_user_id=${id}`);
         ev.value = eventsRequest.data.results;
         for (let i in eventsRequest.data.results) {
             viewEvents(eventsRequest.data.results[i].id);
@@ -209,12 +193,6 @@ const confirmApplication = async (event_pk, id) => {
         const approveReq = await HTTP.post(
             `/events/${event_pk}/applications/${id}/confirm/`,
             {},
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: "Token " + localStorage.getItem("Token"),
-                },
-            }
         );
         swal.fire({
             position: "top-center",
@@ -244,12 +222,6 @@ const confirmGroupApplication = async (event_pk, id) => {
         const approveReq = await HTTP.post(
             `/events/${event_pk}/group_applications/all/${id}/approve/`,
             {},
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: "Token " + localStorage.getItem("Token"),
-                },
-            }
         );
         swal.fire({
             position: "top-center",
@@ -278,12 +250,6 @@ const cancelApplication = async (event_pk, id) => {
     try {
         const rejectReq = await HTTP.delete(
             `/events/${event_pk}/applications/${id}/`,
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: "Token " + localStorage.getItem("Token"),
-                },
-            },
             {}
         );
         swal.fire({
@@ -313,12 +279,6 @@ const cancelGroupApplication = async (event_pk, id) => {
     try {
         const rejectReq = await HTTP.delete(
             `/events/${event_pk}/group_applications/all/${id}/reject`,
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: "Token " + localStorage.getItem("Token"),
-                },
-            },
             {}
         );
         swal.fire({
@@ -376,8 +336,6 @@ const onAction = async () => {
             );
             selectedEv.value = [...selectedEventList.value, ...selectedGroupEventsList.value]
         }
-        // await viewEvents();
-        // await viewGroupEvents();
     } catch (e) {
         console.log("error action", e);
     }

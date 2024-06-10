@@ -3,54 +3,26 @@
         <div class="contributor">
             <h2 class="contributor-title">Реестр участников</h2>
             <div class="contributor-search">
-                <input
-                    type="text"
-                    id="search"
-                    class="contributor-search__input mb-10"
-                    @keyup="searchItems"
-                    v-model="name"
-                    placeholder="Начинайте ввод?"
-                />
+                <input type="text" id="search" class="contributor-search__input mb-10" @keyup="searchItems"
+                    v-model="name" placeholder="Начинайте ввод?" />
                 <img src="@app/assets/icon/search.svg" alt="search" />
             </div>
             <div class="contributor-container">
                 <div class="filters">
-                    <filters
-                        @update-district="updateDistrict"
-                        @update-reg="updateReg"
-                        @update-local="updateLocal"
-                        @update-educ="updateEduc"
-                        @update-detachment="updateDetachment"
-                        :district="district"
-                        :districts="districts"
-                        :reg="reg"
-                        :regionals="regionals"
-                        :local="local"
-                        :locals="locals"
-                        :educ="educ"
-                        :educ-head="educHead"
-                        :detachment="detachment"
-                        :detachments="detachments"
-                        :roles="roles.roles.value"
-                        :sorted-participants="sortedHeadquarters"
-                    />
+                    <filters @update-district="updateDistrict" @update-reg="updateReg" @update-local="updateLocal"
+                        @update-educ="updateEduc" @update-detachment="updateDetachment" :district="district"
+                        :districts="districts" :reg="reg" :regionals="regionals" :local="local" :locals="locals"
+                        :educ="educ" :educ-head="educHead" :detachment="detachment" :detachments="detachments"
+                        :roles="roles.roles.value" :sorted-participants="sortedHeadquarters" />
                 </div>
                 <div class="contributor-items">
                     <div class="contributor-sort">
                         <div class="sort-layout">
-                            <button
-                                class="showInfoBtn mr-4"
-                                v-if="!showInfo"
-                                @click="showInfo = !showInfo"
-                            >
+                            <button class="showInfoBtn mr-4" v-if="!showInfo" @click="showInfo = !showInfo">
                                 Показать статистику
                             </button>
 
-                            <button
-                                class="showInfoBtn mr-4"
-                                v-else-if="showInfo"
-                                @click="showInfo = !showInfo"
-                            >
+                            <button class="showInfoBtn mr-4" v-else-if="showInfo" @click="showInfo = !showInfo">
                                 Скрыть статистику
                             </button>
                         </div>
@@ -75,17 +47,8 @@
                             ></Button> -->
                         </div>
                     </div>
-                    <registryList
-                        v-if="!isLoading"
-                        :items="sortedHeadquarters"
-                        :show-info="showInfo"
-                    ></registryList>
-                    <v-progress-circular
-                        class="circleLoader"
-                        v-else
-                        indeterminate
-                        color="blue"
-                    ></v-progress-circular>
+                    <registryList v-if="!isLoading" :items="sortedHeadquarters" :show-info="showInfo"></registryList>
+                    <v-progress-circular class="circleLoader" v-else indeterminate color="blue"></v-progress-circular>
                 </div>
             </div>
         </div>
@@ -95,35 +58,42 @@
 <style lang="scss" scoped>
 .contributor {
     padding: 0px 0px 60px 0px;
+
     &-title {
         font-size: 52px;
     }
+
     &-sort {
         display: flex;
         justify-content: flex-end;
         align-items: flex-end;
         margin-bottom: 32px;
+
         @media (max-width: 1024px) {
             flex-direction: column;
             align-items: flex-start;
             margin-top: 60px;
         }
     }
+
     &-container {
         display: grid;
         grid-template-columns: 0.5fr 1.5fr;
         align-items: baseline;
         grid-column-gap: 36px;
     }
+
     &-search {
         position: relative;
         box-sizing: border-box;
         margin: 60px 0px 0px 0px;
+
         img {
             position: absolute;
             top: 15px;
             left: 16px;
         }
+
         &__input {
             width: 100%;
             padding: 13px 0px 10px 60px;
@@ -131,11 +101,13 @@
             border: 1px solid black;
         }
     }
+
     &-info {
         font-size: 18px;
         font-weight: 400;
         margin-top: 60px;
     }
+
     &-wrapper {
         padding-top: 40px;
     }
@@ -229,12 +201,7 @@ const viewHeadquartersData = async (resp, search, join) => {
         } else if (resp.indexOf('rsousers') >= 0) {
             routeName = 'userpage';
         }
-        const viewHeadquartersResponse = await HTTP.get(resp + search, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const viewHeadquartersResponse = await HTTP.get(resp + search,);
 
         let response = viewHeadquartersResponse.data.results;
         for (let i in response) {
@@ -243,12 +210,6 @@ const viewHeadquartersData = async (resp, search, join) => {
         if (join) {
             const viewHeadquartersResponsetTwo = await HTTP.get(
                 '/educationals/' + search,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
             );
             educHead.value = viewHeadquartersResponsetTwo.data.results;
             let response2 = viewHeadquartersResponsetTwo.data.results;
@@ -327,8 +288,8 @@ const updateEduc = (educVal) => {
     let resp = educVal
         ? '/detachments/'
         : local.value
-        ? '/educationals/'
-        : '/locals/';
+            ? '/educationals/'
+            : '/locals/';
     if (educVal) {
         search = '?educational_headquarter__name=' + educVal;
     } else if (local.value) {
@@ -388,8 +349,8 @@ const searchItems = (event) => {
         resp = educ.value
             ? '/detachments/'
             : local.value
-            ? '/educationals/'
-            : '/locals/';
+                ? '/educationals/'
+                : '/locals/';
         search = '?detachment__name=' + detachment.value;
 
         search = '?educational_headquarter__name=' + educ.value;
@@ -510,8 +471,8 @@ watch(
     () => {
         let districtID = districtsStore.districts.length
             ? districtsStore.districts.find(
-                  (dis) => (dis.name = district.value),
-              )?.id
+                (dis) => (dis.name = district.value),
+            )?.id
             : roleStore.roles.districtheadquarter_commander?.id;
         regionals.value = regionalsStore.regionals.filter(
             (reg) => reg.district_headquarter == district.value,

@@ -67,7 +67,7 @@ const emit = defineEmits(['change']);
 const checked = ref(false);
 
 const updateMembership = (e) => {
-    console.log('dddddd', checked.value);
+    // console.log('dddddd', checked.value);
     emit('change', checked.value, props.participant.id);
 };
 
@@ -78,11 +78,11 @@ watch(
     (newChecked) => {
         if (!newChecked) return;
         selectedPeoples.value = newChecked;
-        console.log('newChecked', newChecked);
+        // console.log('newChecked', newChecked);
         const checkedItem = newChecked.find(
             (item) => item.id == props.participant.id,
         );
-        console.log('checkedItem', checkedItem);
+        // console.log('checkedItem', checkedItem);
         if (!checkedItem) checked.value = false;
         else checked.value = true;
     },

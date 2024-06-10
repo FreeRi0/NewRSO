@@ -16,57 +16,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="report" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -155,57 +105,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="report" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -382,57 +282,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="report" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -473,57 +323,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="report" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -562,57 +362,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="report" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -799,57 +549,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="report" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1378,57 +1078,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="report" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1705,57 +1355,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="report" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -2031,57 +1631,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="report" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -2277,57 +1827,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="report" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -2521,57 +2021,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="report" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -2768,57 +2218,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="report" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -3010,57 +2410,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="report" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -3184,57 +2534,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="report" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -3364,57 +2664,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="report" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -3587,57 +2837,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="report" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -3817,57 +3017,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="report" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -3989,57 +3139,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="report" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -4109,57 +3209,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="report" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -4225,57 +3275,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="report" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -4424,6 +3424,7 @@ import { ref, inject, onMounted, computed, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 import { sortByEducation } from '@shared/components/selects';
+import { SvgIcon } from '@shared';
 
 const route = useRoute();
 
@@ -4532,7 +3533,6 @@ const deleteBlock = (index, sectionIndex, nameSection) => {
 const deleteLink = (index, sectionIndex, nameSection) => {
     report.value[sectionIndex][nameSection][index].links.splice(index, 1);
 };
-// const report = ref({});
 const report = ref({
     1: { number_of_members: '', number_of_payments: '' },
     2: {
@@ -4718,12 +3718,6 @@ const getParameters = async (id) => {
         const response = await HTTP.get(
             `/competitions/${route.params.competition_pk}/reports/q${id}/` +
                 (id == 1 ? 'info/' : 'me/'),
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
         );
         console.log(report.value[id]);
         if (id == 1 || id == 3 || id == 4) report.value[id] = response.data;
@@ -4998,7 +3992,8 @@ const postParameters = async (id) => {
                 {
                     headers: {
                         'Content-Type': type,
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                        Authorization:
+                            'JWT ' + localStorage.getItem('jwt_token'),
                     },
                 },
             );
@@ -5056,27 +4051,34 @@ console.log(report);
 .v-expansion-panels {
     margin-bottom: 60px;
 }
+
 .form .v-expansion-panel .v-expansion-panel-title {
     font-weight: 500;
 }
+
 .form__inner-content {
     margin-bottom: 40px;
     border-bottom: none;
 }
+
 .form__label {
     font-weight: 500;
 }
+
 .p-placeholder {
     color: #b6b6b6;
 }
+
 .invents-select {
     border: 2px solid #b6b6b6;
 }
+
 .p-dropdown-items {
     background-color: white;
     border: 1px solid #b6b6b6;
     border-radius: 10px;
 }
+
 .p-dropdown-item {
     border-bottom: 1px solid #b6b6b6;
     margin: 15px;
@@ -5087,6 +4089,7 @@ console.log(report);
     grid-template-columns: 1fr 1fr;
     column-gap: 80px;
 }
+
 .form__field-group-bottom {
     margin-top: 50px;
 }
@@ -5096,6 +4099,7 @@ console.log(report);
     flex-direction: column;
     align-items: center;
 }
+
 .form__field-group-bottom p {
     margin-top: 50px;
     font-family: 'Akrobat';
@@ -5104,9 +4108,11 @@ console.log(report);
     line-height: 19px;
     color: #35383f;
 }
+
 .form__field-column-one {
     grid-template-columns: 1fr;
 }
+
 .form__field-group-left-title {
     font-size: 24px;
     color: #35383f;
@@ -5115,35 +4121,44 @@ console.log(report);
     line-height: 24px;
     margin-bottom: 40px;
 }
+
 .form__label * {
     color: red;
 }
+
 .form .v-expansion-panel .v-expansion-panel-title {
     max-height: none;
 }
+
 .add-block {
     cursor: pointer;
     max-width: fit-content;
     border-bottom: 1px solid #35383f;
 }
+
 .form__field-file {
     grid-template-columns: 10fr 10fr 0.5fr;
 }
+
 .form__field-column-one-file {
     grid-template-columns: 10fr 0.5fr;
 }
+
 .form__button-color:disabled {
     background-color: #b6b6b6;
     border-color: #b6b6b6;
 }
+
 .card {
     position: relative;
 }
+
 .addFile {
     position: absolute;
     top: 4px;
     left: 1px;
 }
+
 .statement-item {
     display: flex;
     margin-top: 12px;
@@ -5156,6 +4171,7 @@ console.log(report);
     font-size: 16px;
     display: block;
     margin-left: 8px;
+
     @media (max-width: 768px) {
         font-size: 14px;
         max-width: 290px;
@@ -5165,9 +4181,11 @@ console.log(report);
 .statement-item a {
     color: #1f7cc0;
 }
+
 .p-icon {
     display: none !important;
 }
+
 .p-button-label {
     color: #1f7cc0;
     margin-left: 5px;
@@ -5178,6 +4196,7 @@ console.log(report);
     grid-template-columns: 10fr 0.5fr;
     grid-column-gap: 5px;
 }
+
 .form__field-link svg {
     margin-top: 10px;
 }
@@ -5190,6 +4209,7 @@ table {
     margin-bottom: 20px;
     border: 1px solid #dddddd;
 }
+
 td {
     font-size: 18px;
     line-height: 23.74px;
@@ -5198,6 +4218,7 @@ td {
     padding: 20px;
     border: 1px solid #d9d9d9;
 }
+
 .form_place p {
     margin-top: 20px;
     margin-bottom: 10px;
@@ -5205,9 +4226,11 @@ td {
     font-size: 16px;
     color: #35383f;
 }
+
 .btn_large {
     padding: 12px 32px !important;
 }
+
 .error {
     color: #db0000;
     font-size: 14px;

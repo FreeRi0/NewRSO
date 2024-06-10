@@ -34,7 +34,7 @@ const props = defineProps({
 
 const route = useRoute();
 const routes = route.matched;
-console.log(routes);
+// console.log(routes);
 
 </script>
 

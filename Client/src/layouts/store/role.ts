@@ -17,7 +17,7 @@ export const useRoleStore = defineStore('role', {
             const data = await HTTP.get('/rsousers/me_commander/', {
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                    Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
                 },
             });
             this.roles = data.data;
@@ -28,7 +28,7 @@ export const useRoleStore = defineStore('role', {
             const dataUserRoles = await HTTP.get(`/rsousers/${id}/commander/`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                    Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
                 },
             });
             this.userRoles = dataUserRoles.data;
@@ -38,7 +38,7 @@ export const useRoleStore = defineStore('role', {
             const dataUserStatus = await HTTP.get(`/competitions/${competition_pk}/participants/status/`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                    Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
                 },
             });
             this.status = dataUserStatus.data;
@@ -49,7 +49,7 @@ export const useRoleStore = defineStore('role', {
             const dataMyPositions = await HTTP.get('/rsousers/me_positions/', {
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                    Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
                 },
             });
             this.myPositions = dataMyPositions.data;
@@ -59,7 +59,7 @@ export const useRoleStore = defineStore('role', {
             const dataPositions = await HTTP.get(`/rsousers/${id}/positions/`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
+                    Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
                 },
             });
             this.positions = dataPositions.data;

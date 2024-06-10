@@ -200,7 +200,7 @@ const searchRegionals = (val) => {
         return;
     }
     regionalsStore.searchRegionals(name.value);
-    console.log('val', val);
+    // console.log('val', val);
 };
 
 watch(
@@ -231,7 +231,6 @@ onMounted(() => {
 .option-select {
     background-color: #ffffff;
     box-sizing: border-box;
-    border: 1px solid #b6b6b6;
     border-radius: 10px;
     box-sizing: border-box;
 

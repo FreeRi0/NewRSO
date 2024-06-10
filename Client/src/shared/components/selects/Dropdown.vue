@@ -105,7 +105,7 @@ const props = defineProps({
 const selected = ref(null);
 
 const changeValue = (event) => {
-    console.log(event);
+    // console.log(event);
     emit('update:value', event);
 };
 
@@ -122,33 +122,23 @@ const items = ref(props.items);
 
 const onChangeItem = async () => {
     if (props.isReg === false) {
-        await HTTP.get(`rsousers?regional_headquarter__name=${props.headVal}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
+        await HTTP.get(`rsousers?regional_headquarter__name=${props.headVal}`)
 
             .then((res) => {
                 // console.log(props.address);
                 items.value = res.data.results;
-                console.log(res.data);
+                // console.log(res.data);
             })
             .catch(function (error) {
                 console.log('an error occured ' + error);
             });
     } else {
-        await HTTP.get(`rsousers?region=${props.headVal}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        })
+        await HTTP.get(`rsousers?region=${props.headVal}`)
 
             .then((res) => {
                 // console.log(props.address);
                 items.value = res.data.results;
-                console.log(res.data);
+                // console.log(res.data);
             })
             .catch(function (error) {
                 console.log('an error occured ' + error);
@@ -159,7 +149,7 @@ const onChangeItem = async () => {
 
 watch(() => props.headVal,
     (newRegName) => {
-        console.log('Reg', newRegName)
+        // console.log('Reg', newRegName)
         onChangeItem();
     }
 )

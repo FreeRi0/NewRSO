@@ -145,12 +145,6 @@ const getCompetition = async () => {
         } else {
             const { data } = await HTTP.get(
                 `/competitions/${props.report.competition}/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
             );
             competition.value = data;
         }
@@ -167,12 +161,6 @@ const getDetachmentData = async () => {
         } else {
             const { data } = await HTTP.get(
                 `/detachments/${props.report.detachment}/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
             );
             detachmentData.value = data;
         }
@@ -187,12 +175,7 @@ const getIsTandemInfo = async () => {
     try {
         const { data } = await HTTP.get(
             `/detachments/${props.report.detachment}/competitions/1/is_tandem/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         // console.log(data);
         isTandem.value = data.is_tandem;

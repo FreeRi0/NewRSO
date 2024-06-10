@@ -10,9 +10,7 @@
                 то&nbsp;сообщите нам об&nbsp;этом по&nbsp;адресу электронной
                 почты:
                 <a href="mailto:rso.login@yandex.ru">rso.login@yandex.ru</a> или
-                <a href="https://t.me/LK_RSO_Support"
-                    >напишите нам в&nbsp;Телеграм</a
-                >.
+                <a href="https://t.me/LK_RSO_Support">напишите нам в&nbsp;Телеграм</a>.
             </p>
             <!-- <div
                 v-if="
@@ -55,32 +53,58 @@ import { useRegionalsStore } from '@features/store/regionals';
 import { usePositionsStore } from '@features/store/positions';
 import { useEducationalsStore } from '@features/store/educationals';
 import { useSquadsStore } from '@features/store/squads';
+import { HTTP } from '@app/http';
 import { useDistrictsStore } from '@features/store/districts';
+import { verify } from 'crypto';
 
 const roleStore = useRoleStore();
 const userStore = useUserStore();
 const regionsStore = useRegionalsStore();
 const positionsStore = usePositionsStore();
+const isVerify = ref(false);
 const competition_pk = 1;
-// const districtStore  = useDistrictsStore();
+
+const updateToken = async () => {
+    try {
+        const resp = await HTTP.post('/jwt/refresh/', { refresh: localStorage.getItem('refresh_token') });
+        localStorage.setItem('jwt_token', resp.data.access);
+        localStorage.setItem('refresh_token', resp.data.refresh);
+    } catch (e) {
+        console.error('Error refreshing token:', e);
+    }
+};
+
+const verifyToken = async () => {
+    try {
+        const resp = await HTTP.post('/jwt/verify/', { token: localStorage.getItem('jwt_token') })
+        if (resp.status == 200) {
+            userStore.getUser(currentUser);
+            roleStore.getRoles();
+            positionsStore.getPositions();
+            squadsStore.getAreas();
+            roleStore.getUserParticipantsStatus(competition_pk);
+        } else if (resp.status == 401) {
+            updateToken()
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
 
 const squadsStore = useSquadsStore();
 const currentUser = storeToRefs(userStore);
-const isAuth = ref(!!localStorage.getItem('Token'));
 
 onMounted(() => {
-    if (localStorage.getItem('Token')) {
-        userStore.getUser();
-        roleStore.getRoles();
-        positionsStore.getPositions();
-        squadsStore.getAreas();
-        roleStore.getUserParticipantsStatus(competition_pk);
-    }
+    setTimeout(() => {
+        verifyToken();
+    }, 2000)
 
     regionsStore.getRegions();
 });
 
-//запрос на коммандира
 </script>
 
 <style scoped lang="scss">
@@ -93,7 +117,7 @@ onMounted(() => {
     line-height: 22px;
     color: #35383f;
 
-    & > a {
+    &>a {
         text-decoration: underline;
     }
 
@@ -102,6 +126,7 @@ onMounted(() => {
         text-decoration: none;
     }
 }
+
 .required_verification {
     border: 1px solid #a3a3a3;
     border-radius: 7px;
@@ -109,6 +134,7 @@ onMounted(() => {
     padding: 28px 15px 28px 15px;
     margin-bottom: 30px;
 }
+
 .required_verification p {
     max-width: 1180px;
     font-size: 16px;
@@ -116,9 +142,11 @@ onMounted(() => {
     font-weight: 500;
     line-height: 22px;
     color: #000000;
+
     @media (max-width: 1024px) {
         max-width: 980px;
     }
+
     @media (max-width: 768px) {
         max-width: 700px;
     }

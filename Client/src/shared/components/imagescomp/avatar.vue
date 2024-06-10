@@ -4,12 +4,7 @@
             <!-- Аватар пользователя  -->
 
             <img v-if="avatar" :src="avatar" alt="avatarka" />
-            <img
-                v-else
-                id="profile-pic"
-                src="@app/assets/user-avatar.png"
-                alt="Аватарка(пусто)"
-            />
+            <img v-else id="profile-pic" src="@app/assets/user-avatar.png" alt="Аватарка(пусто)" />
         </div>
 
         <!-- Иконка добавления аватара -->
@@ -32,70 +27,34 @@
                             </template>
                             <v-card>
                                 <v-card-title>
-                                    <span class="text-h5"
-                                        >Загрузите ваше фото</span
-                                    >
+                                    <span class="text-h5">Загрузите ваше фото</span>
                                 </v-card-title>
                                 <v-card-text>
                                     <v-container>
                                         <v-row>
-                                            <v-file-input
-                                                @change="selectFile"
-                                                type="file"
-                                                show-size
-                                                prepend-icon="mdi-camera"
-                                                counter
-                                            />
+                                            <v-file-input @change="selectFile" type="file" show-size
+                                                prepend-icon="mdi-camera" counter />
                                         </v-row>
                                         <v-row class="align-center justify-end">
-                                            <v-btn
-                                                v-if="preview"
-                                                class="button-wrapper mt-5"
-                                                @click="cropImage()"
-                                                prepend-icon="crop"
-                                                variant="plain"
-                                                >Обрезать фото</v-btn
-                                            >
+                                            <v-btn v-if="preview" class="button-wrapper mt-5" @click="cropImage()"
+                                                prepend-icon="crop" variant="plain">Обрезать фото</v-btn>
                                         </v-row>
                                         <v-row v-if="preview">
-                                            <Cropper
-                                                ref="cropper"
-                                                class="cropper mt-5 mx-auto"
-                                                :src="preview"
-                                                @change="onChangeCrop"
-                                                :stencil-component="
-                                                    CircleStencil
-                                                "
-                                            />
-                                            <Preview
-                                                :width="120"
-                                                :height="120"
-                                                :image="result.image"
-                                                :coordinates="
-                                                    result.coordinates
-                                                "
-                                                class="mt-9"
-                                                style="border-radius: 50%"
-                                            />
+                                            <Cropper ref="cropper" class="cropper mt-5 mx-auto" :src="preview"
+                                                @change="onChangeCrop" :stencil-component="CircleStencil
+                                                    " />
+                                            <Preview :width="120" :height="120" :image="result.image" :coordinates="result.coordinates
+                                                " class="mt-9" style="border-radius: 50%" />
                                         </v-row>
                                     </v-container>
                                 </v-card-text>
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
-                                    <v-btn
-                                        color="blue-darken-1"
-                                        variant="text"
-                                        @click="dialog = false"
-                                    >
+                                    <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
                                         Закрыть
                                     </v-btn>
-                                    <v-btn
-                                        :disabled="!media"
-                                        color="blue-darken-1"
-                                        variant="text"
-                                        type="submit"
-                                        @click="uploadAvatar()"
-                                    >
+                                    <v-btn :disabled="!media" color="blue-darken-1" variant="text" type="submit"
+                                        @click="uploadAvatar()">
                                         Загрузить
                                     </v-btn>
                                 </v-card-actions>
@@ -109,11 +68,7 @@
             </v-card>
         </v-menu>
 
-        <v-menu
-            min-width="200px"
-            rounded
-            v-else-if="props.avatar && props.edited"
-        >
+        <v-menu min-width="200px" rounded v-else-if="props.avatar && props.edited">
             <template v-slot:activator="{ props }">
                 <v-btn class="user-metric__avatar-add" icon v-bind="props">
                     <v-avatar size="large">
@@ -127,82 +82,40 @@
                         <v-row justify="center">
                             <v-dialog v-model="dialog" width="1024">
                                 <template v-slot:activator="{ props }">
-                                    <v-btn
-                                        rounded
-                                        variant="text"
-                                        v-bind="props"
-                                    >
+                                    <v-btn rounded variant="text" v-bind="props">
                                         Редактировать аватар
                                     </v-btn>
                                 </template>
                                 <v-card>
                                     <v-card-title>
-                                        <span class="text-h5"
-                                            >Загрузите ваше фото</span
-                                        >
+                                        <span class="text-h5">Загрузите ваше фото</span>
                                     </v-card-title>
                                     <v-card-text>
                                         <v-container>
                                             <v-row>
-                                                <v-file-input
-                                                    @change="selectFile"
-                                                    type="file"
-                                                    show-size
-                                                    prepend-icon="mdi-camera"
-                                                    counter
-                                                />
+                                                <v-file-input @change="selectFile" type="file" show-size
+                                                    prepend-icon="mdi-camera" counter />
                                             </v-row>
-                                            <v-row
-                                                class="align-center justify-end"
-                                            >
-                                                <v-btn
-                                                    v-if="preview"
-                                                    class="button-wrapper mt-5"
-                                                    @click="cropImage()"
-                                                    prepend-icon="crop"
-                                                    variant="plain"
-                                                    >Обрезать фото</v-btn
-                                                >
+                                            <v-row class="align-center justify-end">
+                                                <v-btn v-if="preview" class="button-wrapper mt-5" @click="cropImage()"
+                                                    prepend-icon="crop" variant="plain">Обрезать фото</v-btn>
                                             </v-row>
                                             <v-row v-if="preview">
-                                                <Cropper
-                                                    ref="cropper"
-                                                    class="cropper mt-5 mx-auto"
-                                                    :src="preview"
-                                                    @change="onChangeCrop"
-                                                    :stencil-component="
-                                                        CircleStencil
-                                                    "
-                                                />
-                                                <Preview
-                                                    :width="120"
-                                                    :height="120"
-                                                    :image="result.image"
-                                                    :coordinates="
-                                                        result.coordinates
-                                                    "
-                                                    class="mt-9"
-                                                    style="border-radius: 50%"
-                                                />
+                                                <Cropper ref="cropper" class="cropper mt-5 mx-auto" :src="preview"
+                                                    @change="onChangeCrop" :stencil-component="CircleStencil
+                                                        " />
+                                                <Preview :width="120" :height="120" :image="result.image" :coordinates="result.coordinates
+                                                    " class="mt-9" style="border-radius: 50%" />
                                             </v-row>
                                         </v-container>
                                     </v-card-text>
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
-                                        <v-btn
-                                            color="blue-darken-1"
-                                            variant="text"
-                                            @click="dialog = false"
-                                        >
+                                        <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
                                             Закрыть
                                         </v-btn>
-                                        <v-btn
-                                            :disabled="!media"
-                                            color="blue-darken-1"
-                                            variant="text"
-                                            type="submit"
-                                            @click="updateAvatar()"
-                                        >
+                                        <v-btn :disabled="!media" color="blue-darken-1" variant="text" type="submit"
+                                            @click="updateAvatar()">
                                             Загрузить
                                         </v-btn>
                                     </v-card-actions>
@@ -279,13 +192,13 @@ const selectFile = (event) => {
 const uploadAvatar = async () => {
     dialog.value = true;
     const formData = new FormData();
-    console.log('upload');
+    // console.log('upload');
 
     formData.append('photo', media.value);
     await HTTP.patch('/rsousers/me/media/', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+             Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
         },
     })
         .then((response) => {
@@ -297,9 +210,9 @@ const uploadAvatar = async () => {
                 timer: 1500,
             });
             dialog.value = false;
-            console.log('resp', response.data);
+            // console.log('resp', response.data);
             emit('upload', response.data.photo);
-            console.log(response, 'avatar uploaded');
+            // console.log(response, 'avatar uploaded');
         })
         .catch(({ response }) => {
             console.log('err', response);
@@ -321,7 +234,7 @@ const updateAvatar = async () => {
     await HTTP.put('/rsousers/me/media/', fd, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+             Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
         },
     })
         .then((response) => {
@@ -334,7 +247,7 @@ const updateAvatar = async () => {
             });
             dialog.value = false;
             emit('update', response.data.photo);
-            console.log(response, 'updated');
+            // console.log(response, 'updated');
         })
         .catch(({ response }) => {
             isError.value = response.data;
@@ -353,13 +266,6 @@ const deleteAvatar = async () => {
     await HTTP.patch(
         '/rsousers/me/media/',
         { photo: null },
-
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        },
     )
         .then((response) => {
             swal.fire({
@@ -371,19 +277,19 @@ const deleteAvatar = async () => {
             });
 
             emit('delete', response.data.photo);
-            console.log(response, 'deleted');
+            // console.log(response, 'deleted');
         })
-        .catch(({ response }) => {
-            isError.value = response.data;
-            console.error('There was an error!', response.data);
-            swal.fire({
-                position: 'top-center',
-                icon: 'error',
-                title: 'ошибка',
-                showConfirmButton: false,
-                timer: 1500,
-            });
+    .catch(({ response }) => {
+        isError.value = response.data;
+        console.error('There was an error!', response.data);
+        swal.fire({
+            position: 'top-center',
+            icon: 'error',
+            title: 'ошибка',
+            showConfirmButton: false,
+            timer: 1500,
         });
+    });
 };
 </script>
 
@@ -397,6 +303,7 @@ const deleteAvatar = async () => {
     width: 80%;
     height: 100%;
     border-radius: 50%;
+
     &-wrapper {
         display: grid;
         grid-template-columns: 160px 90px;
@@ -408,6 +315,7 @@ const deleteAvatar = async () => {
         grid-row-start: 2;
         grid-row-end: 4;
     }
+
     &-add {
         display: grid;
         grid-column-start: 2;
@@ -424,10 +332,12 @@ const deleteAvatar = async () => {
     object-fit: cover;
     border-radius: 50%;
 }
+
 .v-btn--icon.v-btn--density-default {
     background: rgba(0, 0, 0, 0.4);
     margin-right: 15px;
 }
+
 .v-btn--icon {
     border-radius: 50%;
     border: 2px solid white;

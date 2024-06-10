@@ -61,16 +61,16 @@ const isError = ref([]);
 const isLoading = ref(false);
 const swal = inject('$swal');
 
-const APP_ID = 51932483
-const REDIRECT_URL = 'https://rso.sprint.1t.ru/MyPage'
-const oneTap = new VKID.OneTap();
+ const APP_ID = 51915086
+ const REDIRECT_URL = 'https://rso.sprint.1t.ru/my-page'
+ const oneTap = new VKID.OneTap();
 
 
-VKID.Config.set({
-    app: APP_ID, // Идентификатор приложения.
-    redirectUrl: REDIRECT_URL, // Адрес для перехода после авторизации.
-    state: 'dj29fnsadjsd82...' // Произвольная строка состояния приложения.
-});
+ VKID.Config.set({
+     app: APP_ID, // Идентификатор приложения.
+     redirectUrl: REDIRECT_URL, // Адрес для перехода после авторизации.
+     state: 'dj29fnsadjsd82...' // Произвольная строка состояния приложения.
+ });
 
 
 const Click = () => {
@@ -80,13 +80,11 @@ const Click = () => {
 const LoginUser = async () => {
     try {
         isLoading.value = true;
-        const response = await HTTP.post('/token/login/', data.value, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+        const response = await HTTP.post('/jwt/create/', data.value);
         data.value = response.data;
-        localStorage.setItem('Token', response.data.auth_token);
+        // console.log(response.data);
+        localStorage.setItem('jwt_token', response.data.access);
+        localStorage.setItem('refresh_token', response.data.refresh);
         isLoading.value = false;
         router.push({
             name: 'mypage',
@@ -116,13 +114,13 @@ const LoginUser = async () => {
     }
 };
 
-onMounted(() => {
+ onMounted(() => {
     const container = document.getElementById('VkIdSdkOneTap');
-    if (container) {
-        // Отрисовка кнопки в контейнере с именем приложения APP_NAME, светлой темой и на русском языке.
-        oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
-    }
-})
+     if (container) {
+//         // Отрисовка кнопки в контейнере с именем приложения APP_NAME, светлой темой и на русском языке.
+         oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
+     }
+ })
 
 </script>
 

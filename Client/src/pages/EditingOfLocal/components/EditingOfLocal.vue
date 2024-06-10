@@ -51,12 +51,7 @@ const isCommanderLoading = ref(false);
 const getHeadquarter = async () => {
     loading.value = true;
     isCommanderLoading.value = true;
-    await HTTP.get(`locals/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    await HTTP.get(`locals/${id}/`,)
         .then((response) => {
             headquarter.value = response.data;
             if (headquarter.value.commander) {
@@ -199,7 +194,7 @@ const changeHeadquarter = async () => {
         await HTTP.patch(`/locals/${id}/`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+                 Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
             },
         });
         swal.fire({

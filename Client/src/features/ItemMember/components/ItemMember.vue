@@ -79,7 +79,7 @@ const roleStore = useRoleStore();
 
 
 const changeOption = (event) => {
-    console.log(event);
+    // console.log(event);
     emit(
         'updateMember',
         {
@@ -89,7 +89,7 @@ const changeOption = (event) => {
     );
 };
 const changeConfidant = (event) => {
-    console.log(event);
+    // console.log(event);
     emit(
         'updateMember',
         {

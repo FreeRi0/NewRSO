@@ -15,27 +15,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" fill="#1F7CC0" stroke="#1F7CC0" />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" transform="rotate(-180 16 16)" fill="#1F7CC0"
-                                        stroke="#1F7CC0" />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -97,27 +77,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" fill="#1F7CC0" stroke="#1F7CC0" />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" transform="rotate(-180 16 16)" fill="#1F7CC0"
-                                        stroke="#1F7CC0" />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -141,11 +101,11 @@
                                                 <img class="file_img" src="/assets/file_dock.svg" />
                                                 <a :href="participant.document" target="_blank" class="file_title">{{
                                                     participant.document_name.slice(
-                                                        participant.document_name.indexOf(
-                                                            '/media/',
-                                                        ) + 7,
+                                                    participant.document_name.indexOf(
+                                                    '/media/',
+                                                    ) + 7,
                                                     )
-                                                }}</a>
+                                                    }}</a>
                                             </div>
                                             <a class="download_text" :href="participant.document" target="_blank">
                                                 <img class="download_img" src="/assets/download.svg" />
@@ -170,27 +130,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" fill="#1F7CC0" stroke="#1F7CC0" />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" transform="rotate(-180 16 16)" fill="#1F7CC0"
-                                        stroke="#1F7CC0" />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content"
@@ -363,27 +303,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" fill="#1F7CC0" stroke="#1F7CC0" />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" transform="rotate(-180 16 16)" fill="#1F7CC0"
-                                        stroke="#1F7CC0" />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -418,11 +338,11 @@
                                                 <img class="file_img" src="/assets/file_dock.svg" />
                                                 <a :href="applicationData.certificate_scans
                                                     " target="_blank">{{
-                                                        applicationData.certificate_scans.slice(
-                                                            applicationData.certificate_scans.indexOf(
-                                                                'ksk_',
-                                                            ) + 4,
-                                                        )
+                                                    applicationData.certificate_scans.slice(
+                                                    applicationData.certificate_scans.indexOf(
+                                                    'ksk_',
+                                                    ) + 4,
+                                                    )
                                                     }}</a>
                                             </div>
                                             <a class="download_text" :href="applicationData.certificate_scans
@@ -448,27 +368,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" fill="#1F7CC0" stroke="#1F7CC0" />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" transform="rotate(-180 16 16)" fill="#1F7CC0"
-                                        stroke="#1F7CC0" />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -499,11 +399,11 @@
                                                 <img class="file_img" src="/assets/file_dock.svg" />
                                                 <a :href="applicationData.certificate_scans
                                                     " target="_blank">{{
-                                                        applicationData.certificate_scans.slice(
-                                                            applicationData.certificate_scans.indexOf(
-                                                                'ksk_',
-                                                            ) + 4,
-                                                        )
+                                                    applicationData.certificate_scans.slice(
+                                                    applicationData.certificate_scans.indexOf(
+                                                    'ksk_',
+                                                    ) + 4,
+                                                    )
                                                     }}</a>
                                             </div>
                                             <a class="download_text" :href="applicationData.certificate_scans
@@ -529,32 +429,12 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" fill="#1F7CC0" stroke="#1F7CC0" />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" transform="rotate(-180 16 16)" fill="#1F7CC0"
-                                        stroke="#1F7CC0" />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one">
+                            <div class="form__field-column-one">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
                                         <label class="form__label">Наименование мероприятия или
@@ -574,13 +454,13 @@
                                         <div class="file">
                                             <div class="file_name">
                                                 <img class="file_img" src="/assets/file_dock.svg" />
-                                                <a :href="applicationData.certificate_scans
-                                                    " target="_blank">{{
-                                                        applicationData.certificate_scans.slice(
-                                                            applicationData.certificate_scans.indexOf(
-                                                                'ksk_',
-                                                            ) + 4,
-                                                        )
+                                                <a :href="applicationData.certificate_scans 
+                                                    " target="_blank" class="file_title">{{
+                                                    applicationData.certificate_scans.slice(
+                                                    applicationData.certificate_scans.indexOf(
+                                                    '/Q9/',
+                                                    ) + 19,
+                                                    )
                                                     }}</a>
                                             </div>
                                             <a class="download_text" :href="applicationData.certificate_scans
@@ -606,32 +486,12 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" fill="#1F7CC0" stroke="#1F7CC0" />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" transform="rotate(-180 16 16)" fill="#1F7CC0"
-                                        stroke="#1F7CC0" />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one">
+                            <div class="form__field-column-one">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
                                         <label class="form__label">Наименование мероприятия или
@@ -652,12 +512,12 @@
                                             <div class="file_name">
                                                 <img class="file_img" src="/assets/file_dock.svg" />
                                                 <a :href="applicationData.certificate_scans
-                                                    " target="_blank">{{
-                                                        applicationData.certificate_scans.slice(
-                                                            applicationData.certificate_scans.indexOf(
-                                                                'ksk_',
-                                                            ) + 4,
-                                                        )
+                                                    " target="_blank" class="file_title">{{
+                                                    applicationData.certificate_scans.slice(
+                                                    applicationData.certificate_scans.indexOf(
+                                                    'ksk_',
+                                                    ) + 4,
+                                                    )
                                                     }}</a>
                                             </div>
                                             <a class="download_text" :href="applicationData.certificate_scans
@@ -683,32 +543,12 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" fill="#1F7CC0" stroke="#1F7CC0" />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" transform="rotate(-180 16 16)" fill="#1F7CC0"
-                                        stroke="#1F7CC0" />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one">
+                            <div class="form__field-column-one">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
                                         <label class="form__label">Наименование трудового
@@ -729,12 +569,12 @@
                                             <div class="file_name">
                                                 <img class="file_img" src="/assets/file_dock.svg" />
                                                 <a :href="applicationData.certificate_scans
-                                                    " target="_blank">{{
-                                                        applicationData.certificate_scans.slice(
-                                                            applicationData.certificate_scans.indexOf(
-                                                                'ksk_',
-                                                            ) + 4,
-                                                        )
+                                                    " target="_blank" class="file_title">{{
+                                                    applicationData.certificate_scans.slice(
+                                                    applicationData.certificate_scans.indexOf(
+                                                    'ksk_',
+                                                    ) + 4,
+                                                    )
                                                     }}</a>
                                             </div>
                                             <a class="download_text" :href="applicationData.certificate_scans
@@ -760,32 +600,12 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" fill="#1F7CC0" stroke="#1F7CC0" />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" transform="rotate(-180 16 16)" fill="#1F7CC0"
-                                        stroke="#1F7CC0" />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one">
+                            <div class="form__field-column-one">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
                                         <label class="form__label">Наименование трудового
@@ -806,12 +626,12 @@
                                             <div class="file_name">
                                                 <img class="file_img" src="/assets/file_dock.svg" />
                                                 <a :href="applicationData.certificate_scans
-                                                    " target="_blank">{{
-                                                        applicationData.certificate_scans.slice(
-                                                            applicationData.certificate_scans.indexOf(
-                                                                'ksk_',
-                                                            ) + 4,
-                                                        )
+                                                    " target="_blank" class="file_title">{{
+                                                    applicationData.certificate_scans.slice(
+                                                    applicationData.certificate_scans.indexOf(
+                                                    'ksk_',
+                                                    ) + 4,
+                                                    )
                                                     }}</a>
                                             </div>
                                             <a class="download_text" :href="applicationData.certificate_scans
@@ -837,27 +657,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" fill="#1F7CC0" stroke="#1F7CC0" />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" transform="rotate(-180 16 16)" fill="#1F7CC0"
-                                        stroke="#1F7CC0" />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -894,27 +694,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" fill="#1F7CC0" stroke="#1F7CC0" />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" transform="rotate(-180 16 16)" fill="#1F7CC0"
-                                        stroke="#1F7CC0" />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -951,27 +731,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" fill="#1F7CC0" stroke="#1F7CC0" />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" transform="rotate(-180 16 16)" fill="#1F7CC0"
-                                        stroke="#1F7CC0" />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1017,27 +777,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" fill="#1F7CC0" stroke="#1F7CC0" />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" transform="rotate(-180 16 16)" fill="#1F7CC0"
-                                        stroke="#1F7CC0" />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1110,27 +850,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" fill="#1F7CC0" stroke="#1F7CC0" />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" transform="rotate(-180 16 16)" fill="#1F7CC0"
-                                        stroke="#1F7CC0" />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1166,27 +886,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" fill="#1F7CC0" stroke="#1F7CC0" />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" transform="rotate(-180 16 16)" fill="#1F7CC0"
-                                        stroke="#1F7CC0" />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1218,27 +918,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" fill="#1F7CC0" stroke="#1F7CC0" />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" transform="rotate(-180 16 16)" fill="#1F7CC0"
-                                        stroke="#1F7CC0" />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1270,27 +950,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" fill="#1F7CC0" stroke="#1F7CC0" />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                    fill="none">
-                                    <circle cx="16" cy="16" r="15.5" transform="rotate(-180 16 16)" fill="#1F7CC0"
-                                        stroke="#1F7CC0" />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="test" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1343,23 +1003,22 @@ import { useRoute } from 'vue-router';
 import { HTTP } from '@app/http';
 
 import { Input } from '@shared/components/inputs';
+import { SvgIcon } from '@shared';
 
 const route = useRoute();
 const id = ref(route.params.id);
 
 const applicationData = ref({});
 const loading = ref(true);
+
+const idHasCert = ['7','8','9','10','11','12'];
+
 const getApplicationData = async (_id, applicationId) => {
     id.value = _id;
     try {
         const { data } = await HTTP.get(
             `/competitions/1/reports/q${_id}/${applicationId}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         applicationData.value = data;
         // console.log(applicationData.value);
@@ -1371,8 +1030,10 @@ const getApplicationData = async (_id, applicationId) => {
                     );
             }
         }
+        if(idHasCert.includes(_id)){
+            applicationData.value.certificate_scans = decodeURI(applicationData.value.certificate_scans);
+        }
 
-        console.log(applicationData.value);
     } catch (e) {
         console.log(`getApplicationData error`, e);
     } finally {
@@ -1498,6 +1159,7 @@ onMounted(async () => {
     font-weight: 400;
     line-height: 20px;
     text-decoration-line: underline;
+    max-width: 80%
 }
 
 .download_text {

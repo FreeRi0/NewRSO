@@ -20,7 +20,7 @@ export const useLocalsStore = defineStore('local', {
                     },
                     headers: {
                         'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                        Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
                     },
                 },
             );
@@ -36,7 +36,7 @@ export const useLocalsStore = defineStore('local', {
                     },
                     headers: {
                         'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
+                        Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
                     },
                 });
                 this.totalLocals = responseLocals.data.count;
@@ -96,11 +96,7 @@ export const useLocalsStore = defineStore('local', {
                 const responseLocalsNext = await HTTP.get(
                     this.nextLocals.replace('http', 'https'),
                     {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token' + localStorage.getItem('Token'),
-                        },
+
                     },
                 );
                 this.locals = this.locals.concat(
