@@ -80,9 +80,11 @@ const Click = () => {
 const LoginUser = async () => {
     try {
         isLoading.value = true;
-        const response = await HTTP.post('/token/login/', data.value);
+        const response = await HTTP.post('/jwt/create/', data.value);
         data.value = response.data;
-        localStorage.setItem('Token', response.data.auth_token);
+        // console.log(response.data);
+        localStorage.setItem('jwt_token', response.data.access);
+        localStorage.setItem('refresh_token', response.data.refresh);
         isLoading.value = false;
         router.push({
             name: 'mypage',

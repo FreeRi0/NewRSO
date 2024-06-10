@@ -386,7 +386,7 @@ const localsStore = useLocalsStore();
 const roleStore = useRoleStore();
 const educationalsStore = useEducationalsStore();
 const isContact = ref([]);
-const isAuth = ref(!!localStorage.getItem('Token'));
+const isAuth = ref(!!localStorage.getItem('jwt_token'));
 
 const next = () => {
     eventsStore.getNextFilteredEvents();

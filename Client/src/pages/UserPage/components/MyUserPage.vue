@@ -58,7 +58,7 @@ const isLoading = storeToRefs(userStore);
 const education = ref({});
 const region = ref({});
 const tokenUser = ref("");
-const isAuth = ref(!!localStorage.getItem('Token'));
+const isAuth = ref(!!localStorage.getItem('jwt_token'));
 const query = new URLSearchParams(window.location.search);
 const payload = JSON.parse(query.get("payload"));
 
@@ -90,8 +90,6 @@ const exchangeToken = async () => {
 }
 
 
-
-// console.log('token', localStorage.getItem('Bearer'));
 
 const uploadAva = (imageAva) => {
 
@@ -125,7 +123,6 @@ const deleteWall = (imageWall) => {
 
 onMounted(() => {
     exchangeToken();
-    // getAccessToken();
 
 })
 </script>

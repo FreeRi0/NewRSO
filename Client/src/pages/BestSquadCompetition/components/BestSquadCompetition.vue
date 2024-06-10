@@ -214,7 +214,7 @@ import { usePage } from '@shared';
 
 usePage({ isHidden: true });
 const roleStore = useRoleStore();
-const isAuth = ref(!!localStorage.getItem('Token'));
+const isAuth = ref(!!localStorage.getItem('jwt_token'));
 const squadsStore = useSquadsStore();
 const userStore = useUserStore();
 const userCommander = ref({});
