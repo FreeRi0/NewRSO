@@ -68,12 +68,11 @@ const TokenData = ref({
     uuid: payload?.uuid,
 })
 
-
-const exchangeToken = async () => {
+const getAccessToken = async (token) => {
     try {
-        const resp = await HTTP.post('/exchange-token/', TokenData.value)
-        localStorage.setItem('Bearer', resp.data.access_token);
-        console.log(resp.data.access_token);
+        const resp = await HTTP.post('/jwt/vk-login', token)
+        console.log('access', resp.data.access_token, 'refresh', resp.data.refresh_token);
+
         //userStore.getUser()
 
     } catch (e) {
@@ -81,7 +80,23 @@ const exchangeToken = async () => {
     }
 }
 
-console.log('token', localStorage.getItem('Bearer'));
+
+const exchangeToken = async () => {
+    try {
+        const resp = await HTTP.post('/exchange-token/', TokenData.value)
+        // localStorage.setItem('VK-Token', resp.data.access_token);
+        // console.log(resp.data.access_token);
+        getAccessToken(resp.data.access_token);
+     
+
+    } catch (e) {
+        console.log('error:', e)
+    }
+}
+
+
+
+// console.log('token', localStorage.getItem('Bearer'));
 
 const uploadAva = (imageAva) => {
 
@@ -115,6 +130,7 @@ const deleteWall = (imageWall) => {
 
 onMounted(() => {
     exchangeToken();
+
 })
 </script>
 <style lang="scss" scoped>
