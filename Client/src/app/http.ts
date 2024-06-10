@@ -11,7 +11,7 @@ export const HTTP = axios.create({
 HTTP.interceptors.request.use(
     (config) => {
         // console.log(config.headers.Accept);
-        if (config.url == '/token/login/' || config.url == '/register/' || config.url == '/exchange-token/' || config.url == '/jwt/vk-login') {
+        if (config.url == '/token/login/' || config.url == '/register/' || config.url == '/exchange-token/' || config.url == '/jwt/vk-login/') {
             delete config.headers.Authorization;
         } else {
             config.headers.Authorization = 'Token ' + localStorage.getItem('Token');
