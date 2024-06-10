@@ -70,7 +70,7 @@ const TokenData = ref({
 
 const getAccessToken = async (token) => {
     try {
-        const resp = await HTTP.post('/jwt/vk-login', token)
+        const resp = await HTTP.post('/jwt/vk-login/', token)
         console.log('access', resp.data.access_token, 'refresh', resp.data.refresh_token);
 
         //userStore.getUser()
@@ -87,8 +87,6 @@ const exchangeToken = async () => {
         // localStorage.setItem('VK-Token', resp.data.access_token);
         // console.log(resp.data.access_token);
         getAccessToken(resp.data.access_token);
-     
-
     } catch (e) {
         console.log('error:', e)
     }
@@ -130,6 +128,7 @@ const deleteWall = (imageWall) => {
 
 onMounted(() => {
     exchangeToken();
+    // getAccessToken();
 
 })
 </script>
