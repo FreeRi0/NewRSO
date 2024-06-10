@@ -720,7 +720,13 @@ s
                                 </div>
                                 <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        @click="deleteBlock(index)"
+                                        @click="
+                                            deleteBlock(
+                                                index,
+                                                5,
+                                                'participants_data',
+                                            )
+                                        "
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
                                         height="24"
@@ -747,7 +753,12 @@ s
                             </div>
                             <div
                                 class="form__field add-block"
-                                @click="addNewBlock"
+                                @click="
+                                    addNewBlock(5, 'participants_data', {
+                                        name: '',
+                                        document: '',
+                                    })
+                                "
                             >
                                 + добавить участника
                             </div>
@@ -865,6 +876,10 @@ s
                                             :sorts-boolean="false"
                                             variant="outlined"
                                             clearable
+                                            :disabled="
+                                                report[61].demonstration_block
+                                                    .is_verified
+                                            "
                                         />
                                     </div>
                                     <div class="form__field">
@@ -881,6 +896,10 @@ s
                                                 report[61].demonstration_block
                                                     .first_may_demonstration_participants
                                             "
+                                            :readonly="
+                                                report[61].demonstration_block
+                                                    .is_verified
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{
@@ -888,7 +907,7 @@ s
                                                     .first_may_demonstration_participants
                                                     .length
                                             }}
-                                            / 5
+                                            / 100
                                         </div>
                                     </div>
                                 </div>
@@ -1431,6 +1450,7 @@ s
                                             placeholder="Например, Окружной слет студенческих отрядов ПФО"
                                             :maxlength="150"
                                             v-model:value="block.event_name"
+                                            :readonly="block.is_verified"
                                         />
                                         <div class="form__counter">
                                             {{ block.event_name.length }} / 100
@@ -1449,6 +1469,7 @@ s
                                             v-model:value="
                                                 block.number_of_participants
                                             "
+                                            :readonly="block.is_verified"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -1476,6 +1497,9 @@ s
                                                     placeholder="Например, https://vk.com/cco_monolit"
                                                     :maxlength="100"
                                                     v-model:value="link.link"
+                                                    :readonly="
+                                                        block.is_verified
+                                                    "
                                                 />
                                                 <div
                                                     type="button"
@@ -1483,7 +1507,11 @@ s
                                                 >
                                                     <svg
                                                         @click="
-                                                            deleteLink7(index)
+                                                            deleteLink(
+                                                                index,
+                                                                7,
+                                                                'participation_data',
+                                                            )
                                                         "
                                                         xmlns="http://www.w3.org/2000/svg"
                                                         width="24"
@@ -1516,7 +1544,15 @@ s
                                         </template>
                                         <div
                                             class="form__field add-block"
-                                            @click="AddLink7(index)"
+                                            @click="
+                                                AddLink(
+                                                    index,
+                                                    7,
+                                                    'participation_data',
+                                                    { link: '' },
+                                                )
+                                            "
+                                            v-if="!block.is_verified"
                                         >
                                             <p>+ добавить ссылку</p>
                                         </div>
@@ -1589,7 +1625,13 @@ s
                                 </div>
                                 <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        @click="deleteBlock7(index)"
+                                        @click="
+                                            deleteBlock(
+                                                index,
+                                                7,
+                                                'participation_data',
+                                            )
+                                        "
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
                                         height="24"
@@ -1616,7 +1658,14 @@ s
                             </div>
                             <div
                                 class="form__field add-block"
-                                @click="AddBlock7"
+                                @click="
+                                    addNewBlock(7, 'participation_data', {
+                                        event_name: '',
+                                        number_of_participants: '',
+                                        certificate_scans: null,
+                                        links: [{ link: '' }],
+                                    })
+                                "
                             >
                                 <p>+ Добавить мероприятие</p>
                             </div>
@@ -1728,6 +1777,7 @@ s
                                             placeholder="Например, Всероссийский конкурс «В объективе РСО»"
                                             :maxlength="100"
                                             v-model:value="block.event_name"
+                                            :readonly="block.is_verified"
                                         />
                                         <div class="form__counter">
                                             {{ block.event_name.length }} / 100
@@ -1746,6 +1796,7 @@ s
                                             v-model:value="
                                                 block.number_of_participants
                                             "
+                                            :readonly="block.is_verified"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -1773,6 +1824,9 @@ s
                                                     placeholder="Например, https://vk.com/cco_monolit"
                                                     :maxlength="100"
                                                     v-model:value="link.link"
+                                                    :readonly="
+                                                        block.is_verified
+                                                    "
                                                 />
                                                 <div
                                                     type="button"
@@ -1780,7 +1834,11 @@ s
                                                 >
                                                     <svg
                                                         @click="
-                                                            deleteLink8(index)
+                                                            deleteLink(
+                                                                index,
+                                                                8,
+                                                                'participation_data',
+                                                            )
                                                         "
                                                         xmlns="http://www.w3.org/2000/svg"
                                                         width="24"
@@ -1812,7 +1870,15 @@ s
                                         </template>
                                         <div
                                             class="form__field add-block"
-                                            @click="AddLink8(index)"
+                                            @click="
+                                                AddLink(
+                                                    index,
+                                                    8,
+                                                    'participation_data',
+                                                    { link: '' },
+                                                )
+                                            "
+                                            v-if="!block.is_verified"
                                         >
                                             <p>+ добавить ссылку</p>
                                         </div>
@@ -1885,7 +1951,13 @@ s
                                 </div>
                                 <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        @click="deleteBlock8(index)"
+                                        @click="
+                                            deleteBlock(
+                                                index,
+                                                8,
+                                                'participation_data',
+                                            )
+                                        "
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
                                         height="24"
@@ -1912,7 +1984,14 @@ s
                             </div>
                             <div
                                 class="form__field add-block"
-                                @click="AddBlock8"
+                                @click="
+                                    addNewBlock(8, 'participation_data', {
+                                        event_name: '',
+                                        number_of_participants: '',
+                                        certificate_scans: null,
+                                        links: [{ link: '' }],
+                                    })
+                                "
                             >
                                 <p>+ Добавить мероприятие</p>
                             </div>
@@ -2023,6 +2102,7 @@ s
                                             placeholder="Например, Окружной слет студенческих отрядов ПФО"
                                             :maxlength="100"
                                             v-model:value="block.event_name"
+                                            :readonly="block.is_verified"
                                         />
                                         <div class="form__counter">
                                             {{ block.event_name.length }} / 100
@@ -2043,6 +2123,7 @@ s
                                             :sorts-boolean="false"
                                             variant="outlined"
                                             clearable
+                                            :disabled="block.is_verified"
                                         />
                                     </div>
                                     <div class="form__field">
@@ -2117,7 +2198,13 @@ s
                                 </div>
                                 <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        @click="deleteBlock9(index)"
+                                        @click="
+                                            deleteBlock(
+                                                index,
+                                                9,
+                                                'participation_data',
+                                            )
+                                        "
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
                                         height="24"
@@ -2144,7 +2231,13 @@ s
                             </div>
                             <div
                                 class="form__field add-block"
-                                @click="AddBlock9"
+                                @click="
+                                    addNewBlock(9, 'participation_data', {
+                                        event_name: '',
+                                        number_of_participants: '',
+                                        certificate_scans: null,
+                                    })
+                                "
                             >
                                 <p>+ Добавить мероприятие или конкурс</p>
                             </div>
@@ -2349,7 +2442,13 @@ s
                                 </div>
                                 <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        @click="deleteBlock10(index)"
+                                        @click="
+                                            deleteBlock(
+                                                index,
+                                                10,
+                                                'participation_data',
+                                            )
+                                        "
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
                                         height="24"
@@ -2376,7 +2475,13 @@ s
                             </div>
                             <div
                                 class="form__field add-block"
-                                @click="AddBlock10"
+                                @click="
+                                    addNewBlock(10, 'participation_data', {
+                                        event_name: '',
+                                        number_of_participants: '',
+                                        certificate_scans: null,
+                                    })
+                                "
                             >
                                 <p>+ Добавить мероприятие или конкурс</p>
                             </div>
@@ -2584,7 +2689,13 @@ s
                                 </div>
                                 <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        @click="deleteBlock11(index)"
+                                        @click="
+                                            deleteBlock(
+                                                index,
+                                                11,
+                                                'participation_data',
+                                            )
+                                        "
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
                                         height="24"
@@ -2611,7 +2722,13 @@ s
                             </div>
                             <div
                                 class="form__field add-block"
-                                @click="AddBlock11"
+                                @click="
+                                    addNewBlock(11, 'participation_data', {
+                                        event_name: '',
+                                        number_of_participants: '',
+                                        certificate_scans: null,
+                                    })
+                                "
                             >
                                 <p>+ добавить проект</p>
                             </div>
@@ -2814,7 +2931,13 @@ s
                                 </div>
                                 <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        @click="deleteBlock12(index)"
+                                        @click="
+                                            deleteBlock(
+                                                index,
+                                                12,
+                                                'participation_data',
+                                            )
+                                        "
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
                                         height="24"
@@ -2841,7 +2964,13 @@ s
                             </div>
                             <div
                                 class="form__field add-block"
-                                @click="addBlock12"
+                                @click="
+                                    addNewBlock(12, 'participation_data', {
+                                        event_name: '',
+                                        number_of_participants: '',
+                                        certificate_scans: null,
+                                    })
+                                "
                             >
                                 <p>+ добавить проект</p>
                             </div>
@@ -2976,7 +3105,13 @@ s
                                 </div>
                                 <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        @click="deleteBlock13(index)"
+                                        @click="
+                                            deleteBlock(
+                                                index,
+                                                13,
+                                                'organization_data',
+                                            )
+                                        "
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
                                         height="24"
@@ -3003,7 +3138,12 @@ s
                             </div>
                             <div
                                 class="form__field add-block"
-                                @click="AddBlock13"
+                                @click="
+                                    addNewBlock(13, 'organization_data', {
+                                        event_type: '',
+                                        event_link: '',
+                                    })
+                                "
                             >
                                 <p>+ добавить мероприятие</p>
                             </div>
@@ -3144,7 +3284,13 @@ s
                                 </div>
                                 <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        @click="deleteBlock14(index)"
+                                        @click="
+                                            deleteBlock(
+                                                index,
+                                                14,
+                                                'q14_labor_projects',
+                                            )
+                                        "
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
                                         height="24"
@@ -3171,7 +3317,12 @@ s
                             </div>
                             <div
                                 class="form__field add-block"
-                                @click="AddBlock14"
+                                @click="
+                                    addNewBlock(14, 'q14_labor_projects', {
+                                        lab_project_name: '',
+                                        amount: '',
+                                    })
+                                "
                             >
                                 <p>+ добавить проект</p>
                             </div>
@@ -3355,7 +3506,13 @@ s
                                 </div>
                                 <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        @click="deleteBlock15(index)"
+                                        @click="
+                                            deleteBlock(
+                                                index,
+                                                15,
+                                                'grants_data',
+                                            )
+                                        "
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
                                         height="24"
@@ -3382,7 +3539,15 @@ s
                             </div>
                             <div
                                 class="form__field add-block"
-                                @click="AddBlock15"
+                                @click="
+                                    addNewBlock(15, 'grants_data', {
+                                        name: '',
+                                        status: '',
+                                        author_name: '',
+                                        competition_link: '',
+                                        prove_link: '',
+                                    })
+                                "
                             >
                                 <p>+ добавить проект</p>
                             </div>
@@ -3746,7 +3911,13 @@ s
                                 </div>
                                 <div type="button" v-if="!block.is_verified">
                                     <svg
-                                        @click="deleteBlock17(index)"
+                                        @click="
+                                            deleteBlock(
+                                                index,
+                                                17,
+                                                'source_data',
+                                            )
+                                        "
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
                                         height="24"
@@ -3773,7 +3944,12 @@ s
                             </div>
                             <div
                                 class="form__field add-block"
-                                @click="addNewBlockQ17"
+                                @click="
+                                    addNewBlock(17, 'source_data', {
+                                        source_name: '',
+                                        link: '',
+                                    })
+                                "
                             >
                                 + Добавить источник
                             </div>
@@ -4335,165 +4511,28 @@ const selectFile = (e, id, field, subfield, index) => {
     if (subfield) report.value[id][field][index][subfield] = e.files[0];
     else report.value[id][field] = e.files[0];
 };
-const addNewBlock = () => {
-    report.value[5].participants_data.push({ name: '', document: '' });
-    report.value[5].disabledBtn = false;
+
+const addNewBlock = (sectionIndex, NameSection, fields) => {
+    console.log(sectionIndex, fields);
+    report.value[sectionIndex][NameSection].push(fields);
+    console.log(report.value);
+    if (sectionIndex === 5 || sectionIndex === 17) {
+        report.value[sectionIndex][NameSection].disabledBtn = false;
+    }
 };
 
-const addNewBlockQ17 = () => {
-    report.value[17].source_data.push({ source_name: '', link: '' });
-    report.value[17].disabledBtn = false;
-};
-const AddLink7 = (index) => {
-    report.value[7].participation_data[index].links.push({ link: '' });
-};
-const deleteLink7 = (index) => {
-    report.value[7].participation_data[index].links.splice(index, 1);
+const AddLink = (index, sectionIndex, nameSection, fields) => {
+    report.value[sectionIndex][nameSection][index].links.push(fields);
 };
 
-const AddBlock7 = () => {
-    report.value[7].participation_data.push({
-        event_name: '',
-        number_of_participants: '',
-        certificate_scans: null,
-        links: [{ link: '' }],
-    });
+const deleteBlock = (index, sectionIndex, nameSection) => {
+    report.value[sectionIndex][nameSection].splice(index, 1);
 };
 
-const AddLink8 = (index) => {
-    report.value[8].participation_data[index].links.push({ link: '' });
+const deleteLink = (index, sectionIndex, nameSection) => {
+    report.value[sectionIndex][nameSection][index].links.splice(index, 1);
 };
-const deleteLink8 = (index) => {
-    report.value[8].participation_data[index].links.splice(index, 1);
-};
-
-const AddBlock8 = () => {
-    report.value[8].participation_data.push({
-        event_name: '',
-        number_of_participants: '',
-        certificate_scans: null,
-        links: [{ link: '' }],
-    });
-};
-
-const AddBlock9 = () => {
-    report.value[9].participation_data.push({
-        event_name: '',
-        number_of_participants: '',
-        certificate_scans: null,
-    });
-};
-
-const AddBlock10 = () => {
-    report.value[10].participation_data.push({
-        event_name: '',
-        number_of_participants: '',
-        certificate_scans: null,
-    });
-};
-
-const AddBlock11 = () => {
-    report.value[11].participation_data.push({
-        event_name: '',
-        number_of_participants: '',
-        certificate_scans: null,
-    });
-};
-
-const addBlock12 = () => {
-    report.value[12].participation_data.push({
-        event_name: '',
-        number_of_participants: '',
-        certificate_scans: null,
-    });
-};
-
-const AddBlock13 = () => {
-    report.value[13].organization_data.push({
-        event_type: '',
-        event_link: '',
-    });
-    report.value[13].disabledBtn = false;
-};
-const AddBlock14 = () => {
-    report.value[14].q14_labor_projects.push({
-        lab_project_name: '',
-        amount: '',
-    });
-};
-
-const AddBlock15 = () => {
-    report.value[15].grants_data.push({
-        name: '',
-        status: '',
-        author_name: '',
-        competition_link: '',
-        prove_link: '',
-    });
-};
-
-// const deleteBlock = async (index) => {
-//     try {
-//         const response = await HTTP.delete(
-//             `/competitions/${route.params.competition_pk}/reports/q5/${report.value[5].id}/objects/${report.value[5].participants_data[index].id}/`,
-//             report.value[5],
-//             {
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     Authorization: 'Token ' + localStorage.getItem('Token'),
-//                 },
-//             },
-//         );
-//         report.value[5] = response.data;
-//     } catch (error) {
-//         isError.value = error.response.data;
-//     }
-//     report.value[5].participants_data.splice(index, 1);
-// };
-const deleteBlock = (index) => {
-    report.value[5].participants_data.splice(index, 1);
-};
-
-const deleteBlock7 = (index) => {
-    report.value[7].participation_data.splice(index, 1);
-};
-
-const deleteBlock8 = (index) => {
-    report.value[8].participation_data.splice(index, 1);
-};
-
-const deleteBlock9 = (index) => {
-    report.value[9].participation_data.splice(index, 1);
-};
-
-const deleteBlock10 = (index) => {
-    report.value[10].participation_data.splice(index, 1);
-};
-
-const deleteBlock11 = (index) => {
-    report.value[11].participation_data.splice(index, 1);
-};
-
-const deleteBlock12 = (index) => {
-    report.value[12].participation_data.splice(index, 1);
-};
-
-const deleteBlock13 = (index) => {
-    report.value[13].organization_data.splice(index, 1);
-};
-
-const deleteBlock14 = (index) => {
-    report.value[14].q14_labor_projects.splice(index, 1);
-};
-
-const deleteBlock15 = (index) => {
-    report.value[15].grants_data.splice(index, 1);
-};
-
-const deleteBlock17 = (index) => {
-    report.value[17].source_data.splice(index, 1);
-};
-
+// const report = ref({});
 const report = ref({
     1: { number_of_members: '', number_of_payments: '' },
     2: {
@@ -4508,6 +4547,7 @@ const report = ref({
     5: {
         participants_data: [{ name: '', document: null }],
         disabledBtn: false,
+        show_btn: false,
     },
     61: {
         demonstration_block: {
@@ -4558,10 +4598,10 @@ const report = ref({
                 event_name: '',
                 number_of_participants: '',
                 links: [{ link: '' }],
-                // certificate_scans: null,
             },
         ],
         disabledBtn: false,
+        show_btn: false,
     },
     8: {
         participation_data: [
@@ -4569,10 +4609,10 @@ const report = ref({
                 event_name: '',
                 number_of_participants: '',
                 links: [{ link: '' }],
-                // certificate_scans: null,
             },
         ],
         disabledBtn: false,
+        show_btn: false,
     },
     9: {
         participation_data: [
@@ -4583,6 +4623,7 @@ const report = ref({
             },
         ],
         disabledBtn: false,
+        show_btn: false,
     },
     10: {
         participation_data: [
@@ -4593,6 +4634,7 @@ const report = ref({
             },
         ],
         disabledBtn: false,
+        show_btn: false,
     },
     11: {
         participation_data: [
@@ -4603,20 +4645,24 @@ const report = ref({
             },
         ],
         disabledBtn: false,
+        show_btn: false,
     },
     12: {
         participation_data: [
             { event_name: '', prize_place: null, certificate_scans: null },
         ],
         disabledBtn: false,
+        show_btn: false,
     },
     13: {
         organization_data: [{ event_type: null, event_link: '' }],
         disabledBtn: false,
+        show_btn: false,
     },
     14: {
         q14_labor_projects: [{ lab_project_name: '', amount: '' }],
         disabledBtn: false,
+        show_btn: false,
     },
     15: {
         grants_data: [
@@ -4629,6 +4675,7 @@ const report = ref({
             },
         ],
         disabledBtn: false,
+        show_btn: false,
     },
     16: {
         link_vk_commander: '',
@@ -4638,7 +4685,11 @@ const report = ref({
         vk_detachment_number_subscribers: '',
         disabledBtn: false,
     },
-    17: { source_data: [{ source_name: '', link: '' }], disabledBtn: false },
+    17: {
+        source_data: [{ source_name: '', link: '' }],
+        disabledBtn: false,
+        show_btn: false,
+    },
     18: { participants_number: '', disabledBtn: false },
     19: { safety_violations: null, disabledBtn: false },
     20: {
@@ -4674,6 +4725,7 @@ const getParameters = async (id) => {
                 },
             },
         );
+        console.log(report.value[id]);
         if (id == 1 || id == 3 || id == 4) report.value[id] = response.data;
         else if (response.data.results.length) {
             if (
@@ -4780,23 +4832,14 @@ const getParameters = async (id) => {
                 if (report.value[id].participation_data) {
                     report.value[id].participation_data = response.data.results;
                 } else report.value[id] = response.data.results[0];
-                console.log(`true`);
                 report.value[id].disabledBtn = true;
             }
         }
         isLoading.value = false;
+        const allowedIds = [5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17];
         if (
-            id == 5 ||
-            id == 7 ||
-            id == 8 ||
-            id == 9 ||
-            id == 10 ||
-            id == 11 ||
-            id == 12 ||
-            id == 13 ||
-            id == 14 ||
-            id == 15 ||
-            id == 17
+            allowedIds.includes(id)
+            // Object.prototype.hasOwnProperty.call(report.value[id], 'show_btn')
         ) {
             report.value[id].disabledBtn = false;
         }
@@ -4809,15 +4852,8 @@ const postParameters = async (id) => {
     try {
         let fd = report.value[id];
         let type = 'application/json';
-        if (
-            id == 5 ||
-            id == 7 ||
-            id == 8 ||
-            id == 9 ||
-            id == 10 ||
-            id == 11 ||
-            id == 12
-        ) {
+        const allowedIds = [5, 7, 8, 9, 10, 11, 12];
+        if (allowedIds.includes(id)) {
             type = 'multipart/form-data';
             fd = new FormData();
             for (let i in report.value[id]) {
@@ -4886,14 +4922,8 @@ const postParameters = async (id) => {
                         if (temp.is_verified) {
                             continue;
                         }
-                        if (
-                            id == 7 ||
-                            id == 8 ||
-                            id == 9 ||
-                            id == 10 ||
-                            id == 11 ||
-                            id == 12
-                        ) {
+                        const allowedIds = [7, 8, 9, 10, 11, 12];
+                        if (allowedIds.includes(id)) {
                             if (temp.id) continue;
                             await HTTP.patch(
                                 `/competitions/${route.params.competition_pk}/reports/q${index}/${report.value[id].participation_data[0].detachment_report.id}/objects/${temp.id}/`,
@@ -5017,8 +5047,10 @@ watch(
 );
 
 onMounted(async (id) => {
+    // report.value = JSON.parse(JSON.stringify(reportBase));
     await getParameters(id);
 });
+console.log(report);
 </script>
 <style>
 .v-expansion-panels {
