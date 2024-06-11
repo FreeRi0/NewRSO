@@ -55,7 +55,6 @@ import { useEducationalsStore } from '@features/store/educationals';
 import { useSquadsStore } from '@features/store/squads';
 import { HTTP } from '@app/http';
 import { useDistrictsStore } from '@features/store/districts';
-import { verify } from 'crypto';
 
 const roleStore = useRoleStore();
 const userStore = useUserStore();
@@ -100,7 +99,7 @@ const currentUser = storeToRefs(userStore);
 onMounted(() => {
     setTimeout(() => {
         verifyToken();
-    }, 2000)
+    }, 1000)
 
     regionsStore.getRegions();
 });

@@ -68,9 +68,9 @@ const TokenData = ref({
     uuid: payload?.uuid,
 })
 
-const getAccessToken = async (token) => {
+const getAccessToken = async () => {
     try {
-        const resp = await HTTP.post('/jwt/vk-login/', { access_token: token })
+        const resp = await HTTP.post('/jwt/vk-login/', TokenData.value)
         console.log('access', resp.data.access, 'refresh', resp.data.refresh);
         localStorage.setItem('jwt_token', resp.data.access );
     } catch (e) {
@@ -79,14 +79,14 @@ const getAccessToken = async (token) => {
 }
 
 
-const exchangeToken = async () => {
-    try {
-        const resp = await HTTP.post('/exchange-token/', TokenData.value)
-        getAccessToken(resp.data.access_token);
-    } catch (e) {
-        console.log('error:', e)
-    }
-}
+// const exchangeToken = async () => {
+//     try {
+//         const resp = await HTTP.post('/exchange-token/', TokenData.value)
+//         getAccessToken(resp.data.access_token);
+//     } catch (e) {
+//         console.log('error:', e)
+//     }
+// }
 
 
 
@@ -121,7 +121,7 @@ const deleteWall = (imageWall) => {
 };
 
 onMounted(() => {
-    exchangeToken();
+    getAccessToken();
 
 })
 </script>

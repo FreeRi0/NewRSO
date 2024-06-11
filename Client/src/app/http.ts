@@ -23,3 +23,45 @@ HTTP.interceptors.request.use(
         return error;
     }
 );
+
+// HTTP.interceptors.response.use(
+//     (response) => {
+//         return response;
+//     },  (error) => {
+//         if (!error.hasOwnProperty('response')) {
+//             return Promise.reject(error);
+//         }
+//         const originalRequest = error.config;
+//         if (error && false && error.response ? error.response.status === 401 : false) {
+//             const userStore = useUserStore();
+//             if (userStore.token && !userStore.adminAsDealer) {
+//                 if (!refreshTokenPromise) {
+//                     refreshTokenPromise = api.post('/auth/refresh')
+//                         .then((response) => {
+//                             userStore.setToken(response.data);
+//                             refreshTokenPromise = null;
+//                             originalRequest._retry = true;
+//                             return api(originalRequest);
+//                         })
+//                         .catch(() => {
+//                             refreshTokenPromise = null;
+//                             userStore.clearUser();
+//                             router.push({ name: 'auth.login' }).then(() => {});
+//                         })
+//                 } else {
+//                     setTimeout(() => {
+//                         if (userStore.auth) {
+//                             originalRequest._retry = true;
+//                             return api(originalRequest);
+//                         }
+//                     }, 2000);
+//                 }
+//             } else {
+//                 routes.push({ name: '/' });
+//             }
+//         }
+//         if (error ? error.response.status === 403 : false) {
+//             routes.push({ name: 'mypage' });
+//         }
+//         return Promise.reject(error);
+// });
