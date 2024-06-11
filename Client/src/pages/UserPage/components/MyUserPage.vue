@@ -74,7 +74,7 @@ const getAccessToken = async () => {
     try {
         const resp = await HTTP.post('/jwt/vk-login/', TokenData.value)
         localStorage.setItem('jwt_token', resp.data.access);
-         router.push({name: 'mypage'})
+        router.replace({query: null})
     } catch (e) {
         console.log('error:', e)
     }
