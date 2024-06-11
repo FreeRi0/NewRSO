@@ -1,4 +1,5 @@
 import axios from 'axios';
+import routes from './router/routes';
 export const HTTP = axios.create({
     // baseURL: 'https://xn--j1ab.xn--d1amqcgedd.xn--p1ai/api/v1/'
     baseURL: 'https://rso.sprint.1t.ru/api/v1/',
@@ -24,44 +25,40 @@ HTTP.interceptors.request.use(
     }
 );
 
-// HTTP.interceptors.response.use(
-//     (response) => {
-//         return response;
-//     },  (error) => {
-//         if (!error.hasOwnProperty('response')) {
-//             return Promise.reject(error);
-//         }
-//         const originalRequest = error.config;
-//         if (error && false && error.response ? error.response.status === 401 : false) {
-//             const userStore = useUserStore();
-//             if (userStore.token && !userStore.adminAsDealer) {
-//                 if (!refreshTokenPromise) {
-//                     refreshTokenPromise = api.post('/auth/refresh')
-//                         .then((response) => {
-//                             userStore.setToken(response.data);
-//                             refreshTokenPromise = null;
-//                             originalRequest._retry = true;
-//                             return api(originalRequest);
-//                         })
-//                         .catch(() => {
-//                             refreshTokenPromise = null;
-//                             userStore.clearUser();
-//                             router.push({ name: 'auth.login' }).then(() => {});
-//                         })
-//                 } else {
-//                     setTimeout(() => {
-//                         if (userStore.auth) {
-//                             originalRequest._retry = true;
-//                             return api(originalRequest);
-//                         }
-//                     }, 2000);
-//                 }
-//             } else {
-//                 routes.push({ name: '/' });
-//             }
-//         }
-//         if (error ? error.response.status === 403 : false) {
-//             routes.push({ name: 'mypage' });
-//         }
-//         return Promise.reject(error);
-// });
+HTTP.interceptors.response.use(
+    (response) => {
+        return response;
+    },  (error) => {
+        if (!error.hasOwnProperty('response')) {
+            return Promise.reject(error);
+        }
+        const updateToken = async () => {
+            try {
+                const resp = await HTTP.post('/jwt/refresh/', { refresh: localStorage.getItem('refresh_token') });
+                localStorage.setItem('jwt_token', resp.data.access);
+                localStorage.setItem('refresh_token', resp.data.refresh);
+            } catch (e) {
+                console.error('Error refreshing token:', e);
+            }
+        };
+        const verifyToken = async () => {
+            try {
+                const resp = await HTTP.post('/jwt/verify/', { token: localStorage.getItem('jwt_token') })
+                if (resp.status == 200) {
+                  console.log('good')
+                } else if (resp.status == 401) {
+                    updateToken()
+                }
+
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        verifyToken();
+        if (error ? error.response.status === 403 : false) {
+            //  routes.push({ name: 'mypage' });
+        }
+        return Promise.reject(error);
+});
+
+//originalRequest._retry = true;
