@@ -24,40 +24,40 @@ HTTP.interceptors.request.use(
     }
 );
 
-HTTP.interceptors.response.use(
-    (response) => {
-        return response;
-    },  (error) => {
-        if (!error.hasOwnProperty('response')) {
-            return Promise.reject(error);
-        }
-        const updateToken = async () => {
-            try {
-                const resp = await HTTP.post('/jwt/refresh/', { refresh: localStorage.getItem('refresh_token') });
-                localStorage.setItem('jwt_token', resp.data.access);
-                localStorage.setItem('refresh_token', resp.data.refresh);
-            } catch (e) {
-                console.error('Error refreshing token:', e);
-            }
-        };
-        const verifyToken = async () => {
-            try {
-                const resp = await HTTP.post('/jwt/verify/', { token: localStorage.getItem('jwt_token') })
-                if (resp.status == 200) {
-                  console.log('good')
-                } else if (resp.status == 401) {
-                    updateToken()
-                }
+// HTTP.interceptors.response.use(
+//     (response) => {
+//         return response;
+//     },  (error) => {
+//         if (!error.hasOwnProperty('response')) {
+//             return Promise.reject(error);
+//         }
+//         const updateToken = async () => {
+//             try {
+//                 const resp = await HTTP.post('/jwt/refresh/', { refresh: localStorage.getItem('refresh_token') });
+//                 localStorage.setItem('jwt_token', resp.data.access);
+//                 localStorage.setItem('refresh_token', resp.data.refresh);
+//             } catch (e) {
+//                 console.error('Error refreshing token:', e);
+//             }
+//         };
+//         const verifyToken = async () => {
+//             try {
+//                 const resp = await HTTP.post('/jwt/verify/', { token: localStorage.getItem('jwt_token') })
+//                 if (resp.status == 200) {
+//                   console.log('good')
+//                 } else if (resp.status == 401) {
+//                     updateToken()
+//                 }
 
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        verifyToken();
-        if (error ? error.response.status === 403 : false) {
-            //  routes.push({ name: 'mypage' });
-        }
-        return Promise.reject(error);
-});
+//             } catch (error) {
+//                 console.log(error)
+//             }
+//         }
+//         verifyToken();
+//         if (error ? error.response.status === 403 : false) {
+//             //  routes.push({ name: 'mypage' });
+//         }
+//         return Promise.reject(error);
+// });
 
 //originalRequest._retry = true;
