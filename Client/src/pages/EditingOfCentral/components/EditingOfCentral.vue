@@ -1,24 +1,12 @@
 <template>
     <div class="container">
         <h1 class="title title--lso">Редактирование центрального штаба</h1>
-        <FormCentr
-            :participants="true"
-            :headquarter="headquarter"
-            :members="members"
-            :submited="submited"
-            :is-commander-loading="isCommanderLoading"
-            :is-members-loading="isMembersLoading"
-            :is-error="isError"
-            :is-error-members="isErrorMembers"
-            v-if="headquarter && isError && isErrorMembers && !loading"
-            @submit.prevent="changeHeadquarter"
-            @select-emblem="onSelectEmblem"
-            @select-banner="onSelectBanner"
-            @delete-emblem="onDeleteEmblem"
-            @delete-banner="onDeleteBanner"
-            @update-search-member="onUpdateSearchMember"
-            @update-member="onUpdateMember"
-        >
+        <FormCentr :participants="true" :headquarter="headquarter" :members="members" :submited="submited"
+            :is-commander-loading="isCommanderLoading" :is-members-loading="isMembersLoading" :is-error="isError"
+            :is-error-members="isErrorMembers" v-if="headquarter && isError && isErrorMembers && !loading"
+            @submit.prevent="changeHeadquarter" @select-emblem="onSelectEmblem" @select-banner="onSelectBanner"
+            @delete-emblem="onDeleteEmblem" @delete-banner="onDeleteBanner" @update-search-member="onUpdateSearchMember"
+            @update-member="onUpdateMember">
         </FormCentr>
     </div>
 </template>
@@ -62,12 +50,7 @@ const isCommanderLoading = ref(false);
 const getHeadquarter = async () => {
     loading.value = true;
     isCommanderLoading.value = true;
-    await HTTP.get(`/centrals/1/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    await HTTP.get(`/centrals/1/`,)
         .then((response) => {
             headquarter.value = response.data;
             if (headquarter.value.commander) {
@@ -92,12 +75,7 @@ const isMembersLoading = ref(false);
 
 const getMembers = async (name) => {
     isMembersLoading.value = true;
-    HTTP.get(`/centrals/${id}/members/?search=${name}`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    HTTP.get(`/centrals/${id}/members/?search=${name}`,)
         .then((response) => {
             members.value = response.data.results;
         })
@@ -245,7 +223,7 @@ const changeHeadquarter = async () => {
         await HTTP.patch(`/centrals/1/`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+                 Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
             },
         });
         swal.fire({

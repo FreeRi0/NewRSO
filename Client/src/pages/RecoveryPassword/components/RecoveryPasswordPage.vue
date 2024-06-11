@@ -69,7 +69,7 @@ const submitForm = async () => {
             },
         });
         data.value = response.data;
-        console.log(response.data);
+        // console.log(response.data);
         isLoading.value = false;
         router.push({
             name: 'RecoveryPassword',

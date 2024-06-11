@@ -5,96 +5,46 @@
                 Справка о членстве в РСО (для работодателя)
             </h2>
             <div class="references-search">
-                <input
-                    type="text"
-                    id="search"
-                    class="references-search__input"
-                    @keyup="searchContributors"
-                    v-model="name"
-                    placeholder="Поищем пользователей?"
-                />
+                <input type="text" id="search" class="references-search__input" @keyup="searchContributors"
+                    v-model="name" placeholder="Поищем пользователей?" />
                 <img src="@app/assets/icon/search.svg" alt="search" />
             </div>
             <div class="references-container">
                 <div class="filters">
-                    <filters
-                        @update-district="updateDistrict"
-                        @update-reg="updateReg"
-                        @update-local="updateLocal"
-                        @update-educ="updateEduc"
-                        @update-detachment="updateDetachment"
-                        :district="district"
-                        :districts="districts"
-                        :reg="reg"
-                        :regionals="regionals"
-                        :local="local"
-                        :locals="locals"
-                        :educ="educ"
-                        :educ-head="educHead"
-                        :detachment="detachment"
-                        :detachments="detachments"
-                        :roles="roles.roles.value"
-                        :sorted-participants="sortedParticipants"
-                    />
+                    <filters @update-district="updateDistrict" @update-reg="updateReg" @update-local="updateLocal"
+                        @update-educ="updateEduc" @update-detachment="updateDetachment" :district="district"
+                        :districts="districts" :reg="reg" :regionals="regionals" :local="local" :locals="locals"
+                        :educ="educ" :educ-head="educHead" :detachment="detachment" :detachments="detachments"
+                        :roles="roles.roles.value" :sorted-participants="sortedParticipants" />
                 </div>
                 <!-- <pre>{{ reg }}</pre> -->
                 <div class="references-items">
                     <div class="references-sort">
                         <div class="d-flex align-center">
                             <div class="references-sort__all">
-                                <input
-                                    type="checkbox"
-                                    @click="select"
-                                    v-model="checkboxAll"
-                                />
+                                <input type="checkbox" @click="select" v-model="checkboxAll" />
                             </div>
                             <div class="ml-3">Выбрать всё</div>
                         </div>
                         <div class="sort-filters">
                             <div class="sort-select">
-                                <sortByEducation
-                                    variant="outlined"
-                                    clearable
-                                    v-model="sortBy"
-                                    :options="sortOptionss"
-                                    :sorts-boolean="false"
-                                    class="Sort-alphabet"
-                                ></sortByEducation>
+                                <sortByEducation variant="outlined" clearable v-model="sortBy" :options="sortOptionss"
+                                    :sorts-boolean="false" class="Sort-alphabet"></sortByEducation>
                             </div>
 
-                            <Button
-                                type="button"
-                                class="ascend"
-                                iconn="iconn"
-                                @click="ascending = !ascending"
-                                color="white"
-                            ></Button>
+                            <Button type="button" class="ascend" iconn="iconn" @click="ascending = !ascending"
+                                color="white"></Button>
                         </div>
                     </div>
                     <div class="references-wrapper">
-                        <referencesList
-                            v-if="!isLoading"
-                            :participants="sortedParticipants"
-                            :selected-peoples="selectedPeoples"
-                            @change="changePeoples"
-                        ></referencesList>
-                        <v-progress-circular
-                            class="circleLoader"
-                            v-else
-                            indeterminate
-                            color="blue"
-                        ></v-progress-circular>
+                        <referencesList v-if="!isLoading" :participants="sortedParticipants"
+                            :selected-peoples="selectedPeoples" @change="changePeoples"></referencesList>
+                        <v-progress-circular class="circleLoader" v-else indeterminate
+                            color="blue"></v-progress-circular>
                     </div>
-                    <Button
-                        @click="participantsVisible += step"
-                        v-if="participantsVisible < participants.length"
-                        label="Показать еще"
-                    ></Button>
-                    <Button
-                        @click="participantsVisible -= step"
-                        v-else
-                        label="Свернуть все"
-                    ></Button>
+                    <Button @click="participantsVisible += step" v-if="participantsVisible < participants.length"
+                        label="Показать еще"></Button>
+                    <Button @click="participantsVisible -= step" v-else label="Свернуть все"></Button>
                 </div>
             </div>
 
@@ -102,51 +52,30 @@
                 <form action="#" @submit.prevent="SendReference()">
                     <div class="data-form refer">
                         <div class="form-field">
-                            <label for="education-org"
-                                >Дата начала действия справки<span
-                                    class="valid-red"
-                                    >*</span
-                                ></label
-                            >
-                            <Input
-                                name="date_start"
-                                type="date"
-                                class="input-big"
-                                v-model:value="refData.cert_start_date"
-                            />
+                            <label for="education-org">Дата начала действия справки<span
+                                    class="valid-red">*</span></label>
+                            <Input name="date_start" type="date" class="input-big"
+                                v-model:value="refData.cert_start_date" />
                         </div>
                         <p class="error" v-if="isError.cert_start_date">
                             {{ '' + isError.cert_start_date }}
                         </p>
 
                         <div class="form-field">
-                            <label for="facultet"
-                                >Дата окончания действия справки
+                            <label for="facultet">Дата окончания действия справки
                             </label>
-                            <Input
-                                name="date_end"
-                                type="date"
-                                class="input-big"
-                                v-model:value="refData.cert_end_date"
-                            />
+                            <Input name="date_end" type="date" class="input-big"
+                                v-model:value="refData.cert_end_date" />
                         </div>
                     </div>
                     <p class="error" v-if="isError.cert_end_date">
                         {{ '' + isError.cert_end_date }}
                     </p>
                     <div class="form-field another">
-                        <label for="course"
-                            >Справка выдана для предоставления
-                            <span class="valid-red">*</span></label
-                        >
-                        <Input
-                            name="spravka-field"
-                            type="text"
-                            v-model:value="refData.recipient"
-                            id="course"
-                            class="input-full"
-                            placeholder="Ответ"
-                        />
+                        <label for="course">Справка выдана для предоставления
+                            <span class="valid-red">*</span></label>
+                        <Input name="spravka-field" type="text" v-model:value="refData.recipient" id="course"
+                            class="input-full" placeholder="Ответ" />
                     </div>
                     <p class="error" v-if="isError.recipient">
                         {{ '' + isError.recipient }}
@@ -154,10 +83,7 @@
                     <div class="selectedItems">
                         <h3>Итого: {{ selectedPeoples.length }}</h3>
 
-                        <checkedReference
-                            @change="changePeoples"
-                            :participants="selectedPeoples"
-                        ></checkedReference>
+                        <checkedReference @change="changePeoples" :participants="selectedPeoples"></checkedReference>
                     </div>
 
                     <Button type="submit" label="Получить справки"></Button>
@@ -240,12 +166,7 @@ const viewContributorsData = async (search) => {
     try {
         isLoading.value = true;
 
-        const viewParticipantsResponse = await HTTP.get('/rsousers' + search, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const viewParticipantsResponse = await HTTP.get('/rsousers' + search,);
         participants.value = viewParticipantsResponse.data.results;
         isLoading.value = false;
         selectedPeoples.value = [];
@@ -257,12 +178,7 @@ const viewContributorsData = async (search) => {
 const getFiltersData = async (resp, search) => {
     try {
         isLoading.value = true;
-        const viewHeadquartersResponse = await HTTP.get(resp + search, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const viewHeadquartersResponse = await HTTP.get(resp + search,);
         isLoading.value = false;
 
         if (resp.indexOf('districts') >= 0) {
@@ -364,7 +280,7 @@ const SendReference = async () => {
     await HTTP.post('/membership_certificates/external/', refData.value, {
         headers: {
             'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+             Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
         },
         responseType: 'blob'
     })
@@ -565,8 +481,8 @@ watch(
     () => {
         let districtID = districtsStore.districts.length
             ? districtsStore.districts.find(
-                  (dis) => (dis.name = district.value),
-              )?.id
+                (dis) => (dis.name = district.value),
+            )?.id
             : roleStore.roles.districtheadquarter_commander?.id;
         regionals.value = regionalsStore.regionals.filter(
             (reg) => reg.district_headquarter == district.value,
@@ -610,7 +526,7 @@ watch(
     () => {
         let educId = educationalsStore.educationals.length
             ? educationalsStore.educationals.find((ed) => ed.name == educ.value)
-                  ?.id
+                ?.id
             : roleStore.roles.educationalheadquarter_commander?.id;
         detachments.value = squadsStore.squads.filter(
             (det) => det.educational_headquarter == educId,
@@ -631,36 +547,44 @@ input[type='number']::-webkit-outer-spin-button {
 
 .references {
     padding: 0px 0px 60px 0px;
+
     &-title {
         font-size: 52px;
     }
+
     &-sort {
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
+
         @media screen and (max-width: 768px) {
             align-items: flex-start;
             flex-direction: column;
         }
     }
+
     &-container {
         display: grid;
         grid-template-columns: 0.5fr 1.5fr;
         align-items: baseline;
         grid-column-gap: 36px;
+
         @media screen and (max-width: 768px) {
             margin-top: 60px;
         }
     }
+
     &-search {
         position: relative;
         box-sizing: border-box;
         margin: 60px 0px 0px 0px;
+
         img {
             position: absolute;
             top: 15px;
             left: 16px;
         }
+
         &__input {
             width: 100%;
             padding: 13px 0px 10px 60px;
@@ -668,6 +592,7 @@ input[type='number']::-webkit-outer-spin-button {
             border: 1px solid black;
         }
     }
+
     &-wrapper {
         padding-top: 40px;
     }
@@ -682,6 +607,7 @@ p {
     grid-template-columns: 1fr 1fr;
     column-gap: 140px;
     margin-top: 60px;
+
     @media screen and (max-width: 768px) {
         grid-template-columns: 1fr 1fr;
         column-gap: 40px;
@@ -691,6 +617,7 @@ p {
 .another {
     margin-top: 50px;
 }
+
 .form-field label {
     font-size: 16px;
     font-family: BERTSANS;
@@ -700,6 +627,7 @@ p {
 
 .input-big {
     width: 465px;
+
     @media screen and (max-width: 768px) {
         width: 100%;
     }
@@ -715,11 +643,13 @@ p {
     border-radius: 10px;
     height: 48px;
     width: 48px;
+
     input {
         width: 24px;
         height: 24px;
     }
 }
+
 .filter {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -730,8 +660,10 @@ p {
     font-weight: 600;
     line-height: 31px;
 }
+
 .selectedItems {
     margin-top: 60px;
+
     h3 {
         margin-bottom: 40px;
     }
@@ -751,7 +683,7 @@ p {
         margin: 0;
     }
 
-    &--active + .v-expansion-panel {
+    &--active+.v-expansion-panel {
         margin: 0;
     }
 
@@ -772,6 +704,7 @@ p {
 .v-expansion-panel:not(:first-child)::after {
     display: none;
 }
+
 .sort-filters {
     align-items: flex-start;
 }
@@ -803,6 +736,7 @@ p {
 .v-field--variant-outlined .v-field__outline__start {
     border: none;
 }
+
 .Sort-alphabet {
     margin-right: 8px;
 }

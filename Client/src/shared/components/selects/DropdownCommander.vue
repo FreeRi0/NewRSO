@@ -117,7 +117,7 @@ const props = defineProps({
 const selected = ref(null);
 
 const changeValue = (event) => {
-    console.log(event);
+    // console.log(event);
     emit('update:value', event);
 };
 
@@ -134,14 +134,14 @@ const items = ref(props.items);
 const queryRegion = ref(props.query);
 
 const onChangeItem = async () => {
-    console.log(queryRegion.value);
+    // console.log(queryRegion.value);
     await HTTP.get(props.address, {
         params: {
             region: queryRegion.value,
         },
         headers: {
             'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+             Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
         },
     })
         .then((res) => {

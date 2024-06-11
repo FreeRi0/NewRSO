@@ -282,12 +282,7 @@ const getEducationals = async (pagination, orderLimit) => {
         if (SelectedSortRegional.value) data.push('regional_headquarter__name='+SelectedSortRegional.value)
         if (SelectedSortLocal.value) data.push('local_headquarter__name='+SelectedSortLocal.value)
         if (sortBy.value && !pagination) data.push('ordering='+(ascending.value?'':'-')+sortBy.value)
-        const viewHeadquartersResponse = await HTTP.get(url + data.join('&'), {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const viewHeadquartersResponse = await HTTP.get(url + data.join('&'),);
         isLoading.value = false;
 
         let response = viewHeadquartersResponse.data;

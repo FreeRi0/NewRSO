@@ -2,23 +2,11 @@
     <div class="container">
         <h1 class="title title--mb">Редактирование штаба СО ОО</h1>
 
-        <FormHQ
-            :participants="true"
-            :headquarter="headquarter"
-            :members="educationalsStore.members"
-            :submited="submited"
-            :is-commander-loading="isCommanderLoading"
-            :is-members-loading="isMembersLoading"
-            :is-error="isError"
-            :is-error-members="isErrorMembers"
-            v-if="headquarter && isError && isErrorMembers"
-            @submit.prevent="changeHeadquarter"
-            @select-file="onSelectFile"
-            @reset-emblem="onResetEmblem"
-            @select-banner="onSelectBanner"
-            @reset-banner="onResetBanner"
-            @update-member="onUpdateMember"
-        ></FormHQ>
+        <FormHQ :participants="true" :headquarter="headquarter" :members="educationalsStore.members"
+            :submited="submited" :is-commander-loading="isCommanderLoading" :is-members-loading="isMembersLoading"
+            :is-error="isError" :is-error-members="isErrorMembers" v-if="headquarter && isError && isErrorMembers"
+            @submit.prevent="changeHeadquarter" @select-file="onSelectFile" @reset-emblem="onResetEmblem"
+            @select-banner="onSelectBanner" @reset-banner="onResetBanner" @update-member="onUpdateMember"></FormHQ>
     </div>
 </template>
 
@@ -42,12 +30,7 @@ const isCommanderLoading = ref(false);
 
 const getHeadquarter = async () => {
     isCommanderLoading.value = true;
-    HTTP.get(`educationals/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    HTTP.get(`educationals/${id}/`,)
         .then((response) => {
             headquarter.value = response.data;
             if (headquarter.value.educational_institution.name) {
@@ -57,7 +40,7 @@ const getHeadquarter = async () => {
             if (headquarter.value.commander) {
                 headquarter.value.commander = headquarter.value.commander;
             }
-            console.log(response);
+            // console.log(response);
             isCommanderLoading.value = false;
         })
         .catch(function (error) {
@@ -85,7 +68,7 @@ const onUpdateMember = (event, id) => {
     const firstkey = Object.keys(event)[0];
     educationalsStore.members[memberIndex].change = true;
     if (firstkey == 'position')
-    educationalsStore.members[memberIndex].position.id = event[firstkey];
+        educationalsStore.members[memberIndex].position.id = event[firstkey];
     else educationalsStore.members[memberIndex][firstkey] = event[firstkey];
 };
 
@@ -149,12 +132,6 @@ const changeHeadquarter = async () => {
                     position: member.position.id,
                     is_trusted: member.is_trusted,
                 },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
             )
                 .then((response) => {
                     member.position = response.data.position;
@@ -164,7 +141,7 @@ const changeHeadquarter = async () => {
                 .catch(function ({ response }) {
                     isErrorMembers.value = response.data;
                     console.error('There was an error!', response.data);
-                    console.log('Ошибки отправки формы', isErrorMembers.value);
+                    // console.log('Ошибки отправки формы', isErrorMembers.value);
                     swal.fire({
                         position: 'center',
                         icon: 'error',
@@ -188,12 +165,12 @@ const changeHeadquarter = async () => {
     HTTP.patch(`/educationals/${id}/`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+             Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
         },
     })
         .then((response) => {
             // submited.value = true;
-            console.log(response.data);
+            // console.log(response.data);
             swal.fire({
                 position: 'center',
                 icon: 'success',

@@ -17,16 +17,16 @@
                     roleStore.roles.centralheadquarter_commander)) ||
             props.user.privacy?.privacy_email === 'Все' ||
             props.user.privacy?.privacy_email === 'all'
-        " :banner="user.media?.banner" @upload-wall="uploadWall" @update-wall="updateWall"
-            @delete-wall="deleteWall" :edited="false"></bannerPhoto>
+        " :banner="user.media?.banner" @upload-wall="uploadWall" @update-wall="updateWall" @delete-wall="deleteWall"
+            :edited="false"></bannerPhoto>
         <div class="user-metric__top" v-else>
             <div class="user-metric__top-img-wrapper">
                 <img src="@/app/assets/user-banner.jpg" alt="Баннер личной страницы(пусто)" />
             </div>
         </div>
 
-        <Avatar
-         :avatar="user.avatar?.photo" @upload="uploadAva" @update="updateAva" @delete="deleteAva" :edited="false">
+        <Avatar :avatar="user.avatar?.photo" @upload="uploadAva" @update="updateAva" @delete="deleteAva"
+            :edited="false">
         </Avatar>
 
         <div class="user-metric__bottom">
@@ -60,17 +60,17 @@
                         ">
                             <p>
                                 {{
-                                    position.userdetachmentposition?.position ??
-                                    position.usereducationalheadquarterposition
-                                        ?.position ??
-                                    position.userregionalheadquarterposition
-                                        ?.position ??
-                                    position.userlocalheadquarterposition
-                                        ?.position ??
-                                    position.userdistrictheadquarterposition
-                                        ?.position ??
-                                    position.usercentralheadquarterposition
-                                        ?.position
+                                position.userdetachmentposition?.position ??
+                                position.usereducationalheadquarterposition
+                                ?.position ??
+                                position.userregionalheadquarterposition
+                                ?.position ??
+                                position.userlocalheadquarterposition
+                                ?.position ??
+                                position.userdistrictheadquarterposition
+                                ?.position ??
+                                position.usercentralheadquarterposition
+                                ?.position
                                 }}
                             </p>
                         </li>
@@ -89,10 +89,10 @@
                         ">
                             <p>
                                 {{
-                                    position.userdetachmentposition?.headquarter
-                                        ?.name ??
-                                    position.usereducationalheadquarterposition
-                                        ?.headquarter?.name
+                                position.userdetachmentposition?.headquarter
+                                ?.name ??
+                                position.usereducationalheadquarterposition
+                                ?.headquarter?.name
                                 }}
                             </p>
                         </li>
@@ -113,8 +113,8 @@
                         ">
                             <p>
                                 {{
-                                    user.education?.study_institution
-                                        ?.short_name
+                                user.education?.study_institution
+                                ?.short_name
                                 }}
                             </p>
                         </li>
@@ -300,38 +300,38 @@ const squad = storeToRefs(squadsStore);
 const emit = defineEmits(['upload', 'update', 'delete']);
 
 const uploadAva = (imageAva) => {
-    console.log('photo', imageAva);
+    // console.log('photo', imageAva);
     emit('upload', imageAva);
-    console.log('ghhhgh');
+    // console.log('ghhhgh');
 };
 
 const updateAva = (imageAva) => {
-    console.log('photoUpdate', imageAva);
+    // console.log('photoUpdate', imageAva);
     emit('update', imageAva);
-    console.log('update');
+    // console.log('update');
 };
 
 const deleteAva = (imageAva) => {
-    console.log('photoDel', imageAva);
+    // console.log('photoDel', imageAva);
     emit('delete', imageAva);
-    console.log('del');
+    // console.log('del');
 };
 
 const uploadWall = (imageWall) => {
-    console.log('ban', imageWall);
+    // console.log('ban', imageWall);
     emit('uploadWall', imageWall);
-    console.log('ghhhgh');
+    // console.log('ghhhgh');
 };
 
 const updateWall = (imageWall) => {
-    console.log('banUpdate', imageWall);
+    // console.log('banUpdate', imageWall);
     emit('updateWall', imageWall);
-    console.log('update');
+    // console.log('update');
 };
 const deleteWall = (imageWall) => {
-    console.log('banDelete', imageWall);
+    // console.log('banDelete', imageWall);
     emit('deleteWall', imageWall);
-    console.log('delete');
+    // console.log('delete');
 };
 
 const regionalsStore = useRegionalsStore();
@@ -343,26 +343,14 @@ const getUserData = async () => {
     try {
         if (props.user.detachment_id) {
             const responseSquad = await HTTP.get(
-                `/detachments/${props.user.detachment_id}/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
+                `/detachments/${props.user.detachment_id}/`
             );
             detachment.value = responseSquad.data;
         }
 
         if (props.user.educational_headquarter_id) {
             const responseEducHead = await HTTP.get(
-                `/educationals/${props.user.educational_headquarter_id}/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
+                `/educationals/${props.user.educational_headquarter_id}/`
             );
 
             educationalHeadquarter.value = responseEducHead.data;
@@ -379,7 +367,6 @@ watch(
         if (Object.keys(props.user).length === 0) {
             return;
         }
-        // getUserData();
         regionalsStore.searchRegionals(props.user.region);
     },
 );

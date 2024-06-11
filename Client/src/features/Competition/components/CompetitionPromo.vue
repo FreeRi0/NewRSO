@@ -89,7 +89,7 @@ const roleStore = useRoleStore();
 let sizeImage = ref('desktop');
 
 const getSizeImage = () => {
-    console.log('ширина экрана', window.innerWidth);
+    // console.log('ширина экрана', window.innerWidth);
     if (window.innerWidth <= 360) {
         sizeImage.value = 'mobile';
     }

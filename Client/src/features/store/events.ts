@@ -20,12 +20,7 @@ export const useEventsStore = defineStore('events', {
         async getEventId(id: String) {
             try {
                 this.isLoading = true;
-                const responseEvent = await HTTP.get(`/events/${id}/`, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                });
+                const responseEvent = await HTTP.get(`/events/${id}/`);
                 this.event = responseEvent.data;
                 this.isLoading = false;
             } catch (error) {
@@ -37,15 +32,7 @@ export const useEventsStore = defineStore('events', {
             try {
 
                 const responseStatus = await HTTP.get(
-                    `/events/${eventId}/user_status/${userId}/`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    },
-                );
+                    `/events/${eventId}/user_status/${userId}/`);
                 this.status = responseStatus.data;
 
             } catch (error) {
@@ -56,15 +43,7 @@ export const useEventsStore = defineStore('events', {
             try {
                 this.isLoading = true;
                 const responseEvents = await HTTP.get(
-                    `/events/${id}/applications`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    },
-                );
+                    `/events/${id}/applications`);
                 this.applications = responseEvents.data.results;
                 this.isLoading = false;
             } catch (error) {
@@ -77,15 +56,7 @@ export const useEventsStore = defineStore('events', {
             try {
                 this.isLoading = true;
                 const responseGroupEvents = await HTTP.get(
-                    `/events/${id}/group_applications/all/`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    },
-                );
+                    `/events/${id}/group_applications/all/`);
                 this.groupApplications = responseGroupEvents.data.results;
                 this.isLoading = false;
             } catch (error) {
@@ -102,11 +73,6 @@ export const useEventsStore = defineStore('events', {
                     {
                         params: {
                             limit: this.MembersLimit,
-                        },
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
                         },
                     },
                 );
@@ -125,11 +91,6 @@ export const useEventsStore = defineStore('events', {
                         params: {
                             limit: this.eventsLimit,
                         },
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
                     },
                 );
                 this.totalEvents = responseFilteredEvents.data.count;
@@ -145,15 +106,7 @@ export const useEventsStore = defineStore('events', {
                 this.isLoading = true;
 
                 const responseFilteredEventsNext = await HTTP.get(
-                    this.nextEvents.replace('http', 'https'),
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token' + localStorage.getItem('Token'),
-                        },
-                    },
-                );
+                    this.nextEvents.replace('http', 'https'));
 
                 this.events = this.events.concat(
                     responseFilteredEventsNext.data.results,
@@ -167,15 +120,7 @@ export const useEventsStore = defineStore('events', {
             try {
                 this.isLoading = true;
                 const responseOrg = await HTTP.get(
-                    `/events/${id}/organizers/`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    },
-                );
+                    `/events/${id}/organizers/`);
                 this.organizators = responseOrg.data.results;
                 this.isLoading = false;
             } catch (error) {

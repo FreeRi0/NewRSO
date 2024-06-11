@@ -13,7 +13,7 @@
                     верификацию. Верификация — это документальное подтверждение
                     ваших личных данных. Она займет всего несколько минут.
                 </div>
-                <router-link to="/PersonalData">
+                <router-link to="/personal-data">
                     <Button class="user-verify__btn" name="verify-btn" label="Пройти верификацию"
                         color="primary"></Button></router-link>
             </div>
@@ -48,6 +48,7 @@ import {
 } from '@shared/components/imagescomp';
 
 import { ref, onMounted } from 'vue';
+import axios from 'axios';
 import { HTTP } from '@app/http';
 import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
@@ -56,30 +57,38 @@ const currentUser = storeToRefs(userStore);
 const isLoading = storeToRefs(userStore);
 const education = ref({});
 const region = ref({});
+const tokenUser = ref("");
+const isAuth = ref(!!localStorage.getItem('jwt_token'));
+const query = new URLSearchParams(window.location.search);
+const payload = JSON.parse(query.get("payload"));
 
 
-// const query = new URLSearchParams(window.location.search);
-// const payload = JSON.parse(query.get("payload"));
+const TokenData = ref({
+    silent_token: payload?.token,
+    uuid: payload?.uuid,
+})
 
-
-
-// const TokenData = ref({
-//     silent_token: payload?.token,
-//     uuid: payload?.uuid,
-// })
+const getAccessToken = async () => {
+    try {
+        const resp = await HTTP.post('/jwt/vk-login/', TokenData.value)
+        console.log('access', resp.data.access, 'refresh', resp.data.refresh);
+        localStorage.setItem('jwt_token', resp.data.access );
+    } catch (e) {
+        console.log('error:', e)
+    }
+}
 
 
 // const exchangeToken = async () => {
 //     try {
-//         const resp = await HTTP.post('/exchange-token/', TokenData.value, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//         })
+//         const resp = await HTTP.post('/exchange-token/', TokenData.value)
+//         getAccessToken(resp.data.access_token);
 //     } catch (e) {
 //         console.log('error:', e)
 //     }
 // }
+
+
 
 const uploadAva = (imageAva) => {
 
@@ -111,9 +120,10 @@ const deleteWall = (imageWall) => {
     currentUser.currentUser.value.media.banner = imageWall;
 };
 
-// onMounted(() => {
-//     exchangeToken();
-// })
+onMounted(() => {
+    getAccessToken();
+
+})
 </script>
 <style lang="scss" scoped>
 .user-wrapper {
@@ -201,4 +211,3 @@ const deleteWall = (imageWall) => {
     }
 }
 </style>
-@shared/components/inputs/imagescomp

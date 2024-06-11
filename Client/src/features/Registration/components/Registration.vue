@@ -437,13 +437,9 @@ const RegisterUser = async () => {
     try {
         isLoading.value = true;
         validated.value = true;
-        const response = await HTTP.post('/register/', form.value, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+        const response = await HTTP.post('/register/', form.value);
         form.value = response.data;
-        console.log(response.data);
+        // console.log(response.data);
         isLoading.value = false;
         swal.fire({
             position: 'top-center',

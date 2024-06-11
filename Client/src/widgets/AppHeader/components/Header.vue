@@ -27,11 +27,11 @@
                                 <Dropdown title="Структура" :items="pages" />
                             </div>
                         </li>
-                        <!-- <li class="header__nav-item">
-                            <a class="header__nav-link" href="/actionSquads">
+                        <li class="header__nav-item">
+                            <a class="header__nav-link" href="/action-squads">
                                 Мероприятия
                             </a>
-                        </li> -->
+                        </li>
                         <li class="header__nav-item competition__nav-item">
                             <a class="header__nav-link competition__link" href="/Competition">
                                 Конкурс
@@ -199,12 +199,12 @@ const userUpdate = (userData) => {
 };
 
 const pages = ref([
-    { title: 'ЛСО', link: '/allSquads', show: true },
-    { title: 'Штабы СО ОО', link: '/AllHeadquarters', show: true },
-    { title: 'Местные штабы', link: '/LocalHeadquarters', show: true },
-    { title: 'Региональные штабы', link: '/RegionalHeadquarters', show: true },
-    { title: 'Окружные штабы', link: '/DistrictHeadquarters', show: true },
-    { title: 'Центральный штаб', link: '/CentralHQ/1', show: true },
+    { title: 'ЛСО', link: '/all-squads', show: true },
+    { title: 'Штабы СО ОО', link: '/all-headquarters', show: true },
+    { title: 'Местные штабы', link: '/local-headquarters', show: true },
+    { title: 'Региональные штабы', link: '/regional-headquarters', show: true },
+    { title: 'Окружные штабы', link: '/district-headquarters', show: true },
+    { title: 'Центральный штаб', link: '/central-hq/1', show: true },
 ]);
 
 const userPages = computed(() => [
@@ -391,12 +391,6 @@ const updateRegion = async () => {
             {
                 region: region.value,
             },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
         );
 
         region.value = updateRegResponse.data.region.id;
@@ -405,14 +399,12 @@ const updateRegion = async () => {
         userStore.currentUser.region = updateRegResponse.data.region;
         regionalsStore.searchMyRegionals(updateRegResponse.data.region);
 
-        // userStore.getUser();
     } catch (error) {
         console.log('an error occured ' + error);
     }
 };
 
 const close = () => {
-    // regionAction.value = regionAction;
     show.value = !show.value;
 };
 
@@ -443,7 +435,6 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
-//убрала тег scoped потому что стили к кнопке dropdown не применялись
 
 .header {
     display: grid;
@@ -942,5 +933,6 @@ onMounted(() => {
     font-size: 16px;
     line-height: 20px;
     font-weight: 600;
+    font-family: 'Bert-Sans'
 }
 </style>

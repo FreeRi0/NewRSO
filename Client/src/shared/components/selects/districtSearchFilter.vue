@@ -159,7 +159,7 @@ const addressRef = ref(props.address)
 const selected = ref(null);
 const isLoading = ref(false);
 const changeValue = (event) => {
-  console.log(event);
+//   console.log(event);
   emit('update:value', event);
 };
 
@@ -217,7 +217,7 @@ onMounted(() => {
 .option-select {
   background-color: #ffffff;
   box-sizing: border-box;
-  border: 1px solid #b6b6b6;
+//   border: 1px solid #b6b6b6;
   border-radius: 10px;
   box-sizing: border-box;
 

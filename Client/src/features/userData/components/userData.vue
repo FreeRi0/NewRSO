@@ -2,13 +2,8 @@
     <div class="MyPage">
         <form class="userBio" @submit.prevent="AddAbout">
             <p>Кратко о себе</p>
-            <TextArea
-                class="mt-4 bio"
-                name="about"
-                placeholder="Напиши что-нибудь"
-                v-model:value="bio"
-                :max-length="400"
-            ></TextArea>
+            <TextArea class="mt-4 bio" name="about" placeholder="Напиши что-нибудь" v-model:value="bio"
+                :max-length="400"></TextArea>
             <!-- <pre>{{ user.value }}</pre> -->
             <div class="form__counter">{{ counterSquad }} / 400</div>
             <p class="error" v-if="isError.last_name">
@@ -20,40 +15,18 @@
             <p class="error" v-if="isError.gender">
                 {{ 'Гендер, ' + isError.gender }}
             </p>
-            <Button
-                :loaded="isLoading"
-                :disabled="isLoading"
-                type="submit"
-                label="Сохранить"
-            ></Button>
+            <Button :loaded="isLoading" :disabled="isLoading" type="submit" label="Сохранить"></Button>
             <div class="d-flex"></div>
         </form>
 
         <div class="mt-8 photoWrapper">
-            <userPhoto
-                class="photo-item"
-                :photo="media.photo1"
-                :add="true"
-                @uploadUserPic="uploadUserPic1"
-            ></userPhoto>
-            <userPhoto2
-                class="photo-item"
-                :photo="media.photo2"
-                :add="true"
-                @uploadUserPic="uploadUserPic2"
-            ></userPhoto2>
-            <userPhoto3
-                class="photo-item"
-                :photo="media.photo3"
-                :add="true"
-                @uploadUserPic="uploadUserPic3"
-            ></userPhoto3>
-            <userPhoto4
-                class="photo-item"
-                :photo="media.photo4"
-                :add="true"
-                @uploadUserPic="uploadUserPic4"
-            ></userPhoto4>
+            <userPhoto class="photo-item" :photo="media.photo1" :add="true" @uploadUserPic="uploadUserPic1"></userPhoto>
+            <userPhoto2 class="photo-item" :photo="media.photo2" :add="true" @uploadUserPic="uploadUserPic2">
+            </userPhoto2>
+            <userPhoto3 class="photo-item" :photo="media.photo3" :add="true" @uploadUserPic="uploadUserPic3">
+            </userPhoto3>
+            <userPhoto4 class="photo-item" :photo="media.photo4" :add="true" @uploadUserPic="uploadUserPic4">
+            </userPhoto4>
         </div>
     </div>
 </template>
@@ -117,14 +90,9 @@ const uploadUserPic4 = (userPic) => {
 
 const getMedia = async () => {
     try {
-        const response = await HTTP.get(`/rsousers/me/media/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const response = await HTTP.get(`/rsousers/me/media/`,);
         media.value = response.data;
-        console.log(response.data);
+        // console.log(response.data);
     } catch (error) {
         console.log('failed ' + error);
     }
@@ -136,12 +104,7 @@ const AddAbout = async () => {
         const response = await HTTP.patch(
             '/rsousers/me/',
             { bio: bio.value },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         isLoading.value = false;
         swal.fire({
@@ -188,6 +151,7 @@ onMounted(() => {
 .photo-item {
     width: 260px;
     margin-right: 20px;
+
     @media screen and (max-width: 575px) {
         height: 373px;
         width: 280px;
@@ -197,6 +161,7 @@ onMounted(() => {
 
 .photoWrapper {
     display: flex;
+
     @media screen and (max-width: 768px) {
         // flex-wrap: wrap;
         display: grid;
@@ -205,6 +170,7 @@ onMounted(() => {
         grid-row-gap: 20px;
         justify-content: center;
     }
+
     @media screen and (max-width: 575px) {
         grid-template-columns: 0.28fr;
     }

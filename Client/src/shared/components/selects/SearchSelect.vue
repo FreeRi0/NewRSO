@@ -62,7 +62,7 @@ const props = defineProps({
 const selected = ref(null);
 
 const changeValue = (event) => {
-    console.log(event);
+    // console.log(event);
     emit('update:value', event);
 };
 

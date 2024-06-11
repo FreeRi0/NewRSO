@@ -3,17 +3,9 @@
         <p class="main_title">Многоэтапная заявка</p>
         <div v-if="applications.length > 0">
             <p class="subtitle">Подал:</p>
-            <div
-                class="horizontallso-item__wrapper"
-                v-for="headquarter in headquarters"
-                :key="headquarter.id"
-            >
+            <div class="horizontallso-item__wrapper" v-for="headquarter in headquarters" :key="headquarter.id">
                 <div class="horizontallso-img">
-                    <img
-                        class="competition__avatar_circle"
-                        :src="headquarter?.emblem"
-                        alt="logo"
-                    />
+                    <img class="competition__avatar_circle" :src="headquarter?.emblem" alt="logo" />
                 </div>
                 <div class="containerHorizontal">
                     <p class="horizontallso-item__list-full">
@@ -32,13 +24,9 @@
                         <img class="file_img" src="/assets/file_dock.svg" />
                         <a :href="file.document" target="_blank">{{
                             file.document.slice(file.document.indexOf('_') + 1)
-                        }}</a>
+                            }}</a>
                     </div>
-                    <a
-                        class="download_text"
-                        :href="file.document"
-                        target="_blank"
-                    >
+                    <a class="download_text" :href="file.document" target="_blank">
                         <img class="download_img" src="/assets/download.svg" />
                         скачать файл
                     </a>
@@ -74,15 +62,10 @@ const getApplicationsInfo = async () => {
     try {
         const { data } = await HTTP.get(
             `/events/${route.params.id}/multi_applications/all/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         for (const obj of data) {
-            console.log(obj);
+            // console.log(obj);
             if (!obj.is_approved) applications.value.push(obj);
         }
         //console.log(applications.value);
@@ -96,12 +79,7 @@ const getFilesInfo = async () => {
     try {
         const { data } = await HTTP.get(
             `/events/${route.params.id}/user_documents/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         for (const file of data) {
             if (
@@ -111,8 +89,8 @@ const getFilesInfo = async () => {
                 files.value.push(file);
         }
         //files.value = data;
-        console.log(data);
-        console.log(applications.value);
+        // console.log(data);
+        // console.log(applications.value);
     } catch (e) {
         console.log('getFilesInfo error', e);
     }
@@ -122,12 +100,7 @@ const getHeadquarters = async () => {
     try {
         const { data } = await HTTP.get(
             `/events/${route.params.id}/multi_applications/detail/${applications.value[0].organizer_id}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         headquarters.value = data;
         //console.log(headquarters.value);
@@ -140,12 +113,7 @@ const onCancel = async () => {
     try {
         await HTTP.delete(
             `/events/${route.params.id}/multi_applications/delete/${applications.value[0].organizer_id}/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         applications.value.shift();
         redirect();
@@ -159,12 +127,7 @@ const onAccept = async () => {
         await HTTP.post(
             `/events/${route.params.id}/multi_applications/confirm/${applications.value[0].organizer_id}/`,
             {},
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         applications.value.shift();
         redirect();
@@ -174,7 +137,7 @@ const onAccept = async () => {
 };
 
 const redirect = async () => {
-    console.log(applications.value);
+    // console.log(applications.value);
     if (applications.value.length == 0)
         router.push({
             name: 'MultiStageRequest',
@@ -208,6 +171,7 @@ onMounted(async () => {
     font-weight: 700;
     line-height: normal;
 }
+
 .subtitle {
     margin: 20px 0px;
     font-size: 20px;
@@ -215,6 +179,7 @@ onMounted(async () => {
     font-weight: 600;
     line-height: normal;
 }
+
 .horizontallso-item__wrapper {
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -226,22 +191,26 @@ onMounted(async () => {
     margin-left: 12px;
     margin-bottom: 12px;
 }
+
 .containerHorizontal {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
+
 .horizontallso-item__list-date {
     width: 95px;
     display: grid;
     grid-template-columns: auto 1fr 0fr;
 }
+
 .horizontallso-item__list-full {
     color: #35383f;
     font-size: 16px;
     font-weight: 400;
     margin-left: 10px;
 }
+
 .file_name {
     display: flex;
     flex-wrap: nowrap;
@@ -253,6 +222,7 @@ onMounted(async () => {
     line-height: 20px;
     text-decoration-line: underline;
 }
+
 .download_text {
     display: flex;
     flex-wrap: nowrap;
@@ -263,6 +233,7 @@ onMounted(async () => {
     font-weight: 500;
     line-height: normal;
 }
+
 .download_img {
     display: inline-block;
     width: 24px;
@@ -270,10 +241,12 @@ onMounted(async () => {
     margin-left: 40px;
     margin-right: 4px;
 }
+
 .file {
     display: flex;
     flex-wrap: nowrap;
 }
+
 .button {
     padding-top: 60px;
     font-size: 16px;
@@ -282,11 +255,13 @@ onMounted(async () => {
     line-height: 20px;
     text-align: center;
 }
+
 .deny_button {
     border-radius: 10px;
     border: 2px solid #35383f;
     padding: 16px 32px;
 }
+
 .submit_button {
     border-radius: 10px;
     background: #39bfbf;
@@ -294,15 +269,18 @@ onMounted(async () => {
     margin-left: 20px;
     color: #fff;
 }
+
 .container {
     margin: 0 auto;
     padding: 0px 130px 60px 130px;
 }
+
 .competition__avatar_circle {
     border-radius: 50%;
     width: 38px;
     height: 38px;
 }
+
 .competition__avatar_circle {
     border-radius: 50%;
     width: 38px;

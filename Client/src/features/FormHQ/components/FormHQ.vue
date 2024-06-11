@@ -1101,7 +1101,7 @@ const onUpdateMember = (event, id) => {
 };
 
 const changeValue = (event) => {
-    console.log(event);
+    // console.log(event);
     emit('update:value', event);
 };
 //--Обрезать фото----------------------------------------------------------------------------

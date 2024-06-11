@@ -71,7 +71,7 @@ const props = defineProps({
 
 const emit = defineEmits(['change']);
 const updateMembership = (e) => {
-    console.log('checkeed', checked.value);
+    // console.log('checkeed', checked.value);
     emit('change', checked.value, props.participant.id );
 };
 

@@ -10,7 +10,8 @@
                     {{ tab.name }}
                 </button>
             </div>
-            <div v-if="(picked == 'Верификация аккаунтов') && (roleStore.roles?.regionalheadquarter_commander?.id || roleStore.roles?.detachment_commander?.id)">
+
+            <div v-if="(picked == 'Верификация аккаунтов') && (roleStore.roles?.regionalheadquarter_commander?.id || roleStore.roles.detachment_commander?.id)">
                 <activeApplications />
             </div>
             <div

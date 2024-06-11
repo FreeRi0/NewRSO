@@ -29,8 +29,8 @@ const props = defineProps({
 });
 
 const uploadUserPic = (userPic) => {
-    console.log('photoUser', userPic);
+    // console.log('photoUser', userPic);
     emit('uploadUserPic', userPic);
-    console.log('userPic Uploaded!');
+    // console.log('userPic Uploaded!');
 };
 </script>
