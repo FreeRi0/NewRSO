@@ -225,7 +225,7 @@ s
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                         color="blue"></v-progress-circular>
-                                    <Button type="button" :disabled="report[2].disabledBtn"
+                                    <Button v-if="!is_regional_commander" type="button" :disabled="report[2].disabledBtn"
                                         class="form__button form__button-color" label="Отправить данные на верификацию"
                                         size="large" @click="postParameters(2)" />
                                 </div>
@@ -468,7 +468,7 @@ s
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                         color="blue"></v-progress-circular>
-                                    <Button type="button" :disabled="report[5].disabledBtn"
+                                    <Button v-if="!is_regional_commander" type="button" :disabled="report[5].disabledBtn"
                                         class="form__button form__button-color" label="Отправить данные на верификацию"
                                         size="large" @click="postParameters(5)" />
                                 </div>
@@ -550,7 +550,7 @@ s
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                         color="blue"></v-progress-circular>
-                                    <Button type="button" :disabled="report[61].disabledBtn"
+                                    <Button v-if="!is_regional_commander" type="button" :disabled="report[61].disabledBtn"
                                         class="form__button form__button-color" label="Отправить данные на верификацию"
                                         size="large" @click="postParameters(61)" />
                                 </div>
@@ -600,7 +600,7 @@ s
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                         color="blue"></v-progress-circular>
-                                    <Button type="button" :disabled="report[62].disabledBtn"
+                                    <Button v-if="!is_regional_commander" type="button" :disabled="report[62].disabledBtn"
                                         class="form__button form__button-color" label="Отправить данные на верификацию"
                                         size="large" @click="postParameters(62)" />
                                 </div>
@@ -630,7 +630,7 @@ s
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                         color="blue"></v-progress-circular>
-                                    <Button type="button" :disabled="report[63].disabledBtn"
+                                    <Button v-if="!is_regional_commander" type="button" :disabled="report[63].disabledBtn"
                                         class="form__button form__button-color" label="Отправить данные на верификацию"
                                         size="large" @click="postParameters(63)" />
                                 </div>
@@ -662,7 +662,7 @@ s
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                         color="blue"></v-progress-circular>
-                                    <Button type="button" :disabled="report[64].disabledBtn"
+                                    <Button v-if="!is_regional_commander" type="button" :disabled="report[64].disabledBtn"
                                         class="form__button form__button-color" label="Отправить данные на верификацию"
                                         size="large" @click="postParameters(64)" />
                                 </div>
@@ -710,7 +710,7 @@ s
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                         color="blue"></v-progress-circular>
-                                    <Button type="button" :disabled="report[65].disabledBtn"
+                                    <Button v-if="!is_regional_commander" type="button" :disabled="report[65].disabledBtn"
                                         class="form__button form__button-color" label="Отправить данные на верификацию"
                                         size="large" @click="postParameters(65)" />
                                 </div>
@@ -740,7 +740,7 @@ s
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                         color="blue"></v-progress-circular>
-                                    <Button type="button" :disabled="report[66].disabledBtn"
+                                    <Button v-if="!is_regional_commander" type="button" :disabled="report[66].disabledBtn"
                                         class="form__button form__button-color" label="Отправить данные на верификацию"
                                         size="large" @click="postParameters(66)" />
                                 </div>
@@ -770,7 +770,7 @@ s
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                         color="blue"></v-progress-circular>
-                                    <Button type="button" :disabled="report[67].disabledBtn"
+                                    <Button v-if="!is_regional_commander" type="button" :disabled="report[67].disabledBtn"
                                         class="form__button form__button-color" label="Отправить данные на верификацию"
                                         size="large" @click="postParameters(67)" />
                                 </div>
@@ -800,7 +800,7 @@ s
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                         color="blue"></v-progress-circular>
-                                    <Button type="button" :disabled="report[68].disabledBtn"
+                                    <Button v-if="!is_regional_commander" type="button" :disabled="report[68].disabledBtn"
                                         class="form__button form__button-color" label="Отправить данные на верификацию"
                                         size="large" @click="postParameters(68)" />
                                 </div>
@@ -960,7 +960,7 @@ s
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                         color="blue"></v-progress-circular>
-                                    <Button type="button" :disabled="report[7].disabledBtn"
+                                    <Button v-if="!is_regional_commander" type="button" :disabled="report[7].disabledBtn"
                                         class="form__button form__button-color" label="Отправить данные на верификацию"
                                         size="large" @click="postParameters(7)" />
                                 </div>
@@ -1118,7 +1118,7 @@ s
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                         color="blue"></v-progress-circular>
-                                    <Button type="button" :disabled="report[8].disabledBtn"
+                                    <Button v-if="!is_regional_commander" type="button" :disabled="report[8].disabledBtn"
                                         class="form__button form__button-color" label="Отправить данные на верификацию"
                                         size="large" @click="postParameters(8)" />
                                 </div>
@@ -1243,7 +1243,7 @@ s
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                         color="blue"></v-progress-circular>
-                                    <Button type="button" :disabled="report[9].disabledBtn"
+                                    <Button v-if="!is_regional_commander" type="button" :disabled="report[9].disabledBtn"
                                         class="form__button form__button-color" label="Отправить данные на верификацию"
                                         size="large" @click="postParameters(9)" />
                                 </div>
@@ -1368,7 +1368,7 @@ s
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                         color="blue"></v-progress-circular>
-                                    <Button type="button" :disabled="report[10].disabledBtn"
+                                    <Button v-if="!is_regional_commander" type="button" :disabled="report[10].disabledBtn"
                                         class="form__button form__button-color" label="Отправить данные на верификацию"
                                         size="large" @click="postParameters(10)" />
                                 </div>
@@ -1495,7 +1495,7 @@ s
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                         color="blue"></v-progress-circular>
-                                    <Button type="button" :disabled="report[11].disabledBtn"
+                                    <Button v-if="!is_regional_commander" type="button" :disabled="report[11].disabledBtn"
                                         class="form__button form__button-color" label="Отправить данные на верификацию"
                                         size="large" @click="postParameters(11)" />
                                 </div>
@@ -1617,7 +1617,7 @@ s
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                         color="blue"></v-progress-circular>
-                                    <Button type="button" :disabled="report[12].disabledBtn"
+                                    <Button v-if="!is_regional_commander" type="button" :disabled="report[12].disabledBtn"
                                         class="form__button form__button-color" label="Отправить данные на верификацию"
                                         size="large" @click="postParameters(12)" />
                                 </div>
@@ -1701,7 +1701,7 @@ s
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                         color="blue"></v-progress-circular>
-                                    <Button type="button" :disabled="report[13].disabledBtn"
+                                    <Button v-if="!is_regional_commander" type="button" :disabled="report[13].disabledBtn"
                                         class="form__button form__button-color" label="Отправить данные на верификацию"
                                         size="large" @click="postParameters(13)" />
                                 </div>
@@ -1791,7 +1791,7 @@ s
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                         color="blue"></v-progress-circular>
-                                    <Button type="button" :disabled="report[14].disabledBtn"
+                                    <Button v-if="!is_regional_commander" type="button" :disabled="report[14].disabledBtn"
                                         class="form__button form__button-color" label="Отправить данные на верификацию"
                                         size="large" @click="postParameters(14)" />
                                 </div>
@@ -1906,7 +1906,7 @@ s
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                         color="blue"></v-progress-circular>
-                                    <Button type="button" :disabled="report[15].disabledBtn"
+                                    <Button v-if="!is_regional_commander" type="button" :disabled="report[15].disabledBtn"
                                         class="form__button form__button-color" label="Отправить данные на верификацию"
                                         size="large" @click="postParameters(15)" />
                                 </div>
@@ -2053,7 +2053,7 @@ s
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                         color="blue"></v-progress-circular>
-                                    <Button type="button" :disabled="report[16].disabledBtn"
+                                    <Button v-if="!is_regional_commander" type="button" :disabled="report[16].disabledBtn"
                                         class="form__button form__button-color" label="Отправить данные на верификацию"
                                         size="large" @click="postParameters(16)" />
                                 </div>
@@ -2142,7 +2142,7 @@ s
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                         color="blue"></v-progress-circular>
-                                    <Button type="button" :disabled="report[17].disabledBtn"
+                                    <Button v-if="!is_regional_commander" type="button" :disabled="report[17].disabledBtn"
                                         class="form__button form__button-color" label="Отправить данные на верификацию"
                                         size="large" @click="postParameters(17)" />
                                 </div>
@@ -2213,7 +2213,7 @@ s
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                         color="blue"></v-progress-circular>
-                                    <Button type="button" :disabled="report[18].disabledBtn"
+                                    <Button v-if="!is_regional_commander" type="button" :disabled="report[18].disabledBtn"
                                         class="form__button form__button-color" label="Отправить данные на верификацию"
                                         size="large" @click="postParameters(18)" />
                                 </div>
@@ -2279,7 +2279,7 @@ s
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                         color="blue"></v-progress-circular>
-                                    <Button type="button" :disabled="report[19].disabledBtn"
+                                    <Button v-if="!is_regional_commander" type="button" :disabled="report[19].disabledBtn"
                                         class="form__button form__button-color" label="Отправить данные на верификацию"
                                         size="large" @click="postParameters(19)" />
                                 </div>
@@ -2403,7 +2403,7 @@ s
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                         color="blue"></v-progress-circular>
-                                    <Button type="button" :disabled="report[20].disabledBtn"
+                                    <Button v-if="!is_regional_commander" type="button" :disabled="report[20].disabledBtn"
                                         class="form__button form__button-color" label="Отправить данные на верификацию"
                                         size="large" @click="postParameters(20)" />
                                 </div>
@@ -2426,6 +2426,8 @@ import { ref, inject, onMounted, computed, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 import { sortByEducation } from '@shared/components/selects';
+
+const is_regional_commander = ref();
 
 const route = useRoute();
 
@@ -2839,142 +2841,210 @@ const selectCertScans = (event, index) => {
     );
 };
 
-const getParameters = async (id) => {
-    try {
-        isLoading.value = true;
-        const response = await HTTP.get(
-            `/competitions/${route.params.competition_pk}/reports/q${id}/` +
-            (id == 1 ? 'info/' : 'me/'),
-
+const getParametersRegCom = async(id) => {
+    try{
+        const { data } = await HTTP.get(
+            `/competitions/${route.params.competition_pk}/detachment/${route.params.id}/q/${id}/`
         );
-        if (id == 1 || id == 3 || id == 4) report.value[id] = response.data;
-        else if (response.data.results.length) {
-            if (
-                id == 6 &&
-                route.params.id == response.data.results[0].detachment
-            ) {
-                if (
-                    response.data.results[0].demonstration_block
-                        ?.first_may_demonstration
-                ) {
-                    report.value[61].demonstration_block.first_may_demonstration =
-                        response.data.results[0].demonstration_block.first_may_demonstration;
-                    report.value[61].demonstration_block.first_may_demonstration_participants =
-                        response.data.results[0].demonstration_block.first_may_demonstration_participants;
-                    report.value[61].disabledBtn = true;
-                } else {
-                    report.value[61].demonstration_block.first_may_demonstration =
-                        null;
-                    report.value[61].demonstration_block.first_may_demonstration_participants =
-                        '';
-                }
-                if (
-                    response.data.results[0].patriotic_action_block
-                        ?.patriotic_action_participants
-                ) {
-                    report.value[62].patriotic_action_block.patriotic_action =
-                        response.data.results[0].patriotic_action_block.patriotic_action;
-                    report.value[62].patriotic_action_block.patriotic_action_participants =
-                        response.data.results[0].patriotic_action_block.patriotic_action_participants;
-                    report.value[62].disabledBtn = true;
-                } else {
-                    report.value[62].patriotic_action_block.patriotic_action =
-                        null;
-                    report.value[62].patriotic_action_block.patriotic_action_participants =
-                        '';
-                }
-                if (
-                    response.data.results[0].safety_work_week_block
-                        ?.safety_work_week
-                ) {
-                    report.value[63].disabledBtn = true;
-                    report.value[63].safety_work_week_block.safety_work_week =
-                        response.data.results[0].safety_work_week_block.safety_work_week;
-                } else {
-                    report.value[63].safety_work_week_block.safety_work_week =
-                        null;
-                }
-                if (
-                    response.data.results[0].commander_commissioner_school_block
-                        ?.commander_commissioner_school
-                ) {
-                    report.value[64].disabledBtn = true;
-                    report.value[64].commander_commissioner_school_block.commander_commissioner_school =
-                        response.data.results[0].commander_commissioner_school_block.commander_commissioner_school;
-                } else {
-                    report.value[64].commander_commissioner_school_block.commander_commissioner_school =
-                        null;
-                }
-                if (
-                    response.data.results[0].working_semester_opening_block
-                        ?.working_semester_opening
-                ) {
-                    report.value[65].disabledBtn = true;
-                    report.value[65].working_semester_opening_block.working_semester_opening =
-                        response.data.results[0].working_semester_opening_block.working_semester_opening;
-                    report.value[65].working_semester_opening_block.working_semester_opening_participants =
-                        response.data.results[0].working_semester_opening_block.working_semester_opening_participants;
-                } else {
-                    report.value[65].working_semester_opening_block.working_semester_opening =
-                        null;
-                    report.value[65].working_semester_opening_block.working_semester_opening_participants =
-                        '';
-                }
-                if (
-                    response.data.results[0].creative_festival_block
-                        ?.creative_festival
-                ) {
-                    report.value[66].disabledBtn = true;
-                    report.value[66].creative_festival_block.creative_festival =
-                        response.data.results[0].creative_festival_block.creative_festival;
-                } else {
-                    report.value[66].creative_festival_block.creative_festival =
-                        null;
-                }
-                if (response.data.results[0].spartakiad_block?.spartakiad) {
-                    report.value[67].disabledBtn = true;
-                    report.value[67].spartakiad_block.spartakiad =
-                        response.data.results[0].spartakiad_block.spartakiad;
-                } else {
-                    report.value[67].spartakiad_block.spartakiad = null;
-                }
-                if (
-                    response.data.results[0].professional_competition_block
-                        ?.professional_competition
-                ) {
-                    report.value[68].disabledBtn = true;
-                    report.value[68].professional_competition_block.professional_competition =
-                        response.data.results[0].professional_competition_block.professional_competition;
-                } else {
-                    report.value[68].professional_competition_block.professional_competition =
-                        null;
-                }
-            } else {
-                if (report.value[id].participation_data) {
-                    report.value[id].participation_data = response.data.results;
-                } else report.value[id] = response.data.results[0];
-                console.log(`true`);
-                report.value[id].disabledBtn = true;
+        if(id == 6){
+            if(data.demonstration_block){
+                report.value[61].demonstration_block = data.demonstration_block;
             }
+            if (data.patriotic_action_block){
+                report.value[62].patriotic_action_block = data.patriotic_action_block;
+            }
+            if(data.safety_work_week_block){
+                report.value[63].safety_work_week_block = data.safety_work_week_block;
+            }
+            if(data.commander_commissioner_school_block){
+                report.value[64].commander_commissioner_school_block = data.commander_commissioner_school_block;
+            }
+            if(data.working_semester_opening_block){
+                report.value[65].working_semester_opening_block = data.working_semester_opening_block;
+            }
+            if(data.creative_festival_block){
+                report.value[66].creative_festival_block = data.creative_festival_block;
+            }
+            if(data.spartakiad_block){
+                report.value[67].spartakiad_block = data.spartakiad_block;
+            }
+            if(data.professional_competition_block){
+                report.value[68].professional_competition_block = data.professional_competition_block;
+            }
+        } else if (id == 5){
+            if(data.q5educatedparticipant_set){
+                report.value[5].participants_data = data.q5educatedparticipant_set;
+            }
+        } else if ([7, 8, 9, 10, 11,  12].includes(id)){
+            if(data.participation_data){
+                report.value[id].participation_data = data.participation_data;
+            }
+        } else if (id == 13){
+            if(data.organization_data){
+                report.value[13].organization_data = data.organization_data;
+            }
+        } else if (id == 14){
+            if(data.q14_labor_project){
+                report.value[14].q14_labor_projects = data.q14_labor_project;
+            }
+        } else if (id == 15){
+            if(data.q15grantwinner_set){
+                report.value[15].grants_data = data.q15grantwinner_set;
+            }
+        } else if (id == 17){
+            if(data.q17_event_links){
+                report.value[17].source_data = data.q17_event_links;
+            }
+        } else {
+            report.value[id] = data;
         }
-        isLoading.value = false;
-        if (
-            id == 5 ||
-            id == 7 ||
-            id == 8 ||
-            id == 9 ||
-            id == 10 ||
-            id == 11 ||
-            id == 12 ||
-            id == 13 ||
-            id == 14 ||
-            id == 15 ||
-            id == 17
-        ) {
-            report.value[id].disabledBtn = false;
-        }
-    } catch (error) {
+        console.log(data);
+    } catch(error){
         isError.value = error.response;
+    }
+    isLoading.value = false;
+}
+
+const getParameters = async (id) => {
+    isLoading.value = true;
+    if(is_regional_commander.value){
+        await getParametersRegCom(id);
+    } else {
+        try {
+            const response = await HTTP.get(
+                `/competitions/${route.params.competition_pk}/reports/q${id}/` +
+                (id == 1 ? 'info/' : 'me/'),
+
+            );
+            if (id == 1 || id == 3 || id == 4) report.value[id] = response.data;
+            else if (response.data.results.length) {
+                if (
+                    id == 6 &&
+                    route.params.id == response.data.results[0].detachment
+                ) {
+                    if (
+                        response.data.results[0].demonstration_block
+                            ?.first_may_demonstration
+                    ) {
+                        report.value[61].demonstration_block.first_may_demonstration =
+                            response.data.results[0].demonstration_block.first_may_demonstration;
+                        report.value[61].demonstration_block.first_may_demonstration_participants =
+                            response.data.results[0].demonstration_block.first_may_demonstration_participants;
+                        report.value[61].disabledBtn = true;
+                    } else {
+                        report.value[61].demonstration_block.first_may_demonstration =
+                            null;
+                        report.value[61].demonstration_block.first_may_demonstration_participants =
+                            '';
+                    }
+                    if (
+                        response.data.results[0].patriotic_action_block
+                            ?.patriotic_action_participants
+                    ) {
+                        report.value[62].patriotic_action_block.patriotic_action =
+                            response.data.results[0].patriotic_action_block.patriotic_action;
+                        report.value[62].patriotic_action_block.patriotic_action_participants =
+                            response.data.results[0].patriotic_action_block.patriotic_action_participants;
+                        report.value[62].disabledBtn = true;
+                    } else {
+                        report.value[62].patriotic_action_block.patriotic_action =
+                            null;
+                        report.value[62].patriotic_action_block.patriotic_action_participants =
+                            '';
+                    }
+                    if (
+                        response.data.results[0].safety_work_week_block
+                            ?.safety_work_week
+                    ) {
+                        report.value[63].disabledBtn = true;
+                        report.value[63].safety_work_week_block.safety_work_week =
+                            response.data.results[0].safety_work_week_block.safety_work_week;
+                    } else {
+                        report.value[63].safety_work_week_block.safety_work_week =
+                            null;
+                    }
+                    if (
+                        response.data.results[0].commander_commissioner_school_block
+                            ?.commander_commissioner_school
+                    ) {
+                        report.value[64].disabledBtn = true;
+                        report.value[64].commander_commissioner_school_block.commander_commissioner_school =
+                            response.data.results[0].commander_commissioner_school_block.commander_commissioner_school;
+                    } else {
+                        report.value[64].commander_commissioner_school_block.commander_commissioner_school =
+                            null;
+                    }
+                    if (
+                        response.data.results[0].working_semester_opening_block
+                            ?.working_semester_opening
+                    ) {
+                        report.value[65].disabledBtn = true;
+                        report.value[65].working_semester_opening_block.working_semester_opening =
+                            response.data.results[0].working_semester_opening_block.working_semester_opening;
+                        report.value[65].working_semester_opening_block.working_semester_opening_participants =
+                            response.data.results[0].working_semester_opening_block.working_semester_opening_participants;
+                    } else {
+                        report.value[65].working_semester_opening_block.working_semester_opening =
+                            null;
+                        report.value[65].working_semester_opening_block.working_semester_opening_participants =
+                            '';
+                    }
+                    if (
+                        response.data.results[0].creative_festival_block
+                            ?.creative_festival
+                    ) {
+                        report.value[66].disabledBtn = true;
+                        report.value[66].creative_festival_block.creative_festival =
+                            response.data.results[0].creative_festival_block.creative_festival;
+                    } else {
+                        report.value[66].creative_festival_block.creative_festival =
+                            null;
+                    }
+                    if (response.data.results[0].spartakiad_block?.spartakiad) {
+                        report.value[67].disabledBtn = true;
+                        report.value[67].spartakiad_block.spartakiad =
+                            response.data.results[0].spartakiad_block.spartakiad;
+                    } else {
+                        report.value[67].spartakiad_block.spartakiad = null;
+                    }
+                    if (
+                        response.data.results[0].professional_competition_block
+                            ?.professional_competition
+                    ) {
+                        report.value[68].disabledBtn = true;
+                        report.value[68].professional_competition_block.professional_competition =
+                            response.data.results[0].professional_competition_block.professional_competition;
+                    } else {
+                        report.value[68].professional_competition_block.professional_competition =
+                            null;
+                    }
+                } else {
+                    if (report.value[id].participation_data) {
+                        report.value[id].participation_data = response.data.results;
+                    } else report.value[id] = response.data.results[0];
+                    console.log(`true`);
+                    report.value[id].disabledBtn = true;
+                }
+            }
+            isLoading.value = false;
+            if (
+                id == 5 ||
+                id == 7 ||
+                id == 8 ||
+                id == 9 ||
+                id == 10 ||
+                id == 11 ||
+                id == 12 ||
+                id == 13 ||
+                id == 14 ||
+                id == 15 ||
+                id == 17
+            ) {
+                report.value[id].disabledBtn = false;
+            }
+        } catch (error) {
+            isError.value = error.response;
+        }
     }
 };
 const postParameters = async (id) => {
@@ -3173,6 +3243,17 @@ const postParameters = async (id) => {
     }
 };
 
+const getMeCommander = async () => {
+    try {
+        const { data } = await HTTP.get(`/rsousers/me_commander/`,);
+        if (data.regionalheadquarter_commander) {
+            is_regional_commander.value = true;
+        }
+    } catch (e) {
+        console.log(`getMeCommander error`, e);
+    }
+};
+
 watch(
     () => report.value[16],
     () => {
@@ -3191,6 +3272,7 @@ watch(
 
 onMounted(async (id) => {
     await getParameters(id);
+    await getMeCommander();
 });
 </script>
 <style>
