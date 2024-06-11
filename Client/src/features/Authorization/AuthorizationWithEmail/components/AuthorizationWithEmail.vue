@@ -62,7 +62,8 @@ const isLoading = ref(false);
 const swal = inject('$swal');
 
  const APP_ID = 51915086
- const REDIRECT_URL = 'https://лк.трудкрут.рф/my-page'
+ const REDIRECT_URL = 'https://xn--j1ab.xn--d1amqcgedd.xn--p1ai/my-page'
+
  const oneTap = new VKID.OneTap();
 
 
