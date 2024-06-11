@@ -52,6 +52,9 @@ import axios from 'axios';
 import { HTTP } from '@app/http';
 import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 const userStore = useUserStore();
 const currentUser = storeToRefs(userStore);
 const isLoading = storeToRefs(userStore);
@@ -71,24 +74,12 @@ const TokenData = ref({
 const getAccessToken = async () => {
     try {
         const resp = await HTTP.post('/jwt/vk-login/', TokenData.value)
-        console.log('access', resp.data.access, 'refresh', resp.data.refresh);
         localStorage.setItem('jwt_token', resp.data.access );
+        router.replace({query: null})
     } catch (e) {
         console.log('error:', e)
     }
 }
-
-
-// const exchangeToken = async () => {
-//     try {
-//         const resp = await HTTP.post('/exchange-token/', TokenData.value)
-//         getAccessToken(resp.data.access_token);
-//     } catch (e) {
-//         console.log('error:', e)
-//     }
-// }
-
-
 
 const uploadAva = (imageAva) => {
 

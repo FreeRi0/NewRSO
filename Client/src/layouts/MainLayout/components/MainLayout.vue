@@ -99,7 +99,7 @@ const currentUser = storeToRefs(userStore);
 onMounted(() => {
     setTimeout(() => {
         verifyToken();
-    }, 1000)
+    }, 1500)
 
     regionsStore.getRegions();
 });
