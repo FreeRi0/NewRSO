@@ -574,6 +574,7 @@
                                       placeholder="Например, 15.05.2023"
                                       name="end-registration-hq"
                                       type="date"
+                                      :min="maininfo.time_data.start_date"
                                   />
                                 </div>
                               </div>

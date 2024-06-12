@@ -1,11 +1,10 @@
 <template>
     <div class="container">
         <bannerCreate
-            v-if="rolesCount !== 0"
             desc="Студенческие отряды — это больше, чем работа. Километры впечатлений, тысячи друзей и лето с пользой!"
             label="Создать мероприятие"
             name="createAction"
-            :button="true"
+            :eventCreate="true"
             :target="'_blank'"
         ></bannerCreate>
 
