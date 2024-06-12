@@ -16,7 +16,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="report" :flip="expanded" />
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -105,7 +105,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="report" :flip="expanded" />
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -282,7 +282,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="report" :flip="expanded" />
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -323,7 +323,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="report" :flip="expanded" />
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -362,7 +362,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="report" :flip="expanded" />
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -549,7 +549,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="report" :flip="expanded" />
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1078,7 +1078,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="report" :flip="expanded" />
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1355,7 +1355,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="report" :flip="expanded" />
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1631,7 +1631,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="report" :flip="expanded" />
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1827,7 +1827,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="report" :flip="expanded" />
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -2021,7 +2021,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="report" :flip="expanded" />
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -2218,7 +2218,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="report" :flip="expanded" />
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -2410,7 +2410,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="report" :flip="expanded" />
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -2534,7 +2534,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="report" :flip="expanded" />
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -2664,7 +2664,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="report" :flip="expanded" />
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -2837,7 +2837,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="report" :flip="expanded" />
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -3017,7 +3017,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="report" :flip="expanded" />
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -3139,7 +3139,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="report" :flip="expanded" />
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -3209,7 +3209,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="report" :flip="expanded" />
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -3275,7 +3275,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="report" :flip="expanded" />
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -3831,10 +3831,7 @@ const getParameters = async (id) => {
         }
         isLoading.value = false;
         const allowedIds = [5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17];
-        if (
-            allowedIds.includes(id)
-            // Object.prototype.hasOwnProperty.call(report.value[id], 'show_btn')
-        ) {
+        if (allowedIds.includes(id)) {
             report.value[id].disabledBtn = false;
         }
     } catch (error) {
@@ -4013,13 +4010,21 @@ const postParameters = async (id) => {
         console.log(error);
         isError.value = error.response.data;
         isLoading.value = false;
-        if (isError.value) {
+        if (isError.value && id < 60) {
             swal.fire({
                 position: 'center',
                 icon: 'error',
                 title: `ошибка`,
                 showConfirmButton: false,
                 timer: 2500,
+            });
+        }
+        if (isError.value && id > 60) {
+            swal.fire({
+                position: 'center',
+                title: `К сожалению, срок отправки данных по показателю истек.`,
+                showConfirmButton: false,
+                timer: 3000,
             });
         }
     }
