@@ -165,7 +165,7 @@ s
                                             ">&nbsp;*</span></label>
                                         <Input placeholder="Например, https://vk.com/cco_monolit" :maxlength="100"
                                             v-model:value="report[2].commander_link
-                                                " :readonly="report[2].is_verified" />
+                                                " :readonly="report[2].is_verified || is_regional_commander" />
                                         <div class="form__counter">
                                             {{
                                                 report[2].commander_link.length
@@ -397,7 +397,7 @@ s
                                         <label class="form__label">ФИО участника, прошедшего
                                             профессиональное обучение<span>&nbsp;*</span></label>
                                         <Input placeholder="Например, Иванова Светлана Андреевна" :maxlength="100"
-                                            v-model:value="block.name" :readonly="block.is_verified" />
+                                            v-model:value="block.name" :readonly="block.is_verified || is_regional_commander" />
                                         <div class="form__counter">
                                             {{ block.name.length }} / 100
                                         </div>
@@ -450,7 +450,7 @@ s
                                         </p>
                                     </div>
                                 </div>
-                                <div type="button" v-if="!block.is_verified">
+                                <div type="button" v-if="!block.is_verified && !is_regional_commander">
                                     <svg @click="deleteBlock(index)" xmlns="http://www.w3.org/2000/svg" width="24"
                                         height="24" viewBox="0 0 24 24" fill="none">
                                         <path
@@ -461,7 +461,7 @@ s
                                     </svg>
                                 </div>
                             </div>
-                            <div class="form__field add-block" @click="addNewBlock">
+                            <div v-if="!is_regional_commander" class="form__field add-block" @click="addNewBlock">
                                 + добавить участника
                             </div>
                             <div class="form__field-group-bottom">
@@ -583,7 +583,7 @@ s
                                         <Input type="number" placeholder="Например, 10" :maxlength="5" v-model:value="report[62]
                                                 .patriotic_action_block
                                                 .patriotic_action_participants
-                                            " />
+                                            " :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{
                                                 report[62]
