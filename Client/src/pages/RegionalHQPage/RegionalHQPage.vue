@@ -57,10 +57,11 @@ import { useCrosspageFilter } from '@shared';
 import { useRegionalsStore } from '@features/store/regionals';
 import { storeToRefs } from 'pinia';
 import { usePage } from '@shared';
-import {
-    getEnding,
-    getEndingMembers,
-} from '@features/EndingWord/components/EndingWord.vue';
+import mixins from '@/mixins/mixins';
+
+const { methods } = mixins;
+const { getEnding } = methods;
+const { getEndingMembers } = methods;
 
 const regionalsStore = useRegionalsStore();
 const crosspageFilters = useCrosspageFilter();

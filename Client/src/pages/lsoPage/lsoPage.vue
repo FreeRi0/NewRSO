@@ -73,7 +73,10 @@ import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { usePage } from '@shared';
-import { getEnding } from '@features/EndingWord/components/EndingWord.vue';
+import mixins from '@/mixins/mixins';
+
+const { methods } = mixins;
+const { getEnding } = methods;
 
 const squadsStore = useSquadsStore();
 const squad = storeToRefs(squadsStore);

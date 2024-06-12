@@ -41,7 +41,10 @@ import { useEducationalsStore } from '@features/store/educationals';
 import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router';
 import { usePage } from '@shared';
-import { getEnding } from '@features/EndingWord/components/EndingWord.vue';
+import mixins from '@/mixins/mixins';
+
+const { methods } = mixins;
+const { getEnding } = methods;
 
 // banner condition
 const educationalsStore = useEducationalsStore();

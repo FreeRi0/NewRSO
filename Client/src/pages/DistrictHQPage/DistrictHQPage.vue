@@ -52,10 +52,11 @@ import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
 import { usePage } from '@shared';
-import {
-    getEnding,
-    getEndingMembers,
-} from '@features/EndingWord/components/EndingWord.vue';
+import mixins from '@/mixins/mixins';
+
+const { methods } = mixins;
+const { getEnding } = methods;
+const { getEndingMembers } = methods;
 
 const crosspageFilters = useCrosspageFilter();
 const commander = ref({});
