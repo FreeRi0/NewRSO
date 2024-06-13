@@ -5,7 +5,7 @@
             :is-commander-loading="isCommanderLoading" :is-members-loading="isMembersLoading" :is-error="isError"
             :is-error-members="isErrorMembers" v-if="headquarter && isError && isErrorMembers && !loading"
             @submit.prevent="changeHeadquarter" @select-emblem="onSelectEmblem" @select-banner="onSelectBanner"
-            @delete-emblem="onDeleteEmblem" @delete-banner="onDeleteBanner" @update-member="onUpdateMember">
+            @delete-emblem="onDeleteEmblem" @delete-banner="onDeleteBanner" @update-member="onUpdateMember" @delete-member="onDeleteMember">
         </FormDH>
     </div>
 </template>
@@ -90,6 +90,12 @@ const onUpdateMember = (event, id) => {
         districtsStore.members[memberIndex].position.id = event[firstkey];
     else districtsStore.members[memberIndex][firstkey] = event[firstkey];
 };
+
+const onDeleteMember = (id) => {
+    const memberIndex =  districtsStore.members.findIndex((member) => member.id === id);
+    districtsStore.members.splice(memberIndex, 1);
+    // members.value[memberIndex].change = true;
+}
 
 const submited = ref(false);
 

@@ -311,6 +311,11 @@
                                     </Icon>
                                 </template>
                             </v-text-field>
+                            <div class="overlay" v-if="showModal"></div>
+                            <DeleteModal v-show="showModal === true" @close="close" @delete="
+                                deleteMember(props.headquarter.id, deletedId)
+                                ">
+                            </DeleteModal>
                             <MembersList
                                 :items="props.members"
                                 :submited="submited"
@@ -318,6 +323,7 @@
                                 :is-error-members="isErrorMembers"
                                 v-if="members && !isMembersLoading"
                                 @update-member="onUpdateMember"
+                                 @delete-member="onDeleteMember"
                             ></MembersList>
                             <v-progress-circular
                                 class="circleLoader"
@@ -847,6 +853,8 @@ import { Button } from '@shared/components/buttons';
 import { Select, Dropdown } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
+import { HTTP } from '@app/http';
+import { DeleteModal } from '@shared/components/dropdown';
 import { useRoleStore } from '@layouts/store/role';
 import { useDistrictsStore } from '@features/store/districts';
 import { usePositionsStore } from '@features/store/positions';
@@ -914,6 +922,9 @@ const props = defineProps({
     },
 });
 
+const showModal = ref(false);
+const deletedId = ref(null);
+
 const getErrorField = (field) => {
     if (
         props.isError[field][0] ===
@@ -921,6 +932,30 @@ const getErrorField = (field) => {
     )
         return 'Это поле не может быть пустым.';
     else return props.isError[field][0];
+};
+
+const onDeleteMember = (memId) => {
+    showModal.value = true;
+    deletedId.value = memId;
+    // console.log('mm', memId)
+};
+
+const close = () => {
+    showModal.value = false;
+};
+
+const deleteMember = (id, membership_pk) => {
+    try {
+        const responseDelete = HTTP.delete(
+            `/districts/${id}/members/${membership_pk}/`,
+
+        );
+        showModal.value = false;
+
+        emit('deleteMember', membership_pk);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
 const headquarter = ref(props.headquarter);
