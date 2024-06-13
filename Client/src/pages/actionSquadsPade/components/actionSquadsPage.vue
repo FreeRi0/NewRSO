@@ -837,7 +837,7 @@ const sortOptions = ref([
 }
 .textCaption {
   max-width: 280px;
-  max-height: 20px;
+  //max-height: 55px;
   font-family: Bert Sans;
   font-size: 14px;
   font-weight: 600;
@@ -845,8 +845,13 @@ const sortOptions = ref([
   text-align: left;
   margin-top: 12px;
   overflow: hidden;
-  white-space: nowrap;
   text-overflow: ellipsis;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  line-clamp: 3;
 }
 .cardTimeQuantity {
   display: flex;
@@ -888,7 +893,7 @@ const sortOptions = ref([
   padding: 0 12px;
 }
 .eventsScale:first-child {
-  margin-right: 12px;
+  margin-right: 3px;
 }
 .cardClock {
   display: flex;

@@ -587,6 +587,7 @@
                                       placeholder="Например 27.06.2024"
                                       name="action-end-hq"
                                       type="date"
+                                      :min="time_data.start_date"
                                   />
                                 </div>
                                 <div class="form__field form-timeGrid3">
@@ -601,7 +602,7 @@
                                       placeholder="Например, 15.05.2023"
                                       name="end-registration-hq"
                                       type="date"
-                                      :min="time_data.start_date"
+                                      :max="time_data.start_date"
                                   />
                                 </div>
 
