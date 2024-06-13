@@ -50,7 +50,6 @@ import {
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { HTTP } from '@app/http';
-import { useRouter } from 'vue-router';
 import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
