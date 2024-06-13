@@ -102,11 +102,7 @@ const currentUser = storeToRefs(userStore);
 onMounted(() => {
     setTimeout(() => {
         verifyToken();
-<<<<<<< HEAD
-    }, 2000);
-=======
-    }, 1000)
->>>>>>> cd2ac47aa00b4fcd47de0aa538ea44d88e8dee26
+    }, 1000);
 
     regionsStore.getRegions();
 });
