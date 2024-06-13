@@ -10,9 +10,8 @@
                 <p class="error" v-if="isError.username">
                     {{ '' + isError.username }}
                 </p>
-                <v-text-field class="password-input" :append-inner-icon="!visible ? 'mdi-eye-off' : 'mdi-eye'"
-                    :type="visible ? 'text' : 'password'" density="compact" v-model="data.password" placeholder="Пароль"
-                    variant="outlined" @click:append-inner="visible = !visible"></v-text-field>
+
+                <passwordInput placeholder="Пароль" v-model:value="data.password" />
                 <p class="text-right mt-3 mb-8"><router-link to="/RecoveryPass">Забыли пароль?</router-link>
                 </p>
 
@@ -40,7 +39,7 @@
 <script setup>
 import { ref, inject, onMounted } from 'vue';
 import { Button } from '@shared/components/buttons';
-import { Input } from '@shared/components/inputs';
+import { Input, passwordInput } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@features/store/index';
@@ -54,24 +53,24 @@ const data = ref({
     username: '',
     password: '',
 });
-const visible = ref(false);
 
 
 const isError = ref([]);
 const isLoading = ref(false);
 const swal = inject('$swal');
 
- const APP_ID = 51915086
- const REDIRECT_URL = 'https://xn--j1ab.xn--d1amqcgedd.xn--p1ai/my-page'
 
- const oneTap = new VKID.OneTap();
+const APP_ID = 51915086
+const REDIRECT_URL = 'https://xn--j1ab.xn--d1amqcgedd.xn--p1ai/my-page'
+
+const oneTap = new VKID.OneTap();
 
 
- VKID.Config.set({
-     app: APP_ID, // Идентификатор приложения.
-     redirectUrl: REDIRECT_URL, // Адрес для перехода после авторизации.
-     state: 'dj29fnsadjsd82...' // Произвольная строка состояния приложения.
- });
+VKID.Config.set({
+    app: APP_ID, // Идентификатор приложения.
+    redirectUrl: REDIRECT_URL, // Адрес для перехода после авторизации.
+    state: 'dj29fnsadjsd82...' // Произвольная строка состояния приложения.
+});
 
 
 const Click = () => {
@@ -115,13 +114,13 @@ const LoginUser = async () => {
     }
 };
 
- onMounted(() => {
+onMounted(() => {
     const container = document.getElementById('VkIdSdkOneTap');
-     if (container) {
-//         // Отрисовка кнопки в контейнере с именем приложения APP_NAME, светлой темой и на русском языке.
-         oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
-     }
- })
+    if (container) {
+        //         // Отрисовка кнопки в контейнере с именем приложения APP_NAME, светлой темой и на русском языке.
+        oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
+    }
+})
 
 </script>
 
@@ -132,6 +131,7 @@ const LoginUser = async () => {
         justify-content: center !important;
     }
 }
+
 
 .Login {
     background-color: #FFFFFF;
@@ -205,15 +205,6 @@ const LoginUser = async () => {
     border-radius: 8px;
 }
 
-.password-input {
-    border: 1px solid #a3a3a3;
-    border-radius: 8px;
-    font-size: 16px;
-    height: 40px;
-    color: #35383f;
-    font-family: 'Bert Sans';
-}
-
 .goReg {
     margin-top: 40px;
 }
@@ -268,16 +259,6 @@ const LoginUser = async () => {
 }
 
 
-.password-input::placeholder {
-    color: #898989;
-    font-size: 16px;
-    font-weight: 500;
-    font-family: 'Bert-Sans';
-}
-
-.password-input:focus {
-    outline: none;
-}
 
 .v-card {
     padding: 98px;
@@ -293,8 +274,8 @@ const LoginUser = async () => {
 
 .password-input input.v-field__input::placeholder {
     color: #a3a3a3;
-    opacity: revert;
-    font-weight: lighter;
+    font-weight: 500;
+    font-family: 'Bert-Sans';
 }
 
 .password-input input.v-field__input::placeholder,
@@ -314,28 +295,6 @@ const LoginUser = async () => {
     font-size: 18px;
 }
 
-
-
-.v-text-field input.v-field__input {
-    padding: 0px 7.5px 6px 16px;
-}
-
-// :global(.v-input__control) {
-//     min-height: 40px !important;
-//     font-weight: 400;
-// }
-
-.v-field--center-affix .v-field__append-inner,
-.v-field--center-affix .v-field__clearable,
-.v-field--center-affix .v-field__prepend-inner {
-    padding-bottom: 5px;
-}
-
-
-:global(.v-text-field .v-field--no-label input,
-    .v-text-field .v-field--active input) {
-    border-radius: 8px;
-}
 
 .VkIdWebSdk__button_mltngh {
     border-radius: 10px;
