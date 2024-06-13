@@ -71,15 +71,15 @@ const viewParticipants = async () => {
         const regComReq = ref(null);
         const detComReq = ref(null);
 
-        if (roles.roles.value.regionalheadquarter_commander?.id) {
+        if (roleStore.roles.regionalheadquarter_commander?.id) {
             const regComReq = await HTTP.get(
-                `/regionals/${roles.roles.value.regionalheadquarter_commander?.id}/verifications/`
+                `/regionals/${roleStore.roles.regionalheadquarter_commander?.id}/verifications/`
             );
             participantList.value = regComReq.data;
             loading.value = false;
-        } else if (roles.roles.value.detachment_commander?.id) {
+        } else if (roleStore.roles.detachment_commander?.id) {
             const detComReq = await HTTP.get(
-                `/detachments/${roles.roles.value.detachment_commander?.id}/verifications/`,
+                `/detachments/${roleStore.roles.detachment_commander?.id}/verifications/`,
             );
             participantList.value = detComReq.data;
             loading.value = false;

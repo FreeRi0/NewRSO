@@ -50,6 +50,7 @@ import {
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { HTTP } from '@app/http';
+import { useRouter } from 'vue-router';
 import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
 const userStore = useUserStore();
@@ -62,32 +63,22 @@ const isAuth = ref(!!localStorage.getItem('jwt_token'));
 const query = new URLSearchParams(window.location.search);
 const payload = JSON.parse(query.get("payload"));
 
+const router = useRouter();
 
 const TokenData = ref({
     silent_token: payload?.token,
     uuid: payload?.uuid,
 })
 
-const getAccessToken = async (token) => {
+const getAccessToken = async () => {
     try {
-        const resp = await HTTP.post('/jwt/vk-login/', { access_token: token })
-        console.log('access', resp.data.access, 'refresh', resp.data.refresh);
-        localStorage.setItem('jwt_token', resp.data.access );
+        const resp = await HTTP.post('/jwt/vk-login/', TokenData.value)
+        localStorage.setItem('jwt_token', resp.data.access);
+        router.replace({query: null})
     } catch (e) {
         console.log('error:', e)
     }
 }
-
-
-const exchangeToken = async () => {
-    try {
-        const resp = await HTTP.post('/exchange-token/', TokenData.value)
-        getAccessToken(resp.data.access_token);
-    } catch (e) {
-        console.log('error:', e)
-    }
-}
-
 
 
 const uploadAva = (imageAva) => {
@@ -121,7 +112,7 @@ const deleteWall = (imageWall) => {
 };
 
 onMounted(() => {
-    exchangeToken();
+    getAccessToken();
 
 })
 </script>

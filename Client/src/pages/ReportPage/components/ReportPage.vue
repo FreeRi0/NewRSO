@@ -160,7 +160,10 @@ s
                                             v-model:value="
                                                 report[2].commander_link
                                             "
-                                            :readonly="report[2].is_verified"
+                                            :readonly="
+                                                report[2].is_verified ||
+                                                is_regional_commander
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{
@@ -255,6 +258,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[2].disabledBtn"
                                         class="form__button form__button-color"
@@ -385,7 +389,10 @@ s
                                             placeholder="Например, Иванова Светлана Андреевна"
                                             :maxlength="100"
                                             v-model:value="block.name"
-                                            :readonly="block.is_verified"
+                                            :readonly="
+                                                block.is_verified ||
+                                                is_regional_commander
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ block.name.length }} / 100
@@ -468,7 +475,13 @@ s
                                         </p>
                                     </div>
                                 </div>
-                                <div type="button" v-if="!block.is_verified">
+                                <div
+                                    type="button"
+                                    v-if="
+                                        !block.is_verified &&
+                                        !is_regional_commander
+                                    "
+                                >
                                     <svg
                                         @click="
                                             deleteBlock(
@@ -502,6 +515,7 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!is_regional_commander"
                                 class="form__field add-block"
                                 @click="
                                     addNewBlock(5, 'participants_data', {
@@ -521,6 +535,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[5].disabledBtn"
                                         class="form__button form__button-color"
@@ -596,10 +611,7 @@ s
                                                 report[61].demonstration_block
                                                     .first_may_demonstration_participants
                                             "
-                                            :readonly="
-                                                report[61].demonstration_block
-                                                    .is_verified
-                                            "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -621,6 +633,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[61].disabledBtn"
                                         class="form__button form__button-color"
@@ -682,6 +695,7 @@ s
                                                     .patriotic_action_block
                                                     .patriotic_action_participants
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -704,6 +718,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[62].disabledBtn"
                                         class="form__button form__button-color"
@@ -757,6 +772,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[63].disabledBtn"
                                         class="form__button form__button-color"
@@ -812,6 +828,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[64].disabledBtn"
                                         class="form__button form__button-color"
@@ -869,6 +886,7 @@ s
                                                     .working_semester_opening_block
                                                     .working_semester_opening_participants
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -891,6 +909,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[65].disabledBtn"
                                         class="form__button form__button-color"
@@ -944,6 +963,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[66].disabledBtn"
                                         class="form__button form__button-color"
@@ -996,6 +1016,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[67].disabledBtn"
                                         class="form__button form__button-color"
@@ -1050,6 +1071,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[68].disabledBtn"
                                         class="form__button form__button-color"
@@ -1100,7 +1122,7 @@ s
                                             placeholder="Например, Окружной слет студенческих отрядов ПФО"
                                             :maxlength="150"
                                             v-model:value="block.event_name"
-                                            :readonly="block.is_verified"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.event_name.length }} / 100
@@ -1119,7 +1141,7 @@ s
                                             v-model:value="
                                                 block.number_of_participants
                                             "
-                                            :readonly="block.is_verified"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -1148,7 +1170,7 @@ s
                                                     :maxlength="100"
                                                     v-model:value="link.link"
                                                     :readonly="
-                                                        block.is_verified
+                                                        is_regional_commander
                                                     "
                                                 />
                                                 <div
@@ -1202,7 +1224,7 @@ s
                                                     { link: '' },
                                                 )
                                             "
-                                            v-if="!block.is_verified"
+                                            v-if="!is_regional_commander"
                                         >
                                             <p>+ добавить ссылку</p>
                                         </div>
@@ -1273,7 +1295,13 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button" v-if="!block.is_verified">
+                                <div
+                                    type="button"
+                                    v-if="
+                                        !block.is_verified &&
+                                        !is_regional_commander
+                                    "
+                                >
                                     <svg
                                         @click="
                                             deleteBlock(
@@ -1307,6 +1335,7 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!is_regional_commander"
                                 class="form__field add-block"
                                 @click="
                                     addNewBlock(7, 'participation_data', {
@@ -1328,6 +1357,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[7].disabledBtn"
                                         class="form__button form__button-color"
@@ -1377,7 +1407,7 @@ s
                                             placeholder="Например, Всероссийский конкурс «В объективе РСО»"
                                             :maxlength="100"
                                             v-model:value="block.event_name"
-                                            :readonly="block.is_verified"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.event_name.length }} / 100
@@ -1396,7 +1426,7 @@ s
                                             v-model:value="
                                                 block.number_of_participants
                                             "
-                                            :readonly="block.is_verified"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -1424,9 +1454,7 @@ s
                                                     placeholder="Например, https://vk.com/cco_monolit"
                                                     :maxlength="100"
                                                     v-model:value="link.link"
-                                                    :readonly="
-                                                        block.is_verified
-                                                    "
+                                                    readonly="is_regional_commander"
                                                 />
                                                 <div
                                                     type="button"
@@ -1478,7 +1506,7 @@ s
                                                     { link: '' },
                                                 )
                                             "
-                                            v-if="!block.is_verified"
+                                            v-if="!is_regional_commander"
                                         >
                                             <p>+ добавить ссылку</p>
                                         </div>
@@ -1549,7 +1577,13 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button" v-if="!block.is_verified">
+                                <div
+                                    type="button"
+                                    v-if="
+                                        !block.is_verified &&
+                                        !is_regional_commander
+                                    "
+                                >
                                     <svg
                                         @click="
                                             deleteBlock(
@@ -1583,6 +1617,7 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!is_regional_commander"
                                 class="form__field add-block"
                                 @click="
                                     addNewBlock(8, 'participation_data', {
@@ -1604,6 +1639,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[8].disabledBtn"
                                         class="form__button form__button-color"
@@ -1652,7 +1688,7 @@ s
                                             placeholder="Например, Окружной слет студенческих отрядов ПФО"
                                             :maxlength="100"
                                             v-model:value="block.event_name"
-                                            :readonly="block.is_verified"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.event_name.length }} / 100
@@ -1746,7 +1782,13 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button" v-if="!block.is_verified">
+                                <div
+                                    type="button"
+                                    v-if="
+                                        !block.is_verified &&
+                                        !is_regional_commander
+                                    "
+                                >
                                     <svg
                                         @click="
                                             deleteBlock(
@@ -1780,6 +1822,7 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!is_regional_commander"
                                 class="form__field add-block"
                                 @click="
                                     addNewBlock(9, 'participation_data', {
@@ -1800,6 +1843,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[9].disabledBtn"
                                         class="form__button form__button-color"
@@ -1848,6 +1892,7 @@ s
                                             placeholder="Например, Всероссийский конкурс «В объективе РСО»"
                                             :maxlength="100"
                                             v-model:value="block.event_name"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.event_name.length }} / 100
@@ -1940,7 +1985,13 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button" v-if="!block.is_verified">
+                                <div
+                                    type="button"
+                                    v-if="
+                                        !block.is_verified &&
+                                        !is_regional_commander
+                                    "
+                                >
                                     <svg
                                         @click="
                                             deleteBlock(
@@ -1974,6 +2025,7 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!is_regional_commander"
                                 class="form__field add-block"
                                 @click="
                                     addNewBlock(10, 'participation_data', {
@@ -1994,6 +2046,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[10].disabledBtn"
                                         class="form__button form__button-color"
@@ -2043,6 +2096,7 @@ s
                                             placeholder="Например, Спартакиада на МСС «Алабуга»"
                                             :maxlength="100"
                                             v-model:value="block.event_name"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.event_name.length }} / 100
@@ -2137,7 +2191,13 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button" v-if="!block.is_verified">
+                                <div
+                                    type="button"
+                                    v-if="
+                                        !block.is_verified &&
+                                        !is_regional_commander
+                                    "
+                                >
                                     <svg
                                         @click="
                                             deleteBlock(
@@ -2171,6 +2231,7 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!is_regional_commander"
                                 class="form__field add-block"
                                 @click="
                                     addNewBlock(11, 'participation_data', {
@@ -2191,6 +2252,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[11].disabledBtn"
                                         class="form__button form__button-color"
@@ -2240,6 +2302,7 @@ s
                                             placeholder="Например, Творческий фестиваль на ВСС «Мирный атом»"
                                             :maxlength="100"
                                             v-model:value="block.event_name"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.event_name.length }} / 100
@@ -2329,7 +2392,13 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button" v-if="!block.is_verified">
+                                <div
+                                    type="button"
+                                    v-if="
+                                        !block.is_verified &&
+                                        !is_regional_commander
+                                    "
+                                >
                                     <svg
                                         @click="
                                             deleteBlock(
@@ -2363,6 +2432,7 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!is_regional_commander"
                                 class="form__field add-block"
                                 @click="
                                     addNewBlock(12, 'participation_data', {
@@ -2383,6 +2453,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[12].disabledBtn"
                                         class="form__button form__button-color"
@@ -2447,13 +2518,20 @@ s
                                             placeholder="Например, https://t.me/+7pe98d2PqoJ"
                                             :maxlength="100"
                                             v-model:value="block.event_link"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.event_link.length }} / 100
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button" v-if="!block.is_verified">
+                                <div
+                                    type="button"
+                                    v-if="
+                                        !block.is_verified &&
+                                        !is_regional_commander
+                                    "
+                                >
                                     <svg
                                         @click="
                                             deleteBlock(
@@ -2487,6 +2565,7 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!is_regional_commander"
                                 class="form__field add-block"
                                 @click="
                                     addNewBlock(13, 'organization_data', {
@@ -2506,6 +2585,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[13].disabledBtn"
                                         class="form__button form__button-color"
@@ -2558,6 +2638,7 @@ s
                                             v-model:value="
                                                 block.lab_project_name
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.lab_project_name.length }}
@@ -2576,13 +2657,20 @@ s
                                             placeholder="Например, 5"
                                             :maxlength="100"
                                             v-model:value="block.amount"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.amount.length }} / 100
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button" v-if="!block.is_verified">
+                                <div
+                                    type="button"
+                                    v-if="
+                                        !block.is_verified &&
+                                        !is_regional_commander
+                                    "
+                                >
                                     <svg
                                         @click="
                                             deleteBlock(
@@ -2616,6 +2704,7 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!is_regional_commander"
                                 class="form__field add-block"
                                 @click="
                                     addNewBlock(14, 'q14_labor_projects', {
@@ -2635,6 +2724,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[14].disabledBtn"
                                         class="form__button form__button-color"
@@ -2684,6 +2774,7 @@ s
                                             placeholder="Например, Всероссийский конкурс молодёжных проектов среди физических лиц Федерального агентства по делам молодежи"
                                             :maxlength="100"
                                             v-model:value="block.name"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.name.length }} / 100
@@ -2714,6 +2805,7 @@ s
                                             placeholder="Например, Иванова Светлана Андреевна"
                                             :maxlength="100"
                                             v-model:value="block.author_name"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.author_name.length }} / 100
@@ -2731,6 +2823,7 @@ s
                                             v-model:value="
                                                 block.competition_link
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.competition_link.length }}
@@ -2748,13 +2841,20 @@ s
                                             placeholder="Например, https://t.me/+7pe98d2PqoJ"
                                             :maxlength="100"
                                             v-model:value="block.prove_link"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.prove_link.length }} / 100
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button" v-if="!block.is_verified">
+                                <div
+                                    type="button"
+                                    v-if="
+                                        !block.is_verified &&
+                                        !is_regional_commander
+                                    "
+                                >
                                     <svg
                                         @click="
                                             deleteBlock(
@@ -2788,6 +2888,7 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!is_regional_commander"
                                 class="form__field add-block"
                                 @click="
                                     addNewBlock(15, 'grants_data', {
@@ -2810,6 +2911,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[15].disabledBtn"
                                         class="form__button form__button-color"
@@ -2864,6 +2966,7 @@ s
                                             v-model:value="
                                                 report[16].link_vk_commander
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -2886,6 +2989,7 @@ s
                                             v-model:value="
                                                 report[16].link_vk_commissar
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -2916,6 +3020,7 @@ s
                                                 report[16]
                                                     .vk_rso_number_subscribers
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -2941,6 +3046,7 @@ s
                                             v-model:value="
                                                 report[16].link_vk_detachment
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -2968,6 +3074,7 @@ s
                                                 report[16]
                                                     .vk_detachment_number_subscribers
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -2989,6 +3096,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[16].disabledBtn"
                                         class="form__button form__button-color"
@@ -3038,6 +3146,7 @@ s
                                             placeholder="Например, РИА Новости"
                                             :maxlength="100"
                                             v-model:value="block.source_name"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.source_name.length }} / 100
@@ -3053,13 +3162,20 @@ s
                                             placeholder="Например, https://vk.com/cco_monolit"
                                             :maxlength="100"
                                             v-model:value="block.link"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.link.length }} / 100
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button" v-if="!block.is_verified">
+                                <div
+                                    type="button"
+                                    v-if="
+                                        !block.is_verified &&
+                                        !is_regional_commander
+                                    "
+                                >
                                     <svg
                                         @click="
                                             deleteBlock(
@@ -3093,6 +3209,7 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!is_regional_commander"
                                 class="form__field add-block"
                                 @click="
                                     addNewBlock(17, 'source_data', {
@@ -3112,6 +3229,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[17].disabledBtn"
                                         class="form__button form__button-color"
@@ -3161,6 +3279,7 @@ s
                                             v-model:value="
                                                 report[18].participants_number
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -3181,6 +3300,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[18].disabledBtn"
                                         class="form__button form__button-color"
@@ -3247,6 +3367,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[19].disabledBtn"
                                         class="form__button form__button-color"
@@ -3294,6 +3415,7 @@ s
                                             v-model:value="
                                                 report[20].link_emblem
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ report[20].link_emblem.length }}
@@ -3310,6 +3432,7 @@ s
                                             v-model:value="
                                                 report[20].link_emblem_img
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -3327,6 +3450,7 @@ s
                                             placeholder="Например, https://vk.com/cco_monolit"
                                             :maxlength="100"
                                             v-model:value="report[20].link_flag"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ report[20].link_flag.length }} /
@@ -3343,6 +3467,7 @@ s
                                             v-model:value="
                                                 report[20].link_flag_img
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -3361,6 +3486,7 @@ s
                                             v-model:value="
                                                 report[20].link_banner
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ report[20].link_banner.length }}
@@ -3377,6 +3503,7 @@ s
                                             v-model:value="
                                                 report[20].link_banner_img
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -3397,6 +3524,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[20].disabledBtn"
                                         class="form__button form__button-color"
@@ -3425,6 +3553,8 @@ import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 import { sortByEducation } from '@shared/components/selects';
 import { SvgIcon } from '@shared';
+
+const is_regional_commander = ref();
 
 const route = useRoute();
 
@@ -3712,130 +3842,207 @@ const selectCertScans = (event, index) => {
     );
 };
 
-const getParameters = async (id) => {
+const getParametersRegCom = async (id) => {
     try {
-        isLoading.value = true;
-        const response = await HTTP.get(
-            `/competitions/${route.params.competition_pk}/reports/q${id}/` +
-                (id == 1 ? 'info/' : 'me/'),
+        const { data } = await HTTP.get(
+            `/competitions/${route.params.competition_pk}/detachment/${route.params.id}/q/${id}/`,
         );
-        console.log(report.value[id]);
-        if (id == 1 || id == 3 || id == 4) report.value[id] = response.data;
-        else if (response.data.results.length) {
-            if (
-                id == 6 &&
-                route.params.id == response.data.results[0].detachment
-            ) {
-                if (
-                    response.data.results[0].demonstration_block
-                        ?.first_may_demonstration
-                ) {
-                    report.value[61].demonstration_block.first_may_demonstration =
-                        response.data.results[0].demonstration_block.first_may_demonstration;
-                    report.value[61].demonstration_block.first_may_demonstration_participants =
-                        response.data.results[0].demonstration_block.first_may_demonstration_participants;
-                    report.value[61].disabledBtn = true;
-                } else {
-                    report.value[61].demonstration_block.first_may_demonstration =
-                        null;
-                    report.value[61].demonstration_block.first_may_demonstration_participants =
-                        '';
-                }
-                if (
-                    response.data.results[0].patriotic_action_block
-                        ?.patriotic_action_participants
-                ) {
-                    report.value[62].patriotic_action_block.patriotic_action =
-                        response.data.results[0].patriotic_action_block.patriotic_action;
-                    report.value[62].patriotic_action_block.patriotic_action_participants =
-                        response.data.results[0].patriotic_action_block.patriotic_action_participants;
-                    report.value[62].disabledBtn = true;
-                } else {
-                    report.value[62].patriotic_action_block.patriotic_action =
-                        null;
-                    report.value[62].patriotic_action_block.patriotic_action_participants =
-                        '';
-                }
-                if (
-                    response.data.results[0].safety_work_week_block
-                        ?.safety_work_week
-                ) {
-                    report.value[63].disabledBtn = true;
-                    report.value[63].safety_work_week_block.safety_work_week =
-                        response.data.results[0].safety_work_week_block.safety_work_week;
-                } else {
-                    report.value[63].safety_work_week_block.safety_work_week =
-                        null;
-                }
-                if (
-                    response.data.results[0].commander_commissioner_school_block
-                        ?.commander_commissioner_school
-                ) {
-                    report.value[64].disabledBtn = true;
-                    report.value[64].commander_commissioner_school_block.commander_commissioner_school =
-                        response.data.results[0].commander_commissioner_school_block.commander_commissioner_school;
-                } else {
-                    report.value[64].commander_commissioner_school_block.commander_commissioner_school =
-                        null;
-                }
-                if (
-                    response.data.results[0].working_semester_opening_block
-                        ?.working_semester_opening
-                ) {
-                    report.value[65].disabledBtn = true;
-                    report.value[65].working_semester_opening_block.working_semester_opening =
-                        response.data.results[0].working_semester_opening_block.working_semester_opening;
-                    report.value[65].working_semester_opening_block.working_semester_opening_participants =
-                        response.data.results[0].working_semester_opening_block.working_semester_opening_participants;
-                } else {
-                    report.value[65].working_semester_opening_block.working_semester_opening =
-                        null;
-                    report.value[65].working_semester_opening_block.working_semester_opening_participants =
-                        '';
-                }
-                if (
-                    response.data.results[0].creative_festival_block
-                        ?.creative_festival
-                ) {
-                    report.value[66].disabledBtn = true;
-                    report.value[66].creative_festival_block.creative_festival =
-                        response.data.results[0].creative_festival_block.creative_festival;
-                } else {
-                    report.value[66].creative_festival_block.creative_festival =
-                        null;
-                }
-                if (response.data.results[0].spartakiad_block?.spartakiad) {
-                    report.value[67].disabledBtn = true;
-                    report.value[67].spartakiad_block.spartakiad =
-                        response.data.results[0].spartakiad_block.spartakiad;
-                } else {
-                    report.value[67].spartakiad_block.spartakiad = null;
-                }
-                if (
-                    response.data.results[0].professional_competition_block
-                        ?.professional_competition
-                ) {
-                    report.value[68].disabledBtn = true;
-                    report.value[68].professional_competition_block.professional_competition =
-                        response.data.results[0].professional_competition_block.professional_competition;
-                } else {
-                    report.value[68].professional_competition_block.professional_competition =
-                        null;
-                }
-            } else {
-                if (report.value[id].participation_data) {
-                    report.value[id].participation_data = response.data.results;
-                } else report.value[id] = response.data.results[0];
-                report.value[id].disabledBtn = true;
+        if (id == 6) {
+            if (data.demonstration_block) {
+                report.value[61].demonstration_block = data.demonstration_block;
             }
+            if (data.patriotic_action_block) {
+                report.value[62].patriotic_action_block =
+                    data.patriotic_action_block;
+            }
+            if (data.safety_work_week_block) {
+                report.value[63].safety_work_week_block =
+                    data.safety_work_week_block;
+            }
+            if (data.commander_commissioner_school_block) {
+                report.value[64].commander_commissioner_school_block =
+                    data.commander_commissioner_school_block;
+            }
+            if (data.working_semester_opening_block) {
+                report.value[65].working_semester_opening_block =
+                    data.working_semester_opening_block;
+            }
+            if (data.creative_festival_block) {
+                report.value[66].creative_festival_block =
+                    data.creative_festival_block;
+            }
+            if (data.spartakiad_block) {
+                report.value[67].spartakiad_block = data.spartakiad_block;
+            }
+            if (data.professional_competition_block) {
+                report.value[68].professional_competition_block =
+                    data.professional_competition_block;
+            }
+        } else if (id == 5) {
+            if (data.q5educatedparticipant_set) {
+                report.value[5].participants_data =
+                    data.q5educatedparticipant_set;
+            }
+        } else if ([7, 8, 9, 10, 11, 12].includes(id)) {
+            if (data.participation_data) {
+                report.value[id].participation_data = data.participation_data;
+            }
+        } else if (id == 13) {
+            if (data.organization_data) {
+                report.value[13].organization_data = data.organization_data;
+            }
+        } else if (id == 14) {
+            if (data.q14_labor_project) {
+                report.value[14].q14_labor_projects = data.q14_labor_project;
+            }
+        } else if (id == 15) {
+            if (data.q15grantwinner_set) {
+                report.value[15].grants_data = data.q15grantwinner_set;
+            }
+        } else if (id == 17) {
+            if (data.q17_event_links) {
+                report.value[17].source_data = data.q17_event_links;
+            }
+        } else {
+            report.value[id] = data;
         }
-        isLoading.value = false;
-        const allowedIds = [5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17];
-        if (allowedIds.includes(id)) {
-            report.value[id].disabledBtn = false;
-        }
+        console.log(data);
     } catch (error) {
         isError.value = error.response;
+    }
+    isLoading.value = false;
+};
+
+const getParameters = async (id) => {
+    isLoading.value = true;
+    if (is_regional_commander.value) {
+        await getParametersRegCom(id);
+    } else {
+        try {
+            const response = await HTTP.get(
+                `/competitions/${route.params.competition_pk}/reports/q${id}/` +
+                    (id == 1 ? 'info/' : 'me/'),
+            );
+            if (id == 1 || id == 3 || id == 4) report.value[id] = response.data;
+            else if (response.data.results.length) {
+                if (
+                    id == 6 &&
+                    route.params.id == response.data.results[0].detachment
+                ) {
+                    if (
+                        response.data.results[0].demonstration_block
+                            ?.first_may_demonstration
+                    ) {
+                        report.value[61].demonstration_block.first_may_demonstration =
+                            response.data.results[0].demonstration_block.first_may_demonstration;
+                        report.value[61].demonstration_block.first_may_demonstration_participants =
+                            response.data.results[0].demonstration_block.first_may_demonstration_participants;
+                        report.value[61].disabledBtn = true;
+                    } else {
+                        report.value[61].demonstration_block.first_may_demonstration =
+                            null;
+                        report.value[61].demonstration_block.first_may_demonstration_participants =
+                            '';
+                    }
+                    if (
+                        response.data.results[0].patriotic_action_block
+                            ?.patriotic_action_participants
+                    ) {
+                        report.value[62].patriotic_action_block.patriotic_action =
+                            response.data.results[0].patriotic_action_block.patriotic_action;
+                        report.value[62].patriotic_action_block.patriotic_action_participants =
+                            response.data.results[0].patriotic_action_block.patriotic_action_participants;
+                        report.value[62].disabledBtn = true;
+                    } else {
+                        report.value[62].patriotic_action_block.patriotic_action =
+                            null;
+                        report.value[62].patriotic_action_block.patriotic_action_participants =
+                            '';
+                    }
+                    if (
+                        response.data.results[0].safety_work_week_block
+                            ?.safety_work_week
+                    ) {
+                        report.value[63].disabledBtn = true;
+                        report.value[63].safety_work_week_block.safety_work_week =
+                            response.data.results[0].safety_work_week_block.safety_work_week;
+                    } else {
+                        report.value[63].safety_work_week_block.safety_work_week =
+                            null;
+                    }
+                    if (
+                        response.data.results[0]
+                            .commander_commissioner_school_block
+                            ?.commander_commissioner_school
+                    ) {
+                        report.value[64].disabledBtn = true;
+                        report.value[64].commander_commissioner_school_block.commander_commissioner_school =
+                            response.data.results[0].commander_commissioner_school_block.commander_commissioner_school;
+                    } else {
+                        report.value[64].commander_commissioner_school_block.commander_commissioner_school =
+                            null;
+                    }
+                    if (
+                        response.data.results[0].working_semester_opening_block
+                            ?.working_semester_opening
+                    ) {
+                        report.value[65].disabledBtn = true;
+                        report.value[65].working_semester_opening_block.working_semester_opening =
+                            response.data.results[0].working_semester_opening_block.working_semester_opening;
+                        report.value[65].working_semester_opening_block.working_semester_opening_participants =
+                            response.data.results[0].working_semester_opening_block.working_semester_opening_participants;
+                    } else {
+                        report.value[65].working_semester_opening_block.working_semester_opening =
+                            null;
+                        report.value[65].working_semester_opening_block.working_semester_opening_participants =
+                            '';
+                    }
+                    if (
+                        response.data.results[0].creative_festival_block
+                            ?.creative_festival
+                    ) {
+                        report.value[66].disabledBtn = true;
+                        report.value[66].creative_festival_block.creative_festival =
+                            response.data.results[0].creative_festival_block.creative_festival;
+                    } else {
+                        report.value[66].creative_festival_block.creative_festival =
+                            null;
+                    }
+                    if (response.data.results[0].spartakiad_block?.spartakiad) {
+                        report.value[67].disabledBtn = true;
+                        report.value[67].spartakiad_block.spartakiad =
+                            response.data.results[0].spartakiad_block.spartakiad;
+                    } else {
+                        report.value[67].spartakiad_block.spartakiad = null;
+                    }
+                    if (
+                        response.data.results[0].professional_competition_block
+                            ?.professional_competition
+                    ) {
+                        report.value[68].disabledBtn = true;
+                        report.value[68].professional_competition_block.professional_competition =
+                            response.data.results[0].professional_competition_block.professional_competition;
+                    } else {
+                        report.value[68].professional_competition_block.professional_competition =
+                            null;
+                    }
+                } else {
+                    if (report.value[id].participation_data) {
+                        report.value[id].participation_data =
+                            response.data.results;
+                    } else report.value[id] = response.data.results[0];
+                    console.log(`true`);
+                    report.value[id].disabledBtn = true;
+                }
+            }
+            isLoading.value = false;
+            const allowedIds = [5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17];
+            if (allowedIds.includes(id)) {
+                report.value[id].disabledBtn = false;
+            }
+        } catch (error) {
+            isError.value = error.response;
+        }
     }
 };
 const postParameters = async (id) => {
@@ -4030,6 +4237,17 @@ const postParameters = async (id) => {
     }
 };
 
+const getMeCommander = async () => {
+    try {
+        const { data } = await HTTP.get(`/rsousers/me_commander/`);
+        if (data.regionalheadquarter_commander) {
+            is_regional_commander.value = true;
+        }
+    } catch (e) {
+        console.log(`getMeCommander error`, e);
+    }
+};
+
 watch(
     () => report.value[16],
     () => {
@@ -4049,6 +4267,7 @@ watch(
 onMounted(async (id) => {
     // report.value = JSON.parse(JSON.stringify(reportBase));
     await getParameters(id);
+    await getMeCommander();
 });
 console.log(report);
 </script>
