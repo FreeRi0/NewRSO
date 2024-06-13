@@ -70,6 +70,19 @@ const onUpdateMember = (event, id) => {
     if (firstkey == 'position')
         educationalsStore.members[memberIndex].position.id = event[firstkey];
     else educationalsStore.members[memberIndex][firstkey] = event[firstkey];
+    if (firstkey == 'is_trusted'){
+        const payload = {
+            id_trusted: event[firstkey],
+        }
+        try{
+            HTTP.patch(
+                `/detachments/${route.params.id}/members/${id}/`,
+                payload
+            )
+        } catch(e){
+            console.log(e);
+        }
+    }
 };
 
 const isEmblemChange = ref(false);
