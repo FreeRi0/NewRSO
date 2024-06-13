@@ -60,17 +60,17 @@
                         ">
                             <p>
                                 {{
-                                    position.userdetachmentposition?.position ??
-                                    position.usereducationalheadquarterposition
-                                        ?.position ??
-                                    position.userregionalheadquarterposition
-                                        ?.position ??
-                                    position.userlocalheadquarterposition
-                                        ?.position ??
-                                    position.userdistrictheadquarterposition
-                                        ?.position ??
-                                    position.usercentralheadquarterposition
-                                        ?.position
+                                position.userdetachmentposition?.position ??
+                                position.usereducationalheadquarterposition
+                                ?.position ??
+                                position.userregionalheadquarterposition
+                                ?.position ??
+                                position.userlocalheadquarterposition
+                                ?.position ??
+                                position.userdistrictheadquarterposition
+                                ?.position ??
+                                position.usercentralheadquarterposition
+                                ?.position
                                 }}
                             </p>
                         </li>
@@ -89,10 +89,10 @@
                         ">
                             <p>
                                 {{
-                                    position.userdetachmentposition?.headquarter
-                                        ?.name ??
-                                    position.usereducationalheadquarterposition
-                                        ?.headquarter?.name
+                                position.userdetachmentposition?.headquarter
+                                ?.name ??
+                                position.usereducationalheadquarterposition
+                                ?.headquarter?.name
                                 }}
                             </p>
                         </li>
@@ -113,8 +113,8 @@
                         ">
                             <p>
                                 {{
-                                    user.education?.study_institution
-                                        ?.short_name
+                                user.education?.study_institution
+                                ?.short_name
                                 }}
                             </p>
                         </li>

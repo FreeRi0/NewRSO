@@ -14,44 +14,64 @@
                 </div>
                 <div class="squad__list-wrapper">
                     <ul class="Squad-HQ__list">
-                        <li class="Squad-HQ__university" v-if="squad.educational_institution?.short_name">
+                        <li
+                            class="Squad-HQ__university"
+                            v-if="squad.educational_institution?.short_name"
+                        >
                             <p>
                                 {{ squad.educational_institution?.short_name }}
                             </p>
                         </li>
                         <li class="Squad-HQ__date">
                             <p>Дата создания ЛСО</p>
-                            <img src="@/app/assets/icon/calendar.svg" alt="calendar" />
+                            <img
+                                src="@/app/assets/icon/calendar.svg"
+                                alt="calendar"
+                            />
                             <time datetime="2022-09-10">{{
                                 squad.founding_date
-                                }}</time>
+                            }}</time>
                         </li>
                     </ul>
                 </div>
                 <div class="squad-data__contacts-wrapper">
                     <div class="squad-data__contacts">
                         <div class="squad-data__participant-counter">
-                            <span>{{ squad.participants_count }}
-                                {{ getEnding }}</span>
+                            <span
+                                >{{ squad.participants_count }}
+                                {{ ending }}</span
+                            >
                         </div>
                         <div class="squad-data__social-network">
-                            <div class="squad-data__link-vk" v-if="
-                                squad.social_vk && squad.social_vk != 'null'
-                            ">
+                            <div
+                                class="squad-data__link-vk"
+                                v-if="
+                                    squad.social_vk && squad.social_vk != 'null'
+                                "
+                            >
                                 <a :href="squad.social_vk" target="_blank">
                                     <img src="@/app/assets/icon/vk-blue.svg" />
                                 </a>
                             </div>
-                            <div class="squad-data__link-telegram" v-if="
-                                squad.social_tg && squad.social_tg != 'null'
-                            ">
+                            <div
+                                class="squad-data__link-telegram"
+                                v-if="
+                                    squad.social_tg && squad.social_tg != 'null'
+                                "
+                            >
                                 <a :href="squad.social_tg" target="_blank">
-                                    <img src="@/app/assets/icon/telegram-blue.svg" alt="" />
+                                    <img
+                                        src="@/app/assets/icon/telegram-blue.svg"
+                                        alt=""
+                                    />
                                 </a>
                             </div>
                             <div class="squad-data__link-share-link">
                                 <a @click="copyL">
-                                    <img src="@/app/assets/icon/to-share-link.svg" alt="" />
+                                    <img
+                                        src="@/app/assets/icon/to-share-link.svg"
+                                        alt=""
+                                    />
                                 </a>
                                 <div class="copy-message" hidden>
                                     Ссылка скопирована
@@ -65,23 +85,36 @@
                     <!-- <pre>{{ regional?.commander?.id }}</pre>
                     <pre>{{ squad?.commander?.id }}</pre> -->
 
-                    <router-link v-if="
-                        userId == squad.commander?.id ||
-                        userId == regional.commander?.id ||
-                        IsTrusted
-                    " :to="{
+                    <router-link
+                        v-if="
+                            userId == squad.commander?.id ||
+                            userId == regional.commander?.id ||
+                            IsTrusted
+                        "
+                        :to="{
                             name: 'EditLSO',
                             params: { id: squad.id },
-                        }" class="user-data__link">Редактировать отряд</router-link>
+                        }"
+                        class="user-data__link"
+                        >Редактировать отряд</router-link
+                    >
 
-                    <Button v-else-if="!IsMember && !UserApplication" @click="AddApplication()" label="Подать заявку"
-                        class="AddApplication"></Button>
+                    <Button
+                        v-else-if="!IsMember && !UserApplication"
+                        @click="AddApplication()"
+                        label="Подать заявку"
+                        class="AddApplication"
+                    ></Button>
 
                     <div v-else-if="UserApplication" class="d-flex">
                         <div class="user-data__link mr-2">
                             Заявка на рассмотрении
                         </div>
-                        <Button @click="DeleteApplication()" label="Удалить заявку" class="AddApplication"></Button>
+                        <Button
+                            @click="DeleteApplication()"
+                            label="Удалить заявку"
+                            class="AddApplication"
+                        ></Button>
                     </div>
 
                     <!--find искать id в computed-->
@@ -127,7 +160,7 @@ const props = defineProps({
     applications: {
         type: Array,
     },
-    getEnding: {
+    ending: {
         type: Number,
     },
 });
@@ -212,7 +245,7 @@ const AddApplication = async () => {
         let id = props.squad.id;
         const sendResponse = await HTTP.post(
             `/detachments/${id}/apply/`,
-            data.value
+            data.value,
         );
         swal.fire({
             position: 'top-center',
@@ -242,7 +275,7 @@ const AddApplication = async () => {
 const DeleteApplication = async () => {
     try {
         let id = props.squad.id;
-        const delApplyResp = await HTTP.delete(`/detachments/${id}/apply/`,);
+        const delApplyResp = await HTTP.delete(`/detachments/${id}/apply/`);
         swal.fire({
             position: 'top-center',
             icon: 'success',

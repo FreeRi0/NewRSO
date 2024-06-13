@@ -106,6 +106,19 @@ const onUpdateMember = (event, id) => {
     if (firstkey == 'position')
         SquadsStore.members[memberIndex].position.id = event[firstkey];
     else SquadsStore.members[memberIndex][firstkey] = event[firstkey];
+    if (firstkey == 'is_trusted'){
+        const payload = {
+            id_trusted: event[firstkey],
+        }
+        try{
+            HTTP.patch(
+                `/detachments/${route.params.id}/members/${id}/`,
+                payload
+            )
+        } catch(e){
+            console.log(e);
+        }
+    }
 };
 
 const onDeleteMember = (id) => {
@@ -234,12 +247,6 @@ const changeDetachment = async () => {
                     position: member.position.id,
                     is_trusted: member.is_trusted,
                 },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
             )
                 .then((response) => {
                     member.position = response.data.position;
@@ -289,7 +296,7 @@ const changeDetachment = async () => {
     HTTP.patch(`/detachments/${id}/`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+             Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
         },
     })
         .then((response) => {

@@ -364,7 +364,7 @@
                                   <textarea
                                       class="form__textarea"
                                       v-model="maininfo.description"
-                                      placeholder="Расскажите об отряде"
+                                      placeholder="Расскажите о мероприятии"
                                   />
                                   <div class="form__counter">
                                     {{ maininfo.description.length }}/300
@@ -587,6 +587,7 @@
                                       placeholder="Например 27.06.2024"
                                       name="action-end-hq"
                                       type="date"
+                                      :min="time_data.start_date"
                                   />
                                 </div>
                                 <div class="form__field form-timeGrid3">
@@ -601,6 +602,7 @@
                                       placeholder="Например, 15.05.2023"
                                       name="end-registration-hq"
                                       type="date"
+                                      :max="time_data.start_date"
                                   />
                                 </div>
 
@@ -1015,14 +1017,6 @@
                                 size="large"
                                 @click="openPanelThree"
                             ></Button>
-<!--                            <Button-->
-<!--                                variant="text"-->
-<!--                                type="button"-->
-<!--                                class="form-button form-button&#45;&#45;next"-->
-<!--                                label="Далее"-->
-<!--                                size="large"-->
-<!--                                @click="openPanelFive"-->
-<!--                            ></Button>-->
                           </v-card-actions>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
@@ -1153,11 +1147,14 @@ import { getUser } from '@services/UserService';
 import { Cropper } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
 import { HTTP } from '@app/http';
+import { useRoleStore } from '@layouts/store/role';
+import { useUserStore } from '@features/store/index';
+import { storeToRefs } from 'pinia';
 
 const swal = inject('$swal');
 const router = useRouter();
 const rules = ref([]);
-// const organization_stop = ref('');
+
 
 //------------------------------------------------------------------------------------------------
 const panel = ref();
@@ -1178,16 +1175,12 @@ const openPanelFour = () => {
   panel.value = 'panelFour';
 }
 
-// const openPanelFive = () => {
-//   panel.value = 'panelFive';
-// }
 //-------------------------------------------------------------------------------------
 const usersList = ref(null)
 let selectedUser = ref([])
 
 onActivated( () => {
     getRoles().then((resp) => {
-        // console.log(resp.data);
         rules.value = resp.data;
         Object.entries(resp.data).forEach(([key, value]) => {
             if (value !== null) {
@@ -1217,7 +1210,7 @@ onActivated( () => {
         const usersRes = await HTTP.get('users/', {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+             Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
           },
         })
         usersList.value = await usersRes.data.results;
@@ -1228,7 +1221,7 @@ onActivated( () => {
     getUsers();
 });
 onMounted(() => {});
-//@update:value="changeValue"
+
 const maininfo = ref({
     format: '',
     direction: '',
@@ -1308,12 +1301,9 @@ const direction_massive = ref([
     'Творческое',
 ]);
 
-const area = ref('');
-const area_massive = ref([
-    { name: 'ЛСО' },
-    { name: 'Региональный штаб' },
-    { name: 'Окружной штаб' },
-]);
+const area_massive = ref([])
+const roleStore = useRoleStore();
+const roles = storeToRefs(roleStore);
 
 watchEffect(() => {
     switch (maininfo.value.application_type) {
@@ -1321,15 +1311,47 @@ watchEffect(() => {
             area_massive.value = [{ name: 'ЛСО' }];
             break;
         case 'Групповая':
+          if (roles.roles.value?.centralheadquarter_commander) {
             area_massive.value = [
-                { name: 'Отряды' },
-                { name: 'Образовательные штабы' },
-                { name: 'Местные штабы' },
-                { name: 'Региональные штабы' },
-                { name: 'Окружные штабы' },
-                { name: 'Центральные штабы' },
+              { name: 'Отряды' },
+              { name: 'Образовательные штабы' },
+              { name: 'Местные штабы' },
+              { name: 'Региональные штабы' },
+              { name: 'Окружные штабы' },
+              { name: 'Центральный штаб' },
             ];
-            break;
+          } else if (roles.roles.value?.districtheadquarter_commander) {
+            area_massive.value = [
+              { name: 'Отряды' },
+              { name: 'Образовательные штабы' },
+              { name: 'Местные штабы' },
+              { name: 'Региональные штабы' },
+              { name: 'Окружные штабы' },
+            ];
+          } else if (roles.roles.value?.regionalheadquarter_commander) {
+            area_massive.value = [
+              { name: 'Отряды' },
+              { name: 'Образовательные штабы' },
+              { name: 'Местные штабы' },
+              { name: 'Региональные штабы' },
+            ];
+          } else if (roles.roles.value?.localheadquarter_commander) {
+            area_massive.value = [
+              { name: 'Отряды' },
+              { name: 'Образовательные штабы' },
+              { name: 'Местные штабы' },
+            ];
+          } else if (roles.roles.value?.educationalheadquarter_commander) {
+            area_massive.value = [
+              { name: 'Отряды' },
+              { name: 'Образовательные штабы' },
+            ];
+          } else if (roles.roles.value?.detachment_commander) {
+            area_massive.value = [
+              { name: 'Отряды' },
+            ];
+          }
+          break;
         case 'Многоэтапная':
             area_massive.value = [
                 { name: 'Округи' },
@@ -1454,10 +1476,6 @@ const time_data = ref({
     registration_end_date: '',
     registration_end_time: '',
 });
-
-//Переменные организаторов
-
-// const organizators = ref([]);
 
 //Ответы на вопросы
 const answers = ref([

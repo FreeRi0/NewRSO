@@ -119,7 +119,7 @@ const isMembersLoading = ref(false);
 //             const membersResponse = await HTTP.get(`regionals/${id}/members/`, {
 //                 headers: {
 //                     'Content-Type': 'application/json',
-//                     Authorization: 'Token ' + localStorage.getItem('Token'),
+//                      Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
 //                 },
 //             });
 
@@ -150,6 +150,19 @@ const onUpdateMember = (event, id) => {
     if (firstkey == 'position')
         regionalsStore.members[memberIndex].position.id = event[firstkey];
     else regionalsStore.members[memberIndex][firstkey] = event[firstkey];
+    if (firstkey == 'is_trusted'){
+        const payload = {
+            id_trusted: event[firstkey],
+        }
+        try{
+            HTTP.patch(
+                `/detachments/${route.params.id}/members/${id}/`,
+                payload
+            )
+        } catch(e){
+            console.log(e);
+        }
+    }
 };
 
 const submited = ref(false);
@@ -270,7 +283,7 @@ const changeHeadquarter = async () => {
         await HTTP.patch(`/regionals/${id}/`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+                 Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
             },
         });
         swal.fire({

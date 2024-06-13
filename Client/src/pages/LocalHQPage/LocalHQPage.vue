@@ -2,31 +2,38 @@
     <div class="container">
         <Breadcrumbs :items="pages"></Breadcrumbs>
         <h1 class="title title--hq">Местный штаб</h1>
-        <BannerHQ v-if="showHQ" :headquarter="headquarter" :edict="edict" :member="member"></BannerHQ>
-        <BannerHQ v-else-if="showDistrictHQ" :districtHeadquarter="districtHeadquarter" :member="member"></BannerHQ>
-        <BannerHQ v-else-if="showLocalHQ" :localHeadquarter="localHeadquarter" :member="member" :getEnding="getEnding"
-            :getEndingMembers="getEndingMembers"></BannerHQ>
-        <BannerHQ v-else-if="showRegionalHQ" :regionalHeadquarter="regionalHeadquarter" :member="member"></BannerHQ>
-        <BannerHQ v-else :centralHeadquarter="centralHeadquarter" :member="member"></BannerHQ>
-        <section class="about-hq" v-if="localHeadquarter.about && localHeadquarter.about != 'null'">
+        <BannerHQ
+            :localHeadquarter="localHeadquarter"
+            :member="member"
+            :ending="ending"
+            :endingMember="endingMember"
+        ></BannerHQ>
+        <section
+            class="about-hq"
+            v-if="localHeadquarter.about && localHeadquarter.about != 'null'"
+        >
             <h3>Описание местного штаба</h3>
-            <p v-if="showHQ">
-                {{ headquarter.about }}
-            </p>
-            <p v-else-if="showDistrictHQ">{{ districtHeadquarter.about }}</p>
-            <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
-            <p v-else-if="showRegionalHQ">{{ regionalHeadquarter.about }}</p>
-            <p v-else>{{ centralHeadquarter.about }}</p>
+            <p>{{ localHeadquarter.about }}</p>
         </section>
-        <ManagementHQ :commander="commander" :member="member" head="Руководство местного штаба" :position="position"
-            :leadership="localHeadquarter.leadership"></ManagementHQ>
+        <ManagementHQ
+            :commander="commander"
+            :member="member"
+            head="Руководство местного штаба"
+            :position="position"
+            :leadership="localHeadquarter.leadership"
+        ></ManagementHQ>
         <section class="headquarters_squads">
             <h3>Штабы и отряды местного штаба</h3>
             <div class="headquarters_squads__container">
-                <div class="card" :key="HQandSquad.link" v-for="(HQandSquad, index) in HQandSquads" :class="{
-                    'align-left': index % 2 === 0,
-                    'align-right': index % 2 !== 0,
-                }">
+                <div
+                    class="card"
+                    :key="HQandSquad.link"
+                    v-for="(HQandSquad, index) in HQandSquads"
+                    :class="{
+                        'align-left': index % 2 === 0,
+                        'align-right': index % 2 !== 0,
+                    }"
+                >
                     <a v-bind:href="HQandSquad.link" @click="HQandSquad.click">
                         <p>{{ HQandSquad.name }}</p>
                     </a>
@@ -43,13 +50,13 @@ import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
 import { usePage } from '@shared';
+import mixins from '@/mixins/mixins';
+
+const { methods } = mixins;
+const { getEnding } = methods;
+const { getEndingMembers } = methods;
 
 const crosspageFilters = useCrosspageFilter();
-const showLocalHQ = ref(true);
-const showHQ = ref(false);
-const showDistrictHQ = ref(false);
-const showRegionalHQ = ref(false);
-
 const commander = ref({});
 const position = ref({});
 const localHeadquarter = ref({});
@@ -61,7 +68,7 @@ const { replaceTargetObjects } = usePage();
 
 const aboutlocalHQ = async () => {
     try {
-        const response = await HTTP.get(`/locals/${id}/`,);
+        const response = await HTTP.get(`/locals/${id}/`);
 
         localHeadquarter.value = response.data;
         replaceTargetObjects([localHeadquarter.value]);
@@ -73,7 +80,7 @@ const aboutlocalHQ = async () => {
 
 const aboutMembers = async () => {
     try {
-        const response = await HTTP.get(`/locals/${id}/members/`,);
+        const response = await HTTP.get(`/locals/${id}/members/`);
 
         member.value = response.data;
         // console.log(response);
@@ -86,7 +93,7 @@ const fetchCommander = async () => {
     try {
         let id = localHeadquarter.value.commander.id;
 
-        const response = await HTTP.get(`/users/${id}/`,);
+        const response = await HTTP.get(`/users/${id}/`);
 
         commander.value = response.data;
         // console.log(response);
@@ -147,30 +154,12 @@ const HQandSquads = ref([
         },
     },
 ]);
-
-const getEnding = computed(() => {
-    const count = localHeadquarter.value.participants_count;
-
-    if (count === 1 && count % 100 !== 11) {
-        return 'участник';
-    } else if ([2, 3, 4].includes(count)) {
-        return 'участника';
-    } else {
-        return 'участников';
-    }
-});
-
-const getEndingMembers = computed(() => {
-    const count = localHeadquarter.value.members_count;
-
-    if (count === 1 && count % 100 !== 11) {
-        return 'действующий член';
-    } else if ([2, 3, 4].includes(count)) {
-        return 'действующих члена';
-    } else {
-        return 'действующих членов';
-    }
-});
+const ending = computed(() =>
+    getEnding(localHeadquarter.value.participants_count),
+);
+const endingMember = computed(() =>
+    getEndingMembers(localHeadquarter.value.members_count),
+);
 </script>
 <style scoped lang="scss">
 .title {

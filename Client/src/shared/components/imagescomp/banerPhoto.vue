@@ -177,7 +177,7 @@ const uploadBanner = async () => {
     await HTTP.patch('/rsousers/me/media/', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+            Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
         },
     })
         .then((response) => {
@@ -213,7 +213,7 @@ const updateBanner = async () => {
     await HTTP.put('/rsousers/me/media/', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+            Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
         },
     })
         .then((response) => {

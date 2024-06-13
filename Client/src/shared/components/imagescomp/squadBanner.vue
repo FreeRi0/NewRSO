@@ -35,7 +35,7 @@ const props = defineProps({
 // const viewBanner = async () => {
 //     await HTTP.get(`/detachments/${id}/`, {
 //         headers: {
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//              Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
 //         },
 //     })
 //         .then((response) => {

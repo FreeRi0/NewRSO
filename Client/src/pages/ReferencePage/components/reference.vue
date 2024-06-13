@@ -280,7 +280,7 @@ const SendReference = async () => {
     await HTTP.post('/membership_certificates/external/', refData.value, {
         headers: {
             'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+             Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
         },
         responseType: 'blob'
     })

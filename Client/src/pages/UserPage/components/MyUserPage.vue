@@ -13,7 +13,7 @@
                     верификацию. Верификация — это документальное подтверждение
                     ваших личных данных. Она займет всего несколько минут.
                 </div>
-                <router-link to="/PersonalData">
+                <router-link to="/personal-data">
                     <Button class="user-verify__btn" name="verify-btn" label="Пройти верификацию"
                         color="primary"></Button></router-link>
             </div>
@@ -50,6 +50,7 @@ import {
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { HTTP } from '@app/http';
+import { useRouter } from 'vue-router';
 import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
 const userStore = useUserStore();
@@ -58,43 +59,27 @@ const isLoading = storeToRefs(userStore);
 const education = ref({});
 const region = ref({});
 const tokenUser = ref("");
-const isAuth = ref(!!localStorage.getItem('Token'));
+const isAuth = ref(!!localStorage.getItem('jwt_token'));
 const query = new URLSearchParams(window.location.search);
 const payload = JSON.parse(query.get("payload"));
 
+const router = useRouter();
 
 const TokenData = ref({
     silent_token: payload?.token,
     uuid: payload?.uuid,
 })
 
-// const getVkUser = async () => {
-//     try {
-//         const resp = await HTTP.get('rsousers/me/', {
-//             headers: {
-//                 Authorization: 'Bearer ' + localStorage.getItem('Bearer'),
-//             }
-//         })
-
-//         console.log(resp, resp.data)
-//     } catch (e) {
-//         console.log('error:', e)
-//     }
-// }
-
-
-
-const exchangeToken = async () => {
+const getAccessToken = async () => {
     try {
-        const resp = await HTTP.post('/exchange-token/', TokenData.value)
-        localStorage.setItem('Bearer', resp.data.access_token);
-        console.log(resp.data.access_token);
-       userStore.getUser()
-
+        const resp = await HTTP.post('/jwt/vk-login/', TokenData.value)
+        localStorage.setItem('jwt_token', resp.data.access);
+        router.replace({query: null})
     } catch (e) {
         console.log('error:', e)
     }
 }
+
 
 const uploadAva = (imageAva) => {
 
@@ -127,7 +112,8 @@ const deleteWall = (imageWall) => {
 };
 
 onMounted(() => {
-    exchangeToken();
+    getAccessToken();
+
 })
 </script>
 <style lang="scss" scoped>

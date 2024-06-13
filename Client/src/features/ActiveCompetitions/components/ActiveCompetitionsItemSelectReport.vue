@@ -135,12 +135,6 @@ const getCompetition = async () => {
         } else {
             const { data } = await HTTP.get(
                 `/competitions/${props.report.competition}/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
             );
             competition.value = data;
         }
@@ -156,12 +150,6 @@ const getDetachmentData = async () => {
         } else {
             const { data } = await HTTP.get(
                 `/detachments/${props.report.detachment}/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
             );
             detachmentData.value = data;
         }

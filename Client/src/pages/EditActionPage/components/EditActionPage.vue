@@ -574,6 +574,7 @@
                                       placeholder="Например, 15.05.2023"
                                       name="end-registration-hq"
                                       type="date"
+                                      :min="maininfo.time_data.start_date"
                                   />
                                 </div>
                               </div>
@@ -1229,7 +1230,7 @@ onActivated(() => {
       const usersRes = await HTTP.get('users/', {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Token ' + localStorage.getItem('Token'),
+           Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
         },
       })
       usersList.value = await usersRes.data.results;

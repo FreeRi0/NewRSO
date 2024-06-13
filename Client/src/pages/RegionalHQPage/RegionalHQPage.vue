@@ -1,37 +1,43 @@
 <template>
     <div class="container">
         <h1 class="title title--hq">Региональный штаб</h1>
-        <BannerHQ v-if="showHQ" :headquarter="headquarter" :edict="edict" :member="member"></BannerHQ>
-        <BannerHQ v-else-if="showDistrictHQ" :districtHeadquarter="districtHeadquarter" :member="member"></BannerHQ>
-        <BannerHQ v-else-if="showLocalHQ" :localHeadquarter="localHeadquarter" :member="member"></BannerHQ>
-        <BannerHQ v-else-if="showRegionalHQ" :regionalHeadquarter="regionalHeadquarter.regional.value"
-            :member="member.members.value" :getEnding="getEnding" :getEndingMembers="getEndingMembers"></BannerHQ>
-        <BannerHQ v-else :centralHeadquarter="centralHeadquarter" :member="member"></BannerHQ>
-        <section class="about-hq" v-if="
-            regionalHeadquarter.regional.value.about &&
-            regionalHeadquarter.regional.value.about != 'null'
-        ">
+        <BannerHQ
+            :regionalHeadquarter="regionalHeadquarter.regional.value"
+            :member="member.members.value"
+            :ending="ending"
+            :endingMember="endingMember"
+        ></BannerHQ>
+        <section
+            class="about-hq"
+            v-if="
+                regionalHeadquarter.regional.value.about &&
+                regionalHeadquarter.regional.value.about != 'null'
+            "
+        >
             <h3>Описание регионального штаба</h3>
-            <p v-if="showHQ">
-                {{ headquarter.about }}
-            </p>
-            <p v-else-if="showDistrictHQ">{{ districtHeadquarter.about }}</p>
-            <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
-            <p v-else-if="showRegionalHQ">
+            <p>
                 {{ regionalHeadquarter.regional.value.about }}
             </p>
-            <p v-else>{{ centralHeadquarter.about }}</p>
         </section>
-        <ManagementHQ :commander="commander" :member="member" head="Руководство регионального штаба"
-            :position="position" :leadership="regionalHeadquarter.regional.value.leadership"></ManagementHQ>
-        <!-- <HQandSquad></HQandSquad> -->
+        <ManagementHQ
+            :commander="commander"
+            :member="member"
+            head="Руководство регионального штаба"
+            :position="position"
+            :leadership="regionalHeadquarter.regional.value.leadership"
+        ></ManagementHQ>
         <section class="headquarters_squads">
             <h3>Штабы и отряды регионального штаба</h3>
             <div class="headquarters_squads__container">
-                <div :key="HQandSquad.link" class="card" v-for="(HQandSquad, index) in HQandSquads" :class="{
-                    'align-left': index % 2 === 0,
-                    'align-right': index % 2 !== 0,
-                }">
+                <div
+                    :key="HQandSquad.link"
+                    class="card"
+                    v-for="(HQandSquad, index) in HQandSquads"
+                    :class="{
+                        'align-left': index % 2 === 0,
+                        'align-right': index % 2 !== 0,
+                    }"
+                >
                     <a v-bind:href="HQandSquad.link" @click="HQandSquad.click">
                         <p>{{ HQandSquad.name }}</p>
                     </a>
@@ -51,14 +57,14 @@ import { useCrosspageFilter } from '@shared';
 import { useRegionalsStore } from '@features/store/regionals';
 import { storeToRefs } from 'pinia';
 import { usePage } from '@shared';
+import mixins from '@/mixins/mixins';
+
+const { methods } = mixins;
+const { getEnding } = methods;
+const { getEndingMembers } = methods;
 
 const regionalsStore = useRegionalsStore();
 const crosspageFilters = useCrosspageFilter();
-const showRegionalHQ = ref(true);
-const showDistrictHQ = ref(false);
-const showLocalHQ = ref(false);
-const showHQ = ref(false);
-
 const commander = ref({});
 const position = ref({});
 const regionalHeadquarter = storeToRefs(regionalsStore);
@@ -72,7 +78,7 @@ const fetchCommander = async () => {
     try {
         let id = regionalHeadquarter.regional.value.commander.id;
 
-        const response = await HTTP.get(`/users/${id}/`,);
+        const response = await HTTP.get(`/users/${id}/`);
 
         commander.value = response.data;
         // console.log(response);
@@ -141,30 +147,12 @@ const HQandSquads = ref([
         },
     },
 ]);
-
-const getEnding = computed(() => {
-    const count = regionalsStore.regional.participants_count;
-
-    if (count === 1 && count % 100 !== 11) {
-        return 'участник';
-    } else if ([2, 3, 4].includes(count)) {
-        return 'участника';
-    } else {
-        return 'участников';
-    }
-});
-
-const getEndingMembers = computed(() => {
-    const count = regionalsStore.regional.members_count;
-
-    if (count === 1 && count % 100 !== 11) {
-        return 'действующий член';
-    } else if ([2, 3, 4].includes(count)) {
-        return 'действующих члена';
-    } else {
-        return 'действующих членов';
-    }
-});
+const ending = computed(() =>
+    getEnding(regionalsStore.regional.participants_count),
+);
+const endingMember = computed(() =>
+    getEndingMembers(regionalsStore.regional.members_count),
+);
 </script>
 <style scoped lang="scss">
 .title {

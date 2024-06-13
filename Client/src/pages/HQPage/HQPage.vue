@@ -1,28 +1,34 @@
 <template>
     <div class="container">
-        <h1 class="title title--hq" v-if="showHQ">Штаб</h1>
-        <BannerHQ v-if="showHQ" :headquarter="headquarter.educational.value" :edict="edict" :member="member"
-            :getEnding="getEnding"></BannerHQ>
-        <BannerHQ v-else-if="showDistrictHQ" :districtHeadquarter="districtHeadquarter" :member="member"></BannerHQ>
-        <BannerHQ v-else-if="showLocalHQ" :localHeadquarter="localHeadquarter" :member="member"></BannerHQ>
-        <BannerHQ v-else-if="showRegionalHQ" :regionalHeadquarter="regionalHeadquarter" :member="member"></BannerHQ>
-        <BannerHQ v-else :centralHeadquarter="centralHeadquarter" :member="member"></BannerHQ>
-        <section class="about-hq" v-if="
-            headquarter.educational.value.about &&
-            headquarter.educational.value.about != 'null'
-        ">
+        <h1 class="title title--hq">Штаб</h1>
+        <BannerHQ
+            :headquarter="headquarter.educational.value"
+            :edict="edict"
+            :member="member"
+            :ending="ending"
+        ></BannerHQ>
+        <section
+            class="about-hq"
+            v-if="
+                headquarter.educational.value.about &&
+                headquarter.educational.value.about != 'null'
+            "
+        >
             <h3>Описание штаба</h3>
-            <p v-if="showHQ">
+            <p>
                 {{ headquarter.educational.value.about }}
             </p>
-            <p v-else-if="showDistrictHQ">{{ districtHeadquarter.about }}</p>
-            <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
-            <p v-else-if="showRegionalHQ">{{ regionalHeadquarter.about }}</p>
-            <p v-else>{{ centralHeadquarter.about }}</p>
         </section>
-        <ManagementHQ :commander="commander" :member="member" head="Руководство штаба" :position="position"
-            :leadership="educationalsStore.educational.leadership"></ManagementHQ>
-        <DetachmentsHQ :items="educationalsStore.educational?.detachments"></DetachmentsHQ>
+        <ManagementHQ
+            :commander="commander"
+            :member="member"
+            head="Руководство штаба"
+            :position="position"
+            :leadership="educationalsStore.educational.leadership"
+        ></ManagementHQ>
+        <DetachmentsHQ
+            :items="educationalsStore.educational?.detachments"
+        ></DetachmentsHQ>
     </div>
 </template>
 <script setup>
@@ -35,14 +41,13 @@ import { useEducationalsStore } from '@features/store/educationals';
 import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router';
 import { usePage } from '@shared';
+import mixins from '@/mixins/mixins';
+
+const { methods } = mixins;
+const { getEnding } = methods;
 
 // banner condition
 const educationalsStore = useEducationalsStore();
-const showHQ = ref(true);
-const showDistrictHQ = ref(false);
-const showLocalHQ = ref(false);
-const showRegionalHQ = ref(false);
-
 const commander = ref({});
 const position = ref({});
 const headquarter = storeToRefs(educationalsStore);
@@ -57,7 +62,7 @@ const { replaceTargetObjects } = usePage();
 const fetchCommander = async () => {
     try {
         let id = headquarter.educational.value.commander.id;
-        const response = await HTTP.get(`/users/${id}/`,);
+        const response = await HTTP.get(`/users/${id}/`);
 
         commander.value = response.data;
         // console.log(response);
@@ -87,22 +92,12 @@ watch(
 onMounted(() => {
     educationalsStore.getEducationalsId(id);
     educationalsStore.getEducationalsMembers(id);
-    // await aboutEduc();
     replaceTargetObjects([headquarter.educational.value]);
     fetchCommander();
 });
-
-const getEnding = computed(() => {
-    const count = educationalsStore.educational.participants_count;
-
-    if (count === 1 && count % 100 !== 11) {
-        return 'участник';
-    } else if ([2, 3, 4].includes(count)) {
-        return 'участника';
-    } else {
-        return 'участников';
-    }
-});
+const ending = computed(() =>
+    getEnding(educationalsStore.educational.participants_count),
+);
 </script>
 <style scoped lang="scss">
 .title {

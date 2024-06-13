@@ -70,6 +70,19 @@ const onUpdateMember = (event, id) => {
     if (firstkey == 'position')
         educationalsStore.members[memberIndex].position.id = event[firstkey];
     else educationalsStore.members[memberIndex][firstkey] = event[firstkey];
+    if (firstkey == 'is_trusted'){
+        const payload = {
+            id_trusted: event[firstkey],
+        }
+        try{
+            HTTP.patch(
+                `/detachments/${route.params.id}/members/${id}/`,
+                payload
+            )
+        } catch(e){
+            console.log(e);
+        }
+    }
 };
 
 const isEmblemChange = ref(false);
@@ -132,12 +145,6 @@ const changeHeadquarter = async () => {
                     position: member.position.id,
                     is_trusted: member.is_trusted,
                 },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
             )
                 .then((response) => {
                     member.position = response.data.position;
@@ -171,7 +178,7 @@ const changeHeadquarter = async () => {
     HTTP.patch(`/educationals/${id}/`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
+             Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
         },
     })
         .then((response) => {

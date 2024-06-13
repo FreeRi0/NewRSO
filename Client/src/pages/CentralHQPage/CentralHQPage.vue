@@ -1,17 +1,28 @@
 <template>
     <div class="container">
         <h1 class="title title--hq">Центральный штаб</h1>
-        <BannerHQ :centralHeadquarter="centralHeadquarter" :member="centralHeadquarter.leadership"
-            :getEnding="getEnding" :getEndingMembers="getEndingMembers"></BannerHQ>
-        <section class="about-hq" v-if="
-            centralHeadquarter.about && centralHeadquarter.about != 'null'
-        ">
+        <BannerHQ
+            :centralHeadquarter="centralHeadquarter"
+            :member="centralHeadquarter.leadership"
+            :ending="ending"
+            :endingMember="endingMember"
+        ></BannerHQ>
+        <section
+            class="about-hq"
+            v-if="
+                centralHeadquarter.about && centralHeadquarter.about != 'null'
+            "
+        >
             <h3>Описание центрального штаба</h3>
 
             <p>{{ centralHeadquarter.about }}</p>
         </section>
-        <ManagementHQ :commander="centralHeadquarter.commander" head="Руководство центрального штаба"
-            :position="position" :leadership="centralHeadquarter.leadership">
+        <ManagementHQ
+            :commander="centralHeadquarter.commander"
+            head="Руководство центрального штаба"
+            :position="position"
+            :leadership="centralHeadquarter.leadership"
+        >
         </ManagementHQ>
         <HQandSquad></HQandSquad>
     </div>
@@ -24,6 +35,11 @@ import { ref, onMounted, watch, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { usePage } from '@shared';
+import mixins from '@/mixins/mixins';
+
+const { methods } = mixins;
+const { getEnding } = methods;
+const { getEndingMembers } = methods;
 
 const position = ref({});
 const centralHeadquarter = ref({});
@@ -34,7 +50,7 @@ const { replaceTargetObjects } = usePage();
 
 const aboutCentralHQs = async () => {
     try {
-        const response = await HTTP.get(`/centrals/${id}/`,);
+        const response = await HTTP.get(`/centrals/${id}/`);
 
         centralHeadquarter.value = response.data;
         replaceTargetObjects([centralHeadquarter.value]);
@@ -56,29 +72,12 @@ watch(
     },
 );
 
-const getEnding = computed(() => {
-    const count = centralHeadquarter.value.participants_count;
-
-    if (count === 1 && count % 100 !== 11) {
-        return 'участник';
-    } else if ([2, 3, 4].includes(count)) {
-        return 'участника';
-    } else {
-        return 'участников';
-    }
-});
-
-const getEndingMembers = computed(() => {
-    const count = centralHeadquarter.value.members_count;
-
-    if (count === 1 && count % 100 !== 11) {
-        return 'действующий член';
-    } else if ([2, 3, 4].includes(count)) {
-        return 'действующих члена';
-    } else {
-        return 'действующих членов';
-    }
-});
+const ending = computed(() =>
+    getEnding(centralHeadquarter.value.participants_count),
+);
+const endingMember = computed(() =>
+    getEndingMembers(centralHeadquarter.value.members_count),
+);
 </script>
 <style lang="scss" scoped>
 .title {

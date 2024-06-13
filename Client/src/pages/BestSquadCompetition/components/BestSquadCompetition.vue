@@ -214,7 +214,7 @@ import { usePage } from '@shared';
 
 usePage({ isHidden: true });
 const roleStore = useRoleStore();
-const isAuth = ref(!!localStorage.getItem('Token'));
+const isAuth = ref(!!localStorage.getItem('jwt_token'));
 const squadsStore = useSquadsStore();
 const userStore = useUserStore();
 const userCommander = ref({});
@@ -303,7 +303,7 @@ const getCompetition = async () => {
         const response = await HTTP.get(`competitions/${id}/`, {
             // headers: {
             //     'Content-Type': 'application/json',
-            //     Authorization: 'Token ' + localStorage.getItem('Token'),
+            //      Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
             // },
         });
 

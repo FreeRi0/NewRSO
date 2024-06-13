@@ -84,7 +84,7 @@ const props = defineProps({
 //     HTTP.get(`rsousers/me_commander/`, {
 //         headers: {
 //             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//              Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
 //         },
 //     })
 //         .then((response) => {
@@ -100,7 +100,7 @@ const props = defineProps({
 //     HTTP.get(`detachments/`, {
 //         headers: {
 //             'Content-Type': 'application/json',
-//             Authorization: 'Token ' + localStorage.getItem('Token'),
+//              Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
 //         },
 //     })
 //         .then((response) => {

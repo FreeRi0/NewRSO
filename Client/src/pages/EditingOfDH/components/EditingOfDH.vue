@@ -89,6 +89,19 @@ const onUpdateMember = (event, id) => {
     if (firstkey == 'position')
         districtsStore.members[memberIndex].position.id = event[firstkey];
     else districtsStore.members[memberIndex][firstkey] = event[firstkey];
+    if (firstkey == 'is_trusted'){
+        const payload = {
+            id_trusted: event[firstkey],
+        }
+        try{
+            HTTP.patch(
+                `/detachments/${route.params.id}/members/${id}/`,
+                payload
+            )
+        } catch(e){
+            console.log(e);
+        }
+    }
 };
 
 const submited = ref(false);
@@ -191,7 +204,7 @@ const changeHeadquarter = async () => {
         await HTTP.patch(`/districts/${id}/`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+                 Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
             },
         });
         swal.fire({

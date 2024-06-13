@@ -33,6 +33,25 @@ export const useUserStore = defineStore('user', {
             }
         },
 
+        async geVktUser() {
+
+            try {
+                this.isLoading = true;
+                setTimeout(async () => {
+                    const responseUserVk = await HTTP.get('rsousers/me/');
+                    if (!Number.isInteger(localStorage.getItem('user'))) {
+                        localStorage.setItem('user', responseUserVk.data.id);
+                    }
+                    this.currentUser = responseUserVk.data;
+                    this.isLoading = false;
+                }, 10);
+            } catch (error) {
+                console.log('an error occured ' + error);
+                this.isLoading = false;
+            }
+        },
+
+
         async getCountApp() {
             try {
                 const responseCount = await HTTP.get(
@@ -86,5 +105,23 @@ export const useUserStore = defineStore('user', {
             const responseSearch = await HTTP.get(`rsousers?search=${name}`);
             this.users = responseSearch.data;
         },
+
+        // async getAccessToken(token: String) {
+        //     try {
+        //         const responseAccessToken = await HTTP.post('/jwt/vk-login/', {access_token: token} )
+
+        //     } catch (error) {
+        //        console.log(error)
+        //     }
+        // },
+
+        // async exchangeToken(data: Object) {
+        //     try {
+        //         const respToken = await HTTP.post('/exchange-token/', data)
+
+        //     } catch (error) {
+        //         console.log('error:', error)
+        //     }
+        // }
     },
 });

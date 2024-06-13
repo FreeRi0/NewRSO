@@ -2,7 +2,7 @@
     <div v-for="participant in verified" v-if="verified.length > 0">
         <router-link
             class="horizontallso-item__wrapper"
-            :to="{ name: 'userpage', params: { id: participant.id } }"
+            :to="{ name: 'userpage', params: { id: participant.user?.id } }"
         >
             <div class="horizontallso-img">
                 <img
