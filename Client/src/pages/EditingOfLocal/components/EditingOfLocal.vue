@@ -88,6 +88,19 @@ const onUpdateMember = (event, id) => {
     if (firstkey == 'position')
         localsStore.members[memberIndex].position.id = event[firstkey];
     else localsStore.members[memberIndex][firstkey] = event[firstkey];
+    if (firstkey == 'is_trusted'){
+        const payload = {
+            id_trusted: event[firstkey],
+        }
+        try{
+            HTTP.patch(
+                `/detachments/${route.params.id}/members/${id}/`,
+                payload
+            )
+        } catch(e){
+            console.log(e);
+        }
+    }
 };
 
 const submited = ref(false);
