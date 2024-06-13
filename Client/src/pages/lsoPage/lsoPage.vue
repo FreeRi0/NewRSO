@@ -2,28 +2,63 @@
     <div class="container">
         <div class="squad-page" v-if="!isLoading.isLoading.value">
             <h1 class="title title--lso">ЛСО</h1>
-            <BannerSquad :squad="squad.squad.value" :member="member.members.value" :getEnding="getEnding"></BannerSquad>
-            <section class="about-squad" v-if="
-                squad.squad.value.about && squad.squad.value.about != 'null'
-            ">
+            <BannerSquad
+                :squad="squad.squad.value"
+                :member="member.members.value"
+                :ending="ending"
+            ></BannerSquad>
+            <section
+                class="about-squad"
+                v-if="
+                    squad.squad.value.about && squad.squad.value.about != 'null'
+                "
+            >
                 <h3>Об отряде</h3>
                 <p>
                     {{ squad.squad.value.about }}
                 </p>
             </section>
             <div class="mt-8 photoWrapper">
-                <squadPhotos class="photo-item" :squad-photos="squad.squad.value.photo1"></squadPhotos>
-                <squadPhotos class="photo-item" :squad-photos="squad.squad.value.photo2"></squadPhotos>
-                <squadPhotos class="photo-item" :squad-photos="squad.squad.value.photo3"></squadPhotos>
-                <squadPhotos class="photo-item photo-item-last" :squad-photos="squad.squad.value.photo4"></squadPhotos>
+                <squadPhotos
+                    class="photo-item"
+                    :squad-photos="squad.squad.value.photo1"
+                ></squadPhotos>
+                <squadPhotos
+                    class="photo-item"
+                    :squad-photos="squad.squad.value.photo2"
+                ></squadPhotos>
+                <squadPhotos
+                    class="photo-item"
+                    :squad-photos="squad.squad.value.photo3"
+                ></squadPhotos>
+                <squadPhotos
+                    class="photo-item photo-item-last"
+                    :squad-photos="squad.squad.value.photo4"
+                ></squadPhotos>
             </div>
 
-            <CompetitionPromo v-if="squad.squad.value.nomination" :squad="squad.squad.value"></CompetitionPromo>
-            <ManagementSquad class="mt-12" :commander="commander" :member="filteredMembers" head="Командир отряда"
-                :position="position"></ManagementSquad>
-            <SquadParticipants :squad="squad.squad.value" :member="member.members.value"></SquadParticipants>
+            <CompetitionPromo
+                v-if="squad.squad.value.nomination"
+                :squad="squad.squad.value"
+            ></CompetitionPromo>
+            <ManagementSquad
+                class="mt-12"
+                :commander="commander"
+                :member="filteredMembers"
+                head="Командир отряда"
+                :position="position"
+            ></ManagementSquad>
+            <SquadParticipants
+                :squad="squad.squad.value"
+                :member="member.members.value"
+            ></SquadParticipants>
         </div>
-        <v-progress-circular class="circleLoader" v-else indeterminate color="blue"></v-progress-circular>
+        <v-progress-circular
+            class="circleLoader"
+            v-else
+            indeterminate
+            color="blue"
+        ></v-progress-circular>
     </div>
 </template>
 <script setup>
@@ -38,6 +73,10 @@ import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { usePage } from '@shared';
+import mixins from '@/mixins/mixins';
+
+const { methods } = mixins;
+const { getEnding } = methods;
 
 const squadsStore = useSquadsStore();
 const squad = storeToRefs(squadsStore);
@@ -54,7 +93,7 @@ const { replaceTargetObjects } = usePage();
 const fetchCommander = async () => {
     try {
         let id = squad.squad.value.commander.id;
-        const response = await HTTP.get(`/users/${id}/`,);
+        const response = await HTTP.get(`/users/${id}/`);
 
         commander.value = response.data;
         // console.log(response);
@@ -83,18 +122,7 @@ watch(
         immediate: true,
     },
 );
-
-const getEnding = computed(() => {
-    const count = squadsStore.squad.participants_count;
-
-    if (count === 1 && count % 100 !== 11) {
-        return 'участник';
-    } else if ([2, 3, 4].includes(count)) {
-        return 'участника';
-    } else {
-        return 'участников';
-    }
-});
+const ending = computed(() => getEnding(squadsStore.squad.participants_count));
 </script>
 <style scoped lang="scss">
 .Squad-HQ__name {
