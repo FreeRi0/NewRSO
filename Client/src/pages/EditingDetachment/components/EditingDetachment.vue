@@ -106,6 +106,19 @@ const onUpdateMember = (event, id) => {
     if (firstkey == 'position')
         SquadsStore.members[memberIndex].position.id = event[firstkey];
     else SquadsStore.members[memberIndex][firstkey] = event[firstkey];
+    if (firstkey == 'is_trusted'){
+        const payload = {
+            id_trusted: event[firstkey],
+        }
+        try{
+            HTTP.patch(
+                `/detachments/${route.params.id}/members/${id}/`,
+                payload
+            )
+        } catch(e){
+            console.log(e);
+        }
+    }
 };
 
 const onDeleteMember = (id) => {
