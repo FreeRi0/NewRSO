@@ -246,7 +246,7 @@ const getMeCommander = async () => {
     try {
         const { data } = await HTTP.get(`/rsousers/me_commander/`,);
         // console.log(data);
-        if (data.detachment_commander) {
+        if (data.detachment_commander?.id == route.params.id) {
             commander.value = true;
         } else if (data.regionalheadquarter_commander) {
             regional_commander.value = true;
