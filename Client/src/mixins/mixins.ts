@@ -1,9 +1,4 @@
 const mixins = {
-    data() {
-        return {
-            uploadPercentage: 0,
-        };
-    },
     methods: {
         getEnding(count: number) {
             if (count === 1 && count % 100 !== 11) {
