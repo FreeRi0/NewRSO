@@ -3644,9 +3644,7 @@ const selectFile = (e, id, field, subfield, index) => {
 };
 
 const addNewBlock = (sectionIndex, NameSection, fields) => {
-    console.log(sectionIndex, fields);
     report.value[sectionIndex][NameSection].push(fields);
-    console.log(report.value);
     if (sectionIndex === 5 || sectionIndex === 17) {
         report.value[sectionIndex][NameSection].disabledBtn = false;
     }
@@ -4129,9 +4127,6 @@ const postParameters = async (id) => {
                                 {
                                     headers: {
                                         'Content-Type': type,
-                                        Authorization:
-                                            'Token ' +
-                                            localStorage.getItem('Token'),
                                     },
                                 },
                             );
@@ -4142,9 +4137,6 @@ const postParameters = async (id) => {
                                 {
                                     headers: {
                                         'Content-Type': type,
-                                        Authorization:
-                                            'Token ' +
-                                            localStorage.getItem('Token'),
                                     },
                                 },
                             );
@@ -4160,8 +4152,6 @@ const postParameters = async (id) => {
                         {
                             headers: {
                                 'Content-Type': type,
-                                Authorization:
-                                    'Token ' + localStorage.getItem('Token'),
                             },
                         },
                     );
@@ -4174,8 +4164,6 @@ const postParameters = async (id) => {
                     {
                         headers: {
                             'Content-Type': type,
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
                         },
                     },
                 );
@@ -4196,8 +4184,6 @@ const postParameters = async (id) => {
                 {
                     headers: {
                         'Content-Type': type,
-                        Authorization:
-                            'JWT ' + localStorage.getItem('jwt_token'),
                     },
                 },
             );
