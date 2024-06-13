@@ -35,7 +35,7 @@ watch(
     () => props.name,
     async (name) => {
       console.log(props.flip);
-        src.value = `/assets/icons/${name}.svg`;
+        src.value = `/assets/${name}.svg`;
     },
     { immediate: true },
 );
