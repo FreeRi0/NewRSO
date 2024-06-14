@@ -1,11 +1,6 @@
 <template>
-    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-      <circle cx="16" cy="16" r="15.5" fill="#1F7CC0" stroke="#1F7CC0" />
-      <path
-        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-        stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-        stroke-linejoin="round" />
-    </svg>  
+  <div v-html="icons" :class="{ rotate_icon: flip}">
+  </div>
 </template>
 
 <script setup>
@@ -29,13 +24,21 @@ const props = defineProps({
     }
 })
 
-const src = ref(null);
+const icons = ref();
 
 watch(
     () => props.name,
     async (name) => {
-      console.log(props.flip);
-        src.value = `/assets/${name}.svg`;
+      const { default: icon } = await import(`/assets/${name}.svg?raw`);
+      icons.value = icon;
+      if(props.width){
+        let regex = /width="\d+"/g;
+        icons.value = icons.value.replace(regex, `width="${props.width}"`);
+      }
+      if(props.height){
+        let regex = /height="\d+"/g;
+        icons.value = icons.value.replace(regex, `height="${props.height}"`);
+      }
     },
     { immediate: true },
 );
