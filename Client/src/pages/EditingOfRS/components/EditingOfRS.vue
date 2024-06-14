@@ -2,23 +2,11 @@
     <div class="container">
         <h1 class="title title--lso">Редактирование регионального штаба</h1>
         <!-- здесь поменяла -->
-        <FormRS
-            :participants="true"
-            :headquarter="headquarter"
-            :members="regionalsStore.members"
-            :submited="submited"
-            :is-commander-loading="isCommanderLoading"
-            :is-members-loading="isMembersLoading"
-            :is-error="isError"
-            :is-error-members="isErrorMembers"
-            v-if="headquarter && isError && isErrorMembers && !loading"
-            @submit.prevent="changeHeadquarter"
-            @select-emblem="onSelectEmblem"
-            @select-banner="onSelectBanner"
-            @delete-emblem="onDeleteEmblem"
-            @delete-banner="onDeleteBanner"
-            @update-member="onUpdateMember"
-        ></FormRS>
+        <FormRS :participants="true" :headquarter="headquarter" :members="regionalsStore.members" :submited="submited"
+            :is-commander-loading="isCommanderLoading" :is-members-loading="isMembersLoading" :is-error="isError"
+            :is-error-members="isErrorMembers" v-if="headquarter && isError && isErrorMembers && !loading"
+            @submit.prevent="changeHeadquarter" @select-emblem="onSelectEmblem" @select-banner="onSelectBanner"
+            @delete-emblem="onDeleteEmblem" @delete-banner="onDeleteBanner" @update-member="onUpdateMember"></FormRS>
     </div>
 </template>
 
@@ -91,12 +79,7 @@ const isCommanderLoading = ref(false);
 const getHeadquarter = async () => {
     loading.value = true;
     isCommanderLoading.value = true;
-    await HTTP.get(`regionals/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    await HTTP.get(`regionals/${id}/`,)
         .then((response) => {
             headquarter.value = response.data;
             if (headquarter.value.region) {
@@ -136,7 +119,7 @@ const isMembersLoading = ref(false);
 //             const membersResponse = await HTTP.get(`regionals/${id}/members/`, {
 //                 headers: {
 //                     'Content-Type': 'application/json',
-//                     Authorization: 'Token ' + localStorage.getItem('Token'),
+//                      Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
 //                 },
 //             });
 
@@ -165,8 +148,21 @@ const onUpdateMember = (event, id) => {
     const firstkey = Object.keys(event)[0];
     regionalsStore.members[memberIndex].change = true;
     if (firstkey == 'position')
-    regionalsStore.members[memberIndex].position.id = event[firstkey];
+        regionalsStore.members[memberIndex].position.id = event[firstkey];
     else regionalsStore.members[memberIndex][firstkey] = event[firstkey];
+    if (firstkey == 'is_trusted'){
+        const payload = {
+            id_trusted: event[firstkey],
+        }
+        try{
+            HTTP.patch(
+                `/detachments/${route.params.id}/members/${id}/`,
+                payload
+            )
+        } catch(e){
+            console.log(e);
+        }
+    }
 };
 
 const submited = ref(false);
@@ -287,7 +283,7 @@ const changeHeadquarter = async () => {
         await HTTP.patch(`/regionals/${id}/`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+                 Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
             },
         });
         swal.fire({

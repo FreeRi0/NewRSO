@@ -17,12 +17,18 @@ export default defineConfig({
         port: 8080,
         proxy: {
             "/api": {
-              //changeOrigin: true,
-              target: "http://127.0.0.1:8000",
-              changeOrigin: true,
-              secure: false,
+                //changeOrigin: true,
+                target: "http://127.0.0.1:8000",
+                changeOrigin: true,
+                secure: false,
+            },
+            "https://api.vk.com/method/auth.getProfileInfoBySilentToken": {
+                //changeOrigin: true,
+                target: "http://127.0.0.1:8000",
+                changeOrigin: true,
+                secure: false,
             }
-          }
+        }
     },
     resolve: {
         alias: [
@@ -38,6 +44,7 @@ export default defineConfig({
             getAliasObject('@services', './src/services'),
         ],
     },
+
     css: {
         preprocessorOptions: {
             scss: {

@@ -3,45 +3,17 @@
         <Breadcrumbs :items="pages"></Breadcrumbs>
         <h1 class="title title--hq">Местный штаб</h1>
         <BannerHQ
-            v-if="showHQ"
-            :headquarter="headquarter"
-            :edict="edict"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else-if="showDistrictHQ"
-            :districtHeadquarter="districtHeadquarter"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else-if="showLocalHQ"
             :localHeadquarter="localHeadquarter"
             :member="member"
-            :getEnding="getEnding"
-            :getEndingMembers="getEndingMembers"
-        ></BannerHQ>
-        <BannerHQ
-            v-else-if="showRegionalHQ"
-            :regionalHeadquarter="regionalHeadquarter"
-            :member="member"
-        ></BannerHQ>
-        <BannerHQ
-            v-else
-            :centralHeadquarter="centralHeadquarter"
-            :member="member"
+            :ending="ending"
+            :endingMember="endingMember"
         ></BannerHQ>
         <section
             class="about-hq"
             v-if="localHeadquarter.about && localHeadquarter.about != 'null'"
         >
             <h3>Описание местного штаба</h3>
-            <p v-if="showHQ">
-                {{ headquarter.about }}
-            </p>
-            <p v-else-if="showDistrictHQ">{{ districtHeadquarter.about }}</p>
-            <p v-else-if="showLocalHQ">{{ localHeadquarter.about }}</p>
-            <p v-else-if="showRegionalHQ">{{ regionalHeadquarter.about }}</p>
-            <p v-else>{{ centralHeadquarter.about }}</p>
+            <p>{{ localHeadquarter.about }}</p>
         </section>
         <ManagementHQ
             :commander="commander"
@@ -62,9 +34,9 @@
                         'align-right': index % 2 !== 0,
                     }"
                 >
-                    <a v-bind:href="HQandSquad.link" @click="HQandSquad.click"
-                        ><p>{{ HQandSquad.name }}</p></a
-                    >
+                    <a v-bind:href="HQandSquad.link" @click="HQandSquad.click">
+                        <p>{{ HQandSquad.name }}</p>
+                    </a>
                 </div>
             </div>
         </section>
@@ -78,13 +50,13 @@ import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
 import { usePage } from '@shared';
+import mixins from '@/mixins/mixins';
+
+const { methods } = mixins;
+const { getEnding } = methods;
+const { getEndingMembers } = methods;
 
 const crosspageFilters = useCrosspageFilter();
-const showLocalHQ = ref(true);
-const showHQ = ref(false);
-const showDistrictHQ = ref(false);
-const showRegionalHQ = ref(false);
-
 const commander = ref({});
 const position = ref({});
 const localHeadquarter = ref({});
@@ -96,16 +68,11 @@ const { replaceTargetObjects } = usePage();
 
 const aboutlocalHQ = async () => {
     try {
-        const response = await HTTP.get(`/locals/${id}/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const response = await HTTP.get(`/locals/${id}/`);
 
         localHeadquarter.value = response.data;
         replaceTargetObjects([localHeadquarter.value]);
-        console.log(response);
+        // console.log(response);
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -113,15 +80,10 @@ const aboutlocalHQ = async () => {
 
 const aboutMembers = async () => {
     try {
-        const response = await HTTP.get(`/locals/${id}/members/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const response = await HTTP.get(`/locals/${id}/members/`);
 
         member.value = response.data;
-        console.log(response);
+        // console.log(response);
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -131,15 +93,10 @@ const fetchCommander = async () => {
     try {
         let id = localHeadquarter.value.commander.id;
 
-        const response = await HTTP.get(`/users/${id}/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const response = await HTTP.get(`/users/${id}/`);
 
         commander.value = response.data;
-        console.log(response);
+        // console.log(response);
     } catch (error) {
         console.log('An error occurred:', error);
     }
@@ -197,30 +154,12 @@ const HQandSquads = ref([
         },
     },
 ]);
-
-const getEnding = computed(() => {
-    const count = localHeadquarter.value.participants_count;
-
-    if (count === 1 && count % 100 !== 11) {
-        return 'участник';
-    } else if ([2, 3, 4].includes(count)) {
-        return 'участника';
-    } else {
-        return 'участников';
-    }
-});
-
-const getEndingMembers = computed(() => {
-    const count = localHeadquarter.value.members_count;
-
-    if (count === 1 && count % 100 !== 11) {
-        return 'действующий член';
-    } else if ([2, 3, 4].includes(count)) {
-        return 'действующих члена';
-    } else {
-        return 'действующих членов';
-    }
-});
+const ending = computed(() =>
+    getEnding(localHeadquarter.value.participants_count),
+);
+const endingMember = computed(() =>
+    getEndingMembers(localHeadquarter.value.members_count),
+);
 </script>
 <style scoped lang="scss">
 .title {
@@ -235,6 +174,7 @@ const getEndingMembers = computed(() => {
         margin-bottom: 50px;
     }
 }
+
 .user-data__wrapper {
     margin: 20px 0 12px 298px;
 }
@@ -246,31 +186,38 @@ const getEndingMembers = computed(() => {
     font-weight: 600;
     line-height: normal;
 }
+
 .slogan {
     margin-top: 20px;
     margin-bottom: 9.5px;
 }
+
 .Squad-HQ__list {
     margin-bottom: 20px;
     display: grid;
     grid-template-columns: 380px 300px;
 }
+
 .Squad-HQ__list li {
     border-right: none;
     height: 20px;
     margin: 0;
 }
+
 .Squad-HQ__university p {
     border-right: 1px solid #35383f;
     margin-right: 8px;
     padding-right: 8px;
 }
+
 .Squad-HQ__date {
     display: flex;
 }
+
 .Squad-HQ__date p {
     margin-right: 22px;
 }
+
 .user-data__link {
     border-radius: 10px;
     background: #39bfbf;
@@ -284,17 +231,21 @@ const getEndingMembers = computed(() => {
     color: white;
     padding: 16px 32px;
 }
+
 .squad-data__contacts-wrapper {
     display: flex;
     justify-content: space-between;
 }
+
 .squad-data__contacts {
     display: grid;
 }
+
 .squad-data__contacts {
     display: flex;
     flex-direction: column;
 }
+
 .squad-data__social-network {
     display: flex;
     justify-content: space-between;
@@ -304,12 +255,14 @@ const getEndingMembers = computed(() => {
 .about-hq {
     margin-bottom: 60px;
 }
+
 .about-hq h3 {
     font-size: 32px;
     font-family: 'Akrobat';
     margin-bottom: 40px;
     color: #35383f;
 }
+
 .about-hq p {
     font-size: 18px;
     font-weight: 400;
@@ -323,71 +276,87 @@ const getEndingMembers = computed(() => {
     .Squad-HQ__list {
         grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
     }
+
     .Squad-HQ__university p {
         border-right: 0;
         margin-right: 0;
         padding-right: 0;
     }
+
     .Squad-HQ__list li {
         margin-bottom: 8px;
     }
 }
+
 @media (max-width: 790px) {
     .squad-data__contacts-wrapper {
         flex-direction: column;
     }
+
     .user-data__link {
         align-self: start;
     }
+
     .squad-data__social-network {
         justify-content: start;
         margin: 16px 16px 20px 0px;
         gap: 12px;
     }
 }
+
 @media (max-width: 730px) {
     .user-data__wrapper {
         margin: 20px 0 12px 265px;
     }
+
     .user-metric {
         grid-template-columns: 15px 135px 135px 2fr 16px;
     }
 }
+
 @media (max-width: 690px) {
     .user-metric {
         grid-template-columns: 3fr 0fr 16fr 1fr;
     }
+
     .user-data__wrapper {
         margin: 105px 5px 20px 5px;
         display: flex;
         flex-direction: column;
         align-items: center;
     }
+
     .Squad-HQ__university p {
         text-align: center;
     }
+
     .Squad-HQ__list li {
         justify-content: center;
     }
+
     .squad-data__contacts {
         align-self: center;
     }
 }
+
 @media (max-width: 430px) {
     .user-metric {
         grid-template-columns: 6fr 0fr 16fr 1fr;
     }
 }
+
 @media (max-width: 415px) {
     .Squad-HQ__list {
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         row-gap: 30px;
     }
 }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 section.headquarters_squads {
     margin-bottom: 60px;
 }
+
 section.headquarters_squads h3 {
     color: #35383f;
     font-family: 'Akrobat';
@@ -415,6 +384,7 @@ section.headquarters_squads h3 {
     display: grid;
     align-items: center;
 }
+
 .card p {
     color: #35383f;
     text-align: center;
@@ -431,9 +401,11 @@ section.headquarters_squads h3 {
         justify-items: center;
         column-gap: 40px;
     }
+
     .card.align-left {
         margin-left: auto;
     }
+
     .card.align-right {
         margin-right: auto;
     }
@@ -443,21 +415,25 @@ section.headquarters_squads h3 {
     .card.align-left {
         margin-left: 0;
     }
+
     .card.align-right {
         margin-right: 0;
     }
 }
+
 @media (max-width: 450px) {
     .headquarters_squads__container {
         grid-template-columns: repeat(auto-fill, minmax(156px, 1fr));
         column-gap: 16px;
         row-gap: 16px;
     }
+
     .card {
         padding: 16px;
         width: 156px;
         height: 165px;
     }
+
     .card p {
         font-size: 18px;
     }

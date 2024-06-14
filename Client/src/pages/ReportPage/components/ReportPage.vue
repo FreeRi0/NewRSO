@@ -16,57 +16,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -76,7 +26,7 @@ s
                                     >Численность членов линейного студенческого
                                     отряда в соответствии с объемом уплаченных
                                     членских взносов рассчитывается ежедневно.
-                                    Последняя дата рассчета 12 июня 2024 года.
+                                    Последняя дата расчета 12 июня 2024 года.
                                 </label>
                                 <div class="form_place">
                                     <p>Для сведения:</p>
@@ -155,57 +105,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -260,7 +160,10 @@ s
                                             v-model:value="
                                                 report[2].commander_link
                                             "
-                                            :readonly="report[2].is_verified"
+                                            :readonly="
+                                                report[2].is_verified ||
+                                                is_regional_commander
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{
@@ -355,6 +258,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[2].disabledBtn"
                                         class="form__button form__button-color"
@@ -382,57 +286,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -473,57 +327,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -562,57 +366,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -635,7 +389,10 @@ s
                                             placeholder="Например, Иванова Светлана Андреевна"
                                             :maxlength="100"
                                             v-model:value="block.name"
-                                            :readonly="block.is_verified"
+                                            :readonly="
+                                                block.is_verified ||
+                                                is_regional_commander
+                                            "
                                         />
                                         <div class="form__counter">
                                             {{ block.name.length }} / 100
@@ -718,9 +475,21 @@ s
                                         </p>
                                     </div>
                                 </div>
-                                <div type="button" v-if="!block.is_verified">
+                                <div
+                                    type="button"
+                                    v-if="
+                                        !block.is_verified &&
+                                        !is_regional_commander
+                                    "
+                                >
                                     <svg
-                                        @click="deleteBlock(index)"
+                                        @click="
+                                            deleteBlock(
+                                                index,
+                                                5,
+                                                'participants_data',
+                                            )
+                                        "
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
                                         height="24"
@@ -746,8 +515,14 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!is_regional_commander"
                                 class="form__field add-block"
-                                @click="addNewBlock"
+                                @click="
+                                    addNewBlock(5, 'participants_data', {
+                                        name: '',
+                                        document: '',
+                                    })
+                                "
                             >
                                 + добавить участника
                             </div>
@@ -760,6 +535,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[5].disabledBtn"
                                         class="form__button form__button-color"
@@ -788,57 +564,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -865,6 +591,10 @@ s
                                             :sorts-boolean="false"
                                             variant="outlined"
                                             clearable
+                                            :disabled="
+                                                report[61].demonstration_block
+                                                    .is_verified
+                                            "
                                         />
                                     </div>
                                     <div class="form__field">
@@ -881,6 +611,7 @@ s
                                                 report[61].demonstration_block
                                                     .first_may_demonstration_participants
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -888,7 +619,7 @@ s
                                                     .first_may_demonstration_participants
                                                     .length
                                             }}
-                                            / 5
+                                            / 100
                                         </div>
                                     </div>
                                 </div>
@@ -902,6 +633,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[61].disabledBtn"
                                         class="form__button form__button-color"
@@ -963,6 +695,7 @@ s
                                                     .patriotic_action_block
                                                     .patriotic_action_participants
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -985,6 +718,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[62].disabledBtn"
                                         class="form__button form__button-color"
@@ -1038,6 +772,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[63].disabledBtn"
                                         class="form__button form__button-color"
@@ -1093,6 +828,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[64].disabledBtn"
                                         class="form__button form__button-color"
@@ -1150,6 +886,7 @@ s
                                                     .working_semester_opening_block
                                                     .working_semester_opening_participants
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -1172,6 +909,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[65].disabledBtn"
                                         class="form__button form__button-color"
@@ -1225,6 +963,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[66].disabledBtn"
                                         class="form__button form__button-color"
@@ -1277,6 +1016,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[67].disabledBtn"
                                         class="form__button form__button-color"
@@ -1331,6 +1071,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[68].disabledBtn"
                                         class="form__button form__button-color"
@@ -1359,57 +1100,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1431,6 +1122,7 @@ s
                                             placeholder="Например, Окружной слет студенческих отрядов ПФО"
                                             :maxlength="150"
                                             v-model:value="block.event_name"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.event_name.length }} / 100
@@ -1449,6 +1141,7 @@ s
                                             v-model:value="
                                                 block.number_of_participants
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -1476,6 +1169,9 @@ s
                                                     placeholder="Например, https://vk.com/cco_monolit"
                                                     :maxlength="100"
                                                     v-model:value="link.link"
+                                                    :readonly="
+                                                        is_regional_commander
+                                                    "
                                                 />
                                                 <div
                                                     type="button"
@@ -1483,7 +1179,11 @@ s
                                                 >
                                                     <svg
                                                         @click="
-                                                            deleteLink7(index)
+                                                            deleteLink(
+                                                                index,
+                                                                7,
+                                                                'participation_data',
+                                                            )
                                                         "
                                                         xmlns="http://www.w3.org/2000/svg"
                                                         width="24"
@@ -1515,8 +1215,16 @@ s
                                             </div>
                                         </template>
                                         <div
-                                            class="form__field add-link"
-                                            @click="AddLink7(index)"
+                                            class="form__field add-block"
+                                            @click="
+                                                AddLink(
+                                                    index,
+                                                    7,
+                                                    'participation_data',
+                                                    { link: '' },
+                                                )
+                                            "
+                                            v-if="!is_regional_commander"
                                         >
                                             <p>+ добавить ссылку</p>
                                         </div>
@@ -1587,9 +1295,21 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button" v-if="!block.is_verified">
+                                <div
+                                    type="button"
+                                    v-if="
+                                        !block.is_verified &&
+                                        !is_regional_commander
+                                    "
+                                >
                                     <svg
-                                        @click="deleteBlock7(index)"
+                                        @click="
+                                            deleteBlock(
+                                                index,
+                                                7,
+                                                'participation_data',
+                                            )
+                                        "
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
                                         height="24"
@@ -1615,8 +1335,16 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!is_regional_commander"
                                 class="form__field add-block"
-                                @click="AddBlock7"
+                                @click="
+                                    addNewBlock(7, 'participation_data', {
+                                        event_name: '',
+                                        number_of_participants: '',
+                                        certificate_scans: null,
+                                        links: [{ link: '' }],
+                                    })
+                                "
                             >
                                 <p>+ Добавить мероприятие</p>
                             </div>
@@ -1629,6 +1357,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[7].disabledBtn"
                                         class="form__button form__button-color"
@@ -1656,57 +1385,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1728,6 +1407,7 @@ s
                                             placeholder="Например, Всероссийский конкурс «В объективе РСО»"
                                             :maxlength="100"
                                             v-model:value="block.event_name"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.event_name.length }} / 100
@@ -1746,6 +1426,7 @@ s
                                             v-model:value="
                                                 block.number_of_participants
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -1773,6 +1454,7 @@ s
                                                     placeholder="Например, https://vk.com/cco_monolit"
                                                     :maxlength="100"
                                                     v-model:value="link.link"
+                                                    readonly="is_regional_commander"
                                                 />
                                                 <div
                                                     type="button"
@@ -1780,7 +1462,11 @@ s
                                                 >
                                                     <svg
                                                         @click="
-                                                            deleteLink8(index)
+                                                            deleteLink(
+                                                                index,
+                                                                8,
+                                                                'participation_data',
+                                                            )
                                                         "
                                                         xmlns="http://www.w3.org/2000/svg"
                                                         width="24"
@@ -1811,8 +1497,16 @@ s
                                             </div>
                                         </template>
                                         <div
-                                            class="form__field add-link"
-                                            @click="AddLink8(index)"
+                                            class="form__field add-block"
+                                            @click="
+                                                AddLink(
+                                                    index,
+                                                    8,
+                                                    'participation_data',
+                                                    { link: '' },
+                                                )
+                                            "
+                                            v-if="!is_regional_commander"
                                         >
                                             <p>+ добавить ссылку</p>
                                         </div>
@@ -1883,9 +1577,21 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button" v-if="!block.is_verified">
+                                <div
+                                    type="button"
+                                    v-if="
+                                        !block.is_verified &&
+                                        !is_regional_commander
+                                    "
+                                >
                                     <svg
-                                        @click="deleteBlock8(index)"
+                                        @click="
+                                            deleteBlock(
+                                                index,
+                                                8,
+                                                'participation_data',
+                                            )
+                                        "
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
                                         height="24"
@@ -1911,8 +1617,16 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!is_regional_commander"
                                 class="form__field add-block"
-                                @click="AddBlock8"
+                                @click="
+                                    addNewBlock(8, 'participation_data', {
+                                        event_name: '',
+                                        number_of_participants: '',
+                                        certificate_scans: null,
+                                        links: [{ link: '' }],
+                                    })
+                                "
                             >
                                 <p>+ Добавить мероприятие</p>
                             </div>
@@ -1925,6 +1639,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[8].disabledBtn"
                                         class="form__button form__button-color"
@@ -1952,57 +1667,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -2023,6 +1688,7 @@ s
                                             placeholder="Например, Окружной слет студенческих отрядов ПФО"
                                             :maxlength="100"
                                             v-model:value="block.event_name"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.event_name.length }} / 100
@@ -2043,6 +1709,7 @@ s
                                             :sorts-boolean="false"
                                             variant="outlined"
                                             clearable
+                                            :disabled="block.is_verified"
                                         />
                                     </div>
                                     <div class="form__field">
@@ -2115,9 +1782,21 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button" v-if="!block.is_verified">
+                                <div
+                                    type="button"
+                                    v-if="
+                                        !block.is_verified &&
+                                        !is_regional_commander
+                                    "
+                                >
                                     <svg
-                                        @click="deleteBlock9(index)"
+                                        @click="
+                                            deleteBlock(
+                                                index,
+                                                9,
+                                                'participation_data',
+                                            )
+                                        "
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
                                         height="24"
@@ -2143,8 +1822,15 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!is_regional_commander"
                                 class="form__field add-block"
-                                @click="AddBlock9"
+                                @click="
+                                    addNewBlock(9, 'participation_data', {
+                                        event_name: '',
+                                        number_of_participants: '',
+                                        certificate_scans: null,
+                                    })
+                                "
                             >
                                 <p>+ Добавить мероприятие или конкурс</p>
                             </div>
@@ -2157,6 +1843,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[9].disabledBtn"
                                         class="form__button form__button-color"
@@ -2184,57 +1871,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -2255,6 +1892,7 @@ s
                                             placeholder="Например, Всероссийский конкурс «В объективе РСО»"
                                             :maxlength="100"
                                             v-model:value="block.event_name"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.event_name.length }} / 100
@@ -2347,9 +1985,21 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button" v-if="!block.is_verified">
+                                <div
+                                    type="button"
+                                    v-if="
+                                        !block.is_verified &&
+                                        !is_regional_commander
+                                    "
+                                >
                                     <svg
-                                        @click="deleteBlock10(index)"
+                                        @click="
+                                            deleteBlock(
+                                                index,
+                                                10,
+                                                'participation_data',
+                                            )
+                                        "
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
                                         height="24"
@@ -2375,8 +2025,15 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!is_regional_commander"
                                 class="form__field add-block"
-                                @click="AddBlock10"
+                                @click="
+                                    addNewBlock(10, 'participation_data', {
+                                        event_name: '',
+                                        number_of_participants: '',
+                                        certificate_scans: null,
+                                    })
+                                "
                             >
                                 <p>+ Добавить мероприятие или конкурс</p>
                             </div>
@@ -2389,6 +2046,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[10].disabledBtn"
                                         class="form__button form__button-color"
@@ -2416,57 +2074,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -2488,6 +2096,7 @@ s
                                             placeholder="Например, Спартакиада на МСС «Алабуга»"
                                             :maxlength="100"
                                             v-model:value="block.event_name"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.event_name.length }} / 100
@@ -2582,9 +2191,21 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button" v-if="!block.is_verified">
+                                <div
+                                    type="button"
+                                    v-if="
+                                        !block.is_verified &&
+                                        !is_regional_commander
+                                    "
+                                >
                                     <svg
-                                        @click="deleteBlock11(index)"
+                                        @click="
+                                            deleteBlock(
+                                                index,
+                                                11,
+                                                'participation_data',
+                                            )
+                                        "
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
                                         height="24"
@@ -2610,8 +2231,15 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!is_regional_commander"
                                 class="form__field add-block"
-                                @click="AddBlock11"
+                                @click="
+                                    addNewBlock(11, 'participation_data', {
+                                        event_name: '',
+                                        number_of_participants: '',
+                                        certificate_scans: null,
+                                    })
+                                "
                             >
                                 <p>+ добавить проект</p>
                             </div>
@@ -2624,6 +2252,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[11].disabledBtn"
                                         class="form__button form__button-color"
@@ -2651,57 +2280,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -2723,6 +2302,7 @@ s
                                             placeholder="Например, Творческий фестиваль на ВСС «Мирный атом»"
                                             :maxlength="100"
                                             v-model:value="block.event_name"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.event_name.length }} / 100
@@ -2812,9 +2392,21 @@ s
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button" v-if="!block.is_verified">
+                                <div
+                                    type="button"
+                                    v-if="
+                                        !block.is_verified &&
+                                        !is_regional_commander
+                                    "
+                                >
                                     <svg
-                                        @click="deleteBlock12(index)"
+                                        @click="
+                                            deleteBlock(
+                                                index,
+                                                12,
+                                                'participation_data',
+                                            )
+                                        "
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
                                         height="24"
@@ -2840,8 +2432,15 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!is_regional_commander"
                                 class="form__field add-block"
-                                @click="addBlock12"
+                                @click="
+                                    addNewBlock(12, 'participation_data', {
+                                        event_name: '',
+                                        number_of_participants: '',
+                                        certificate_scans: null,
+                                    })
+                                "
                             >
                                 <p>+ добавить проект</p>
                             </div>
@@ -2854,6 +2453,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[12].disabledBtn"
                                         class="form__button form__button-color"
@@ -2881,57 +2481,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -2968,15 +2518,28 @@ s
                                             placeholder="Например, https://t.me/+7pe98d2PqoJ"
                                             :maxlength="100"
                                             v-model:value="block.event_link"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.event_link.length }} / 100
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button" v-if="!block.is_verified">
+                                <div
+                                    type="button"
+                                    v-if="
+                                        !block.is_verified &&
+                                        !is_regional_commander
+                                    "
+                                >
                                     <svg
-                                        @click="deleteBlock13(index)"
+                                        @click="
+                                            deleteBlock(
+                                                index,
+                                                13,
+                                                'organization_data',
+                                            )
+                                        "
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
                                         height="24"
@@ -3002,8 +2565,14 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!is_regional_commander"
                                 class="form__field add-block"
-                                @click="AddBlock13"
+                                @click="
+                                    addNewBlock(13, 'organization_data', {
+                                        event_type: '',
+                                        event_link: '',
+                                    })
+                                "
                             >
                                 <p>+ добавить мероприятие</p>
                             </div>
@@ -3016,6 +2585,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[13].disabledBtn"
                                         class="form__button form__button-color"
@@ -3044,57 +2614,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -3118,6 +2638,7 @@ s
                                             v-model:value="
                                                 block.lab_project_name
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.lab_project_name.length }}
@@ -3136,15 +2657,28 @@ s
                                             placeholder="Например, 5"
                                             :maxlength="100"
                                             v-model:value="block.amount"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.amount.length }} / 100
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button" v-if="!block.is_verified">
+                                <div
+                                    type="button"
+                                    v-if="
+                                        !block.is_verified &&
+                                        !is_regional_commander
+                                    "
+                                >
                                     <svg
-                                        @click="deleteBlock14(index)"
+                                        @click="
+                                            deleteBlock(
+                                                index,
+                                                14,
+                                                'q14_labor_projects',
+                                            )
+                                        "
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
                                         height="24"
@@ -3170,8 +2704,14 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!is_regional_commander"
                                 class="form__field add-block"
-                                @click="AddBlock14"
+                                @click="
+                                    addNewBlock(14, 'q14_labor_projects', {
+                                        lab_project_name: '',
+                                        amount: '',
+                                    })
+                                "
                             >
                                 <p>+ добавить проект</p>
                             </div>
@@ -3184,6 +2724,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[14].disabledBtn"
                                         class="form__button form__button-color"
@@ -3213,57 +2754,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -3283,6 +2774,7 @@ s
                                             placeholder="Например, Всероссийский конкурс молодёжных проектов среди физических лиц Федерального агентства по делам молодежи"
                                             :maxlength="100"
                                             v-model:value="block.name"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.name.length }} / 100
@@ -3313,6 +2805,7 @@ s
                                             placeholder="Например, Иванова Светлана Андреевна"
                                             :maxlength="100"
                                             v-model:value="block.author_name"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.author_name.length }} / 100
@@ -3330,6 +2823,7 @@ s
                                             v-model:value="
                                                 block.competition_link
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.competition_link.length }}
@@ -3347,15 +2841,28 @@ s
                                             placeholder="Например, https://t.me/+7pe98d2PqoJ"
                                             :maxlength="100"
                                             v-model:value="block.prove_link"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.prove_link.length }} / 100
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button" v-if="!block.is_verified">
+                                <div
+                                    type="button"
+                                    v-if="
+                                        !block.is_verified &&
+                                        !is_regional_commander
+                                    "
+                                >
                                     <svg
-                                        @click="deleteBlock15(index)"
+                                        @click="
+                                            deleteBlock(
+                                                index,
+                                                15,
+                                                'grants_data',
+                                            )
+                                        "
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
                                         height="24"
@@ -3381,8 +2888,17 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!is_regional_commander"
                                 class="form__field add-block"
-                                @click="AddBlock15"
+                                @click="
+                                    addNewBlock(15, 'grants_data', {
+                                        name: '',
+                                        status: '',
+                                        author_name: '',
+                                        competition_link: '',
+                                        prove_link: '',
+                                    })
+                                "
                             >
                                 <p>+ добавить проект</p>
                             </div>
@@ -3395,6 +2911,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[15].disabledBtn"
                                         class="form__button form__button-color"
@@ -3422,57 +2939,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -3499,6 +2966,7 @@ s
                                             v-model:value="
                                                 report[16].link_vk_commander
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -3521,6 +2989,7 @@ s
                                             v-model:value="
                                                 report[16].link_vk_commissar
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -3551,6 +3020,7 @@ s
                                                 report[16]
                                                     .vk_rso_number_subscribers
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -3576,6 +3046,7 @@ s
                                             v-model:value="
                                                 report[16].link_vk_detachment
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -3603,6 +3074,7 @@ s
                                                 report[16]
                                                     .vk_detachment_number_subscribers
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -3624,6 +3096,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[16].disabledBtn"
                                         class="form__button form__button-color"
@@ -3652,57 +3125,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -3723,6 +3146,7 @@ s
                                             placeholder="Например, РИА Новости"
                                             :maxlength="100"
                                             v-model:value="block.source_name"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.source_name.length }} / 100
@@ -3738,15 +3162,28 @@ s
                                             placeholder="Например, https://vk.com/cco_monolit"
                                             :maxlength="100"
                                             v-model:value="block.link"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ block.link.length }} / 100
                                         </div>
                                     </div>
                                 </div>
-                                <div type="button" v-if="!block.is_verified">
+                                <div
+                                    type="button"
+                                    v-if="
+                                        !block.is_verified &&
+                                        !is_regional_commander
+                                    "
+                                >
                                     <svg
-                                        @click="deleteBlock17(index)"
+                                        @click="
+                                            deleteBlock(
+                                                index,
+                                                17,
+                                                'source_data',
+                                            )
+                                        "
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
                                         height="24"
@@ -3772,8 +3209,14 @@ s
                                 </div>
                             </div>
                             <div
+                                v-if="!is_regional_commander"
                                 class="form__field add-block"
-                                @click="addNewBlockQ17"
+                                @click="
+                                    addNewBlock(17, 'source_data', {
+                                        source_name: '',
+                                        link: '',
+                                    })
+                                "
                             >
                                 + Добавить источник
                             </div>
@@ -3786,6 +3229,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[17].disabledBtn"
                                         class="form__button form__button-color"
@@ -3813,57 +3257,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -3885,6 +3279,7 @@ s
                                             v-model:value="
                                                 report[18].participants_number
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -3905,6 +3300,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[18].disabledBtn"
                                         class="form__button form__button-color"
@@ -3933,57 +3329,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -4021,6 +3367,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[19].disabledBtn"
                                         class="form__button form__button-color"
@@ -4049,57 +3396,7 @@ s
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <v-icon v-if="!expanded">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
-                            <v-icon v-else>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="32"
-                                    height="32"
-                                    viewBox="0 0 32 32"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="16"
-                                        cy="16"
-                                        r="15.5"
-                                        transform="rotate(-180 16 16)"
-                                        fill="#1F7CC0"
-                                        stroke="#1F7CC0"
-                                    />
-                                    <path
-                                        d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                        stroke="white"
-                                        stroke-width="1.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-                            </v-icon>
+                            <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -4118,6 +3415,7 @@ s
                                             v-model:value="
                                                 report[20].link_emblem
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ report[20].link_emblem.length }}
@@ -4134,6 +3432,7 @@ s
                                             v-model:value="
                                                 report[20].link_emblem_img
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -4151,6 +3450,7 @@ s
                                             placeholder="Например, https://vk.com/cco_monolit"
                                             :maxlength="100"
                                             v-model:value="report[20].link_flag"
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ report[20].link_flag.length }} /
@@ -4167,6 +3467,7 @@ s
                                             v-model:value="
                                                 report[20].link_flag_img
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -4185,6 +3486,7 @@ s
                                             v-model:value="
                                                 report[20].link_banner
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{ report[20].link_banner.length }}
@@ -4201,6 +3503,7 @@ s
                                             v-model:value="
                                                 report[20].link_banner_img
                                             "
+                                            :readonly="is_regional_commander"
                                         />
                                         <div class="form__counter">
                                             {{
@@ -4221,6 +3524,7 @@ s
                                         color="blue"
                                     ></v-progress-circular>
                                     <Button
+                                        v-if="!is_regional_commander"
                                         type="button"
                                         :disabled="report[20].disabledBtn"
                                         class="form__button form__button-color"
@@ -4248,6 +3552,9 @@ import { ref, inject, onMounted, computed, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 import { sortByEducation } from '@shared/components/selects';
+import { SvgIcon } from '@shared';
+
+const is_regional_commander = ref();
 
 const route = useRoute();
 
@@ -4335,165 +3642,25 @@ const selectFile = (e, id, field, subfield, index) => {
     if (subfield) report.value[id][field][index][subfield] = e.files[0];
     else report.value[id][field] = e.files[0];
 };
-const addNewBlock = () => {
-    report.value[5].participants_data.push({ name: '', document: '' });
-    report.value[5].disabledBtn = false;
+
+const addNewBlock = (sectionIndex, NameSection, fields) => {
+    report.value[sectionIndex][NameSection].push(fields);
+    if (sectionIndex === 5 || sectionIndex === 17) {
+        report.value[sectionIndex][NameSection].disabledBtn = false;
+    }
 };
 
-const addNewBlockQ17 = () => {
-    report.value[17].source_data.push({ source_name: '', link: '' });
-    report.value[17].disabledBtn = false;
-};
-const AddLink7 = (index) => {
-    report.value[7].participation_data[index].links.push({ link: '' });
-};
-const deleteLink7 = (index) => {
-    report.value[7].participation_data[index].links.splice(index, 1);
+const AddLink = (index, sectionIndex, nameSection, fields) => {
+    report.value[sectionIndex][nameSection][index].links.push(fields);
 };
 
-const AddBlock7 = () => {
-    report.value[7].participation_data.push({
-        event_name: '',
-        number_of_participants: '',
-        certificate_scans: null,
-        links: [{ link: '' }],
-    });
+const deleteBlock = (index, sectionIndex, nameSection) => {
+    report.value[sectionIndex][nameSection].splice(index, 1);
 };
 
-const AddLink8 = (index) => {
-    report.value[8].participation_data[index].links.push({ link: '' });
+const deleteLink = (index, sectionIndex, nameSection) => {
+    report.value[sectionIndex][nameSection][index].links.splice(index, 1);
 };
-const deleteLink8 = (index) => {
-    report.value[8].participation_data[index].links.splice(index, 1);
-};
-
-const AddBlock8 = () => {
-    report.value[8].participation_data.push({
-        event_name: '',
-        number_of_participants: '',
-        certificate_scans: null,
-        links: [{ link: '' }],
-    });
-};
-
-const AddBlock9 = () => {
-    report.value[9].participation_data.push({
-        event_name: '',
-        number_of_participants: '',
-        certificate_scans: null,
-    });
-};
-
-const AddBlock10 = () => {
-    report.value[10].participation_data.push({
-        event_name: '',
-        number_of_participants: '',
-        certificate_scans: null,
-    });
-};
-
-const AddBlock11 = () => {
-    report.value[11].participation_data.push({
-        event_name: '',
-        number_of_participants: '',
-        certificate_scans: null,
-    });
-};
-
-const addBlock12 = () => {
-    report.value[12].participation_data.push({
-        event_name: '',
-        number_of_participants: '',
-        certificate_scans: null,
-    });
-};
-
-const AddBlock13 = () => {
-    report.value[13].organization_data.push({
-        event_type: '',
-        event_link: '',
-    });
-    report.value[13].disabledBtn = false;
-};
-const AddBlock14 = () => {
-    report.value[14].q14_labor_projects.push({
-        lab_project_name: '',
-        amount: '',
-    });
-};
-
-const AddBlock15 = () => {
-    report.value[15].grants_data.push({
-        name: '',
-        status: '',
-        author_name: '',
-        competition_link: '',
-        prove_link: '',
-    });
-};
-
-// const deleteBlock = async (index) => {
-//     try {
-//         const response = await HTTP.delete(
-//             `/competitions/${route.params.competition_pk}/reports/q5/${report.value[5].id}/objects/${report.value[5].participants_data[index].id}/`,
-//             report.value[5],
-//             {
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     Authorization: 'Token ' + localStorage.getItem('Token'),
-//                 },
-//             },
-//         );
-//         report.value[5] = response.data;
-//     } catch (error) {
-//         isError.value = error.response.data;
-//     }
-//     report.value[5].participants_data.splice(index, 1);
-// };
-const deleteBlock = (index) => {
-    report.value[5].participants_data.splice(index, 1);
-};
-
-const deleteBlock7 = (index) => {
-    report.value[7].participation_data.splice(index, 1);
-};
-
-const deleteBlock8 = (index) => {
-    report.value[8].participation_data.splice(index, 1);
-};
-
-const deleteBlock9 = (index) => {
-    report.value[9].participation_data.splice(index, 1);
-};
-
-const deleteBlock10 = (index) => {
-    report.value[10].participation_data.splice(index, 1);
-};
-
-const deleteBlock11 = (index) => {
-    report.value[11].participation_data.splice(index, 1);
-};
-
-const deleteBlock12 = (index) => {
-    report.value[12].participation_data.splice(index, 1);
-};
-
-const deleteBlock13 = (index) => {
-    report.value[13].organization_data.splice(index, 1);
-};
-
-const deleteBlock14 = (index) => {
-    report.value[14].q14_labor_projects.splice(index, 1);
-};
-
-const deleteBlock15 = (index) => {
-    report.value[15].grants_data.splice(index, 1);
-};
-
-const deleteBlock17 = (index) => {
-    report.value[17].source_data.splice(index, 1);
-};
-
 const report = ref({
     1: { number_of_members: '', number_of_payments: '' },
     2: {
@@ -4508,6 +3675,7 @@ const report = ref({
     5: {
         participants_data: [{ name: '', document: null }],
         disabledBtn: false,
+        show_btn: false,
     },
     61: {
         demonstration_block: {
@@ -4558,10 +3726,10 @@ const report = ref({
                 event_name: '',
                 number_of_participants: '',
                 links: [{ link: '' }],
-                // certificate_scans: null,
             },
         ],
         disabledBtn: false,
+        show_btn: false,
     },
     8: {
         participation_data: [
@@ -4569,10 +3737,10 @@ const report = ref({
                 event_name: '',
                 number_of_participants: '',
                 links: [{ link: '' }],
-                // certificate_scans: null,
             },
         ],
         disabledBtn: false,
+        show_btn: false,
     },
     9: {
         participation_data: [
@@ -4583,6 +3751,7 @@ const report = ref({
             },
         ],
         disabledBtn: false,
+        show_btn: false,
     },
     10: {
         participation_data: [
@@ -4593,6 +3762,7 @@ const report = ref({
             },
         ],
         disabledBtn: false,
+        show_btn: false,
     },
     11: {
         participation_data: [
@@ -4603,20 +3773,24 @@ const report = ref({
             },
         ],
         disabledBtn: false,
+        show_btn: false,
     },
     12: {
         participation_data: [
             { event_name: '', prize_place: null, certificate_scans: null },
         ],
         disabledBtn: false,
+        show_btn: false,
     },
     13: {
         organization_data: [{ event_type: null, event_link: '' }],
         disabledBtn: false,
+        show_btn: false,
     },
     14: {
         q14_labor_projects: [{ lab_project_name: '', amount: '' }],
         disabledBtn: false,
+        show_btn: false,
     },
     15: {
         grants_data: [
@@ -4629,6 +3803,7 @@ const report = ref({
             },
         ],
         disabledBtn: false,
+        show_btn: false,
     },
     16: {
         link_vk_commander: '',
@@ -4638,7 +3813,11 @@ const report = ref({
         vk_detachment_number_subscribers: '',
         disabledBtn: false,
     },
-    17: { source_data: [{ source_name: '', link: '' }], disabledBtn: false },
+    17: {
+        source_data: [{ source_name: '', link: '' }],
+        disabledBtn: false,
+        show_btn: false,
+    },
     18: { participants_number: '', disabledBtn: false },
     19: { safety_violations: null, disabledBtn: false },
     20: {
@@ -4661,110 +3840,207 @@ const selectCertScans = (event, index) => {
     );
 };
 
-const getParameters = async (id) => {
+const getParametersRegCom = async (id) => {
     try {
-        isLoading.value = true;
-        const response = await HTTP.get(
-            `/competitions/${route.params.competition_pk}/reports/q${id}/` +
-                (id == 1 ? 'info/' : 'me/'),
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+        const { data } = await HTTP.get(
+            `/competitions/${route.params.competition_pk}/detachment/${route.params.id}/q/${id}/`,
         );
-        if (id == 1 || id == 3 || id == 4) report.value[id] = response.data;
-        else if (response.data.results.length) {
-            if (
-                id == 6 &&
-                route.params.id == response.data.results[0].detachment
-            ) {
-                if (
-                    response.data.results[0].demonstration_block
-                        .first_may_demonstration
-                )
-                    report.value[61].disabledBtn = true;
-                if (
-                    response.data.results[0].patriotic_action_block
-                        .patriotic_action_participants
-                )
-                    report.value[62].disabledBtn = true;
-                if (
-                    response.data.results[0].safety_work_week_block
-                        .safety_work_week
-                )
-                    report.value[63].disabledBtn = true;
-                if (
-                    response.data.results[0].commander_commissioner_school_block
-                        .commander_commissioner_school
-                )
-                    report.value[64].disabledBtn = true;
-                if (
-                    response.data.results[0].working_semester_opening_block
-                        .working_semester_opening
-                )
-                    report.value[65].disabledBtn = true;
-                if (
-                    response.data.results[0].creative_festival_block
-                        .creative_festival
-                )
-                    report.value[66].disabledBtn = true;
-                if (response.data.results[0].spartakiad_block.spartakiad)
-                    report.value[67].disabledBtn = true;
-                if (
-                    response.data.results[0].professional_competition_block
-                        .professional_competition
-                )
-                    report.value[68].disabledBtn = true;
-                report.value[61].demonstration_block.first_may_demonstration =
-                    response.data.results[0].demonstration_block.first_may_demonstration;
-                report.value[61].demonstration_block.first_may_demonstration_participants =
-                    response.data.results[0].demonstration_block.first_may_demonstration_participants;
-                report.value[62].patriotic_action_block.patriotic_action =
-                    response.data.results[0].patriotic_action_block.patriotic_action;
-                report.value[62].patriotic_action_block.patriotic_action_participants =
-                    response.data.results[0].patriotic_action_block.patriotic_action_participants;
-                report.value[63].safety_work_week_block.safety_work_week =
-                    response.data.results[0].safety_work_week_block.safety_work_week;
-                report.value[64].commander_commissioner_school_block.commander_commissioner_school =
-                    response.data.results[0].commander_commissioner_school_block.commander_commissioner_school;
-                report.value[65].working_semester_opening_block.working_semester_opening =
-                    response.data.results[0].working_semester_opening_block.working_semester_opening;
-                report.value[65].working_semester_opening_block.working_semester_opening_participants =
-                    response.data.results[0].working_semester_opening_block.working_semester_opening_participants;
-                report.value[66].creative_festival_block.creative_festival =
-                    response.data.results[0].creative_festival_block.creative_festival;
-                report.value[67].spartakiad_block.spartakiad =
-                    response.data.results[0].spartakiad_block.spartakiad;
-                report.value[68].professional_competition_block.professional_competition =
-                    response.data.results[0].professional_competition_block.professional_competition;
-            } else {
-                if (report.value[id].participation_data) {
-                    report.value[id].participation_data = response.data.results;
-                } else report.value[id] = response.data.results[0];
-                console.log(`true`);
-                report.value[id].disabledBtn = true;
+        if (id == 6) {
+            if (data.demonstration_block) {
+                report.value[61].demonstration_block = data.demonstration_block;
             }
+            if (data.patriotic_action_block) {
+                report.value[62].patriotic_action_block =
+                    data.patriotic_action_block;
+            }
+            if (data.safety_work_week_block) {
+                report.value[63].safety_work_week_block =
+                    data.safety_work_week_block;
+            }
+            if (data.commander_commissioner_school_block) {
+                report.value[64].commander_commissioner_school_block =
+                    data.commander_commissioner_school_block;
+            }
+            if (data.working_semester_opening_block) {
+                report.value[65].working_semester_opening_block =
+                    data.working_semester_opening_block;
+            }
+            if (data.creative_festival_block) {
+                report.value[66].creative_festival_block =
+                    data.creative_festival_block;
+            }
+            if (data.spartakiad_block) {
+                report.value[67].spartakiad_block = data.spartakiad_block;
+            }
+            if (data.professional_competition_block) {
+                report.value[68].professional_competition_block =
+                    data.professional_competition_block;
+            }
+        } else if (id == 5) {
+            if (data.q5educatedparticipant_set) {
+                report.value[5].participants_data =
+                    data.q5educatedparticipant_set;
+            }
+        } else if ([7, 8, 9, 10, 11, 12].includes(id)) {
+            if (data.participation_data) {
+                report.value[id].participation_data = data.participation_data;
+            }
+        } else if (id == 13) {
+            if (data.organization_data) {
+                report.value[13].organization_data = data.organization_data;
+            }
+        } else if (id == 14) {
+            if (data.q14_labor_project) {
+                report.value[14].q14_labor_projects = data.q14_labor_project;
+            }
+        } else if (id == 15) {
+            if (data.q15grantwinner_set) {
+                report.value[15].grants_data = data.q15grantwinner_set;
+            }
+        } else if (id == 17) {
+            if (data.q17_event_links) {
+                report.value[17].source_data = data.q17_event_links;
+            }
+        } else {
+            report.value[id] = data;
         }
-        isLoading.value = false;
-        if (
-            id == 5 ||
-            id == 7 ||
-            id == 8 ||
-            id == 9 ||
-            id == 10 ||
-            id == 11 ||
-            id == 12 ||
-            id == 13 ||
-            id == 14 ||
-            id == 15 ||
-            id == 17
-        ) {
-            report.value[id].disabledBtn = false;
-        }
+        console.log(data);
     } catch (error) {
-        isError.value = error.response.data;
+        isError.value = error.response;
+    }
+    isLoading.value = false;
+};
+
+const getParameters = async (id) => {
+    isLoading.value = true;
+    if (is_regional_commander.value) {
+        await getParametersRegCom(id);
+    } else {
+        try {
+            const response = await HTTP.get(
+                `/competitions/${route.params.competition_pk}/reports/q${id}/` +
+                    (id == 1 ? 'info/' : 'me/'),
+            );
+            if (id == 1 || id == 3 || id == 4) report.value[id] = response.data;
+            else if (response.data.results.length) {
+                if (
+                    id == 6 &&
+                    route.params.id == response.data.results[0].detachment
+                ) {
+                    if (
+                        response.data.results[0].demonstration_block
+                            ?.first_may_demonstration
+                    ) {
+                        report.value[61].demonstration_block.first_may_demonstration =
+                            response.data.results[0].demonstration_block.first_may_demonstration;
+                        report.value[61].demonstration_block.first_may_demonstration_participants =
+                            response.data.results[0].demonstration_block.first_may_demonstration_participants;
+                        report.value[61].disabledBtn = true;
+                    } else {
+                        report.value[61].demonstration_block.first_may_demonstration =
+                            null;
+                        report.value[61].demonstration_block.first_may_demonstration_participants =
+                            '';
+                    }
+                    if (
+                        response.data.results[0].patriotic_action_block
+                            ?.patriotic_action_participants
+                    ) {
+                        report.value[62].patriotic_action_block.patriotic_action =
+                            response.data.results[0].patriotic_action_block.patriotic_action;
+                        report.value[62].patriotic_action_block.patriotic_action_participants =
+                            response.data.results[0].patriotic_action_block.patriotic_action_participants;
+                        report.value[62].disabledBtn = true;
+                    } else {
+                        report.value[62].patriotic_action_block.patriotic_action =
+                            null;
+                        report.value[62].patriotic_action_block.patriotic_action_participants =
+                            '';
+                    }
+                    if (
+                        response.data.results[0].safety_work_week_block
+                            ?.safety_work_week
+                    ) {
+                        report.value[63].disabledBtn = true;
+                        report.value[63].safety_work_week_block.safety_work_week =
+                            response.data.results[0].safety_work_week_block.safety_work_week;
+                    } else {
+                        report.value[63].safety_work_week_block.safety_work_week =
+                            null;
+                    }
+                    if (
+                        response.data.results[0]
+                            .commander_commissioner_school_block
+                            ?.commander_commissioner_school
+                    ) {
+                        report.value[64].disabledBtn = true;
+                        report.value[64].commander_commissioner_school_block.commander_commissioner_school =
+                            response.data.results[0].commander_commissioner_school_block.commander_commissioner_school;
+                    } else {
+                        report.value[64].commander_commissioner_school_block.commander_commissioner_school =
+                            null;
+                    }
+                    if (
+                        response.data.results[0].working_semester_opening_block
+                            ?.working_semester_opening
+                    ) {
+                        report.value[65].disabledBtn = true;
+                        report.value[65].working_semester_opening_block.working_semester_opening =
+                            response.data.results[0].working_semester_opening_block.working_semester_opening;
+                        report.value[65].working_semester_opening_block.working_semester_opening_participants =
+                            response.data.results[0].working_semester_opening_block.working_semester_opening_participants;
+                    } else {
+                        report.value[65].working_semester_opening_block.working_semester_opening =
+                            null;
+                        report.value[65].working_semester_opening_block.working_semester_opening_participants =
+                            '';
+                    }
+                    if (
+                        response.data.results[0].creative_festival_block
+                            ?.creative_festival
+                    ) {
+                        report.value[66].disabledBtn = true;
+                        report.value[66].creative_festival_block.creative_festival =
+                            response.data.results[0].creative_festival_block.creative_festival;
+                    } else {
+                        report.value[66].creative_festival_block.creative_festival =
+                            null;
+                    }
+                    if (response.data.results[0].spartakiad_block?.spartakiad) {
+                        report.value[67].disabledBtn = true;
+                        report.value[67].spartakiad_block.spartakiad =
+                            response.data.results[0].spartakiad_block.spartakiad;
+                    } else {
+                        report.value[67].spartakiad_block.spartakiad = null;
+                    }
+                    if (
+                        response.data.results[0].professional_competition_block
+                            ?.professional_competition
+                    ) {
+                        report.value[68].disabledBtn = true;
+                        report.value[68].professional_competition_block.professional_competition =
+                            response.data.results[0].professional_competition_block.professional_competition;
+                    } else {
+                        report.value[68].professional_competition_block.professional_competition =
+                            null;
+                    }
+                } else {
+                    if (report.value[id].participation_data) {
+                        report.value[id].participation_data =
+                            response.data.results;
+                    } else report.value[id] = response.data.results[0];
+                    console.log(`true`);
+                    report.value[id].disabledBtn = true;
+                }
+            }
+            isLoading.value = false;
+            const allowedIds = [5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17];
+            if (allowedIds.includes(id)) {
+                report.value[id].disabledBtn = false;
+            }
+        } catch (error) {
+            isError.value = error.response;
+        }
     }
 };
 const postParameters = async (id) => {
@@ -4772,15 +4048,8 @@ const postParameters = async (id) => {
     try {
         let fd = report.value[id];
         let type = 'application/json';
-        if (
-            id == 5 ||
-            id == 7 ||
-            id == 8 ||
-            id == 9 ||
-            id == 10 ||
-            id == 11 ||
-            id == 12
-        ) {
+        const allowedIds = [5, 7, 8, 9, 10, 11, 12];
+        if (allowedIds.includes(id)) {
             type = 'multipart/form-data';
             fd = new FormData();
             for (let i in report.value[id]) {
@@ -4849,14 +4118,8 @@ const postParameters = async (id) => {
                         if (temp.is_verified) {
                             continue;
                         }
-                        if (
-                            id == 7 ||
-                            id == 8 ||
-                            id == 9 ||
-                            id == 10 ||
-                            id == 11 ||
-                            id == 12
-                        ) {
+                        const allowedIds = [7, 8, 9, 10, 11, 12];
+                        if (allowedIds.includes(id)) {
                             if (temp.id) continue;
                             await HTTP.patch(
                                 `/competitions/${route.params.competition_pk}/reports/q${index}/${report.value[id].participation_data[0].detachment_report.id}/objects/${temp.id}/`,
@@ -4864,9 +4127,6 @@ const postParameters = async (id) => {
                                 {
                                     headers: {
                                         'Content-Type': type,
-                                        Authorization:
-                                            'Token ' +
-                                            localStorage.getItem('Token'),
                                     },
                                 },
                             );
@@ -4877,9 +4137,6 @@ const postParameters = async (id) => {
                                 {
                                     headers: {
                                         'Content-Type': type,
-                                        Authorization:
-                                            'Token ' +
-                                            localStorage.getItem('Token'),
                                     },
                                 },
                             );
@@ -4895,8 +4152,6 @@ const postParameters = async (id) => {
                         {
                             headers: {
                                 'Content-Type': type,
-                                Authorization:
-                                    'Token ' + localStorage.getItem('Token'),
                             },
                         },
                     );
@@ -4909,8 +4164,6 @@ const postParameters = async (id) => {
                     {
                         headers: {
                             'Content-Type': type,
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
                         },
                     },
                 );
@@ -4931,7 +4184,6 @@ const postParameters = async (id) => {
                 {
                     headers: {
                         'Content-Type': type,
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
                     },
                 },
             );
@@ -4951,7 +4203,7 @@ const postParameters = async (id) => {
         console.log(error);
         isError.value = error.response.data;
         isLoading.value = false;
-        if (isError.value) {
+        if (isError.value && id < 60) {
             swal.fire({
                 position: 'center',
                 icon: 'error',
@@ -4960,6 +4212,25 @@ const postParameters = async (id) => {
                 timer: 2500,
             });
         }
+        if (isError.value && id > 60) {
+            swal.fire({
+                position: 'center',
+                title: `К сожалению, срок отправки данных по показателю истек.`,
+                showConfirmButton: false,
+                timer: 3000,
+            });
+        }
+    }
+};
+
+const getMeCommander = async () => {
+    try {
+        const { data } = await HTTP.get(`/rsousers/me_commander/`);
+        if (data.regionalheadquarter_commander) {
+            is_regional_commander.value = true;
+        }
+    } catch (e) {
+        console.log(`getMeCommander error`, e);
     }
 };
 
@@ -4980,34 +4251,44 @@ watch(
 );
 
 onMounted(async (id) => {
+    // report.value = JSON.parse(JSON.stringify(reportBase));
     await getParameters(id);
+    await getMeCommander();
 });
+console.log(report);
 </script>
 <style>
 .v-expansion-panels {
     margin-bottom: 60px;
 }
+
 .form .v-expansion-panel .v-expansion-panel-title {
     font-weight: 500;
 }
+
 .form__inner-content {
     margin-bottom: 40px;
     border-bottom: none;
 }
+
 .form__label {
     font-weight: 500;
 }
+
 .p-placeholder {
     color: #b6b6b6;
 }
+
 .invents-select {
     border: 2px solid #b6b6b6;
 }
+
 .p-dropdown-items {
     background-color: white;
     border: 1px solid #b6b6b6;
     border-radius: 10px;
 }
+
 .p-dropdown-item {
     border-bottom: 1px solid #b6b6b6;
     margin: 15px;
@@ -5018,6 +4299,7 @@ onMounted(async (id) => {
     grid-template-columns: 1fr 1fr;
     column-gap: 80px;
 }
+
 .form__field-group-bottom {
     margin-top: 50px;
 }
@@ -5027,6 +4309,7 @@ onMounted(async (id) => {
     flex-direction: column;
     align-items: center;
 }
+
 .form__field-group-bottom p {
     margin-top: 50px;
     font-family: 'Akrobat';
@@ -5035,9 +4318,11 @@ onMounted(async (id) => {
     line-height: 19px;
     color: #35383f;
 }
+
 .form__field-column-one {
     grid-template-columns: 1fr;
 }
+
 .form__field-group-left-title {
     font-size: 24px;
     color: #35383f;
@@ -5046,12 +4331,15 @@ onMounted(async (id) => {
     line-height: 24px;
     margin-bottom: 40px;
 }
+
 .form__label * {
     color: red;
 }
+
 .form .v-expansion-panel .v-expansion-panel-title {
     max-height: none;
 }
+
 .add-block {
     cursor: pointer;
     max-width: fit-content;
@@ -5063,24 +4351,30 @@ onMounted(async (id) => {
     max-width: fit-content;
     border-bottom: 1px solid #35383f;
 }
+
 .form__field-file {
     grid-template-columns: 10fr 10fr 0.5fr;
 }
+
 .form__field-column-one-file {
     grid-template-columns: 10fr 0.5fr;
 }
+
 .form__button-color:disabled {
     background-color: #b6b6b6;
     border-color: #b6b6b6;
 }
+
 .card {
     position: relative;
 }
+
 .addFile {
     position: absolute;
     top: 4px;
     left: 1px;
 }
+
 .statement-item {
     display: flex;
     margin-top: 12px;
@@ -5093,6 +4387,7 @@ onMounted(async (id) => {
     font-size: 16px;
     display: block;
     margin-left: 8px;
+
     @media (max-width: 768px) {
         font-size: 14px;
         max-width: 290px;
@@ -5102,9 +4397,11 @@ onMounted(async (id) => {
 .statement-item a {
     color: #1f7cc0;
 }
+
 .p-icon {
     display: none !important;
 }
+
 .p-button-label {
     color: #1f7cc0;
     margin-left: 5px;
@@ -5115,6 +4412,7 @@ onMounted(async (id) => {
     grid-template-columns: 10fr 0.5fr;
     grid-column-gap: 5px;
 }
+
 .form__field-link svg {
     margin-top: 10px;
 }
@@ -5127,6 +4425,7 @@ table {
     margin-bottom: 20px;
     border: 1px solid #dddddd;
 }
+
 td {
     font-size: 18px;
     line-height: 23.74px;
@@ -5135,6 +4434,7 @@ td {
     padding: 20px;
     border: 1px solid #d9d9d9;
 }
+
 .form_place p {
     margin-top: 20px;
     margin-bottom: 10px;
@@ -5142,9 +4442,11 @@ td {
     font-size: 16px;
     color: #35383f;
 }
+
 .btn_large {
     padding: 12px 32px !important;
 }
+
 .error {
     color: #db0000;
     font-size: 14px;

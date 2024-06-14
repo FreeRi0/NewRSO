@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import { HTTP } from '@app/http';
-// import { useRoute } from 'vue-router';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -21,13 +20,7 @@ export const useUserStore = defineStore('user', {
             try {
                 this.isLoading = true;
                 setTimeout(async () => {
-                    const responseUser = await HTTP.get('rsousers/me/', {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    });
+                    const responseUser = await HTTP.get('rsousers/me/');
                     if (!Number.isInteger(localStorage.getItem('user'))) {
                         localStorage.setItem('user', responseUser.data.id);
                     }
@@ -40,18 +33,29 @@ export const useUserStore = defineStore('user', {
             }
         },
 
+        async geVktUser() {
+
+            try {
+                this.isLoading = true;
+                setTimeout(async () => {
+                    const responseUserVk = await HTTP.get('rsousers/me/');
+                    if (!Number.isInteger(localStorage.getItem('user'))) {
+                        localStorage.setItem('user', responseUserVk.data.id);
+                    }
+                    this.currentUser = responseUserVk.data;
+                    this.isLoading = false;
+                }, 10);
+            } catch (error) {
+                console.log('an error occured ' + error);
+                this.isLoading = false;
+            }
+        },
+
+
         async getCountApp() {
             try {
                 const responseCount = await HTTP.get(
-                    'rsousers/me_notifications_count/',
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    },
-                );
+                    'rsousers/me_notifications_count/');
                 this.count = responseCount.data;
             } catch (error) {
                 console.log('an error occured ' + error);
@@ -62,13 +66,7 @@ export const useUserStore = defineStore('user', {
             try {
                 this.isLoading = true;
                 setTimeout(async () => {
-                    const responseUserId = await HTTP.get(`save_users/${id}/`, {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    });
+                    const responseUserId = await HTTP.get(`save_users/${id}/`);
                     this.user = responseUserId.data;
                     this.isLoading = false;
                 }, 10);
@@ -78,60 +76,52 @@ export const useUserStore = defineStore('user', {
             }
         },
         async getPrivateUserId(id: String) {
-            const responsePrivate = await HTTP.get(`rsousers/${id}/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
+            const responsePrivate = await HTTP.get(`rsousers/${id}/`);
             this.privateUser = responsePrivate.data;
         },
         async getForeignDocsId(id: String) {
-            const responseForeignDocsId = await HTTP.get(`rsousers/foreign_documents/${id}/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
+            const responseForeignDocsId = await HTTP.get(`rsousers/foreign_documents/${id}/`);
             this.foreignUser = responseForeignDocsId.data.results;
         },
         async getForeignDocs() {
             const responseForeignDocs = await HTTP.get(`rsousers/me/foreign_documents/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
+
             });
             this.userDocs = responseForeignDocs.data;
         },
         async getForeignParentId(id: String) {
-            const responseForeignParentId = await HTTP.get(`rsousers/foreign_parent_documents/${id}/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
+            const responseForeignParentId = await HTTP.get(`rsousers/foreign_parent_documents/${id}/`);
             this.foreignParent = responseForeignParentId.data.results;
         },
 
         async getForeignParent() {
             const responseForeignParent = await HTTP.get(`rsousers/me/foreign_parent_documents/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
+
             });
             this.parentDocs = responseForeignParent.data;
         },
 
         async searchUsers(name: String) {
-            const responseSearch = await HTTP.get(`rsousers?search=${name}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            });
+            const responseSearch = await HTTP.get(`rsousers?search=${name}`);
             this.users = responseSearch.data;
         },
+
+        // async getAccessToken(token: String) {
+        //     try {
+        //         const responseAccessToken = await HTTP.post('/jwt/vk-login/', {access_token: token} )
+
+        //     } catch (error) {
+        //        console.log(error)
+        //     }
+        // },
+
+        // async exchangeToken(data: Object) {
+        //     try {
+        //         const respToken = await HTTP.post('/exchange-token/', data)
+
+        //     } catch (error) {
+        //         console.log('error:', error)
+        //     }
+        // }
     },
 });

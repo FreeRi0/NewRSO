@@ -51,12 +51,7 @@ const isCommanderLoading = ref(false);
 const getHeadquarter = async () => {
     loading.value = true;
     isCommanderLoading.value = true;
-    await HTTP.get(`locals/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token ' + localStorage.getItem('Token'),
-        },
-    })
+    await HTTP.get(`locals/${id}/`,)
         .then((response) => {
             headquarter.value = response.data;
             if (headquarter.value.commander) {
@@ -93,6 +88,19 @@ const onUpdateMember = (event, id) => {
     if (firstkey == 'position')
         localsStore.members[memberIndex].position.id = event[firstkey];
     else localsStore.members[memberIndex][firstkey] = event[firstkey];
+    if (firstkey == 'is_trusted'){
+        const payload = {
+            id_trusted: event[firstkey],
+        }
+        try{
+            HTTP.patch(
+                `/detachments/${route.params.id}/members/${id}/`,
+                payload
+            )
+        } catch(e){
+            console.log(e);
+        }
+    }
 };
 
 const submited = ref(false);
@@ -199,7 +207,7 @@ const changeHeadquarter = async () => {
         await HTTP.patch(`/locals/${id}/`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
+                 Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
             },
         });
         swal.fire({

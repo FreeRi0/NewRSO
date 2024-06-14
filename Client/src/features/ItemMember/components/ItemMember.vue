@@ -21,11 +21,15 @@
             </div>
         </div>
         <div class="member__wrap">
-            <div class="member__select-box">
-                <Select class="member__select" variant="outlined" clearable :items="functions" name="select_position"
-                    id="select-position" placeholder="Выберите должность" v-model="positionMember"
-                    @update:value="changeOption"></Select>
-                <!-- {{ positionMember }} -->
+            <div class="member__select-box" :title=positionMember.name>
+                <v-tooltip :text=positionMember.name location="bottom">
+                    <template v-slot:activator="{ props }">
+                        <Select class="member__select" variant="outlined" clearable :items="functions" name="select_position"
+                            id="select-position" placeholder="Выберите должность" v-model="positionMember"
+                            @update:value="changeOption" v-bind="props"></Select>
+                        <!-- {{ positionMember }} -->
+                    </template>
+                </v-tooltip>
             </div>
             <div class="member__block">
                 <div class="member__confidant">
@@ -79,7 +83,7 @@ const roleStore = useRoleStore();
 
 
 const changeOption = (event) => {
-    console.log(event);
+    // console.log(event);
     emit(
         'updateMember',
         {
@@ -89,7 +93,7 @@ const changeOption = (event) => {
     );
 };
 const changeConfidant = (event) => {
-    console.log(event);
+    // console.log(event);
     emit(
         'updateMember',
         {

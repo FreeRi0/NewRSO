@@ -10,10 +10,9 @@ export const useSquadsStore = defineStore('squads', {
         competitionSquads: [],
         isLoading: false,
         totalMembers: 0,
-        SquadsLimit: 4,
-        MembersLimit: 6,
+        SquadsLimit: 20,
+        MembersLimit: 10,
         totalSquads: 0,
-        CompetitionsLimit: 12,
         nextSquads: '',
         totalCompetitions: 0,
     }),
@@ -24,10 +23,6 @@ export const useSquadsStore = defineStore('squads', {
                 const responseSquads = await HTTP.get(`/detachments/?ordering=${name}`, {
                     params: {
                         limit: this.SquadsLimit,
-                    },
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
                     },
                 });
                 this.totalSquads = responseSquads.data.count;
@@ -47,14 +42,7 @@ export const useSquadsStore = defineStore('squads', {
                 this.isLoading = true;
 
                 const responseSquadsNext = await HTTP.get(
-                    this.nextSquads.replace('http', 'https'),
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token' + localStorage.getItem('Token'),
-                        },
-                    },
+                    this.nextSquads.replace('http', 'https')
                 );
 
                 this.squads = this.squads.concat(responseSquadsNext.data.results);
@@ -69,12 +57,7 @@ export const useSquadsStore = defineStore('squads', {
         async getAreas() {
             try {
                 this.isLoading = true;
-                const responseAreas = await HTTP.get('/areas/', {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                });
+                const responseAreas = await HTTP.get('/areas/');
                 this.areas = responseAreas.data.results;
                 this.isLoading = false;
             } catch (error) {
@@ -88,11 +71,8 @@ export const useSquadsStore = defineStore('squads', {
                 const responseCompetitionSquads = await HTTP.get(
                     `/competitions/1/participants/`,
                     {
-
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
+                        params: {
+                            limit: 351
                         },
                     },
                 );
@@ -111,14 +91,7 @@ export const useSquadsStore = defineStore('squads', {
                 this.isLoading = true;
 
                 const responseSquadsNext = await HTTP.get(
-                    this.nextSquads.replace('http', 'https'),
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token' + localStorage.getItem('Token'),
-                        },
-                    },
+                    this.nextSquads.replace('http', 'https')
                 );
 
                 this.competitionSquads = this.competitionSquads.concat(responseSquadsNext.data.results);
@@ -132,15 +105,7 @@ export const useSquadsStore = defineStore('squads', {
 
         async searchCompetitionSquads(name: String) {
             const searchCompSquads = await HTTP.get(
-                `/competitions/1/participants/?search=${name}`,
-                {
-                    params: {
-                        limit: this.CompetitionsLimit,
-                    },
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                },
+                `/competitions/1/participants/?search=${name}`
             );
             this.competitionSquads = searchCompSquads.data.results;
         },
@@ -148,12 +113,7 @@ export const useSquadsStore = defineStore('squads', {
         async getSquadId(id: String) {
             try {
                 this.isLoading = true;
-                const responseSquad = await HTTP.get(`/detachments/${id}/`, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                });
+                const responseSquad = await HTTP.get(`/detachments/${id}/`);
                 this.squad = responseSquad.data;
                 this.isLoading = false;
             } catch (error) {
@@ -163,13 +123,7 @@ export const useSquadsStore = defineStore('squads', {
         },
         async getFilteredSquads(education: String) {
             const responseFilteredSquads = await HTTP.get(
-                `/detachments/educational_institution__name=${education}`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
+                `/detachments/educational_institution__name=${education}`
             );
             this.squads = responseFilteredSquads.data;
         },
@@ -181,11 +135,6 @@ export const useSquadsStore = defineStore('squads', {
                     {
                         params: {
                             limit: this.MembersLimit,
-                        },
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
                         },
                     },
                 );
@@ -203,14 +152,7 @@ export const useSquadsStore = defineStore('squads', {
             try {
 
                 const responseMembers = await HTTP.get(
-                    `/detachments/${id}/members/`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    },
+                    `/detachments/${id}/members/`
                 );
                 this.members = responseMembers.data.results;
             } catch (error) {
@@ -223,14 +165,7 @@ export const useSquadsStore = defineStore('squads', {
             try {
 
                 const responseMembers = await HTTP.get(
-                    `/detachments/${id}/members/?search=${name}`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token ' + localStorage.getItem('Token'),
-                        },
-                    },
+                    `/detachments/${id}/members/?search=${name}`
                 );
                 this.totalMembers = responseMembers.data.count;
                 this.members = responseMembers.data.results;
@@ -247,14 +182,7 @@ export const useSquadsStore = defineStore('squads', {
                 this.isLoading = true;
 
                 const responseMembersNext = await HTTP.get(
-                    this.nextSquads.replace('http', 'https'),
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization:
-                                'Token' + localStorage.getItem('Token'),
-                        },
-                    },
+                    this.nextSquads.replace('http', 'https')
                 );
                 this.members = this.members.concat(responseMembersNext.data.results);
                 this.nextSquads = responseMembersNext.data.next;
@@ -274,9 +202,6 @@ export const useSquadsStore = defineStore('squads', {
                 {
                     params: {
                         limit: this.SquadsLimit,
-                    },
-                    headers: {
-                        'Content-Type': 'application/json',
                     },
                 },
             );

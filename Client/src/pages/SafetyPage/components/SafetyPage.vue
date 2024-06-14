@@ -207,7 +207,8 @@
         </div>
         <div id="testing" class="corpuniver__documents-test"
             v-if="roleStore.status.is_commander_detachment ||
-                roleStore.status.is_commissar_detachment || (squadsStore.competitionSquads.find((item) => item.detachment?.id == userStore.currentUser.detachment_id || item.junior_detachment?.id == userStore.currentUser.detachment_id))">
+                roleStore.status.is_commissar_detachment  || (squadsStore.competitionSquads.find((item) => item.detachment?.id === userStore.currentUser.detachment_id || item.junior_detachment?.id === userStore.currentUser.detachment_id))">
+            <p class="text corpuniver__documents-description-test"></p>
             <p class="text corpuniver__documents-description-test">
                 Итоговую аттестацию можно пройти с 22 апреля по 15 мая 2024 года (допускается 1 пересдача)
                 Для прохождения тестирования необходимо набрать не менее 60 баллов. Удачи!
@@ -219,7 +220,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import Button from '@shared/components/buttons/Button.vue';
 import { useRoleStore } from '@layouts/store/role';
 import { useUserStore } from '@features/store/index';
@@ -228,6 +229,8 @@ const roleStore = useRoleStore();
 const squadsStore = useSquadsStore();
 const userStore = useUserStore();
 const showVideo = ref({ 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false });
+// let id = userStore.currentUser.detachment_id;
+// let name = squadsStore.squad.name;
 
 
 function playVideo(video) {
@@ -236,7 +239,22 @@ function playVideo(video) {
     showVideo.value[video] = true;
 }
 
-onMounted(async () => {
+// watch(() => roleStore.myPositions,
+
+//     (newPos) => {
+//         if (Object.keys(roleStore.myPositions).length === 0) {
+//             return;
+//         }
+//         // getUserData();
+//         // getEducData();
+//         roleStore.getMyPositions();
+//     }
+// );
+
+onMounted(async() => {
+    // roleStore.getMyPositions();
+    // squadsStore.getSquadId(userStore.currentUser.detachment_id);
+    // squadsStore.searchCompetitionSquads(name);
     await squadsStore.getCompetitionSquads();
 })
 </script>

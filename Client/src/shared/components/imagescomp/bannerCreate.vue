@@ -40,6 +40,11 @@
             :to="{ name: name }"
             ><p v-if="locCom" class="create">{{ label }}</p></router-link
         >
+      <router-link
+          v-if="roles.roles.value.detachment_commander || roles.roles.value.localheadquarter_commander"
+          :to="{ name: name }">
+        <p v-if="eventCreate" class="create">{{ label }}</p>
+      </router-link>
 
     </div>
 </template>
@@ -88,6 +93,10 @@ const props = defineProps({
     target: {
       type: String,
       default: ''
+    },
+    eventCreate: {
+      type: Boolean,
+      default: false,
     }
 });
 

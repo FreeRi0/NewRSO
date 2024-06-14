@@ -10,11 +10,7 @@
             </template>
 
             <div class="horizontal__confidant">
-                <input
-                    type="checkbox"
-                    v-model="isChecked"
-                    @change="onCheckbox"
-                />
+                <input type="checkbox" v-model="isChecked" @change="onCheckbox" />
             </div>
 
             <div class="horizontal-item__wrapper">
@@ -27,23 +23,13 @@
 
             <div class="competition__detachments">
                 <div v-if="detachmentData" class="horizontal-item__wrapper">
-                    <img
-                        v-if="detachmentData.banner"
-                        class="competition__avatar_circle"
-                        :src="detachmentData.banner"
-                        alt="Banner"
-                    />
+                    <img v-if="detachmentData.banner" class="competition__avatar_circle" :src="detachmentData.banner"
+                        alt="Banner" />
 
-                    <div
-                        v-else
-                        class="competition__avatar_circle blue-bg"
-                    ></div>
+                    <div v-else class="competition__avatar_circle blue-bg"></div>
 
                     <div class="containerHorizontal">
-                        <p
-                            class="cursor_redirect"
-                            @click="clickDetacment(detachmentData.id)"
-                        >
+                        <p class="cursor_redirect" @click="clickDetacment(detachmentData.id)">
                             {{ detachmentData.name }}
                         </p>
                     </div>
@@ -51,11 +37,7 @@
             </div>
 
             <div class="horizontal-item__wrapper competitition">
-                <img
-                    class="competition__avatar_square"
-                    src="@app/assets/competition/tablet-promo.png"
-                    alt="banner"
-                />
+                <img class="competition__avatar_square" src="@app/assets/competition/tablet-promo.png" alt="banner" />
 
                 <div class="containerHorizontal">
                     <p class="cursor_redirect" @click="onCompetition">
@@ -131,7 +113,7 @@ const onCheckbox = (e) => {
 };
 
 const clickIndicator = (report) => {
-    console.log(report);
+    // console.log(report);
     router.push({
         name: 'indicatorPage',
         params: {
@@ -163,16 +145,10 @@ const getCompetition = async () => {
         } else {
             const { data } = await HTTP.get(
                 `/competitions/${props.report.competition}/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
             );
             competition.value = data;
         }
-        console.log(competition.value);
+        // console.log(competition.value);
     } catch (e) {
         console.log(`getCompetitions error`, e);
     }
@@ -185,17 +161,11 @@ const getDetachmentData = async () => {
         } else {
             const { data } = await HTTP.get(
                 `/detachments/${props.report.detachment}/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'Token ' + localStorage.getItem('Token'),
-                    },
-                },
             );
             detachmentData.value = data;
         }
 
-        console.log(detachmentData.value);
+        // console.log(detachmentData.value);
     } catch (e) {
         console.log(`getDetachmentData error`, e);
     }
@@ -205,14 +175,9 @@ const getIsTandemInfo = async () => {
     try {
         const { data } = await HTTP.get(
             `/detachments/${props.report.detachment}/competitions/1/is_tandem/`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
-        console.log(data);
+        // console.log(data);
         isTandem.value = data.is_tandem;
     } catch (e) {
         console.log(`getIsTandemInfo error`, e);
@@ -239,12 +204,14 @@ onMounted(() => {
     border: 1px solid #b6b6b6;
     border-radius: 10px;
     margin-bottom: 12px;
+
     //max-height: 48px;
     input {
         width: 100%;
         height: 100%;
     }
 }
+
 .competition__item {
     display: grid;
     width: 100%;
@@ -274,6 +241,7 @@ onMounted(() => {
     grid-gap: 12px;
     grid-template-columns: 1fr 1fr;
 }
+
 .competition__avatar_circle {
     border-radius: 50%;
     width: 38px;
@@ -308,9 +276,11 @@ onMounted(() => {
     align-items: center;
     justify-content: space-between;
 }
+
 .cursor_redirect {
     cursor: pointer;
 }
+
 .competition__nomination {
     display: flex;
     justify-content: center;

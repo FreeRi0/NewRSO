@@ -5,7 +5,7 @@
             <BannerSquad
                 :squad="squad.squad.value"
                 :member="member.members.value"
-                :getEnding="getEnding"
+                :ending="ending"
             ></BannerSquad>
             <section
                 class="about-squad"
@@ -73,6 +73,10 @@ import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { usePage } from '@shared';
+import mixins from '@/mixins/mixins';
+
+const { methods } = mixins;
+const { getEnding } = methods;
 
 const squadsStore = useSquadsStore();
 const squad = storeToRefs(squadsStore);
@@ -89,15 +93,10 @@ const { replaceTargetObjects } = usePage();
 const fetchCommander = async () => {
     try {
         let id = squad.squad.value.commander.id;
-        const response = await HTTP.get(`/users/${id}/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        const response = await HTTP.get(`/users/${id}/`);
 
         commander.value = response.data;
-        console.log(response);
+        // console.log(response);
     } catch (error) {
         console.log(error);
     }
@@ -123,18 +122,7 @@ watch(
         immediate: true,
     },
 );
-
-const getEnding = computed(() => {
-    const count = squadsStore.squad.participants_count;
-
-    if (count === 1 && count % 100 !== 11) {
-        return 'участник';
-    } else if ([2, 3, 4].includes(count)) {
-        return 'участника';
-    } else {
-        return 'участников';
-    }
-});
+const ending = computed(() => getEnding(squadsStore.squad.participants_count));
 </script>
 <style scoped lang="scss">
 .Squad-HQ__name {
@@ -144,37 +132,45 @@ const getEnding = computed(() => {
     font-weight: 600;
     line-height: normal;
 }
+
 .slogan {
     margin-top: 20px;
     margin-bottom: 9.5px;
 }
+
 .Squad-HQ__list {
     margin-bottom: 20px;
     display: grid;
     grid-template-columns: 380px 300px;
 }
+
 .circleLoader {
     width: 60px;
     height: 60px;
     display: block;
     margin: 30px auto;
 }
+
 .Squad-HQ__list li {
     border-right: none;
     height: 20px;
     margin: 0;
 }
+
 .Squad-HQ__university p {
     border-right: 1px solid #35383f;
     margin-right: 8px;
     padding-right: 8px;
 }
+
 .Squad-HQ__date {
     display: flex;
 }
+
 .Squad-HQ__date p {
     margin-right: 22px;
 }
+
 .user-data__link {
     border-radius: 10px;
     background: #39bfbf;
@@ -188,17 +184,21 @@ const getEnding = computed(() => {
     color: white;
     padding: 16px 32px;
 }
+
 .squad-data__contacts-wrapper {
     display: flex;
     justify-content: space-between;
 }
+
 .squad-data__contacts {
     display: grid;
 }
+
 .squad-data__contacts {
     display: flex;
     flex-direction: column;
 }
+
 .squad-data__social-network {
     display: flex;
     justify-content: space-between;
@@ -208,6 +208,7 @@ const getEnding = computed(() => {
 section.about-squad {
     margin-top: 60px;
 }
+
 .about-squad h3 {
     color: #35383f;
     font-family: 'Akrobat';
@@ -229,20 +230,25 @@ section.about-squad {
     font-weight: 500;
     line-height: normal;
 }
+
 .photo-item {
     width: 280px;
     margin-right: 20px;
+
     @media screen and (max-width: 575px) {
         height: 373px;
         width: 280px;
         margin-right: 0;
     }
 }
+
 .photo-item-last {
     margin-right: 0;
 }
+
 .photoWrapper {
     display: flex;
+
     @media screen and (max-width: 768px) {
         display: grid;
         grid-template-columns: 0.28fr 0.28fr;
@@ -250,6 +256,7 @@ section.about-squad {
         grid-row-gap: 20px;
         justify-content: center;
     }
+
     @media screen and (max-width: 575px) {
         grid-template-columns: 0.28fr;
     }
@@ -259,61 +266,75 @@ section.about-squad {
     .Squad-HQ__list {
         grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
     }
+
     .Squad-HQ__university p {
         border-right: 0;
         margin-right: 0;
         padding-right: 0;
     }
+
     .Squad-HQ__list li {
         margin-bottom: 8px;
     }
 }
+
 @media (max-width: 790px) {
     .squad-data__contacts-wrapper {
         flex-direction: column;
     }
+
     .user-data__link {
         align-self: start;
     }
+
     .squad-data__social-network {
         justify-content: start;
         margin: 16px 16px 20px 0px;
         gap: 12px;
     }
 }
+
 @media (max-width: 730px) {
     .user-data__wrapper {
         margin: 20px 0 12px 265px;
     }
+
     .user-metric {
         grid-template-columns: 15px 135px 135px 2fr 16px;
     }
 }
+
 @media (max-width: 690px) {
     .user-metric {
         grid-template-columns: 3fr 0fr 16fr 1fr;
     }
+
     .user-data__wrapper {
         margin: 105px 5px 20px 5px;
         display: flex;
         flex-direction: column;
         align-items: center;
     }
+
     .Squad-HQ__university p {
         text-align: center;
     }
+
     .Squad-HQ__list li {
         justify-content: center;
     }
+
     .squad-data__contacts {
         align-self: center;
     }
 }
+
 @media (max-width: 430px) {
     .user-metric {
         grid-template-columns: 6fr 0fr 16fr 1fr;
     }
 }
+
 @media (max-width: 415px) {
     .Squad-HQ__list {
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

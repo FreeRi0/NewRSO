@@ -24,7 +24,7 @@ router.beforeEach((to, _from, next) => {
         to.name !== 'Competition' &&
         to.name !== 'faq' &&
         to.name !== 'mypage' &&
-        !localStorage.getItem('Token')
+        !localStorage.getItem('jwt_token')
     )
         next({ name: 'Login' });
     // else if (to.name == 'Login' && localStorage.getItem('Token'))

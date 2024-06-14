@@ -367,7 +367,9 @@ const onDeleteMember = (memId) => {
             margin: 0;
 
             span {
-                white-space: pre-wrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                // white-space: pre-wrap;
             }
         }
 

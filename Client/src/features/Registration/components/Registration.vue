@@ -85,7 +85,7 @@
                     {{ isError.username }}
                 </p>
                 <v-text-field
-                    class="password-input"
+                    class="passwordReg-input"
                     :append-inner-icon="!visible ? 'mdi-eye-off' : 'mdi-eye'"
                     :type="visible ? 'text' : 'password'"
                     density="compact"
@@ -99,7 +99,7 @@
                     {{ isError.password }}
                 </p>
                 <v-text-field
-                    class="password-input"
+                    class="passwordReg-input"
                     :append-inner-icon="!visibleRe ? 'mdi-eye-off' : 'mdi-eye'"
                     :type="visibleRe ? 'text' : 'password'"
                     density="compact"
@@ -228,7 +228,7 @@
     text-align: center;
 }
 
-.password-input,
+.passwordReg-input,
 .region-input {
     border: 1px solid #a3a3a3;
     border-radius: 10px;
@@ -238,7 +238,7 @@
     margin-bottom: 8px;
 }
 
-.password-input::placeholder,
+.passwordReg-input::placeholder,
 .region-input::placeholder {
     color: #898989;
     font-size: 16px;
@@ -364,7 +364,11 @@ input {
 .dateInput .mx-input:focus {
     border-color: #a3a3a3;
 }
-
+.v-field--center-affix .v-field__append-inner,
+.v-field--center-affix .v-field__clearable,
+.v-field--center-affix .v-field__prepend-inner {
+    padding-bottom: 0px;
+}
 .dateInput.mx-datepicker {
     width: 100%;
 }
@@ -377,7 +381,7 @@ input {
 .dateInput.mx-datepicker svg {
     margin-right: 6px;
 }
-.password-input input.v-field__input::placeholder,
+.passwordReg-input input.v-field__input::placeholder,
 .option-select .v-field__input input::placeholder {
     color: #a3a3a3;
     opacity: revert;
@@ -433,13 +437,9 @@ const RegisterUser = async () => {
     try {
         isLoading.value = true;
         validated.value = true;
-        const response = await HTTP.post('/register/', form.value, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+        const response = await HTTP.post('/register/', form.value);
         form.value = response.data;
-        console.log(response.data);
+        // console.log(response.data);
         isLoading.value = false;
         swal.fire({
             position: 'top-center',

@@ -38,7 +38,7 @@
                         <div class="hq-data__participant-counter-HQ">
                             <span
                                 >{{ headquarter.participants_count }}
-                                {{ getEnding }}</span
+                                {{ ending }}</span
                             >
                         </div>
                         <div class="hq-data__social-network">
@@ -141,13 +141,13 @@
                         <li class="hq-data__participant-counter">
                             <span
                                 >{{ localHeadquarter.participants_count }}
-                                {{ getEnding }}</span
+                                {{ ending }}</span
                             >
                         </li>
                         <li class="hq-data__participant-counter-">
                             <span
                                 >{{ localHeadquarter.members_count }}
-                                {{ getEndingMembers }}</span
+                                {{ endingMember }}</span
                             >
                         </li>
                     </ul>
@@ -250,13 +250,13 @@
                         <li class="hq-data__participant-counter">
                             <span
                                 >{{ districtHeadquarter.participants_count }}
-                                {{ getEnding }}</span
+                                {{ ending }}</span
                             >
                         </li>
                         <li class="hq-data__participant-counter-">
                             <span
                                 >{{ districtHeadquarter.members_count }}
-                                {{ getEndingMembers }}</span
+                                {{ endingMember }}</span
                             >
                         </li>
                     </ul>
@@ -356,13 +356,13 @@
                         <li class="hq-data__participant-counter">
                             <span
                                 >{{ regionalHeadquarter.participants_count }}
-                                {{ getEnding }}</span
+                                {{ ending }}</span
                             >
                         </li>
                         <li class="hq-data__participant-counter-">
                             <span
                                 >{{ regionalHeadquarter.members_count }}
-                                {{ getEndingMembers }}</span
+                                {{ endingMember }}</span
                             >
                         </li>
                     </ul>
@@ -473,13 +473,13 @@
                         <li class="hq-data__participant-counter">
                             <span
                                 >{{ centralHeadquarter.participants_count }}
-                                {{ getEnding }}</span
+                                {{ ending }}</span
                             >
                         </li>
                         <li class="hq-data__participant-counter-">
                             <span
                                 >{{ centralHeadquarter.members_count }}
-                                {{ getEndingMembers }}</span
+                                {{ endingMember }}</span
                             >
                         </li>
                     </ul>
@@ -606,10 +606,10 @@ const props = defineProps({
     member: {
         type: Object,
     },
-    getEnding: {
+    ending: {
         type: Number,
     },
-    getEndingMembers: {
+    endingMember: {
         type: Number,
     },
 });
@@ -617,17 +617,12 @@ const props = defineProps({
 const aboutEduc = async () => {
     try {
         let id = props.headquarter?.educational_institution.id;
-        console.log('headquarter', props.headquarter);
-        console.log('id', id);
-        const response = await HTTP.get(`/eduicational_institutions/${id}/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + localStorage.getItem('Token'),
-            },
-        });
+        // console.log('headquarter', props.headquarter);
+        // console.log('id', id);
+        const response = await HTTP.get(`/eduicational_institutions/${id}/`);
 
         edict.value = response.data;
-        console.log(response);
+        // console.log(response);
     } catch (error) {
         console.log(error);
     }

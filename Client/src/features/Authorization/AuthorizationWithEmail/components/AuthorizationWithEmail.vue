@@ -2,7 +2,7 @@
     <div class="d-flex justify-end align-self-center">
         <div class="Login">
 
-            <form action="#" class="Login_form" method="post" @submit.prevent="LoginUser">
+            <form action="#" class="Login_form" method="post" @submit.prevent="Click">
                 <h2 class="Login_title">Вход в личный кабинет</h2>
                 <Input placeholder="Логин" name="login" height="40px" v-model:value="data.username"
                     class="username-input mb-3 Login_input" />
@@ -13,7 +13,7 @@
                 <v-text-field class="password-input" :append-inner-icon="!visible ? 'mdi-eye-off' : 'mdi-eye'"
                     :type="visible ? 'text' : 'password'" density="compact" v-model="data.password" placeholder="Пароль"
                     variant="outlined" @click:append-inner="visible = !visible"></v-text-field>
-                <p class="text-right mt-3"><router-link to="/RecoveryPass">Забыли пароль?</router-link>
+                <p class="text-right mt-3 mb-8"><router-link to="/RecoveryPass">Забыли пароль?</router-link>
                 </p>
 
                 <p class="error" v-if="isError.password">
@@ -25,8 +25,8 @@
                 </p>
 
 
-                <Button class="Login_btn" type="submit" label="Войти" :loaded="isLoading" :disabled="isLoading"
-                    color="primary"></Button>
+                <Button class="Login_btn" type="submit" @click="LoginUser" label="Войти" :loaded="isLoading"
+                    :disabled="isLoading" color="primary"></Button>
                 <p class="text-center Login_and">или</p>
                 <div id="VkIdSdkOneTap"></div>
                 <div class="text-center goReg">У вас нет аккаунта?
@@ -56,33 +56,35 @@ const data = ref({
 });
 const visible = ref(false);
 
+
 const isError = ref([]);
 const isLoading = ref(false);
 const swal = inject('$swal');
 
-const APP_ID = 51932483
-const REDIRECT_URL = 'https://rso.sprint.1t.ru/MyPage'
-const oneTap = new VKID.OneTap();
+ const APP_ID = 51915086
+ const REDIRECT_URL = 'https://rso.sprint.1t.ru/my-page'
+ const oneTap = new VKID.OneTap();
 
 
-VKID.Config.set({
-    app: APP_ID, // Идентификатор приложения.
-    redirectUrl: REDIRECT_URL, // Адрес для перехода после авторизации.
-    state: 'dj29fnsadjsd82...' // Произвольная строка состояния приложения.
-});
+ VKID.Config.set({
+     app: APP_ID, // Идентификатор приложения.
+     redirectUrl: REDIRECT_URL, // Адрес для перехода после авторизации.
+     state: 'dj29fnsadjsd82...' // Произвольная строка состояния приложения.
+ });
 
+
+const Click = () => {
+    // console.log("Click");
+}
 
 const LoginUser = async () => {
     try {
         isLoading.value = true;
-        const response = await HTTP.post('/token/login/', data.value, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+        const response = await HTTP.post('/jwt/create/', data.value);
         data.value = response.data;
-        localStorage.setItem('Token', response.data.auth_token);
-        console.log(response.data);
+        // console.log(response.data);
+        localStorage.setItem('jwt_token', response.data.access);
+        localStorage.setItem('refresh_token', response.data.refresh);
         isLoading.value = false;
         router.push({
             name: 'mypage',
@@ -112,14 +114,13 @@ const LoginUser = async () => {
     }
 };
 
-onMounted(() => {
+ onMounted(() => {
     const container = document.getElementById('VkIdSdkOneTap');
-    if (container) {
-        console.log(container, oneTap)
-        // Отрисовка кнопки в контейнере с именем приложения APP_NAME, светлой темой и на русском языке.
-        oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
-    }
-})
+     if (container) {
+//         // Отрисовка кнопки в контейнере с именем приложения APP_NAME, светлой темой и на русском языке.
+         oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
+     }
+ })
 
 </script>
 
@@ -137,13 +138,12 @@ onMounted(() => {
     border-radius: 10px;
     width: 100%;
     max-width: 500px;
-    max-height: 592px;
 
     &_title {
         font-size: 40px;
         font-weight: 600;
         font-family: 'Akrobat';
-        line-height: 48px;
+        line-height: 28px;
         margin-bottom: 48px;
         text-align: center;
 
@@ -170,10 +170,12 @@ onMounted(() => {
 
 
     &_btn {
+        border-radius: 8px !important;
         width: 100%;
         margin: 0px;
         height: 44px;
-        margin-top: 40px;
+        padding: 0px 24px !important;
+
     }
 
     &_and {
@@ -191,16 +193,20 @@ onMounted(() => {
         font-size: 18px;
         font-weight: 500;
     }
+
+    &_input {
+        border-radius: 8px !important;
+    }
 }
 
 
 .v-field {
-    border-radius: 10px;
+    border-radius: 8px;
 }
 
 .password-input {
     border: 1px solid #a3a3a3;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 16px;
     height: 40px;
     color: #35383f;
@@ -310,7 +316,7 @@ onMounted(() => {
 
 
 .v-text-field input.v-field__input {
-    padding: 0px 6px 6px 16px;
+    padding: 0px 7.5px 6px 16px;
 }
 
 // :global(.v-input__control) {
@@ -318,9 +324,23 @@ onMounted(() => {
 //     font-weight: 400;
 // }
 
+.v-field--center-affix .v-field__append-inner,
+.v-field--center-affix .v-field__clearable,
+.v-field--center-affix .v-field__prepend-inner {
+    padding-bottom: 5px;
+}
+
 
 :global(.v-text-field .v-field--no-label input,
     .v-text-field .v-field--active input) {
+    border-radius: 8px;
+}
+
+.VkIdWebSdk__button_mltngh {
+    border-radius: 10px;
+}
+
+#flelhu .VkIdWebSdk__button_flelhu {
     border-radius: 10px;
 }
 

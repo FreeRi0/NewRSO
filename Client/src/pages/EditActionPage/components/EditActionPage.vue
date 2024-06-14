@@ -574,6 +574,7 @@
                                       placeholder="Например, 15.05.2023"
                                       name="end-registration-hq"
                                       type="date"
+                                      :min="maininfo.time_data.start_date"
                                   />
                                 </div>
                               </div>
@@ -944,7 +945,7 @@
                                           organizer.last_name = item.last_name
                                           organizer.first_name = item.first_name
                                           organizer.patronymic_name = item.patronymic_name
-                                          console.log('selectedUser: ', selectedUser)
+                                          // console.log('selectedUser: ', selectedUser)
                                         }"
                                         style="border: 1px solid #b6b6b6;
                                         border-radius: 10px;
@@ -1132,11 +1133,10 @@ import {
   putOrganizator,
   putTimeData,
   putDocuments,
-  getRoles, deleteOrganizator, createOrganizator,
+  getRoles, deleteOrganizator, createOrganizator, patchOrganizator,
 } from '@services/ActionService';
 import { sortByEducation } from '@shared/components/selects';
 import { useRoute, useRouter } from 'vue-router';
-// import { useRoleStore } from '@layouts/store/role';
 import FileUpload from 'primevue/fileupload';
 import InputText from 'primevue/inputtext';
 import { Input } from '@shared/components/inputs';
@@ -1180,15 +1180,13 @@ let deletedUser =  ref([]);
 
 onActivated(() => {
     getRoles().then((resp) => {
-        console.log(resp.data);
         rules.value = resp.data;
         Object.entries(resp.data).forEach(([key, value]) => {
             if (value !== null) {
-                console.log(`${key} + ${value}`);
                 const filted = scale_massive.value.find(
                     (commander) => commander.value === key,
                 );
-                scale_massive_sorted.value.push(filted); //Работает
+                scale_massive_sorted.value.push(filted);
             }
         });
     });
@@ -1214,6 +1212,7 @@ onActivated(() => {
                       is_contact_person: item.is_contact_person,
                       organizerBtnClose: true,
                       oldValue: true,
+                      id: item.organizer.id,
                     })
                   })
                 })
@@ -1229,7 +1228,7 @@ onActivated(() => {
       const usersRes = await HTTP.get('users/', {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Token ' + localStorage.getItem('Token'),
+           Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
         },
       })
       usersList.value = await usersRes.data.results;
@@ -1268,7 +1267,7 @@ onActivated(() => {
                 if (key === 'detachment_commander') {
                     Object.entries(value).forEach(([key, value]) => {
                         if (key === 'id') {
-                            console.log(value);
+                            // console.log(value);
                             maininfo.value.org_central_headquarter = null;
                             maininfo.value.org_district_headquarter = null;
                             maininfo.value.org_regional_headquarter = null;
@@ -1285,7 +1284,7 @@ onActivated(() => {
                 if (key === 'educationalheadquarter_commander') {
                     Object.entries(value).forEach(([key, value]) => {
                         if (key === 'id') {
-                            console.log(value);
+                            // console.log(value);
                             maininfo.value.org_central_headquarter = null;
                             maininfo.value.org_district_headquarter = null;
                             maininfo.value.org_regional_headquarter = null;
@@ -1302,7 +1301,7 @@ onActivated(() => {
                 if (key === 'localheadquarter_commander') {
                     Object.entries(value).forEach(([key, value]) => {
                         if (key === 'id') {
-                            console.log(value);
+                            // console.log(value);
                             maininfo.value.org_central_headquarter = null;
                             maininfo.value.org_district_headquarter = null;
                             maininfo.value.org_regional_headquarter = null;
@@ -1320,7 +1319,7 @@ onActivated(() => {
                 if (key === 'regionalheadquarter_commander') {
                     Object.entries(value).forEach(([key, value]) => {
                         if (key === 'id') {
-                            console.log(value);
+                            // console.log(value);
                             maininfo.value.org_central_headquarter = null;
                             maininfo.value.org_district_headquarter = null;
                             maininfo.value.org_regional_headquarter = value;
@@ -1337,7 +1336,7 @@ onActivated(() => {
                 if (key === 'districtheadquarter_commander') {
                     Object.entries(value).forEach(([key, value]) => {
                         if (key === 'id') {
-                            console.log(value);
+                            // console.log(value);
                             maininfo.value.org_central_headquarter = null;
                             maininfo.value.org_district_headquarter = value;
                             maininfo.value.org_regional_headquarter = null;
@@ -1492,7 +1491,8 @@ function AddOrganizer() {
     patronymic_name: '',
     is_contact_person: false,
     organizerBtnClose: true,
-    oldValue: false
+    oldValue: false,
+    new_organizer: true,
   });
 }
 function SubmitEvent() {
@@ -1527,17 +1527,17 @@ function SubmitEvent() {
                     console.log(e);
                   });
             })
-            // selectedUser.value.forEach((item) => {
-            //     putOrganizator(id, { organizer: item.organizer, is_contact_person: item.is_contact_person }, item.organizer)
-            //         .then((resp) => {
-            //             console.log(resp.data);
-            //         })
-            //         .catch((e) => {
-            //             console.log(e);
-            //         });
-            // });
+            selectedUser.value.forEach((item) => {
+              patchOrganizator(id, { organizer: item.id, is_contact_person: item.is_contact_person }, item.organizer)
+                    .then((resp) => {
+                        console.log(resp.data);
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                    });
+            });
           selectedUser.value.forEach((item) => {
-            if (!item.oldValue) {
+            if (!item.oldValue && item.new_organizer) {
               createOrganizator(id, { organizer: item.organizer, is_contact_person: item.is_contact_person })
                   .then((resp) => {
                     console.log(resp.data);

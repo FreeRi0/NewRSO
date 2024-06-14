@@ -87,7 +87,7 @@
                     </p>
                 </div>
                 <div class="start_button">
-                    <button @click="onStart" :class="{ submit_button: !stoppedTest, inactive_button: stoppedTest }">
+                    <button @click="onStart" :class="{submit_button: !stoppedTest, inactive_button: stoppedTest}">
                         Начать тестирование
                     </button>
                 </div>
@@ -123,7 +123,7 @@ const titleName = ref(
 );
 // const testName = ref('university');
 
-console.log(testName.value);
+// console.log(testName.value);
 
 const swal = inject('$swal');
 
@@ -132,13 +132,14 @@ const questions = ref([]);
 let answers = [];
 const selected = ref(false);
 
+const stoppedTest = ref(true);
+
 const result = ref();
 let indexQuestion = ref(0);
 const choosenAnswer = ref(null);
 const started = ref(false);
 const solved = ref(false);
 
-const stoppedTest = ref(true);
 
 const status = ref({
     left_attempts: null,
@@ -146,17 +147,11 @@ const status = ref({
 });
 
 const onStart = async () => {
-    if (stoppedTest.value) return;
+    if(stoppedTest.value) return;
     started.value = true;
     try {
         const { data } = await HTTP.get(
-            `/questions/?category=${testName.value}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+            `/questions/?category=${testName.value}`
         );
         questions.value = data;
     } catch (e) {
@@ -193,6 +188,7 @@ const onAction = async () => {
         };
         indexQuestion.value += 1;
         answers.push(temp);
+
         if (indexQuestion.value == questions.value.length) {
             started.value = false;
             solved.value = true;
@@ -209,12 +205,7 @@ const submitAnswers = async () => {
         const { data } = await HTTP.post(
             `/submit_answers/`,
             { answers, category: `${testName.value}` },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         result.value = data;
     } catch (e) {
@@ -226,12 +217,7 @@ const getAttempts = async () => {
     try {
         const { data } = await HTTP.get(
             `/get_attempts_status/?category=${testName.value}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Token ' + localStorage.getItem('Token'),
-                },
-            },
+
         );
         status.value = data;
     } catch (e) {
@@ -252,7 +238,7 @@ onMounted(async () => {
 });
 </script>
 
-<styel scoped lang="scss">
+<style scoped lang="scss">
 .image_answer {
     max-width: 150px;
     height: auto;
@@ -419,4 +405,4 @@ input[type='radio']+label {
     word-wrap: break-word;
     /* автоматически перемещает слова на следующую строку при необходимости */
 }
-</styel>
+</style>
