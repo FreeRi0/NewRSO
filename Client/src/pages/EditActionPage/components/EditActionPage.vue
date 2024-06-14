@@ -1133,11 +1133,10 @@ import {
   putOrganizator,
   putTimeData,
   putDocuments,
-  getRoles, deleteOrganizator, createOrganizator,
+  getRoles, deleteOrganizator, createOrganizator, patchOrganizator,
 } from '@services/ActionService';
 import { sortByEducation } from '@shared/components/selects';
 import { useRoute, useRouter } from 'vue-router';
-// import { useRoleStore } from '@layouts/store/role';
 import FileUpload from 'primevue/fileupload';
 import InputText from 'primevue/inputtext';
 import { Input } from '@shared/components/inputs';
@@ -1181,15 +1180,13 @@ let deletedUser =  ref([]);
 
 onActivated(() => {
     getRoles().then((resp) => {
-        // console.log(resp.data);
         rules.value = resp.data;
         Object.entries(resp.data).forEach(([key, value]) => {
             if (value !== null) {
-                // console.log(`${key} + ${value}`);
                 const filted = scale_massive.value.find(
                     (commander) => commander.value === key,
                 );
-                scale_massive_sorted.value.push(filted); //Работает
+                scale_massive_sorted.value.push(filted);
             }
         });
     });
@@ -1215,6 +1212,7 @@ onActivated(() => {
                       is_contact_person: item.is_contact_person,
                       organizerBtnClose: true,
                       oldValue: true,
+                      id: item.organizer.id,
                     })
                   })
                 })
@@ -1493,7 +1491,8 @@ function AddOrganizer() {
     patronymic_name: '',
     is_contact_person: false,
     organizerBtnClose: true,
-    oldValue: false
+    oldValue: false,
+    new_organizer: true,
   });
 }
 function SubmitEvent() {
@@ -1528,17 +1527,17 @@ function SubmitEvent() {
                     console.log(e);
                   });
             })
-            // selectedUser.value.forEach((item) => {
-            //     putOrganizator(id, { organizer: item.organizer, is_contact_person: item.is_contact_person }, item.organizer)
-            //         .then((resp) => {
-            //             console.log(resp.data);
-            //         })
-            //         .catch((e) => {
-            //             console.log(e);
-            //         });
-            // });
+            selectedUser.value.forEach((item) => {
+              patchOrganizator(id, { organizer: item.id, is_contact_person: item.is_contact_person }, item.organizer)
+                    .then((resp) => {
+                        console.log(resp.data);
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                    });
+            });
           selectedUser.value.forEach((item) => {
-            if (!item.oldValue) {
+            if (!item.oldValue && item.new_organizer) {
               createOrganizator(id, { organizer: item.organizer, is_contact_person: item.is_contact_person })
                   .then((resp) => {
                     console.log(resp.data);
