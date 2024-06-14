@@ -1454,7 +1454,7 @@ s
                                                     placeholder="Например, https://vk.com/cco_monolit"
                                                     :maxlength="100"
                                                     v-model:value="link.link"
-                                                    readonly="is_regional_commander"
+                                                    :readonly="is_regional_commander"
                                                 />
                                                 <div
                                                     type="button"
