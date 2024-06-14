@@ -1515,7 +1515,7 @@ s
                                             </div>
                                         </template>
                                         <div
-                                            class="form__field add-block"
+                                            class="form__field add-link"
                                             @click="AddLink7(index)"
                                         >
                                             <p>+ добавить ссылку</p>
@@ -1811,7 +1811,7 @@ s
                                             </div>
                                         </template>
                                         <div
-                                            class="form__field add-block"
+                                            class="form__field add-link"
                                             @click="AddLink8(index)"
                                         >
                                             <p>+ добавить ссылку</p>
@@ -5053,6 +5053,12 @@ onMounted(async (id) => {
     max-height: none;
 }
 .add-block {
+    cursor: pointer;
+    max-width: fit-content;
+    border-bottom: 1px solid #35383f;
+    margin-top: 40px;
+}
+.add-link {
     cursor: pointer;
     max-width: fit-content;
     border-bottom: 1px solid #35383f;
