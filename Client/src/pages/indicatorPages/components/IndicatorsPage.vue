@@ -340,8 +340,8 @@
                                                     " target="_blank">{{
                                                     applicationData.certificate_scans.slice(
                                                     applicationData.certificate_scans.indexOf(
-                                                    'ksk_',
-                                                    ) + 4,
+                                                    'Q7/',
+                                                    ) + 18,
                                                     )
                                                     }}</a>
                                             </div>
