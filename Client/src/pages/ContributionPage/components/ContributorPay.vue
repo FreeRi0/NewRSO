@@ -137,10 +137,6 @@ const users = ref({});
 const limit = 12;
 const action = ref('Оплачен');
 const participants = ref([]);
-// const pages = ref([
-//     { pageTitle: 'Личный кабинет', href: '#' },
-//     { pageTitle: 'Членский взнос', href: '/contributorPay' },
-// ]);
 const actionsList = ref([
     {
         value: 'Оплачен',
@@ -229,18 +225,11 @@ const viewContributorsData = async (search, pagination, orderLimit) => {
         else if (!pagination) data.push('limit=' + limit);
         else if (pagination == 'next')
             url = users.value.next.replace('http', 'https');
-        // if (name.value) data.push('search=' + name.value);
-        // if (district.value) data.push('district_headquarter__name=' + district.value);
-        // if (reg.value) data.push('regional_headquarter__name=' + reg.value);
-        // if (local.value) data.push('local_headquarter__name=' + local.value);
-        // if (educ.value) data.push('educational_headquarter__name=' + educ.value);
-        // if (detachment.value) data.push('detachment__name=' + detachment.value);
 
         if (sortBy.value && !pagination)
             data.push(
                 'ordering=' + (ascending.value ? '' : '-') + sortBy.value,
             );
-        // const viewParticipantsResponse = await HTTP.get('/rsousers' + search);
         const viewParticipantsResponse = await HTTP.get(url + data.join('&'));
 
         isLoading.value = false;
@@ -371,18 +360,18 @@ const updateDetachment = (detachmentVal) => {
 
 const select = (event) => {
     selectedPeoples.value = [];
-    // console.log('fffss', checkboxAll.value, event);
+
     if (event.target.checked) {
-        // console.log('fffss', checkboxAll.value, event);
+
         for (let index in participants.value) {
-            // console.log('arr', selectedPeoples.value);
+
 
             participants.value[index].selected = true;
             selectedPeoples.value.push(participants.value[index]);
         }
     } else {
         for (let index in participants.value) {
-            // console.log('arr', selectedPeoples.value);
+
             participants.value[index].selected = false;
         }
     }
@@ -517,7 +506,7 @@ const onAction = async () => {
     try {
         for (const application of selectedPeoples.value) {
             if (action.value === 'Оплачен') {
-                // console.log('app', application);
+               
                 await ChangeStatus(application.id);
             } else {
                 await ChangeCancelStatus(application.id);
