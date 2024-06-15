@@ -171,11 +171,43 @@ const ascending = ref(true);
 const sortBy = ref('last_name');
 
 const next = () => {
+    let search = '';
+    if (district.value) {
+        search += '?district_headquarter__name=' + district.value;
+    }
+    if (reg.value) {
+        search += '?regional_headquarter__name=' + reg.value;
+    }
+    if (local.value) {
+        search += '?local_headquarter__name=' + local.value;
+    }
+    if (educ.value) {
+        search += '?educational_headquarter__name=' + educ.value;
+    }
+    if (detachment.value) {
+        search = '?detachment__name=' + detachment.value;
+    }
     viewContributorsData(search, '', 'next');
 };
 
 const prev = () => {
-    viewContributorsData();
+    let search = '';
+    if (district.value) {
+        search += '?district_headquarter__name=' + district.value;
+    }
+    if (reg.value) {
+        search += '?regional_headquarter__name=' + reg.value;
+    }
+    if (local.value) {
+        search += '?local_headquarter__name=' + local.value;
+    }
+    if (educ.value) {
+        search += '?educational_headquarter__name=' + educ.value;
+    }
+    if (detachment.value) {
+        search = '?detachment__name=' + detachment.value;
+    }
+    viewContributorsData(search, '', '');
 
 };
 
@@ -524,7 +556,7 @@ const searchContributors = (event) => {
         search = '?district_headquarter__name=' + district.value;
     }
     if (reg.value) {
-        search += '?search=' + name.value;
+        search = '?regional_headquarter__name=' + reg.value;
     }
     if (local.value) {
         search = '?local_headquarter__name=' + local.value;
@@ -535,13 +567,29 @@ const searchContributors = (event) => {
     if (detachment.value) {
         search = '?detachment__name=' + detachment.value;
     }
-    if (search && !reg.value) {
+    if (search) {
         search += '&search=' + name.value;
+    }
+
+    if (!name.value && reg.value) {
+        search = '?regional_headquarter__name=' + reg.value;
+    }
+    if (!name.value && district.value) {
+        search = '?district_headquarter__name=' + district.value;
+    }
+    if (!name.value && local.value) {
+        search = '?local_headquarter__name=' + local.value;
+    }
+    if (!name.value && educ.value) {
+        search = '?educational_headquarter__name=' + educ.value;
+    }
+    if (!name.value && detachment.value) {
+        search = '?detachment__name=' + detachment.value;
     }
 
     clearTimeout(timerSearch.value);
     timerSearch.value = setTimeout(() => {
-        viewContributorsData(search);
+        viewContributorsData(search, '', '');
     }, 400);
 };
 
@@ -606,52 +654,53 @@ watch(
     },
 );
 
-// watch(
-//     () => district.value,
-//     () => {
-//         viewContributorsData();
-//     },
-// );
-// watch(
-//     () => reg.value,
-//     () => {
-//         viewContributorsData();
-//     },
-// );
-// watch(
-//     () => local.value,
-//     () => {
-//         viewContributorsData();
-//     },
-// );
-// watch(
-//     () => educ.value,
-//     () => {
-//         viewContributorsData();
-//     },
-// );
-// watch(
-//     () => detachment.value,
-//     () => {
-//         viewContributorsData();
-//     },
-// );
 watch(
     () => sortBy.value,
     () => {
-        viewContributorsData('', '', participants.value.length);
+        let search = '';
+        if (district.value) {
+            search += '?district_headquarter__name=' + district.value;
+        }
+        if (reg.value) {
+            search += '?regional_headquarter__name=' + reg.value;
+        }
+        if (local.value) {
+            search += '?local_headquarter__name=' + local.value;
+        }
+        if (educ.value) {
+            search += '?educational_headquarter__name=' + educ.value;
+        }
+        if (detachment.value) {
+            search = '?detachment__name=' + detachment.value;
+        }
+        viewContributorsData(search, '', participants.value.length);
     },
 );
 watch(
     () => ascending.value,
     () => {
-        viewContributorsData('', '', participants.value.length);
+        let search = '';
+        if (district.value) {
+            search += '?district_headquarter__name=' + district.value;
+        }
+        if (reg.value) {
+            search += '?regional_headquarter__name=' + reg.value;
+        }
+        if (local.value) {
+            search += '?local_headquarter__name=' + local.value;
+        }
+        if (educ.value) {
+            search += '?educational_headquarter__name=' + educ.value;
+        }
+        if (detachment.value) {
+            search = '?detachment__name=' + detachment.value;
+        }
+        viewContributorsData(search, '', participants.value.length);
     },
 );
 
 onMounted(() => {
     getUsersByRoles();
-    //  viewContributorsData(search);
 });
 </script>
 <style lang="scss">
