@@ -4226,7 +4226,7 @@ const postParameters = async (id) => {
 const getMeCommander = async () => {
     try {
         const { data } = await HTTP.get(`/rsousers/me_commander/`);
-        if (data.regionalheadquarter_commander) {
+        if (data.regionalheadquarter_commander && (data.detachment_commander?.id != route.params.id)) {
             is_regional_commander.value = true;
         }
     } catch (e) {
