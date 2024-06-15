@@ -3646,7 +3646,7 @@ const selectFile = (e, id, field, subfield, index) => {
 const addNewBlock = (sectionIndex, NameSection, fields) => {
     report.value[sectionIndex][NameSection].push(fields);
     if (sectionIndex === 5 || sectionIndex === 17) {
-        report.value[sectionIndex][NameSection].disabledBtn = false;
+        report.value[sectionIndex].disabledBtn = false;
     }
 };
 
