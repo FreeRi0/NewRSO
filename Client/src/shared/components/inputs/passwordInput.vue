@@ -2,8 +2,8 @@
   <div class="password">
     <input :type="show ? 'text' : 'password'" :style="{ height: height }" class="password__input" :placeholder="placeholder" :value="value"  @input="updateValue" />
     <div class="eyeButton">
-      <span @click="show = !show"> <img v-show="!show" src="@app/assets/icons/eye-slash.png" alt="eye-slash"> <img
-          v-show="show" src="@app/assets/icons/eye.png" alt="eye"></span>
+      <span @click="show = !show"> <img v-show="!show" src="@app/assets/eye-slash.png" alt="eye-slash"> <img
+          v-show="show" src="@app/assets/eye.png" alt="eye"></span>
 
 
     </div>
