@@ -1,113 +1,47 @@
 <template>
     <div class="wrap">
         <v-card class="regWrapper">
-            <v-card-title class="text-h4 text-center regTitle"
-                >Регистрация</v-card-title
-            >
+            <v-card-title class="text-h4 text-center regTitle">Регистрация</v-card-title>
             <v-form action="#" method="post" @submit.prevent="RegisterUser">
-                <regionsDropdown
-                    open-on-clear
-                    id="reg"
-                    name="regdrop"
-                    placeholder="Выберите регион обучения"
-                    v-model="form.region"
-                    @update:value="changeValue"
-                    class="mb-2 region-input"
-                    address="/regions/"
-                ></regionsDropdown>
-                <Input
-                    placeholder="Фамилия"
-                    name="surname"
-                    v-model:value.trim="form.last_name"
-                />
+                <regionsDropdown open-on-clear id="reg" name="regdrop" placeholder="Выберите регион обучения"
+                    v-model="form.region" @update:value="changeValue" class="mb-2 region-input" address="/regions/">
+                </regionsDropdown>
+                <Input placeholder="Фамилия" name="surname" height="40px" v-model:value.trim="form.last_name" />
                 <p class="error" v-if="isError.last_name">
                     {{ isError.last_name }}
                 </p>
-                <Input
-                    placeholder="Имя"
-                    name="name"
-                    v-model:value.trim="form.first_name"
-                />
+                <Input placeholder="Имя" name="name" height="40px" v-model:value.trim="form.first_name" />
                 <p class="error" v-if="isError.first_name">
                     {{ isError.first_name }}
                 </p>
-                <Input
-                    placeholder="Отчество (при наличии)"
-                    name="patronomyc"
-                    v-model:value.trim="form.patronymic_name"
-                />
+                <Input placeholder="Отчество (при наличии)" name="patronomyc" height="40px"
+                    v-model:value.trim="form.patronymic_name" />
                 <div class="form-input">
-                    <MaskInput
-                        type="tel"
-                        placeholder="+7 (999) 999-99-99"
-                        name="phone"
-                        class="mb-2"
-                        v-model="form.phone_number"
-                        mask="+7(###) ###-##-##"
-                    />
+                    <MaskInput type="tel" placeholder="+7 (999) 999-99-99" name="phone" class="mb-2 phone-input"
+                        v-model="form.phone_number" mask="+7(###) ###-##-##" />
                 </div>
-                <Input
-                    placeholder="Электронная почта"
-                    name="email"
-                    type="email"
-                    v-model:value.trim="form.email"
-                />
+                <Input placeholder="Электронная почта" name="email" type="email" height="40px"
+                    v-model:value.trim="form.email" />
                 <p class="error" v-if="isError.email">
                     {{ isError.email }}
                 </p>
-                <!-- <Input
-                    name="date"
-                    type="date"
-                    class="dateInput"
-                    placeholder="Дата рождения"
-                    v-model:value="form.date_of_birth"
-                    max="9999-12-31"
-                /> -->
-                <date-picker
-                    v-model:value="form.date_of_birth"
-                    placeholder="Дата рождения"
-                    name="date"
-                    type="date"
-                    class="dateInput"
-                    value-type="format"
-                    :lang="langObject"
-                    format="YYYY-MM-DD"
-                ></date-picker>
+
+                <date-picker v-model:value="form.date_of_birth" placeholder="Дата рождения" name="date" type="date"
+                    class="dateInput" value-type="format" :lang="langObject" format="YYYY-MM-DD"></date-picker>
                 <p class="error" v-if="isError.date_of_birth">
                     Дата рождения в формате ДД.ММ.ГГГГ
                 </p>
-                <Input
-                    placeholder="Придумайте логин"
-                    name="login"
-                    v-model:value.trim="form.username"
-                />
+                <Input placeholder="Придумайте логин" name="login" height="40px" v-model:value.trim="form.username" />
                 <p class="error" v-if="isError.username">
                     {{ isError.username }}
                 </p>
-                <v-text-field
-                    class="passwordReg-input"
-                    :append-inner-icon="!visible ? 'mdi-eye-off' : 'mdi-eye'"
-                    :type="visible ? 'text' : 'password'"
-                    density="compact"
-                    v-model="form.password"
-                    placeholder="Придумайте пароль"
-                    variant="outlined"
-                    @click:append-inner="visible = !visible"
-                    id="pass"
-                ></v-text-field>
+
+                <passwordInput class="mb-2" placeholder="Придумайте пароль" v-model:value="form.password" />
                 <p class="error" v-if="isError.password">
                     {{ isError.password }}
                 </p>
-                <v-text-field
-                    class="passwordReg-input"
-                    :append-inner-icon="!visibleRe ? 'mdi-eye-off' : 'mdi-eye'"
-                    :type="visibleRe ? 'text' : 'password'"
-                    density="compact"
-                    v-model="form.re_password"
-                    placeholder="Повторите пароль"
-                    variant="outlined"
-                    @click:append-inner="visibleRe = !visibleRe"
-                ></v-text-field>
+
+                <passwordInput placeholder="Повторите пароль" v-model:value="form.re_password" />
 
                 <p class="error" v-if="isError.re_password">
                     {{ isError.re_password }}
@@ -117,11 +51,7 @@
                 </p>
 
                 <div class="regCheck">
-                    <input
-                        v-model="form.personal_data_agreement"
-                        type="checkbox"
-                        @change="handleTermsState"
-                    />
+                    <input v-model="form.personal_data_agreement" type="checkbox" @change="handleTermsState" />
                     <div class="regCheck_text">
                         Даю согласие на обработку моих персональных данных в
                         соответствии с законом от 27.07.2006 года № 152-ФЗ «О
@@ -131,47 +61,21 @@
                     </div>
                 </div>
 
-                <Button
-                    label="Зарегистрироваться"
-                    :loaded="isLoading"
-                    :disabled="
-                        isLoading ||
-                        !form.personal_data_agreement ||
-                        !form.region
-                    "
-                    type="submit"
-                    color="primary"
-                >
+                <Button label="Зарегистрироваться" :loaded="isLoading" :disabled="isLoading ||
+                    !form.personal_data_agreement ||
+                    !form.region
+                    " type="submit" color="primary">
                 </Button>
 
-                <v-card-text class="text-center goLog">
-                    <router-link to="/"
-                        >У меня уже есть аккаунт</router-link
-                    ></v-card-text
-                >
+                <div class="text-center goLog">
+                    <router-link class="Reg_link ml-1" to="/">У меня уже есть аккаунт</router-link>
+                </div>
             </v-form>
         </v-card>
     </div>
 </template>
 
-<style lang="scss" >
-.v-field {
-    border-radius: 10px;
-}
-
-.v-field.v-field--appended {
-    --v-field-padding-end: 10px;
-}
-.v-field--prepended {
-    padding-inline-start: 0px;
-}
-
-.v-field--variant-outlined,
-.v-field--single-line,
-.v-field--no-label {
-    --v-field-padding-top: 5px;
-}
-
+<style lang="scss">
 .btn {
     margin: 60px auto;
     margin-bottom: 15px;
@@ -181,30 +85,43 @@
     padding-top: 60px;
     padding-bottom: 60px;
     max-width: 580px;
+
     @media screen and (max-width: 768px) {
         padding-top: 40px;
         padding-bottom: 40px;
     }
+
     @media screen and (max-width: 575px) {
         max-width: 328px;
     }
+}
+
+.Reg_link {
+    text-decoration: underline;
+    font-family: 'Bert Sans';
+    color: #35383F;
+    font-size: 18px;
+    font-weight: 500;
 }
 
 .regCheck {
     margin-top: 20px;
     display: flex;
     margin-bottom: 28px;
+
     input {
         width: 20px;
         height: 20px;
         border: 1px solid #35383f;
     }
+
     &_text {
         max-width: 354px;
         font-size: 14px;
         color: #35383f;
         font-weight: 500;
         margin-left: 8px;
+
         @media screen and (max-width: 575px) {
             max-width: 270px;
         }
@@ -214,10 +131,12 @@
 .wrap {
     display: flex;
     justify-content: end;
+
     @media screen and (max-width: 768px) {
         justify-content: center;
     }
 }
+
 .error {
     color: #db0000;
     font-size: 14px;
@@ -228,7 +147,11 @@
     text-align: center;
 }
 
-.passwordReg-input,
+.phone-input {
+    height: 40px;
+}
+
+
 .region-input {
     border: 1px solid #a3a3a3;
     border-radius: 10px;
@@ -238,7 +161,6 @@
     margin-bottom: 8px;
 }
 
-.passwordReg-input::placeholder,
 .region-input::placeholder {
     color: #898989;
     font-size: 16px;
@@ -246,20 +168,25 @@
     font-family: 'Bert Sans';
     margin-bottom: 8px;
 }
+
 .v-card {
     padding-left: 100px;
     padding-right: 100px;
     border-radius: 10px;
+    box-shadow: 0px 4px 30px 0px #0000000D;
+
     @media screen and (max-width: 575px) {
         padding-left: 16px;
         padding-right: 16px;
     }
 }
+
 .regTitle {
     padding: 0rem 1rem;
     font-size: 40px;
     font-weight: 600;
     font-family: Akrobat;
+
     @media screen and (max-width: 575px) {
         font-size: 32px;
     }
@@ -276,28 +203,30 @@
 }
 
 .goLog {
-    a {
-        text-decoration: underline;
-        font-weight: bold;
-        font-size: 18px;
-    }
+    font-family: 'Bert Sans';
+    font-size: 18px;
+    font-weight: 400;
+    color: #35383F;
 }
-.v-field__prepend-inner {
-    display: none;
-}
+
 #reg,
 #input-3,
 #input-5 {
+    color: #a3a3a3;
     font-size: 16px;
     font-weight: 500;
     letter-spacing: 0;
+    font-family: 'Bert Sans';
 }
+
 #reg {
     padding-top: 5px;
 }
+
 .v-autocomplete .v-field--dirty .v-autocomplete__selection {
     color: #000;
 }
+
 .RegisterWrapper {
     min-height: 100vh;
     background-image: url(/assets/regBR.jpg);
@@ -306,23 +235,23 @@
     background-position: center bottom;
     padding-top: 60px;
     padding-bottom: 60px;
+
     @media screen and (max-width: 1440px) {
         background-image: url(/assets/regBR1440.jpg);
     }
+
     @media screen and (max-width: 1024px) {
         background-image: url(/assets/regBR1024.jpg);
     }
+
     @media screen and (max-width: 768px) {
         background-image: none;
         background-color: #d1d5d8;
     }
 }
-.v-input__control {
-    min-height: 45px;
-    font-weight: 500;
-}
+
 .option-select__title {
-    font-family: 'Bert sans';
+    font-family: 'Bert Sans';
 }
 
 input {
@@ -360,31 +289,33 @@ input {
     margin-bottom: 20px;
     width: 100%;
 }
+
 .dateInput .mx-input:hover,
 .dateInput .mx-input:focus {
     border-color: #a3a3a3;
 }
-.v-field--center-affix .v-field__append-inner,
-.v-field--center-affix .v-field__clearable,
-.v-field--center-affix .v-field__prepend-inner {
-    padding-bottom: 0px;
+
+.v-autocomplete .v-field--dirty .v-autocomplete__selection {
+    color: #35383f;
+    font-size: 16px;
+    font-family: 'Bert Sans';
+    font-weight: 500;
 }
+
 .dateInput.mx-datepicker {
     width: 100%;
 }
+
 #login {
     margin-top: 6px;
 }
+
 .dateInput .mx-input {
-    height: 47px;
+    height: 40px;
 }
+
 .dateInput.mx-datepicker svg {
     margin-right: 6px;
-}
-.passwordReg-input input.v-field__input::placeholder,
-.option-select .v-field__input input::placeholder {
-    color: #a3a3a3;
-    opacity: revert;
 }
 
 .v-field--variant-outlined .v-field__outline__end,
@@ -392,21 +323,16 @@ input {
     border: none;
 }
 
-.v-text-field input.v-field__input {
-    padding: 5px 6px 5px 16px;
-}
 </style>
 
 <script setup>
 import { ref, inject, computed } from 'vue';
 import { Button } from '@shared/components/buttons';
-import { Input } from '@shared/components/inputs';
+import { Input, passwordInput } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
 import { Select, regionsDropdown } from '@shared/components/selects';
 
-const visible = ref(false);
-const visibleRe = ref(false);
 const validated = ref(false);
 const form = ref({
     region: null,

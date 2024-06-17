@@ -5,7 +5,7 @@
             :is-commander-loading="isCommanderLoading" :is-members-loading="isMembersLoading" :is-error="isError"
             :is-error-members="isErrorMembers" v-if="headquarter && isError && isErrorMembers && !loading"
             @submit.prevent="changeHeadquarter" @select-emblem="onSelectEmblem" @select-banner="onSelectBanner"
-            @delete-emblem="onDeleteEmblem" @delete-banner="onDeleteBanner" @update-member="onUpdateMember"></FormLocal>
+            @delete-emblem="onDeleteEmblem" @delete-banner="onDeleteBanner" @update-member="onUpdateMember" @delete-member="onDeleteMember"></FormLocal>
     </div>
 </template>
 
@@ -102,6 +102,12 @@ const onUpdateMember = (event, id) => {
         }
     }
 };
+
+const onDeleteMember = (id) => {
+    const memberIndex =  localsStore.members.findIndex((member) => member.id === id);
+    localsStore.members.splice(memberIndex, 1);
+    // members.value[memberIndex].change = true;
+}
 
 const submited = ref(false);
 
