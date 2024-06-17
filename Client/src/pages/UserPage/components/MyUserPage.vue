@@ -53,6 +53,8 @@ import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
+
+const router = useRouter();
 const userStore = useUserStore();
 const currentUser = storeToRefs(userStore);
 const isLoading = storeToRefs(userStore);
@@ -63,7 +65,6 @@ const isAuth = ref(!!localStorage.getItem('jwt_token'));
 const query = new URLSearchParams(window.location.search);
 const payload = JSON.parse(query.get("payload"));
 
-const router = useRouter();
 
 const TokenData = ref({
     silent_token: payload?.token,
@@ -74,13 +75,12 @@ const getAccessToken = async () => {
     try {
         const resp = await HTTP.post('/jwt/vk-login/', TokenData.value)
         localStorage.setItem('jwt_token', resp.data.access);
+
         router.replace({query: null})
     } catch (e) {
         console.log('error:', e)
     }
 }
-
-
 const uploadAva = (imageAva) => {
 
     currentUser.currentUser.value.media.photo = imageAva;

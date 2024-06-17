@@ -6,7 +6,7 @@
             :is-error-members="isErrorMembers" v-if="headquarter && isError && isErrorMembers && !loading"
             @submit.prevent="changeHeadquarter" @select-emblem="onSelectEmblem" @select-banner="onSelectBanner"
             @delete-emblem="onDeleteEmblem" @delete-banner="onDeleteBanner" @update-search-member="onUpdateSearchMember"
-            @update-member="onUpdateMember">
+            @update-member="onUpdateMember"  @delete-member="onDeleteMember">
         </FormCentr>
     </div>
 </template>
@@ -124,6 +124,12 @@ const onUpdateMember = (event, id) => {
         }
     }
 };
+
+const onDeleteMember = (id) => {
+    const memberIndex =  members.value.findIndex((member) => member.id === id);
+    members.value.splice(memberIndex, 1);
+    // members.value[memberIndex].change = true;
+}
 
 /**
  * переменные на удаление фото из БД

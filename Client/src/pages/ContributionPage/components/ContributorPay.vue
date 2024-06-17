@@ -41,7 +41,7 @@
                             @update-educ="updateEduc" @update-detachment="updateDetachment" :district="district"
                             :districts="districts" :reg="reg" :regionals="regionals" :local="local" :locals="locals"
                             :educ="educ" :educ-head="educHead" :detachment="detachment" :detachments="detachments"
-                            :roles="roles.roles.value" :sorted-participants="sortedParticipants" />
+                            :roles="roles.roles.value" :sorted-participants="participants" />
                     </div>
                     <div class="contributor-items">
                         <div class="contributor-sort">
@@ -73,17 +73,22 @@
                                     color="white"></Button>
                             </div>
                         </div>
-                        <div class="contributor-wrapper" v-if="!isLoading">
-                            <template v-for="participant in sortedParticipants" :key="participant.id">
+                        <div class="contributor-wrapper">
+                            <template v-for="participant in participants" :key="participant.id">
                                 <contributionAccessItem :participant="participant"
                                     @select="onToggleSelectCompetition" />
                             </template>
+                            <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                color="blue"></v-progress-circular>
+                            <p v-else-if="!isLoading && !participants.length">
+                                Ничего не найдено
+                            </p>
                         </div>
-                        <v-progress-circular class="circleLoader" v-else indeterminate
-                            color="blue"></v-progress-circular>
-                        <Button @click="participantsVisible += step" v-if="participantsVisible < participants.length"
-                            label="Показать еще"></Button>
-                        <Button @click="participantsVisible -= step" v-else label="Свернуть все"></Button>
+                        <template v-if="users.count && users.count > limit">
+                            <Button @click="next" v-if="participants.length < users.count"
+                                label="Показать еще"></Button>
+                            <Button @click="prev" v-else label="Свернуть все"></Button>
+                        </template>
                     </div>
                 </div>
                 <div class="selectedItems" v-if="selectedPeoples.length > 0">
@@ -128,13 +133,10 @@ const districtsStore = useDistrictsStore();
 const localsStore = useLocalsStore();
 const educationalsStore = useEducationalsStore();
 const squadsStore = useSquadsStore();
+const users = ref({});
+const limit = 12;
 const action = ref('Оплачен');
 const participants = ref([]);
-const participantsVisible = ref(10);
-const pages = ref([
-    { pageTitle: 'Личный кабинет', href: '#' },
-    { pageTitle: 'Членский взнос', href: '/contributorPay' },
-]);
 const actionsList = ref([
     {
         value: 'Оплачен',
@@ -159,18 +161,87 @@ const isError = ref([]);
 const picked = ref(true);
 const checkboxAll = ref(false);
 const levelAccess = ref(7);
-const step = ref(12);
 const name = ref('');
 const selectedPeoples = ref([]);
 const ascending = ref(true);
-const sortBy = ref('alphabetically');
+const sortBy = ref('last_name');
 
-const viewContributorsData = async (search) => {
+const next = () => {
+    let search = '';
+    if (district.value) {
+        search += '?district_headquarter__name=' + district.value;
+    }
+    if (reg.value) {
+        search += '?regional_headquarter__name=' + reg.value;
+    }
+    if (local.value) {
+        search += '?local_headquarter__name=' + local.value;
+    }
+    if (educ.value) {
+        search += '?educational_headquarter__name=' + educ.value;
+    }
+    if (detachment.value) {
+        search = '?detachment__name=' + detachment.value;
+    }
+    viewContributorsData(search, '', 'next');
+};
+
+const prev = () => {
+    let search = '';
+    if (district.value) {
+        search += '?district_headquarter__name=' + district.value;
+    }
+    if (reg.value) {
+        search += '?regional_headquarter__name=' + reg.value;
+    }
+    if (local.value) {
+        search += '?local_headquarter__name=' + local.value;
+    }
+    if (educ.value) {
+        search += '?educational_headquarter__name=' + educ.value;
+    }
+    if (detachment.value) {
+        search = '?detachment__name=' + detachment.value;
+    }
+    viewContributorsData(search, '', '');
+
+};
+
+const sortOptionss = ref([
+    {
+        value: 'last_name',
+        name: 'Алфавиту от А - Я',
+    },
+]);
+
+const viewContributorsData = async (search, pagination, orderLimit) => {
+    // if (isLoading.value) return false;
     try {
         isLoading.value = true;
-        const viewParticipantsResponse = await HTTP.get('/rsousers' + search,);
-        participants.value = viewParticipantsResponse.data.results;
+        let data = [];
+        let url = '/rsousers';
+        if (search) data.push(search);
+        if (orderLimit) data.push('limit=' + orderLimit);
+        else if (!pagination) data.push('limit=' + limit);
+        else if (pagination == 'next')
+            url = users.value.next.replace('http', 'https');
+
+        if (sortBy.value && !pagination)
+            data.push(
+                'ordering=' + (ascending.value ? '' : '-') + sortBy.value,
+            );
+        const viewParticipantsResponse = await HTTP.get(url + data.join('&'));
+
         isLoading.value = false;
+        let response = viewParticipantsResponse.data;
+        if (pagination) {
+            response.results = [
+                ...users.value.results,
+                ...response.results,
+            ];
+        }
+        users.value = response;
+        participants.value = response.results;
         selectedPeoples.value = [];
 
         if (search.indexOf('districts') >= 0) {
@@ -289,19 +360,19 @@ const updateDetachment = (detachmentVal) => {
 
 const select = (event) => {
     selectedPeoples.value = [];
-    // console.log('fffss', checkboxAll.value, event);
-    if (event.target.checked) {
-        // console.log('fffss', checkboxAll.value, event);
-        for (let index in participants.value) {
-            // console.log('arr', selectedPeoples.value);
 
-            sortedParticipants.value[index].selected = true;
-            selectedPeoples.value.push(sortedParticipants.value[index]);
+    if (event.target.checked) {
+
+        for (let index in participants.value) {
+
+
+            participants.value[index].selected = true;
+            selectedPeoples.value.push(participants.value[index]);
         }
     } else {
-        for (let index in sortedParticipants.value) {
-            // console.log('arr', selectedPeoples.value);
-            sortedParticipants.value[index].selected = false;
+        for (let index in participants.value) {
+
+            participants.value[index].selected = false;
         }
     }
 };
@@ -424,6 +495,7 @@ const getUsersByRoles = () => {
             levelAccess.value = 5;
         }
         viewContributorsData(search);
+
     } else {
         levelAccess.value = 0;
         getFiltersData('/districts/', search);
@@ -434,7 +506,7 @@ const onAction = async () => {
     try {
         for (const application of selectedPeoples.value) {
             if (action.value === 'Оплачен') {
-                // console.log('app', application);
+               
                 await ChangeStatus(application.id);
             } else {
                 await ChangeCancelStatus(application.id);
@@ -462,13 +534,7 @@ const onAction = async () => {
     }
 };
 
-const sortOptionss = ref([
-    {
-        value: 'alphabetically',
-        name: 'Алфавиту от А - Я',
-    },
-    { value: 'date_of_birth', name: 'По дате вступления в РСО' },
-]);
+
 
 const searchContributors = (event) => {
     let search = '';
@@ -479,7 +545,7 @@ const searchContributors = (event) => {
         search = '?district_headquarter__name=' + district.value;
     }
     if (reg.value) {
-        search += '?search=' + name.value;
+        search = '?regional_headquarter__name=' + reg.value;
     }
     if (local.value) {
         search = '?local_headquarter__name=' + local.value;
@@ -490,52 +556,31 @@ const searchContributors = (event) => {
     if (detachment.value) {
         search = '?detachment__name=' + detachment.value;
     }
-    if (search && !reg.value) {
+    if (search) {
         search += '&search=' + name.value;
+    }
+
+    if (!name.value && reg.value) {
+        search = '?regional_headquarter__name=' + reg.value;
+    }
+    if (!name.value && district.value) {
+        search = '?district_headquarter__name=' + district.value;
+    }
+    if (!name.value && local.value) {
+        search = '?local_headquarter__name=' + local.value;
+    }
+    if (!name.value && educ.value) {
+        search = '?educational_headquarter__name=' + educ.value;
+    }
+    if (!name.value && detachment.value) {
+        search = '?detachment__name=' + detachment.value;
     }
 
     clearTimeout(timerSearch.value);
     timerSearch.value = setTimeout(() => {
-        viewContributorsData(search);
+        viewContributorsData(search, '', '');
     }, 400);
 };
-
-const sortedParticipants = computed(() => {
-    let tempParticipants = participants.value;
-
-    tempParticipants = tempParticipants.sort((a, b) => {
-        if (sortBy.value == 'alphabetically') {
-            let fa = a.last_name.toLowerCase(),
-                fb = b.last_name.toLowerCase();
-
-            if (fa < fb) {
-                return -1;
-            }
-            if (fa > fb) {
-                return 1;
-            }
-            return 0;
-        } else if (sortBy.value == 'date_of_birth') {
-            let fc = a.date_of_birth,
-                fn = b.date_of_birth;
-
-            if (fc < fn) {
-                return -1;
-            }
-            if (fc > fn) {
-                return 1;
-            }
-            return 0;
-        }
-    });
-
-    if (!ascending.value) {
-        tempParticipants.reverse();
-    }
-
-    tempParticipants = tempParticipants.slice(0, participantsVisible.value);
-    return tempParticipants;
-});
 
 watch(
     () => roles.roles.value,
@@ -595,6 +640,51 @@ watch(
                 (edh) => edh.local_headquarter == locID,
             );
         }
+    },
+);
+
+watch(
+    () => sortBy.value,
+    () => {
+        let search = '';
+        if (district.value) {
+            search += '?district_headquarter__name=' + district.value;
+        }
+        if (reg.value) {
+            search += '?regional_headquarter__name=' + reg.value;
+        }
+        if (local.value) {
+            search += '?local_headquarter__name=' + local.value;
+        }
+        if (educ.value) {
+            search += '?educational_headquarter__name=' + educ.value;
+        }
+        if (detachment.value) {
+            search = '?detachment__name=' + detachment.value;
+        }
+        viewContributorsData(search, '', participants.value.length);
+    },
+);
+watch(
+    () => ascending.value,
+    () => {
+        let search = '';
+        if (district.value) {
+            search += '?district_headquarter__name=' + district.value;
+        }
+        if (reg.value) {
+            search += '?regional_headquarter__name=' + reg.value;
+        }
+        if (local.value) {
+            search += '?local_headquarter__name=' + local.value;
+        }
+        if (educ.value) {
+            search += '?educational_headquarter__name=' + educ.value;
+        }
+        if (detachment.value) {
+            search = '?detachment__name=' + detachment.value;
+        }
+        viewContributorsData(search, '', participants.value.length);
     },
 );
 

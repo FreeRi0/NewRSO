@@ -112,7 +112,7 @@ onMounted(() => {
 const HQandSquads = ref([
     {
         name: 'Местные штабы',
-        link: '/LocalHeadquarters',
+        link: '/local-headquarters',
         click: () => {
             crosspageFilters.addFilter({
                 pageName: 'LocalHeadquarters',
@@ -124,7 +124,7 @@ const HQandSquads = ref([
     },
     {
         name: 'Штабы СО ОО',
-        link: '/AllHeadquarters',
+        link: '/all-headquarters',
         click: () => {
             crosspageFilters.addFilter({
                 pageName: 'AllHeadquarters',
@@ -136,7 +136,7 @@ const HQandSquads = ref([
     },
     {
         name: 'ЛСО',
-        link: '/AllSquads',
+        link: '/all-squads',
         click: () => {
             crosspageFilters.addFilter({
                 pageName: 'AllHeadquarters',

@@ -213,14 +213,14 @@ const getPostitions = async () => {
                 if (resultData.value[index].place == '-')
                 resultData.value[index].place = 'Данные не отправлены';
             } else if(e.request?.status == 400){
-                console.log();
+                // console.log();
                 resultData.value[index].place = 'Показатель в обработке';
             } else {
                 console.log(`!!!\n${index}: getPostions error`, e);
             }
         }
     }
-    console.log(resultData.value);
+    // console.log(resultData.value);
     loading.value = false;
 };
 
