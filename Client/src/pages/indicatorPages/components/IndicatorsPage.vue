@@ -392,7 +392,7 @@
                                             принявшем в нем участие<span>&nbsp;*</span></label>
                                         <Input type="text" v-model:value="link.link" readonly />
                                     </div>
-                                    <div class="form__field" v-if="applicationData.certificate_scans">
+                                    <div class="form__field" v-if="applicationData.certificate_scans !== 'null'">
                                         <label class="form__label">Скан грамот (при наличии)<span>&nbsp;*</span></label>
                                         <div class="file">
                                             <div class="file_name">
