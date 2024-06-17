@@ -1454,7 +1454,9 @@ s
                                                     placeholder="Например, https://vk.com/cco_monolit"
                                                     :maxlength="100"
                                                     v-model:value="link.link"
-                                                    readonly="is_regional_commander"
+                                                    :readonly="
+                                                        is_regional_commander
+                                                    "
                                                 />
                                                 <div
                                                     type="button"
@@ -4226,7 +4228,10 @@ const postParameters = async (id) => {
 const getMeCommander = async () => {
     try {
         const { data } = await HTTP.get(`/rsousers/me_commander/`);
-        if (data.regionalheadquarter_commander && (data.detachment_commander?.id != route.params.id)) {
+        if (
+            data.regionalheadquarter_commander &&
+            data.detachment_commander?.id != route.params.id
+        ) {
             is_regional_commander.value = true;
         }
     } catch (e) {
