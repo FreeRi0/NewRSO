@@ -102,7 +102,7 @@
                     <Button
                         v-else-if="!IsMember && !UserApplication"
                         @click="AddApplication()"
-                        label="Подать заявку"
+                        label="Вступить в отряд"
                         class="AddApplication"
                     ></Button>
 
@@ -227,7 +227,6 @@ const IsTrusted = computed(() => {
     );
 });
 
-// console.log('member', IsMember);
 
 watch(
     () => props.squad,
@@ -255,7 +254,7 @@ const AddApplication = async () => {
             timer: 1500,
         });
         viewDetachments();
-        // console.log('responseee', sendResponse.data);
+
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
