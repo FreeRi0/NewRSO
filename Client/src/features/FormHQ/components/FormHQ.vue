@@ -363,6 +363,11 @@
                                     </Icon>
                                 </template>
                             </v-text-field>
+                            <div class="overlay" v-if="showModal"></div>
+                            <DeleteModal v-show="showModal === true" @close="close" @delete="
+                                deleteMember(props.headquarter.id, deletedId)
+                                ">
+                            </DeleteModal>
                             <MembersList
                                 :items="props.members"
                                 :submited="submited"
@@ -370,6 +375,7 @@
                                 :is-error-members="isErrorMembers"
                                 v-if="members && !isMembersLoading"
                                 @update-member="onUpdateMember"
+                                @delete-member="onDeleteMember"
                             ></MembersList>
                             <v-progress-circular
                                 class="circleLoader"
@@ -945,9 +951,11 @@
 
 <script setup>
 import { ref, computed, onBeforeMount, watch } from 'vue';
+import { HTTP } from '@app/http';
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 // import { Select } from '@shared/components/selects';
+import { DeleteModal } from '@shared/components/dropdown';
 import { SearchSelect } from '@shared/components/selects';
 import { educInstitutionDropdown } from '@shared/components/selects';
 // import { educationalsDropdown } from '@shared/components/selects';
@@ -1025,6 +1033,8 @@ const props = defineProps({
         default: false,
     }
 });
+const showModal = ref(false);
+const deletedId = ref(null);
 
 const getErrorField = (field) => {
     if (
@@ -1033,6 +1043,30 @@ const getErrorField = (field) => {
     )
         return 'Это поле не может быть пустым.';
     else return props.isError[field][0];
+};
+
+const onDeleteMember = (memId) => {
+    showModal.value = true;
+    deletedId.value = memId;
+    // console.log('mm', memId)
+};
+
+const close = () => {
+    showModal.value = false;
+};
+
+const deleteMember = (id, membership_pk) => {
+    try {
+        const responseDelete = HTTP.delete(
+            `/educationals/${id}/members/${membership_pk}/`,
+
+        );
+        showModal.value = false;
+
+        emit('deleteMember', membership_pk);
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
 };
 
 const headquarter = ref(props.headquarter);

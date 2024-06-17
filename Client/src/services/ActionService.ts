@@ -53,6 +53,10 @@ export function putOrganizator(id: number, data: object, org_id: number) {
     return HTTP.put(`/events/${id}/organizers/${org_id}/`, data,);
 }
 
+export function patchOrganizator(id: number, data: object, org_id: number) {
+    return HTTP.patch(`/events/${id}/organizers/${org_id}/`, data,);
+}
+
 export function deleteOrganizator(id: number, org_id: number) {
     return HTTP.delete(`/events/${id}/organizers/${org_id}/`,);
 }

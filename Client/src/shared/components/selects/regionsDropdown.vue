@@ -211,7 +211,8 @@ onMounted(() => {
 .option-select {
     background-color: #ffffff;
     box-sizing: border-box;
-
+    border: none;
+    border: 1px solid #a3a3a3;
     border-radius: 10px;
     box-sizing: border-box;
 
@@ -240,7 +241,7 @@ onMounted(() => {
             width: calc(100% - 10px);
             margin-top: -10px;
             padding: 5px 0;
-            border-bottom: 1px solid #b6b6b6;
+
         }
     }
 
@@ -249,7 +250,10 @@ onMounted(() => {
         flex-wrap: nowrap;
         width: calc(100% - 49px);
         justify-content: space-between;
-        font-family: 'BertSans', sans-serif;
+        font-family: 'Bert Sans';
+        font-weight: 500;
+        font-size: 16px;
+        color: #35383f;
         line-height: 20px;
 
         @media (max-width: 768px) {

@@ -75,12 +75,14 @@ const viewParticipants = async () => {
             const regComReq = await HTTP.get(
 
                 `/regionals/${roleStore.roles.regionalheadquarter_commander?.id}/verifications/`
+
             );
             participantList.value = regComReq.data;
             loading.value = false;
         } else if (roleStore.roles.detachment_commander?.id) {
             const detComReq = await HTTP.get(
                 `/detachments/${roleStore.roles.detachment_commander?.id}/verifications/`,
+
             );
             participantList.value = detComReq.data;
             loading.value = false;

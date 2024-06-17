@@ -2,6 +2,7 @@ import axios from 'axios';
 export const HTTP = axios.create({
      baseURL: 'https://xn--j1ab.xn--d1amqcgedd.xn--p1ai/api/v1/',
     // baseURL: 'https://rso.sprint.1t.ru/api/v1/',
+
     headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -10,14 +11,8 @@ export const HTTP = axios.create({
 
 HTTP.interceptors.request.use(
     (config) => {
-        if (
-            config.url == '/jwt/create/' ||
-            config.url == '/register/' ||
-            config.url == '/exchange-token/' ||
-            config.url == '/jwt/vk-login/' ||
-            config.url == '/jwt/verify/' ||
-            config.url == '/jwt/refresh/'
-        ) {
+
+        if (config.url == '/jwt/create/' || config.url == '/register/' || config.url == '/exchange-token/' || config.url == '/jwt/vk-login/' || config.url == '/jwt/verify/' || config.url == '/jwt/refresh/' || config.url == '/regions/') {
             delete config.headers.Authorization;
         } else {
             config.headers.Authorization =

@@ -6,7 +6,7 @@
             :submited="submited" :is-commander-loading="isCommanderLoading" :is-members-loading="isMembersLoading"
             :is-error="isError" :is-error-members="isErrorMembers" v-if="headquarter && isError && isErrorMembers"
             @submit.prevent="changeHeadquarter" @select-file="onSelectFile" @reset-emblem="onResetEmblem"
-            @select-banner="onSelectBanner" @reset-banner="onResetBanner" @update-member="onUpdateMember"></FormHQ>
+            @select-banner="onSelectBanner" @reset-banner="onResetBanner" @update-member="onUpdateMember"  @delete-member="onDeleteMember"></FormHQ>
     </div>
 </template>
 
@@ -84,6 +84,13 @@ const onUpdateMember = (event, id) => {
         }
     }
 };
+
+const onDeleteMember = (id) => {
+    const memberIndex =  educationalsStore.members.findIndex((member) => member.id === id);
+    educationalsStore.members.splice(memberIndex, 1);
+    // members.value[memberIndex].change = true;
+}
+
 
 const isEmblemChange = ref(false);
 const isBannerChange = ref(false);

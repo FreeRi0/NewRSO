@@ -331,7 +331,7 @@
                                             .link
                                             " readonly />
                                     </div>
-                                    <div class="form__field" v-if="applicationData.certificate_scans">
+                                    <div class="form__field" v-if="applicationData.certificate_scans !== 'null'">
                                         <label class="form__label">Скан грамот (при наличии)<span>&nbsp;*</span></label>
                                         <div class="file">
                                             <div class="file_name">
@@ -340,8 +340,8 @@
                                                     " target="_blank">{{
                                                     applicationData.certificate_scans.slice(
                                                     applicationData.certificate_scans.indexOf(
-                                                    'ksk_',
-                                                    ) + 4,
+                                                    'Q7/',
+                                                    ) + 18,
                                                     )
                                                     }}</a>
                                             </div>
@@ -392,7 +392,7 @@
                                             принявшем в нем участие<span>&nbsp;*</span></label>
                                         <Input type="text" v-model:value="link.link" readonly />
                                     </div>
-                                    <div class="form__field" v-if="applicationData.certificate_scans">
+                                    <div class="form__field" v-if="applicationData.certificate_scans !== 'null'">
                                         <label class="form__label">Скан грамот (при наличии)<span>&nbsp;*</span></label>
                                         <div class="file">
                                             <div class="file_name">
@@ -701,7 +701,7 @@
                         <div class="form__field-group">
                             <div class="form__field-group-top form__field-column-one"
                                 v-for="project in applicationData.q14_labor_projects" :key="project.id">
-                                <div class="form__field-group-left">
+                                <div class="form__field-group-left" v-if="!project.is_verified">
                                     <div class="form__field">
                                         <label class="form__label">Наименование трудового
                                             проекта<span>&nbsp;*</span></label>
@@ -738,7 +738,7 @@
                         <div class="form__field-group">
                             <div class="form__field-group-top form__field-column-one"
                                 v-for="grant in applicationData.grants_data" :key="grant.id">
-                                <div class="form__field-group-left">
+                                <div class="form__field-group-left" v-if="!grant.is_verified">
                                     <div class="form__field">
                                         <label class="form__label">Полное название грантового
                                             проекта<span>&nbsp;*</span></label>
@@ -1021,7 +1021,6 @@ const getApplicationData = async (_id, applicationId) => {
 
         );
         applicationData.value = data;
-        // console.log(applicationData.value);
         if (_id == 5) {
             for (let part in applicationData.value.participants_data) {
                 applicationData.value.participants_data[part].document_name =
@@ -1033,7 +1032,7 @@ const getApplicationData = async (_id, applicationId) => {
         if(idHasCert.includes(_id)){
             applicationData.value.certificate_scans = decodeURI(applicationData.value.certificate_scans);
         }
-
+        console.log(applicationData.value);
     } catch (e) {
         console.log(`getApplicationData error`, e);
     } finally {

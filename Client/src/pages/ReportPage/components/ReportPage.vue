@@ -1454,7 +1454,9 @@ s
                                                     placeholder="Например, https://vk.com/cco_monolit"
                                                     :maxlength="100"
                                                     v-model:value="link.link"
-                                                    :readonly="is_regional_commander"
+                                                    :readonly="
+                                                        is_regional_commander
+                                                    "
                                                 />
                                                 <div
                                                     type="button"
@@ -3646,7 +3648,7 @@ const selectFile = (e, id, field, subfield, index) => {
 const addNewBlock = (sectionIndex, NameSection, fields) => {
     report.value[sectionIndex][NameSection].push(fields);
     if (sectionIndex === 5 || sectionIndex === 17) {
-        report.value[sectionIndex][NameSection].disabledBtn = false;
+        report.value[sectionIndex].disabledBtn = false;
     }
 };
 
@@ -4226,7 +4228,10 @@ const postParameters = async (id) => {
 const getMeCommander = async () => {
     try {
         const { data } = await HTTP.get(`/rsousers/me_commander/`);
-        if (data.regionalheadquarter_commander) {
+        if (
+            data.regionalheadquarter_commander &&
+            data.detachment_commander?.id != route.params.id
+        ) {
             is_regional_commander.value = true;
         }
     } catch (e) {
@@ -4341,6 +4346,12 @@ console.log(report);
 }
 
 .add-block {
+    cursor: pointer;
+    max-width: fit-content;
+    border-bottom: 1px solid #35383f;
+    margin-top: 40px;
+}
+.add-link {
     cursor: pointer;
     max-width: fit-content;
     border-bottom: 1px solid #35383f;
