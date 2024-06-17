@@ -331,7 +331,7 @@
                                             .link
                                             " readonly />
                                     </div>
-                                    <div class="form__field" v-if="applicationData.certificate_scans">
+                                    <div class="form__field" v-if="applicationData.certificate_scans !== 'null'">
                                         <label class="form__label">Скан грамот (при наличии)<span>&nbsp;*</span></label>
                                         <div class="file">
                                             <div class="file_name">
@@ -1032,7 +1032,7 @@ const getApplicationData = async (_id, applicationId) => {
         if(idHasCert.includes(_id)){
             applicationData.value.certificate_scans = decodeURI(applicationData.value.certificate_scans);
         }
-
+        console.log(applicationData.value);
     } catch (e) {
         console.log(`getApplicationData error`, e);
     } finally {
