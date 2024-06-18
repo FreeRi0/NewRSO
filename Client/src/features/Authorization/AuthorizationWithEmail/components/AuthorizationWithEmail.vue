@@ -12,7 +12,7 @@
                 </p>
 
                 <passwordInput placeholder="Пароль" v-model:value="data.password" />
-                <p class="text-right mt-3 mb-8"><router-link to="/RecoveryPass">Забыли пароль?</router-link>
+                <p class="text-right mt-3 mb-8"><router-link to="/recovery-pass">Забыли пароль?</router-link>
                 </p>
 
                 <p class="error" v-if="isError.password">
