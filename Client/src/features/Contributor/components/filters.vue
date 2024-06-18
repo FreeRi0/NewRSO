@@ -133,6 +133,8 @@
     <p>
         Найдено пользователей:
         {{ sortedParticipants.length }}
+        из
+        {{ countParticipants }}
     </p>
 </template>
 <script setup>
@@ -177,6 +179,7 @@ const props = defineProps({
         type: Object,
     },
     sortedParticipants: { type: Array, required: false },
+    countParticipants: { type: Number, required: false },
 });
 
 const roleStore = useRoleStore();

@@ -4,7 +4,7 @@
 
     <template v-else>
         <div class="participants__actions">
-            <div class="participants__actions-select mr-3">
+            <div class="participants__actions-select">
                 <sortByEducation placeholder="Выберите действие" variant="outlined" clearable v-model="action"
                     :options="actionsList"></sortByEducation>
             </div>
@@ -214,7 +214,7 @@ onMounted(async () => {
 }
 
 .checked {
-    margin-bottom: 80px;
+    margin-bottom: 12px;
 }
 
 .participants__actions-select {
