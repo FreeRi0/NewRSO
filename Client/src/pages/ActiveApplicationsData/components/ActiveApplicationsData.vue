@@ -15,14 +15,14 @@
                 <activeApplications />
             </div>
             <div
-                v-else-if="picked == 'Заявка на вступление в отряд' && (roleStore.roles?.regionalheadquarter_commander?.id || roleStore.roles?.detachment_commander?.id)">
+                v-else-if="picked == 'Заявки на вступление в отряд' && (roleStore.roles?.regionalheadquarter_commander?.id || roleStore.roles?.detachment_commander?.id)">
                 <ActiveSquads />
             </div>
             <div
-                v-else-if="picked == 'Заявка на вступление в штаб' && (roleStore.roles?.regionalheadquarter_commander?.id || roleStore.roles?.detachment_commander?.id)">
+                v-else-if="picked == 'Заявки на вступление в штаб' && (roleStore.roles?.regionalheadquarter_commander?.id || roleStore.roles?.detachment_commander?.id)">
                 <active-headquarters />
             </div>
-            <div v-else-if="picked == 'Заявка на участие в мероприятии'">
+            <div v-else-if="picked == 'Заявки на участие в мероприятии'">
                 <ActiveEventsApp />
             </div>
 
