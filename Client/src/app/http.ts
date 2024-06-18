@@ -13,18 +13,19 @@ export const HTTP = axios.create({
 HTTP.interceptors.request.use(
   (config) => {
 
-    if (config.url == '/jwt/create/' || config.url == '/register/' || config.url == '/exchange-token/' || config.url == '/jwt/vk-login/' || config.url == '/jwt/verify/' || config.url == '/jwt/refresh/' || config.url == '/regions/') {
-      delete config.headers.Authorization;
-    } else {
-      config.headers.Authorization =
-        'JWT ' + localStorage.getItem('jwt_token');
-    }
-    return config;
-  },
-  function (error) {
-    console.log('aborted');
-    return error;
-  },
+
+        if (config.url == '/jwt/create/' || config.url == '/register/' || config.url == '/exchange-token/' || config.url == '/jwt/vk-login/' || config.url == '/jwt/verify/' || config.url == '/jwt/refresh/' || config.url == '/regions/' || config.url =='/reset_password/') {
+            delete config.headers.Authorization;
+        } else {
+            config.headers.Authorization =
+                'JWT ' + localStorage.getItem('jwt_token');
+        }
+        return config;
+    },
+    function (error) {
+        console.log('aborted');
+        return error;
+    },
 );
 HTTP.interceptors.response.use(
   (res) => {

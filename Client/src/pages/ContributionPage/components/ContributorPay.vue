@@ -41,7 +41,7 @@
                             @update-educ="updateEduc" @update-detachment="updateDetachment" :district="district"
                             :districts="districts" :reg="reg" :regionals="regionals" :local="local" :locals="locals"
                             :educ="educ" :educ-head="educHead" :detachment="detachment" :detachments="detachments"
-                            :roles="roles.roles.value" :sorted-participants="participants" />
+                            :roles="roles.roles.value" :sorted-participants="participants" :count-participants="count" />
                     </div>
                     <div class="contributor-items">
                         <div class="contributor-sort">
@@ -154,6 +154,7 @@ const reg = ref(null);
 const detachment = ref(null);
 const timerSearch = ref(null);
 const district = ref(null);
+const count = ref(null);
 const local = ref(null);
 const isLoading = ref(false);
 const educ = ref(null);
@@ -184,6 +185,7 @@ const next = () => {
         search = '?detachment__name=' + detachment.value;
     }
     viewContributorsData(search, '', 'next');
+    checkboxAll.value = false;
 };
 
 const prev = () => {
@@ -204,6 +206,7 @@ const prev = () => {
         search = '?detachment__name=' + detachment.value;
     }
     viewContributorsData(search, '', '');
+    checkboxAll.value = false;
 
 };
 
@@ -234,6 +237,7 @@ const viewContributorsData = async (search, pagination, orderLimit) => {
 
         isLoading.value = false;
         let response = viewParticipantsResponse.data;
+        count.value = viewParticipantsResponse.data.count;
         if (pagination) {
             response.results = [
                 ...users.value.results,
@@ -506,7 +510,7 @@ const onAction = async () => {
     try {
         for (const application of selectedPeoples.value) {
             if (action.value === 'Оплачен') {
-               
+
                 await ChangeStatus(application.id);
             } else {
                 await ChangeCancelStatus(application.id);
