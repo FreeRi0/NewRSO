@@ -113,8 +113,10 @@ const onToggleSelectCompetition = (participant, checked) => {
     } else {
         participant.selected = checked;
         selectedParticipantList.value = selectedParticipantList.value.filter(
-            (c) => c.id !== participant.id,
+            (c) => c.user.id !== participant.user.id,
         );
+        checkboxAll.value = false;
+
     }
 };
 

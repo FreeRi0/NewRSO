@@ -38,10 +38,12 @@
                 <div class="contributor-container">
                     <div class="filters">
                         <filters @update-district="updateDistrict" @update-reg="updateReg" @update-local="updateLocal"
-                            @update-educ="updateEduc" @update-detachment="updateDetachment" :district="district"
-                            :districts="districts" :reg="reg" :regionals="regionals" :local="local" :locals="locals"
-                            :educ="educ" :educ-head="educHead" :detachment="detachment" :detachments="detachments"
-                            :roles="roles.roles.value" :sorted-participants="participants" :count-participants="count" />
+                            @update-educ="updateEduc" @update-detachment="updateDetachment"
+                            @update-membership="updateMembership" :district="district" :districts="districts" :reg="reg"
+                            :regionals="regionals" :local="local" :locals="locals" :membership="membership" :educ="educ"
+                            :educ-head="educHead" :detachment="detachment" :detachments="detachments"
+                            :roles="roles.roles.value" :sorted-participants="participants" :count-participants="count"
+                            :is-membership="true" />
                     </div>
                     <div class="contributor-items">
                         <div class="contributor-sort">
@@ -80,7 +82,7 @@
                             </template>
                             <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                 color="blue"></v-progress-circular>
-                            <p v-else-if="!isLoading && !participants.length">
+                            <p class="text-center" v-else-if="!isLoading && !participants.length">
                                 Ничего не найдено
                             </p>
                         </div>
@@ -147,6 +149,7 @@ const actionsList = ref([
 const swal = inject('$swal');
 const regionals = ref([]);
 const districts = ref([]);
+const membership = ref('all');
 const locals = ref([]);
 const educHead = ref([]);
 const detachments = ref([]);
@@ -229,10 +232,19 @@ const viewContributorsData = async (search, pagination, orderLimit) => {
         else if (pagination == 'next')
             url = users.value.next.replace('http', 'https');
 
+        if (membership.value) {
+            if (membership.value == 'paid') {
+                data.push('membership_fee=true');
+            } else if (membership.value == 'notPaid') {
+                data.push('membership_fee=false');
+            }
+        }
         if (sortBy.value && !pagination)
             data.push(
                 'ordering=' + (ascending.value ? '' : '-') + sortBy.value,
             );
+
+
         const viewParticipantsResponse = await HTTP.get(url + data.join('&'));
 
         isLoading.value = false;
@@ -362,6 +374,19 @@ const updateDetachment = (detachmentVal) => {
     detachment.value = detachmentVal;
 };
 
+const updateMembership = (membershipVal) => {
+    let search = '';
+    if (membershipVal == 'paid') {
+        search += '?membership_fee=true';
+    } else if (membershipVal == 'notPaid') {
+        search += '?membership_fee=false';
+    }
+    if (name.value) search += '&search=' + name.value;
+    viewContributorsData(search);
+
+    membership.value = membershipVal;
+}
+
 const select = (event) => {
     selectedPeoples.value = [];
 
@@ -385,11 +410,13 @@ const onToggleSelectCompetition = (participant, checked) => {
     if (checked) {
         participant.selected = checked;
         selectedPeoples.value.push(participant);
+
     } else {
         participant.selected = checked;
         selectedPeoples.value = selectedPeoples.value.filter(
             (c) => c.id !== participant.id,
         );
+        checkboxAll.value = false;
     }
 };
 
@@ -648,6 +675,29 @@ watch(
 );
 
 watch(
+    () => membership.value,
+    () => {
+        let search = '';
+        if (district.value) {
+            search += '?district_headquarter__name=' + district.value;
+        }
+        if (reg.value) {
+            search += '?regional_headquarter__name=' + reg.value;
+        }
+        if (local.value) {
+            search += '?local_headquarter__name=' + local.value;
+        }
+        if (educ.value) {
+            search += '?educational_headquarter__name=' + educ.value;
+        }
+        if (detachment.value) {
+            search = '?detachment__name=' + detachment.value;
+        }
+        viewContributorsData(search, '', participants.value.length);
+    },
+);
+
+watch(
     () => sortBy.value,
     () => {
         let search = '';
@@ -691,6 +741,8 @@ watch(
         viewContributorsData(search, '', participants.value.length);
     },
 );
+
+
 
 onMounted(() => {
     getUsersByRoles();

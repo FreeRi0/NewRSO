@@ -9,6 +9,8 @@ const getAliasObject = (findName: string, path: string): Alias => {
     };
 };
 
+const hash = Math.floor(Math.random() * 90000) + 10000;
+
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [vue()],
@@ -52,28 +54,15 @@ export default defineConfig({
             },
         },
     },
-    // build: {
-    //     rollupOptions: {
-    //       output: {
-    //         entryFileNames: [name] + hash + .js,
-    //         chunkFileNames: [name] + hash + .js,
-    //         assetFileNames: [name] + hash + .[ext]
-    //       }
-    //     }
-    //   },
-      build: {
+    build: {
+
         rollupOptions: {
-          output: {
-            assetFileNames: (assetInfo) => {
-              let extType = assetInfo.name.split('.').at(1);
-              if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
-                extType = 'img';
-              }
-              return `assets/${extType}/[name]-[hash][extname]`;
+
+            output: {
+                entryFileNames: `[name] ${hash}.js`,
+                chunkFileNames: `[name] ${hash}.js`,
+                assetFileNames: `[name] ${hash}.[ext]`,
             },
-            chunkFileNames: 'assets/js/[name]-[hash].js',
-            entryFileNames: 'assets/js/[name]-[hash].js',
-          },
         },
-      },
+    },
 });

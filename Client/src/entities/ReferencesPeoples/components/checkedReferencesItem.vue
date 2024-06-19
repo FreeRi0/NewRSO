@@ -53,35 +53,28 @@
 <script setup>
 
 import { useRoute } from 'vue-router';
-import { ref, watch, inject } from 'vue';
+import { ref } from 'vue';
 
 const props = defineProps({
     participant: {
         type: Object,
+        require: true,
     },
     action: {
         type: String,
         default: '',
     },
 });
+const checked = ref(true);
 
 const emit = defineEmits({
     select: null,
 });
 
-const checked = ref(true);
-
 const updateMembership = (e) => {
-    // console.log('checkeed', checked.value);
-    // emit('change', checked.value, props.participant.user.id);
     emit('select', props.participant, e.target.checked);
 };
 
-
-// const isError = ref([]);
-
-// const selectedPeoples = ref(props.selectedParticipants);
-// const swal = inject('$swal');
 
 </script>
 <style lang="scss" scoped>
