@@ -80,20 +80,22 @@
                 </p>
                 <div class="border_result" v-if="status.best_score > 0">
                     <p class="text_result">
-                        <template v-if="status.left_attempts == 2">
+                        <template v-if="status.left_attempts == 0">
+                            Пользователь: {{ userStore.currentUser.first_name }} {{ userStore.currentUser.last_name }} {{ userStore.currentUser.patronymic_name }}
+                            <br><br>
+                            Ваш лучший результат:
+                            {{ status.best_score }} баллов
+                        </template>
+                        <template v-else>
                             Пользователь: {{ userStore.currentUser.first_name }} {{ userStore.currentUser.last_name }} {{ userStore.currentUser.patronymic_name }}
                             <br><br>
                             Ваш результат:
                             {{ status.best_score }} баллов</template>
-                        <template v-else>
-                            Пользователь: {{ userStore.currentUser.first_name }} {{ userStore.currentUser.last_name }} {{ userStore.currentUser.patronymic_name }}
-                            <br><br>
-                            Ваш лучший результат:
-                            {{ status.best_score }} баллов</template>
+                        
                     </p>
                 </div>
                 <div class="start_button">
-                    <button v-if="status.left_attempts == 2" @click="onStart" :class="{submit_button: !stoppedTest, inactive_button: stoppedTest}">
+                    <button v-if="status.left_attempts > 1" @click="onStart" :class="{submit_button: !stoppedTest, inactive_button: stoppedTest}">
                         Начать тестирование
                     </button>
                     <div v-else class="text_result">
