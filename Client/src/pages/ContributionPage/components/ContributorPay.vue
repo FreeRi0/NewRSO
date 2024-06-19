@@ -378,9 +378,25 @@ const updateDetachment = (detachmentVal) => {
 const updateMembership = (membershipVal) => {
     let search = [];
     if (membershipVal == 'paid') {
-        search.push('membership_fee=true');
+        search = '?membership_fee=true';
     } else if (membershipVal == 'notPaid') {
-        search.push('membership_fee=false');
+        search = '?membership_fee=false';
+    } else {
+        if (district.value) {
+            search = '?district_headquarter__name=' + district.value;
+        }
+        if (reg.value) {
+            search = '?regional_headquarter__name=' + reg.value;
+        }
+        if (local.value) {
+            search = '?local_headquarter__name=' + local.value;
+        }
+        if (educ.value) {
+            search = '?educational_headquarter__name=' + educ.value;
+        }
+        if (detachment.value) {
+            search = '?detachment__name=' + detachment.value;
+        }
     }
     if (district.value) {
         search.push('district_headquarter__name=' + district.value);
