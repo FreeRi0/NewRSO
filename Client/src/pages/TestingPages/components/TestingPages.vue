@@ -178,10 +178,6 @@ const onStart = async () => {
 };
 
 const onRestart = async () => {
-    // attemptSpent.value++;
-    // questions.value = [];
-    // answers = [];
-    // solved.value = false;
     window.location.reload();
 };
 
