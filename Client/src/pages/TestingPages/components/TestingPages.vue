@@ -132,7 +132,7 @@ const questions = ref([]);
 let answers = [];
 const selected = ref(false);
 
-const stoppedTest = ref(true);
+const stoppedTest = ref(false);
 
 const result = ref();
 let indexQuestion = ref(0);
