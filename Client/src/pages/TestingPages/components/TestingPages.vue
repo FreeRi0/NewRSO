@@ -49,6 +49,8 @@
             <p class="main_title">{{ titleName }}</p>
             <div class="border_result">
                 <p class="text_result">
+                    Пользователь: {{ userStore.currentUser.first_name }} {{ userStore.currentUser.last_name }} {{ userStore.currentUser.patronymic_name }}
+                    <br><br>
                     Ваш результат: {{ result.score }} баллов
                 </p>
                 <br />
