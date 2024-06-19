@@ -716,6 +716,29 @@ watch(
 // );
 
 watch(
+    () => membership.value,
+    () => {
+        let search = '';
+        if (district.value) {
+            search += '?district_headquarter__name=' + district.value;
+        }
+        if (reg.value) {
+            search += '?regional_headquarter__name=' + reg.value;
+        }
+        if (local.value) {
+            search += '?local_headquarter__name=' + local.value;
+        }
+        if (educ.value) {
+            search += '?educational_headquarter__name=' + educ.value;
+        }
+        if (detachment.value) {
+            search = '?detachment__name=' + detachment.value;
+        }
+        viewContributorsData(search, '', participants.value.length);
+    },
+);
+
+watch(
     () => sortBy.value,
     () => {
         let search = '';
