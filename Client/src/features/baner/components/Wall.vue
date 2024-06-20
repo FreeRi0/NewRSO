@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <Avatar :avatar="user.avatar?.photo" @upload="uploadAva" @update="updateAva" @delete="deleteAva"
+        <Avatar :avatar="user.media?.photo" @upload="uploadAva" @update="updateAva" @delete="deleteAva"
             :edited="false">
         </Avatar>
 
