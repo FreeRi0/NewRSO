@@ -66,28 +66,14 @@
                     user.user.value.privacy?.privacy_photo === 'all'
                 "
             >
-                <userPhoto
-                    class="photo-item"
-                    :photo="user.user.value.media?.photo1"
-                    :add="false"
-                    @uploadUserPic="uploadUserPic"
-                    @updateUserPic="updateUserPic"
-                ></userPhoto>
-                <userPhoto2
-                    class="photo-item"
-                    :photo="user.user.value.media?.photo2"
-                    :add="false"
-                ></userPhoto2>
-                <userPhoto3
-                    class="photo-item"
-                    :photo="user.user.value.media?.photo3"
-                    :add="false"
-                ></userPhoto3>
-                <userPhoto4
-                    class="photo-item photo-item-last"
-                    :photo="user.user.value.media?.photo4"
-                    :add="false"
-                ></userPhoto4>
+                <user-photo 
+                    v-for="(photo, index) in media" 
+                    :key="index"
+                    class="photo-item" 
+                    :photo="photo" 
+                    :add="false" 
+                    :number="index"
+                />
             </div>
             <div class="mt-8 photoWrapper" v-else>
                 <div class="avatar-preview my_photo__plug photo-item">
@@ -128,12 +114,7 @@
 import { Button } from '@shared/components/buttons';
 import { Wall } from '@features/baner/components';
 import { TextArea } from '@shared/components/inputs';
-import {
-    userPhoto,
-    userPhoto2,
-    userPhoto3,
-    userPhoto4,
-} from '@shared/components/imagescomp';
+import { userPhoto } from '@shared/components/imagescomp';
 
 import { ref, watch, onMounted } from 'vue';
 import { HTTP } from '@app/http';
@@ -160,6 +141,13 @@ const education = ref({});
 const member = ref([]);
 const region = ref({});
 const route = useRoute();
+
+const media = ref({
+    photo1: null,
+    photo2: null,
+    photo3: null,
+    photo4: null,
+});
 
 let id = route.params.id;
 
@@ -204,6 +192,15 @@ watch(
         roleStore.getUserRoles(id);
     },
 );
+
+watch (() => user.user.value.media, (photos)=> {
+    media.value = {
+        photo1: photos?.photo1,
+        photo2: photos?.photo2,
+        photo3: photos?.photo3,
+        photo4: photos?.photo4,
+    }
+}, {deep: true});
 
 onMounted(() => {
     userStore.getUserId(id);
