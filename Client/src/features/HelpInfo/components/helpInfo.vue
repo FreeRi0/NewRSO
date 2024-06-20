@@ -3524,6 +3524,1511 @@
                             </v-list-group>
                         </v-list>
                     </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Учитываются ли в Конкурсе места на региональных трудовых проектах?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        В соответствии с положением Приложение
+                                        2, Пункт 9 – 10, учитываются места
+                                        только на межрегиональных, окружных,
+                                        всероссийских проектах.
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Засчитываются ли в Конкурсе мероприятия штаба студенческих отрядов образовательной организации?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Мероприятия, организованные штабом
+                                        образовательной организации, НЕ
+                                        УЧИТЫВАЮТСЯ в рейтинге.
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Засчитываются ли в Конкурсе победы штаба студенческих отрядов образовательной организации (в которых участвовал отряд в том числе)?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        НЕТ. В зачёт конкурса идут только победы
+                                        отряда и членов ОТРЯДА на
+                                        межрегиональных, окружных и
+                                        всероссийских конкурсах.
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Что подразумевается под «Победы членов отряда в региональных, окружных и всероссийских грантовых конкурсах, направленных на развитие студенческих отрядов»?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Каждый представитель отряда может стать
+                                        участником региональных, окружных и
+                                        всероссийских грантовых конкурсов, подав
+                                        проект на развитие студенческих отрядов.
+                                        Рекомендуем ознакомиться с порядком
+                                        проведения и участия в грантовых
+                                        конкурсах в сети интернет, уточнить в
+                                        региональном отделении РСО.<br />Ссылки
+                                        на всероссийские грантовые площадки:
+                                        <br /><a
+                                            class="accordion_text-link"
+                                            href="https://президентскиегранты.рф/"
+                                            >https://президентскиегранты.рф/</a
+                                        >
+                                        <br /><a
+                                            class="accordion_text-link"
+                                            href="https://фондкультурныхинициатив.рф/"
+                                            >https://фондкультурныхинициатив.рф/</a
+                                        >
+                                        <br /><a
+                                            class="accordion_text-link"
+                                            href="https://fadm.gov.ru/directions/grant/"
+                                            >https://fadm.gov.ru/directions/grant/</a
+                                        >
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Учитывается ли в Конкурсе производственная часть отряда на целине? Или только победы?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Производственная деятельность
+                                        учитывается только в части конкурсов
+                                        трудовых проектов в части показателей
+                                        производственной деятельности. Если вы
+                                        стали лучшими на проекте и получили
+                                        знамя, вымпел, диплом, то данную награду
+                                        вы прикладываете, в остальных случаях
+                                        производственная деятельность не
+                                        учитывается.
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Как поступить в случае возникновения ошибки при загрузке данных во время отправки Отчетности?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Обратитесь в тех.поддержку, вам
+                                        подскажут, в чем конкретно проблема в
+                                        тех или иных пунктах. Тех. поддержка
+                                        сайта:
+                                        <a
+                                            class="accordion_text-link"
+                                            href="https://t.me/LK_RSO_Support"
+                                            >https://t.me/LK_RSO_Support</a
+                                        >
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Учитываются ли в Конкурсе награды за победу и участие в региональных конкурсах РО?
+"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Региональные конкурсы НЕ ИДУТ в зачёт. В
+                                        зачёт идут победы в межрегиональных,
+                                        окружных и всероссийских конкурсах.
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Засчитывается ли в Конкурсе участие в акции «Снежный десант РСО», если участвовал от другого отряда?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Участие в акции «Снежный десант РСО»
+                                        ИДЁТ в зачёт. Данные необходимо подавать
+                                        в пункт 8, Положения, Приложения 2:
+                                        «Участие членов студенческого отряда во
+                                        всероссийских мероприятиях РСО»
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Какие данные подтверждает командир РО, а какие комиссар РО?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Таблица с расчётом показателей, где
+                                        отразили дедлайн по каждому показателю и
+                                        лицо, которое верифицирует результаты:
+                                        <a
+                                            class="accordion_text-link"
+                                            href="https://docs.google.com/spreadsheets/d/1TiQQ2meY9D2-pUmsAlY3DjgpENTo0W-w3WInX44zuRE/edit?gid=0#gid=0"
+                                            >https://docs.google.com/spreadsheets/d/1TiQQ2meY9D2-pUmsAlY3DjgpENTo0W-w3WInX44zuRE/edit?gid=0#gid=0</a
+                                        >
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Что означает «Рейтинг ещё не сформирован»?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Срок (дата) формирования рейтинга ещё не
+                                        наступил(а) и (или) показатель ещё не
+                                        верифицирован. Крайний срок подачи
+                                        данных, можно отследить в таблице с
+                                        расчётом показателей:<a
+                                            class="accordion_text-link"
+                                            href="https://docs.google.com/spreadsheets/d/1TiQQ2meY9D2-pUmsAlY3DjgpENTo0W-w3WInX44zuRE/edit?gid=0#gid=0"
+                                            >https://docs.google.com/spreadsheets/d/1TiQQ2meY9D2-pUmsAlY3DjgpENTo0W-w3WInX44zuRE/edit?gid=0#gid=0</a
+                                        >
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Проф. обучение на ребят (сертификаты) загружать по одному или сразу на всех? Можно ли потом добавлять?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        По итогам профессионального обучения
+                                        выдаются свидетельства о профессии
+                                        рабочего, должности служащего.
+                                        Свидетельство загружается на каждого
+                                        члена отряда индивидуально. Данные можно
+                                        подать единовременно. Также можно
+                                        загружать свидетельства в разное время.
+                                        На сканах свидетельства вся информация
+                                        должна быть четкой и читаемой.
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="После отправки того или иного сертификата на согласование, можно ли добавлять потом еще?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Всё зависит от показателя, если в пункте
+                                        есть «+добавить …», то добавление
+                                        предусмотрено, если такой функции нет,
+                                        то результат не подразумевает
+                                        дополнения.
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Сколько человек в отряде должно быть для того, чтобы место в рейтинге было выше?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Место в конкурсном рейтинге зависит от
+                                        большого количества показателей и
+                                        корректных отчётов по каждому из них,
+                                        место по показателю «Численность членов
+                                        линейного студенческого отряда в
+                                        соответствии с объемом уплаченных
+                                        членских взносов» регламентировано
+                                        Положением о Конкурсе.
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Какие отчетные документы нужно подготовить по итогу конкурса и как/куда их прикреплять? На данный момент показатели в критериях подтверждаются на сайте со страницы ком. состава регионального отделения, готовим ли мы к этому же какой-то отчет для достоверности этих показателей? К какому числу и как?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Все отчетные документы, которые
+                                        необходимо подать расписаны в положении,
+                                        дополнительного (общего) отчета делать
+                                        не нужно. Показатели проверяет и
+                                        подтверждает региональное отделение, а
+                                        после данные будет проверять комиссия
+                                        конкурса.
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Нужно ли прикладывать платежные поручения об оплате членских взносов? 
+"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Нет, членский взнос подтверждает
+                                        командир регионального отделения.
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Нужно ли прикладывать сертификаты о прохождении Школы командных составов командиром и комиссаром отряда?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Для подтверждения вам необходимо сделать
+                                        пост в социальной сети ВКонтакте и
+                                        прикрепить ссылку на пост в данном
+                                        показателе. Данный пункт подтверждает
+                                        региональное отделение. (Смотри видео –
+                                        3:00) Видео:<a
+                                            class="accordion_text-link"
+                                            href="https://vk.com/video-223571150_456239061"
+                                            >https://vk.com/video-223571150_456239061</a
+                                        >
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Нужно ли прикладывать выписку из списка участников мероприятий? Как подтверждается количество участников на мероприятиях (в частности Открытие ТТС): общее фото, например, или достаточно того, что это подтверждает командир РО в критерии?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Смотри видео – 4:22, там показано какие
+                                        данные нужны для заполнения данного
+                                        показателя. Видео:<a
+                                            class="accordion_text-link"
+                                            href="https://vk.com/video-223571150_456239061"
+                                            >https://vk.com/video-223571150_456239061</a
+                                        >
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Какие упоминания в СМИ о деятельности отряда учитываются в рамках конкурса? Учитываются ли публикации на сайте университета, где учатся ребята, университетские газеты, или учитываются только упоминания в СМИ, зарегистрированных в Роскомнадзоре?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Учитываются все упоминания в официальных
+                                        СМИ, это сайты, газеты, журналы, статьи,
+                                        но не учитываются упоминания в
+                                        социальных сетях. Сайт университета,
+                                        района, города подходят для данного
+                                        показателя.
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="Будет ли происходить перерасчёт баллов за тестирование в связи с прибавлением членов отряда или исключением?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Новые участники могут пройти
+                                        тестирование по Охране труда и технике
+                                        безопасности до 30 июня (включительно).
+                                        На основе новых результатов будет
+                                        произведен перерасчёт.
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list>
+                            <v-list-group value="Programming Group">
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-bind="props"
+                                        title="У некоторых регионов заканчивается профобучение 30 июня 2024 г. 30 июня – крайний срок загрузки документов: есть риск, что организация не успеет выдать /направить свидетельства: есть ли вариант переноса срока?"
+                                    >
+                                        <v-icon v-if="!expanded">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                        <v-icon v-else>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 32 32"
+                                                fill="none"
+                                            >
+                                                <circle
+                                                    cx="16"
+                                                    cy="16"
+                                                    r="15.5"
+                                                    transform="rotate(-180 16 16)"
+                                                    fill="#1F7CC0"
+                                                    stroke="#1F7CC0"
+                                                />
+                                                <path
+                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
+                                                    stroke="white"
+                                                    stroke-width="1.5"
+                                                    stroke-miterlimit="10"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                        </v-icon>
+                                    </v-list-item>
+                                </template>
+                                <v-list-group class="accordion_text">
+                                    <template v-slot:activator="{ props }">
+                                        Срок загрузки свидетельств на сайт
+                                        продлили до 15 июля (включительно).
+                                        Также обращаем ваше внимание, что
+                                        поскольку свидетельства действительны
+                                        минимум 3 года, то вы можете загружать
+                                        свидетельства, подтверждающие
+                                        прохождение профессионального обучения
+                                        за 2022, 2023 и 2024 год включительно.
+                                    </template>
+                                </v-list-group>
+                            </v-list-group>
+                        </v-list>
+                    </v-card>
                 </v-expansion-panel-text>
             </v-expansion-panel>
         </v-expansion-panels>
@@ -3598,5 +5103,8 @@ usePage({ isHidden: true });
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+}
+.accordion_text-link {
+    text-decoration: underline;
 }
 </style>
