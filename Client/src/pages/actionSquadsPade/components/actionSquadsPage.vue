@@ -100,7 +100,7 @@
                             <div class="settings-radio">
                                 <input
                                     v-model="actionFormSearch.status"
-                                    value="Завершенные"
+                                    value="Завершенный"
                                     type="radio"
                                     id="close"
                                 />
@@ -837,7 +837,7 @@ const sortOptions = ref([
 }
 .textCaption {
   max-width: 280px;
-  //max-height: 55px;
+  min-height: 55px;
   font-family: Bert Sans;
   font-size: 14px;
   font-weight: 600;
@@ -849,9 +849,9 @@ const sortOptions = ref([
   display: -moz-box;
   -moz-box-orient: vertical;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  //-webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
-  line-clamp: 3;
+  //line-clamp: 3;
 }
 .cardTimeQuantity {
   display: flex;
