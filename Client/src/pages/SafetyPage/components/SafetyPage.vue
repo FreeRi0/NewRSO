@@ -206,8 +206,8 @@
             </iframe>
         </div>
         <div id="testing" class="corpuniver__documents-test"
-            v-if="roleStore.status.is_commander_detachment ||
-                roleStore.status.is_commissar_detachment  || (squadsStore.competitionSquads.find((item) => item.detachment?.id === userStore.currentUser.detachment_id || item.junior_detachment?.id === userStore.currentUser.detachment_id))">
+            v-if="buttonAcces"
+        >
             <p class="text corpuniver__documents-description-test"></p>
             <p class="text corpuniver__documents-description-test">
                 Итоговую аттестацию можно пройти с 15 мая по 30 июня 2024 года (допускается 1 пересдача)
@@ -220,11 +220,23 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import Button from '@shared/components/buttons/Button.vue';
 import { useRoleStore } from '@layouts/store/role';
 import { useUserStore } from '@features/store/index';
 import { useSquadsStore } from '@features/store/squads';
+
+const buttonAcces = computed(() => {
+    return (
+        roleStore.status.is_commander_detachment ||
+        roleStore.status.is_commissar_detachment || 
+            (squadsStore.competitionSquads.find(
+                    (item) => item.detachment?.id === userStore.currentUser.detachment_id || 
+                    item.junior_detachment?.id === userStore.currentUser.detachment_id
+                )
+            )
+        )
+})
 const roleStore = useRoleStore();
 const squadsStore = useSquadsStore();
 const userStore = useUserStore();
