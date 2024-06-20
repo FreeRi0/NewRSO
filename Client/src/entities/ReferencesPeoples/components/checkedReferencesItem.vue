@@ -44,7 +44,7 @@
         <div class="checked__confidant ml-3">
             <input
                 type="checkbox"
-                v-model="checked"
+                v-model="participant.selected"
                 @change="updateMembership"
             />
         </div>
@@ -64,6 +64,10 @@ const props = defineProps({
         type: String,
         default: '',
     },
+    participantIndex: {
+        type: Number,
+        default: 0,
+    }
 });
 const checked = ref(true);
 
@@ -72,7 +76,7 @@ const emit = defineEmits({
 });
 
 const updateMembership = (e) => {
-    emit('select', props.participant, e.target.checked);
+    emit('select', props.participant, false, props.participantIndex);
 };
 
 

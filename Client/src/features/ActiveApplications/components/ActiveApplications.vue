@@ -16,16 +16,17 @@
             </div>
         </div>
         <div class="participants__list">
-            <template v-for="participant in participantList" :key="participant.id">
-                <referenceItem :participant="participant" @select="onToggleSelectCompetition" />
+            <template v-for="(participant, index) in participantList" :key="participant.id">
+                <referenceItem :participant="participant" :participant-index="index" @select="onToggleSelectCompetition" />
             </template>
             <template v-if="selectedParticipantList.length">
                 <p class="text_total">
                     Итого: {{ selectedParticipantList.length }}
                 </p>
 
-                <checkedReferencesItem v-for="participant in selectedParticipantList" :action="action"
-                    :participant="participant" :key="participant.id" @select="onToggleSelectCompetition" />
+                <checkedReferencesItem v-for="(participant, index) in selectedParticipantList" :action="action"
+                    :participant="participant" :participant-index="index"  :key="participant.id"
+                    @select="onToggleSelectCompetition" />
             </template>
         </div>
 
@@ -106,105 +107,111 @@ const select = (event) => {
     }
 };
 
-const onToggleSelectCompetition = (participant, checked) => {
+const onToggleSelectCompetition = (participant, checked, index) => {
     if (checked) {
-        participant.selected = checked;
+        participantList.value[index].selected = true;
         selectedParticipantList.value.push(participant);
+
     } else {
-        participant.selected = checked;
-        selectedParticipantList.value = selectedParticipantList.value.filter(
-            (c) => c.user.id !== participant.user.id,
-        );
-        checkboxAll.value = false;
-
-    }
-};
-
-const confirmApplication = async (id) => {
-    try {
-        const approveReq = await HTTP.post(
-            `rsousers/${id}/verify/`,
-            {},
-        );
-        swal.fire({
-            position: 'top-center',
-            icon: 'success',
-            title: 'успешно',
-            showConfirmButton: false,
-            timer: 1500,
-        });
-    } catch (error) {
-        isError.value = error.response.data;
-        console.error('There was an error!', error);
-        if (isError.value) {
-            swal.fire({
-                position: 'center',
-                icon: 'error',
-                title: `ошибка`,
-                showConfirmButton: false,
-                timer: 2500,
-            });
-        }
-    }
-};
-
-const cancelApplication = async (id) => {
-    try {
-        const rejectReq = await HTTP.delete(
-            `/rsousers/${id}/verify/`,
-            {},
-        );
-        swal.fire({
-            position: 'top-center',
-            icon: 'success',
-            title: 'успешно',
-            showConfirmButton: false,
-            timer: 1500,
-        });
-    } catch (error) {
-        isError.value = error.response.data;
-        console.error('There was an error!', error);
-        if (isError.value) {
-            swal.fire({
-                position: 'center',
-                icon: 'error',
-                title: `ошибка`,
-                showConfirmButton: false,
-                timer: 2500,
-            });
-        }
-    }
-};
-
-const onAction = async () => {
-    try {
-        for (const application of selectedParticipantList.value) {
-            if (action.value === 'Одобрить') {
-
-                await confirmApplication(application.user.id);
-                await userStore.getCountApp();
-            } else {
-                await cancelApplication(application.user.id);
-                await userStore.getCountApp();
+        console.log(index);
+        for (let i in participantList.value) {
+            if (participantList.value[i].user.id == participant.user.id) {
+                participantList.value[i].selected = false;
             }
-
-            participantList.value = participantList.value.filter(
-                (participant) => participant.id != application.user.id,
+        }
+            selectedParticipantList.value.splice(
+                index, 1
             );
-            selectedParticipantList.value =
-                selectedParticipantList.value.filter(
+            checkboxAll.value = false;
+
+        }
+    };
+
+    const confirmApplication = async (id) => {
+        try {
+            const approveReq = await HTTP.post(
+                `rsousers/${id}/verify/`,
+                {},
+            );
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        } catch (error) {
+            isError.value = error.response.data;
+            console.error('There was an error!', error);
+            if (isError.value) {
+                swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: `ошибка`,
+                    showConfirmButton: false,
+                    timer: 2500,
+                });
+            }
+        }
+    };
+
+    const cancelApplication = async (id) => {
+        try {
+            const rejectReq = await HTTP.delete(
+                `/rsousers/${id}/verify/`,
+                {},
+            );
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        } catch (error) {
+            isError.value = error.response.data;
+            console.error('There was an error!', error);
+            if (isError.value) {
+                swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: `ошибка`,
+                    showConfirmButton: false,
+                    timer: 2500,
+                });
+            }
+        }
+    };
+
+    const onAction = async () => {
+        try {
+            for (const application of selectedParticipantList.value) {
+                if (action.value === 'Одобрить') {
+
+                    await confirmApplication(application.user.id);
+                    await userStore.getCountApp();
+                } else {
+                    await cancelApplication(application.user.id);
+                    await userStore.getCountApp();
+                }
+
+                participantList.value = participantList.value.filter(
                     (participant) => participant.id != application.user.id,
                 );
+                selectedParticipantList.value =
+                    selectedParticipantList.value.filter(
+                        (participant) => participant.id != application.user.id,
+                    );
+            }
+            await viewParticipants();
+        } catch (e) {
+            console.log('error action', e);
         }
-        await viewParticipants();
-    } catch (e) {
-        console.log('error action', e);
-    }
-};
+    };
 
-onMounted(async () => {
-    await viewParticipants();
-});
+    onMounted(async () => {
+        await viewParticipants();
+    });
 </script>
 
 <style lang="scss">
