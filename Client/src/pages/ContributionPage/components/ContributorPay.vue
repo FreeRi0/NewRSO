@@ -378,24 +378,24 @@ const updateDetachment = (detachmentVal) => {
 const updateMembership = (membershipVal) => {
     let search = [];
     if (membershipVal == 'paid') {
-        search = '?membership_fee=true';
+        search.push('membership_fee=true');
     } else if (membershipVal == 'notPaid') {
-        search = '?membership_fee=false';
-    } else {
-        if (district.value) {
-            search = '?district_headquarter__name=' + district.value;
+        search.push('membership_fee=false');
+    }
+    if (district.value) {
+            search.push('district_headquarter__name=' + district.value);
         }
         if (reg.value) {
-            search = '?regional_headquarter__name=' + reg.value;
+            search.push('regional_headquarter__name=' + reg.value);
         }
         if (local.value) {
-            search = '?local_headquarter__name=' + local.value;
+            search.push('local_headquarter__name=' + local.value);
         }
         if (educ.value) {
-            search = '?educational_headquarter__name=' + educ.value;
+            search.push('educational_headquarter__name=' + educ.value);
         }
         if (detachment.value) {
-            search = '?detachment__name=' + detachment.value;
+            search.push('detachment__name=' + detachment.value);
         }
     }
     if (district.value) {
@@ -417,7 +417,6 @@ const updateMembership = (membershipVal) => {
     viewContributorsData('?' + search.join('&'));
 
     membership.value = membershipVal;
-}
 
 const select = (event) => {
     selectedPeoples.value = [];
