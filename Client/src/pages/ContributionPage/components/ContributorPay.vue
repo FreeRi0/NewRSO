@@ -733,23 +733,25 @@ watch(
 watch(
     () => membership.value,
     () => {
-        let search = '';
+        let search = [];
         if (district.value) {
-            search += '?district_headquarter__name=' + district.value;
+            search.push('district_headquarter__name=' + district.value);
         }
         if (reg.value) {
-            search += '?regional_headquarter__name=' + reg.value;
+            search.push('regional_headquarter__name=' + reg.value);
         }
         if (local.value) {
-            search += '?local_headquarter__name=' + local.value;
+            search.push('local_headquarter__name=' + local.value);
         }
         if (educ.value) {
-            search += '?educational_headquarter__name=' + educ.value;
+            search.push('educational_headquarter__name=' + educ.value);
         }
         if (detachment.value) {
-            search = '?detachment__name=' + detachment.value;
+            search.push('detachment__name=' + detachment.value);
         }
-        viewContributorsData(search, '', participants.value.length);
+        if (name.value) search.push('&search=' + name.value);
+        viewContributorsData('?' + search.join('&'));
+        // viewContributorsData(search, '', participants.value.length);
     },
 );
 
