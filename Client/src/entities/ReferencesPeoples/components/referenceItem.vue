@@ -58,6 +58,10 @@ const props = defineProps({
         type: Object,
         require: true,
     },
+    participantIndex: {
+        type: Number,
+       default: 0,
+    }
 });
 
 const emit = defineEmits({
@@ -66,7 +70,7 @@ const emit = defineEmits({
 const checked = ref(false);
 
 const updateCheck = (e) => {
-    emit('select', props.participant , e.target.checked);
+    emit('select', props.participant , e.target.checked, props.participantIndex);
 };
 
 watch(
