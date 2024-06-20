@@ -80,16 +80,27 @@
                 </p>
                 <div class="border_result" v-if="status.best_score > 0">
                     <p class="text_result">
-                        <template v-if="status.left_attempts == 2">Ваш результат:
+                        <template v-if="status.left_attempts == 0">
+                            Пользователь: {{ userStore.currentUser.first_name }} {{ userStore.currentUser.last_name }} {{ userStore.currentUser.patronymic_name }}
+                            <br><br>
+                            Ваш лучший результат:
+                            {{ status.best_score }} баллов
+                        </template>
+                        <template v-else>
+                            Пользователь: {{ userStore.currentUser.first_name }} {{ userStore.currentUser.last_name }} {{ userStore.currentUser.patronymic_name }}
+                            <br><br>
+                            Ваш результат:
                             {{ status.best_score }} баллов</template>
-                        <template v-else>Ваш лучший результат:
-                            {{ status.best_score }} баллов</template>
+                        
                     </p>
                 </div>
                 <div class="start_button">
-                    <button @click="onStart" :class="{submit_button: !stoppedTest, inactive_button: stoppedTest}">
+                    <button v-if="status.left_attempts > 1" @click="onStart" :class="{submit_button: !stoppedTest, inactive_button: stoppedTest}">
                         Начать тестирование
                     </button>
+                    <div v-else class="text_result">
+                        Использованы все доступные попытки
+                    </div>
                 </div>
             </div>
             <div v-else-if="status.best_score" class="solved__wrapper">
@@ -114,6 +125,10 @@ import { HTTP } from '@app/http';
 import { ref, inject, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
+import { useUserStore } from '@features/store/index';
+
+const userStore = useUserStore();
+
 const route = useRoute();
 const testName = ref(route.params.name);
 const titleName = ref(
@@ -132,7 +147,7 @@ const questions = ref([]);
 let answers = [];
 const selected = ref(false);
 
-const stoppedTest = ref(true);
+const stoppedTest = ref(false);
 
 const result = ref();
 let indexQuestion = ref(0);
@@ -155,6 +170,7 @@ const onStart = async () => {
         );
         questions.value = data;
     } catch (e) {
+        started.value = false;
         if (e.request.status == 400) {
             swal.fire({
                 position: 'center',
@@ -170,10 +186,6 @@ const onStart = async () => {
 };
 
 const onRestart = async () => {
-    // attemptSpent.value++;
-    // questions.value = [];
-    // answers = [];
-    // solved.value = false;
     window.location.reload();
 };
 
