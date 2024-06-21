@@ -61,7 +61,7 @@ const swal = inject('$swal');
 
 
 const APP_ID = 51915086
-const REDIRECT_URL = 'https://rso.sprint.1t.ru'
+const REDIRECT_URL = 'https://rso.sprint.1t.ru/'
 
 const oneTap = new VKID.OneTap();
 
