@@ -74,13 +74,9 @@ const TokenData = ref({
 const getAccessToken = async () => {
 
     try {
-        if (TokenData.value.silent_token != undefined) {
             const resp = await HTTP.post('/jwt/vk-login/', TokenData.value)
             localStorage.setItem('jwt_token', resp.data.access);
             router.replace({ query: null })
-        } else {
-            console.log('undefined')
-        }
     } catch (e) {
         console.log('error:', e)
     }
