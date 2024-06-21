@@ -1,6 +1,7 @@
 <template>
     <div class="competitions__container">
         <p v-if="loading">Загрузка...</p>
+        <p v-else-if="!applicationsData.length">Список заявок на вступление пуст</p>
 
         <template v-else>
             <div class="competitions__actions">
@@ -32,72 +33,27 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted, inject } from 'vue';
 import { Button } from '@shared/components/buttons';
+import { HTTP } from '@app/http';
 
 import ActiveHeadquartersItem from './ActiveHeadquartersItem.vue';
 import ActiveHeadquartersSelected from './ActiveHeadquartersSelected.vue';
+import { useRoleStore } from '@layouts/store/role';
 
+const roleStore = useRoleStore();
+
+const swal = inject('$swal');
+const isCheckedAll =ref(false);
 const loading = ref(false);
 const action = ref('Одобрить');
 const actionsList = ref(['Одобрить', 'Отклонить']);
-const isCheckedAll = ref(false);
 
 const selectedApplications = ref([]);
 
-const applicationsData = ref([
-    {
-        id:1,
-        user: {
-            id: 1,
-            name: 'Васильев Андрей Владимирович1',
-            date_of_birth: '13.07.2000',
-        },
-        headquarters: {
-            id: 1,
-            name: 'Штаб Кировского РО',
-            photo: '',
-        },
-        selected: false,
-    },
-    {
-        id:2,
-        user: {
-            id: 2,
-            name: 'Васильев Андрей Владимирович2',
-            date_of_birth: '13.07.2000',
-            media:{
-                avatar: '123',
-            }
-        },
-        headquarters: {
-            id: 1,
-            name: 'Штаб Кировского РО',
-            photo: '',
-        },
-        selected: false,
-    },
-    {
-        id:3,
-        user: {
-            id: 3,
-            name: 'Васильев Андрей Владимирович3',
-            date_of_birth: '13.07.2000',
-            media:{
-                avatar: '',
-            }
-        },
-        headquarters: {
-            id: 1,
-            name: 'Штаб Кировского РО',
-            photo: '',
-        },
-        selected: false,
-    },
-])
+const applicationsData = ref([]);
 
 const onChooseAll = () => {
-    console.log(isCheckedAll.value);
     if (isCheckedAll.value){
         for(let application of applicationsData.value){
             application.selected = true;
@@ -123,13 +79,161 @@ const onToggleSelect = (application, isChecked) => {
     }
 };
 
-const onAction = () => {
-    console.log('send');
+const onAction = async () => {
+    if(action.value === 'Одобрить'){
+        try{
+            for(let application of selectedApplications.value){
+                applicationsData.value = applicationsData.value.filter(item => item != application);
+                await HTTP.post(`/${application.headquarters.level}/${application.headquarters.id}/applications/${application.id}/accept/`)
+                selectedApplications.value = [];
+            }
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        } catch(e){
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `Ошибка верификации`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+            console.log(e);
+        }
+        
+    } else {
+        try{
+            for(let application of selectedApplications.value){
+                applicationsData.value = applicationsData.value.filter(item => item != application);
+                await HTTP.delete(`/${application.headquarters.level}/${application.headquarters.id}/applications/${application.id}/accept/`)
+                selectedApplications.value = [];
+            }
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        } catch(e){
+            swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: `Ошибка верификации`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+            console.log(e);
+        }
+        
+    }
 }
 
 watch(selectedApplications, (selectedApplications) => {
     isCheckedAll.value =
-        selectedApplications.length == selectedApplications.value;
+        applicationsData.value.length == selectedApplications.length;
+});
+
+const getApplications = async () => {
+    loading.value = true;
+    try{
+        if(roleStore.roles.detachment_commander){
+            const { data } = await HTTP.get(`/detachments/${roleStore.roles.detachment_commander.id}/applications`);
+            if(data.length){
+                for(let temp of data){
+                    temp.headquarters = roleStore.roles.detachment_commander;
+                    temp.headquarters.level = 'detachments';
+                    applicationsData.value.push(temp);
+                }
+            }
+        }
+    } catch(e){
+        console.log(e);
+    }
+
+    try{
+        if(roleStore.roles.centralheadquarter_commander){
+            const { data } = await HTTP.get(`/centrals/${roleStore.roles.centralheadquarter_commander.id}/applications`);
+            if(data.length){
+                for(let temp of data){
+                    temp.headquarters = roleStore.roles.centralheadquarter_commander;
+                    temp.headquarters.level = 'centrals';
+                    applicationsData.value.push(temp);
+                }
+            }
+        }
+    } catch(e){
+        console.log(e);
+    }
+
+    try{
+        if(roleStore.roles.districtheadquarter_commander){
+            const { data } = await HTTP.get(`/districts/${roleStore.roles.districtheadquarter_commander.id}/applications`);
+            if(data.length){
+                for(let temp of data){
+                    temp.headquarters = roleStore.roles.districtheadquarter_commander;
+                    temp.headquarters.level = 'districts';
+                    applicationsData.value.push(temp);
+                }
+            }
+        }
+    } catch(e){
+        console.log(e);
+    }
+
+    try{
+        if(roleStore.roles.educationalheadquarter_commander){
+            const { data } = await HTTP.get(`/educationals/${roleStore.roles.educationalheadquarter_commander.id}/applications`);
+            if(data.length){
+                for(let temp of data){
+                    temp.headquarters = roleStore.roles.educationalheadquarter_commander;
+                    temp.headquarters.level = 'educationals';
+                    applicationsData.value.push(temp);
+                }
+            }
+        }
+    } catch(e){
+        console.log(e);
+    }
+
+    try{
+        if(roleStore.roles.localheadquarter_commander){
+            const { data } = await HTTP.get(`/locals/${roleStore.roles.localheadquarter_commander.id}/applications`);
+            if(data.length){
+                for(let temp of data){
+                    temp.headquarters = roleStore.roles.localheadquarter_commander;
+                    temp.headquarters.level = 'locals';
+                    applicationsData.value.push(temp);
+                }
+            }
+        }
+    } catch(e){
+        console.log(e);
+    }
+
+    try{
+        if(roleStore.roles.regionalheadquarter_commander){
+            const { data } = await HTTP.get(`/regionals/${roleStore.roles.regionalheadquarter_commander.id}/applications`);
+            if(data.length){
+                for(let temp of data){
+                    temp.headquarters = roleStore.roles.regionalheadquarter_commander;
+                    temp.headquarters.level = 'regionals';
+                    applicationsData.value.push(temp);
+                }
+            }
+        }
+    } catch(e){
+        console.log(e);
+    }
+    loading.value = false;
+}
+
+onMounted(async () => {
+    await getApplications(); 
 });
 </script>
 
