@@ -188,7 +188,7 @@ const searchLSO = (val) => {
   clearTimeout(timer.value);
 
   timer.value = setTimeout(() => {
-      squadsStore.getFilteredSquads(name.value);
+      squadsStore.searchSquads(name.value);
   }, 200);
 };
 
