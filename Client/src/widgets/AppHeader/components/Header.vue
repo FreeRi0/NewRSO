@@ -430,12 +430,16 @@ watch(
 );
 
 onMounted(() => {
-    userStore.getCountApp();
+    if (localStorage.getItem('jwt_token') !== null) {
+        userStore.getCountApp();
+    } else {
+        return
+    }
+
 });
 </script>
 
 <style lang="scss">
-
 .header {
     display: grid;
     grid-template-columns: 146px 1.3fr 1fr;
