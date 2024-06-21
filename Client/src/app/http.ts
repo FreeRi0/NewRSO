@@ -40,7 +40,8 @@ HTTP.interceptors.response.use(
             await updateToken();
           }
           else {
-            window.location.href = 'http://localhost:8080/'
+            console.log('401')
+            // window.location.href = 'http://localhost:8080/'
           }
         } catch (error) {
           return Promise.reject(error);
