@@ -27,23 +27,23 @@ let id = route.params.id;
 const HQandSquads = ref([
     {
         name: 'Окружные штабы',
-        link: '/DistrictHeadquarters',
+        link: '/district-headquarters',
     },
     {
         name: 'Региональные штабы',
-        link: '/RegionalHeadquarters',
+        link: '/regional-headquarters',
     },
     {
         name: 'Местные штабы',
-        link: '/LocalHeadquarters',
+        link: '/local-headquarters',
     },
     {
         name: 'Штабы СО ОО',
-        link: '/AllHeadquarters',
+        link: '/all-headquarters',
     },
     {
         name: 'ЛСО',
-        link: '/AllSquads',
+        link: '/all-squads',
     },
 ]);
 </script>
