@@ -24,7 +24,7 @@
                             <img src="@/app/assets/icon/calendar.svg" alt="calendar" />
                             <time datetime="2022-09-10">{{
                                 headquarter.founding_date
-                                }}</time>
+                            }}</time>
                         </li>
                     </ul>
                 </div>
@@ -75,9 +75,9 @@
                                 .centralheadquarter_commander ||
                             IsTrusted)
                     " class="hq-data__link" :to="{
-                            name: 'EditHQ',
-                            params: { id: headquarter.id },
-                        }">Редактировать штаб</router-link>
+                        name: 'EditHQ',
+                        params: { id: headquarter.id },
+                    }">Редактировать штаб</router-link>
                     <Button v-else-if="!IsMember && !UserApplication" @click="AddApplication('educationals')"
                         label="Подать заявку" class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
@@ -167,9 +167,22 @@
                                 .centralheadquarter_commander ||
                             IsTrusted)
                     " class="hq-data__link" :to="{
-                            name: 'FormLocal',
-                            params: { id: localHeadquarter.id },
-                        }">Редактировать штаб</router-link>
+                        name: 'FormLocal',
+                        params: { id: localHeadquarter.id },
+                    }">Редактировать штаб</router-link>
+                    <Button v-else-if="!IsMember && !UserApplication" @click="AddApplication('locals')"
+                        label="Подать заявку" class="AddApplication"></Button>
+                    <div v-else-if="UserApplication" class="d-flex">
+                        <div class="user-data__link mr-2">
+                            Заявка на рассмотрении
+                        </div>
+                        <Button @click="DeleteApplication('locals')" label="Удалить заявку"
+                            class="AddApplication"></Button>
+                    </div>
+
+                    <div v-else-if="IsMember" class="user-data__link">
+                        Вы участник
+                    </div>
                 </div>
             </div>
         </div>
@@ -242,9 +255,22 @@
                                 .centralheadquarter_commander ||
                             IsTrusted)
                     " class="hq-data__link" :to="{
-                            name: 'FormDH',
-                            params: { id: districtHeadquarter.id },
-                        }">Редактировать штаб</router-link>
+                        name: 'FormDH',
+                        params: { id: districtHeadquarter.id },
+                    }">Редактировать штаб</router-link>
+                    <Button v-else-if="!IsMember && !UserApplication" @click="AddApplication('districts')"
+                        label="Подать заявку" class="AddApplication"></Button>
+                    <div v-else-if="UserApplication" class="d-flex">
+                        <div class="user-data__link mr-2">
+                            Заявка на рассмотрении
+                        </div>
+                        <Button @click="DeleteApplication('districts')" label="Удалить заявку"
+                            class="AddApplication"></Button>
+                    </div>
+
+                    <div v-else-if="IsMember" class="user-data__link">
+                        Вы участник
+                    </div>
                 </div>
             </div>
         </div>
@@ -320,9 +346,22 @@
                                 .centralheadquarter_commander ||
                             IsTrusted)
                     " class="hq-data__link" :to="{
-                            name: 'EditingOfRS',
-                            params: { id: regionalHeadquarter.id },
-                        }">Редактировать штаб</router-link>
+                        name: 'EditingOfRS',
+                        params: { id: regionalHeadquarter.id },
+                    }">Редактировать штаб</router-link>
+                    <Button v-else-if="!IsMember && !UserApplication" @click="AddApplication('regionals')"
+                        label="Подать заявку" class="AddApplication"></Button>
+                    <div v-else-if="UserApplication" class="d-flex">
+                        <div class="user-data__link mr-2">
+                            Заявка на рассмотрении
+                        </div>
+                        <Button @click="DeleteApplication('regionals')" label="Удалить заявку"
+                            class="AddApplication"></Button>
+                    </div>
+
+                    <div v-else-if="IsMember" class="user-data__link">
+                        Вы участник
+                    </div>
                 </div>
             </div>
         </div>
@@ -354,7 +393,7 @@
                         <li class="Squad-HQ__date-central">
                             <time datetime="2022-09-10">{{
                                 centralHeadquarter.rso_founding_congress_date
-                            }}
+                                }}
                                 — дата первого Учредительного Съезда РСО</time>
                         </li>
                         <li class="hq-data__participant-counter">
@@ -403,8 +442,9 @@
                         (userId === centralHeadquarter?.commander?.id ||
                             IsTrusted)
                     " class="hq-data__link" :to="{
-                            name: 'FormCentral',
-                        }">Редактировать штаб</router-link>
+                        name: 'FormCentral',
+                    }">Редактировать штаб</router-link>
+
                 </div>
             </div>
         </div>
@@ -430,7 +470,7 @@ const edict = ref({});
 const applications = ref([]);
 const isError = ref([]);
 const data = ref({});
-
+const route = useRoute();
 const roles = storeToRefs(roleStore);
 let educComId = roles.roles.value.educationalheadquarter_commander;
 let regionComId = roles.roles.value.regionalheadquarter_commander;
@@ -479,7 +519,14 @@ const props = defineProps({
 });
 const swal = inject('$swal');
 const viewApplications = async (name) => {
-    let id = route.params.id;
+    try {
+        let id = route.params.id;
+        const resp = await HTTP.get(`/${name}/${id}/applications/`)
+        applications.value = resp.data;
+    } catch (e) {
+        console.log(e)
+    }
+
     await HTTP.get(`/${name}/${id}/applications/`)
         .then((response) => {
             applications.value = response.data;
@@ -582,6 +629,9 @@ watch(
 );
 onMounted(() => {
     viewApplications('educationals');
+    viewApplications('locals');
+    viewApplications('regionals');
+    viewApplications('districts');
     aboutEduc();
 });
 
