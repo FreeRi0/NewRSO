@@ -10,9 +10,7 @@
                 то&nbsp;сообщите нам об&nbsp;этом по&nbsp;адресу электронной
                 почты:
                 <a href="mailto:rso.login@yandex.ru">rso.login@yandex.ru</a> или
-                <a href="https://t.me/LK_RSO_Support"
-                    >напишите нам в&nbsp;Телеграм</a
-                >.
+                <a href="https://t.me/LK_RSO_Support">напишите нам в&nbsp;Телеграм</a>.
             </p>
             <!-- <div
                 v-if="
@@ -65,45 +63,39 @@ const positionsStore = usePositionsStore();
 const isVerify = ref(false);
 const competition_pk = 1;
 
-const updateToken = async () => {
-    try {
-        const resp = await HTTP.post('/jwt/refresh/', {
-            refresh: localStorage.getItem('refresh_token'),
-        });
-        localStorage.setItem('jwt_token', resp.data.access);
-        localStorage.setItem('refresh_token', resp.data.refresh);
-    } catch (e) {
-        console.error('Error refreshing token:', e);
-    }
-};
+// const updateToken = async () => {
+//     try {
+//         const resp = await HTTP.post('/jwt/refresh/', {
+//             refresh: localStorage.getItem('refresh_token'),
+//         });
+//         localStorage.setItem('jwt_token', resp.data.access);
+//         localStorage.setItem('refresh_token', resp.data.refresh);
+//     } catch (e) {
+//         console.error('Error refreshing token:', e);
+//     }
+// };
 
-const verifyToken = async () => {
-    try {
-        const resp = await HTTP.post('/jwt/verify/', {
-            token: localStorage.getItem('jwt_token'),
-        });
-        if (resp.status == 200) {
-            userStore.getUser(currentUser);
-            roleStore.getRoles();
-            positionsStore.getPositions();
-            squadsStore.getAreas();
-            roleStore.getUserParticipantsStatus(competition_pk);
-        } else if (resp.status == 401) {
-            updateToken();
-        }
-    } catch (error) {
-        console.log(error);
-    }
-};
+// const verifyToken = async () => {
+//     try {
+//         const resp = await HTTP.post('/jwt/verify/', {
+//             token: localStorage.getItem('jwt_token'),
+//         });
+
+
+//     } catch (error) {
+//         console.log(error);
+//     }
+// };
 
 const squadsStore = useSquadsStore();
 const currentUser = storeToRefs(userStore);
 
 onMounted(() => {
-    setTimeout(() => {
-        verifyToken();
-    }, 1000);
-
+    userStore.getUser(currentUser);
+    roleStore.getRoles();
+    positionsStore.getPositions();
+    squadsStore.getAreas();
+    roleStore.getUserParticipantsStatus(competition_pk);
     regionsStore.getRegions();
 });
 </script>
@@ -118,7 +110,7 @@ onMounted(() => {
     line-height: 22px;
     color: #35383f;
 
-    & > a {
+    &>a {
         text-decoration: underline;
     }
 

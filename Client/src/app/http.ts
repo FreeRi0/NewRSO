@@ -24,3 +24,58 @@ HTTP.interceptors.request.use(
         return error;
     },
 );
+
+HTTP.interceptors.response.use(
+    (res) => {
+      return res;
+    },
+    async (err) => {
+      const originalConfig = err.config;
+        await verifyToken()
+      if (err.response) {
+        // Access Token was expired
+        if (err.response.status === 401 && !originalConfig._retry) {
+          originalConfig._retry = true;
+
+          try {
+            await updateToken();
+            return HTTP(originalConfig);
+          } catch (error) {
+            return Promise.reject(error);
+          }
+        }
+
+        if (err.response.status === 403 && err.response.data) {
+
+          return Promise.reject(err.response.data);
+        }
+      }
+
+      return Promise.reject(err);
+    }
+  );
+
+  const verifyToken = async () => {
+    try {
+        const resp = await HTTP.post('/jwt/verify/', {
+            token: localStorage.getItem('jwt_token'),
+        });
+
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+  const updateToken = async () => {
+    try {
+        const resp = await HTTP.post('/jwt/refresh/', {
+            refresh: localStorage.getItem('refresh_token'),
+        });
+        localStorage.setItem('jwt_token', resp.data.access);
+        localStorage.setItem('refresh_token', resp.data.refresh);
+    } catch (e) {
+        console.error('Error refreshing token:', e);
+    }
+};
+
