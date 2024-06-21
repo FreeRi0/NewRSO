@@ -2,20 +2,20 @@
     <div class="competition__item">
         <div class="competition__content">
             <div class="horizontal-item__wrapper">
-                <div class="containerHorizontal">
-                    <img
-                        v-if="application.user?.media?.avatar"
-                        class="competition__avatar_circle"
-                        :src="application.user.media.avatar"
-                        alt="avatar"
-                    />
+                <img
+                    v-if="application.user?.media?.avatar"
+                    class="competition__avatar_circle"
+                    :src="application.user.media.avatar"
+                     alt="avatar"
+                />
 
-                    <div
-                        v-else
-                        class="competition__avatar_circle blue-bg"
-                    ></div>
-                    <p class="cursor_redirect" @click="clickIndicator(report)">
-                        {{ application.user.name }}
+                <div
+                    v-else
+                    class="competition__avatar_circle blue-bg"
+                ></div>
+                <div class="containerHorizontal">
+                    <p class="cursor_redirect" @click="clickUser(application.user)">
+                        {{ application.user.first_name }} {{ application.user.last_name }} {{ application.user.patronymic_name }}
                     </p>
                 </div>
             </div>
