@@ -60,6 +60,7 @@ HTTP.interceptors.response.use(
         const resp = await HTTP.post('/jwt/verify/', {
             token: localStorage.getItem('jwt_token'),
         });
+        console.log(resp.data);
 
 
     } catch (error) {
