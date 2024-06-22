@@ -49,6 +49,8 @@
             <p class="main_title">{{ titleName }}</p>
             <div class="border_result">
                 <p class="text_result">
+                    Пользователь: {{ userStore.currentUser.first_name }} {{ userStore.currentUser.last_name }} {{ userStore.currentUser.patronymic_name }}
+                    <br><br>
                     Ваш результат: {{ result.score }} баллов
                 </p>
                 <br />
@@ -106,6 +108,8 @@
             <div v-else-if="status.best_score" class="solved__wrapper">
                 <div class="border_result_finally">
                     <p class="text_result">
+                        Пользователь: {{ userStore.currentUser.first_name }} {{ userStore.currentUser.last_name }} {{ userStore.currentUser.patronymic_name }}
+                        <br><br>
                         Ваш лучший результат: {{ status.best_score }} баллов
                     </p>
                     <br />
