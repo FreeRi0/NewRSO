@@ -38,10 +38,11 @@
                 <div class="contributor-container">
                     <div class="filters">
                         <filters @update-district="updateDistrict" @update-reg="updateReg" @update-local="updateLocal"
-                            @update-educ="updateEduc" @update-detachment="updateDetachment" :district="district"
-                            :districts="districts" :reg="reg" :regionals="regionals" :local="local" :locals="locals"
-                            :educ="educ" :educ-head="educHead" :detachment="detachment" :detachments="detachments"
-                            :roles="roles.roles.value" :sorted-participants="participants" />
+                            @update-educ="updateEduc" @update-detachment="updateDetachment"
+                            @search-detachment="searchDetachment" :district="district" :districts="districts" :reg="reg"
+                            :regionals="regionals" :local="local" :locals="locals" :educ="educ" :educ-head="educHead"
+                            :detachment="detachment" :detachments="detachments" :roles="roles.roles.value"
+                            :sorted-participants="participants" />
                     </div>
                     <div class="contributor-items">
                         <div class="contributor-sort">
@@ -296,6 +297,42 @@ const updateDistrict = (districtVal) => {
     district.value = districtVal;
 };
 
+const searchDetachment = (name) => {
+    let search = [];
+    // if (district.value) {
+    //     search.push('district_headquarter__name=' + district.value);
+    // }
+    if (name && reg.value) {
+        search.push('regional_headquarter__name=' + reg.value + '&' + 'search=' + name);
+    }
+    // if (local.value) {
+    //     search.push('local_headquarter__name=' + local.value);
+    // }
+    // if (educ.value) {
+    //     search.push('educational_headquarter__name=' + educ.value);
+    // }
+    // if (name) search.push('search=' + name);
+
+    if (!name && reg.value) {
+        search.push('regional_headquarter__name=' + reg.value);
+    }
+    if (!name && district.value) {
+        search.push('district_headquarter__name=' + district.value);
+    }
+    if (!name && local.value) {
+        search.push('local_headquarter__name=' + local.value);
+    }
+    if (!name && educ.value) {
+        search.push('educational_headquarter__name=' + educ.value);
+    }
+    if (!name && detachment.value) {
+        search.push('detachment__name=' + detachment.value);
+    }
+    getFiltersData('/detachments/', '?' + search.join('&'));
+
+    detachment.value = name;
+}
+
 const updateReg = (regVal) => {
     let search = '';
     if (regVal) {
@@ -506,7 +543,7 @@ const onAction = async () => {
     try {
         for (const application of selectedPeoples.value) {
             if (action.value === 'Оплачен') {
-               
+
                 await ChangeStatus(application.id);
             } else {
                 await ChangeCancelStatus(application.id);

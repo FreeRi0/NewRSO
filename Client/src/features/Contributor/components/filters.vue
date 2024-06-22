@@ -121,6 +121,7 @@
                     placeholder="Выберите отряд"
                     v-model="detachmentRef"
                     @update:value="updateDetachment"
+                    @search-detachment="searchDetachment"
                     class="mb-2 region-input"
                     :items="detachments"
                     :SortDropdown="true"
@@ -199,6 +200,7 @@ const emit = defineEmits([
     'updateLocal',
     'updateEduc',
     'updateDetachment',
+    'searchDetachment',
 ]);
 
 const updateDistrict = () => {
@@ -213,6 +215,10 @@ const updateLocal = () => {
 
 const updateEduc = () => {
     emit('updateEduc', educRef.value);
+};
+
+const searchDetachment = (name) => {
+    emit('searchDetachment', name);
 };
 
 const updateDetachment = () => {
