@@ -24,7 +24,7 @@
                             <img src="@/app/assets/icon/calendar.svg" alt="calendar" />
                             <time datetime="2022-09-10">{{
                                 headquarter.founding_date
-                            }}</time>
+                                }}</time>
                         </li>
                     </ul>
                 </div>
@@ -78,13 +78,14 @@
                         name: 'EditHQ',
                         params: { id: headquarter.id },
                     }">Редактировать штаб</router-link>
-                    <Button v-else-if="!IsMember && !UserApplication" @click="AddApplication('educationals')"
-                        label="Подать заявку" class="AddApplication"></Button>
+                    <Button v-else-if="!IsMember && !UserApplication"
+                        @click="AddApplication('educationals', props.headquarter.id)" label="Подать заявку"
+                        class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
                         <div class="user-data__link mr-2">
                             Заявка на рассмотрении
                         </div>
-                        <Button @click="DeleteApplication('educationals')" label="Удалить заявку"
+                        <Button @click="DeleteApplication('educationals', props.headquarter.id)" label="Удалить заявку"
                             class="AddApplication"></Button>
                     </div>
 
@@ -170,13 +171,14 @@
                         name: 'FormLocal',
                         params: { id: localHeadquarter.id },
                     }">Редактировать штаб</router-link>
-                    <Button v-else-if="!IsMember && !UserApplication" @click="AddApplication('locals')"
-                        label="Подать заявку" class="AddApplication"></Button>
+                    <Button v-else-if="!IsMember && !UserApplication"
+                        @click="AddApplication('locals', props.localHeadquarter.id)" label="Подать заявку"
+                        class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
                         <div class="user-data__link mr-2">
                             Заявка на рассмотрении
                         </div>
-                        <Button @click="DeleteApplication('locals')" label="Удалить заявку"
+                        <Button @click="DeleteApplication('locals', props.localHeadquarter.id)" label="Удалить заявку"
                             class="AddApplication"></Button>
                     </div>
 
@@ -258,14 +260,15 @@
                         name: 'FormDH',
                         params: { id: districtHeadquarter.id },
                     }">Редактировать штаб</router-link>
-                    <Button v-else-if="!IsMember && !UserApplication" @click="AddApplication('districts')"
-                        label="Подать заявку" class="AddApplication"></Button>
+                    <Button v-else-if="!IsMember && !UserApplication"
+                        @click="AddApplication('districts', props.districtHeadquarter.id)" label="Подать заявку"
+                        class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
                         <div class="user-data__link mr-2">
                             Заявка на рассмотрении
                         </div>
-                        <Button @click="DeleteApplication('districts')" label="Удалить заявку"
-                            class="AddApplication"></Button>
+                        <Button @click="DeleteApplication('districts', props.districtHeadquarter.id)"
+                            label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
                     <div v-else-if="IsMember" class="user-data__link">
@@ -349,14 +352,15 @@
                         name: 'EditingOfRS',
                         params: { id: regionalHeadquarter.id },
                     }">Редактировать штаб</router-link>
-                    <Button v-else-if="!IsMember && !UserApplication" @click="AddApplication('regionals')"
-                        label="Подать заявку" class="AddApplication"></Button>
+                    <Button v-else-if="!IsMember && !UserApplication"
+                        @click="AddApplication('regionals', props.regionalHeadquarter.id)" label="Подать заявку"
+                        class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
                         <div class="user-data__link mr-2">
                             Заявка на рассмотрении
                         </div>
-                        <Button @click="DeleteApplication('regionals')" label="Удалить заявку"
-                            class="AddApplication"></Button>
+                        <Button @click="DeleteApplication('regionals', props.regionalHeadquarter.id)"
+                            label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
                     <div v-else-if="IsMember" class="user-data__link">
@@ -393,7 +397,7 @@
                         <li class="Squad-HQ__date-central">
                             <time datetime="2022-09-10">{{
                                 centralHeadquarter.rso_founding_congress_date
-                                }}
+                            }}
                                 — дата первого Учредительного Съезда РСО</time>
                         </li>
                         <li class="hq-data__participant-counter">
@@ -526,14 +530,6 @@ const viewApplications = async (name) => {
     } catch (e) {
         console.log(e)
     }
-
-    await HTTP.get(`/${name}/${id}/applications/`)
-        .then((response) => {
-            applications.value = response.data;
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
 };
 const aboutEduc = async () => {
     try {
@@ -562,9 +558,8 @@ const IsMember = computed(() => {
 });
 
 
-const AddApplication = async (name) => {
+const AddApplication = async (name, id) => {
     try {
-        let id = props.headquarter.id;
         const sendResponse = await HTTP.post(`/${name}/${id}/apply/`,
             data.value,
         );
@@ -591,9 +586,8 @@ const AddApplication = async (name) => {
     }
 };
 
-const DeleteApplication = async (name) => {
+const DeleteApplication = async (name, id) => {
     try {
-        let id = props.headquarter.id;
         const delApplyResp = await HTTP.delete(`/${name}/${id}/apply/`);
         swal.fire({
             position: 'top-center',
@@ -628,10 +622,21 @@ watch(
     },
 );
 onMounted(() => {
-    viewApplications('educationals');
-    viewApplications('locals');
-    viewApplications('regionals');
-    viewApplications('districts');
+    if (props.headquarter) {
+        viewApplications('educationals');
+    }
+
+    if (props.localHeadquarter) {
+        viewApplications('locals');
+    }
+    if (props.regionalHeadquarter) {
+        viewApplications('regionals');
+    }
+
+    if (props.districtHeadquarter) {
+        viewApplications('districts');
+    }
+
     aboutEduc();
 });
 
