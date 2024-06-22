@@ -15,6 +15,7 @@
             @uploadUserPic="uploadUserPic"
             v-if="add"
             :photo="photo"
+            :number="props.number"
         ></uploadPhoto>
     </div>
 </template>
@@ -22,16 +23,18 @@
 import { uploadPhoto } from '.';
 const emit = defineEmits(['uploadUserPic, updateUserPic']);
 
-const uploadUserPic = (userPic) => {
-    emit('uploadUserPic', userPic);
+const uploadUserPic = (userPic, number) => {
+    console.log(userPic);
+    emit('uploadUserPic', userPic, number);
 };
-
 
 const props = defineProps({
     photo: String,
     add: Boolean,
+    number: Number,
 });
 </script>
+
 <style lang="scss">
 .my_photo__edit {
     display: grid;

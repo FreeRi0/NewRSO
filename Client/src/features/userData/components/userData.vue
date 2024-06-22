@@ -20,25 +20,22 @@
         </form>
 
         <div class="mt-8 photoWrapper">
-            <userPhoto class="photo-item" :photo="media.photo1" :add="true" @uploadUserPic="uploadUserPic1"></userPhoto>
-            <userPhoto2 class="photo-item" :photo="media.photo2" :add="true" @uploadUserPic="uploadUserPic2">
-            </userPhoto2>
-            <userPhoto3 class="photo-item" :photo="media.photo3" :add="true" @uploadUserPic="uploadUserPic3">
-            </userPhoto3>
-            <userPhoto4 class="photo-item" :photo="media.photo4" :add="true" @uploadUserPic="uploadUserPic4">
-            </userPhoto4>
+                <user-photo 
+                    v-for="(photo, index) in media" 
+                    :key="index"
+                    class="photo-item" 
+                    :photo="photo" 
+                    :add="true" 
+                    :number="index"
+                    @uploadUserPic="uploadUserPic"
+                />
         </div>
     </div>
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
 import { TextArea } from '@shared/components/inputs';
-import {
-    userPhoto,
-    userPhoto2,
-    userPhoto3,
-    userPhoto4,
-} from '@shared/components/imagescomp';
+import { userPhoto } from '@shared/components/imagescomp';
 import { ref, onMounted, inject, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useUserStore } from '@features/store/index';
@@ -47,11 +44,7 @@ const emit = defineEmits(['uploadUserPic, updateUserPic', 'changeBio']);
 
 const userStore = useUserStore();
 let currentUser = storeToRefs(userStore);
-// const updateUserPic = (userPic) => {
-//     console.log('photoUpdate', userPic);
-//     user.value.media.photo1 = userPic;
 
-// };
 let bio = ref(currentUser.currentUser.value.bio);
 
 const media = ref({
@@ -68,31 +61,18 @@ const counterSquad = computed(() => {
     return bio.value?.length || 0;
 });
 
-const uploadUserPic1 = (userPic) => {
-    media.value.photo1 = userPic;
-    emit('uploadUserPic', userPic);
-};
-
-const uploadUserPic2 = (userPic) => {
-    media.value.photo2 = userPic;
-    emit('uploadUserPic', userPic);
-};
-
-const uploadUserPic3 = (userPic) => {
-    media.value.photo3 = userPic;
-    emit('uploadUserPic', userPic);
-};
-
-const uploadUserPic4 = (userPic) => {
-    media.value.photo4 = userPic;
-    emit('uploadUserPic', userPic);
+const uploadUserPic = (userPic, index) => {
+    getMedia();
+    media.value[index] = userPic;
+    emit('uploadUserPic', userPic, index);
 };
 
 const getMedia = async () => {
     try {
         const response = await HTTP.get(`/rsousers/me/media/`,);
         media.value = response.data;
-        // console.log(response.data);
+        delete media.value.banner;
+        delete media.value.photo;
     } catch (error) {
         console.log('failed ' + error);
     }
@@ -157,6 +137,10 @@ onMounted(() => {
         width: 280px;
         margin-right: 0;
     }
+}
+
+.photo-item:last-child{
+    margin-right: 0px;
 }
 
 .photoWrapper {
