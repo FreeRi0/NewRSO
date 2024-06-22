@@ -23,10 +23,4 @@ export {
     squadBanner,
     squadPhotos,
     uploadPhoto,
-    uploadPhoto2,
-    uploadPhoto3,
-    uploadPhoto4,
-    userPhoto2,
-    userPhoto3,
-    userPhoto4,
 };
