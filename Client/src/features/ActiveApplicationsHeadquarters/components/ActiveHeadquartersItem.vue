@@ -39,7 +39,7 @@
                     <div v-else class="competition__avatar_circle blue-bg"></div>
 
                     <div class="containerHorizontal">
-                        <p class="cursor_redirect" @click="clickDetacment(detachmentData.id)">
+                        <p class="cursor_redirect">
                             {{ application.headquarters.name }}
                         </p>
                     </div>
@@ -52,6 +52,10 @@
 
 <script setup>
 import { ref, watch } from 'vue';
+
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const props = defineProps({
     application: {
@@ -67,6 +71,15 @@ const props = defineProps({
 const emit = defineEmits({
     select: null,
 });
+
+const clickUser = (user) => {
+    router.push({
+        name: 'PersonalDataUser',
+        params: {
+            id: user.id,
+        },
+    });
+}
 
 const isChecked = ref(false);
 
