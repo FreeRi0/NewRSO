@@ -89,7 +89,7 @@
                             class="AddApplication"></Button>
                     </div>
 
-                    <div v-else-if="IsMember" class="AddAplication">
+                    <div v-else-if="IsMember" class="AddApplication">
                         Вы участник
                     </div>
 
@@ -175,14 +175,14 @@
                         @click="AddApplication('locals', props.localHeadquarter.id)" label="Вступить в штаб"
                         class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
-                        <div class="AddAplication mr-2">
+                        <div class="AddApplication mr-2">
                             Заявка на рассмотрении
                         </div>
                         <Button @click="DeleteApplication('locals', props.localHeadquarter.id)" label="Удалить заявку"
                             class="AddApplication"></Button>
                     </div>
 
-                    <div v-else-if="IsMember" class="AddAplication">
+                    <div v-else-if="IsMember" class="AddApplication">
                         Вы участник
                     </div>
                 </div>
@@ -264,14 +264,14 @@
                         @click="AddApplication('districts', props.districtHeadquarter.id)" label="Вступить в штаб"
                         class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
-                        <div class="AddAplication mr-2">
+                        <div class="AddApplication mr-2">
                             Заявка на рассмотрении
                         </div>
                         <Button @click="DeleteApplication('districts', props.districtHeadquarter.id)"
                             label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
-                    <div v-else-if="IsMember" class="AddAplication">
+                    <div v-else-if="IsMember" class="AddApplication">
                         Вы участник
                     </div>
                 </div>
@@ -356,14 +356,14 @@
                         @click="AddApplication('regionals', props.regionalHeadquarter.id)" label="Вступить в штаб"
                         class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
-                        <div class="AddAplication mr-2">
+                        <div class="AddApplication mr-2">
                             Заявка на рассмотрении
                         </div>
                         <Button @click="DeleteApplication('regionals', props.regionalHeadquarter.id)"
                             label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
-                    <div v-else-if="IsMember" class="AddAplication">
+                    <div v-else-if="IsMember" class="AddApplication">
                         Вы участник
                     </div>
                 </div>
@@ -598,9 +598,6 @@ const AddApplication = async (name, id) => {
         if (props.districtHeadquarter) {
             viewApplications('districts');
         }
-        // if (props.centralHeadquarter) {
-        //     viewApplications('centrals');
-        // }
 
     } catch (error) {
 
@@ -641,9 +638,6 @@ const DeleteApplication = async (name, id) => {
         if (props.districtHeadquarter) {
             viewApplications('districts');
         }
-        // if (props.centralHeadquarter) {
-        //     viewApplications('centrals');
-        // }
     } catch (error) {
 
         console.error('There was an error!', error);
@@ -709,24 +703,24 @@ watch(
 
 
 onMounted(() => {
-    // if (props.headquarter) {
-    //     viewApplications('educationals');
-    // }
+    if (props.headquarter) {
+        viewApplications('educationals');
+    }
 
-    // if (props.localHeadquarter) {
-    //     viewApplications('locals');
-    // }
-    // if (props.regionalHeadquarter) {
-    //     viewApplications('regionals');
-    // }
+    if (props.localHeadquarter) {
+        viewApplications('locals');
+    }
+    if (props.regionalHeadquarter) {
+        viewApplications('regionals');
+    }
 
-    // if (props.districtHeadquarter) {
-    //     viewApplications('districts');
-    // }
+    if (props.districtHeadquarter) {
+        viewApplications('districts');
+    }
 
-    // if (props.centralHeadquarter) {
-    //     viewApplications('centrals');
-    // }
+    if (props.centralHeadquarter) {
+        viewApplications('centrals');
+    }
 
     aboutEduc();
 });
@@ -816,6 +810,7 @@ const copyL = () => {
 
 .AddApplication {
     margin: 0px;
+    display: block;
     border-radius: 10px;
     background: #39bfbf;
     align-self: end;
