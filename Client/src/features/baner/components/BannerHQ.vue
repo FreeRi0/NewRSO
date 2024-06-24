@@ -24,7 +24,7 @@
                             <img src="@/app/assets/icon/calendar.svg" alt="calendar" />
                             <time datetime="2022-09-10">{{
                                 headquarter.founding_date
-                                }}</time>
+                            }}</time>
                         </li>
                     </ul>
                 </div>
@@ -79,17 +79,17 @@
                         params: { id: headquarter.id },
                     }">Редактировать штаб</router-link>
                     <Button v-else-if="!IsMember && !UserApplication"
-                        @click="AddApplication('educationals', props.headquarter.id)" label="Подать заявку"
+                        @click="AddApplication('educationals', props.headquarter.id)" label="Вступить в штаб"
                         class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
-                        <div class="user-data__link mr-2">
+                        <div class="AddApplication mr-2">
                             Заявка на рассмотрении
                         </div>
                         <Button @click="DeleteApplication('educationals', props.headquarter.id)" label="Удалить заявку"
                             class="AddApplication"></Button>
                     </div>
 
-                    <div v-else-if="IsMember" class="user-data__link">
+                    <div v-else-if="IsMember" class="AddAplication">
                         Вы участник
                     </div>
 
@@ -172,17 +172,17 @@
                         params: { id: localHeadquarter.id },
                     }">Редактировать штаб</router-link>
                     <Button v-else-if="!IsMember && !UserApplication"
-                        @click="AddApplication('locals', props.localHeadquarter.id)" label="Подать заявку"
+                        @click="AddApplication('locals', props.localHeadquarter.id)" label="Вступить в штаб"
                         class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
-                        <div class="user-data__link mr-2">
+                        <div class="AddAplication mr-2">
                             Заявка на рассмотрении
                         </div>
                         <Button @click="DeleteApplication('locals', props.localHeadquarter.id)" label="Удалить заявку"
                             class="AddApplication"></Button>
                     </div>
 
-                    <div v-else-if="IsMember" class="user-data__link">
+                    <div v-else-if="IsMember" class="AddAplication">
                         Вы участник
                     </div>
                 </div>
@@ -261,17 +261,17 @@
                         params: { id: districtHeadquarter.id },
                     }">Редактировать штаб</router-link>
                     <Button v-else-if="!IsMember && !UserApplication"
-                        @click="AddApplication('districts', props.districtHeadquarter.id)" label="Подать заявку"
+                        @click="AddApplication('districts', props.districtHeadquarter.id)" label="Вступить в штаб"
                         class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
-                        <div class="user-data__link mr-2">
+                        <div class="AddAplication mr-2">
                             Заявка на рассмотрении
                         </div>
                         <Button @click="DeleteApplication('districts', props.districtHeadquarter.id)"
                             label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
-                    <div v-else-if="IsMember" class="user-data__link">
+                    <div v-else-if="IsMember" class="AddAplication">
                         Вы участник
                     </div>
                 </div>
@@ -353,17 +353,17 @@
                         params: { id: regionalHeadquarter.id },
                     }">Редактировать штаб</router-link>
                     <Button v-else-if="!IsMember && !UserApplication"
-                        @click="AddApplication('regionals', props.regionalHeadquarter.id)" label="Подать заявку"
+                        @click="AddApplication('regionals', props.regionalHeadquarter.id)" label="Вступить в штаб"
                         class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
-                        <div class="user-data__link mr-2">
+                        <div class="AddAplication mr-2">
                             Заявка на рассмотрении
                         </div>
                         <Button @click="DeleteApplication('regionals', props.regionalHeadquarter.id)"
                             label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
-                    <div v-else-if="IsMember" class="user-data__link">
+                    <div v-else-if="IsMember" class="AddAplication">
                         Вы участник
                     </div>
                 </div>
@@ -397,7 +397,7 @@
                         <li class="Squad-HQ__date-central">
                             <time datetime="2022-09-10">{{
                                 centralHeadquarter.rso_founding_congress_date
-                            }}
+                                }}
                                 — дата первого Учредительного Съезда РСО</time>
                         </li>
                         <li class="hq-data__participant-counter">
@@ -571,6 +571,21 @@ const AddApplication = async (name, id) => {
             timer: 1500,
         });
 
+        if (props.headquarter) {
+            viewApplications('educationals');
+        }
+
+        if (props.localHeadquarter) {
+            viewApplications('locals');
+        }
+        if (props.regionalHeadquarter) {
+            viewApplications('regionals');
+        }
+
+        if (props.districtHeadquarter) {
+            viewApplications('districts');
+        }
+
     } catch (error) {
 
         console.error('There was an error!', error);
@@ -596,6 +611,20 @@ const DeleteApplication = async (name, id) => {
             showConfirmButton: false,
             timer: 1500,
         });
+        if (props.headquarter) {
+            viewApplications('educationals');
+        }
+
+        if (props.localHeadquarter) {
+            viewApplications('locals');
+        }
+        if (props.regionalHeadquarter) {
+            viewApplications('regionals');
+        }
+
+        if (props.districtHeadquarter) {
+            viewApplications('districts');
+        }
     } catch (error) {
 
         console.error('There was an error!', error);
@@ -619,6 +648,7 @@ watch(
             return;
         }
         aboutEduc();
+
     },
 );
 onMounted(() => {
