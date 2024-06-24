@@ -63,21 +63,31 @@ const positionsStore = usePositionsStore();
 const isVerify = ref(false);
 const competition_pk = 1;
 
+const updateToken = async () => {
+    try {
+        const resp = await HTTP.post('/jwt/refresh/', {
+            refresh: localStorage.getItem('refresh_token'),
+        });
+        localStorage.setItem('jwt_token', resp.data.access);
+        localStorage.setItem('refresh_token', resp.data.refresh);
+    } catch (e) {
+        console.error('Error refreshing token:', e);
+    }
+};
+
 const verifyToken = async () => {
     try {
-        if (localStorage.getItem('jwt_token') !== null) {
-            const resp = await HTTP.post('/jwt/verify/', {
-                token: localStorage.getItem('jwt_token'),
-            });
-
+        const resp = await HTTP.post('/jwt/verify/', {
+            token: localStorage.getItem('jwt_token'),
+        });
+        if (resp.status == 200) {
             userStore.getUser(currentUser);
             roleStore.getRoles();
             positionsStore.getPositions();
             squadsStore.getAreas();
             roleStore.getUserParticipantsStatus(competition_pk);
-        }
-        else {
-            return
+        } else if (resp.status == 401) {
+            updateToken();
         }
     } catch (error) {
         console.log(error);
@@ -88,7 +98,11 @@ const squadsStore = useSquadsStore();
 const currentUser = storeToRefs(userStore);
 
 onMounted(() => {
-    verifyToken()
+    setTimeout(() => {
+        verifyToken();
+
+    }, 1000);
+
     regionsStore.getRegions();
 });
 </script>
