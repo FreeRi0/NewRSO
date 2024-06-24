@@ -24,7 +24,7 @@
                             <img src="@/app/assets/icon/calendar.svg" alt="calendar" />
                             <time datetime="2022-09-10">{{
                                 headquarter.founding_date
-                            }}</time>
+                                }}</time>
                         </li>
                     </ul>
                 </div>
@@ -397,7 +397,7 @@
                         <li class="Squad-HQ__date-central">
                             <time datetime="2022-09-10">{{
                                 centralHeadquarter.rso_founding_congress_date
-                                }}
+                            }}
                                 — дата первого Учредительного Съезда РСО</time>
                         </li>
                         <li class="hq-data__participant-counter">
@@ -571,21 +571,6 @@ const AddApplication = async (name, id) => {
             timer: 1500,
         });
 
-        if (props.headquarter) {
-            viewApplications('educationals');
-        }
-
-        if (props.localHeadquarter) {
-            viewApplications('locals');
-        }
-        if (props.regionalHeadquarter) {
-            viewApplications('regionals');
-        }
-
-        if (props.districtHeadquarter) {
-            viewApplications('districts');
-        }
-
     } catch (error) {
 
         console.error('There was an error!', error);
@@ -611,20 +596,6 @@ const DeleteApplication = async (name, id) => {
             showConfirmButton: false,
             timer: 1500,
         });
-        if (props.headquarter) {
-            viewApplications('educationals');
-        }
-
-        if (props.localHeadquarter) {
-            viewApplications('locals');
-        }
-        if (props.regionalHeadquarter) {
-            viewApplications('regionals');
-        }
-
-        if (props.districtHeadquarter) {
-            viewApplications('districts');
-        }
     } catch (error) {
 
         console.error('There was an error!', error);
@@ -651,6 +622,27 @@ watch(
 
     },
 );
+watch(
+    () => applications.value,
+
+    (newApp) => {
+        if (props.headquarter) {
+            viewApplications('educationals');
+        }
+
+        if (props.localHeadquarter) {
+            viewApplications('locals');
+        }
+        if (props.regionalHeadquarter) {
+            viewApplications('regionals');
+        }
+
+        if (props.districtHeadquarter) {
+            viewApplications('districts');
+        }
+
+    }
+)
 onMounted(() => {
     if (props.headquarter) {
         viewApplications('educationals');
