@@ -6,7 +6,7 @@
                 v-model="checked"
                 @change="updateCheck"
             />
-            <!-- :value="participant.user" -->
+
         </div>
         <router-link
             class="horizontallso-item__wrapper"
@@ -23,7 +23,7 @@
                 />
                 <img src="@app/assets/user-avatar.png" alt="photo" v-else />
             </div>
-            <!-- <pre>{{ participant.user.avatar?.photo }}</pre> -->
+
             <div class="containerHorizontal">
                 <div class="d-flex">
                     <p class="horizontallso-item__list-full">
@@ -56,7 +56,12 @@ import { HTTP } from '@app/http';
 const props = defineProps({
     participant: {
         type: Object,
+        require: true,
     },
+    participantIndex: {
+        type: Number,
+       default: 0,
+    }
 });
 
 const emit = defineEmits({
@@ -65,7 +70,7 @@ const emit = defineEmits({
 const checked = ref(false);
 
 const updateCheck = (e) => {
-    emit('select', props.participant, e.target.checked);
+    emit('select', props.participant , e.target.checked, props.participantIndex);
 };
 
 watch(

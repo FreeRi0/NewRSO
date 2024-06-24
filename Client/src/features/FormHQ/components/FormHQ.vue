@@ -364,7 +364,7 @@
                                 </template>
                             </v-text-field>
                             <div class="overlay" v-if="showModal"></div>
-                            <DeleteModal v-show="showModal === true" @close="close" @delete="
+                            <DeleteModal :is-squad="false" v-show="showModal === true" @close="close" @delete="
                                 deleteMember(props.headquarter.id, deletedId)
                                 ">
                             </DeleteModal>

@@ -44,7 +44,7 @@
         <div class="checked__confidant ml-3">
             <input
                 type="checkbox"
-                v-model="checked"
+                v-model="participant.selected"
                 @change="updateMembership"
             />
         </div>
@@ -53,35 +53,32 @@
 <script setup>
 
 import { useRoute } from 'vue-router';
-import { ref, watch, inject } from 'vue';
+import { ref } from 'vue';
 
 const props = defineProps({
     participant: {
         type: Object,
+        require: true,
     },
     action: {
         type: String,
         default: '',
     },
+    participantIndex: {
+        type: Number,
+        default: 0,
+    }
 });
+const checked = ref(true);
 
 const emit = defineEmits({
     select: null,
 });
 
-const checked = ref(true);
-
 const updateMembership = (e) => {
-    // console.log('checkeed', checked.value);
-    // emit('change', checked.value, props.participant.user.id);
-    emit('select', props.participant, e.target.checked);
+    emit('select', props.participant, false, props.participantIndex);
 };
 
-
-// const isError = ref([]);
-
-// const selectedPeoples = ref(props.selectedParticipants);
-// const swal = inject('$swal');
 
 </script>
 <style lang="scss" scoped>

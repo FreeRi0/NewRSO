@@ -39,10 +39,13 @@
                     <div class="filters">
                         <filters @update-district="updateDistrict" @update-reg="updateReg" @update-local="updateLocal"
                             @update-educ="updateEduc" @update-detachment="updateDetachment"
-                            @search-detachment="searchDetachment" :district="district" :districts="districts" :reg="reg"
-                            :regionals="regionals" :local="local" :locals="locals" :educ="educ" :educ-head="educHead"
-                            :detachment="detachment" :detachments="detachments" :roles="roles.roles.value"
-                            :sorted-participants="participants" />
+
+
+                            @update-membership="updateMembership" @search-detachment="searchDetachment" :district="district" :districts="districts" :reg="reg"
+                            :regionals="regionals" :local="local" :locals="locals" :membership="membership" :educ="educ"
+                            :educ-head="educHead" :detachment="detachment" :detachments="detachments"
+                            :roles="roles.roles.value" :sorted-participants="participants" :count-participants="count"
+                            :is-membership="true" />
                     </div>
                     <div class="contributor-items">
                         <div class="contributor-sort">
@@ -81,7 +84,7 @@
                             </template>
                             <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                                 color="blue"></v-progress-circular>
-                            <p v-else-if="!isLoading && !participants.length">
+                            <p class="text-center" v-else-if="!isLoading && !participants.length">
                                 Ничего не найдено
                             </p>
                         </div>
@@ -148,6 +151,7 @@ const actionsList = ref([
 const swal = inject('$swal');
 const regionals = ref([]);
 const districts = ref([]);
+const membership = ref('all');
 const locals = ref([]);
 const educHead = ref([]);
 const detachments = ref([]);
@@ -155,6 +159,7 @@ const reg = ref(null);
 const detachment = ref(null);
 const timerSearch = ref(null);
 const district = ref(null);
+const count = ref(null);
 const local = ref(null);
 const isLoading = ref(false);
 const educ = ref(null);
@@ -185,6 +190,7 @@ const next = () => {
         search = '?detachment__name=' + detachment.value;
     }
     viewContributorsData(search, '', 'next');
+    checkboxAll.value = false;
 };
 
 const prev = () => {
@@ -205,6 +211,7 @@ const prev = () => {
         search = '?detachment__name=' + detachment.value;
     }
     viewContributorsData(search, '', '');
+    checkboxAll.value = false;
 
 };
 
@@ -227,14 +234,24 @@ const viewContributorsData = async (search, pagination, orderLimit) => {
         else if (pagination == 'next')
             url = users.value.next.replace('http', 'https');
 
+        // if (membership.value) {
+        //     if (membership.value == 'paid') {
+        //         data.push('membership_fee=true');
+        //     } else if (membership.value == 'notPaid') {
+        //         data.push('membership_fee=false');
+        //     }
+        // }
         if (sortBy.value && !pagination)
             data.push(
                 'ordering=' + (ascending.value ? '' : '-') + sortBy.value,
             );
+
+
         const viewParticipantsResponse = await HTTP.get(url + data.join('&'));
 
         isLoading.value = false;
         let response = viewParticipantsResponse.data;
+        count.value = viewParticipantsResponse.data.count;
         if (pagination) {
             response.results = [
                 ...users.value.results,
@@ -340,6 +357,7 @@ const updateReg = (regVal) => {
     } else if (levelAccess.value < 2) {
         search = '?district_headquarter__name=' + district.value;
     }
+
     if (name.value) search += '&search=' + name.value;
     viewContributorsData(search);
     getFiltersData('/locals/', search);
@@ -395,6 +413,34 @@ const updateDetachment = (detachmentVal) => {
     detachment.value = detachmentVal;
 };
 
+const updateMembership = (membershipVal) => {
+    let search = [];
+    if (membershipVal == 'paid') {
+        search.push('membership_fee=true');
+    } else if (membershipVal == 'notPaid') {
+        search.push('membership_fee=false');
+    }
+    if (district.value) {
+        search.push('district_headquarter__name=' + district.value);
+    }
+    if (reg.value) {
+        search.push('regional_headquarter__name=' + reg.value);
+    }
+    if (local.value) {
+        search.push('local_headquarter__name=' + local.value);
+    }
+    if (educ.value) {
+        search.push('educational_headquarter__name=' + educ.value);
+    }
+    if (detachment.value) {
+        search.push('detachment__name=' + detachment.value);
+    }
+    if (name.value) search.push('&search=' + name.value);
+    viewContributorsData('?' + search.join('&'));
+
+    membership.value = membershipVal;
+}
+
 const select = (event) => {
     selectedPeoples.value = [];
 
@@ -418,11 +464,13 @@ const onToggleSelectCompetition = (participant, checked) => {
     if (checked) {
         participant.selected = checked;
         selectedPeoples.value.push(participant);
+
     } else {
         participant.selected = checked;
         selectedPeoples.value = selectedPeoples.value.filter(
             (c) => c.id !== participant.id,
         );
+        checkboxAll.value = false;
     }
 };
 
@@ -680,6 +728,31 @@ watch(
     },
 );
 
+// watch(
+//     () => membership.value,
+//     () => {
+//         let search = [];
+//         if (district.value) {
+//             search.push('district_headquarter__name=' + district.value);
+//         }
+//         if (reg.value) {
+//             search.push('regional_headquarter__name=' + reg.value);
+//         }
+//         if (local.value) {
+//             search.push('local_headquarter__name=' + local.value);
+//         }
+//         if (educ.value) {
+//             search.push('educational_headquarter__name=' + educ.value);
+//         }
+//         if (detachment.value) {
+//             search.push('detachment__name=' + detachment.value);
+//         }
+//         if (name.value) search.push('&search=' + name.value);
+//         viewContributorsData('?' + search.join('&'));
+//         // viewContributorsData(search, '', participants.value.length);
+//     },
+// );
+
 watch(
     () => sortBy.value,
     () => {
@@ -724,6 +797,8 @@ watch(
         viewContributorsData(search, '', participants.value.length);
     },
 );
+
+
 
 onMounted(() => {
     getUsersByRoles();

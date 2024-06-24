@@ -129,6 +129,7 @@ const emit = defineEmits(['uploadUserPic, updateUserPic']);
 
 const props = defineProps({
     photo: String,
+    number: Number,
 });
 
 const dialog = ref(false);
@@ -138,41 +139,27 @@ const isError = ref([]);
 const swal = inject('$swal');
 const cropper = ref();
 
-const userPhotos = ref({
-    photo1: null,
-});
-
-// const uploadUserPic = (userPic) => {
-//     console.log('photo', userPic);
-//     emit('uploadUserPic', userPic);
-//     console.log('uploadUserPic');
-// };
-//
-// const updateUserPic = (userPic) => {
-//     console.log('photoUpdate', userPic);
-//     emit('updateUserPic', userPic);
-//     console.log('updateUserPic');
-// };
+const userPhotos = ref({});
 
 const cropImage = () => {
     if (cropper.value) {
         const { canvas } = cropper.value.getResult();
         preview.value = canvas.toDataURL('image/jpeg')
         canvas.toBlob((blob) => {
-            userPhotos.value.photo1 = new File([blob], "photo1.jpg", { type: "image/jpeg" })
+            userPhotos.value.photo = new File([blob], `${props.number}.jpg`, { type: "image/jpeg" })
         }, 'image/jpeg');
     }
 };
 
 const selectFile = (event) => {
-    userPhotos.value.photo1 = event.target.files[0];
-    preview.value = URL.createObjectURL(userPhotos.value.photo1);
+    userPhotos.value.photo = event.target.files[0];
+    preview.value = URL.createObjectURL(userPhotos.value.photo);
 };
 
 const uploadPhoto = async () => {
     dialog.value = true;
     const formData = new FormData();
-    formData.append('photo1', userPhotos.value.photo1);
+    formData.append(`${props.number}`, userPhotos.value.photo);
 
     await HTTP.patch('/rsousers/me/media/', formData, {
         headers: {
@@ -189,7 +176,7 @@ const uploadPhoto = async () => {
                 timer: 1500,
             });
             // console.log('resp', response.data);
-            emit('uploadUserPic', response.data.photo1);
+            emit('uploadUserPic', userPhotos.value.photo, props.number);
             dialog.value = false;
             // console.log(response, 'photoUser uploaded');
         })
@@ -207,7 +194,7 @@ const uploadPhoto = async () => {
 };
 const updatePhoto = async () => {
     let fd = new FormData();
-    fd.append('photo1', userPhotos.value.photo1);
+    fd.append(`${props.number}`, userPhotos.value.photo);
     dialog.value = true;
     await HTTP.put('/rsousers/me/media/', fd, {
         headers: {
@@ -224,7 +211,8 @@ const updatePhoto = async () => {
                 timer: 1500,
             });
             dialog.value = false;
-            emit('updateUserPic', response.data.photo1);
+            emit('updateUserPic', response.data.photo, props.number);
+            emit('uploadUserPic', userPhotos.value.photo, props.number);
             // console.log(response, 'updated');
         })
         .catch(({ response }) => {
@@ -241,6 +229,7 @@ const updatePhoto = async () => {
 };
 
 const deletePhoto = async () => {
+    userPhotos.value[props.number] = null;
     await HTTP.put('/rsousers/me/media/', userPhotos.value,)
         .then((response) => {
             swal.fire({
@@ -250,6 +239,7 @@ const deletePhoto = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
+            emit('uploadUserPic', userPhotos.value.photo, props.number);
             // console.log(response, 'deleted');
         })
         .catch(({ response }) => {

@@ -87,9 +87,9 @@ const updateParent = (userParent) => {
     currentUser.currentUser.value.parent = userParent;
 };
 
-const uploadUserPic = (userPic) => {
-    // console.log('photoUser', userPic);
-    currentUser.currentUser.value.media.photo1 = userPic;
+const uploadUserPic = (userPic, number) => {
+    // console.log('photoUser', userPic, number);
+    currentUser.currentUser.value.media[number] = userPic;
     // console.log('Phot Uploadeddd');
 };
 

@@ -140,7 +140,6 @@ const timer = ref(null);
 
 const searchLSO = (val) => {
     clearTimeout(timer.value);
-
     timer.value = setTimeout(() => {
         // searchSquads(name.value);
         emit('searchDetachment', name.value);

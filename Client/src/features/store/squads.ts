@@ -127,6 +127,8 @@ export const useSquadsStore = defineStore('squads', {
             );
             this.squads = responseFilteredSquads.data;
         },
+
+        
         async getSquadMembers(id: String) {
             try {
                 this.isLoading = true;

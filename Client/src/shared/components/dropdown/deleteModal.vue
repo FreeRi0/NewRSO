@@ -1,8 +1,8 @@
 <template>
   <div class="modal">
     <div class="modal__wrapper">
-      <p class="modal__wrapper_title">Вы действительно хотите удалить участника из отряда?</p>
-
+      <p class="modal__wrapper_title" v-if="props.isSquad == true">Вы действительно хотите удалить участника из отряда?</p>
+      <p class="modal__wrapper_title" v-else>Вы действительно хотите удалить участника из штаба?</p>
       <div class="modal__wrapper_buttons">
         <Button type="button" label="Да, все верно" class="modal__wrapper_buttons_confirm" @click="del"></Button>
         <Button type="button" label="Отменить" class="modal__wrapper_buttons_cancel" @click="close"></Button>
@@ -12,6 +12,14 @@
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
+
+const props = defineProps({
+  isSquad: {
+    type: Boolean,
+    required: true,
+    default: true
+  }
+})
 
 const emit = defineEmits(['close', 'delete']);
 

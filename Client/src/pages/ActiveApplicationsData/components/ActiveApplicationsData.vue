@@ -5,7 +5,7 @@
 
             <div class="d-flex mt-9 mb-9 active-tabs">
                 <button class="contributorBtn" :class="{ active: picked === tab.name }" v-for="tab in tabs"
-                    v-show="tab.name === 'Верификация аккаунтов' && (roleStore.roles.detachment_commander || roleStore.roles.regionalheadquarter_commander) || tab.name === 'Заявка на вступление в отряд' && (roleStore.roles.detachment_commander) || tab.name === 'Заявка на участие в мероприятии' || tab.name === 'Конкурсы'"
+                    v-show="tab.name === 'Верификация аккаунтов' && (roleStore.roles.detachment_commander || roleStore.roles.regionalheadquarter_commander) || tab.name === 'Заявки на вступление в отряд' && (roleStore.roles.detachment_commander) || tab.name === 'Заявки на участие в мероприятии' || tab.name === 'Конкурсы' || tab.name === 'Заявки на вступление в штаб'"
                     :key="tab.id" @click="picked = tab.name">
                     {{ tab.name }}
                 </button>
@@ -16,11 +16,14 @@
                 <activeApplications />
             </div>
             <div
-                v-else-if="picked == 'Заявка на вступление в отряд' && (roleStore.roles?.regionalheadquarter_commander?.id || roleStore.roles?.detachment_commander?.id)">
+                v-else-if="picked == 'Заявки на вступление в отряд' && (roleStore.roles?.regionalheadquarter_commander?.id || roleStore.roles?.detachment_commander?.id)">
                 <ActiveSquads />
             </div>
-
-            <div v-else-if="picked == 'Заявка на участие в мероприятии'">
+            <div
+                v-else-if="picked == 'Заявки на вступление в штаб' && (roleStore.roles?.regionalheadquarter_commander?.id || roleStore.roles?.detachment_commander?.id)">
+                <active-headquarters />
+            </div>
+            <div v-else-if="picked == 'Заявки на участие в мероприятии'">
                 <ActiveEventsApp />
             </div>
 
@@ -38,8 +41,9 @@ import { activeApplications } from '@features/ActiveApplications/components';
 import { ActiveSquads } from '@features/ActiveApplications/components';
 import { ActiveCompetitions } from '@features/ActiveCompetitions';
 import { ActiveEventsApp } from '@features/ActiveApplications/components';
+import { ActiveHeadquarters } from '@features/ActiveApplicationsHeadquarters/';
 
-
+// E:\RSO\NewRSO\Client\src\features\ActiveApplicationHeadquarters\index.ts
 const roleStore = useRoleStore();
 
 
@@ -54,18 +58,24 @@ const tabs = ref([
     },
     {
         id: '2',
-        name: 'Заявка на вступление в отряд',
+        name: 'Заявки на вступление в отряд',
 
 
     },
     {
         id: '3',
-        name: 'Заявка на участие в мероприятии',
+        name: 'Заявки на вступление в штаб',
 
 
     },
     {
         id: '4',
+        name: 'Заявки на участие в мероприятии',
+
+
+    },
+    {
+        id: '5',
         name: 'Конкурсы',
 
 

@@ -22,14 +22,22 @@
                 {{ currentUser.currentUser.value.bio }}
             </div>
             <div class="mt-8 photoWrapper">
-                <userPhoto class="photo-item" :photo="currentUser.currentUser.value.media?.photo1" :add="false"
+                <user-photo 
+                    v-for="(photo, index) in media" 
+                    :key="index"
+                    class="photo-item" 
+                    :photo="photo" 
+                    :add="false" 
+                    :number="index"
+                />
+                <!-- <userPhoto class="photo-item" :photo="currentUser.currentUser.value.media?.photo1" :add="false"
                     @uploadUserPic="uploadUserPic" @updateUserPic="updateUserPic"></userPhoto>
                 <userPhoto2 class="photo-item" :photo="currentUser.currentUser.value.media?.photo2" :add="false">
                 </userPhoto2>
                 <userPhoto3 class="photo-item" :photo="currentUser.currentUser.value.media?.photo3" :add="false">
                 </userPhoto3>
                 <userPhoto4 class="photo-item photo-item-last" :photo="currentUser.currentUser.value.media?.photo4"
-                    :add="false"></userPhoto4>
+                    :add="false"></userPhoto4> -->
             </div>
         </div>
 
@@ -40,14 +48,9 @@
 import { Button } from '@shared/components/buttons';
 import { MyWall } from '@features/baner/components';
 import { TextArea } from '@shared/components/inputs';
-import {
-    userPhoto,
-    userPhoto2,
-    userPhoto3,
-    userPhoto4,
-} from '@shared/components/imagescomp';
+import { userPhoto } from '@shared/components/imagescomp';
 
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
 import { HTTP } from '@app/http';
 import { useUserStore } from '@features/store/index';
@@ -66,6 +69,12 @@ const isAuth = ref(!!localStorage.getItem('jwt_token'));
 const query = new URLSearchParams(window.location.search);
 const payload = JSON.parse(query.get("payload"));
 
+const media = ref({
+    photo1: null,
+    photo2: null,
+    photo3: null,
+    photo4: null,
+})
 
 const TokenData = ref({
     silent_token: payload?.token,
@@ -73,11 +82,11 @@ const TokenData = ref({
 })
 
 const getAccessToken = async () => {
-    try {
-        const resp = await HTTP.post('/jwt/vk-login/', TokenData.value)
-        localStorage.setItem('jwt_token', resp.data.access);
 
-        router.replace({query: null})
+    try {
+            const resp = await HTTP.post('/jwt/vk-login/', TokenData.value)
+            localStorage.setItem('jwt_token', resp.data.access);
+            router.replace({ query: null })
     } catch (e) {
         console.log('error:', e)
     }
@@ -112,9 +121,17 @@ const deleteWall = (imageWall) => {
     currentUser.currentUser.value.media.banner = imageWall;
 };
 
+watch (() => currentUser.currentUser.value.media,(photos)=> {
+    media.value = {
+        photo1: photos?.photo1,
+        photo2: photos?.photo2,
+        photo3: photos?.photo3,
+        photo4: photos?.photo4,
+    }
+}, {deep: true});
+
 onMounted(() => {
     getAccessToken();
-
 })
 </script>
 <style lang="scss" scoped>

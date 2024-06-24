@@ -10,9 +10,7 @@
                 то&nbsp;сообщите нам об&nbsp;этом по&nbsp;адресу электронной
                 почты:
                 <a href="mailto:rso.login@yandex.ru">rso.login@yandex.ru</a> или
-                <a href="https://t.me/LK_RSO_Support"
-                    >напишите нам в&nbsp;Телеграм</a
-                >.
+                <a href="https://t.me/LK_RSO_Support">напишите нам в&nbsp;Телеграм</a>.
             </p>
             <!-- <div
                 v-if="
@@ -120,7 +118,7 @@ onMounted(() => {
     line-height: 22px;
     color: #35383f;
 
-    & > a {
+    &>a {
         text-decoration: underline;
     }
 
