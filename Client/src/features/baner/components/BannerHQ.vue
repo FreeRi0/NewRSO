@@ -448,6 +448,20 @@
                     " class="hq-data__link" :to="{
                         name: 'FormCentral',
                     }">Редактировать штаб</router-link>
+                    <!-- <Button v-else-if="!IsMember && !UserApplication"
+                        @click="AddApplication('centrals', props.centralHeadquarter.id)" label="Вступить в штаб"
+                        class="AddApplication"></Button>
+                    <div v-else-if="UserApplication" class="d-flex">
+                        <div class="AddAplication mr-2">
+                            Заявка на рассмотрении
+                        </div>
+                        <Button @click="DeleteApplication('centrals', props.centralHeadquarter.id)"
+                            label="Удалить заявку" class="AddApplication"></Button>
+                    </div>
+
+                    <div v-else-if="IsMember" class="AddAplication">
+                        Вы участник
+                    </div> -->
 
                 </div>
             </div>
@@ -570,6 +584,23 @@ const AddApplication = async (name, id) => {
             showConfirmButton: false,
             timer: 1500,
         });
+        if (props.headquarter) {
+            viewApplications('educationals');
+        }
+
+        if (props.localHeadquarter) {
+            viewApplications('locals');
+        }
+        if (props.regionalHeadquarter) {
+            viewApplications('regionals');
+        }
+
+        if (props.districtHeadquarter) {
+            viewApplications('districts');
+        }
+        // if (props.centralHeadquarter) {
+        //     viewApplications('centrals');
+        // }
 
     } catch (error) {
 
@@ -596,6 +627,23 @@ const DeleteApplication = async (name, id) => {
             showConfirmButton: false,
             timer: 1500,
         });
+        if (props.headquarter) {
+            viewApplications('educationals');
+        }
+
+        if (props.localHeadquarter) {
+            viewApplications('locals');
+        }
+        if (props.regionalHeadquarter) {
+            viewApplications('regionals');
+        }
+
+        if (props.districtHeadquarter) {
+            viewApplications('districts');
+        }
+        // if (props.centralHeadquarter) {
+        //     viewApplications('centrals');
+        // }
     } catch (error) {
 
         console.error('There was an error!', error);
@@ -619,45 +667,66 @@ watch(
             return;
         }
         aboutEduc();
+        viewApplications('educationals');
+
+    },
+);
+
+watch(
+    () => props.localHeadquarter,
+
+    (newheadquarter) => {
+        if (Object.keys(props.localHeadquarter).length === 0) {
+            return;
+        }
+        viewApplications('locals');
 
     },
 );
 watch(
-    () => applications.value,
+    () => props.regionalHeadquarter,
 
-    (newApp) => {
-        if (props.headquarter) {
-            viewApplications('educationals');
+    (newheadquarter) => {
+        if (Object.keys(props.regionalHeadquarter).length === 0) {
+            return;
         }
-
-        if (props.localHeadquarter) {
-            viewApplications('locals');
-        }
-        if (props.regionalHeadquarter) {
-            viewApplications('regionals');
-        }
-
-        if (props.districtHeadquarter) {
-            viewApplications('districts');
-        }
-
-    }
-)
-onMounted(() => {
-    if (props.headquarter) {
-        viewApplications('educationals');
-    }
-
-    if (props.localHeadquarter) {
-        viewApplications('locals');
-    }
-    if (props.regionalHeadquarter) {
         viewApplications('regionals');
-    }
 
-    if (props.districtHeadquarter) {
+    },
+);
+
+watch(
+    () => props.districtHeadquarter,
+
+    (newheadquarter) => {
+        if (Object.keys(props.districtHeadquarter).length === 0) {
+            return;
+        }
         viewApplications('districts');
-    }
+
+    },
+);
+
+
+onMounted(() => {
+    // if (props.headquarter) {
+    //     viewApplications('educationals');
+    // }
+
+    // if (props.localHeadquarter) {
+    //     viewApplications('locals');
+    // }
+    // if (props.regionalHeadquarter) {
+    //     viewApplications('regionals');
+    // }
+
+    // if (props.districtHeadquarter) {
+    //     viewApplications('districts');
+    // }
+
+    // if (props.centralHeadquarter) {
+    //     viewApplications('centrals');
+    // }
 
     aboutEduc();
 });
