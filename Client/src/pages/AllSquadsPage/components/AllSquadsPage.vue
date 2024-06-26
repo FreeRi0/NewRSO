@@ -348,23 +348,26 @@ const getDetachments = async (pagination, orderLimit) => {
         else if (pagination == 'next')
             url = detachments.value.next.replace('http', 'https');
         if (name.value) data.push('search=' + name.value);
-        if (SelectedSortDistrict.value)
-            data.push(
-                'district_headquarter__name=' + SelectedSortDistrict.value,
-            );
-        if (SelectedSortRegional.value)
-            data.push(
-                'regional_headquarter__name=' + SelectedSortRegional.value,
-            );
-        if (SelectedSortLocal.value)
-            data.push('local_headquarter__name=' + SelectedSortLocal.value);
-        if (education.value)
-            data.push('educational_institution__name=' + education.value);
-        if (picked.value) data.push('area__name=' + picked.value);
-        if (sortBy.value && !pagination)
-            data.push(
-                'ordering=' + (ascending.value ? '' : '-') + sortBy.value,
-            );
+        if (pagination != 'next'){
+            if (SelectedSortDistrict.value)
+                data.push(
+                    'district_headquarter__name=' + SelectedSortDistrict.value,
+                );
+            if (SelectedSortRegional.value)
+                data.push(
+                    'regional_headquarter__name=' + SelectedSortRegional.value,
+                );
+            if (SelectedSortLocal.value)
+                data.push('local_headquarter__name=' + SelectedSortLocal.value);
+            if (education.value)
+                data.push('educational_institution__name=' + education.value);
+            if (picked.value) data.push('area__name=' + picked.value);
+            if (sortBy.value && !pagination)
+                data.push(
+                    'ordering=' + (ascending.value ? '' : '-') + sortBy.value,
+                );
+        }
+        
         const viewHeadquartersResponse = await HTTP.get(url + data.join('&'));
         isLoading.value = false;
 
@@ -377,6 +380,7 @@ const getDetachments = async (pagination, orderLimit) => {
         }
         detachments.value = response;
         sortedSquads.value = response.results;
+        console.log(detachments.value);
     } catch (error) {
         console.log('an error occured ' + error);
     }
