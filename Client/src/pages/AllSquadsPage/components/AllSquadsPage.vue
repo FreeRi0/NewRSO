@@ -380,7 +380,6 @@ const getDetachments = async (pagination, orderLimit) => {
         }
         detachments.value = response;
         sortedSquads.value = response.results;
-        console.log(detachments.value);
     } catch (error) {
         console.log('an error occured ' + error);
     }
