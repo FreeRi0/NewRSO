@@ -24,7 +24,7 @@
                             <img src="@/app/assets/icon/calendar.svg" alt="calendar" />
                             <time datetime="2022-09-10">{{
                                 headquarter.founding_date
-                                }}</time>
+                            }}</time>
                         </li>
                     </ul>
                 </div>
@@ -62,6 +62,11 @@
                             <!-- <pre>{{ userId }} {{ headquarter.commander.id }}</pre> -->
                         </div>
                     </div>
+                    <div class="overlay" v-if="showModal"></div>
+                    <AddModal v-show="showModal === true" @close="close" @add="
+                        AddApplication('educationals', props.headquarter.id)
+                        ">
+                    </AddModal>
 
                     <router-link v-if="
                         userId &&
@@ -78,8 +83,8 @@
                         name: 'EditHQ',
                         params: { id: headquarter.id },
                     }">Редактировать штаб</router-link>
-                    <Button v-else-if="!IsMember && !UserApplication"
-                        @click="AddApplication('educationals', props.headquarter.id)" label="Вступить в штаб"
+                    <Button v-else-if="!IsMember && !UserApplication && userStore.currentUser.educational_headquarter_id === null"
+                        @click="showModalW()" label="Вступить в штаб"
                         class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
                         <div class="AddApplication mr-2">
@@ -92,7 +97,6 @@
                     <div v-else-if="IsMember" class="AddApplication">
                         Вы участник
                     </div>
-
                 </div>
             </div>
         </div>
@@ -158,6 +162,10 @@
                             </div>
                         </div>
                     </div>
+                    <AddModal v-show="showModal === true" @close="close" @add="
+                        AddApplication('locals', props.localHeadquarter.id)
+                        ">
+                    </AddModal>
                     <router-link v-if="
                         userId &&
                         (userId === localHeadquarter?.commander?.id ||
@@ -172,7 +180,7 @@
                         params: { id: localHeadquarter.id },
                     }">Редактировать штаб</router-link>
                     <Button v-else-if="!IsMember && !UserApplication"
-                        @click="AddApplication('locals', props.localHeadquarter.id)" label="Вступить в штаб"
+                        @click="showModal()" label="Вступить в штаб"
                         class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
                         <div class="AddApplication mr-2">
@@ -397,7 +405,7 @@
                         <li class="Squad-HQ__date-central">
                             <time datetime="2022-09-10">{{
                                 centralHeadquarter.rso_founding_congress_date
-                            }}
+                                }}
                                 — дата первого Учредительного Съезда РСО</time>
                         </li>
                         <li class="hq-data__participant-counter">
@@ -448,7 +456,7 @@
                     " class="hq-data__link" :to="{
                         name: 'FormCentral',
                     }">Редактировать штаб</router-link>
-                    <!-- <Button v-else-if="!IsMember && !UserApplication"
+                    <Button v-else-if="userStore.currentUser.central_headquarter_id	 === null && !UserApplication"
                         @click="AddApplication('centrals', props.centralHeadquarter.id)" label="Вступить в штаб"
                         class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
@@ -459,9 +467,9 @@
                             label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
-                    <div v-else-if="IsMember" class="AddAplication">
+                    <div v-else-if="userStore.currentUser.central_headquarter_id !== null" class="AddAplication">
                         Вы участник
-                    </div> -->
+                    </div>
 
                 </div>
             </div>
@@ -477,6 +485,7 @@ import { useRoute } from 'vue-router';
 import { useRoleStore } from '@layouts/store/role';
 import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
+import { AddModal } from '@shared/components/dropdown';
 import { Button } from '@shared/components/buttons';
 const roleStore = useRoleStore();
 const userStore = useUserStore();
@@ -489,6 +498,8 @@ const applications = ref([]);
 const isError = ref([]);
 const data = ref({});
 const route = useRoute();
+const showModal = ref(false);
+const deletedId = ref(null);
 const roles = storeToRefs(roleStore);
 let educComId = roles.roles.value.educationalheadquarter_commander;
 let regionComId = roles.roles.value.regionalheadquarter_commander;
@@ -556,6 +567,10 @@ const aboutEduc = async () => {
         console.log(error);
     }
 };
+
+const showModalW = () => {
+    showModal.value =!showModal.value;
+}
 
 const UserApplication = computed(() => {
     return applications.value.find((item) => item.user.id === userId.value);

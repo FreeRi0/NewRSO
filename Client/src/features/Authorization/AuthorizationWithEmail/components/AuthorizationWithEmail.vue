@@ -54,6 +54,8 @@ const data = ref({
     password: '',
 });
 
+// let textVk = document.querySelector('.VkIdSdk_oauth_link_text');
+// textVk.textContent = 'войдите через Вк'
 
 const isError = ref([]);
 const isLoading = ref(false);
@@ -72,7 +74,6 @@ const oauthList = new VKID.OAuthList();
 //     redirectUrl: REDIRECT_URL, // Адрес для перехода после авторизации.
 //     state: 'dj29fnsadjsd82...' // Произвольная строка состояния приложения.
 // });
-
 VKID.Config.set({
     app: CLIENT_ID, // Идентификатор приложения.
     redirectUrl: REDIRECT_URL, // Адрес для перехода после авторизации.
