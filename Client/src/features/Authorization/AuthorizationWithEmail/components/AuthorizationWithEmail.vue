@@ -26,8 +26,8 @@
 
                 <Button class="Login_btn" type="submit" @click="LoginUser" label="Войти" :loaded="isLoading"
                     :disabled="isLoading" color="primary"></Button>
-                <p class="text-center Login_and">или</p>
-                <div id="VkIdSdkOneTap"></div>
+                <!-- <p class="text-center Login_and">или</p> -->
+                <div id="VkIdSdkOAuthList"></div>
                 <div class="text-center goReg">У вас нет аккаунта?
                     <router-link class="Login_link ml-1" to="/Register">Зарегистрироваться</router-link>
                 </div>
@@ -54,22 +54,32 @@ const data = ref({
     password: '',
 });
 
+// let textVk = document.querySelector('.VkIdSdk_oauth_link_text');
+// textVk.textContent = 'войдите через Вк'
 
 const isError = ref([]);
 const isLoading = ref(false);
 const swal = inject('$swal');
 
 
-const APP_ID = 51915086
+const CLIENT_ID = 51915086
 const REDIRECT_URL = 'https://xn--j1ab.xn--d1amqcgedd.xn--p1ai/my-page'
 
-const oneTap = new VKID.OneTap();
+// const oneTap = new VKID.OneTap();
+const oauthList = new VKID.OAuthList();
 
 
+// VKID.Config.set({
+//     app: APP_ID, // Идентификатор приложения.
+//     redirectUrl: REDIRECT_URL, // Адрес для перехода после авторизации.
+//     state: 'dj29fnsadjsd82...' // Произвольная строка состояния приложения.
+// });
 VKID.Config.set({
-    app: APP_ID, // Идентификатор приложения.
+    app: CLIENT_ID, // Идентификатор приложения.
     redirectUrl: REDIRECT_URL, // Адрес для перехода после авторизации.
-    state: 'dj29fnsadjsd82...' // Произвольная строка состояния приложения.
+    state: 'dj29fnsadjsd82', // Произвольная строка состояния приложения.
+    codeVerifier: 'FGH767Gd65', // Верификатор в виде случайной строки. Обеспечивает защиту передаваемых данных.
+    scope: 'email phone' // Список прав доступа, которые нужны приложению.
 });
 
 
@@ -115,10 +125,16 @@ const LoginUser = async () => {
 };
 
 onMounted(() => {
-    const container = document.getElementById('VkIdSdkOneTap');
+    const container = document.getElementById('VkIdSdkOAuthList');
+    const oauthListNames = [
+        VKID.OAuthName.VK,
+        VKID.OAuthName.MAIL,
+        VKID.OAuthName.OK,
+    ];
     if (container) {
-        //         // Отрисовка кнопки в контейнере с именем приложения APP_NAME, светлой темой и на русском языке.
-        oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
+        oauthList.render({ container: container, oauthList: oauthListNames, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS, styles: { height: 44, borderRadius: 8 } })
+            .on(VKID.WidgetEvents.ERROR);  // Отрисовка кнопки в контейнере с именем приложения APP_NAME, светлой темой и на русском языке.
+        // oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
     }
 })
 
