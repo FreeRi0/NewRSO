@@ -1,9 +1,12 @@
 <template>
   <div class="modal">
     <div class="modal__wrapper">
-      <p class="modal__wrapper_title">При одобрении вашей заявки на вступление в штаб, вы будете автоматически удалены
-        из тех ЛСО/штабов, в которых вы сейчас состоите.</p>
 
+      <p  v-if="isCommander" class="modal__wrapper_title">При одобрении вашей заявки на вступление в штаб, вы останетесь командиром
+        ЛСО/штаба, которым вы сейчас являетесь, также станете участником этого штаба.</p>
+        <p v-else class="modal__wrapper_title">При одобрении вашей заявки на вступление в штаб, вы будете
+        автоматически удалены
+        из тех ЛСО/штабов, в которых вы сейчас состоите.</p>
       <div class="modal__wrapper_buttons">
         <Button type="button" label="Продолжить" class="modal__wrapper_buttons_confirm" @click="add"></Button>
         <Button type="button" label="Отменить" class="modal__wrapper_buttons_cancel" @click="close"></Button>
@@ -13,6 +16,10 @@
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
+
+const props = defineProps({
+  isCommander: { type: Boolean, required: true },
+});
 
 const emit = defineEmits(['close', 'add']);
 
@@ -28,17 +35,19 @@ function add() {
 .modal {
   border: 2px solid #35383F;
   max-width: 400px;
-  height: 270px;
+  height: auto;
   border-radius: 10px;
   position: absolute;
-  right: 35%;
+  top: 50%;
+  transform: translate(-50%, 50%);
+  left: 35%;
   background: #fff;
   z-index: 999;
   transform: none;
 
   @media (max-width: 575px) {
     max-width: 320px;
-    height: 216px;
+    height: auto;
     right: auto;
   }
 
@@ -52,9 +61,10 @@ function add() {
     &_title {
       font-size: 16px;
       font-weight: 600;
-      font-family: Bert Sans;
+      font-family: 'Bert Sans';
       text-align: center;
       max-width: 336px;
+      color: #35383F;
       line-height: 21.1px;
 
       @media (max-width: 575px) {
@@ -77,7 +87,7 @@ function add() {
         margin: 0px;
         font-size: 16px;
         font-weight: 600;
-        font-family: Bert Sans;
+        font-family: 'Bert Sans';
         height: 52px;
 
         @media (max-width: 575px) {
@@ -94,7 +104,7 @@ function add() {
         color: #35383F;
         font-size: 16px;
         font-weight: 600;
-        font-family: Bert Sans;
+        font-family: 'Bert Sans';
         height: 52px;
 
         @media (max-width: 575px) {
