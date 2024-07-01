@@ -134,7 +134,7 @@ onMounted(() => {
     ];
     if (container) {
         oauthList.render({ container: container, oauthList: oauthListNames, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS, styles: { height: 44, borderRadius: 8 } })
-            .on(VKID.WidgetEvents.ERROR, handleError);
+            .on(VKID.WidgetEvents.ERROR);
         // oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
     }
 })

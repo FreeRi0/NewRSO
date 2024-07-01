@@ -16,7 +16,7 @@
         :no-data-text="noDataText"
         class="option-select"
     >
-        <template #prepend-inner v-if="changeUser">
+        <!-- <template #prepend-inner v-if="changeUser">
             <Icon
                 icon="clarity-search-line"
                 color="#222222"
@@ -25,7 +25,7 @@
                 class="option__icon mr-3"
             >
             </Icon>
-        </template>
+        </template> -->
         <template v-slot:chip="{ props, item }">
             <div class="option__content">
                 <div class="option__wrapper">
