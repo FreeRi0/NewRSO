@@ -334,7 +334,7 @@ const updateLocal = (localVal) => {
         educ.value = null;
     }
     if (name.value) search += '&search=' + name.value;
-    viewContributorsData(search, !localVal);
+    viewContributorsData(search);
     getFiltersData('/educationals/', search);
     getFiltersData('/detachments/', search);
 
