@@ -400,9 +400,19 @@ const SendReference = async () => {
 
 const select = (event) => {
     selectedPeoples.value = [];
+
     if (event.target.checked) {
-        for (let index in sortedParticipants.value) {
-            selectedPeoples.value.push(sortedParticipants.value[index]);
+
+        for (let index in participants.value) {
+
+
+            participants.value[index].selected = true;
+            selectedPeoples.value.push(participants.value[index]);
+        }
+    } else {
+        for (let index in participants.value) {
+
+            participants.value[index].selected = false;
         }
     }
 };

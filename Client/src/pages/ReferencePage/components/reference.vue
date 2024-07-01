@@ -132,6 +132,7 @@ const participants = ref([]);
 const users = ref({});
 const limit = 12;
 const levelAccess = ref(7);
+const count = ref(null);
 const regionals = ref([]);
 const districts = ref([]);
 const locals = ref([]);
@@ -407,11 +408,21 @@ const SendReference = async () => {
 
 const select = (event) => {
     selectedPeoples.value = [];
-    if (event.target.checked) {
-        for (let index in sortedParticipants.value) {
-            selectedPeoples.value.push(sortedParticipants.value[index]);
-        }
+
+if (event.target.checked) {
+
+    for (let index in participants.value) {
+
+
+        participants.value[index].selected = true;
+        selectedPeoples.value.push(participants.value[index]);
     }
+} else {
+    for (let index in participants.value) {
+
+        participants.value[index].selected = false;
+    }
+}
 };
 
 const changePeoples = (CheckedUser, UserId) => {
