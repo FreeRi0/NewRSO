@@ -31,7 +31,7 @@
             <v-expansion-panel-text>
                 <regionalsDropdown open-on-clear id="reg" name="regdrop" placeholder="Выберите рег штаб"
                     v-model="regRef" @update:value="updateReg" class="mb-2 region-input" :items="regionals"
-                    :SortDropdown="true">
+                    :SortDropdown="props.SortDropdown">
                 </regionalsDropdown>
             </v-expansion-panel-text>
             <p v-if="regRef">Выбрано: {{ regRef }}</p>
@@ -67,7 +67,7 @@
             <v-expansion-panel-text>
                 <educationalsDropdown open-on-clear id="reg" name="regdrop" placeholder="Выберите обр штаб"
                     v-model="educRef" @update:value="updateEduc" class="mb-2 region-input" :items="educHead"
-                    :SortDropdown="true">
+                    :SortDropdown="SortDropdown">
                 </educationalsDropdown>
             </v-expansion-panel-text>
             <p v-if="educRef">Выбрано: {{ educRef }}</p>
@@ -172,6 +172,9 @@ const props = defineProps({
     sortedParticipants: { type: Array, required: false },
     countParticipants: { type: Number, required: false },
     isMembership: { type: Boolean, required: false, default: false },
+    SortDropdown: {
+        type: Boolean,
+    }
 });
 
 const roleStore = useRoleStore();

@@ -8,7 +8,7 @@
         v-model:search.trim="name"
         variant="outlined"
         item-title="name"
-        item-value="value"
+        item-value="name"
         v-bind="$attrs"
         @keyup="searchEducation"
         @update:modelValue="changeValue"

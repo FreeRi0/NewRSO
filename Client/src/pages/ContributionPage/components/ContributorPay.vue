@@ -42,8 +42,8 @@
                             @update-membership="updateMembership" :district="district" :districts="districts" :reg="reg"
                             :regionals="regionals" :local="local" :locals="locals" :membership="membership" :educ="educ"
                             :educ-head="educHead" :detachment="detachment" :detachments="detachments"
-                            :roles="roles.roles.value" :sorted-participants="participants" :count-participants="count"
-                            :is-membership="true" />
+                            :SortDropdown="sortedDrop" :roles="roles.roles.value" :sorted-participants="participants"
+                            :count-participants="count" :is-membership="true" />
                     </div>
                     <div class="contributor-items">
                         <div class="contributor-sort">
@@ -136,6 +136,7 @@ const localsStore = useLocalsStore();
 const educationalsStore = useEducationalsStore();
 const squadsStore = useSquadsStore();
 const users = ref({});
+const sortedDrop = ref(false);
 const limit = 12;
 const action = ref('Оплачен');
 const participants = ref([]);
@@ -161,6 +162,7 @@ const count = ref(null);
 const local = ref(null);
 const isLoading = ref(false);
 const educ = ref(null);
+const detLimit = 500;
 const isError = ref([]);
 const picked = ref(true);
 const checkboxAll = ref(false);
@@ -260,7 +262,7 @@ const viewContributorsData = async (search, pagination, orderLimit) => {
             locals.value = viewParticipantsResponse.data.results;
         } else if (search.indexOf('educationals') >= 0) {
             educHead.value = viewParticipantsResponse.data.results;
-        } else if (search.indexOf('detachments') >= 0) {
+        } else if (search.indexOf('detanchment_list') >= 0) {
             detachments.value = viewParticipantsResponse.data.results;
         }
     } catch (error) {
@@ -268,10 +270,10 @@ const viewContributorsData = async (search, pagination, orderLimit) => {
     }
 };
 
-const getFiltersData = async (resp, search) => {
+const getFiltersData = async (resp, search, searchId, lim) => {
     try {
         isLoading.value = true;
-        const viewHeadquartersResponse = await HTTP.get(resp + search,);
+        const viewHeadquartersResponse = await HTTP.get(resp + search + searchId + lim);
         isLoading.value = false;
 
         if (resp.indexOf('districts') >= 0) {
@@ -282,7 +284,7 @@ const getFiltersData = async (resp, search) => {
             locals.value = viewHeadquartersResponse.data.results;
         } else if (resp.indexOf('educationals') >= 0) {
             educHead.value = viewHeadquartersResponse.data.results;
-        } else if (resp.indexOf('detachments') >= 0) {
+        } else if (resp.indexOf('detanchment_list') >= 0) {
             detachments.value = viewHeadquartersResponse.data.results;
         }
     } catch (error) {
@@ -306,17 +308,23 @@ const updateDistrict = (districtVal) => {
 
 const updateReg = (regVal) => {
     let search = '';
+    let searchId = 0;
     if (regVal) {
         search = '?regional_headquarter__name=' + regVal;
+        if (searchId) {
+            searchId = '?regional_headquarter__id=' + regVal;
+            sortedDrop.value = false;
+        }
     } else if (levelAccess.value < 2) {
         search = '?district_headquarter__name=' + district.value;
+        searchId = '?district_headquarter__id=' + district.value;
     }
 
     if (name.value) search += '&search=' + name.value;
     viewContributorsData(search);
     getFiltersData('/locals/', search);
     getFiltersData('/educationals/', search);
-    getFiltersData('/detachments/', search);
+    getFiltersData('/detanchment_list', '', searchId);
 
     reg.value = regVal;
 };
@@ -336,21 +344,43 @@ const updateLocal = (localVal) => {
     if (name.value) search += '&search=' + name.value;
     viewContributorsData(search);
     getFiltersData('/educationals/', search);
-    getFiltersData('/detachments/', search);
+    getFiltersData('/detanchment_list/', search);
 
     local.value = localVal;
 };
 
 const updateEduc = (educVal) => {
     let search = '';
+    let searchId = 0;
+    let lim = '';
     if (educVal) {
+        sortedDrop.value = false;
         search = '?educational_headquarter__name=' + educVal;
+        searchId = '?educational_headquarter__id=' + educVal;
+        lim = '&limit=500';
+
+
     } else if (local.value) {
         search = '?local_headquarter__name=' + local.value;
+        if (searchId) {
+            searchId = '?local_headquarter__id=' + local.value;
+            sortedDrop.value = false;
+        }
+        searchId = '?local_headquarter__id=' + local.value;
     } else if (levelAccess.value < 3) {
         search = '?regional_headquarter__name=' + reg.value;
+        if (searchId) {
+            searchId = '?regional_headquarter__id=' + reg.value;
+            sortedDrop.value = false;
+        }
+        searchId = '?regional_headquarter__id=' + reg.value;
     } else if (levelAccess.value < 4) {
+        if (searchId) {
+            searchId = '?local_headquarter__id=' + local.value;
+            sortedDrop.value = false;
+        }
         search = '?local_headquarter__name=' + local.value;
+
     }
 
     if (educVal && detachment.value) {
@@ -358,7 +388,7 @@ const updateEduc = (educVal) => {
     }
     if (name.value) search += '&search=' + name.value;
     viewContributorsData(search);
-    getFiltersData('/detachments/', search);
+    getFiltersData('/detanchment_list/', '', searchId, lim);
 
     educ.value = educVal;
 };
@@ -501,6 +531,8 @@ const getUsersByRoles = () => {
     if (!Object.keys(roleStore.roles).length) return false;
     if (!roles.roles.value.centralheadquarter_commander) {
         let search = '';
+        let searchId = 0;
+        let lim = '';
         if (roles.roles.value.districtheadquarter_commander) {
             district.value =
                 roles.roles.value.districtheadquarter_commander.name;
@@ -514,15 +546,18 @@ const getUsersByRoles = () => {
             search =
                 '?regional_headquarter__name=' +
                 roles.roles.value.regionalheadquarter_commander.name;
+                searchId = '?regional_headquarter__id=' +
+                roles.roles.value.regionalheadquarter_commander.id;
+                lim = '&limit=500';
             locals.value = localsStore.locals.filter(
                 (loc) => loc.regional_headquarter == reg.value,
             );
             detachments.value = squadsStore.squads.filter((det) => det.regional_headquarter == reg.value,
             );
             levelAccess.value = 2;
-            getFiltersData('/educationals/', search);
-            getFiltersData('/locals/', search);
-            getFiltersData('/detachments/', search);
+            getFiltersData('/educationals/', search, '', '');
+            getFiltersData('/locals/',  search, '', '');
+            getFiltersData('/detanchment_list/', '', searchId, lim);
         } else if (roles.roles.value.localheadquarter_commander) {
             local.value = roles.roles.value.localheadquarter_commander.name;
             search =
@@ -536,8 +571,9 @@ const getUsersByRoles = () => {
             search =
                 '?educational_headquarter__name=' +
                 roles.roles.value.educationalheadquarter_commander.name;
+                lim = '&limit=500';
             levelAccess.value = 4;
-            getFiltersData('/detachments/', search);
+            getFiltersData('/detanchment_list/', ' ', searchId, lim);
         } else if (roles.roles.value.detachment_commander) {
             detachment.value = roles.roles.value.detachment_commander.name;
             search =
