@@ -570,6 +570,7 @@
                                       placeholder="Например 26.06.2024"
                                       name="action-start-hq"
                                       type="date"
+                                      :min="minStartDate"
                                   />
                                 </div>
                                 <div
@@ -1135,7 +1136,7 @@ import {
   putDocuments,
   createOrganizator,
   getRoles,
-  getRsousers,
+  getRsousers, patchOrganizator,
 } from '@services/ActionService';
 import { sortByEducation } from '@shared/components/selects';
 import { useRouter } from 'vue-router';
@@ -1148,13 +1149,14 @@ import { Cropper } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
 import { HTTP } from '@app/http';
 import { useRoleStore } from '@layouts/store/role';
-import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
+import moment from "moment";
 
 const swal = inject('$swal');
 const router = useRouter();
 const rules = ref([]);
 
+const minStartDate = ref(moment().format('YYYY-MM-DD'))
 
 //------------------------------------------------------------------------------------------------
 const panel = ref();
@@ -1199,6 +1201,7 @@ onActivated( () => {
           patronymic_name: resp.data.patronymic_name,
           is_contact_person: true,
           organizerBtnClose: false,
+          is_organizer: true,
       });
     });
     getRsousers().then((resp) => {
@@ -1511,13 +1514,17 @@ function SubmitEvent() {
                     console.error(e);
                 });
             selectedUser.value.forEach((item) => {
+              if (item.is_organizer) {
+                patchOrganizator(resp.data.id, { organizer: item.organizer, is_contact_person: item.is_contact_person }, resp.data.organization_data[0].id)
+              } else {
                 createOrganizator(resp.data.id, { organizer: item.organizer, is_contact_person: item.is_contact_person })
                     .then((resp) => {
-                        console.log(resp.data);
+                      console.log(resp.data);
                     })
                     .catch((e) => {
-                        console.log(e);
+                      console.log(e);
                     });
+              }
             });
             swal.fire({
                 position: 'center',

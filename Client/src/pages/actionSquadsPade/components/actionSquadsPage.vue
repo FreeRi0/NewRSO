@@ -91,7 +91,7 @@
                             <div class="settings-radio">
                                 <input
                                     v-model="actionFormSearch.status"
-                                    value="Активный"
+                                    value="active"
                                     type="radio"
                                     id="open"
                                 />
@@ -100,7 +100,7 @@
                             <div class="settings-radio">
                                 <input
                                     v-model="actionFormSearch.status"
-                                    value="Завершенный"
+                                    value="inactive"
                                     type="radio"
                                     id="close"
                                 />
