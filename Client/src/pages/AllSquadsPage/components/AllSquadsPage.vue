@@ -345,8 +345,8 @@ const getDetachments = async (pagination, orderLimit) => {
         let url = '/detachments/?';
         if (orderLimit) data.push('limit=' + orderLimit);
         else if (!pagination) data.push('limit=' + limit);
-        else if (pagination == 'next')
-            url = detachments.value.next.replace('http', 'https');
+        // else if (pagination == 'next')
+        //     url = detachments.value.next.replace('http', 'https');
         if (name.value) data.push('search=' + name.value);
         if (pagination != 'next'){
             if (SelectedSortDistrict.value)
