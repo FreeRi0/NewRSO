@@ -167,7 +167,7 @@
                     <AddModal v-show="showModal === true"
                         :is-commander="(roleStore.roles.detachment_commander || roleStore.roles.educationalheadquarter_commander) !== null"
                         :is-new="userStore.currentUser.educational_headquarter_id === null && userStore.currentUser.detachment_id === null && userStore.currentUser.local_headquarter_id === null && userStore.currentUser.regional_headquarter_id === null && userStore.currentUser.district_headquarter_id === null"
-                        @close="close" @add="
+                        @close="closeModalW()" @add="
                             AddApplication('locals', props.localHeadquarter.id)
                             ">
                     </AddModal>
@@ -362,7 +362,7 @@
                     <AddModal v-show="showModal === true"
                         :is-commander="(roleStore.roles.detachment_commander || roleStore.roles.educationalheadquarter_commander || roleStore.roles.localheadquarter_commander) !== null"
                         :is-new="userStore.currentUser.educational_headquarter_id === null && userStore.currentUser.detachment_id === null && userStore.currentUser.local_headquarter_id === null && userStore.currentUser.regional_headquarter_id === null && userStore.currentUser.district_headquarter_id === null"
-                        @close="close" @add="
+                        @close="closeModalW()" @add="
                             AddApplication('regionals', props.regionalHeadquarter.id)
                             ">
                     </AddModal>
@@ -468,12 +468,14 @@
                             <pre>{{  IsTrusted }}</pre> -->
                         </div>
                     </div>
-                    <AddModal v-show="showModal === true" @close="close"
+                    <AddModal v-show="showModal === true"  @close="closeModalW()"
                         :is-commander="(roleStore.roles.detachment_commander || roleStore.roles.educationalheadquarter_commander || roleStore.roles.regionalHeadquarter_commander || roleStore.roles.localheadquarter_commander || roleStore.roles.districtheadquarter_commander) !== null"
                         :is-new="userStore.currentUser.educational_headquarter_id === null && userStore.currentUser.detachment_id === null && userStore.currentUser.local_headquarter_id === null && userStore.currentUser.regional_headquarter_id === null && userStore.currentUser.district_headquarter_id === null"
+
                         @add="
                             AddApplication('centrals', props.centralHeadquarter.id)
                             ">
+
                     </AddModal>
                     <router-link v-if="
                         userId &&
