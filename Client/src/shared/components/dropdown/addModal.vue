@@ -4,9 +4,11 @@
 
       <p  v-if="isCommander" class="modal__wrapper_title">При одобрении вашей заявки на вступление в штаб, вы останетесь командиром
         ЛСО/штаба, которым вы сейчас являетесь, также станете участником этого штаба.</p>
+        <p v-else-if="isNew">Вы действительно хотите вступить в штаб?</p>
         <p v-else class="modal__wrapper_title">При одобрении вашей заявки на вступление в штаб, вы будете
         автоматически удалены
         из тех ЛСО/штабов, в которых вы сейчас состоите.</p>
+
       <div class="modal__wrapper_buttons">
         <Button type="button" label="Продолжить" class="modal__wrapper_buttons_confirm" @click="add"></Button>
         <Button type="button" label="Отменить" class="modal__wrapper_buttons_cancel" @click="close"></Button>
@@ -19,6 +21,10 @@ import { Button } from '@shared/components/buttons';
 
 const props = defineProps({
   isCommander: { type: Boolean, required: true },
+  isNew: {
+    type: Boolean,
+    required: true
+  }
 });
 
 const emit = defineEmits(['close', 'add']);

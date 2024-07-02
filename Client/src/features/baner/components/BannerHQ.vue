@@ -24,7 +24,7 @@
                             <img src="@/app/assets/icon/calendar.svg" alt="calendar" />
                             <time datetime="2022-09-10">{{
                                 headquarter.founding_date
-                            }}</time>
+                                }}</time>
                         </li>
                     </ul>
                 </div>
@@ -64,6 +64,7 @@
                     </div>
                     <div class="overlay" v-if="showModal"></div>
                     <AddModal v-show="showModal === true" :is-commander="roleStore.roles.detachment_commander !== null"
+                        :is-new="userStore.currentUser.educational_headquarter_id === null && userStore.currentUser.detachment_id === null && userStore.currentUser.local_headquarter_id === null && userStore.currentUser.regional_headquarter_id === null && userStore.currentUser.district_headquarter_id === null"
                         @close="closeModalW()" @add="
                             AddApplication('educationals', props.headquarter.id)
                             ">
@@ -165,6 +166,7 @@
                     </div>
                     <AddModal v-show="showModal === true"
                         :is-commander="(roleStore.roles.detachment_commander || roleStore.roles.educationalheadquarter_commander) !== null"
+                        :is-new="userStore.currentUser.educational_headquarter_id === null && userStore.currentUser.detachment_id === null && userStore.currentUser.local_headquarter_id === null && userStore.currentUser.regional_headquarter_id === null && userStore.currentUser.district_headquarter_id === null"
                         @close="close" @add="
                             AddApplication('locals', props.localHeadquarter.id)
                             ">
@@ -263,6 +265,7 @@
                     </div>
                     <AddModal v-show="showModal === true" @close="close"
                         :is-commander="(roleStore.roles.detachment_commander || roleStore.roles.educationalheadquarter_commander || roleStore.roles.regionalHeadquarter_commander || roleStore.roles.localheadquarter_commander) !== null"
+                        :is-new="userStore.currentUser.educational_headquarter_id === null && userStore.currentUser.detachment_id === null && userStore.currentUser.local_headquarter_id === null && userStore.currentUser.regional_headquarter_id === null && userStore.currentUser.district_headquarter_id === null"
                         @add="
                             AddApplication('districts', props.districtHeadquarter.id)
                             ">
@@ -358,6 +361,7 @@
                     </div>
                     <AddModal v-show="showModal === true"
                         :is-commander="(roleStore.roles.detachment_commander || roleStore.roles.educationalheadquarter_commander || roleStore.roles.localheadquarter_commander) !== null"
+                        :is-new="userStore.currentUser.educational_headquarter_id === null && userStore.currentUser.detachment_id === null && userStore.currentUser.local_headquarter_id === null && userStore.currentUser.regional_headquarter_id === null && userStore.currentUser.district_headquarter_id === null"
                         @close="close" @add="
                             AddApplication('regionals', props.regionalHeadquarter.id)
                             ">
@@ -420,7 +424,7 @@
                         <li class="Squad-HQ__date-central">
                             <time datetime="2022-09-10">{{
                                 centralHeadquarter.rso_founding_congress_date
-                                }}
+                            }}
                                 — дата первого Учредительного Съезда РСО</time>
                         </li>
                         <li class="hq-data__participant-counter">
@@ -466,6 +470,7 @@
                     </div>
                     <AddModal v-show="showModal === true" @close="close"
                         :is-commander="(roleStore.roles.detachment_commander || roleStore.roles.educationalheadquarter_commander || roleStore.roles.regionalHeadquarter_commander || roleStore.roles.localheadquarter_commander || roleStore.roles.districtheadquarter_commander) !== null"
+                        :is-new="userStore.currentUser.educational_headquarter_id === null && userStore.currentUser.detachment_id === null && userStore.currentUser.local_headquarter_id === null && userStore.currentUser.regional_headquarter_id === null && userStore.currentUser.district_headquarter_id === null"
                         @add="
                             AddApplication('centrals', props.centralHeadquarter.id)
                             ">
