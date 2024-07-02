@@ -363,11 +363,13 @@ const updateEduc = (educVal) => {
     let searchId = 0;
     let lim = '';
     if (educVal) {
-        search = '?educational_headquarter__name=' + educVal;
-        sortedDrop.value = true;
-
-        searchId = '?educational_headquarter__id=' + educVal;
-        sortedDrop.value = false;
+        if (Number.isInteger(educVal)) {
+            searchId = '?educational_headquarter__id=' + educVal;
+            sortedDrop.value = false;
+        } else {
+            search = '?educational_headquarter__name=' + educVal;
+            sortedDrop.value = true;
+        }
         lim = '&limit=500';
 
 
