@@ -1,7 +1,10 @@
 <template>
     <div class="competition__item">
         <div class="competition__content">
-            <div class="horizontal-item__wrapper">
+            <div :class="{
+                horizontal_item__wrapper: true,
+                first_row: slimScreen    
+            }">
                 <img
                     v-if="application.user?.media?.avatar"
                     class="competition__avatar_circle"
@@ -20,8 +23,11 @@
                 </div>
             </div>
 
-            <div class="competition__detachments">
-                <div class="horizontal-item__wrapper">
+            <div :class="{
+                competition__detachments: true,
+                second_row_first: slimScreen
+            }">
+                <div class="horizontal_item__wrapper">
                     <img v-if="application.headquarters.banner" class="competition__avatar_circle" :src="application.headquarters.banner"
                         alt="Banner" />
 
@@ -35,9 +41,9 @@
                 </div>
             </div>
 
-            <div class="horizontal-item__wrapper">{{ action }}</div>
+            <div :class="{horizontal_item__wrapper: true, second_row_second: slimScreen}">{{ action }}</div>
 
-            <div class="horizontal__confidant">
+            <div :class="{horizontal__confidant: true, second_row_third: slimScreen}">
                 <input
                     type="checkbox"
                     v-model="isChecked"
@@ -49,11 +55,13 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+
+const slimScreen = ref(false);
 
 const props = defineProps({
     application: {
@@ -84,6 +92,12 @@ const clickUser = (user) => {
 const onCheckbox = (e) => {
     emit('select', props.application, e.target.checked);
 };
+
+onMounted(() => {
+    const onResize = () => window.innerWidth < 1024 ? slimScreen.value = true : slimScreen.value = false;
+    onResize();
+    window.addEventListener('resize', onResize);
+});
 </script>
 
 <style scoped lang="scss">
@@ -92,6 +106,9 @@ const onCheckbox = (e) => {
     border: 1px solid #b6b6b6;
     border-radius: 10px;
     margin-bottom: 12px;
+    @media screen and (max-width: 1024px) {
+        margin-bottom: 0px;
+    }
     input {
         width: 100%;
         height: 100%;
@@ -100,7 +117,44 @@ const onCheckbox = (e) => {
 .competition__content {
     display: grid;
     grid-gap: 12px;
-    grid-template-columns: auto auto 224px 50px;
+    @media screen and (max-width: 1980px) {
+        grid-template-columns: auto auto 224px 50px;
+    }
+    @media screen and (max-width: 1024px) {
+        grid-template-columns: repeat(19, 1fr);
+        grid-template-rows: 1fr 1fr;
+        margin-bottom: 12px;
+    }
+    @media screen and (max-width: 360px){
+        grid-template-columns: repeat(19, 1fr);
+        grid-template-rows: 1fr 1fr 1fr;
+        margin-bottom: 12px;
+    }
+}
+.first_row {   
+    grid-column: span 19;
+    @media screen and (max-width: 360px){
+        grid-column: span 19;
+    }
+}
+.second_row_first {
+    grid-column: span 13;
+    @media screen and (max-width: 360px){
+        grid-column: span 19;
+    }
+
+}
+.second_row_second {
+    grid-column: span 4;
+    @media screen and (max-width: 360px){
+        grid-column: span 15;
+    }
+}
+.second_row_third {
+    grid-column: span 2;
+    @media screen and (max-width: 360px){
+        grid-column: span 4;
+    }
 }
 .competition__detachments {
     display: flex;
@@ -122,14 +176,16 @@ const onCheckbox = (e) => {
 .blue-bg {
     background-color: #c7e3fa;
 }
-.horizontal-item__wrapper {
+.horizontal_item__wrapper {
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: baseline;
     align-items: center;
 
     padding: 4px 20px;
-
+    @media screen and (max-width: 1024px) {
+        margin-bottom: 0px;
+    }
     gap: 10px;
     border-radius: 10px;
     border: 1px solid #b6b6b6;

@@ -1492,7 +1492,7 @@ function SubmitEvent() {
         fd.append(key, item);
     });
     if (time_data.value.event_duration_type === 'Однодневное') {
-      delete time_data.value.end_date;
+      time_data.value.end_date = time_data.value.start_date;
     }
     createAction(fd)
         .then((resp) => {

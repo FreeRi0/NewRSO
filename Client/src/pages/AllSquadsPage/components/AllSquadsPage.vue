@@ -345,26 +345,29 @@ const getDetachments = async (pagination, orderLimit) => {
         let url = '/detachments/?';
         if (orderLimit) data.push('limit=' + orderLimit);
         else if (!pagination) data.push('limit=' + limit);
-        else if (pagination == 'next')
+        else if (pagination == 'next' && !detachments.value.next.includes('213.139.208.147:30000'))
             url = detachments.value.next.replace('http', 'https');
         if (name.value) data.push('search=' + name.value);
-        if (SelectedSortDistrict.value)
-            data.push(
-                'district_headquarter__name=' + SelectedSortDistrict.value,
-            );
-        if (SelectedSortRegional.value)
-            data.push(
-                'regional_headquarter__name=' + SelectedSortRegional.value,
-            );
-        if (SelectedSortLocal.value)
-            data.push('local_headquarter__name=' + SelectedSortLocal.value);
-        if (education.value)
-            data.push('educational_institution__name=' + education.value);
-        if (picked.value) data.push('area__name=' + picked.value);
-        if (sortBy.value && !pagination)
-            data.push(
-                'ordering=' + (ascending.value ? '' : '-') + sortBy.value,
-            );
+        if (pagination != 'next'){
+            if (SelectedSortDistrict.value)
+                data.push(
+                    'district_headquarter__name=' + SelectedSortDistrict.value,
+                );
+            if (SelectedSortRegional.value)
+                data.push(
+                    'regional_headquarter__name=' + SelectedSortRegional.value,
+                );
+            if (SelectedSortLocal.value)
+                data.push('local_headquarter__name=' + SelectedSortLocal.value);
+            if (education.value)
+                data.push('educational_institution__name=' + education.value);
+            if (picked.value) data.push('area__name=' + picked.value);
+            if (sortBy.value && !pagination)
+                data.push(
+                    'ordering=' + (ascending.value ? '' : '-') + sortBy.value,
+                );
+        }
+        
         const viewHeadquartersResponse = await HTTP.get(url + data.join('&'));
         isLoading.value = false;
 

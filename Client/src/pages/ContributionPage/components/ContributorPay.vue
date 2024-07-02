@@ -233,14 +233,6 @@ const viewContributorsData = async (search, pagination, orderLimit) => {
         else if (!pagination) data.push('limit=' + limit);
         else if (pagination == 'next')
             url = users.value.next.replace('http', 'https');
-
-        // if (membership.value) {
-        //     if (membership.value == 'paid') {
-        //         data.push('membership_fee=true');
-        //     } else if (membership.value == 'notPaid') {
-        //         data.push('membership_fee=false');
-        //     }
-        // }
         if (sortBy.value && !pagination)
             data.push(
                 'ordering=' + (ascending.value ? '' : '-') + sortBy.value,
@@ -373,9 +365,16 @@ const updateLocal = (localVal) => {
     } else if (levelAccess.value < 3) {
         search = '?regional_headquarter__name=' + reg.value;
     }
+    if (localVal && detachment.value) {
+        detachment.value = null;
+    }
+    if (localVal && educ.value) {
+        educ.value = null;
+    }
     if (name.value) search += '&search=' + name.value;
-    viewContributorsData(search, !localVal);
+    viewContributorsData(search);
     getFiltersData('/educationals/', search);
+    getFiltersData('/detachments/', search);
 
     local.value = localVal;
 };
@@ -391,8 +390,13 @@ const updateEduc = (educVal) => {
     } else if (levelAccess.value < 4) {
         search = '?local_headquarter__name=' + local.value;
     }
+
+    if (educVal && detachment.value) {
+        detachment.value = null;
+    }
     if (name.value) search += '&search=' + name.value;
     viewContributorsData(search);
+    getFiltersData('/detachments/', search);
 
     educ.value = educVal;
 };
@@ -728,30 +732,31 @@ watch(
     },
 );
 
-// watch(
-//     () => membership.value,
-//     () => {
-//         let search = [];
-//         if (district.value) {
-//             search.push('district_headquarter__name=' + district.value);
-//         }
-//         if (reg.value) {
-//             search.push('regional_headquarter__name=' + reg.value);
-//         }
-//         if (local.value) {
-//             search.push('local_headquarter__name=' + local.value);
-//         }
-//         if (educ.value) {
-//             search.push('educational_headquarter__name=' + educ.value);
-//         }
-//         if (detachment.value) {
-//             search.push('detachment__name=' + detachment.value);
-//         }
-//         if (name.value) search.push('&search=' + name.value);
-//         viewContributorsData('?' + search.join('&'));
-//         // viewContributorsData(search, '', participants.value.length);
-//     },
-// );
+
+watch(
+    () => membership.value,
+    () => {
+        let search = [];
+        if (district.value) {
+            search.push('district_headquarter__name=' + district.value);
+        }
+        if (reg.value) {
+            search.push('regional_headquarter__name=' + reg.value);
+        }
+        if (local.value) {
+            search.push('local_headquarter__name=' + local.value);
+        }
+        if (educ.value) {
+            search.push('educational_headquarter__name=' + educ.value);
+        }
+        if (detachment.value) {
+            search.push('detachment__name=' + detachment.value);
+        }
+        if (name.value) search.push('&search=' + name.value);
+        viewContributorsData('?' + search.join('&'));
+        // viewContributorsData(search, '', participants.value.length);
+    },
+);
 
 watch(
     () => sortBy.value,

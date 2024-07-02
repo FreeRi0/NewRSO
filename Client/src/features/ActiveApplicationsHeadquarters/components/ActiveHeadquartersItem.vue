@@ -1,7 +1,7 @@
 <template>
     <div class="competition__item">
         <div class="competition__content">
-            <template v-if="!position">
+            <template v-if="!position && !slimScreen">
                 <span></span>
                 <span>Боец</span>
                 <span>Штаб</span>
@@ -30,12 +30,11 @@
                     </p>
                 </div>
             </div>
-
+            <div v-if="slimScreen"></div>
             <div class="competition__detachments">
                 <div class="horizontal-item__wrapper">
                     <img v-if="application.headquarters.banner" class="competition__avatar_circle" :src="application.headquarters.banner"
                         alt="Banner" />
-
                     <div v-else class="competition__avatar_circle blue-bg"></div>
 
                     <div class="containerHorizontal">
@@ -51,9 +50,11 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 
 import { useRouter } from 'vue-router';
+
+const slimScreen = ref(false);
 
 const router = useRouter();
 
@@ -93,6 +94,12 @@ watch(
         isChecked.value = newSelected;
     },
 );
+
+onMounted(() => {
+    const onResize = () => window.innerWidth < 1024 ? slimScreen.value = true : slimScreen.value = false;
+    onResize();
+    window.addEventListener('resize', onResize);
+});
 </script>
 
 <style scoped lang="scss">
@@ -102,7 +109,10 @@ watch(
     border-radius: 10px;
     margin-bottom: 12px;
 
-    //max-height: 48px;
+    @media screen and (max-width: 1024px) {
+        margin-bottom: 0px;
+    }
+
     input {
         width: 100%;
         height: 100%;
@@ -124,6 +134,12 @@ watch(
     width: 100%;
     grid-gap: 12px;
     grid-template-columns: 48px auto auto;
+
+    @media screen and (max-width: 1024px) {
+        grid-template-columns: 48px auto;
+        grid-template-rows: 1fr 1fr;
+        margin-bottom: 12px;
+    }
 
     font-family: Bert Sans;
     font-size: 16px;
@@ -159,6 +175,10 @@ watch(
     align-items: center;
 
     padding: 4px 20px;
+
+    @media screen and (max-width: 1024px) {
+        margin-bottom: 0px;
+    }
 
     gap: 10px;
     border-radius: 10px;
