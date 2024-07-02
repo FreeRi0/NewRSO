@@ -345,7 +345,7 @@ const getDetachments = async (pagination, orderLimit) => {
         let url = '/detachments/?';
         if (orderLimit) data.push('limit=' + orderLimit);
         else if (!pagination) data.push('limit=' + limit);
-        else if (pagination == 'next')
+        else if (pagination == 'next' && !detachments.value.next.includes('213.139.208.147:30000'))
             url = detachments.value.next.replace('http', 'https');
         if (name.value) data.push('search=' + name.value);
         if (pagination != 'next'){
