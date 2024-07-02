@@ -136,7 +136,7 @@ const localsStore = useLocalsStore();
 const educationalsStore = useEducationalsStore();
 const squadsStore = useSquadsStore();
 const users = ref({});
-const sortedDrop = ref(false);
+const sortedDrop = ref(null);
 const limit = 12;
 const action = ref('Оплачен');
 const participants = ref([]);
@@ -309,12 +309,14 @@ const updateDistrict = (districtVal) => {
 const updateReg = (regVal) => {
     let search = '';
     let searchId = 0;
+    let lim = '';
     if (regVal) {
         search = '?regional_headquarter__name=' + regVal;
-        if (searchId) {
-            searchId = '?regional_headquarter__id=' + regVal;
-            sortedDrop.value = false;
-        }
+        sortedDrop.value = true;
+        searchId = '?regional_headquarter__id=' + regVal;
+        sortedDrop.value = false;
+        lim = '&limit=500';
+
     } else if (levelAccess.value < 2) {
         search = '?district_headquarter__name=' + district.value;
         searchId = '?district_headquarter__id=' + district.value;
@@ -324,14 +326,21 @@ const updateReg = (regVal) => {
     viewContributorsData(search);
     getFiltersData('/locals/', search);
     getFiltersData('/educationals/', search);
-    getFiltersData('/detanchment_list', '', searchId);
+    getFiltersData('/detanchment_list', '', searchId, lim);
 
     reg.value = regVal;
 };
 const updateLocal = (localVal) => {
     let search = '';
+    let searchId = 0;
+    let lim = '';
     if (localVal) {
         search = '?local_headquarter__name=' + localVal;
+        sortedDrop.value = true;
+
+        searchId = '?local_headquarter__id=' + localVal;
+        sortedDrop.value = false;
+        lim = '&limit=500';
     } else if (levelAccess.value < 3) {
         search = '?regional_headquarter__name=' + reg.value;
     }
@@ -344,7 +353,7 @@ const updateLocal = (localVal) => {
     if (name.value) search += '&search=' + name.value;
     viewContributorsData(search);
     getFiltersData('/educationals/', search);
-    getFiltersData('/detanchment_list/', search);
+    getFiltersData('/detanchment_list/', '', searchId, lim);
 
     local.value = localVal;
 };
@@ -354,32 +363,31 @@ const updateEduc = (educVal) => {
     let searchId = 0;
     let lim = '';
     if (educVal) {
-        sortedDrop.value = false;
         search = '?educational_headquarter__name=' + educVal;
+        sortedDrop.value = true;
+
         searchId = '?educational_headquarter__id=' + educVal;
+        sortedDrop.value = false;
         lim = '&limit=500';
 
 
     } else if (local.value) {
         search = '?local_headquarter__name=' + local.value;
-        if (searchId) {
-            searchId = '?local_headquarter__id=' + local.value;
-            sortedDrop.value = false;
-        }
         searchId = '?local_headquarter__id=' + local.value;
+        sortedDrop.value = false;
+        lim = '&limit=500';
+
     } else if (levelAccess.value < 3) {
         search = '?regional_headquarter__name=' + reg.value;
-        if (searchId) {
-            searchId = '?regional_headquarter__id=' + reg.value;
-            sortedDrop.value = false;
-        }
         searchId = '?regional_headquarter__id=' + reg.value;
+        sortedDrop.value = false;
+        lim = '&limit=500';
+
     } else if (levelAccess.value < 4) {
-        if (searchId) {
-            searchId = '?local_headquarter__id=' + local.value;
-            sortedDrop.value = false;
-        }
+        searchId = '?local_headquarter__id=' + local.value;
+        sortedDrop.value = false;
         search = '?local_headquarter__name=' + local.value;
+        lim = '&limit=500';
 
     }
 
@@ -546,9 +554,9 @@ const getUsersByRoles = () => {
             search =
                 '?regional_headquarter__name=' +
                 roles.roles.value.regionalheadquarter_commander.name;
-                searchId = '?regional_headquarter__id=' +
+            searchId = '?regional_headquarter__id=' +
                 roles.roles.value.regionalheadquarter_commander.id;
-                lim = '&limit=500';
+            lim = '&limit=500';
             locals.value = localsStore.locals.filter(
                 (loc) => loc.regional_headquarter == reg.value,
             );
@@ -556,7 +564,7 @@ const getUsersByRoles = () => {
             );
             levelAccess.value = 2;
             getFiltersData('/educationals/', search, '', '');
-            getFiltersData('/locals/',  search, '', '');
+            getFiltersData('/locals/', search, '', '');
             getFiltersData('/detanchment_list/', '', searchId, lim);
         } else if (roles.roles.value.localheadquarter_commander) {
             local.value = roles.roles.value.localheadquarter_commander.name;
@@ -571,7 +579,7 @@ const getUsersByRoles = () => {
             search =
                 '?educational_headquarter__name=' +
                 roles.roles.value.educationalheadquarter_commander.name;
-                lim = '&limit=500';
+            lim = '&limit=500';
             levelAccess.value = 4;
             getFiltersData('/detanchment_list/', ' ', searchId, lim);
         } else if (roles.roles.value.detachment_commander) {

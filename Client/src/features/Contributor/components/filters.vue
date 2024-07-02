@@ -31,7 +31,7 @@
             <v-expansion-panel-text>
                 <regionalsDropdown open-on-clear id="reg" name="regdrop" placeholder="Выберите рег штаб"
                     v-model="regRef" @update:value="updateReg" class="mb-2 region-input" :items="regionals"
-                    :SortDropdown="props.SortDropdown">
+                    :SortDropdown="SortDropdown">
                 </regionalsDropdown>
             </v-expansion-panel-text>
             <p v-if="regRef">Выбрано: {{ regRef }}</p>
@@ -49,7 +49,7 @@
             <v-expansion-panel-text>
                 <localSearchFilter open-on-clear id="reg" name="regdrop" placeholder="Выберите местный штаб"
                     v-model="localRef" @update:value="updateLocal" class="mb-2 region-input" :items="locals"
-                    :SortDropdown="true">
+                    :SortDropdown="SortDropdown">
                 </localSearchFilter>
             </v-expansion-panel-text>
             <p v-if="localRef">Выбрано: {{ localRef }}</p>
@@ -103,17 +103,17 @@
             <v-expansion-panel-text>
                 <div class="radio-buttons-field filter-text">
                     <input type="radio" id="fee1" name="fee" value="all" v-model="membershipRef"
-                        @update:model-value="updateMembership " />
+                        @update:model-value="updateMembership" />
                     <label for="fee1">Все</label>
                 </div>
                 <div class="radio-buttons-field filter-text">
                     <input type="radio" id="fee2" name="fee" value="paid" v-model="membershipRef"
-                        @update:model-value="updateMembership " />
+                        @update:model-value="updateMembership" />
                     <label for="fee2">Оплачен</label>
                 </div>
                 <div class="radio-buttons-field filter-text">
                     <input type="radio" id="fee3" name="fee" value="notPaid" v-model="membershipRef"
-                        @update:model-value="updateMembership " />
+                        @update:model-value="updateMembership" />
                     <label for="fee3">Не оплачен</label>
                 </div>
             </v-expansion-panel-text>
@@ -190,6 +190,7 @@ const membershipRef = ref(props.membership);
 const regRef = ref(props.reg);
 const educRef = ref(props.educ);
 const detachmentRef = ref(props.detachment);
+const boolVal = ref(props.SortDropdown);
 const levelAccess = ref(7);
 
 const emit = defineEmits([
@@ -205,14 +206,14 @@ const updateDistrict = () => {
     emit('updateDistrict', districtRef.value);
 };
 const updateReg = () => {
-    emit('updateReg', regRef.value);
+    emit('updateReg', regRef.value, boolVal.value);
 };
 const updateLocal = () => {
-    emit('updateLocal', localRef.value);
+    emit('updateLocal', localRef.value, boolVal.value);
 };
 
 const updateEduc = () => {
-    emit('updateEduc', educRef.value);
+    emit('updateEduc', educRef.value, boolVal.value);
 };
 
 const updateDetachment = () => {
@@ -265,6 +266,12 @@ watch(
     () => props.membership,
     () => {
         membershipRef.value = props.membership;
+    },
+);
+watch(
+    () => props.SortDropdown,
+    () => {
+        boolVal.value = props.SortDropdown;
     },
 );
 
