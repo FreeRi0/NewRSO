@@ -31,7 +31,7 @@
             <v-expansion-panel-text>
                 <regionalsDropdown open-on-clear id="reg" name="regdrop" placeholder="Выберите рег штаб"
                     v-model="regRef" @update:value="updateReg" class="mb-2 region-input" :items="regionals"
-                    :SortDropdown="SortDropdown">
+                    :SortDropdown="true">
                 </regionalsDropdown>
             </v-expansion-panel-text>
             <p v-if="regRef">Выбрано: {{ regRef }}</p>
@@ -49,7 +49,7 @@
             <v-expansion-panel-text>
                 <localSearchFilter open-on-clear id="reg" name="regdrop" placeholder="Выберите местный штаб"
                     v-model="localRef" @update:value="updateLocal" class="mb-2 region-input" :items="locals"
-                    :SortDropdown="SortDropdown">
+                    :SortDropdown="true">
                 </localSearchFilter>
             </v-expansion-panel-text>
             <p v-if="localRef">Выбрано: {{ localRef }}</p>
@@ -67,7 +67,7 @@
             <v-expansion-panel-text>
                 <educationalsDropdown open-on-clear id="reg" name="regdrop" placeholder="Выберите обр штаб"
                     v-model="educRef" @update:value="updateEduc" class="mb-2 region-input" :items="educHead"
-                    :SortDropdown="SortDropdown">
+                    :SortDropdown="true">
                 </educationalsDropdown>
             </v-expansion-panel-text>
             <p v-if="educRef">Выбрано: {{ educRef }}</p>
@@ -172,9 +172,6 @@ const props = defineProps({
     sortedParticipants: { type: Array, required: false },
     countParticipants: { type: Number, required: false },
     isMembership: { type: Boolean, required: false, default: false },
-    SortDropdown: {
-        type: Boolean,
-    }
 });
 
 const roleStore = useRoleStore();
@@ -190,7 +187,6 @@ const membershipRef = ref(props.membership);
 const regRef = ref(props.reg);
 const educRef = ref(props.educ);
 const detachmentRef = ref(props.detachment);
-const boolVal = ref(props.SortDropdown);
 const levelAccess = ref(7);
 
 const emit = defineEmits([
@@ -206,16 +202,14 @@ const updateDistrict = () => {
     emit('updateDistrict', districtRef.value);
 };
 const updateReg = () => {
-    emit('updateReg', regRef.value, boolVal.value);
+    emit('updateReg', regRef.value);
 };
 const updateLocal = () => {
-    emit('updateLocal', localRef.value, boolVal.value);
+    emit('updateLocal', localRef.value);
 };
-
 const updateEduc = () => {
-    emit('updateEduc', educRef.value, boolVal.value);
+    emit('updateEduc', educRef.value);
 };
-
 const updateDetachment = () => {
     emit('updateDetachment', detachmentRef.value);
 };
@@ -268,13 +262,6 @@ watch(
         membershipRef.value = props.membership;
     },
 );
-watch(
-    () => props.SortDropdown,
-    () => {
-        boolVal.value = props.SortDropdown;
-    },
-);
-
 
 </script>
 <style lang="scss">
