@@ -170,7 +170,7 @@
                         label="Обучение по охране труда и технике безопасности" /></router-link>
             </div>
 
-            <img src="@app/assets/SafetyBgMini.png" alt="bg" />
+            <img src="@app/assets/bg_safety.jpg" alt="bg" />
         </div>
         <router-link :to="{
             name: 'CompetitionParticipants',
