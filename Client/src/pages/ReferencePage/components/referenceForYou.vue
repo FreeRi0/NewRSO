@@ -57,9 +57,9 @@
                 <form action="#" @submit.prevent="SendReference()">
                     <div class="data-form refer">
                         <div class="form-field">
-                            <label for="education-org">Дата начала действия справки<span
+                            <label for="education-org">Дата начала действия справки <span
                                     class="valid-red">*</span></label>
-                            <Input name="date_start" type="date" class="input-big"
+                            <Input name="date_start" type="date" class="input-big reference-field"
                                 v-model:value="refData.cert_start_date" />
                         </div>
                         <p class="error" v-if="isError.cert_start_date">
@@ -68,7 +68,7 @@
                         <div class="form-field">
                             <label for="facultet">Дата окончания действия справки
                             </label>
-                            <Input name="date_end" type="date" class="input-big"
+                            <Input name="date_end" type="date" class="input-big reference-field"
                                 v-model:value="refData.cert_end_date" />
                         </div>
                     </div>
@@ -79,7 +79,7 @@
                         <label for="course">Справка выдана для предоставления
                             <span class="valid-red">*</span></label>
                         <Input name="spravka-field" type="text" v-model:value="refData.recipient" id="course"
-                            class="input-full" placeholder="Ответ" />
+                            class="input-full reference-field" placeholder="Ответ" />
                     </div>
                     <p class="error" v-if="isError.recipient">
                         {{ '' + isError.recipient }}
@@ -597,18 +597,7 @@ watch(
         }
     },
 );
-// watch(
-//     () => squadsStore.squads,
-//     () => {
-//         let educId = educationalsStore.educationals.length
-//             ? educationalsStore.educationals.find((ed) => ed.name == educ.value)
-//                 ?.id
-//             : roleStore.roles.educationalheadquarter_commander?.id;
-//         detachments.value = squadsStore.squads.filter(
-//             (det) => det.educational_headquarter == educId,
-//         );
-//     },
-// );
+
 watch(
     () => sortBy.value,
     () => {
@@ -721,6 +710,9 @@ input[type='number']::-webkit-outer-spin-button {
     grid-template-columns: 1fr 1fr;
     column-gap: 140px;
     margin-top: 60px;
+}
+.reference-field {
+    margin-top: 20px;
 }
 
 .another {

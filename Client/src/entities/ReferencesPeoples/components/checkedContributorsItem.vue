@@ -1,17 +1,9 @@
 <template>
-    <div class="checked">
+    <div class="checked checkedReference">
         <div class="checked-item__wrapper">
             <div class="checked-img">
-                <img
-                    :src="participant.media?.photo"
-                    alt="logo"
-                    v-if="participant.media?.photo"
-                />
-                <img
-                    src="@app/assets/user-avatar.png"
-                    alt="photo"
-                    v-else
-                />
+                <img :src="participant.media?.photo" alt="logo" v-if="participant.media?.photo" />
+                <img src="@app/assets/user-avatar.png" alt="photo" v-else />
             </div>
             <div class="containerHorizontal">
                 <div class="d-flex">
@@ -26,24 +18,16 @@
                     </p>
                 </div>
                 <div class="checked-item__list-date">
-                    <span
-                        style="
+                    <span style="
                             border-left: 2px solid #b6b6b6;
                             padding-right: 8px;
-                        "
-                    ></span>
+                        "></span>
                     <p>{{ participant.date_of_birth }}</p>
                 </div>
             </div>
         </div>
         <div class="checked__confidant ml-3">
-            <input
-                type="checkbox"
-                v-model="checked"
-                :value="participant"
-
-                @change="updateMembership"
-            />
+            <input type="checkbox" v-model="checked" :value="participant" @change="updateMembership" />
         </div>
     </div>
 </template>
@@ -72,7 +56,7 @@ const props = defineProps({
 const emit = defineEmits(['change']);
 const updateMembership = (e) => {
     // console.log('checkeed', checked.value);
-    emit('change', checked.value, props.participant.id );
+    emit('change', checked.value, props.participant.id);
 };
 
 
@@ -93,12 +77,15 @@ watch(
 <style lang="scss" scoped>
 .checked {
     display: flex;
+    margin-top: 12px;
     align-items: center;
+
     &-img {
         align-items: center;
         width: 36px;
         height: 36px;
         justify-content: start;
+
         img {
             display: flex;
             position: relative;
@@ -109,6 +96,7 @@ watch(
         }
     }
 }
+
 .checked-item__wrapper {
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -150,6 +138,7 @@ watch(
     margin-top: 10px;
     text-align: center;
 }
+
 .checked-item__list-date {
     width: 95px;
     display: grid;
@@ -182,6 +171,7 @@ watch(
     height: 48px;
     margin: 0px 12px;
     width: 48px;
+
     input {
         width: 24px;
         height: 24px;
@@ -196,6 +186,7 @@ watch(
     height: 48px;
     padding: 12px 32px;
     margin: 0px;
+
     span {
         font-size: 16px;
     }
@@ -212,6 +203,7 @@ watch(
     font-weight: 400;
     margin-right: 10px;
 }
+
 .sort-select {
     height: 46px;
     width: 185px;
