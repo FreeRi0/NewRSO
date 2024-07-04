@@ -30,7 +30,7 @@
                         <Button class="form-button" type="button" label="Подать заявку" variant="text"
                             size="large"></Button></router-link> -->
 
-                    <Button v-else-if="(!eventsStore.status.is_participant && !eventsStore.status.is_applicant)"
+                    <Button v-else-if="(!eventsStore.status.is_participant && !eventsStore.status.is_applicant && (new Date().getTime() <= new Date(eventsStore.event.time_data?.registration_end_date).getTime()))"
                         class="form-button" type="button" @click="AddApp()" label="Подать заявку" variant="text"
                         size="large"></Button>
 
@@ -376,6 +376,7 @@ const data = ref({});
 const comName = ref('');
 const showModal = ref(false);
 
+
 const picked = ref(true);
 const swal = inject('$swal');
 const eventsStore = useEventsStore();
@@ -404,7 +405,7 @@ const prev = () => {
 let userId = computed(() => {
     return userStore.currentUser.id;
 });
-
+console.log((new Date().getTime() <= new Date(eventsStore.event.time_data?.registration_end_date).getTime()))
 
 const ddd = computed(() => {
     return regionalsStore.regionals.find((item) => item.district === roleStore.roles.districtheadquarter_commander?.id);
@@ -1035,7 +1036,7 @@ onMounted(() => {
 
 .section_wrap {
     margin-top: 40px;
-
+    border-radius: 10px;
     box-shadow: 0px 0px 10px 0px #00000014;
     height: 337px;
     padding: 24px 46px;

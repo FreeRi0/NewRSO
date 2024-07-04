@@ -103,17 +103,17 @@
             <v-expansion-panel-text>
                 <div class="radio-buttons-field filter-text">
                     <input type="radio" id="fee1" name="fee" value="all" v-model="membershipRef"
-                        @update:model-value="updateMembership " />
+                        @update:model-value="updateMembership" />
                     <label for="fee1">Все</label>
                 </div>
                 <div class="radio-buttons-field filter-text">
                     <input type="radio" id="fee2" name="fee" value="paid" v-model="membershipRef"
-                        @update:model-value="updateMembership " />
+                        @update:model-value="updateMembership" />
                     <label for="fee2">Оплачен</label>
                 </div>
                 <div class="radio-buttons-field filter-text">
                     <input type="radio" id="fee3" name="fee" value="notPaid" v-model="membershipRef"
-                        @update:model-value="updateMembership " />
+                        @update:model-value="updateMembership" />
                     <label for="fee3">Не оплачен</label>
                 </div>
             </v-expansion-panel-text>
@@ -207,11 +207,9 @@ const updateReg = () => {
 const updateLocal = () => {
     emit('updateLocal', localRef.value);
 };
-
 const updateEduc = () => {
     emit('updateEduc', educRef.value);
 };
-
 const updateDetachment = () => {
     emit('updateDetachment', detachmentRef.value);
 };
@@ -264,7 +262,6 @@ watch(
         membershipRef.value = props.membership;
     },
 );
-
 
 </script>
 <style lang="scss">
