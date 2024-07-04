@@ -422,7 +422,6 @@ const edd = computed(() => {
         regional_headquarter
         === roleStore.roles.regional_headquarter_commander?.id || item?.local_headquarter === roleStore.roles.local_headquarter_commander?.id);
 })
-
 const det = computed(() => {
     return squadsStore.squads.find((item) => item?.
         regional_headquarter
@@ -551,8 +550,14 @@ const AddApplication = async () => {
 watch(
     () => route.params.id,
 
+
     async (newId) => {
+        console.log(newId);
         if (!newId) return;
+        console.log(newId);
+        if(userStore.currentUser?.id === undefined) {
+           userStore.getUser();
+        }
         await eventsStore.getEventId(newId);
         await eventsStore.getStatus(newId, userStore.currentUser?.id);
         await eventsStore.getEventOrganizators(newId);
@@ -568,6 +573,7 @@ watch(
         immediate: true,
     },
 );
+
 
 
 watch(
@@ -591,9 +597,11 @@ watch(
         );
     },
 );
-onMounted(() => {
-    eventsStore.getStatus(eventsStore.event.id, userStore.currentUser?.id);
-})
+// onMounted(() => {
+//     // eventsStore.getEventId(route.params.id)
+//     console.log(eventsStore.event.id, route.params.id)
+//     eventsStore.getStatus(route.params.id, userStore.currentUser?.id);
+// })
 </script>
 
 <style lang="scss" scoped>
