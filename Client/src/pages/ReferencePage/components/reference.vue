@@ -56,9 +56,9 @@
                 <form action="#" @submit.prevent="SendReference()">
                     <div class="data-form refer">
                         <div class="form-field">
-                            <label for="education-org">Дата начала действия справки<span
+                            <label for="education-org">Дата начала действия справки <span
                                     class="valid-red">*</span></label>
-                            <Input name="date_start" type="date" class="input-big"
+                            <Input name="date_start" type="date" class="input-big reference-field"
                                 v-model:value="refData.cert_start_date" />
                         </div>
                         <p class="error" v-if="isError.cert_start_date">
@@ -68,7 +68,7 @@
                         <div class="form-field">
                             <label for="facultet">Дата окончания действия справки
                             </label>
-                            <Input name="date_end" type="date" class="input-big"
+                            <Input name="date_end" type="date" class="input-big reference-field"
                                 v-model:value="refData.cert_end_date" />
                         </div>
                     </div>
@@ -79,11 +79,23 @@
                         <label for="course">Справка выдана для предоставления
                             <span class="valid-red">*</span></label>
                         <Input name="spravka-field" type="text" v-model:value="refData.recipient" id="course"
-                            class="input-full" placeholder="Ответ" />
+                            class="input-full reference-field" placeholder="Ответ" />
                     </div>
                     <p class="error" v-if="isError.recipient">
                         {{ '' + isError.recipient }}
                     </p>
+                    <div class="form-field another">
+                        <label for="course">ФИО подписывающего лица
+                            <span class="valid-red">*</span></label>
+                        <Input name="spravka-field" type="text" v-model:value="refData.signatory" id="course"
+                            class="input-full reference-field" placeholder="Ответ" />
+                    </div>
+                    <div class="form-field another">
+                        <label for="course">Должность подписывающего лица, доверенность
+                            <span class="valid-red">*</span></label>
+                        <Input name="spravka-field" type="text" v-model:value="refData.position_procuration" id="course"
+                            class="input-full reference-field" placeholder="Ответ" />
+                    </div>
                     <div class="selectedItems">
                         <h3>Итого: {{ selectedPeoples.length }}</h3>
 
@@ -165,6 +177,8 @@ const refData = ref({
     cert_end_date: '',
     ids: arr,
     recipient: '',
+    signatory: '',
+    position_procuration: '',
 });
 
 const next = () => {
@@ -606,18 +620,6 @@ watch(
         }
     },
 );
-// watch(
-//     () => squadsStore.squads,
-//     () => {
-//         let educId = educationalsStore.educationals.length
-//             ? educationalsStore.educationals.find((ed) => ed.name == educ.value)
-//                 ?.id
-//             : roleStore.roles.educationalheadquarter_commander?.id;
-//         detachments.value = squadsStore.squads.filter(
-//             (det) => det.educational_headquarter == educId,
-//         );
-//     },
-// );
 
 watch(
     () => sortBy.value,
@@ -731,7 +733,9 @@ input[type='number']::-webkit-outer-spin-button {
 p {
     color: #898989;
 }
-
+.valid-red {
+    color: #db0000;
+}
 .refer {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -750,9 +754,9 @@ p {
 
 .form-field label {
     font-size: 16px;
-    font-family: BERTSANS;
+    font-family: 'Bert Sans';
     font-weight: 600;
-    margin-bottom: 8px;
+
 }
 
 .input-big {
@@ -852,7 +856,9 @@ p {
         text-overflow: ellipsis;
     }
 }
-
+.reference-field {
+    margin-top: 20px;
+}
 .error {
     color: #db0000;
     font-size: 14px;
