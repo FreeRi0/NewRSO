@@ -14,21 +14,6 @@
                         name: 'editAction',
                         params: { id: eventsStore.event.id },
                     }" class="user-data__link">Редактировать мероприятие</router-link>
-                    <!-- <Button
-                        v-else-if="(!eventsStore.status.is_participant && !eventsStore.status.is_applicant) && eventsStore.event.application_type === 'Персональная'"
-                        class="form-button" type="button" @click="AddApplication()" label="Подать заявку" variant="text"
-                        size="large"></Button>
-                    <router-link
-                        v-else-if="(!eventsStore.status.is_participant && !eventsStore.status.is_applicant) && eventsStore.event.application_type === 'Групповая'"
-                        :to="{ name: 'GroupSubmit' }">
-                        <Button class="form-button" type="button" label="Подать заявку" variant="text"
-                            size="large"></Button></router-link>
-
-                    <router-link
-                        v-else-if="(!eventsStore.status.is_participant && !eventsStore.status.is_applicant) && eventsStore.event.application_type === 'Мультиэтапная'"
-                        :to="{ name: 'MultiStageSubmit' }">
-                        <Button class="form-button" type="button" label="Подать заявку" variant="text"
-                            size="large"></Button></router-link> -->
 
                     <Button v-else-if="(!eventsStore.status.is_participant && !eventsStore.status.is_applicant && (new Date().getTime() <= new Date(eventsStore.event.time_data?.registration_end_date).getTime()))"
                         class="form-button" type="button" @click="AddApp()" label="Подать заявку" variant="text"
@@ -71,11 +56,11 @@
                     </div>
                     <div class="event-cols-2">
                         <img src="@app/assets/icon_items/label.svg" class="mr-3" alt="" />
-                        <div> Адрес: <p>{{ eventsStore.event.address }}</p>
+                        <div> Адрес: <p v-if="eventsStore.event.format !== 'Онлайн'">{{ eventsStore.event.address}}</p> <p v-else>Онлайн</p>
                         </div>
 
                     </div>
-                    <div class="event-cols-2">
+                    <div class="event-cols-2" v-if="eventsStore.event.conference_link !== null">
                         <img src="@app/assets/icon/linkRef.svg" class="mr-3 event-cols-2_ref" alt="linkRef" />
                         <a :href="eventsStore.event.conference_link">Ссылка на мероприятие</a>
                     </div>
@@ -205,6 +190,7 @@
                             <div class="text text--participant_name mt-7">
                                 {{ participant.user.first_name }}
                             </div>
+                            <div class="text text--position">{{ participant?.position?.position }}</div>
 
 
                         </router-link>
@@ -356,7 +342,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, computed, inject } from 'vue';
+import { ref, watch, computed, inject } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { useRoute, useRouter } from 'vue-router';
 import { HTTP } from '@app/http';
@@ -537,24 +523,12 @@ const AddApplication = async () => {
     }
 };
 
-// watch(
-//     () => userStore.currentUser,
-//     (newUser) => {
-//         return userStore.currentUser?.id
-//     },
-//     {
-//         immediate: true,
-//     },
-// );
-
 watch(
     () => route.params.id,
 
 
     async (newId) => {
-        console.log(newId);
         if (!newId) return;
-        console.log(newId);
         if(userStore.currentUser?.id === undefined) {
            userStore.getUser();
         }
@@ -597,11 +571,6 @@ watch(
         );
     },
 );
-// onMounted(() => {
-//     // eventsStore.getEventId(route.params.id)
-//     console.log(eventsStore.event.id, route.params.id)
-//     eventsStore.getStatus(route.params.id, userStore.currentUser?.id);
-// })
 </script>
 
 <style lang="scss" scoped>
@@ -823,6 +792,7 @@ watch(
     font-size: 16px;
     font-weight: 400;
     font-family: 'Bert-Sans';
+    text-align: center;
 }
 
 .form-button {

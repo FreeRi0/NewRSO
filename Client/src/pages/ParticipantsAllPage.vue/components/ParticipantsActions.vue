@@ -138,7 +138,7 @@ const getMembers = async (pagination, orderLimit) => {
         let url = `/events/${id}/participants/?`;
         if (orderLimit) data.push('limit=' + orderLimit);
         else if (!pagination) data.push('limit=' + limit);
-        else if (pagination == 'next')
+        else if (pagination == 'next' && !peoples.value.next.includes('213.139.208.147:30000'))
             url = peoples.value.next.replace('http', 'https');
         if (name.value) data.push('search=' + name.value);
         if (sortBy.value && !pagination)

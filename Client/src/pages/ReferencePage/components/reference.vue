@@ -15,7 +15,8 @@
                         @update-educ="updateEduc" @update-detachment="updateDetachment" :district="district"
                         :districts="districts" :reg="reg" :regionals="regionals" :local="local" :locals="locals"
                         :educ="educ" :educ-head="educHead" :detachment="detachment" :detachments="detachments"
-                        :roles="roles.roles.value" :sorted-participants="participants"  :count-participants="count" :is-membership="false" />
+                        :roles="roles.roles.value" :sorted-participants="participants" :count-participants="count"
+                        :is-membership="false" />
                 </div>
                 <!-- <pre>{{ reg }}</pre> -->
                 <div class="references-items">
@@ -37,11 +38,11 @@
                         </div>
                     </div>
                     <div class="references-wrapper">
-                        <referencesList :participants="participants"
-                            :selected-peoples="selectedPeoples" @change="changePeoples"></referencesList>
-                        <v-progress-circular class="circleLoader"  v-if="isLoading" indeterminate
+                        <referencesList :participants="participants" :selected-peoples="selectedPeoples"
+                            @change="changePeoples"></referencesList>
+                        <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
                             color="blue"></v-progress-circular>
-                            <p class="text-center" v-else-if="!isLoading && !participants.length">
+                        <p class="text-center" v-else-if="!isLoading && !participants.length">
                             Ничего не найдено
                         </p>
                     </div>
@@ -93,8 +94,10 @@
                     <div class="form-field another">
                         <label for="course">Должность подписывающего лица, доверенность
                             <span class="valid-red">*</span></label>
-                        <Input name="spravka-field" type="text" v-model:value="refData.position_procuration" id="course"
-                            class="input-full reference-field" placeholder="Ответ" />
+                        <!-- <Input name="spravka-field" type="text" v-model:value="refData.position_procuration" id="course"
+                            class="input-full reference-field" placeholder="Ответ" /> -->
+                        <textarea name="spravka-field" class="input-full reference-field position-field" id="course"
+                            type="text" v-model="refData.position_procuration" placeholder="Ответ" />
                     </div>
                     <div class="selectedItems">
                         <h3>Итого: {{ selectedPeoples.length }}</h3>
@@ -387,7 +390,7 @@ const SendReference = async () => {
     await HTTP.post('/membership_certificates/external/', refData.value, {
         headers: {
             'Content-Type': 'application/json',
-             Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
+            Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
         },
         responseType: 'blob'
     })
@@ -423,20 +426,20 @@ const SendReference = async () => {
 const select = (event) => {
     selectedPeoples.value = [];
 
-if (event.target.checked) {
+    if (event.target.checked) {
 
-    for (let index in participants.value) {
+        for (let index in participants.value) {
 
 
-        participants.value[index].selected = true;
-        selectedPeoples.value.push(participants.value[index]);
+            participants.value[index].selected = true;
+            selectedPeoples.value.push(participants.value[index]);
+        }
+    } else {
+        for (let index in participants.value) {
+
+            participants.value[index].selected = false;
+        }
     }
-} else {
-    for (let index in participants.value) {
-
-        participants.value[index].selected = false;
-    }
-}
 };
 
 const changePeoples = (CheckedUser, UserId) => {
@@ -733,9 +736,38 @@ input[type='number']::-webkit-outer-spin-button {
 p {
     color: #898989;
 }
+
 .valid-red {
     color: #db0000;
 }
+
+.position-field {
+    box-sizing: border-box;
+    border: 1px solid #a3a3a3;
+    border-radius: 10px;
+    display: block;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 16px 10px 16px;
+    margin-bottom: 20px;
+    font-family: 'Bert Sans';
+    width: 100%;
+    resize: none;
+    color: #35383f;
+    height: 45px;
+}
+
+.position-field:focus{
+    outline: none;
+}
+
+.position-field::placeholder {
+    color: #a3a3a3;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Bert Sans';
+}
+
 .refer {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -856,9 +888,12 @@ p {
         text-overflow: ellipsis;
     }
 }
+
 .reference-field {
     margin-top: 20px;
+
 }
+
 .error {
     color: #db0000;
     font-size: 14px;
