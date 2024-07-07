@@ -121,7 +121,7 @@
                                       class="form__input form-input-container"
                                       placeholder="Название мероприятия"
                                       name="name_hq"
-                                      :maxlength="100"
+                                      :maxlength="60"
                                   />
                                   <div class="form__counter">
                                     {{ maininfo.name.length }}/60
@@ -139,6 +139,7 @@
                                       class="form__input form-input-container"
                                       placeholder="https://discord.gg/s44UfkVJ"
                                       name="telegram-owner-hq"
+                                      :maxlength="60"
                                   />
                                   <div class="form__counter">{{ maininfo.conference_link.length }}/60</div>
                                 </div>
@@ -337,7 +338,7 @@
                                       class="form__input form-input-container"
                                       placeholder="Например, Москва, Гагарина 40"
                                       name="address_hq"
-                                      :maxlength="100"
+                                      :maxlength="60"
                                   />
                                   <div class="form__counter">
                                     {{ maininfo.address.length }}/60
@@ -354,6 +355,8 @@
                                       placeholder="Например, 150"
                                       name="group-hq"
                                       min="0"
+                                      max="9999"
+                                      onkeydown="if(this.value.length==4) this.value = this.value.slice(0,-1)"
                                   />
                                   <div class="form__counter">
                                     {{ maininfo.participants_number.length }}/4
@@ -365,6 +368,7 @@
                                       class="form__textarea"
                                       v-model="maininfo.description"
                                       placeholder="Расскажите о мероприятии"
+                                      :maxlength="300"
                                   />
                                   <div class="form__counter">
                                     {{ maininfo.description.length }}/300

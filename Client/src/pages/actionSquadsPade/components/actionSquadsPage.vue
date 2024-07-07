@@ -522,7 +522,14 @@ function SearchByInput() {
   });
 }
 const goToEvent = (id) => {
-router.push({ name: 'Action', params: { id: id } })
+  router.push({ name: 'Action', params: { id: id } })
+  actionFormSearch.value = {
+    format_type: '',
+    direction: '',
+    status: '',
+    scale: '',
+    search: '',
+  }
 }
 const goToEventList = (event) => {
   router.push({ name: 'Action', params: { id: event.target.id } })
@@ -796,13 +803,16 @@ const sortOptions = ref([
   margin-right: 16px;
 
   img {
-    z-index: -1;
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: fill;
+    right: 0;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
   }
 }
 .vertical_list-title {
