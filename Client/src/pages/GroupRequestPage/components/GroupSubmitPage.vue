@@ -18,13 +18,18 @@
                 </p>
 
                 <div class="uploads">
-                    <div class="form-col" v-for="(file, index) in files.length + 1" :key="file">
+                    <div class="form-col" v-for="(file, index) in files.length + 1" :key="index">
                         <div class="form-fileupload" v-if="index < 6">
                             <img class="paper-clip" src="@app/assets/icon/addFile.svg" alt="addFile" />
-
-                            <FileUpload class="file-upload-text" mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
+                            <FileUpload v-if="files[index]?.name" class="file-upload-text" mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
+                                :maxFileSize="7000000" :customUpload="true" :chooseLabel=files[index].name
+                            ></FileUpload>
+                            <FileUpload v-else class="file-upload-text" mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
                                 :maxFileSize="7000000" :customUpload="true" chooseLabel="Выбрать файл"
-                                @select="onUpload" @clear="onRemove(index)"></FileUpload>
+                                @select="onUpload"
+                            ></FileUpload>
+
+                            <img v-if="index < files.length" src="../../../app/assets/icon/close-location.svg" alt="close" width="24" height="24" @click="onRemove(index)"/>
                         </div>
                     </div>
                 </div>
@@ -38,7 +43,7 @@
 
                     <p class="choose_all">Выделить все</p>
 
-                    <a class="download_text" target="_blank">
+                    <a class="download_text" target="_blank" @click="downloadList">
                         <img class="download_img" src="/assets/download.svg" />
                         Cкачать список
                     </a>
@@ -83,6 +88,7 @@ import { useRouter } from 'vue-router';
 import GroupFilters from './GroupFilters.vue';
 import GroupSubmitItem from './GroupSubmitItem.vue';
 import GroupSubmitSelect from './GroupSubmitSelect.vue';
+import * as XLSX from 'xlsx';
 
 const sortBy = ref('alphabetically');
 
@@ -248,6 +254,30 @@ const onResize = () => {
     // console.log(width.value);
 };
 
+const downloadList = () => {
+    const workbook = XLSX.utils.book_new();
+
+    const worksheet_data = [
+        ["ФИО", "Почта", "Телефон", "Членский взнос"],
+        ...usersList.value.map(item => [`${item.last_name} ${item.first_name} ${item.patronymic_name}`, item.email, item.phone, item.fee])
+    ];
+
+    const worksheet = XLSX.utils.aoa_to_sheet(worksheet_data);
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'members.xlsx';
+    document.body.appendChild(a);
+    a.click();
+}
+
 watch(selectedUsersList, (newSelectedUsersList) => {
     isChecked.value = newSelectedUsersList.length == usersList.value.length;
 });
@@ -401,6 +431,7 @@ onMounted(async () => {
 }
 
 .download_text {
+    cursor: pointer;
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
