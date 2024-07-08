@@ -131,7 +131,7 @@
 
 
 
-        <div class="d-flex  school-wrapper" v-if="
+        <div class="d-flex  competition__school-wrapper" v-if="
             roleStore.status.is_commander_detachment ||
             roleStore.status.is_commissar_detachment ||
             roleStore.roles.regionalheadquarter_commander ||

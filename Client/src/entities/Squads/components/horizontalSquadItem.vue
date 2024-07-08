@@ -98,7 +98,7 @@ onMounted(() => {
     display: flex;
     column-gap: 12px;
     width: 100%;
-    @media screen and (max-width: 575px) {
+    @media screen and (max-width: 820px) {
     //   width: 100%;
       justify-content: center;
       align-items: center;
@@ -118,14 +118,14 @@ onMounted(() => {
     align-items: baseline;
     align-items: center;
 
-    @media screen and (max-width: 575px) {
+    @media screen and (max-width: 820px) {
         display: none;
     }
 
     &_img {
         display: none;
 
-        @media screen and (max-width: 575px) {
+        @media screen and (max-width: 820px) {
             display: flex;
             width: 100%;
             border: 1px solid #b6b6b6;
@@ -151,8 +151,10 @@ onMounted(() => {
 
 
     @media screen and (max-width: 820px) {
-        align-items: flex-start;
-        margin-bottom: 20px;
+        // align-items: flex-start;
+         margin-bottom: 20px;
+        flex-direction: column;
+        align-items: center;
     }
 
     @media screen and (max-width: 575px) {
@@ -176,7 +178,7 @@ onMounted(() => {
         background: #fff;
         margin-bottom: 12px;
 
-        @media screen and (max-width: 575px) {
+        @media screen and (max-width: 820px) {
             width: 100%;
             max-width: 100%;
             font-size: 12px;
@@ -189,14 +191,12 @@ onMounted(() => {
         column-gap: 12px;
 
 
+        // @media screen and (max-width: 820px) {
+        //     display: grid;
+        //     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        // }
         @media screen and (max-width: 820px) {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        }
-        @media screen and (max-width: 575px) {
           width: 100%;
-
-
           grid-template-columns: 1fr;
         }
     }
@@ -253,7 +253,7 @@ onMounted(() => {
     font-family: 'Bert Sans';
     font-size: 16px;
     padding: 0px 20px;
-    @media screen and (max-width: 575px) {
+    @media screen and (max-width: 820px) {
      max-width: 100%;
      padding: 16px 20px;
      font-size: 12px;
