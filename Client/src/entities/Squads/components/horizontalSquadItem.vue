@@ -97,8 +97,9 @@ onMounted(() => {
 .reg_wrap {
     display: flex;
     column-gap: 12px;
+    width: 100%;
     @media screen and (max-width: 575px) {
-      width: 100%;
+    //   width: 100%;
       justify-content: center;
       align-items: center;
     }
