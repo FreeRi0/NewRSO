@@ -1,23 +1,6 @@
 <template>
     <div class="user-metric">
-        <bannerPhoto v-if="
-            (props.user.privacy?.privacy_photo === 'Члены отряда' &&
-                props.user.detachment_id ===
-                currentUser.currentUser.value.detachment_id) ||
-            (props.user.privacy?.privacy_email === 'Руководство' &&
-                ((roleStore.roles.detachment_commander &&
-                    roleStore.roles.detachment_commander?.id ===
-                    props.user.detachment_id) ||
-                    (roleStore.roles.regionalheadquarter_commander &&
-                        roleStore.roles.regionalheadquarter_commander
-                            ?.id === props.user.regional_headquarter_id) ||
-                    roleStore.roles.localheadquarter_commander ||
-                    roleStore.roles.educationalheadquarter_commander ||
-                    roleStore.roles.districtheadquarter_commander ||
-                    roleStore.roles.centralheadquarter_commander)) ||
-            props.user.privacy?.privacy_email === 'Все' ||
-            props.user.privacy?.privacy_email === 'all'
-        " :banner="user.media?.banner" @upload-wall="uploadWall" @update-wall="updateWall" @delete-wall="deleteWall"
+        <bannerPhoto  v-if="privateFunc(privacyPhoto)" :banner="user.media?.banner" @upload-wall="uploadWall" @update-wall="updateWall" @delete-wall="deleteWall"
             :edited="false"></bannerPhoto>
         <div class="user-metric__top" v-else>
             <div class="user-metric__top-img-wrapper">
@@ -333,6 +316,25 @@ const deleteWall = (imageWall) => {
     emit('deleteWall', imageWall);
     // console.log('delete');
 };
+
+const privateFunc = (item) => {
+    (props.user.privacy?.item === 'Члены отряда' &&
+                props.user.detachment_id ===
+                currentUser.currentUser.value.detachment_id) ||
+            (props.user.privacy?.item === 'Руководство' &&
+                ((roleStore.roles.detachment_commander &&
+                    roleStore.roles.detachment_commander?.id ===
+                    props.user.detachment_id) ||
+                    (roleStore.roles.regionalheadquarter_commander &&
+                        roleStore.roles.regionalheadquarter_commander
+                            ?.id === props.user.regional_headquarter_id) ||
+                    roleStore.roles.localheadquarter_commander ||
+                    roleStore.roles.educationalheadquarter_commander ||
+                    roleStore.roles.districtheadquarter_commander ||
+                    roleStore.roles.centralheadquarter_commander)) ||
+            props.user.privacy?.item === 'Все' ||
+            props.user.privacy?.item === 'all'
+}
 
 const regionalsStore = useRegionalsStore();
 const regionals = storeToRefs(regionalsStore);

@@ -225,6 +225,7 @@
                             <div class="text text--participant_name mt-7">
                                 {{ participant.user.first_name }}
                             </div>
+                            <div class="text text--position">{{ participant?.position}}</div>
 
                         </router-link>
                     </li>
@@ -259,6 +260,7 @@
                                 <div class="text text--participant_name mt-7">
                                     {{ item.user.first_name }}
                                 </div>
+                                <div class="text text--position">{{ participant?.position }}</div>
                             </router-link>
                         </li>
                     </template>
