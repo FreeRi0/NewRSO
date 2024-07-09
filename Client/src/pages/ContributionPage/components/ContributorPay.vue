@@ -263,7 +263,7 @@ const viewContributorsData = async (search, pagination, orderLimit) => {
             locals.value = viewParticipantsResponse.data.results;
         } else if (search.indexOf('educationals') >= 0) {
             educHead.value = viewParticipantsResponse.data.results;
-        } else if (search.indexOf('detanchment_list') >= 0) {
+        } else if (search.indexOf('detachment_list') >= 0) {
             detachments.value = viewParticipantsResponse.data.results;
         }
     } catch (error) {
@@ -285,7 +285,7 @@ const getFiltersData = async (resp, search, lim) => {
             locals.value = viewHeadquartersResponse.data.results;
         } else if (resp.indexOf('educationals') >= 0) {
             educHead.value = viewHeadquartersResponse.data.results;
-        } else if (resp.indexOf('detanchment_list') >= 0) {
+        } else if (resp.indexOf('detachment_list') >= 0) {
             detachments.value = viewHeadquartersResponse.data.results;
         }
     } catch (error) {
@@ -309,11 +309,13 @@ const updateDistrict = (districtVal) => {
 
 const searchDetachment = (name) => {
     let search = [];
+    let lim = ''
     // if (district.value) {
     //     search.push('district_headquarter__name=' + district.value);
     // }
     if (name && reg.value) {
         search.push('regional_headquarter__name=' + reg.value + '&' + 'search=' + name);
+        lim = '&limit=500';
     }
     // if (local.value) {
     //     search.push('local_headquarter__name=' + local.value);
@@ -325,20 +327,25 @@ const searchDetachment = (name) => {
 
     if (!name && reg.value) {
         search.push('regional_headquarter__name=' + reg.value);
+        lim = '&limit=500';
     }
     if (!name && district.value) {
         search.push('district_headquarter__name=' + district.value);
+        lim = '&limit=500';
     }
     if (!name && local.value) {
         search.push('local_headquarter__name=' + local.value);
+        lim = '&limit=500';
     }
     if (!name && educ.value) {
         search.push('educational_headquarter__name=' + educ.value);
+        lim = '&limit=500';
     }
     if (!name && detachment.value) {
         search.push('detachment__name=' + detachment.value);
+        lim = '&limit=500';
     }
-    getFiltersData('/detanchment_list/', '?' + search.join('&'));
+    getFiltersData('/detachment_list/', '?' + search.join('&') + lim);
 
     detachment.value = name;
 }
@@ -359,7 +366,7 @@ const updateReg = (regVal) => {
     viewContributorsData(search);
     getFiltersData('/locals/', search, '');
     getFiltersData('/educationals/', search, '');
-    getFiltersData('/detanchment_list/', search, lim);
+    getFiltersData('/detachment_list/', search, lim);
 
     reg.value = regVal;
 };
@@ -382,7 +389,7 @@ const updateLocal = (localVal) => {
     if (name.value) search += '&search=' + name.value;
     viewContributorsData(search);
     getFiltersData('/educationals/', search, '');
-    getFiltersData('/detanchment_list/', search, lim);
+    getFiltersData('/detachment_list/', search, lim);
 
     local.value = localVal;
 };
@@ -410,7 +417,7 @@ const updateEduc = (educVal) => {
     }
     if (name.value) search += '&search=' + name.value;
     viewContributorsData(search);
-    getFiltersData('/detanchment_list/', search, lim);
+    getFiltersData('/detachment_list/', search, lim);
 
     educ.value = educVal;
 };
@@ -576,7 +583,7 @@ const getUsersByRoles = () => {
             levelAccess.value = 2;
             getFiltersData('/educationals/', search, '');
             getFiltersData('/locals/', search, '');
-            getFiltersData('/detanchment_list/',search, lim);
+            getFiltersData('/detachment_list/',search, lim);
         } else if (roles.roles.value.localheadquarter_commander) {
             local.value = roles.roles.value.localheadquarter_commander.name;
             search =
