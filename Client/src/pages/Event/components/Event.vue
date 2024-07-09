@@ -268,7 +268,10 @@
                                 <div class="text text--participant_name mt-7">
                                     {{ item.user.first_name }}
                                 </div>
-                                <div class="text text--position">{{ participant?.position }}</div>
+                                <div class="text text--position" v-if="participant?.position">{{ participant?.position
+                                    }}
+                                </div>
+                                <div v-else class="text text--position">Кандидат</div>
                             </router-link>
                         </li>
                     </template>
