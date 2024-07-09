@@ -51,12 +51,13 @@
 
 <script setup>
 import { HTTP } from '@app/http';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, inject } from 'vue';
 
 import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
 import * as XLSX from 'xlsx';
 
+const swal = inject('$swal');
 
 const route = useRoute();
 const router = useRouter();
@@ -82,12 +83,24 @@ const onSubmit = async () => {
         await HTTP.post(
             `/events/${route.params.id}/group_applications/all/${applicationsList.value[0].id}/approve/`,
             {},
-
         );
-
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
         await relocate();
     } catch (e) {
         console.log('onSubmit error', e);
+        swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: `ошибка`,
+            showConfirmButton: false,
+            timer: 2500,
+        })
     }
 };
 
@@ -95,12 +108,24 @@ const onDeny = async () => {
     try {
         await HTTP.delete(
             `/events/${route.params.id}/group_applications/all/${applicationsList.value[0].id}/reject/`,
-
         );
-
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
         await relocate();
     } catch (e) {
         console.log('onDeny error', e);
+        swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: `ошибка`,
+            showConfirmButton: false,
+            timer: 2500,
+        })
     }
 };
 
@@ -125,9 +150,22 @@ const relocate = async () => {
 const downloadList = () => {
     const workbook = XLSX.utils.book_new();
 
+    const downloadTemp = [];
+
+    applicationsList.value[0].applicants.map(item => { 
+        downloadTemp.push({
+            last_name: item.user.last_name,
+            first_name: item.user.first_name,
+            patronymic_name: item.user.patronymic_name,
+            email: item.user.email,
+            phone_number: item.user.phone_number,
+            membership_fee: item.user.membership_fee ? item.user.membership_fee = "Оплачен" : item.user.membership_fee = "Не оплачен",
+        });
+    })
+
     const worksheet_data = [
         ["ФИО", "Почта", "Телефон", "Членский взнос"],
-        ...applicationsList.value[0].applicants.map(item => [`${item.user.last_name} ${item.user.first_name} ${item.user.patronymic_name}`, item.user.email, item.user.phone_number, item.user.membership_fee])
+        ...downloadTemp.map(item => [`${item.last_name} ${item.first_name} ${item.patronymic_name}`, item.email, item.phone_number, item.membership_fee])
     ];
 
     const worksheet = XLSX.utils.aoa_to_sheet(worksheet_data);
