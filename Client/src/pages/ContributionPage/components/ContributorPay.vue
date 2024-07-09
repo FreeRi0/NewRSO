@@ -338,7 +338,7 @@ const searchDetachment = (name) => {
     if (!name && detachment.value) {
         search.push('detachment__name=' + detachment.value);
     }
-    getFiltersData('/detachments/', '?' + search.join('&'));
+    getFiltersData('/detanchment_list/', '?' + search.join('&'));
 
     detachment.value = name;
 }
