@@ -15,7 +15,8 @@
                         params: { id: eventsStore.event.id },
                     }" class="user-data__link">Редактировать мероприятие</router-link>
 
-                    <Button v-else-if="(!eventsStore.status.is_participant && !eventsStore.status.is_applicant && (new Date().getTime() <= new Date(eventsStore.event.time_data?.registration_end_date).getTime()))"
+                    <Button
+                        v-else-if="(!eventsStore.status.is_participant && !eventsStore.status.is_applicant && (new Date().getTime() <= new Date(eventsStore.event.time_data?.registration_end_date).getTime()))"
                         class="form-button" type="button" @click="AddApp()" label="Подать заявку" variant="text"
                         size="large"></Button>
 
@@ -56,7 +57,8 @@
                     </div>
                     <div class="event-cols-2">
                         <img src="@app/assets/icon_items/label.svg" class="mr-3" alt="" />
-                        <div> Адрес: <p v-if="eventsStore.event.format !== 'Онлайн'">{{ eventsStore.event.address}}</p> <p v-else>Онлайн</p>
+                        <div> Адрес: <p v-if="eventsStore.event.format !== 'Онлайн'">{{ eventsStore.event.address }}</p>
+                            <p v-else>Онлайн</p>
                         </div>
 
                     </div>
@@ -225,6 +227,7 @@
                             <div class="text text--participant_name mt-7">
                                 {{ participant.user.first_name }}
                             </div>
+                            <div class="text text--position">{{ participant?.position }}</div>
 
                         </router-link>
                     </li>
@@ -259,6 +262,7 @@
                                 <div class="text text--participant_name mt-7">
                                     {{ item.user.first_name }}
                                 </div>
+                                <div class="text text--position">{{ participant?.position }}</div>
                             </router-link>
                         </li>
                     </template>
@@ -529,8 +533,8 @@ watch(
 
     async (newId) => {
         if (!newId) return;
-        if(userStore.currentUser?.id === undefined) {
-           userStore.getUser();
+        if (userStore.currentUser?.id === undefined) {
+            userStore.getUser();
         }
         await eventsStore.getEventId(newId);
         await eventsStore.getStatus(newId, userStore.currentUser?.id);
@@ -951,7 +955,7 @@ watch(
     height: 120px;
     min-height: 120px;
     min-width: 120px;
-    border-radius: 50px;
+    border-radius: 100%;
 }
 
 .card_wrap {
