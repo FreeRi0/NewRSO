@@ -126,7 +126,7 @@ const downloadList = () => {
     const workbook = XLSX.utils.book_new();
 
     const downloadTemp = [];
-    console.log( applicationsList.value[0]);
+    
     applicationsList.value[0].applicants.map(item => { 
         downloadTemp.push({
             last_name: item.user.last_name,
@@ -137,7 +137,7 @@ const downloadList = () => {
             membership_fee: item.user.membership_fee ? item.user.membership_fee = "Оплачен" : item.user.membership_fee = "Не оплачен",
         });
     })
-    console.log(downloadTemp);
+
     const worksheet_data = [
         ["ФИО", "Почта", "Телефон", "Членский взнос"],
         ...downloadTemp.map(item => [`${item.last_name} ${item.first_name} ${item.patronymic_name}`, item.email, item.phone_number, item.membership_fee])
