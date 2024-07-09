@@ -616,8 +616,6 @@ const UserApplication = computed(() => {
 });
 
 const IsTrusted = computed(() => {
-    console.log('member 1');
-    console.log('member 1', props.member);
     return props.member.find(
         (item) => item.user.id === userId.value && item.is_trusted === true,
     );
@@ -625,9 +623,6 @@ const IsTrusted = computed(() => {
 
 
 const IsMember = computed(() => {
-    console.log('member 2');
-    console.log('member 2 2', props.member);
-
     return props.member.find((item) => item.user.id === userId.value);
 });
 
