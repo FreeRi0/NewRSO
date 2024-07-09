@@ -125,9 +125,22 @@ const relocate = async () => {
 const downloadList = () => {
     const workbook = XLSX.utils.book_new();
 
+    const downloadTemp = [];
+    console.log( applicationsList.value[0]);
+    applicationsList.value[0].applicants.map(item => { 
+        downloadTemp.push({
+            last_name: item.user.last_name,
+            first_name: item.user.first_name,
+            patronymic_name: item.user.patronymic_name,
+            email: item.user.email,
+            phone_number: item.user.phone_number,
+            membership_fee: item.user.membership_fee ? item.user.membership_fee = "Оплачен" : item.user.membership_fee = "Не оплачен",
+        });
+    })
+    console.log(downloadTemp);
     const worksheet_data = [
         ["ФИО", "Почта", "Телефон", "Членский взнос"],
-        ...applicationsList.value[0].applicants.map(item => [`${item.user.last_name} ${item.user.first_name} ${item.user.patronymic_name}`, item.user.email, item.user.phone_number, item.user.membership_fee])
+        ...downloadTemp.map(item => [`${item.last_name} ${item.first_name} ${item.patronymic_name}`, item.email, item.phone_number, item.membership_fee])
     ];
 
     const worksheet = XLSX.utils.aoa_to_sheet(worksheet_data);
