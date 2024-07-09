@@ -2,38 +2,21 @@
     <div class="container">
         <Breadcrumbs :items="pages"></Breadcrumbs>
         <h1 class="title title--hq">Местный штаб</h1>
-        <BannerHQ
-            :localHeadquarter="localHeadquarter"
-            :member="member"
-            :ending="ending"
-            :endingMember="endingMember"
-        ></BannerHQ>
-        <section
-            class="about-hq"
-            v-if="localHeadquarter.about && localHeadquarter.about != 'null'"
-        >
+        <BannerHQ :localHeadquarter="localHeadquarter" :member="member" :ending="ending" :endingMember="endingMember">
+        </BannerHQ>
+        <section class="about-hq" v-if="localHeadquarter.about && localHeadquarter.about != 'null'">
             <h3>Описание местного штаба</h3>
             <p>{{ localHeadquarter.about }}</p>
         </section>
-        <ManagementHQ
-            :commander="commander"
-            :member="member"
-            head="Руководство местного штаба"
-            :position="position"
-            :leadership="localHeadquarter.leadership"
-        ></ManagementHQ>
+        <ManagementHQ :commander="commander" :member="member" head="Руководство местного штаба" :position="position"
+            :leadership="localHeadquarter.leadership"></ManagementHQ>
         <section class="headquarters_squads">
             <h3>Штабы и отряды местного штаба</h3>
             <div class="headquarters_squads__container">
-                <div
-                    class="card"
-                    :key="HQandSquad.link"
-                    v-for="(HQandSquad, index) in HQandSquads"
-                    :class="{
-                        'align-left': index % 2 === 0,
-                        'align-right': index % 2 !== 0,
-                    }"
-                >
+                <div class="card" :key="HQandSquad.link" v-for="(HQandSquad, index) in HQandSquads" :class="{
+                    'align-left': index % 2 === 0,
+                    'align-right': index % 2 !== 0,
+                }">
                     <a v-bind:href="HQandSquad.link" @click="HQandSquad.click">
                         <p>{{ HQandSquad.name }}</p>
                     </a>
@@ -67,25 +50,27 @@ let id = route.params.id;
 const { replaceTargetObjects } = usePage();
 
 const aboutlocalHQ = async () => {
-    try {
-        const response = await HTTP.get(`/locals/${id}/`);
+    if (typeof id !== 'undefined') {
+        try {
+            const response = await HTTP.get(`/locals/${id}/`);
 
-        localHeadquarter.value = response.data;
-        replaceTargetObjects([localHeadquarter.value]);
-        // console.log(response);
-    } catch (error) {
-        console.log('an error occured ' + error);
+            localHeadquarter.value = response.data;
+            replaceTargetObjects([localHeadquarter.value]);
+            // console.log(response);
+        } catch (error) {
+            console.log('an error occured ' + error);
+        }
     }
 };
 
 const aboutMembers = async () => {
-    try {
-        const response = await HTTP.get(`/locals/${id}/members/`);
-
-        member.value = response.data;
-        // console.log(response);
-    } catch (error) {
-        console.log('an error occured ' + error);
+    if (typeof id !== 'undefined') {
+        try {
+            const response = await HTTP.get(`/locals/${id}/members/`);
+            member.value = response.data.results;
+        } catch (error) {
+            console.log('an error occured ' + error);
+        }
     }
 };
 

@@ -13,7 +13,7 @@
                     </p>
                 </div>
             </div>
-            <div class="download">
+            <div class="download" @click="downloadList">
                 <a class="download_text">
                     <img class="download_img" src="/assets/download.svg" />
                     скачать список
@@ -55,6 +55,8 @@ import { onMounted, ref } from 'vue';
 
 import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
+import * as XLSX from 'xlsx';
+
 
 const route = useRoute();
 const router = useRouter();
@@ -120,6 +122,30 @@ const relocate = async () => {
     }
 };
 
+const downloadList = () => {
+    const workbook = XLSX.utils.book_new();
+
+    const worksheet_data = [
+        ["ФИО", "Почта", "Телефон", "Членский взнос"],
+        ...applicationsList.value[0].applicants.map(item => [`${item.user.last_name} ${item.user.first_name} ${item.user.patronymic_name}`, item.user.email, item.user.phone_number, item.user.membership_fee])
+    ];
+
+    const worksheet = XLSX.utils.aoa_to_sheet(worksheet_data);
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'members.xlsx';
+    document.body.appendChild(a);
+    a.click();
+}
+
 onMounted(async () => {
     await getApplicatonsList();
     // console.log(applicationsList.value);
@@ -150,6 +176,7 @@ onMounted(async () => {
     float: right;
     margin-bottom: 12px;
     margin-top: 40px;
+    cursor: pointer;
 }
 
 .download_text {

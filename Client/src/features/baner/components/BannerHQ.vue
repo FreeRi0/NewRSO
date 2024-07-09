@@ -263,7 +263,7 @@
                             </div>
                         </div>
                     </div>
-                    <AddModal v-show="showModal === true" @close="close"
+                    <AddModal v-show="showModal === true" @close="closeModalW()"
                         :is-commander="(roleStore.roles.detachment_commander || roleStore.roles.educationalheadquarter_commander || roleStore.roles.regionalHeadquarter_commander || roleStore.roles.localheadquarter_commander) !== null"
                         :is-new="userStore.currentUser.educational_headquarter_id === null && userStore.currentUser.detachment_id === null && userStore.currentUser.local_headquarter_id === null && userStore.currentUser.regional_headquarter_id === null && userStore.currentUser.district_headquarter_id === null"
                         @add="
@@ -468,7 +468,7 @@
                             <pre>{{  IsTrusted }}</pre> -->
                         </div>
                     </div>
-                    <AddModal v-show="showModal === true"  @close="closeModalW()"
+                    <AddModal v-show="showModal === true" @close="closeModalW()"
                         :is-commander="(roleStore.roles.detachment_commander || roleStore.roles.educationalheadquarter_commander || roleStore.roles.regionalHeadquarter_commander || roleStore.roles.localheadquarter_commander || roleStore.roles.districtheadquarter_commander) !== null"
                         :is-new="userStore.currentUser.educational_headquarter_id === null && userStore.currentUser.detachment_id === null && userStore.currentUser.local_headquarter_id === null && userStore.currentUser.regional_headquarter_id === null && userStore.currentUser.district_headquarter_id === null"
 
@@ -544,23 +544,23 @@ const props = defineProps({
     },
     headquarter: {
         type: Object,
-        required: true,
+        required: false,
     },
     districtHeadquarter: {
         type: Object,
-        required: true,
+        required: false,
     },
     localHeadquarter: {
         type: Object,
-        required: true,
+        required: false,
     },
     regionalHeadquarter: {
         type: Object,
-        required: true,
+        required: false,
     },
     centralHeadquarter: {
         type: Object,
-        required: true,
+        required: false,
     },
     edict: {
         type: Object,
@@ -569,10 +569,10 @@ const props = defineProps({
         type: Object,
     },
     ending: {
-        type: Number,
+        type: String,
     },
     endingMember: {
-        type: Number,
+        type: String,
     },
 });
 const swal = inject('$swal');
@@ -586,14 +586,16 @@ const viewApplications = async (name) => {
     }
 };
 const aboutEduc = async () => {
-    try {
-        let id = props.headquarter?.educational_institution.id;
-        const response = await HTTP.get(`/eduicational_institutions/${id}/`);
+    let id = props.headquarter?.educational_institution.id;
+    if (typeof id !== 'undefined') {
+        try {
+            const response = await HTTP.get(`/eduicational_institutions/${id}/`);
 
-        edict.value = response.data;
+            edict.value = response.data;
 
-    } catch (error) {
-        console.log(error);
+        } catch (error) {
+            console.log(error);
+        }
     }
 };
 
