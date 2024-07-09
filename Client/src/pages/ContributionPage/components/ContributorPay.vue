@@ -39,13 +39,11 @@
                     <div class="filters">
                         <filters @update-district="updateDistrict" @update-reg="updateReg" @update-local="updateLocal"
                             @update-educ="updateEduc" @update-detachment="updateDetachment"
-
-
-                            @update-membership="updateMembership" @search-detachment="searchDetachment" :district="district" :districts="districts" :reg="reg"
-                            :regionals="regionals" :local="local" :locals="locals" :membership="membership" :educ="educ"
-                            :educ-head="educHead" :detachment="detachment" :detachments="detachments"
-                            :roles="roles.roles.value" :sorted-participants="participants" :count-participants="count"
-                            :is-membership="true" />
+                            @update-membership="updateMembership" @search-detachment="searchDetachment"
+                            :district="district" :districts="districts" :reg="reg" :regionals="regionals" :local="local"
+                            :locals="locals" :membership="membership" :educ="educ" :educ-head="educHead"
+                            :detachment="detachment" :detachments="detachments" :roles="roles.roles.value"
+                            :sorted-participants="participants" :count-participants="count" :is-membership="true" />
                     </div>
                     <div class="contributor-items">
                         <div class="contributor-sort">
@@ -173,44 +171,45 @@ const selectedPeoples = ref([]);
 const ascending = ref(true);
 const sortBy = ref('last_name');
 
+
 const next = () => {
     let search = '';
-    if (district.value) {
-        search += '?district_headquarter__name=' + district.value;
-    }
-    if (reg.value) {
-        search += '?regional_headquarter__name=' + reg.value;
-    }
-    if (local.value) {
-        search += '?local_headquarter__name=' + local.value;
-    }
-    if (educ.value) {
-        search += '?educational_headquarter__name=' + educ.value;
-    }
-    if (detachment.value) {
-        search = '?detachment__name=' + detachment.value;
-    }
-    viewContributorsData(search, '', 'next');
+    // if (district.value) {
+    //     search += '?district_headquarter__name=' + district.value;
+    // }
+    // if (reg.value) {
+    //     search += '?regional_headquarter__name=' + reg.value;
+    // }
+    // if (local.value) {
+    //     search += '?local_headquarter__name=' + local.value;
+    // }
+    // if (educ.value) {
+    //     search += '?educational_headquarter__name=' + educ.value;
+    // }
+    // if (detachment.value) {
+    //     search = '?detachment__name=' + detachment.value;
+    // }
+    viewContributorsData(search, 'next');
     checkboxAll.value = false;
 };
 
 const prev = () => {
     let search = '';
-    if (district.value) {
-        search += '?district_headquarter__name=' + district.value;
-    }
-    if (reg.value) {
-        search += '?regional_headquarter__name=' + reg.value;
-    }
-    if (local.value) {
-        search += '?local_headquarter__name=' + local.value;
-    }
-    if (educ.value) {
-        search += '?educational_headquarter__name=' + educ.value;
-    }
-    if (detachment.value) {
-        search = '?detachment__name=' + detachment.value;
-    }
+    // if (district.value) {
+    //     search += '?district_headquarter__name=' + district.value;
+    // }
+    // if (reg.value) {
+    //     search += '?regional_headquarter__name=' + reg.value;
+    // }
+    // if (local.value) {
+    //     search += '?local_headquarter__name=' + local.value;
+    // }
+    // if (educ.value) {
+    //     search += '?educational_headquarter__name=' + educ.value;
+    // }
+    // if (detachment.value) {
+    //     search = '?detachment__name=' + detachment.value;
+    // }
     viewContributorsData(search, '', '');
     checkboxAll.value = false;
 
@@ -234,10 +233,13 @@ const viewContributorsData = async (search, pagination, orderLimit) => {
         else if (!pagination) data.push('limit=' + limit);
         else if (pagination == 'next')
             url = users.value.next.replace('http', 'https');
-        if (sortBy.value && !pagination)
-            data.push(
-                'ordering=' + (ascending.value ? '' : '-') + sortBy.value,
-            );
+        if (pagination != 'next') {
+            if (sortBy.value && !pagination)
+                data.push(
+                    'ordering=' + (ascending.value ? '' : '-') + sortBy.value,
+                );
+        }
+
 
 
         const viewParticipantsResponse = await HTTP.get(url + data.join('&'));
@@ -254,6 +256,7 @@ const viewContributorsData = async (search, pagination, orderLimit) => {
         users.value = response;
         participants.value = response.results;
         selectedPeoples.value = [];
+        console.log(users.count, participants.length)
 
         if (search.indexOf('districts') >= 0) {
             districts.value = viewParticipantsResponse.data.results;
@@ -583,7 +586,7 @@ const getUsersByRoles = () => {
             levelAccess.value = 2;
             getFiltersData('/educationals/', search, '');
             getFiltersData('/locals/', search, '');
-            getFiltersData('/detachment_list/',search, lim);
+            getFiltersData('/detachment_list/', search, lim);
         } else if (roles.roles.value.localheadquarter_commander) {
             local.value = roles.roles.value.localheadquarter_commander.name;
             search =
@@ -599,7 +602,7 @@ const getUsersByRoles = () => {
                 roles.roles.value.educationalheadquarter_commander.name;
             lim = '&limit=500';
             levelAccess.value = 4;
-            getFiltersData('/detanchment_list/',search, lim);
+            getFiltersData('/detanchment_list/', search, lim);
         } else if (roles.roles.value.detachment_commander) {
             detachment.value = roles.roles.value.detachment_commander.name;
             search =
