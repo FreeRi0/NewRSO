@@ -29,11 +29,13 @@
         <div class="reg_wrap">
             <div class="regItem" v-if="member?.junior_detachment !== null">
                 <p class="horizontal-item-title">
-                    {{ member.junior_detachment?.regional_headquarter_name }}
+                    {{ member.junior_detachment?.regional_headquarter.name }}
                 </p>
             </div>
             <div class="regItem_img">
-                <img src="@app/assets/hq-emblem.png" alt="image">
+                <img v-if="member.junior_detachment?.regional_headquarter.banner"
+                    :src="member.junior_detachment?.regional_headquarter.banner" alt="logo">
+                <img v-else src="@app/assets/hq-emblem.png" alt="image">
             </div>
             <div class="mini" v-if="rating">
                 <p v-if="place.place">Место в рейтинге: {{ place.place }}</p>
@@ -98,10 +100,11 @@ onMounted(() => {
     display: flex;
     column-gap: 12px;
     width: 100%;
+
     @media screen and (max-width: 820px) {
-    //   width: 100%;
-      justify-content: center;
-      align-items: center;
+        //   width: 100%;
+        justify-content: center;
+        align-items: center;
     }
 }
 
@@ -141,6 +144,7 @@ onMounted(() => {
         img {
             width: 38px;
             height: 38px;
+            border-radius: 100%;
         }
     }
 }
@@ -152,7 +156,7 @@ onMounted(() => {
 
     @media screen and (max-width: 820px) {
         // align-items: flex-start;
-         margin-bottom: 20px;
+        margin-bottom: 20px;
         flex-direction: column;
         align-items: center;
     }
@@ -196,8 +200,8 @@ onMounted(() => {
         //     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         // }
         @media screen and (max-width: 820px) {
-          width: 100%;
-          grid-template-columns: 1fr;
+            width: 100%;
+            grid-template-columns: 1fr;
         }
     }
 }
@@ -253,11 +257,12 @@ onMounted(() => {
     font-family: 'Bert Sans';
     font-size: 16px;
     padding: 0px 20px;
+
     @media screen and (max-width: 820px) {
-     max-width: 100%;
-     padding: 16px 20px;
-     font-size: 12px;
-     margin-bottom: 0;
+        max-width: 100%;
+        padding: 16px 20px;
+        font-size: 12px;
+        margin-bottom: 0;
 
     }
 }
