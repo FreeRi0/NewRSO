@@ -79,7 +79,7 @@
 
 <script setup>
 import { HTTP } from '@app/http';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, inject } from 'vue';
 import { useRoute } from 'vue-router';
 
 import { sortByEducation } from '@shared/components/selects';
@@ -90,6 +90,8 @@ import GroupFilters from './GroupFilters.vue';
 import GroupSubmitItem from './GroupSubmitItem.vue';
 import GroupSubmitSelect from './GroupSubmitSelect.vue';
 import * as XLSX from 'xlsx';
+
+const swal = inject('$swal');
 
 const sortBy = ref('alphabetically');
 
@@ -203,7 +205,13 @@ const onAction = async () => {
             { user_ids },
 
         );
-
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
         router.push({
             name: 'Action',
             params: {
@@ -212,6 +220,13 @@ const onAction = async () => {
         });
     } catch (e) {
         console.log('onAction error', e);
+        swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: `ошибка`,
+            showConfirmButton: false,
+            timer: 2500,
+        })
     }
 };
 

@@ -51,12 +51,13 @@
 
 <script setup>
 import { HTTP } from '@app/http';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, inject } from 'vue';
 
 import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
 import * as XLSX from 'xlsx';
 
+const swal = inject('$swal');
 
 const route = useRoute();
 const router = useRouter();
@@ -82,12 +83,24 @@ const onSubmit = async () => {
         await HTTP.post(
             `/events/${route.params.id}/group_applications/all/${applicationsList.value[0].id}/approve/`,
             {},
-
         );
-
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
         await relocate();
     } catch (e) {
         console.log('onSubmit error', e);
+        swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: `ошибка`,
+            showConfirmButton: false,
+            timer: 2500,
+        })
     }
 };
 
@@ -95,12 +108,24 @@ const onDeny = async () => {
     try {
         await HTTP.delete(
             `/events/${route.params.id}/group_applications/all/${applicationsList.value[0].id}/reject/`,
-
         );
-
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
         await relocate();
     } catch (e) {
         console.log('onDeny error', e);
+        swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: `ошибка`,
+            showConfirmButton: false,
+            timer: 2500,
+        })
     }
 };
 
@@ -126,7 +151,7 @@ const downloadList = () => {
     const workbook = XLSX.utils.book_new();
 
     const downloadTemp = [];
-    
+
     applicationsList.value[0].applicants.map(item => { 
         downloadTemp.push({
             last_name: item.user.last_name,
