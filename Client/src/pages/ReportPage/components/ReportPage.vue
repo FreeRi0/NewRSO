@@ -22,8 +22,7 @@ s
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
                             <div class="form__field">
-                                <label class="form__label"
-                                    >Численность членов линейного студенческого
+                                <label class="form__label">Численность членов линейного студенческого
                                     отряда в соответствии с объемом уплаченных
                                     членских взносов рассчитывается ежедневно.
                                     Последняя дата расчета 30 июня 2024 года.
@@ -42,21 +41,15 @@ s
                                             }}
                                         </td>
                                         <td>
-                                            <p
-                                                v-if="
-                                                    report[1]?.number_of_members
-                                                "
-                                            >
+                                            <p v-if="
+                                                report[1]?.number_of_members
+                                            ">
                                                 {{
                                                     report[1]?.number_of_members
                                                 }}
                                             </p>
-                                            <v-progress-circular
-                                                class="circleLoader"
-                                                v-if="isLoading"
-                                                indeterminate
-                                                color="blue"
-                                            ></v-progress-circular>
+                                            <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                                color="blue"></v-progress-circular>
                                         </td>
                                     </tr>
                                     <tr>
@@ -69,23 +62,17 @@ s
                                             }}
                                         </td>
                                         <td>
-                                            <p
-                                                v-if="
-                                                    report[1]
-                                                        ?.number_of_payments
-                                                "
-                                            >
+                                            <p v-if="
+                                                report[1]
+                                                    ?.number_of_payments
+                                            ">
                                                 {{
                                                     report[1]
                                                         ?.number_of_payments
                                                 }}
                                             </p>
-                                            <v-progress-circular
-                                                class="circleLoader"
-                                                v-if="isLoading"
-                                                indeterminate
-                                                color="blue"
-                                            ></v-progress-circular>
+                                            <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                                color="blue"></v-progress-circular>
                                         </td>
                                     </tr>
                                 </table>
@@ -113,27 +100,14 @@ s
                             <div class="form__field-group-top">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Региональная школа командного
+                                        <label class="form__label">Региональная школа командного
                                             состава пройдена командиром
-                                            отряда<span>&nbsp;*</span></label
-                                        >
-                                        <sortByEducation
-                                            placeholder="Например, да"
-                                            v-model="
-                                                report[2].commander_achievement
-                                            "
-                                            :options="CommanderChoose"
-                                            optionLabel="name"
-                                            :sorts-boolean="false"
-                                            class="invents-select"
-                                            variant="outlined"
-                                            :disabled="report[2].is_verified"
-                                        />
-                                        <p
-                                            class="error"
-                                            v-if="isError.commander_achievement"
-                                        >
+                                            отряда<span>&nbsp;*</span></label>
+                                        <sortByEducation placeholder="Например, да" v-model="report[2].commander_achievement
+                                            " :options="CommanderChoose" optionLabel="name" :sorts-boolean="false"
+                                            class="invents-select" variant="outlined"
+                                            :disabled="report[2].is_verified" />
+                                        <p class="error" v-if="isError.commander_achievement">
                                             {{
                                                 isError.commander_achievement[0]
                                             }}
@@ -141,70 +115,43 @@ s
                                     </div>
 
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Ссылка на публикацию из группы
+                                        <label class="form__label">Ссылка на публикацию из группы
                                             отряда о прохождении школы
                                             командного состава командиром
-                                            отряда<span
-                                                v-if="
-                                                    report[2]
-                                                        .commander_achievement ==
-                                                    true
-                                                "
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <Input
-                                            placeholder="Например, https://vk.com/cco_monolit"
-                                            :maxlength="100"
-                                            v-model:value="
-                                                report[2].commander_link
-                                            "
-                                            :readonly="
-                                                report[2].is_verified ||
+                                            отряда<span v-if="
+                                                report[2]
+                                                    .commander_achievement ==
+                                                true
+                                            ">&nbsp;*</span></label>
+                                        <Input placeholder="Например, https://vk.com/cco_monolit" :maxlength="100"
+                                            v-model:value="report[2].commander_link
+                                                " :readonly="report[2].is_verified ||
                                                 is_regional_commander
-                                            "
-                                        />
+                                                " />
                                         <div class="form__counter">
                                             {{
                                                 report[2].commander_link.length
                                             }}
                                             / 100
                                         </div>
-                                        <p
-                                            class="error"
-                                            v-if="isError.commander_link"
-                                        >
+                                        <p class="error" v-if="isError.commander_link">
                                             {{ isError.commander_link[0] }}
                                         </p>
                                     </div>
                                 </div>
                                 <div class="form__field-group-right">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Региональная школа командного
+                                        <label class="form__label">Региональная школа командного
                                             состава пройдена комиссаром
-                                            отряда<span>&nbsp;*</span></label
-                                        >
-                                        <sortByEducation
-                                            placeholder="Например, да"
-                                            v-model="
-                                                report[2]
-                                                    .commissioner_achievement
-                                            "
-                                            :options="Choose"
-                                            optionLabel="name"
-                                            class="invents-select"
-                                            :sorts-boolean="false"
-                                            variant="outlined"
-                                            :disabled="report[2].is_verified"
-                                        />
-                                        <p
-                                            class="error"
-                                            v-if="
-                                                isError.commissioner_achievement
-                                            "
-                                        >
+                                            отряда<span>&nbsp;*</span></label>
+                                        <sortByEducation placeholder="Например, да" v-model="report[2]
+                                                .commissioner_achievement
+                                            " :options="Choose" optionLabel="name" class="invents-select"
+                                            :sorts-boolean="false" variant="outlined"
+                                            :disabled="report[2].is_verified" />
+                                        <p class="error" v-if="
+                                            isError.commissioner_achievement
+                                        ">
                                             {{
                                                 isError
                                                     .commissioner_achievement[0]
@@ -212,27 +159,17 @@ s
                                         </p>
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Ссылка на публикацию из группы
+                                        <label class="form__label">Ссылка на публикацию из группы
                                             отряда о прохождении школы
                                             командного состава комиссаром
-                                            отряда<span
-                                                v-if="
-                                                    report[2]
-                                                        .commissioner_achievement ==
-                                                    true
-                                                "
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <Input
-                                            placeholder="Например, https://vk.com/cco_monolit"
-                                            max-length="100"
-                                            v-model:value="
-                                                report[2].commissioner_link
-                                            "
-                                            :readonly="report[2].is_verified"
-                                        />
+                                            отряда<span v-if="
+                                                report[2]
+                                                    .commissioner_achievement ==
+                                                true
+                                            ">&nbsp;*</span></label>
+                                        <Input placeholder="Например, https://vk.com/cco_monolit" max-length="100"
+                                            v-model:value="report[2].commissioner_link
+                                                " :readonly="report[2].is_verified" />
                                         <div class="form__counter">
                                             {{
                                                 report[2].commissioner_link
@@ -240,10 +177,7 @@ s
                                             }}
                                             / 100
                                         </div>
-                                        <p
-                                            class="error"
-                                            v-if="isError.commissioner_link"
-                                        >
+                                        <p class="error" v-if="isError.commissioner_link">
                                             {{ isError.commissioner_link[0] }}
                                         </p>
                                     </div>
@@ -251,21 +185,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
-                                        class="circleLoader"
-                                        v-if="isLoading"
-                                        indeterminate
-                                        color="blue"
-                                    ></v-progress-circular>
-                                    <Button
-                                        v-if="!is_regional_commander"
-                                        type="button"
-                                        :disabled="report[2].disabledBtn"
-                                        class="form__button form__button-color"
-                                        label="Отправить данные на верификацию"
-                                        size="large"
-                                        @click="postParameters(2)"
-                                    />
+                                    <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                        color="blue"></v-progress-circular>
+                                    <Button v-if="!is_regional_commander" type="button"
+                                        :disabled="report[2].disabledBtn" class="form__button form__button-color"
+                                        label="Отправить данные на верификацию" size="large"
+                                        @click="postParameters(2)" />
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -297,8 +222,7 @@ s
                                     class="form__label"
                                     >{{ report[3]?.place }}
                                 </label> -->
-                                <label class="form__label"
-                                    >Для получения баллов по данному показателю
+                                <label class="form__label">Для получения баллов по данному показателю
                                     Командиру и Комиссару ЛСО необходимо пройти
                                     тестирование. Для прохождения теста
                                     перейдите в «Личный кабинет» —
@@ -338,13 +262,11 @@ s
                                     class="form__label"
                                     >{{ report[4]?.place }}</label
                                 > -->
-                                <label class="form__label"
-                                    >Для получения баллов по данному показателю
+                                <label class="form__label">Для получения баллов по данному показателю
                                     участникам ЛСО необходимо пройти
                                     тестирование. Для прохождения теста
                                     перейдите в «Личный кабинет» - «Охрана
-                                    труда» - «Тест».</label
-                                >
+                                    труда» - «Тест».</label>
                             </div>
                             <div class="form__field-group-bottom">
                                 <p>
@@ -371,29 +293,16 @@ s
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div
-                                class="form__field-group-top form__field-file"
-                                v-for="(block, index) in report[5]
-                                    .participants_data"
-                                :key="index"
-                            >
+                            <div class="form__field-group-top form__field-file" v-for="(block, index) in report[5]
+                                .participants_data" :key="index">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >ФИО участника, прошедшего
-                                            профессиональное обучение<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <Input
-                                            placeholder="Например, Иванова Светлана Андреевна"
-                                            :maxlength="100"
-                                            v-model:value="block.name"
-                                            :readonly="
-                                                block.is_verified ||
+                                        <label class="form__label">ФИО участника, прошедшего
+                                            профессиональное обучение<span>&nbsp;*</span></label>
+                                        <Input placeholder="Например, Иванова Светлана Андреевна" :maxlength="100"
+                                            v-model:value="block.name" :readonly="block.is_verified ||
                                                 is_regional_commander
-                                            "
-                                        />
+                                                " />
                                         <div class="form__counter">
                                             {{ block.name.length }} / 100
                                         </div>
@@ -404,25 +313,14 @@ s
                                 </div>
                                 <div class="form__field-group-right">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Документ, подтверждающий
+                                        <label class="form__label">Документ, подтверждающий
                                             прохождение профессионального
                                             обучения<span>&nbsp;*</span>
                                         </label>
-                                        <div
-                                            class="statement-item"
-                                            v-if="!block.document"
-                                        >
-                                            <img
-                                                src="@app/assets/icon/addFile.svg"
-                                                alt="addFile"
-                                            />
-                                            <FileUpload
-                                                mode="basic"
-                                                name="demo[]"
-                                                accept=".pdf, .jpeg, .png"
-                                                :customUpload="true"
-                                                @select="
+                                        <div class="statement-item" v-if="!block.document">
+                                            <img src="@app/assets/icon/addFile.svg" alt="addFile" />
+                                            <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
+                                                :customUpload="true" @select="
                                                     selectFile(
                                                         $event,
                                                         5,
@@ -430,119 +328,69 @@ s
                                                         'document',
                                                         index,
                                                     )
-                                                "
-                                                chooseLabel="Выбрать файл"
-                                            />
+                                                    " chooseLabel="Выбрать файл" />
                                         </div>
 
                                         <div v-else>
-                                            <div
-                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
-                                            >
+                                            <div class="flex flex-wrap p-0 sm:p-5 gap-5">
                                                 <div
-                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
-                                                >
-                                                    <img
-                                                        class="addFile"
-                                                        src="@app/assets/icon/addFile.svg"
-                                                        alt="addFile"
-                                                    />
-                                                    <span
-                                                        class="font-semibold"
-                                                        >{{
-                                                            block.document.name
-                                                        }}</span
-                                                    >
-                                                    <span
-                                                        v-if="block.id"
-                                                        class="font-semibold"
-                                                        >{{
-                                                            decodeURIComponent(
-                                                                block.document
-                                                                    .split('/')
-                                                                    .pop(),
-                                                            )
-                                                        }}</span
-                                                    >
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
+                                                    <img class="addFile" src="@app/assets/icon/addFile.svg"
+                                                        alt="addFile" />
+                                                    <span class="font-semibold">{{
+                                                        block.document.name
+                                                    }}</span>
+                                                    <span v-if="block.id" class="font-semibold">{{
+                                                        decodeURIComponent(
+                                                            block.document
+                                                                .split('/')
+                                                                .pop(),
+                                                        )
+                                                    }}</span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <p
-                                            class="error"
-                                            v-if="isError.document"
-                                        >
+                                        <p class="error" v-if="isError.document">
                                             {{ isError.document[0] }}
                                         </p>
                                     </div>
                                 </div>
-                                <div
-                                    type="button"
-                                    v-if="
-                                        !block.is_verified &&
-                                        !is_regional_commander
-                                    "
-                                >
-                                    <svg
-                                        @click="
-                                            deleteBlock(
-                                                index,
-                                                5,
-                                                'participants_data',
-                                            )
-                                        "
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                    >
+                                <div type="button" v-if="
+                                    !block.is_verified &&
+                                    !is_regional_commander
+                                ">
+                                    <svg @click="
+                                        deleteBlock(
+                                            index,
+                                            5,
+                                            'participants_data',
+                                        )
+                                        " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none">
                                         <path
                                             d="M12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 10.8181 3.23279 9.64778 3.68508 8.55585C4.13738 7.46392 4.80031 6.47177 5.63604 5.63604C6.47177 4.80031 7.46392 4.13738 8.55585 3.68508C9.64778 3.23279 10.8181 3 12 3C13.1819 3 14.3522 3.23279 15.4442 3.68508C16.5361 4.13738 17.5282 4.80031 18.364 5.63604C19.1997 6.47177 19.8626 7.46392 20.3149 8.55585C20.7672 9.64778 21 10.8181 21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4441 20.3149C14.3522 20.7672 13.1819 21 12 21L12 21Z"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
-                                        <path
-                                            d="M9 9L15 15"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
-                                        <path
-                                            d="M15 9L9 15"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
+                                            stroke="#939393" stroke-linecap="round" />
+                                        <path d="M9 9L15 15" stroke="#939393" stroke-linecap="round" />
+                                        <path d="M15 9L9 15" stroke="#939393" stroke-linecap="round" />
                                     </svg>
                                 </div>
                             </div>
-                            <div
-                                v-if="!is_regional_commander"
-                                class="form__field add-block"
-                                @click="
-                                    addNewBlock(5, 'participants_data', {
-                                        name: '',
-                                        document: '',
-                                    })
-                                "
-                            >
+                            <div v-if="!is_regional_commander" class="form__field add-block" @click="
+                                addNewBlock(5, 'participants_data', {
+                                    name: '',
+                                    document: '',
+                                })
+                                ">
                                 + добавить участника
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
-                                        class="circleLoader"
-                                        v-if="isLoading"
-                                        indeterminate
-                                        color="blue"
-                                    ></v-progress-circular>
-                                    <Button
-                                        v-if="!is_regional_commander"
-                                        type="button"
-                                        :disabled="report[5].disabledBtn"
-                                        class="form__button form__button-color"
-                                        label="Отправить данные на верификацию"
-                                        size="large"
-                                        @click="postParameters(5)"
-                                    />
+                                    <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                        color="blue"></v-progress-circular>
+                                    <Button v-if="!is_regional_commander" type="button"
+                                        :disabled="report[5].disabledBtn" class="form__button form__button-color"
+                                        label="Отправить данные на верификацию" size="large"
+                                        @click="postParameters(5)" />
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -569,50 +417,26 @@ s
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div
-                                class="form__field-group-top form__field-column-one"
-                            >
+                            <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Участие в Демонстрации 1 мая<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <sortByEducation
-                                            placeholder="Например, да"
-                                            v-model="
-                                                report[61].demonstration_block
-                                                    .first_may_demonstration
-                                            "
-                                            :options="mayDemonstrationChoose"
-                                            optionLabel="name"
-                                            class="invents-select"
-                                            :sorts-boolean="false"
-                                            variant="outlined"
-                                            clearable
-                                            :disabled="
-                                                report[61].demonstration_block
+                                        <label class="form__label">Участие в Демонстрации 1
+                                            мая<span>&nbsp;*</span></label>
+                                        <sortByEducation placeholder="Например, да" v-model="report[61].demonstration_block
+                                                .first_may_demonstration
+                                            " :options="mayDemonstrationChoose" optionLabel="name"
+                                            class="invents-select" :sorts-boolean="false" variant="outlined" clearable
+                                            :disabled="report[61].demonstration_block
                                                     .is_verified
-                                            "
-                                        />
+                                                " />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Количество участников мероприятия
+                                        <label class="form__label">Количество участников мероприятия
                                             Демонстрация 1 мая
-                                            <span>&nbsp;*</span></label
-                                        >
-                                        <Input
-                                            type="number"
-                                            placeholder="Например, 10"
-                                            :maxlength="5"
-                                            v-model:value="
-                                                report[61].demonstration_block
-                                                    .first_may_demonstration_participants
-                                            "
-                                            :readonly="is_regional_commander"
-                                        />
+                                            <span>&nbsp;*</span></label>
+                                        <Input type="number" placeholder="Например, 10" :maxlength="5" v-model:value="report[61].demonstration_block
+                                                .first_may_demonstration_participants
+                                            " :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{
                                                 report[61].demonstration_block
@@ -626,21 +450,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
-                                        class="circleLoader"
-                                        v-if="isLoading"
-                                        indeterminate
-                                        color="blue"
-                                    ></v-progress-circular>
-                                    <Button
-                                        v-if="!is_regional_commander"
-                                        type="button"
-                                        :disabled="report[61].disabledBtn"
-                                        class="form__button form__button-color"
-                                        label="Отправить данные на верификацию"
-                                        size="large"
-                                        @click="postParameters(61)"
-                                    />
+                                    <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                        color="blue"></v-progress-circular>
+                                    <Button v-if="!is_regional_commander" type="button"
+                                        :disabled="report[61].disabledBtn" class="form__button form__button-color"
+                                        label="Отправить данные на верификацию" size="large"
+                                        @click="postParameters(61)" />
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -651,52 +466,27 @@ s
                     </v-expansion-panel-text>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div
-                                class="form__field-group-top form__field-column-one"
-                            >
+                            <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Участие во всероссийской
+                                        <label class="form__label">Участие во всероссийской
                                             патриотической акции «Поклонимся
-                                            великим тем годам»<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <sortByEducation
-                                            placeholder="Например, да"
-                                            v-model="
-                                                report[62]
-                                                    .patriotic_action_block
-                                                    .patriotic_action
-                                            "
-                                            :options="patrioticActionChoose"
-                                            optionLabel="name"
-                                            class="invents-select"
-                                            :sorts-boolean="false"
-                                            variant="outlined"
-                                            clearable
-                                        />
+                                            великим тем годам»<span>&nbsp;*</span></label>
+                                        <sortByEducation placeholder="Например, да" v-model="report[62]
+                                                .patriotic_action_block
+                                                .patriotic_action
+                                            " :options="patrioticActionChoose" optionLabel="name"
+                                            class="invents-select" :sorts-boolean="false" variant="outlined"
+                                            clearable />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Количество участников всероссийской
+                                        <label class="form__label">Количество участников всероссийской
                                             патриотической акции «Поклонимся
-                                            великим тем годам»<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <Input
-                                            type="number"
-                                            placeholder="Например, 10"
-                                            :maxlength="5"
-                                            v-model:value="
-                                                report[62]
-                                                    .patriotic_action_block
-                                                    .patriotic_action_participants
-                                            "
-                                            :readonly="is_regional_commander"
-                                        />
+                                            великим тем годам»<span>&nbsp;*</span></label>
+                                        <Input type="number" placeholder="Например, 10" :maxlength="5" v-model:value="report[62]
+                                                .patriotic_action_block
+                                                .patriotic_action_participants
+                                            " :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{
                                                 report[62]
@@ -711,21 +501,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
-                                        class="circleLoader"
-                                        v-if="isLoading"
-                                        indeterminate
-                                        color="blue"
-                                    ></v-progress-circular>
-                                    <Button
-                                        v-if="!is_regional_commander"
-                                        type="button"
-                                        :disabled="report[62].disabledBtn"
-                                        class="form__button form__button-color"
-                                        label="Отправить данные на верификацию"
-                                        size="large"
-                                        @click="postParameters(62)"
-                                    />
+                                    <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                        color="blue"></v-progress-circular>
+                                    <Button v-if="!is_regional_commander" type="button"
+                                        :disabled="report[62].disabledBtn" class="form__button form__button-color"
+                                        label="Отправить данные на верификацию" size="large"
+                                        @click="postParameters(62)" />
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -736,50 +517,27 @@ s
                     </v-expansion-panel-text>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div
-                                class="form__field-group-top form__field-column-one"
-                            >
+                            <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Участие в Неделе охраны труда<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <sortByEducation
-                                            placeholder="Например, да"
-                                            v-model="
-                                                report[63]
-                                                    .safety_work_week_block
-                                                    .safety_work_week
-                                            "
-                                            :options="SafetyWeekChoose"
-                                            optionLabel="name"
-                                            class="invents-select"
-                                            :sorts-boolean="false"
-                                            variant="outlined"
-                                            clearable
-                                        />
+                                        <label class="form__label">Участие в Неделе охраны
+                                            труда<span>&nbsp;*</span></label>
+                                        <sortByEducation placeholder="Например, да" v-model="report[63]
+                                                .safety_work_week_block
+                                                .safety_work_week
+                                            " :options="SafetyWeekChoose" optionLabel="name" class="invents-select"
+                                            :sorts-boolean="false" variant="outlined" clearable />
                                     </div>
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
-                                        class="circleLoader"
-                                        v-if="isLoading"
-                                        indeterminate
-                                        color="blue"
-                                    ></v-progress-circular>
-                                    <Button
-                                        v-if="!is_regional_commander"
-                                        type="button"
-                                        :disabled="report[63].disabledBtn"
-                                        class="form__button form__button-color"
-                                        label="Отправить данные на верификацию"
-                                        size="large"
-                                        @click="postParameters(63)"
-                                    />
+                                    <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                        color="blue"></v-progress-circular>
+                                    <Button v-if="!is_regional_commander" type="button"
+                                        :disabled="report[63].disabledBtn" class="form__button form__button-color"
+                                        label="Отправить данные на верификацию" size="large"
+                                        @click="postParameters(63)" />
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -790,52 +548,29 @@ s
                     </v-expansion-panel-text>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div
-                                class="form__field-group-top form__field-column-one"
-                            >
+                            <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Участие в Школе подготовки
+                                        <label class="form__label">Участие в Школе подготовки
                                             командиров и комиссаров студенческих
-                                            отрядов<span>&nbsp;*</span></label
-                                        >
-                                        <sortByEducation
-                                            placeholder="Например, да"
-                                            v-model="
-                                                report[64]
-                                                    .commander_commissioner_school_block
-                                                    .commander_commissioner_school
-                                            "
-                                            :options="
-                                                CommanderCommissionerschoolChoose
-                                            "
-                                            optionLabel="name"
-                                            class="invents-select"
-                                            :sorts-boolean="false"
-                                            variant="outlined"
-                                            clearable
-                                        />
+                                            отрядов<span>&nbsp;*</span></label>
+                                        <sortByEducation placeholder="Например, да" v-model="report[64]
+                                                .commander_commissioner_school_block
+                                                .commander_commissioner_school
+                                            " :options="CommanderCommissionerschoolChoose
+                                                " optionLabel="name" class="invents-select" :sorts-boolean="false"
+                                            variant="outlined" clearable />
                                     </div>
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
-                                        class="circleLoader"
-                                        v-if="isLoading"
-                                        indeterminate
-                                        color="blue"
-                                    ></v-progress-circular>
-                                    <Button
-                                        v-if="!is_regional_commander"
-                                        type="button"
-                                        :disabled="report[64].disabledBtn"
-                                        class="form__button form__button-color"
-                                        label="Отправить данные на верификацию"
-                                        size="large"
-                                        @click="postParameters(64)"
-                                    />
+                                    <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                        color="blue"></v-progress-circular>
+                                    <Button v-if="!is_regional_commander" type="button"
+                                        :disabled="report[64].disabledBtn" class="form__button form__button-color"
+                                        label="Отправить данные на верификацию" size="large"
+                                        @click="postParameters(64)" />
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -846,48 +581,25 @@ s
                     </v-expansion-panel-text>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div
-                                class="form__field-group-top form__field-column-one"
-                            >
+                            <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Участие в Открытии трудового
-                                            семестра<span>&nbsp;*</span></label
-                                        >
-                                        <sortByEducation
-                                            placeholder="Например, да"
-                                            v-model="
-                                                report[65]
-                                                    .working_semester_opening_block
-                                                    .working_semester_opening
-                                            "
-                                            :options="semesterOpeningChoose"
-                                            optionLabel="name"
-                                            class="invents-select"
-                                            :sorts-boolean="false"
-                                            variant="outlined"
-                                            clearable
-                                        />
+                                        <label class="form__label">Участие в Открытии трудового
+                                            семестра<span>&nbsp;*</span></label>
+                                        <sortByEducation placeholder="Например, да" v-model="report[65]
+                                                .working_semester_opening_block
+                                                .working_semester_opening
+                                            " :options="semesterOpeningChoose" optionLabel="name"
+                                            class="invents-select" :sorts-boolean="false" variant="outlined"
+                                            clearable />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Количество участников мероприятия
-                                            Открытие трудового семестра<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <Input
-                                            type="number"
-                                            placeholder="Например, 10"
-                                            :maxlength="5"
-                                            v-model:value="
-                                                report[65]
-                                                    .working_semester_opening_block
-                                                    .working_semester_opening_participants
-                                            "
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Количество участников мероприятия
+                                            Открытие трудового семестра<span>&nbsp;*</span></label>
+                                        <Input type="number" placeholder="Например, 10" :maxlength="5" v-model:value="report[65]
+                                                .working_semester_opening_block
+                                                .working_semester_opening_participants
+                                            " :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{
                                                 report[65]
@@ -902,21 +614,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
-                                        class="circleLoader"
-                                        v-if="isLoading"
-                                        indeterminate
-                                        color="blue"
-                                    ></v-progress-circular>
-                                    <Button
-                                        v-if="!is_regional_commander"
-                                        type="button"
-                                        :disabled="report[65].disabledBtn"
-                                        class="form__button form__button-color"
-                                        label="Отправить данные на верификацию"
-                                        size="large"
-                                        @click="postParameters(65)"
-                                    />
+                                    <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                        color="blue"></v-progress-circular>
+                                    <Button v-if="!is_regional_commander" type="button"
+                                        :disabled="report[65].disabledBtn" class="form__button form__button-color"
+                                        label="Отправить данные на верификацию" size="large"
+                                        @click="postParameters(65)" />
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -927,50 +630,27 @@ s
                     </v-expansion-panel-text>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div
-                                class="form__field-group-top form__field-column-one"
-                            >
+                            <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Участие в Творческом фестивале<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <sortByEducation
-                                            placeholder="Например, да"
-                                            optionLabel="name"
-                                            v-model="
-                                                report[66]
-                                                    .creative_festival_block
-                                                    .creative_festival
-                                            "
-                                            :options="festivalChoose"
-                                            class="invents-select"
-                                            :sorts-boolean="false"
-                                            variant="outlined"
-                                            clearable
-                                        />
+                                        <label class="form__label">Участие в Творческом
+                                            фестивале<span>&nbsp;*</span></label>
+                                        <sortByEducation placeholder="Например, да" optionLabel="name" v-model="report[66]
+                                                .creative_festival_block
+                                                .creative_festival
+                                            " :options="festivalChoose" class="invents-select" :sorts-boolean="false"
+                                            variant="outlined" clearable />
                                     </div>
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
-                                        class="circleLoader"
-                                        v-if="isLoading"
-                                        indeterminate
-                                        color="blue"
-                                    ></v-progress-circular>
-                                    <Button
-                                        v-if="!is_regional_commander"
-                                        type="button"
-                                        :disabled="report[66].disabledBtn"
-                                        class="form__button form__button-color"
-                                        label="Отправить данные на верификацию"
-                                        size="large"
-                                        @click="postParameters(66)"
-                                    />
+                                    <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                        color="blue"></v-progress-circular>
+                                    <Button v-if="!is_regional_commander" type="button"
+                                        :disabled="report[66].disabledBtn" class="form__button form__button-color"
+                                        label="Отправить данные на верификацию" size="large"
+                                        @click="postParameters(66)" />
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -981,49 +661,27 @@ s
                     </v-expansion-panel-text>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div
-                                class="form__field-group-top form__field-column-one"
-                            >
+                            <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Участие в Спартакиаде студенческих
+                                        <label class="form__label">Участие в Спартакиаде студенческих
                                             отрядов и комплексе мероприятий
-                                            РСО-спорт<span>&nbsp;*</span></label
-                                        >
-                                        <sortByEducation
-                                            placeholder="Например, да"
-                                            v-model="
-                                                report[67].spartakiad_block
-                                                    .spartakiad
-                                            "
-                                            :options="spartakiadChoose"
-                                            optionLabel="name"
-                                            class="invents-select"
-                                            :sorts-boolean="false"
-                                            variant="outlined"
-                                            clearable
-                                        />
+                                            РСО-спорт<span>&nbsp;*</span></label>
+                                        <sortByEducation placeholder="Например, да" v-model="report[67].spartakiad_block
+                                                .spartakiad
+                                            " :options="spartakiadChoose" optionLabel="name" class="invents-select"
+                                            :sorts-boolean="false" variant="outlined" clearable />
                                     </div>
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
-                                        class="circleLoader"
-                                        v-if="isLoading"
-                                        indeterminate
-                                        color="blue"
-                                    ></v-progress-circular>
-                                    <Button
-                                        v-if="!is_regional_commander"
-                                        type="button"
-                                        :disabled="report[67].disabledBtn"
-                                        class="form__button form__button-color"
-                                        label="Отправить данные на верификацию"
-                                        size="large"
-                                        @click="postParameters(67)"
-                                    />
+                                    <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                        color="blue"></v-progress-circular>
+                                    <Button v-if="!is_regional_commander" type="button"
+                                        :disabled="report[67].disabledBtn" class="form__button form__button-color"
+                                        label="Отправить данные на верификацию" size="large"
+                                        @click="postParameters(67)" />
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -1034,51 +692,27 @@ s
                     </v-expansion-panel-text>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div
-                                class="form__field-group-top form__field-column-one"
-                            >
+                            <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Участие в Конкурсе
-                                            профессионального мастерства<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <sortByEducation
-                                            placeholder="Например, да"
-                                            v-model="
-                                                report[68]
-                                                    .professional_competition_block
-                                                    .professional_competition
-                                            "
-                                            :options="competitionProChoose"
-                                            optionLabel="name"
-                                            class="invents-select"
-                                            :sorts-boolean="false"
-                                            variant="outlined"
-                                            clearable
-                                        />
+                                        <label class="form__label">Участие в Конкурсе
+                                            профессионального мастерства<span>&nbsp;*</span></label>
+                                        <sortByEducation placeholder="Например, да" v-model="report[68]
+                                                .professional_competition_block
+                                                .professional_competition
+                                            " :options="competitionProChoose" optionLabel="name" class="invents-select"
+                                            :sorts-boolean="false" variant="outlined" clearable />
                                     </div>
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
-                                        class="circleLoader"
-                                        v-if="isLoading"
-                                        indeterminate
-                                        color="blue"
-                                    ></v-progress-circular>
-                                    <Button
-                                        v-if="!is_regional_commander"
-                                        type="button"
-                                        :disabled="report[68].disabledBtn"
-                                        class="form__button form__button-color"
-                                        label="Отправить данные на верификацию"
-                                        size="large"
-                                        @click="postParameters(68)"
-                                    />
+                                    <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                        color="blue"></v-progress-circular>
+                                    <Button v-if="!is_regional_commander" type="button"
+                                        :disabled="report[68].disabledBtn" class="form__button form__button-color"
+                                        label="Отправить данные на верификацию" size="large"
+                                        @click="postParameters(68)" />
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -1105,44 +739,22 @@ s
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div
-                                class="form__field-group-top form__field-column-one form__field-column-one-file"
-                                v-for="(block, index) in report[7]
-                                    .participation_data"
-                                :key="index"
-                            >
+                            <div class="form__field-group-top form__field-column-one form__field-column-one-file" v-for="(block, index) in report[7]
+                                .participation_data" :key="index">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Наименование мероприятия<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <Input
-                                            placeholder="Например, Окружной слет студенческих отрядов ПФО"
-                                            :maxlength="150"
-                                            v-model:value="block.event_name"
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Наименование мероприятия<span>&nbsp;*</span></label>
+                                        <Input placeholder="Например, Окружной слет студенческих отрядов ПФО"
+                                            :maxlength="150" v-model:value="block.event_name"
+                                            :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{ block.event_name.length }} / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Количество человек<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <Input
-                                            type="number"
-                                            placeholder="Например, 5"
-                                            :maxlength="5"
-                                            v-model:value="
-                                                block.number_of_participants
-                                            "
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Количество человек<span>&nbsp;*</span></label>
+                                        <Input type="number" placeholder="Например, 5" :maxlength="5" v-model:value="block.number_of_participants
+                                            " :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{
                                                 block.number_of_participants
@@ -1152,60 +764,29 @@ s
                                         </div>
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Ссылка на социальные сети
+                                        <label class="form__label">Ссылка на социальные сети
                                             с фотоотчетом с наименованием
                                             мероприятия и наименованием ЛСО,
-                                            принявшем в нем участие<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <template
-                                            v-for="(link, i) in block.links"
-                                            :key="index + '_' + i"
-                                        >
+                                            принявшем в нем участие<span>&nbsp;*</span></label>
+                                        <template v-for="(link, i) in block.links" :key="index + '_' + i">
                                             <div class="form__field-link">
-                                                <Input
-                                                    placeholder="Например, https://vk.com/cco_monolit"
-                                                    :maxlength="100"
-                                                    v-model:value="link.link"
-                                                    :readonly="
-                                                        is_regional_commander
-                                                    "
-                                                />
-                                                <div
-                                                    type="button"
-                                                    v-if="!block.is_verified"
-                                                >
-                                                    <svg
-                                                        @click="
-                                                            deleteLink(
-                                                                index,
-                                                                7,
-                                                                'participation_data',
-                                                            )
-                                                        "
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        width="24"
-                                                        height="24"
-                                                        viewBox="0 0 24 24"
-                                                        fill="none"
-                                                    >
+                                                <Input placeholder="Например, https://vk.com/cco_monolit"
+                                                    :maxlength="100" v-model:value="link.link" :readonly="is_regional_commander
+                                                        " />
+                                                <div type="button" v-if="!block.is_verified">
+                                                    <svg @click="
+                                                        deleteLink(
+                                                            index,
+                                                            7,
+                                                            'participation_data',
+                                                        )
+                                                        " xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        viewBox="0 0 24 24" fill="none">
                                                         <path
                                                             d="M12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 10.8181 3.23279 9.64778 3.68508 8.55585C4.13738 7.46392 4.80031 6.47177 5.63604 5.63604C6.47177 4.80031 7.46392 4.13738 8.55585 3.68508C9.64778 3.23279 10.8181 3 12 3C13.1819 3 14.3522 3.23279 15.4442 3.68508C16.5361 4.13738 17.5282 4.80031 18.364 5.63604C19.1997 6.47177 19.8626 7.46392 20.3149 8.55585C20.7672 9.64778 21 10.8181 21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4441 20.3149C14.3522 20.7672 13.1819 21 12 21L12 21Z"
-                                                            stroke="#939393"
-                                                            stroke-linecap="round"
-                                                        />
-                                                        <path
-                                                            d="M9 9L15 15"
-                                                            stroke="#939393"
-                                                            stroke-linecap="round"
-                                                        />
-                                                        <path
-                                                            d="M15 9L9 15"
-                                                            stroke="#939393"
-                                                            stroke-linecap="round"
-                                                        />
+                                                            stroke="#939393" stroke-linecap="round" />
+                                                        <path d="M9 9L15 15" stroke="#939393" stroke-linecap="round" />
+                                                        <path d="M15 9L9 15" stroke="#939393" stroke-linecap="round" />
                                                     </svg>
                                                 </div>
                                             </div>
@@ -1214,39 +795,23 @@ s
                                                 {{ link.link.length }} / 100
                                             </div>
                                         </template>
-                                        <div
-                                            class="form__field add-block"
-                                            @click="
-                                                AddLink(
-                                                    index,
-                                                    7,
-                                                    'participation_data',
-                                                    { link: '' },
-                                                )
-                                            "
-                                            v-if="!is_regional_commander"
-                                        >
+                                        <div class="form__field add-block" @click="
+                                            AddLink(
+                                                index,
+                                                7,
+                                                'participation_data',
+                                                { link: '' },
+                                            )
+                                            " v-if="!is_regional_commander">
                                             <p>+ добавить ссылку</p>
                                         </div>
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Скан грамот (при наличии)</label
-                                        >
-                                        <div
-                                            class="statement-item"
-                                            v-if="!block.certificate_scans"
-                                        >
-                                            <img
-                                                src="@app/assets/icon/addFile.svg"
-                                                alt="addFile"
-                                            />
-                                            <FileUpload
-                                                mode="basic"
-                                                name="demo[]"
-                                                accept=".pdf, .jpeg, .png"
-                                                :customUpload="true"
-                                                @select="
+                                        <label class="form__label">Скан грамот (при наличии)</label>
+                                        <div class="statement-item" v-if="!block.certificate_scans">
+                                            <img src="@app/assets/icon/addFile.svg" alt="addFile" />
+                                            <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
+                                                :customUpload="true" @select="
                                                     selectFile(
                                                         $event,
                                                         7,
@@ -1254,117 +819,70 @@ s
                                                         'certificate_scans',
                                                         index,
                                                     )
-                                                "
-                                                chooseLabel="Выбрать файл"
-                                            />
+                                                    " chooseLabel="Выбрать файл" />
                                         </div>
 
                                         <div v-else>
-                                            <div
-                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
-                                            >
+                                            <div class="flex flex-wrap p-0 sm:p-5 gap-5">
                                                 <div
-                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
-                                                >
-                                                    <img
-                                                        class="addFile"
-                                                        src="@app/assets/icon/addFile.svg"
-                                                        alt="addFile"
-                                                    />
-                                                    <span
-                                                        class="font-semibold"
-                                                        >{{
-                                                            block
-                                                                .certificate_scans
-                                                                .name
-                                                        }}</span
-                                                    >
-                                                    <span
-                                                        v-if="block.id"
-                                                        class="font-semibold"
-                                                        >{{
-                                                            decodeURIComponent(
-                                                                block.certificate_scans
-                                                                    .split('/')
-                                                                    .pop(),
-                                                            )
-                                                        }}</span
-                                                    >
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
+                                                    <img class="addFile" src="@app/assets/icon/addFile.svg"
+                                                        alt="addFile" />
+                                                    <span class="font-semibold">{{
+                                                        block
+                                                            .certificate_scans
+                                                            .name
+                                                    }}</span>
+                                                    <span v-if="block.id" class="font-semibold">{{
+                                                        decodeURIComponent(
+                                                            block.certificate_scans
+                                                                .split('/')
+                                                                .pop(),
+                                                        )
+                                                    }}</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div
-                                    type="button"
-                                    v-if="
-                                        !block.is_verified &&
-                                        !is_regional_commander
-                                    "
-                                >
-                                    <svg
-                                        @click="
-                                            deleteBlock(
-                                                index,
-                                                7,
-                                                'participation_data',
-                                            )
-                                        "
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                    >
+                                <div type="button" v-if="
+                                    !block.is_verified &&
+                                    !is_regional_commander
+                                ">
+                                    <svg @click="
+                                        deleteBlock(
+                                            index,
+                                            7,
+                                            'participation_data',
+                                        )
+                                        " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none">
                                         <path
                                             d="M12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 10.8181 3.23279 9.64778 3.68508 8.55585C4.13738 7.46392 4.80031 6.47177 5.63604 5.63604C6.47177 4.80031 7.46392 4.13738 8.55585 3.68508C9.64778 3.23279 10.8181 3 12 3C13.1819 3 14.3522 3.23279 15.4442 3.68508C16.5361 4.13738 17.5282 4.80031 18.364 5.63604C19.1997 6.47177 19.8626 7.46392 20.3149 8.55585C20.7672 9.64778 21 10.8181 21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4441 20.3149C14.3522 20.7672 13.1819 21 12 21L12 21Z"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
-                                        <path
-                                            d="M9 9L15 15"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
-                                        <path
-                                            d="M15 9L9 15"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
+                                            stroke="#939393" stroke-linecap="round" />
+                                        <path d="M9 9L15 15" stroke="#939393" stroke-linecap="round" />
+                                        <path d="M15 9L9 15" stroke="#939393" stroke-linecap="round" />
                                     </svg>
                                 </div>
                             </div>
-                            <div
-                                v-if="!is_regional_commander"
-                                class="form__field add-block"
-                                @click="
-                                    addNewBlock(7, 'participation_data', {
-                                        event_name: '',
-                                        number_of_participants: '',
-                                        certificate_scans: null,
-                                        links: [{ link: '' }],
-                                    })
-                                "
-                            >
+                            <div v-if="!is_regional_commander" class="form__field add-block" @click="
+                                addNewBlock(7, 'participation_data', {
+                                    event_name: '',
+                                    number_of_participants: '',
+                                    certificate_scans: null,
+                                    links: [{ link: '' }],
+                                })
+                                ">
                                 <p>+ Добавить мероприятие</p>
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
-                                        class="circleLoader"
-                                        v-if="isLoading"
-                                        indeterminate
-                                        color="blue"
-                                    ></v-progress-circular>
-                                    <Button
-                                        v-if="!is_regional_commander"
-                                        type="button"
-                                        :disabled="report[7].disabledBtn"
-                                        class="form__button form__button-color"
-                                        label="Отправить данные на верификацию"
-                                        size="large"
-                                        @click="postParameters(7)"
-                                    />
+                                    <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                        color="blue"></v-progress-circular>
+                                    <Button v-if="!is_regional_commander" type="button"
+                                        :disabled="report[7].disabledBtn" class="form__button form__button-color"
+                                        label="Отправить данные на верификацию" size="large"
+                                        @click="postParameters(7)" />
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -1390,44 +908,22 @@ s
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div
-                                class="form__field-group-top form__field-column-one form__field-column-one-file"
-                                v-for="(block, index) in report[8]
-                                    .participation_data"
-                                :key="index"
-                            >
+                            <div class="form__field-group-top form__field-column-one form__field-column-one-file" v-for="(block, index) in report[8]
+                                .participation_data" :key="index">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Наименование мероприятия<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <Input
-                                            placeholder="Например, Всероссийский конкурс «В объективе РСО»"
-                                            :maxlength="100"
-                                            v-model:value="block.event_name"
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Наименование мероприятия<span>&nbsp;*</span></label>
+                                        <Input placeholder="Например, Всероссийский конкурс «В объективе РСО»"
+                                            :maxlength="100" v-model:value="block.event_name"
+                                            :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{ block.event_name.length }} / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Количество человек<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <Input
-                                            type="number"
-                                            placeholder="Например, 5"
-                                            :maxlength="100"
-                                            v-model:value="
-                                                block.number_of_participants
-                                            "
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Количество человек<span>&nbsp;*</span></label>
+                                        <Input type="number" placeholder="Например, 5" :maxlength="100" v-model:value="block.number_of_participants
+                                            " :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{
                                                 block.number_of_participants
@@ -1437,60 +933,29 @@ s
                                         </div>
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Ссылка на социальные сети
+                                        <label class="form__label">Ссылка на социальные сети
                                             с фотоотчетом с наименованием
                                             мероприятия и наименованием ЛСО,
-                                            принявшем в нем участие<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <template
-                                            v-for="(link, i) in block.links"
-                                            :key="index + '_' + i"
-                                        >
+                                            принявшем в нем участие<span>&nbsp;*</span></label>
+                                        <template v-for="(link, i) in block.links" :key="index + '_' + i">
                                             <div class="form__field-link">
-                                                <Input
-                                                    placeholder="Например, https://vk.com/cco_monolit"
-                                                    :maxlength="100"
-                                                    v-model:value="link.link"
-                                                    :readonly="
-                                                        is_regional_commander
-                                                    "
-                                                />
-                                                <div
-                                                    type="button"
-                                                    v-if="!block.is_verified"
-                                                >
-                                                    <svg
-                                                        @click="
-                                                            deleteLink(
-                                                                index,
-                                                                8,
-                                                                'participation_data',
-                                                            )
-                                                        "
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        width="24"
-                                                        height="24"
-                                                        viewBox="0 0 24 24"
-                                                        fill="none"
-                                                    >
+                                                <Input placeholder="Например, https://vk.com/cco_monolit"
+                                                    :maxlength="100" v-model:value="link.link" :readonly="is_regional_commander
+                                                        " />
+                                                <div type="button" v-if="!block.is_verified">
+                                                    <svg @click="
+                                                        deleteLink(
+                                                            index,
+                                                            8,
+                                                            'participation_data',
+                                                        )
+                                                        " xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        viewBox="0 0 24 24" fill="none">
                                                         <path
                                                             d="M12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 10.8181 3.23279 9.64778 3.68508 8.55585C4.13738 7.46392 4.80031 6.47177 5.63604 5.63604C6.47177 4.80031 7.46392 4.13738 8.55585 3.68508C9.64778 3.23279 10.8181 3 12 3C13.1819 3 14.3522 3.23279 15.4442 3.68508C16.5361 4.13738 17.5282 4.80031 18.364 5.63604C19.1997 6.47177 19.8626 7.46392 20.3149 8.55585C20.7672 9.64778 21 10.8181 21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4441 20.3149C14.3522 20.7672 13.1819 21 12 21L12 21Z"
-                                                            stroke="#939393"
-                                                            stroke-linecap="round"
-                                                        />
-                                                        <path
-                                                            d="M9 9L15 15"
-                                                            stroke="#939393"
-                                                            stroke-linecap="round"
-                                                        />
-                                                        <path
-                                                            d="M15 9L9 15"
-                                                            stroke="#939393"
-                                                            stroke-linecap="round"
-                                                        />
+                                                            stroke="#939393" stroke-linecap="round" />
+                                                        <path d="M9 9L15 15" stroke="#939393" stroke-linecap="round" />
+                                                        <path d="M15 9L9 15" stroke="#939393" stroke-linecap="round" />
                                                     </svg>
                                                 </div>
                                             </div>
@@ -1498,39 +963,23 @@ s
                                                 {{ link.link.length }} / 100
                                             </div>
                                         </template>
-                                        <div
-                                            class="form__field add-block"
-                                            @click="
-                                                AddLink(
-                                                    index,
-                                                    8,
-                                                    'participation_data',
-                                                    { link: '' },
-                                                )
-                                            "
-                                            v-if="!is_regional_commander"
-                                        >
+                                        <div class="form__field add-block" @click="
+                                            AddLink(
+                                                index,
+                                                8,
+                                                'participation_data',
+                                                { link: '' },
+                                            )
+                                            " v-if="!is_regional_commander">
                                             <p>+ добавить ссылку</p>
                                         </div>
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Скан грамот (при наличии)</label
-                                        >
-                                        <div
-                                            class="statement-item"
-                                            v-if="!block.certificate_scans"
-                                        >
-                                            <img
-                                                src="@app/assets/icon/addFile.svg"
-                                                alt="addFile"
-                                            />
-                                            <FileUpload
-                                                mode="basic"
-                                                name="demo[]"
-                                                accept=".pdf, .jpeg, .png"
-                                                :customUpload="true"
-                                                @select="
+                                        <label class="form__label">Скан грамот (при наличии)</label>
+                                        <div class="statement-item" v-if="!block.certificate_scans">
+                                            <img src="@app/assets/icon/addFile.svg" alt="addFile" />
+                                            <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
+                                                :customUpload="true" @select="
                                                     selectFile(
                                                         $event,
                                                         8,
@@ -1538,117 +987,70 @@ s
                                                         'certificate_scans',
                                                         index,
                                                     )
-                                                "
-                                                chooseLabel="Выбрать файл"
-                                            />
+                                                    " chooseLabel="Выбрать файл" />
                                         </div>
 
                                         <div v-else>
-                                            <div
-                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
-                                            >
+                                            <div class="flex flex-wrap p-0 sm:p-5 gap-5">
                                                 <div
-                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
-                                                >
-                                                    <img
-                                                        src="@app/assets/icon/addFile.svg"
-                                                        alt="addFile"
-                                                        class="addFile"
-                                                    />
-                                                    <span
-                                                        class="font-semibold"
-                                                        >{{
-                                                            block
-                                                                .certificate_scans
-                                                                .name
-                                                        }}</span
-                                                    >
-                                                    <span
-                                                        v-if="block.id"
-                                                        class="font-semibold"
-                                                        >{{
-                                                            decodeURIComponent(
-                                                                block.certificate_scans
-                                                                    .split('/')
-                                                                    .pop(),
-                                                            )
-                                                        }}</span
-                                                    >
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
+                                                    <img src="@app/assets/icon/addFile.svg" alt="addFile"
+                                                        class="addFile" />
+                                                    <span class="font-semibold">{{
+                                                        block
+                                                            .certificate_scans
+                                                            .name
+                                                    }}</span>
+                                                    <span v-if="block.id" class="font-semibold">{{
+                                                        decodeURIComponent(
+                                                            block.certificate_scans
+                                                                .split('/')
+                                                                .pop(),
+                                                        )
+                                                    }}</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div
-                                    type="button"
-                                    v-if="
-                                        !block.is_verified &&
-                                        !is_regional_commander
-                                    "
-                                >
-                                    <svg
-                                        @click="
-                                            deleteBlock(
-                                                index,
-                                                8,
-                                                'participation_data',
-                                            )
-                                        "
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                    >
+                                <div type="button" v-if="
+                                    !block.is_verified &&
+                                    !is_regional_commander
+                                ">
+                                    <svg @click="
+                                        deleteBlock(
+                                            index,
+                                            8,
+                                            'participation_data',
+                                        )
+                                        " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none">
                                         <path
                                             d="M12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 10.8181 3.23279 9.64778 3.68508 8.55585C4.13738 7.46392 4.80031 6.47177 5.63604 5.63604C6.47177 4.80031 7.46392 4.13738 8.55585 3.68508C9.64778 3.23279 10.8181 3 12 3C13.1819 3 14.3522 3.23279 15.4442 3.68508C16.5361 4.13738 17.5282 4.80031 18.364 5.63604C19.1997 6.47177 19.8626 7.46392 20.3149 8.55585C20.7672 9.64778 21 10.8181 21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4441 20.3149C14.3522 20.7672 13.1819 21 12 21L12 21Z"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
-                                        <path
-                                            d="M9 9L15 15"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
-                                        <path
-                                            d="M15 9L9 15"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
+                                            stroke="#939393" stroke-linecap="round" />
+                                        <path d="M9 9L15 15" stroke="#939393" stroke-linecap="round" />
+                                        <path d="M15 9L9 15" stroke="#939393" stroke-linecap="round" />
                                     </svg>
                                 </div>
                             </div>
-                            <div
-                                v-if="!is_regional_commander"
-                                class="form__field add-block"
-                                @click="
-                                    addNewBlock(8, 'participation_data', {
-                                        event_name: '',
-                                        number_of_participants: '',
-                                        certificate_scans: null,
-                                        links: [{ link: '' }],
-                                    })
-                                "
-                            >
+                            <div v-if="!is_regional_commander" class="form__field add-block" @click="
+                                addNewBlock(8, 'participation_data', {
+                                    event_name: '',
+                                    number_of_participants: '',
+                                    certificate_scans: null,
+                                    links: [{ link: '' }],
+                                })
+                                ">
                                 <p>+ Добавить мероприятие</p>
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
-                                        class="circleLoader"
-                                        v-if="isLoading"
-                                        indeterminate
-                                        color="blue"
-                                    ></v-progress-circular>
-                                    <Button
-                                        v-if="!is_regional_commander"
-                                        type="button"
-                                        :disabled="report[8].disabledBtn"
-                                        class="form__button form__button-color"
-                                        label="Отправить данные на верификацию"
-                                        size="large"
-                                        @click="postParameters(8)"
-                                    />
+                                    <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                        color="blue"></v-progress-circular>
+                                    <Button v-if="!is_regional_commander" type="button"
+                                        :disabled="report[8].disabledBtn" class="form__button form__button-color"
+                                        label="Отправить данные на верификацию" size="large"
+                                        @click="postParameters(8)" />
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -1674,68 +1076,34 @@ s
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div
-                                class="form__field-group-top form__field-column-one form__field-column-one-file"
-                                v-for="(block, index) in report[9]
-                                    .participation_data"
-                                :key="index"
-                            >
+                            <div class="form__field-group-top form__field-column-one form__field-column-one-file" v-for="(block, index) in report[9]
+                                .participation_data" :key="index">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Наименование мероприятия или
-                                            конкурса<span>&nbsp;*</span></label
-                                        >
-                                        <Input
-                                            placeholder="Например, Окружной слет студенческих отрядов ПФО"
-                                            :maxlength="100"
-                                            v-model:value="block.event_name"
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Наименование мероприятия или
+                                            конкурса<span>&nbsp;*</span></label>
+                                        <Input placeholder="Например, Окружной слет студенческих отрядов ПФО"
+                                            :maxlength="100" v-model:value="block.event_name"
+                                            :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{ block.event_name.length }} / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Призовое место<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <sortByEducation
-                                            placeholder="Например, 1"
-                                            v-model="block.prize_place"
-                                            :options="prizePlaceChoose"
-                                            optionLabel="name"
-                                            class="invents-select"
-                                            :sorts-boolean="false"
-                                            variant="outlined"
-                                            clearable
-                                            :disabled="block.is_verified"
-                                        />
+                                        <label class="form__label">Призовое место<span>&nbsp;*</span></label>
+                                        <sortByEducation placeholder="Например, 1" v-model="block.prize_place"
+                                            :options="prizePlaceChoose" optionLabel="name" class="invents-select"
+                                            :sorts-boolean="false" variant="outlined" clearable
+                                            :disabled="block.is_verified" />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Скан грамоты с наименованием
+                                        <label class="form__label">Скан грамоты с наименованием
                                             проектов, наименования студенческого
-                                            отряда, призовым местом<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <div
-                                            class="statement-item"
-                                            v-if="!block.certificate_scans"
-                                        >
-                                            <img
-                                                src="@app/assets/icon/addFile.svg"
-                                                alt="addFile"
-                                            />
-                                            <FileUpload
-                                                mode="basic"
-                                                name="demo[]"
-                                                accept=".pdf, .jpeg, .png"
-                                                :customUpload="true"
-                                                @select="
+                                            отряда, призовым местом<span>&nbsp;*</span></label>
+                                        <div class="statement-item" v-if="!block.certificate_scans">
+                                            <img src="@app/assets/icon/addFile.svg" alt="addFile" />
+                                            <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
+                                                :customUpload="true" @select="
                                                     selectFile(
                                                         $event,
                                                         9,
@@ -1743,116 +1111,69 @@ s
                                                         'certificate_scans',
                                                         index,
                                                     )
-                                                "
-                                                chooseLabel="Выбрать файл"
-                                            />
+                                                    " chooseLabel="Выбрать файл" />
                                         </div>
 
                                         <div v-else>
-                                            <div
-                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
-                                            >
+                                            <div class="flex flex-wrap p-0 sm:p-5 gap-5">
                                                 <div
-                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
-                                                >
-                                                    <img
-                                                        src="@app/assets/icon/addFile.svg"
-                                                        alt="addFile"
-                                                        class="addFile"
-                                                    />
-                                                    <span
-                                                        class="font-semibold"
-                                                        >{{
-                                                            block
-                                                                .certificate_scans
-                                                                .name
-                                                        }}</span
-                                                    >
-                                                    <span
-                                                        v-if="block.id"
-                                                        class="font-semibold"
-                                                        >{{
-                                                            decodeURIComponent(
-                                                                block.certificate_scans
-                                                                    .split('/')
-                                                                    .pop(),
-                                                            )
-                                                        }}</span
-                                                    >
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
+                                                    <img src="@app/assets/icon/addFile.svg" alt="addFile"
+                                                        class="addFile" />
+                                                    <span class="font-semibold">{{
+                                                        block
+                                                            .certificate_scans
+                                                            .name
+                                                    }}</span>
+                                                    <span v-if="block.id" class="font-semibold">{{
+                                                        decodeURIComponent(
+                                                            block.certificate_scans
+                                                                .split('/')
+                                                                .pop(),
+                                                        )
+                                                    }}</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div
-                                    type="button"
-                                    v-if="
-                                        !block.is_verified &&
-                                        !is_regional_commander
-                                    "
-                                >
-                                    <svg
-                                        @click="
-                                            deleteBlock(
-                                                index,
-                                                9,
-                                                'participation_data',
-                                            )
-                                        "
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                    >
+                                <div type="button" v-if="
+                                    !block.is_verified &&
+                                    !is_regional_commander
+                                ">
+                                    <svg @click="
+                                        deleteBlock(
+                                            index,
+                                            9,
+                                            'participation_data',
+                                        )
+                                        " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none">
                                         <path
                                             d="M12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 10.8181 3.23279 9.64778 3.68508 8.55585C4.13738 7.46392 4.80031 6.47177 5.63604 5.63604C6.47177 4.80031 7.46392 4.13738 8.55585 3.68508C9.64778 3.23279 10.8181 3 12 3C13.1819 3 14.3522 3.23279 15.4442 3.68508C16.5361 4.13738 17.5282 4.80031 18.364 5.63604C19.1997 6.47177 19.8626 7.46392 20.3149 8.55585C20.7672 9.64778 21 10.8181 21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4441 20.3149C14.3522 20.7672 13.1819 21 12 21L12 21Z"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
-                                        <path
-                                            d="M9 9L15 15"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
-                                        <path
-                                            d="M15 9L9 15"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
+                                            stroke="#939393" stroke-linecap="round" />
+                                        <path d="M9 9L15 15" stroke="#939393" stroke-linecap="round" />
+                                        <path d="M15 9L9 15" stroke="#939393" stroke-linecap="round" />
                                     </svg>
                                 </div>
                             </div>
-                            <div
-                                v-if="!is_regional_commander"
-                                class="form__field add-block"
-                                @click="
-                                    addNewBlock(9, 'participation_data', {
-                                        event_name: '',
-                                        number_of_participants: '',
-                                        certificate_scans: null,
-                                    })
-                                "
-                            >
+                            <div v-if="!is_regional_commander" class="form__field add-block" @click="
+                                addNewBlock(9, 'participation_data', {
+                                    event_name: '',
+                                    number_of_participants: '',
+                                    certificate_scans: null,
+                                })
+                                ">
                                 <p>+ Добавить мероприятие или конкурс</p>
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
-                                        class="circleLoader"
-                                        v-if="isLoading"
-                                        indeterminate
-                                        color="blue"
-                                    ></v-progress-circular>
-                                    <Button
-                                        v-if="!is_regional_commander"
-                                        type="button"
-                                        :disabled="report[9].disabledBtn"
-                                        class="form__button form__button-color"
-                                        label="Отправить данные на верификацию"
-                                        size="large"
-                                        @click="postParameters(9)"
-                                    />
+                                    <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                        color="blue"></v-progress-circular>
+                                    <Button v-if="!is_regional_commander" type="button"
+                                        :disabled="report[9].disabledBtn" class="form__button form__button-color"
+                                        label="Отправить данные на верификацию" size="large"
+                                        @click="postParameters(9)" />
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -1878,67 +1199,33 @@ s
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div
-                                class="form__field-group-top form__field-column-one form__field-column-one-file"
-                                v-for="(block, index) in report[10]
-                                    .participation_data"
-                                :key="index"
-                            >
+                            <div class="form__field-group-top form__field-column-one form__field-column-one-file" v-for="(block, index) in report[10]
+                                .participation_data" :key="index">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Наименование мероприятия или
-                                            конкурса<span>&nbsp;*</span></label
-                                        >
-                                        <Input
-                                            placeholder="Например, Всероссийский конкурс «В объективе РСО»"
-                                            :maxlength="100"
-                                            v-model:value="block.event_name"
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Наименование мероприятия или
+                                            конкурса<span>&nbsp;*</span></label>
+                                        <Input placeholder="Например, Всероссийский конкурс «В объективе РСО»"
+                                            :maxlength="100" v-model:value="block.event_name"
+                                            :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{ block.event_name.length }} / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Призовое место<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <sortByEducation
-                                            placeholder="Например, 1"
-                                            v-model="block.prize_place"
-                                            :options="prizePlaceChoose"
-                                            optionLabel="name"
-                                            class="invents-select"
-                                            :sorts-boolean="false"
-                                            variant="outlined"
-                                            clearable
-                                        />
+                                        <label class="form__label">Призовое место<span>&nbsp;*</span></label>
+                                        <sortByEducation placeholder="Например, 1" v-model="block.prize_place"
+                                            :options="prizePlaceChoose" optionLabel="name" class="invents-select"
+                                            :sorts-boolean="false" variant="outlined" clearable />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Скан грамоты с наименованием
+                                        <label class="form__label">Скан грамоты с наименованием
                                             проектов, наименования студенческого
-                                            отряда, призовым местом<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <div
-                                            class="statement-item"
-                                            v-if="!block.certificate_scans"
-                                        >
-                                            <img
-                                                src="@app/assets/icon/addFile.svg"
-                                                alt="addFile"
-                                            />
-                                            <FileUpload
-                                                mode="basic"
-                                                name="demo[]"
-                                                accept=".pdf, .jpeg, .png"
-                                                :customUpload="true"
-                                                @select="
+                                            отряда, призовым местом<span>&nbsp;*</span></label>
+                                        <div class="statement-item" v-if="!block.certificate_scans">
+                                            <img src="@app/assets/icon/addFile.svg" alt="addFile" />
+                                            <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
+                                                :customUpload="true" @select="
                                                     selectFile(
                                                         $event,
                                                         10,
@@ -1946,116 +1233,69 @@ s
                                                         'certificate_scans',
                                                         index,
                                                     )
-                                                "
-                                                chooseLabel="Выбрать файл"
-                                            />
+                                                    " chooseLabel="Выбрать файл" />
                                         </div>
 
                                         <div v-else>
-                                            <div
-                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
-                                            >
+                                            <div class="flex flex-wrap p-0 sm:p-5 gap-5">
                                                 <div
-                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
-                                                >
-                                                    <img
-                                                        src="@app/assets/icon/addFile.svg"
-                                                        alt="addFile"
-                                                        class="addFile"
-                                                    />
-                                                    <span
-                                                        class="font-semibold"
-                                                        >{{
-                                                            block
-                                                                .certificate_scans
-                                                                .name
-                                                        }}</span
-                                                    >
-                                                    <span
-                                                        v-if="block.id"
-                                                        class="font-semibold"
-                                                        >{{
-                                                            decodeURIComponent(
-                                                                block.certificate_scans
-                                                                    .split('/')
-                                                                    .pop(),
-                                                            )
-                                                        }}</span
-                                                    >
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
+                                                    <img src="@app/assets/icon/addFile.svg" alt="addFile"
+                                                        class="addFile" />
+                                                    <span class="font-semibold">{{
+                                                        block
+                                                            .certificate_scans
+                                                            .name
+                                                    }}</span>
+                                                    <span v-if="block.id" class="font-semibold">{{
+                                                        decodeURIComponent(
+                                                            block.certificate_scans
+                                                                .split('/')
+                                                                .pop(),
+                                                        )
+                                                    }}</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div
-                                    type="button"
-                                    v-if="
-                                        !block.is_verified &&
-                                        !is_regional_commander
-                                    "
-                                >
-                                    <svg
-                                        @click="
-                                            deleteBlock(
-                                                index,
-                                                10,
-                                                'participation_data',
-                                            )
-                                        "
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                    >
+                                <div type="button" v-if="
+                                    !block.is_verified &&
+                                    !is_regional_commander
+                                ">
+                                    <svg @click="
+                                        deleteBlock(
+                                            index,
+                                            10,
+                                            'participation_data',
+                                        )
+                                        " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none">
                                         <path
                                             d="M12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 10.8181 3.23279 9.64778 3.68508 8.55585C4.13738 7.46392 4.80031 6.47177 5.63604 5.63604C6.47177 4.80031 7.46392 4.13738 8.55585 3.68508C9.64778 3.23279 10.8181 3 12 3C13.1819 3 14.3522 3.23279 15.4442 3.68508C16.5361 4.13738 17.5282 4.80031 18.364 5.63604C19.1997 6.47177 19.8626 7.46392 20.3149 8.55585C20.7672 9.64778 21 10.8181 21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4441 20.3149C14.3522 20.7672 13.1819 21 12 21L12 21Z"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
-                                        <path
-                                            d="M9 9L15 15"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
-                                        <path
-                                            d="M15 9L9 15"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
+                                            stroke="#939393" stroke-linecap="round" />
+                                        <path d="M9 9L15 15" stroke="#939393" stroke-linecap="round" />
+                                        <path d="M15 9L9 15" stroke="#939393" stroke-linecap="round" />
                                     </svg>
                                 </div>
                             </div>
-                            <div
-                                v-if="!is_regional_commander"
-                                class="form__field add-block"
-                                @click="
-                                    addNewBlock(10, 'participation_data', {
-                                        event_name: '',
-                                        number_of_participants: '',
-                                        certificate_scans: null,
-                                    })
-                                "
-                            >
+                            <div v-if="!is_regional_commander" class="form__field add-block" @click="
+                                addNewBlock(10, 'participation_data', {
+                                    event_name: '',
+                                    number_of_participants: '',
+                                    certificate_scans: null,
+                                })
+                                ">
                                 <p>+ Добавить мероприятие или конкурс</p>
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
-                                        class="circleLoader"
-                                        v-if="isLoading"
-                                        indeterminate
-                                        color="blue"
-                                    ></v-progress-circular>
-                                    <Button
-                                        v-if="!is_regional_commander"
-                                        type="button"
-                                        :disabled="report[10].disabledBtn"
-                                        class="form__button form__button-color"
-                                        label="Отправить данные на верификацию"
-                                        size="large"
-                                        @click="postParameters(10)"
-                                    />
+                                    <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                        color="blue"></v-progress-circular>
+                                    <Button v-if="!is_regional_commander" type="button"
+                                        :disabled="report[10].disabledBtn" class="form__button form__button-color"
+                                        label="Отправить данные на верификацию" size="large"
+                                        @click="postParameters(10)" />
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -2081,69 +1321,33 @@ s
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div
-                                class="form__field-group-top form__field-column-one form__field-column-one-file"
-                                v-for="(block, index) in report[11]
-                                    .participation_data"
-                                :key="index"
-                            >
+                            <div class="form__field-group-top form__field-column-one form__field-column-one-file" v-for="(block, index) in report[11]
+                                .participation_data" :key="index">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Наименование трудового проекта<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <Input
-                                            placeholder="Например, Спартакиада на МСС «Алабуга»"
-                                            :maxlength="100"
-                                            v-model:value="block.event_name"
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Наименование трудового
+                                            проекта<span>&nbsp;*</span></label>
+                                        <Input placeholder="Например, Спартакиада на МСС «Алабуга»" :maxlength="100"
+                                            v-model:value="block.event_name" :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{ block.event_name.length }} / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Призовое место<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <sortByEducation
-                                            placeholder="Например, 1"
-                                            v-model="block.prize_place"
-                                            :options="prizePlaceChoose"
-                                            optionLabel="name"
-                                            class="invents-select"
-                                            :sorts-boolean="false"
-                                            clearable
-                                            variant="outlined"
-                                        />
+                                        <label class="form__label">Призовое место<span>&nbsp;*</span></label>
+                                        <sortByEducation placeholder="Например, 1" v-model="block.prize_place"
+                                            :options="prizePlaceChoose" optionLabel="name" class="invents-select"
+                                            :sorts-boolean="false" clearable variant="outlined" />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Скан грамоты с наименованием
+                                        <label class="form__label">Скан грамоты с наименованием
                                             мероприятия, наименования ЛСО,
-                                            призовым местом<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <div
-                                            class="statement-item"
-                                            v-if="!block.certificate_scans"
-                                        >
-                                            <img
-                                                src="@app/assets/icon/addFile.svg"
-                                                alt="addFile"
-                                            />
+                                            призовым местом<span>&nbsp;*</span></label>
+                                        <div class="statement-item" v-if="!block.certificate_scans">
+                                            <img src="@app/assets/icon/addFile.svg" alt="addFile" />
 
-                                            <FileUpload
-                                                mode="basic"
-                                                name="demo[]"
-                                                accept=".pdf, .jpeg, .png"
-                                                :customUpload="true"
-                                                @select="
+                                            <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
+                                                :customUpload="true" @select="
                                                     selectFile(
                                                         $event,
                                                         11,
@@ -2151,117 +1355,70 @@ s
                                                         'certificate_scans',
                                                         index,
                                                     )
-                                                "
-                                                chooseLabel="Выбрать файл"
-                                            />
+                                                    " chooseLabel="Выбрать файл" />
                                         </div>
 
                                         <div v-else>
-                                            <div
-                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
-                                            >
+                                            <div class="flex flex-wrap p-0 sm:p-5 gap-5">
                                                 <div
-                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
-                                                >
-                                                    <img
-                                                        src="@app/assets/icon/addFile.svg"
-                                                        alt="addFile"
-                                                        class="addFile"
-                                                    />
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
+                                                    <img src="@app/assets/icon/addFile.svg" alt="addFile"
+                                                        class="addFile" />
 
-                                                    <span
-                                                        class="font-semibold"
-                                                        >{{
-                                                            block
-                                                                .certificate_scans
-                                                                .name
-                                                        }}</span
-                                                    >
-                                                    <span
-                                                        v-if="block.id"
-                                                        class="font-semibold"
-                                                        >{{
-                                                            decodeURIComponent(
-                                                                block.certificate_scans
-                                                                    .split('/')
-                                                                    .pop(),
-                                                            )
-                                                        }}</span
-                                                    >
+                                                    <span class="font-semibold">{{
+                                                        block
+                                                            .certificate_scans
+                                                            .name
+                                                    }}</span>
+                                                    <span v-if="block.id" class="font-semibold">{{
+                                                        decodeURIComponent(
+                                                            block.certificate_scans
+                                                                .split('/')
+                                                                .pop(),
+                                                        )
+                                                    }}</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div
-                                    type="button"
-                                    v-if="
-                                        !block.is_verified &&
-                                        !is_regional_commander
-                                    "
-                                >
-                                    <svg
-                                        @click="
-                                            deleteBlock(
-                                                index,
-                                                11,
-                                                'participation_data',
-                                            )
-                                        "
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                    >
+                                <div type="button" v-if="
+                                    !block.is_verified &&
+                                    !is_regional_commander
+                                ">
+                                    <svg @click="
+                                        deleteBlock(
+                                            index,
+                                            11,
+                                            'participation_data',
+                                        )
+                                        " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none">
                                         <path
                                             d="M12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 10.8181 3.23279 9.64778 3.68508 8.55585C4.13738 7.46392 4.80031 6.47177 5.63604 5.63604C6.47177 4.80031 7.46392 4.13738 8.55585 3.68508C9.64778 3.23279 10.8181 3 12 3C13.1819 3 14.3522 3.23279 15.4442 3.68508C16.5361 4.13738 17.5282 4.80031 18.364 5.63604C19.1997 6.47177 19.8626 7.46392 20.3149 8.55585C20.7672 9.64778 21 10.8181 21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4441 20.3149C14.3522 20.7672 13.1819 21 12 21L12 21Z"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
-                                        <path
-                                            d="M9 9L15 15"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
-                                        <path
-                                            d="M15 9L9 15"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
+                                            stroke="#939393" stroke-linecap="round" />
+                                        <path d="M9 9L15 15" stroke="#939393" stroke-linecap="round" />
+                                        <path d="M15 9L9 15" stroke="#939393" stroke-linecap="round" />
                                     </svg>
                                 </div>
                             </div>
-                            <div
-                                v-if="!is_regional_commander"
-                                class="form__field add-block"
-                                @click="
-                                    addNewBlock(11, 'participation_data', {
-                                        event_name: '',
-                                        number_of_participants: '',
-                                        certificate_scans: null,
-                                    })
-                                "
-                            >
+                            <div v-if="!is_regional_commander" class="form__field add-block" @click="
+                                addNewBlock(11, 'participation_data', {
+                                    event_name: '',
+                                    number_of_participants: '',
+                                    certificate_scans: null,
+                                })
+                                ">
                                 <p>+ добавить проект</p>
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
-                                        class="circleLoader"
-                                        v-if="isLoading"
-                                        indeterminate
-                                        color="blue"
-                                    ></v-progress-circular>
-                                    <Button
-                                        v-if="!is_regional_commander"
-                                        type="button"
-                                        :disabled="report[11].disabledBtn"
-                                        class="form__button form__button-color"
-                                        label="Отправить данные на верификацию"
-                                        size="large"
-                                        @click="postParameters(11)"
-                                    />
+                                    <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                        color="blue"></v-progress-circular>
+                                    <Button v-if="!is_regional_commander" type="button"
+                                        :disabled="report[11].disabledBtn" class="form__button form__button-color"
+                                        label="Отправить данные на верификацию" size="large"
+                                        @click="postParameters(11)" />
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -2287,182 +1444,100 @@ s
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div
-                                class="form__field-group-top form__field-column-one form__field-column-one-file"
-                                v-for="(block, index) in report[12]
-                                    .participation_data"
-                                :key="index"
-                            >
+                            <div class="form__field-group-top form__field-column-one form__field-column-one-file" v-for="(block, index) in report[12]
+                                .participation_data" :key="index">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Наименование трудового проекта<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <Input
-                                            placeholder="Например, Творческий фестиваль на ВСС «Мирный атом»"
-                                            :maxlength="100"
-                                            v-model:value="block.event_name"
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Наименование трудового
+                                            проекта<span>&nbsp;*</span></label>
+                                        <Input placeholder="Например, Творческий фестиваль на ВСС «Мирный атом»"
+                                            :maxlength="100" v-model:value="block.event_name"
+                                            :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{ block.event_name.length }} / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Призовое место<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <sortByEducation
-                                            placeholder="Например, 1"
-                                            v-model="block.prize_place"
-                                            :options="prizePlaceChoose"
-                                            optionLabel="name"
-                                            class="invents-select"
-                                            :sorts-boolean="false"
-                                            clearable
-                                            variant="outlined"
-                                        />
+                                        <label class="form__label">Призовое место<span>&nbsp;*</span></label>
+                                        <sortByEducation placeholder="Например, 1" v-model="block.prize_place"
+                                            :options="prizePlaceChoose" optionLabel="name" class="invents-select"
+                                            :sorts-boolean="false" clearable variant="outlined" />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Скан грамоты с наименованием
+                                        <label class="form__label">Скан грамоты с наименованием
                                             мероприятия, наименования ЛСО,
-                                            призовым местом<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <div
-                                            class="statement-item"
-                                            v-if="!block.certificate_scans"
-                                        >
-                                            <img
-                                                src="@app/assets/icon/addFile.svg"
-                                                alt="addFile"
-                                            />
-                                            <FileUpload
-                                                mode="basic"
-                                                name="demo[]"
-                                                accept=".pdf, .jpeg, .png"
-                                                :customUpload="true"
-                                                @select="
+                                            призовым местом<span>&nbsp;*</span></label>
+                                        <div class="statement-item" v-if="!block.certificate_scans">
+                                            <img src="@app/assets/icon/addFile.svg" alt="addFile" />
+                                            <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
+                                                :customUpload="true" @select="
                                                     selectCertScans(
                                                         $event,
                                                         index,
                                                     )
-                                                "
-                                                chooseLabel="Выбрать файл"
-                                            />
+                                                    " chooseLabel="Выбрать файл" />
                                         </div>
 
                                         <div v-else>
-                                            <div
-                                                class="flex flex-wrap p-0 sm:p-5 gap-5"
-                                            >
+                                            <div class="flex flex-wrap p-0 sm:p-5 gap-5">
                                                 <div
-                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
-                                                >
-                                                    <img
-                                                        src="@app/assets/icon/addFile.svg"
-                                                        alt="addFile"
-                                                        class="addFile"
-                                                    />
-                                                    <span
-                                                        class="font-semibold"
-                                                        >{{
-                                                            block
-                                                                .certificate_scans
-                                                                .name
-                                                        }}</span
-                                                    >
-                                                    <span
-                                                        v-if="block.id"
-                                                        class="font-semibold"
-                                                        >{{
-                                                            decodeURIComponent(
-                                                                block.certificate_scans
-                                                                    .split('/')
-                                                                    .pop(),
-                                                            )
-                                                        }}</span
-                                                    >
+                                                    class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
+                                                    <img src="@app/assets/icon/addFile.svg" alt="addFile"
+                                                        class="addFile" />
+                                                    <span class="font-semibold">{{
+                                                        block
+                                                            .certificate_scans
+                                                            .name
+                                                    }}</span>
+                                                    <span v-if="block.id" class="font-semibold">{{
+                                                        decodeURIComponent(
+                                                            block.certificate_scans
+                                                                .split('/')
+                                                                .pop(),
+                                                        )
+                                                    }}</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div
-                                    type="button"
-                                    v-if="
-                                        !block.is_verified &&
-                                        !is_regional_commander
-                                    "
-                                >
-                                    <svg
-                                        @click="
-                                            deleteBlock(
-                                                index,
-                                                12,
-                                                'participation_data',
-                                            )
-                                        "
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                    >
+                                <div type="button" v-if="
+                                    !block.is_verified &&
+                                    !is_regional_commander
+                                ">
+                                    <svg @click="
+                                        deleteBlock(
+                                            index,
+                                            12,
+                                            'participation_data',
+                                        )
+                                        " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none">
                                         <path
                                             d="M12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 10.8181 3.23279 9.64778 3.68508 8.55585C4.13738 7.46392 4.80031 6.47177 5.63604 5.63604C6.47177 4.80031 7.46392 4.13738 8.55585 3.68508C9.64778 3.23279 10.8181 3 12 3C13.1819 3 14.3522 3.23279 15.4442 3.68508C16.5361 4.13738 17.5282 4.80031 18.364 5.63604C19.1997 6.47177 19.8626 7.46392 20.3149 8.55585C20.7672 9.64778 21 10.8181 21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4441 20.3149C14.3522 20.7672 13.1819 21 12 21L12 21Z"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
-                                        <path
-                                            d="M9 9L15 15"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
-                                        <path
-                                            d="M15 9L9 15"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
+                                            stroke="#939393" stroke-linecap="round" />
+                                        <path d="M9 9L15 15" stroke="#939393" stroke-linecap="round" />
+                                        <path d="M15 9L9 15" stroke="#939393" stroke-linecap="round" />
                                     </svg>
                                 </div>
                             </div>
-                            <div
-                                v-if="!is_regional_commander"
-                                class="form__field add-block"
-                                @click="
-                                    addNewBlock(12, 'participation_data', {
-                                        event_name: '',
-                                        number_of_participants: '',
-                                        certificate_scans: null,
-                                    })
-                                "
-                            >
+                            <div v-if="!is_regional_commander" class="form__field add-block" @click="
+                                addNewBlock(12, 'participation_data', {
+                                    event_name: '',
+                                    number_of_participants: '',
+                                    certificate_scans: null,
+                                })
+                                ">
                                 <p>+ добавить проект</p>
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
-                                        class="circleLoader"
-                                        v-if="isLoading"
-                                        indeterminate
-                                        color="blue"
-                                    ></v-progress-circular>
-                                    <Button
-                                        v-if="!is_regional_commander"
-                                        type="button"
-                                        :disabled="report[12].disabledBtn"
-                                        class="form__button form__button-color"
-                                        label="Отправить данные на верификацию"
-                                        size="large"
-                                        @click="postParameters(12)"
-                                    />
+                                    <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                        color="blue"></v-progress-circular>
+                                    <Button v-if="!is_regional_commander" type="button"
+                                        :disabled="report[12].disabledBtn" class="form__button form__button-color"
+                                        label="Отправить данные на верификацию" size="large"
+                                        @click="postParameters(12)" />
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -2488,113 +1563,60 @@ s
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div
-                                class="form__field-group-top form__field-column-one form__field-column-one-file"
-                                v-for="(block, index) in report[13]
-                                    .organization_data"
-                                :key="index"
-                            >
+                            <div class="form__field-group-top form__field-column-one form__field-column-one-file" v-for="(block, index) in report[13]
+                                .organization_data" :key="index">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Выберите тип мероприятия<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <sortByEducation
-                                            v-model="block.event_type"
-                                            :options="typeEventChoose"
-                                            class="invents-select"
-                                            clearable
-                                            placeholder="Например, спортивное"
-                                            variant="outlined"
-                                        />
+                                        <label class="form__label">Выберите тип мероприятия<span>&nbsp;*</span></label>
+                                        <sortByEducation v-model="block.event_type" :options="typeEventChoose"
+                                            class="invents-select" clearable placeholder="Например, спортивное"
+                                            variant="outlined" />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Ссылка на публикацию<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <Input
-                                            placeholder="Например, https://t.me/+7pe98d2PqoJ"
-                                            :maxlength="100"
-                                            v-model:value="block.event_link"
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Ссылка на публикацию<span>&nbsp;*</span></label>
+                                        <Input placeholder="Например, https://t.me/+7pe98d2PqoJ" :maxlength="100"
+                                            v-model:value="block.event_link" :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{ block.event_link.length }} / 100
                                         </div>
                                     </div>
                                 </div>
-                                <div
-                                    type="button"
-                                    v-if="
-                                        !block.is_verified &&
-                                        !is_regional_commander
-                                    "
-                                >
-                                    <svg
-                                        @click="
-                                            deleteBlock(
-                                                index,
-                                                13,
-                                                'organization_data',
-                                            )
-                                        "
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                    >
+                                <div type="button" v-if="
+                                    !block.is_verified &&
+                                    !is_regional_commander
+                                ">
+                                    <svg @click="
+                                        deleteBlock(
+                                            index,
+                                            13,
+                                            'organization_data',
+                                        )
+                                        " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none">
                                         <path
                                             d="M12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 10.8181 3.23279 9.64778 3.68508 8.55585C4.13738 7.46392 4.80031 6.47177 5.63604 5.63604C6.47177 4.80031 7.46392 4.13738 8.55585 3.68508C9.64778 3.23279 10.8181 3 12 3C13.1819 3 14.3522 3.23279 15.4442 3.68508C16.5361 4.13738 17.5282 4.80031 18.364 5.63604C19.1997 6.47177 19.8626 7.46392 20.3149 8.55585C20.7672 9.64778 21 10.8181 21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4441 20.3149C14.3522 20.7672 13.1819 21 12 21L12 21Z"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
-                                        <path
-                                            d="M9 9L15 15"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
-                                        <path
-                                            d="M15 9L9 15"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
+                                            stroke="#939393" stroke-linecap="round" />
+                                        <path d="M9 9L15 15" stroke="#939393" stroke-linecap="round" />
+                                        <path d="M15 9L9 15" stroke="#939393" stroke-linecap="round" />
                                     </svg>
                                 </div>
                             </div>
-                            <div
-                                v-if="!is_regional_commander"
-                                class="form__field add-block"
-                                @click="
-                                    addNewBlock(13, 'organization_data', {
-                                        event_type: '',
-                                        event_link: '',
-                                    })
-                                "
-                            >
+                            <div v-if="!is_regional_commander" class="form__field add-block" @click="
+                                addNewBlock(13, 'organization_data', {
+                                    event_type: '',
+                                    event_link: '',
+                                })
+                                ">
                                 <p>+ добавить мероприятие</p>
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
-                                        class="circleLoader"
-                                        v-if="isLoading"
-                                        indeterminate
-                                        color="blue"
-                                    ></v-progress-circular>
-                                    <Button
-                                        v-if="!is_regional_commander"
-                                        type="button"
-                                        :disabled="report[13].disabledBtn"
-                                        class="form__button form__button-color"
-                                        label="Отправить данные на верификацию"
-                                        size="large"
-                                        @click="postParameters(13)"
-                                    />
+                                    <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                        color="blue"></v-progress-circular>
+                                    <Button v-if="!is_regional_commander" type="button"
+                                        :disabled="report[13].disabledBtn" class="form__button form__button-color"
+                                        label="Отправить данные на верификацию" size="large"
+                                        @click="postParameters(13)" />
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -2621,119 +1643,65 @@ s
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div
-                                class="form__field-group-top form__field-column-one form__field-column-one-file"
-                                v-for="(block, index) in report[14]
-                                    .q14_labor_projects"
-                                :key="index"
-                            >
+                            <div class="form__field-group-top form__field-column-one form__field-column-one-file" v-for="(block, index) in report[14]
+                                .q14_labor_projects" :key="index">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Наименование трудового проекта<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <Input
-                                            placeholder="Например, ВСС «Мирный атом»"
-                                            :maxlength="100"
-                                            v-model:value="
-                                                block.lab_project_name
-                                            "
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Наименование трудового
+                                            проекта<span>&nbsp;*</span></label>
+                                        <Input placeholder="Например, ВСС «Мирный атом»" :maxlength="100" v-model:value="block.lab_project_name
+                                            " :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{ block.lab_project_name.length }}
                                             / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Количество бойцов, отработавших
-                                            в летнем трудовом семестре<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <Input
-                                            type="number"
-                                            placeholder="Например, 5"
-                                            :maxlength="100"
-                                            v-model:value="block.amount"
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Количество бойцов, отработавших
+                                            в летнем трудовом семестре<span>&nbsp;*</span></label>
+                                        <Input type="number" placeholder="Например, 5" :maxlength="100"
+                                            v-model:value="block.amount" :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{ block.amount.length }} / 100
                                         </div>
                                     </div>
                                 </div>
-                                <div
-                                    type="button"
-                                    v-if="
-                                        !block.is_verified &&
-                                        !is_regional_commander
-                                    "
-                                >
-                                    <svg
-                                        @click="
-                                            deleteBlock(
-                                                index,
-                                                14,
-                                                'q14_labor_projects',
-                                            )
-                                        "
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                    >
+                                <div type="button" v-if="
+                                    !block.is_verified &&
+                                    !is_regional_commander
+                                ">
+                                    <svg @click="
+                                        deleteBlock(
+                                            index,
+                                            14,
+                                            'q14_labor_projects',
+                                        )
+                                        " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none">
                                         <path
                                             d="M12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 10.8181 3.23279 9.64778 3.68508 8.55585C4.13738 7.46392 4.80031 6.47177 5.63604 5.63604C6.47177 4.80031 7.46392 4.13738 8.55585 3.68508C9.64778 3.23279 10.8181 3 12 3C13.1819 3 14.3522 3.23279 15.4442 3.68508C16.5361 4.13738 17.5282 4.80031 18.364 5.63604C19.1997 6.47177 19.8626 7.46392 20.3149 8.55585C20.7672 9.64778 21 10.8181 21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4441 20.3149C14.3522 20.7672 13.1819 21 12 21L12 21Z"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
-                                        <path
-                                            d="M9 9L15 15"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
-                                        <path
-                                            d="M15 9L9 15"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
+                                            stroke="#939393" stroke-linecap="round" />
+                                        <path d="M9 9L15 15" stroke="#939393" stroke-linecap="round" />
+                                        <path d="M15 9L9 15" stroke="#939393" stroke-linecap="round" />
                                     </svg>
                                 </div>
                             </div>
-                            <div
-                                v-if="!is_regional_commander"
-                                class="form__field add-block"
-                                @click="
-                                    addNewBlock(14, 'q14_labor_projects', {
-                                        lab_project_name: '',
-                                        amount: '',
-                                    })
-                                "
-                            >
+                            <div v-if="!is_regional_commander" class="form__field add-block" @click="
+                                addNewBlock(14, 'q14_labor_projects', {
+                                    lab_project_name: '',
+                                    amount: '',
+                                })
+                                ">
                                 <p>+ добавить проект</p>
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
-                                        class="circleLoader"
-                                        v-if="isLoading"
-                                        indeterminate
-                                        color="blue"
-                                    ></v-progress-circular>
-                                    <Button
-                                        v-if="!is_regional_commander"
-                                        type="button"
-                                        :disabled="report[14].disabledBtn"
-                                        class="form__button form__button-color"
-                                        label="Отправить данные на верификацию"
-                                        size="large"
-                                        @click="postParameters(14)"
-                                    />
+                                    <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                        color="blue"></v-progress-circular>
+                                    <Button v-if="!is_regional_commander" type="button"
+                                        :disabled="report[14].disabledBtn" class="form__button form__button-color"
+                                        label="Отправить данные на верификацию" size="large"
+                                        @click="postParameters(14)" />
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -2761,166 +1729,93 @@ s
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div
-                                class="form__field-group-top form__field-column-one form__field-column-one-file"
-                                v-for="(block, index) in report[15].grants_data"
-                                :key="index"
-                            >
+                            <div class="form__field-group-top form__field-column-one form__field-column-one-file"
+                                v-for="(block, index) in report[15].grants_data" :key="index">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Полное название грантового
-                                            проекта<span>&nbsp;*</span></label
-                                        >
+                                        <label class="form__label">Полное название грантового
+                                            проекта<span>&nbsp;*</span></label>
                                         <Input
                                             placeholder="Например, Всероссийский конкурс молодёжных проектов среди физических лиц Федерального агентства по делам молодежи"
-                                            :maxlength="100"
-                                            v-model:value="block.name"
-                                            :readonly="is_regional_commander"
-                                        />
+                                            :maxlength="100" v-model:value="block.name"
+                                            :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{ block.name.length }} / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Статус конкурса<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <sortByEducation
-                                            placeholder="Например, окружной"
-                                            v-model="block.status"
-                                            :options="statusChoose"
-                                            class="invents-select"
-                                            clearable
-                                            variant="outlined"
-                                        />
+                                        <label class="form__label">Статус конкурса<span>&nbsp;*</span></label>
+                                        <sortByEducation placeholder="Например, окружной" v-model="block.status"
+                                            :options="statusChoose" class="invents-select" clearable
+                                            variant="outlined" />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Автор проекта<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <Input
-                                            placeholder="Например, Иванова Светлана Андреевна"
-                                            :maxlength="100"
-                                            v-model:value="block.author_name"
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Автор проекта<span>&nbsp;*</span></label>
+                                        <Input placeholder="Например, Иванова Светлана Андреевна" :maxlength="100"
+                                            v-model:value="block.author_name" :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{ block.author_name.length }} / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Ссылка на конкурс<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <Input
-                                            placeholder="Например, https://vk.com/cco_monolit"
-                                            :maxlength="100"
-                                            v-model:value="
-                                                block.competition_link
-                                            "
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Ссылка на конкурс<span>&nbsp;*</span></label>
+                                        <Input placeholder="Например, https://vk.com/cco_monolit" :maxlength="100"
+                                            v-model:value="block.competition_link
+                                                " :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{ block.competition_link.length }}
                                             / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Ссылка на новостной источник
-                                            с упоминанием победы<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <Input
-                                            placeholder="Например, https://t.me/+7pe98d2PqoJ"
-                                            :maxlength="100"
-                                            v-model:value="block.prove_link"
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Ссылка на новостной источник
+                                            с упоминанием победы<span>&nbsp;*</span></label>
+                                        <Input placeholder="Например, https://t.me/+7pe98d2PqoJ" :maxlength="100"
+                                            v-model:value="block.prove_link" :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{ block.prove_link.length }} / 100
                                         </div>
                                     </div>
                                 </div>
-                                <div
-                                    type="button"
-                                    v-if="
-                                        !block.is_verified &&
-                                        !is_regional_commander
-                                    "
-                                >
-                                    <svg
-                                        @click="
-                                            deleteBlock(
-                                                index,
-                                                15,
-                                                'grants_data',
-                                            )
-                                        "
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                    >
+                                <div type="button" v-if="
+                                    !block.is_verified &&
+                                    !is_regional_commander
+                                ">
+                                    <svg @click="
+                                        deleteBlock(
+                                            index,
+                                            15,
+                                            'grants_data',
+                                        )
+                                        " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none">
                                         <path
                                             d="M12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 10.8181 3.23279 9.64778 3.68508 8.55585C4.13738 7.46392 4.80031 6.47177 5.63604 5.63604C6.47177 4.80031 7.46392 4.13738 8.55585 3.68508C9.64778 3.23279 10.8181 3 12 3C13.1819 3 14.3522 3.23279 15.4442 3.68508C16.5361 4.13738 17.5282 4.80031 18.364 5.63604C19.1997 6.47177 19.8626 7.46392 20.3149 8.55585C20.7672 9.64778 21 10.8181 21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4441 20.3149C14.3522 20.7672 13.1819 21 12 21L12 21Z"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
-                                        <path
-                                            d="M9 9L15 15"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
-                                        <path
-                                            d="M15 9L9 15"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
+                                            stroke="#939393" stroke-linecap="round" />
+                                        <path d="M9 9L15 15" stroke="#939393" stroke-linecap="round" />
+                                        <path d="M15 9L9 15" stroke="#939393" stroke-linecap="round" />
                                     </svg>
                                 </div>
                             </div>
-                            <div
-                                v-if="!is_regional_commander"
-                                class="form__field add-block"
-                                @click="
-                                    addNewBlock(15, 'grants_data', {
-                                        name: '',
-                                        status: '',
-                                        author_name: '',
-                                        competition_link: '',
-                                        prove_link: '',
-                                    })
-                                "
-                            >
+                            <div v-if="!is_regional_commander" class="form__field add-block" @click="
+                                addNewBlock(15, 'grants_data', {
+                                    name: '',
+                                    status: '',
+                                    author_name: '',
+                                    competition_link: '',
+                                    prove_link: '',
+                                })
+                                ">
                                 <p>+ добавить проект</p>
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
-                                        class="circleLoader"
-                                        v-if="isLoading"
-                                        indeterminate
-                                        color="blue"
-                                    ></v-progress-circular>
-                                    <Button
-                                        v-if="!is_regional_commander"
-                                        type="button"
-                                        :disabled="report[15].disabledBtn"
-                                        class="form__button form__button-color"
-                                        label="Отправить данные на верификацию"
-                                        size="large"
-                                        @click="postParameters(15)"
-                                    />
+                                    <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                        color="blue"></v-progress-circular>
+                                    <Button v-if="!is_regional_commander" type="button"
+                                        :disabled="report[15].disabledBtn" class="form__button form__button-color"
+                                        label="Отправить данные на верификацию" size="large"
+                                        @click="postParameters(15)" />
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -2946,9 +1841,7 @@ s
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div
-                                class="form__field-group-top form__field-column-one"
-                            >
+                            <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
                                     <div class="form__field-group-left-title">
                                         Наличие открытых аккаунтов у участников
@@ -2956,20 +1849,11 @@ s
                                         сетях:
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Ссылка на личную страницу ВКонтакте
-                                            командира отряда<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <Input
-                                            placeholder="Например, https://vk.com/cco_monolit"
-                                            :maxlength="100"
-                                            v-model:value="
-                                                report[16].link_vk_commander
-                                            "
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Ссылка на личную страницу ВКонтакте
+                                            командира отряда<span>&nbsp;*</span></label>
+                                        <Input placeholder="Например, https://vk.com/cco_monolit" :maxlength="100"
+                                            v-model:value="report[16].link_vk_commander
+                                                " :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{
                                                 report[16].link_vk_commander
@@ -2979,20 +1863,11 @@ s
                                         </div>
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Ссылка на личную страницу ВКонтакте
-                                            комиссара отряда<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <Input
-                                            placeholder="Например, https://vk.com/cco_monolit"
-                                            :maxlength="100"
-                                            v-model:value="
-                                                report[16].link_vk_commissar
-                                            "
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Ссылка на личную страницу ВКонтакте
+                                            комиссара отряда<span>&nbsp;*</span></label>
+                                        <Input placeholder="Например, https://vk.com/cco_monolit" :maxlength="100"
+                                            v-model:value="report[16].link_vk_commissar
+                                                " :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{
                                                 report[16].link_vk_commissar
@@ -3007,23 +1882,12 @@ s
                                         в социальной сети ВКонтакте:
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Количество членов отряда,
+                                        <label class="form__label">Количество членов отряда,
                                             подписанных на официальную страницу
-                                            РСО ВКонтакте<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <Input
-                                            type="number"
-                                            placeholder="Например, 5"
-                                            :maxlength="100"
-                                            v-model:value="
-                                                report[16]
-                                                    .vk_rso_number_subscribers
-                                            "
-                                            :readonly="is_regional_commander"
-                                        />
+                                            РСО ВКонтакте<span>&nbsp;*</span></label>
+                                        <Input type="number" placeholder="Например, 5" :maxlength="100" v-model:value="report[16]
+                                                .vk_rso_number_subscribers
+                                            " :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{
                                                 report[16]
@@ -3038,18 +1902,11 @@ s
                                         в социальной сети ВКонтакте:
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Ссылка на группу отряда
-                                            ВКонтакте<span>&nbsp;*</span></label
-                                        >
-                                        <Input
-                                            placeholder="Например, https://vk.com/cco_monolit"
-                                            :maxlength="100"
-                                            v-model:value="
-                                                report[16].link_vk_detachment
-                                            "
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Ссылка на группу отряда
+                                            ВКонтакте<span>&nbsp;*</span></label>
+                                        <Input placeholder="Например, https://vk.com/cco_monolit" :maxlength="100"
+                                            v-model:value="report[16].link_vk_detachment
+                                                " :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{
                                                 report[16].link_vk_detachment
@@ -3063,21 +1920,11 @@ s
                                         Отряда в социальной сети ВКонтакте:
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Укажите количество подписчиков
-                                            группы отряда ВКонтакте<span
-                                                >&nbsp;*</span
-                                            ></label
-                                        >
-                                        <Input
-                                            placeholder="Например, 200"
-                                            :maxlength="100"
-                                            v-model:value="
-                                                report[16]
-                                                    .vk_detachment_number_subscribers
-                                            "
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Укажите количество подписчиков
+                                            группы отряда ВКонтакте<span>&nbsp;*</span></label>
+                                        <Input placeholder="Например, 200" :maxlength="100" v-model:value="report[16]
+                                                .vk_detachment_number_subscribers
+                                            " :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{
                                                 report[16]
@@ -3091,21 +1938,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
-                                        class="circleLoader"
-                                        v-if="isLoading"
-                                        indeterminate
-                                        color="blue"
-                                    ></v-progress-circular>
-                                    <Button
-                                        v-if="!is_regional_commander"
-                                        type="button"
-                                        :disabled="report[16].disabledBtn"
-                                        class="form__button form__button-color"
-                                        label="Отправить данные на верификацию"
-                                        size="large"
-                                        @click="postParameters(16)"
-                                    />
+                                    <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                        color="blue"></v-progress-circular>
+                                    <Button v-if="!is_regional_commander" type="button"
+                                        :disabled="report[16].disabledBtn" class="form__button form__button-color"
+                                        label="Отправить данные на верификацию" size="large"
+                                        @click="postParameters(16)" />
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -3132,113 +1970,64 @@ s
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div
-                                class="form__field-group-top form__field-column-one form__field-column-one-file"
-                                v-for="(block, index) in report[17].source_data"
-                                :key="index"
-                            >
+                            <div class="form__field-group-top form__field-column-one form__field-column-one-file"
+                                v-for="(block, index) in report[17].source_data" :key="index">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Наименование источника<span
-                                                >&nbsp;*</span
-                                            >
+                                        <label class="form__label">Наименование источника<span>&nbsp;*</span>
                                         </label>
-                                        <Input
-                                            placeholder="Например, РИА Новости"
-                                            :maxlength="100"
-                                            v-model:value="block.source_name"
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <Input placeholder="Например, РИА Новости" :maxlength="100"
+                                            v-model:value="block.source_name" :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{ block.source_name.length }} / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Ссылка на публикацию<span
-                                                >&nbsp;*</span
-                                            >
+                                        <label class="form__label">Ссылка на публикацию<span>&nbsp;*</span>
                                         </label>
-                                        <Input
-                                            placeholder="Например, https://vk.com/cco_monolit"
-                                            :maxlength="100"
-                                            v-model:value="block.link"
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <Input placeholder="Например, https://vk.com/cco_monolit" :maxlength="100"
+                                            v-model:value="block.link" :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{ block.link.length }} / 100
                                         </div>
                                     </div>
                                 </div>
-                                <div
-                                    type="button"
-                                    v-if="
-                                        !block.is_verified &&
-                                        !is_regional_commander
-                                    "
-                                >
-                                    <svg
-                                        @click="
-                                            deleteBlock(
-                                                index,
-                                                17,
-                                                'source_data',
-                                            )
-                                        "
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                    >
+                                <div type="button" v-if="
+                                    !block.is_verified &&
+                                    !is_regional_commander
+                                ">
+                                    <svg @click="
+                                        deleteBlock(
+                                            index,
+                                            17,
+                                            'source_data',
+                                        )
+                                        " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none">
                                         <path
                                             d="M12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 10.8181 3.23279 9.64778 3.68508 8.55585C4.13738 7.46392 4.80031 6.47177 5.63604 5.63604C6.47177 4.80031 7.46392 4.13738 8.55585 3.68508C9.64778 3.23279 10.8181 3 12 3C13.1819 3 14.3522 3.23279 15.4442 3.68508C16.5361 4.13738 17.5282 4.80031 18.364 5.63604C19.1997 6.47177 19.8626 7.46392 20.3149 8.55585C20.7672 9.64778 21 10.8181 21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4441 20.3149C14.3522 20.7672 13.1819 21 12 21L12 21Z"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
-                                        <path
-                                            d="M9 9L15 15"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
-                                        <path
-                                            d="M15 9L9 15"
-                                            stroke="#939393"
-                                            stroke-linecap="round"
-                                        />
+                                            stroke="#939393" stroke-linecap="round" />
+                                        <path d="M9 9L15 15" stroke="#939393" stroke-linecap="round" />
+                                        <path d="M15 9L9 15" stroke="#939393" stroke-linecap="round" />
                                     </svg>
                                 </div>
                             </div>
-                            <div
-                                v-if="!is_regional_commander"
-                                class="form__field add-block"
-                                @click="
-                                    addNewBlock(17, 'source_data', {
-                                        source_name: '',
-                                        link: '',
-                                    })
-                                "
-                            >
+                            <div v-if="!is_regional_commander" class="form__field add-block" @click="
+                                addNewBlock(17, 'source_data', {
+                                    source_name: '',
+                                    link: '',
+                                })
+                                ">
                                 + Добавить источник
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
-                                        class="circleLoader"
-                                        v-if="isLoading"
-                                        indeterminate
-                                        color="blue"
-                                    ></v-progress-circular>
-                                    <Button
-                                        v-if="!is_regional_commander"
-                                        type="button"
-                                        :disabled="report[17].disabledBtn"
-                                        class="form__button form__button-color"
-                                        label="Отправить данные на верификацию"
-                                        size="large"
-                                        @click="postParameters(17)"
-                                    />
+                                    <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                        color="blue"></v-progress-circular>
+                                    <Button v-if="!is_regional_commander" type="button"
+                                        :disabled="report[17].disabledBtn" class="form__button form__button-color"
+                                        label="Отправить данные на верификацию" size="large"
+                                        @click="postParameters(17)" />
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -3264,25 +2053,15 @@ s
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div
-                                class="form__field-group-top form__field-column-one"
-                            >
+                            <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Количество бойцов, принявших
+                                        <label class="form__label">Количество бойцов, принявших
                                             участие во Всероссийском дне
                                             ударного труда<span>&nbsp;*</span>
                                         </label>
-                                        <Input
-                                            type="number"
-                                            placeholder="Например, 10"
-                                            :maxlength="100"
-                                            v-model:value="
-                                                report[18].participants_number
-                                            "
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <Input type="number" placeholder="Например, 10" :maxlength="100" v-model:value="report[18].participants_number
+                                            " :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{
                                                 report[18].participants_number
@@ -3295,21 +2074,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
-                                        class="circleLoader"
-                                        v-if="isLoading"
-                                        indeterminate
-                                        color="blue"
-                                    ></v-progress-circular>
-                                    <Button
-                                        v-if="!is_regional_commander"
-                                        type="button"
-                                        :disabled="report[18].disabledBtn"
-                                        class="form__button form__button-color"
-                                        label="Отправить данные на верификацию"
-                                        size="large"
-                                        @click="postParameters(18)"
-                                    />
+                                    <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                        color="blue"></v-progress-circular>
+                                    <Button v-if="!is_regional_commander" type="button"
+                                        :disabled="report[18].disabledBtn" class="form__button form__button-color"
+                                        label="Отправить данные на верификацию" size="large"
+                                        @click="postParameters(18)" />
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -3336,47 +2106,27 @@ s
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div
-                                class="form__field-group-top form__field-column-one"
-                            >
+                            <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Нарушения техники безопасности,
+                                        <label class="form__label">Нарушения техники безопасности,
                                             охраны труда и противопожарной
                                             безопасности в трудовом
-                                            семестре<span>&nbsp;*</span></label
-                                        >
-                                        <sortByEducation
-                                            v-model="
-                                                report[19].safety_violations
-                                            "
-                                            :options="precautionChoose"
-                                            class="invents-select"
-                                            clearable
-                                            placeholder="Например, отсутствуют"
-                                            variant="outlined"
-                                        />
+                                            семестре<span>&nbsp;*</span></label>
+                                        <sortByEducation v-model="report[19].safety_violations
+                                            " :options="precautionChoose" class="invents-select" clearable
+                                            placeholder="Например, отсутствуют" variant="outlined" />
                                     </div>
                                 </div>
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
-                                        class="circleLoader"
-                                        v-if="isLoading"
-                                        indeterminate
-                                        color="blue"
-                                    ></v-progress-circular>
-                                    <Button
-                                        v-if="!is_regional_commander"
-                                        type="button"
-                                        :disabled="report[19].disabledBtn"
-                                        class="form__button form__button-color"
-                                        label="Отправить данные на верификацию"
-                                        size="large"
-                                        @click="postParameters(19)"
-                                    />
+                                    <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                        color="blue"></v-progress-circular>
+                                    <Button v-if="!is_regional_commander" type="button"
+                                        :disabled="report[19].disabledBtn" class="form__button form__button-color"
+                                        label="Отправить данные на верификацию" size="large"
+                                        @click="postParameters(19)" />
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -3403,39 +2153,23 @@ s
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div
-                                class="form__field-group-top form__field-column-one"
-                            >
+                            <div class="form__field-group-top form__field-column-one">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Ссылка на фото эмблемы</label
-                                        >
-                                        <Input
-                                            placeholder="Например, https://vk.com/cco_monolit"
-                                            :maxlength="100"
-                                            v-model:value="
-                                                report[20].link_emblem
-                                            "
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Ссылка на фото эмблемы</label>
+                                        <Input placeholder="Например, https://vk.com/cco_monolit" :maxlength="100"
+                                            v-model:value="report[20].link_emblem
+                                                " :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{ report[20].link_emblem.length }}
                                             / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Ссылка на макет эмблемы</label
-                                        >
-                                        <Input
-                                            placeholder="Например, https://vk.com/cco_monolit"
-                                            :maxlength="100"
-                                            v-model:value="
-                                                report[20].link_emblem_img
-                                            "
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Ссылка на макет эмблемы</label>
+                                        <Input placeholder="Например, https://vk.com/cco_monolit" :maxlength="100"
+                                            v-model:value="report[20].link_emblem_img
+                                                " :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{
                                                 report[20].link_emblem_img
@@ -3445,32 +2179,19 @@ s
                                         </div>
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Ссылка на фото флага</label
-                                        >
-                                        <Input
-                                            placeholder="Например, https://vk.com/cco_monolit"
-                                            :maxlength="100"
-                                            v-model:value="report[20].link_flag"
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Ссылка на фото флага</label>
+                                        <Input placeholder="Например, https://vk.com/cco_monolit" :maxlength="100"
+                                            v-model:value="report[20].link_flag" :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{ report[20].link_flag.length }} /
                                             100
                                         </div>
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Ссылка на макет флага</label
-                                        >
-                                        <Input
-                                            placeholder="Например, https://vk.com/cco_monolit"
-                                            :maxlength="100"
-                                            v-model:value="
-                                                report[20].link_flag_img
-                                            "
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Ссылка на макет флага</label>
+                                        <Input placeholder="Например, https://vk.com/cco_monolit" :maxlength="100"
+                                            v-model:value="report[20].link_flag_img
+                                                " :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{
                                                 report[20].link_flag_img.length
@@ -3479,34 +2200,20 @@ s
                                         </div>
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Ссылка на фото знамени</label
-                                        >
-                                        <Input
-                                            placeholder="Например, https://vk.com/cco_monolit"
-                                            :maxlength="100"
-                                            v-model:value="
-                                                report[20].link_banner
-                                            "
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Ссылка на фото знамени</label>
+                                        <Input placeholder="Например, https://vk.com/cco_monolit" :maxlength="100"
+                                            v-model:value="report[20].link_banner
+                                                " :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{ report[20].link_banner.length }}
                                             / 100
                                         </div>
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label"
-                                            >Ссылка на макет знамени</label
-                                        >
-                                        <Input
-                                            placeholder="Например, https://vk.com/cco_monolit"
-                                            :maxlength="100"
-                                            v-model:value="
-                                                report[20].link_banner_img
-                                            "
-                                            :readonly="is_regional_commander"
-                                        />
+                                        <label class="form__label">Ссылка на макет знамени</label>
+                                        <Input placeholder="Например, https://vk.com/cco_monolit" :maxlength="100"
+                                            v-model:value="report[20].link_banner_img
+                                                " :readonly="is_regional_commander" />
                                         <div class="form__counter">
                                             {{
                                                 report[20].link_banner_img
@@ -3519,21 +2226,12 @@ s
                             </div>
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
-                                    <v-progress-circular
-                                        class="circleLoader"
-                                        v-if="isLoading"
-                                        indeterminate
-                                        color="blue"
-                                    ></v-progress-circular>
-                                    <Button
-                                        v-if="!is_regional_commander"
-                                        type="button"
-                                        :disabled="report[20].disabledBtn"
-                                        class="form__button form__button-color"
-                                        label="Отправить данные на верификацию"
-                                        size="large"
-                                        @click="postParameters(20)"
-                                    />
+                                    <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                                        color="blue"></v-progress-circular>
+                                    <Button v-if="!is_regional_commander" type="button"
+                                        :disabled="report[20].disabledBtn" class="form__button form__button-color"
+                                        label="Отправить данные на верификацию" size="large"
+                                        @click="postParameters(20)" />
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
@@ -3921,7 +2619,7 @@ const getParameters = async (id) => {
         try {
             const response = await HTTP.get(
                 `/competitions/${route.params.competition_pk}/reports/q${id}/` +
-                    (id == 1 ? 'info/' : 'me/'),
+                (id == 1 ? 'info/' : 'me/'),
             );
             if (id == 1 || id == 3 || id == 4) report.value[id] = response.data;
             else if (response.data.results.length) {
@@ -4048,6 +2746,7 @@ const getParameters = async (id) => {
 const postParameters = async (id) => {
     if (report.value[id].disabledBtn) return false;
     try {
+        report.value[id].disabledBtn = true;
         let fd = report.value[id];
         let type = 'application/json';
         const allowedIds = [5, 7, 8, 9, 10, 11, 12];
@@ -4065,16 +2764,16 @@ const postParameters = async (id) => {
                                     for (let j1 in temp[k1]) {
                                         fd.append(
                                             i +
-                                                '[' +
-                                                k +
-                                                '][' +
-                                                j +
-                                                ']' +
-                                                '[' +
-                                                k1 +
-                                                '][' +
-                                                j1 +
-                                                ']',
+                                            '[' +
+                                            k +
+                                            '][' +
+                                            j +
+                                            ']' +
+                                            '[' +
+                                            k1 +
+                                            '][' +
+                                            j1 +
+                                            ']',
                                             temp[k1][j1],
                                         );
                                     }
@@ -4107,11 +2806,8 @@ const postParameters = async (id) => {
             let data = {};
             data['' + dataName] = [];
             if (!(id == 2 || id == 6 || id == 16 || id >= 18)) {
-                let u = report.value[id].disabledBtn;
-                delete report.value[id].disabledBtn;
                 for (let i in report.value[id][dataName]) {
                     let temp = report.value[id][dataName][i];
-
                     if (temp.id) {
                         if (!temp.is_verified) {
                             delete temp.document;
@@ -4158,11 +2854,12 @@ const postParameters = async (id) => {
                         },
                     );
                 }
-                report.value[id].disabledBtn = u;
             } else if (id == 20 || id == 16) {
+                let data_for_save = report.value[id]
+                delete data_for_save.disabledBtn;
                 await HTTP.patch(
                     `/competitions/${route.params.competition_pk}/reports/q${index}/${report.value[id].id}/`,
-                    report.value[id],
+                    data_for_save,
                     {
                         headers: {
                             'Content-Type': type,
@@ -4171,14 +2868,13 @@ const postParameters = async (id) => {
                 );
             }
         } else {
-            let u = report.value[id].disabledBtn;
-            delete report.value[id].disabledBtn;
             if (id == 16) {
                 if (!fd.vk_rso_number_subscribers)
                     fd.vk_rso_number_subscribers = 0;
                 if (!fd.vk_detachment_number_subscribers)
                     fd.vk_detachment_number_subscribers = 0;
             }
+            delete fd.disabledBtn;
             console.log(fd);
             await HTTP.post(
                 `/competitions/${route.params.competition_pk}/reports/q${index}/`,
@@ -4189,8 +2885,6 @@ const postParameters = async (id) => {
                     },
                 },
             );
-
-            report.value[id].disabledBtn = u;
         }
         isLoading.value = false;
         swal.fire({
@@ -4200,11 +2894,15 @@ const postParameters = async (id) => {
             showConfirmButton: false,
             timer: 1500,
         });
-        report.value[id].disabledBtn = true;
+        await getParameters(id)
+
     } catch (error) {
         console.log(error);
         isError.value = error.response.data;
         isLoading.value = false;
+        report.value[id].disabledBtn = false;
+
+
         if (isError.value && id < 60) {
             swal.fire({
                 position: 'center',
@@ -4223,6 +2921,7 @@ const postParameters = async (id) => {
             });
         }
     }
+    report.value[id].disabledBtn = false;
 };
 
 const getMeCommander = async () => {
@@ -4351,6 +3050,7 @@ console.log(report);
     border-bottom: 1px solid #35383f;
     margin-top: 40px;
 }
+
 .add-link {
     cursor: pointer;
     max-width: fit-content;
