@@ -125,7 +125,7 @@ onMounted(() => {
         grid-template-rows: 1fr 1fr;
         margin-bottom: 12px;
     }
-    @media screen and (max-width: 360px){
+    @media screen and (max-width: 540px){
         grid-template-columns: repeat(19, 1fr);
         grid-template-rows: 1fr 1fr 1fr;
         margin-bottom: 12px;
@@ -133,26 +133,26 @@ onMounted(() => {
 }
 .first_row {   
     grid-column: span 19;
-    @media screen and (max-width: 360px){
+    @media screen and (max-width: 540px){
         grid-column: span 19;
     }
 }
 .second_row_first {
     grid-column: span 13;
-    @media screen and (max-width: 360px){
+    @media screen and (max-width: 540px){
         grid-column: span 19;
     }
 
 }
 .second_row_second {
     grid-column: span 4;
-    @media screen and (max-width: 360px){
+    @media screen and (max-width: 540px){
         grid-column: span 15;
     }
 }
 .second_row_third {
     grid-column: span 2;
-    @media screen and (max-width: 360px){
+    @media screen and (max-width: 540px){
         grid-column: span 4;
     }
 }

@@ -1,71 +1,87 @@
 <template>
-    <div class="horizontallso">
-        <router-link :to="{ name: 'PersonalDataUser', params: { id: event.user.id } }"
-            class="horizontallso-item__wrapper mr-3" v-if="props.isGroup === false">
-            <div class="horizontallso-img">
-                <img :src="event?.user?.avatar?.photo" alt="logo" v-if="event?.user?.avatar?.photo" />
-                <img v-else src="@app/assets/user-avatar.png" alt="photo" />
-            </div>
-            <div class="containerHorizontal">
-                <div class="d-flex">
-                    <p class="horizontallso-item__list-full">
-                        {{ event.user.last_name }}
-                    </p>
-                    <p class="horizontallso-item__list-full">
-                        {{ event.user.first_name }}
-                    </p>
-                    <p class="horizontallso-item__list-full">
-                        {{ event.user.patronymic_name }}
-                    </p>
+    <div>
+        <div class="horizontallso">
+            <router-link v-if="!event.group" class="horizontallso-item__wrapper " :to="{
+                name: 'PersonalDataUser',
+                params: { id: event.user.id },
+            }">
+                <div class="horizontallso-img">
+                    <img :src="event?.user?.avatar?.photo" alt="logo" v-if="event?.user?.avatar?.photo" />
+                    <img v-else src="@app/assets/user-avatar.png" alt="photo" />
                 </div>
-                <div class="horizontallso-item__list-date">
-                    <span style="
-                            border-left: 2px solid #b6b6b6;
-                            padding-right: 8px;
-                        "></span>
-                    <p>{{ event.user.date_of_birth }}</p>
+                <div class="containerHorizontal">
+                        <div class="d-flex">
+                            <p class="horizontallso-item__list-full">
+                                {{ event.user.last_name }}
+                            </p>
+                            <p class="horizontallso-item__list-full">
+                                {{ event.user.first_name }}
+                            </p>
+                            <p class="horizontallso-item__list-full">
+                                {{ event.user.patronymic_name }}
+                            </p>
+                        </div>
+                        <div class="horizontallso-item__list-date">
+                            <span style="
+                                    border-left: 2px solid #b6b6b6;
+                                    padding-right: 8px;
+                                "></span>
+                            <p>{{ event.user.date_of_birth }}</p>
+                        </div>
+                </div>
+            </router-link>
+            <div class="horizontallso-item__wrapper" v-else>
+                <div class="horizontallso-img">
+                    <img v-if="event.headquarter_author.banner" :src="event.headquarter_author.banner" alt="logo" />
+                    <img v-else src="@app/assets/user-avatar.png" alt="photo" />
+                </div>
+                <div class="containerHorizontal">
+                        <div class="d-flex">
+                            <p class="horizontallso-item__list-full">
+                                {{ event.headquarter_author.name }}
+                            </p>
+                        </div>
                 </div>
             </div>
-        </router-link>
-        <router-link :to="{ name: 'lso', params: { id: event.headquarter_author.id } }"
-            class="horizontallso-item__wrapper mr-3" v-else>
-            <div class="horizontallso-img">
-                <img :src="event.headquarter_author.banner" alt="logo" v-if="event.headquarter_author.banner" />
-                <img v-else src="@app/assets/user-avatar.png" alt="photo" />
-            </div>
-            <div class="containerHorizontal">
-                <div class="d-flex">
-                    <p class="horizontallso-item__list-full">
-                        {{ event.headquarter_author.name }}
-                    </p>
-                </div>
 
+            <div class="horizontallso-item__wrapper">
+                <div class="containerHorizontal">
+                    <div class="d-flex">
+                        <p class="horizontallso-item__list-full">
+                            {{ event.event.application_type }}
+                        </p>
+                    </div>
+                </div>
             </div>
-        </router-link>
-        <router-link :to="{ name: 'ActionData', params: { id: event.event.id } }" class="horizontallso-item__wrapper">
-            <div class="horizontallso-img">
-                <img :src="event.event.banner" alt="logo" v-if="event.event.banner" />
-                <img src="@app/assets/foto-leader-squad/foto-leader-squad-01.png" alt="photo" v-else />
-            </div>
-            <div class="containerHorizontal">
-                <p class="horizontallso-item__list-full evname">
-                    {{ event.event.name }}
-                </p>
-            </div>
-        </router-link>
-        <div class="d-flex">
-            <div class="actionVal">{{ action }}</div>
 
-            <div class="horizontalSquad__confidant ml-3">
+            <router-link class="horizontallso-item__wrapper " :to="{
+                name: 'ActionData',
+                params: { id: event.event.id },
+            }">
+                <div class="horizontallso-img">
+                    <img :src="event.event.banner" alt="logo" v-if="event.event.banner" />
+                    <img src="@app/assets/user-avatar.png" alt="photo" v-else />
+                </div>
+                <div class="containerHorizontal">
+                    <p class="horizontallso-item__list-full evname">
+                        {{ event.event.name }}
+                    </p>
+                </div>
+            </router-link>
+        </div>
+        
+
+        <div class="second_line">
+            <div></div>
+            <div class="horizontallso-item__wrapper" style="margin-bottom: 0px;">{{ action }}</div>
+            <div class="horizontallso__confidant">
                 <input type="checkbox" v-model="checked" @change="updateCheckEvents" />
             </div>
         </div>
     </div>
 </template>
 <script setup>
-import { ref, onMounted, watch } from 'vue';
-import { HTTP } from '@app/http';
-import { useRoleStore } from '@layouts/store/role';
+import { ref } from 'vue';
 
 const props = defineProps({
     event: {
@@ -76,10 +92,6 @@ const props = defineProps({
         type: String,
         default: '',
     },
-    isGroup: {
-        type: Boolean,
-        default: false,
-    }
 });
 
 const checked = ref(true);
@@ -92,10 +104,13 @@ const updateCheckEvents = (e) => {
     emit('select', props.event, e.target.checked);
 };
 </script>
+
 <style lang="scss" scoped>
 .horizontallso {
-    display: flex;
-    align-items: flex-start;
+    display: grid;
+    width: 100%;
+    grid-gap: 12px;
+    grid-template-columns: minmax(268px, 528px) 164px 1fr;
 
     &-img {
         align-items: center;
@@ -128,6 +143,14 @@ const updateCheckEvents = (e) => {
     }
 }
 
+.second_line {
+    display: grid;
+    margin-bottom: 12px;
+    grid-gap: 12px;
+    grid-template-columns: 1fr 164px 48px;
+    justify-self: end;
+}
+
 .horizontallso-item__wrapper {
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -139,7 +162,6 @@ const updateCheckEvents = (e) => {
     border-radius: 10px;
     border: 1px solid #b6b6b6;
     background: #fff;
-    margin-bottom: 12px;
     width: 100%;
 }
 
@@ -236,5 +258,18 @@ const updateCheckEvents = (e) => {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.horizontallso__confidant {
+    padding: 10px 10px;
+    border: 1px solid #b6b6b6;
+    border-radius: 10px;
+    height: 48px;
+    width: 48px;
+
+    input {
+        width: 24px;
+        height: 24px;
+    }
 }
 </style>

@@ -479,7 +479,8 @@ s
                                     type="button"
                                     v-if="
                                         !block.is_verified &&
-                                        !is_regional_commander
+                                        !is_regional_commander &&
+                                        !block.id
                                     "
                                 >
                                     <svg
@@ -546,7 +547,9 @@ s
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
-                                    по 15 июля 2024 года включительно.
+                                    по 15 июля 2024 года включительно.<br /><br />
+                                    ОДНОВРЕМЕННО МОЖНО ОТПРАВИТЬ ДАННЫЕ ПО ПЯТИ
+                                    УЧАСТНИКАМ.
                                 </p>
                             </div>
                         </div>
@@ -1299,7 +1302,8 @@ s
                                     type="button"
                                     v-if="
                                         !block.is_verified &&
-                                        !is_regional_commander
+                                        !is_regional_commander &&
+                                        !block.id
                                     "
                                 >
                                     <svg
@@ -1583,7 +1587,8 @@ s
                                     type="button"
                                     v-if="
                                         !block.is_verified &&
-                                        !is_regional_commander
+                                        !is_regional_commander &&
+                                        !block.id
                                     "
                                 >
                                     <svg
@@ -1788,7 +1793,8 @@ s
                                     type="button"
                                     v-if="
                                         !block.is_verified &&
-                                        !is_regional_commander
+                                        !is_regional_commander &&
+                                        !block.id
                                     "
                                 >
                                     <svg
@@ -1991,7 +1997,8 @@ s
                                     type="button"
                                     v-if="
                                         !block.is_verified &&
-                                        !is_regional_commander
+                                        !is_regional_commander &&
+                                        !block.id
                                     "
                                 >
                                     <svg
@@ -2197,7 +2204,8 @@ s
                                     type="button"
                                     v-if="
                                         !block.is_verified &&
-                                        !is_regional_commander
+                                        !is_regional_commander &&
+                                        !block.id
                                     "
                                 >
                                     <svg
@@ -2398,7 +2406,8 @@ s
                                     type="button"
                                     v-if="
                                         !block.is_verified &&
-                                        !is_regional_commander
+                                        !is_regional_commander &&
+                                        !block.id
                                     "
                                 >
                                     <svg
@@ -2531,7 +2540,8 @@ s
                                     type="button"
                                     v-if="
                                         !block.is_verified &&
-                                        !is_regional_commander
+                                        !is_regional_commander &&
+                                        !block.id
                                     "
                                 >
                                     <svg
@@ -2670,7 +2680,8 @@ s
                                     type="button"
                                     v-if="
                                         !block.is_verified &&
-                                        !is_regional_commander
+                                        !is_regional_commander &&
+                                        !block.id
                                     "
                                 >
                                     <svg
@@ -2854,7 +2865,8 @@ s
                                     type="button"
                                     v-if="
                                         !block.is_verified &&
-                                        !is_regional_commander
+                                        !is_regional_commander &&
+                                        !block.id
                                     "
                                 >
                                     <svg
@@ -3175,7 +3187,8 @@ s
                                     type="button"
                                     v-if="
                                         !block.is_verified &&
-                                        !is_regional_commander
+                                        !is_regional_commander &&
+                                        !block.id
                                     "
                                 >
                                     <svg
@@ -4048,6 +4061,7 @@ const getParameters = async (id) => {
 const postParameters = async (id) => {
     if (report.value[id].disabledBtn) return false;
     try {
+        report.value[id].disabledBtn = true;
         let fd = report.value[id];
         let type = 'application/json';
         const allowedIds = [5, 7, 8, 9, 10, 11, 12];
@@ -4107,11 +4121,8 @@ const postParameters = async (id) => {
             let data = {};
             data['' + dataName] = [];
             if (!(id == 2 || id == 6 || id == 16 || id >= 18)) {
-                let u = report.value[id].disabledBtn;
-                delete report.value[id].disabledBtn;
                 for (let i in report.value[id][dataName]) {
                     let temp = report.value[id][dataName][i];
-
                     if (temp.id) {
                         if (!temp.is_verified) {
                             delete temp.document;
@@ -4158,11 +4169,12 @@ const postParameters = async (id) => {
                         },
                     );
                 }
-                report.value[id].disabledBtn = u;
             } else if (id == 20 || id == 16) {
+                let data_for_save = report.value[id];
+                delete data_for_save.disabledBtn;
                 await HTTP.patch(
                     `/competitions/${route.params.competition_pk}/reports/q${index}/${report.value[id].id}/`,
-                    report.value[id],
+                    data_for_save,
                     {
                         headers: {
                             'Content-Type': type,
@@ -4171,14 +4183,13 @@ const postParameters = async (id) => {
                 );
             }
         } else {
-            let u = report.value[id].disabledBtn;
-            delete report.value[id].disabledBtn;
             if (id == 16) {
                 if (!fd.vk_rso_number_subscribers)
                     fd.vk_rso_number_subscribers = 0;
                 if (!fd.vk_detachment_number_subscribers)
                     fd.vk_detachment_number_subscribers = 0;
             }
+            delete fd.disabledBtn;
             console.log(fd);
             await HTTP.post(
                 `/competitions/${route.params.competition_pk}/reports/q${index}/`,
@@ -4189,8 +4200,6 @@ const postParameters = async (id) => {
                     },
                 },
             );
-
-            report.value[id].disabledBtn = u;
         }
         isLoading.value = false;
         swal.fire({
@@ -4200,12 +4209,13 @@ const postParameters = async (id) => {
             showConfirmButton: false,
             timer: 1500,
         });
-        report.value[id].disabledBtn = true;
+        await getParameters(id);
     } catch (error) {
         console.log(error);
         isError.value = error.response.data;
         isLoading.value = false;
-        if (isError.value && id < 60) {
+        report.value[id].disabledBtn = false;
+        if (isError.value && (id < 60 || id != 2)) {
             swal.fire({
                 position: 'center',
                 icon: 'error',
@@ -4214,7 +4224,7 @@ const postParameters = async (id) => {
                 timer: 2500,
             });
         }
-        if (isError.value && id > 60) {
+        if (isError.value && (id > 60 || id == 2)) {
             swal.fire({
                 position: 'center',
                 title: `К сожалению, срок отправки данных по показателю истек.`,
@@ -4223,6 +4233,7 @@ const postParameters = async (id) => {
             });
         }
     }
+    report.value[id].disabledBtn = false;
 };
 
 const getMeCommander = async () => {
@@ -4351,6 +4362,7 @@ console.log(report);
     border-bottom: 1px solid #35383f;
     margin-top: 40px;
 }
+
 .add-link {
     cursor: pointer;
     max-width: fit-content;

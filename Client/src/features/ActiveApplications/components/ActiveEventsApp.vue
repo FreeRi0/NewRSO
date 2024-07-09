@@ -9,7 +9,7 @@
             </div>
             <div class="d-flex align-center">
                 <div class="contributor-sort__all">
-                    <input type="checkbox" @click="select" placeholder="Выбрать все" v-model="checkboxAll" />
+                    <input type="checkbox" v-model="isCheckedAll" @change="onChooseAll" />
                 </div>
                 <div class="ml-3">Выбрать всё</div>
             </div>
@@ -17,19 +17,12 @@
 
         <div class="participants__list">
             <template v-for="event in eventsList" :key="event.id">
-                <applicationCompetitionItem :event="event" :is-group="false" @select="onToggleSelectCompetition" />
-
+                <applicationCompetitionItem :event="event" @select="onToggleSelectCompetition" />
             </template>
-            <template v-for="event in groupEventsList" :key="event.id">
-                <applicationCompetitionItem :event="event" :is-group="true" @select="onToggleSelectGroupCompetition" />
-            </template>
-            <template v-if="selectedEv.length">
-                <p class="text_total">Итого: {{ selectedEv.length }}</p>
-
-                <selectedApplicationEventItem v-for="event in selectedEventList" :action="action" :is-group="false"
+            <template v-if="selectedEventList.length">
+                <p class="text_total">Итого: {{ selectedEventList.length }}</p>
+                <selectedApplicationEventItem v-for="event in selectedEventList" :action="action"
                     :event="event" :key="event.id" @select="onToggleSelectCompetition" />
-                <selectedApplicationEventItem v-for="event in selectedGroupEventsList" :is-group="true" :action="action"
-                    :event="event" :key="event.id" @select="onToggleSelectGroupCompetition" />
             </template>
         </div>
 
@@ -37,12 +30,13 @@
             {{ "" + isError.non_field_errors }}
         </div>
 
-        <div class="participants__btn" v-if="selectedEv.length">
+        <div class="participants__btn" v-if="selectedEventList.length">
             <Button class="save" type="button" label="Сохранить" @click="onAction"></Button>
         </div>
 
     </template>
 </template>
+
 <script setup>
 import {
     applicationCompetitionItem,
@@ -59,6 +53,7 @@ import { useEventsStore } from "@features/store/events";
 const eventsStore = useEventsStore();
 const userStore = useUserStore();
 const ev = ref([]);
+const isCheckedAll = ref(false);
 const eventsList = ref([]);
 const groupEventsList = ref([]);
 const selectedGroupEventsList = ref([]);
@@ -80,120 +75,101 @@ const actionsList = ref([
         value: "Одобрить",
         name: "Одобрить",
     },
-    { value: "Отклонить", name: "Отклонить" },
+    { 
+        value: "Отклонить", 
+        name: "Отклонить",
+    },
 ]);
 
 
 const viewEvents = async (event_pk) => {
-    loading.value = true;
     try {
-
-        const eventsRequest = await HTTP.get(`/events/${event_pk}/applications/`);
-        eventsList.value = [...eventsList.value, ...eventsRequest.data.results];
-
-        selectedEventList.value = [];
-        selectedGroupEventsList.value = [];
-
+        const { data } = await HTTP.get(`/events/${event_pk}/applications/`);
+        for(let i in data.results) {
+            data.results[i].chosen = false;
+            data.results[i].group = false;
+            data.results[i].event.application_type = "Многоэтапная";
+        }
+        eventsList.value = [...eventsList.value, ...data.results];
     } catch (error) {
-
         console.log("an error occured " + error);
     }
-    loading.value = false;
 };
 
 const viewGroupEvents = async (event_pk) => {
-    loading.value = true;
     try {
-
-        const eventsGroupRequest = await HTTP.get(
+        const { data } = await HTTP.get(
             `/events/${event_pk}/group_applications/all/`
         );
-        groupEventsList.value = [
-            ...groupEventsList.value,
-            ...eventsGroupRequest.data.results,
-        ];
-
+        for(let i in data.results) {
+            data.results[i].group = true;
+            data.results[i].chosen = false;
+        }
+        eventsList.value = [...eventsList.value, ...data.results];
     } catch (error) {
-
         console.log("an error occured " + error);
+    }
+};
+
+const events = async (id) => {
+    loading.value = true;
+    try {
+        const { data } = await HTTP.get(`/events/?active_organizer_user_id=${id}`);
+        // console.log(data.results);
+        const myEvents = data.results;
+        for (let i in myEvents) {
+            if(myEvents[i].application_type === "Групповая") {
+                viewGroupEvents(myEvents[i].id);
+            } else {
+                viewEvents(myEvents[i].id);
+            }
+        }
+    } catch (error) {
+        console.log("an error occured" + error);
     }
     loading.value = false;
 };
 
-const events = async (id) => {
-    try {
-
-        const eventsRequest = await HTTP.get(`/events/?active_organizer_user_id=${id}`);
-        ev.value = eventsRequest.data.results;
-        for (let i in eventsRequest.data.results) {
-            viewEvents(eventsRequest.data.results[i].id);
-            viewGroupEvents(eventsRequest.data.results[i].id);
+const onChooseAll = () => {
+    if (isCheckedAll.value){
+        for(let event of eventsList.value){
+            event.chosen = true;
         }
-
-    } catch (error) {
-        console.log("an error occured" + error);
-    }
-};
-
-
-
-const select = (event) => {
-    selectedEventList.value = [];
-    selectedGroupEventsList.value = [];
-    if (event.target.checked) {
-        for (let index in eventsList.value) {
-            eventsList.value[index].selected = true;
-            selectedEventList.value.push(eventsList.value[index]);
-            selectedEv.value = [...selectedEventList.value, ...selectedGroupEventsList.value]
-        }
-        for (let index in groupEventsList.value) {
-            groupEventsList.value[index].selected = true;
-            selectedGroupEventsList.value.push(groupEventsList.value[index]);
-            selectedEv.value = [...selectedEventList.value, ...selectedGroupEventsList.value]
-        }
-
+        selectedEventList.value = eventsList.value;
     } else {
-        for (let index in eventsList.value) {
-            eventsList.value[index].selected = false;
-        }
-        for (let index in groupEventsList.value) {
-            groupEventsList.value[index].selected = false;
+        selectedEventList.value = [];
+        for(let event of eventsList.value){
+            event.chosen = false;
         }
     }
-};
+}
 
 const onToggleSelectCompetition = (event, checked) => {
     if (checked) {
-        event.selected = checked;
-        selectedEventList.value.push(event);
-        selectedEv.value = [...selectedEventList.value, ...selectedGroupEventsList.value]
+        event.chosen = checked;
+        selectedEventList.value = [...selectedEventList.value, event];
     } else {
-        event.selected = checked;
-        selectedEventList.value = selectedEventList.value.filter((c) => c.id !== event.id);
-        selectedEv.value = [...selectedEventList.value, ...selectedGroupEventsList.value]
-    }
-};
-
-const onToggleSelectGroupCompetition = (event, checked) => {
-    if (checked) {
-        event.selected = checked;
-        selectedGroupEventsList.value.push(event);
-        selectedEv.value = [...selectedEventList.value, ...selectedGroupEventsList.value]
-    } else {
-        event.selected = checked;
-        selectedGroupEventsList.value = selectedGroupEventsList.value.filter((c) => c.id !== event.id);
-        selectedEv.value = [...selectedEventList.value, ...selectedGroupEventsList.value]
-    }
-};
-
-
-
-const confirmApplication = async (event_pk, id) => {
-    try {
-        const approveReq = await HTTP.post(
-            `/events/${event_pk}/applications/${id}/confirm/`,
-            {},
+        event.chosen = checked;
+        selectedEventList.value = selectedEventList.value.filter(
+            (a) => a.id !== event.id,
         );
+    }
+};
+
+const confirmApplication = async (event, id) => {
+    try {
+        if(event.event.application_type === "Групповая") {
+            await HTTP.post(
+                `/events/${event.event.id}/group_applications/all/${id}/approve/`,
+                {},
+            );
+        } 
+        else {
+            await HTTP.post(
+                `/events/${event.event.id}/applications/${id}/confirm/`,
+                {},
+            );
+        }
         swal.fire({
             position: "top-center",
             icon: "success",
@@ -217,70 +193,20 @@ const confirmApplication = async (event_pk, id) => {
     }
 };
 
-const confirmGroupApplication = async (event_pk, id) => {
+const cancelApplication = async (event, id) => {
     try {
-        const approveReq = await HTTP.post(
-            `/events/${event_pk}/group_applications/all/${id}/approve/`,
-            {},
-        );
-        swal.fire({
-            position: "top-center",
-            icon: "success",
-            title: "успешно",
-            showConfirmButton: false,
-            timer: 1500,
-        });
-    } catch (error) {
-        console.log("errr", error);
-        isError.value = error.response.data;
-        console.error("There was an error!", error);
-        if (isError.value) {
-            swal.fire({
-                position: "center",
-                icon: "error",
-                title: `ошибка`,
-                showConfirmButton: false,
-                timer: 2500,
-            });
+        if(event.event.application_type === "Групповая") {
+            await HTTP.delete(
+                `/events/${event.event.id}/group_applications/all/${id}/reject`,
+                {}
+            );
+        } 
+        else {
+            await HTTP.delete(
+                `/events/${event.event.id}/applications/${id}/`,
+                {}
+            );
         }
-    }
-};
-
-const cancelApplication = async (event_pk, id) => {
-    try {
-        const rejectReq = await HTTP.delete(
-            `/events/${event_pk}/applications/${id}/`,
-            {}
-        );
-        swal.fire({
-            position: "top-center",
-            icon: "success",
-            title: "успешно",
-            showConfirmButton: false,
-            timer: 1500,
-        });
-    } catch (error) {
-        console.log("errr", error);
-        isError.value = error.response.data;
-        console.error("There was an error!", error);
-        if (isError.value) {
-            swal.fire({
-                position: "center",
-                icon: "error",
-                title: `ошибка`,
-                showConfirmButton: false,
-                timer: 2500,
-            });
-        }
-    }
-};
-
-const cancelGroupApplication = async (event_pk, id) => {
-    try {
-        const rejectReq = await HTTP.delete(
-            `/events/${event_pk}/group_applications/all/${id}/reject`,
-            {}
-        );
         swal.fire({
             position: "top-center",
             icon: "success",
@@ -306,33 +232,18 @@ const cancelGroupApplication = async (event_pk, id) => {
 
 const onAction = async () => {
     try {
-        for (const application of selectedEventList.value) {
+        for (const event of selectedEventList.value) {
             if (action.value === "Одобрить") {
-                await confirmApplication(application.event.id, application.id);
+                await confirmApplication(event, event.id);
                 await userStore.getCountApp();
             } else {
-                await cancelApplication(application.event.id, application.id);
+                await cancelApplication(event, event.id);
                 await userStore.getCountApp();
             }
 
-            eventsList.value = eventsList.value.filter((event) => event.id != application.id);
+            eventsList.value = eventsList.value.filter((event) => event.id != event.id);
             selectedEventList.value = selectedEventList.value.filter(
-                (event) => event.id != application.id
-            );
-            selectedEv.value = [...selectedEventList.value, ...selectedGroupEventsList.value]
-        }
-        for (const applicationGroup of selectedGroupEventsList.value) {
-            if (action.value === "Одобрить") {
-                await confirmGroupApplication(applicationGroup.event.id, applicationGroup.id);
-                await userStore.getCountApp();
-            } else {
-                await cancelGroupApplication(applicationGroup.event.id, applicationGroup.id);
-                await userStore.getCountApp();
-            }
-
-            groupEventsList.value = groupEventsList.value.filter((event) => event.id != applicationGroup.id);
-            selectedGroupEventsList.value = selectedGroupEventsList.value.filter(
-                (event) => event.id != applicationGroup.id
+                (event) => event.id != event.id
             );
             selectedEv.value = [...selectedEventList.value, ...selectedGroupEventsList.value]
         }
@@ -341,10 +252,14 @@ const onAction = async () => {
     }
 };
 
+watch(selectedEventList, (selectedEventList) => {
+    isCheckedAll.value =
+    eventsList.value.length == selectedEventList.length;
+});
+
 onMounted(async () => {
     await events(userStore.currentUser.id);
-    await viewEvents();
-    await viewGroupEvents();
+    setTimeout(() => console.log(eventsList.value), 1000);
 });
 </script>
 
