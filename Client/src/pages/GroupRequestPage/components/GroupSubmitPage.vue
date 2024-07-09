@@ -177,7 +177,7 @@ const getUsersList = async (search) => {
             `/events/${route.params.id}/group_applications/${search}`,
 
         );
-        // console.log(data);
+        console.log(data);
         usersList.value = [];
         for (const obj of data) {
             obj.name = obj.first_name + ' ' + obj.last_name;
@@ -257,10 +257,22 @@ const onResize = () => {
 
 const downloadList = () => {
     const workbook = XLSX.utils.book_new();
+    const downloadTemp = [];
+
+    usersList.value.map(item => { 
+        downloadTemp.push({
+            last_name: item.last_name,
+            first_name: item.first_name,
+            patronymic_name: item.patronymic_name,
+            email: item.email,
+            phone_number: item.phone_number,
+            membership_fee: item.membership_fee ? item.membership_fee = "Оплачен" : item.membership_fee = "Не оплачен",
+        });
+    })
 
     const worksheet_data = [
         ["ФИО", "Почта", "Телефон", "Членский взнос"],
-        ...usersList.value.map(item => [`${item.last_name} ${item.first_name} ${item.patronymic_name}`, item.email, item.phone, item.fee])
+        ...downloadTemp.map(item => [`${item.last_name} ${item.first_name} ${item.patronymic_name}`, item.email, item.phone_number, item.membership_fee])
     ];
 
     const worksheet = XLSX.utils.aoa_to_sheet(worksheet_data);
@@ -526,7 +538,7 @@ onMounted(async () => {
         margin-left: 4px;
         margin-top: 8px;
     }
-    
+
     &-text {
         overflow: hidden;
     }
