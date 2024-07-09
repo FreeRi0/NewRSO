@@ -1,57 +1,73 @@
 <template>
     <div class="horizontallso">
-        <div class="horizontallso__confidant mr-3">
+        <div class="horizontallso__confidant ">
             <input type="checkbox" v-model="checked" @change="updateCheckEvents" />
         </div>
 
-        <router-link :to="{ name: 'PersonalDataUser', params: { id: event.user.id } }"
-            class="horizontallso-item__wrapper mr-3" v-if="props.isGroup === false">
+        <router-link v-if="!event.group" class="horizontallso-item__wrapper " :to="{
+            name: 'PersonalDataUser',
+            params: { id: event.user.id },
+        }">
             <div class="horizontallso-img">
                 <img :src="event?.user?.avatar?.photo" alt="logo" v-if="event?.user?.avatar?.photo" />
                 <img v-else src="@app/assets/user-avatar.png" alt="photo" />
             </div>
             <div class="containerHorizontal">
-                <div class="d-flex">
-                    <p class="horizontallso-item__list-full">
-                        {{ event.user.last_name }}
-                    </p>
-                    <p class="horizontallso-item__list-full">
-                        {{ event.user.first_name }}
-                    </p>
-                    <p class="horizontallso-item__list-full">
-                        {{ event.user.patronymic_name }}
-                    </p>
-                </div>
-                <div class="horizontallso-item__list-date">
-                    <span style="
-                            border-left: 2px solid #b6b6b6;
-                            padding-right: 8px;
-                        "></span>
-                    <p>{{ event.user.date_of_birth }}</p>
-                </div>
+                    <div class="d-flex">
+                        <p class="horizontallso-item__list-full">
+                            {{ event.user.last_name }}
+                        </p>
+                        <p class="horizontallso-item__list-full">
+                            {{ event.user.first_name }}
+                        </p>
+                        <p class="horizontallso-item__list-full">
+                            {{ event.user.patronymic_name }}
+                        </p>
+                    </div>
+                    <div class="horizontallso-item__list-date">
+                        <span style="
+                                border-left: 2px solid #b6b6b6;
+                                padding-right: 8px;
+                            "></span>
+                        <p>{{ event.user.date_of_birth }}</p>
+                    </div>
             </div>
-
         </router-link>
-        <router-link :to="{ name: 'lso', params: { id: event.headquarter_author.id } }"
-            class="horizontallso-item__wrapper mr-3" v-else>
+        <!-- <router-link v-else class="horizontallso-item__wrapper" :to="{
+            name: 'DetachmentData',
+            params: { id: event.headquarter_author.id },
+        }"> -->
+        <div v-else class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
-                <img :src="event.headquarter_author?.banner" alt="logo" v-if="event.headquarter_author?.banner" />
+                <img v-if="event.headquarter_author.banner" :src="event.headquarter_author.banner" alt="logo" />
                 <img v-else src="@app/assets/user-avatar.png" alt="photo" />
             </div>
             <div class="containerHorizontal">
+                    <div class="d-flex">
+                        <p class="horizontallso-item__list-full">
+                            {{ event.headquarter_author.name }}
+                        </p>
+                    </div>
+            </div>
+        </div>
+        <!-- </router-link> -->
+        <div class="horizontallso-item__wrapper ">
+            <div class="containerHorizontal">
                 <div class="d-flex">
                     <p class="horizontallso-item__list-full">
-                        {{ event.headquarter_author.name }}
+                        {{ event.event.application_type }}
                     </p>
                 </div>
-
             </div>
-
-        </router-link>
-        <router-link :to="{ name: 'ActionData', params: { id: event.event.id } }" class="horizontallso-item__wrapper">
+        </div>
+        
+        <router-link class="horizontallso-item__wrapper " :to="{
+            name: 'ActionData',
+            params: { id: event.event.id },
+        }">
             <div class="horizontallso-img">
                 <img :src="event.event.banner" alt="logo" v-if="event.event.banner" />
-                <img src="@app/assets/foto-leader-squad/foto-leader-squad-01.png" alt="photo" v-else />
+                <img src="@app/assets/user-avatar.png" alt="photo" v-else />
             </div>
             <div class="containerHorizontal">
                 <p class="horizontallso-item__list-full evname">
@@ -59,14 +75,12 @@
                 </p>
             </div>
         </router-link>
-
     </div>
 </template>
+
 <script setup>
-import { ref, onMounted, watch } from 'vue';
-import { HTTP } from '@app/http';
+import { ref, watch } from 'vue';
 import { useRoleStore } from '@layouts/store/role';
-import { storeToRefs } from 'pinia';
 
 const roleStore = useRoleStore();
 roleStore.getRoles();
@@ -75,33 +89,40 @@ const props = defineProps({
     event: {
         type: Object,
         required: true,
-    },
-    isGroup: {
-        type: Boolean,
-        required: false
     }
 });
+
+console.log(props.event);
 
 const emit = defineEmits({
     select: null,
 });
 const checked = ref(false);
 
+
+
 const updateCheckEvents = (e) => {
     emit('select', props.event, e.target.checked);
 };
 
 watch(
-    () => props.event.selected,
+    () => props.event.chosen,
     (newSelected) => {
         checked.value = newSelected;
     },
 );
 </script>
+
 <style lang="scss" scoped>
 .horizontallso {
-    display: flex;
-    align-items: flex-start;
+    // display: flex;
+    // align-items: flex-start;
+
+    display: grid;
+    width: 100%;
+    grid-gap: 12px;
+    grid-template-columns: 48px minmax(268px, 528px) 164px 1fr;
+
 
     &-img {
         align-items: center;
