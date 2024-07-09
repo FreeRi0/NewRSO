@@ -21,14 +21,15 @@
                     <div class="form-col" v-for="(file, index) in files.length + 1" :key="index">
                         <div class="form-fileupload" v-if="index < 6">
                             <img class="paper-clip" src="@app/assets/icon/addFile.svg" alt="addFile" />
-                            <FileUpload v-if="files[index]?.name" class="file-upload-text" mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                :maxFileSize="7000000" :customUpload="true" :chooseLabel=files[index].name
-                            ></FileUpload>
-                            <FileUpload v-else class="file-upload-text" mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                :maxFileSize="7000000" :customUpload="true" chooseLabel="Выбрать файл"
-                                @select="onUpload"
-                            ></FileUpload>
-
+                            <div class="form-text">
+                                <FileUpload v-if="files[index]?.name" class="file-upload-text" mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
+                                    :maxFileSize="7000000" :customUpload="true" :chooseLabel=files[index].name
+                                ></FileUpload>
+                                <FileUpload v-else class="file-upload-text" mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
+                                    :maxFileSize="7000000" :customUpload="true" chooseLabel="Выбрать файл"
+                                    @select="onUpload"
+                                ></FileUpload>
+                            </div>
                             <img v-if="index < files.length" src="../../../app/assets/icon/close-location.svg" alt="close" width="24" height="24" @click="onRemove(index)"/>
                         </div>
                     </div>
@@ -523,7 +524,11 @@ onMounted(async () => {
 
     &-col {
         margin-left: 4px;
-        margin-top: 36px;
+        margin-top: 8px;
+    }
+    
+    &-text {
+        overflow: hidden;
     }
 }
 
