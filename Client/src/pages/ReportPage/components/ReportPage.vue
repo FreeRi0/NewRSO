@@ -479,7 +479,8 @@ s
                                     type="button"
                                     v-if="
                                         !block.is_verified &&
-                                        !is_regional_commander
+                                        !is_regional_commander &&
+                                        !block.id
                                     "
                                 >
                                     <svg
@@ -546,7 +547,9 @@ s
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
-                                    по 15 июля 2024 года включительно.
+                                    по 15 июля 2024 года включительно.<br /><br />
+                                    ОДНОВРЕМЕННО МОЖНО ОТПРАВИТЬ ДАННЫЕ ПО ПЯТИ
+                                    УЧАСТНИКАМ.
                                 </p>
                             </div>
                         </div>
@@ -1299,7 +1302,8 @@ s
                                     type="button"
                                     v-if="
                                         !block.is_verified &&
-                                        !is_regional_commander
+                                        !is_regional_commander &&
+                                        !block.id
                                     "
                                 >
                                     <svg
@@ -1583,7 +1587,8 @@ s
                                     type="button"
                                     v-if="
                                         !block.is_verified &&
-                                        !is_regional_commander
+                                        !is_regional_commander &&
+                                        !block.id
                                     "
                                 >
                                     <svg
@@ -1788,7 +1793,8 @@ s
                                     type="button"
                                     v-if="
                                         !block.is_verified &&
-                                        !is_regional_commander
+                                        !is_regional_commander &&
+                                        !block.id
                                     "
                                 >
                                     <svg
@@ -1991,7 +1997,8 @@ s
                                     type="button"
                                     v-if="
                                         !block.is_verified &&
-                                        !is_regional_commander
+                                        !is_regional_commander &&
+                                        !block.id
                                     "
                                 >
                                     <svg
@@ -2197,7 +2204,8 @@ s
                                     type="button"
                                     v-if="
                                         !block.is_verified &&
-                                        !is_regional_commander
+                                        !is_regional_commander &&
+                                        !block.id
                                     "
                                 >
                                     <svg
@@ -2398,7 +2406,8 @@ s
                                     type="button"
                                     v-if="
                                         !block.is_verified &&
-                                        !is_regional_commander
+                                        !is_regional_commander &&
+                                        !block.id
                                     "
                                 >
                                     <svg
@@ -2531,7 +2540,8 @@ s
                                     type="button"
                                     v-if="
                                         !block.is_verified &&
-                                        !is_regional_commander
+                                        !is_regional_commander &&
+                                        !block.id
                                     "
                                 >
                                     <svg
@@ -2670,7 +2680,8 @@ s
                                     type="button"
                                     v-if="
                                         !block.is_verified &&
-                                        !is_regional_commander
+                                        !is_regional_commander &&
+                                        !block.id
                                     "
                                 >
                                     <svg
@@ -2854,7 +2865,8 @@ s
                                     type="button"
                                     v-if="
                                         !block.is_verified &&
-                                        !is_regional_commander
+                                        !is_regional_commander &&
+                                        !block.id
                                     "
                                 >
                                     <svg
@@ -3175,7 +3187,8 @@ s
                                     type="button"
                                     v-if="
                                         !block.is_verified &&
-                                        !is_regional_commander
+                                        !is_regional_commander &&
+                                        !block.id
                                     "
                                 >
                                     <svg
@@ -4205,7 +4218,7 @@ const postParameters = async (id) => {
         console.log(error);
         isError.value = error.response.data;
         isLoading.value = false;
-        if (isError.value && id < 60) {
+        if (isError.value && (id < 60 || id != 2)) {
             swal.fire({
                 position: 'center',
                 icon: 'error',
@@ -4214,7 +4227,7 @@ const postParameters = async (id) => {
                 timer: 2500,
             });
         }
-        if (isError.value && id > 60) {
+        if (isError.value && (id > 60 || id == 2)) {
             swal.fire({
                 position: 'center',
                 title: `К сожалению, срок отправки данных по показателю истек.`,
