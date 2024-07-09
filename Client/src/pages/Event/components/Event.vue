@@ -137,7 +137,9 @@
                                 {{ organizator.organizer?.first_name }}
                                 {{ organizator.organizer?.patronymic_name }}
                             </div>
-                            <div class="text text--position">{{ organizator?.position?.position }}</div>
+                            <div v-if="organizator?.position?.position" class="text text--position">{{
+                                organizator?.position?.position }}</div>
+                            <div class="text text--position" v-else>Кандидат</div>
 
                         </router-link>
 
@@ -163,8 +165,9 @@
                                 {{ organizator.organizer?.first_name }}
                                 {{ organizator.organizer?.patronymic_name }}
                             </div>
-                            <div class="text text--position">{{ organizator?.position?.position }}</div>
-
+                            <div v-if="organizator?.position?.position" class="text text--position">{{
+                                organizator?.position?.position }}</div>
+                            <div class="text text--position" v-else>Кандидат</div>
                         </router-link>
                     </div>
                 </div>
@@ -192,8 +195,9 @@
                             <div class="text text--participant_name mt-7">
                                 {{ participant.user.first_name }}
                             </div>
-                            <div class="text text--position">{{ participant?.position?.position }}</div>
-
+                            <div class="text text--position" v-if="participant?.position?.position">{{
+                                participant?.position?.position }}</div>
+                            <div v-else class="text text--position">Кандидат</div>
 
                         </router-link>
                     </li>
@@ -227,7 +231,9 @@
                             <div class="text text--participant_name mt-7">
                                 {{ participant.user.first_name }}
                             </div>
-                            <div class="text text--position">{{ participant?.position }}</div>
+                            <div class="text text--position" v-if="participant?.position">{{ participant?.position }}
+                            </div>
+                            <div v-else class="text text--position">Кандидат</div>
 
                         </router-link>
                     </li>
