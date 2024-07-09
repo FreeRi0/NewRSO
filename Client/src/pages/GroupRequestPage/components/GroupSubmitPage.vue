@@ -21,14 +21,15 @@
                     <div class="form-col" v-for="(file, index) in files.length + 1" :key="index">
                         <div class="form-fileupload" v-if="index < 6">
                             <img class="paper-clip" src="@app/assets/icon/addFile.svg" alt="addFile" />
-                            <FileUpload v-if="files[index]?.name" class="file-upload-text" mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                :maxFileSize="7000000" :customUpload="true" :chooseLabel=files[index].name
-                            ></FileUpload>
-                            <FileUpload v-else class="file-upload-text" mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                :maxFileSize="7000000" :customUpload="true" chooseLabel="Выбрать файл"
-                                @select="onUpload"
-                            ></FileUpload>
-
+                            <div class="form-text">
+                                <FileUpload v-if="files[index]?.name" class="file-upload-text" mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
+                                    :maxFileSize="7000000" :customUpload="true" :chooseLabel=files[index].name
+                                ></FileUpload>
+                                <FileUpload v-else class="file-upload-text" mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
+                                    :maxFileSize="7000000" :customUpload="true" chooseLabel="Выбрать файл"
+                                    @select="onUpload"
+                                ></FileUpload>
+                            </div>
                             <img v-if="index < files.length" src="../../../app/assets/icon/close-location.svg" alt="close" width="24" height="24" @click="onRemove(index)"/>
                         </div>
                     </div>
@@ -78,7 +79,7 @@
 
 <script setup>
 import { HTTP } from '@app/http';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, inject } from 'vue';
 import { useRoute } from 'vue-router';
 
 import { sortByEducation } from '@shared/components/selects';
@@ -89,6 +90,8 @@ import GroupFilters from './GroupFilters.vue';
 import GroupSubmitItem from './GroupSubmitItem.vue';
 import GroupSubmitSelect from './GroupSubmitSelect.vue';
 import * as XLSX from 'xlsx';
+
+const swal = inject('$swal');
 
 const sortBy = ref('alphabetically');
 
@@ -176,7 +179,7 @@ const getUsersList = async (search) => {
             `/events/${route.params.id}/group_applications/${search}`,
 
         );
-        // console.log(data);
+        console.log(data);
         usersList.value = [];
         for (const obj of data) {
             obj.name = obj.first_name + ' ' + obj.last_name;
@@ -202,7 +205,13 @@ const onAction = async () => {
             { user_ids },
 
         );
-
+        swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'успешно',
+            showConfirmButton: false,
+            timer: 1500,
+        });
         router.push({
             name: 'Action',
             params: {
@@ -211,6 +220,13 @@ const onAction = async () => {
         });
     } catch (e) {
         console.log('onAction error', e);
+        swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: `ошибка`,
+            showConfirmButton: false,
+            timer: 2500,
+        })
     }
 };
 
@@ -256,10 +272,22 @@ const onResize = () => {
 
 const downloadList = () => {
     const workbook = XLSX.utils.book_new();
+    const downloadTemp = [];
+
+    usersList.value.map(item => { 
+        downloadTemp.push({
+            last_name: item.last_name,
+            first_name: item.first_name,
+            patronymic_name: item.patronymic_name,
+            email: item.email,
+            phone_number: item.phone_number,
+            membership_fee: item.membership_fee ? item.membership_fee = "Оплачен" : item.membership_fee = "Не оплачен",
+        });
+    })
 
     const worksheet_data = [
         ["ФИО", "Почта", "Телефон", "Членский взнос"],
-        ...usersList.value.map(item => [`${item.last_name} ${item.first_name} ${item.patronymic_name}`, item.email, item.phone, item.fee])
+        ...downloadTemp.map(item => [`${item.last_name} ${item.first_name} ${item.patronymic_name}`, item.email, item.phone_number, item.membership_fee])
     ];
 
     const worksheet = XLSX.utils.aoa_to_sheet(worksheet_data);
@@ -523,7 +551,11 @@ onMounted(async () => {
 
     &-col {
         margin-left: 4px;
-        margin-top: 36px;
+        margin-top: 8px;
+    }
+
+    &-text {
+        overflow: hidden;
     }
 }
 
