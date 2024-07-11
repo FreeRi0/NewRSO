@@ -69,14 +69,15 @@ let id = route.params.id;
 const { replaceTargetObjects } = usePage();
 
 const aboutDistrictHQ = async () => {
-    try {
-        const response = await HTTP.get(`/districts/${id}/`);
+    if (typeof id !== 'undefined') {
+        try {
+            const response = await HTTP.get(`/districts/${id}/`);
 
-        districtHeadquarter.value = response.data;
-        replaceTargetObjects([districtHeadquarter.value]);
-        // console.log(response);
-    } catch (error) {
-        console.log('an error occured ' + error);
+            districtHeadquarter.value = response.data;
+            replaceTargetObjects([districtHeadquarter.value]);
+        } catch (error) {
+            console.log('an error occured ' + error);
+        }
     }
 };
 
