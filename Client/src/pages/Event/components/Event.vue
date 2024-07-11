@@ -62,11 +62,10 @@
                         </div>
 
                     </div>
-                    <div class="event-cols-2" v-if="eventsStore.event.conference_link !== null">
+                    <div class="event-cols-2" v-if="eventsStore.event.conference_link !== null && eventsStore.event.conference_link.length > 0">
                         <img src="@app/assets/icon/linkRef.svg" class="mr-3 event-cols-2_ref" alt="linkRef" />
                         <a :href="eventsStore.event.conference_link">Ссылка на мероприятие</a>
                     </div>
-
 
                 </div>
                 <div class="wrap__item">
