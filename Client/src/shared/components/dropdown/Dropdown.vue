@@ -116,9 +116,11 @@
 <script setup>
 import { useRouter, useRoute } from 'vue-router';
 import { useRoleStore } from '@layouts/store/role';
+import { useUserStore } from '@features/store';
 import { storeToRefs } from 'pinia';
 const emit = defineEmits(['updateUser']);
 const roleStore = useRoleStore();
+const userStore = useUserStore();
 const roles = storeToRefs(roleStore);
 const router = useRouter();
 const props = defineProps({
@@ -177,6 +179,7 @@ const props = defineProps({
 
 const LogOut = () => {
     localStorage.removeItem('jwt_token');
+    userStore.logOut();
     emit('updateUser', {});
     router.push('/');
 };

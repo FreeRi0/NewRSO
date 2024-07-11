@@ -104,22 +104,8 @@ export const useUserStore = defineStore('user', {
             this.users = responseSearch.data;
         },
 
-        // async getAccessToken(token: String) {
-        //     try {
-        //         const responseAccessToken = await HTTP.post('/jwt/vk-login/', {access_token: token} )
-
-        //     } catch (error) {
-        //        console.log(error)
-        //     }
-        // },
-
-        // async exchangeToken(data: Object) {
-        //     try {
-        //         const respToken = await HTTP.post('/exchange-token/', data)
-
-        //     } catch (error) {
-        //         console.log('error:', error)
-        //     }
-        // }
+        logOut() {
+            this.$reset();
+        }
     },
 });

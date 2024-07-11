@@ -29,15 +29,15 @@
                         <li
                             class="user-data__title"
                             v-if="
-                                role.roles.value.detachment_commander ||
-                                role.roles.value
-                                    .educationalheadquarter_commander ||
-                                role.roles.value.localheadquarter_commander ||
-                                role.roles.value
-                                    .regionalheadquarter_commander ||
-                                role.roles.value
-                                    .districtheadquarter_commander ||
-                                role.roles.value.centralheadquarter_commander
+                                roleStore.roles.detachment_commander !== null ||
+                                roleStore.roles
+                                    .educationalheadquarter_commander !== null ||
+                                    roleStore.roles.localheadquarter_commander !== null ||
+                                    roleStore.roles
+                                    .regionalheadquarter_commander !== null ||
+                                    roleStore.roles
+                                    .districtheadquarter_commander !== null ||
+                                    roleStore.roles.centralheadquarter_commander !== null
                             "
                         >
                             <p>Командир</p>
