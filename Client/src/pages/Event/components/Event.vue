@@ -962,9 +962,11 @@ watch(
 .event_card_wrap img {
     width: 120px;
     height: 120px;
-    min-height: 120px;
-    min-width: 120px;
+    display: block;
+    margin: 0 auto;
     border-radius: 100%;
+    object-fit: cover;
+    overflow: hidden;
 }
 
 .card_wrap {
