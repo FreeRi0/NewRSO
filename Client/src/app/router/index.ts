@@ -26,8 +26,8 @@ router.beforeEach((to, _from, next) => {
     localStorage.getItem('jwt_token') === null
   )
     next({ name: 'Login' });
-  else if (to.name == 'Login' && localStorage.getItem('jwt_token') !== null)
-    next({ name: 'mypage' });
+  // else if (to.name == 'Login' && localStorage.getItem('jwt_token') !== null)
+  //   next({ name: 'mypage' });
   else next();
 });
 
