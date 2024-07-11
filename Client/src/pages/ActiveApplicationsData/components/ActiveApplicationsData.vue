@@ -19,7 +19,14 @@
                 <ActiveSquads />
             </div>
             <div
-                v-else-if="picked == 'Заявки на вступление в штаб' && (roleStore.roles?.regionalheadquarter_commander?.id || roleStore.roles?.detachment_commander?.id)">
+                v-else-if="picked == 'Заявки на вступление в штаб' && (
+                        roleStore.roles?.regionalheadquarter_commander?.id || 
+                        roleStore.roles?.detachment_commander?.id ||
+                        roleStore.roles?.centralheadquarter_commander?.id ||
+                        roleStore.roles?.districtheadquarter_commander?.id ||
+                        roleStore.roles?.localheadquarter_commander?.id ||
+                        roleStore.roles?.detachment_commander?.id
+                    )">
                 <active-headquarters />
             </div>
             <div v-else-if="picked == 'Заявки на участие в мероприятии'">
@@ -44,7 +51,7 @@ import { ActiveHeadquarters } from '@features/ActiveApplicationsHeadquarters/';
 
 // E:\RSO\NewRSO\Client\src\features\ActiveApplicationHeadquarters\index.ts
 const roleStore = useRoleStore();
-
+console.log(roleStore.roles);
 
 const picked = ref('Верификация аккаунтов');
 
