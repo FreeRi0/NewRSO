@@ -1,4 +1,3 @@
-s
 <template>
     <div class="container">
         <h1 class="title title--mb">Редактирование данных по показателям</h1>
@@ -527,6 +526,10 @@ s
                             >
                                 + добавить участника
                             </div>
+                            <span
+                                >ОДНОВРЕМЕННО МОЖНО ОТПРАВИТЬ ДАННЫЕ ПО ПЯТИ
+                                УЧАСТНИКАМ.</span
+                            >
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
                                     <v-progress-circular
@@ -547,9 +550,7 @@ s
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
-                                    по 15 июля 2024 года включительно.<br /><br />
-                                    ОДНОВРЕМЕННО МОЖНО ОТПРАВИТЬ ДАННЫЕ ПО ПЯТИ
-                                    УЧАСТНИКАМ.
+                                    по 15 июля 2024 года включительно.
                                 </p>
                             </div>
                         </div>
@@ -4158,7 +4159,12 @@ const postParameters = async (id) => {
                         data[dataName].push(temp);
                     }
                 }
-                if (data[dataName].length > 0) {
+                if (
+                    (data[dataName].length > 0 && !(id == 5)) ||
+                    (id === 5 &&
+                        data[dataName].length > 0 &&
+                        data[dataName].length <= 5)
+                ) {
                     await HTTP.post(
                         `/competitions/${route.params.competition_pk}/reports/q${index}/`,
                         data,

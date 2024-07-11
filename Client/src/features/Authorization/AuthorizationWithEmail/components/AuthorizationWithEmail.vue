@@ -43,11 +43,13 @@ import { Input, passwordInput } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@features/store/index';
+import { useRoleStore } from '@layouts/store/role';
 import * as VKID from '@vkid/sdk';
 import { storeToRefs } from 'pinia';
 
 const router = useRouter();
 const userStore = useUserStore();
+const roleStore = useRoleStore();
 const user = storeToRefs(userStore);
 const data = ref({
     username: '',
@@ -100,6 +102,9 @@ const LoginUser = async () => {
             name: 'mypage',
         });
         userStore.getUser();
+        userStore.getCountApp();
+        roleStore.getRoles();
+
         swal.fire({
             position: 'top-center',
             icon: 'success',

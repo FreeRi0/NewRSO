@@ -49,13 +49,15 @@ let id = route.params.id;
 const { replaceTargetObjects } = usePage();
 
 const aboutCentralHQs = async () => {
-    try {
-        const response = await HTTP.get(`/centrals/${id}/`);
+    if (typeof id !== 'undefined') {
+        try {
+            const response = await HTTP.get(`/centrals/${id}/`);
 
-        centralHeadquarter.value = response.data;
-        replaceTargetObjects([centralHeadquarter.value]);
-    } catch (error) {
-        console.log('an error occured ' + error);
+            centralHeadquarter.value = response.data;
+            replaceTargetObjects([centralHeadquarter.value]);
+        } catch (error) {
+            console.log('an error occured ' + error);
+        }
     }
 };
 

@@ -484,17 +484,17 @@
                     " class="hq-data__link" :to="{
                         name: 'FormCentral',
                     }">Редактировать штаб</router-link>
-                    <Button v-else-if="userStore.currentUser.central_headquarter_id === null && !UserApplication"
+                    <Button v-else-if="roleStore.myPositions.usercentralheadquarterposition === null && !UserApplication"
                         @click="showModalW()" label="Вступить в штаб" class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
-                        <div class="AddAplication mr-2">
+                        <div class="AddApplication  mr-2">
                             Заявка на рассмотрении
                         </div>
                         <Button @click="DeleteApplication('centrals', props.centralHeadquarter.id)"
                             label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
-                    <div v-else-if="userStore.currentUser.central_headquarter_id !== null" class="AddApplication">
+                    <div v-else-if="roleStore.myPositions.usercentralheadquarterposition !== null" class="AddApplication">
                         Вы участник
                     </div>
 
@@ -657,6 +657,13 @@ const AddApplication = async (name, id) => {
             viewApplications('districts');
         }
 
+        if (props.districtHeadquarter) {
+            viewApplications('districts');
+        }
+        if (props.centralHeadquarter) {
+            viewApplications('centrals');
+        }
+
         showModal.value = false;
 
     } catch (error) {
@@ -695,8 +702,8 @@ const DeleteApplication = async (name, id) => {
             viewApplications('regionals');
         }
 
-        if (props.districtHeadquarter) {
-            viewApplications('districts');
+        if (props.centralHeadquarter) {
+            viewApplications('centrals');
         }
     } catch (error) {
 
@@ -781,6 +788,8 @@ onMounted(() => {
     if (props.centralHeadquarter) {
         viewApplications('centrals');
     }
+
+    roleStore.getMyPositions()
 
     aboutEduc();
 });
