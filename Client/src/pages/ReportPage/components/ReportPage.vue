@@ -4158,7 +4158,12 @@ const postParameters = async (id) => {
                         data[dataName].push(temp);
                     }
                 }
-                if (data[dataName].length > 0) {
+                if (
+                    (data[dataName].length > 0 && !(id == 5)) ||
+                    (id === 5 &&
+                        data[dataName].length > 0 &&
+                        data[dataName].length <= 5)
+                ) {
                     await HTTP.post(
                         `/competitions/${route.params.competition_pk}/reports/q${index}/`,
                         data,
