@@ -41,7 +41,11 @@
             ><p v-if="locCom" class="create">{{ label }}</p></router-link
         >
       <router-link
-          v-if="roles.roles.value.detachment_commander || roles.roles.value.localheadquarter_commander"
+          v-if="roles.roles.value.detachment_commander ||
+                roles.roles.value.localheadquarter_commander ||
+                roles.roles.value.regionalheadquarter_commander ||
+                roles.roles.value.educationalheadquarter_commander ||
+                roles.roles.value.districtheadquarter_commander"
           :to="{ name: name }">
         <p v-if="eventCreate" class="create">{{ label }}</p>
       </router-link>
