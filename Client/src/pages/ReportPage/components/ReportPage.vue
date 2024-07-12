@@ -2366,12 +2366,15 @@ const selectFile = (e, id, field, subfield, index) => {
 // };
 const addNewBlock = (sectionIndex, NameSection, fields) => {
     if (sectionIndex === 5) {
-        const sectionData = report.value[sectionIndex][NameSection].filter(
+        let sectionData = report.value[sectionIndex][NameSection].filter(
             (item) => !item.id,
         );
-        if (sectionData.length < 5) {
+        let sectionDataLength = sectionData.length
+        if (sectionDataLength < 5) {
             report.value[sectionIndex][NameSection].push(fields);
-        } else {
+            sectionDataLength = sectionDataLength + 1
+        }
+        if (sectionDataLength >= 5) {
             console.log('условия не выполняются');
             report.value[sectionIndex].hidden_btn = true;
         }
