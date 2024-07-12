@@ -385,6 +385,7 @@
                                             ></label
                                         >
                                         <Input
+                                            name="fio"
                                             placeholder="Например, Иванова Светлана Андреевна"
                                             :maxlength="100"
                                             v-model:value="block.name"
@@ -529,9 +530,9 @@
                             >
                                 + добавить участника
                             </div>
-                            <span
-                                >ОДНОВРЕМЕННО МОЖНО ОТПРАВИТЬ ДАННЫЕ ПО ПЯТИ
-                                УЧАСТНИКАМ.</span
+                            <span class="loading"
+                                >Одновременно возможна загрузка данных не более,
+                                чем по пяти участникам.</span
                             >
                             <div class="form__field-group-bottom">
                                 <div class="form__field-group-bottom-btn">
@@ -736,7 +737,7 @@
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
-                                    по 31 мая 2024 года включительно.
+                                    по 15 октября 2024 года включительно.
                                 </p>
                             </div>
                         </div>
@@ -927,7 +928,7 @@
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
-                                    по 30 июня 2024 года включительно.
+                                    по 15 августа 2024 года включительно.
                                 </p>
                             </div>
                         </div>
@@ -3662,21 +3663,17 @@ const selectFile = (e, id, field, subfield, index) => {
     else report.value[id][field] = e.files[0];
 };
 
-// const addNewBlock = (sectionIndex, NameSection, fields) => {
-//     report.value[sectionIndex][NameSection].push(fields);
-//     if (sectionIndex === 5 || sectionIndex === 17) {
-//         report.value[sectionIndex].disabledBtn = false;
-//     }
-// };
 const addNewBlock = (sectionIndex, NameSection, fields) => {
     if (sectionIndex === 5) {
-        const sectionData = report.value[sectionIndex][NameSection].filter(
+        let sectionData = report.value[sectionIndex][NameSection].filter(
             (item) => !item.id,
         );
-        if (sectionData.length < 5) {
+        let sectionDataLength = sectionData.length;
+        if (sectionDataLength < 5) {
             report.value[sectionIndex][NameSection].push(fields);
-        } else {
-            console.log('условия не выполняются');
+            sectionDataLength = sectionDataLength + 1;
+        }
+        if (sectionDataLength >= 5) {
             report.value[sectionIndex].hidden_btn = true;
         }
     } else report.value[sectionIndex][NameSection].push(fields);
@@ -3690,15 +3687,14 @@ const AddLink = (index, sectionIndex, nameSection, fields) => {
 };
 
 const deleteBlock = (index, sectionIndex, nameSection) => {
+    report.value[sectionIndex][nameSection].splice(index, 1);
     if (sectionIndex === 5) {
         const sectionData = report.value[sectionIndex][nameSection].filter(
             (item) => !item.id,
         );
-        report.value[sectionIndex][nameSection].splice(index, 1);
-        if (index === 5) {
+        if (sectionData.length < 5)
             report.value[sectionIndex].hidden_btn = false;
-        }
-    } else report.value[sectionIndex][nameSection].splice(index, 1);
+    }
 };
 
 const deleteLink = (index, sectionIndex, nameSection) => {
@@ -3947,7 +3943,6 @@ const getParametersRegCom = async (id) => {
         } else {
             report.value[id] = data;
         }
-        console.log(data);
     } catch (error) {
         isError.value = error.response;
     }
@@ -4072,7 +4067,6 @@ const getParameters = async (id) => {
                         report.value[id].participation_data =
                             response.data.results;
                     } else report.value[id] = response.data.results[0];
-                    console.log(`true`);
                     report.value[id].disabledBtn = true;
                 }
             }
@@ -4141,7 +4135,6 @@ const postParameters = async (id) => {
         if (id == 14) dataName = 'q14_labor_projects';
         if (id == 15) dataName = 'grants_data';
         if (id == 17) dataName = 'source_data';
-        console.log(report.value[id]);
         if (
             report.value[id]?.id ||
             report.value[id]?.participation_data?.[0]?.detachment_report?.id
@@ -4223,7 +4216,6 @@ const postParameters = async (id) => {
                     fd.vk_detachment_number_subscribers = 0;
             }
             delete fd.disabledBtn;
-            console.log(fd);
             await HTTP.post(
                 `/competitions/${route.params.competition_pk}/reports/q${index}/`,
                 fd,
@@ -4243,6 +4235,7 @@ const postParameters = async (id) => {
             timer: 1500,
         });
         await getParameters(id);
+        if (id == 5) report.value[sectionIndex].hidden_btn = false;
     } catch (error) {
         console.log(error);
         isError.value = error.response.data;
@@ -4300,11 +4293,9 @@ watch(
 );
 
 onMounted(async (id) => {
-    // report.value = JSON.parse(JSON.stringify(reportBase));
     await getParameters(id);
     await getMeCommander();
 });
-console.log(report);
 </script>
 <style>
 .v-expansion-panels {
@@ -4502,5 +4493,8 @@ td {
     font-size: 14px;
     font-weight: 600;
     font-family: 'Acrobat';
+}
+.loading {
+    color: #db0000;
 }
 </style>
