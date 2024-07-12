@@ -3696,7 +3696,7 @@ const deleteBlock = (index, sectionIndex, nameSection) => {
         );
         report.value[sectionIndex][nameSection].splice(index, 1);
         if (index === 5) {
-            report.value[sectionIndex][nameSection].splice(index, 1);
+            report.value[sectionIndex].hidden_btn = false;
         }
     } else report.value[sectionIndex][nameSection].splice(index, 1);
 };
