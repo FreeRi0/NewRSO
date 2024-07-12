@@ -3659,8 +3659,23 @@ const selectFile = (e, id, field, subfield, index) => {
     else report.value[id][field] = e.files[0];
 };
 
+// const addNewBlock = (sectionIndex, NameSection, fields) => {
+//     report.value[sectionIndex][NameSection].push(fields);
+//     if (sectionIndex === 5 || sectionIndex === 17) {
+//         report.value[sectionIndex].disabledBtn = false;
+//     }
+// };
 const addNewBlock = (sectionIndex, NameSection, fields) => {
-    report.value[sectionIndex][NameSection].push(fields);
+    if (sectionIndex === 5) {
+        const sectionData = report.value[sectionIndex][NameSection].filter(
+            (item) => !item.id,
+        );
+        if (sectionData.length <= 5) {
+            sectionData.push(fields);
+        } else {
+            console.log('условия не выполняются');
+        }
+    } else report.value[sectionIndex][NameSection].push(fields);
     if (sectionIndex === 5 || sectionIndex === 17) {
         report.value[sectionIndex].disabledBtn = false;
     }
