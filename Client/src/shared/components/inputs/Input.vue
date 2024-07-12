@@ -1,8 +1,19 @@
 <template>
     <div class="form-input" :style="{ width: width }">
-        <input :type="type" :name="name" :style="{ height: height }" :value="value" :id="name"
-            :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly" max="9999-12-31" class="mb-2"
-            @input="updateValue" v-bind="$attrs" />
+        <input
+            :type="type"
+            :name="name"
+            :style="{ height: height }"
+            :value="value"
+            :id="name"
+            :placeholder="placeholder"
+            :maxlength="maxLength"
+            :readonly="readonly"
+            max="9999-12-31"
+            class="mb-2"
+            @input="updateValue"
+            v-bind="$attrs"
+        />
     </div>
 </template>
 
@@ -45,6 +56,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    readonly: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const updateValue = (event) => {
@@ -73,7 +88,6 @@ input:focus {
     outline: none;
 }
 
-
 .form-input input {
     box-sizing: border-box;
     border: 1px solid #a3a3a3;
@@ -85,7 +99,7 @@ input:focus {
     margin-bottom: 20px;
     font-family: 'Bert Sans';
     width: 100%;
-    color: #35383f; 
+    color: #35383f;
 }
 
 .form-input input::placeholder {
