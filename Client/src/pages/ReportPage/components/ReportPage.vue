@@ -515,7 +515,10 @@
                                 </div>
                             </div>
                             <div
-                                v-if="!is_regional_commander"
+                                v-if="
+                                    !is_regional_commander &&
+                                    !report[5].hidden_btn
+                                "
                                 class="form__field add-block"
                                 @click="
                                     addNewBlock(5, 'participants_data', {
@@ -3670,10 +3673,11 @@ const addNewBlock = (sectionIndex, NameSection, fields) => {
         const sectionData = report.value[sectionIndex][NameSection].filter(
             (item) => !item.id,
         );
-        if (sectionData.length <= 5) {
-            sectionData.push(fields);
+        if (sectionData.length < 5) {
+            report.value[sectionIndex][NameSection].push(fields);
         } else {
             console.log('условия не выполняются');
+            report.value[sectionIndex].hidden_btn = true;
         }
     } else report.value[sectionIndex][NameSection].push(fields);
     if (sectionIndex === 5 || sectionIndex === 17) {
@@ -3686,7 +3690,15 @@ const AddLink = (index, sectionIndex, nameSection, fields) => {
 };
 
 const deleteBlock = (index, sectionIndex, nameSection) => {
-    report.value[sectionIndex][nameSection].splice(index, 1);
+    if (sectionIndex === 5) {
+        const sectionData = report.value[sectionIndex][nameSection].filter(
+            (item) => !item.id,
+        );
+        report.value[sectionIndex][nameSection].splice(index, 1);
+        if (index === 5) {
+            report.value[sectionIndex][nameSection].splice(index, 1);
+        }
+    } else report.value[sectionIndex][nameSection].splice(index, 1);
 };
 
 const deleteLink = (index, sectionIndex, nameSection) => {
@@ -3706,7 +3718,7 @@ const report = ref({
     5: {
         participants_data: [{ name: '', document: null }],
         disabledBtn: false,
-        show_btn: false,
+        hidden_btn: false,
     },
     61: {
         demonstration_block: {
