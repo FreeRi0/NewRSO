@@ -174,33 +174,12 @@ const sortBy = ref('last_name');
 
 const next = () => {
     let search = '';
-    // if (district.value) {
-    //     search += '?district_headquarter__name=' + district.value;
-    // }
-    // if (reg.value) {
-    //     search += '?regional_headquarter__name=' + reg.value;
-    // }
-    // if (local.value) {
-    //     search += '?local_headquarter__name=' + local.value;
-    // }
-    // if (educ.value) {
-    //     search += '?educational_headquarter__name=' + educ.value;
-    // }
-    // if (detachment.value) {
-    //     search = '?detachment__name=' + detachment.value;
-    // }
     viewContributorsData(search, 'next');
     checkboxAll.value = false;
 };
 
 const prev = () => {
     let search = '';
-    if (district.value) {
-        search += '?district_headquarter__name=' + district.value;
-    }
-    if (reg.value) {
-        search += '?regional_headquarter__name=' + reg.value;
-    }
     if (local.value) {
         search += '?local_headquarter__name=' + local.value;
     }
@@ -223,7 +202,6 @@ const sortOptionss = ref([
 ]);
 
 const viewContributorsData = async (search, pagination, orderLimit) => {
-    // if (isLoading.value) return false;
     try {
         isLoading.value = true;
         let data = [];
@@ -256,7 +234,7 @@ const viewContributorsData = async (search, pagination, orderLimit) => {
         users.value = response;
         participants.value = response.results;
         selectedPeoples.value = [];
-        console.log(users.count, participants.length)
+    
 
         if (search.indexOf('districts') >= 0) {
             districts.value = viewParticipantsResponse.data.results;
