@@ -3,7 +3,7 @@
         <div class="CompItem_wrapper"> <router-link v-if="member.detachment"
                 :to="{ name: 'lso', params: { id: member.detachment.id } }" class="CompItem_item">
                 <div class="horizontal-img">
-                    <img :src="member.detachment?.banner" alt="logo" v-if="member.detachment?.banner" />
+                    <img :src="member.detachment?.emblem" alt="logo" v-if="member.detachment?.emblem" />
                     <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
                 </div>
                 <div class="containerHorizontal">
@@ -15,7 +15,7 @@
 
             <router-link :to="{ name: 'lso', params: { id: member.junior_detachment.id } }" class=" CompItem_item">
                 <div class="horizontal-img">
-                    <img :src="member.junior_detachment?.banner" alt="logo" v-if="member.junior_detachment?.banner" />
+                    <img :src="member.junior_detachment?.emblem" alt="logo" v-if="member.junior_detachment?.emblem" />
                     <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
                 </div>
                 <div class="containerHorizontal">
@@ -33,8 +33,8 @@
                 </p>
             </div>
             <div class="regItem_img">
-                <img v-if="member.junior_detachment?.regional_headquarter.banner"
-                    :src="member.junior_detachment?.regional_headquarter.banner" alt="logo">
+                <img v-if="member.junior_detachment?.regional_headquarter.emblem"
+                    :src="member.junior_detachment?.regional_headquarter.emblem" alt="logo">
                 <img v-else src="@app/assets/hq-emblem.png" alt="image">
             </div>
             <div class="mini" v-if="rating">
