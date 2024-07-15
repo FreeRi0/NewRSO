@@ -78,6 +78,10 @@ const updateToken = async () => {
     }
   } catch (e) {
     console.error('Error refreshing token:', e);
+    const userStore = useUserStore();
+    userStore.logOut();
+    localStorage.removeItem('jwt_token');
+    router.push({ name: 'Login' });
   }
 };
 
