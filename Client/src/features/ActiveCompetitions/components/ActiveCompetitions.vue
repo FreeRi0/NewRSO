@@ -416,9 +416,9 @@ const getAllReporting = async () => {
     loading.value = true;
     for (let index = 2; index <= 20; ++index) {
         if (index == 3 || index == 4) continue;
-        if(index == 5 && !isHeadDepartment.value) continue;
-        if (reportsCommissionerIds.value.includes(index) && !isCommissioner.value) continue;
-        if (!reportsCommissionerIds.value.includes(index) && !isCommander.value) continue;
+        if (index == 5 && !isHeadDepartment.value) continue;
+        if (index !== 5 && reportsCommissionerIds.value.includes(index) && !isCommissioner.value) continue;
+        if (index !== 5 && !reportsCommissionerIds.value.includes(index) && !isCommander.value) continue;
         try {
             const { data } = await HTTP.get(
                 `/competitions/1/reports/q${index}/`,
