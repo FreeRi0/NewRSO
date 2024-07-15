@@ -392,10 +392,29 @@ const onAction = async () => {
     }
 };
 
+const reportsCommissionerIds = ref([5,6,7,8,9,10,11,12,13,16,20]);
+
 const getAllReporting = async () => {
     loading.value = true;
     for (let index = 2; index <= 20; ++index) {
         if (index == 3 || index == 4) continue;
+        if(
+            (commanderIds.value.regionalheadquarter_commander || 
+            commanderIds.value.localheadquarter_commander || 
+            commanderIds.value.educationalheadquarter_commander || 
+            commanderIds.value.districtheadquarter_commander) && 
+            reportsCommissionerIds.value.includes(index)
+        ) {
+            continue;
+        } else if (
+            !(commanderIds.value.regionalheadquarter_commander || 
+            commanderIds.value.localheadquarter_commander || 
+            commanderIds.value.educationalheadquarter_commander || 
+            commanderIds.value.districtheadquarter_commander) && 
+            !reportsCommissionerIds.value.includes(index)
+        ) {
+            continue;
+        }
         try {
             const { data } = await HTTP.get(
                 `/competitions/1/reports/q${index}/`,
@@ -489,9 +508,9 @@ watch(selectedReportingList, (selectedReportingList) => {
 });
 
 onMounted(async () => {
-    await getAllReporting();
     await getAllCompetition();
     await getMeCommander();
+    await getAllReporting();
     if (commanderIds.value.regionalheadquarter_commander?.id == null)
         await getCompetitionsJunior();
     else await getCompetitions();
