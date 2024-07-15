@@ -12,21 +12,8 @@
                 <div class="containerHorizontal">
                         <div class="d-flex">
                             <p class="horizontallso-item__list-full">
-                                {{ event.user.last_name }}
+                                {{ event.user.last_name }} {{ event.user.first_name }} {{ event.user.patronymic_name }}
                             </p>
-                            <p class="horizontallso-item__list-full">
-                                {{ event.user.first_name }}
-                            </p>
-                            <p class="horizontallso-item__list-full">
-                                {{ event.user.patronymic_name }}
-                            </p>
-                        </div>
-                        <div class="horizontallso-item__list-date">
-                            <span style="
-                                    border-left: 2px solid #b6b6b6;
-                                    padding-right: 8px;
-                                "></span>
-                            <p>{{ event.user.date_of_birth }}</p>
                         </div>
                 </div>
             </router-link>
@@ -44,7 +31,7 @@
                 </div>
             </div>
 
-            <div class="horizontallso-item__wrapper">
+            <div class="horizontallso-item__wrapper" v-if="width>660">
                 <div class="containerHorizontal">
                     <div class="d-flex">
                         <p class="horizontallso-item__list-full">
@@ -62,7 +49,7 @@
                     <img :src="event.event.banner" alt="logo" v-if="event.event.banner" />
                     <img src="@app/assets/user-avatar.png" alt="photo" v-else />
                 </div>
-                <div class="containerHorizontal">
+                <div class="containerHorizontal" v-if="width>500">
                     <p class="horizontallso-item__list-full evname">
                         {{ event.event.name }}
                     </p>
@@ -81,7 +68,7 @@
     </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const props = defineProps({
     event: {
@@ -94,6 +81,8 @@ const props = defineProps({
     },
 });
 
+const width = ref();
+
 const checked = ref(true);
 
 const emit = defineEmits({
@@ -103,6 +92,16 @@ const emit = defineEmits({
 const updateCheckEvents = (e) => {
     emit('select', props.event, e.target.checked);
 };
+
+const onResize = () => {
+    width.value = window.innerWidth;
+    console.log(width.value);
+};
+
+onMounted(() => {
+    onResize();
+    window.addEventListener('resize', onResize);
+});
 </script>
 
 <style lang="scss" scoped>

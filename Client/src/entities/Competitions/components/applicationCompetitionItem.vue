@@ -15,22 +15,16 @@
             <div class="containerHorizontal">
                     <div class="d-flex">
                         <p class="horizontallso-item__list-full">
-                            {{ event.user.last_name }}
-                        </p>
-                        <p class="horizontallso-item__list-full">
-                            {{ event.user.first_name }}
-                        </p>
-                        <p class="horizontallso-item__list-full">
-                            {{ event.user.patronymic_name }}
-                        </p>
+                            {{ event.user.last_name }} {{ event.user.first_name }} {{ event.user.patronymic_name }}
+                        </p> 
                     </div>
-                    <div class="horizontallso-item__list-date">
+                    <!-- <div class="horizontallso-item__list-date">
                         <span style="
                                 border-left: 2px solid #b6b6b6;
                                 padding-right: 8px;
                             "></span>
                         <p>{{ event.user.date_of_birth }}</p>
-                    </div>
+                    </div> -->
             </div>
         </router-link>
         <!-- <router-link v-else class="horizontallso-item__wrapper" :to="{
@@ -51,7 +45,8 @@
             </div>
         </div>
         <!-- </router-link> -->
-        <div class="horizontallso-item__wrapper ">
+
+        <div class="horizontallso-item__wrapper " v-if="width > 768">
             <div class="containerHorizontal">
                 <div class="d-flex">
                     <p class="horizontallso-item__list-full">
@@ -69,18 +64,30 @@
                 <img :src="event.event.banner" alt="logo" v-if="event.event.banner" />
                 <img src="@app/assets/user-avatar.png" alt="photo" v-else />
             </div>
-            <div class="containerHorizontal">
+            <div class="containerHorizontal"  v-if="width > 500">
                 <p class="horizontallso-item__list-full evname">
                     {{ event.event.name }}
                 </p>
             </div>
         </router-link>
+
+        <div class="horizontallso-item__wrapper second_line" v-if="width < 768">
+            <div class="containerHorizontal">
+                <div class="d-flex">
+                    <p class="horizontallso-item__list-full">
+                        {{ event.event.application_type }}
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { useRoleStore } from '@layouts/store/role';
+
+const width = ref();
 
 const roleStore = useRoleStore();
 roleStore.getRoles();
@@ -99,10 +106,13 @@ const emit = defineEmits({
 });
 const checked = ref(false);
 
-
-
 const updateCheckEvents = (e) => {
     emit('select', props.event, e.target.checked);
+};
+
+const onResize = () => {
+    width.value = window.innerWidth;
+    console.log(width.value);
 };
 
 watch(
@@ -111,18 +121,27 @@ watch(
         checked.value = newSelected;
     },
 );
+
+onMounted(() => {
+    onResize();
+    window.addEventListener('resize', onResize);
+});
 </script>
 
 <style lang="scss" scoped>
+.second_line {
+    display: grid;
+    grid-template-columns: 164px;
+}
 .horizontallso {
-    // display: flex;
-    // align-items: flex-start;
-
     display: grid;
     width: 100%;
     grid-gap: 12px;
     grid-template-columns: 48px minmax(268px, 528px) 164px 1fr;
 
+    @media screen and (max-width: 768){
+        grid-template-columns: 48px minmax(268px, 528px) 1fr;
+    }
 
     &-img {
         align-items: center;
