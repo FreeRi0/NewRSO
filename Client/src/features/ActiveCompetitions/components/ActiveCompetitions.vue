@@ -109,6 +109,9 @@ const getMeCommander = async () => {
     try {
         const { data } = await HTTP.get('/rsousers/me_commander/');
         commanderIds.value = data;
+        for(const temp in commanderIds.value){
+            if (commanderIds.value[temp]?.id) isCommander.value = true;
+        }
     } catch (e) {
         console.log('error getMeCommander', e);
     }
@@ -121,7 +124,6 @@ const getMePosition = async () => {
         for(const temp in positions.value){
             if (positions.value[temp].position == "Начальник отдела реализации мероприятий по профессиональному обучению участников студенческих отрядов ЦШ") isHeadDepartment.value = true;
             if (positions.value[temp].position == "Комиссар") isCommissioner.value = true;
-            if (positions.value[temp].position == "Командир") isCommander.value = true;
         }
     } catch (e) {
         console.log('error getMeCommander', e);
