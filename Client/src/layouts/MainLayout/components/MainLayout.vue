@@ -68,10 +68,20 @@ const updateToken = async () => {
         const resp = await HTTP.post('/jwt/refresh/', {
             refresh: localStorage.getItem('refresh_token'),
         });
-        localStorage.setItem('jwt_token', resp.data.access);
-        localStorage.setItem('refresh_token', resp.data.refresh);
+        if (resp.status === 200) {
+            localStorage.setItem('jwt_token', resp.data.access);
+            localStorage.setItem('refresh_token', resp.data.refresh);
+        } else {
+            const userStore = useUserStore();
+            userStore.logOut();
+            localStorage.removeItem('jwt_token');
+            router.push({ name: 'Login' });
+        }
     } catch (e) {
-        console.error('Error refreshing token:', e);
+        const userStore = useUserStore();
+        userStore.logOut();
+        localStorage.removeItem('jwt_token');
+        router.push({ name: 'Login' });
     }
 };
 
