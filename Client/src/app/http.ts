@@ -1,5 +1,8 @@
 import axios from 'axios';
+import { useUserStore } from '@features/store';
 import router from "./router";
+
+
 export const HTTP = axios.create({
   baseURL: 'https://xn--j1ab.xn--d1amqcgedd.xn--p1ai/api/v1/',
   // baseURL: 'https://rso.sprint.1t.ru/api/v1/',
@@ -9,7 +12,6 @@ export const HTTP = axios.create({
     'Content-Type': 'application/json',
   },
 });
-
 
 
 HTTP.interceptors.request.use(
@@ -40,10 +42,7 @@ HTTP.interceptors.response.use(
         try {
           if (localStorage.getItem('jwt_token') !== null) {
             await updateToken();
-          }
-          else {
-            console.log('401');
-
+          } else {
             router.push({ name: 'Login' });
           }
         } catch (error) {
@@ -72,11 +71,14 @@ const updateToken = async () => {
     if (resp.status === 200) {
       localStorage.setItem('jwt_token', resp.data.access);
       localStorage.setItem('refresh_token', resp.data.refresh);
+    } else {
+      const userStore = useUserStore();
+      userStore.logOut();
+      localStorage.removeItem('jwt_token');
+      router.push({ name: 'Login' });
     }
-
   } catch (e) {
     console.error('Error refreshing token:', e);
-
   }
 };
 
