@@ -85,8 +85,12 @@ import ActiveCompetitionItemSelectReport from './ActiveCompetitionsItemSelectRep
 
 const competitionsList = ref([]);
 const commanderIds = ref();
+const positions = ref();
 const selectedCompetitionsList = ref([]);
 const allCompetition = ref([]);
+const isCommander = ref(false);
+const isHeadDepartment = ref(false);
+const isCommissioner = ref(false);
 
 const swal = inject('$swal');
 
@@ -105,6 +109,20 @@ const getMeCommander = async () => {
     try {
         const { data } = await HTTP.get('/rsousers/me_commander/');
         commanderIds.value = data;
+    } catch (e) {
+        console.log('error getMeCommander', e);
+    }
+};
+
+const getMePosition = async () => {
+    try {
+        const { data } = await HTTP.get(`/rsousers/me_positions/`)
+        positions.value = data;
+        for(const temp in positions.value){
+            if (positions.value[temp].position == "Начальник отдела реализации мероприятий по профессиональному обучению участников студенческих отрядов ЦШ") isHeadDepartment.value = true;
+            if (positions.value[temp].position == "Комиссар") isCommissioner.value = true;
+            if (positions.value[temp].position == "Командир") isCommander.value = true;
+        }
     } catch (e) {
         console.log('error getMeCommander', e);
     }
@@ -392,29 +410,15 @@ const onAction = async () => {
     }
 };
 
-const reportsCommissionerIds = ref([5,6,7,8,9,10,11,12,13,16,20]);
+const reportsCommissionerIds = ref([6, 7, 8, 9, 10, 11, 12, 13, 16, 20]);
 
 const getAllReporting = async () => {
     loading.value = true;
     for (let index = 2; index <= 20; ++index) {
         if (index == 3 || index == 4) continue;
-        if(
-            (commanderIds.value.regionalheadquarter_commander || 
-            commanderIds.value.localheadquarter_commander || 
-            commanderIds.value.educationalheadquarter_commander || 
-            commanderIds.value.districtheadquarter_commander) && 
-            reportsCommissionerIds.value.includes(index)
-        ) {
-            continue;
-        } else if (
-            !(commanderIds.value.regionalheadquarter_commander || 
-            commanderIds.value.localheadquarter_commander || 
-            commanderIds.value.educationalheadquarter_commander || 
-            commanderIds.value.districtheadquarter_commander) && 
-            !reportsCommissionerIds.value.includes(index)
-        ) {
-            continue;
-        }
+        if(index == 5 && !isHeadDepartment.value) continue;
+        if (reportsCommissionerIds.value.includes(index) && !isCommissioner.value) continue;
+        if (!reportsCommissionerIds.value.includes(index) && !isCommander.value) continue;
         try {
             const { data } = await HTTP.get(
                 `/competitions/1/reports/q${index}/`,
@@ -510,6 +514,7 @@ watch(selectedReportingList, (selectedReportingList) => {
 onMounted(async () => {
     await getAllCompetition();
     await getMeCommander();
+    await getMePosition();
     await getAllReporting();
     if (commanderIds.value.regionalheadquarter_commander?.id == null)
         await getCompetitionsJunior();
