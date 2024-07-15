@@ -25,7 +25,7 @@
                         roleStore.roles?.centralheadquarter_commander?.id ||
                         roleStore.roles?.districtheadquarter_commander?.id ||
                         roleStore.roles?.localheadquarter_commander?.id ||
-                        roleStore.roles?.detachment_commander?.id
+                        roleStore.roles?.educationalheadquarter_commander?.id
                     )">
                 <active-headquarters />
             </div>
