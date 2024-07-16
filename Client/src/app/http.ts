@@ -50,12 +50,12 @@ HTTP.interceptors.response.use(
         }
       }
 
-      if (err.response.status === 403 && err.response.data) {
+      /*if (err.response.status === 403 && err.response.data) {
 
         console.log('403 err', router);
         router.push({ name: 'mypage' });
         return Promise.reject(err.response.data);
-      }
+      }*/
     }
 
     return Promise.reject(err);
