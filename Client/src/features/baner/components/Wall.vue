@@ -1,15 +1,40 @@
 <template>
     <div class="user-metric">
-        <bannerPhoto  v-if="privateFunc(privacyPhoto)" :banner="user.media?.banner" @upload-wall="uploadWall" @update-wall="updateWall" @delete-wall="deleteWall"
-            :edited="false"></bannerPhoto>
+        <bannerPhoto v-if="(props.user.privacy?.privacy_photo ===
+            'Члены отряда' &&
+            props.user.detachment_id ===
+            userStore.currentUser.detachment_id) ||
+            (props.user.privacy?.privacy_photo ===
+                'Руководство' &&
+                ((roleStore.roles.detachment_commander &&
+                    roleStore.roles.detachment_commander
+                        ?.id ===
+                    props.user.detachment_id) ||
+                    (roleStore.roles
+                        .regionalheadquarter_commander &&
+                        roleStore.roles
+                            .regionalheadquarter_commander
+                            ?.id ===
+                        props.user
+                            .regional_headquarter_id) ||
+                    roleStore.roles
+                        .localheadquarter_commander ||
+                    roleStore.roles
+                        .educationalheadquarter_commander ||
+                    roleStore.roles
+                        .districtheadquarter_commander ||
+                    roleStore.roles
+                        .centralheadquarter_commander)) ||
+            props.user.privacy?.privacy_photo === 'Все' ||
+            props.user.privacy?.privacy_photo === 'all'" :banner="user.media?.banner"
+            @upload-wall="uploadWall" @update-wall="updateWall" @delete-wall="deleteWall" :edited="false"></bannerPhoto>
         <div class="user-metric__top" v-else>
             <div class="user-metric__top-img-wrapper">
                 <img src="@/app/assets/user-banner.jpg" alt="Баннер личной страницы(пусто)" />
             </div>
         </div>
 
-        <Avatar :avatar="user.media?.photo" @upload="uploadAva" @update="updateAva" @delete="deleteAva"
-            :edited="false">
+        <Avatar :avatar="user.media?.photo" @upload="uploadAva" @update="updateAva" @delete="deleteAva" :edited="false">
         </Avatar>
 
         <div class="user-metric__bottom">
@@ -43,17 +68,17 @@
                         ">
                             <p>
                                 {{
-                                position.userdetachmentposition?.position ??
-                                position.usereducationalheadquarterposition
-                                ?.position ??
-                                position.userregionalheadquarterposition
-                                ?.position ??
-                                position.userlocalheadquarterposition
-                                ?.position ??
-                                position.userdistrictheadquarterposition
-                                ?.position ??
-                                position.usercentralheadquarterposition
-                                ?.position
+                                    position.userdetachmentposition?.position ??
+                                    position.usereducationalheadquarterposition
+                                        ?.position ??
+                                    position.userregionalheadquarterposition
+                                        ?.position ??
+                                    position.userlocalheadquarterposition
+                                        ?.position ??
+                                    position.userdistrictheadquarterposition
+                                        ?.position ??
+                                    position.usercentralheadquarterposition
+                                        ?.position
                                 }}
                             </p>
                         </li>
@@ -72,10 +97,10 @@
                         ">
                             <p>
                                 {{
-                                position.userdetachmentposition?.headquarter
-                                ?.name ??
-                                position.usereducationalheadquarterposition
-                                ?.headquarter?.name
+                                    position.userdetachmentposition?.headquarter
+                                        ?.name ??
+                                    position.usereducationalheadquarterposition
+                                        ?.headquarter?.name
                                 }}
                             </p>
                         </li>
@@ -96,8 +121,8 @@
                         ">
                             <p>
                                 {{
-                                user.education?.study_institution
-                                ?.short_name
+                                    user.education?.study_institution
+                                        ?.short_name
                                 }}
                             </p>
                         </li>
@@ -317,24 +342,8 @@ const deleteWall = (imageWall) => {
     // console.log('delete');
 };
 
-const privateFunc = (item) => {
-    (props.user.privacy?.item === 'Члены отряда' &&
-                props.user.detachment_id ===
-                currentUser.currentUser.value.detachment_id) ||
-            (props.user.privacy?.item === 'Руководство' &&
-                ((roleStore.roles.detachment_commander &&
-                    roleStore.roles.detachment_commander?.id ===
-                    props.user.detachment_id) ||
-                    (roleStore.roles.regionalheadquarter_commander &&
-                        roleStore.roles.regionalheadquarter_commander
-                            ?.id === props.user.regional_headquarter_id) ||
-                    roleStore.roles.localheadquarter_commander ||
-                    roleStore.roles.educationalheadquarter_commander ||
-                    roleStore.roles.districtheadquarter_commander ||
-                    roleStore.roles.centralheadquarter_commander)) ||
-            props.user.privacy?.item === 'Все' ||
-            props.user.privacy?.item === 'all'
-}
+
+
 
 const regionalsStore = useRegionalsStore();
 const regionals = storeToRefs(regionalsStore);
@@ -361,6 +370,39 @@ const getUserData = async () => {
         console.log('an error occured ' + error);
     }
 };
+
+const privateFunc = (item) => {
+    (props.user.privacy?.item ===
+        'Члены отряда' &&
+        props.user.detachment_id ===
+        userStore.currentUser.detachment_id) ||
+        (props.user.privacy?.item ===
+            'Руководство' &&
+            ((roleStore.roles.detachment_commander &&
+                roleStore.roles.detachment_commander
+                    ?.id ===
+                props.user.detachment_id) ||
+                (roleStore.roles
+                    .regionalheadquarter_commander &&
+                    roleStore.roles
+                        .regionalheadquarter_commander
+                        ?.id ===
+                    props.user
+                        .regional_headquarter_id) ||
+                roleStore.roles
+                    .localheadquarter_commander ||
+                roleStore.roles
+                    .educationalheadquarter_commander ||
+                roleStore.roles
+                    .districtheadquarter_commander ||
+                roleStore.roles
+                    .centralheadquarter_commander)) ||
+        props.user.privacy?.item === 'Все' ||
+        props.user.privacy?.item === 'all'
+
+    console.log(item)
+}
+
 
 watch(
     () => props.user,

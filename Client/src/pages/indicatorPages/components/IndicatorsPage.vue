@@ -1022,12 +1022,10 @@ const getApplicationData = async (_id, applicationId) => {
         );
         applicationData.value = data;
         if (_id == 5) {
-            for (let part in applicationData.value.participants_data) {
-                applicationData.value.participants_data[part].document_name =
-                    decodeURI(
-                        applicationData.value.participants_data[part].document,
-                    );
+            for(const temp of applicationData.value.participants_data){
+                temp.document_name = decodeURI(temp.document,);
             }
+            applicationData.value.participants_data = applicationData.value.participants_data.filter(item => item.is_verified !== true);
         }
         if(idHasCert.includes(_id)){
             applicationData.value.certificate_scans = decodeURI(applicationData.value.certificate_scans);
