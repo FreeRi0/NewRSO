@@ -11,6 +11,9 @@
                     <p v-if="
                         headquarter.slogan && headquarter.slogan != 'null'
                     ">
+                    <p v-if="
+                        headquarter.slogan && headquarter.slogan != 'null'
+                    ">
                         {{ headquarter.slogan }}
                     </p>
                 </div>
@@ -24,7 +27,7 @@
                             <img src="@/app/assets/icon/calendar.svg" alt="calendar" />
                             <time datetime="2022-09-10">{{
                                 headquarter.founding_date
-                                }}</time>
+                            }}</time>
                         </li>
                     </ul>
                 </div>
@@ -74,8 +77,8 @@
                             userStore.currentUser.district_headquarter_id ===
                             null
                             " @close="closeModalW()" @add="
-                            AddApplication('educationals', props.headquarter.id)
-                            ">
+                                AddApplication('educationals', props.headquarter.id)
+                                ">
                     </AddModal>
 
                     <router-link v-if="
@@ -90,9 +93,9 @@
                                 .centralheadquarter_commander ||
                             IsTrusted)
                     " class="hq-data__link" :to="{
-                            name: 'EditHQ',
-                            params: { id: headquarter.id },
-                        }">Редактировать штаб</router-link>
+                        name: 'EditHQ',
+                        params: { id: headquarter.id },
+                    }">Редактировать штаб</router-link>
                     <Button v-else-if="
                         !IsMember &&
                         !UserApplication &&
@@ -181,8 +184,8 @@
                         </div>
                     </div>
                     <AddModal v-show="showModal === true" :is-commander="(roleStore.roles.detachment_commander ||
-                            roleStore.roles
-                                .educationalheadquarter_commander) !== null
+                        roleStore.roles
+                            .educationalheadquarter_commander) !== null
                         " :is-new="userStore.currentUser.educational_headquarter_id ===
                             null &&
                             userStore.currentUser.detachment_id === null &&
@@ -193,8 +196,8 @@
                             userStore.currentUser.district_headquarter_id ===
                             null
                             " @close="closeModalW()" @add="
-                            AddApplication('locals', props.localHeadquarter.id)
-                            ">
+                                AddApplication('locals', props.localHeadquarter.id)
+                                ">
                     </AddModal>
                     <router-link v-if="
                         userId &&
@@ -206,9 +209,9 @@
                                 .centralheadquarter_commander ||
                             IsTrusted)
                     " class="hq-data__link" :to="{
-                            name: 'FormLocal',
-                            params: { id: localHeadquarter.id },
-                        }">Редактировать штаб</router-link>
+                        name: 'FormLocal',
+                        params: { id: localHeadquarter.id },
+                    }">Редактировать штаб</router-link>
                     <Button v-else-if="
                         !IsMember &&
                         !UserApplication &&
@@ -295,10 +298,10 @@
                         </div>
                     </div>
                     <AddModal v-show="showModal === true" @close="closeModalW()" :is-commander="(roleStore.roles.detachment_commander ||
-                            roleStore.roles
-                                .educationalheadquarter_commander ||
-                            roleStore.roles.regionalHeadquarter_commander ||
-                            roleStore.roles.localheadquarter_commander) !==
+                        roleStore.roles
+                            .educationalheadquarter_commander ||
+                        roleStore.roles.regionalHeadquarter_commander ||
+                        roleStore.roles.localheadquarter_commander) !==
                         null
                         " :is-new="userStore.currentUser.educational_headquarter_id ===
                             null &&
@@ -310,11 +313,11 @@
                             userStore.currentUser.district_headquarter_id ===
                             null
                             " @add="
-                            AddApplication(
-                                'districts',
-                                props.districtHeadquarter.id,
-                            )
-                            ">
+                                AddApplication(
+                                    'districts',
+                                    props.districtHeadquarter.id,
+                                )
+                                ">
                     </AddModal>
                     <router-link v-if="
                         userId &&
@@ -323,9 +326,9 @@
                                 .centralheadquarter_commander ||
                             IsTrusted)
                     " class="hq-data__link" :to="{
-                            name: 'FormDH',
-                            params: { id: districtHeadquarter.id },
-                        }">Редактировать штаб</router-link>
+                        name: 'FormDH',
+                        params: { id: districtHeadquarter.id },
+                    }">Редактировать штаб</router-link>
                     <Button v-else-if="
                         !IsMember &&
                         !UserApplication &&
@@ -413,9 +416,9 @@
                         </div>
                     </div>
                     <AddModal v-show="showModal === true" :is-commander="(roleStore.roles.detachment_commander ||
-                            roleStore.roles
-                                .educationalheadquarter_commander ||
-                            roleStore.roles.localheadquarter_commander) !==
+                        roleStore.roles
+                            .educationalheadquarter_commander ||
+                        roleStore.roles.localheadquarter_commander) !==
                         null
                         " :is-new="userStore.currentUser.educational_headquarter_id ===
                             null &&
@@ -427,11 +430,11 @@
                             userStore.currentUser.district_headquarter_id ===
                             null
                             " @close="closeModalW()" @add="
-                            AddApplication(
-                                'regionals',
-                                props.regionalHeadquarter.id,
-                            )
-                            ">
+                                AddApplication(
+                                    'regionals',
+                                    props.regionalHeadquarter.id,
+                                )
+                                ">
                     </AddModal>
                     <router-link v-if="
                         userId &&
@@ -443,9 +446,9 @@
                                 .centralheadquarter_commander ||
                             IsTrusted)
                     " class="hq-data__link" :to="{
-                            name: 'EditingOfRS',
-                            params: { id: regionalHeadquarter.id },
-                        }">Редактировать штаб</router-link>
+                        name: 'EditingOfRS',
+                        params: { id: regionalHeadquarter.id },
+                    }">Редактировать штаб</router-link>
                     <Button v-else-if="
                         !IsMember &&
                         !UserApplication &&
@@ -498,7 +501,7 @@
                         <li class="Squad-HQ__date-central">
                             <time datetime="2022-09-10">{{
                                 centralHeadquarter.rso_founding_congress_date
-                            }}
+                                }}
                                 — дата первого Учредительного Съезда РСО</time>
                         </li>
                         <li class="hq-data__participant-counter">
@@ -543,12 +546,12 @@
                         </div>
                     </div>
                     <AddModal v-show="showModal === true" @close="closeModalW()" :is-commander="(roleStore.roles.detachment_commander ||
-                            roleStore.roles
-                                .educationalheadquarter_commander ||
-                            roleStore.roles.regionalHeadquarter_commander ||
-                            roleStore.roles.localheadquarter_commander ||
-                            roleStore.roles
-                                .districtheadquarter_commander) !== null
+                        roleStore.roles
+                            .educationalheadquarter_commander ||
+                        roleStore.roles.regionalHeadquarter_commander ||
+                        roleStore.roles.localheadquarter_commander ||
+                        roleStore.roles
+                            .districtheadquarter_commander) !== null
                         " :is-new="userStore.currentUser.educational_headquarter_id ===
                             null &&
                             userStore.currentUser.detachment_id === null &&
@@ -559,7 +562,10 @@
                             userStore.currentUser.district_headquarter_id ===
                             null
                             " @add="
-                            AddApplication('centrals', props.centralHeadquarter.id)
+                            AddApplication(
+                                'centrals',
+                                props.centralHeadquarter.id,
+                            )
                             ">
                     </AddModal>
                     <router-link v-if="
@@ -567,8 +573,8 @@
                         (userId === centralHeadquarter?.commander?.id ||
                             IsTrusted)
                     " class="hq-data__link" :to="{
-                            name: 'FormCentral',
-                        }">Редактировать штаб</router-link>
+                        name: 'FormCentral',
+                    }">Редактировать штаб</router-link>
                     <Button v-else-if="
                         roleStore.myPositions
                             .usercentralheadquarterposition === null &&
@@ -713,7 +719,7 @@ const UserApplication = computed(() => {
 });
 
 const IsTrusted = computed(() => {
-    if (props.member.length > 0) {
+    if (props.member && props.member.length > 0) {
         return props.member.find(
             (item) => item.user.id === userId.value && item.is_trusted === true,
         );
@@ -723,7 +729,7 @@ const IsTrusted = computed(() => {
 });
 
 const IsMember = computed(() => {
-    if (props.member.length > 0) {
+    if (props.member && props.member.length > 0) {
         return props.member.find((item) => item.user.id === userId.value);
     } else {
         return false;
