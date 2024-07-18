@@ -8,11 +8,9 @@
                     <h4>{{ headquarter.name }}</h4>
                 </div>
                 <div class="slogan">
-                    <p
-                        v-if="
-                            headquarter.slogan && headquarter.slogan != 'null'
-                        "
-                    >
+                    <p v-if="
+                        headquarter.slogan && headquarter.slogan != 'null'
+                    ">
                         {{ headquarter.slogan }}
                     </p>
                 </div>
@@ -23,62 +21,39 @@
                         </li>
                         <li class="Squad-HQ__date">
                             <p>Дата создания штаба</p>
-                            <img
-                                src="@/app/assets/icon/calendar.svg"
-                                alt="calendar"
-                            />
+                            <img src="@/app/assets/icon/calendar.svg" alt="calendar" />
                             <time datetime="2022-09-10">{{
                                 headquarter.founding_date
-                            }}</time>
+                                }}</time>
                         </li>
                     </ul>
                 </div>
                 <div class="hq-data__contacts-wrapper">
                     <div class="hq-data__contacts">
                         <div class="hq-data__participant-counter-HQ">
-                            <span
-                                >{{ headquarter.participants_count }}
-                                {{ ending }}</span
-                            >
+                            <span>{{ headquarter.participants_count }}
+                                {{ ending }}</span>
                         </div>
                         <div class="hq-data__social-network">
-                            <div
-                                class="hq-data__link-vk"
-                                v-if="
-                                    headquarter.social_vk &&
-                                    headquarter.social_vk != 'null'
-                                "
-                            >
-                                <a
-                                    :href="headquarter.social_vk"
-                                    target="_blank"
-                                >
+                            <div class="hq-data__link-vk" v-if="
+                                headquarter.social_vk &&
+                                headquarter.social_vk != 'null'
+                            ">
+                                <a :href="headquarter.social_vk" target="_blank">
                                     <img src="@/app/assets/icon/vk-blue.svg" />
                                 </a>
                             </div>
-                            <div
-                                class="hq-data__link-telegram"
-                                v-if="
-                                    headquarter.social_tg &&
-                                    headquarter.social_tg != 'null'
-                                "
-                            >
-                                <a
-                                    :href="headquarter.social_tg"
-                                    target="_blank"
-                                >
-                                    <img
-                                        src="@/app/assets/icon/telegram-blue.svg"
-                                        alt=""
-                                    />
+                            <div class="hq-data__link-telegram" v-if="
+                                headquarter.social_tg &&
+                                headquarter.social_tg != 'null'
+                            ">
+                                <a :href="headquarter.social_tg" target="_blank">
+                                    <img src="@/app/assets/icon/telegram-blue.svg" alt="" />
                                 </a>
                             </div>
                             <div class="hq-data__link-share-link">
                                 <a @click="copyL">
-                                    <img
-                                        src="@/app/assets/icon/to-share-link.svg"
-                                        alt=""
-                                    />
+                                    <img src="@/app/assets/icon/to-share-link.svg" alt="" />
                                 </a>
                                 <div class="copy-message" hidden>
                                     Ссылка скопирована
@@ -88,75 +63,53 @@
                         </div>
                     </div>
                     <div class="overlay" v-if="showModal"></div>
-                    <AddModal
-                        v-show="showModal === true"
-                        :is-commander="
-                            roleStore.roles.detachment_commander !== null
-                        "
-                        :is-new="
-                            userStore.currentUser.educational_headquarter_id ===
-                                null &&
+                    <AddModal v-show="showModal === true" :is-commander="roleStore.roles.detachment_commander !== null
+                        " :is-new="userStore.currentUser.educational_headquarter_id ===
+                            null &&
                             userStore.currentUser.detachment_id === null &&
                             userStore.currentUser.local_headquarter_id ===
-                                null &&
+                            null &&
                             userStore.currentUser.regional_headquarter_id ===
-                                null &&
+                            null &&
                             userStore.currentUser.district_headquarter_id ===
-                                null
-                        "
-                        @close="closeModalW()"
-                        @add="
+                            null
+                            " @close="closeModalW()" @add="
                             AddApplication('educationals', props.headquarter.id)
-                        "
-                    >
+                            ">
                     </AddModal>
 
-                    <router-link
-                        v-if="
-                            userId &&
-                            (userId === headquarter?.commander?.id ||
-                                roles.roles.value.regionalheadquarter_commander
-                                    ?.id ===
-                                    headquarter?.regional_headquarter ||
-                                roles.roles.value.localheadquarter_commander
-                                    ?.id === headquarter?.local_headquarter ||
-                                roles.roles.value
-                                    .centralheadquarter_commander ||
-                                IsTrusted)
-                        "
-                        class="hq-data__link"
-                        :to="{
+                    <router-link v-if="
+                        userId &&
+                        (userId === headquarter?.commander?.id ||
+                            roles.roles.value.regionalheadquarter_commander
+                                ?.id ===
+                            headquarter?.regional_headquarter ||
+                            roles.roles.value.localheadquarter_commander
+                                ?.id === headquarter?.local_headquarter ||
+                            roles.roles.value
+                                .centralheadquarter_commander ||
+                            IsTrusted)
+                    " class="hq-data__link" :to="{
                             name: 'EditHQ',
                             params: { id: headquarter.id },
-                        }"
-                        >Редактировать штаб</router-link
-                    >
-                    <Button
-                        v-else-if="
-                            !IsMember &&
-                            !UserApplication &&
-                            userStore.currentUser.educational_headquarter_id ===
-                                null &&
-                            isRegion
-                        "
-                        @click="showModalW()"
-                        label="Вступить в штаб"
-                        class="AddApplication"
-                    ></Button>
+                        }">Редактировать штаб</router-link>
+                    <Button v-else-if="
+                        !IsMember &&
+                        !UserApplication &&
+                        userStore.currentUser.educational_headquarter_id ===
+                        null &&
+                        isRegion
+                    " @click="showModalW()" label="Вступить в штаб" class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
                         <div class="AddApplication mr-2">
                             Заявка на рассмотрении
                         </div>
-                        <Button
-                            @click="
-                                DeleteApplication(
-                                    'educationals',
-                                    props.headquarter.id,
-                                )
-                            "
-                            label="Удалить заявку"
-                            class="AddApplication"
-                        ></Button>
+                        <Button @click="
+                            DeleteApplication(
+                                'educationals',
+                                props.headquarter.id,
+                            )
+                            " label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
                     <div v-else-if="IsMember" class="AddApplication">
@@ -175,77 +128,51 @@
                     <h4>{{ localHeadquarter.name }}</h4>
                 </div>
                 <div class="slogan">
-                    <p
-                        v-if="
-                            localHeadquarter.slogan &&
-                            localHeadquarter.slogan != 'null'
-                        "
-                    >
+                    <p v-if="
+                        localHeadquarter.slogan &&
+                        localHeadquarter.slogan != 'null'
+                    ">
                         {{ localHeadquarter.slogan }}
                     </p>
                 </div>
                 <div class="hq__list-wrapper">
                     <ul class="Squad-HQ__list-Local">
                         <li class="Squad-HQ__date-local">
-                            <time datetime="2022-09-10"
-                                >{{ localHeadquarter.founding_date }} — дата
-                                проведения первого Общего собрания МШ</time
-                            >
+                            <time datetime="2022-09-10">{{ localHeadquarter.founding_date }} — дата
+                                проведения первого Общего собрания МШ</time>
                         </li>
                         <li class="hq-data__participant-counter">
-                            <span
-                                >{{ localHeadquarter.participants_count }}
-                                {{ ending }}</span
-                            >
+                            <span>{{ localHeadquarter.participants_count }}
+                                {{ ending }}</span>
                         </li>
                         <li class="hq-data__participant-counter-">
-                            <span
-                                >{{ localHeadquarter.members_count }}
-                                {{ endingMember }}</span
-                            >
+                            <span>{{ localHeadquarter.members_count }}
+                                {{ endingMember }}</span>
                         </li>
                     </ul>
                 </div>
                 <div class="hq-data__contacts-wrapper">
                     <div class="hq-data__contacts">
                         <div class="hq-data__social-network-Reg">
-                            <div
-                                class="hq-data__link-vk"
-                                v-if="
-                                    localHeadquarter.social_vk &&
-                                    localHeadquarter.social_vk != 'null'
-                                "
-                            >
-                                <a
-                                    :href="localHeadquarter.social_vk"
-                                    target="_blank"
-                                >
+                            <div class="hq-data__link-vk" v-if="
+                                localHeadquarter.social_vk &&
+                                localHeadquarter.social_vk != 'null'
+                            ">
+                                <a :href="localHeadquarter.social_vk" target="_blank">
                                     <img src="@/app/assets/icon/vk-blue.svg" />
                                 </a>
                             </div>
-                            <div
-                                class="hq-data__link-telegram"
-                                v-if="
-                                    localHeadquarter.social_tg &&
-                                    localHeadquarter.social_tg != 'null'
-                                "
-                            >
-                                <a
-                                    :href="localHeadquarter.social_tg"
-                                    target="_blank"
-                                >
-                                    <img
-                                        src="@/app/assets/icon/telegram-blue.svg"
-                                        alt=""
-                                    />
+                            <div class="hq-data__link-telegram" v-if="
+                                localHeadquarter.social_tg &&
+                                localHeadquarter.social_tg != 'null'
+                            ">
+                                <a :href="localHeadquarter.social_tg" target="_blank">
+                                    <img src="@/app/assets/icon/telegram-blue.svg" alt="" />
                                 </a>
                             </div>
                             <div class="hq-data__link-share-link">
                                 <a @click="copyL">
-                                    <img
-                                        src="@/app/assets/icon/to-share-link.svg"
-                                        alt=""
-                                    />
+                                    <img src="@/app/assets/icon/to-share-link.svg" alt="" />
                                 </a>
                                 <div class="copy-message" hidden>
                                     Ссылка скопирована
@@ -253,72 +180,50 @@
                             </div>
                         </div>
                     </div>
-                    <AddModal
-                        v-show="showModal === true"
-                        :is-commander="
-                            (roleStore.roles.detachment_commander ||
-                                roleStore.roles
-                                    .educationalheadquarter_commander) !== null
-                        "
-                        :is-new="
-                            userStore.currentUser.educational_headquarter_id ===
-                                null &&
+                    <AddModal v-show="showModal === true" :is-commander="(roleStore.roles.detachment_commander ||
+                            roleStore.roles
+                                .educationalheadquarter_commander) !== null
+                        " :is-new="userStore.currentUser.educational_headquarter_id ===
+                            null &&
                             userStore.currentUser.detachment_id === null &&
                             userStore.currentUser.local_headquarter_id ===
-                                null &&
+                            null &&
                             userStore.currentUser.regional_headquarter_id ===
-                                null &&
+                            null &&
                             userStore.currentUser.district_headquarter_id ===
-                                null
-                        "
-                        @close="closeModalW()"
-                        @add="
+                            null
+                            " @close="closeModalW()" @add="
                             AddApplication('locals', props.localHeadquarter.id)
-                        "
-                    >
+                            ">
                     </AddModal>
-                    <router-link
-                        v-if="
-                            userId &&
-                            (userId === localHeadquarter?.commander?.id ||
-                                roles.roles.value.regionalheadquarter_commander
-                                    ?.id ===
-                                    localHeadquarter.regional_headquarter ||
-                                roles.roles.value
-                                    .centralheadquarter_commander ||
-                                IsTrusted)
-                        "
-                        class="hq-data__link"
-                        :to="{
+                    <router-link v-if="
+                        userId &&
+                        (userId === localHeadquarter?.commander?.id ||
+                            roles.roles.value.regionalheadquarter_commander
+                                ?.id ===
+                            localHeadquarter.regional_headquarter ||
+                            roles.roles.value
+                                .centralheadquarter_commander ||
+                            IsTrusted)
+                    " class="hq-data__link" :to="{
                             name: 'FormLocal',
                             params: { id: localHeadquarter.id },
-                        }"
-                        >Редактировать штаб</router-link
-                    >
-                    <Button
-                        v-else-if="
-                            !IsMember &&
-                            !UserApplication &&
-                            userStore.currentUser.local_headquarter_id === null
-                        "
-                        @click="showModalW()"
-                        label="Вступить в штаб"
-                        class="AddApplication"
-                    ></Button>
+                        }">Редактировать штаб</router-link>
+                    <Button v-else-if="
+                        !IsMember &&
+                        !UserApplication &&
+                        userStore.currentUser.local_headquarter_id === null
+                    " @click="showModalW()" label="Вступить в штаб" class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
                         <div class="AddApplication mr-2">
                             Заявка на рассмотрении
                         </div>
-                        <Button
-                            @click="
-                                DeleteApplication(
-                                    'locals',
-                                    props.localHeadquarter.id,
-                                )
-                            "
-                            label="Удалить заявку"
-                            class="AddApplication"
-                        ></Button>
+                        <Button @click="
+                            DeleteApplication(
+                                'locals',
+                                props.localHeadquarter.id,
+                            )
+                            " label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
                     <div v-else-if="IsMember" class="AddApplication">
@@ -337,77 +242,51 @@
                     <h4>{{ districtHeadquarter.name }}</h4>
                 </div>
                 <div class="slogan">
-                    <p
-                        v-if="
-                            districtHeadquarter.slogan &&
-                            districtHeadquarter.slogan != 'null'
-                        "
-                    >
+                    <p v-if="
+                        districtHeadquarter.slogan &&
+                        districtHeadquarter.slogan != 'null'
+                    ">
                         {{ districtHeadquarter.slogan }}
                     </p>
                 </div>
                 <div class="hq__list-wrapper">
                     <ul class="Squad-HQ__list-Reg">
                         <li class="Squad-HQ__date-Reg">
-                            <time datetime="2022-09-10"
-                                >{{ districtHeadquarter.founding_date }} — дата
-                                начала функционирования ОШ</time
-                            >
+                            <time datetime="2022-09-10">{{ districtHeadquarter.founding_date }} — дата
+                                начала функционирования ОШ</time>
                         </li>
                         <li class="hq-data__participant-counter">
-                            <span
-                                >{{ districtHeadquarter.participants_count }}
-                                {{ ending }}</span
-                            >
+                            <span>{{ districtHeadquarter.participants_count }}
+                                {{ ending }}</span>
                         </li>
                         <li class="hq-data__participant-counter-">
-                            <span
-                                >{{ districtHeadquarter.members_count }}
-                                {{ endingMember }}</span
-                            >
+                            <span>{{ districtHeadquarter.members_count }}
+                                {{ endingMember }}</span>
                         </li>
                     </ul>
                 </div>
                 <div class="hq-data__contacts-wrapper">
                     <div class="hq-data__contacts">
                         <div class="hq-data__social-network-Reg">
-                            <div
-                                class="hq-data__link-vk"
-                                v-if="
-                                    districtHeadquarter.social_vk &&
-                                    districtHeadquarter.social_vk != 'null'
-                                "
-                            >
-                                <a
-                                    :href="districtHeadquarter.social_vk"
-                                    target="_blank"
-                                >
+                            <div class="hq-data__link-vk" v-if="
+                                districtHeadquarter.social_vk &&
+                                districtHeadquarter.social_vk != 'null'
+                            ">
+                                <a :href="districtHeadquarter.social_vk" target="_blank">
                                     <img src="@/app/assets/icon/vk-blue.svg" />
                                 </a>
                             </div>
-                            <div
-                                class="hq-data__link-telegram"
-                                v-if="
-                                    districtHeadquarter.social_tg &&
-                                    districtHeadquarter.social_tg != 'null'
-                                "
-                            >
-                                <a
-                                    :href="districtHeadquarter.social_tg"
-                                    target="_blank"
-                                >
-                                    <img
-                                        src="@/app/assets/icon/telegram-blue.svg"
-                                        alt=""
-                                    />
+                            <div class="hq-data__link-telegram" v-if="
+                                districtHeadquarter.social_tg &&
+                                districtHeadquarter.social_tg != 'null'
+                            ">
+                                <a :href="districtHeadquarter.social_tg" target="_blank">
+                                    <img src="@/app/assets/icon/telegram-blue.svg" alt="" />
                                 </a>
                             </div>
                             <div class="hq-data__link-share-link">
                                 <a @click="copyL">
-                                    <img
-                                        src="@/app/assets/icon/to-share-link.svg"
-                                        alt=""
-                                    />
+                                    <img src="@/app/assets/icon/to-share-link.svg" alt="" />
                                 </a>
                                 <div class="copy-message" hidden>
                                     Ссылка скопирована
@@ -415,76 +294,54 @@
                             </div>
                         </div>
                     </div>
-                    <AddModal
-                        v-show="showModal === true"
-                        @close="closeModalW()"
-                        :is-commander="
-                            (roleStore.roles.detachment_commander ||
-                                roleStore.roles
-                                    .educationalheadquarter_commander ||
-                                roleStore.roles.regionalHeadquarter_commander ||
-                                roleStore.roles.localheadquarter_commander) !==
-                            null
-                        "
-                        :is-new="
-                            userStore.currentUser.educational_headquarter_id ===
-                                null &&
+                    <AddModal v-show="showModal === true" @close="closeModalW()" :is-commander="(roleStore.roles.detachment_commander ||
+                            roleStore.roles
+                                .educationalheadquarter_commander ||
+                            roleStore.roles.regionalHeadquarter_commander ||
+                            roleStore.roles.localheadquarter_commander) !==
+                        null
+                        " :is-new="userStore.currentUser.educational_headquarter_id ===
+                            null &&
                             userStore.currentUser.detachment_id === null &&
                             userStore.currentUser.local_headquarter_id ===
-                                null &&
+                            null &&
                             userStore.currentUser.regional_headquarter_id ===
-                                null &&
+                            null &&
                             userStore.currentUser.district_headquarter_id ===
-                                null
-                        "
-                        @add="
+                            null
+                            " @add="
                             AddApplication(
                                 'districts',
                                 props.districtHeadquarter.id,
                             )
-                        "
-                    >
+                            ">
                     </AddModal>
-                    <router-link
-                        v-if="
-                            userId &&
-                            (userId === districtHeadquarter?.commander?.id ||
-                                roles.roles.value
-                                    .centralheadquarter_commander ||
-                                IsTrusted)
-                        "
-                        class="hq-data__link"
-                        :to="{
+                    <router-link v-if="
+                        userId &&
+                        (userId === districtHeadquarter?.commander?.id ||
+                            roles.roles.value
+                                .centralheadquarter_commander ||
+                            IsTrusted)
+                    " class="hq-data__link" :to="{
                             name: 'FormDH',
                             params: { id: districtHeadquarter.id },
-                        }"
-                        >Редактировать штаб</router-link
-                    >
-                    <Button
-                        v-else-if="
-                            !IsMember &&
-                            !UserApplication &&
-                            userStore.currentUser.district_headquarter_id ===
-                                null
-                        "
-                        @click="showModalW()"
-                        label="Вступить в штаб"
-                        class="AddApplication"
-                    ></Button>
+                        }">Редактировать штаб</router-link>
+                    <Button v-else-if="
+                        !IsMember &&
+                        !UserApplication &&
+                        userStore.currentUser.district_headquarter_id ===
+                        null
+                    " @click="showModalW()" label="Вступить в штаб" class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
                         <div class="AddApplication mr-2">
                             Заявка на рассмотрении
                         </div>
-                        <Button
-                            @click="
-                                DeleteApplication(
-                                    'districts',
-                                    props.districtHeadquarter.id,
-                                )
-                            "
-                            label="Удалить заявку"
-                            class="AddApplication"
-                        ></Button>
+                        <Button @click="
+                            DeleteApplication(
+                                'districts',
+                                props.districtHeadquarter.id,
+                            )
+                            " label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
                     <div v-else-if="IsMember" class="AddApplication">
@@ -503,77 +360,51 @@
                     <h4>{{ regionalHeadquarter.name }}</h4>
                 </div>
                 <div class="slogan">
-                    <p
-                        v-if="
-                            regionalHeadquarter.slogan &&
-                            regionalHeadquarter.slogan != 'null'
-                        "
-                    >
+                    <p v-if="
+                        regionalHeadquarter.slogan &&
+                        regionalHeadquarter.slogan != 'null'
+                    ">
                         {{ regionalHeadquarter.slogan }}
                     </p>
                 </div>
                 <div class="hq__list-wrapper">
                     <ul class="Squad-HQ__list-Reg">
                         <li class="Squad-HQ__date-Reg">
-                            <time datetime="2022-09-10"
-                                >{{ regionalHeadquarter.conference_date }} —
-                                дата учредительной конференции РШ</time
-                            >
+                            <time datetime="2022-09-10">{{ regionalHeadquarter.conference_date }} —
+                                дата учредительной конференции РШ</time>
                         </li>
                         <li class="hq-data__participant-counter">
-                            <span
-                                >{{ regionalHeadquarter.participants_count }}
-                                {{ ending }}</span
-                            >
+                            <span>{{ regionalHeadquarter.participants_count }}
+                                {{ ending }}</span>
                         </li>
                         <li class="hq-data__participant-counter-">
-                            <span
-                                >{{ regionalHeadquarter.members_count }}
-                                {{ endingMember }}</span
-                            >
+                            <span>{{ regionalHeadquarter.members_count }}
+                                {{ endingMember }}</span>
                         </li>
                     </ul>
                 </div>
                 <div class="hq-data__contacts-wrapper">
                     <div class="hq-data__contacts">
                         <div class="hq-data__social-network-Reg">
-                            <div
-                                class="hq-data__link-vk"
-                                v-if="
-                                    regionalHeadquarter.social_vk &&
-                                    regionalHeadquarter.social_vk != 'null'
-                                "
-                            >
-                                <a
-                                    :href="regionalHeadquarter.social_vk"
-                                    target="_blank"
-                                >
+                            <div class="hq-data__link-vk" v-if="
+                                regionalHeadquarter.social_vk &&
+                                regionalHeadquarter.social_vk != 'null'
+                            ">
+                                <a :href="regionalHeadquarter.social_vk" target="_blank">
                                     <img src="@/app/assets/icon/vk-blue.svg" />
                                 </a>
                             </div>
-                            <div
-                                class="hq-data__link-telegram"
-                                v-if="
-                                    regionalHeadquarter.social_tg &&
-                                    regionalHeadquarter.social_tg != 'null'
-                                "
-                            >
-                                <a
-                                    :href="regionalHeadquarter.social_tg"
-                                    target="_blank"
-                                >
-                                    <img
-                                        src="@/app/assets/icon/telegram-blue.svg"
-                                        alt=""
-                                    />
+                            <div class="hq-data__link-telegram" v-if="
+                                regionalHeadquarter.social_tg &&
+                                regionalHeadquarter.social_tg != 'null'
+                            ">
+                                <a :href="regionalHeadquarter.social_tg" target="_blank">
+                                    <img src="@/app/assets/icon/telegram-blue.svg" alt="" />
                                 </a>
                             </div>
                             <div class="hq-data__link-share-link">
                                 <a @click="copyL">
-                                    <img
-                                        src="@/app/assets/icon/to-share-link.svg"
-                                        alt=""
-                                    />
+                                    <img src="@/app/assets/icon/to-share-link.svg" alt="" />
                                 </a>
                                 <div class="copy-message" hidden>
                                     Ссылка скопирована
@@ -581,78 +412,56 @@
                             </div>
                         </div>
                     </div>
-                    <AddModal
-                        v-show="showModal === true"
-                        :is-commander="
-                            (roleStore.roles.detachment_commander ||
-                                roleStore.roles
-                                    .educationalheadquarter_commander ||
-                                roleStore.roles.localheadquarter_commander) !==
-                            null
-                        "
-                        :is-new="
-                            userStore.currentUser.educational_headquarter_id ===
-                                null &&
+                    <AddModal v-show="showModal === true" :is-commander="(roleStore.roles.detachment_commander ||
+                            roleStore.roles
+                                .educationalheadquarter_commander ||
+                            roleStore.roles.localheadquarter_commander) !==
+                        null
+                        " :is-new="userStore.currentUser.educational_headquarter_id ===
+                            null &&
                             userStore.currentUser.detachment_id === null &&
                             userStore.currentUser.local_headquarter_id ===
-                                null &&
+                            null &&
                             userStore.currentUser.regional_headquarter_id ===
-                                null &&
+                            null &&
                             userStore.currentUser.district_headquarter_id ===
-                                null
-                        "
-                        @close="closeModalW()"
-                        @add="
+                            null
+                            " @close="closeModalW()" @add="
                             AddApplication(
                                 'regionals',
                                 props.regionalHeadquarter.id,
                             )
-                        "
-                    >
+                            ">
                     </AddModal>
-                    <router-link
-                        v-if="
-                            userId &&
-                            (userId === regionalHeadquarter?.commander?.id ||
-                                roles.roles.value.districtheadquarter_commander
-                                    ?.id ===
-                                    regionalHeadquarter.district_headquarter ||
-                                roles.roles.value
-                                    .centralheadquarter_commander ||
-                                IsTrusted)
-                        "
-                        class="hq-data__link"
-                        :to="{
+                    <router-link v-if="
+                        userId &&
+                        (userId === regionalHeadquarter?.commander?.id ||
+                            roles.roles.value.districtheadquarter_commander
+                                ?.id ===
+                            regionalHeadquarter.district_headquarter ||
+                            roles.roles.value
+                                .centralheadquarter_commander ||
+                            IsTrusted)
+                    " class="hq-data__link" :to="{
                             name: 'EditingOfRS',
                             params: { id: regionalHeadquarter.id },
-                        }"
-                        >Редактировать штаб</router-link
-                    >
-                    <Button
-                        v-else-if="
-                            !IsMember &&
-                            !UserApplication &&
-                            userStore.currentUser.regional_headquarter_id ===
-                                null
-                        "
-                        @click="showModalW()"
-                        label="Вступить в штаб"
-                        class="AddApplication"
-                    ></Button>
+                        }">Редактировать штаб</router-link>
+                    <Button v-else-if="
+                        !IsMember &&
+                        !UserApplication &&
+                        userStore.currentUser.regional_headquarter_id ===
+                        null
+                    " @click="showModalW()" label="Вступить в штаб" class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
                         <div class="AddApplication mr-2">
                             Заявка на рассмотрении
                         </div>
-                        <Button
-                            @click="
-                                DeleteApplication(
-                                    'regionals',
-                                    props.regionalHeadquarter.id,
-                                )
-                            "
-                            label="Удалить заявку"
-                            class="AddApplication"
-                        ></Button>
+                        <Button @click="
+                            DeleteApplication(
+                                'regionals',
+                                props.regionalHeadquarter.id,
+                            )
+                            " label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
                     <div v-else-if="IsMember" class="AddApplication">
@@ -671,12 +480,10 @@
                     <h4>{{ centralHeadquarter.name }}</h4>
                 </div>
                 <div class="slogan">
-                    <p
-                        v-if="
-                            centralHeadquarter.slogan &&
-                            centralHeadquarter.slogan != 'null'
-                        "
-                    >
+                    <p v-if="
+                        centralHeadquarter.slogan &&
+                        centralHeadquarter.slogan != 'null'
+                    ">
                         {{ centralHeadquarter.slogan }}
                     </p>
                 </div>
@@ -689,67 +496,43 @@
                 <div class="hq__list-wrapper">
                     <ul class="Squad-HQ__list">
                         <li class="Squad-HQ__date-central">
-                            <time datetime="2022-09-10"
-                                >{{
-                                    centralHeadquarter.rso_founding_congress_date
-                                }}
-                                — дата первого Учредительного Съезда РСО</time
-                            >
+                            <time datetime="2022-09-10">{{
+                                centralHeadquarter.rso_founding_congress_date
+                            }}
+                                — дата первого Учредительного Съезда РСО</time>
                         </li>
                         <li class="hq-data__participant-counter">
-                            <span
-                                >{{ centralHeadquarter.participants_count }}
-                                {{ ending }}</span
-                            >
+                            <span>{{ centralHeadquarter.participants_count }}
+                                {{ ending }}</span>
                         </li>
                         <li class="hq-data__participant-counter-">
-                            <span
-                                >{{ centralHeadquarter.members_count }}
-                                {{ endingMember }}</span
-                            >
+                            <span>{{ centralHeadquarter.members_count }}
+                                {{ endingMember }}</span>
                         </li>
                     </ul>
                 </div>
                 <div class="hq-data__contacts-wrapper">
                     <div class="hq-data__contacts-central">
                         <div class="hq-data__social-network-central">
-                            <div
-                                class="hq-data__link-vk"
-                                v-if="
-                                    centralHeadquarter.social_vk &&
-                                    centralHeadquarter.social_vk != 'null'
-                                "
-                            >
-                                <a
-                                    :href="centralHeadquarter.social_vk"
-                                    target="_blank"
-                                >
+                            <div class="hq-data__link-vk" v-if="
+                                centralHeadquarter.social_vk &&
+                                centralHeadquarter.social_vk != 'null'
+                            ">
+                                <a :href="centralHeadquarter.social_vk" target="_blank">
                                     <img src="@/app/assets/icon/vk-blue.svg" />
                                 </a>
                             </div>
-                            <div
-                                class="hq-data__link-telegram"
-                                v-if="
-                                    centralHeadquarter.social_tg &&
-                                    centralHeadquarter.social_tg != 'null'
-                                "
-                            >
-                                <a
-                                    :href="centralHeadquarter.social_tg"
-                                    target="_blank"
-                                >
-                                    <img
-                                        src="@/app/assets/icon/telegram-blue.svg"
-                                        alt=""
-                                    />
+                            <div class="hq-data__link-telegram" v-if="
+                                centralHeadquarter.social_tg &&
+                                centralHeadquarter.social_tg != 'null'
+                            ">
+                                <a :href="centralHeadquarter.social_tg" target="_blank">
+                                    <img src="@/app/assets/icon/telegram-blue.svg" alt="" />
                                 </a>
                             </div>
                             <div class="hq-data__link-share-link">
                                 <a @click="copyL">
-                                    <img
-                                        src="@/app/assets/icon/to-share-link.svg"
-                                        alt=""
-                                    />
+                                    <img src="@/app/assets/icon/to-share-link.svg" alt="" />
                                 </a>
                                 <div class="copy-message" hidden>
                                     Ссылка скопирована
@@ -759,82 +542,57 @@
                             <pre>{{  IsTrusted }}</pre> -->
                         </div>
                     </div>
-                    <AddModal
-                        v-show="showModal === true"
-                        @close="closeModalW()"
-                        :is-commander="
-                            (roleStore.roles.detachment_commander ||
-                                roleStore.roles
-                                    .educationalheadquarter_commander ||
-                                roleStore.roles.regionalHeadquarter_commander ||
-                                roleStore.roles.localheadquarter_commander ||
-                                roleStore.roles
-                                    .districtheadquarter_commander) !== null
-                        "
-                        :is-new="
-                            userStore.currentUser.educational_headquarter_id ===
-                                null &&
+                    <AddModal v-show="showModal === true" @close="closeModalW()" :is-commander="(roleStore.roles.detachment_commander ||
+                            roleStore.roles
+                                .educationalheadquarter_commander ||
+                            roleStore.roles.regionalHeadquarter_commander ||
+                            roleStore.roles.localheadquarter_commander ||
+                            roleStore.roles
+                                .districtheadquarter_commander) !== null
+                        " :is-new="userStore.currentUser.educational_headquarter_id ===
+                            null &&
                             userStore.currentUser.detachment_id === null &&
                             userStore.currentUser.local_headquarter_id ===
-                                null &&
+                            null &&
                             userStore.currentUser.regional_headquarter_id ===
-                                null &&
+                            null &&
                             userStore.currentUser.district_headquarter_id ===
-                                null
-                        "
-                        @add="
+                            null
+                            " @add="
                             AddApplication(
                                 'centrals',
                                 props.centralHeadquarter.id,
                             )
-                        "
-                    >
+                            ">
                     </AddModal>
-                    <router-link
-                        v-if="
-                            userId &&
-                            (userId === centralHeadquarter?.commander?.id ||
-                                IsTrusted)
-                        "
-                        class="hq-data__link"
-                        :to="{
+                    <router-link v-if="
+                        userId &&
+                        (userId === centralHeadquarter?.commander?.id ||
+                            IsTrusted)
+                    " class="hq-data__link" :to="{
                             name: 'FormCentral',
-                        }"
-                        >Редактировать штаб</router-link
-                    >
-                    <Button
-                        v-else-if="
-                            roleStore.myPositions
-                                .usercentralheadquarterposition === null &&
-                            !UserApplication
-                        "
-                        @click="showModalW()"
-                        label="Вступить в штаб"
-                        class="AddApplication"
-                    ></Button>
+                        }">Редактировать штаб</router-link>
+                    <Button v-else-if="
+                        roleStore.myPositions
+                            .usercentralheadquarterposition === null &&
+                        !UserApplication
+                    " @click="showModalW()" label="Вступить в штаб" class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
                         <div class="AddApplication mr-2">
                             Заявка на рассмотрении
                         </div>
-                        <Button
-                            @click="
-                                DeleteApplication(
-                                    'centrals',
-                                    props.centralHeadquarter.id,
-                                )
-                            "
-                            label="Удалить заявку"
-                            class="AddApplication"
-                        ></Button>
+                        <Button @click="
+                            DeleteApplication(
+                                'centrals',
+                                props.centralHeadquarter.id,
+                            )
+                            " label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
-                    <div
-                        v-else-if="
-                            roleStore.myPositions
-                                .usercentralheadquarterposition !== null
-                        "
-                        class="AddApplication"
-                    >
+                    <div v-else-if="
+                        roleStore.myPositions
+                            .usercentralheadquarterposition !== null
+                    " class="AddApplication">
                         Вы участник
                     </div>
                 </div>
@@ -958,7 +716,7 @@ const UserApplication = computed(() => {
 });
 
 const IsTrusted = computed(() => {
-    if (props.member.length > 0) {
+    if (props.member && props.member.length > 0) {
         return props.member.find(
             (item) => item.user.id === userId.value && item.is_trusted === true,
         );
@@ -968,7 +726,7 @@ const IsTrusted = computed(() => {
 });
 
 const IsMember = computed(() => {
-    if (props.member.length > 0) {
+    if (props.member && props.member.length > 0) {
         return props.member.find((item) => item.user.id === userId.value);
     } else {
         return false;
@@ -1406,6 +1164,7 @@ const copyL = () => {
 }
 
 @media ((max-width: 841px)) {
+
     .Squad-HQ__date-local time,
     .Squad-HQ__date-central time {
         border-right: none;
