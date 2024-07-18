@@ -11,9 +11,6 @@
                     <p v-if="
                         headquarter.slogan && headquarter.slogan != 'null'
                     ">
-                    <p v-if="
-                        headquarter.slogan && headquarter.slogan != 'null'
-                    ">
                         {{ headquarter.slogan }}
                     </p>
                 </div>
