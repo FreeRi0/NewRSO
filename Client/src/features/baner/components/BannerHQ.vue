@@ -63,9 +63,17 @@
                         </div>
                     </div>
                     <div class="overlay" v-if="showModal"></div>
-                    <AddModal v-show="showModal === true" :is-commander="roleStore.roles.detachment_commander !== null"
-                        :is-new="userStore.currentUser.educational_headquarter_id === null && userStore.currentUser.detachment_id === null && userStore.currentUser.local_headquarter_id === null && userStore.currentUser.regional_headquarter_id === null && userStore.currentUser.district_headquarter_id === null"
-                        @close="closeModalW()" @add="
+                    <AddModal v-show="showModal === true" :is-commander="roleStore.roles.detachment_commander !== null
+                        " :is-new="userStore.currentUser.educational_headquarter_id ===
+                            null &&
+                            userStore.currentUser.detachment_id === null &&
+                            userStore.currentUser.local_headquarter_id ===
+                            null &&
+                            userStore.currentUser.regional_headquarter_id ===
+                            null &&
+                            userStore.currentUser.district_headquarter_id ===
+                            null
+                            " @close="closeModalW()" @add="
                             AddApplication('educationals', props.headquarter.id)
                             ">
                     </AddModal>
@@ -82,18 +90,26 @@
                                 .centralheadquarter_commander ||
                             IsTrusted)
                     " class="hq-data__link" :to="{
-                        name: 'EditHQ',
-                        params: { id: headquarter.id },
-                    }">Редактировать штаб</router-link>
-                    <Button
-                        v-else-if="!IsMember && !UserApplication && userStore.currentUser.educational_headquarter_id === null && isRegion"
-                        @click="showModalW()" label="Вступить в штаб" class="AddApplication"></Button>
+                            name: 'EditHQ',
+                            params: { id: headquarter.id },
+                        }">Редактировать штаб</router-link>
+                    <Button v-else-if="
+                        !IsMember &&
+                        !UserApplication &&
+                        userStore.currentUser.educational_headquarter_id ===
+                        null &&
+                        isRegion
+                    " @click="showModalW()" label="Вступить в штаб" class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
                         <div class="AddApplication mr-2">
                             Заявка на рассмотрении
                         </div>
-                        <Button @click="DeleteApplication('educationals', props.headquarter.id)" label="Удалить заявку"
-                            class="AddApplication"></Button>
+                        <Button @click="
+                            DeleteApplication(
+                                'educationals',
+                                props.headquarter.id,
+                            )
+                            " label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
                     <div v-else-if="IsMember" class="AddApplication">
@@ -164,10 +180,19 @@
                             </div>
                         </div>
                     </div>
-                    <AddModal v-show="showModal === true"
-                        :is-commander="(roleStore.roles.detachment_commander || roleStore.roles.educationalheadquarter_commander) !== null"
-                        :is-new="userStore.currentUser.educational_headquarter_id === null && userStore.currentUser.detachment_id === null && userStore.currentUser.local_headquarter_id === null && userStore.currentUser.regional_headquarter_id === null && userStore.currentUser.district_headquarter_id === null"
-                        @close="closeModalW()" @add="
+                    <AddModal v-show="showModal === true" :is-commander="(roleStore.roles.detachment_commander ||
+                            roleStore.roles
+                                .educationalheadquarter_commander) !== null
+                        " :is-new="userStore.currentUser.educational_headquarter_id ===
+                            null &&
+                            userStore.currentUser.detachment_id === null &&
+                            userStore.currentUser.local_headquarter_id ===
+                            null &&
+                            userStore.currentUser.regional_headquarter_id ===
+                            null &&
+                            userStore.currentUser.district_headquarter_id ===
+                            null
+                            " @close="closeModalW()" @add="
                             AddApplication('locals', props.localHeadquarter.id)
                             ">
                     </AddModal>
@@ -181,18 +206,24 @@
                                 .centralheadquarter_commander ||
                             IsTrusted)
                     " class="hq-data__link" :to="{
-                        name: 'FormLocal',
-                        params: { id: localHeadquarter.id },
-                    }">Редактировать штаб</router-link>
-                    <Button
-                        v-else-if="!IsMember && !UserApplication && userStore.currentUser.local_headquarter_id === null"
-                        @click="showModalW()" label="Вступить в штаб" class="AddApplication"></Button>
+                            name: 'FormLocal',
+                            params: { id: localHeadquarter.id },
+                        }">Редактировать штаб</router-link>
+                    <Button v-else-if="
+                        !IsMember &&
+                        !UserApplication &&
+                        userStore.currentUser.local_headquarter_id === null
+                    " @click="showModalW()" label="Вступить в штаб" class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
                         <div class="AddApplication mr-2">
                             Заявка на рассмотрении
                         </div>
-                        <Button @click="DeleteApplication('locals', props.localHeadquarter.id)" label="Удалить заявку"
-                            class="AddApplication"></Button>
+                        <Button @click="
+                            DeleteApplication(
+                                'locals',
+                                props.localHeadquarter.id,
+                            )
+                            " label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
                     <div v-else-if="IsMember" class="AddApplication">
@@ -263,11 +294,26 @@
                             </div>
                         </div>
                     </div>
-                    <AddModal v-show="showModal === true" @close="closeModalW()"
-                        :is-commander="(roleStore.roles.detachment_commander || roleStore.roles.educationalheadquarter_commander || roleStore.roles.regionalHeadquarter_commander || roleStore.roles.localheadquarter_commander) !== null"
-                        :is-new="userStore.currentUser.educational_headquarter_id === null && userStore.currentUser.detachment_id === null && userStore.currentUser.local_headquarter_id === null && userStore.currentUser.regional_headquarter_id === null && userStore.currentUser.district_headquarter_id === null"
-                        @add="
-                            AddApplication('districts', props.districtHeadquarter.id)
+                    <AddModal v-show="showModal === true" @close="closeModalW()" :is-commander="(roleStore.roles.detachment_commander ||
+                            roleStore.roles
+                                .educationalheadquarter_commander ||
+                            roleStore.roles.regionalHeadquarter_commander ||
+                            roleStore.roles.localheadquarter_commander) !==
+                        null
+                        " :is-new="userStore.currentUser.educational_headquarter_id ===
+                            null &&
+                            userStore.currentUser.detachment_id === null &&
+                            userStore.currentUser.local_headquarter_id ===
+                            null &&
+                            userStore.currentUser.regional_headquarter_id ===
+                            null &&
+                            userStore.currentUser.district_headquarter_id ===
+                            null
+                            " @add="
+                            AddApplication(
+                                'districts',
+                                props.districtHeadquarter.id,
+                            )
                             ">
                     </AddModal>
                     <router-link v-if="
@@ -277,18 +323,25 @@
                                 .centralheadquarter_commander ||
                             IsTrusted)
                     " class="hq-data__link" :to="{
-                        name: 'FormDH',
-                        params: { id: districtHeadquarter.id },
-                    }">Редактировать штаб</router-link>
-                    <Button
-                        v-else-if="!IsMember && !UserApplication && userStore.currentUser.district_headquarter_id === null"
-                        @click="showModalW()" label="Вступить в штаб" class="AddApplication"></Button>
+                            name: 'FormDH',
+                            params: { id: districtHeadquarter.id },
+                        }">Редактировать штаб</router-link>
+                    <Button v-else-if="
+                        !IsMember &&
+                        !UserApplication &&
+                        userStore.currentUser.district_headquarter_id ===
+                        null
+                    " @click="showModalW()" label="Вступить в штаб" class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
                         <div class="AddApplication mr-2">
                             Заявка на рассмотрении
                         </div>
-                        <Button @click="DeleteApplication('districts', props.districtHeadquarter.id)"
-                            label="Удалить заявку" class="AddApplication"></Button>
+                        <Button @click="
+                            DeleteApplication(
+                                'districts',
+                                props.districtHeadquarter.id,
+                            )
+                            " label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
                     <div v-else-if="IsMember" class="AddApplication">
@@ -359,11 +412,25 @@
                             </div>
                         </div>
                     </div>
-                    <AddModal v-show="showModal === true"
-                        :is-commander="(roleStore.roles.detachment_commander || roleStore.roles.educationalheadquarter_commander || roleStore.roles.localheadquarter_commander) !== null"
-                        :is-new="userStore.currentUser.educational_headquarter_id === null && userStore.currentUser.detachment_id === null && userStore.currentUser.local_headquarter_id === null && userStore.currentUser.regional_headquarter_id === null && userStore.currentUser.district_headquarter_id === null"
-                        @close="closeModalW()" @add="
-                            AddApplication('regionals', props.regionalHeadquarter.id)
+                    <AddModal v-show="showModal === true" :is-commander="(roleStore.roles.detachment_commander ||
+                            roleStore.roles
+                                .educationalheadquarter_commander ||
+                            roleStore.roles.localheadquarter_commander) !==
+                        null
+                        " :is-new="userStore.currentUser.educational_headquarter_id ===
+                            null &&
+                            userStore.currentUser.detachment_id === null &&
+                            userStore.currentUser.local_headquarter_id ===
+                            null &&
+                            userStore.currentUser.regional_headquarter_id ===
+                            null &&
+                            userStore.currentUser.district_headquarter_id ===
+                            null
+                            " @close="closeModalW()" @add="
+                            AddApplication(
+                                'regionals',
+                                props.regionalHeadquarter.id,
+                            )
                             ">
                     </AddModal>
                     <router-link v-if="
@@ -376,18 +443,25 @@
                                 .centralheadquarter_commander ||
                             IsTrusted)
                     " class="hq-data__link" :to="{
-                        name: 'EditingOfRS',
-                        params: { id: regionalHeadquarter.id },
-                    }">Редактировать штаб</router-link>
-                    <Button
-                        v-else-if="!IsMember && !UserApplication && userStore.currentUser.regional_headquarter_id === null"
-                        @click="showModalW()" label="Вступить в штаб" class="AddApplication"></Button>
+                            name: 'EditingOfRS',
+                            params: { id: regionalHeadquarter.id },
+                        }">Редактировать штаб</router-link>
+                    <Button v-else-if="
+                        !IsMember &&
+                        !UserApplication &&
+                        userStore.currentUser.regional_headquarter_id ===
+                        null
+                    " @click="showModalW()" label="Вступить в штаб" class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
                         <div class="AddApplication mr-2">
                             Заявка на рассмотрении
                         </div>
-                        <Button @click="DeleteApplication('regionals', props.regionalHeadquarter.id)"
-                            label="Удалить заявку" class="AddApplication"></Button>
+                        <Button @click="
+                            DeleteApplication(
+                                'regionals',
+                                props.regionalHeadquarter.id,
+                            )
+                            " label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
                     <div v-else-if="IsMember" class="AddApplication">
@@ -468,36 +542,56 @@
                             <pre>{{  IsTrusted }}</pre> -->
                         </div>
                     </div>
-                    <AddModal v-show="showModal === true" @close="closeModalW()"
-                        :is-commander="(roleStore.roles.detachment_commander || roleStore.roles.educationalheadquarter_commander || roleStore.roles.regionalHeadquarter_commander || roleStore.roles.localheadquarter_commander || roleStore.roles.districtheadquarter_commander) !== null"
-                        :is-new="userStore.currentUser.educational_headquarter_id === null && userStore.currentUser.detachment_id === null && userStore.currentUser.local_headquarter_id === null && userStore.currentUser.regional_headquarter_id === null && userStore.currentUser.district_headquarter_id === null"
-
-                        @add="
+                    <AddModal v-show="showModal === true" @close="closeModalW()" :is-commander="(roleStore.roles.detachment_commander ||
+                            roleStore.roles
+                                .educationalheadquarter_commander ||
+                            roleStore.roles.regionalHeadquarter_commander ||
+                            roleStore.roles.localheadquarter_commander ||
+                            roleStore.roles
+                                .districtheadquarter_commander) !== null
+                        " :is-new="userStore.currentUser.educational_headquarter_id ===
+                            null &&
+                            userStore.currentUser.detachment_id === null &&
+                            userStore.currentUser.local_headquarter_id ===
+                            null &&
+                            userStore.currentUser.regional_headquarter_id ===
+                            null &&
+                            userStore.currentUser.district_headquarter_id ===
+                            null
+                            " @add="
                             AddApplication('centrals', props.centralHeadquarter.id)
                             ">
-
                     </AddModal>
                     <router-link v-if="
                         userId &&
                         (userId === centralHeadquarter?.commander?.id ||
                             IsTrusted)
                     " class="hq-data__link" :to="{
-                        name: 'FormCentral',
-                    }">Редактировать штаб</router-link>
-                    <Button v-else-if="roleStore.myPositions.usercentralheadquarterposition === null && !UserApplication"
-                        @click="showModalW()" label="Вступить в штаб" class="AddApplication"></Button>
+                            name: 'FormCentral',
+                        }">Редактировать штаб</router-link>
+                    <Button v-else-if="
+                        roleStore.myPositions
+                            .usercentralheadquarterposition === null &&
+                        !UserApplication
+                    " @click="showModalW()" label="Вступить в штаб" class="AddApplication"></Button>
                     <div v-else-if="UserApplication" class="d-flex">
-                        <div class="AddApplication  mr-2">
+                        <div class="AddApplication mr-2">
                             Заявка на рассмотрении
                         </div>
-                        <Button @click="DeleteApplication('centrals', props.centralHeadquarter.id)"
-                            label="Удалить заявку" class="AddApplication"></Button>
+                        <Button @click="
+                            DeleteApplication(
+                                'centrals',
+                                props.centralHeadquarter.id,
+                            )
+                            " label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
-                    <div v-else-if="roleStore.myPositions.usercentralheadquarterposition !== null" class="AddApplication">
+                    <div v-else-if="
+                        roleStore.myPositions
+                            .usercentralheadquarterposition !== null
+                    " class="AddApplication">
                         Вы участник
                     </div>
-
                 </div>
             </div>
         </div>
@@ -579,20 +673,21 @@ const swal = inject('$swal');
 const viewApplications = async (name) => {
     try {
         let id = route.params.id;
-        const resp = await HTTP.get(`/${name}/${id}/applications/`)
+        const resp = await HTTP.get(`/${name}/${id}/applications/`);
         applications.value = resp.data;
     } catch (e) {
-        console.log(e)
+        console.log(e);
     }
 };
 const aboutEduc = async () => {
     let id = props.headquarter?.educational_institution.id;
     if (typeof id !== 'undefined') {
         try {
-            const response = await HTTP.get(`/eduicational_institutions/${id}/`);
+            const response = await HTTP.get(
+                `/eduicational_institutions/${id}/`,
+            );
 
             edict.value = response.data;
-
         } catch (error) {
             console.log(error);
         }
@@ -601,16 +696,16 @@ const aboutEduc = async () => {
 
 const showModalW = () => {
     showModal.value = !showModal.value;
-}
+};
 const closeModalW = () => {
     showModal.value = false;
-}
+};
 
 const isRegion = computed(() => {
     let res = regionalsStore.filteredMyRegional.find(
         (item) => item?.id == props.headquarter?.regional_headquarter,
     );
-    return res !== undefined
+    return res !== undefined;
 });
 
 const UserApplication = computed(() => {
@@ -618,20 +713,27 @@ const UserApplication = computed(() => {
 });
 
 const IsTrusted = computed(() => {
-    return props.member.find(
-        (item) => item.user.id === userId.value && item.is_trusted === true,
-    );
+    if (props.member.length > 0) {
+        return props.member.find(
+            (item) => item.user.id === userId.value && item.is_trusted === true,
+        );
+    } else {
+        return false;
+    }
 });
-
 
 const IsMember = computed(() => {
-    return props.member.find((item) => item.user.id === userId.value);
+    if (props.member.length > 0) {
+        return props.member.find((item) => item.user.id === userId.value);
+    } else {
+        return false;
+    }
 });
-
 
 const AddApplication = async (name, id) => {
     try {
-        const sendResponse = await HTTP.post(`/${name}/${id}/apply/`,
+        const sendResponse = await HTTP.post(
+            `/${name}/${id}/apply/`,
             data.value,
         );
         swal.fire({
@@ -665,9 +767,7 @@ const AddApplication = async (name, id) => {
         }
 
         showModal.value = false;
-
     } catch (error) {
-
         console.error('There was an error!', error);
         if (isError.value) {
             swal.fire({
@@ -706,7 +806,6 @@ const DeleteApplication = async (name, id) => {
             viewApplications('centrals');
         }
     } catch (error) {
-
         console.error('There was an error!', error);
         if (isError.value) {
             swal.fire({
@@ -729,7 +828,6 @@ watch(
         }
         aboutEduc();
         viewApplications('educationals');
-
     },
 );
 
@@ -741,7 +839,6 @@ watch(
             return;
         }
         viewApplications('locals');
-
     },
 );
 watch(
@@ -752,7 +849,6 @@ watch(
             return;
         }
         viewApplications('regionals');
-
     },
 );
 
@@ -764,10 +860,8 @@ watch(
             return;
         }
         viewApplications('districts');
-
     },
 );
-
 
 onMounted(() => {
     if (props.headquarter) {
@@ -789,7 +883,7 @@ onMounted(() => {
         viewApplications('centrals');
     }
 
-    roleStore.getMyPositions()
+    roleStore.getMyPositions();
 
     aboutEduc();
 });
