@@ -56,11 +56,8 @@ HTTP.interceptors.response.use(
                 refresh: localStorage.getItem('refresh_token'),
               })
                 .then((response) => {
-
                   console.log('here 3')
-
                   localStorage.setItem('jwt_token', response.data.access);
-                  localStorage.setItem('refresh_token', response.data.refresh);
                   refreshTokenPromise.value = {};
                   originalRequest._retry = true;
                   return HTTP(originalRequest);
@@ -70,6 +67,7 @@ HTTP.interceptors.response.use(
                   refreshTokenPromise.value = {};
                   userStore.logOut();
                   localStorage.removeItem('jwt_token');
+                  localStorage.removeItem('refresh_token');
                   router.push({ name: 'Login' });
                 })
             } else {
@@ -88,6 +86,7 @@ HTTP.interceptors.response.use(
             console.log('here 7')
             userStore.logOut();
             localStorage.removeItem('jwt_token');
+            localStorage.removeItem('refresh_token');
             router.push({ name: 'Login' });
           }
         } catch (error) {
@@ -116,7 +115,6 @@ HTTP.interceptors.response.use(
     });
     if (resp.status === 200) {
       localStorage.setItem('jwt_token', resp.data.access);
-      localStorage.setItem('refresh_token', resp.data.refresh);
     } else {
       const userStore = useUserStore();
       userStore.logOut();
