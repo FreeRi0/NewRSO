@@ -1,51 +1,40 @@
 <template>
     <div class="container" v-if="!loading">
-        <template v-if="applicationsList.length">
-            <p class="main_title">Групповая заявка</p>
-            <p class="subtitle">Подал:</p>
-            <div class="horizontallso-item__wrapper">
-                <div class="horizontallso-img">
-                    <img class="avatar_circle" :src="applicationsList[0].headquarter_author.banner" alt="logo" />
-                </div>
-                <div class="containerHorizontal">
-                    <p class="horizontallso-item__list-full">
-                        {{ applicationsList[0].headquarter_author.name }}
-                    </p>
-                </div>
+        <p class="main_title">Групповая заявка</p>
+        <p class="subtitle">Подал:</p>
+        <div class="horizontallso-item__wrapper">
+            <div class="horizontallso-img">
+                <img class="avatar_circle" :src="application.headquarter_author.banner" alt="logo" />
             </div>
-            <div class="download" @click="downloadList">
-                <a class="download_text">
-                    <img class="download_img" src="/assets/download.svg" />
-                    скачать список
-                </a>
+            <div class="containerHorizontal">
+                <p class="horizontallso-item__list-full">
+                    {{ application.headquarter_author.name }}
+                </p>
             </div>
-            <div class="horizontallso-item__wrapper" v-for="user in applicationsList[0].applicants" :key="user.id">
-                <div class="horizontallso-img">
-                    <img class="avatar_circle" :src="user.user.avatar.photo" alt="avatar" />
-                </div>
-                <div class="containerHorizontal">
-                    <p class="horizontallso-item__list-full">
-                        {{ user.user.first_name + ' ' + user.user.last_name }}
-                    </p>
-                    <div class="horizontallso-item__list-date">
-                        <span style="
-                                border-left: 2px solid #b6b6b6;
-                                padding-right: 8px;
-                            "></span>
-                        <p>{{ user.user.date_of_birth }}</p>
-                    </div>
+        </div>
+        <div class="download" @click="downloadList">
+            <a class="download_text">
+                <img class="download_img" src="/assets/download.svg" />
+                скачать список
+            </a>
+        </div>
+        <div class="horizontallso-item__wrapper" v-for="user in application.applicants" :key="user.id">
+            <div class="horizontallso-img">
+                <img class="avatar_circle" :src="user.user.avatar.photo" alt="avatar" />
+            </div>
+            <div class="containerHorizontal">
+                <p class="horizontallso-item__list-full">
+                    {{ user.user.first_name + ' ' + user.user.last_name }}
+                </p>
+                <div class="horizontallso-item__list-date">
+                    <span style="
+                            border-left: 2px solid #b6b6b6;
+                            padding-right: 8px;
+                        "></span>
+                    <p>{{ user.user.date_of_birth }}</p>
                 </div>
             </div>
-            <div class="button">
-                <button type="submit" class="deny_button" @click="onDeny">
-                    Отклонить
-                </button>
-                <button type="submit" class="submit_button" @click="onSubmit">
-                    Одобрить
-                </button>
-            </div>
-        </template>
-        <p class="subtitle" v-else>Заявок сейчас нет</p>
+        </div>
     </div>
 </template>
 
@@ -54,71 +43,24 @@ import { HTTP } from '@app/http';
 import { onMounted, ref } from 'vue';
 
 import { useRoute } from 'vue-router';
-import { useRouter } from 'vue-router';
 import * as XLSX from 'xlsx';
 
 
 const route = useRoute();
-const router = useRouter();
 
 const loading = ref(true);
-const applicationsList = ref({});
-
+const application = ref({});
+console.log(route.params);
 const getApplicatonsList = async () => {
     try {
         const { data } = await HTTP.get(
-            `/events/${route.params.id}/group_applications/all/`,
+            `/events/${route.params.eventId}/group_applications/all/${route.params.id}`,
 
         );
-        applicationsList.value = data.results;
+        application.value = data;
         loading.value = false;
     } catch (e) {
         console.log('getApplicatonsList error', e);
-    }
-};
-
-const onSubmit = async () => {
-    try {
-        await HTTP.post(
-            `/events/${route.params.id}/group_applications/all/${applicationsList.value[0].id}/approve/`,
-            {},
-
-        );
-
-        await relocate();
-    } catch (e) {
-        console.log('onSubmit error', e);
-    }
-};
-
-const onDeny = async () => {
-    try {
-        await HTTP.delete(
-            `/events/${route.params.id}/group_applications/all/${applicationsList.value[0].id}/reject/`,
-
-        );
-
-        await relocate();
-    } catch (e) {
-        console.log('onDeny error', e);
-    }
-};
-
-const relocate = async () => {
-    if (applicationsList.value[1]) {
-        router.push({
-            name: 'GroupRequest',
-            params: {
-                id: applicationsList.value[1].id,
-            },
-        });
-    } else {
-        router.push({
-            name: 'Action',
-            params: {
-                id: applicationsList.value[0].headquarter_author.id,
-            },
-        });
     }
 };
 
@@ -127,7 +69,7 @@ const downloadList = () => {
 
     const worksheet_data = [
         ["ФИО", "Почта", "Телефон", "Членский взнос"],
-        ...applicationsList.value[0].applicants.map(item => [`${item.user.last_name} ${item.user.first_name} ${item.user.patronymic_name}`, item.user.email, item.user.phone_number, item.user.membership_fee])
+        ...application.value.applicants.map(item => [`${item.user.last_name} ${item.user.first_name} ${item.user.patronymic_name}`, item.user.email, item.user.phone_number, item.user.membership_fee ? 'Оплачен' : 'Не оплачен'])
     ];
 
     const worksheet = XLSX.utils.aoa_to_sheet(worksheet_data);
