@@ -932,6 +932,38 @@ const routes: RouteRecordRaw[] = [
                                     ),
                             },
                             {
+                                path: 'group',
+                                children: [
+                                    {
+                                        path: ':eventId',
+                                        meta: {
+                                            label: 'Данные групповой заявки',
+                                        },
+                                        name: 'GroupPage',
+                                        component: () =>
+                                            import(
+                                                '@pages/GroupRequestPage/components/GroupRequestPage.vue'
+                                            ),
+                                    },
+                                ],
+                            },
+                            {
+                                path: 'multi',
+                                children: [
+                                    {
+                                        path: ':eventId',
+                                        meta: {
+                                            label: 'Данные Многоэтапной заявки',
+                                        },
+                                        name: 'MultiPage',
+                                        component: () =>
+                                            import(
+                                                '@pages/MultiStageRequestPage/components/MultiStageRequestPage.vue'
+                                            ),
+                                    },
+                                ],
+                            },
+                            {
                                 path: 'action',
                                 meta: {
                                     label: 'Данные мероприятия',
