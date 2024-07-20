@@ -18,13 +18,6 @@
                             {{ event.user.last_name }} {{ event.user.first_name }} {{ event.user.patronymic_name }}
                         </p> 
                     </div>
-                    <!-- <div class="horizontallso-item__list-date">
-                        <span style="
-                                border-left: 2px solid #b6b6b6;
-                                padding-right: 8px;
-                            "></span>
-                        <p>{{ event.user.date_of_birth }}</p>
-                    </div> -->
             </div>
         </router-link>
         <!-- <router-link v-else class="horizontallso-item__wrapper" :to="{
@@ -46,7 +39,7 @@
         </div>
         <!-- </router-link> -->
 
-        <div class="horizontallso-item__wrapper " v-if="width > 768">
+        <div class="horizontallso-item__events " v-if="width > 768" @click="onEvent">
             <div class="containerHorizontal">
                 <div class="d-flex">
                     <p class="horizontallso-item__list-full">
@@ -69,9 +62,10 @@
                     {{ event.event.name }}
                 </p>
             </div>
-        </router-link>
-
-        <div class="horizontallso-item__wrapper second_line" v-if="width < 768">
+        </router-link>        
+    </div>
+    <div class="second_line">
+        <div class="horizontallso-item__events" v-if="width < 768" @click="onEvent">
             <div class="containerHorizontal">
                 <div class="d-flex">
                     <p class="horizontallso-item__list-full">
@@ -81,11 +75,15 @@
             </div>
         </div>
     </div>
+    
 </template>
 
 <script setup>
 import { ref, watch, onMounted } from 'vue';
 import { useRoleStore } from '@layouts/store/role';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const width = ref();
 
@@ -106,13 +104,33 @@ const emit = defineEmits({
 });
 const checked = ref(false);
 
+const onEvent = () => {
+    console.log(props.event);
+    if(props.event.group){
+        router.push({
+            name: `GroupPage`,
+            params: {
+                id: props.event.id,
+                eventId: props.event.event.id,
+            },
+    });
+    } else {
+        router.push({
+            name: `MultiPage`,
+            params: {
+                id: props.event.user.id,
+                eventId: props.event.event.id,
+            },
+    });
+    }
+}
+
 const updateCheckEvents = (e) => {
     emit('select', props.event, e.target.checked);
 };
 
 const onResize = () => {
     width.value = window.innerWidth;
-    console.log(width.value);
 };
 
 watch(
@@ -129,6 +147,10 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+.d-flex{
+    display: flex !important;
+    width: 100%;
+}
 .second_line {
     display: grid;
     grid-template-columns: 164px;
@@ -137,10 +159,10 @@ onMounted(() => {
     display: grid;
     width: 100%;
     grid-gap: 12px;
-    grid-template-columns: 48px minmax(268px, 528px) 164px 1fr;
-
-    @media screen and (max-width: 768){
-        grid-template-columns: 48px minmax(268px, 528px) 1fr;
+    grid-template-columns: 48px minmax(268px, 528px) 164px minmax(65px, 404px);
+    @media screen and (max-width: 768px){
+        grid-template-columns: 48px minmax(268px, 528px) minmax(65px, 404px);
+        // grid-template-rows: 1fr 1fr;
     }
 
     &-img {
@@ -176,7 +198,7 @@ onMounted(() => {
 
 .horizontallso-item__wrapper {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: 36px minmax(122px ,438px);
     align-items: baseline;
     align-items: center;
 
@@ -224,12 +246,31 @@ onMounted(() => {
     margin-right: 13px;
 }
 
+.horizontallso-item__events{
+    display: grid;
+    grid-template-columns: minmax(122px ,438px);
+    align-items: baseline;
+    align-items: center;
+
+    padding: 4px 20px;
+
+    border-radius: 10px;
+    border: 1px solid #b6b6b6;
+    background: #fff;
+    margin-bottom: 12px;
+    width: 100%;
+    height: 46px;
+}
+
+
 .horizontallso-item__list-full {
     color: #35383f;
     font-family: 'BertSans', sans-serif;
     font-size: 16px;
     font-weight: 400;
     margin-left: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .horizontallso-item__list-date p {
