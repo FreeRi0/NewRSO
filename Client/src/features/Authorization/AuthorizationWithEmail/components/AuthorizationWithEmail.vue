@@ -62,7 +62,7 @@ const data = ref({
 const isError = ref([]);
 const isLoading = ref(false);
 const swal = inject('$swal');
-
+const competition_pk = 1;
 
 const CLIENT_ID = 51915086
 const REDIRECT_URL = 'https://rso.sprint.1t.ru/my-page/'
@@ -104,6 +104,8 @@ const LoginUser = async () => {
         userStore.getUser();
         userStore.getCountApp();
         roleStore.getRoles();
+        roleStore.getUserParticipantsStatus(competition_pk);
+
 
         swal.fire({
             position: 'top-center',
