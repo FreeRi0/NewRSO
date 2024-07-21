@@ -57,7 +57,7 @@
                 <img :src="event.event.banner" alt="logo" v-if="event.event.banner" />
                 <img src="@app/assets/user-avatar.png" alt="photo" v-else />
             </div>
-            <div class="containerHorizontal"  v-if="width > 500">
+            <div class="containerHorizontal"  v-if="width > 600">
                 <p class="horizontallso-item__list-full evname">
                     {{ event.event.name }}
                 </p>
@@ -105,7 +105,6 @@ const emit = defineEmits({
 const checked = ref(false);
 
 const onEvent = () => {
-    console.log(props.event);
     if(props.event.group){
         router.push({
             name: `GroupPage`,
