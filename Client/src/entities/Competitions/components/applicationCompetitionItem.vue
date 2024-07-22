@@ -125,7 +125,7 @@ const onEvent = () => {
                 eventId: props.event.event.id,
             },
     });
-    } else {
+    } else if (props.event.multi){
         router.push({
             name: `MultiPage`,
             params: {
