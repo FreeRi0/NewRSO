@@ -82,10 +82,20 @@ const actionsList = ref([
 ]);
 
 
-const viewEvents = async (event_pk) => {
+const viewEvents = async (event_pk, application_type) => {
     try {
         const { data } = await HTTP.get(`/events/${event_pk}/applications/`);
         for(let i in data.results) {
+            if (application_type == "Персональная") {
+                data.results[i].personal = true;
+            } else {
+                data.results[i].personal = false;
+            }
+            if (application_type == "Многоэтапная") {
+                data.results[i].multi = true;
+            } else {
+                data.results[i].multi = false;
+            }
             data.results[i].chosen = false;
             data.results[i].group = false;
             data.results[i].event.application_type = "Многоэтапная";
@@ -121,7 +131,7 @@ const events = async (id) => {
             if(myEvents[i].application_type === "Групповая") {
                 viewGroupEvents(myEvents[i].id);
             } else {
-                viewEvents(myEvents[i].id);
+                viewEvents(myEvents[i].id), myEvents[i].application_type;
             }
         }
     } catch (error) {
