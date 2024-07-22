@@ -2,28 +2,11 @@
     <section class="headquarters-management">
         <h3>{{ head }}</h3>
         <div class="headquarters-management__container">
-            <router-link
-                :to="{ name: 'userpage', params: { id: props.commander.id } }"
-            >
-                <div
-                    class="manager-card"
-                    :class="{
-                        'align-left': index % 2 === 0,
-                        'align-right': index % 2 !== 0,
-                    }"
-                >
+            <router-link :to="{ name: 'userpage', params: { id: props.commander.id } }">
+                <div class="manager-card">
                     <div class="manager-card__avatar">
-                        <img
-                            :src="props.commander?.avatar?.photo"
-                            alt="фото"
-                            v-if="props.commander?.avatar?.photo"
-                        />
-                        <img
-                            class="img_alt"
-                            src="@app/assets/user-avatar-manage.png"
-                            alt="photo"
-                            v-else
-                        />
+                        <img :src="props.commander?.avatar?.photo" alt="фото" v-if="props.commander?.avatar?.photo" />
+                        <img class="img_alt" src="@app/assets/user-avatar-manage.png" alt="photo" v-else />
                     </div>
                     <div class="manager-card__box">
                         <p id="name_length">
@@ -60,6 +43,7 @@ const props = defineProps({
 section.headquarters-management {
     margin-bottom: 60px;
 }
+
 section.headquarters-management h3 {
     color: #35383f;
     font-family: 'Akrobat';
@@ -94,6 +78,7 @@ section.headquarters-management h3 {
     display: flex;
     justify-content: center;
 }
+
 .manager-card__avatar img {
     width: 120px;
     height: 120px;
@@ -137,9 +122,11 @@ section.headquarters-management h3 {
         justify-items: center;
         column-gap: 40px;
     }
+
     .manager-card.align-left {
         margin-left: auto;
     }
+
     .manager-card.align-right {
         margin-right: auto;
     }
@@ -149,6 +136,7 @@ section.headquarters-management h3 {
     .manager-card.align-left {
         margin-left: 0;
     }
+
     .manager-card.align-right {
         margin-right: 0;
     }
@@ -160,20 +148,25 @@ section.headquarters-management h3 {
         column-gap: 16px;
         row-gap: 16px;
     }
+
     .manager-card {
         width: 156px;
         height: 173px;
     }
+
     .manager-card__box {
         width: 114px;
     }
+
     .manager-card__box #name_length {
         font-size: 12px;
         margin-bottom: 8px;
     }
+
     .manager-card__box p {
         font-size: 12px;
     }
+
     .manager-card__avatar img {
         width: 60px;
         height: 60px;

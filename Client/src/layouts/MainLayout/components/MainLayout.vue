@@ -63,7 +63,7 @@ const positionsStore = usePositionsStore();
 const isVerify = ref(false);
 const competition_pk = 1;
 
-const updateToken = async () => {
+/*const updateToken = async () => {
     try {
         const resp = await HTTP.post('/jwt/refresh/', {
             refresh: localStorage.getItem('refresh_token'),
@@ -78,7 +78,7 @@ const updateToken = async () => {
         localStorage.removeItem('refresh_token');
         router.push({ name: 'Login' });
     }
-};
+};*/
 
 const verifyToken = async () => {
     try {
@@ -91,9 +91,9 @@ const verifyToken = async () => {
             positionsStore.getPositions();
             squadsStore.getAreas();
             roleStore.getUserParticipantsStatus(competition_pk);
-        } else if (resp.status == 401) {
+        }/* else if (resp.status == 401) {
             updateToken();
-        }
+        }*/
     } catch (error) {
         console.log(error);
     }
