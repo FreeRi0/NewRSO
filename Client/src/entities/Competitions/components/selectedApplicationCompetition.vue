@@ -34,8 +34,14 @@
             <div class="horizontallso-item__wrapper" v-if="width>660">
                 <div class="containerHorizontal">
                     <div class="d-flex">
-                        <p class="horizontallso-item__list-full">
-                            {{ event.event.application_type }}
+                        <p class="horizontallso-item__list-full" v-if="event.group">
+                            Групповая
+                        </p>
+                        <p class="horizontallso-item__list-full" v-else-if="event.personal">
+                            Персональная
+                        </p>
+                        <p class="horizontallso-item__list-full" v-else-if="event.multi">
+                            Многоэтапная
                         </p>
                     </div>
                 </div>
