@@ -55,7 +55,7 @@ const onBack = () => {
     router.back();
 };
 
-const getPrivate = async () => {
+/*const getPrivate = async () => {
     await HTTP.get('/rsousers/me/',)
         .then((response) => {
             user.value = response.data;
@@ -66,7 +66,7 @@ const getPrivate = async () => {
         });
 };
 
-getPrivate();
+getPrivate();*/
 
 const resetPasswordForm = async () => {
     if (new_password.value !== current_password.value) {
