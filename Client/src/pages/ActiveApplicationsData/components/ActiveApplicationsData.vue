@@ -23,7 +23,7 @@
                 v-else-if="picked == 'Заявки на вступление в штаб' && (
                         roleStore.roles?.regionalheadquarter_commander?.id || 
                         roleStore.roles?.detachment_commander?.id ||
-                        roleStore.roles?.centralheadquarter_commander?.id ||
+                        roleStore.roles?.centralheadquarter_commander ||
                         roleStore.roles?.districtheadquarter_commander?.id ||
                         roleStore.roles?.localheadquarter_commander?.id ||
                         roleStore.roles?.educationalheadquarter_commander?.id
