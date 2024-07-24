@@ -140,20 +140,6 @@ watch(selectedApplications, (selectedApplications) => {
 
 const getApplications = async () => {
     loading.value = true;
-    try{
-        if(roleStore.roles.detachment_commander){
-            const { data } = await HTTP.get(`/detachments/${roleStore.roles.detachment_commander.id}/applications`);
-            if(data.length){
-                for(let temp of data){
-                    temp.headquarters = roleStore.roles.detachment_commander;
-                    temp.headquarters.level = 'detachments';
-                    applicationsData.value.push(temp);
-                }
-            }
-        }
-    } catch(e){
-        console.log(e);
-    }
 
     try{
         if(roleStore.roles.centralheadquarter_commander){
