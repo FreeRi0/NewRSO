@@ -17,7 +17,12 @@ let refreshTokenPromise = ref({})
 
 HTTP.interceptors.request.use(
   (config) => {
-    if (config.url == '/jwt/create/' || config.url == '/register/' || config.url == '/exchange-token/' || config.url == '/jwt/vk-login/' || config.url == '/jwt/verify/' || config.url == '/jwt/refresh/' || config.url == '/regions/' || config.url == '/reset_password/') {
+    if (
+      config.url == '/jwt/create/' || config.url == '/register/' || config.url == '/exchange-token/' ||
+      config.url == '/jwt/vk-login/' || config.url == '/jwt/verify/' || config.url == '/jwt/refresh/' ||
+      config.url == '/regions/' || config.url == '/reset_password/' ||
+      config.url == '/reset_password_confirm/'
+    ) {
       delete config.headers.Authorization;
     } else {
       config.headers.Authorization =
