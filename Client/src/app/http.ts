@@ -6,9 +6,9 @@ import { ref } from 'vue';
 
 
 export const HTTP = axios.create({
-  baseURL: 'https://xn--j1ab.xn--d1amqcgedd.xn--p1ai/api/v1/',
-  // baseURL: 'https://rso.sprint.1t.ru/api/v1/',
-
+  //baseURL: 'https://xn--j1ab.xn--d1amqcgedd.xn--p1ai/api/v1/',
+  baseURL: 'http://213.139.208.147:30000/api/v1/',
+  //baseURL: 'https://rso.sprint.1t.ru/api/v1/',
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
@@ -19,8 +19,7 @@ let refreshTokenPromise = ref({})
 
 HTTP.interceptors.request.use(
   (config) => {
-    if (config.url == '/jwt/create/' || config.url == '/register/' || config.url == '/exchange-token/' || config.url == '/jwt/vk-login/' || config.url == '/jwt/verify/' || config.url == '/jwt/refresh/' || config.url == '/regions/' || config.url == '/reset_password/' || config.url == '/users/reset_password_confirm/' || config.url == 'competitions/download_regulation_file/') {
-
+    if (config.url == '/jwt/create/' || config.url == '/register/' || config.url == '/exchange-token/' || config.url == '/jwt/vk-login/' || config.url == '/jwt/verify/' || config.url == '/jwt/refresh/' || config.url == '/regions/' || config.url == '/reset_password/') {
       delete config.headers.Authorization;
     } else {
       config.headers.Authorization =
