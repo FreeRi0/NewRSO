@@ -143,10 +143,12 @@ const getApplications = async () => {
 
     try{
         if(roleStore.roles.centralheadquarter_commander){
-            const { data } = await HTTP.get(`/centrals/${roleStore.roles.centralheadquarter_commander.id}/applications`);
+            const { data } = await HTTP.get(`/centrals/${roleStore.roles.centralheadquarter_commander}/applications`);
+            const centralHQ = await HTTP.get(`/centrals/${roleStore.roles.centralheadquarter_commander}/`);
+            console.log(centralHQ.data);
             if(data.length){
                 for(let temp of data){
-                    temp.headquarters = roleStore.roles.centralheadquarter_commander;
+                    temp.headquarters = centralHQ.data;
                     temp.headquarters.level = 'centrals';
                     applicationsData.value.push(temp);
                 }
