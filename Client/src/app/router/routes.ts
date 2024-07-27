@@ -449,6 +449,7 @@ const routes: RouteRecordRaw[] = [
                             },
                         ],
                     },
+
                 ],
             },
             //----------------------Конец Структуры - ЛСО/Штабы/Создание/Редактирование---------------------------------------------------------96cb9a («.»)
@@ -861,6 +862,32 @@ const routes: RouteRecordRaw[] = [
                         ],
                     },
                 ],
+            },
+            {
+                path: '/rating-ro',
+                meta: {
+                    label: 'Рейтинг РО',
+                    redirectTo: 'rating-ro',
+                },
+                children: [
+                    {
+                        path: '',
+                        name: 'rating-ro',
+                        component: () =>
+                            import('@pages/RatingRO/components/RatingRo.vue'),
+                    },
+                    {
+                        path: 'reporting',
+                        name: 'rating-ro-reporting',
+                        component: () =>
+                            import('@pages/RatingRoReporting/components/RatingRoReporting.vue'),
+                        meta: {
+                            label: 'Отчетность',
+                        },
+                    }
+
+                ]
+
             },
             {
                 path: '/references',

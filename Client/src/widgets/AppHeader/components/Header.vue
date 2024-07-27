@@ -333,7 +333,7 @@ const userPages = computed(() => [
     },
     {
         title: 'Рейтинг РО',
-        name: 'CorpUniver',
+        name: 'rating-ro',
         show: roleStore.roles?.regionalheadquarter_commander || roleStore.roles.centralheadquarter_commander,
     },
 

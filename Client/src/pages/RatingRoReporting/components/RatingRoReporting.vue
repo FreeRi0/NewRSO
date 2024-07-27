@@ -1,0 +1,44 @@
+<template>
+  <div class="container">
+    <h1 class="ratingRo_report_title">Отчетность</h1>
+    <div class="ratingRo_report_wrapper">
+      <div class="ratingRo_report_item">Отчет о деятельности регионального отделения РСО за 2024 год. Часть 1</div>
+      <div class="ratingRo_report_item">Отчет о деятельности регионального отделения РСО за 2024 год. Часть 2</div>
+    </div>
+  </div>
+</template>
+<script>
+</script>
+<style lang="scss" scoped>
+.ratingRo_report_title {
+  font-size: 52px;
+  font-weight: 700;
+  color: #35383F;
+  font-family: 'Akrobat';
+}
+
+.ratingRo_report_wrapper {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  margin-top: 40px;
+  padding-bottom: 280px;
+}
+
+.ratingRo_report_item {
+  cursor: pointer;
+  max-width: 100%;
+  padding: 16px 16px 16px 32px;
+  width: 100%;
+  border: 0px 0px 0px 6px;
+  border-radius: 10px;
+  background-color: #F3F4F5;
+  font-size: 22px;
+  color: #000000;
+  font-weight: 600;
+  font-family: 'Akrobat';
+  border-left: 6px solid #1F7CC0;
+  line-height: 26.4px;
+  height: auto;
+}
+</style>
