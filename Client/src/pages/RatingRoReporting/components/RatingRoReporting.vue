@@ -2,7 +2,7 @@
   <div class="container">
     <h1 class="ratingRo_report_title">Отчетность</h1>
     <div class="ratingRo_report_wrapper">
-      <div class="ratingRo_report_item">Отчет о деятельности регионального отделения РСО за 2024 год. Часть 1</div>
+      <router-link class="ratingRo_report_item" :to="{ name: 'ReportRegionalPartOne' }">Отчет о деятельности регионального отделения РСО за 2024 год. Часть 1</router-link>
       <div class="ratingRo_report_item">Отчет о деятельности регионального отделения РСО за 2024 год. Часть 2</div>
     </div>
   </div>

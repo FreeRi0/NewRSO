@@ -878,16 +878,31 @@ const routes: RouteRecordRaw[] = [
                     },
                     {
                         path: 'reporting',
-                        name: 'rating-ro-reporting',
-                        component: () =>
-                            import('@pages/RatingRoReporting/components/RatingRoReporting.vue'),
                         meta: {
                             label: 'Отчетность',
+                            redirectTo: 'rating-ro-reporting'
                         },
-                    }
-
+                        children: [
+                            {
+                                path: '',
+                                name: 'rating-ro-reporting',
+                                component: () =>
+                                    import('@pages/RatingRoReporting/components/RatingRoReporting.vue'),
+                            },
+                            {
+                                path: 'report-regional-one',
+                                name: 'ReportRegionalPartOne',
+                                component: () =>
+                                    import(
+                                        '@pages/ReportRegionalHQPartOnePage/ReportRegionalHQPartOne.vue'
+                                        ),
+                                meta: {
+                                    label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 1',
+                                },
+                            },
+                        ]
+                    },
                 ]
-
             },
             {
                 path: '/references',
