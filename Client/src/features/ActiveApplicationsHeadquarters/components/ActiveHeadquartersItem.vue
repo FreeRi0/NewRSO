@@ -133,7 +133,7 @@ onMounted(() => {
     display: grid;
     width: 100%;
     grid-gap: 12px;
-    grid-template-columns: 48px auto auto;
+    grid-template-columns: 48px minmax(336px, 528px) auto;
 
     @media screen and (max-width: 1024px) {
         grid-template-columns: 48px auto;
