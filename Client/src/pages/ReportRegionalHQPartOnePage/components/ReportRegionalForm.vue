@@ -1,5 +1,6 @@
 <template>
   <form class="form__field-group" @submit.prevent="sentReport">
+    <h2 v-if="!isNewReport" class="report_title-h3">Свод статистических данных по трудоустройству бойцов студенческих отрядов РО за 2024 год на 1 сентября 2024 года</h2>
     <div class="form__field">
       <label
           class="form__label"
@@ -229,5 +230,13 @@ const sentReport = () => {
 .form__field-group {
   border: none;
   background-color: #F3F4F5;
+}
+.report_title-h3 {
+  font-family: Akrobat;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 21.6px;
+  text-align: left;
+  padding-bottom: 32px;
 }
 </style>

@@ -3,7 +3,8 @@
     <input
         :type="type"
         :name="name"
-        :style="{ height: height }"
+        :style="{ height: height,
+         background: 'white'}"
         :value="value"
         :id="name"
         :placeholder="placeholder"
