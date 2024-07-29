@@ -1,6 +1,6 @@
 <template>
   <router-link :to="{ name: 'rating-ro-reporting' }" class="ratingRO__item">
-    <p>{{ item.title }}</p>
+    <p>{{ item.name }}</p>
   </router-link>
 </template>
 <script setup>

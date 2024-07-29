@@ -879,7 +879,7 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: 'reporting',
                         meta: {
-                            label: 'Отчетность',
+                            label: 'Отчеты РО',
                             redirectTo: 'rating-ro-reporting'
                         },
                         children: [

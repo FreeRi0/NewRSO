@@ -14,8 +14,10 @@
       <div class="RoReporting_sort">
         <div class="sort-layout">
           <div class="sort-select sort-select--width">
-            <v-select class="form__select filter-item" :items="tests" bg-color="#F7F7F7" item-color="#000000" menu-icon="mdi-chevron-down" no-data-text="Ничего не найдено..."  variant="default"
-              name="select_item" id="select-district" v-model="SelectedSortItem" item-title="name" placeholder="Выберите Штаб">
+            <v-select class="form__select filter-item" :items="districtsStore.districts" bg-color="#F7F7F7"
+              item-color="#000000" menu-icon="mdi-chevron-down" no-data-text="Ничего не найдено..." base-color="red" variant="default"
+              name="select_item" id="select-district" v-model="SelectedSortItem" item-title="name"
+              placeholder="Окружной Штаб">
               <template #selection="{ item }">
                 <pre v-if="!districtsStore.isLoading">{{
                   item.title
@@ -34,16 +36,27 @@
         </div>
         <div class="sort-filters">
           <div class="sort-select">
-            <div @click="sortAlphabet" class="sorting_btn">По алфавиту</div>
+            <div @click="sortAlphabet" class="sorting_btn">{{ sortOptions.name }}</div>
           </div>
           <Button class="ascend grey" @click="ascending = !ascending" iconn="/assets/icon/new-sort-icon.svg"></Button>
         </div>
       </div>
       <div class="RoReporting_wrapper">
-        <RatingRoHeadquartersList :items="items" />
+        <RatingRoHeadquartersList :items="sortedRegionalHeadquarters" />
+        <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate color="blue"></v-progress-circular>
+        <p v-else-if="
+          !isLoading &&
+          !sortedRegionalHeadquarters.length
+        "    class="no-found-text">
+          К сожалению, не удалось найти информацию о штабах по вашему запросу.
+        </p>
       </div>
-      <template v-if="show">
-        <Button label="Показать еще"></Button>
+      <template v-if='regionals.count && regionals.count > limit'>
+        <Button @click="next" v-if="
+          sortedRegionalHeadquarters.length <
+          regionals.count
+        " label="Показать еще"></Button>
+        <Button @click="prev" v-else label="Свернуть все"></Button>
       </template>
     </div>
 
@@ -53,42 +66,44 @@
 
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { Button } from '@shared/components/buttons';
 import { sortByEducation } from '@shared/components/selects';
 import { RatingRoHeadquartersList } from '@features/RatingRoHeadquarterList';
 import { useDistrictsStore } from '@features/store/districts';
+import { useRegionalsStore } from '@features/store/regionals';
+import { HTTP } from '@app/http';
 
 const districtsStore = useDistrictsStore();
+const regionalsStore = useRegionalsStore();
 
 const SelectedSortItem = ref(null);
 
+const next = () => {
+  getRegionals('next')
+};
 
-const items = ref([
-  { id: 1, title: 'Московское РО' },
-  { id: 2, title: 'Коми РО' },
-  { id: 3, title: 'Кировское РО' },
-  { id: 4, title: 'Московское РО' },
-  { id: 5, title: 'Коми РО' }
-])
+const prev = () => {
+  getRegionals();
+};
+
+const sortedRegionalHeadquarters = ref([]);
 
 const ascending = ref(true);
 const isLoading = ref(false);
 const detachments = ref({});
-const sortBy = ref('alphabet');
+const sortBy = ref('name');
 const timerSearch = ref(null);
+const regionals = ref({});
 const name = ref('');
-const show = ref(true);
 const limit = 20;
 
-const sortOptionss = ref([
+const sortOptions = ref(
   {
-    value: 'alphabet',
-    name: 'Алфавиту от А - Я',
-  },
-]);
+    value: 'name',
+    name: 'По Алфавиту',
+  });
 
-const tests = ref(['Штаб РО', 'Тест РО'])
 
 const clearItem = () => {
   SelectedSortItem.value = null;
@@ -97,14 +112,64 @@ const clearItem = () => {
 const searchHeadquarters = () => {
   clearTimeout(timerSearch.value);
   timerSearch.value = setTimeout(() => {
-    console.log('search');
+    getRegionals();
   }, 400);
 };
-onMounted(() => {
 
+const getRegionals = async (pagination, orderLimit) => {
+  try {
+    isLoading.value = true;
+    let data = [];
+    let url = '/regionals/?';
+    if (orderLimit) data.push('limit=' + orderLimit);
+    else if (!pagination) data.push('limit=' + limit);
+    else if (pagination == 'next') url = regionals.value.next.replace('http', 'https');
+    if (name.value) data.push('search=' + name.value)
+    if (SelectedSortItem.value) data.push('district_headquarter__name=' + SelectedSortItem.value)
+    if (sortBy.value && !pagination) data.push('ordering=' + (ascending.value ? '' : '-') + sortBy.value)
+    const viewHeadquartersResponse = await HTTP.get(url + data.join('&'),);
+    isLoading.value = false;
+
+    let response = viewHeadquartersResponse.data;
+    if (pagination) {
+      response.results = [...regionals.value.results, ...response.results];
+    }
+    regionals.value = response;
+    sortedRegionalHeadquarters.value = response.results
+  } catch (error) {
+    console.log('an error occured ' + error);
+  }
+};
+
+watch(
+  () => SelectedSortItem.value,
+  () => {
+    getRegionals();
+  },
+);
+
+watch(
+  () => ascending.value,
+  () => {
+    getRegionals('', sortedRegionalHeadquarters.value.length);
+  },
+);
+
+
+onMounted(() => {
+  districtsStore.getDistricts()
+  getRegionals();
 })
 </script>
 <style lang="scss" scoped>
+
+.circleLoader {
+  margin: 40px auto;
+}
+
+// .v-field__input::placeholder {
+//     color: green;
+// }
 .sorting_btn {
   cursor: pointer;
   border: none;
@@ -129,6 +194,15 @@ onMounted(() => {
 .sort-layout {
   display: flex;
   column-gap: 8px;
+}
+
+.no-found-text {
+  text-align: center;
+  margin-top: 40px;
+  color: #35383F;
+  font-size: 22px;
+  font-weight: 400;
+  font-family: 'Bert Sans';
 }
 
 .clear {
