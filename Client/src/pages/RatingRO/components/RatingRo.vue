@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 class="ratingRO__title">Рейтинг РО</h1>
+    <h2 class="ratingRO__title">Рейтинг РО</h2>
     <div class="ratingRO__wrapper">
       <router-link :to="{ name: 'rating-ro-reporting' }" class="ratingRO__item">
         <p>Отчеты РО</p>

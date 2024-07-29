@@ -1,45 +1,30 @@
 <template>
-    <button
-        v-if="!loaded"
-        :class="[
-            'btn',
-            `btn_${color}`,
-            { btn_rounded: rounded },
-            { btn_outlined: outlined },
-            { btn_icon: icon },
-            { btn_iconn: iconn },
-            { btn_large: size === 'large' },
-        ]"
-        :disabled="disabled"
-        :loaded="loaded"
-        @click="clickOnButton"
-    >
-        <span v-if="icon || iconn"></span>
+    <button v-if="!loaded" :class="[
+        'btn',
+        `btn_${color}`,
+        { btn_rounded: rounded },
+        { btn_outlined: outlined },
+        { btn_icon: icon },
+        { btn_iconn: iconn },
+        { btn_large: size === 'large' },
+    ]" :disabled="disabled" :loaded="loaded" @click="clickOnButton">
+        <span v-if="icon || iconn"><img id="iconn"></span>
         <span v-else>{{ label }}</span>
     </button>
-    <button
-        v-else
-        :class="[
-            'btn',
-            `btn_${color}`,
-            { btn_rounded: rounded },
-            { btn_outlined: outlined },
-            { btn_icon: icon },
-            { btn_iconn: iconn },
-            { btn_large: size === 'large' },
-        ]"
-        :disabled="disabled"
-        :loaded="loaded"
-        @click="clickOnButton"
-    >
-        <v-progress-circular
-            class="circleLoader"
-            indeterminate
-        ></v-progress-circular>
+    <button v-else :class="[
+        'btn',
+        `btn_${color}`,
+        { btn_rounded: rounded },
+        { btn_outlined: outlined },
+        { btn_icon: icon },
+        { btn_iconn: iconn },
+        { btn_large: size === 'large' },
+    ]" :disabled="disabled" :loaded="loaded" @click="clickOnButton">
+        <v-progress-circular class="circleLoader" indeterminate></v-progress-circular>
     </button>
 </template>
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 
 const res = ref();
 
@@ -87,6 +72,11 @@ const emit = defineEmits(['click']);
 const clickOnButton = () => {
     emit('click');
 };
+onMounted(() => {
+    if (props.icon || props.iconn) {
+        document.getElementById('iconn').src = props.iconn;
+    }
+})
 </script>
 <style lang="scss" scoped>
 .btn {
@@ -102,44 +92,55 @@ const clickOnButton = () => {
     font-size: 16px;
     transition: 0.2s;
     text-transform: none;
+
     &_primary {
         background: var(--primary);
         border: 1px solid var(--primary);
     }
+
     &_second {
         background: var(--second);
         border: 1px solid var(--second);
     }
+
     &_success {
         background: var(--success);
         border: 1px solid var(--success);
     }
+
     &_info {
         background: var(--info);
         border: 1px solid var(--info);
     }
+
     &_warning {
         background: var(--warning);
         border: 1px solid var(--warning);
     }
+
     &_danger {
         background: var(--danger);
         border: 1px solid var(--danger);
     }
+
     &:disabled {
         opacity: 0.6;
         cursor: default;
     }
+
     &_rounded {
         border-radius: 15px;
     }
+
     &_outlined {
         background: transparent;
         color: #000;
+
         &:hover {
             color: #fff;
         }
     }
+
     &_icon {
         border-radius: 5px;
         height: 40px;
@@ -148,6 +149,7 @@ const clickOnButton = () => {
         margin-left: 8px;
         padding: 0;
     }
+
     &_iconn {
         border-radius: 10px;
         height: 40px;
@@ -155,6 +157,7 @@ const clickOnButton = () => {
         margin: 0px;
         padding: 0;
     }
+
     &_switchh {
         border-radius: 10px;
         height: 40px;
@@ -163,6 +166,7 @@ const clickOnButton = () => {
         margin-left: 8px;
         padding: 0;
     }
+
     &_large {
         height: 52px;
         padding: 16px 32px;

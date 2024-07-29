@@ -887,7 +887,7 @@ const routes: RouteRecordRaw[] = [
                                 path: '',
                                 name: 'rating-ro-reporting',
                                 component: () =>
-                                    import('@pages/RatingRoReporting/components/RatingRoReporting.vue'),
+                                    import('@pages/RatingRoReporting/components/RatingRoReportingHeadquarters.vue'),
                             },
                             {
                                 path: 'report-regional-one',
