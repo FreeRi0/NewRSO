@@ -175,7 +175,7 @@
 <script setup>
 import { InputReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { onBeforeMount, ref } from "vue";
+import { ref, watchEffect } from "vue";
 
 const emit = defineEmits(['sentReport']);
 const props = defineProps({
@@ -193,9 +193,9 @@ const props = defineProps({
 });
 
 const reportDataChildren = ref(null);
-onBeforeMount(() => {
+watchEffect(() => {
   reportDataChildren.value = { ...props.reportData };
-});
+})
 
 const sentReport = () => {
   emit('sentReport', reportDataChildren.value)

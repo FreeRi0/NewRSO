@@ -21,9 +21,9 @@
 </template>
 
 <script setup>
-import { inject, ref } from "vue";
+import {inject, onActivated, ref} from "vue";
 import ReportRegionalForm from "@pages/ReportRegionalHQPartOnePage/components/ReportRegionalForm.vue";
-import { createReport } from "@services/ReportService.ts";
+import { createReport, getReport } from "@services/ReportService.ts";
 import ReportModalSuccess from "@pages/ReportRegionalHQPartOnePage/components/ReportModalSuccess.vue";
 import ReportModalWarning from "@pages/ReportRegionalHQPartOnePage/components/ReportModalWarning.vue";
 
@@ -46,6 +46,20 @@ const reportData = ref(defaultReportData);
 const showModalWarning = ref(false);
 const showModalSuccess = ref(false);
 const isButtonDisabled = ref(false);
+
+onActivated(async () => {
+  try {
+    const res = await getReport();
+    delete res.data.id;
+    for (let i in res.data) {
+      res.data[i] = res.data[i].toString()
+    }
+    reportData.value = res.data;
+    isButtonDisabled.value = true;
+  } catch (e) {
+    console.log(e)
+  }
+})
 
 const reportConfirmation = async (value) => {
   if (value) {
