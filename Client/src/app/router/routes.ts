@@ -889,6 +889,24 @@ const routes: RouteRecordRaw[] = [
                                 component: () =>
                                     import('@pages/RoPlaces/components/RoPlaces.vue'),
                             },
+                            {
+                                path: ':id',
+                                meta: {
+                                    requiresAuth: true,
+                                    redirectTo: 'places',
+                                    label: 'PlaceId.title',
+                                    isObject: true,
+                                },
+                                children: [
+                                    {
+                                        path: '',
+                                        name: 'Place',
+                                        component: () =>
+                                            import('@pages/RatingRoPlace/components/RatingRoPlace.vue'),
+                                    },
+                                ]
+                            }
+
                         ]
                     },
 

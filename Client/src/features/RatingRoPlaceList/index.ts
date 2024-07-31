@@ -1,0 +1,1 @@
+export { default as RatingRoPlaceList } from './components/RatingRoPlaceList.vue'

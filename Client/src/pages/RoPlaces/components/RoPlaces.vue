@@ -3,7 +3,7 @@
     <div class="RoPlaces">
       <h2 class="RoPlaces_title">Места РО по показателям</h2>
       <div class="RoPlaces_wrapper">
-        <router-link to="/" v-for="item in RoPlaces" :key="item.id" class="RoPlaces_item">
+        <router-link :to="{ name: 'Place', params: {id: item.id} }" v-for="item in RoPlaces" :key="item.id" class="RoPlaces_item">
           <p>{{ item.id }}.</p>
           <p>{{ item.title }}</p>
         </router-link>
@@ -78,7 +78,7 @@ const RoPlaces = ref([{
     height: auto;
     display: flex;
     align-items: flex-start;
-    column-gap: 3px;
+    column-gap: 8px;
 
     p {
       line-height: 24px;

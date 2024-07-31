@@ -38,5 +38,9 @@ const classes = computed(() => ({
     color: #1c5c94;
     background-color: transparent;
     border: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-wrap: nowrap;
+    max-width: 600px;
 }
 </style>
