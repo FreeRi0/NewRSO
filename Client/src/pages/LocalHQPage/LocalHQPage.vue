@@ -56,7 +56,6 @@ const aboutlocalHQ = async () => {
 
             localHeadquarter.value = response.data;
             replaceTargetObjects([localHeadquarter.value]);
-            // console.log(response);
         } catch (error) {
             console.log('an error occured ' + error);
         }
@@ -86,20 +85,12 @@ const fetchCommander = async () => {
         console.log('An error occurred:', error);
     }
 };
-onBeforeRouteUpdate(async (to, from) => {
-    if (to.params.id !== from.params.id) {
-        aboutlocalHQ();
-        aboutMembers();
-        fetchCommander();
-    }
-});
 watch(
     () => route.params.id,
 
     async (newId) => {
         id = newId;
         await aboutlocalHQ();
-        await aboutMembers();
         await fetchCommander();
     },
     {
@@ -109,8 +100,7 @@ watch(
 );
 
 onMounted(() => {
-    aboutlocalHQ();
-    aboutMembers();
+
 });
 
 const HQandSquads = ref([

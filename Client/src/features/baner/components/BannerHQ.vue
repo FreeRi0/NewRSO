@@ -24,7 +24,7 @@
                             <img src="@/app/assets/icon/calendar.svg" alt="calendar" />
                             <time datetime="2022-09-10">{{
                                 headquarter.founding_date
-                            }}</time>
+                                }}</time>
                         </li>
                     </ul>
                 </div>
@@ -112,7 +112,7 @@
                             " label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
-                    <div v-else-if="IsMember" class="AddApplication">
+                    <div v-else-if="userStore.currentUser.educational_headquarter_id === props.headquarter.id" class="AddApplication">
                         Вы участник
                     </div>
                 </div>
@@ -226,7 +226,7 @@
                             " label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
-                    <div v-else-if="IsMember" class="AddApplication">
+                    <div v-else-if="userStore.currentUser.local_headquarter_id === props.localHeadquarter.id" class="AddApplication">
                         Вы участник
                     </div>
                 </div>
@@ -343,10 +343,11 @@
                             )
                             " label="Удалить заявку" class="AddApplication"></Button>
                     </div>
-
-                    <div v-else-if="IsMember" class="AddApplication">
+                    <div v-else-if="userStore.currentUser.district_headquarter_id === props.districtHeadquarter.id" class="AddApplication">
                         Вы участник
                     </div>
+
+
                 </div>
             </div>
         </div>
@@ -464,7 +465,7 @@
                             " label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
-                    <div v-else-if="IsMember" class="AddApplication">
+                    <div v-else-if="userStore.currentUser.regional_headquarter_id === props.regionalHeadquarter.id" class="AddApplication">
                         Вы участник
                     </div>
                 </div>
@@ -498,7 +499,7 @@
                         <li class="Squad-HQ__date-central">
                             <time datetime="2022-09-10">{{
                                 centralHeadquarter.rso_founding_congress_date
-                                }}
+                            }}
                                 — дата первого Учредительного Съезда РСО</time>
                         </li>
                         <li class="hq-data__participant-counter">
@@ -559,11 +560,11 @@
                             userStore.currentUser.district_headquarter_id ===
                             null
                             " @add="
-                            AddApplication(
-                                'centrals',
-                                props.centralHeadquarter.id,
-                            )
-                            ">
+                                AddApplication(
+                                    'centrals',
+                                    props.centralHeadquarter.id,
+                                )
+                                ">
                     </AddModal>
                     <router-link v-if="
                         userId &&
@@ -726,12 +727,13 @@ const IsTrusted = computed(() => {
 });
 
 const IsMember = computed(() => {
-    if (props.member && props.member.length > 0) {
-        return props.member.find((item) => item.user.id === userId.value);
-    } else {
-        return false;
-    }
+    // if (props.member && props.member.length > 0) {
+    //     return props.member.find((item) => item.user.id === userId.value);
+    // } else {
+    //     return false;
+    // }
 });
+
 
 const AddApplication = async (name, id) => {
     try {

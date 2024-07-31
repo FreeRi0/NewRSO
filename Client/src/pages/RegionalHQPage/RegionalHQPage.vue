@@ -91,9 +91,9 @@ watch(
 
     async (newId) => {
         if (!newId || route.name !== 'RegionalHQ') return;
-        // id = newId;
+
         await regionalsStore.getRegionalId(newId);
-        await regionalsStore.getRegionalsMembers(newId);
+
         await replaceTargetObjects([regionalHeadquarter.regional.value]);
         await fetchCommander();
     },
@@ -104,8 +104,6 @@ watch(
 );
 
 onMounted(() => {
-    regionalsStore.getRegionalId(id);
-    regionalsStore.getRegionalsMembers(id);
     replaceTargetObjects([regionalHeadquarter.regional.value]);
 });
 
