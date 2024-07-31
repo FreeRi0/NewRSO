@@ -4,18 +4,28 @@
         <p class="subtitle">Подал:</p>
         <div class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
-                <img :src="request.user?.media.photo" alt="logo" v-if="request.user?.media" />
-                <img src="@app/assets/foto-leader-squad/foto-leader-squad-01.png" alt="photo" v-else />
+                <img
+                    :src="request.user?.media.photo"
+                    alt="logo"
+                    v-if="request.user?.media"
+                />
+                <img
+                    src="@app/assets/foto-leader-squad/foto-leader-squad-01.png"
+                    alt="photo"
+                    v-else
+                />
             </div>
             <div class="containerHorizontal">
                 <p class="horizontallso-item__list-full">
                     {{ request.user?.first_name }}
                 </p>
                 <div class="horizontallso-item__list-date">
-                    <span style="
+                    <span
+                        style="
                             border-left: 2px solid #b6b6b6;
                             padding-right: 8px;
-                        "></span>
+                        "
+                    ></span>
                     <p>{{ request.user?.date_of_birth }}</p>
                 </div>
             </div>
@@ -31,13 +41,13 @@
 
             <div class="file" v-for="file in files" :key="file.id">
                 <div class="file_name">
-                    <img class="file_img" src="/assets/file_dock.svg" />
+                    <SvgIcon class="file_img" icon-name="file-dock" />
                     <a :href="file.document" target="_blank">{{
                         file.document.slice(file.document.indexOf('_') + 1)
-                        }}</a>
+                    }}</a>
                 </div>
                 <a class="download_text" :href="file.document" target="_blank">
-                    <img class="download_img" src="/assets/download.svg" />
+                    <SvgIcon class="download_img" iconName="download" />
                     скачать файл
                 </a>
             </div>
@@ -67,7 +77,6 @@ const getIndividualApplication = async () => {
     try {
         const { data } = await HTTP.get(
             `/events/${route.params.id}/applications/${currentApplicationId.value}/`,
-
         );
 
         request.value = data;
@@ -86,7 +95,6 @@ const onCancel = async () => {
 
         const { data } = await HTTP.get(
             `/events/${route.params.id}/applications/`,
-
         );
 
         if (data.length) {
@@ -114,7 +122,6 @@ const getFilesInfo = async () => {
     try {
         const { data } = await HTTP.get(
             `/events/${route.params.id}/user_documents/`,
-
         );
         for (const file of data) {
             if (
@@ -135,12 +142,10 @@ const onAccept = async () => {
         await HTTP.post(
             `/events/${route.params.id}/applications/${currentApplicationId.value}/confirm/`,
             {},
-
         );
 
         const { data } = await HTTP.get(
             `/events/${route.params.id}/applications/`,
-
         );
 
         if (data.length) {

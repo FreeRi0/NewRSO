@@ -5,7 +5,11 @@
             <p class="subtitle">Подал:</p>
             <div class="horizontallso-item__wrapper">
                 <div class="horizontallso-img">
-                    <img class="avatar_circle" :src="applicationsList[0].headquarter_author.banner" alt="logo" />
+                    <img
+                        class="avatar_circle"
+                        :src="applicationsList[0].headquarter_author.banner"
+                        alt="logo"
+                    />
                 </div>
                 <div class="containerHorizontal">
                     <p class="horizontallso-item__list-full">
@@ -15,23 +19,33 @@
             </div>
             <div class="download" @click="downloadList">
                 <a class="download_text">
-                    <img class="download_img" src="/assets/download.svg" />
+                    <SvgIcon class="download_img" iconName="download" />
                     скачать список
                 </a>
             </div>
-            <div class="horizontallso-item__wrapper" v-for="user in applicationsList[0].applicants" :key="user.id">
+            <div
+                class="horizontallso-item__wrapper"
+                v-for="user in applicationsList[0].applicants"
+                :key="user.id"
+            >
                 <div class="horizontallso-img">
-                    <img class="avatar_circle" :src="user.user.avatar.photo" alt="avatar" />
+                    <img
+                        class="avatar_circle"
+                        :src="user.user.avatar.photo"
+                        alt="avatar"
+                    />
                 </div>
                 <div class="containerHorizontal">
                     <p class="horizontallso-item__list-full">
                         {{ user.user.first_name + ' ' + user.user.last_name }}
                     </p>
                     <div class="horizontallso-item__list-date">
-                        <span style="
+                        <span
+                            style="
                                 border-left: 2px solid #b6b6b6;
                                 padding-right: 8px;
-                            "></span>
+                            "
+                        ></span>
                         <p>{{ user.user.date_of_birth }}</p>
                     </div>
                 </div>
@@ -51,8 +65,8 @@
 
 <script setup>
 import { HTTP } from '@app/http';
+import { SvgIcon } from '@shared/components/SvgIcon';
 import { onMounted, ref, inject } from 'vue';
-
 import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
 import * as XLSX from 'xlsx';
@@ -69,7 +83,6 @@ const getApplicatonsList = async () => {
     try {
         const { data } = await HTTP.get(
             `/events/${route.params.id}/group_applications/all/`,
-
         );
         applicationsList.value = data.results;
         loading.value = false;
@@ -100,7 +113,7 @@ const onSubmit = async () => {
             title: `ошибка`,
             showConfirmButton: false,
             timer: 2500,
-        })
+        });
     }
 };
 
@@ -125,7 +138,7 @@ const onDeny = async () => {
             title: `ошибка`,
             showConfirmButton: false,
             timer: 2500,
-        })
+        });
     }
 };
 
@@ -152,27 +165,37 @@ const downloadList = () => {
 
     const downloadTemp = [];
 
-    applicationsList.value[0].applicants.map(item => { 
+    applicationsList.value[0].applicants.map((item) => {
         downloadTemp.push({
             last_name: item.user.last_name,
             first_name: item.user.first_name,
             patronymic_name: item.user.patronymic_name,
             email: item.user.email,
             phone_number: item.user.phone_number,
-            membership_fee: item.user.membership_fee ? item.user.membership_fee = "Оплачен" : item.user.membership_fee = "Не оплачен",
+            membership_fee: item.user.membership_fee
+                ? (item.user.membership_fee = 'Оплачен')
+                : (item.user.membership_fee = 'Не оплачен'),
         });
-    })
+    });
 
     const worksheet_data = [
-        ["ФИО", "Почта", "Телефон", "Членский взнос"],
-        ...downloadTemp.map(item => [`${item.last_name} ${item.first_name} ${item.patronymic_name}`, item.email, item.phone_number, item.membership_fee])
+        ['ФИО', 'Почта', 'Телефон', 'Членский взнос'],
+        ...downloadTemp.map((item) => [
+            `${item.last_name} ${item.first_name} ${item.patronymic_name}`,
+            item.email,
+            item.phone_number,
+            item.membership_fee,
+        ]),
     ];
 
     const worksheet = XLSX.utils.aoa_to_sheet(worksheet_data);
 
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
 
-    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const excelBuffer = XLSX.write(workbook, {
+        bookType: 'xlsx',
+        type: 'array',
+    });
 
     const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
 
@@ -182,7 +205,7 @@ const downloadList = () => {
     a.download = 'members.xlsx';
     document.body.appendChild(a);
     a.click();
-}
+};
 
 onMounted(async () => {
     await getApplicatonsList();

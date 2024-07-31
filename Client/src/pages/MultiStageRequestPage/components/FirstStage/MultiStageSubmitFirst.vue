@@ -38,7 +38,7 @@
                     <p class="choose_all">Выделить все</p>
 
                     <a class="download_text" target="_blank">
-                        <img class="download_img" src="/assets/download.svg" />
+                        <SvgIcon class="download_img" iconName="download"/>
                         Cкачать список
                     </a>
 

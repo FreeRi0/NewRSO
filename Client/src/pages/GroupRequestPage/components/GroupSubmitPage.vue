@@ -3,8 +3,14 @@
         <p class="main_title">Групповая заявка</p>
         <div class="form__field">
             <div class="contributor-search">
-                <input type="text" id="search" class="contributor-search__input" @keyup="searchUsers" v-model="name"
-                    placeholder="Начните вводить" />
+                <input
+                    type="text"
+                    id="search"
+                    class="contributor-search__input"
+                    @keyup="searchUsers"
+                    v-model="name"
+                    placeholder="Начните вводить"
+                />
                 <img src="@app/assets/icon/search.svg" alt="search" />
             </div>
         </div>
@@ -18,19 +24,48 @@
                 </p>
 
                 <div class="uploads">
-                    <div class="form-col" v-for="(file, index) in files.length + 1" :key="index">
+                    <div
+                        class="form-col"
+                        v-for="(file, index) in files.length + 1"
+                        :key="index"
+                    >
                         <div class="form-fileupload" v-if="index < 6">
-                            <img class="paper-clip" src="@app/assets/icon/addFile.svg" alt="addFile" />
+                            <img
+                                class="paper-clip"
+                                src="@app/assets/icon/addFile.svg"
+                                alt="addFile"
+                            />
                             <div class="form-text">
-                                <FileUpload v-if="files[index]?.name" class="file-upload-text" mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                    :maxFileSize="7000000" :customUpload="true" :chooseLabel=files[index].name
+                                <FileUpload
+                                    v-if="files[index]?.name"
+                                    class="file-upload-text"
+                                    mode="basic"
+                                    name="demo[]"
+                                    accept=".pdf, .jpeg, .png"
+                                    :maxFileSize="7000000"
+                                    :customUpload="true"
+                                    :chooseLabel="files[index].name"
                                 ></FileUpload>
-                                <FileUpload v-else class="file-upload-text" mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                    :maxFileSize="7000000" :customUpload="true" chooseLabel="Выбрать файл"
+                                <FileUpload
+                                    v-else
+                                    class="file-upload-text"
+                                    mode="basic"
+                                    name="demo[]"
+                                    accept=".pdf, .jpeg, .png"
+                                    :maxFileSize="7000000"
+                                    :customUpload="true"
+                                    chooseLabel="Выбрать файл"
                                     @select="onUpload"
                                 ></FileUpload>
                             </div>
-                            <img v-if="index < files.length" src="../../../app/assets/icon/close-location.svg" alt="close" width="24" height="24" @click="onRemove(index)"/>
+                            <img
+                                v-if="index < files.length"
+                                src="../../../app/assets/icon/close-location.svg"
+                                alt="close"
+                                width="24"
+                                height="24"
+                                @click="onRemove(index)"
+                            />
                         </div>
                     </div>
                 </div>
@@ -39,39 +74,71 @@
             <div id="right">
                 <div class="additional_line">
                     <div class="horizontallso__confidant">
-                        <input type="checkbox" v-model="isChecked" @change="onCheckbox" />
+                        <input
+                            type="checkbox"
+                            v-model="isChecked"
+                            @change="onCheckbox"
+                        />
                     </div>
 
                     <p class="choose_all">Выделить все</p>
 
-                    <a class="download_text" target="_blank" @click="downloadList">
-                        <img class="download_img" src="/assets/download.svg" />
+                    <a
+                        class="download_text"
+                        target="_blank"
+                        @click="downloadList"
+                    >
+                        <SvgIcon class="download_img" iconName="download" />
                         Cкачать список
                     </a>
 
                     <div class="sort_line">
                         <div class="sort-select">
-                            <sortByEducation variant="outlined" v-model="sortBy" :options="sortOptions"
-                                :sorts-boolean="false" selected="sortBy" placeholder="Выберите фильтр">
+                            <sortByEducation
+                                variant="outlined"
+                                v-model="sortBy"
+                                :options="sortOptions"
+                                :sorts-boolean="false"
+                                selected="sortBy"
+                                placeholder="Выберите фильтр"
+                            >
                             </sortByEducation>
                         </div>
-                        <Button type="button" class="ascend" icon="switch" @click="ascending = !ascending"
-                            color="white"></Button>
+                        <Button
+                            type="button"
+                            class="ascend"
+                            icon="switch"
+                            @click="ascending = !ascending"
+                            color="white"
+                        ></Button>
                     </div>
                 </div>
 
-                <group-submit-item v-for="user in sortedUsersList" :key="user.id" :user="user"
-                    @select="onToggleSelectUser" />
+                <group-submit-item
+                    v-for="user in sortedUsersList"
+                    :key="user.id"
+                    :user="user"
+                    @select="onToggleSelectUser"
+                />
             </div>
         </div>
         <template v-if="selectedUsersList.length">
             <p class="text_total">Итого: {{ selectedUsersList.length }}</p>
 
-            <group-submit-select v-for="user in selectedUsersList" :key="user.id" :user="user"
-                @select="onToggleSelectUser" />
+            <group-submit-select
+                v-for="user in selectedUsersList"
+                :key="user.id"
+                :user="user"
+                @select="onToggleSelectUser"
+            />
 
             <div class="competitions__btns">
-                <Button class="save" type="button" label="Подать заявку" @click="onAction"></Button>
+                <Button
+                    class="save"
+                    type="button"
+                    label="Подать заявку"
+                    @click="onAction"
+                ></Button>
             </div>
         </template>
     </div>
@@ -177,7 +244,6 @@ const getUsersList = async (search) => {
     try {
         const { data } = await HTTP.get(
             `/events/${route.params.id}/group_applications/${search}`,
-
         );
         console.log(data);
         usersList.value = [];
@@ -200,11 +266,9 @@ const onAction = async () => {
         for (const user of selectedUsersList.value) {
             user_ids.push(user.id);
         }
-        await HTTP.post(
-            `/events/${route.params.id}/group_applications/`,
-            { user_ids },
-
-        );
+        await HTTP.post(`/events/${route.params.id}/group_applications/`, {
+            user_ids,
+        });
         swal.fire({
             position: 'top-center',
             icon: 'success',
@@ -226,7 +290,7 @@ const onAction = async () => {
             title: `ошибка`,
             showConfirmButton: false,
             timer: 2500,
-        })
+        });
     }
 };
 
@@ -274,27 +338,37 @@ const downloadList = () => {
     const workbook = XLSX.utils.book_new();
     const downloadTemp = [];
 
-    usersList.value.map(item => { 
+    usersList.value.map((item) => {
         downloadTemp.push({
             last_name: item.last_name,
             first_name: item.first_name,
             patronymic_name: item.patronymic_name,
             email: item.email,
             phone_number: item.phone_number,
-            membership_fee: item.membership_fee ? item.membership_fee = "Оплачен" : item.membership_fee = "Не оплачен",
+            membership_fee: item.membership_fee
+                ? (item.membership_fee = 'Оплачен')
+                : (item.membership_fee = 'Не оплачен'),
         });
-    })
+    });
 
     const worksheet_data = [
-        ["ФИО", "Почта", "Телефон", "Членский взнос"],
-        ...downloadTemp.map(item => [`${item.last_name} ${item.first_name} ${item.patronymic_name}`, item.email, item.phone_number, item.membership_fee])
+        ['ФИО', 'Почта', 'Телефон', 'Членский взнос'],
+        ...downloadTemp.map((item) => [
+            `${item.last_name} ${item.first_name} ${item.patronymic_name}`,
+            item.email,
+            item.phone_number,
+            item.membership_fee,
+        ]),
     ];
 
     const worksheet = XLSX.utils.aoa_to_sheet(worksheet_data);
 
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
 
-    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const excelBuffer = XLSX.write(workbook, {
+        bookType: 'xlsx',
+        type: 'array',
+    });
 
     const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
 
@@ -304,7 +378,7 @@ const downloadList = () => {
     a.download = 'members.xlsx';
     document.body.appendChild(a);
     a.click();
-}
+};
 
 watch(selectedUsersList, (newSelectedUsersList) => {
     isChecked.value = newSelectedUsersList.length == usersList.value.length;
@@ -488,7 +562,7 @@ onMounted(async () => {
         width: 193px;
     }
 
-    &>.form__select {
+    & > .form__select {
         margin-bottom: 0px;
     }
 }
@@ -536,7 +610,7 @@ onMounted(async () => {
         text-align: left;
         color: #1f7cc0;
 
-        &> :deep(.p-) {
+        & > :deep(.p-) {
             display: none;
         }
 

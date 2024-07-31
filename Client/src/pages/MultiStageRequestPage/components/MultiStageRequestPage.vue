@@ -3,9 +3,17 @@
         <p class="main_title">Многоэтапная заявка</p>
         <div v-if="applications.length > 0">
             <p class="subtitle">Подал:</p>
-            <div class="horizontallso-item__wrapper" v-for="headquarter in headquarters" :key="headquarter.id">
+            <div
+                class="horizontallso-item__wrapper"
+                v-for="headquarter in headquarters"
+                :key="headquarter.id"
+            >
                 <div class="horizontallso-img">
-                    <img class="competition__avatar_circle" :src="headquarter?.emblem" alt="logo" />
+                    <img
+                        class="competition__avatar_circle"
+                        :src="headquarter?.emblem"
+                        alt="logo"
+                    />
                 </div>
                 <div class="containerHorizontal">
                     <p class="horizontallso-item__list-full">
@@ -21,13 +29,17 @@
                 <p class="subtitle" v-if="files">Сопутствующие документы:</p>
                 <div class="file" v-for="file in files" :key="file">
                     <div class="file_name">
-                        <img class="file_img" src="/assets/file_dock.svg" />
+                        <SvgIcon class="file_img" icon-name="file-dock" />
                         <a :href="file.document" target="_blank">{{
                             file.document.slice(file.document.indexOf('_') + 1)
-                            }}</a>
+                        }}</a>
                     </div>
-                    <a class="download_text" :href="file.document" target="_blank">
-                        <img class="download_img" src="/assets/download.svg" />
+                    <a
+                        class="download_text"
+                        :href="file.document"
+                        target="_blank"
+                    >
+                        <SvgIcon class="download_img" iconName="download" />
                         скачать файл
                     </a>
                 </div>
@@ -62,7 +74,6 @@ const getApplicationsInfo = async () => {
     try {
         const { data } = await HTTP.get(
             `/events/${route.params.id}/multi_applications/all/`,
-
         );
         for (const obj of data) {
             // console.log(obj);
@@ -79,7 +90,6 @@ const getFilesInfo = async () => {
     try {
         const { data } = await HTTP.get(
             `/events/${route.params.id}/user_documents/`,
-
         );
         for (const file of data) {
             if (
@@ -100,7 +110,6 @@ const getHeadquarters = async () => {
     try {
         const { data } = await HTTP.get(
             `/events/${route.params.id}/multi_applications/detail/${applications.value[0].organizer_id}`,
-
         );
         headquarters.value = data;
         //console.log(headquarters.value);
@@ -113,7 +122,6 @@ const onCancel = async () => {
     try {
         await HTTP.delete(
             `/events/${route.params.id}/multi_applications/delete/${applications.value[0].organizer_id}/`,
-
         );
         applications.value.shift();
         redirect();
@@ -127,7 +135,6 @@ const onAccept = async () => {
         await HTTP.post(
             `/events/${route.params.id}/multi_applications/confirm/${applications.value[0].organizer_id}/`,
             {},
-
         );
         applications.value.shift();
         redirect();

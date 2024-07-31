@@ -23,43 +23,81 @@
                             <div class="form__field-group-top">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label">Региональная школа командного
+                                        <label class="form__label"
+                                            >Региональная школа командного
                                             состава пройдена командиром
-                                            отряда<span>&nbsp;*</span></label>
+                                            отряда<span>&nbsp;*</span></label
+                                        >
 
-                                        <Input v-if="
-                                            applicationData.commander_achievement
-                                        " type="text" value="Да" readonly />
-                                        <Input v-else type="text" value="Нет" readonly />
+                                        <Input
+                                            v-if="
+                                                applicationData.commander_achievement
+                                            "
+                                            type="text"
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Ссылка на публикацию из группы
+                                        <label class="form__label"
+                                            >Ссылка на публикацию из группы
                                             отряда о прохождении школы
                                             командного состава командиром
-                                            отряда<span>&nbsp;*</span></label>
-                                        <Input placeholder="Например, https://vk.com/cco_monolit" :max-length="100"
-                                            v-model:value="applicationData.commander_link
-                                                " readonly />
+                                            отряда<span>&nbsp;*</span></label
+                                        >
+                                        <Input
+                                            placeholder="Например, https://vk.com/cco_monolit"
+                                            :max-length="100"
+                                            v-model:value="
+                                                applicationData.commander_link
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                 </div>
                                 <div class="form__field-group-right">
                                     <div class="form__field">
-                                        <label class="form__label">Региональная школа командного
+                                        <label class="form__label"
+                                            >Региональная школа командного
                                             состава пройдена комиссаром
-                                            отряда<span>&nbsp;*</span></label>
-                                        <Input v-if="
-                                            applicationData.commissioner_achievement
-                                        " type="text" value="Да" readonly />
-                                        <Input v-else type="text" value="Нет" readonly />
+                                            отряда<span>&nbsp;*</span></label
+                                        >
+                                        <Input
+                                            v-if="
+                                                applicationData.commissioner_achievement
+                                            "
+                                            type="text"
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Ссылка на публикацию из группы
+                                        <label class="form__label"
+                                            >Ссылка на публикацию из группы
                                             отряда о прохождении школы
                                             командного состава комиссаром
-                                            отряда<span>&nbsp;*</span></label>
-                                        <Input placeholder="Например, https://vk.com/cco_monolit" max-length="100"
-                                            v-model:value="applicationData.commissioner_link
-                                                " readonly />
+                                            отряда<span>&nbsp;*</span></label
+                                        >
+                                        <Input
+                                            placeholder="Например, https://vk.com/cco_monolit"
+                                            max-length="100"
+                                            v-model:value="
+                                                applicationData.commissioner_link
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -82,33 +120,61 @@
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div class="form__field-group-top" v-for="participant in applicationData.participants_data"
-                                :key="participant.id">
+                            <div
+                                class="form__field-group-top"
+                                v-for="participant in applicationData.participants_data"
+                                :key="participant.id"
+                            >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label">ФИО участника, прошедшего
-                                            профессиональное обучение<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="participant.name" readonly />
+                                        <label class="form__label"
+                                            >ФИО участника, прошедшего
+                                            профессиональное обучение<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="participant.name"
+                                            readonly
+                                        />
                                     </div>
                                 </div>
                                 <div class="form__field-group-right">
                                     <div class="form__field">
-                                        <label class="form__label">Документ, подтверждающий
+                                        <label class="form__label"
+                                            >Документ, подтверждающий
                                             прохождение профессионального
-                                            обучения<span>&nbsp;*</span></label>
+                                            обучения<span>&nbsp;*</span></label
+                                        >
                                         <div class="file">
                                             <div class="file_name">
-                                                <img class="file_img" src="/assets/file_dock.svg" />
-                                                <a :href="participant.document" target="_blank" class="file_title">{{
-                                                    participant.document_name.slice(
-                                                    participant.document_name.indexOf(
-                                                    '/media/',
-                                                    ) + 7,
-                                                    )
-                                                    }}</a>
+                                                <SvgIcon
+                                                    class="file_img"
+                                                    icon-name="file-dock"
+                                                />
+                                                <a
+                                                    :href="participant.document"
+                                                    target="_blank"
+                                                    class="file_title"
+                                                    >{{
+                                                        participant.document_name.slice(
+                                                            participant.document_name.indexOf(
+                                                                '/media/',
+                                                            ) + 7,
+                                                        )
+                                                    }}</a
+                                                >
                                             </div>
-                                            <a class="download_text" :href="participant.document" target="_blank">
-                                                <img class="download_img" src="/assets/download.svg" />
+                                            <a
+                                                class="download_text"
+                                                :href="participant.document"
+                                                target="_blank"
+                                            >
+                                                <SvgIcon
+                                                    class="download_img"
+                                                    iconName="download"
+                                                />
                                                 скачать файл
                                             </a>
                                         </div>
@@ -133,159 +199,369 @@
                             <svg-icon name="wrap" :flip="expanded" />
                         </template>
                     </v-expansion-panel-title>
-                    <v-expansion-panel-text class="form__inner-content"
-                        v-if="applicationData.demonstration_block && !applicationData.demonstration_block?.is_verified">
+                    <v-expansion-panel-text
+                        class="form__inner-content"
+                        v-if="
+                            applicationData.demonstration_block &&
+                            !applicationData.demonstration_block?.is_verified
+                        "
+                    >
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                            >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label">Участие в Демонстрации 1
-                                            мая<span>&nbsp;*</span></label>
-                                        <Input v-if="
-                                            applicationData.demonstration_block.first_may_demonstration
-                                        " type="text" value="Да" readonly />
-                                        <Input v-else type="text" value="Нет" readonly />
+                                        <label class="form__label"
+                                            >Участие в Демонстрации 1 мая<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            v-if="
+                                                applicationData
+                                                    .demonstration_block
+                                                    .first_may_demonstration
+                                            "
+                                            type="text"
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Количество участников мероприятия
+                                        <label class="form__label"
+                                            >Количество участников мероприятия
                                             Демонстрация 1 мая
-                                            <span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="applicationData.demonstration_block.first_may_demonstration_participants
-                                            " readonly />
+                                            <span>&nbsp;*</span></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData
+                                                    .demonstration_block
+                                                    .first_may_demonstration_participants
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </v-expansion-panel-text>
-                    <v-expansion-panel-text class="form__inner-content"
-                        v-if="applicationData.patriotic_action_block && !applicationData.patriotic_action_block?.is_verified">
+                    <v-expansion-panel-text
+                        class="form__inner-content"
+                        v-if="
+                            applicationData.patriotic_action_block &&
+                            !applicationData.patriotic_action_block?.is_verified
+                        "
+                    >
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                            >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label">Участие во всероссийской
+                                        <label class="form__label"
+                                            >Участие во всероссийской
                                             патриотической акции «Поклонимся
-                                            великим тем годам»<span>&nbsp;*</span></label>
-                                        <Input v-if="
-                                            applicationData.patriotic_action_block.patriotic_action
-                                        " type="text" value="Да" readonly />
-                                        <Input v-else type="text" value="Нет" readonly />
+                                            великим тем годам»<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            v-if="
+                                                applicationData
+                                                    .patriotic_action_block
+                                                    .patriotic_action
+                                            "
+                                            type="text"
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Количество участников всероссийской
+                                        <label class="form__label"
+                                            >Количество участников всероссийской
                                             патриотической акции «Поклонимся
-                                            великим тем годам»<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="applicationData.patriotic_action_block.patriotic_action_participants
-                                            " readonly />
+                                            великим тем годам»<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData
+                                                    .patriotic_action_block
+                                                    .patriotic_action_participants
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </v-expansion-panel-text>
-                    <v-expansion-panel-text class="form__inner-content"
-                        v-if="applicationData.safety_work_week_block && !applicationData.safety_work_week_block?.is_verified">
+                    <v-expansion-panel-text
+                        class="form__inner-content"
+                        v-if="
+                            applicationData.safety_work_week_block &&
+                            !applicationData.safety_work_week_block?.is_verified
+                        "
+                    >
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                            >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label">Участие в Неделе охраны
-                                            труда<span>&nbsp;*</span></label>
-                                        <Input v-if="
-                                            applicationData.safety_work_week_block.safety_work_week
-                                        " type="text" value="Да" readonly />
-                                        <Input v-else type="text" value="Нет" readonly />
+                                        <label class="form__label"
+                                            >Участие в Неделе охраны труда<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            v-if="
+                                                applicationData
+                                                    .safety_work_week_block
+                                                    .safety_work_week
+                                            "
+                                            type="text"
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
+                                            readonly
+                                        />
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </v-expansion-panel-text>
-                    <v-expansion-panel-text class="form__inner-content"
-                        v-if="applicationData.commander_commissioner_school_block && !applicationData.commander_commissioner_school_block?.is_verified">
+                    <v-expansion-panel-text
+                        class="form__inner-content"
+                        v-if="
+                            applicationData.commander_commissioner_school_block &&
+                            !applicationData.commander_commissioner_school_block
+                                ?.is_verified
+                        "
+                    >
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                            >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label">Участие в Школе подготовки
+                                        <label class="form__label"
+                                            >Участие в Школе подготовки
                                             командиров и комиссаров студенческих
-                                            отрядов<span>&nbsp;*</span></label>
-                                        <Input v-if="
-                                            applicationData.commander_commissioner_school_block.commander_commissioner_school
-                                        " type="text" value="Да" readonly />
-                                        <Input v-else type="text" value="Нет" readonly />
+                                            отрядов<span>&nbsp;*</span></label
+                                        >
+                                        <Input
+                                            v-if="
+                                                applicationData
+                                                    .commander_commissioner_school_block
+                                                    .commander_commissioner_school
+                                            "
+                                            type="text"
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
+                                            readonly
+                                        />
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </v-expansion-panel-text>
-                    <v-expansion-panel-text class="form__inner-content"
-                        v-if="applicationData.working_semester_opening_block && !applicationData.working_semester_opening_block?.is_verified">
+                    <v-expansion-panel-text
+                        class="form__inner-content"
+                        v-if="
+                            applicationData.working_semester_opening_block &&
+                            !applicationData.working_semester_opening_block
+                                ?.is_verified
+                        "
+                    >
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                            >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label">Участие в Открытии трудового
-                                            семестра<span>&nbsp;*</span></label>
-                                        <Input v-if="
-                                            applicationData.working_semester_opening_block.working_semester_opening
-                                        " type="text" value="Да" readonly />
-                                        <Input v-else type="text" value="Нет" readonly />
+                                        <label class="form__label"
+                                            >Участие в Открытии трудового
+                                            семестра<span>&nbsp;*</span></label
+                                        >
+                                        <Input
+                                            v-if="
+                                                applicationData
+                                                    .working_semester_opening_block
+                                                    .working_semester_opening
+                                            "
+                                            type="text"
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Количество участников мероприятия
-                                            Открытие трудового семестра<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="applicationData.working_semester_opening_block.working_semester_opening_participants
-                                            " readonly />
+                                        <label class="form__label"
+                                            >Количество участников мероприятия
+                                            Открытие трудового семестра<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData
+                                                    .working_semester_opening_block
+                                                    .working_semester_opening_participants
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </v-expansion-panel-text>
-                    <v-expansion-panel-text class="form__inner-content"
-                        v-if="applicationData.creative_festival_block && !applicationData.creative_festival_block?.is_verified">
+                    <v-expansion-panel-text
+                        class="form__inner-content"
+                        v-if="
+                            applicationData.creative_festival_block &&
+                            !applicationData.creative_festival_block
+                                ?.is_verified
+                        "
+                    >
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                            >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label">Участие в Творческом
-                                            фестивале<span>&nbsp;*</span></label>
-                                        <Input v-if="
-                                            applicationData.creative_festival_block.creative_festival
-                                        " type="text" value="Да" readonly />
-                                        <Input v-else type="text" value="Нет" readonly />
+                                        <label class="form__label"
+                                            >Участие в Творческом фестивале<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            v-if="
+                                                applicationData
+                                                    .creative_festival_block
+                                                    .creative_festival
+                                            "
+                                            type="text"
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
+                                            readonly
+                                        />
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </v-expansion-panel-text>
-                    <v-expansion-panel-text class="form__inner-content"
-                        v-if="applicationData.spartakiad_block && !applicationData.spartakiad_block?.is_verified">
+                    <v-expansion-panel-text
+                        class="form__inner-content"
+                        v-if="
+                            applicationData.spartakiad_block &&
+                            !applicationData.spartakiad_block?.is_verified
+                        "
+                    >
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                            >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label">Участие в Спартакиаде студенческих
+                                        <label class="form__label"
+                                            >Участие в Спартакиаде студенческих
                                             отрядов и комплексе мероприятий
-                                            РСО-спорт<span>&nbsp;*</span></label>
-                                        <Input v-if="applicationData.spartakiad_block.spartakiad" type="text" value="Да"
-                                            readonly />
-                                        <Input v-else type="text" value="Нет" readonly />
+                                            РСО-спорт<span>&nbsp;*</span></label
+                                        >
+                                        <Input
+                                            v-if="
+                                                applicationData.spartakiad_block
+                                                    .spartakiad
+                                            "
+                                            type="text"
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
+                                            readonly
+                                        />
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </v-expansion-panel-text>
-                    <v-expansion-panel-text class="form__inner-content"
-                        v-if="applicationData.professional_competition_block && !applicationData.professional_competition_block?.is_verified">
+                    <v-expansion-panel-text
+                        class="form__inner-content"
+                        v-if="
+                            applicationData.professional_competition_block &&
+                            !applicationData.professional_competition_block
+                                ?.is_verified
+                        "
+                    >
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                            >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label">Участие в Конкурсе
-                                            профессионального мастерства<span>&nbsp;*</span></label>
-                                        <Input v-if="
-                                            applicationData.professional_competition_block.professional_competition
-                                        " type="text" value="Да" readonly />
-                                        <Input v-else type="text" value="Нет" readonly />
+                                        <label class="form__label"
+                                            >Участие в Конкурсе
+                                            профессионального мастерства<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            v-if="
+                                                applicationData
+                                                    .professional_competition_block
+                                                    .professional_competition
+                                            "
+                                            type="text"
+                                            value="Да"
+                                            readonly
+                                        />
+                                        <Input
+                                            v-else
+                                            type="text"
+                                            value="Нет"
+                                            readonly
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -308,46 +584,106 @@
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                            >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label">Наименование мероприятия<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="applicationData.event_name
-                                            " readonly />
+                                        <label class="form__label"
+                                            >Наименование мероприятия<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.event_name
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Количество человек<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="applicationData.number_of_participants
-                                            " readonly />
+                                        <label class="form__label"
+                                            >Количество человек<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.number_of_participants
+                                            "
+                                            readonly
+                                        />
                                     </div>
-                                    <div class="form__field" v-for="(
+                                    <div
+                                        class="form__field"
+                                        v-for="(
                                             link, index
-                                        ) in applicationData.links" :key="index">
-                                        <label class="form__label">Ссылка на социальные сети с
+                                        ) in applicationData.links"
+                                        :key="index"
+                                    >
+                                        <label class="form__label"
+                                            >Ссылка на социальные сети с
                                             фотоотчетом с наименованием
                                             мероприятия и наименованием ЛСО,
-                                            принявшем в нем участие<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="applicationData.links[index]
-                                            .link
-                                            " readonly />
+                                            принявшем в нем участие<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.links[index]
+                                                    .link
+                                            "
+                                            readonly
+                                        />
                                     </div>
-                                    <div class="form__field" v-if="applicationData.certificate_scans !== 'null'">
-                                        <label class="form__label">Скан грамот (при наличии)<span>&nbsp;*</span></label>
+                                    <div
+                                        class="form__field"
+                                        v-if="
+                                            applicationData.certificate_scans !==
+                                            'null'
+                                        "
+                                    >
+                                        <label class="form__label"
+                                            >Скан грамот (при наличии)<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
                                         <div class="file">
                                             <div class="file_name">
-                                                <img class="file_img" src="/assets/file_dock.svg" />
-                                                <a :href="applicationData.certificate_scans
-                                                    " target="_blank">{{
-                                                    applicationData.certificate_scans.slice(
-                                                    applicationData.certificate_scans.indexOf(
-                                                    'Q7/',
-                                                    ) + 18,
-                                                    )
-                                                    }}</a>
+                                                <SvgIcon
+                                                    class="file_img"
+                                                    icon-name="file-dock"
+                                                />
+                                                <a
+                                                    :href="
+                                                        applicationData.certificate_scans
+                                                    "
+                                                    target="_blank"
+                                                    >{{
+                                                        applicationData.certificate_scans.slice(
+                                                            applicationData.certificate_scans.indexOf(
+                                                                'Q7/',
+                                                            ) + 18,
+                                                        )
+                                                    }}</a
+                                                >
                                             </div>
-                                            <a class="download_text" :href="applicationData.certificate_scans
-                                                " target="_blank">
-                                                <img class="download_img" src="/assets/download.svg" />
+                                            <a
+                                                class="download_text"
+                                                :href="
+                                                    applicationData.certificate_scans
+                                                "
+                                                target="_blank"
+                                            >
+                                                <SvgIcon
+                                                    class="download_img"
+                                                    iconName="download"
+                                                />
+
                                                 скачать файл
                                             </a>
                                         </div>
@@ -373,42 +709,101 @@
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                            >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label">Наименование мероприятия<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="applicationData.event_name
-                                            " readonly />
+                                        <label class="form__label"
+                                            >Наименование мероприятия<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.event_name
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Количество человек<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="applicationData.number_of_participants
-                                            " readonly />
+                                        <label class="form__label"
+                                            >Количество человек<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.number_of_participants
+                                            "
+                                            readonly
+                                        />
                                     </div>
-                                    <div class="form__field" v-for="link in applicationData.links" :key="link.id">
-                                        <label class="form__label">Ссылка на социальные сети с
+                                    <div
+                                        class="form__field"
+                                        v-for="link in applicationData.links"
+                                        :key="link.id"
+                                    >
+                                        <label class="form__label"
+                                            >Ссылка на социальные сети с
                                             фотоотчетом с наименованием
                                             мероприятия и наименованием ЛСО,
-                                            принявшем в нем участие<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="link.link" readonly />
+                                            принявшем в нем участие<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="link.link"
+                                            readonly
+                                        />
                                     </div>
-                                    <div class="form__field" v-if="applicationData.certificate_scans !== 'null'">
-                                        <label class="form__label">Скан грамот (при наличии)<span>&nbsp;*</span></label>
+                                    <div
+                                        class="form__field"
+                                        v-if="
+                                            applicationData.certificate_scans !==
+                                            'null'
+                                        "
+                                    >
+                                        <label class="form__label"
+                                            >Скан грамот (при наличии)<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
                                         <div class="file">
                                             <div class="file_name">
-                                                <img class="file_img" src="/assets/file_dock.svg" />
-                                                <a :href="applicationData.certificate_scans
-                                                    " target="_blank">{{
-                                                    applicationData.certificate_scans.slice(
-                                                    applicationData.certificate_scans.indexOf(
-                                                    'ksk_',
-                                                    ) + 4,
-                                                    )
-                                                    }}</a>
+                                                <SvgIcon
+                                                    class="file_img"
+                                                    icon-name="file-dock"
+                                                />
+                                                <a
+                                                    :href="
+                                                        applicationData.certificate_scans
+                                                    "
+                                                    target="_blank"
+                                                    >{{
+                                                        applicationData.certificate_scans.slice(
+                                                            applicationData.certificate_scans.indexOf(
+                                                                'ksk_',
+                                                            ) + 4,
+                                                        )
+                                                    }}</a
+                                                >
                                             </div>
-                                            <a class="download_text" :href="applicationData.certificate_scans
-                                                " target="_blank">
-                                                <img class="download_img" src="/assets/download.svg" />
+                                            <a
+                                                class="download_text"
+                                                :href="
+                                                    applicationData.certificate_scans
+                                                "
+                                                target="_blank"
+                                            >
+                                                <SvgIcon
+                                                    class="download_img"
+                                                    iconName="download"
+                                                />
+
                                                 скачать файл
                                             </a>
                                         </div>
@@ -437,35 +832,72 @@
                             <div class="form__field-column-one">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label">Наименование мероприятия или
-                                            конкурса<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="applicationData.event_name
-                                            " readonly />
+                                        <label class="form__label"
+                                            >Наименование мероприятия или
+                                            конкурса<span>&nbsp;*</span></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.event_name
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Призовое место<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="applicationData.prize_place
-                                            " readonly />
+                                        <label class="form__label"
+                                            >Призовое место<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.prize_place
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Скан грамоты с наименованием
+                                        <label class="form__label"
+                                            >Скан грамоты с наименованием
                                             проектов, наименования студенческого
-                                            отряда, призовым местом<span>&nbsp;*</span></label>
+                                            отряда, призовым местом<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
                                         <div class="file">
                                             <div class="file_name">
-                                                <img class="file_img" src="/assets/file_dock.svg" />
-                                                <a :href="applicationData.certificate_scans 
-                                                    " target="_blank" class="file_title">{{
-                                                    applicationData.certificate_scans.slice(
-                                                    applicationData.certificate_scans.indexOf(
-                                                    '/Q9/',
-                                                    ) + 19,
-                                                    )
-                                                    }}</a>
+                                                <SvgIcon
+                                                    class="file_img"
+                                                    icon-name="file-dock"
+                                                />
+                                                <a
+                                                    :href="
+                                                        applicationData.certificate_scans
+                                                    "
+                                                    target="_blank"
+                                                    class="file_title"
+                                                    >{{
+                                                        applicationData.certificate_scans.slice(
+                                                            applicationData.certificate_scans.indexOf(
+                                                                '/Q9/',
+                                                            ) + 19,
+                                                        )
+                                                    }}</a
+                                                >
                                             </div>
-                                            <a class="download_text" :href="applicationData.certificate_scans
-                                                " target="_blank">
-                                                <img class="download_img" src="/assets/download.svg" />
+                                            <a
+                                                class="download_text"
+                                                :href="
+                                                    applicationData.certificate_scans
+                                                "
+                                                target="_blank"
+                                            >
+                                                <SvgIcon
+                                                    class="download_img"
+                                                    iconName="download"
+                                                />
                                                 скачать файл
                                             </a>
                                         </div>
@@ -494,35 +926,71 @@
                             <div class="form__field-column-one">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label">Наименование мероприятия или
-                                            конкурса<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="applicationData.event_name
-                                            " />
+                                        <label class="form__label"
+                                            >Наименование мероприятия или
+                                            конкурса<span>&nbsp;*</span></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.event_name
+                                            "
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Призовое место<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="applicationData.prize_place
-                                            " readonly />
+                                        <label class="form__label"
+                                            >Призовое место<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.prize_place
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Скан грамоты с наименованием
+                                        <label class="form__label"
+                                            >Скан грамоты с наименованием
                                             проектов, наименования студенческого
-                                            отряда, призовым местом<span>&nbsp;*</span></label>
+                                            отряда, призовым местом<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
                                         <div class="file">
                                             <div class="file_name">
-                                                <img class="file_img" src="/assets/file_dock.svg" />
-                                                <a :href="applicationData.certificate_scans
-                                                    " target="_blank" class="file_title">{{
-                                                    applicationData.certificate_scans.slice(
-                                                    applicationData.certificate_scans.indexOf(
-                                                    'ksk_',
-                                                    ) + 4,
-                                                    )
-                                                    }}</a>
+                                                <SvgIcon
+                                                    class="file_img"
+                                                    icon-name="file-dock"
+                                                />
+                                                <a
+                                                    :href="
+                                                        applicationData.certificate_scans
+                                                    "
+                                                    target="_blank"
+                                                    class="file_title"
+                                                    >{{
+                                                        applicationData.certificate_scans.slice(
+                                                            applicationData.certificate_scans.indexOf(
+                                                                'ksk_',
+                                                            ) + 4,
+                                                        )
+                                                    }}</a
+                                                >
                                             </div>
-                                            <a class="download_text" :href="applicationData.certificate_scans
-                                                " target="_blank">
-                                                <img class="download_img" src="/assets/download.svg" />
+                                            <a
+                                                class="download_text"
+                                                :href="
+                                                    applicationData.certificate_scans
+                                                "
+                                                target="_blank"
+                                            >
+                                                <SvgIcon
+                                                    class="download_img"
+                                                    iconName="download"
+                                                />
                                                 скачать файл
                                             </a>
                                         </div>
@@ -551,35 +1019,73 @@
                             <div class="form__field-column-one">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label">Наименование трудового
-                                            проекта<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="applicationData.event_name
-                                            " readonly />
+                                        <label class="form__label"
+                                            >Наименование трудового проекта<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.event_name
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Призовое место<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="applicationData.prize_place
-                                            " readonly />
+                                        <label class="form__label"
+                                            >Призовое место<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.prize_place
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Скан грамоты с наименованием
+                                        <label class="form__label"
+                                            >Скан грамоты с наименованием
                                             мероприятия, наименования ЛСО,
-                                            призовым местом<span>&nbsp;*</span></label>
+                                            призовым местом<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
                                         <div class="file">
                                             <div class="file_name">
-                                                <img class="file_img" src="/assets/file_dock.svg" />
-                                                <a :href="applicationData.certificate_scans
-                                                    " target="_blank" class="file_title">{{
-                                                    applicationData.certificate_scans.slice(
-                                                    applicationData.certificate_scans.indexOf(
-                                                    'ksk_',
-                                                    ) + 4,
-                                                    )
-                                                    }}</a>
+                                                <SvgIcon
+                                                    class="file_img"
+                                                    icon-name="file-dock"
+                                                />
+                                                <a
+                                                    :href="
+                                                        applicationData.certificate_scans
+                                                    "
+                                                    target="_blank"
+                                                    class="file_title"
+                                                    >{{
+                                                        applicationData.certificate_scans.slice(
+                                                            applicationData.certificate_scans.indexOf(
+                                                                'ksk_',
+                                                            ) + 4,
+                                                        )
+                                                    }}</a
+                                                >
                                             </div>
-                                            <a class="download_text" :href="applicationData.certificate_scans
-                                                " target="_blank">
-                                                <img class="download_img" src="/assets/download.svg" />
+                                            <a
+                                                class="download_text"
+                                                :href="
+                                                    applicationData.certificate_scans
+                                                "
+                                                target="_blank"
+                                            >
+                                                <SvgIcon
+                                                    class="download_img"
+                                                    iconName="download"
+                                                />
                                                 скачать файл
                                             </a>
                                         </div>
@@ -608,35 +1114,73 @@
                             <div class="form__field-column-one">
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label">Наименование трудового
-                                            проекта<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="applicationData.event_name
-                                            " readonly />
+                                        <label class="form__label"
+                                            >Наименование трудового проекта<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.event_name
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Призовое место<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="applicationData.prize_place
-                                            " readonly />
+                                        <label class="form__label"
+                                            >Призовое место<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.prize_place
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Скан грамоты с наименованием
+                                        <label class="form__label"
+                                            >Скан грамоты с наименованием
                                             мероприятия, наименования ЛСО,
-                                            призовым местом<span>&nbsp;*</span></label>
+                                            призовым местом<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
                                         <div class="file">
                                             <div class="file_name">
-                                                <img class="file_img" src="/assets/file_dock.svg" />
-                                                <a :href="applicationData.certificate_scans
-                                                    " target="_blank" class="file_title">{{
-                                                    applicationData.certificate_scans.slice(
-                                                    applicationData.certificate_scans.indexOf(
-                                                    'ksk_',
-                                                    ) + 4,
-                                                    )
-                                                    }}</a>
+                                                <SvgIcon
+                                                    class="file_img"
+                                                    icon-name="file-dock"
+                                                />
+                                                <a
+                                                    :href="
+                                                        applicationData.certificate_scans
+                                                    "
+                                                    target="_blank"
+                                                    class="file_title"
+                                                    >{{
+                                                        applicationData.certificate_scans.slice(
+                                                            applicationData.certificate_scans.indexOf(
+                                                                'ksk_',
+                                                            ) + 4,
+                                                        )
+                                                    }}</a
+                                                >
                                             </div>
-                                            <a class="download_text" :href="applicationData.certificate_scans
-                                                " target="_blank">
-                                                <img class="download_img" src="/assets/download.svg" />
+                                            <a
+                                                class="download_text"
+                                                :href="
+                                                    applicationData.certificate_scans
+                                                "
+                                                target="_blank"
+                                            >
+                                                <SvgIcon
+                                                    class="download_img"
+                                                    iconName="download"
+                                                />
                                                 скачать файл
                                             </a>
                                         </div>
@@ -662,21 +1206,43 @@
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one">
-                                <div class="form__field-group-left" v-for="event in applicationData.organization_data"
-                                    :key="event.id">
-                                    <div v-if="!event.is_verified" class="form__block">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                            >
+                                <div
+                                    class="form__field-group-left"
+                                    v-for="event in applicationData.organization_data"
+                                    :key="event.id"
+                                >
+                                    <div
+                                        v-if="!event.is_verified"
+                                        class="form__block"
+                                    >
                                         <div class="form__field">
-                                            <label class="form__label">Выберите тип
-                                                мероприятия<span>&nbsp;*</span></label>
-                                            <Input type="text" v-model:value="event.event_type" readonly />
+                                            <label class="form__label"
+                                                >Выберите тип мероприятия<span
+                                                    >&nbsp;*</span
+                                                ></label
+                                            >
+                                            <Input
+                                                type="text"
+                                                v-model:value="event.event_type"
+                                                readonly
+                                            />
                                         </div>
                                         <div class="form__field">
-                                            <label class="form__label">Ссылка на публикацию<span>&nbsp;*</span></label>
-                                            <Input type="text" v-model:value="event.event_link" readonly />
+                                            <label class="form__label"
+                                                >Ссылка на публикацию<span
+                                                    >&nbsp;*</span
+                                                ></label
+                                            >
+                                            <Input
+                                                type="text"
+                                                v-model:value="event.event_link"
+                                                readonly
+                                            />
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -699,19 +1265,41 @@
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one"
-                                v-for="project in applicationData.q14_labor_projects" :key="project.id">
-                                <div class="form__field-group-left" v-if="!project.is_verified">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                                v-for="project in applicationData.q14_labor_projects"
+                                :key="project.id"
+                            >
+                                <div
+                                    class="form__field-group-left"
+                                    v-if="!project.is_verified"
+                                >
                                     <div class="form__field">
-                                        <label class="form__label">Наименование трудового
-                                            проекта<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="project.lab_project_name
-                                            " readonly />
+                                        <label class="form__label"
+                                            >Наименование трудового проекта<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                project.lab_project_name
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Количество бойцов, отработавших в
-                                            летнем трудовом семестре<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="project.amount" readonly />
+                                        <label class="form__label"
+                                            >Количество бойцов, отработавших в
+                                            летнем трудовом семестре<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="project.amount"
+                                            readonly
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -736,31 +1324,76 @@
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one"
-                                v-for="grant in applicationData.grants_data" :key="grant.id">
-                                <div class="form__field-group-left" v-if="!grant.is_verified">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                                v-for="grant in applicationData.grants_data"
+                                :key="grant.id"
+                            >
+                                <div
+                                    class="form__field-group-left"
+                                    v-if="!grant.is_verified"
+                                >
                                     <div class="form__field">
-                                        <label class="form__label">Полное название грантового
-                                            проекта<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="grant.name" readonly />
+                                        <label class="form__label"
+                                            >Полное название грантового
+                                            проекта<span>&nbsp;*</span></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="grant.name"
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Статус конкурса<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="grant.status" readonly />
+                                        <label class="form__label"
+                                            >Статус конкурса<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="grant.status"
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Автор проекта<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="grant.author_name" readonly />
+                                        <label class="form__label"
+                                            >Автор проекта<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="grant.author_name"
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Ссылка на конкурс<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="grant.competition_link
-                                            " readonly />
+                                        <label class="form__label"
+                                            >Ссылка на конкурс<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                grant.competition_link
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Ссылка на новостной источник с
-                                            упоминанием победы<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="grant.prove_link" readonly />
+                                        <label class="form__label"
+                                            >Ссылка на новостной источник с
+                                            упоминанием победы<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="grant.prove_link"
+                                            readonly
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -782,7 +1415,9 @@
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                            >
                                 <div class="form__field-group-left">
                                     <div class="form__field-group-left-title">
                                         Наличие открытых аккаунтов у участников
@@ -790,16 +1425,34 @@
                                         сетях:
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Ссылка на личную страницу ВКонтакте
-                                            командира отряда<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="applicationData.link_vk_commander
-                                            " readonly />
+                                        <label class="form__label"
+                                            >Ссылка на личную страницу ВКонтакте
+                                            командира отряда<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.link_vk_commander
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Ссылка на личную страницу ВКонтакте
-                                            комиссара отряда<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="applicationData.link_vk_commissar
-                                            " readonly />
+                                        <label class="form__label"
+                                            >Ссылка на личную страницу ВКонтакте
+                                            комиссара отряда<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.link_vk_commissar
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field-group-left-title">
                                         Наличие действующей подписки на
@@ -807,31 +1460,56 @@
                                         социальной сети ВКонтакте:
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Количество членов отряда,
+                                        <label class="form__label"
+                                            >Количество членов отряда,
                                             подписанных на официальную страницу
-                                            РСО ВКонтакте<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="applicationData.vk_rso_number_subscribers
-                                            " readonly />
+                                            РСО ВКонтакте<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.vk_rso_number_subscribers
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field-group-left-title">
                                         Наличие активной группы Отряда в
                                         социальной сети ВКонтакте:
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Ссылка на группу отряда
-                                            ВКонтакте<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="applicationData.link_vk_detachment
-                                            " readonly />
+                                        <label class="form__label"
+                                            >Ссылка на группу отряда
+                                            ВКонтакте<span>&nbsp;*</span></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.link_vk_detachment
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field-group-left-title">
                                         Количество подписчиков активной группы
                                         Отряда в социальной сети ВКонтакте:
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Укажите количество подписчиков
-                                            группы отряда ВКонтакте<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="applicationData.vk_detachment_number_subscribers
-                                            " readonly />
+                                        <label class="form__label"
+                                            >Укажите количество подписчиков
+                                            группы отряда ВКонтакте<span
+                                                >&nbsp;*</span
+                                            ></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.vk_detachment_number_subscribers
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -855,20 +1533,37 @@
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one"
-                                v-for="source in applicationData.source_data" :key="source.id">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                                v-for="source in applicationData.source_data"
+                                :key="source.id"
+                            >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label">Наименование источника<span>&nbsp;*</span>
+                                        <label class="form__label"
+                                            >Наименование источника<span
+                                                >&nbsp;*</span
+                                            >
                                         </label>
-                                        <Input type="text" v-model:value="source.source_name" readonly />
+                                        <Input
+                                            type="text"
+                                            v-model:value="source.source_name"
+                                            readonly
+                                        />
                                     </div>
                                 </div>
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label">Ссылка на публикацию<span>&nbsp;*</span>
+                                        <label class="form__label"
+                                            >Ссылка на публикацию<span
+                                                >&nbsp;*</span
+                                            >
                                         </label>
-                                        <Input type="text" v-model:value="source.link" readonly />
+                                        <Input
+                                            type="text"
+                                            v-model:value="source.link"
+                                            readonly
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -891,15 +1586,23 @@
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                            >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label">Количество бойцов, принявших
+                                        <label class="form__label"
+                                            >Количество бойцов, принявших
                                             участие во Всероссийском дне
                                             ударного труда<span>&nbsp;*</span>
                                         </label>
-                                        <Input type="text" v-model:value="applicationData.participants_number
-                                            " readonly />
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.participants_number
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -923,15 +1626,24 @@
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                            >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label">Нарушения техники безопасности,
+                                        <label class="form__label"
+                                            >Нарушения техники безопасности,
                                             охраны труда и противопожарной
                                             безопасности в трудовом
-                                            семестре<span>&nbsp;*</span></label>
-                                        <Input type="text" v-model:value="applicationData.safety_violations
-                                            " readonly />
+                                            семестре<span>&nbsp;*</span></label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.safety_violations
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -955,37 +1667,80 @@
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
-                            <div class="form__field-group-top form__field-column-one">
+                            <div
+                                class="form__field-group-top form__field-column-one"
+                            >
                                 <div class="form__field-group-left">
                                     <div class="form__field">
-                                        <label class="form__label">Ссылка на фото эмблемы</label>
-                                        <Input type="text" v-model:value="applicationData.link_emblem
-                                            " />
+                                        <label class="form__label"
+                                            >Ссылка на фото эмблемы</label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.link_emblem
+                                            "
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Ссылка на макет эмблемы</label>
-                                        <Input type="text" v-model:value="applicationData.link_emblem_img
-                                            " readonly />
+                                        <label class="form__label"
+                                            >Ссылка на макет эмблемы</label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.link_emblem_img
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Ссылка на фото флага</label>
-                                        <Input type="text" v-model:value="applicationData.link_flag
-                                            " readonly />
+                                        <label class="form__label"
+                                            >Ссылка на фото флага</label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.link_flag
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Ссылка на макет флага</label>
-                                        <Input type="text" v-model:value="applicationData.link_flag_img
-                                            " readonly />
+                                        <label class="form__label"
+                                            >Ссылка на макет флага</label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.link_flag_img
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Ссылка на фото знамени</label>
-                                        <Input type="text" v-model:value="applicationData.link_banner
-                                            " readonly />
+                                        <label class="form__label"
+                                            >Ссылка на фото знамени</label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.link_banner
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                     <div class="form__field">
-                                        <label class="form__label">Ссылка на макет знамени</label>
-                                        <Input type="text" v-model:value="applicationData.link_banner_img
-                                            " readonly />
+                                        <label class="form__label"
+                                            >Ссылка на макет знамени</label
+                                        >
+                                        <Input
+                                            type="text"
+                                            v-model:value="
+                                                applicationData.link_banner_img
+                                            "
+                                            readonly
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -1003,7 +1758,7 @@ import { useRoute } from 'vue-router';
 import { HTTP } from '@app/http';
 
 import { Input } from '@shared/components/inputs';
-import { SvgIcon } from '@shared';
+import { SvgIcon } from '@shared/components/SvgIcon';
 
 const route = useRoute();
 const id = ref(route.params.id);
@@ -1011,24 +1766,28 @@ const id = ref(route.params.id);
 const applicationData = ref({});
 const loading = ref(true);
 
-const idHasCert = ['7','8','9','10','11','12'];
+const idHasCert = ['7', '8', '9', '10', '11', '12'];
 
 const getApplicationData = async (_id, applicationId) => {
     id.value = _id;
     try {
         const { data } = await HTTP.get(
             `/competitions/1/reports/q${_id}/${applicationId}`,
-
         );
         applicationData.value = data;
         if (_id == 5) {
-            for(const temp of applicationData.value.participants_data){
-                temp.document_name = decodeURI(temp.document,);
+            for (const temp of applicationData.value.participants_data) {
+                temp.document_name = decodeURI(temp.document);
             }
-            applicationData.value.participants_data = applicationData.value.participants_data.filter(item => item.is_verified !== true);
+            applicationData.value.participants_data =
+                applicationData.value.participants_data.filter(
+                    (item) => item.is_verified !== true,
+                );
         }
-        if(idHasCert.includes(_id)){
-            applicationData.value.certificate_scans = decodeURI(applicationData.value.certificate_scans);
+        if (idHasCert.includes(_id)) {
+            applicationData.value.certificate_scans = decodeURI(
+                applicationData.value.certificate_scans,
+            );
         }
         console.log(applicationData.value);
     } catch (e) {
@@ -1156,7 +1915,7 @@ onMounted(async () => {
     font-weight: 400;
     line-height: 20px;
     text-decoration-line: underline;
-    max-width: 80%
+    max-width: 80%;
 }
 
 .download_text {

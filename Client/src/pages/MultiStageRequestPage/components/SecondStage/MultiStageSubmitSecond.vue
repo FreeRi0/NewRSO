@@ -1,19 +1,39 @@
 <template>
     <div class="form__field">
         <div class="contributor-search">
-            <input type="text" id="search" class="contributor-search__input" @keyup="searchUsers" v-model="name"
-                placeholder="Начните вводить" />
+            <input
+                type="text"
+                id="search"
+                class="contributor-search__input"
+                @keyup="searchUsers"
+                v-model="name"
+                placeholder="Начните вводить"
+            />
             <img src="@app/assets/icon/search.svg" alt="search" />
         </div>
     </div>
 
     <div id="wrapper">
         <div id="left">
-            <filters @update-district="updateDistrict" @update-reg="updateReg" @update-local="updateLocal"
-                @update-educ="updateEduc" @update-detachment="updateDetachment" :district="district"
-                :districts="districts" :reg="reg" :regionals="regionals" :local="local" :locals="locals" :educ="educ"
-                :educ-head="educHead" :detachment="detachment" :detachments="detachments" :roles="roles.roles.value"
-                :sorted-participants="sortedParticipants" />
+            <filters
+                @update-district="updateDistrict"
+                @update-reg="updateReg"
+                @update-local="updateLocal"
+                @update-educ="updateEduc"
+                @update-detachment="updateDetachment"
+                :district="district"
+                :districts="districts"
+                :reg="reg"
+                :regionals="regionals"
+                :local="local"
+                :locals="locals"
+                :educ="educ"
+                :educ-head="educHead"
+                :detachment="detachment"
+                :detachments="detachments"
+                :roles="roles.roles.value"
+                :sorted-participants="sortedParticipants"
+            />
 
             <!-- <div class="uploads">
                 <div
@@ -47,24 +67,37 @@
         <div id="right">
             <div class="additional_line">
                 <div class="horizontallso__confidant">
-                    <input type="checkbox" v-model="isChecked" @change="onCheckbox" />
+                    <input
+                        type="checkbox"
+                        v-model="isChecked"
+                        @change="onCheckbox"
+                    />
                 </div>
 
                 <p class="choose_all">Выделить все</p>
 
                 <a class="download_text" target="_blank">
-                    <img class="download_img" src="/assets/download.svg" />
+                    <SvgIcon class="download_img" iconName="download" />
                     Cкачать список
                 </a>
 
                 <div class="sort_line">
-                    <Button type="button" class="ascend" iconn="iconn" @click="ascending = !ascending"
-                        color="white"></Button>
+                    <Button
+                        type="button"
+                        class="ascend"
+                        iconn="iconn"
+                        @click="ascending = !ascending"
+                        color="white"
+                    ></Button>
                 </div>
             </div>
 
-            <multi-stage-submit-item v-for="user in sortedParticipants" :key="user.id" :user="user"
-                @select="onToggleSelectUser" />
+            <multi-stage-submit-item
+                v-for="user in sortedParticipants"
+                :key="user.id"
+                :user="user"
+                @select="onToggleSelectUser"
+            />
             <p class="subtitle" v-if="!sortedParticipants.length">
                 Ничего не найдено
             </p>
@@ -74,11 +107,20 @@
     <template v-if="selectedUsersList.length">
         <p class="text_total">Итого:</p>
 
-        <multi-stage-submit-select v-for="user in selectedUsersList" :key="user.id" :user="user"
-            @select="onToggleSelectUser" />
+        <multi-stage-submit-select
+            v-for="user in selectedUsersList"
+            :key="user.id"
+            :user="user"
+            @select="onToggleSelectUser"
+        />
 
         <div class="competitions__btns">
-            <Button class="save" type="button" label="Подать заявку" @click="onAction"></Button>
+            <Button
+                class="save"
+                type="button"
+                label="Подать заявку"
+                @click="onAction"
+            ></Button>
         </div>
     </template>
 </template>
@@ -124,7 +166,6 @@ const getCompileList = async () => {
     try {
         const { data } = await HTTP.get(
             `/events/${props.route.params.id}/multi_applications/compile_lists/`,
-
         );
         // console.log(data);
         usersList.value = data;
@@ -193,7 +234,6 @@ const onAction = async () => {
         HTTP.post(
             `/events/${props.route.params.id}/multi_applications/compile_lists/`,
             payload,
-
         );
         router.push({
             name: 'Action',
@@ -236,7 +276,7 @@ const sortBy = ref('alphabetically');
 const viewContributorsData = async (search) => {
     try {
         isLoading.value = true;
-        const viewParticipantsResponse = await HTTP.get('/rsousers' + search,);
+        const viewParticipantsResponse = await HTTP.get('/rsousers' + search);
         participants.value = viewParticipantsResponse.data.results;
         isLoading.value = false;
         selectedPeoples.value = [];
@@ -260,7 +300,7 @@ const viewContributorsData = async (search) => {
 const getFiltersData = async (resp, search) => {
     try {
         isLoading.value = true;
-        const viewHeadquartersResponse = await HTTP.get(resp + search,);
+        const viewHeadquartersResponse = await HTTP.get(resp + search);
         isLoading.value = false;
 
         if (resp.indexOf('districts') >= 0) {
@@ -472,8 +512,8 @@ watch(
     () => {
         let districtID = districtsStore.districts.length
             ? districtsStore.districts.find(
-                (dis) => (dis.name = district.value),
-            )?.id
+                  (dis) => (dis.name = district.value),
+              )?.id
             : roleStore.roles.districtheadquarter_commander?.id;
         regionals.value = regionalsStore.regionals.filter(
             (reg) => reg.district_headquarter == district.value,
@@ -654,7 +694,7 @@ onMounted(async () => {
         width: 193px;
     }
 
-    &>.form__select {
+    & > .form__select {
         margin-bottom: 0px;
     }
 }
@@ -697,7 +737,7 @@ onMounted(async () => {
         text-align: left;
         color: #1f7cc0;
 
-        &> :deep(.p-) {
+        & > :deep(.p-) {
             display: none;
         }
 
