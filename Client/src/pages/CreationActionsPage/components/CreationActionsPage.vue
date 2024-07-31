@@ -821,12 +821,7 @@
                                 <label class="form__label">Добавьте документы:</label>
                                 <div class="form-col" style="margin-top: 12px;">
                                   <div class="form-fileupload">
-                                    <img
-                                        class="paper-clip"
-                                        src="@app/assets/icon/addFile.svg"
-                                        alt="addFile"
-                                    />
-
+                                    <SvgIcon iconName="add-file" />
                                     <FileUpload
                                         class="file-upload-text"
                                         mode="basic"
@@ -1155,6 +1150,7 @@ import { HTTP } from '@app/http';
 import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
 import moment from "moment";
+import SvgIcon from '@shared/components/SvgIcon/SvgIcon.vue';
 
 const swal = inject('$swal');
 const router = useRouter();

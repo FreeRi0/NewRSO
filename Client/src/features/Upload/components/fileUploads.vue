@@ -1,13 +1,21 @@
 <template>
     <div class="statement-wrapper">
         <div class="statement-item">
-            <img src="@app/assets/icon/addFile.svg" alt="addFile">
-            <FileUpload  mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"  :maxFileSize="7000000" customUpload @uploader="customBase64Uploader" chooseLabel="Выбрать файл" />
+            <SvgIcon iconName="add-file" />
+            <FileUpload
+                mode="basic"
+                name="demo[]"
+                accept=".pdf, .jpeg, .png"
+                :maxFileSize="7000000"
+                customUpload
+                @uploader="customBase64Uploader"
+                chooseLabel="Выбрать файл"
+            />
         </div>
     </div>
 </template>
 <script setup>
-
+import SvgIcon from '@shared/components/SvgIcon/SvgIcon.vue';
 </script>
 <style lang="scss">
 .statement-title {
@@ -39,7 +47,7 @@
 }
 
 .p-icon {
-  display: none;
+    display: none;
 }
 
 .p-button-label {

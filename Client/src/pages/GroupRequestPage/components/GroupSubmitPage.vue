@@ -30,11 +30,8 @@
                         :key="index"
                     >
                         <div class="form-fileupload" v-if="index < 6">
-                            <img
-                                class="paper-clip"
-                                src="@app/assets/icon/addFile.svg"
-                                alt="addFile"
-                            />
+                            <SvgIcon class="paper-clip" iconName="add-file" />
+
                             <div class="form-text">
                                 <FileUpload
                                     v-if="files[index]?.name"
@@ -157,6 +154,7 @@ import GroupFilters from './GroupFilters.vue';
 import GroupSubmitItem from './GroupSubmitItem.vue';
 import GroupSubmitSelect from './GroupSubmitSelect.vue';
 import * as XLSX from 'xlsx';
+import SvgIcon from '@shared/components/SvgIcon/SvgIcon.vue';
 
 const swal = inject('$swal');
 

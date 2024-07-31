@@ -15,7 +15,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -104,7 +104,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -285,7 +285,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -326,7 +326,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -365,7 +365,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -413,10 +413,8 @@
                                             class="statement-item"
                                             v-if="!block.document"
                                         >
-                                            <img
-                                                src="@app/assets/icon/addFile.svg"
-                                                alt="addFile"
-                                            />
+                                            <SvgIcon iconName="add-file" />
+
                                             <FileUpload
                                                 mode="basic"
                                                 name="demo[]"
@@ -442,10 +440,9 @@
                                                 <div
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
                                                 >
-                                                    <img
+                                                    <SvgIcon
                                                         class="addFile"
-                                                        src="@app/assets/icon/addFile.svg"
-                                                        alt="addFile"
+                                                        iconName="add-file"
                                                     />
                                                     <span
                                                         class="font-semibold"
@@ -572,7 +569,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1108,7 +1105,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1245,10 +1242,8 @@
                                             class="statement-item"
                                             v-if="!block.certificate_scans"
                                         >
-                                            <img
-                                                src="@app/assets/icon/addFile.svg"
-                                                alt="addFile"
-                                            />
+                                            <SvgIcon iconName="add-file" />
+
                                             <FileUpload
                                                 mode="basic"
                                                 name="demo[]"
@@ -1274,10 +1269,9 @@
                                                 <div
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
                                                 >
-                                                    <img
+                                                    <SvgIcon
                                                         class="addFile"
-                                                        src="@app/assets/icon/addFile.svg"
-                                                        alt="addFile"
+                                                        iconName="add-file"
                                                     />
                                                     <span
                                                         class="font-semibold"
@@ -1394,7 +1388,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1530,10 +1524,7 @@
                                             class="statement-item"
                                             v-if="!block.certificate_scans"
                                         >
-                                            <img
-                                                src="@app/assets/icon/addFile.svg"
-                                                alt="addFile"
-                                            />
+                                            <SvgIcon iconName="add-file" />
                                             <FileUpload
                                                 mode="basic"
                                                 name="demo[]"
@@ -1559,11 +1550,11 @@
                                                 <div
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
                                                 >
-                                                    <img
-                                                        src="@app/assets/icon/addFile.svg"
-                                                        alt="addFile"
+                                                    <SvgIcon
                                                         class="addFile"
+                                                        iconName="add-file"
                                                     />
+
                                                     <span
                                                         class="font-semibold"
                                                         >{{
@@ -1679,7 +1670,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1736,10 +1727,7 @@
                                             class="statement-item"
                                             v-if="!block.certificate_scans"
                                         >
-                                            <img
-                                                src="@app/assets/icon/addFile.svg"
-                                                alt="addFile"
-                                            />
+                                            <SvgIcon iconName="add-file" />
                                             <FileUpload
                                                 mode="basic"
                                                 name="demo[]"
@@ -1765,11 +1753,11 @@
                                                 <div
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
                                                 >
-                                                    <img
-                                                        src="@app/assets/icon/addFile.svg"
-                                                        alt="addFile"
+                                                    <SvgIcon
                                                         class="addFile"
+                                                        iconName="add-file"
                                                     />
+
                                                     <span
                                                         class="font-semibold"
                                                         >{{
@@ -1884,7 +1872,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1940,10 +1928,8 @@
                                             class="statement-item"
                                             v-if="!block.certificate_scans"
                                         >
-                                            <img
-                                                src="@app/assets/icon/addFile.svg"
-                                                alt="addFile"
-                                            />
+                                            <SvgIcon iconName="add-file" />
+
                                             <FileUpload
                                                 mode="basic"
                                                 name="demo[]"
@@ -2088,7 +2074,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -2145,10 +2131,7 @@
                                             class="statement-item"
                                             v-if="!block.certificate_scans"
                                         >
-                                            <img
-                                                src="@app/assets/icon/addFile.svg"
-                                                alt="addFile"
-                                            />
+                                            <SvgIcon iconName="add-file" />
 
                                             <FileUpload
                                                 mode="basic"
@@ -2175,10 +2158,9 @@
                                                 <div
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
                                                 >
-                                                    <img
-                                                        src="@app/assets/icon/addFile.svg"
-                                                        alt="addFile"
+                                                    <SvgIcon
                                                         class="addFile"
+                                                        iconName="add-file"
                                                     />
 
                                                     <span
@@ -2295,7 +2277,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -2352,10 +2334,11 @@
                                             class="statement-item"
                                             v-if="!block.certificate_scans"
                                         >
-                                            <img
-                                                src="@app/assets/icon/addFile.svg"
-                                                alt="addFile"
+                                            <SvgIcon
+                                                class="addFile"
+                                                iconName="add-file"
                                             />
+
                                             <FileUpload
                                                 mode="basic"
                                                 name="demo[]"
@@ -2378,11 +2361,11 @@
                                                 <div
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
                                                 >
-                                                    <img
-                                                        src="@app/assets/icon/addFile.svg"
-                                                        alt="addFile"
+                                                    <SvgIcon
                                                         class="addFile"
+                                                        iconName="add-file"
                                                     />
+
                                                     <span
                                                         class="font-semibold"
                                                         >{{
@@ -2497,7 +2480,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -2631,7 +2614,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -2772,7 +2755,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -2958,7 +2941,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -3144,7 +3127,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -3277,7 +3260,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -3349,7 +3332,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -3416,7 +3399,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -4298,6 +4281,11 @@ onMounted(async (id) => {
 });
 </script>
 <style>
+.expanded {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
+}
+
 .v-expansion-panels {
     margin-bottom: 60px;
 }

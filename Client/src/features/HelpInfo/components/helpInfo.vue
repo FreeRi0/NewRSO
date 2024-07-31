@@ -12,56 +12,8 @@
                         </v-row>
                     </template>
                     <template v-slot:actions="{ expanded }">
-                        <v-icon v-if="!expanded">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="32"
-                                height="32"
-                                viewBox="0 0 32 32"
-                                fill="none"
-                            >
-                                <circle
-                                    cx="16"
-                                    cy="16"
-                                    r="15.5"
-                                    fill="#1F7CC0"
-                                    stroke="#1F7CC0"
-                                />
-                                <path
-                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                    stroke="white"
-                                    stroke-width="1.5"
-                                    stroke-miterlimit="10"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                />
-                            </svg>
-                        </v-icon>
-                        <v-icon v-else>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="32"
-                                height="32"
-                                viewBox="0 0 32 32"
-                                fill="none"
-                            >
-                                <circle
-                                    cx="16"
-                                    cy="16"
-                                    r="15.5"
-                                    transform="rotate(-180 16 16)"
-                                    fill="#1F7CC0"
-                                    stroke="#1F7CC0"
-                                />
-                                <path
-                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                    stroke="white"
-                                    stroke-width="1.5"
-                                    stroke-miterlimit="10"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                />
-                            </svg>
+                        <v-icon>
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </v-icon>
                     </template>
                 </v-expansion-panel-title>
@@ -74,57 +26,10 @@
                                         v-bind="props"
                                         title="Что такое РСО?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -158,57 +63,10 @@
                                         v-bind="props"
                                         title="Где я могу узнать, действует ли движение РСО в моем регионе и какие существуют направления работы?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -231,57 +89,10 @@
                                         v-bind="props"
                                         title="Могу ли я вступить в РСО, если мне нет 18 лет?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -304,57 +115,10 @@
                                         v-bind="props"
                                         title="Хочу узнать подробнее о структуре организации, правах, обязанностях членов РСО"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -377,57 +141,10 @@
                                         v-bind="props"
                                         title="Для чего нужен членский взнос?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -451,57 +168,10 @@
                                         v-bind="props"
                                         title="Как просмотреть информацию об оплате членского взноса?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -526,57 +196,10 @@
                                         v-bind="props"
                                         title="Что означают аббревиатуры ЛСО, Штаб СО ОО?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -600,57 +223,10 @@
                                         v-bind="props"
                                         title="Что такое линейный студенческий отряд?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -749,57 +325,10 @@
                                         v-bind="props"
                                         title="Как зарегистрироваться в РСО?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -826,57 +355,10 @@
                                         v-bind="props"
                                         title="Как изменить пароль?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -902,57 +384,10 @@
                                         v-bind="props"
                                         title="Как изменить логин?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -979,57 +414,10 @@
                                         v-bind="props"
                                         title="Как восстановить пароль?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1057,57 +445,10 @@
                                         v-bind="props"
                                         title="Как изменить персональные данные?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1133,57 +474,10 @@
                                         v-bind="props"
                                         title="Как настроить приватность данных?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1209,57 +503,10 @@
                                         v-bind="props"
                                         title="Для чего нужна верификация данных?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1286,57 +533,10 @@
                                         v-bind="props"
                                         title="Как пройти верификацию данных?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1436,57 +636,10 @@
                                         v-bind="props"
                                         title="Как создать отряд?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1512,57 +665,10 @@
                                         v-bind="props"
                                         title="Как редактировать данные об отряде?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1588,57 +694,10 @@
                                         v-bind="props"
                                         title="Как создать штаб?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1665,57 +724,10 @@
                                         v-bind="props"
                                         title="Как редактировать данные о штабе?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1741,57 +753,10 @@
                                         v-bind="props"
                                         title="Как вступить в отряд?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1887,57 +852,10 @@
                                         v-bind="props"
                                         title="Как создать мероприятие?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1963,57 +881,10 @@
                                         v-bind="props"
                                         title="Как редактировать данные о мероприятии?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -2040,57 +911,10 @@
                                         v-bind="props"
                                         title="Как зарегистрироваться на участие в мероприятии?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -2138,57 +962,10 @@
                                         v-bind="props"
                                         title="Как отказаться от участия в мероприятии?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -2281,57 +1058,10 @@
                                         v-bind="props"
                                         title="Как одобрить/отклонить заявку на участие в мероприятии?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -2359,57 +1089,10 @@
                                         v-bind="props"
                                         title="Как одобрить/отклонить заявку на вступление в отряд?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -2437,57 +1120,10 @@
                                         v-bind="props"
                                         title="Как одобрить/отклонить заявку на верификацию аккаунта?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -2515,57 +1151,10 @@
                                         v-bind="props"
                                         title="Как одобрить/отклонить заявку на Конкурс?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -2660,57 +1249,10 @@
                                         v-bind="props"
                                         title="Как пользоваться реестром участников?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -2738,57 +1280,10 @@
                                         v-bind="props"
                                         title="Как сформировать справку о членстве в РСО?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -2892,57 +1387,10 @@
                                         v-bind="props"
                                         title="Кто может принять участие в Конкурсе?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -2972,57 +1420,10 @@
                                         v-bind="props"
                                         title="Какие номинации есть в Конкурсе?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -3052,57 +1453,10 @@
                                         v-bind="props"
                                         title="Как принять участие в Конкурсе?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -3134,57 +1488,10 @@
                                         v-bind="props"
                                         title="Как Командиру отряда подать заявку на участие в конкурсе в номинации «Дебют»?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -3216,57 +1523,10 @@
                                         v-bind="props"
                                         title="Как командиру отряда подать заявку на участие в конкурсе в номинации «Тандем»?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -3304,57 +1564,10 @@
                                         v-bind="props"
                                         title="Как определяется место отряда в рейтинге отрядов-участников Конкурса?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -3383,57 +1596,10 @@
                                         v-bind="props"
                                         title="Как командиру отряда отправить отчетность для формирования места в рейтинге отрядов-участников Конкурса?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -3459,57 +1625,10 @@
                                         v-bind="props"
                                         title="Как узнать рейтинг своего отряда в конкурсе?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -3532,57 +1651,10 @@
                                         v-bind="props"
                                         title="Учитываются ли в Конкурсе места на региональных трудовых проектах?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -3604,57 +1676,10 @@
                                         v-bind="props"
                                         title="Засчитываются ли в Конкурсе мероприятия штаба студенческих отрядов образовательной организации?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -3675,57 +1700,10 @@
                                         v-bind="props"
                                         title="Засчитываются ли в Конкурсе победы штаба студенческих отрядов образовательной организации (в которых участвовал отряд в том числе)?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -3747,57 +1725,10 @@
                                         v-bind="props"
                                         title="Что подразумевается под «Победы членов отряда в региональных, окружных и всероссийских грантовых конкурсах, направленных на развитие студенческих отрядов»?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -3839,57 +1770,10 @@
                                         v-bind="props"
                                         title="Учитывается ли в Конкурсе производственная часть отряда на целине? Или только победы?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -3916,57 +1800,10 @@
                                         v-bind="props"
                                         title="Как поступить в случае возникновения ошибки при загрузке данных во время отправки Отчетности?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -3994,57 +1831,10 @@
                                         title="Учитываются ли в Конкурсе награды за победу и участие в региональных конкурсах РО?
 "
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -4065,57 +1855,10 @@
                                         v-bind="props"
                                         title="Засчитывается ли в Конкурсе участие в акции «Снежный десант РСО», если участвовал от другого отряда?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -4138,57 +1881,10 @@
                                         v-bind="props"
                                         title="Какие данные подтверждает командир РО, а какие комиссар РО?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -4214,57 +1910,10 @@
                                         v-bind="props"
                                         title="Что означает «Рейтинг ещё не сформирован»?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -4291,57 +1940,10 @@
                                         v-bind="props"
                                         title="Проф. обучение на ребят (сертификаты) загружать по одному или сразу на всех? Можно ли потом добавлять?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -4366,57 +1968,10 @@
                                         v-bind="props"
                                         title="После отправки того или иного сертификата на согласование, можно ли добавлять потом еще?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -4439,57 +1994,10 @@
                                         v-bind="props"
                                         title="Сколько человек в отряде должно быть для того, чтобы место в рейтинге было выше?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -4515,57 +2023,10 @@
                                         v-bind="props"
                                         title="Какие отчетные документы нужно подготовить по итогу конкурса и как/куда их прикреплять? На данный момент показатели в критериях подтверждаются на сайте со страницы ком. состава регионального отделения, готовим ли мы к этому же какой-то отчет для достоверности этих показателей? К какому числу и как?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -4591,57 +2052,10 @@
                                         title="Нужно ли прикладывать платежные поручения об оплате членских взносов? 
 "
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -4661,57 +2075,10 @@
                                         v-bind="props"
                                         title="Нужно ли прикладывать сертификаты о прохождении Школы командных составов командиром и комиссаром отряда?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -4739,57 +2106,10 @@
                                         v-bind="props"
                                         title="Нужно ли прикладывать выписку из списка участников мероприятий? Как подтверждается количество участников на мероприятиях (в частности Открытие ТТС): общее фото, например, или достаточно того, что это подтверждает командир РО в критерии?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -4814,57 +2134,10 @@
                                         v-bind="props"
                                         title="Какие упоминания в СМИ о деятельности отряда учитываются в рамках конкурса? Учитываются ли публикации на сайте университета, где учатся ребята, университетские газеты, или учитываются только упоминания в СМИ, зарегистрированных в Роскомнадзоре?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -4888,57 +2161,10 @@
                                         v-bind="props"
                                         title="Будет ли происходить перерасчёт баллов за тестирование в связи с прибавлением членов отряда или исключением?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -4961,57 +2187,10 @@
                                         v-bind="props"
                                         title="У некоторых регионов заканчивается профобучение 30 июня 2024 г. 30 июня – крайний срок загрузки документов: есть риск, что организация не успеет выдать /направить свидетельства: есть ли вариант переноса срока?"
                                     >
-                                        <v-icon v-if="!expanded">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
-                                        <v-icon v-else>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="32"
-                                                height="32"
-                                                viewBox="0 0 32 32"
-                                                fill="none"
-                                            >
-                                                <circle
-                                                    cx="16"
-                                                    cy="16"
-                                                    r="15.5"
-                                                    transform="rotate(-180 16 16)"
-                                                    fill="#1F7CC0"
-                                                    stroke="#1F7CC0"
-                                                />
-                                                <path
-                                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                                    stroke="white"
-                                                    stroke-width="1.5"
-                                                    stroke-miterlimit="10"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </v-icon>
+                                        <SvgIcon
+                                            iconName="wrap"
+                                            :class="{ expanded }"
+                                        />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -5037,11 +2216,17 @@
 
 <script setup>
 import { usePage } from '@shared';
+import SvgIcon from '@shared/components/SvgIcon/SvgIcon.vue';
 
 usePage({ isHidden: true });
 </script>
 
 <style lang="scss">
+.expanded {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
+}
+
 .v-card {
     margin-top: 10px;
     border-bottom: 1px solid #d9d9d9;

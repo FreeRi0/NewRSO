@@ -1931,10 +1931,7 @@
                                     </div>
                                     <div class="statement-wrapper">
                                         <div class="statement-item">
-                                            <img
-                                                src="@app/assets/icon/addFile.svg"
-                                                alt="addFile"
-                                            />
+                                            <SvgIcon iconName="add-file" />
 
                                             <!-- <FileUpload
                                                 mode="advanced"
@@ -2033,10 +2030,7 @@
                                     </div>
                                     <div class="statement-wrapper">
                                         <div class="statement-item">
-                                            <img
-                                                src="@app/assets/icon/addFile.svg"
-                                                alt="addFile"
-                                            />
+                                            <SvgIcon iconName="add-file" />
 
                                             <FileUpload
                                                 mode="basic"
@@ -2131,10 +2125,7 @@
                                     </div>
                                     <div class="statement-wrapper">
                                         <div class="statement-item">
-                                            <img
-                                                src="@app/assets/icon/addFile.svg"
-                                                alt="addFile"
-                                            />
+                                            <SvgIcon iconName="add-file" />
                                             <FileUpload
                                                 mode="basic"
                                                 name="demo[]"
@@ -2234,10 +2225,7 @@
                                     </div>
                                     <div class="statement-wrapper">
                                         <div class="statement-item">
-                                            <img
-                                                src="@app/assets/icon/addFile.svg"
-                                                alt="addFile"
-                                            />
+                                            <SvgIcon iconName="add-file" />
                                             <FileUpload
                                                 mode="basic"
                                                 name="demo[]"
@@ -2318,10 +2306,7 @@
                                     </div>
                                     <div class="statement-wrapper">
                                         <div class="statement-item">
-                                            <img
-                                                src="@app/assets/icon/addFile.svg"
-                                                alt="addFile"
-                                            />
+                                            <SvgIcon iconName="add-file" />
                                             <FileUpload
                                                 mode="basic"
                                                 name="demo[]"
@@ -2408,10 +2393,7 @@
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                                        <SvgIcon iconName="add-file" />
                                         <FileUpload
                                             mode="basic"
                                             name="demo[]"
@@ -2474,10 +2456,7 @@
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                                        <SvgIcon iconName="add-file" />
                                         <FileUpload
                                             mode="basic"
                                             name="demo[]"
@@ -2544,10 +2523,7 @@
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                                        <SvgIcon iconName="add-file" />
                                         <FileUpload
                                             mode="basic"
                                             name="demo[]"
@@ -2610,10 +2586,7 @@
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                                        <SvgIcon iconName="add-file" />
                                         <FileUpload
                                             mode="basic"
                                             name="demo[]"
@@ -2680,10 +2653,7 @@
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                                        <SvgIcon iconName="add-file" />
                                         <FileUpload
                                             mode="basic"
                                             name="demo[]"
@@ -2865,10 +2835,7 @@
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                                        <SvgIcon iconName="add-file" />
                                         <FileUpload
                                             mode="basic"
                                             name="demo[]"
@@ -2943,10 +2910,7 @@
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                                        <SvgIcon iconName="add-file" />
                                         <FileUpload
                                             mode="basic"
                                             name="demo[]"
@@ -3022,10 +2986,7 @@
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                                        <SvgIcon iconName="add-file" />
                                         <FileUpload
                                             mode="basic"
                                             name="demo[]"
@@ -3088,10 +3049,7 @@
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                                        <SvgIcon iconName="add-file" />
                                         <FileUpload
                                             mode="basic"
                                             name="demo[]"
@@ -3158,10 +3116,7 @@
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                                        <SvgIcon iconName="add-file" />
                                         <FileUpload
                                             mode="basic"
                                             name="demo[]"
@@ -3224,10 +3179,7 @@
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                                        <SvgIcon iconName="add-file" />
                                         <FileUpload
                                             mode="basic"
                                             name="demo[]"
@@ -3294,10 +3246,7 @@
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                                        <SvgIcon iconName="add-file" />
                                         <FileUpload
                                             mode="basic"
                                             name="demo[]"
@@ -3481,10 +3430,7 @@
                                         </button>
                                     </div>
                                     <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                                        <SvgIcon iconName="add-file" />
                                         <FileUpload
                                             mode="basic"
                                             name="demo[]"
@@ -3559,10 +3505,7 @@
                                         </button>
                                     </div>
                                     <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                                        <SvgIcon iconName="add-file" />
                                         <FileUpload
                                             mode="basic"
                                             name="demo[]"
@@ -3649,10 +3592,7 @@
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                                        <SvgIcon iconName="add-file" />
                                         <FileUpload
                                             mode="basic"
                                             name="demo[]"
@@ -3722,10 +3662,7 @@
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                                        <SvgIcon iconName="add-file" />
                                         <FileUpload
                                             mode="basic"
                                             name="demo[]"
@@ -3788,10 +3725,7 @@
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                                        <SvgIcon iconName="add-file" />
                                         <FileUpload
                                             mode="basic"
                                             name="demo[]"
@@ -3854,10 +3788,7 @@
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                                        <SvgIcon iconName="add-file" />
                                         <FileUpload
                                             mode="basic"
                                             name="demo[]"
@@ -4041,10 +3972,7 @@
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                                        <SvgIcon iconName="add-file" />
                                         <FileUpload
                                             mode="basic"
                                             name="demo[]"
@@ -4115,10 +4043,7 @@
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                                        <SvgIcon iconName="add-file" />
                                         <FileUpload
                                             mode="basic"
                                             name="demo[]"
@@ -4194,10 +4119,7 @@
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                                        <SvgIcon iconName="add-file" />
                                         <FileUpload
                                             mode="basic"
                                             name="demo[]"
@@ -4260,10 +4182,7 @@
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                                        <SvgIcon iconName="add-file" />
                                         <FileUpload
                                             mode="basic"
                                             name="demo[]"
@@ -4327,10 +4246,7 @@
                                         </p>
                                     </div>
                                     <div class="statement-item">
-                                        <img
-                                            src="@app/assets/icon/addFile.svg"
-                                            alt="addFile"
-                                        />
+                                        <SvgIcon iconName="add-file" />
                                         <FileUpload
                                             mode="basic"
                                             name="demo[]"
@@ -4495,6 +4411,7 @@ import { TextArea } from '@shared/components/inputs';
 import { MaskInput } from 'vue-3-mask';
 import { userData } from '@features/userData';
 import { SvgIcon } from '@shared/components/SvgIcon';
+import SvgIcon from '@shared/components/SvgIcon/SvgIcon.vue';
 const props = defineProps({
     button: Boolean,
     user: Object,

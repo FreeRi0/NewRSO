@@ -2,28 +2,60 @@
     <div v-if="!permissonDeny">
         <div class="form__field">
             <div class="contributor-search">
-                <input type="text" id="search" class="contributor-search__input" @keyup="searchHeadquarters"
-                    v-model="name" placeholder="Начните вводить" />
+                <input
+                    type="text"
+                    id="search"
+                    class="contributor-search__input"
+                    @keyup="searchHeadquarters"
+                    v-model="name"
+                    placeholder="Начните вводить"
+                />
                 <img src="@app/assets/icon/search.svg" alt="search" />
             </div>
         </div>
 
         <div id="wrapper">
             <div id="left" v-if="width > 768">
-                <filters @update-district="updateDistrict" @update-reg="updateReg" @update-local="updateLocal"
-                    @update-educ="updateEduc" @update-detachment="updateDetachment" :district="district"
-                    :districts="districts" :reg="reg" :regionals="regionals" :local="local" :locals="locals"
-                    :educ="educ" :educ-head="educHead" :detachment="detachment" :detachments="detachments"
-                    :roles="roles.roles.value" :sorted-participants="sortedHeadquarters" />
+                <filters
+                    @update-district="updateDistrict"
+                    @update-reg="updateReg"
+                    @update-local="updateLocal"
+                    @update-educ="updateEduc"
+                    @update-detachment="updateDetachment"
+                    :district="district"
+                    :districts="districts"
+                    :reg="reg"
+                    :regionals="regionals"
+                    :local="local"
+                    :locals="locals"
+                    :educ="educ"
+                    :educ-head="educHead"
+                    :detachment="detachment"
+                    :detachments="detachments"
+                    :roles="roles.roles.value"
+                    :sorted-participants="sortedHeadquarters"
+                />
 
                 <div class="uploads">
-                    <div class="form-col" v-for="(file, index) in files.length + 1" :key="file">
+                    <div
+                        class="form-col"
+                        v-for="(file, index) in files.length + 1"
+                        :key="file"
+                    >
                         <div class="form-fileupload" v-if="index < 6">
-                            <img class="paper-clip" src="@app/assets/icon/addFile.svg" alt="addFile" />
+                            <SvgIcon class="paper-clip" iconName="add-file" />
 
-                            <FileUpload class="file-upload-text" mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                :maxFileSize="7000000" :customUpload="true" chooseLabel="Выбрать файл"
-                                @select="onUpload" @clear="onRemove(index)"></FileUpload>
+                            <FileUpload
+                                class="file-upload-text"
+                                mode="basic"
+                                name="demo[]"
+                                accept=".pdf, .jpeg, .png"
+                                :maxFileSize="7000000"
+                                :customUpload="true"
+                                chooseLabel="Выбрать файл"
+                                @select="onUpload"
+                                @clear="onRemove(index)"
+                            ></FileUpload>
                         </div>
                     </div>
                 </div>
@@ -32,28 +64,46 @@
             <div id="right" v-if="sortedHeadquartersJunior.length">
                 <div class="additional_line">
                     <div class="horizontallso__confidant">
-                        <input type="checkbox" v-model="isChecked" @change="onCheckbox" />
+                        <input
+                            type="checkbox"
+                            v-model="isChecked"
+                            @change="onCheckbox"
+                        />
                     </div>
 
                     <p class="choose_all">Выделить все</p>
 
                     <a class="download_text" target="_blank">
-                        <SvgIcon class="download_img" iconName="download"/>
+                        <SvgIcon class="download_img" iconName="download" />
                         Cкачать список
                     </a>
 
                     <div class="sort_line">
                         <div class="sort-select">
-                            <sortByEducation variant="outlined" clearable v-model="sortBy" :options="sortOptionss"
-                                class="Sort-alphabet"></sortByEducation>
+                            <sortByEducation
+                                variant="outlined"
+                                clearable
+                                v-model="sortBy"
+                                :options="sortOptionss"
+                                class="Sort-alphabet"
+                            ></sortByEducation>
                         </div>
-                        <Button type="button" class="ascend" iconn="iconn" @click="ascending = !ascending"
-                            color="white"></Button>
+                        <Button
+                            type="button"
+                            class="ascend"
+                            iconn="iconn"
+                            @click="ascending = !ascending"
+                            color="white"
+                        ></Button>
                     </div>
                 </div>
 
-                <multi-stage-submit-item v-for="headquarter in sortedHeadquarters" :key="headquarter"
-                    :headquarter="headquarter" @select="onToggleSelectCompetition" />
+                <multi-stage-submit-item
+                    v-for="headquarter in sortedHeadquarters"
+                    :key="headquarter"
+                    :headquarter="headquarter"
+                    @select="onToggleSelectCompetition"
+                />
                 <p class="subtitle" v-if="!sortedParticipants.length">
                     Ничего не найдено
                 </p>
@@ -66,11 +116,20 @@
                 Итого: {{ selectedCompetitionsList.length }} ({{ memberCount }}
                 участников)
             </p>
-            <multi-stage-submit-select v-for="headquarter in selectedCompetitionsList" :key="headquarter.id"
-                :headquarter="headquarter" @select="onToggleSelectCompetition" />
+            <multi-stage-submit-select
+                v-for="headquarter in selectedCompetitionsList"
+                :key="headquarter.id"
+                :headquarter="headquarter"
+                @select="onToggleSelectCompetition"
+            />
         </template>
         <div class="competitions__btns" v-if="selectedCompetitionsList.length">
-            <Button class="save" type="button" label="Подать заявку" @click="onAction"></Button>
+            <Button
+                class="save"
+                type="button"
+                label="Подать заявку"
+                @click="onAction"
+            ></Button>
         </div>
     </div>
     <p class="subtitle" v-else>Вы не можете подавать заявку</p>
@@ -97,6 +156,7 @@ import { useLocalsStore } from '@features/store/local';
 import { useEducationalsStore } from '@features/store/educationals';
 import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
+import SvgIcon from '@shared/components/SvgIcon/SvgIcon.vue';
 
 const props = defineProps({
     me: {
@@ -179,7 +239,7 @@ const viewHeadquartersData = async (resp, search, join) => {
         } else if (resp.indexOf('rsousers') >= 0) {
             routeName = 'userpage';
         }
-        const viewHeadquartersResponse = await HTTP.get(resp + search,);
+        const viewHeadquartersResponse = await HTTP.get(resp + search);
 
         let response = viewHeadquartersResponse.data.results;
         for (let i in response) {
@@ -273,8 +333,8 @@ const updateEduc = (educVal) => {
     let resp = educVal
         ? '/detachments/'
         : local.value
-            ? '/educationals/'
-            : '/locals/';
+        ? '/educationals/'
+        : '/locals/';
     if (educVal) {
         search = '?educational_headquarter__name=' + educVal;
     } else if (local.value) {
@@ -408,8 +468,8 @@ watch(
     () => {
         let districtID = districtsStore.districts.length
             ? districtsStore.districts.find(
-                (dis) => (dis.name = district.value),
-            )?.id
+                  (dis) => (dis.name = district.value),
+              )?.id
             : roleStore.roles.districtheadquarter_commander?.id;
         regionals.value = regionalsStore.regionals.filter(
             (reg) => reg.district_headquarter == district.value,
@@ -503,7 +563,6 @@ const onAction = async () => {
         await HTTP.post(
             `/events/${props.route.params.id}/multi_applications/`,
             selectedCompetitionsList.value,
-
         );
 
         router.push({
@@ -568,7 +627,6 @@ const getHeadquartersJunior = async () => {
     try {
         const { data } = await HTTP.get(
             `/events/${props.route.params.id}/multi_applications`,
-
         );
         let i = 0;
         // console.log(data);
@@ -801,7 +859,7 @@ onMounted(() => {
         width: 193px;
     }
 
-    &>.form__select {
+    & > .form__select {
         margin-bottom: 0px;
     }
 }
@@ -844,7 +902,7 @@ onMounted(() => {
         text-align: left;
         color: #1f7cc0;
 
-        &> :deep(.p-) {
+        & > :deep(.p-) {
             display: none;
         }
 

@@ -4,25 +4,40 @@
             <ul class="header__logo">
                 <li class="header__logo-rso">
                     <a href="https://трудкрут.рф/" target="_blank">
-                        <img src="@app/assets/logo/logo-rso-tablet.svg" width="60" height="56"
-                            alt="Логотип сайта трудкрут.рф" />
+                        <img
+                            src="@app/assets/logo/logo-rso-tablet.svg"
+                            width="60"
+                            height="56"
+                            alt="Логотип сайта трудкрут.рф"
+                        />
                     </a>
                 </li>
 
                 <li class="header__logo-labor-cool">
                     <a href="https://trudkrutshop.ru/" target="_blank">
-                        <img src="@app/assets/logo/logo-shop-tablet.png" width="56" height="56"
-                            alt="Логотип сайта trudkrutshop.ru" />
+                        <img
+                            src="@app/assets/logo/logo-shop-tablet.png"
+                            width="56"
+                            height="56"
+                            alt="Логотип сайта trudkrutshop.ru"
+                        />
                     </a>
                 </li>
             </ul>
 
             <nav class="header__nav header__nav--order">
-                <button class="header__button-mobile-menu" type="button" @click="removeClass()"></button>
+                <button
+                    class="header__button-mobile-menu"
+                    type="button"
+                    @click="removeClass()"
+                ></button>
                 <div ref="navMenu" class="header__nav-container no-visible">
                     <div class="header__overlay" @click="removeClass()"></div>
                     <ul class="header__nav-list">
-                        <li class="header__nav-item" v-if="Object.keys(userStore.currentUser).length">
+                        <li
+                            class="header__nav-item"
+                            v-if="Object.keys(userStore.currentUser).length"
+                        >
                             <div class="nav-menu-item">
                                 <Dropdown title="Структура" :items="pages" />
                             </div>
@@ -33,7 +48,10 @@
                             </a>
                         </li>
                         <li class="header__nav-item competition__nav-item">
-                            <a class="header__nav-link competition__link" href="/Competition">
+                            <a
+                                class="header__nav-link competition__link"
+                                href="/Competition"
+                            >
                                 Конкурс
                             </a>
                         </li>
@@ -47,26 +65,39 @@
             </nav>
 
             <nav class="header__nav nav-user">
-                <div class="nav-user__application-count" v-if="
-                    Object.keys(userStore.currentUser).length &&
-                    (roles.roles.value.regionalheadquarter_commander ||
-                        roles.roles.value.detachment_commander)
-                ">
+                <div
+                    class="nav-user__application-count"
+                    v-if="
+                        Object.keys(userStore.currentUser).length &&
+                        (roles.roles.value.regionalheadquarter_commander ||
+                            roles.roles.value.detachment_commander)
+                    "
+                >
                     <!--ССЫЛКА НА СТРАНИЦУ АКТИВНЫЕ ЗАЯВКИ?-->
                     <router-link :to="'/active'">
-                        <img src="@app/assets/icon/bell-light.svg" width="36" height="36" alt="Иконка уведомления" />
+                        <SvgIcon iconName="bell-light" />
                     </router-link>
                     <!--Если есть активные заявки (isActive = true), ниже отображается их количество:-->
-                    <div v-if="userStore.count.count" class="nav-user__quantity-box">
-                        <span v-if="userStore.count.count < 100" class="countNum">{{ userStore.count.count }}</span>
+                    <div
+                        v-if="userStore.count.count"
+                        class="nav-user__quantity-box"
+                    >
+                        <span
+                            v-if="userStore.count.count < 100"
+                            class="countNum"
+                            >{{ userStore.count.count }}</span
+                        >
                         <span v-else>99+</span>
                     </div>
                 </div>
 
-                <div class="nav-user__location" v-if="
-                    Object.keys(userStore.currentUser).length &&
-                    !userStore.isLoading
-                ">
+                <div
+                    class="nav-user__location"
+                    v-if="
+                        Object.keys(userStore.currentUser).length &&
+                        !userStore.isLoading
+                    "
+                >
                     <button class="nav-user__button" @click="show = !show">
                         <!-- <img
                             class="nav-user__button-mobile"
@@ -76,11 +107,15 @@
                             alt="Иконка геолокации"
                         /> -->
 
-                        <span v-if="
-                            userStore.currentUser?.region &&
-                            !isLoading.isLoading.value
-                        ">
-                            <div v-for="item in regionalsStore.filteredMyRegional">
+                        <span
+                            v-if="
+                                userStore.currentUser?.region &&
+                                !isLoading.isLoading.value
+                            "
+                        >
+                            <div
+                                v-for="item in regionalsStore.filteredMyRegional"
+                            >
                                 <p>{{ item.name }}</p>
                             </div>
                         </span>
@@ -92,24 +127,49 @@
                         <span v-else>Выберите региональное отделение</span>
                     </button>
 
-                    <div class="header__overlay" @click="show = !show" v-if="show"></div>
+                    <div
+                        class="header__overlay"
+                        @click="show = !show"
+                        v-if="show"
+                    ></div>
 
                     <div class="nav-user__location-container" v-if="show">
-                        <button type="button" @click="show = !show" class="nav-user__location-close">
+                        <button
+                            type="button"
+                            @click="show = !show"
+                            class="nav-user__location-close"
+                        >
                             x
                         </button>
                         <label for="your-region">Ваш регион</label>
-                        <regionsDropdown open-on-clear id="reg" name="regdrop" placeholder="Выберите регион обучения"
-                            v-model="region" @update:value="changeValue" address="/regions/" class="mb-2 region-input">
+                        <regionsDropdown
+                            open-on-clear
+                            id="reg"
+                            name="regdrop"
+                            placeholder="Выберите регион обучения"
+                            v-model="region"
+                            @update:value="changeValue"
+                            address="/regions/"
+                            class="mb-2 region-input"
+                        >
                         </regionsDropdown>
 
                         <div>
-                            <Button type="submit" class="nav-user__button-agree mt-2 mx-auto" label="Да, все верно"
-                                color="primary" size="large" @click="updateRegion"></Button>
+                            <Button
+                                type="submit"
+                                class="nav-user__button-agree mt-2 mx-auto"
+                                label="Да, все верно"
+                                color="primary"
+                                size="large"
+                                @click="updateRegion"
+                            ></Button>
                         </div>
                     </div>
                 </div>
-                <div class="nav-user__location" v-if="!Object.keys(userStore.currentUser).length">
+                <div
+                    class="nav-user__location"
+                    v-if="!Object.keys(userStore.currentUser).length"
+                >
                     <button class="nav-user__button" @click="show = !show">
                         <span v-if="regionAction">
                             {{ regionAction }}
@@ -117,33 +177,66 @@
                         <span v-else>Выберите региональное отделение</span>
                     </button>
 
-                    <div class="header__overlay" @click="show = !show" v-if="show"></div>
+                    <div
+                        class="header__overlay"
+                        @click="show = !show"
+                        v-if="show"
+                    ></div>
 
                     <div class="nav-user__location-container" v-if="show">
-                        <button type="button" @click="show = !show" class="nav-user__location-close">
+                        <button
+                            type="button"
+                            @click="show = !show"
+                            class="nav-user__location-close"
+                        >
                             x
                         </button>
                         <label for="your-region">Ваш регион</label>
-                        <regionsDropdown open-on-clear id="reg" name="regdrop" placeholder="Выберите регион обучения"
-                            v-model="regionAction" @update:value="changeValue" class="mb-2 region-input"
-                            address="/regions/" :value-change="true"></regionsDropdown>
+                        <regionsDropdown
+                            open-on-clear
+                            id="reg"
+                            name="regdrop"
+                            placeholder="Выберите регион обучения"
+                            v-model="regionAction"
+                            @update:value="changeValue"
+                            class="mb-2 region-input"
+                            address="/regions/"
+                            :value-change="true"
+                        ></regionsDropdown>
 
                         <div>
-                            <Button type="submit" class="nav-user__button-agree mt-2 mx-auto" label="Да, все верно"
-                                color="primary" size="large" @click="close()"></Button>
+                            <Button
+                                type="submit"
+                                class="nav-user__button-agree mt-2 mx-auto"
+                                label="Да, все верно"
+                                color="primary"
+                                size="large"
+                                @click="close()"
+                            ></Button>
                         </div>
                     </div>
                 </div>
-                <div class="nav-user__menu user-menu" v-if="
-                    Object.keys(userStore.currentUser).length &&
-                    !userStore.isLoading
-                ">
-                    <img v-if="!Object.keys(userStore.currentUser).length" src="@app/assets/user-avatar.png"
-                        alt="Фото бойца (заглушка)" />
+                <div
+                    class="nav-user__menu user-menu"
+                    v-if="
+                        Object.keys(userStore.currentUser).length &&
+                        !userStore.isLoading
+                    "
+                >
+                    <img
+                        v-if="!Object.keys(userStore.currentUser).length"
+                        src="@app/assets/user-avatar.png"
+                        alt="Фото бойца (заглушка)"
+                    />
 
-                    <Dropdown v-if="Object.keys(userStore.currentUser).length" :items="userPages" :image="true"
-                        :url="userStore.currentUser?.media?.photo" desc="Фотография пользователя"
-                        @updateUser="userUpdate" />
+                    <Dropdown
+                        v-if="Object.keys(userStore.currentUser).length"
+                        :items="userPages"
+                        :image="true"
+                        :url="userStore.currentUser?.media?.photo"
+                        desc="Фотография пользователя"
+                        @updateUser="userUpdate"
+                    />
                 </div>
             </nav>
         </header>
@@ -164,8 +257,9 @@ import { useRouter, onBeforeRouteUpdate, useRoute } from 'vue-router';
 import { useUserStore } from '@features/store/index';
 import { useRegionalsStore } from '@features/store/regionals';
 import { useRoleStore } from '@layouts/store/role';
-import { useSquadsStore } from '@features/store/squads'
+import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
+import SvgIcon from '@shared/components/SvgIcon/SvgIcon.vue';
 
 const props = defineProps({
     isActive: {
@@ -299,9 +393,14 @@ const userPages = computed(() => [
         name: 'active',
         show:
             roleStore.roles?.regionalheadquarter_commander ||
-            roleStore.roles?.detachment_commander || roleStore.roles?.localheadquarter_commander || roleStore.roles?.districtheadquarter_commander || roleStore.roles?.educationalheadquarter_commander || roleStore.myPositions.usercentralheadquarterposition?.position === "Начальник отдела реализации мероприятий по профессиональному обучению участников студенческих отрядов ЦШ" || roleStore.myPositions.userregionalheadquarterposition?.position === "Комиссар"
-
-        ,
+            roleStore.roles?.detachment_commander ||
+            roleStore.roles?.localheadquarter_commander ||
+            roleStore.roles?.districtheadquarter_commander ||
+            roleStore.roles?.educationalheadquarter_commander ||
+            roleStore.myPositions.usercentralheadquarterposition?.position ===
+                'Начальник отдела реализации мероприятий по профессиональному обучению участников студенческих отрядов ЦШ' ||
+            roleStore.myPositions.userregionalheadquarterposition?.position ===
+                'Комиссар',
     },
     // {
     //     title: 'Поиск участников',
@@ -335,11 +434,8 @@ const userPages = computed(() => [
     {
         title: 'Охрана труда и техника безопасности',
         name: 'Safety',
-        show:
-            true
-
+        show: true,
     },
-
 
     { title: 'Настройки профиля', name: 'personaldata', show: true },
     { title: 'Выйти из ЛК', button: true, show: true },
@@ -386,19 +482,15 @@ const headquertersNames = ref([
 
 const updateRegion = async () => {
     try {
-        const updateRegResponse = await HTTP.patch(
-            '/rsousers/me/',
-            {
-                region: region.value,
-            },
-        );
+        const updateRegResponse = await HTTP.patch('/rsousers/me/', {
+            region: region.value,
+        });
 
         region.value = updateRegResponse.data.region.id;
 
         show.value = !show.value;
         userStore.currentUser.region = updateRegResponse.data.region;
         regionalsStore.searchMyRegionals(updateRegResponse.data.region);
-
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -433,9 +525,8 @@ onMounted(() => {
     if (localStorage.getItem('jwt_token') !== null) {
         userStore.getCountApp();
     } else {
-        return
+        return;
     }
-
 });
 </script>
 
@@ -623,7 +714,7 @@ onMounted(() => {
     }
 
     &__nav-item.disable {
-        &>a {
+        & > a {
             cursor: not-allowed;
         }
     }
@@ -937,6 +1028,6 @@ onMounted(() => {
     font-size: 16px;
     line-height: 20px;
     font-weight: 600;
-    font-family: 'Bert-Sans'
+    font-family: 'Bert-Sans';
 }
 </style>

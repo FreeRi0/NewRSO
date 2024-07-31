@@ -15,7 +15,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -115,7 +115,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -196,7 +196,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text
@@ -579,7 +579,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -704,7 +704,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -824,7 +824,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -918,7 +918,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1011,7 +1011,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1106,7 +1106,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1201,7 +1201,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1260,7 +1260,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1319,7 +1319,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1410,7 +1410,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1528,7 +1528,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1581,7 +1581,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1621,7 +1621,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1662,7 +1662,7 @@
                             </v-row>
                         </template>
                         <template v-slot:actions="{ expanded }">
-                            <svg-icon name="wrap" :flip="expanded" />
+                            <SvgIcon iconName="wrap" :class="{ expanded }" />
                         </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
@@ -1811,6 +1811,11 @@ onMounted(async () => {
 </script>
 
 <style>
+.expanded {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
+}
+
 .v-expansion-panels {
     margin-bottom: 60px;
 }
