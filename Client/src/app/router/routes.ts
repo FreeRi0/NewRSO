@@ -864,6 +864,48 @@ const routes: RouteRecordRaw[] = [
                 ],
             },
             {
+                path: '/reporting-ro',
+                meta: {
+                    label: 'Рейтинг РО',
+                    redirectTo: 'reportingRo',
+                },
+                children: [
+                    {
+                        name: 'reportingRo',
+                        path: 'reporting',
+                        component: () =>
+                            import('@pages/RatingRoReporting/components/RatingRoReporting.vue'),
+                        meta: {
+                            label: 'Отчетность',
+                            redirectTo: 'reportingRo',
+                        },
+                    },
+                    {
+                        path: 'report-regional-one',
+                        name: 'ReportRegionalPartOne',
+                        component: () =>
+                            import(
+                                '@pages/ReportRegionalHQPartOnePage/ReportRegionalHQPartOne.vue'
+                                ),
+                        meta: {
+                            label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 1',
+                        },
+                    },
+                    {
+                        path: 'report-regional-two',
+                        name: 'ReportRegionalPartTwo',
+                        component: () =>
+                            import(
+                                '@pages/ReportRegionalHQPartTwoPage/ReportRegionalHQPartTwo.vue'
+                                ),
+                        meta: {
+                            label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 2',
+                        },
+                    },
+
+                ]
+            },
+            {
                 path: '/rating-ro',
                 meta: {
                     label: 'Рейтинг РО',
@@ -922,28 +964,6 @@ const routes: RouteRecordRaw[] = [
                                 name: 'rating-ro-reporting',
                                 component: () =>
                                     import('@pages/RatingRoReporting/components/RatingRoReportingHeadquarters.vue'),
-                            },
-                            {
-                                path: 'report-regional-one',
-                                name: 'ReportRegionalPartOne',
-                                component: () =>
-                                    import(
-                                        '@pages/ReportRegionalHQPartOnePage/ReportRegionalHQPartOne.vue'
-                                        ),
-                                meta: {
-                                    label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 1',
-                                },
-                            },
-                            {
-                                path: 'report-regional-two',
-                                name: 'ReportRegionalPartTwo',
-                                component: () =>
-                                    import(
-                                        '@pages/ReportRegionalHQPartTwoPage/ReportRegionalHQPartTwo.vue'
-                                        ),
-                                meta: {
-                                    label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 2',
-                                },
                             },
                         ]
                     },

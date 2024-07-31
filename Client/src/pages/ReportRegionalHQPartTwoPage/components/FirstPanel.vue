@@ -51,7 +51,7 @@
                 />
               </div>
             </form>
-            <ReportRegionalForm :reportData="defaultReportData" />
+            <ReportRegionalForm :reportData="reportData" />
           </v-tabs-window-item>
           <v-tabs-window-item value="two">
             <form class="form__field-group" @submit.prevent>
@@ -122,9 +122,11 @@
   </v-card>
 </template>
 <script setup>
-import { ref } from "vue";
+import {onActivated, ref, watchEffect} from "vue";
 import { InputReport } from '@shared/components/inputs';
 import { ReportRegionalForm } from '../../ReportRegionalHQPartOnePage/components/index'
+import {getReport} from "@services/ReportService.ts";
+
 const defaultReportData = {
   participants_number: '0',
   employed_sso: '0',
@@ -137,8 +139,22 @@ const defaultReportData = {
   employed_ssho: '0',
   employed_top: '0',
 };
-
 const tab = ref('one')
+const reportData = ref(defaultReportData)
+
+watchEffect(async () => {
+  try {
+    const res = await getReport();
+    console.log('res: ', res)
+    delete res.data.id;
+    for (let i in res.data) {
+      res.data[i] = res.data[i].toString()
+    }
+    reportData.value = res.data;
+  } catch (e) {
+    console.log(e)
+  }
+})
 </script>
 <style lang="scss" scoped>
 .panel-card {

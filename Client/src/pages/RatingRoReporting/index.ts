@@ -1,0 +1,1 @@
+export { default as reportingRo} from './RatingToReporing.vue'

@@ -25,10 +25,16 @@
       </v-expansion-panel>
     </v-expansion-panels>
   </div>
+  <Button
+      variant="text"
+      label="Отправить отчет"
+      size="large"
+  />
 </template>
 <script setup>
 import FirstPanel from "@pages/ReportRegionalHQPartTwoPage/components/FirstPanel.vue";
 import SecondPanel from "@pages/ReportRegionalHQPartTwoPage/components/SecondPanel.vue";
+import { Button } from '@shared/components/buttons';
 
 </script>
 <style>
