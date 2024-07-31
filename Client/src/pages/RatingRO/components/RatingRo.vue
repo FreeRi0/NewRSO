@@ -5,7 +5,7 @@
       <router-link :to="{ name: 'rating-ro-reporting' }" class="ratingRO__item">
         <p>Отчеты РО</p>
       </router-link>
-      <router-link to="/" class="ratingRO__item">
+      <router-link :to="{name: 'places'}" class="ratingRO__item">
         <p>Места РО по показателям</p>
       </router-link>
     </div>

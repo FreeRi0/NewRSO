@@ -877,6 +877,22 @@ const routes: RouteRecordRaw[] = [
                             import('@pages/RatingRO/components/RatingRo.vue'),
                     },
                     {
+                        path: 'places',
+                        meta: {
+                            label: 'Места РО по показателям',
+                            redirectTo: 'places'
+                        },
+                        children: [
+                            {
+                                path: '',
+                                name: 'places',
+                                component: () =>
+                                    import('@pages/RoPlaces/components/RoPlaces.vue'),
+                            },
+                        ]
+                    },
+
+                    {
                         path: 'reporting',
                         meta: {
                             label: 'Отчеты РО',

@@ -331,11 +331,11 @@ const userPages = computed(() => [
             roleStore.roles.regionalheadquarter_commander ||
             roleStore.roles.centralheadquarter_commander,
     },
-    // {
-    //     title: 'Рейтинг РО',
-    //     name: 'rating-ro',
-    //     show: roleStore.roles?.regionalheadquarter_commander || roleStore.roles.centralheadquarter_commander,
-    // },
+    {
+        title: 'Рейтинг РО',
+        name: 'rating-ro',
+        show: roleStore.roles?.regionalheadquarter_commander || roleStore.roles.centralheadquarter_commander,
+    },
 
     {
         title: 'Охрана труда и техника безопасности',
