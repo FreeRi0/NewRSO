@@ -24,7 +24,7 @@
             // margin-bottom: 46px;
 
             font-size: 18px;
-            font-family: "Akrobat", sans-serif;
+            font-family: 'Akrobat', sans-serif;
             font-weight: 500;
             margin-bottom: 28px;
 
@@ -47,7 +47,6 @@
         }
 
         &-wrapper {
-
             box-shadow: 0px 0px 10px 0px #00000014;
             border-radius: 10px;
 
@@ -65,11 +64,10 @@
                     max-width: 100%;
                     height: auto;
                     border-radius: 10px 10px 0px 0px;
-
                 }
 
                 @media (max-width: 768px) {
-                    height: auto
+                    height: auto;
                 }
             }
 
@@ -101,7 +99,6 @@
             @media (max-width: 768px) {
                 font-size: 10px !important;
                 padding: 13px !important;
-
             }
         }
     }
@@ -120,7 +117,7 @@
 
             p {
                 font-size: 18px;
-                font-family: "Akrobat", sans-serif;
+                font-family: 'Akrobat', sans-serif;
                 font-weight: 500;
                 margin-bottom: 28px;
 
@@ -155,7 +152,6 @@
                 @media (max-width: 768px) {
                     font-size: 10px !important;
                     padding: 13px !important;
-
                 }
             }
         }
@@ -177,11 +173,10 @@
                     max-width: 100%;
                     height: auto;
                     border-radius: 10px 10px 0px 0px;
-
                 }
 
                 @media (max-width: 768px) {
-                    height: auto
+                    height: auto;
                 }
             }
 
@@ -277,7 +272,7 @@
 
     &__link.header__nav-link {
         padding: 2px 7px 2px 31px;
-        background-image: url("@/app/assets/icon/fire-icon.svg");
+        background-image: url('@/app/assets/icon/fire-icon.svg');
         background-repeat: no-repeat;
         background-position: 0 0;
         color: #ffffff;
@@ -302,7 +297,7 @@
     }
 
     &__label {
-        font-family: "Bert Sans";
+        font-family: 'Bert Sans';
         font-size: 20px;
         font-weight: 500;
         line-height: 20px;
@@ -335,7 +330,7 @@
         width: fit-content;
         margin: 0 auto;
         margin-top: 16px;
-        font-family: "Montserrat";
+        font-family: 'Montserrat';
         font-size: 16px;
         font-weight: 400;
         line-height: 19px;
@@ -393,7 +388,7 @@
         position: absolute;
         left: 34.3%;
         bottom: 14%;
-        font-family: "Bert Sans";
+        font-family: 'Bert Sans';
         font-size: 16px;
         font-weight: 600;
         line-height: 20px;
@@ -501,24 +496,24 @@
         }
 
         li:last-child .competition__list li {
-            background-image: url("@/app/assets/icon/timer.svg");
+            background-image: url('@/app/assets/icon/timer.svg');
         }
 
         li:first-child .competition__list {
             li:first-child {
-                background-image: url("@/app/assets/icon/map.svg");
+                background-image: url('@/app/assets/icon/map.svg');
             }
 
             li:nth-child(2) {
-                background-image: url("@/app/assets/icon/group_light.svg");
+                background-image: url('@/app/assets/icon/group_light.svg');
             }
 
             li:nth-child(3) {
-                background-image: url("@/app/assets/icon/funds.svg");
+                background-image: url('@/app/assets/icon/funds.svg');
             }
 
             li:last-child {
-                background-image: url("@/app/assets/icon/telephone.svg");
+                background-image: url('@/app/assets/icon/telephone.svg');
             }
         }
     }
@@ -555,7 +550,7 @@
 
     &__documents-description {
         // max-width: 900px;
-        font-family: "Akrobat";
+        font-family: 'Akrobat';
         font-size: 20px;
         font-weight: 500;
     }
@@ -567,7 +562,7 @@
         height: 32px;
         margin-left: 76px;
         padding-right: 10px;
-        font-family: "Akrobat";
+        font-family: 'Akrobat';
         font-weight: 600;
         line-height: 16px;
         color: #1f7cc0;
@@ -679,7 +674,7 @@
         right: 8px;
         width: 24px;
         height: 24px;
-        background-image: url("@/app/assets/icon/close-location.svg");
+        background-image: url('@/app/assets/icon/close-location.svg');
     }
 
     &__info {
@@ -710,7 +705,6 @@
         width: 350px;
     }
 }
-
 
 .subtitle {
     &--link {

@@ -31,13 +31,16 @@
                             v-if="
                                 roleStore.roles.detachment_commander !== null ||
                                 roleStore.roles
-                                    .educationalheadquarter_commander !== null ||
-                                    roleStore.roles.localheadquarter_commander !== null ||
-                                    roleStore.roles
+                                    .educationalheadquarter_commander !==
+                                    null ||
+                                roleStore.roles.localheadquarter_commander !==
+                                    null ||
+                                roleStore.roles
                                     .regionalheadquarter_commander !== null ||
-                                    roleStore.roles
+                                roleStore.roles
                                     .districtheadquarter_commander !== null ||
-                                    roleStore.roles.centralheadquarter_commander !== null
+                                roleStore.roles.centralheadquarter_commander !==
+                                    null
                             "
                         >
                             <p>Командир</p>
@@ -141,7 +144,7 @@
                             "
                         >
                             <a :href="user.social_vk" target="_blank">
-                                <img src="@/app/assets/icon/vk-blue.svg" />
+                                <SvgIcon icon-name="vk" />
                             </a>
                         </div>
                         <div
@@ -152,18 +155,12 @@
                             "
                         >
                             <a :href="user.social_tg">
-                                <img
-                                    src="@/app/assets/icon/telegram-blue.svg"
-                                    alt=""
-                                />
+                                <SvgIcon icon-name="telegram" />
                             </a>
                         </div>
                         <div class="user-data__link-share-link">
                             <a @click="copyL">
-                                <img
-                                    src="@/app/assets/icon/to-share-link.svg"
-                                    alt=""
-                                />
+                                <SvgIcon icon-name="share-link" />
                             </a>
                             <div class="copy-message" hidden>
                                 Ссылка скопирована
@@ -172,14 +169,11 @@
                     </div>
                     <div class="user-data__contact-contact">
                         <div class="user-data__contact-contact_item">
-                            <img
-                                src="@/app/assets/icon/phone.svg"
-                                alt="phone"
-                            />
+                            <SvgIcon icon-name="phone" />
                             <p class="ml-2">{{ user.phone_number }}</p>
                         </div>
                         <div class="user-data__contact-contact_item mail">
-                            <img src="@/app/assets/icon/mail.svg" alt="mail" />
+                            <SvgIcon icon-name="mail" />
                             <p class="ml-2">{{ user.email }}</p>
                         </div>
                     </div>
@@ -197,6 +191,7 @@ import { useRegionalsStore } from '@features/store/regionals';
 import { useRoute } from 'vue-router';
 import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
+import { SvgIcon } from '@shared/index';
 
 const props = defineProps({
     banner: {
@@ -263,14 +258,14 @@ const getUserData = async () => {
     try {
         if (props.user.detachment_id) {
             const responseSquad = await HTTP.get(
-                `/detachments/${props.user.detachment_id}/`
+                `/detachments/${props.user.detachment_id}/`,
             );
             detachment.value = responseSquad.data;
         }
 
         if (props.user.educational_headquarter_id) {
             const responseEducHead = await HTTP.get(
-                `/educationals/${props.user.educational_headquarter_id}/`
+                `/educationals/${props.user.educational_headquarter_id}/`,
             );
 
             educationalHeadquarter.value = responseEducHead.data;
@@ -294,7 +289,6 @@ watch(
 onMounted(() => {
     roleStore.getMyPositions();
     getUserData();
-
 });
 
 const copyL = () => {

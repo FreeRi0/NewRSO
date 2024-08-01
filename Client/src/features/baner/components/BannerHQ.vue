@@ -50,7 +50,7 @@
                                     :href="headquarter.social_vk"
                                     target="_blank"
                                 >
-                                    <img src="@/app/assets/icon/vk-blue.svg" />
+                                    <SvgIcon icon-name="vk" />
                                 </a>
                             </div>
                             <div
@@ -64,18 +64,12 @@
                                     :href="headquarter.social_tg"
                                     target="_blank"
                                 >
-                                    <img
-                                        src="@/app/assets/icon/telegram-blue.svg"
-                                        alt=""
-                                    />
+                                    <SvgIcon icon-name="telegram" />
                                 </a>
                             </div>
                             <div class="hq-data__link-share-link">
                                 <a @click="copyL">
-                                    <img
-                                        src="@/app/assets/icon/to-share-link.svg"
-                                        alt=""
-                                    />
+                                    <SvgIcon icon-name="share-link" />
                                 </a>
                                 <div class="copy-message" hidden>
                                     Ссылка скопирована
@@ -217,7 +211,7 @@
                                     :href="localHeadquarter.social_vk"
                                     target="_blank"
                                 >
-                                    <img src="@/app/assets/icon/vk-blue.svg" />
+                                    <SvgIcon icon-name="vk" />
                                 </a>
                             </div>
                             <div
@@ -231,18 +225,12 @@
                                     :href="localHeadquarter.social_tg"
                                     target="_blank"
                                 >
-                                    <img
-                                        src="@/app/assets/icon/telegram-blue.svg"
-                                        alt=""
-                                    />
+                                    <SvgIcon icon-name="telegram" />
                                 </a>
                             </div>
                             <div class="hq-data__link-share-link">
                                 <a @click="copyL">
-                                    <img
-                                        src="@/app/assets/icon/to-share-link.svg"
-                                        alt=""
-                                    />
+                                    <SvgIcon icon-name="share-link" />
                                 </a>
                                 <div class="copy-message" hidden>
                                     Ссылка скопирована
@@ -379,7 +367,7 @@
                                     :href="districtHeadquarter.social_vk"
                                     target="_blank"
                                 >
-                                    <img src="@/app/assets/icon/vk-blue.svg" />
+                                    <SvgIcon icon-name="vk" />
                                 </a>
                             </div>
                             <div
@@ -393,18 +381,12 @@
                                     :href="districtHeadquarter.social_tg"
                                     target="_blank"
                                 >
-                                    <img
-                                        src="@/app/assets/icon/telegram-blue.svg"
-                                        alt=""
-                                    />
+                                    <SvgIcon icon-name="telegram" />
                                 </a>
                             </div>
                             <div class="hq-data__link-share-link">
                                 <a @click="copyL">
-                                    <img
-                                        src="@/app/assets/icon/to-share-link.svg"
-                                        alt=""
-                                    />
+                                    <SvgIcon icon-name="share-link" />
                                 </a>
                                 <div class="copy-message" hidden>
                                     Ссылка скопирована
@@ -545,7 +527,7 @@
                                     :href="regionalHeadquarter.social_vk"
                                     target="_blank"
                                 >
-                                    <img src="@/app/assets/icon/vk-blue.svg" />
+                                    <SvgIcon icon-name="vk" />
                                 </a>
                             </div>
                             <div
@@ -559,18 +541,12 @@
                                     :href="regionalHeadquarter.social_tg"
                                     target="_blank"
                                 >
-                                    <img
-                                        src="@/app/assets/icon/telegram-blue.svg"
-                                        alt=""
-                                    />
+                                    <SvgIcon icon-name="telegram" />
                                 </a>
                             </div>
                             <div class="hq-data__link-share-link">
                                 <a @click="copyL">
-                                    <img
-                                        src="@/app/assets/icon/to-share-link.svg"
-                                        alt=""
-                                    />
+                                    <SvgIcon icon-name="share-link" />
                                 </a>
                                 <div class="copy-message" hidden>
                                     Ссылка скопирована
@@ -721,7 +697,7 @@
                                     :href="centralHeadquarter.social_vk"
                                     target="_blank"
                                 >
-                                    <img src="@/app/assets/icon/vk-blue.svg" />
+                                    <SvgIcon icon-name="vk" />
                                 </a>
                             </div>
                             <div
@@ -735,18 +711,12 @@
                                     :href="centralHeadquarter.social_tg"
                                     target="_blank"
                                 >
-                                    <img
-                                        src="@/app/assets/icon/telegram-blue.svg"
-                                        alt=""
-                                    />
+                                    <SvgIcon icon-name="telegram" />
                                 </a>
                             </div>
                             <div class="hq-data__link-share-link">
                                 <a @click="copyL">
-                                    <img
-                                        src="@/app/assets/icon/to-share-link.svg"
-                                        alt=""
-                                    />
+                                    <SvgIcon icon-name="share-link" />
                                 </a>
                                 <div class="copy-message" hidden>
                                     Ссылка скопирована

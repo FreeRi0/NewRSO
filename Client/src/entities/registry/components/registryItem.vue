@@ -18,7 +18,6 @@
                 v-if="item.name"
             >
                 {{ item.name }}
-
             </p>
             <div
                 class="d-flex"
@@ -60,13 +59,15 @@
                 Членский Взнос: Неоплачен
             </p>
             <div class="d-flex" v-if="item.participants_count">
-                <img src="@app/assets/icon/people.svg" alt="people" />
+                <SvgIcon icon-name="people" />
                 <p class="ml-3">{{ item.participants_count }}</p>
             </div>
         </div>
     </div>
 </template>
 <script setup>
+import { SvgIcon } from '@shared/index';
+
 const props = defineProps({
     item: {
         type: Object,

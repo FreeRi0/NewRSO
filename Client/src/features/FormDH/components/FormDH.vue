@@ -23,56 +23,8 @@
                         </p>
                     </v-row>
                     <template v-slot:actions="{ expanded }">
-                        <v-icon v-if="!expanded">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="32"
-                                height="32"
-                                viewBox="0 0 32 32"
-                                fill="none"
-                            >
-                                <circle
-                                    cx="16"
-                                    cy="16"
-                                    r="15.5"
-                                    fill="#1F7CC0"
-                                    stroke="#1F7CC0"
-                                />
-                                <path
-                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                    stroke="white"
-                                    stroke-width="1.5"
-                                    stroke-miterlimit="10"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                />
-                            </svg>
-                        </v-icon>
-                        <v-icon v-else>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="32"
-                                height="32"
-                                viewBox="0 0 32 32"
-                                fill="none"
-                            >
-                                <circle
-                                    cx="16"
-                                    cy="16"
-                                    r="15.5"
-                                    transform="rotate(-180 16 16)"
-                                    fill="#1F7CC0"
-                                    stroke="#1F7CC0"
-                                />
-                                <path
-                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                    stroke="white"
-                                    stroke-width="1.5"
-                                    stroke-miterlimit="10"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                />
-                            </svg>
+                        <v-icon>
+                            <SvgIcon icon-name="wrap" :class="{ expanded }" />
                         </v-icon>
                     </template>
                 </v-expansion-panel-title>
@@ -200,56 +152,8 @@
                         </p>
                     </v-row>
                     <template v-slot:actions="{ expanded }">
-                        <v-icon v-if="!expanded">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="32"
-                                height="32"
-                                viewBox="0 0 32 32"
-                                fill="none"
-                            >
-                                <circle
-                                    cx="16"
-                                    cy="16"
-                                    r="15.5"
-                                    fill="#1F7CC0"
-                                    stroke="#1F7CC0"
-                                />
-                                <path
-                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                    stroke="white"
-                                    stroke-width="1.5"
-                                    stroke-miterlimit="10"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                />
-                            </svg>
-                        </v-icon>
-                        <v-icon v-else>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="32"
-                                height="32"
-                                viewBox="0 0 32 32"
-                                fill="none"
-                            >
-                                <circle
-                                    cx="16"
-                                    cy="16"
-                                    r="15.5"
-                                    transform="rotate(-180 16 16)"
-                                    fill="#1F7CC0"
-                                    stroke="#1F7CC0"
-                                />
-                                <path
-                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                    stroke="white"
-                                    stroke-width="1.5"
-                                    stroke-miterlimit="10"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                />
-                            </svg>
+                        <v-icon>
+                            <SvgIcon icon-name="wrap" :class="{ expanded }" />
                         </v-icon>
                     </template>
                 </v-expansion-panel-title>
@@ -312,9 +216,17 @@
                                 </template>
                             </v-text-field>
                             <div class="overlay" v-if="showModal"></div>
-                            <DeleteModal v-show="showModal === true" :is-squad="false" @close="close" @delete="
-                                deleteMember(props.headquarter.id, deletedId)
-                                ">
+                            <DeleteModal
+                                v-show="showModal === true"
+                                :is-squad="false"
+                                @close="close"
+                                @delete="
+                                    deleteMember(
+                                        props.headquarter.id,
+                                        deletedId,
+                                    )
+                                "
+                            >
                             </DeleteModal>
                             <MembersList
                                 :items="props.members"
@@ -323,7 +235,7 @@
                                 :is-error-members="isErrorMembers"
                                 v-if="members && !isMembersLoading"
                                 @update-member="onUpdateMember"
-                                 @delete-member="onDeleteMember"
+                                @delete-member="onDeleteMember"
                             ></MembersList>
                             <v-progress-circular
                                 class="circleLoader"
@@ -362,56 +274,8 @@
                         </v-col>
                     </v-row>
                     <template v-slot:actions="{ expanded }">
-                        <v-icon v-if="!expanded">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="32"
-                                height="32"
-                                viewBox="0 0 32 32"
-                                fill="none"
-                            >
-                                <circle
-                                    cx="16"
-                                    cy="16"
-                                    r="15.5"
-                                    fill="#1F7CC0"
-                                    stroke="#1F7CC0"
-                                />
-                                <path
-                                    d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                    stroke="white"
-                                    stroke-width="1.5"
-                                    stroke-miterlimit="10"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                />
-                            </svg>
-                        </v-icon>
-                        <v-icon v-else>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="32"
-                                height="32"
-                                viewBox="0 0 32 32"
-                                fill="none"
-                            >
-                                <circle
-                                    cx="16"
-                                    cy="16"
-                                    r="15.5"
-                                    transform="rotate(-180 16 16)"
-                                    fill="#1F7CC0"
-                                    stroke="#1F7CC0"
-                                />
-                                <path
-                                    d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                    stroke="white"
-                                    stroke-width="1.5"
-                                    stroke-miterlimit="10"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                />
-                            </svg>
+                        <v-icon>
+                            <SvgIcon icon-name="wrap" :class="{ expanded }" />
                         </v-icon>
                     </template>
                 </v-expansion-panel-title>
@@ -575,32 +439,46 @@
                                     <v-dialog v-model="dialogLogo" width="1024">
                                         <v-card>
                                             <v-card-title>
-                                            <span class="text-h5">
-                                                Загрузите ваше фото
-                                            </span>
+                                                <span class="text-h5">
+                                                    Загрузите ваше фото
+                                                </span>
                                             </v-card-title>
                                             <v-card-text>
                                                 <v-container>
                                                     <v-row>
                                                         <v-file-input
-                                                            @change="selectEmblem"
+                                                            @change="
+                                                                selectEmblem
+                                                            "
                                                             type="file"
                                                             show-size
                                                             prepend-icon="mdi-camera"
                                                             counter
                                                         />
                                                     </v-row>
-                                                    <v-row class="align-center justify-end">
+                                                    <v-row
+                                                        class="align-center justify-end"
+                                                    >
                                                         <v-btn
                                                             v-if="logoPreview"
                                                             class="button-wrapper mt-5"
-                                                            @click="cropImage('logo')"
+                                                            @click="
+                                                                cropImage(
+                                                                    'logo',
+                                                                )
+                                                            "
                                                             prepend-icon="crop"
                                                             variant="plain"
-                                                        >Обрезать фото</v-btn>
+                                                            >Обрезать
+                                                            фото</v-btn
+                                                        >
                                                     </v-row>
                                                     <v-row>
-                                                        <Cropper ref="cropper" class="cropper mt-5 mx-auto" :src="logoPreview" />
+                                                        <Cropper
+                                                            ref="cropper"
+                                                            class="cropper mt-5 mx-auto"
+                                                            :src="logoPreview"
+                                                        />
                                                     </v-row>
                                                 </v-container>
                                             </v-card-text>
@@ -623,7 +501,10 @@
                                                     Загрузить
                                                 </v-btn>
                                             </v-card-actions>
-                                            <p class="error" v-if="isError.detail">
+                                            <p
+                                                class="error"
+                                                v-if="isError.detail"
+                                            >
                                                 {{ isError.detail }}
                                             </p>
                                         </v-card>
@@ -759,35 +640,52 @@
                                         @change="selectBanner"
                                         @click.prevent
                                     />
-                                    <v-dialog v-model="dialogBanner" width="1024">
+                                    <v-dialog
+                                        v-model="dialogBanner"
+                                        width="1024"
+                                    >
                                         <v-card>
                                             <v-card-title>
-                                            <span class="text-h5">
-                                                Загрузите ваше фото
-                                            </span>
+                                                <span class="text-h5">
+                                                    Загрузите ваше фото
+                                                </span>
                                             </v-card-title>
                                             <v-card-text>
                                                 <v-container>
                                                     <v-row>
                                                         <v-file-input
-                                                            @change="selectBanner"
+                                                            @change="
+                                                                selectBanner
+                                                            "
                                                             type="file"
                                                             show-size
                                                             prepend-icon="mdi-camera"
                                                             counter
                                                         />
                                                     </v-row>
-                                                    <v-row class="align-center justify-end">
+                                                    <v-row
+                                                        class="align-center justify-end"
+                                                    >
                                                         <v-btn
                                                             v-if="bannerPreview"
                                                             class="button-wrapper mt-5"
-                                                            @click="cropImage('banner')"
+                                                            @click="
+                                                                cropImage(
+                                                                    'banner',
+                                                                )
+                                                            "
                                                             prepend-icon="crop"
                                                             variant="plain"
-                                                        >Обрезать фото</v-btn>
+                                                            >Обрезать
+                                                            фото</v-btn
+                                                        >
                                                     </v-row>
                                                     <v-row>
-                                                        <Cropper ref="cropper" class="cropper mt-5 mx-auto" :src="bannerPreview" />
+                                                        <Cropper
+                                                            ref="cropper"
+                                                            class="cropper mt-5 mx-auto"
+                                                            :src="bannerPreview"
+                                                        />
                                                     </v-row>
                                                 </v-container>
                                             </v-card-text>
@@ -796,7 +694,9 @@
                                                 <v-btn
                                                     color="blue-darken-1"
                                                     variant="text"
-                                                    @click="dialogBanner = false"
+                                                    @click="
+                                                        dialogBanner = false
+                                                    "
                                                 >
                                                     Закрыть
                                                 </v-btn>
@@ -805,12 +705,17 @@
                                                     color="blue-darken-1"
                                                     variant="text"
                                                     type="submit"
-                                                    @click="uploadPhoto('banner')"
+                                                    @click="
+                                                        uploadPhoto('banner')
+                                                    "
                                                 >
                                                     Загрузить
                                                 </v-btn>
                                             </v-card-actions>
-                                            <p class="error" v-if="isError.detail">
+                                            <p
+                                                class="error"
+                                                v-if="isError.detail"
+                                            >
                                                 {{ isError.detail }}
                                             </p>
                                         </v-card>
@@ -861,6 +766,7 @@ import { usePositionsStore } from '@features/store/positions';
 import { storeToRefs } from 'pinia';
 import { Cropper } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
+import { SvgIcon } from '@shared/index';
 
 const positionsStore = usePositionsStore();
 const positions = storeToRefs(positionsStore);
@@ -948,7 +854,6 @@ const deleteMember = (id, membership_pk) => {
     try {
         const responseDelete = HTTP.delete(
             `/districts/${id}/members/${membership_pk}/`,
-
         );
         showModal.value = false;
 
@@ -996,13 +901,15 @@ const searchMembers = ref('');
 
 const timerSearch = ref(null);
 
-const searchMembersDH = () =>{
+const searchMembersDH = () => {
     clearTimeout(timerSearch.value);
-   timerSearch.value = setTimeout(() => {
-        districtsStore.getSearchDHMembers(props.headquarter.id, searchMembers.value)
-   }, 400);
-}
-
+    timerSearch.value = setTimeout(() => {
+        districtsStore.getSearchDHMembers(
+            props.headquarter.id,
+            searchMembers.value,
+        );
+    }, 400);
+};
 
 const onUpdateMember = (event, id) => {
     emit('updateMember', event, id);
@@ -1020,37 +927,41 @@ let logoPreview = ref(null);
 let bannerPreview = ref(null);
 
 const cropImage = (type) => {
-    if (cropper.value && type === "logo") {
+    if (cropper.value && type === 'logo') {
         const { canvas } = cropper.value.getResult();
-        logoPreview.value = canvas.toDataURL('image/jpeg')
+        logoPreview.value = canvas.toDataURL('image/jpeg');
         canvas.toBlob((blob) => {
-            fileEmblem.value = new File([blob], "logo.jpg", { type: "image/jpeg" })
+            fileEmblem.value = new File([blob], 'logo.jpg', {
+                type: 'image/jpeg',
+            });
         }, 'image/jpeg');
     }
-    if (cropper.value && type === "banner") {
+    if (cropper.value && type === 'banner') {
         const { canvas } = cropper.value.getResult();
-        bannerPreview.value = canvas.toDataURL('image/jpeg')
+        bannerPreview.value = canvas.toDataURL('image/jpeg');
         canvas.toBlob((blob) => {
-            fileBanner.value = new File([blob], "banner.jpg", { type: "image/jpeg" })
+            fileBanner.value = new File([blob], 'banner.jpg', {
+                type: 'image/jpeg',
+            });
         }, 'image/jpeg');
     }
-}
+};
 const uploadPhoto = (type) => {
-    if (type === "logo") {
+    if (type === 'logo') {
         headquarter.value.emblem = null;
         urlEmblem.value = URL.createObjectURL(fileEmblem.value);
 
         emit('selectEmblem', fileEmblem.value);
         dialogLogo.value = false;
     }
-    if (type === "banner") {
+    if (type === 'banner') {
         headquarter.value.banner = null;
         urlBanner.value = URL.createObjectURL(fileBanner.value);
 
         emit('selectBanner', fileBanner.value);
         dialogBanner.value = false;
     }
-}
+};
 
 //--Добавление логотипа-----------------------------------------------------------------------------
 
@@ -1092,6 +1003,10 @@ onBeforeMount(async () => {
 </script>
 
 <style lang="scss" scoped>
+.expanded {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
+}
 .form-button {
     width: 132px;
     min-height: 52px;

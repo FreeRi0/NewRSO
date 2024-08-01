@@ -5,50 +5,104 @@
                 Справка о членстве в РСО (для работодателя)
             </h2>
             <div class="references-search">
-                <input type="text" id="search" class="references-search__input" @keyup="searchContributors"
-                    v-model="name" placeholder="Поищем пользователей?" />
-                <img src="@app/assets/icon/search.svg" alt="search" />
+                <input
+                    type="text"
+                    id="search"
+                    class="references-search__input"
+                    @keyup="searchContributors"
+                    v-model="name"
+                    placeholder="Поищем пользователей?"
+                />
+                <SvgIcon icon-name="search" />
             </div>
             <div class="references-container">
                 <div class="filters">
-                    <filters @update-district="updateDistrict" @update-reg="updateReg" @update-local="updateLocal"
-                        @update-educ="updateEduc" @update-detachment="updateDetachment" :district="district"
-                        :districts="districts" :reg="reg" :regionals="regionals" :local="local" :locals="locals"
-                        :educ="educ" :educ-head="educHead" :detachment="detachment" :detachments="detachments"
-                        :roles="roles.roles.value" :sorted-participants="participants" :count-participants="count"
-                        :is-membership="false" />
+                    <filters
+                        @update-district="updateDistrict"
+                        @update-reg="updateReg"
+                        @update-local="updateLocal"
+                        @update-educ="updateEduc"
+                        @update-detachment="updateDetachment"
+                        :district="district"
+                        :districts="districts"
+                        :reg="reg"
+                        :regionals="regionals"
+                        :local="local"
+                        :locals="locals"
+                        :educ="educ"
+                        :educ-head="educHead"
+                        :detachment="detachment"
+                        :detachments="detachments"
+                        :roles="roles.roles.value"
+                        :sorted-participants="participants"
+                        :count-participants="count"
+                        :is-membership="false"
+                    />
                 </div>
                 <!-- <pre>{{ reg }}</pre> -->
                 <div class="references-items">
                     <div class="references-sort">
                         <div class="d-flex align-center">
                             <div class="references-sort__all">
-                                <input type="checkbox" @click="select" v-model="checkboxAll" />
+                                <input
+                                    type="checkbox"
+                                    @click="select"
+                                    v-model="checkboxAll"
+                                />
                             </div>
                             <div class="ml-3">Выбрать всё</div>
                         </div>
                         <div class="sort-filters">
                             <div class="sort-select">
-                                <sortByEducation variant="outlined" clearable v-model="sortBy" :options="sortOptionss"
-                                    :sorts-boolean="false" class="Sort-alphabet"></sortByEducation>
+                                <sortByEducation
+                                    variant="outlined"
+                                    clearable
+                                    v-model="sortBy"
+                                    :options="sortOptionss"
+                                    :sorts-boolean="false"
+                                    class="Sort-alphabet"
+                                ></sortByEducation>
                             </div>
 
-                            <Button type="button" class="ascend" iconn="iconn" @click="ascending = !ascending"
-                                color="white"></Button>
+                            <Button
+                                type="button"
+                                class="ascend"
+                                iconn="iconn"
+                                @click="ascending = !ascending"
+                                color="white"
+                            ></Button>
                         </div>
                     </div>
                     <div class="references-wrapper">
-                        <referencesList :participants="participants" :selected-peoples="selectedPeoples"
-                            @change="changePeoples"></referencesList>
-                        <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
-                            color="blue"></v-progress-circular>
-                        <p class="text-center" v-else-if="!isLoading && !participants.length">
+                        <referencesList
+                            :participants="participants"
+                            :selected-peoples="selectedPeoples"
+                            @change="changePeoples"
+                        ></referencesList>
+                        <v-progress-circular
+                            class="circleLoader"
+                            v-if="isLoading"
+                            indeterminate
+                            color="blue"
+                        ></v-progress-circular>
+                        <p
+                            class="text-center"
+                            v-else-if="!isLoading && !participants.length"
+                        >
                             Ничего не найдено
                         </p>
                     </div>
                     <template v-if="users.count && users.count > limit">
-                        <Button @click="next" v-if="participants.length < users.count" label="Показать еще"></Button>
-                        <Button @click="prev" v-else label="Свернуть все"></Button>
+                        <Button
+                            @click="next"
+                            v-if="participants.length < users.count"
+                            label="Показать еще"
+                        ></Button>
+                        <Button
+                            @click="prev"
+                            v-else
+                            label="Свернуть все"
+                        ></Button>
                     </template>
                 </div>
             </div>
@@ -57,52 +111,90 @@
                 <form action="#" @submit.prevent="SendReference()">
                     <div class="data-form refer">
                         <div class="form-field">
-                            <label for="education-org">Дата начала действия справки <span
-                                    class="valid-red">*</span></label>
-                            <Input name="date_start" type="date" class="input-big reference-field"
-                                v-model:value="refData.cert_start_date" />
+                            <label for="education-org"
+                                >Дата начала действия справки
+                                <span class="valid-red">*</span></label
+                            >
+                            <Input
+                                name="date_start"
+                                type="date"
+                                class="input-big reference-field"
+                                v-model:value="refData.cert_start_date"
+                            />
                         </div>
                         <p class="error" v-if="isError.cert_start_date">
                             {{ '' + isError.cert_start_date }}
                         </p>
 
                         <div class="form-field">
-                            <label for="facultet">Дата окончания действия справки
+                            <label for="facultet"
+                                >Дата окончания действия справки
                             </label>
-                            <Input name="date_end" type="date" class="input-big reference-field"
-                                v-model:value="refData.cert_end_date" />
+                            <Input
+                                name="date_end"
+                                type="date"
+                                class="input-big reference-field"
+                                v-model:value="refData.cert_end_date"
+                            />
                         </div>
                     </div>
                     <p class="error" v-if="isError.cert_end_date">
                         {{ '' + isError.cert_end_date }}
                     </p>
                     <div class="form-field another">
-                        <label for="course">Справка выдана для предоставления
-                            <span class="valid-red">*</span></label>
-                        <Input name="spravka-field" type="text" v-model:value="refData.recipient" id="course"
-                            class="input-full reference-field" placeholder="Ответ" />
+                        <label for="course"
+                            >Справка выдана для предоставления
+                            <span class="valid-red">*</span></label
+                        >
+                        <Input
+                            name="spravka-field"
+                            type="text"
+                            v-model:value="refData.recipient"
+                            id="course"
+                            class="input-full reference-field"
+                            placeholder="Ответ"
+                        />
                     </div>
                     <p class="error" v-if="isError.recipient">
                         {{ '' + isError.recipient }}
                     </p>
                     <div class="form-field another">
-                        <label for="course">ФИО подписывающего лица
-                            <span class="valid-red">*</span></label>
-                        <Input name="spravka-field" type="text" v-model:value="refData.signatory" id="course"
-                            class="input-full reference-field" placeholder="Ответ" />
+                        <label for="course"
+                            >ФИО подписывающего лица
+                            <span class="valid-red">*</span></label
+                        >
+                        <Input
+                            name="spravka-field"
+                            type="text"
+                            v-model:value="refData.signatory"
+                            id="course"
+                            class="input-full reference-field"
+                            placeholder="Ответ"
+                        />
                     </div>
                     <div class="form-field another">
-                        <label for="course">Должность подписывающего лица, доверенность
-                            <span class="valid-red">*</span></label>
+                        <label for="course"
+                            >Должность подписывающего лица, доверенность
+                            <span class="valid-red">*</span></label
+                        >
                         <!-- <Input name="spravka-field" type="text" v-model:value="refData.position_procuration" id="course"
                             class="input-full reference-field" placeholder="Ответ" /> -->
-                        <textarea name="spravka-field" class="input-full reference-field position-field" id="course"
-                            type="text" v-model="refData.position_procuration" placeholder="Ответ" />
+                        <textarea
+                            name="spravka-field"
+                            class="input-full reference-field position-field"
+                            id="course"
+                            type="text"
+                            v-model="refData.position_procuration"
+                            placeholder="Ответ"
+                        />
                     </div>
                     <div class="selectedItems">
                         <h3>Итого: {{ selectedPeoples.length }}</h3>
 
-                        <checkedReference @change="changePeoples" :participants="selectedPeoples"></checkedReference>
+                        <checkedReference
+                            @change="changePeoples"
+                            :participants="selectedPeoples"
+                        ></checkedReference>
                     </div>
 
                     <Button type="submit" label="Получить справки"></Button>
@@ -134,6 +226,7 @@ import { useEducationalsStore } from '@features/store/educationals';
 import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
 import { HTTP } from '@app/http';
+import { SvgIcon } from '@shared/index';
 
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
@@ -224,7 +317,6 @@ const prev = () => {
     }
     viewContributorsData(search, '', '');
     checkboxAll.value = false;
-
 };
 
 const viewContributorsData = async (search, pagination, orderLimit) => {
@@ -242,17 +334,13 @@ const viewContributorsData = async (search, pagination, orderLimit) => {
                 'ordering=' + (ascending.value ? '' : '-') + sortBy.value,
             );
 
-
         const viewParticipantsResponse = await HTTP.get(url + data.join('&'));
 
         isLoading.value = false;
         let response = viewParticipantsResponse.data;
         count.value = viewParticipantsResponse.data.count;
         if (pagination) {
-            response.results = [
-                ...users.value.results,
-                ...response.results,
-            ];
+            response.results = [...users.value.results, ...response.results];
         }
         users.value = response;
         participants.value = response.results;
@@ -277,7 +365,7 @@ const viewContributorsData = async (search, pagination, orderLimit) => {
 const getFiltersData = async (resp, search) => {
     try {
         isLoading.value = true;
-        const viewHeadquartersResponse = await HTTP.get(resp + search,);
+        const viewHeadquartersResponse = await HTTP.get(resp + search);
         isLoading.value = false;
 
         if (resp.indexOf('districts') >= 0) {
@@ -308,9 +396,7 @@ const updateDistrict = (districtVal) => {
     viewContributorsData(search);
     getFiltersData('/regionals/', search);
 
-
     district.value = districtVal;
-
 };
 const updateReg = (regVal) => {
     let search = '';
@@ -347,7 +433,6 @@ const updateLocal = (localVal) => {
     getFiltersData('/detachments/', search);
 
     local.value = localVal;
-
 };
 
 const updateEduc = (educVal) => {
@@ -369,7 +454,6 @@ const updateEduc = (educVal) => {
     getFiltersData('/detachments/', search);
 
     educ.value = educVal;
-
 };
 
 const updateDetachment = (detachmentVal) => {
@@ -392,7 +476,7 @@ const SendReference = async () => {
             'Content-Type': 'application/json',
             Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
         },
-        responseType: 'blob'
+        responseType: 'blob',
     })
         .then((response) => {
             swal.fire({
@@ -403,7 +487,9 @@ const SendReference = async () => {
                 timer: 1500,
             });
             refData.value = response.data;
-            const url = window.URL.createObjectURL(new Blob([response.data], response.headers));;
+            const url = window.URL.createObjectURL(
+                new Blob([response.data], response.headers),
+            );
             const link = document.createElement('a');
             link.href = url;
             link.setAttribute('download', 'external.zip');
@@ -427,16 +513,12 @@ const select = (event) => {
     selectedPeoples.value = [];
 
     if (event.target.checked) {
-
         for (let index in participants.value) {
-
-
             participants.value[index].selected = true;
             selectedPeoples.value.push(participants.value[index]);
         }
     } else {
         for (let index in participants.value) {
-
             participants.value[index].selected = false;
         }
     }
@@ -527,7 +609,8 @@ const getUsersByRoles = () => {
             locals.value = localsStore.locals.filter(
                 (loc) => loc.regional_headquarter == reg.value,
             );
-            detachments.value = squadsStore.squads.filter((det) => det.regional_headquarter == reg.value,
+            detachments.value = squadsStore.squads.filter(
+                (det) => det.regional_headquarter == reg.value,
             );
             levelAccess.value = 2;
             getFiltersData('/educationals/', search);
@@ -562,7 +645,6 @@ const getUsersByRoles = () => {
     }
 };
 
-
 watch(
     () => roles.roles.value,
 
@@ -583,8 +665,8 @@ watch(
     () => {
         let districtID = districtsStore.districts.length
             ? districtsStore.districts.find(
-                (dis) => (dis.name = district.value),
-            )?.id
+                  (dis) => (dis.name = district.value),
+              )?.id
             : roleStore.roles.districtheadquarter_commander?.id;
         regionals.value = regionalsStore.regionals.filter(
             (reg) => reg.district_headquarter == district.value,
@@ -757,7 +839,7 @@ p {
     height: 45px;
 }
 
-.position-field:focus{
+.position-field:focus {
     outline: none;
 }
 
@@ -788,7 +870,6 @@ p {
     font-size: 16px;
     font-family: 'Bert Sans';
     font-weight: 600;
-
 }
 
 .input-big {
@@ -849,7 +930,7 @@ p {
         margin: 0;
     }
 
-    &--active+.v-expansion-panel {
+    &--active + .v-expansion-panel {
         margin: 0;
     }
 
@@ -891,7 +972,6 @@ p {
 
 .reference-field {
     margin-top: 20px;
-
 }
 
 .error {

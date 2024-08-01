@@ -13,8 +13,7 @@
         <section class="postcard-counts">
             <div class="postcard-date">{{ action.date }}</div>
             <div class="postcard-group">
-                {{ action.groupReq
-                }}<img src="@app/assets/actions/Group_light.svg" alt="" />
+                {{ action.groupReq }}
             </div>
         </section>
     </div>

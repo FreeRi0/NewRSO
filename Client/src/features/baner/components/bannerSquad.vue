@@ -47,7 +47,7 @@
                                 "
                             >
                                 <a :href="squad.social_vk" target="_blank">
-                                    <img src="@/app/assets/icon/vk-blue.svg" />
+                                    <SvgIcon icon-name="vk" />
                                 </a>
                             </div>
                             <div
@@ -57,18 +57,12 @@
                                 "
                             >
                                 <a :href="squad.social_tg" target="_blank">
-                                    <img
-                                        src="@/app/assets/icon/telegram-blue.svg"
-                                        alt=""
-                                    />
+                                    <SvgIcon icon-name="telegram" />
                                 </a>
                             </div>
                             <div class="squad-data__link-share-link">
                                 <a @click="copyL">
-                                    <img
-                                        src="@/app/assets/icon/to-share-link.svg"
-                                        alt=""
-                                    />
+                                    <SvgIcon icon-name="share-link" />
                                 </a>
                                 <div class="copy-message" hidden>
                                     Ссылка скопирована
@@ -140,6 +134,7 @@ import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { Button } from '@shared/components/buttons';
+import { SvgIcon } from '@shared/index';
 const props = defineProps({
     banner: {
         type: String,

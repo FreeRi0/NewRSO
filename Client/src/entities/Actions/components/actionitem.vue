@@ -12,8 +12,8 @@
                 }}
             </div>
             <div class="postcard-group">
-                {{ action.participants_number
-                }}<img src="@app/assets/actions/Group_light.svg" alt="" />
+                {{ action.participants_number }}
+                <SvgIcon icon-name="group-light" />
             </div>
         </section>
         <section class="postcard-counts">
@@ -24,6 +24,7 @@
 </template>
 
 <script setup>
+import { SvgIcon } from '@shared/index';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();

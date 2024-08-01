@@ -3,9 +3,8 @@
         <div class="container">
             <div class="d-flex justify-end">
                 <v-card class="px-14 py-15">
-                    <img
-                        src="@/app/assets/icon/cross.svg"
-                        alt="cross"
+                    <SvgIcon
+                        iconName="cross"
                         class="card_cross"
                         @click="onBack"
                     />
@@ -48,6 +47,7 @@ import { Button } from '@shared/components/buttons';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
 import { usePage } from '@shared';
+import SvgIcon from '@shared/components/SvgIcon/SvgIcon.vue';
 
 usePage({ isHidden: true });
 

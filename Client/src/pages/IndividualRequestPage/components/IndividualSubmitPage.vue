@@ -37,12 +37,7 @@
                 :key="file"
             >
                 <div class="form-fileupload" v-if="index < 6">
-                    <img
-                        class="file-upload-svg"
-                        src="@app/assets/icon/file.svg"
-                        alt="file"
-                    />
-
+                    <SvgIcon iconName="file" class="file-upload-svg" />
                     <FileUpload
                         class="file-upload-text"
                         mode="basic"
@@ -79,6 +74,7 @@ import { useRouter } from 'vue-router';
 import InputText from 'primevue/inputtext';
 import FileUpload from 'primevue/fileupload';
 import { HTTP } from '@app/http';
+import { SvgIcon } from '@shared/index';
 
 const eventInfo = ref({});
 const route = useRoute();

@@ -1,23 +1,34 @@
 <template>
-    <div class='postcard' @click='RouteToAction'>
-        <img :src="action.banner" class='postcard-image' alt='Изображение'/>
-        <p class='postcard-title'>{{action.name}}</p>
-        <p class='postcard-title'>{{action.description}}</p>
-        <section class='postcard-counts'>
-            <div class='postcard-date'>{{action.time_data.start_date + " - " + action.time_data.start_time}}</div>
-            <div class='postcard-group'>{{action.participants_number}}<img src="@app/assets/actions/Group_light.svg" alt=''/></div>
+    <div class="postcard" @click="RouteToAction">
+        <img :src="action.banner" class="postcard-image" alt="Изображение" />
+        <p class="postcard-title">{{ action.name }}</p>
+        <p class="postcard-title">{{ action.description }}</p>
+        <section class="postcard-counts">
+            <div class="postcard-date">
+                {{
+                    action.time_data.start_date +
+                    ' - ' +
+                    action.time_data.start_time
+                }}
+            </div>
+            <div class="postcard-group">
+                {{ action.participants_number
+                }}<SvgIcon icon-name="group-light" />
+            </div>
         </section>
-        <section class='postcard-counts'>
-            <div class='postcard-tag'>{{action.direction}}</div>
-            <div class='postcard-tag'>{{action.format}}</div>
+        <section class="postcard-counts">
+            <div class="postcard-tag">{{ action.direction }}</div>
+            <div class="postcard-tag">{{ action.format }}</div>
         </section>
     </div>
 </template>
 
 <script setup>
+import { SvgIcon } from '@shared/index';
+
 //Параметры модели
 const props = defineProps({
-    action:{
+    action: {
         id: Number,
         author: String,
         format: String,
@@ -35,11 +46,10 @@ const props = defineProps({
         participants_number: String,
         time_data: {
             start_date: String,
-            start_time: String
-        }
-    }
-})
-
+            start_time: String,
+        },
+    },
+});
 </script>
 
 <style></style>

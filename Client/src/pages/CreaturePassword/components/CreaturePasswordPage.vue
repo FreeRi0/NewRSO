@@ -3,20 +3,43 @@
         <v-container>
             <div class="d-flex">
                 <v-card class="px-14 py-15" max-width="580">
-                    <img src="@/app/assets/icon/cross.svg" alt="cross" class="card_cross" @click="onBack" />
-                    <v-card-title class="text-center">Создание нового пароля</v-card-title>
-                    <v-form class="LoginForm" action="#" method="post" @submit.prevent="resetPasswordForm">
+                    <SvgIcon
+                        iconName="cross"
+                        class="card_cross"
+                        @click="onBack"
+                    />
+                    <v-card-title class="text-center"
+                        >Создание нового пароля</v-card-title
+                    >
+                    <v-form
+                        class="LoginForm"
+                        action="#"
+                        method="post"
+                        @submit.prevent="resetPasswordForm"
+                    >
                         <p>
                             Пароль должен быть не короче 8 букв и цифр.
                             Используйте только буквы (a–z, A–Z), цифры и символы
                             ! @ # $ % ^ & * ( ) - _ + = ; : , . / ? \ | ` ~ { }
                         </p>
 
-                        <Input class="creaturePass__input" placeholder="Введите новый пароль" name="password"
-                            v-model:value="new_password"></Input>
-                        <Input class="creaturePass__input" placeholder="Повторите новый пароль" name="confirm"
-                            v-model:value="current_password"></Input>
-                        <Button label="Сохранить" color="primary" type="submit"></Button>
+                        <Input
+                            class="creaturePass__input"
+                            placeholder="Введите новый пароль"
+                            name="password"
+                            v-model:value="new_password"
+                        ></Input>
+                        <Input
+                            class="creaturePass__input"
+                            placeholder="Повторите новый пароль"
+                            name="confirm"
+                            v-model:value="current_password"
+                        ></Input>
+                        <Button
+                            label="Сохранить"
+                            color="primary"
+                            type="submit"
+                        ></Button>
                     </v-form>
                 </v-card>
             </div>
@@ -33,6 +56,7 @@ import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
 
 import { usePage } from '@shared';
+import SvgIcon from '@shared/components/SvgIcon/SvgIcon.vue';
 
 usePage({ isHidden: true });
 

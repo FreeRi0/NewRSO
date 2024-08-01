@@ -9,7 +9,7 @@
                 v-model="name"
                 placeholder="Начните вводить"
             />
-            <img src="@app/assets/icon/search.svg" alt="search" />
+            <SvgIcon icon-name="search" />
         </div>
     </div>
 
@@ -142,6 +142,7 @@ import { useDistrictsStore } from '@features/store/districts';
 import { useLocalsStore } from '@features/store/local';
 import { useEducationalsStore } from '@features/store/educationals';
 import { storeToRefs } from 'pinia';
+import { SvgIcon } from '@shared/index';
 
 const usersList = ref([]);
 const selectedUsersList = ref([]);

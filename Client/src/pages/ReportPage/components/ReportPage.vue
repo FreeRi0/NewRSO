@@ -1955,9 +1955,8 @@
                                                 <div
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
                                                 >
-                                                    <img
-                                                        src="@app/assets/icon/addFile.svg"
-                                                        alt="addFile"
+                                                    <SvgIcon
+                                                        iconName="add-file"
                                                         class="addFile"
                                                     />
                                                     <span
@@ -3551,7 +3550,7 @@
 <script setup>
 import { Input } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { ref, inject, onMounted, computed, watch } from 'vue';
+import { ref, inject, onMounted, watch } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 import { sortByEducation } from '@shared/components/selects';

@@ -3,26 +3,54 @@
         <div class="contributor">
             <h2 class="contributor-title">Реестр участников</h2>
             <div class="contributor-search">
-                <input type="text" id="search" class="contributor-search__input mb-10" @keyup="searchItems"
-                    v-model="name" placeholder="Начинайте ввод?" />
-                <img src="@app/assets/icon/search.svg" alt="search" />
+                <input
+                    type="text"
+                    id="search"
+                    class="contributor-search__input mb-10"
+                    @keyup="searchItems"
+                    v-model="name"
+                    placeholder="Начинайте ввод?"
+                />
+                <SvgIcon icon-name="search" />
             </div>
             <div class="contributor-container">
                 <div class="filters">
-                    <filters @update-district="updateDistrict" @update-reg="updateReg" @update-local="updateLocal"
-                        @update-educ="updateEduc" @update-detachment="updateDetachment" :district="district"
-                        :districts="districts" :reg="reg" :regionals="regionals" :local="local" :locals="locals"
-                        :educ="educ" :educ-head="educHead" :detachment="detachment" :detachments="detachments"
-                        :roles="roles.roles.value" :sorted-participants="sortedHeadquarters" />
+                    <filters
+                        @update-district="updateDistrict"
+                        @update-reg="updateReg"
+                        @update-local="updateLocal"
+                        @update-educ="updateEduc"
+                        @update-detachment="updateDetachment"
+                        :district="district"
+                        :districts="districts"
+                        :reg="reg"
+                        :regionals="regionals"
+                        :local="local"
+                        :locals="locals"
+                        :educ="educ"
+                        :educ-head="educHead"
+                        :detachment="detachment"
+                        :detachments="detachments"
+                        :roles="roles.roles.value"
+                        :sorted-participants="sortedHeadquarters"
+                    />
                 </div>
                 <div class="contributor-items">
                     <div class="contributor-sort">
                         <div class="sort-layout">
-                            <button class="showInfoBtn mr-4" v-if="!showInfo" @click="showInfo = !showInfo">
+                            <button
+                                class="showInfoBtn mr-4"
+                                v-if="!showInfo"
+                                @click="showInfo = !showInfo"
+                            >
                                 Показать статистику
                             </button>
 
-                            <button class="showInfoBtn mr-4" v-else-if="showInfo" @click="showInfo = !showInfo">
+                            <button
+                                class="showInfoBtn mr-4"
+                                v-else-if="showInfo"
+                                @click="showInfo = !showInfo"
+                            >
                                 Скрыть статистику
                             </button>
                         </div>
@@ -47,8 +75,17 @@
                             ></Button> -->
                         </div>
                     </div>
-                    <registryList v-if="!isLoading" :items="sortedHeadquarters" :show-info="showInfo"></registryList>
-                    <v-progress-circular class="circleLoader" v-else indeterminate color="blue"></v-progress-circular>
+                    <registryList
+                        v-if="!isLoading"
+                        :items="sortedHeadquarters"
+                        :show-info="showInfo"
+                    ></registryList>
+                    <v-progress-circular
+                        class="circleLoader"
+                        v-else
+                        indeterminate
+                        color="blue"
+                    ></v-progress-circular>
                 </div>
             </div>
         </div>
@@ -143,6 +180,7 @@ import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
 import { HTTP } from '@app/http';
 import { registryList } from '@features/registry/components';
+import { SvgIcon } from '@shared/index';
 
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
@@ -201,7 +239,7 @@ const viewHeadquartersData = async (resp, search, join) => {
         } else if (resp.indexOf('rsousers') >= 0) {
             routeName = 'userpage';
         }
-        const viewHeadquartersResponse = await HTTP.get(resp + search,);
+        const viewHeadquartersResponse = await HTTP.get(resp + search);
 
         let response = viewHeadquartersResponse.data.results;
         for (let i in response) {
@@ -288,8 +326,8 @@ const updateEduc = (educVal) => {
     let resp = educVal
         ? '/detachments/'
         : local.value
-            ? '/educationals/'
-            : '/locals/';
+        ? '/educationals/'
+        : '/locals/';
     if (educVal) {
         search = '?educational_headquarter__name=' + educVal;
     } else if (local.value) {
@@ -349,8 +387,8 @@ const searchItems = (event) => {
         resp = educ.value
             ? '/detachments/'
             : local.value
-                ? '/educationals/'
-                : '/locals/';
+            ? '/educationals/'
+            : '/locals/';
         search = '?detachment__name=' + detachment.value;
 
         search = '?educational_headquarter__name=' + educ.value;
@@ -465,14 +503,13 @@ watch(
     },
 );
 
-
 watch(
     () => regionalsStore.regionals,
     () => {
         let districtID = districtsStore.districts.length
             ? districtsStore.districts.find(
-                (dis) => (dis.name = district.value),
-            )?.id
+                  (dis) => (dis.name = district.value),
+              )?.id
             : roleStore.roles.districtheadquarter_commander?.id;
         regionals.value = regionalsStore.regionals.filter(
             (reg) => reg.district_headquarter == district.value,

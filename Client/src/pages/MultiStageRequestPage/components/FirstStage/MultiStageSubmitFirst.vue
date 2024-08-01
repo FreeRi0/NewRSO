@@ -10,7 +10,7 @@
                     v-model="name"
                     placeholder="Начните вводить"
                 />
-                <img src="@app/assets/icon/search.svg" alt="search" />
+                <SvgIcon icon-name="search" />
             </div>
         </div>
 

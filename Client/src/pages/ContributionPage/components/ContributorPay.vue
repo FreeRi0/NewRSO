@@ -3,104 +3,194 @@
         <div class="contributor">
             <h2 class="contributor-title">Членский взнос</h2>
             <div class="d-flex mt-7 buttonWrapper">
-                <button type="button" class="contributorBtn" :class="{ activee: picked === true }"
-                    @click="picked = true">
+                <button
+                    type="button"
+                    class="contributorBtn"
+                    :class="{ activee: picked === true }"
+                    @click="picked = true"
+                >
                     Мой членский взнос
                 </button>
 
-                <button type="button" class="contributorBtn" :class="{ activee: picked === false }"
-                    @click="picked = false">
+                <button
+                    type="button"
+                    class="contributorBtn"
+                    :class="{ activee: picked === false }"
+                    @click="picked = false"
+                >
                     Данные об оплате членского взноса пользователями системы
                 </button>
             </div>
 
-            <div class="contributor-info" v-if="
-                picked === true &&
-                userStore.currentUser.membership_fee === false
-            ">
+            <div
+                class="contributor-info"
+                v-if="
+                    picked === true &&
+                    userStore.currentUser.membership_fee === false
+                "
+            >
                 Уважаемый пользователь, ваш членский взнос не оплачен.
             </div>
 
-            <div class="contributor-info" v-else-if="
-                picked === true &&
-                userStore.currentUser.membership_fee === true
-            ">
+            <div
+                class="contributor-info"
+                v-else-if="
+                    picked === true &&
+                    userStore.currentUser.membership_fee === true
+                "
+            >
                 Уважаемый пользователь, ваш членский взнос оплачен.
             </div>
 
             <div v-else-if="picked === false">
                 <div class="contributor-search">
-                    <input type="text" id="search" class="contributor-search__input" @keyup="searchContributors"
-                        v-model="name" placeholder="Поищем пользователей?" />
-                    <img src="@app/assets/icon/search.svg" alt="search" />
+                    <input
+                        type="text"
+                        id="search"
+                        class="contributor-search__input"
+                        @keyup="searchContributors"
+                        v-model="name"
+                        placeholder="Поищем пользователей?"
+                    />
+                    <SvgIcon icon-name="search" />
                 </div>
 
                 <div class="contributor-container">
                     <div class="filters">
-                        <filters @update-district="updateDistrict" @update-reg="updateReg" @update-local="updateLocal"
-                            @update-educ="updateEduc" @update-detachment="updateDetachment"
-                            @update-membership="updateMembership" @search-detachment="searchDetachment"
-                            :district="district" :districts="districts" :reg="reg" :regionals="regionals" :local="local"
-                            :locals="locals" :membership="membership" :educ="educ" :educ-head="educHead"
-                            :detachment="detachment" :detachments="detachments" :roles="roles.roles.value"
-                            :sorted-participants="participants" :count-participants="count" :is-membership="true" />
+                        <filters
+                            @update-district="updateDistrict"
+                            @update-reg="updateReg"
+                            @update-local="updateLocal"
+                            @update-educ="updateEduc"
+                            @update-detachment="updateDetachment"
+                            @update-membership="updateMembership"
+                            @search-detachment="searchDetachment"
+                            :district="district"
+                            :districts="districts"
+                            :reg="reg"
+                            :regionals="regionals"
+                            :local="local"
+                            :locals="locals"
+                            :membership="membership"
+                            :educ="educ"
+                            :educ-head="educHead"
+                            :detachment="detachment"
+                            :detachments="detachments"
+                            :roles="roles.roles.value"
+                            :sorted-participants="participants"
+                            :count-participants="count"
+                            :is-membership="true"
+                        />
                     </div>
                     <div class="contributor-items">
                         <div class="contributor-sort">
-                            <div class="d-flex align-center" v-if="
-                                roleStore.roles
-                                    .regionalheadquarter_commander
-                            ">
+                            <div
+                                class="d-flex align-center"
+                                v-if="
+                                    roleStore.roles
+                                        .regionalheadquarter_commander
+                                "
+                            >
                                 <div class="contributor-sort__all">
-                                    <input type="checkbox" @click="select" placeholder="Выбрать все"
-                                        v-model="checkboxAll" />
+                                    <input
+                                        type="checkbox"
+                                        @click="select"
+                                        placeholder="Выбрать все"
+                                        v-model="checkboxAll"
+                                    />
                                 </div>
                                 <div class="ml-3">Выбрать всё</div>
                             </div>
                             <div class="participants__actions">
                                 <div class="participants__actions-select mr-3">
-                                    <sortByEducation placeholder="Выберете действие" variant="outlined" clearable
-                                        v-model="action" :options="actionsList"></sortByEducation>
+                                    <sortByEducation
+                                        placeholder="Выберете действие"
+                                        variant="outlined"
+                                        clearable
+                                        v-model="action"
+                                        :options="actionsList"
+                                    ></sortByEducation>
                                 </div>
                             </div>
 
                             <div class="sort-filters">
                                 <div class="sort-select">
-                                    <sortByEducation variant="outlined" clearable v-model="sortBy"
-                                        :options="sortOptionss" :sorts-boolean="false" class="Sort-alphabet">
+                                    <sortByEducation
+                                        variant="outlined"
+                                        clearable
+                                        v-model="sortBy"
+                                        :options="sortOptionss"
+                                        :sorts-boolean="false"
+                                        class="Sort-alphabet"
+                                    >
                                     </sortByEducation>
                                 </div>
 
-                                <Button type="button" class="ascend" iconn="iconn" @click="ascending = !ascending"
-                                    color="white"></Button>
+                                <Button
+                                    type="button"
+                                    class="ascend"
+                                    iconn="iconn"
+                                    @click="ascending = !ascending"
+                                    color="white"
+                                ></Button>
                             </div>
                         </div>
                         <div class="contributor-wrapper">
-                            <template v-for="participant in participants" :key="participant.id">
-                                <contributionAccessItem :participant="participant"
-                                    @select="onToggleSelectCompetition" />
+                            <template
+                                v-for="participant in participants"
+                                :key="participant.id"
+                            >
+                                <contributionAccessItem
+                                    :participant="participant"
+                                    @select="onToggleSelectCompetition"
+                                />
                             </template>
-                            <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
-                                color="blue"></v-progress-circular>
-                            <p class="text-center" v-else-if="!isLoading && !participants.length">
+                            <v-progress-circular
+                                class="circleLoader"
+                                v-if="isLoading"
+                                indeterminate
+                                color="blue"
+                            ></v-progress-circular>
+                            <p
+                                class="text-center"
+                                v-else-if="!isLoading && !participants.length"
+                            >
                                 Ничего не найдено
                             </p>
                         </div>
                         <template v-if="users.count && users.count > limit">
-                            <Button @click="next" v-if="participants.length < users.count"
-                                label="Показать еще"></Button>
-                            <Button @click="prev" v-else label="Свернуть все"></Button>
+                            <Button
+                                @click="next"
+                                v-if="participants.length < users.count"
+                                label="Показать еще"
+                            ></Button>
+                            <Button
+                                @click="prev"
+                                v-else
+                                label="Свернуть все"
+                            ></Button>
                         </template>
                     </div>
                 </div>
                 <div class="selectedItems" v-if="selectedPeoples.length > 0">
                     <h3>Итого: {{ selectedPeoples.length }}</h3>
-                    <selectedContributionAccessItem v-for="participant in selectedPeoples" :action="action"
-                        :participant="participant" :key="participant.id" @select="onToggleSelectCompetition" />
+                    <selectedContributionAccessItem
+                        v-for="participant in selectedPeoples"
+                        :action="action"
+                        :participant="participant"
+                        :key="participant.id"
+                        @select="onToggleSelectCompetition"
+                    />
                 </div>
                 <div class="participants__btn" v-if="selectedPeoples.length">
-                    <Button :loaded="isLoading" :disabled="isLoading || !action" class="save" type="button"
-                        label="Сохранить" @click="onAction"></Button>
+                    <Button
+                        :loaded="isLoading"
+                        :disabled="isLoading || !action"
+                        class="save"
+                        type="button"
+                        label="Сохранить"
+                        @click="onAction"
+                    ></Button>
                 </div>
             </div>
         </div>
@@ -125,6 +215,7 @@ import { useEducationalsStore } from '@features/store/educationals';
 import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
 import { HTTP } from '@app/http';
+import { SvgIcon } from '@shared/index';
 
 const roleStore = useRoleStore();
 const roles = storeToRefs(roleStore);
@@ -171,7 +262,6 @@ const selectedPeoples = ref([]);
 const ascending = ref(true);
 const sortBy = ref('last_name');
 
-
 const next = () => {
     let search = '';
     viewContributorsData(search, 'next');
@@ -191,7 +281,6 @@ const prev = () => {
     }
     viewContributorsData(search, '', '');
     checkboxAll.value = false;
-
 };
 
 const sortOptionss = ref([
@@ -218,23 +307,17 @@ const viewContributorsData = async (search, pagination, orderLimit) => {
                 );
         }
 
-
-
         const viewParticipantsResponse = await HTTP.get(url + data.join('&'));
 
         isLoading.value = false;
         let response = viewParticipantsResponse.data;
         count.value = viewParticipantsResponse.data.count;
         if (pagination) {
-            response.results = [
-                ...users.value.results,
-                ...response.results,
-            ];
+            response.results = [...users.value.results, ...response.results];
         }
         users.value = response;
         participants.value = response.results;
         selectedPeoples.value = [];
-    
 
         if (search.indexOf('districts') >= 0) {
             districts.value = viewParticipantsResponse.data.results;
@@ -290,12 +373,14 @@ const updateDistrict = (districtVal) => {
 
 const searchDetachment = (name) => {
     let search = [];
-    let lim = ''
+    let lim = '';
     // if (district.value) {
     //     search.push('district_headquarter__name=' + district.value);
     // }
     if (name && reg.value) {
-        search.push('regional_headquarter__name=' + reg.value + '&' + 'search=' + name);
+        search.push(
+            'regional_headquarter__name=' + reg.value + '&' + 'search=' + name,
+        );
         lim = '&limit=500';
     }
     // if (local.value) {
@@ -329,7 +414,7 @@ const searchDetachment = (name) => {
     getFiltersData('/detachment_list/', '?' + search.join('&') + lim);
 
     detachment.value = name;
-}
+};
 
 const updateReg = (regVal) => {
     let search = '';
@@ -337,7 +422,6 @@ const updateReg = (regVal) => {
     if (regVal) {
         search = '?regional_headquarter__name=' + regVal;
         lim = '&limit=500';
-
     } else if (levelAccess.value < 2) {
         search = '?district_headquarter__name=' + district.value;
         lim = '&limit=500';
@@ -384,11 +468,9 @@ const updateEduc = (educVal) => {
     } else if (local.value) {
         search = '?local_headquarter__name=' + local.value;
         lim = '&limit=500';
-
     } else if (levelAccess.value < 3) {
         search = '?regional_headquarter__name=' + reg.value;
         lim = '&limit=500';
-
     } else if (levelAccess.value < 4) {
         search = '?local_headquarter__name=' + local.value;
         lim = '&limit=500';
@@ -407,7 +489,6 @@ const updateDetachment = (detachmentVal) => {
     let search = '';
     if (detachmentVal) {
         search = '?detachment__name=' + detachmentVal;
-
     } else if (levelAccess.value === 2) {
         search = '?regional_headquarter__name=' + reg.value;
     } else if (levelAccess.value < 5) {
@@ -445,22 +526,18 @@ const updateMembership = (membershipVal) => {
     viewContributorsData('?' + search.join('&'));
 
     membership.value = membershipVal;
-}
+};
 
 const select = (event) => {
     selectedPeoples.value = [];
 
     if (event.target.checked) {
-
         for (let index in participants.value) {
-
-
             participants.value[index].selected = true;
             selectedPeoples.value.push(participants.value[index]);
         }
     } else {
         for (let index in participants.value) {
-
             participants.value[index].selected = false;
         }
     }
@@ -470,7 +547,6 @@ const onToggleSelectCompetition = (participant, checked) => {
     if (checked) {
         participant.selected = checked;
         selectedPeoples.value.push(participant);
-
     } else {
         participant.selected = checked;
         selectedPeoples.value = selectedPeoples.value.filter(
@@ -485,7 +561,6 @@ const ChangeStatus = async (id) => {
         const changeStatus = await HTTP.post(
             `rsousers/${id}/membership_fee_status/`,
             {},
-
         );
         checkboxAll.value = false;
 
@@ -559,7 +634,8 @@ const getUsersByRoles = () => {
             locals.value = localsStore.locals.filter(
                 (loc) => loc.regional_headquarter == reg.value,
             );
-            detachments.value = squadsStore.squads.filter((det) => det.regional_headquarter == reg.value,
+            detachments.value = squadsStore.squads.filter(
+                (det) => det.regional_headquarter == reg.value,
             );
             levelAccess.value = 2;
             getFiltersData('/educationals/', search, '');
@@ -589,7 +665,6 @@ const getUsersByRoles = () => {
             levelAccess.value = 5;
         }
         viewContributorsData(search);
-
     } else {
         levelAccess.value = 0;
         getFiltersData('/districts/', search);
@@ -600,7 +675,6 @@ const onAction = async () => {
     try {
         for (const application of selectedPeoples.value) {
             if (action.value === 'Оплачен') {
-
                 await ChangeStatus(application.id);
             } else {
                 await ChangeCancelStatus(application.id);
@@ -627,8 +701,6 @@ const onAction = async () => {
         console.log('error action', e);
     }
 };
-
-
 
 const searchContributors = (event) => {
     let search = '';
@@ -696,8 +768,8 @@ watch(
     () => {
         let districtID = districtsStore.districts.length
             ? districtsStore.districts.find(
-                (dis) => (dis.name = district.value),
-            )?.id
+                  (dis) => (dis.name = district.value),
+              )?.id
             : roleStore.roles.districtheadquarter_commander?.id;
         regionals.value = regionalsStore.regionals.filter(
             (reg) => reg.district_headquarter == district.value,
@@ -736,7 +808,6 @@ watch(
         }
     },
 );
-
 
 watch(
     () => membership.value,
@@ -807,8 +878,6 @@ watch(
         viewContributorsData(search, '', participants.value.length);
     },
 );
-
-
 
 onMounted(() => {
     getUsersByRoles();
@@ -1008,7 +1077,7 @@ p {
         margin: 0;
     }
 
-    &--active+.v-expansion-panel {
+    &--active + .v-expansion-panel {
         margin: 0;
     }
 
