@@ -60,7 +60,7 @@ const props = defineProps({
     },
 });
 
-const getVerified = async () => {
+const getVerified = async (id) => {
     try {
         const verified = await HTTP.get(`/detachments/${id}/applications/`,);
         isVerified.value = verified.data;
@@ -70,19 +70,19 @@ const getVerified = async () => {
 };
 
 
+
 watch(
     () => route.params.id,
 
-    async (newId, oldId) => {
+    async (newId) => {
         if (!newId || route.name !== 'lso') return;
-        id = newId;
-        await getVerified();
+        await getVerified(newId);
+    },
+    {
+        immediate: true,
     },
 );
 
-onMounted(() => {
-    getVerified();
-});
 </script>
 
 <style scoped lang="scss">

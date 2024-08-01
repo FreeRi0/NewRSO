@@ -52,6 +52,7 @@ import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
 import { usePage } from '@shared';
+import { useUserStore } from '@features/store';
 import mixins from '@/mixins/mixins';
 
 const { methods } = mixins;
@@ -59,6 +60,7 @@ const { getEnding } = methods;
 const { getEndingMembers } = methods;
 
 const crosspageFilters = useCrosspageFilter();
+const userStore = useUserStore();
 const commander = ref({});
 const position = ref({});
 const districtHeadquarter = ref({});
@@ -91,6 +93,8 @@ const aboutMembers = async () => {
         console.log('an error occured ' + error);
     }
 };
+
+
 
 const fetchCommander = async () => {
     try {

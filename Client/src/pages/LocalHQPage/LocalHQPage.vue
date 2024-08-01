@@ -2,7 +2,8 @@
     <div class="container">
         <Breadcrumbs :items="pages"></Breadcrumbs>
         <h1 class="title title--hq">Местный штаб</h1>
-        <BannerHQ :localHeadquarter="localHeadquarter" :member="member" :ending="ending" :endingMember="endingMember">
+        <BannerHQ  :localHeadquarter="localHeadquarter" :member="member"
+            :ending="ending" :endingMember="endingMember">
         </BannerHQ>
         <section class="about-hq" v-if="localHeadquarter.about && localHeadquarter.about != 'null'">
             <h3>Описание местного штаба</h3>
@@ -33,11 +34,14 @@ import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
 import { usePage } from '@shared';
+import { useUserStore } from '@features/store';
 import mixins from '@/mixins/mixins';
 
 const { methods } = mixins;
 const { getEnding } = methods;
 const { getEndingMembers } = methods;
+
+const userStore = useUserStore();
 
 const crosspageFilters = useCrosspageFilter();
 const commander = ref({});
@@ -62,16 +66,16 @@ const aboutlocalHQ = async () => {
     }
 };
 
-const aboutMembers = async () => {
-    if (typeof id !== 'undefined') {
-        try {
-            const response = await HTTP.get(`/locals/${id}/members/`);
-            member.value = response.data.results;
-        } catch (error) {
-            console.log('an error occured ' + error);
-        }
-    }
-};
+// const aboutMembers = async () => {
+//     if (typeof id !== 'undefined') {
+//         try {
+//             const response = await HTTP.get(`/locals/${id}/members/`);
+//             member.value = response.data.results;
+//         } catch (error) {
+//             console.log('an error occured ' + error);
+//         }
+//     }
+// };
 
 const fetchCommander = async () => {
     try {
@@ -85,6 +89,7 @@ const fetchCommander = async () => {
         console.log('An error occurred:', error);
     }
 };
+
 watch(
     () => route.params.id,
 
@@ -99,9 +104,6 @@ watch(
     },
 );
 
-onMounted(() => {
-
-});
 
 const HQandSquads = ref([
     {
