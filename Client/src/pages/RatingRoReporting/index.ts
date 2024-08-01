@@ -1,1 +1,1 @@
-export { default as reportingRo} from './RatingToReporing.vue'
+export { default as reportingRo } from './components/RatingRoReporting.vue';

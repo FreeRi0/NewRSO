@@ -2,12 +2,14 @@
   <div class="container">
     <h2 class="ratingRo_report_title">Отчетность</h2>
     <div class="ratingRo_report_wrapper">
-      <router-link class="ratingRo_report_item" :to="{ name: 'ReportRegionalPartOne' }">Отчет о деятельности регионального отделения РСО за 2024 год. Часть 1</router-link>
-      <router-link class="ratingRo_report_item" :to="{ name: 'ReportRegionalPartTwo' }">Отчет о деятельности регионального отделения РСО за 2024 год. Часть 2</router-link>
+      <router-link class="ratingRo_report_item" :to="{ name: 'ReportRegionalPartOne' }">Отчет о деятельности
+        регионального отделения РСО за 2024 год. Часть 1</router-link>
+      <router-link class="ratingRo_report_item" :to="{ name: 'ReportRegionalPartTwo' }">Отчет о деятельности
+        регионального отделения РСО за 2024 год. Часть 2</router-link>
     </div>
   </div>
 </template>
-<script>
+<script setup>
 </script>
 <style lang="scss" scoped>
 .ratingRo_report_title {
