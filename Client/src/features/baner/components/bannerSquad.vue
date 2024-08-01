@@ -132,10 +132,11 @@ const userStore = useUserStore();
 const route = useRoute();
 const user = storeToRefs(userStore);
 const roles = storeToRefs(roleStore);
-let userId = computed(() => {
-    return user.currentUser.value.id;
-});
+// let userId = computed(() => {
+//     return user.currentUser.value.id;
+// });
 
+const userId = localStorage.getItem('user');
 const regional = ref({});
 const data = ref({});
 const isError = ref([]);
@@ -144,7 +145,7 @@ const swal = inject('$swal');
 
 const filterApplications = async (id) => {
     try {
-        const response = await HTTP.get(`/detachments/${id}/applications/?user_id=${userId.value}`);
+        const response = await HTTP.get(`/detachments/${id}/applications/?user_id=${userId}`);
         applications.value = response.data;
         console.log(applications.value)
     } catch (error) {

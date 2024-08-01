@@ -674,10 +674,12 @@ const props = defineProps({
     },
 });
 
+const userId = localStorage.getItem('user');
+
 const swal = inject('$swal');
 const filterApplications = async (name, id) => {
     try {
-        const response = await HTTP.get(`/${name}/${id}/applications/?user_id=${userStore.currentUser.id}`);
+        const response = await HTTP.get(`/${name}/${id}/applications/?user_id=${userId}`);
         applications.value = response.data;
         console.log(applications.value)
     } catch (error) {
@@ -687,7 +689,7 @@ const filterApplications = async (name, id) => {
 
 const filtereIsTrusted = async (name, id) => {
     try {
-        const response = await HTTP.get(`/${name}/${id}/members/?trusted_user_id=${userStore.currentUser.id}`);
+        const response = await HTTP.get(`/${name}/${id}/members/?trusted_user_id=${userId}`);
         isTrusted.value = response.data.results;
     } catch (error) {
         console.log('an error occured' + error);
@@ -787,12 +789,10 @@ watch(
             return;
         }
         aboutEduc();
-        setTimeout(() => {
-            filterApplications('educationals', props.headquarter.id);
-        }, 1000)
-        setTimeout(() => {
-            filtereIsTrusted('educationals', props.headquarter.id);
-        })
+
+        filterApplications('educationals', props.headquarter.id);
+        filtereIsTrusted('educationals', props.headquarter.id);
+
 
     },
 );
@@ -804,9 +804,8 @@ watch(
         if (Object.keys(props.localHeadquarter).length === 0) {
             return;
         }
-        setTimeout(() => {
-            filterApplications('locals', props.localHeadquarter.id);
-        }, 1000)
+
+        filterApplications('locals', props.localHeadquarter.id);
         filtereIsTrusted('locals', props.localHeadquarter.id);
     },
 );
@@ -817,12 +816,10 @@ watch(
         if (Object.keys(props.regionalHeadquarter).length === 0) {
             return;
         }
-        setTimeout(() => {
-            filterApplications('regionals', props.regionalHeadquarter.id);
-        }, 1000)
-        setTimeout(() => {
-            filtereIsTrusted('regionals', props.regionalHeadquarter.id);
-        }, 1000)
+
+        filterApplications('regionals', props.regionalHeadquarter.id);
+        filtereIsTrusted('regionals', props.regionalHeadquarter.id);
+
 
 
     },
@@ -835,9 +832,8 @@ watch(
         if (Object.keys(props.districtHeadquarter).length === 0) {
             return;
         }
-        setTimeout(() => {
-            filterApplications('districts', props.districtHeadquarter.id);
-        }, 1000)
+
+        filterApplications('districts', props.districtHeadquarter.id);
         filtereIsTrusted('districts', props.districtHeadquarter.id);
     },
 );
@@ -849,13 +845,10 @@ watch(
         if (Object.keys(props.centralHeadquarter).length === 0) {
             return;
         }
-        setTimeout(() => {
-            filterApplications('centrals', props.centralHeadquarter.id);
-        }, 1200)
 
-        setTimeout(()=> {
-            filtereIsTrusted('centrals', props.centralHeadquarter.id);
-        }, 1200)
+        filterApplications('centrals', props.centralHeadquarter.id);
+        filtereIsTrusted('centrals', props.centralHeadquarter.id);
+
     },
 );
 
