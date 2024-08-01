@@ -24,7 +24,7 @@
                             <img src="@/app/assets/icon/calendar.svg" alt="calendar" />
                             <time datetime="2022-09-10">{{
                                 headquarter.founding_date
-                            }}</time>
+                                }}</time>
                         </li>
                     </ul>
                 </div>
@@ -88,19 +88,19 @@
                                 ?.id === headquarter?.local_headquarter ||
                             roles.roles.value
                                 .centralheadquarter_commander ||
-                            IsTrusted)
+                            isTrusted.length > 0)
                     " class="hq-data__link" :to="{
                         name: 'EditHQ',
                         params: { id: headquarter.id },
                     }">Редактировать штаб</router-link>
                     <Button v-else-if="
-                        !IsMember &&
-                        !UserApplication &&
+                        userStore.currentUser.educational_headquarter_id !== props.headquarter.id &&
+                        Object.keys(applications).length === 0 &&
                         userStore.currentUser.educational_headquarter_id ===
                         null &&
                         isRegion
                     " @click="showModalW()" label="Вступить в штаб" class="AddApplication"></Button>
-                    <div v-else-if="UserApplication" class="d-flex">
+                    <div v-else-if="Object.keys(applications).length !== 0" class="d-flex">
                         <div class="AddApplication mr-2">
                             Заявка на рассмотрении
                         </div>
@@ -112,7 +112,8 @@
                             " label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
-                    <div v-else-if="IsMember" class="AddApplication">
+                    <div v-else-if="userStore.currentUser.educational_headquarter_id === props.headquarter.id"
+                        class="AddApplication">
                         Вы участник
                     </div>
                 </div>
@@ -204,17 +205,17 @@
                             localHeadquarter.regional_headquarter ||
                             roles.roles.value
                                 .centralheadquarter_commander ||
-                            IsTrusted)
+                            isTrusted.length > 0)
                     " class="hq-data__link" :to="{
                         name: 'FormLocal',
                         params: { id: localHeadquarter.id },
                     }">Редактировать штаб</router-link>
                     <Button v-else-if="
-                        !IsMember &&
-                        !UserApplication &&
+                        userStore.currentUser.local_headquarter_id !== props.localHeadquarter.id &&
+                        Object.keys(applications).length === 0 &&
                         userStore.currentUser.local_headquarter_id === null
                     " @click="showModalW()" label="Вступить в штаб" class="AddApplication"></Button>
-                    <div v-else-if="UserApplication" class="d-flex">
+                    <div v-else-if="Object.keys(applications).length !== 0" class="d-flex">
                         <div class="AddApplication mr-2">
                             Заявка на рассмотрении
                         </div>
@@ -226,7 +227,8 @@
                             " label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
-                    <div v-else-if="IsMember" class="AddApplication">
+                    <div v-else-if="userStore.currentUser.local_headquarter_id === props.localHeadquarter.id"
+                        class="AddApplication">
                         Вы участник
                     </div>
                 </div>
@@ -321,18 +323,18 @@
                         (userId === districtHeadquarter?.commander?.id ||
                             roles.roles.value
                                 .centralheadquarter_commander ||
-                            IsTrusted)
+                            isTrusted.length > 0)
                     " class="hq-data__link" :to="{
                         name: 'FormDH',
                         params: { id: districtHeadquarter.id },
                     }">Редактировать штаб</router-link>
                     <Button v-else-if="
-                        !IsMember &&
-                        !UserApplication &&
+                        userStore.currentUser.district_headquarter_id !== props.districtHeadquarter.id &&
+                        Object.keys(applications).length === 0 &&
                         userStore.currentUser.district_headquarter_id ===
                         null
                     " @click="showModalW()" label="Вступить в штаб" class="AddApplication"></Button>
-                    <div v-else-if="UserApplication" class="d-flex">
+                    <div v-else-if="Object.keys(applications).length !== 0" class="d-flex">
                         <div class="AddApplication mr-2">
                             Заявка на рассмотрении
                         </div>
@@ -343,10 +345,12 @@
                             )
                             " label="Удалить заявку" class="AddApplication"></Button>
                     </div>
-
-                    <div v-else-if="IsMember" class="AddApplication">
+                    <div v-else-if="userStore.currentUser.district_headquarter_id === props.districtHeadquarter.id"
+                        class="AddApplication">
                         Вы участник
                     </div>
+
+
                 </div>
             </div>
         </div>
@@ -441,18 +445,18 @@
                             regionalHeadquarter.district_headquarter ||
                             roles.roles.value
                                 .centralheadquarter_commander ||
-                            IsTrusted)
+                            isTrusted.length > 0)
                     " class="hq-data__link" :to="{
                         name: 'EditingOfRS',
                         params: { id: regionalHeadquarter.id },
                     }">Редактировать штаб</router-link>
                     <Button v-else-if="
-                        !IsMember &&
-                        !UserApplication &&
+                        userStore.currentUser.regional_headquarter_id !== props.regionalHeadquarter.id &&
+                        Object.keys(applications).length === 0 &&
                         userStore.currentUser.regional_headquarter_id ===
                         null
                     " @click="showModalW()" label="Вступить в штаб" class="AddApplication"></Button>
-                    <div v-else-if="UserApplication" class="d-flex">
+                    <div v-else-if="Object.keys(applications).length !== 0" class="d-flex">
                         <div class="AddApplication mr-2">
                             Заявка на рассмотрении
                         </div>
@@ -464,7 +468,8 @@
                             " label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
-                    <div v-else-if="IsMember" class="AddApplication">
+                    <div v-else-if="userStore.currentUser.regional_headquarter_id === props.regionalHeadquarter.id"
+                        class="AddApplication">
                         Вы участник
                     </div>
                 </div>
@@ -498,7 +503,7 @@
                         <li class="Squad-HQ__date-central">
                             <time datetime="2022-09-10">{{
                                 centralHeadquarter.rso_founding_congress_date
-                                }}
+                            }}
                                 — дата первого Учредительного Съезда РСО</time>
                         </li>
                         <li class="hq-data__participant-counter">
@@ -538,8 +543,6 @@
                                     Ссылка скопирована
                                 </div>
                             </div>
-                            <!-- <pre>{{ centralHeadquarter.commander.id }}</pre>
-                            <pre>{{  IsTrusted }}</pre> -->
                         </div>
                     </div>
                     <AddModal v-show="showModal === true" @close="closeModalW()" :is-commander="(roleStore.roles.detachment_commander ||
@@ -559,25 +562,25 @@
                             userStore.currentUser.district_headquarter_id ===
                             null
                             " @add="
-                            AddApplication(
-                                'centrals',
-                                props.centralHeadquarter.id,
-                            )
-                            ">
+                                AddApplication(
+                                    'centrals',
+                                    props.centralHeadquarter.id,
+                                )
+                                ">
                     </AddModal>
                     <router-link v-if="
                         userId &&
                         (userId === centralHeadquarter?.commander?.id ||
-                            IsTrusted)
+                            isTrusted.length > 0)
                     " class="hq-data__link" :to="{
                         name: 'FormCentral',
                     }">Редактировать штаб</router-link>
                     <Button v-else-if="
                         roleStore.myPositions
                             .usercentralheadquarterposition === null &&
-                        !UserApplication
+                        Object.keys(applications).length === 0
                     " @click="showModalW()" label="Вступить в штаб" class="AddApplication"></Button>
-                    <div v-else-if="UserApplication" class="d-flex">
+                    <div v-else-if="Object.keys(applications).length !== 0" class="d-flex">
                         <div class="AddApplication mr-2">
                             Заявка на рассмотрении
                         </div>
@@ -616,11 +619,9 @@ const roleStore = useRoleStore();
 const regionalsStore = useRegionalsStore();
 const userStore = useUserStore();
 const user = storeToRefs(userStore);
-let userId = computed(() => {
-    return user.currentUser.value.id;
-});
 const edict = ref({});
-const applications = ref([]);
+const applications = ref({});
+const isTrusted = ref([]);
 const isError = ref([]);
 const data = ref({});
 const route = useRoute();
@@ -672,16 +673,28 @@ const props = defineProps({
         type: String,
     },
 });
+
+const userId = localStorage.getItem('user');
+
 const swal = inject('$swal');
-const viewApplications = async (name) => {
+const filterApplications = async (name, id) => {
     try {
-        let id = route.params.id;
-        const resp = await HTTP.get(`/${name}/${id}/applications/`);
-        applications.value = resp.data;
-    } catch (e) {
-        console.log(e);
+        const response = await HTTP.get(`/${name}/${id}/applications/?user_id=${userId}`);
+        applications.value = response.data;
+        console.log(applications.value)
+    } catch (error) {
+        console.log('an error occured ' + error);
     }
-};
+}
+
+const filtereIsTrusted = async (name, id) => {
+    try {
+        const response = await HTTP.get(`/${name}/${id}/members/?trusted_user_id=${userId}`);
+        isTrusted.value = response.data.results;
+    } catch (error) {
+        console.log('an error occured' + error);
+    }
+}
 const aboutEduc = async () => {
     let id = props.headquarter?.educational_institution.id;
     if (typeof id !== 'undefined') {
@@ -704,6 +717,7 @@ const closeModalW = () => {
     showModal.value = false;
 };
 
+
 const isRegion = computed(() => {
     let res = regionalsStore.filteredMyRegional.find(
         (item) => item?.id == props.headquarter?.regional_headquarter,
@@ -711,27 +725,7 @@ const isRegion = computed(() => {
     return res !== undefined;
 });
 
-const UserApplication = computed(() => {
-    return applications.value.find((item) => item.user.id === userId.value);
-});
 
-const IsTrusted = computed(() => {
-    if (props.member && props.member.length > 0) {
-        return props.member.find(
-            (item) => item.user.id === userId.value && item.is_trusted === true,
-        );
-    } else {
-        return false;
-    }
-});
-
-const IsMember = computed(() => {
-    if (props.member && props.member.length > 0) {
-        return props.member.find((item) => item.user.id === userId.value);
-    } else {
-        return false;
-    }
-});
 
 const AddApplication = async (name, id) => {
     try {
@@ -746,29 +740,7 @@ const AddApplication = async (name, id) => {
             showConfirmButton: false,
             timer: 1500,
         });
-
-        if (props.headquarter) {
-            viewApplications('educationals');
-        }
-
-        if (props.localHeadquarter) {
-            viewApplications('locals');
-        }
-        if (props.regionalHeadquarter) {
-            viewApplications('regionals');
-        }
-
-        if (props.districtHeadquarter) {
-            viewApplications('districts');
-        }
-
-        if (props.districtHeadquarter) {
-            viewApplications('districts');
-        }
-        if (props.centralHeadquarter) {
-            viewApplications('centrals');
-        }
-
+        applications.value = sendResponse.data;
         showModal.value = false;
     } catch (error) {
         console.error('There was an error!', error);
@@ -794,20 +766,7 @@ const DeleteApplication = async (name, id) => {
             showConfirmButton: false,
             timer: 1500,
         });
-        if (props.headquarter) {
-            viewApplications('educationals');
-        }
-
-        if (props.localHeadquarter) {
-            viewApplications('locals');
-        }
-        if (props.regionalHeadquarter) {
-            viewApplications('regionals');
-        }
-
-        if (props.centralHeadquarter) {
-            viewApplications('centrals');
-        }
+        applications.value = {}
     } catch (error) {
         console.error('There was an error!', error);
         if (isError.value) {
@@ -830,7 +789,11 @@ watch(
             return;
         }
         aboutEduc();
-        viewApplications('educationals');
+
+        filterApplications('educationals', props.headquarter.id);
+        filtereIsTrusted('educationals', props.headquarter.id);
+
+
     },
 );
 
@@ -841,7 +804,9 @@ watch(
         if (Object.keys(props.localHeadquarter).length === 0) {
             return;
         }
-        viewApplications('locals');
+
+        filterApplications('locals', props.localHeadquarter.id);
+        filtereIsTrusted('locals', props.localHeadquarter.id);
     },
 );
 watch(
@@ -851,7 +816,12 @@ watch(
         if (Object.keys(props.regionalHeadquarter).length === 0) {
             return;
         }
-        viewApplications('regionals');
+
+        filterApplications('regionals', props.regionalHeadquarter.id);
+        filtereIsTrusted('regionals', props.regionalHeadquarter.id);
+
+
+
     },
 );
 
@@ -862,33 +832,28 @@ watch(
         if (Object.keys(props.districtHeadquarter).length === 0) {
             return;
         }
-        viewApplications('districts');
+
+        filterApplications('districts', props.districtHeadquarter.id);
+        filtereIsTrusted('districts', props.districtHeadquarter.id);
+    },
+);
+
+watch(
+    () => props.centralHeadquarter,
+
+    (newheadquarter) => {
+        if (Object.keys(props.centralHeadquarter).length === 0) {
+            return;
+        }
+
+        filterApplications('centrals', props.centralHeadquarter.id);
+        filtereIsTrusted('centrals', props.centralHeadquarter.id);
+
     },
 );
 
 onMounted(() => {
-    if (props.headquarter) {
-        viewApplications('educationals');
-    }
-
-    if (props.localHeadquarter) {
-        viewApplications('locals');
-    }
-    if (props.regionalHeadquarter) {
-        viewApplications('regionals');
-    }
-
-    if (props.districtHeadquarter) {
-        viewApplications('districts');
-    }
-
-    if (props.centralHeadquarter) {
-        viewApplications('centrals');
-    }
-
     roleStore.getMyPositions();
-
-    aboutEduc();
 });
 
 const copyL = () => {

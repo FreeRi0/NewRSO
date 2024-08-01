@@ -57,13 +57,8 @@
                                     Ссылка скопирована
                                 </div>
                             </div>
-                            <!-- <pre>dddddssss   {{ userId }}</pre> -->
                         </div>
                     </div>
-                    <!-- <pre>dddddddd{{ props.member }}</pre> -->
-                    <!-- <pre>{{ IsTrusted }}</pre> -->
-                    <!-- <pre>{{ regional?.commander?.id }}</pre>
-                    <pre>{{ squad?.commander?.id }}</pre> -->
 
                     <router-link v-if="
                         userId == squad.commander?.id ||
@@ -74,10 +69,10 @@
                         params: { id: squad.id },
                     }" class="user-data__link">Редактировать отряд</router-link>
 
-                    <Button v-else-if="!IsMember && !UserApplication" @click="AddApplication()" label="Подать заявку"
+                    <Button v-else-if="!IsMember && Object.keys(applications).length === 0 && userStore.currentUser.detachment_id === null" @click="AddApplication()" label="Подать заявку"
                         class="AddApplication"></Button>
 
-                    <div v-else-if="UserApplication" class="d-flex">
+                    <div v-else-if="Object.keys(applications).length !== 0" class="d-flex">
                         <div class="user-data__link mr-2">
                             Заявка на рассмотрении
                         </div>
@@ -137,53 +132,37 @@ const userStore = useUserStore();
 const route = useRoute();
 const user = storeToRefs(userStore);
 const roles = storeToRefs(roleStore);
-// let comId = roles.roles.value.detachment_commander.id;
-let userId = computed(() => {
-    return user.currentUser.value.id;
-});
-// console.log('comId', comId);
+// let userId = computed(() => {
+//     return user.currentUser.value.id;
+// });
 
-// console.log('memberAA', props.member);
-
-// const edict = ref({});
+const userId = localStorage.getItem('user');
 const regional = ref({});
 const data = ref({});
 const isError = ref([]);
-const applications = ref([]);
+const applications = ref({});
 const swal = inject('$swal');
-// console.log('user', userId.value);
-// console.log('member', props.member);
 
-const viewDetachments = async () => {
-    let id = route.params.id;
-    // console.log('idRoute', id);
-    await HTTP.get(`/detachments/${id}/applications/`)
-        .then((response) => {
-            applications.value = response.data;
-            // console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
+const filterApplications = async (id) => {
+    try {
+        const response = await HTTP.get(`/detachments/${id}/applications/?user_id=${userId}`);
+        applications.value = response.data;
+        console.log(applications.value)
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+}
 const viewRegionals = async () => {
     let id = props.squad.regional_headquarter;
-    // console.log('idRouteReg', id);
     await HTTP.get(`/regionals/${id}/`)
         .then((response) => {
             regional.value = response.data;
-            // console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
 };
 
-//member сравнивать так же
-const UserApplication = computed(() => {
-    return applications.value.find((item) => item.user.id === userId.value);
-});
 
 const IsMember = computed(() => {
     return props.member.find((item) => item.user.id === userId.value);
@@ -194,15 +173,15 @@ const IsTrusted = computed(() => {
     );
 });
 
-// console.log('member', IsMember);
 
 watch(
     () => props.squad,
 
-    (newSquad, oldSquad) => {
+    (newSquad) => {
         if (Object.keys(props.squad).length === 0) {
             return;
         }
+        filterApplications(props.squad.id);
         viewRegionals();
     },
 );
@@ -221,12 +200,10 @@ const AddApplication = async () => {
             showConfirmButton: false,
             timer: 1500,
         });
-        viewDetachments();
-        // console.log('responseee', sendResponse.data);
+        sendResponse.data.user = applications.value;
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
-        console.error('There was an error!', error);
         if (isError.value) {
             swal.fire({
                 position: 'center',
@@ -250,7 +227,7 @@ const DeleteApplication = async () => {
             showConfirmButton: false,
             timer: 1500,
         });
-        viewDetachments();
+        applications.value = {};
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
@@ -267,10 +244,6 @@ const DeleteApplication = async () => {
     }
 };
 
-onMounted(() => {
-    viewDetachments();
-    viewRegionals();
-});
 
 const copyL = () => {
     navigator.clipboard.writeText(window.location.href);
