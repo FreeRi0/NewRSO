@@ -42,7 +42,7 @@
                         </v-select>
                     </div>
                     <div class="sort-select">
-                        <v-select class="form__select filter-district" :items="regionalsStore.regionals" clearable
+                        <v-select class="form__select filter-region" :items="regionalsStore.regionals" clearable
                             variant="outlined" name="select_region" id="select-region" v-model="selectedSortRegional"
                             item-title="name" placeholder="Региональные штабы">
                             <template #selection="{ item }">
@@ -259,11 +259,15 @@ watch(
     &-sort {
         display: flex;
         justify-content: space-between;
-        align-items: flex-end;
+        align-items: flex-start;
+        gap: 0 23px;
+        margin-top: 20px;
 
         @media screen and (max-width: 768px) {
             flex-direction: column-reverse;
             align-items: flex-start;
+            gap: 60px 0;
+            margin-top: 0;
         }
     }
 
@@ -302,6 +306,14 @@ watch(
     }
 }
 
+.sort-layout {
+    margin-top: 40px;
+
+    @media screen and (max-width: 768px) {
+        margin-top: 0;
+    }
+}
+
 .headquarters-wrapper__item {
     margin: 0px auto;
     width: 180px;
@@ -337,6 +349,11 @@ pre {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+
+    font-family: 'Bert Sans';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
 }
 
 .circleLoader {
@@ -355,7 +372,7 @@ pre {
 
 .form__select {
     margin-bottom: 0px;
-    margin-right: 8px;
+    // margin-right: 8px;
     border: 1px solid #35383f;
 }
 
@@ -388,6 +405,11 @@ pre {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+
+        font-family: 'Bert Sans';
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 20px;
     }
 }
 
@@ -401,25 +423,23 @@ pre {
 }
 
 .sort-filters {
+    flex-wrap: wrap;
+    gap: 8px;
+
     @media screen and (max-width: 768px) {
         margin-top: 40px;
         display: flex;
         flex-wrap: wrap;
-        margin-bottom: 60px;
     }
 }
 
 .filter {
-    &-local {
-        width: 186px;
-    }
-
     &-region {
-        width: 227px;
+        min-width: 227px;
     }
 
     &-district {
-        width: 193px;
+        min-width: 193px;
     }
 }
 
@@ -430,12 +450,7 @@ pre {
 
     .sort-filters {
         flex-wrap: wrap;
-        margin-bottom: 40px;
         align-items: end;
-    }
-
-    .sort-select {
-        margin-top: 12px;
     }
 }
 
@@ -443,6 +458,13 @@ pre {
 .form__select .v-field__input input::placeholder {
     color: #35383f;
     opacity: revert;
+}
+
+.v-field__field .v-field__input {
+    font-family: 'Bert Sans';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
 }
 
 .v-field--variant-outlined .v-field__outline__end,

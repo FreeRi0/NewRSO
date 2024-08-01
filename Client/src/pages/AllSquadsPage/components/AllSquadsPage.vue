@@ -49,7 +49,7 @@
                     />
                 </svg>
             </div>
-            <div class="squads-sort">
+            <div class="squads-sorts">
                 <div class="sort-layout">
                     <div>
                         <Button
@@ -91,10 +91,10 @@
                     </div>
                 </div>
 
-                <div class="sort-filters">
+                <div class="sort-filter">
                     <div class="squads-sort">
                         <div class="sort-filters">
-                            <div class="sort-select sort-select--width">
+                            <div class="sort-select sort-select--width-district">
                                 <v-select
                                     class="form__select filter-district"
                                     :items="districtsStore.districts"
@@ -119,7 +119,7 @@
                                     </template>
                                 </v-select>
                             </div>
-                            <div class="sort-select sort-select--width">
+                            <div class="sort-select sort-select--width-regional">
                                 <v-select
                                     class="form__select filter-district"
                                     :items="regionalsStore.regionals"
@@ -146,7 +146,7 @@
                             </div>
 
                             <div
-                                class="sort-select sort-select--width"
+                                class="sort-select sort-select--width-local"
                                 v-if="SelectedSortRegional || SelectedSortLocal"
                             >
                                 <v-select
@@ -166,7 +166,7 @@
                                 </v-select>
                             </div>
                             <div
-                                class="sort-select sort-select--width"
+                                class="sort-select sort-select--width-education"
                                 v-if="SelectedSortRegional || SelectedSortLocal"
                             >
                                 <v-select
@@ -185,7 +185,7 @@
                                     </template>
                                 </v-select>
                             </div>
-                            <div class="sort-select">
+                            <div class="sort-select sort-select--width-sort">
                                 <sortByEducation
                                     variant="outlined"
                                     clearable
@@ -199,7 +199,7 @@
 
                             <Button
                                 type="button"
-                                class="ascend ml-2"
+                                class="ascend"
                                 iconn="iconn"
                                 @click="ascending = !ascending"
                                 color="white"
@@ -482,6 +482,11 @@ watch(
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+
+        font-family: 'Bert Sans';
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 20px;
     }
 }
 
@@ -564,6 +569,11 @@ watch(
     flex-wrap: wrap;
     margin-top: 30px;
     align-items: end;
+    gap: 8px;
+
+    @media (max-width: 768px) {
+        margin-top: 0;
+    }
 }
 
 .squads-search {
@@ -593,29 +603,68 @@ watch(
 
 .form__select {
     margin-bottom: 0px;
-    margin-left: 8px;
     border: 1px solid #35383f;
 }
 
-.sort-select {
-    &--width {
-        width: 193px;
+.squads-sorts {
+    margin-top: 30px;
+    display: flex;
+    column-gap: 23px;
+    justify-content: space-between;
+
+    @media (max-width: 768px) {
+        flex-direction: column-reverse;
+        margin-top: 40px;
+        gap: 60px 0;
     }
 }
 
-@media (max-width: 575px) {
-    .squads-sort {
-        flex-direction: column-reverse;
-    }
-    .sort-filters {
-        flex-wrap: wrap;
-        margin-bottom: 40px;
-        align-items: end;
-    }
+.sort-layout {
+    margin-top: 30px;
 
-    .sort-select {
-        margin-top: 12px;
+    @media screen and (max-width: 768px) {
+        margin-top: 0;
     }
+}
+
+.sort-select {
+    &--width{
+        &-district {
+            min-width: 193px;
+        }
+
+        &-regional {
+            min-width: 227px;
+        }
+
+        &-local {
+            min-width: 185px;
+        }
+
+        &-education {
+            min-width: 295px;
+        }
+
+        &-sort {
+            min-width: 180px;
+        }
+    }
+}
+
+.v-field__input {
+    font-family: 'Bert Sans';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+}
+
+.v-field__field .v-field__input {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.v-field__clearable {
+    margin: 0;
 }
 
 .option-select .v-field__input input::placeholder,
