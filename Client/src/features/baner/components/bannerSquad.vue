@@ -14,10 +14,7 @@
                 </div>
                 <div class="squad__list-wrapper">
                     <ul class="Squad-HQ__list">
-                        <li
-                            class="Squad-HQ__university"
-                            v-if="squad.educational_institution?.short_name"
-                        >
+                        <li class="Squad-HQ__university" v-if="squad.educational_institution?.short_name">
                             <p>
                                 {{ squad.educational_institution?.short_name }}
                             </p>
@@ -27,35 +24,27 @@
                             <SvgIcon iconName="calendar" />
                             <time datetime="2022-09-10">{{
                                 squad.founding_date
-                            }}</time>
+                                }}</time>
                         </li>
                     </ul>
                 </div>
                 <div class="squad-data__contacts-wrapper">
                     <div class="squad-data__contacts">
                         <div class="squad-data__participant-counter">
-                            <span
-                                >{{ squad.participants_count }}
-                                {{ ending }}</span
-                            >
+                            <span>{{ squad.participants_count }}
+                                {{ ending }}</span>
                         </div>
                         <div class="squad-data__social-network">
-                            <div
-                                class="squad-data__link-vk"
-                                v-if="
-                                    squad.social_vk && squad.social_vk != 'null'
-                                "
-                            >
+                            <div class="squad-data__link-vk" v-if="
+                                squad.social_vk && squad.social_vk != 'null'
+                            ">
                                 <a :href="squad.social_vk" target="_blank">
                                     <SvgIcon icon-name="vk" />
                                 </a>
                             </div>
-                            <div
-                                class="squad-data__link-telegram"
-                                v-if="
-                                    squad.social_tg && squad.social_tg != 'null'
-                                "
-                            >
+                            <div class="squad-data__link-telegram" v-if="
+                                squad.social_tg && squad.social_tg != 'null'
+                            ">
                                 <a :href="squad.social_tg" target="_blank">
                                     <SvgIcon icon-name="telegram" />
                                 </a>
@@ -68,44 +57,27 @@
                                     Ссылка скопирована
                                 </div>
                             </div>
-                            <!-- <pre>dddddssss   {{ userId }}</pre> -->
                         </div>
                     </div>
-                    <!-- <pre>dddddddd{{ props.member }}</pre> -->
-                    <!-- <pre>{{ IsTrusted }}</pre> -->
-                    <!-- <pre>{{ regional?.commander?.id }}</pre>
-                    <pre>{{ squad?.commander?.id }}</pre> -->
 
-                    <router-link
-                        v-if="
-                            userId == squad.commander?.id ||
-                            userId == regional.commander?.id ||
-                            IsTrusted
-                        "
-                        :to="{
+                    <router-link v-if="
+                        userId == squad.commander?.id ||
+                        userId == regional.commander?.id ||
+                        IsTrusted
+                    " :to="{
                             name: 'EditLSO',
                             params: { id: squad.id },
-                        }"
-                        class="user-data__link"
-                        >Редактировать отряд</router-link
-                    >
+                        }" class="user-data__link">Редактировать отряд</router-link>
 
                     <Button
-                        v-else-if="!IsMember && !UserApplication"
-                        @click="AddApplication()"
-                        label="Подать заявку"
-                        class="AddApplication"
-                    ></Button>
+                        v-else-if="!IsMember && Object.keys(applications).length === 0 && userStore.currentUser.detachment_id === null"
+                        @click="AddApplication()" label="Подать заявку" class="AddApplication"></Button>
 
-                    <div v-else-if="UserApplication" class="d-flex">
+                    <div v-else-if="Object.keys(applications).length !== 0" class="d-flex">
                         <div class="user-data__link mr-2">
                             Заявка на рассмотрении
                         </div>
-                        <Button
-                            @click="DeleteApplication()"
-                            label="Удалить заявку"
-                            class="AddApplication"
-                        ></Button>
+                        <Button @click="DeleteApplication()" label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
                     <!--find искать id в computed-->
@@ -162,53 +134,37 @@ const userStore = useUserStore();
 const route = useRoute();
 const user = storeToRefs(userStore);
 const roles = storeToRefs(roleStore);
-// let comId = roles.roles.value.detachment_commander.id;
-let userId = computed(() => {
-    return user.currentUser.value.id;
-});
-// console.log('comId', comId);
+// let userId = computed(() => {
+//     return user.currentUser.value.id;
+// });
 
-// console.log('memberAA', props.member);
-
-// const edict = ref({});
+const userId = localStorage.getItem('user');
 const regional = ref({});
 const data = ref({});
 const isError = ref([]);
-const applications = ref([]);
+const applications = ref({});
 const swal = inject('$swal');
-// console.log('user', userId.value);
-// console.log('member', props.member);
 
-const viewDetachments = async () => {
-    let id = route.params.id;
-    // console.log('idRoute', id);
-    await HTTP.get(`/detachments/${id}/applications/`)
-        .then((response) => {
-            applications.value = response.data;
-            // console.log(response);
-        })
-        .catch(function (error) {
-            console.log('an error occured ' + error);
-        });
-};
-
+const filterApplications = async (id) => {
+    try {
+        const response = await HTTP.get(`/detachments/${id}/applications/?user_id=${userId}`);
+        applications.value = response.data;
+        console.log(applications.value)
+    } catch (error) {
+        console.log('an error occured ' + error);
+    }
+}
 const viewRegionals = async () => {
     let id = props.squad.regional_headquarter;
-    // console.log('idRouteReg', id);
     await HTTP.get(`/regionals/${id}/`)
         .then((response) => {
             regional.value = response.data;
-            // console.log(response);
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
         });
 };
 
-//member сравнивать так же
-const UserApplication = computed(() => {
-    return applications.value.find((item) => item.user.id === userId.value);
-});
 
 const IsMember = computed(() => {
     return props.member.find((item) => item.user.id === userId.value);
@@ -219,15 +175,15 @@ const IsTrusted = computed(() => {
     );
 });
 
-// console.log('member', IsMember);
 
 watch(
     () => props.squad,
 
-    (newSquad, oldSquad) => {
+    (newSquad) => {
         if (Object.keys(props.squad).length === 0) {
             return;
         }
+        filterApplications(props.squad.id);
         viewRegionals();
     },
 );
@@ -246,12 +202,10 @@ const AddApplication = async () => {
             showConfirmButton: false,
             timer: 1500,
         });
-        viewDetachments();
-        // console.log('responseee', sendResponse.data);
+        sendResponse.data.user = applications.value;
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
-        console.error('There was an error!', error);
         if (isError.value) {
             swal.fire({
                 position: 'center',
@@ -275,7 +229,7 @@ const DeleteApplication = async () => {
             showConfirmButton: false,
             timer: 1500,
         });
-        viewDetachments();
+        applications.value = {};
     } catch (error) {
         console.log('errr', error);
         isError.value = error.response.data;
@@ -292,10 +246,6 @@ const DeleteApplication = async () => {
     }
 };
 
-onMounted(() => {
-    viewDetachments();
-    viewRegionals();
-});
 
 const copyL = () => {
     navigator.clipboard.writeText(window.location.href);

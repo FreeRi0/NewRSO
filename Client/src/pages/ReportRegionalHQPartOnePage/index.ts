@@ -1,0 +1,1 @@
+export { default as ReportRegionalPartOnePage } from './ReportRegionalHQPartOne.vue'

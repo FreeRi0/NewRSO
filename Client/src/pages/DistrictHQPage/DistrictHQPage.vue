@@ -52,6 +52,7 @@ import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
 import { usePage } from '@shared';
+import { useUserStore } from '@features/store';
 import mixins from '@/mixins/mixins';
 
 const { methods } = mixins;
@@ -59,6 +60,7 @@ const { getEnding } = methods;
 const { getEndingMembers } = methods;
 
 const crosspageFilters = useCrosspageFilter();
+const userStore = useUserStore();
 const commander = ref({});
 const position = ref({});
 const districtHeadquarter = ref({});
@@ -86,11 +88,13 @@ const aboutMembers = async () => {
         const response = await HTTP.get(`/districts/${id}/members/`);
 
         member.value = response.data.results;
-        // console.log(response);
+
     } catch (error) {
         console.log('an error occured ' + error);
     }
 };
+
+
 
 const fetchCommander = async () => {
     try {
@@ -99,19 +103,12 @@ const fetchCommander = async () => {
         const response = await HTTP.get(`/users/${id}/`);
 
         commander.value = response.data;
-        // console.log(response);
+
     } catch (error) {
         console.log('An error occurred:', error);
     }
 };
 
-onBeforeRouteUpdate(async (to, from) => {
-    if (to.params.id !== from.params.id) {
-        aboutDistrictHQ();
-        aboutMembers();
-        fetchCommander();
-    }
-});
 
 watch(
     () => route.params.id,
@@ -119,7 +116,6 @@ watch(
     async (newId) => {
         id = newId;
         await aboutDistrictHQ();
-        await aboutMembers();
         await fetchCommander();
     },
     {
@@ -129,8 +125,6 @@ watch(
 );
 
 onMounted(() => {
-    aboutDistrictHQ();
-    aboutMembers();
 });
 
 const HQandSquads = ref([

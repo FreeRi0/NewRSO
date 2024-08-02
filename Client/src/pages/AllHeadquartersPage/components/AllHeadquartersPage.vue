@@ -102,7 +102,7 @@
                     </div>
                     <div class="sort-select">
                         <v-select
-                            class="form__select filter-district"
+                            class="form__select filter-region"
                             :items="regionalsStore.regionals"
                             clearable
                             variant="outlined"
@@ -127,7 +127,7 @@
                     </div>
                     <div class="sort-select" v-if='SelectedSortRegional || SelectedSortLocal'>
                         <v-select
-                            class="form__select filter-district"
+                            class="form__select filter-local"
                             :items="locals"
                             clearable
                             variant="outlined"
@@ -373,13 +373,19 @@ watch(
             font-size: 40px;
         }
     }
+
     &-sort {
         display: flex;
         justify-content: space-between;
-        align-items: flex-end;
+        align-items: flex-start;
+        gap: 0 23px;
+        margin-top: 20px;
+        
         @media screen and (max-width: 768px) {
             flex-direction: column-reverse;
             align-items: flex-start;
+            gap: 60px 0;
+            margin-top: 0;
         }
     }
     &-search {
@@ -413,10 +419,23 @@ watch(
     }
 }
 
+.sort-layout {
+    margin-top: 40px;
+
+    @media screen and (max-width: 768px) {
+        margin-top: 0;
+    }
+}
+
 pre {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+
+    font-family: 'Bert Sans';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
 }
 
 .circleLoader {
@@ -469,7 +488,7 @@ pre {
 }
 .form__select {
     margin-bottom: 0px;
-    margin-right: 8px;
+    // margin-right: 8px;
     border: 1px solid #35383f;
 }
 .dashboard {
@@ -495,24 +514,39 @@ pre {
 }
 
 .sort-filters {
+    flex-wrap: wrap;
+    gap: 8px;
+
     @media screen and (max-width: 768px) {
         margin-top: 40px;
         display: flex;
-        flex-wrap: wrap;
-        margin-bottom: 60px;
     }
 }
 
 .filter {
     &-local {
-        width: 186px;
+        min-width: 186px;
     }
+
     &-region {
-        width: 227px;
+        min-width: 227px;
     }
 
     &-district {
-        width: 193px;
+        min-width: 193px;
+    }
+
+    &-education {
+            min-width: 295px;
+        }
+}
+
+.sort-select {
+    span {
+        font-family: 'Bert Sans';
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 20px;
     }
 }
 
@@ -522,13 +556,15 @@ pre {
     }
     .sort-filters {
         flex-wrap: wrap;
-        margin-bottom: 40px;
         align-items: end;
     }
+}
 
-    .sort-select {
-        margin-top: 12px;
-    }
+.v-field__field .v-field__input {
+    font-family: 'Bert Sans';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
 }
 
 .option-select .v-field__input input::placeholder,

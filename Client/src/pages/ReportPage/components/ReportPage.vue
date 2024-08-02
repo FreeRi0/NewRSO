@@ -542,7 +542,7 @@
                                     <Button
                                         v-if="!is_regional_commander"
                                         type="button"
-                                        :disabled="report[5]"
+                                        :disabled="report[5].disabledBtn"
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -551,7 +551,7 @@
                                 </div>
                                 <p>
                                     Срок предоставления отчетности по показателю
-                                    по 16 июля 2024 года включительно.
+                                    по 15 сентября 2024 года включительно.
                                 </p>
                             </div>
                         </div>

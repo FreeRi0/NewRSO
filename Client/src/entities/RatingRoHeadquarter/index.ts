@@ -1,0 +1,1 @@
+export { default as RatingRoItem } from './components/RatingRoHeadquarter.vue';

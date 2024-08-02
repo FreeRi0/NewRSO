@@ -449,6 +449,7 @@ const routes: RouteRecordRaw[] = [
                             },
                         ],
                     },
+
                 ],
             },
             //----------------------Конец Структуры - ЛСО/Штабы/Создание/Редактирование---------------------------------------------------------96cb9a («.»)
@@ -861,6 +862,112 @@ const routes: RouteRecordRaw[] = [
                         ],
                     },
                 ],
+            },
+            {
+                path: '/reporting-ro',
+                meta: {
+                    label: 'Рейтинг РО',
+                    redirectTo: 'reportingRo',
+                },
+                children: [
+                    {
+                        name: 'reportingRo',
+                        path: 'reporting',
+                        component: () =>
+                            import('@pages/RatingRoReporting/components/RatingRoReporting.vue'),
+                        meta: {
+                            label: 'Отчетность',
+                            redirectTo: 'reportingRo',
+                        },
+                    },
+                    {
+                        path: 'report-regional-one',
+                        name: 'ReportRegionalPartOne',
+                        component: () =>
+                            import(
+                                '@pages/ReportRegionalHQPartOnePage/ReportRegionalHQPartOne.vue'
+                                ),
+                        meta: {
+                            label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 1',
+                        },
+                    },
+                    {
+                        path: 'report-regional-two',
+                        name: 'ReportRegionalPartTwo',
+                        component: () =>
+                            import(
+                                '@pages/ReportRegionalHQPartTwoPage/ReportRegionalHQPartTwo.vue'
+                                ),
+                        meta: {
+                            label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 2',
+                        },
+                    },
+
+                ]
+            },
+            {
+                path: '/rating-ro',
+                meta: {
+                    label: 'Рейтинг РО',
+                    redirectTo: 'rating-ro',
+                },
+                children: [
+                    {
+                        path: '',
+                        name: 'rating-ro',
+                        component: () =>
+                            import('@pages/RatingRO/components/RatingRo.vue'),
+                    },
+                    {
+                        path: 'places',
+                        meta: {
+                            label: 'Места РО по показателям',
+                            redirectTo: 'places'
+                        },
+                        children: [
+                            {
+                                path: '',
+                                name: 'places',
+                                component: () =>
+                                    import('@pages/RoPlaces/components/RoPlaces.vue'),
+                            },
+                            {
+                                path: ':id',
+                                meta: {
+                                    requiresAuth: true,
+                                    redirectTo: 'places',
+                                    label: 'PlaceId.title',
+                                    isObject: true,
+                                },
+                                children: [
+                                    {
+                                        path: '',
+                                        name: 'Place',
+                                        component: () =>
+                                            import('@pages/RatingRoPlace/components/RatingRoPlace.vue'),
+                                    },
+                                ]
+                            }
+
+                        ]
+                    },
+
+                    {
+                        path: 'reporting',
+                        meta: {
+                            label: 'Отчеты РО',
+                            redirectTo: 'rating-ro-reporting'
+                        },
+                        children: [
+                            {
+                                path: '',
+                                name: 'rating-ro-reporting',
+                                component: () =>
+                                    import('@pages/RatingRoReporting/components/RatingRoReportingHeadquarters.vue'),
+                            },
+                        ]
+                    },
+                ]
             },
             {
                 path: '/references',

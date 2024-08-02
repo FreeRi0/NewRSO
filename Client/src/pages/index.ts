@@ -22,3 +22,5 @@ export * as actionSquadsPage from './actionSquadsPade';
 
 export * as activeInventsPage from './ActiveInventsPage';
 
+export * as ReportRegionalPartOnePage from './ReportRegionalHQPartOnePage'
+
