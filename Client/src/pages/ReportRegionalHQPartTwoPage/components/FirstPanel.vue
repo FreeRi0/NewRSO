@@ -3,9 +3,9 @@
     <v-tabs
         v-model="tab"
     >
-      <v-tab  value="one" class="panel-tab-btn">Отчет РО</v-tab>
-      <v-tab  value="two" class="panel-tab-btn">Корректировка ОШ</v-tab>
-      <v-tab  value="three" class="panel-tab-btn">Корректировка ЦШ</v-tab>
+      <v-tab value="one" class="panel-tab-btn">Отчет РО</v-tab>
+      <v-tab value="two" class="panel-tab-btn">Корректировка ОШ</v-tab>
+      <v-tab value="three" class="panel-tab-btn">Корректировка ЦШ</v-tab>
     </v-tabs>
 
       <v-card-text class="panel-card-text">
@@ -117,15 +117,13 @@
           </v-tabs-window-item>
         </v-tabs-window>
       </v-card-text>
-
-
   </v-card>
 </template>
 <script setup>
-import {onActivated, ref, watchEffect} from "vue";
+import { ref, watchEffect } from "vue";
 import { InputReport } from '@shared/components/inputs';
 import { ReportRegionalForm } from '../../ReportRegionalHQPartOnePage/components/index'
-import {getReport} from "@services/ReportService.ts";
+import { getReport } from "@services/ReportService.ts";
 
 const defaultReportData = {
   participants_number: '0',

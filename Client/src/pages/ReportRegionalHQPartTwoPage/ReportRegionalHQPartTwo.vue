@@ -23,6 +23,33 @@
           <second-panel/>
         </v-expansion-panel-text>
       </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-title>
+          3. Прирост численности членов РО РСО относительно количества членов в соответствии с отчетом РО РСО за 2023 г.
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <third-panel />
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-title>
+          4. Организация всероссийских (международных), окружных и межрегиональных мероприятий и проектов
+          (слеты, школы, фестивали, турниры и прочие)
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <fourth-panel />
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-title>
+          5. Организация всероссийских (международных) (организатор — региональное отделение РСО),
+          окружных и межрегиональных трудовых проектов в соответствии с Положением об организации
+          трудовых проектов РСО
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <fifth-panel />
+        </v-expansion-panel-text>
+      </v-expansion-panel>
     </v-expansion-panels>
   </div>
   <Button
@@ -32,8 +59,7 @@
   />
 </template>
 <script setup>
-import FirstPanel from "@pages/ReportRegionalHQPartTwoPage/components/FirstPanel.vue";
-import SecondPanel from "@pages/ReportRegionalHQPartTwoPage/components/SecondPanel.vue";
+import { FirstPanel, SecondPanel, ThirdPanel, FourthPanel, FifthPanel } from './components/index'
 import { Button } from '@shared/components/buttons';
 
 </script>
