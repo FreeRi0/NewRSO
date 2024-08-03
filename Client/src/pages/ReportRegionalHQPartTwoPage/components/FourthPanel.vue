@@ -166,7 +166,6 @@
               </div>
               <Button
                   label="Удалить мероприятие"
-                  size="large"
               />
             </div>
             <div style="display: flex;">

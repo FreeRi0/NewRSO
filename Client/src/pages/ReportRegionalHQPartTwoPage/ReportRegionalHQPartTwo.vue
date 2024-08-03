@@ -50,6 +50,92 @@
           <fifth-panel />
         </v-expansion-panel-text>
       </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-title>
+          6. Участие бойцов студенческих отрядов РО РСО во всероссийских (международных)
+          мероприятиях и проектах (в том числе и трудовых) «К»
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <sixth-panel />
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-title>
+          7. Победители студенческих отрядов РО РСО во всероссийских (международных) проектах и конкурсах «К»
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <seventh-panel />
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-title>
+          8. Количество упоминаний в СМИ о прошедших творческих, добровольческих и патриотических мероприятиях
+          и трудовых проектах, организованных РО РСО «К»
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <eighth-panel />
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-title>
+          9. Организация обязательных общесистемных мероприятий РСО на региональном уровне «К»
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <ninth-panel />
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-title>
+          10. Организация РО РСО всероссийских (международных) добровольческих и патриотических акций «К»
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <tenth-panel />
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-title>
+          11. Активность РО РСО в социальных сетях «К»
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <eleventh-panel />
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-title>
+          12. Объем средств, собранных бойцами РО РСО во Всероссийском дне ударного труда
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <twelfth-panel />
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-title>
+          13. Охват членов РО РСО, принявших участие во Всероссийском дне ударного труда «К»
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <thirteenth-panel />
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-title>
+          14. Отношение объема средств, собранных бойцами РО РСО во Всероссийском дне ударного труда к количеству членов РО РСО,
+          принявших участие во Всероссийском дне ударного труда
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <fourteenth-panel />
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-title>
+          15. Исполнительская дисциплина РО РСО, соблюдение условий охраны труда на трудовых проектах РСО,
+          наличие проблемной неурегулированной задолженности по выплате заработной платы перед бойцами РСО за трудовой семестр предыдущего года,
+          отсутствие отчислений от членских взносов в Центральный штаб,
+          исполнение решений Центральных руководящих органов РСО, наличие ежегодного акта проверки КРК РО РСО
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <fifteenth-panel />
+        </v-expansion-panel-text>
+      </v-expansion-panel>
     </v-expansion-panels>
   </div>
   <Button
@@ -59,8 +145,24 @@
   />
 </template>
 <script setup>
-import { FirstPanel, SecondPanel, ThirdPanel, FourthPanel, FifthPanel } from './components/index'
+import {
+  FirstPanel,
+  SecondPanel,
+  ThirdPanel,
+  FourthPanel,
+  FifthPanel,
+  SixthPanel,
+  SeventhPanel,
+  EighthPanel,
+  NinthPanel,
+  TenthPanel,
+  EleventhPanel,
+  TwelfthPanel,
+  ThirteenthPanel,
+  FourteenthPanel
+} from './components/index'
 import { Button } from '@shared/components/buttons';
+import FifteenthPanel from "@pages/ReportRegionalHQPartTwoPage/components/FifteenthPanel.vue";
 
 </script>
 <style>
@@ -89,5 +191,8 @@ import { Button } from '@shared/components/buttons';
 }
 .v-expansion-panel-title__overlay {
   border-radius: 6px;
+}
+.v-expansion-panel:not(:first-child)::after {
+  border-top-style: none;
 }
 </style>
