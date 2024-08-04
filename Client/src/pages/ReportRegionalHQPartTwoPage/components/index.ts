@@ -13,3 +13,7 @@ export {default as TwelfthPanel} from './TwelfthPanel.vue';
 export {default as ThirteenthPanel} from './ThirteenthPanel.vue';
 export {default as FourteenthPanel} from './FourteenthPanel.vue';
 export {default as FifteenthPanel} from './FifteenthPanel.vue';
+export {default as SixteenthPanel} from './SixteenthPanel.vue';
+export {default as SeventeenthPanel} from './SeventeenthPanel.vue';
+export {default as EighteenthPanel} from './EighteenthPanel.vue';
+export {default as NineteenthPanel} from './NineteenthPanel.vue';

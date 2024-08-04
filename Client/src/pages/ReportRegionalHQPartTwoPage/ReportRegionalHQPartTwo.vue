@@ -136,6 +136,38 @@
           <fifteenth-panel />
         </v-expansion-panel-text>
       </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-title>
+          16. Победители всероссийских (международных), окружных и межрегиональных трудовых проектов по комиссарской деятельности «К»
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <sixteenth-panel />
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-title>
+          17. Дислокация студенческих отрядов РО РСО
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <seventeenth-panel />
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-title>
+          18. Количество научных работ и публикаций по теме СО, выпущенных в текущем году
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <eighteenth-panel />
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-title>
+          19. Трудоустройство
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <nineteenth-panel />
+        </v-expansion-panel-text>
+      </v-expansion-panel>
     </v-expansion-panels>
   </div>
   <Button
@@ -159,10 +191,14 @@ import {
   EleventhPanel,
   TwelfthPanel,
   ThirteenthPanel,
-  FourteenthPanel
+  FourteenthPanel,
+  FifteenthPanel,
+  SixteenthPanel,
+  SeventeenthPanel,
+  EighteenthPanel,
+  NineteenthPanel
 } from './components/index'
 import { Button } from '@shared/components/buttons';
-import FifteenthPanel from "@pages/ReportRegionalHQPartTwoPage/components/FifteenthPanel.vue";
 
 </script>
 <style>
