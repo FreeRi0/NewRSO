@@ -27,7 +27,7 @@ export const useRoleStore = defineStore('role', {
             this.isLoadingRoles = false;
         },
 
-        async getUserRoles(id: String) {
+        async getUserRoles(id: string) {
             const dataUserRoles = await HTTP.get(`/rsousers/${id}/commander/`, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ export const useRoleStore = defineStore('role', {
             }
         },
 
-        async getPositions(id: String) {
+        async getPositions(id: string) {
             const dataPositions = await HTTP.get(`/rsousers/${id}/positions/`, {
                 headers: {
                     'Content-Type': 'application/json',
