@@ -1,5 +1,150 @@
 <template>
-  <v-card class="panel-card" >
+  <div
+      v-if="true"
+      class="form__field-group"
+  >
+    <div v-for="(event, index) in events" :key="index">
+      <div>
+        <label
+            class="form__label"
+            for="participants_number"
+        >Количество человек, принявших участие в мероприятии <sup class="valid-red">*</sup></label>
+        <InputReport
+            v-model:value="event.participants_number"
+            :id="event.participants_number"
+            name="participants_number"
+            class="form__input"
+            type="number"
+            placeholder="Введите число"
+        />
+      </div>
+      <div style="display: flex;">
+        <div class="form__field">
+          <label
+              class="form__label"
+              for="start_date"
+          >Дата начала проведения мероприятия <sup class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="event.start_date"
+              :id="event.start_date"
+              name="start_date"
+              class="form__input"
+              type="date"
+          />
+        </div>
+        <div class="form__field">
+          <label
+              class="form__label"
+              for="end_date"
+          >Дата окончания проведения мероприятия <sup class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="event.end_date"
+              :id="event.end_date"
+              name="end_date"
+              class="form__input"
+              type="date"
+          />
+        </div>
+      </div>
+      <div style="display: flex;">
+        <div>
+          <label
+              class="form__label"
+              for="4"
+          >Положение о мероприятии <sup class="valid-red">*</sup></label>
+          <InputReport
+              type="file"
+              id="4"
+              name="4"
+          />
+        </div>
+        <div>
+          <p
+              class="form__label"
+          >Межрегиональное <sup class="valid-red">*</sup></p>
+          <div style="display: flex">
+            <div style="display: flex">
+              <input
+                  v-model="event.is_interregional"
+                  type="radio"
+                  :id="`is_interregional-true_${index}`"
+                  :value="true"
+              />
+              <label :for="`is_interregional-true_${index}`">
+                Да
+              </label>
+            </div>
+            <div style="display: flex">
+              <input
+                  v-model="event.is_interregional"
+                  type="radio"
+                  :id="`is_interregional-false_${index}`"
+                  :value="false"
+              />
+              <label :for="`is_interregional-false_${index}`">
+                Нет
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p
+            class="form__label"
+        >Ссылка на группу мероприятия в социальных сетях <sup class="valid-red">*</sup></p>
+        <div style="display: flex;" v-for="(link, i) in events[index].links" :key="i">
+          <InputReport
+              v-model:value="link.link"
+              :id="i"
+              name="6"
+              class="form__input"
+              type="text"
+              placeholder="https://vk.com/cco_monolit"
+          />
+          <Button
+              label="+ Добавить ссылку"
+              @click="addLink(index)"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <Button
+          style="margin: 0"
+          label="+ Добавить мероприятие"
+          @click="addEvent"
+      />
+    </div>
+    <div>
+      <label
+          class="form__label"
+          for="comment"
+      >Комментарий <sup class="valid-red">*</sup></label>
+      <InputReport
+          v-model:value="fourthPanelData.comment"
+          id="comment"
+          name="comment"
+          class="form__input"
+          type="textarea"
+          placeholder="Укажите наименования организованных мероприятий"
+          style="width: 100%;"
+      />
+    </div>
+    <div>
+      <v-checkbox
+          label="Итоговое значение"
+      />
+    </div>
+    <div class="hr"></div>
+    <div>
+      <p>0</p>
+    </div>
+  </div>
+  <v-card
+      v-else
+      class="panel-card"
+  >
     <v-tabs
         v-model="tab"
     >
@@ -11,7 +156,7 @@
     <v-card-text class="panel-card-text">
       <v-tabs-window v-model="tab">
         <v-tabs-window-item value="one">
-          <form class="form__field-group" @submit.prevent>
+          <div class="form__field-group">
             <div>
               <label
                     class="form__label"
@@ -125,7 +270,7 @@
             <div>
               <p>(4-1)*2+(4-2)+(4-3)=9</p>
             </div>
-          </form>
+          </div>
         </v-tabs-window-item>
 
         <v-tabs-window-item value="two">
@@ -367,6 +512,53 @@ import { InputReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 
 const tab = ref('one')
+const fourthPanelData = ref({
+  comment: '',
+  events: [
+    // {
+    //   participants_number: '',
+    //   start_date: '',
+    //   end_date: '',
+    //   links: [
+    //     {
+    //       link: '',
+    //     },
+    //   ],
+    //   is_interregional: false,
+    // }
+  ]
+})
+const events = ref([
+  {
+    participants_number: '',
+    start_date: '',
+    end_date: '',
+    links: [
+      {
+        link: '',
+      },
+    ],
+    is_interregional: false,
+  }
+])
+const addLink = (index) => {
+  events.value[index].links.push({ link: '' })
+  fourthPanelData.value.events = [ ...events.value ]
+  console.log(fourthPanelData.value)
+}
+const addEvent = () => {
+  events.value.push({
+    participants_number: '',
+    start_date: '',
+    end_date: '',
+    links: [
+      {
+        link: '',
+      },
+    ],
+    is_interregional: false,
+  })
+}
 </script>
 <style lang="scss" scoped>
 .panel-card {
