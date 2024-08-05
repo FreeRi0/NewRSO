@@ -116,7 +116,7 @@ const sortedSquads = ref([]);
 const sortOptionss = ref([]);
 sortOptionss.value = [
     {
-        value: 'junior_detachment__name',
+        value: 'detachment__name',
         name: 'Алфавиту от А - Я',
     },
     { value: 'created_at', name: 'Дате создания отряда' },

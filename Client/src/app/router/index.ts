@@ -23,6 +23,7 @@ router.beforeEach((to, _from, next) => {
     to.name !== 'CreaturePassword' &&
     to.name !== 'Competition' &&
     to.name !== 'faq' &&
+    to.name !== 'actionSquads' &&
     localStorage.getItem('jwt_token') === null
   )
     next({ name: 'Login' });

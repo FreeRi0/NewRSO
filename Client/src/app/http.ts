@@ -21,7 +21,9 @@ HTTP.interceptors.request.use(
       config.url == '/jwt/create/' || config.url == '/register/' || config.url == '/exchange-token/' ||
       config.url == '/jwt/vk-login/' || config.url == '/jwt/verify/' || config.url == '/jwt/refresh/' ||
       config.url == '/regions/' || config.url == '/reset_password/' ||
-      config.url == '/users/reset_password_confirm/'
+      config.url == '/users/reset_password_confirm/' ||
+      config.url == 'competitions/1/' ||
+      config.url == '/events/?search='
     ) {
       delete config.headers.Authorization;
     } else {

@@ -458,7 +458,6 @@ const routes: RouteRecordRaw[] = [
             {
                 path: '/action-squads',
                 meta: {
-                    requiresAuth: true,
                     redirectTo: 'actionSquads',
                     label: 'Мероприятия',
                 },
