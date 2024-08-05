@@ -80,7 +80,7 @@
 
                     <router-link v-if="
                         userId &&
-                        (userId === headquarter?.commander?.id ||
+                        (userId == headquarter?.commander?.id ||
                             roles.roles.value.regionalheadquarter_commander
                                 ?.id ===
                             headquarter?.regional_headquarter ||
@@ -199,7 +199,7 @@
                     </AddModal>
                     <router-link v-if="
                         userId &&
-                        (userId === localHeadquarter?.commander?.id ||
+                        (userId == localHeadquarter?.commander?.id ||
                             roles.roles.value.regionalheadquarter_commander
                                 ?.id ===
                             localHeadquarter.regional_headquarter ||
@@ -320,7 +320,7 @@
                     </AddModal>
                     <router-link v-if="
                         userId &&
-                        (userId === districtHeadquarter?.commander?.id ||
+                        (userId == districtHeadquarter?.commander?.id ||
                             roles.roles.value
                                 .centralheadquarter_commander ||
                             isTrusted.length > 0)
@@ -439,17 +439,17 @@
                     </AddModal>
                     <router-link v-if="
                         userId &&
-                        (userId === regionalHeadquarter?.commander?.id ||
+                        (userId == regionalHeadquarter?.commander?.id ||
                             roles.roles.value.districtheadquarter_commander
-                                ?.id ===
+                                ?.id ==
                             regionalHeadquarter.district_headquarter ||
                             roles.roles.value
-                                .centralheadquarter_commander ||
-                            isTrusted.length > 0)
+                                .centralheadquarter_commander)
                     " class="hq-data__link" :to="{
                         name: 'EditingOfRS',
                         params: { id: regionalHeadquarter.id },
                     }">Редактировать штаб</router-link>
+
                     <Button v-else-if="
                         userStore.currentUser.regional_headquarter_id !== props.regionalHeadquarter.id &&
                         Object.keys(applications).length === 0 &&
@@ -468,7 +468,7 @@
                             " label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
-                    <div v-else-if="userStore.currentUser.regional_headquarter_id === props.regionalHeadquarter.id"
+                    <div v-else-if="(userStore.currentUser.regional_headquarter_id == props.regionalHeadquarter.id) && (userId != regionalHeadquarter?.commander?.id) "
                         class="AddApplication">
                         Вы участник
                     </div>
@@ -570,7 +570,7 @@
                     </AddModal>
                     <router-link v-if="
                         userId &&
-                        (userId === centralHeadquarter?.commander?.id ||
+                        (userId == centralHeadquarter?.commander?.id ||
                             isTrusted.length > 0)
                     " class="hq-data__link" :to="{
                         name: 'FormCentral',
