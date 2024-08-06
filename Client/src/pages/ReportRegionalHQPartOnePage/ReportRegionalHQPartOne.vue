@@ -1,27 +1,18 @@
 <template>
   <div class="container">
     <h1 class="title title--mb">Отчет о деятельности регионального отделения РСО за 2024 год. Часть 1</h1>
-    <h2 class="report_title-h2">Свод статистических данных по трудоустройству бойцов студенческих отрядов РО за 2024 год на 1 сентября 2024 года</h2>
+    <h2 class="report_title-h2">Свод статистических данных по трудоустройству бойцов студенческих отрядов РО за 2024 год
+      на 1 сентября 2024 года</h2>
 
-    <report-regional-form
-        :reportData="reportData"
-        @sentReport="sentReport"
-        isNewReport
-        :isButtonDisabled="isButtonDisabled"
-    />
+    <report-regional-form :reportData="reportData" @sentReport="sentReport" isNewReport
+      :isButtonDisabled="isButtonDisabled" />
   </div>
-  <ReportModalSuccess
-      v-if="showModalSuccess"
-      @closeModal="closeModalSuccess"
-  />
-  <ReportModalWarning
-      v-if="showModalWarning"
-      @reportConfirmation="reportConfirmation"
-  />
+  <ReportModalSuccess v-if="showModalSuccess" @closeModal="closeModalSuccess" />
+  <ReportModalWarning v-if="showModalWarning" @reportConfirmation="reportConfirmation" />
 </template>
 
 <script setup>
-import {inject, onActivated, ref} from "vue";
+import { inject, onActivated, ref } from "vue";
 import ReportRegionalForm from "@pages/ReportRegionalHQPartOnePage/components/ReportRegionalForm.vue";
 import { createReport, getReport } from "@services/ReportService.ts";
 import ReportModalSuccess from "@pages/ReportRegionalHQPartOnePage/components/ReportModalSuccess.vue";
@@ -100,11 +91,13 @@ const closeModalSuccess = (value) => {
   text-align: left;
   margin-bottom: 40px;
 }
+
 .form {
   &-container {
     display: flex;
     margin-bottom: 8px;
     gap: 80px;
+
     @media (max-width: 768px) {
       display: initial;
     }
@@ -112,6 +105,7 @@ const closeModalSuccess = (value) => {
 
   &-col {
     width: 50%;
+
     @media (max-width: 768px) {
       width: initial;
     }

@@ -1,19 +1,8 @@
 <template>
     <div class="form-input" :style="{ width: width }">
-        <input
-            :type="type"
-            :name="name"
-            :style="{ height: height }"
-            :value="value"
-            :id="name"
-            :placeholder="placeholder"
-            :maxlength="maxLength"
-            :readonly="readonly"
-            max="9999-12-31"
-            class="mb-2"
-            @input="updateValue"
-            v-bind="$attrs"
-        />
+        <input :type="type" :name="name" :style="{ height: height }" :value="value" :id="name"
+            :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly" max="9999-12-31" class="mb-2"
+            @input="updateValue" v-bind="$attrs" />
     </div>
 </template>
 
