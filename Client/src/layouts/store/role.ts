@@ -1,5 +1,8 @@
+import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { HTTP } from '@app/http';
+
+const isAuth = ref(!!localStorage.getItem('jwt_token'));
 
 export const useRoleStore = defineStore('role', {
     state: () => ({
@@ -46,13 +49,15 @@ export const useRoleStore = defineStore('role', {
 
 
         async getMyPositions() {
-            const dataMyPositions = await HTTP.get('/rsousers/me_positions/', {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
-                },
-            });
-            this.myPositions = dataMyPositions.data;
+            if (isAuth.value) {
+                const dataMyPositions = await HTTP.get('/rsousers/me_positions/', {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
+                    },
+                });
+                this.myPositions = dataMyPositions.data;
+            }
         },
 
         async getPositions(id: String) {

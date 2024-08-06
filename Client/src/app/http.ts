@@ -15,15 +15,33 @@ export const HTTP = axios.create({
 
 let refreshTokenPromise = ref({})
 
-HTTP.interceptors.request.use(
+const urls = [
+  '/jwt/create/',
+  '/register/',
+  '/exchange-token/',
+  '/jwt/vk-login/',
+  '/jwt/verify/',
+  '/jwt/refresh/',
+  '/regions/',
+  '/reset_password/',
+  '/users/reset_password_confirm/',
+  'competitions/1/',
+  '/events/',
+  '/detachments/',
+  '/districts/',
+  '/regionals/',
+  '/eduicational_institutions/',
+  '/locals/',
+  '/educationals/',
+  '/centrals/1/',
+]
+
+HTTP.interceptors.request.use(  
   (config) => {
+    const configUrl = config.url?.split('?').shift();
+    console.log("результат", configUrl);
     if (
-      config.url == '/jwt/create/' || config.url == '/register/' || config.url == '/exchange-token/' ||
-      config.url == '/jwt/vk-login/' || config.url == '/jwt/verify/' || config.url == '/jwt/refresh/' ||
-      config.url == '/regions/' || config.url == '/reset_password/' ||
-      config.url == '/users/reset_password_confirm/' ||
-      config.url == 'competitions/1/' ||
-      config.url == '/events/?search='
+      urls.some(item => item === configUrl)
     ) {
       delete config.headers.Authorization;
     } else {

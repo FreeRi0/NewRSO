@@ -36,7 +36,6 @@
                     <ul class="header__nav-list">
                         <li
                             class="header__nav-item"
-                            v-if="Object.keys(userStore.currentUser).length"
                         >
                             <div class="nav-menu-item">
                                 <Dropdown title="Структура" :items="pages" />
