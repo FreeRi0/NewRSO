@@ -351,11 +351,18 @@ const closeSendApplication = () => {
 };
 
 onMounted(async () => {
-    await getUserCommander();
+    if (isAuth.value) {
+        await getUserCommander();
+    }
 
     await getCompetition();
-    await getSquadStatus();
-    await getMeSquad();
+    if (isAuth.value) {
+        await getSquadStatus();
+    }
+    if (isAuth.value) {
+        await getMeSquad();
+    }
+    
     getSizeImage();
     window.addEventListener('resize', getSizeImage);
 });

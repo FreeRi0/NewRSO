@@ -454,6 +454,7 @@ import {getListActionsByFilter, getListActionsBySearch, getRoles} from '@service
 import {useRouter} from "vue-router";
 import moment from "moment";
 
+const isAuth = ref(!!localStorage.getItem('jwt_token'));
 const router = useRouter();
 
 let actionsList = ref([]);
@@ -467,13 +468,15 @@ onActivated(() => {
     getListActionsBySearch(text.value).then((resp) => {
         actionsList.value = resp.data.results;
     });
-    getRoles().then((resp) => {
+    if (isAuth.value) {
+      getRoles().then((resp) => {
         Object.entries(resp.data).forEach(([key, value]) => {
             if (value !== null) {
                 rolesCount.value = rolesCount.value + 1;
             }
         });
-    });
+      });
+    }
 });
 const sortItems = (e) => {
   if (e === 'alphabetically') {
