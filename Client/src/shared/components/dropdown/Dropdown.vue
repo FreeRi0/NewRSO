@@ -178,6 +178,7 @@ const props = defineProps({
 // let id = route.params.id
 
 const LogOut = () => {
+    localStorage.removeItem('user');
     localStorage.removeItem('jwt_token');
     userStore.logOut();
     emit('updateUser', {});
