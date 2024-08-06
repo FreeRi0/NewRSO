@@ -12,16 +12,16 @@ export function patchReport(data: object) {
     return HTTP.patch('regional_competitions/statistical_report/me/', data)
 }
 
-export const fourthPanelService = {
-    createReport(data: object) {
-        return HTTP.post('regional_competitions/reports/4/', data)
+export const reportPartTwoService = {
+    createReport(data: object, panel: string) {
+        return HTTP.post(`regional_competitions/reports/${panel}/`, data)
     },
 
-    createReportDraft(data: object) {
-        return HTTP.put('regional_competitions/me/reports/4/', data)
+    createReportDraft(data: object, panel: string) {
+        return HTTP.put(`regional_competitions/me/reports/${panel}/`, data)
     },
 
-    getReport() {
-        return HTTP.get('regional_competitions/reports/4/')
+    getReport(panel: string) {
+        return HTTP.get(`regional_competitions/reports/${panel}/`)
     }
 }

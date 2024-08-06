@@ -523,7 +523,7 @@
 import { ref, watchEffect } from "vue";
 import { InputReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { fourthPanelService } from "@services/ReportService.ts";
+import { reportPartTwoService } from "@services/ReportService.ts";
 
 const tab = ref('one');
 const fourthPanelData = ref({
@@ -563,9 +563,9 @@ const focusOut = async () => {
   fourthPanelData.value.events = [ ...events.value ];
   try {
     if (events.value.length) {
-      await fourthPanelService.createReportDraft(fourthPanelData.value);
+      await reportPartTwoService.createReportDraft(fourthPanelData.value, '4');
     } else {
-      await fourthPanelService.createReport(fourthPanelData.value);
+      await reportPartTwoService.createReport(fourthPanelData.value, '4');
     }
   } catch (e) {
     console.log('focusOut error:', e);
@@ -575,14 +575,14 @@ const deleteEvent = async (index) => {
   events.value = events.value.filter((el, i) => index !== i);
   fourthPanelData.value.events = [ ...events.value ];
   try {
-    await fourthPanelService.createReportDraft(fourthPanelData.value);
+    await reportPartTwoService.createReportDraft(fourthPanelData.value, '4');
   } catch (e) {
     console.log('deleteEvent error: ', e);
   }
 };
 watchEffect(async () => {
   try {
-    const { data } = await fourthPanelService.getReport();
+    const { data } = await reportPartTwoService.getReport('4');
     events.value = [...data.results[0].events];
     fourthPanelData.value.comment = data.results[0].comment;
   } catch (e) {
