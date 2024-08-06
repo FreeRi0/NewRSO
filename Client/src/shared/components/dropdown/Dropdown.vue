@@ -179,6 +179,7 @@ const props = defineProps({
 
 const LogOut = () => {
     localStorage.removeItem('jwt_token');
+    localStorage.removeItem('user');
     userStore.logOut();
     emit('updateUser', {});
     router.push('/');
