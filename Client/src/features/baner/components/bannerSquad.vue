@@ -61,9 +61,9 @@
                     </div>
 
                     <router-link v-if="
-                        userId == squad.commander?.id ||
+                        userIs && (userId == squad.commander?.id ||
                         userId == regional.commander?.id ||
-                        IsTrusted
+                        IsTrusted)
                     " :to="{
                             name: 'EditLSO',
                             params: { id: squad.id },
@@ -134,9 +134,6 @@ const userStore = useUserStore();
 const route = useRoute();
 const user = storeToRefs(userStore);
 const roles = storeToRefs(roleStore);
-// let userId = computed(() => {
-//     return user.currentUser.value.id;
-// });
 
 const userId = localStorage.getItem('user');
 const regional = ref({});
@@ -167,11 +164,11 @@ const viewRegionals = async () => {
 
 
 const IsMember = computed(() => {
-    return props.member.find((item) => item.user.id === userId.value);
+    return props.member.find((item) => item.user.id == userId);
 });
 const IsTrusted = computed(() => {
     return props.member.find(
-        (item) => item.user.id === userId.value && item.is_trusted === true,
+        (item) => item.user.id == userId && item.is_trusted == true,
     );
 });
 

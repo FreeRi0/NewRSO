@@ -468,7 +468,7 @@
                             " label="Удалить заявку" class="AddApplication"></Button>
                     </div>
 
-                    <div v-else-if="(userStore.currentUser.regional_headquarter_id == props.regionalHeadquarter.id) && (userId != regionalHeadquarter?.commander?.id) "
+                    <div v-else-if="(userStore.currentUser.regional_headquarter_id == props.regionalHeadquarter.id)"
                         class="AddApplication">
                         Вы участник
                     </div>
