@@ -143,7 +143,7 @@ const reportData = ref(defaultReportData)
 watchEffect(async () => {
   try {
     const res = await getReport();
-    console.log('res: ', res)
+    // console.log('res: ', res)
     delete res.data.id;
     for (let i in res.data) {
       res.data[i] = res.data[i].toString()

@@ -52,7 +52,7 @@ const props = defineProps({
     type: Number,
   },
   value: {
-    type: String,
+    type: [String, Number],
   },
   disabled: {
     type: Boolean,

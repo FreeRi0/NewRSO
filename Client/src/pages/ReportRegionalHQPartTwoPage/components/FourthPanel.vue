@@ -9,14 +9,23 @@
             class="form__label"
             for="participants_number"
         >Количество человек, принявших участие в мероприятии <sup class="valid-red">*</sup></label>
-        <InputReport
-            v-model:value="event.participants_number"
-            :id="event.participants_number"
-            name="participants_number"
-            class="form__input"
-            type="number"
-            placeholder="Введите число"
-        />
+        <div style="display: flex; justify-content: space-between;">
+          <InputReport
+              v-model:value="event.participants_number"
+              :id="event.participants_number"
+              name="participants_number"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+          />
+          <Button
+              v-if="index > 0"
+              label="Удалить мероприятие"
+              style="margin: 0;"
+              @click="deleteEvent(index)"
+          />
+        </div>
       </div>
       <div style="display: flex;">
         <div class="form__field">
@@ -30,6 +39,7 @@
               name="start_date"
               class="form__input"
               type="date"
+              @focusout="focusOut"
           />
         </div>
         <div class="form__field">
@@ -43,6 +53,7 @@
               name="end_date"
               class="form__input"
               type="date"
+              @focusout="focusOut"
           />
         </div>
       </div>
@@ -100,6 +111,7 @@
               class="form__input"
               type="text"
               placeholder="https://vk.com/cco_monolit"
+              @focusout="focusOut"
           />
           <Button
               label="+ Добавить ссылку"
@@ -129,6 +141,7 @@
           type="textarea"
           placeholder="Укажите наименования организованных мероприятий"
           style="width: 100%;"
+          @focusout="focusOut"
       />
     </div>
     <div>
@@ -507,27 +520,16 @@
   </v-card>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, watchEffect } from "vue";
 import { InputReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
+import { fourthPanelService } from "@services/ReportService.ts";
 
-const tab = ref('one')
+const tab = ref('one');
 const fourthPanelData = ref({
   comment: '',
-  events: [
-    // {
-    //   participants_number: '',
-    //   start_date: '',
-    //   end_date: '',
-    //   links: [
-    //     {
-    //       link: '',
-    //     },
-    //   ],
-    //   is_interregional: false,
-    // }
-  ]
-})
+  events: []
+});
 const events = ref([
   {
     participants_number: '',
@@ -540,12 +542,10 @@ const events = ref([
     ],
     is_interregional: false,
   }
-])
+]);
 const addLink = (index) => {
   events.value[index].links.push({ link: '' })
-  fourthPanelData.value.events = [ ...events.value ]
-  console.log(fourthPanelData.value)
-}
+};
 const addEvent = () => {
   events.value.push({
     participants_number: '',
@@ -558,7 +558,37 @@ const addEvent = () => {
     ],
     is_interregional: false,
   })
-}
+};
+const focusOut = async () => {
+  fourthPanelData.value.events = [ ...events.value ];
+  try {
+    if (events.value.length) {
+      await fourthPanelService.createReportDraft(fourthPanelData.value);
+    } else {
+      await fourthPanelService.createReport(fourthPanelData.value);
+    }
+  } catch (e) {
+    console.log('focusOut error:', e);
+  }
+};
+const deleteEvent = async (index) => {
+  events.value = events.value.filter((el, i) => index !== i);
+  fourthPanelData.value.events = [ ...events.value ];
+  try {
+    await fourthPanelService.createReportDraft(fourthPanelData.value);
+  } catch (e) {
+    console.log('deleteEvent error: ', e);
+  }
+};
+watchEffect(async () => {
+  try {
+    const { data } = await fourthPanelService.getReport();
+    events.value = [...data.results[0].events];
+    fourthPanelData.value.comment = data.results[0].comment;
+  } catch (e) {
+    console.log(e);
+  }
+});
 </script>
 <style lang="scss" scoped>
 .panel-card {
