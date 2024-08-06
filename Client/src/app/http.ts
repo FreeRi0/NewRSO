@@ -72,6 +72,7 @@ HTTP.interceptors.response.use(
                   userStore.logOut();
                   localStorage.removeItem('jwt_token');
                   localStorage.removeItem('refresh_token');
+                  localStorage.removeItem('user');
                   router.push({ name: 'Login' });
                 })
             } else {
@@ -91,6 +92,7 @@ HTTP.interceptors.response.use(
             userStore.logOut();
             localStorage.removeItem('jwt_token');
             localStorage.removeItem('refresh_token');
+            localStorage.removeItem('user');
             router.push({ name: 'Login' });
           }
         } catch (error) {
