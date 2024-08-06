@@ -6,15 +6,15 @@
                 <regionsDropdown open-on-clear id="reg" name="regdrop" placeholder="Выберите регион обучения"
                     v-model="form.region" @update:value="changeValue" class="mb-2 region-input" address="/regions/">
                 </regionsDropdown>
-                <Input placeholder="Фамилия" name="surname" height="40px" v-model:value.trim="form.last_name" />
+                <Input placeholder="Фамилия" name="surname" height="40px" v-model:value.trim="form.last_name" maxlength="25" is-cyrillic />
                 <p class="error" v-if="isError.last_name">
                     {{ isError.last_name }}
                 </p>
-                <Input placeholder="Имя" name="name" height="40px" v-model:value.trim="form.first_name" />
+                <Input placeholder="Имя" name="name" height="40px" v-model:value.trim="form.first_name" maxlength="20" />
                 <p class="error" v-if="isError.first_name">
                     {{ isError.first_name }}
                 </p>
-                <Input placeholder="Отчество (при наличии)" name="patronomyc" height="40px"
+                <Input placeholder="Отчество (при наличии)" name="patronomyc" height="40px" maxlength="23"
                     v-model:value.trim="form.patronymic_name" />
                 <div class="form-input">
                     <MaskInput type="tel" placeholder="+7 (999) 999-99-99" name="phone" class="mb-2 phone-input"

@@ -9,6 +9,7 @@
             :placeholder="placeholder"
             :maxlength="maxLength"
             :readonly="readonly"
+            :is-cyrillic="isCyrillic"
             max="9999-12-31"
             class="mb-2"
             @input="updateValue"
@@ -60,11 +61,25 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    isCyrillic: {
+        type: Boolean,
+        default: false,
+    }
 });
 
+// const updateValue = (event) => {
+//     emit('update:value', event.target.value);
+// };
+
 const updateValue = (event) => {
-    emit('update:value', event.target.value);
+    console.log(
+        "атрибут isCyrillic -", event.target.isCyrillic, 
+        event,
+    );
+    emit('update:value', event.target.isCyrillic ? event.target.value.replace(/[^а-яА-ЯЁё\s]/gi, "") : event.target.value);
 };
+
+
 </script>
 
 <style lang="scss" scoped>
