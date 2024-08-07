@@ -146,6 +146,10 @@ const sentReport = () => {
   }
 }
 
+.form__field-group p {
+  color: #6D6D6D;
+}
+
 .report_title-h3 {
   font-family: Akrobat;
   font-size: 18px;
