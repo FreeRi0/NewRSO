@@ -57,7 +57,7 @@
         </div>
         <div class="form__field">
           <label class="form__label" for="top">ТОП <sup class="valid-red">*</sup></label>
-          <InputReport v-model:value="reportDataChildren.employed_top" id="top" name="top" class="form__input"
+          <InputReport v-model:value="reportDataChildren.employed_top" id="top" name="top" class="form__input mb-2"
             type="number" placeholder="Введите число" :disabled="!isNewReport" />
         </div>
       </div>
@@ -97,6 +97,15 @@ const sentReport = () => {
 };
 </script>
 <style lang="scss" scoped>
+.mb-2 {
+  max-width: 100%;
+  border-radius: 10px;
+
+  @media (max-width: 568px) {
+    width: 300px;
+  }
+}
+
 .valid-red {
   color: #db0000;
 }
