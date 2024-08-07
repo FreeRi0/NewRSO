@@ -11,7 +11,7 @@ export const useRoleStore = defineStore('role', {
         myPositions: {},
         positions: {},
         isLoadingRoles: false,
-        status: {}
+        status: {},
     }),
     actions: {
         async getRoles() {
@@ -24,6 +24,7 @@ export const useRoleStore = defineStore('role', {
                 },
             });
             this.roles = data.data;
+            console.log(data.data);
             this.isLoadingRoles = false;
         },
 
@@ -38,15 +39,19 @@ export const useRoleStore = defineStore('role', {
         },
 
         async getUserParticipantsStatus(competition_pk: string) {
-            const dataUserStatus = await HTTP.get(`/competitions/${competition_pk}/participants/status/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
+            const dataUserStatus = await HTTP.get(
+                `/competitions/${competition_pk}/participants/status/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization:
+                            'JWT ' + localStorage.getItem('jwt_token'),
+                    },
                 },
-            });
+            );
             this.status = dataUserStatus.data;
+            console.log(dataUserStatus.data);
         },
-
 
         async getMyPositions() {
             if (isAuth.value) {
