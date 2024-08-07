@@ -533,8 +533,8 @@ const fourthPanelData = ref({
 const events = ref([
   {
     participants_number: '',
-    start_date: '',
-    end_date: '',
+    start_date: null,
+    end_date: null,
     links: [
       {
         link: '',
@@ -549,8 +549,8 @@ const addLink = (index) => {
 const addEvent = () => {
   events.value.push({
     participants_number: '',
-    start_date: '',
-    end_date: '',
+    start_date: null,
+    end_date: null,
     links: [
       {
         link: '',
