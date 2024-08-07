@@ -60,8 +60,12 @@ const updateValue = (event) => {
 
 <style lang="scss" scoped>
 .mb-2 {
-  width: 100%;
+  width: 340px;
   border-radius: 10px;
+
+  @media (max-width: 568px) {
+    width: 300px;
+  }
 }
 
 // <!--.error-wrapper {-->

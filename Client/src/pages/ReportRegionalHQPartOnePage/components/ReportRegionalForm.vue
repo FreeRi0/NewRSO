@@ -28,8 +28,6 @@
             name="specialized_detachment" class="form__input" type="number" placeholder="Введите число"
             :disabled="!isNewReport" />
         </div>
-      </div>
-      <div class="form-col">
         <div class="form__field">
           <label class="form__label" for="spo">СПО <sup class="valid-red">*</sup></label>
           <InputReport v-model:value="reportDataChildren.employed_spo" id="spo" name="spo" class="form__input"
@@ -47,8 +45,6 @@
             name="production_detachments" class="form__input" type="number" placeholder="Введите число"
             :disabled="!isNewReport" />
         </div>
-      </div>
-      <div class="form-col">
         <div class="form__field">
           <label class="form__label" for="sop">СОП <sup class="valid-red">*</sup></label>
           <InputReport v-model:value="reportDataChildren.employed_sop" id="sop" name="sop" class="form__input"
@@ -120,12 +116,14 @@ const sentReport = () => {
   }
 
   &-col {
-    width: 50%;
-    margin-bottom: 80px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
 
-    @media (max-width: 768px) {
-      width: initial;
-      margin-bottom: 40px;
+    @media (max-width: 827px) {
+      justify-content: center;
     }
   }
 
@@ -141,7 +139,7 @@ const sentReport = () => {
   border: none;
   background-color: #F3F4F5;
 
-  @media (max-width: 768px) {
+  @media (max-width: 827px) {
     align-items: center;
   }
 }
