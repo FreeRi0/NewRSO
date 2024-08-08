@@ -6,7 +6,7 @@
             :is-error-members="isErrorMembers" v-if="headquarter && isError && isErrorMembers && !loading"
             @submit.prevent="changeHeadquarter" @select-emblem="onSelectEmblem" @select-banner="onSelectBanner"
             @delete-emblem="onDeleteEmblem" @delete-banner="onDeleteBanner" @update-search-member="onUpdateSearchMember"
-            @update-member="onUpdateMember"  @delete-member="onDeleteMember">
+            @update-member="onUpdateMember" @delete-member="onDeleteMember">
         </FormCentr>
     </div>
 </template>
@@ -39,6 +39,8 @@ let id = route.params.id;
 
 const headquarter = ref(null);
 const members = ref([]);
+const sub_commanders = ref([]);
+
 const timerSearchMember = ref(null);
 const searchMemberString = ref('');
 
@@ -46,6 +48,18 @@ const { replaceTargetObjects } = usePage();
 
 const loading = ref(false);
 const isCommanderLoading = ref(false);
+
+
+const getSubCommanders = async () => {
+    if (typeof id !== 'undefined') {
+        try {
+            const response = await HTTP.get(`/centrals/sub_commanders/${id}/members/`);
+            sub_commanders.value = response.data;
+        } catch (error) {
+            console.log('an error occured' + error);
+        }
+    }
+}
 
 const getHeadquarter = async () => {
     loading.value = true;
@@ -78,6 +92,7 @@ const getMembers = async (name) => {
     HTTP.get(`/centrals/${id}/members/?search=${name}`,)
         .then((response) => {
             members.value = response.data.results;
+            console.log('sub', sub_commanders.value)
         })
         .catch(function (error) {
             console.log('an error occured ' + error);
@@ -87,8 +102,9 @@ const getMembers = async (name) => {
         });
 };
 
-onMounted(() => {
-    getHeadquarter();
+onMounted(async () => {
+    await getSubCommanders();
+    await getHeadquarter();
 });
 
 const onUpdateSearchMember = (event) => {
@@ -110,23 +126,23 @@ const onUpdateMember = (event, id) => {
     if (firstkey == 'position')
         members.value[memberIndex].position.id = event[firstkey];
     else members.value[memberIndex][firstkey] = event[firstkey];
-    if (firstkey == 'is_trusted'){
+    if (firstkey == 'is_trusted') {
         const payload = {
             id_trusted: event[firstkey],
         }
-        try{
+        try {
             HTTP.patch(
                 `/detachments/${route.params.id}/members/${id}/`,
                 payload
             )
-        } catch(e){
+        } catch (e) {
             console.log(e);
         }
     }
 };
 
 const onDeleteMember = (id) => {
-    const memberIndex =  members.value.findIndex((member) => member.id === id);
+    const memberIndex = members.value.findIndex((member) => member.id === id);
     members.value.splice(memberIndex, 1);
     // members.value[memberIndex].change = true;
 }
@@ -242,7 +258,7 @@ const changeHeadquarter = async () => {
         await HTTP.patch(`/centrals/1/`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                 Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
+                Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
             },
         });
         swal.fire({

@@ -664,9 +664,6 @@ const props = defineProps({
     edict: {
         type: Object,
     },
-    member: {
-        type: Object,
-    },
     ending: {
         type: String,
     },

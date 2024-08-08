@@ -1,28 +1,17 @@
 <template>
     <div class="container">
         <h1 class="title title--hq">Центральный штаб</h1>
-        <BannerHQ
-            :centralHeadquarter="centralHeadquarter"
-            :member="centralHeadquarter.leadership"
-            :ending="ending"
-            :endingMember="endingMember"
-        ></BannerHQ>
-        <section
-            class="about-hq"
-            v-if="
-                centralHeadquarter.about && centralHeadquarter.about != 'null'
-            "
-        >
+        <BannerHQ :centralHeadquarter="centralHeadquarter" :ending="ending"
+            :endingMember="endingMember"></BannerHQ>
+        <section class="about-hq" v-if="
+            centralHeadquarter.about && centralHeadquarter.about != 'null'
+        ">
             <h3>Описание центрального штаба</h3>
 
             <p>{{ centralHeadquarter.about }}</p>
         </section>
-        <ManagementHQ
-            :commander="centralHeadquarter.commander"
-            head="Руководство центрального штаба"
-            :position="position"
-            :leadership="centralHeadquarter.leadership"
-        >
+        <ManagementHQ :commander="centralHeadquarter.commander" head="Руководство центрального штаба"
+            :position="position" :leadership="centralHeadquarter.leadership">
         </ManagementHQ>
         <HQandSquad></HQandSquad>
     </div>
@@ -46,6 +35,7 @@ const centralHeadquarter = ref({});
 const route = useRoute();
 let id = route.params.id;
 
+
 const { replaceTargetObjects } = usePage();
 
 const aboutCentralHQs = async () => {
@@ -60,6 +50,7 @@ const aboutCentralHQs = async () => {
         }
     }
 };
+
 
 watch(
     () => route.params.id,

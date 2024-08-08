@@ -43,16 +43,6 @@
 </template>
 
 <script setup>
-import { HTTP } from '@app/http';
-import {ref, onMounted} from 'vue';
-
-
-const leadership = ref([]);
-
-const getLeaderShip = async() => {
-    const response  = await HTTP.get('centrals/sub_commanders/1/members/')
-    leadership.value = response.data;
-}
 
 const props = defineProps({
     member: {
@@ -72,9 +62,6 @@ const props = defineProps({
     },
 });
 
-onMounted(() => {
-    getLeaderShip();
-})
 </script>
 
 <style scoped lang="scss">
