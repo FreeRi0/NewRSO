@@ -1,0 +1,30 @@
+.Report-Regional-Form__style {
+    .form__input {
+        width: 340px;
+        border-radius: 10px;
+
+        @media (max-width: 1231px) {
+            width: 280px;
+        }
+
+        @media (max-width: 1051px) {
+            width: 260px;
+        }
+
+        @media (max-width: 927px) {
+            width: 240px;
+        }
+
+        @media (max-width: 867px) {
+            width: 220px;
+        }
+
+        @media (max-width: 807px) {
+            width: 290px;
+        }
+
+        @media (max-width: 568px) {
+            width: 300px;
+        }
+    }
+}
