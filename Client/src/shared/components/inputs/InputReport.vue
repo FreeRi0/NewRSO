@@ -59,15 +59,6 @@ const updateValue = (event) => {
 </script>
 
 <style lang="scss" scoped>
-// .mb-2 {
-//   max-width: 100%;
-//   border-radius: 10px;
-
-//   @media (max-width: 568px) {
-//     width: 300px;
-//   }
-// }
-
 // <!--.error-wrapper {-->
 // <!--  // margin-bottom: 5px;-->
 // <!--  position: relative;-->

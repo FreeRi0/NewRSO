@@ -1,5 +1,5 @@
 <template>
-  <form class="form__field-group" @submit.prevent="sentReport">
+  <form class="form__field-group Report-Regional-Form__style" @submit.prevent="sentReport">
     <h2 v-if="!isNewReport" class="report_title-h3">Свод статистических данных по трудоустройству бойцов студенческих
       отрядов РО за 2024 год на 1 сентября 2024 года</h2>
     <div class="form__field">
@@ -57,7 +57,7 @@
         </div>
         <div class="form__field">
           <label class="form__label" for="top">ТОП <sup class="valid-red">*</sup></label>
-          <InputReport v-model:value="reportDataChildren.employed_top" id="top" name="top" class="form__input mb-2"
+          <InputReport v-model:value="reportDataChildren.employed_top" id="top" name="top" class="form__input"
             type="number" placeholder="Введите число" :disabled="!isNewReport" />
         </div>
       </div>
@@ -97,15 +97,6 @@ const sentReport = () => {
 };
 </script>
 <style lang="scss" scoped>
-.mb-2 {
-  max-width: 100%;
-  border-radius: 10px;
-
-  @media (max-width: 568px) {
-    width: 300px;
-  }
-}
-
 .valid-red {
   color: #db0000;
 }
@@ -127,11 +118,11 @@ const sentReport = () => {
   &-col {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
     width: 100%;
     height: 100%;
+    justify-content: space-between;
 
-    @media (max-width: 827px) {
+    @media (max-width: 643px) {
       justify-content: center;
     }
   }
@@ -148,7 +139,7 @@ const sentReport = () => {
   border: none;
   background-color: #F3F4F5;
 
-  @media (max-width: 827px) {
+  @media (max-width: 643px) {
     align-items: center;
   }
 }
