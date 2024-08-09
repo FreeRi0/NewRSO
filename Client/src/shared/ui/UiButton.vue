@@ -6,7 +6,7 @@
 <script setup lang="ts">
 withDefaults(
     defineProps<{
-        variant?: 'primary';
+        variant?: 'primary' | 'secondary';
         active?: boolean;
     }>(),
     {
@@ -27,6 +27,19 @@ withDefaults(
     --bg-color-active: rgb(28, 92, 148);
     --color-active: rgb(255, 255, 255);
     --border-active: 2px solid rgb(28, 92, 148);
+}
+
+.secondary {
+    --font-size: 16px;
+    --font-weight: 400;
+    --bg-color: rgb(57, 191, 191);
+    --color: rgb(255, 255, 255);
+    --border: none;
+    --border-radius: 10px;
+    --padding: 12px 32px;
+    --bg-color-active: rgb(28, 92, 148);
+    --color-active: rgb(255, 255, 255);
+    --border-active: none;
 }
 
 @media screen and (max-width: 768px) {

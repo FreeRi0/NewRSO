@@ -1192,7 +1192,7 @@ import { Input } from '@shared/components/inputs';
 import { Cropper } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
 import { HTTP } from '@app/http';
-import SvgIcon from '@shared/components/SvgIcon/SvgIcon.vue';
+import SvgIcon from '@shared/ui/SvgIcon/SvgIcon.vue';
 
 const router = useRouter();
 const route = useRoute();
