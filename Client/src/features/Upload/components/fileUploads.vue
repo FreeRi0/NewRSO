@@ -15,7 +15,7 @@
     </div>
 </template>
 <script setup>
-import SvgIcon from '@shared/components/SvgIcon/SvgIcon.vue';
+import SvgIcon from '@shared/ui/SvgIcon/SvgIcon.vue';
 </script>
 <style lang="scss">
 .statement-title {

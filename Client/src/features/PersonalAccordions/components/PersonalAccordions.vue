@@ -3969,7 +3969,7 @@ import { storeToRefs } from 'pinia';
 import { TextArea } from '@shared/components/inputs';
 import { MaskInput } from 'vue-3-mask';
 import { userData } from '@features/userData';
-import { SvgIcon } from '@shared/components/SvgIcon';
+import { SvgIcon } from '@shared/ui/SvgIcon';
 const props = defineProps({
     button: Boolean,
     user: Object,

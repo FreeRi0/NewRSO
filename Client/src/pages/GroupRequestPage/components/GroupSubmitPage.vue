@@ -154,7 +154,7 @@ import GroupFilters from './GroupFilters.vue';
 import GroupSubmitItem from './GroupSubmitItem.vue';
 import GroupSubmitSelect from './GroupSubmitSelect.vue';
 import * as XLSX from 'xlsx';
-import SvgIcon from '@shared/components/SvgIcon/SvgIcon.vue';
+import SvgIcon from '@shared/ui/SvgIcon/SvgIcon.vue';
 
 const swal = inject('$swal');
 

@@ -259,7 +259,7 @@ import { useRegionalsStore } from '@features/store/regionals';
 import { useRoleStore } from '@layouts/store/role';
 import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
-import SvgIcon from '@shared/components/SvgIcon/SvgIcon.vue';
+import { SvgIcon } from '@shared/ui/SvgIcon';
 
 const props = defineProps({
     isActive: {
@@ -433,7 +433,9 @@ const userPages = computed(() => [
     {
         title: 'Рейтинг РО',
         name: 'reportingRo',
-        show: roleStore.roles?.regionalheadquarter_commander || roleStore.roles.centralheadquarter_commander,
+        show:
+            roleStore.roles?.regionalheadquarter_commander ||
+            roleStore.roles.centralheadquarter_commander,
     },
 
     {

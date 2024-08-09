@@ -27,7 +27,7 @@
 </template>
 <script setup>
 import { useRoleStore } from '@layouts/store/role';
-import SvgIcon from '@shared/components/SvgIcon/SvgIcon.vue';
+import SvgIcon from '@shared/ui/SvgIcon/SvgIcon.vue';
 import { storeToRefs } from 'pinia';
 
 const roleStore = useRoleStore();

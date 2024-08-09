@@ -8,11 +8,17 @@
     <h3 v-if="variant === 'h3'" v-bind="$attrs" class="heading h3">
         <slot />
     </h3>
+    <h4 v-if="variant === 'h4'" v-bind="$attrs" class="heading h4">
+        <slot />
+    </h4>
+    <h5 v-if="variant === 'h5'" v-bind="$attrs" class="heading h5">
+        <slot />
+    </h5>
 </template>
 <script setup lang="ts">
 withDefaults(
     defineProps<{
-        variant?: 'h1' | 'h2' | 'h3' | 'h4';
+        variant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5';
     }>(),
     {
         variant: 'h1',
@@ -30,6 +36,15 @@ withDefaults(
 }
 .h3 {
     --font-size: 32px;
+    --font-weight: 600;
+}
+.h4 {
+    --font-size: 24px;
+    --font-weight: 600;
+}
+
+.h4 {
+    --font-size: 20px;
     --font-weight: 600;
 }
 

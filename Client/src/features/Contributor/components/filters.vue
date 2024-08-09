@@ -1,7 +1,9 @@
 <template>
     <h3 class="filters-title">Основные фильтры</h3>
     <v-expansion-panels>
-        <v-expansion-panel v-if="roles.roles.value.centralheadquarter_commander">
+        <v-expansion-panel
+            v-if="roles.roles.value.centralheadquarter_commander"
+        >
             <v-expansion-panel-title>
                 <template v-slot:default="{ expanded }">
                     <v-row no-gutters>
@@ -12,11 +14,19 @@
                 </template>
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-                <districtSearchFilter open-on-clear id="reg" name="regdrop" placeholder="Выберите окружной штаб"
-                    v-model="districtRef" @update:value="updateDistrict" class="mb-2 region-input" :items="districts"
-                    :SortDropdown="true"></districtSearchFilter>
+                <districtSearchFilter
+                    open-on-clear
+                    id="reg"
+                    name="regdrop"
+                    placeholder="Выберите окружной штаб"
+                    v-model="districtRef"
+                    @update:value="updateDistrict"
+                    class="mb-2 region-input"
+                    :items="districts"
+                    :SortDropdown="true"
+                ></districtSearchFilter>
             </v-expansion-panel-text>
-            <p v-if="districtRef">Выбрано: {{ districtRef }}</p>
+            <!-- <p v-if="districtRef">Выбрано: {{ districtRef }}</p> -->
         </v-expansion-panel>
         <v-expansion-panel>
             <v-expansion-panel-title v-if="districtRef !== null">
@@ -29,9 +39,17 @@
                 </template>
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-                <regionalsDropdown open-on-clear id="reg" name="regdrop" placeholder="Выберите рег штаб"
-                    v-model="regRef" @update:value="updateReg" class="mb-2 region-input" :items="regionals"
-                    :SortDropdown="true">
+                <regionalsDropdown
+                    open-on-clear
+                    id="reg"
+                    name="regdrop"
+                    placeholder="Выберите рег штаб"
+                    v-model="regRef"
+                    @update:value="updateReg"
+                    class="mb-2 region-input"
+                    :items="regionals"
+                    :SortDropdown="true"
+                >
                 </regionalsDropdown>
             </v-expansion-panel-text>
             <p v-if="regRef">Выбрано: {{ regRef }}</p>
@@ -47,9 +65,17 @@
                 </template>
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-                <localSearchFilter open-on-clear id="reg" name="regdrop" placeholder="Выберите местный штаб"
-                    v-model="localRef" @update:value="updateLocal" class="mb-2 region-input" :items="locals"
-                    :SortDropdown="true">
+                <localSearchFilter
+                    open-on-clear
+                    id="reg"
+                    name="regdrop"
+                    placeholder="Выберите местный штаб"
+                    v-model="localRef"
+                    @update:value="updateLocal"
+                    class="mb-2 region-input"
+                    :items="locals"
+                    :SortDropdown="true"
+                >
                 </localSearchFilter>
             </v-expansion-panel-text>
             <p v-if="localRef">Выбрано: {{ localRef }}</p>
@@ -65,9 +91,17 @@
                 </template>
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-                <educationalsDropdown open-on-clear id="reg" name="regdrop" placeholder="Выберите обр штаб"
-                    v-model="educRef" @update:value="updateEduc" class="mb-2 region-input" :items="educHead"
-                    :SortDropdown="true">
+                <educationalsDropdown
+                    open-on-clear
+                    id="reg"
+                    name="regdrop"
+                    placeholder="Выберите обр штаб"
+                    v-model="educRef"
+                    @update:value="updateEduc"
+                    class="mb-2 region-input"
+                    :items="educHead"
+                    :SortDropdown="true"
+                >
                 </educationalsDropdown>
             </v-expansion-panel-text>
             <p v-if="educRef">Выбрано: {{ educRef }}</p>
@@ -82,7 +116,7 @@
                     </v-row>
                 </template>
             </v-expansion-panel-title>
-            <v-expansion-panel-text  >
+            <v-expansion-panel-text>
                 <lsoSerachFilter
                     open-on-clear
                     id="reg"
@@ -95,7 +129,6 @@
                     :items="detachments"
                     :SortDropdown="true"
                 ></lsoSerachFilter>
-
             </v-expansion-panel-text>
             <p v-if="detachmentRef">Выбрано: {{ detachmentRef }}</p>
         </v-expansion-panel>
@@ -111,18 +144,36 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
                 <div class="radio-buttons-field filter-text">
-                    <input type="radio" id="fee1" name="fee" value="all" v-model="membershipRef"
-                        @update:model-value="updateMembership" />
+                    <input
+                        type="radio"
+                        id="fee1"
+                        name="fee"
+                        value="all"
+                        v-model="membershipRef"
+                        @update:model-value="updateMembership"
+                    />
                     <label for="fee1">Все</label>
                 </div>
                 <div class="radio-buttons-field filter-text">
-                    <input type="radio" id="fee2" name="fee" value="paid" v-model="membershipRef"
-                        @update:model-value="updateMembership" />
+                    <input
+                        type="radio"
+                        id="fee2"
+                        name="fee"
+                        value="paid"
+                        v-model="membershipRef"
+                        @update:model-value="updateMembership"
+                    />
                     <label for="fee2">Оплачен</label>
                 </div>
                 <div class="radio-buttons-field filter-text">
-                    <input type="radio" id="fee3" name="fee" value="notPaid" v-model="membershipRef"
-                        @update:model-value="updateMembership" />
+                    <input
+                        type="radio"
+                        id="fee3"
+                        name="fee"
+                        value="notPaid"
+                        v-model="membershipRef"
+                        @update:model-value="updateMembership"
+                    />
                     <label for="fee3">Не оплачен</label>
                 </div>
             </v-expansion-panel-text>
@@ -205,7 +256,7 @@ const emit = defineEmits([
     'updateEduc',
     'updateDetachment',
     'searchDetachment',
-    'updateMembership'
+    'updateMembership',
 ]);
 
 const updateDistrict = () => {
@@ -231,20 +282,18 @@ const updateDetachment = () => {
 
 const updateMembership = () => {
     emit('updateMembership', membershipRef.value);
-}
+};
 
 watch(
     () => props.district,
     () => {
         districtRef.value = props.district;
-
     },
 );
 watch(
     () => props.reg,
     () => {
         regRef.value = props.reg;
-
     },
 );
 
@@ -252,7 +301,6 @@ watch(
     () => props.local,
     () => {
         localRef.value = props.local;
-
     },
 );
 
@@ -260,7 +308,6 @@ watch(
     () => props.educ,
     () => {
         educRef.value = props.educ;
-
     },
 );
 
@@ -277,7 +324,6 @@ watch(
         membershipRef.value = props.membership;
     },
 );
-
 </script>
 <style lang="scss">
 .v-expansion-panel {
@@ -294,7 +340,7 @@ watch(
         margin: 0;
     }
 
-    &--active+.v-expansion-panel {
+    &--active + .v-expansion-panel {
         margin: 0;
     }
 

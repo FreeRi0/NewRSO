@@ -156,7 +156,7 @@ import { useLocalsStore } from '@features/store/local';
 import { useEducationalsStore } from '@features/store/educationals';
 import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
-import SvgIcon from '@shared/components/SvgIcon/SvgIcon.vue';
+import SvgIcon from '@shared/ui/SvgIcon/SvgIcon.vue';
 
 const props = defineProps({
     me: {
