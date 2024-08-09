@@ -1,8 +1,20 @@
 <template>
     <div class="form-input" :style="{ width: width }">
-        <input :type="type" :name="name" :style="{ height: height }" :value="value" :id="name"
-            :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly" max="9999-12-31" class="mb-2"
-            @input="updateValue" v-bind="$attrs" />
+        <input
+            :type="type"
+            :name="name"
+            :style="{ height: height }"
+            :value="value"
+            :id="name"
+            :placeholder="placeholder"
+            :maxlength="maxLength"
+            :readonly="readonly"
+            max="9999-12-31"
+            class="mb-2"
+            @input="updateValue"
+            v-bind="$attrs"
+        />
+        <span class="error-text">{{ errorMessage }}</span>
     </div>
 </template>
 
@@ -49,6 +61,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    errorMessage: {
+        type: String,
+        default: '',
+    }
 });
 
 const updateValue = (event) => {
@@ -106,5 +122,16 @@ input:focus {
     padding: 10px 110px 10px 16px;
     margin-bottom: 20px;
     width: 100%;
+}
+
+.error-text {
+    display: none;
+    color: #db0000;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: "Acrobat";
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: center;
 }
 </style>
