@@ -20,7 +20,8 @@
           (исключения — учебные заведения специальных ведомств, проводящих обучение на казарменном положении)
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <second-panel/>
+          <calculated-panel
+            text="Показатель рассчитывается автоматически на основе данных, предоставленных Аппаратом РСО." />
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -28,7 +29,8 @@
           3. Прирост численности членов РО РСО относительно количества членов в соответствии с отчетом РО РСО за 2023 г.
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <third-panel />
+          <calculated-panel
+            text="Показатель рассчитывается автоматически на основе данных, предоставленных Аппаратом РСО." />
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -73,7 +75,8 @@
           и трудовых проектах, организованных РО РСО «К»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <eighth-panel />
+          <calculated-panel
+            text="Показатель рассчитывается автоматически на основе данных сервиса «Медиалогия», предоставленных Аппаратом РСО." />
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -118,27 +121,31 @@
       </v-expansion-panel>
       <v-expansion-panel>
         <v-expansion-panel-title>
-          14. Отношение объема средств, собранных бойцами РО РСО во Всероссийском дне ударного труда к количеству членов РО РСО,
+          14. Отношение объема средств, собранных бойцами РО РСО во Всероссийском дне ударного труда к количеству членов
+          РО РСО,
           принявших участие во Всероссийском дне ударного труда
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <fourteenth-panel />
+          <calculated-panel text="Показатель рассчитывается автоматически на основе данных из 12 и 13 показателей." />
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
         <v-expansion-panel-title>
           15. Исполнительская дисциплина РО РСО, соблюдение условий охраны труда на трудовых проектах РСО,
-          наличие проблемной неурегулированной задолженности по выплате заработной платы перед бойцами РСО за трудовой семестр предыдущего года,
+          наличие проблемной неурегулированной задолженности по выплате заработной платы перед бойцами РСО за трудовой
+          семестр предыдущего года,
           отсутствие отчислений от членских взносов в Центральный штаб,
           исполнение решений Центральных руководящих органов РСО, наличие ежегодного акта проверки КРК РО РСО
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <fifteenth-panel />
+          <calculated-panel
+            text="Показатель рассчитывается автоматически на основе данных, предоставленных Аппаратом РСО." />
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
         <v-expansion-panel-title>
-          16. Победители всероссийских (международных), окружных и межрегиональных трудовых проектов по комиссарской деятельности «К»
+          16. Победители всероссийских (международных), окружных и межрегиональных трудовых проектов по комиссарской
+          деятельности «К»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <sixteenth-panel />
@@ -170,29 +177,21 @@
       </v-expansion-panel>
     </v-expansion-panels>
   </div>
-  <Button
-      variant="text"
-      label="Отправить отчет"
-      size="large"
-  />
+  <Button variant="text" label="Отправить отчет" size="large" />
 </template>
 <script setup>
 import {
+  CalculatedPanel,
   FirstPanel,
-  SecondPanel,
-  ThirdPanel,
   FourthPanel,
   FifthPanel,
   SixthPanel,
   SeventhPanel,
-  EighthPanel,
   NinthPanel,
   TenthPanel,
   EleventhPanel,
   TwelfthPanel,
   ThirteenthPanel,
-  FourteenthPanel,
-  FifteenthPanel,
   SixteenthPanel,
   SeventeenthPanel,
   EighteenthPanel,
@@ -205,12 +204,15 @@ import { Button } from '@shared/components/buttons';
 .v-expansion-panel__shadow {
   box-shadow: none;
 }
+
 .mdi-chevron-down::before {
   content: "";
 }
+
 .mdi-chevron-up::before {
   content: "";
 }
+
 .v-expansion-panel-title {
   background: #F3F4F5;
   margin-bottom: 8px;
@@ -222,12 +224,15 @@ import { Button } from '@shared/components/buttons';
   text-align: left;
 
 }
+
 .v-expansion-panel-text__wrapper {
   padding: 8px 0 0 0;
 }
+
 .v-expansion-panel-title__overlay {
   border-radius: 6px;
 }
+
 .v-expansion-panel:not(:first-child)::after {
   border-top-style: none;
 }
