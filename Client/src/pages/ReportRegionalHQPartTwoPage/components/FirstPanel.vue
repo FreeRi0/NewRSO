@@ -1,5 +1,55 @@
 <template>
-  <v-card class="panel-card" >
+  <div v-if="true">
+    <div class="form__field-group">
+      <div style="display: flex;">
+          <div class="form__field">
+            <label
+                class="form__label"
+                for="amount_of_money"
+            >Общая сумма уплаченных членских взносов РО  <sup class="valid-red">*</sup></label>
+            <InputReport
+                v-model:value="firstPanelData.amount_of_money"
+                id="amount_of_money"
+                name="amount_of_money"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                @focusout="focusOut"
+            />
+          </div>
+          <div>
+            <label
+                class="form__label"
+                for="scan_file"
+            >Скан платежного поручения об уплате ЧВ <sup class="valid-red">*</sup></label>
+            <v-file-input
+                type="file"
+                id="scan_file"
+                name="scan_file"
+                @change="previewFiles"
+            />
+            <label for="file">{{ firstPanelData.scan_file }}</label>
+          </div>
+        </div>
+      <div  class="form__field">
+          <label
+              class="form__label"
+              for="comment"
+          >Комментарий <sup class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="firstPanelData.comment"
+              id="comment"
+              name="comment"
+              class="form__input"
+              style="width: 100%"
+              @focusout="focusOut"
+          />
+        </div>
+    </div>
+    <ReportRegionalForm :reportData="reportData" />
+  </div>
+
+  <v-card v-else class="panel-card" >
     <v-tabs
         v-model="tab"
     >
@@ -11,7 +61,7 @@
       <v-card-text class="panel-card-text">
         <v-tabs-window v-model="tab">
           <v-tabs-window-item value="one">
-            <form class="form__field-group" @submit.prevent>
+            <div class="form__field-group">
               <div style="display: flex;">
                 <div class="form__field">
                   <label
@@ -50,8 +100,7 @@
                     style="width: 100%"
                 />
               </div>
-            </form>
-            <ReportRegionalForm :reportData="reportData" />
+            </div>
           </v-tabs-window-item>
           <v-tabs-window-item value="two">
             <form class="form__field-group" @submit.prevent>
@@ -123,7 +172,8 @@
 import { ref, watchEffect } from "vue";
 import { InputReport } from '@shared/components/inputs';
 import { ReportRegionalForm } from '../../ReportRegionalHQPartOnePage/components/index'
-import { getReport } from "@services/ReportService.ts";
+import { getReport, reportPartTwoService } from "@services/ReportService.ts";
+import { HTTP } from "@app/http.ts";
 
 const defaultReportData = {
   participants_number: '0',
@@ -137,22 +187,62 @@ const defaultReportData = {
   employed_ssho: '0',
   employed_top: '0',
 };
-const tab = ref('one')
-const reportData = ref(defaultReportData)
+const tab = ref('one');
+const reportData = ref(defaultReportData);
+const isFirstSent = ref(true);
+const scanFile = ref([]);
+const firstPanelData = ref({
+  comment: '',
+  amount_of_money: '',
+  scan_file: '',
+});
+const previewFiles = (event) => {
+  scanFile.value = event.target.files[0];
+};
+const focusOut = () => {
+  let formData = new FormData();
+  formData.append('scan_file', scanFile.value);
+  formData.append('comment', firstPanelData.value.comment);
+  formData.append('amount_of_money', firstPanelData.value.amount_of_money);
 
+  if (isFirstSent.value) {
+    reportPartTwoService.createReport(formData, '1', true)
+  } else {
+    reportPartTwoService.createReportDraft(formData, '1', true)
+  }
+};
+const createFile = async (url) => {
+  let response = await HTTP.get(url, {
+    mode: "cors"
+  });
+  let data = await response.blob();
+  let file = new File([data], "test.jpg", {
+    type: 'image/jpeg'
+  });
+
+  let dt = new DataTransfer();
+  dt.items.add(new File([file], 'test.jpg', {type: 'image/jpeg'}));
+  let file_list = dt.files;
+  scanFile.value.push(file_list[0]);
+};
 watchEffect(async () => {
   try {
     const res = await getReport();
-    console.log('res: ', res)
     delete res.data.id;
-    for (let i in res.data) {
-      res.data[i] = res.data[i].toString()
-    }
     reportData.value = res.data;
+
+    const { data } = await reportPartTwoService.getReport('1');
+    if (data.results.length) {
+      isFirstSent.value = false;
+      firstPanelData.value.comment = data.results[0].comment;
+      firstPanelData.value.amount_of_money = data.results[0].amount_of_money;
+      // await createFile(data.results[0].scan_file)
+      firstPanelData.value.scan_file = data.results[0].scan_file.split('/').at(-1);
+    }
   } catch (e) {
     console.log(e)
   }
-})
+});
 </script>
 <style lang="scss" scoped>
 .panel-card {
