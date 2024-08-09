@@ -23,14 +23,26 @@
                 for="scan_file"
             >Скан платежного поручения об уплате ЧВ <sup class="valid-red">*</sup></label>
             <v-file-input
+                v-if="!firstPanelData.scan_file"
                 type="file"
                 id="scan_file"
                 name="scan_file"
-                @change="previewFiles"
+                @change="uploadFile"
             />
-            <label for="file">{{ firstPanelData.scan_file }}</label>
+            <div v-else style="display: flex;">
+              <p>{{ firstPanelData.scan_file }}</p>
+              <p @click="deleteFile" style="
+              font-family: Bert Sans;
+              font-size: 16px;
+              font-weight: 400;
+              line-height: 20px;
+              text-align: right;
+              cursor: pointer;
+              padding-left: 8px;"
+              >Удалить</p>
           </div>
         </div>
+      </div>
       <div  class="form__field">
           <label
               class="form__label"
@@ -173,7 +185,6 @@ import { ref, watchEffect } from "vue";
 import { InputReport } from '@shared/components/inputs';
 import { ReportRegionalForm } from '../../ReportRegionalHQPartOnePage/components/index'
 import { getReport, reportPartTwoService } from "@services/ReportService.ts";
-import { HTTP } from "@app/http.ts";
 
 const defaultReportData = {
   participants_number: '0',
@@ -196,39 +207,47 @@ const firstPanelData = ref({
   amount_of_money: '',
   scan_file: '',
 });
-const previewFiles = (event) => {
-  scanFile.value = event.target.files[0];
-};
-const focusOut = () => {
+const focusOut = async () => {
   let formData = new FormData();
-  formData.append('scan_file', scanFile.value);
   formData.append('comment', firstPanelData.value.comment);
   formData.append('amount_of_money', firstPanelData.value.amount_of_money);
 
   if (isFirstSent.value) {
-    reportPartTwoService.createReport(formData, '1', true)
+    await reportPartTwoService.createReport(formData, '1', true);
   } else {
-    reportPartTwoService.createReportDraft(formData, '1', true)
+    await reportPartTwoService.createReportDraft(formData, '1', true);
   }
 };
-const createFile = async (url) => {
-  let response = await HTTP.get(url, {
-    mode: "cors"
-  });
-  let data = await response.blob();
-  let file = new File([data], "test.jpg", {
-    type: 'image/jpeg'
-  });
+const uploadFile = async (event) => {
+  scanFile.value = event.target.files[0];
+  let formData = new FormData();
+  formData.append('scan_file', scanFile.value);
+  formData.append('comment', firstPanelData.value.comment);
+  formData.append('amount_of_money', firstPanelData.value.amount_of_money);
+  if (isFirstSent.value) {
+    let { scan_file } = await reportPartTwoService.createReport(formData, '1', true);
+    firstPanelData.value.scan_file = scan_file.split('/').at(-1);
+  } else {
+    let { data : { scan_file } } = await reportPartTwoService.createReportDraft(formData, '1', true);
+    firstPanelData.value.scan_file = scan_file.split('/').at(-1);
+  }
+};
+const deleteFile = async () => {
+  firstPanelData.value.scan_file = '';
+  let formData = new FormData();
+  formData.append('scan_file', '');
+  formData.append('comment', firstPanelData.value.comment);
+  formData.append('amount_of_money', firstPanelData.value.amount_of_money);
 
-  let dt = new DataTransfer();
-  dt.items.add(new File([file], 'test.jpg', {type: 'image/jpeg'}));
-  let file_list = dt.files;
-  scanFile.value.push(file_list[0]);
+  if (isFirstSent.value) {
+    await reportPartTwoService.createReport(formData, '1', true);
+  } else {
+    await reportPartTwoService.createReportDraft(formData, '1', true);
+  }
 };
 watchEffect(async () => {
   try {
     const res = await getReport();
-    delete res.data.id;
     reportData.value = res.data;
 
     const { data } = await reportPartTwoService.getReport('1');
@@ -236,7 +255,6 @@ watchEffect(async () => {
       isFirstSent.value = false;
       firstPanelData.value.comment = data.results[0].comment;
       firstPanelData.value.amount_of_money = data.results[0].amount_of_money;
-      // await createFile(data.results[0].scan_file)
       firstPanelData.value.scan_file = data.results[0].scan_file.split('/').at(-1);
     }
   } catch (e) {
