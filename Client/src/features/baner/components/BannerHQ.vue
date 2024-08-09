@@ -349,7 +349,7 @@
                         class="AddApplication">
                         Вы участник
                     </div>
-
+                    
 
                 </div>
             </div>
@@ -568,35 +568,38 @@
                                 )
                                 ">
                     </AddModal>
-                    <router-link v-if="
-                        userId &&
-                        (userId == centralHeadquarter?.commander?.id ||
-                            isTrusted.length > 0)
-                    " class="hq-data__link" :to="{
-                        name: 'FormCentral',
-                    }">Редактировать штаб</router-link>
-                    <Button v-else-if="
-                        roleStore.myPositions
-                            .usercentralheadquarterposition === null &&
-                        Object.keys(applications).length === 0
-                    " @click="showModalW()" label="Вступить в штаб" class="AddApplication"></Button>
-                    <div v-else-if="Object.keys(applications).length !== 0" class="d-flex">
-                        <div class="AddApplication mr-2">
-                            Заявка на рассмотрении
-                        </div>
-                        <Button @click="
-                            DeleteApplication(
-                                'centrals',
-                                props.centralHeadquarter.id,
-                            )
-                            " label="Удалить заявку" class="AddApplication"></Button>
-                    </div>
 
-                    <div v-else-if="
-                        roleStore.myPositions
-                            .usercentralheadquarterposition !== null
-                    " class="AddApplication">
-                        Вы участник
+                    <div v-if="isAuth">
+                        <router-link v-if="
+                            userId &&
+                            (userId == centralHeadquarter?.commander?.id ||
+                                isTrusted.length > 0)
+                        " class="hq-data__link" :to="{
+                            name: 'FormCentral',
+                        }">Редактировать штаб</router-link>
+                        <Button v-else-if="
+                            roleStore.myPositions
+                                .usercentralheadquarterposition === null &&
+                            Object.keys(applications).length === 0
+                        " @click="showModalW()" label="Вступить в штаб" class="AddApplication"></Button>
+                        <div v-else-if="Object.keys(applications).length !== 0" class="d-flex">
+                            <div class="AddApplication mr-2">
+                                Заявка на рассмотрении
+                            </div>
+                            <Button @click="
+                                DeleteApplication(
+                                    'centrals',
+                                    props.centralHeadquarter.id,
+                                )
+                                " label="Удалить заявку" class="AddApplication"></Button>
+                        </div>
+
+                        <div v-else-if="
+                            roleStore.myPositions
+                                .usercentralheadquarterposition !== null
+                        " class="AddApplication">
+                            Вы участник
+                        </div>
                     </div>
                 </div>
             </div>
@@ -629,6 +632,7 @@ const route = useRoute();
 const showModal = ref(false);
 const deletedId = ref(null);
 const roles = storeToRefs(roleStore);
+const isAuth = ref(!!localStorage.getItem('jwt_token'));
 let educComId = roles.roles.value.educationalheadquarter_commander;
 let regionComId = roles.roles.value.regionalheadquarter_commander;
 let districtComId = roles.roles.value.districtheadquarter_commander;
@@ -679,21 +683,25 @@ const userId = localStorage.getItem('user');
 
 const swal = inject('$swal');
 const filterApplications = async (name, id) => {
-    try {
+    if (isAuth.value) {
+        try {
         const response = await HTTP.get(`/${name}/${id}/applications/?user_id=${userId}`);
         applications.value = response.data;
         console.log(applications.value)
     } catch (error) {
         console.log('an error occured ' + error);
     }
+    }
 }
 
 const filtereIsTrusted = async (name, id) => {
-    try {
+    if (isAuth.value) {
+        try {
         const response = await HTTP.get(`/${name}/${id}/members/?trusted_user_id=${userId}`);
         isTrusted.value = response.data.results;
     } catch (error) {
         console.log('an error occured' + error);
+    }
     }
 }
 const aboutEduc = async () => {
