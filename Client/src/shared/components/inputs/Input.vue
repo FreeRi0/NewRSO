@@ -9,12 +9,12 @@
             :placeholder="placeholder"
             :maxlength="maxLength"
             :readonly="readonly"
-            :is-cyrillic="isCyrillic"
             max="9999-12-31"
             class="mb-2"
             @input="updateValue"
             v-bind="$attrs"
         />
+        <span class="error-text">{{ errorMessage }}</span>
     </div>
 </template>
 
@@ -61,25 +61,15 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
-    isCyrillic: {
-        type: Boolean,
-        default: false,
+    errorMessage: {
+        type: String,
+        default: '',
     }
 });
 
-// const updateValue = (event) => {
-//     emit('update:value', event.target.value);
-// };
-
 const updateValue = (event) => {
-    console.log(
-        "атрибут isCyrillic -", event.target.isCyrillic, 
-        event,
-    );
-    emit('update:value', event.target.isCyrillic ? event.target.value.replace(/[^а-яА-ЯЁё\s]/gi, "") : event.target.value);
+    emit('update:value', event.target.value);
 };
-
-
 </script>
 
 <style lang="scss" scoped>
@@ -132,5 +122,16 @@ input:focus {
     padding: 10px 110px 10px 16px;
     margin-bottom: 20px;
     width: 100%;
+}
+
+.error-text {
+    display: none;
+    color: #db0000;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: "Acrobat";
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: center;
 }
 </style>
