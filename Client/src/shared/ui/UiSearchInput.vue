@@ -46,6 +46,7 @@
 import { onClickOutside } from '@vueuse/core';
 import { computed, defineProps, ref, watch, withDefaults } from 'vue';
 import { SvgIcon } from './SvgIcon';
+import { compareStringsBySimilarity } from '@shared/lib';
 
 const model = ref('');
 const emit = defineEmits(['update:modelValue']);
@@ -64,13 +65,11 @@ const props = withDefaults(
 
 const sortedAutoCompleteValues = computed(() => {
     if (!model.value) return props.autoCompleteValues;
+    const inputValue = model.value.toLowerCase();
     return props.autoCompleteValues
         .slice()
-        .sort(
-            (a, b) =>
-                b.toLowerCase().indexOf(model.value.toLowerCase()) -
-                a.toLowerCase().indexOf(model.value.toLowerCase()),
-        );
+        .sort((a, b) => a.localeCompare(b))
+        .sort((a, b) => compareStringsBySimilarity(a, b, inputValue));
 });
 
 watch(
@@ -91,7 +90,9 @@ const onInput = (e: Event) => {
     updateAutocompleteStyle();
 };
 
-const onFocus = () => {
+const onFocus = (e: Event) => {
+    const target = e.target as HTMLInputElement;
+    target.select();
     showAutoComplete.value = sortedAutoCompleteValues.value.length > 0;
     updateAutocompleteStyle();
 };

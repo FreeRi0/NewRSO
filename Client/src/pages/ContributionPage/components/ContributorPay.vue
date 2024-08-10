@@ -30,7 +30,7 @@
                 <UiTabWindow tab-id="contributors-list">
                     <div class="list-container">
                         <UiSearchInput
-                            v-model="filters.search"
+                            v-model="searchQuery"
                             placeholder="Поищем пользователей?"
                             class="search"
                         />
@@ -55,13 +55,6 @@
                                         variant="small"
                                     />
                                 </DistrictHeadquarterFilter>
-                                <p
-                                    class="filter-info"
-                                    v-if="filters.district_headquarter__name"
-                                >
-                                    Выбрано:
-                                    {{ filters.district_headquarter__name }}
-                                </p>
                             </RoleGuard>
 
                             <p
@@ -171,51 +164,7 @@
                                 {{ filters.educational_headquarter__name }}
                             </p>
 
-                            <UiAccordion>
-                                <template #header="{ toggle }">
-                                    <UiHeading @click="toggle" variant="h4"
-                                        >Членский взнос</UiHeading
-                                    >
-                                </template>
-                                <template #content>
-                                    <div
-                                        class="radio-buttons-field filter-text"
-                                    >
-                                        <input
-                                            v-model="filters.membership_fee"
-                                            type="radio"
-                                            id="fee0"
-                                            name="fee"
-                                            value=""
-                                        />
-                                        <label for="fee0">Все</label>
-                                    </div>
-                                    <div
-                                        class="radio-buttons-field filter-text"
-                                    >
-                                        <input
-                                            v-model="filters.membership_fee"
-                                            type="radio"
-                                            id="fee2"
-                                            name="fee"
-                                            :value="true"
-                                        />
-                                        <label for="fee2">Оплачен</label>
-                                    </div>
-                                    <div
-                                        class="radio-buttons-field filter-text"
-                                    >
-                                        <input
-                                            v-model="filters.membership_fee"
-                                            type="radio"
-                                            id="fee3"
-                                            name="fee"
-                                            :value="false"
-                                        />
-                                        <label for="fee3">Не оплачен</label>
-                                    </div>
-                                </template>
-                            </UiAccordion>
+                            <MemberFeeFilter v-model="filters.membership_fee" />
 
                             <p class="filter-info">
                                 Показано {{ showedRecordsCount }} из
@@ -223,7 +172,12 @@
                             </p>
                         </aside>
                         <div class="contributors-list-wrapper">
-                            <ul class="contributors-list">
+                            <TransitionGroup
+                                v-if="isResultsFound"
+                                name="list"
+                                tag="ul"
+                                class="contributors-list"
+                            >
                                 <li v-for="user in usersList" :key="user.id">
                                     <ContributorItem
                                         :avatar-url="
@@ -239,19 +193,22 @@
                                         :id="user.id"
                                     />
                                 </li>
-                            </ul>
+                            </TransitionGroup>
                             <UiButton
                                 variant="secondary"
-                                v-if="!isLastPage"
+                                v-if="isLoadMoreBtnShowed"
                                 @click="next"
                                 >Показать ещё</UiButton
                             >
                             <UiButton
+                                v-if="isLoadPrevBtnShowed"
                                 variant="secondary"
                                 @click="setPage(1)"
-                                v-else
                                 >Скрыть</UiButton
                             >
+                            <p v-if="!isResultsFound" class="filter-info">
+                                Результаты не найдены
+                            </p>
                         </div>
                     </div>
                 </UiTabWindow>
@@ -272,7 +229,6 @@ import {
     useUsersList,
 } from '@entities/Users';
 import {
-    UiAccordion,
     UiButton,
     UiHeading,
     UiSearchInput,
@@ -281,20 +237,36 @@ import {
     UiTabWindow,
 } from '@shared/ui';
 import { storeToRefs } from 'pinia';
-import { toRefs, watch } from 'vue';
+import { computed, toRefs, watch } from 'vue';
 
 const { authorizedUser, isLoading } = storeToRefs(useSession());
 const {
+    searchQuery,
+    isSinglePage,
+    isResultsFound,
     setPage,
     usersList,
     filters,
     isLastPage,
+    isFirstPage,
     next,
     totalCount,
     showedRecordsCount,
     setFilters,
 } = toRefs(useUsersList({ append: true }));
 const { userHeadquarters } = toRefs(useRole());
+
+const isLoadMoreBtnShowed = computed(
+    () => isResultsFound.value && !isSinglePage.value && !isLastPage.value,
+);
+
+const isLoadPrevBtnShowed = computed(
+    () =>
+        isResultsFound.value &&
+        isLastPage.value &&
+        !isFirstPage.value &&
+        !isSinglePage.value,
+);
 
 watch(
     () => userHeadquarters.value,
@@ -380,5 +352,15 @@ watch(
     flex-wrap: nowrap;
     gap: 16px;
     margin-bottom: 16px;
+}
+
+.list-enter-active,
+.list-leave-active {
+    transition: all 0.5s ease;
+}
+.list-enter-from,
+.list-leave-to {
+    opacity: 0;
+    transform: translateY(10px);
 }
 </style>

@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { regionalHeadquarterApi } from '@shared/api';
 import { UiAccordion, UiHeading } from '@shared/ui';
-import { ref, watch, watchEffect } from 'vue';
+import { ref, watch } from 'vue';
 
 const regionalHeadquarters = ref<string[]>([]);
 
@@ -39,9 +39,8 @@ const fetchRegionalHeadquarters = (districtHeadquarterName?: string) => {
             district_headquarter__name: districtHeadquarterName,
         })
         .then((res) => {
-            regionalHeadquarters.value = res.data.results.map(
-                ({ name }) => name,
-            );
+            console.log(res);
+            regionalHeadquarters.value = res.data.map(({ name }) => name);
         });
 };
 

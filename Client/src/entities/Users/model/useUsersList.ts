@@ -2,6 +2,8 @@ import { usersApi } from '@shared/api';
 import { toReactive, watchDebounced } from '@vueuse/core';
 import { computed, onMounted, ref, watch } from 'vue';
 
+type Filters = Omit<usersApi.GetUsersParams, 'offset' | 'limit'>;
+
 type Props = {
     /**
      * С какой страницы начинаем загрузку
@@ -44,16 +46,19 @@ export function useUsersList({
     debounce = 1000,
     maxWait = 2000,
 }: Props = {}) {
-    const filters = ref<usersApi.GetUsersParams>({});
+    const filters = ref<Filters>({});
     const usersList = ref<usersApi.User[]>([]);
     const currentPage = ref<number>(initialPage);
     const totalCount = ref<number>(0);
+    const searchQuery = ref<string>('');
 
     const maxPage = computed(() =>
         Math.ceil(totalCount.value / recordsPerPage),
     );
     const isLastPage = computed(() => currentPage.value >= maxPage.value);
     const isFirstPage = computed(() => currentPage.value <= 1);
+    const isResultsFound = computed(() => totalCount.value > 0);
+    const isSinglePage = computed(() => isLastPage.value && isFirstPage.value);
 
     const showedRecordsCount = computed(() => usersList.value.length);
 
@@ -66,6 +71,7 @@ export function useUsersList({
         const offset = (currentPage.value - 1) * recordsPerPage;
         const loadedUsers = await usersApi.getUsers({
             ...filters.value,
+            search: searchQuery.value,
             limit: recordsPerPage,
             offset,
         });
@@ -102,6 +108,7 @@ export function useUsersList({
             const limit = recordsPerPage * page;
             const loadedUsers = await usersApi.getUsers({
                 ...filters.value,
+                search: searchQuery.value,
                 limit,
                 offset: 0,
             });
@@ -112,6 +119,7 @@ export function useUsersList({
         const offset = (currentPage.value - 1) * recordsPerPage;
         const loadedUsers = await usersApi.getUsers({
             ...filters.value,
+            search: searchQuery.value,
             limit: recordsPerPage,
             offset,
         });
@@ -128,9 +136,7 @@ export function useUsersList({
         await fetchPage(page);
     };
 
-    const setFilters = (
-        newFilters: Omit<usersApi.GetUsersParams, 'offset' | 'limit'>,
-    ) => {
+    const setFilters = (newFilters: Filters) => {
         filters.value = {
             ...filters.value,
             ...newFilters,
@@ -141,16 +147,14 @@ export function useUsersList({
         await setPage(1);
     };
 
-    onMounted(() => {
-        fetchPage(currentPage.value);
-    });
+    fetchPage(currentPage.value);
 
-    watchDebounced(filters, () => refetch(), { debounce, maxWait, deep: true });
+    watch(filters, () => refetch(), { deep: true });
+    watchDebounced(searchQuery, () => refetch(), { debounce, maxWait });
 
     watch(
         () => filters.value.central_headquarter__name,
         () => {
-            console.log(1);
             setFilters({
                 district_headquarter__name: '',
             });
@@ -160,8 +164,6 @@ export function useUsersList({
     watch(
         () => filters.value.district_headquarter__name,
         () => {
-            console.log(2);
-
             setFilters({
                 regional_headquarter__name: '',
             });
@@ -171,8 +173,6 @@ export function useUsersList({
     watch(
         () => filters.value.regional_headquarter__name,
         () => {
-            console.log(3);
-
             setFilters({
                 local_headquarter__name: '',
             });
@@ -182,8 +182,6 @@ export function useUsersList({
     watch(
         () => filters.value.local_headquarter__name,
         () => {
-            console.log(4);
-
             setFilters({
                 educational_headquarter__name: '',
             });
@@ -191,6 +189,9 @@ export function useUsersList({
     );
 
     return toReactive({
+        searchQuery,
+        isResultsFound,
+        isSinglePage,
         filters,
         usersList,
         isLastPage,

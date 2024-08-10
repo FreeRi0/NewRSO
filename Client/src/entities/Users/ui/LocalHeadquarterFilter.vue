@@ -41,7 +41,7 @@ const fetchLocalHeadquarters = (regionalHeadquarterName?: string) => {
             regional_headquarter__name: regionalHeadquarterName,
         })
         .then((res) => {
-            localHeadquarters.value = res.data.results.map(({ name }) => name);
+            localHeadquarters.value = res.data.map(({ name }) => name);
         });
 };
 
