@@ -1,6 +1,6 @@
 import { usersApi } from '@shared/api';
 import { toReactive, watchDebounced } from '@vueuse/core';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, ref, toRefs, watch } from 'vue';
 
 type Filters = Omit<usersApi.GetUsersParams, 'offset' | 'limit'>;
 
@@ -51,6 +51,7 @@ export function useUsersList({
     const currentPage = ref<number>(initialPage);
     const totalCount = ref<number>(0);
     const searchQuery = ref<string>('');
+    const sortBy = ref<usersApi.UsersOrderingQuery>('last_name');
 
     const maxPage = computed(() =>
         Math.ceil(totalCount.value / recordsPerPage),
@@ -59,6 +60,9 @@ export function useUsersList({
     const isFirstPage = computed(() => currentPage.value <= 1);
     const isResultsFound = computed(() => totalCount.value > 0);
     const isSinglePage = computed(() => isLastPage.value && isFirstPage.value);
+    const isReverseOrder = computed(
+        () => sortBy.value?.startsWith('-') ?? false,
+    );
 
     const showedRecordsCount = computed(() => usersList.value.length);
 
@@ -71,6 +75,7 @@ export function useUsersList({
         const offset = (currentPage.value - 1) * recordsPerPage;
         const loadedUsers = await usersApi.getUsers({
             ...filters.value,
+            ordering: sortBy.value,
             search: searchQuery.value,
             limit: recordsPerPage,
             offset,
@@ -108,6 +113,7 @@ export function useUsersList({
             const limit = recordsPerPage * page;
             const loadedUsers = await usersApi.getUsers({
                 ...filters.value,
+                ordering: sortBy.value,
                 search: searchQuery.value,
                 limit,
                 offset: 0,
@@ -119,6 +125,7 @@ export function useUsersList({
         const offset = (currentPage.value - 1) * recordsPerPage;
         const loadedUsers = await usersApi.getUsers({
             ...filters.value,
+            ordering: sortBy.value,
             search: searchQuery.value,
             limit: recordsPerPage,
             offset,
@@ -143,6 +150,16 @@ export function useUsersList({
         };
     };
 
+    const setSortBy = (newSortBy: usersApi.UsersOrderingQuery) => {
+        sortBy.value = newSortBy;
+    };
+
+    const reverseSortOrder = () => {
+        sortBy.value = sortBy.value?.startsWith('-')
+            ? (sortBy.value.slice(1) as usersApi.UsersOrderingQuery)
+            : (`-${sortBy.value}` as usersApi.UsersOrderingQuery);
+    };
+
     const refetch = async () => {
         await setPage(1);
     };
@@ -150,6 +167,7 @@ export function useUsersList({
     fetchPage(currentPage.value);
 
     watch(filters, () => refetch(), { deep: true });
+    watch(sortBy, () => refetch());
     watchDebounced(searchQuery, () => refetch(), { debounce, maxWait });
 
     watch(
@@ -203,6 +221,7 @@ export function useUsersList({
         isSinglePage,
         filters,
         usersList,
+        isReverseOrder,
         isLastPage,
         isFirstPage,
         currentPage,
@@ -212,6 +231,9 @@ export function useUsersList({
         setPage,
         refetch,
         setFilters,
+        setSortBy,
+        sortBy,
         showedRecordsCount,
+        reverseSortOrder,
     });
 }

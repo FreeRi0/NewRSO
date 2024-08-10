@@ -6,7 +6,7 @@
 <script setup lang="ts">
 withDefaults(
     defineProps<{
-        variant?: 'primary' | 'secondary';
+        variant?: 'primary' | 'secondary' | 'tertiary';
         active?: boolean;
     }>(),
     {
@@ -42,6 +42,19 @@ withDefaults(
     --border-active: none;
 }
 
+.tertiary {
+    --font-size: 16px;
+    --font-weight: 400;
+    --bg-color: transparent;
+    --color: rgb(53, 56, 63);
+    --border: 1px solid rgb(53, 56, 63);
+    --border-radius: 10px;
+    --padding: 8px;
+    --bg-color-active: transparent;
+    --color-active: rgb(53, 56, 63);
+    --border-active: 1px solid rgb(53, 56, 63);
+}
+
 @media screen and (max-width: 768px) {
     .primary {
         --font-size: 16px;
@@ -64,6 +77,9 @@ withDefaults(
     border: var(--border);
     border-radius: var(--border-radius);
     padding: var(--padding);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .button.active {

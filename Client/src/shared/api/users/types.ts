@@ -142,6 +142,8 @@ export type Headquarter = {
     emblem: string | null;
 };
 
+export type UsersOrderingQuery = `${'-' | ''}${keyof CurrentUser}`;
+
 export type GetUsersParams = {
     search?: string;
     date_of_birth?: string;
@@ -157,7 +159,7 @@ export type GetUsersParams = {
     is_verified?: boolean;
     membership_fee?: boolean;
     region?: string;
-    ordering?: keyof CurrentUser;
+    ordering?: UsersOrderingQuery;
     limit?: number;
     offset?: number;
 };

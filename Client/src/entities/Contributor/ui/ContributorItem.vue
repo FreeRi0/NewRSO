@@ -4,14 +4,16 @@
         class="item"
     >
         <div class="content">
-            <div class="image-wrapper">
-                <img
-                    :src="avatarUrl"
-                    :alt="`Аватар пользователя ${fullName}`"
-                />
-            </div>
-            <div class="full-name">
-                {{ fullName }}
+            <div class="main-info">
+                <div class="image-wrapper">
+                    <img
+                        :src="avatarUrl"
+                        :alt="`Аватар пользователя ${fullName}`"
+                    />
+                </div>
+                <div class="full-name">
+                    {{ fullName }}
+                </div>
             </div>
             <div v-if="birthday" class="birthday">
                 {{ formattedBirthday }}
@@ -54,18 +56,32 @@ const formattedBirthday = computed(() =>
 
 <style scoped>
 .item {
-    display: grid;
-    grid-template-columns: 1fr 150px;
+    display: flex;
+    align-items: stretch;
+    flex-wrap: wrap;
     gap: 12px;
+    transition: transform 0.1s ease-in-out;
 }
-.content {
+.main-info {
     display: grid;
     align-items: center;
+    gap: 8px;
+    flex: 1;
+    /* flex-shrink: 1; 
+    flex-wrap: nowrap;
+    flex-basis: 80%;
+    max-width: 250px; */
+    grid-template-columns: 36px minmax(200px, 1fr);
+}
+.content {
+    flex: 1 0;
+    display: flex;
+    align-items: center;
     gap: 10px;
-    grid-template-columns: 36px 1fr 85px;
     border-radius: 10px;
     border: 1px solid rgb(182, 182, 182);
     padding: 4px 20px;
+    flex-wrap: wrap;
 }
 .image-wrapper {
     width: 36px;
@@ -79,6 +95,8 @@ const formattedBirthday = computed(() =>
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+    flex: 1 1;
+    max-width: 100%;
 }
 .birthday {
     font-size: 16px;
@@ -86,6 +104,9 @@ const formattedBirthday = computed(() =>
     padding-left: 8px;
     border-left: 1px solid rgb(182, 182, 182);
     text-align: end;
+    color: rgb(28, 92, 148);
+    flex: 0 1 80px;
+    justify-self: flex-end;
 }
 .status {
     border-radius: 10px;
@@ -95,5 +116,15 @@ const formattedBirthday = computed(() =>
     display: flex;
     align-items: center;
     justify-content: center;
+    min-width: 150px;
+    min-height: 45px;
+}
+
+@media screen and (max-width: 640px) {
+    .birthday {
+        padding-left: 0;
+        border-left: none;
+        text-align: left;
+    }
 }
 </style>

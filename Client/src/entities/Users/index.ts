@@ -5,3 +5,4 @@ export { default as RegionalHeadquarterFilter } from './ui/RegionalHeadquarterFi
 export { default as EducationalHeadquarterFilter } from './ui/EducationalHeadquarterFilter.vue';
 export { default as DetachmentHeadquarterFilter } from './ui/DetachmentHeadquarterFilter.vue';
 export { default as MemberFeeFilter } from './ui/MemberFeeFilter.vue';
+export { default as SortBySelector } from './ui/SortBySelector.vue';

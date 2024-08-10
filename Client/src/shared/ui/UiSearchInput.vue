@@ -1,5 +1,5 @@
 <template>
-    <label :class="['wrapper', variant]">
+    <label ref="inputRef" :class="['wrapper', variant]">
         <SvgIcon
             v-if="variant === 'default'"
             :width="28"
@@ -15,7 +15,6 @@
             class="icon"
         />
         <input
-            ref="inputRef"
             v-model="model"
             @input="onInput"
             @focus="onFocus"
@@ -51,7 +50,6 @@ import { computed, defineProps, ref, watch, withDefaults } from 'vue';
 import { SvgIcon } from './SvgIcon';
 import { compareStringsBySimilarity } from '@shared/lib';
 
-const model = ref('');
 const emit = defineEmits(['update:modelValue']);
 
 const itemRefs = ref<HTMLLIElement[]>([]);
@@ -67,6 +65,8 @@ const props = withDefaults(
         variant: 'default',
     },
 );
+
+const model = ref(props.modelValue ?? '');
 
 const sortedAutoCompleteValues = computed(() => {
     if (!model.value) return props.autoCompleteValues;
@@ -84,6 +84,13 @@ watch(
     },
 );
 
+watch(
+    () => model.value,
+    (newValue) => {
+        emit('update:modelValue', newValue);
+    },
+);
+
 const showAutoComplete = ref(false);
 const inputRef = ref<HTMLInputElement | null>(null);
 const autocompleteStyle = ref({ top: '0px', left: '0px', width: '0px' });
@@ -91,7 +98,7 @@ const highlightedIndex = ref(-1);
 
 const onInput = (e: Event) => {
     const target = e.target as HTMLInputElement;
-    emit('update:modelValue', target.value);
+    model.value = target.value;
     showAutoComplete.value = sortedAutoCompleteValues.value.length > 0;
     updateAutocompleteStyle();
     highlightedIndex.value = -1;
@@ -161,6 +168,7 @@ const selectItem = (item: string) => {
 };
 
 onClickOutside(inputRef, () => {
+    console.log('clickOutside');
     showAutoComplete.value = false;
 });
 </script>
@@ -177,6 +185,7 @@ onClickOutside(inputRef, () => {
     padding: 8px 16px;
     font-size: 18px;
     padding-left: 60px;
+    outline: none;
 }
 .small .input {
     padding-left: 48px;

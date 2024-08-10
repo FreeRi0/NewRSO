@@ -25,7 +25,9 @@ export type IconName =
     | 'search'
     | 'telegram'
     | 'share-link'
-    | 'vk';
+    | 'vk'
+    | 'upside-down-arrow'
+    | 'filter';
 
 type IconsRecord = Record<
     IconName,
@@ -167,5 +169,15 @@ export const defaultIconSizes: IconsRecord = {
         width: 24,
         height: 24,
         color: '#1F7CC0',
+    },
+    'upside-down-arrow': {
+        width: 20,
+        height: 20,
+        color: '#35383f',
+    },
+    filter: {
+        width: 24,
+        height: 24,
+        color: '#35383F',
     },
 };

@@ -34,7 +34,21 @@
                             placeholder="Поищем пользователей?"
                             class="search"
                         />
-                        <div>фильтры</div>
+                        <div class="contributors-list-heading">
+                            <UiButton
+                                @click="filtersMenu.openSideMenu()"
+                                class="filter-button"
+                                variant="tertiary"
+                            >
+                                <SvgIcon icon-name="filter" />
+                            </UiButton>
+                            <SortBySelector
+                                :is-reversed="isReverseOrder"
+                                v-model="sortBy"
+                                :reverse-sort-order="reverseSortOrder"
+                                class="sort-by"
+                            />
+                        </div>
                         <aside class="filters">
                             <UiHeading variant="h4">Основные фильтры</UiHeading>
                             <RoleGuard
@@ -222,6 +236,195 @@
                                 Показано {{ showedRecordsCount }} из
                                 {{ totalCount }} результатов
                             </p>
+                            <UiSideMenu title="Основные фильтры">
+                                <RoleGuard
+                                    :needed-roles="[
+                                        UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                    ]"
+                                >
+                                    <DistrictHeadquarterFilter
+                                        v-slot="{ districtHeadquarters }"
+                                    >
+                                        <UiSearchInput
+                                            placeholder="Начните вводить"
+                                            :auto-complete-values="
+                                                districtHeadquarters
+                                            "
+                                            v-model="
+                                                filters.district_headquarter__name
+                                            "
+                                            variant="small"
+                                        />
+                                    </DistrictHeadquarterFilter>
+                                </RoleGuard>
+
+                                <p
+                                    class="filter-info"
+                                    v-if="filters.district_headquarter__name"
+                                >
+                                    Выбрано:
+                                    {{ filters.district_headquarter__name }}
+                                </p>
+
+                                <RoleGuard
+                                    :needed-roles="[
+                                        UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                        UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                    ]"
+                                >
+                                    <RegionalHeadquarterFilter
+                                        :district-headquarter-name="
+                                            filters.district_headquarter__name
+                                        "
+                                        v-slot="{ regionalHeadquarters }"
+                                    >
+                                        <UiSearchInput
+                                            placeholder="Начните вводить"
+                                            :auto-complete-values="
+                                                regionalHeadquarters
+                                            "
+                                            v-model="
+                                                filters.regional_headquarter__name
+                                            "
+                                            variant="small"
+                                        />
+                                    </RegionalHeadquarterFilter>
+                                </RoleGuard>
+                                <p
+                                    class="filter-info"
+                                    v-if="filters.regional_headquarter__name"
+                                >
+                                    Выбрано:
+                                    {{ filters.regional_headquarter__name }}
+                                </p>
+
+                                <RoleGuard
+                                    :needed-roles="[
+                                        UserRole.REGIONAL_HEADQUARTER_COMMANDER,
+                                        UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                        UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                    ]"
+                                >
+                                    <LocalHeadquarterFilter
+                                        :regional-headquarter-name="
+                                            filters.regional_headquarter__name
+                                        "
+                                        :district-headquarter-name="
+                                            filters.district_headquarter__name
+                                        "
+                                        v-slot="{ localHeadquarters }"
+                                    >
+                                        <UiSearchInput
+                                            placeholder="Начните вводить"
+                                            :auto-complete-values="
+                                                localHeadquarters
+                                            "
+                                            v-model="
+                                                filters.local_headquarter__name
+                                            "
+                                            variant="small"
+                                        />
+                                    </LocalHeadquarterFilter>
+                                </RoleGuard>
+                                <p
+                                    class="filter-info"
+                                    v-if="filters.local_headquarter__name"
+                                >
+                                    Выбрано:
+                                    {{ filters.local_headquarter__name }}
+                                </p>
+
+                                <RoleGuard
+                                    :needed-roles="[
+                                        UserRole.REGIONAL_HEADQUARTER_COMMANDER,
+                                        UserRole.LOCAL_HEADQUARTER_COMMANDER,
+                                        UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                        UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                    ]"
+                                >
+                                    <EducationalHeadquarterFilter
+                                        :local-headquarter-name="
+                                            filters.local_headquarter__name
+                                        "
+                                        :district-headquarter-name="
+                                            filters.district_headquarter__name
+                                        "
+                                        :regional-headquarter-name="
+                                            filters.regional_headquarter__name
+                                        "
+                                        v-slot="{ educationalHeadquarters }"
+                                    >
+                                        <UiSearchInput
+                                            placeholder="Начните вводить"
+                                            :auto-complete-values="
+                                                educationalHeadquarters
+                                            "
+                                            v-model="
+                                                filters.educational_headquarter__name
+                                            "
+                                            variant="small"
+                                        />
+                                    </EducationalHeadquarterFilter>
+                                </RoleGuard>
+                                <p
+                                    class="filter-info"
+                                    v-if="filters.educational_headquarter__name"
+                                >
+                                    Выбрано:
+                                    {{ filters.educational_headquarter__name }}
+                                </p>
+
+                                <RoleGuard
+                                    :needed-roles="[
+                                        UserRole.REGIONAL_HEADQUARTER_COMMANDER,
+                                        UserRole.LOCAL_HEADQUARTER_COMMANDER,
+                                        UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                        UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                        UserRole.EDUCATIONAL_HEADQUARTER_COMMANDER,
+                                    ]"
+                                >
+                                    <DetachmentHeadquarterFilter
+                                        :local-headquarter-name="
+                                            filters.local_headquarter__name
+                                        "
+                                        :district-headquarter-name="
+                                            filters.district_headquarter__name
+                                        "
+                                        :regional-headquarter-name="
+                                            filters.regional_headquarter__name
+                                        "
+                                        :educational-headquarter-name="
+                                            filters.educational_headquarter__name
+                                        "
+                                        v-slot="{ educationalHeadquarters }"
+                                    >
+                                        <UiSearchInput
+                                            placeholder="Начните вводить"
+                                            :auto-complete-values="
+                                                educationalHeadquarters
+                                            "
+                                            v-model="filters.detachment__name"
+                                            variant="small"
+                                        />
+                                    </DetachmentHeadquarterFilter>
+                                </RoleGuard>
+                                <p
+                                    class="filter-info"
+                                    v-if="filters.detachment__name"
+                                >
+                                    Выбрано:
+                                    {{ filters.detachment__name }}
+                                </p>
+
+                                <MemberFeeFilter
+                                    v-model="filters.membership_fee"
+                                />
+
+                                <p class="filter-info">
+                                    Показано {{ showedRecordsCount }} из
+                                    {{ totalCount }} результатов
+                                </p>
+                            </UiSideMenu>
                         </aside>
                         <div class="contributors-list-wrapper">
                             <TransitionGroup
@@ -278,19 +481,24 @@ import {
     LocalHeadquarterFilter,
     MemberFeeFilter,
     RegionalHeadquarterFilter,
+    SortBySelector,
     useUsersList,
+    DetachmentHeadquarterFilter,
 } from '@entities/Users';
-import DetachmentHeadquarterFilter from '@entities/Users/ui/DetachmentHeadquarterFilter.vue';
 import {
+    SvgIcon,
     UiButton,
     UiHeading,
     UiSearchInput,
+    UiSideMenu,
     UiTab,
     UiTabContainer,
     UiTabWindow,
+    useSideMenu,
 } from '@shared/ui';
 import { storeToRefs } from 'pinia';
-import { computed, toRefs, watch } from 'vue';
+import { watch } from 'vue';
+import { computed, toRefs, watchEffect } from 'vue';
 
 const { authorizedUser, isLoading } = storeToRefs(useSession());
 const {
@@ -301,13 +509,17 @@ const {
     usersList,
     filters,
     isLastPage,
+    isReverseOrder,
     isFirstPage,
     next,
     totalCount,
     showedRecordsCount,
     setFilters,
+    sortBy,
+    reverseSortOrder,
 } = toRefs(useUsersList({ append: true, recordsPerPage: 24 }));
-const { userHeadquarters } = toRefs(useRole());
+const { userHeadquarters } = storeToRefs(useRole());
+const filtersMenu = useSideMenu();
 
 const isLoadMoreBtnShowed = computed(
     () => isResultsFound.value && !isSinglePage.value && !isLastPage.value,
@@ -339,7 +551,7 @@ watch(
     },
 );
 </script>
-<style lang="scss">
+<style scoped>
 .buttons-container {
     display: flex;
     flex-wrap: wrap;
@@ -358,6 +570,7 @@ watch(
     grid-template-columns: minmax(120px, 25%) 1fr;
     row-gap: 40px;
     column-gap: 20px;
+    max-width: 100%;
 }
 
 .search {
@@ -383,6 +596,14 @@ watch(
     flex-direction: column;
     gap: 10px;
     align-self: stretch;
+    justify-content: flex-start;
+}
+
+.contributors-list-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
 }
 
 .contributors-list-wrapper {
@@ -415,5 +636,31 @@ watch(
 .list-leave-to {
     opacity: 0;
     transform: translateY(10px);
+}
+
+button.filter-button {
+    width: 32px;
+    height: 32px;
+    --padding: 0;
+    display: none;
+}
+
+@media screen and (max-width: 890px) {
+    .list-container {
+        grid-template-columns: 0 1fr;
+        column-gap: 0;
+    }
+
+    .filters {
+        overflow: hidden;
+    }
+
+    button.filter-button {
+        display: flex;
+    }
+}
+
+.sort-by {
+    margin-left: auto;
 }
 </style>

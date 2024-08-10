@@ -36,9 +36,6 @@ const toggle = () => {
     transform: rotate(-180deg);
     transition: transform 0.3s ease;
 }
-/* .accordion-content.accordion-open {
-    overflow: auto;
-} */
 
 .icon {
     position: absolute;
@@ -47,7 +44,7 @@ const toggle = () => {
 }
 .heading {
     position: relative;
-    padding-right: 3px;
+    padding-right: 36px;
     cursor: pointer;
 }
 .accordion-content {
