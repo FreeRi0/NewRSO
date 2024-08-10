@@ -583,8 +583,8 @@ const deleteEvent = async (index) => {
 watchEffect(async () => {
   try {
     const { data } = await reportPartTwoService.getReport('4');
-    events.value = [...data.results[0].events];
-    fourthPanelData.value.comment = data.results[0].comment;
+    events.value = [...data[0].events];
+    fourthPanelData.value.comment = data[0].comment;
   } catch (e) {
     console.log(e);
   }
