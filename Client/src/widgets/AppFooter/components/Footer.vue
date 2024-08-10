@@ -63,12 +63,12 @@
 
                 <ul class="footer__privacy-policy-list">
                     <li class="footer__privacy-policy-item">
-                        <router-link to="/privacy_policy"
+                        <router-link to="/privacy-policy"
                             >Политика конфиденциальности</router-link
                         >
                     </li>
                     <li class="footer__user-agreement">
-                        <router-link to="/terms_of_use"
+                        <router-link to="/terms-of-use"
                             >Пользовательское соглашение</router-link
                         >
                     </li>
