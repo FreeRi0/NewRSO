@@ -19,6 +19,7 @@
             v-model="model"
             @input="onInput"
             @focus="onFocus"
+            @keydown="onKeyDown"
             v-bind="$attrs"
             class="input"
         />
@@ -30,8 +31,9 @@
             >
                 <ul class="autocomplete-list">
                     <li
-                        v-for="item in sortedAutoCompleteValues"
+                        v-for="(item, index) in sortedAutoCompleteValues"
                         :key="item"
+                        :class="{ highlighted: index === highlightedIndex }"
                         @click="selectItem(item)"
                     >
                         {{ item }}
@@ -82,12 +84,14 @@ watch(
 const showAutoComplete = ref(false);
 const inputRef = ref<HTMLInputElement | null>(null);
 const autocompleteStyle = ref({ top: '0px', left: '0px', width: '0px' });
+const highlightedIndex = ref(-1);
 
 const onInput = (e: Event) => {
     const target = e.target as HTMLInputElement;
     emit('update:modelValue', target.value);
     showAutoComplete.value = sortedAutoCompleteValues.value.length > 0;
     updateAutocompleteStyle();
+    highlightedIndex.value = -1;
 };
 
 const onFocus = (e: Event) => {
@@ -95,6 +99,32 @@ const onFocus = (e: Event) => {
     target.select();
     showAutoComplete.value = sortedAutoCompleteValues.value.length > 0;
     updateAutocompleteStyle();
+};
+
+const onKeyDown = (e: KeyboardEvent) => {
+    if (!showAutoComplete.value) return;
+
+    if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        highlightedIndex.value =
+            (highlightedIndex.value + 1) %
+            sortedAutoCompleteValues.value.length;
+        return;
+    }
+    if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        highlightedIndex.value =
+            (highlightedIndex.value -
+                1 +
+                sortedAutoCompleteValues.value.length) %
+            sortedAutoCompleteValues.value.length;
+        return;
+    }
+    if (e.key === 'Enter' && highlightedIndex.value >= 0) {
+        e.preventDefault();
+        selectItem(sortedAutoCompleteValues.value[highlightedIndex.value]);
+        return;
+    }
 };
 
 const updateAutocompleteStyle = () => {
@@ -112,6 +142,7 @@ const selectItem = (item: string) => {
     model.value = item;
     emit('update:modelValue', item);
     showAutoComplete.value = false;
+    highlightedIndex.value = -1;
 };
 
 onClickOutside(inputRef, () => {
@@ -158,7 +189,10 @@ onClickOutside(inputRef, () => {
     padding: 8px;
     cursor: pointer;
 }
-.autocomplete-list li:hover {
+.autocomplete-list li.highlighted {
     background-color: #f0f0f0;
+}
+.autocomplete-list li:hover {
+    background-color: #e0e0e0;
 }
 </style>
