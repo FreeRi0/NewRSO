@@ -251,11 +251,11 @@ watchEffect(async () => {
     reportData.value = res.data;
 
     const { data } = await reportPartTwoService.getReport('1');
-    if (data.results.length) {
+    if (data.length) {
       isFirstSent.value = false;
-      firstPanelData.value.comment = data.results[0].comment;
-      firstPanelData.value.amount_of_money = data.results[0].amount_of_money;
-      firstPanelData.value.scan_file = data.results[0].scan_file.split('/').at(-1);
+      firstPanelData.value.comment = data[0].comment;
+      firstPanelData.value.amount_of_money = data[0].amount_of_money;
+      firstPanelData.value.scan_file = data[0].scan_file.split('/').at(-1);
     }
   } catch (e) {
     console.log(e)
