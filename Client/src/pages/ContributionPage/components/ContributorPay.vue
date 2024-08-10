@@ -34,6 +34,7 @@
                             placeholder="Поищем пользователей?"
                             class="search"
                         />
+                        <div>фильтры</div>
                         <aside class="filters">
                             <UiHeading variant="h4">Основные фильтры</UiHeading>
                             <RoleGuard
@@ -108,6 +109,9 @@
                                     :regional-headquarter-name="
                                         filters.regional_headquarter__name
                                     "
+                                    :district-headquarter-name="
+                                        filters.district_headquarter__name
+                                    "
                                     v-slot="{ localHeadquarters }"
                                 >
                                     <UiSearchInput
@@ -141,6 +145,12 @@
                                 <EducationalHeadquarterFilter
                                     :local-headquarter-name="
                                         filters.local_headquarter__name
+                                    "
+                                    :district-headquarter-name="
+                                        filters.district_headquarter__name
+                                    "
+                                    :regional-headquarter-name="
+                                        filters.regional_headquarter__name
                                     "
                                     v-slot="{ educationalHeadquarters }"
                                 >
@@ -253,7 +263,7 @@ const {
     totalCount,
     showedRecordsCount,
     setFilters,
-} = toRefs(useUsersList({ append: true }));
+} = toRefs(useUsersList({ append: true, recordsPerPage: 24 }));
 const { userHeadquarters } = toRefs(useRole());
 
 const isLoadMoreBtnShowed = computed(
@@ -301,7 +311,7 @@ watch(
 
 .list-container {
     display: grid;
-    grid-template-rows: 52px 1fr;
+    grid-template-rows: 52px 52px 1fr;
     grid-template-columns: minmax(120px, 25%) 1fr;
     row-gap: 40px;
     column-gap: 20px;

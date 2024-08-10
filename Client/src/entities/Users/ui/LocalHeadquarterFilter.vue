@@ -15,37 +15,39 @@
 <script setup lang="ts">
 import { localHeadquarterApi } from '@shared/api';
 import { UiAccordion, UiHeading } from '@shared/ui';
-import { ref, watch } from 'vue';
+import { ref, watchEffect } from 'vue';
+
+type Props = {
+    regionalHeadquarterName?: string;
+    districtHeadquarterName?: string;
+};
 
 const localHeadquarters = ref<string[]>([]);
 
-const props = defineProps<{
-    regionalHeadquarterName?: string;
-}>();
+const props = defineProps<Props>();
 
-watch(
-    () => props.regionalHeadquarterName,
-    (newVal) => {
-        console.log(newVal);
-        fetchLocalHeadquarters(newVal);
-    },
-);
-
-const fetchLocalHeadquarters = (regionalHeadquarterName?: string) => {
-    if (!props.regionalHeadquarterName) {
-        console.log('return');
+const fetchLocalHeadquarters = ({
+    districtHeadquarterName,
+    regionalHeadquarterName,
+}: Props) => {
+    if (!regionalHeadquarterName && !districtHeadquarterName) {
         return;
     }
     localHeadquarterApi
         .getLocalHeadquarters({
             regional_headquarter__name: regionalHeadquarterName,
+            district_headquarter__name: districtHeadquarterName,
         })
         .then((res) => {
             localHeadquarters.value = res.data.map(({ name }) => name);
         });
 };
 
-fetchLocalHeadquarters();
+watchEffect(() => {
+    fetchLocalHeadquarters(props);
+});
+
+fetchLocalHeadquarters(props);
 </script>
 <style scoped>
 .input-wrapper {

@@ -15,37 +15,46 @@
 <script setup lang="ts">
 import { educationalHeadquarterApi } from '@shared/api';
 import { UiAccordion, UiHeading } from '@shared/ui';
-import { ref, watch } from 'vue';
+import { onMounted, ref, watchEffect } from 'vue';
+
+type Props = {
+    localHeadquarterName?: string;
+    regionalHeadquarterName?: string;
+    districtHeadquarterName?: string;
+};
 
 const educationalHeadquarters = ref<string[]>([]);
 
-const props = defineProps<{
-    localHeadquarterName?: string;
-}>();
+const props = defineProps<Props>();
 
-watch(
-    () => props.localHeadquarterName,
-    (newVal) => {
-        console.log(newVal);
-        fetchEducationalHeadquarters(newVal);
-    },
-);
-
-const fetchEducationalHeadquarters = (localHeadquarterName?: string) => {
-    if (!props.localHeadquarterName) {
-        console.log('retEdu');
+const fetchEducationalHeadquarters = ({
+    localHeadquarterName,
+    districtHeadquarterName,
+    regionalHeadquarterName,
+}: Props) => {
+    if (
+        !localHeadquarterName &&
+        !districtHeadquarterName &&
+        !regionalHeadquarterName
+    ) {
         return;
     }
     educationalHeadquarterApi
         .getEducationalHeadquarters({
             local_headquarter__name: localHeadquarterName,
+            district_headquarter__name: districtHeadquarterName,
+            regional_headquarter__name: regionalHeadquarterName,
         })
         .then((res) => {
             educationalHeadquarters.value = res.data.map(({ name }) => name);
         });
 };
 
-fetchEducationalHeadquarters(props.localHeadquarterName);
+watchEffect(() => {
+    fetchEducationalHeadquarters(props);
+});
+
+fetchEducationalHeadquarters(props);
 </script>
 <style scoped>
 .input-wrapper {

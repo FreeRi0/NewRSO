@@ -12,6 +12,7 @@ export type RegionalHeadquarter = {
 export type GetRegionalHeadquartersParams = {
     search?: string;
     district_headquarter__name?: string;
+    region?: string;
     ordering?: keyof RegionalHeadquarter;
     limit?: number;
     offset?: number;

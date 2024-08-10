@@ -3,11 +3,11 @@ export type EducationalHeadquarter = {
     name: string;
     emblem: string | null;
     founding_date: string;
-    educational_institution: string;
+    educational_institution: number;
     members_count: number;
     participants_count: number | null;
     events_count: number | null;
-    local_headquarter: number;
+    local_headquarter: number | null;
     regional_headquarter: number;
 };
 
