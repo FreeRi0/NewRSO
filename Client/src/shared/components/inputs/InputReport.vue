@@ -18,7 +18,7 @@ defineOptions({
 const emit = defineEmits(['update:value']);
 const props = defineProps({
   name: {
-    type: String,
+    type: [String, Number],
     required: true,
   },
   type: {

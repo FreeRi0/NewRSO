@@ -1,5 +1,144 @@
 <template>
-  <v-card class="panel-card" >
+  <div
+      v-if="true"
+      class="form__field-group"
+  >
+    <div v-for="(project, index) in projects" :key="index">
+      <div style="display: flex;">
+        <div>
+          <label
+              class="form__label"
+              for="participants_number"
+          >Общее количество человек, принявших участие в трудовом проекте <sup class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="project.participants_number"
+              id="participants_number"
+              name="participants_number"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+          />
+        </div>
+        <div>
+          <label
+              class="form__label"
+              for="ro_participants_number"
+          >Количество человек из своего региона, принявших участие в трудовом проекте <sup class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="project.ro_participants_number"
+              id="ro_participants_number"
+              name="ro_participants_number"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+          />
+        </div>
+        <Button
+            v-if="index > 0"
+            label="Удалить мероприятие"
+            style="margin: 0;"
+            @click="deleteProject(index)"
+        />
+      </div>
+      <div style="display: flex;">
+        <div class="form__field">
+          <label
+              class="form__label"
+              for="start_date"
+          >Дата начала проведения проекта <sup class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="project.start_date"
+              id="start_date"
+              name="start_date"
+              class="form__input"
+              type="date"
+              @focusout="focusOut"
+          />
+        </div>
+        <div class="form__field">
+          <label
+              class="form__label"
+              for="end_date"
+          >Дата окончания проведения проекта <sup class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="project.end_date"
+              id="end_date"
+              name="end_date"
+              class="form__input"
+              type="date"
+              @focusout="focusOut"
+          />
+        </div>
+      </div>
+      <div>
+        <label
+            class="form__label"
+            for="4"
+        >Положение о проекте <sup class="valid-red">*</sup></label>
+        <InputReport
+            type="file"
+            id="4"
+            name="4"
+        />
+      </div>
+      <div>
+        <p
+            class="form__label"
+        >Ссылка на группу трудового проекта в социальных сетях <sup class="valid-red">*</sup></p>
+        <div style="display: flex;" v-for="(link, i) in projects[index].links" :key="i">
+          <InputReport
+              v-model:value="link.link"
+              :id="i"
+              :name="i"
+              class="form__input"
+              type="text"
+              placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
+              @focusout="focusOut"
+          />
+          <Button
+              label="+ Добавить ссылку"
+              @click="addLink(index)"
+          />
+        </div>
+      </div>
+    </div>
+    <div>
+      <Button
+          style="margin: 0"
+          label="+ Добавить проект"
+          @click="addProject"
+      />
+    </div>
+    <div>
+      <label
+          class="form__label"
+          for="comment"
+      >Комментарий <sup class="valid-red">*</sup></label>
+      <InputReport
+          v-model:value="fifthPanelData.comment"
+          id="comment"
+          name="comment"
+          class="form__input"
+          type="textarea"
+          placeholder="Комментарий"
+          style="width: 100%;"
+          @focusout="focusOut"
+      />
+    </div>
+    <div>
+      <v-checkbox
+          label="Итоговое значение"
+      />
+    </div>
+    <div class="hr"></div>
+    <div>
+      <p>0</p>
+    </div>
+  </div>
+
+  <v-card v-else class="panel-card" >
     <v-tabs
         v-model="tab"
     >
@@ -11,7 +150,7 @@
     <v-card-text class="panel-card-text">
       <v-tabs-window v-model="tab">
         <v-tabs-window-item value="one">
-          <form class="form__field-group" @submit.prevent>
+          <div class="form__field-group">
             <div style="display: flex;">
               <div>
                 <label
@@ -127,7 +266,7 @@
             <div>
               <p>(4-1)*2+(4-2)+(4-3)=9</p>
             </div>
-          </form>
+          </div>
         </v-tabs-window-item>
 
         <v-tabs-window-item value="two">
@@ -338,11 +477,79 @@
   </v-card>
 </template>
 <script setup>
-import { ref } from "vue";
+import {ref, watchEffect} from "vue";
 import { InputReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
+import { reportPartTwoService } from "@services/ReportService.ts";
 
-const tab = ref('one')
+const tab = ref('one');
+const isFirstSent = ref(true);
+const fifthPanelData = ref({
+  comment: '',
+  projects: []
+});
+const projects = ref([
+  {
+    participants_number: '',
+    ro_participants_number: '',
+    start_date: null,
+    end_date: null,
+    links: [
+      {
+        link: '',
+      },
+    ],
+  }
+]);
+const addLink = (index) => {
+  projects.value[index].links.push({ link: '' })
+};
+const addProject = () => {
+  projects.value.push({
+    participants_number: '',
+    ro_participants_number: '',
+    start_date: null,
+    end_date: null,
+    links: [
+      {
+        link: '',
+      },
+    ],
+  })
+};
+const focusOut = async () => {
+  fifthPanelData.value.projects = [ ...projects.value ];
+  try {
+    if (isFirstSent.value) {
+      await reportPartTwoService.createReport(fifthPanelData.value, '5');
+    } else {
+      await reportPartTwoService.createReportDraft(fifthPanelData.value, '5');
+    }
+  } catch (e) {
+    console.log('focusOut error:', e);
+  }
+}
+const deleteProject = async (index) => {
+  projects.value = projects.value.filter((el, i) => index !== i);
+  fifthPanelData.value.projects = [ ...projects.value ];
+  try {
+    await reportPartTwoService.createReportDraft(fifthPanelData.value, '5');
+  } catch (e) {
+    console.log('deleteEvent error: ', e);
+  }
+};
+watchEffect(async () => {
+  try {
+    const { data } = await reportPartTwoService.getReport('5');
+    if (data.length) {
+      isFirstSent.value = false;
+      if (data.projects) projects.value = [...data[0].projects];
+      fifthPanelData.value.comment = data[0].comment;
+    }
+  } catch (e) {
+    console.log(e);
+  }
+});
 </script>
 <style lang="scss" scoped>
 .panel-card {

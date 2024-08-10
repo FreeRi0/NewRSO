@@ -107,7 +107,7 @@
           <InputReport
               v-model:value="link.link"
               :id="i"
-              name="6"
+              :name="i"
               class="form__input"
               type="text"
               placeholder="https://vk.com/cco_monolit"
@@ -526,6 +526,7 @@ import { Button } from '@shared/components/buttons';
 import { reportPartTwoService } from "@services/ReportService.ts";
 
 const tab = ref('one');
+const isFirstSent = ref(true);
 const fourthPanelData = ref({
   comment: '',
   events: []
@@ -562,10 +563,10 @@ const addEvent = () => {
 const focusOut = async () => {
   fourthPanelData.value.events = [ ...events.value ];
   try {
-    if (events.value.length) {
-      await reportPartTwoService.createReportDraft(fourthPanelData.value, '4');
-    } else {
+    if (isFirstSent.value) {
       await reportPartTwoService.createReport(fourthPanelData.value, '4');
+    } else {
+      await reportPartTwoService.createReportDraft(fourthPanelData.value, '4');
     }
   } catch (e) {
     console.log('focusOut error:', e);
@@ -583,8 +584,11 @@ const deleteEvent = async (index) => {
 watchEffect(async () => {
   try {
     const { data } = await reportPartTwoService.getReport('4');
-    events.value = [...data[0].events];
-    fourthPanelData.value.comment = data[0].comment;
+    if (data.length) {
+      isFirstSent.value = false;
+      events.value = [...data[0].events];
+      fourthPanelData.value.comment = data[0].comment;
+    }
   } catch (e) {
     console.log(e);
   }
