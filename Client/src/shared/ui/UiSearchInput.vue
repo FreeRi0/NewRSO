@@ -35,6 +35,7 @@
                         :key="item"
                         :class="{ highlighted: index === highlightedIndex }"
                         @click="selectItem(item)"
+                        ref="itemRefs"
                     >
                         {{ item }}
                     </li>
@@ -52,6 +53,8 @@ import { compareStringsBySimilarity } from '@shared/lib';
 
 const model = ref('');
 const emit = defineEmits(['update:modelValue']);
+
+const itemRefs = ref<HTMLLIElement[]>([]);
 
 const props = withDefaults(
     defineProps<{
@@ -109,6 +112,7 @@ const onKeyDown = (e: KeyboardEvent) => {
         highlightedIndex.value =
             (highlightedIndex.value + 1) %
             sortedAutoCompleteValues.value.length;
+        scrollToHighlightedItem();
         return;
     }
     if (e.key === 'ArrowUp') {
@@ -118,6 +122,7 @@ const onKeyDown = (e: KeyboardEvent) => {
                 1 +
                 sortedAutoCompleteValues.value.length) %
             sortedAutoCompleteValues.value.length;
+        scrollToHighlightedItem();
         return;
     }
     if (e.key === 'Enter' && highlightedIndex.value >= 0) {
@@ -125,6 +130,16 @@ const onKeyDown = (e: KeyboardEvent) => {
         selectItem(sortedAutoCompleteValues.value[highlightedIndex.value]);
         return;
     }
+};
+
+const scrollToHighlightedItem = () => {
+    if (itemRefs.value.length === 0) {
+        return;
+    }
+
+    const target = itemRefs.value[highlightedIndex.value];
+    console.log(target);
+    target.scrollIntoView({ block: 'nearest' });
 };
 
 const updateAutocompleteStyle = () => {
@@ -184,6 +199,9 @@ onClickOutside(inputRef, () => {
     list-style: none;
     margin: 0;
     padding: 0;
+    max-height: calc(4 * 40px);
+    overflow-y: auto;
+    position: relative;
 }
 .autocomplete-list li {
     padding: 8px;
@@ -194,5 +212,18 @@ onClickOutside(inputRef, () => {
 }
 .autocomplete-list li:hover {
     background-color: #e0e0e0;
+}
+
+.autocomplete-list::-webkit-scrollbar {
+    width: 3px;
+}
+
+.autocomplete-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.autocomplete-list::-webkit-scrollbar-thumb {
+    background-color: grey;
+    border-radius: 10px;
 }
 </style>

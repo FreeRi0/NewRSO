@@ -188,6 +188,15 @@ export function useUsersList({
         },
     );
 
+    watch(
+        () => filters.value.educational_headquarter__name,
+        () => {
+            setFilters({
+                detachment__name: '',
+            });
+        },
+    );
+
     return toReactive({
         searchQuery,
         isResultsFound,

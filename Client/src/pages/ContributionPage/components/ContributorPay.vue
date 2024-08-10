@@ -174,6 +174,48 @@
                                 {{ filters.educational_headquarter__name }}
                             </p>
 
+                            <RoleGuard
+                                :needed-roles="[
+                                    UserRole.REGIONAL_HEADQUARTER_COMMANDER,
+                                    UserRole.LOCAL_HEADQUARTER_COMMANDER,
+                                    UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                    UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                    UserRole.EDUCATIONAL_HEADQUARTER_COMMANDER,
+                                ]"
+                            >
+                                <DetachmentHeadquarterFilter
+                                    :local-headquarter-name="
+                                        filters.local_headquarter__name
+                                    "
+                                    :district-headquarter-name="
+                                        filters.district_headquarter__name
+                                    "
+                                    :regional-headquarter-name="
+                                        filters.regional_headquarter__name
+                                    "
+                                    :educational-headquarter-name="
+                                        filters.educational_headquarter__name
+                                    "
+                                    v-slot="{ educationalHeadquarters }"
+                                >
+                                    <UiSearchInput
+                                        placeholder="Начните вводить"
+                                        :auto-complete-values="
+                                            educationalHeadquarters
+                                        "
+                                        v-model="filters.detachment__name"
+                                        variant="small"
+                                    />
+                                </DetachmentHeadquarterFilter>
+                            </RoleGuard>
+                            <p
+                                class="filter-info"
+                                v-if="filters.detachment__name"
+                            >
+                                Выбрано:
+                                {{ filters.detachment__name }}
+                            </p>
+
                             <MemberFeeFilter v-model="filters.membership_fee" />
 
                             <p class="filter-info">
@@ -238,6 +280,7 @@ import {
     RegionalHeadquarterFilter,
     useUsersList,
 } from '@entities/Users';
+import DetachmentHeadquarterFilter from '@entities/Users/ui/DetachmentHeadquarterFilter.vue';
 import {
     UiButton,
     UiHeading,
