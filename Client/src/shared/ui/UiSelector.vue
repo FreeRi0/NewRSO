@@ -36,10 +36,10 @@ const handleClick = () => (isOpened.value = !isOpened.value);
 
 onClickOutside(elemRef, handleClickOutside);
 
-type Option = { value: string; label: string };
+type Option = { value: string | boolean | number; label: string };
 
 const props = defineProps<{
-    modelValue: string;
+    modelValue: string | boolean | number;
     options: Option[];
 }>();
 const emit = defineEmits(['update:modelValue']);

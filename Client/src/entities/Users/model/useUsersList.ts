@@ -215,7 +215,7 @@ export function useUsersList({
         },
     );
 
-    return toReactive({
+    return {
         searchQuery,
         isResultsFound,
         isSinglePage,
@@ -235,5 +235,5 @@ export function useUsersList({
         sortBy,
         showedRecordsCount,
         reverseSortOrder,
-    });
+    };
 }

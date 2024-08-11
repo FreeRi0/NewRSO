@@ -7,3 +7,4 @@ export { default as UiSkeleton } from './UiSkeleton.vue';
 export { default as UiAccordion } from './UiAccordion.vue';
 export { default as UiSelector } from './UiSelector.vue';
 export * from './UiSideMenu';
+export { default as UiCheckbox } from './UiCheckbox.vue';

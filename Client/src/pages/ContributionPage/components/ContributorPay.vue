@@ -42,6 +42,25 @@
                             >
                                 <SvgIcon icon-name="filter" />
                             </UiButton>
+                            <RoleGuard
+                                :needed-roles="[
+                                    UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                    UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                    UserRole.REGIONAL_HEADQUARTER_COMMANDER,
+                                ]"
+                            >
+                                <UiCheckbox
+                                    v-model="userIdList"
+                                    :value="usersList.map(({ id }) => id)"
+                                />
+                                <UiSelector
+                                    v-model="membersFeeStatus"
+                                    :options="[
+                                        { label: 'Оплачен', value: true },
+                                        { label: 'Не оплачен', value: false },
+                                    ]"
+                                />
+                            </RoleGuard>
                             <SortBySelector
                                 :is-reversed="isReverseOrder"
                                 v-model="sortBy"
@@ -433,7 +452,25 @@
                                 tag="ul"
                                 class="contributors-list"
                             >
-                                <li v-for="user in usersList" :key="user.id">
+                                <li
+                                    v-for="user in usersList"
+                                    :key="user.id"
+                                    class="list-item"
+                                >
+                                    <RoleGuard
+                                        :needed-roles="[
+                                            UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                            UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                            UserRole.REGIONAL_HEADQUARTER_COMMANDER,
+                                        ]"
+                                    >
+                                        <UiButton variant="tertiary">
+                                            <UiCheckbox
+                                                v-model="userIdList"
+                                                :value="user.id"
+                                            />
+                                        </UiButton>
+                                    </RoleGuard>
                                     <ContributorItem
                                         :avatar-url="
                                             user.avatar.photo ?? undefined
@@ -466,6 +503,54 @@
                             </p>
                         </div>
                     </div>
+                    <div
+                        class="change-status-list-wrapper"
+                        v-if="selectedUsersCount !== 0"
+                    >
+                        <UiHeading variant="h3">
+                            Итого: {{ selectedUsersCount }}
+                        </UiHeading>
+                        <div class="change-status-list-wrapper">
+                            <TransitionGroup
+                                v-if="isResultsFound"
+                                name="list"
+                                tag="ul"
+                                class="contributors-list change"
+                            >
+                                <li
+                                    v-for="user in selectedUsersList"
+                                    :key="user.id"
+                                    class="list-item"
+                                >
+                                    <ContributorItem
+                                        :avatar-url="
+                                            user.avatar.photo ?? undefined
+                                        "
+                                        :first-name="user.first_name"
+                                        :last-name="user.last_name"
+                                        :patronymic-name="
+                                            user.patronymic_name ?? undefined
+                                        "
+                                        :birthday="user.date_of_birth"
+                                        :is-fee-payed="membersFeeStatus"
+                                        :id="user.id"
+                                    />
+                                    <UiButton variant="tertiary">
+                                        <UiCheckbox
+                                            v-model="userIdList"
+                                            :value="user.id"
+                                        />
+                                    </UiButton>
+                                </li>
+                            </TransitionGroup>
+                        </div>
+                        <UiButton
+                            class="save-status-button"
+                            variant="secondary"
+                            @click="handleStatusChange"
+                            >Сохранить</UiButton
+                        >
+                    </div>
                 </UiTabWindow>
             </div>
         </UiTabContainer>
@@ -476,6 +561,7 @@ import { ContributionStatus, ContributorItem } from '@entities/Contributor';
 import { RoleGuard, UserRole, useRole } from '@entities/Role';
 import { useSession } from '@entities/Session';
 import {
+    DetachmentHeadquarterFilter,
     DistrictHeadquarterFilter,
     EducationalHeadquarterFilter,
     LocalHeadquarterFilter,
@@ -483,13 +569,15 @@ import {
     RegionalHeadquarterFilter,
     SortBySelector,
     useUsersList,
-    DetachmentHeadquarterFilter,
 } from '@entities/Users';
+import { useChangeMembersFeeStatus } from '@features/changeMemebersFeeStatus';
 import {
     SvgIcon,
     UiButton,
+    UiCheckbox,
     UiHeading,
     UiSearchInput,
+    UiSelector,
     UiSideMenu,
     UiTab,
     UiTabContainer,
@@ -497,8 +585,7 @@ import {
     useSideMenu,
 } from '@shared/ui';
 import { storeToRefs } from 'pinia';
-import { watch } from 'vue';
-import { computed, toRefs, watchEffect } from 'vue';
+import { computed, watch } from 'vue';
 
 const { authorizedUser, isLoading } = storeToRefs(useSession());
 const {
@@ -517,9 +604,21 @@ const {
     setFilters,
     sortBy,
     reverseSortOrder,
-} = toRefs(useUsersList({ append: true, recordsPerPage: 24 }));
+    refetch,
+} = useUsersList({ append: true, recordsPerPage: 24 });
 const { userHeadquarters } = storeToRefs(useRole());
 const filtersMenu = useSideMenu();
+const { userIdList, selectedUsersCount, applyStatus, membersFeeStatus } =
+    useChangeMembersFeeStatus();
+
+const handleStatusChange = async () => {
+    await applyStatus();
+    await refetch();
+};
+
+const selectedUsersList = computed(() =>
+    usersList.value.filter(({ id }) => userIdList.value.includes(id)),
+);
 
 const isLoadMoreBtnShowed = computed(
     () => isResultsFound.value && !isSinglePage.value && !isLastPage.value,
@@ -536,7 +635,7 @@ const isLoadPrevBtnShowed = computed(
 watch(
     () => userHeadquarters.value,
     () => {
-        setFilters.value({
+        setFilters({
             central_headquarter__name:
                 userHeadquarters.value?.centralheadquarter_commander?.name,
             district_headquarter__name:
@@ -552,6 +651,20 @@ watch(
 );
 </script>
 <style scoped>
+.change-status-list-wrapper {
+    padding: 30px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.save-status-button {
+    align-self: center;
+}
+
+.change-status-list {
+    padding-top: 30px;
+}
+
 .buttons-container {
     display: flex;
     flex-wrap: wrap;
@@ -571,6 +684,13 @@ watch(
     row-gap: 40px;
     column-gap: 20px;
     max-width: 100%;
+}
+
+.list-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 .search {
@@ -604,6 +724,7 @@ watch(
     justify-content: space-between;
     gap: 10px;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .contributors-list-wrapper {

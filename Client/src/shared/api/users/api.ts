@@ -20,3 +20,11 @@ export function getUsers(params?: GetUsersParams) {
         params,
     });
 }
+
+export async function setMembershipStatus(id: number, status: boolean) {
+    if (status) {
+        return HTTP.post<null>(`/rsousers/${id}/membership_fee_status/`);
+    }
+
+    return HTTP.delete<null>(`/rsousers/${id}/membership_fee_status/`);
+}

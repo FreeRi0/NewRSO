@@ -61,16 +61,13 @@ const formattedBirthday = computed(() =>
     flex-wrap: wrap;
     gap: 12px;
     transition: transform 0.1s ease-in-out;
+    flex: 1;
 }
 .main-info {
     display: grid;
     align-items: center;
     gap: 8px;
     flex: 1;
-    /* flex-shrink: 1; 
-    flex-wrap: nowrap;
-    flex-basis: 80%;
-    max-width: 250px; */
     grid-template-columns: 36px minmax(200px, 1fr);
 }
 .content {
@@ -118,6 +115,12 @@ const formattedBirthday = computed(() =>
     justify-content: center;
     min-width: 150px;
     min-height: 45px;
+}
+
+@media screen and (hover: hover) {
+    .item:hover {
+        transform: scale(1.01);
+    }
 }
 
 @media screen and (max-width: 640px) {
