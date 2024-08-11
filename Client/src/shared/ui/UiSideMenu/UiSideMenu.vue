@@ -15,7 +15,7 @@
                             title
                         }}</UiHeading>
                         <UiButton
-                            variant="tertiary-light"
+                            variant="tertiary"
                             @click="sideMenuState.closeSideMenu"
                         >
                             <SvgIcon

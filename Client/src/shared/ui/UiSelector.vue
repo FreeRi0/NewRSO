@@ -11,7 +11,7 @@
         <ul v-if="isOpened" class="list-options">
             <li
                 v-for="option in options"
-                :key="option.value"
+                :key="option.label"
                 @click="selectOption(option)"
                 class="list-option"
             >

@@ -1,6 +1,5 @@
 import { HTTP } from '@app/http';
-import { GetDistrictHeadquartersParams, DistrictHeadquarter } from './types';
-import { PaginatedResponse } from '../types';
+import { DistrictHeadquarter, GetDistrictHeadquartersParams } from './types';
 
 export function getDistrictHeadquarters(
     params?: GetDistrictHeadquartersParams,

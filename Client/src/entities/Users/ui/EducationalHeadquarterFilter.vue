@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { educationalHeadquarterApi } from '@shared/api';
 import { UiAccordion, UiHeading } from '@shared/ui';
-import { onMounted, ref, watchEffect } from 'vue';
+import { ref, watchEffect } from 'vue';
 
 type Props = {
     localHeadquarterName?: string;

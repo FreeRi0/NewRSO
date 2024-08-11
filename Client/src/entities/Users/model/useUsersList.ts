@@ -1,6 +1,6 @@
 import { usersApi } from '@shared/api';
-import { toReactive, watchDebounced } from '@vueuse/core';
-import { computed, ref, toRefs, watch } from 'vue';
+import { watchDebounced } from '@vueuse/core';
+import { computed, ref, watch } from 'vue';
 
 type Filters = Omit<usersApi.GetUsersParams, 'offset' | 'limit'>;
 
