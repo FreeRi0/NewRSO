@@ -39,7 +39,7 @@ const urls = [
 HTTP.interceptors.request.use(  
   (config) => {
     const configUrl = config.url?.split('?').shift();
-    console.log("результат", configUrl);
+    // console.log("результат", configUrl);
     if (
       urls.some(item => item === configUrl)
     ) {
