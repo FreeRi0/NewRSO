@@ -586,8 +586,14 @@ watchEffect(async () => {
     const { data } = await reportPartTwoService.getReport('4');
     if (data.length) {
       isFirstSent.value = false;
-      events.value = [...data[0].events];
-      fourthPanelData.value.comment = data[0].comment;
+      for (let item of data) {
+        if (item.regional_headquarter === 1) {
+          events.value = item.events;
+          fourthPanelData.value.comment = item.comment;
+        }
+      }
+      // events.value = [...data[0].events];
+      // fourthPanelData.value.comment = data[0].comment;
     }
   } catch (e) {
     console.log(e);
