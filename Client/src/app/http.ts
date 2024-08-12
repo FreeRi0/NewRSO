@@ -6,7 +6,7 @@ import { ref } from 'vue';
 
 
 export const HTTP = axios.create({
-  baseURL: 'https://xn--j1ab.xn--d1amqcgedd.xn--p1ai/api/v1/',
+  baseURL: 'http://213.139.208.147:30000/api/v1/',
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ const urls = [
 HTTP.interceptors.request.use(  
   (config) => {
     const configUrl = config.url?.split('?').shift();
-    console.log("результат", configUrl);
+    // console.log("результат", configUrl);
     if (
       urls.some(item => item === configUrl)
     ) {
