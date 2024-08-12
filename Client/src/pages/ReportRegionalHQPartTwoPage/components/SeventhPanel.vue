@@ -20,7 +20,7 @@
 </template>
 <script setup>
 import { ref } from "vue";
-import { SeventhPanelForm } from ".";
+import { SeventhPanelForm } from "./index";
 import { InputReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 

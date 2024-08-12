@@ -56,23 +56,27 @@
         </div>
         <div class="form__field">
           <p class="form__label">Призовое место в конкурсе <sup class="valid-red">*</sup></p>
-          <div style="display: flex">
-            <div style="display: flex">
-              <InputReport id="2" name="2" class="form__input" type="radio" />
-              <label>1</label>
+          <div class="places_wrap">
+            <div class="places_item" v-for="item in prize_places" :key="item.id">
+              <input :id="item.id" :value="item.value" :name="item.name" class="form__input" type="radio"
+                @focusout="focusOut" v-model="places.place" />
+              <label :for="id">{{ item.name }}</label>
             </div>
-            <div style="display: flex">
-              <InputReport id="2" name="2" class="form__input" type="radio" />
+            <!-- <div style="display: flex">
+              <InputReport id="2" name="2" class="form__input" type="radio" @focusout="focusOut"
+                v-model:value="places.place" />
               <label>2</label>
             </div>
             <div style="display: flex">
-              <InputReport id="2" name="2" class="form__input" type="radio" />
+              <InputReport id="2" name="2" class="form__input" type="radio" @focusout="focusOut"
+                v-model:value="places.place" />
               <label>3</label>
             </div>
             <div style="display: flex">
-              <InputReport id="2" name="2" class="form__input" type="radio" />
+              <InputReport id="2" name="2" class="form__input" type="radio" @focusout="focusOut"
+                v-model:value="places.place" />
               <label>Нет</label>
-            </div>
+            </div> -->
           </div>
         </div>
         <div>
@@ -88,17 +92,18 @@
 
         <div class="form__field">
           <label class="form__label" for="14">Ссылка на публикацию о победе * <sup class="valid-red">*</sup></label>
-          <div class="form__wrapper" >
-            <InputReport @focusout="focusOut" name="14" class="form__input" style="width: 100%"
-              />
-            <div class="add_link" @click="addLink(index)">+ Добавить ссылку</div>
+          <div class="form__wrapper" v-for="(item, index) in places" :key="index">
+            <InputReport @focusout="focusOut" :id="item.link" :name="item.link" name="14" v-model:value="item.link"
+              class="form__input" style="width: 100%" />
+            <div class="add_link" @click="addLink">+ Добавить ссылку</div>
           </div>
 
         </div>
 
         <div class="form__field">
           <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
-          <InputReport @focusout="focusOut" v-model:value="seventhPanelData.comment" id="14" name="14" class="form__input" style="width: 100%" />
+          <InputReport @focusout="focusOut" v-model:value="seventhPanelData.comment" id="14" name="14"
+            class="form__input" style="width: 100%" />
         </div>
         <div>
           <v-checkbox label="Итоговое значение" />
@@ -189,33 +194,42 @@ const emit = defineEmits(['collapse-form']);
 const collapseForm = () => {
   emit('collapse-form');
 }
+const isFirstSent = ref(true);
 
 const seventhPanelData = ref({
   comment: '',
-  data: []
+  places: []
 });
 
-const data = ref([
+const places = ref([
   {
     place: null,
     file: null,
     links: [
       {
         link: ''
-      }
+      },
     ]
   }
 
 ])
 
+const prize_places = ref([
+  { name: '1', value: 1, id: 'pp1' },
+  { name: '2', value: 2, id: 'pp2' },
+  { name: '3', value: 3, id: 'pp3' },
+  { name: 'нет', value: false, id: 'pp4' },
+]);
+
 const selectFile = (event) => {
-  data.value.file = event.files[0];
+  places.value.file = event.files[0];
 };
 const focusOut = async () => {
-  seventhPanelData.value.events = [...data.value];
+  seventhPanelData.value.events = [...places.value];
   try {
-    if (data.value.length) {
-      await reportPartTwoService.createReportDraft(seventhPanelData.value, '7');
+    if (isFirstSent.value) {
+      console.log('place', places.value.place);
+      await reportPartTwoService.createReportDraft(seventhPanelData.value, '7', true);
     } else {
       await reportPartTwoService.createReport(seventhPanelData.value, '7');
     }
@@ -223,15 +237,19 @@ const focusOut = async () => {
     console.log('focusOut error:', e);
   }
 };
-const addLink = (index) => {
-  data.value[index].links.push({ link: '' })
+const addLink = () => {
+  places.value.push({ link: '' })
+  console.log('links', places.value)
 };
 
 watchEffect(async () => {
   try {
     const { data } = await reportPartTwoService.getReport('7');
-    data.value = [...data.results[0].events];
-    seventhPanelData.value.comment = data.results[0].comment;
+    if (data.length) {
+      isFirstSent.value = false;
+      places.value = [...data[0].places];
+      seventhPanelData.value.comment = data[0].comment;
+    }
   } catch (e) {
     console.log(e);
   }
@@ -245,6 +263,18 @@ watchEffect(async () => {
   font-size: 14px;
   font-weight: 400;
   line-height: 21.1px;
+}
+
+.places{
+  &_wrap {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+  }
+  &_item {
+    display: flex;
+    align-items: center;
+  }
 }
 
 .form {
