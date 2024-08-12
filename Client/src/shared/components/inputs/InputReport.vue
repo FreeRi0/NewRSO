@@ -4,7 +4,7 @@
       height: height,
       background: 'white'
     }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly"
-      max="9999-12-31" class="mb-2" @input="updateValue" v-bind="$attrs" :disabled="disabled" />
+      max="9999-12-31" class="mb-2 form-input__report " @input="updateValue" v-bind="$attrs" :disabled="disabled" />
   </div>
 </template>
 
@@ -59,6 +59,19 @@ const updateValue = (event) => {
 </script>
 
 <style lang="scss" scoped>
+.form-input__report {
+  padding: 8px 16px;
+  background-color: #ffffff;
+  border: 1px solid #bec2c6;
+  border-radius: 10px;
+  line-height: 21px;
+  cursor: pointer;
+
+  &::placeholder {
+    color: #6d6d6d;
+  }
+}
+
 // <!--.error-wrapper {-->
 // <!--  // margin-bottom: 5px;-->
 // <!--  position: relative;-->
