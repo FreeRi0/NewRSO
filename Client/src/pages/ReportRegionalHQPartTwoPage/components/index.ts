@@ -3,6 +3,7 @@ export {default as FourthPanel} from './FourthPanel.vue';
 export {default as FifthPanel} from './FifthPanel.vue';
 export {default as SixthPanel} from './SixthPanel.vue';
 export {default as SeventhPanel} from './SeventhPanel.vue';
+export {default as SeventhPanelForm} from './SeventhPanelForm.vue';
 export {default as NinthPanel} from './NinthPanel.vue';
 export {default as TenthPanel} from './TenthPanel.vue';
 export {default as EleventhPanel} from './EleventhPanel.vue';
