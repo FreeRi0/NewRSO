@@ -215,22 +215,35 @@ import { Button } from '@shared/components/buttons';
 
 .v-expansion-panel-title {
   background: #F3F4F5;
+  border-left: 6px solid #1f7cc0;
   margin-bottom: 8px;
-  border-radius: 6px;
+  border-radius: 10px;
   font-family: Akrobat;
   font-size: 20px;
   font-weight: 600;
   line-height: 24px;
   text-align: left;
+}
 
+.v-expansion-panel--active > .v-expansion-panel-title {
+  border-radius: 10px;
+  min-height: none;
+  border-left: none;
+  border-right: 6px solid #1f7cc0;
 }
 
 .v-expansion-panel-text__wrapper {
-  padding: 8px 0 0 0;
+  padding: 0 0 0 0;
 }
 
 .v-expansion-panel-title__overlay {
-  border-radius: 6px;
+  border-radius: 10px;
+}
+
+.v-expansion-panel--active:not(:first-child),
+.v-expansion-panel--active + .v-expansion-panel {
+  margin-top: 0;
+  opacity: unset;
 }
 
 .v-expansion-panel:not(:first-child)::after {

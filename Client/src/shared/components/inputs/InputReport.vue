@@ -1,14 +1,39 @@
 <template>
-  <div class="form-input" :style="{ width: width }">
-    <input :type="type" :name="name" :style="{
-      height: height,
-      background: 'white'
-    }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly"
-      max="9999-12-31" class="mb-2" @input="updateValue" v-bind="$attrs" :disabled="disabled" />
+  <div
+    :is-file="isFile"
+    :class="isFile ? 'form-input form-input__file-input' : 'form-input'"
+    :style="{ width: width }">
+    <input 
+      :type="type" 
+      :name="name" 
+      :style="{
+        height: height,
+      }" 
+      :value="value" 
+      :id="name" 
+      :placeholder="placeholder" 
+      :maxlength="maxLength" 
+      :readonly="readonly"
+      max="9999-12-31" 
+      class="form-input__report" 
+      @input="updateValue" 
+      v-bind="$attrs" 
+      :disabled="disabled"
+    />
+    <div class="form__counter" v-if="counterVisible">
+        {{ textInputLength }} / {{ maxCounter }}
+    </div>
+    <div 
+      v-if="isFile"
+      class="form-input__text">
+      <span>Перетащите файлы или выберите на&nbsp;компьютере</span>
+      <span>Выбрать файл</span>
+    </div>
   </div>
 </template>
 
 <script setup>
+import {ref, watchEffect} from 'vue';
 import { MaskInput } from 'vue-3-mask';
 
 defineOptions({
@@ -51,7 +76,22 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  counterVisible: {
+    type: Boolean,
+    default: false,
+  },
+  maxCounter: {
+    type: Number,
+  },
+  isFile: {
+    type: Boolean,
+    default: false,
+  },
 });
+
+const textInputLength = ref(null);
+
+watchEffect(() => textInputLength.value = typeof props.value === 'string' ? props.value.length : 0)
 
 const updateValue = (event) => {
   emit('update:value', event.target.value);
@@ -59,53 +99,62 @@ const updateValue = (event) => {
 </script>
 
 <style lang="scss" scoped>
-// <!--.error-wrapper {-->
-// <!--  // margin-bottom: 5px;-->
-// <!--  position: relative;-->
-// <!--}-->
 
-// <!--.form-error__message {-->
-// <!--  position: absolute;-->
-// <!--  right: 0;-->
-// <!--  color: var(&#45;&#45;danger);-->
-// <!--  font-size: 12px;-->
-// <!--}-->
+.form-input {
+  &.form-input__file-input {
+    height: 86px;
+    position: relative;
+    border-radius: 12px;
+    background-color: transparent;
+    border: 1.5px dashed #1F7CC0;
 
-// <!--input {-->
-// <!--  font: normal;-->
-// <!--}-->
+    .form-input__report[type='file'] {
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  }
 
-// <!--input:focus {-->
-// <!--  outline: none;-->
-// <!--}-->
+  &__text {
+    padding: 16px 8px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+    align-items: center;
+    font-family: "Bert Sans";
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 23px;
+    color: #6d6d6d;
 
-// <!--.form-input input {-->
-// <!--  box-sizing: border-box;-->
-// <!--  border: 1px solid #a3a3a3;-->
-// <!--  border-radius: 10px;-->
-// <!--  display: block;-->
-// <!--  font-size: 16px;-->
-// <!--  font-weight: 500;-->
-// <!--  padding: 10px 16px 10px 16px;-->
-// <!--  margin-bottom: 20px;-->
-// <!--  font-family: 'Bert Sans';-->
-// <!--  width: 100%;-->
-// <!--  color: #35383f;-->
-// <!--}-->
+    span:last-child {
+      color:#1f7cc0;
+    }
+  }
+}
+.form-input__report {
+  padding: 8px 16px;
+  background-color: #ffffff;
+  border: 1px solid #bec2c6;
+  border-radius: 10px;
+  line-height: 21px;
+  cursor: pointer;
 
-// <!--.form-input input::placeholder {-->
-// <!--  color: #a3a3a3;-->
-// <!--  font-size: 16px;-->
-// <!--  font-weight: 500;-->
-// <!--  font-family: 'Bert Sans';-->
-// <!--}-->
+  &::placeholder {
+    color: #6d6d6d;
+  }
+}
 
-// <!--.form-input-requisites input {-->
-// <!--  border: 2px solid #a3a3a3;-->
-// <!--  border-radius: 10px;-->
-// <!--  display: block;-->
-// <!--  font-size: 12px;-->
-// <!--  padding: 10px 110px 10px 16px;-->
-// <!--  margin-bottom: 20px;-->
-// <!--  width: 100%;-->
-// <!--}--></style>
+.form__counter {
+  width: fit-content;
+  margin-left: auto;
+  font-family: "Bert Sans";
+  font-size: 12px;
+  line-height: 16px;
+  color: #6d6d6d;
+  margin-top: 1px;
+}
+</style>
