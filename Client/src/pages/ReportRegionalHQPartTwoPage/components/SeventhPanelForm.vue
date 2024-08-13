@@ -54,30 +54,18 @@
             <Button @click="collapseForm" class="form__btn" style="margin: 0;" label="Свернуть" />
           </div>
         </div>
-        <div class="form__field">
+        <div class="form__field places">
           <p class="form__label">Призовое место в конкурсе <sup class="valid-red">*</sup></p>
           <div class="places_wrap">
             <div class="places_item" v-for="item in prize_places" :key="item.id">
-              <input :id="item.id" :value="item.value" :name="item.name" class="form__input" type="radio"
+              <input :id="item.id" :value="item.value" :name="item.name" class="form__input places_input" type="radio"
                 @focusout="focusOut" v-model="places.place" />
-              <label :for="id">{{ item.name }}</label>
+              <label class="places_item_label" :for="id">{{ item.name }}</label>
+
+
             </div>
-            <!-- <div style="display: flex">
-              <InputReport id="2" name="2" class="form__input" type="radio" @focusout="focusOut"
-                v-model:value="places.place" />
-              <label>2</label>
-            </div>
-            <div style="display: flex">
-              <InputReport id="2" name="2" class="form__input" type="radio" @focusout="focusOut"
-                v-model:value="places.place" />
-              <label>3</label>
-            </div>
-            <div style="display: flex">
-              <InputReport id="2" name="2" class="form__input" type="radio" @focusout="focusOut"
-                v-model:value="places.place" />
-              <label>Нет</label>
-            </div> -->
           </div>
+          <p>place: {{ places.place }}</p>
         </div>
         <div>
         </div>
@@ -92,14 +80,19 @@
 
         <div class="form__field">
           <label class="form__label" for="14">Ссылка на публикацию о победе * <sup class="valid-red">*</sup></label>
-          <div class="form__wrapper" v-for="(item, index) in places" :key="index">
-            <InputReport @focusout="focusOut" :id="item.link" :name="item.link" name="14" v-model:value="item.link"
-              class="form__input" style="width: 100%" />
-            <div class="add_link" @click="addLink">+ Добавить ссылку</div>
+
+          <div class="form__wrapper" v-for="(item, index) in places[0].links" :key="index">
+            <InputReport @focusout="focusOut" name="14" v-model:value="item.link" class="form__input mb-2" />
+            <div class="d-flex" v-if="places[0].links.length >= 2">
+              <div class="add_link" @click="deleteLink">Удалить поле ввода | </div>
+              <div class="add_link" @click="addLink"> + Добавить ссылку</div>
+            </div>
+            <div class="add_link" @click="deleteLink" v-else-if="places[0].links.length == 2">Удалить поле ввода</div>
+            <div class="add_link" @click="addLink" v-else>+ Добавить ссылку</div>
           </div>
 
-        </div>
 
+        </div>
         <div class="form__field">
           <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
           <InputReport @focusout="focusOut" v-model:value="seventhPanelData.comment" id="14" name="14"
@@ -207,28 +200,27 @@ const places = ref([
     file: null,
     links: [
       {
-        link: ''
+        link: '',
       },
     ]
   }
-
 ])
 
 const prize_places = ref([
   { name: '1', value: 1, id: 'pp1' },
   { name: '2', value: 2, id: 'pp2' },
   { name: '3', value: 3, id: 'pp3' },
-  { name: 'нет', value: false, id: 'pp4' },
+  { name: 'Нет', value: false, id: 'pp4' },
 ]);
 
 const selectFile = (event) => {
   places.value.file = event.files[0];
+  console.log('file', places.value.file)
 };
 const focusOut = async () => {
   seventhPanelData.value.events = [...places.value];
   try {
     if (isFirstSent.value) {
-      console.log('place', places.value.place);
       await reportPartTwoService.createReportDraft(seventhPanelData.value, '7', true);
     } else {
       await reportPartTwoService.createReport(seventhPanelData.value, '7');
@@ -238,9 +230,12 @@ const focusOut = async () => {
   }
 };
 const addLink = () => {
-  places.value.push({ link: '' })
-  console.log('links', places.value)
+  places.value[0].links.push({ link: '' })
 };
+
+const deleteLink = () => {
+  places.value[0].links.pop();
+}
 
 watchEffect(async () => {
   try {
@@ -265,15 +260,35 @@ watchEffect(async () => {
   line-height: 21.1px;
 }
 
-.places{
+.places {
+  margin-bottom: 16px;
+
   &_wrap {
     display: flex;
     align-items: center;
-    column-gap: 8px;
+    column-gap: 40px;
+    margin-top: 2px;
+
   }
+
+  &_input {
+    width: 20px;
+    height: 20px;
+  }
+
   &_item {
     display: flex;
     align-items: center;
+    column-gap: 8px;
+    height: 24px;
+
+    &_label {
+      font-size: 16px;
+      font-weight: 600;
+      font-family: Bert Sans;
+      line-height: 24px;
+      color: #000000;
+    }
   }
 }
 
@@ -306,7 +321,6 @@ watchEffect(async () => {
     column-gap: 40px;
     align-items: center;
   }
-
 
   .statement-item {
     display: flex;

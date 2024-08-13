@@ -4,7 +4,7 @@
       height: height,
       background: 'white'
     }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly"
-      max="9999-12-31" class="mb-2" @input="updateValue" v-bind="$attrs" :disabled="disabled" />
+      max="9999-12-31" @input="updateValue" v-bind="$attrs" :disabled="disabled" />
   </div>
 </template>
 
@@ -59,6 +59,11 @@ const updateValue = (event) => {
 </script>
 
 <style lang="scss" scoped>
+// .form__small {
+//   width: 100%;
+//   max-width: 720px;
+// }
+
 // <!--.error-wrapper {-->
 // <!--  // margin-bottom: 5px;-->
 // <!--  position: relative;-->
