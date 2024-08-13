@@ -3,27 +3,27 @@
     :is-file="isFile"
     :class="isFile ? 'form-input form-input__file-input' : 'form-input'"
     :style="{ width: width }">
-    <input 
-      :type="type" 
-      :name="name" 
+    <input
+      :type="type"
+      :name="name"
       :style="{
         height: height,
-      }" 
-      :value="value" 
-      :id="name" 
-      :placeholder="placeholder" 
-      :maxlength="maxLength" 
+      }"
+      :value="value"
+      :id="name"
+      :placeholder="placeholder"
+      :maxlength="maxLength"
       :readonly="readonly"
-      max="9999-12-31" 
-      class="form-input__report" 
-      @input="updateValue" 
-      v-bind="$attrs" 
+      max="9999-12-31"
+      class="form-input__report"
+      @input="updateValue"
+      v-bind="$attrs"
       :disabled="disabled"
     />
     <div class="form__counter" v-if="counterVisible">
         {{ textInputLength }} / {{ maxCounter }}
     </div>
-    <div 
+    <div
       v-if="isFile"
       class="form-input__text">
       <span>Перетащите файлы или выберите на&nbsp;компьютере</span>
@@ -99,7 +99,6 @@ const updateValue = (event) => {
 </script>
 
 <style lang="scss" scoped>
-
 .form-input {
   &.form-input__file-input {
     height: 86px;
