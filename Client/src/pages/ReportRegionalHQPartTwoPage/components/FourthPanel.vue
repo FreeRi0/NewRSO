@@ -7,7 +7,7 @@
         <div style="display: flex; justify-content: space-between;">
           <InputReport v-model:value="event.participants_number" :id="event.participants_number"
             name="participants_number" class="form__input" type="number" placeholder="Введите число"
-            @focusout="focusOut" />
+            @focusout="focusOut" width="340px" />
           <Button v-if="index > 0" label="Удалить мероприятие" style="margin: 0;" @click="deleteEvent(index)" />
         </div>
       </div>
@@ -32,7 +32,7 @@
         </div>
         <div>
           <p class="form__label">Межрегиональное <sup class="valid-red">*</sup></p>
-          <div style="display: flex">
+          <div style="display: flex" class="form__label-radio">
             <div style="display: flex">
               <input v-model="event.is_interregional" type="radio" :id="`is_interregional-true_${index}`"
                 :value="true" />
@@ -396,7 +396,10 @@ watchEffect(async () => {
   justify-content: space-between;
 }
 
-
+.form__label-radio {
+  display: flex;
+  gap: 40px;
+}
 
 .valid-red {
   color: #db0000;
