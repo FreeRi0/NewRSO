@@ -498,8 +498,6 @@
                     >
                         Вы участник
                     </div>
-                    
-
                 </div>
             </div>
         </div>
@@ -795,84 +793,56 @@
                         "
                     >
                     </AddModal>
-                    <router-link
-                        v-if="
-                            userId &&
-                            (userId == centralHeadquarter?.commander?.id ||
-                                isTrusted.length > 0)
-                        "
-                        class="hq-data__link"
-                        :to="{
-                            name: 'FormCentral',
-                        }"
-                        >Редактировать штаб</router-link
-                    >
-                    <Button
-                        v-else-if="
-                            roleStore.myPositions
-                                .usercentralheadquarterposition === null &&
-                            Object.keys(applications).length === 0
-                        "
-                        @click="showModalW()"
-                        label="Вступить в штаб"
-                        class="AddApplication"
-                    ></Button>
-                    <div
-                        v-else-if="Object.keys(applications).length !== 0"
-                        class="d-flex"
-                    >
-                        <div class="AddApplication mr-2">
-                            Заявка на рассмотрении
-                        </div>
-                        <Button
-                            @click="
-                                DeleteApplication(
-                                    'centrals',
-                                    props.centralHeadquarter.id,
-                                )
-                            "
-                            label="Удалить заявку"
-                            class="AddApplication"
-                        ></Button>
-                    </div>
 
                     <div v-if="isAuth">
-                        <router-link v-if="
-                            userId &&
-                            (userId == centralHeadquarter?.commander?.id ||
-                                isTrusted.length > 0)
-                        " class="hq-data__link" :to="{
-                            name: 'FormCentral',
-                        }">Редактировать штаб</router-link>
-                        <Button v-else-if="
-                            roleStore.myPositions
-                                .usercentralheadquarterposition === null &&
-                            Object.keys(applications).length === 0
-                        " @click="showModalW()" label="Вступить в штаб" class="AddApplication"></Button>
-                        <div v-else-if="Object.keys(applications).length !== 0" class="d-flex">
+                        <router-link
+                            v-if="
+                                userId &&
+                                (userId == centralHeadquarter?.commander?.id ||
+                                    isTrusted.length > 0)
+                            "
+                            class="hq-data__link"
+                            :to="{
+                                name: 'FormCentral',
+                            }"
+                            >Редактировать штаб</router-link
+                        >
+                        <Button
+                            v-else-if="
+                                roleStore.myPositions
+                                    .usercentralheadquarterposition === null &&
+                                Object.keys(applications).length === 0
+                            "
+                            @click="showModalW()"
+                            label="Вступить в штаб"
+                            class="AddApplication"
+                        ></Button>
+                        <div
+                            v-else-if="Object.keys(applications).length !== 0"
+                            class="d-flex"
+                        >
                             <div class="AddApplication mr-2">
                                 Заявка на рассмотрении
                             </div>
-                            <Button @click="
-                                DeleteApplication(
-                                    'centrals',
-                                    props.centralHeadquarter.id,
-                                )
-                                " label="Удалить заявку" class="AddApplication"></Button>
+                            <Button
+                                @click="
+                                    DeleteApplication(
+                                        'centrals',
+                                        props.centralHeadquarter.id,
+                                    )
+                                "
+                                label="Удалить заявку"
+                                class="AddApplication"
+                            ></Button>
                         </div>
 
-                    <div
-                        v-else-if="
-                            roleStore.myPositions
-                                .usercentralheadquarterposition !== null
-                        "
-                        class="AddApplication"
-                    >
-                        Вы участник
-                        <div v-else-if="
-                            roleStore.myPositions
-                                .usercentralheadquarterposition !== null
-                        " class="AddApplication">
+                        <div
+                            v-else-if="
+                                roleStore.myPositions
+                                    .usercentralheadquarterposition !== null
+                            "
+                            class="AddApplication"
+                        >
                             Вы участник
                         </div>
                     </div>
@@ -893,7 +863,7 @@ import { useUserStore } from '@features/store/index';
 import { storeToRefs } from 'pinia';
 import { AddModal } from '@shared/components/dropdown';
 import { Button } from '@shared/components/buttons';
-import SvgIcon from '@shared/ui/SvgIcon/SvgIcon.vue';
+import { SvgIcon } from '@shared/ui';
 const roleStore = useRoleStore();
 const regionalsStore = useRegionalsStore();
 const userStore = useUserStore();
@@ -958,37 +928,31 @@ const userId = localStorage.getItem('user');
 
 const swal = inject('$swal');
 const filterApplications = async (name, id) => {
-    try {
-        const response = await HTTP.get(
-            `/${name}/${id}/applications/?user_id=${userId}`,
-        );
     if (isAuth.value) {
         try {
-        const response = await HTTP.get(`/${name}/${id}/applications/?user_id=${userId}`);
-        applications.value = response.data;
-        console.log(applications.value);
-    } catch (error) {
-        console.log('an error occured ' + error);
+            const response = await HTTP.get(
+                `/${name}/${id}/applications/?user_id=${userId}`,
+            );
+            applications.value = response.data;
+            console.log(applications.value);
+        } catch (error) {
+            console.log('an error occured ' + error);
+        }
     }
 };
-    }
-}
 
 const filtereIsTrusted = async (name, id) => {
-    try {
-        const response = await HTTP.get(
-            `/${name}/${id}/members/?trusted_user_id=${userId}`,
-        );
     if (isAuth.value) {
         try {
-        const response = await HTTP.get(`/${name}/${id}/members/?trusted_user_id=${userId}`);
-        isTrusted.value = response.data.results;
-    } catch (error) {
-        console.log('an error occured' + error);
+            const response = await HTTP.get(
+                `/${name}/${id}/members/?trusted_user_id=${userId}`,
+            );
+            isTrusted.value = response.data.results;
+        } catch (error) {
+            console.log('an error occured' + error);
+        }
     }
 };
-    }
-}
 const aboutEduc = async () => {
     let id = props.headquarter?.educational_institution.id;
     if (typeof id !== 'undefined') {
@@ -1486,4 +1450,3 @@ const copyL = () => {
     }
 }
 </style>
-@shared/components/inputs/imagescomp@shared/components/inputs/imagescomp

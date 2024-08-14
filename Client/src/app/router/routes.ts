@@ -802,41 +802,6 @@ const routes: RouteRecordRaw[] = [
             },
 
             {
-                path: '/old-contributor-pay',
-                meta: {
-                    label: 'Членский взнос',
-                    redirectTo: 'contributorPay',
-                },
-                children: [
-                    {
-                        path: '',
-                        name: 'oldContributorPay',
-                        meta: {},
-                        component: () =>
-                            import(
-                                '@pages/ContributionPage/components/OldContributionPay.vue'
-                            ),
-                    },
-                    {
-                        path: ':id',
-                        children: [
-                            {
-                                path: 'personal',
-                                meta: {
-                                    label: 'Персональные данные пользователя',
-                                },
-                                name: 'PersonalDataUserContributor',
-                                component: () =>
-                                    import(
-                                        '@pages/PersonalDataPage/components/PersonalDataID.vue'
-                                    ),
-                            },
-                        ],
-                    },
-                ],
-            },
-
-            {
                 path: '/roster',
                 name: 'Roster',
                 component: () =>
