@@ -1758,7 +1758,7 @@ import { useRoute } from 'vue-router';
 import { HTTP } from '@app/http';
 
 import { Input } from '@shared/components/inputs';
-import { SvgIcon } from '@shared/components/SvgIcon';
+import { SvgIcon } from '@shared/ui';
 
 const route = useRoute();
 const id = ref(route.params.id);

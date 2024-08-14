@@ -47,7 +47,7 @@ import { Button } from '@shared/components/buttons';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
 import { usePage } from '@shared';
-import SvgIcon from '@shared/components/SvgIcon/SvgIcon.vue';
+import SvgIcon from '@shared/ui/SvgIcon/SvgIcon.vue';
 
 usePage({ isHidden: true });
 
