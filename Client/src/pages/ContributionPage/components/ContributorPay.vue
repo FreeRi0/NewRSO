@@ -1,1127 +1,787 @@
 <template>
     <div class="container">
-        <div class="contributor">
-            <h2 class="contributor-title">Членский взнос</h2>
-            <div class="d-flex mt-7 buttonWrapper">
-                <button
-                    type="button"
-                    class="contributorBtn"
-                    :class="{ activee: picked === true }"
-                    @click="picked = true"
+        <UiHeading> Членский взнос </UiHeading>
+        <UiTabContainer initial-selection="my-contribution">
+            <div class="buttons-container">
+                <UiTab
+                    tab-id="my-contribution"
+                    v-slot="{ setSelectedTab, isSelected }"
                 >
-                    Мой членский взнос
-                </button>
-
-                <button
-                    type="button"
-                    class="contributorBtn"
-                    :class="{ activee: picked === false }"
-                    @click="picked = false"
+                    <UiButton @click="setSelectedTab" :active="isSelected">
+                        Мой членский взнос
+                    </UiButton>
+                </UiTab>
+                <UiTab
+                    tab-id="contributors-list"
+                    v-slot="{ setSelectedTab, isSelected }"
                 >
-                    Данные об оплате членского взноса пользователями системы
-                </button>
+                    <UiButton @click="setSelectedTab" :active="isSelected">
+                        Данные об оплате членского взноса пользователями системы
+                    </UiButton>
+                </UiTab>
             </div>
-
-            <div
-                class="contributor-info"
-                v-if="
-                    picked === true &&
-                    userStore.currentUser.membership_fee === false
-                "
-            >
-                Уважаемый пользователь, ваш членский взнос не оплачен.
-            </div>
-
-            <div
-                class="contributor-info"
-                v-else-if="
-                    picked === true &&
-                    userStore.currentUser.membership_fee === true
-                "
-            >
-                Уважаемый пользователь, ваш членский взнос оплачен.
-            </div>
-
-            <div v-else-if="picked === false">
-                <div class="contributor-search">
-                    <input
-                        type="text"
-                        id="search"
-                        class="contributor-search__input"
-                        @keyup="searchContributors"
-                        v-model="name"
-                        placeholder="Поищем пользователей?"
+            <div class="tab-views-container">
+                <UiTabWindow tab-id="my-contribution">
+                    <ContributionStatus
+                        :is-paid="authorizedUser?.membership_fee"
+                        :is-loading="isLoading"
                     />
-                    <SvgIcon icon-name="search" />
-                </div>
-
-                <div class="contributor-container">
-                    <div class="filters">
-                        <filters
-                            @update-district="updateDistrict"
-                            @update-reg="updateReg"
-                            @update-local="updateLocal"
-                            @update-educ="updateEduc"
-                            @update-detachment="updateDetachment"
-                            @update-membership="updateMembership"
-                            @search-detachment="searchDetachment"
-                            :district="district"
-                            :districts="districts"
-                            :reg="reg"
-                            :regionals="regionals"
-                            :local="local"
-                            :locals="locals"
-                            :membership="membership"
-                            :educ="educ"
-                            :educ-head="educHead"
-                            :detachment="detachment"
-                            :detachments="detachments"
-                            :roles="roles.roles.value"
-                            :sorted-participants="participants"
-                            :count-participants="count"
-                            :is-membership="true"
+                </UiTabWindow>
+                <UiTabWindow tab-id="contributors-list">
+                    <div class="list-container">
+                        <UiSearchInput
+                            v-model="searchQuery"
+                            placeholder="Поищем пользователей?"
+                            class="search"
                         />
-                    </div>
-                    <div class="contributor-items">
-                        <div class="contributor-sort">
-                            <div
-                                class="d-flex align-center"
-                                v-if="
-                                    roleStore.roles
-                                        .regionalheadquarter_commander
-                                "
+                        <div class="contributors-list-heading">
+                            <UiButton
+                                @click="filtersMenu.openSideMenu()"
+                                class="filter-button"
+                                variant="tertiary"
                             >
-                                <div class="contributor-sort__all">
-                                    <input
-                                        type="checkbox"
-                                        @click="select"
-                                        placeholder="Выбрать все"
-                                        v-model="checkboxAll"
-                                    />
-                                </div>
-                                <div class="ml-3">Выбрать всё</div>
-                            </div>
-                            <div class="participants__actions">
-                                <div class="participants__actions-select mr-3">
-                                    <sortByEducation
-                                        placeholder="Выберете действие"
-                                        variant="outlined"
-                                        clearable
-                                        v-model="action"
-                                        :options="actionsList"
-                                    ></sortByEducation>
-                                </div>
-                            </div>
-
-                            <div class="sort-filters">
-                                <div class="sort-select">
-                                    <sortByEducation
-                                        variant="outlined"
-                                        clearable
-                                        v-model="sortBy"
-                                        :options="sortOptionss"
-                                        :sorts-boolean="false"
-                                        class="Sort-alphabet"
-                                    >
-                                    </sortByEducation>
-                                </div>
-
-                                <Button
-                                    type="button"
-                                    class="ascend"
-                                    iconn="iconn"
-                                    @click="ascending = !ascending"
-                                    color="white"
-                                ></Button>
-                            </div>
-                        </div>
-                        <div class="contributor-wrapper">
-                            <template
-                                v-for="participant in participants"
-                                :key="participant.id"
+                                <SvgIcon icon-name="filter" />
+                            </UiButton>
+                            <RoleGuard
+                                :needed-roles="[
+                                    UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                    UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                    UserRole.REGIONAL_HEADQUARTER_COMMANDER,
+                                ]"
                             >
-                                <contributionAccessItem
-                                    :participant="participant"
-                                    @select="onToggleSelectCompetition"
+                                <UiCheckbox
+                                    v-model="userIdList"
+                                    :value="usersList.map(({ id }) => id)"
                                 />
-                            </template>
-                            <v-progress-circular
-                                class="circleLoader"
-                                v-if="isLoading"
-                                indeterminate
-                                color="blue"
-                            ></v-progress-circular>
-                            <p
-                                class="text-center"
-                                v-else-if="!isLoading && !participants.length"
+                                <UiSelector
+                                    v-model="membersFeeStatus"
+                                    :options="[
+                                        { label: 'Оплачен', value: true },
+                                        { label: 'Не оплачен', value: false },
+                                    ]"
+                                />
+                            </RoleGuard>
+                            <SortBySelector
+                                :is-reversed="isReverseOrder"
+                                v-model="sortBy"
+                                :reverse-sort-order="reverseSortOrder"
+                                class="sort-by"
+                            />
+                        </div>
+                        <aside class="filters">
+                            <UiHeading variant="h4">Основные фильтры</UiHeading>
+                            <RoleGuard
+                                :needed-roles="[
+                                    UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                ]"
                             >
-                                Ничего не найдено
+                                <DistrictHeadquarterFilter
+                                    v-slot="{ districtHeadquarters }"
+                                >
+                                    <UiSearchInput
+                                        placeholder="Начните вводить"
+                                        :auto-complete-values="
+                                            districtHeadquarters
+                                        "
+                                        v-model="
+                                            filters.district_headquarter__name
+                                        "
+                                        variant="small"
+                                    />
+                                </DistrictHeadquarterFilter>
+                            </RoleGuard>
+
+                            <p
+                                class="filter-info"
+                                v-if="filters.district_headquarter__name"
+                            >
+                                Выбрано:
+                                {{ filters.district_headquarter__name }}
+                            </p>
+
+                            <RoleGuard
+                                :needed-roles="[
+                                    UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                    UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                ]"
+                            >
+                                <RegionalHeadquarterFilter
+                                    :district-headquarter-name="
+                                        filters.district_headquarter__name
+                                    "
+                                    v-slot="{ regionalHeadquarters }"
+                                >
+                                    <UiSearchInput
+                                        placeholder="Начните вводить"
+                                        :auto-complete-values="
+                                            regionalHeadquarters
+                                        "
+                                        v-model="
+                                            filters.regional_headquarter__name
+                                        "
+                                        variant="small"
+                                    />
+                                </RegionalHeadquarterFilter>
+                            </RoleGuard>
+                            <p
+                                class="filter-info"
+                                v-if="filters.regional_headquarter__name"
+                            >
+                                Выбрано:
+                                {{ filters.regional_headquarter__name }}
+                            </p>
+
+                            <RoleGuard
+                                :needed-roles="[
+                                    UserRole.REGIONAL_HEADQUARTER_COMMANDER,
+                                    UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                    UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                ]"
+                            >
+                                <LocalHeadquarterFilter
+                                    :regional-headquarter-name="
+                                        filters.regional_headquarter__name
+                                    "
+                                    :district-headquarter-name="
+                                        filters.district_headquarter__name
+                                    "
+                                    v-slot="{ localHeadquarters }"
+                                >
+                                    <UiSearchInput
+                                        placeholder="Начните вводить"
+                                        :auto-complete-values="
+                                            localHeadquarters
+                                        "
+                                        v-model="
+                                            filters.local_headquarter__name
+                                        "
+                                        variant="small"
+                                    />
+                                </LocalHeadquarterFilter>
+                            </RoleGuard>
+                            <p
+                                class="filter-info"
+                                v-if="filters.local_headquarter__name"
+                            >
+                                Выбрано:
+                                {{ filters.local_headquarter__name }}
+                            </p>
+
+                            <RoleGuard
+                                :needed-roles="[
+                                    UserRole.REGIONAL_HEADQUARTER_COMMANDER,
+                                    UserRole.LOCAL_HEADQUARTER_COMMANDER,
+                                    UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                    UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                ]"
+                            >
+                                <EducationalHeadquarterFilter
+                                    :local-headquarter-name="
+                                        filters.local_headquarter__name
+                                    "
+                                    :district-headquarter-name="
+                                        filters.district_headquarter__name
+                                    "
+                                    :regional-headquarter-name="
+                                        filters.regional_headquarter__name
+                                    "
+                                    v-slot="{ educationalHeadquarters }"
+                                >
+                                    <UiSearchInput
+                                        placeholder="Начните вводить"
+                                        :auto-complete-values="
+                                            educationalHeadquarters
+                                        "
+                                        v-model="
+                                            filters.educational_headquarter__name
+                                        "
+                                        variant="small"
+                                    />
+                                </EducationalHeadquarterFilter>
+                            </RoleGuard>
+                            <p
+                                class="filter-info"
+                                v-if="filters.educational_headquarter__name"
+                            >
+                                Выбрано:
+                                {{ filters.educational_headquarter__name }}
+                            </p>
+
+                            <RoleGuard
+                                :needed-roles="[
+                                    UserRole.REGIONAL_HEADQUARTER_COMMANDER,
+                                    UserRole.LOCAL_HEADQUARTER_COMMANDER,
+                                    UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                    UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                    UserRole.EDUCATIONAL_HEADQUARTER_COMMANDER,
+                                ]"
+                            >
+                                <DetachmentHeadquarterFilter
+                                    :local-headquarter-name="
+                                        filters.local_headquarter__name
+                                    "
+                                    :district-headquarter-name="
+                                        filters.district_headquarter__name
+                                    "
+                                    :regional-headquarter-name="
+                                        filters.regional_headquarter__name
+                                    "
+                                    :educational-headquarter-name="
+                                        filters.educational_headquarter__name
+                                    "
+                                    v-slot="{ educationalHeadquarters }"
+                                >
+                                    <UiSearchInput
+                                        placeholder="Начните вводить"
+                                        :auto-complete-values="
+                                            educationalHeadquarters
+                                        "
+                                        v-model="filters.detachment__name"
+                                        variant="small"
+                                    />
+                                </DetachmentHeadquarterFilter>
+                            </RoleGuard>
+                            <p
+                                class="filter-info"
+                                v-if="filters.detachment__name"
+                            >
+                                Выбрано:
+                                {{ filters.detachment__name }}
+                            </p>
+
+                            <MemberFeeFilter v-model="filters.membership_fee" />
+
+                            <p class="filter-info">
+                                Показано {{ showedRecordsCount }} из
+                                {{ totalCount }} результатов
+                            </p>
+                            <UiSideMenu title="Основные фильтры">
+                                <RoleGuard
+                                    :needed-roles="[
+                                        UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                    ]"
+                                >
+                                    <DistrictHeadquarterFilter
+                                        v-slot="{ districtHeadquarters }"
+                                    >
+                                        <UiSearchInput
+                                            placeholder="Начните вводить"
+                                            :auto-complete-values="
+                                                districtHeadquarters
+                                            "
+                                            v-model="
+                                                filters.district_headquarter__name
+                                            "
+                                            variant="small"
+                                        />
+                                    </DistrictHeadquarterFilter>
+                                </RoleGuard>
+
+                                <p
+                                    class="filter-info"
+                                    v-if="filters.district_headquarter__name"
+                                >
+                                    Выбрано:
+                                    {{ filters.district_headquarter__name }}
+                                </p>
+
+                                <RoleGuard
+                                    :needed-roles="[
+                                        UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                        UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                    ]"
+                                >
+                                    <RegionalHeadquarterFilter
+                                        :district-headquarter-name="
+                                            filters.district_headquarter__name
+                                        "
+                                        v-slot="{ regionalHeadquarters }"
+                                    >
+                                        <UiSearchInput
+                                            placeholder="Начните вводить"
+                                            :auto-complete-values="
+                                                regionalHeadquarters
+                                            "
+                                            v-model="
+                                                filters.regional_headquarter__name
+                                            "
+                                            variant="small"
+                                        />
+                                    </RegionalHeadquarterFilter>
+                                </RoleGuard>
+                                <p
+                                    class="filter-info"
+                                    v-if="filters.regional_headquarter__name"
+                                >
+                                    Выбрано:
+                                    {{ filters.regional_headquarter__name }}
+                                </p>
+
+                                <RoleGuard
+                                    :needed-roles="[
+                                        UserRole.REGIONAL_HEADQUARTER_COMMANDER,
+                                        UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                        UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                    ]"
+                                >
+                                    <LocalHeadquarterFilter
+                                        :regional-headquarter-name="
+                                            filters.regional_headquarter__name
+                                        "
+                                        :district-headquarter-name="
+                                            filters.district_headquarter__name
+                                        "
+                                        v-slot="{ localHeadquarters }"
+                                    >
+                                        <UiSearchInput
+                                            placeholder="Начните вводить"
+                                            :auto-complete-values="
+                                                localHeadquarters
+                                            "
+                                            v-model="
+                                                filters.local_headquarter__name
+                                            "
+                                            variant="small"
+                                        />
+                                    </LocalHeadquarterFilter>
+                                </RoleGuard>
+                                <p
+                                    class="filter-info"
+                                    v-if="filters.local_headquarter__name"
+                                >
+                                    Выбрано:
+                                    {{ filters.local_headquarter__name }}
+                                </p>
+
+                                <RoleGuard
+                                    :needed-roles="[
+                                        UserRole.REGIONAL_HEADQUARTER_COMMANDER,
+                                        UserRole.LOCAL_HEADQUARTER_COMMANDER,
+                                        UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                        UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                    ]"
+                                >
+                                    <EducationalHeadquarterFilter
+                                        :local-headquarter-name="
+                                            filters.local_headquarter__name
+                                        "
+                                        :district-headquarter-name="
+                                            filters.district_headquarter__name
+                                        "
+                                        :regional-headquarter-name="
+                                            filters.regional_headquarter__name
+                                        "
+                                        v-slot="{ educationalHeadquarters }"
+                                    >
+                                        <UiSearchInput
+                                            placeholder="Начните вводить"
+                                            :auto-complete-values="
+                                                educationalHeadquarters
+                                            "
+                                            v-model="
+                                                filters.educational_headquarter__name
+                                            "
+                                            variant="small"
+                                        />
+                                    </EducationalHeadquarterFilter>
+                                </RoleGuard>
+                                <p
+                                    class="filter-info"
+                                    v-if="filters.educational_headquarter__name"
+                                >
+                                    Выбрано:
+                                    {{ filters.educational_headquarter__name }}
+                                </p>
+
+                                <RoleGuard
+                                    :needed-roles="[
+                                        UserRole.REGIONAL_HEADQUARTER_COMMANDER,
+                                        UserRole.LOCAL_HEADQUARTER_COMMANDER,
+                                        UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                        UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                        UserRole.EDUCATIONAL_HEADQUARTER_COMMANDER,
+                                    ]"
+                                >
+                                    <DetachmentHeadquarterFilter
+                                        :local-headquarter-name="
+                                            filters.local_headquarter__name
+                                        "
+                                        :district-headquarter-name="
+                                            filters.district_headquarter__name
+                                        "
+                                        :regional-headquarter-name="
+                                            filters.regional_headquarter__name
+                                        "
+                                        :educational-headquarter-name="
+                                            filters.educational_headquarter__name
+                                        "
+                                        v-slot="{ educationalHeadquarters }"
+                                    >
+                                        <UiSearchInput
+                                            placeholder="Начните вводить"
+                                            :auto-complete-values="
+                                                educationalHeadquarters
+                                            "
+                                            v-model="filters.detachment__name"
+                                            variant="small"
+                                        />
+                                    </DetachmentHeadquarterFilter>
+                                </RoleGuard>
+                                <p
+                                    class="filter-info"
+                                    v-if="filters.detachment__name"
+                                >
+                                    Выбрано:
+                                    {{ filters.detachment__name }}
+                                </p>
+
+                                <MemberFeeFilter
+                                    v-model="filters.membership_fee"
+                                />
+
+                                <p class="filter-info">
+                                    Показано {{ showedRecordsCount }} из
+                                    {{ totalCount }} результатов
+                                </p>
+                            </UiSideMenu>
+                        </aside>
+                        <div class="contributors-list-wrapper">
+                            <TransitionGroup
+                                v-if="isResultsFound"
+                                name="list"
+                                tag="ul"
+                                class="contributors-list"
+                            >
+                                <li
+                                    v-for="user in usersList"
+                                    :key="user.id"
+                                    class="list-item"
+                                >
+                                    <RoleGuard
+                                        :needed-roles="[
+                                            UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                            UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                            UserRole.REGIONAL_HEADQUARTER_COMMANDER,
+                                        ]"
+                                    >
+                                        <UiButton variant="tertiary">
+                                            <UiCheckbox
+                                                v-model="userIdList"
+                                                :value="user.id"
+                                            />
+                                        </UiButton>
+                                    </RoleGuard>
+                                    <ContributorItem
+                                        :avatar-url="
+                                            user.avatar.photo ?? undefined
+                                        "
+                                        :first-name="user.first_name"
+                                        :last-name="user.last_name"
+                                        :patronymic-name="
+                                            user.patronymic_name ?? undefined
+                                        "
+                                        :birthday="user.date_of_birth"
+                                        :is-fee-payed="user.membership_fee"
+                                        :id="user.id"
+                                    />
+                                </li>
+                            </TransitionGroup>
+                            <UiButton
+                                variant="secondary"
+                                v-if="isLoadMoreBtnShowed"
+                                @click="next"
+                                >Показать ещё</UiButton
+                            >
+                            <UiButton
+                                v-if="isLoadPrevBtnShowed"
+                                variant="secondary"
+                                @click="setPage(1)"
+                                >Скрыть</UiButton
+                            >
+                            <p v-if="!isResultsFound" class="filter-info">
+                                Результаты не найдены
                             </p>
                         </div>
-                        <template v-if="users.count && users.count > limit">
-                            <Button
-                                @click="next"
-                                v-if="participants.length < users.count"
-                                label="Показать еще"
-                            ></Button>
-                            <Button
-                                @click="prev"
-                                v-else
-                                label="Свернуть все"
-                            ></Button>
-                        </template>
                     </div>
-                </div>
-                <div class="selectedItems" v-if="selectedPeoples.length > 0">
-                    <h3>Итого: {{ selectedPeoples.length }}</h3>
-                    <selectedContributionAccessItem
-                        v-for="participant in selectedPeoples"
-                        :action="action"
-                        :participant="participant"
-                        :key="participant.id"
-                        @select="onToggleSelectCompetition"
-                    />
-                </div>
-                <div class="participants__btn" v-if="selectedPeoples.length">
-                    <Button
-                        :loaded="isLoading"
-                        :disabled="isLoading || !action"
-                        class="save"
-                        type="button"
-                        label="Сохранить"
-                        @click="onAction"
-                    ></Button>
-                </div>
+                    <div
+                        class="change-status-list-wrapper"
+                        v-if="selectedUsersCount !== 0"
+                    >
+                        <UiHeading variant="h3">
+                            Итого: {{ selectedUsersCount }}
+                        </UiHeading>
+                        <div class="change-status-list-wrapper">
+                            <TransitionGroup
+                                v-if="isResultsFound"
+                                name="list"
+                                tag="ul"
+                                class="contributors-list change"
+                            >
+                                <li
+                                    v-for="user in selectedUsersList"
+                                    :key="user.id"
+                                    class="list-item"
+                                >
+                                    <ContributorItem
+                                        :avatar-url="
+                                            user.avatar.photo ?? undefined
+                                        "
+                                        :first-name="user.first_name"
+                                        :last-name="user.last_name"
+                                        :patronymic-name="
+                                            user.patronymic_name ?? undefined
+                                        "
+                                        :birthday="user.date_of_birth"
+                                        :is-fee-payed="membersFeeStatus"
+                                        :id="user.id"
+                                    />
+                                    <UiButton variant="tertiary">
+                                        <UiCheckbox
+                                            v-model="userIdList"
+                                            :value="user.id"
+                                        />
+                                    </UiButton>
+                                </li>
+                            </TransitionGroup>
+                        </div>
+                        <UiButton
+                            class="save-status-button"
+                            variant="secondary"
+                            @click="handleStatusChange"
+                            >Сохранить</UiButton
+                        >
+                    </div>
+                </UiTabWindow>
             </div>
-        </div>
+        </UiTabContainer>
     </div>
 </template>
-<script setup>
-import { Button } from '@shared/components/buttons';
-import { filters } from '@features/Contributor/components';
+<script setup lang="ts">
+import { ContributionStatus, ContributorItem } from '@entities/Contributor';
+import { RoleGuard, UserRole, useRole } from '@entities/Role';
+import { useSession } from '@entities/Session';
 import {
-    contributionAccessItem,
-    selectedContributionAccessItem,
-} from '@entities/ReferencesPeoples';
-import { sortByEducation } from '@shared/components/selects';
-import { ref, computed, watch, inject, onMounted, onActivated } from 'vue';
-
-import { useUserStore } from '@features/store/index';
-import { useRoleStore } from '@layouts/store/role';
-import { useRegionalsStore } from '@features/store/regionals';
-import { useDistrictsStore } from '@features/store/districts';
-import { useLocalsStore } from '@features/store/local';
-import { useEducationalsStore } from '@features/store/educationals';
-import { useSquadsStore } from '@features/store/squads';
+    DetachmentHeadquarterFilter,
+    DistrictHeadquarterFilter,
+    EducationalHeadquarterFilter,
+    LocalHeadquarterFilter,
+    MemberFeeFilter,
+    RegionalHeadquarterFilter,
+    SortBySelector,
+    useUsersList,
+} from '@entities/Users';
+import { useChangeMembersFeeStatus } from '@features/changeMemebersFeeStatus';
+import {
+    SvgIcon,
+    UiButton,
+    UiCheckbox,
+    UiHeading,
+    UiSearchInput,
+    UiSelector,
+    UiSideMenu,
+    UiTab,
+    UiTabContainer,
+    UiTabWindow,
+    useSideMenu,
+} from '@shared/ui';
 import { storeToRefs } from 'pinia';
-import { HTTP } from '@app/http';
-import { SvgIcon } from '@shared/index';
+import { computed, watch } from 'vue';
 
-const roleStore = useRoleStore();
-const roles = storeToRefs(roleStore);
-const regionalsStore = useRegionalsStore();
+const { authorizedUser, isLoading } = storeToRefs(useSession());
+const {
+    searchQuery,
+    isSinglePage,
+    isResultsFound,
+    setPage,
+    usersList,
+    filters,
+    isLastPage,
+    isReverseOrder,
+    isFirstPage,
+    next,
+    totalCount,
+    showedRecordsCount,
+    setFilters,
+    sortBy,
+    reverseSortOrder,
+    refetch,
+} = useUsersList({ append: true, recordsPerPage: 24 });
+const { userHeadquarters } = storeToRefs(useRole());
+const filtersMenu = useSideMenu();
+const { userIdList, selectedUsersCount, applyStatus, membersFeeStatus } =
+    useChangeMembersFeeStatus();
 
-const userStore = useUserStore();
-const districtsStore = useDistrictsStore();
-const localsStore = useLocalsStore();
-const educationalsStore = useEducationalsStore();
-const squadsStore = useSquadsStore();
-const users = ref({});
-const limit = 12;
-const action = ref('Оплачен');
-const participants = ref([]);
-const actionsList = ref([
-    {
-        value: 'Оплачен',
-        name: 'Оплачен',
-    },
-    { value: 'Не оплачен', name: 'Не оплачен' },
-]);
-const swal = inject('$swal');
-const regionals = ref([]);
-const districts = ref([]);
-const membership = ref('all');
-const locals = ref([]);
-const educHead = ref([]);
-const detachments = ref([]);
-const reg = ref(null);
-const detachment = ref(null);
-const timerSearch = ref(null);
-const district = ref(null);
-const count = ref(null);
-const local = ref(null);
-const isLoading = ref(false);
-const educ = ref(null);
-const detLimit = 500;
-const isError = ref([]);
-const picked = ref(true);
-const checkboxAll = ref(false);
-const levelAccess = ref(7);
-const name = ref('');
-const selectedPeoples = ref([]);
-const ascending = ref(true);
-const sortBy = ref('last_name');
-
-const next = () => {
-    let search = '';
-    viewContributorsData(search, 'next');
-    checkboxAll.value = false;
+const handleStatusChange = async () => {
+    await applyStatus();
+    await refetch();
 };
 
-const prev = () => {
-    let search = '';
-    if (local.value) {
-        search += '?local_headquarter__name=' + local.value;
-    }
-    if (educ.value) {
-        search += '?educational_headquarter__name=' + educ.value;
-    }
-    if (detachment.value) {
-        search = '?detachment__name=' + detachment.value;
-    }
-    viewContributorsData(search, '', '');
-    checkboxAll.value = false;
-};
+const selectedUsersList = computed(() =>
+    usersList.value.filter(({ id }) => userIdList.value.includes(id)),
+);
 
-const sortOptionss = ref([
-    {
-        value: 'last_name',
-        name: 'Алфавиту от А - Я',
-    },
-]);
+const isLoadMoreBtnShowed = computed(
+    () => isResultsFound.value && !isSinglePage.value && !isLastPage.value,
+);
 
-const viewContributorsData = async (search, pagination, orderLimit) => {
-    try {
-        isLoading.value = true;
-        let data = [];
-        let url = '/rsousers';
-        if (search) data.push(search);
-        if (orderLimit) data.push('limit=' + orderLimit);
-        else if (!pagination) data.push('limit=' + limit);
-        else if (pagination == 'next')
-            url = users.value.next.replace('http', 'https');
-        if (pagination != 'next') {
-            if (sortBy.value && !pagination)
-                data.push(
-                    'ordering=' + (ascending.value ? '' : '-') + sortBy.value,
-                );
-        }
-
-        const viewParticipantsResponse = await HTTP.get(url + data.join('&'));
-
-        isLoading.value = false;
-        let response = viewParticipantsResponse.data;
-        count.value = viewParticipantsResponse.data.count;
-        if (pagination) {
-            response.results = [...users.value.results, ...response.results];
-        }
-        users.value = response;
-        participants.value = response.results;
-        selectedPeoples.value = [];
-
-        if (search.indexOf('districts') >= 0) {
-            districts.value = viewParticipantsResponse.data.results;
-        } else if (search.indexOf('regionals') >= 0) {
-            regionals.value = viewParticipantsResponse.data.results;
-        } else if (search.indexOf('locals') >= 0) {
-            locals.value = viewParticipantsResponse.data.results;
-        } else if (search.indexOf('educationals') >= 0) {
-            educHead.value = viewParticipantsResponse.data.results;
-        } else if (search.indexOf('detachment_list') >= 0) {
-            detachments.value = viewParticipantsResponse.data.results;
-        }
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
-
-const getFiltersData = async (resp, search, lim) => {
-    try {
-        isLoading.value = true;
-        const viewHeadquartersResponse = await HTTP.get(resp + search + lim);
-        isLoading.value = false;
-
-        if (resp.indexOf('districts') >= 0) {
-            districts.value = viewHeadquartersResponse.data.results;
-        } else if (resp.indexOf('regionals') >= 0) {
-            regionals.value = viewHeadquartersResponse.data.results;
-        } else if (resp.indexOf('locals') >= 0) {
-            locals.value = viewHeadquartersResponse.data.results;
-        } else if (resp.indexOf('educationals') >= 0) {
-            educHead.value = viewHeadquartersResponse.data.results;
-        } else if (resp.indexOf('detachment_list') >= 0) {
-            detachments.value = viewHeadquartersResponse.data.results;
-        }
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
-const updateDistrict = (districtVal) => {
-    let search = '';
-    if (districtVal) {
-        search = '?district_headquarter__name=' + districtVal;
-    } else {
-        search = '';
-    }
-
-    if (name.value) search += '&search=' + name.value;
-    viewContributorsData(search);
-    getFiltersData('/regionals/', search);
-
-    district.value = districtVal;
-};
-
-const searchDetachment = (name) => {
-    let search = [];
-    let lim = '';
-    // if (district.value) {
-    //     search.push('district_headquarter__name=' + district.value);
-    // }
-    if (name && reg.value) {
-        search.push(
-            'regional_headquarter__name=' + reg.value + '&' + 'search=' + name,
-        );
-        lim = '&limit=500';
-    }
-    // if (local.value) {
-    //     search.push('local_headquarter__name=' + local.value);
-    // }
-    // if (educ.value) {
-    //     search.push('educational_headquarter__name=' + educ.value);
-    // }
-    // if (name) search.push('search=' + name);
-
-    if (!name && reg.value) {
-        search.push('regional_headquarter__name=' + reg.value);
-        lim = '&limit=500';
-    }
-    if (!name && district.value) {
-        search.push('district_headquarter__name=' + district.value);
-        lim = '&limit=500';
-    }
-    if (!name && local.value) {
-        search.push('local_headquarter__name=' + local.value);
-        lim = '&limit=500';
-    }
-    if (!name && educ.value) {
-        search.push('educational_headquarter__name=' + educ.value);
-        lim = '&limit=500';
-    }
-    if (!name && detachment.value) {
-        search.push('detachment__name=' + detachment.value);
-        lim = '&limit=500';
-    }
-    getFiltersData('/detachment_list/', '?' + search.join('&') + lim);
-
-    detachment.value = name;
-};
-
-const updateReg = (regVal) => {
-    let search = '';
-    let lim = '';
-    if (regVal) {
-        search = '?regional_headquarter__name=' + regVal;
-        lim = '&limit=500';
-    } else if (levelAccess.value < 2) {
-        search = '?district_headquarter__name=' + district.value;
-        lim = '&limit=500';
-    }
-
-    if (name.value) search += '&search=' + name.value;
-    viewContributorsData(search);
-    getFiltersData('/locals/', search, '');
-    getFiltersData('/educationals/', search, '');
-    getFiltersData('/detachment_list/', search, lim);
-
-    reg.value = regVal;
-};
-const updateLocal = (localVal) => {
-    let search = '';
-    let lim = '';
-    if (localVal) {
-        search = '?local_headquarter__name=' + localVal;
-        lim = '&limit=500';
-    } else if (levelAccess.value < 3) {
-        search = '?regional_headquarter__name=' + reg.value;
-        lim = '&limit=500';
-    }
-    if (localVal && detachment.value) {
-        detachment.value = null;
-    }
-    if (localVal && educ.value) {
-        educ.value = null;
-    }
-    if (name.value) search += '&search=' + name.value;
-    viewContributorsData(search);
-    getFiltersData('/educationals/', search, '');
-    getFiltersData('/detachment_list/', search, lim);
-
-    local.value = localVal;
-};
-
-const updateEduc = (educVal) => {
-    let search = '';
-    let lim = '';
-    if (educVal) {
-        search = '?educational_headquarter__name=' + educVal;
-        lim = '&limit=500';
-    } else if (local.value) {
-        search = '?local_headquarter__name=' + local.value;
-        lim = '&limit=500';
-    } else if (levelAccess.value < 3) {
-        search = '?regional_headquarter__name=' + reg.value;
-        lim = '&limit=500';
-    } else if (levelAccess.value < 4) {
-        search = '?local_headquarter__name=' + local.value;
-        lim = '&limit=500';
-    }
-    if (educVal && detachment.value) {
-        detachment.value = null;
-    }
-    if (name.value) search += '&search=' + name.value;
-    viewContributorsData(search);
-    getFiltersData('/detachment_list/', search, lim);
-
-    educ.value = educVal;
-};
-
-const updateDetachment = (detachmentVal) => {
-    let search = '';
-    if (detachmentVal) {
-        search = '?detachment__name=' + detachmentVal;
-    } else if (levelAccess.value === 2) {
-        search = '?regional_headquarter__name=' + reg.value;
-    } else if (levelAccess.value < 5) {
-        search = '?educational_headquarter__name=' + educ.value;
-    }
-    if (name.value) search += '&search=' + name.value;
-    viewContributorsData(search);
-
-    detachment.value = detachmentVal;
-};
-
-const updateMembership = (membershipVal) => {
-    let search = [];
-    if (membershipVal == 'paid') {
-        search.push('membership_fee=true');
-    } else if (membershipVal == 'notPaid') {
-        search.push('membership_fee=false');
-    }
-    if (district.value) {
-        search.push('district_headquarter__name=' + district.value);
-    }
-    if (reg.value) {
-        search.push('regional_headquarter__name=' + reg.value);
-    }
-    if (local.value) {
-        search.push('local_headquarter__name=' + local.value);
-    }
-    if (educ.value) {
-        search.push('educational_headquarter__name=' + educ.value);
-    }
-    if (detachment.value) {
-        search.push('detachment__name=' + detachment.value);
-    }
-    if (name.value) search.push('&search=' + name.value);
-    viewContributorsData('?' + search.join('&'));
-
-    membership.value = membershipVal;
-};
-
-const select = (event) => {
-    selectedPeoples.value = [];
-
-    if (event.target.checked) {
-        for (let index in participants.value) {
-            participants.value[index].selected = true;
-            selectedPeoples.value.push(participants.value[index]);
-        }
-    } else {
-        for (let index in participants.value) {
-            participants.value[index].selected = false;
-        }
-    }
-};
-
-const onToggleSelectCompetition = (participant, checked) => {
-    if (checked) {
-        participant.selected = checked;
-        selectedPeoples.value.push(participant);
-    } else {
-        participant.selected = checked;
-        selectedPeoples.value = selectedPeoples.value.filter(
-            (c) => c.id !== participant.id,
-        );
-        checkboxAll.value = false;
-    }
-};
-
-const ChangeStatus = async (id) => {
-    try {
-        const changeStatus = await HTTP.post(
-            `rsousers/${id}/membership_fee_status/`,
-            {},
-        );
-        checkboxAll.value = false;
-
-        for (let i in participants.value) {
-            if (id === participants.value[i].id) {
-                participants.value[i].membership_fee = true;
-            }
-        }
-    } catch (error) {
-        isError.value = error.response.data;
-        console.error('There was an error!', error);
-        if (isError.value) {
-            swal.fire({
-                position: 'center',
-                icon: 'error',
-                title: `ошибка`,
-                showConfirmButton: false,
-                timer: 2500,
-            });
-        }
-    }
-};
-
-const ChangeCancelStatus = async (id) => {
-    try {
-        const changeCancelStatus = await HTTP.delete(
-            `rsousers/${id}/membership_fee_status/`,
-
-            {},
-        );
-
-        checkboxAll.value = false;
-        for (let i in participants.value) {
-            if (id === participants.value[i].id) {
-                participants.value[i].membership_fee = false;
-            }
-        }
-    } catch (error) {
-        isError.value = error.response.data;
-        console.error('There was an error!', error);
-        if (isError.value) {
-            swal.fire({
-                position: 'center',
-                icon: 'error',
-                title: `ошибка`,
-                showConfirmButton: false,
-                timer: 2500,
-            });
-        }
-    }
-};
-const getUsersByRoles = () => {
-    if (!Object.keys(roleStore.roles).length) return false;
-    if (!roles.roles.value.centralheadquarter_commander) {
-        let search = '';
-        let lim = '';
-        if (roles.roles.value.districtheadquarter_commander) {
-            district.value =
-                roles.roles.value.districtheadquarter_commander.name;
-            search =
-                '?district_headquarter__name=' +
-                roles.roles.value.districtheadquarter_commander.name;
-            levelAccess.value = 1;
-            getFiltersData('/regionals/', search);
-        } else if (roles.roles.value.regionalheadquarter_commander) {
-            reg.value = roles.roles.value.regionalheadquarter_commander.name;
-            search =
-                '?regional_headquarter__name=' +
-                roles.roles.value.regionalheadquarter_commander.name;
-            lim = '&limit=500';
-            locals.value = localsStore.locals.filter(
-                (loc) => loc.regional_headquarter == reg.value,
-            );
-            detachments.value = squadsStore.squads.filter(
-                (det) => det.regional_headquarter == reg.value,
-            );
-            levelAccess.value = 2;
-            getFiltersData('/educationals/', search, '');
-            getFiltersData('/locals/', search, '');
-            getFiltersData('/detachment_list/', search, lim);
-        } else if (roles.roles.value.localheadquarter_commander) {
-            local.value = roles.roles.value.localheadquarter_commander.name;
-            search =
-                '?local_headquarter__name=' +
-                roles.roles.value.localheadquarter_commander.name;
-            levelAccess.value = 3;
-            getFiltersData('/educationals/', search);
-        } else if (roles.roles.value.educationalheadquarter_commander) {
-            educ.value =
-                roles.roles.value.educationalheadquarter_commander.name;
-            search =
-                '?educational_headquarter__name=' +
-                roles.roles.value.educationalheadquarter_commander.name;
-            lim = '&limit=500';
-            levelAccess.value = 4;
-            getFiltersData('/detanchment_list/', search, lim);
-        } else if (roles.roles.value.detachment_commander) {
-            detachment.value = roles.roles.value.detachment_commander.name;
-            search =
-                '?detachment__name=' +
-                roles.roles.value.detachment_commander.name;
-            levelAccess.value = 5;
-        }
-        viewContributorsData(search);
-    } else {
-        levelAccess.value = 0;
-        getFiltersData('/districts/', search);
-    }
-};
-
-const onAction = async () => {
-    try {
-        for (const application of selectedPeoples.value) {
-            if (action.value === 'Оплачен') {
-                await ChangeStatus(application.id);
-            } else {
-                await ChangeCancelStatus(application.id);
-            }
-            application.selected = false;
-
-            selectedPeoples.value = selectedPeoples.value.filter(
-                (participant) => participant.id != application.id,
-            );
-        }
-        let search = '';
-        if (district.value) {
-            search = '?district_headquarter__name=' + district.value;
-        } else if (reg.value) {
-            search = '?regional_headquarter__name=' + reg.value;
-        } else if (local.value) {
-            search = '?local_headquarter__name=' + local.value;
-        } else if (educ.value) {
-            search = '?educational_headquarter__name=' + educ.value;
-        } else if (detachment.value) {
-            search = '?detachment__name=' + detachment.value;
-        }
-    } catch (e) {
-        console.log('error action', e);
-    }
-};
-
-const searchContributors = (event) => {
-    let search = '';
-    if (!name.value && roles.roles.value.centralheadquarter_commander) {
-        return [];
-    }
-    if (district.value) {
-        search = '?district_headquarter__name=' + district.value;
-    }
-    if (reg.value) {
-        search = '?regional_headquarter__name=' + reg.value;
-    }
-    if (local.value) {
-        search = '?local_headquarter__name=' + local.value;
-    }
-    if (educ.value) {
-        search = '?educational_headquarter__name=' + educ.value;
-    }
-    if (detachment.value) {
-        search = '?detachment__name=' + detachment.value;
-    }
-    if (search) {
-        search += '&search=' + name.value;
-    }
-
-    if (!name.value && reg.value) {
-        search = '?regional_headquarter__name=' + reg.value;
-    }
-    if (!name.value && district.value) {
-        search = '?district_headquarter__name=' + district.value;
-    }
-    if (!name.value && local.value) {
-        search = '?local_headquarter__name=' + local.value;
-    }
-    if (!name.value && educ.value) {
-        search = '?educational_headquarter__name=' + educ.value;
-    }
-    if (!name.value && detachment.value) {
-        search = '?detachment__name=' + detachment.value;
-    }
-
-    clearTimeout(timerSearch.value);
-    timerSearch.value = setTimeout(() => {
-        viewContributorsData(search, '', '');
-    }, 400);
-};
-
-watch(
-    () => roles.roles.value,
-
-    (newRole, oldRole) => {
-        getUsersByRoles();
-    },
+const isLoadPrevBtnShowed = computed(
+    () =>
+        isResultsFound.value &&
+        isLastPage.value &&
+        !isFirstPage.value &&
+        !isSinglePage.value,
 );
 
 watch(
-    () => districtsStore.districts,
+    () => userHeadquarters.value,
     () => {
-        districts.value = districtsStore.districts;
+        setFilters({
+            central_headquarter__name:
+                userHeadquarters.value?.centralheadquarter_commander?.name,
+            district_headquarter__name:
+                userHeadquarters.value?.districtheadquarter_commander?.name,
+            regional_headquarter__name:
+                userHeadquarters.value?.regionalheadquarter_commander?.name,
+            local_headquarter__name:
+                userHeadquarters.value?.localheadquarter_commander?.name,
+            educational_headquarter__name:
+                userHeadquarters.value?.localheadquarter_commander?.name,
+        });
     },
 );
-
-watch(
-    () => regionalsStore.regionals,
-    () => {
-        let districtID = districtsStore.districts.length
-            ? districtsStore.districts.find(
-                  (dis) => (dis.name = district.value),
-              )?.id
-            : roleStore.roles.districtheadquarter_commander?.id;
-        regionals.value = regionalsStore.regionals.filter(
-            (reg) => reg.district_headquarter == district.value,
-        );
-    },
-);
-
-watch(
-    () => localsStore.locals,
-    () => {
-        let regID = regionalsStore.regionals.length
-            ? regionalsStore.regionals.find((reg) => reg.name == reg.value)?.id
-            : roleStore.roles.regionalheadquarter_commander?.id;
-        locals.value = localsStore.locals.filter(
-            (loc) => loc.regional_headquarter == regID,
-        );
-    },
-);
-
-watch(
-    () => educationalsStore.educationals,
-    () => {
-        let regID = regionalsStore.regionals.length
-            ? regionalsStore.regionals.find((reg) => reg.name == reg.value)?.id
-            : roleStore.roles.regionalheadquarter_commander?.id;
-        let locID = localsStore.locals.length
-            ? localsStore.locals.find((loc) => loc.name == local.value)?.id
-            : roleStore.roles.localheadquarter_commander?.id;
-        educHead.value = educationalsStore.educationals.filter(
-            (edh) => edh.regional_headquarter == regID,
-        );
-        if (local.value) {
-            educHead.value = educationalsStore.educationals.filter(
-                (edh) => edh.local_headquarter == locID,
-            );
-        }
-    },
-);
-
-watch(
-    () => membership.value,
-    () => {
-        let search = [];
-        if (district.value) {
-            search.push('district_headquarter__name=' + district.value);
-        }
-        if (reg.value) {
-            search.push('regional_headquarter__name=' + reg.value);
-        }
-        if (local.value) {
-            search.push('local_headquarter__name=' + local.value);
-        }
-        if (educ.value) {
-            search.push('educational_headquarter__name=' + educ.value);
-        }
-        if (detachment.value) {
-            search.push('detachment__name=' + detachment.value);
-        }
-        if (name.value) search.push('&search=' + name.value);
-        viewContributorsData('?' + search.join('&'));
-        // viewContributorsData(search, '', participants.value.length);
-    },
-);
-
-watch(
-    () => sortBy.value,
-    () => {
-        let search = '';
-        if (district.value) {
-            search += '?district_headquarter__name=' + district.value;
-        }
-        if (reg.value) {
-            search += '?regional_headquarter__name=' + reg.value;
-        }
-        if (local.value) {
-            search += '?local_headquarter__name=' + local.value;
-        }
-        if (educ.value) {
-            search += '?educational_headquarter__name=' + educ.value;
-        }
-        if (detachment.value) {
-            search = '?detachment__name=' + detachment.value;
-        }
-        viewContributorsData(search, '', participants.value.length);
-    },
-);
-watch(
-    () => ascending.value,
-    () => {
-        let search = '';
-        if (district.value) {
-            search += '?district_headquarter__name=' + district.value;
-        }
-        if (reg.value) {
-            search += '?regional_headquarter__name=' + reg.value;
-        }
-        if (local.value) {
-            search += '?local_headquarter__name=' + local.value;
-        }
-        if (educ.value) {
-            search += '?educational_headquarter__name=' + educ.value;
-        }
-        if (detachment.value) {
-            search = '?detachment__name=' + detachment.value;
-        }
-        viewContributorsData(search, '', participants.value.length);
-    },
-);
-
-onMounted(() => {
-    getUsersByRoles();
-});
 </script>
-<style lang="scss">
-input[type='number']::-webkit-inner-spin-button,
-input[type='number']::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+<style scoped>
+.change-status-list-wrapper {
+    padding: 30px 0;
+    display: flex;
+    flex-direction: column;
 }
 
-p {
-    color: #898989;
+.save-status-button {
+    align-self: center;
 }
 
-.contributorBtn {
-    border-radius: 30px;
-    background-color: white;
-    color: #1c5c94;
-    border: 1px solid #1c5c94;
-    margin: 0px;
-    padding: 10px 24px;
-    margin: 7px;
+.change-status-list {
+    padding-top: 30px;
 }
 
-.buttonWrapper {
-    @media (max-width: 1024px) {
-        flex-wrap: wrap;
-        max-width: 650px;
-    }
+.buttons-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-top: 40px;
+    padding-bottom: 60px;
 }
 
-.activee {
-    background-color: #1c5c94;
-    color: white;
+.tab-views-container {
+    padding-bottom: 40px;
 }
 
-.circleLoader {
-    width: 60px;
-    height: 60px;
-    display: block;
-    margin: 30px auto;
-}
-
-.contributor {
-    padding: 0px 0px 60px 0px;
-
-    &-title {
-        font-size: 52px;
-    }
-
-    &-sort {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-
-        @media (max-width: 1024px) {
-            flex-direction: column;
-            align-items: flex-start;
-            margin-top: 60px;
-        }
-    }
-
-    &-container {
-        display: grid;
-        grid-template-columns: 0.5fr 1.5fr;
-        align-items: baseline;
-        grid-column-gap: 36px;
-    }
-
-    &-search {
-        position: relative;
-        box-sizing: border-box;
-        margin: 60px 0px 0px 0px;
-
-        img {
-            position: absolute;
-            top: 15px;
-            left: 16px;
-        }
-
-        &__input {
-            width: 100%;
-            padding: 13px 0px 10px 60px;
-            border-radius: 10px;
-            border: 1px solid black;
-        }
-    }
-
-    &-info {
-        font-size: 18px;
-        font-weight: 400;
-        margin-top: 60px;
-    }
-
-    &-wrapper {
-        padding-top: 40px;
-    }
-}
-
-.refer {
+.list-container {
     display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    column-gap: 140px;
-    margin-top: 60px;
+    grid-template-rows: 52px 52px 1fr;
+    grid-template-columns: minmax(120px, 25%) 1fr;
+    row-gap: 40px;
+    column-gap: 20px;
+    max-width: 100%;
 }
 
-.another {
-    margin-top: 50px;
+.list-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
-.form-field label {
+.search {
+    grid-row: 1/2;
+    grid-column: 1/-1;
+}
+
+.filters {
+    grid-row: 2/-1;
+    grid-column: 1/2;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.filter-info {
+    color: #898989;
     font-size: 16px;
-    font-family: BERTSANS;
-    font-weight: 600;
-    margin-bottom: 8px;
 }
 
-.input-big {
-    width: 465px;
+.contributors-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-self: stretch;
+    justify-content: flex-start;
 }
 
-.v-select__selection {
-    span {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
+.contributors-list-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
-.ascend {
-    margin-left: 5px;
-    background-image: url('@app/assets/icon/switch.svg');
-    background-repeat: no-repeat;
-    background-position: center;
+.contributors-list-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+.filter-text {
+    font-family: Bert Sans;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: left;
 }
 
-.input-full {
-    width: 100%;
+.radio-buttons-field {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 16px;
+    margin-bottom: 16px;
 }
 
-.contributor-sort__all {
-    padding: 11px 12px;
-    border: px solid #b6b6b6;
-    border-radius: 10px;
-    height: 48px;
-    width: 48px;
-
-    input {
-        width: 24px;
-        height: 24px;
-    }
+.list-enter-active,
+.list-leave-active {
+    transition: all 0.5s ease;
+}
+.list-enter-from,
+.list-leave-to {
+    opacity: 0;
+    transform: translateY(10px);
 }
 
-.filter {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-.filters-title {
-    font-size: 24px;
-    font-weight: 600;
-    line-height: 31px;
-    margin-bottom: 24px;
-}
-
-.selectedItems {
-    margin-top: 60px;
-
-    h3 {
-        margin-bottom: 40px;
-    }
-}
-
-.sort {
-    &-filters {
-        align-items: flex-start;
-
-        @media (max-width: 1024px) {
-            margin-top: 20px;
-        }
-    }
-}
-
-.v-expansion-panel {
-    &__shadow {
-        box-shadow: none;
-    }
-
-    &--active,
-    &--after-active {
-        margin: 0;
-    }
-
-    &--active:not(:first-child) {
-        margin: 0;
-    }
-
-    &--active + .v-expansion-panel {
-        margin: 0;
-    }
-
-    .v-expansion-panel-title {
-        max-height: 60px;
-        font-family: 'Akrobat';
-        font-size: 20px;
-        font-weight: 600;
-        background-color: transparent;
-
-        &__overlay {
-            display: none;
-        }
-    }
-}
-
-.v-expansion-panel:not(:first-child)::after {
+button.filter-button {
+    width: 32px;
+    height: 32px;
+    --padding: 0;
     display: none;
 }
 
-.v-expansion-panel-title {
-    padding: 7px 0px;
+@media screen and (max-width: 890px) {
+    .list-container {
+        grid-template-columns: 0 1fr;
+        column-gap: 0;
+    }
+
+    .filters {
+        overflow: hidden;
+    }
+
+    button.filter-button {
+        display: flex;
+    }
 }
 
-.participants__actions {
-    width: 230px;
-}
-
-.option-select .v-field__input input::placeholder,
-.form__select .v-field__input input::placeholder {
-    color: #35383f;
-    opacity: revert;
-}
-
-.v-field--variant-outlined .v-field__outline__end,
-.v-field--variant-outlined .v-field__outline__start {
-    border: none;
-}
-
-.v-input {
-    border: 1px solid #35383f;
-}
-
-.Sort-alphabet {
-    margin-right: 8px;
+.sort-by {
+    margin-left: auto;
 }
 </style>
