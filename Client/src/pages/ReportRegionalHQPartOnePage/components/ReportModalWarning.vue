@@ -1,40 +1,50 @@
 <template>
-  <div class="report-modal-warning">
-    <div class="report-modal-warning__wrapper">
-      <p class="report-modal-warning__wrapper_title">Вы точно уверены, что хотите отправить отчетность?</p>
-    </div>
-    <div class="report-modal-warning__wrapper_buttons">
-      <Button type="button"
-              label="Да"
-              @click="reportConfirmation(true)"
-      />
-      <Button type="button"
-              label="Нет"
-              @click="reportConfirmation(false)"
-      />
+  <div class="modal-background">
+    <div class="report-modal-warning">
+      <div class="report-modal-warning__wrapper">
+        <p class="report-modal-warning__wrapper_title">Вы точно уверены, что хотите отправить отчетность?</p>
+      </div>
+      <div class="report-modal-warning__wrapper_buttons">
+        <Button type="button" label="Да" @click="reportConfirmation(true)"
+          class="report-modal-warning__wrapper_buttons-button" />
+        <Button type="button" label="Нет" @click="reportConfirmation(false)"
+          class="report-modal-warning__wrapper_buttons-button"
+          id="report-modal-warning__wrapper_buttons-transparent-button" />
+      </div>
     </div>
   </div>
 </template>
 <script setup>
-  import { Button } from '@shared/components/buttons';
+import { Button } from '@shared/components/buttons';
 
-  const emit = defineEmits(['reportConfirmation']);
-  const reportConfirmation = (value) => {
-    emit('reportConfirmation', value)
-  };
+const emit = defineEmits(['reportConfirmation']);
+const reportConfirmation = (value) => {
+  emit('reportConfirmation', value)
+};
 </script>
 <style lang="scss" scoped>
+.modal-background {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  right: 0;
+  background-color: #BEC2C6CC;
+  z-index: 1;
+}
+
 .report-modal-warning {
   max-width: 400px;
   height: auto;
   border-radius: 10px;
   position: absolute;
-  top: 50%;
-  transform: translate(-50%, 50%);
-  left: 35%;
+  top: 15%;
+  transform: translate(-50%, 50%) !important;
+  left: 50%;
   background: #fff;
-  z-index: 999;
+  z-index: 1;
   transform: none;
+  padding: 32px 32px 40px 32px;
 
   @media (max-width: 575px) {
     max-width: 320px;
@@ -71,13 +81,22 @@
       margin-top: 32px;
       display: flex;
       flex-direction: column;
-      row-gap: 12px;
 
       @media (max-width: 575px) {
         margin-top: 28px;
         row-gap: 8px;
       }
+
+      &-button {
+        width: 100%;
+        margin-bottom: 0;
+      }
     }
   }
+}
+
+#report-modal-warning__wrapper_buttons-transparent-button {
+  background-color: #fff;
+  color: var(--primary);
 }
 </style>

@@ -1,27 +1,14 @@
 <template>
   <div class="form__field-group report__item">
     <div class="report__add-file">
-      <label
-        class="form__label"
-        for="scan_file"
-      >
+      <label class="form__label" for="scan_file">
         Прикрепить документ
       </label>
-  
-      <InputReport
-        v-if="!seventeenthPanelData.scan_file"
-        isFile
-        type="file"
-        id="scan_file"
-        name="scan_file"
-        width="720px"
-        height="86px"
-        @change="uploadFile"
-      />
-      
-      <div 
-        v-else
-        class="form__file-box">
+
+      <InputReport v-if="!seventeenthPanelData.scan_file" isFile type="file" id="scan_file" name="scan_file"
+        width="720px" height="86px" @change="uploadFile" />
+
+      <div v-else class="form__file-box">
         <span class="form__file-name">
           <!-- <SvgIcon v-if="fileType === 'image/jpeg'" icon-name="group-light" />
           <SvgIcon v-if="fileType === 'application/pdf'" icon-name="group-light" />
@@ -29,34 +16,18 @@
           {{ seventeenthPanelData.scan_file }}
         </span>
         <span class="form__file-size">{{ fileSize }} Мб</span>
-        <button 
-          @click="deleteFile"
-          class="form__button-delete-file"
-        >
+        <button @click="deleteFile" class="form__button-delete-file">
           Удалить
         </button>
       </div>
     </div>
     <div class="report__add-comment">
-      <label
-          class="form__label"
-          for="comment"
-      >
+      <label class="form__label" for="comment">
         Комментарий
       </label>
-      <InputReport
-          v-model:value="seventeenthPanelData.comment"
-          id="comment"
-          name="comment"
-          class="form__input"
-          type="textarea"
-          placeholder="Напишите сообщение"
-          style="width: 100%;"
-          :maxlength="3000"
-          counter-visible
-          :max-counter="3000"
-          @focusout="focusOut"
-      />
+      <InputReport v-model:value="seventeenthPanelData.comment" id="comment" name="comment" class="form__input"
+        type="textarea" placeholder="Напишите сообщение" style="width: 100%;" :maxlength="3000" counter-visible
+        :max-counter="3000" @focusout="focusOut" />
     </div>
   </div>
 </template>
@@ -104,7 +75,7 @@ const uploadFile = async (event) => {
     let { scan_file } = await reportPartTwoService.createReport(formData, '17', true);
     seventeenthPanelData.value.scan_file = scan_file.split('/').at(-1);
   } else {
-    let { data : { scan_file } } = await reportPartTwoService.createReportDraft(formData, '17', true);
+    let { data: { scan_file } } = await reportPartTwoService.createReportDraft(formData, '17', true);
     seventeenthPanelData.value.scan_file = scan_file.split('/').at(-1);
   }
 };
@@ -128,7 +99,7 @@ watchEffect(async () => {
     if (data.length) {
       isFirstSent.value = false;
       seventeenthPanelData.value.scan_file = data[0].scan_file.split('/').at(-1);
-      seventeenthPanelData.value.comment = data[0].comment;      
+      seventeenthPanelData.value.comment = data[0].comment;
     }
   } catch (e) {
     console.log(e)
@@ -138,13 +109,13 @@ watchEffect(async () => {
 
 <style lang="scss" scoped>
 .form__field-group {
-    padding: 40px 40px 42px;
-    background: #F3F4F5;
-    border: none;
-    border-radius: 10px;
-    margin-bottom: 8px;
+  padding: 40px 40px 42px;
+  background: #F3F4F5;
+  border: none;
+  border-radius: 10px;
+  margin-bottom: 8px;
 
-  }
+}
 
 .form__label {
   line-height: 21px;
