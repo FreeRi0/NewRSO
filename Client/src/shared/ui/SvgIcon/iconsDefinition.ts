@@ -26,8 +26,12 @@ export type IconName =
     | 'telegram'
     | 'share-link'
     | 'vk'
+    | 'file-pdf'
+    | 'file-jpg'
+    | 'file-png'
     | 'upside-down-arrow'
     | 'filter';
+
 
 type IconsRecord = Record<
     IconName,
@@ -169,6 +173,21 @@ export const defaultIconSizes: IconsRecord = {
         width: 24,
         height: 24,
         color: '#1F7CC0',
+    },
+    'file-pdf': {
+        width: 48,
+        height: 24,
+        color: '#ff8a00',
+    },
+    'file-jpg': {
+        width: 48,
+        height: 24,
+        color: '#16a086',
+    },
+    'file-png': {
+        width: 48,
+        height: 24,
+        color: '#16a086',
     },
     'upside-down-arrow': {
         width: 20,
