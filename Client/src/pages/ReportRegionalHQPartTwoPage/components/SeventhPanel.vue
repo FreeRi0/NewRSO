@@ -56,9 +56,7 @@ const collapsed = () => {
   margin-top: 8px;
 }
 
-.valid-red {
-  color: #db0000;
-}
+
 
 .v-tab-item--selected {
   background: #F3F4F5;

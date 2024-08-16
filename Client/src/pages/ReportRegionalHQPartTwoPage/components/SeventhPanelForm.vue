@@ -63,15 +63,15 @@
                                 type="radio" @focusout="focusOut" v-model="places.place" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                                }}</label>
+                            }}</label>
                         </div>
                     </div>
-                    <p>place: {{ places.place }}</p>
+                    <!-- <p>place: {{ places.place }}</p> -->
                 </div>
                 <div></div>
                 <div class="form__field">
                     <p class="form__label">
-                        Скан подтверждающего документа *
+                        Скан подтверждающего документа
                         <sup class="valid-red">*</sup>
                     </p>
                     <div class="statement-item">
@@ -82,7 +82,7 @@
                 </div>
 
                 <div class="form__field">
-                    <label class="form__label" for="14">Ссылка на публикацию о победе *
+                    <label class="form__label" for="14">Ссылка на публикацию о победе
                         <sup class="valid-red">*</sup></label>
 
                     <div class="form__wrapper" v-for="(item, index) in places[0].links" :key="index">
@@ -102,6 +102,19 @@
                         <div class="add_link" @click="addLink" v-else>
                             + Добавить ссылку
                         </div>
+                    </div>
+                </div>
+                <div class="d-flex ga-4">
+                    <div class="form__field">
+                        <label class="form__label" for="14">Дата <sup class="valid-red">*</sup></label>
+                        <InputReport @focusout="focusOut" type="date" v-model:value="seventhPanelData.comment" id="111"
+                            name="14" class="form__input" />
+                    </div>
+                    <div class="form__field">
+                        <label class="form__label" for="14">Место проведения <sup class="valid-red">*</sup></label>
+                        <InputReport @focusout="focusOut" placeholder="Укажите место проведения мероприятия"
+                            v-model:value="seventhPanelData.comment" id="112" name="14" class="form__input"
+                            style="width: 100%" />
                     </div>
                 </div>
                 <div class="form__field">
@@ -130,10 +143,33 @@
                     <p class="form__label">
                         Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
                     </p>
-                    <InputReport @focusout="focusOut" v-model:value="sixPanelData.count" id="15" name="14"
+                    <InputReport @focusout="focusOut" v-model:value="participants.count" id="15" name="14"
                         class="form__input number_input" type="number" />
                 </div>
-                <div></div>
+                <div class="form__field">
+                    <label class="form__label">Ссылка на социальные сети/ электронные
+                        СМИ, подтверждающая участие в мероприятии *
+                        <sup class="valid-red">*</sup></label>
+
+                    <div class="form__wrapper" v-for="(item, index) in participants[0].links" :key="index">
+                        <InputReport @focusout="focusOut" name="14" v-model:value="item.link"
+                            class="form__input mb-2" />
+                        <div class="d-flex" v-if="places[0].links.length >= 2">
+                            <div class="add_link" @click="deleteLink">
+                                Удалить поле ввода |
+                            </div>
+                            <div class="add_link" @click="addLink">
+                                + Добавить ссылку
+                            </div>
+                        </div>
+                        <div class="add_link" @click="deleteLink" v-else-if="participants[0].links.length == 2">
+                            Удалить поле ввода
+                        </div>
+                        <div class="add_link" @click="addLink" v-else>
+                            + Добавить ссылку
+                        </div>
+                    </div>
+                </div>
                 <div class="form__field">
                     <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
                     <InputReport @focusout="focusOut" v-model:value="sixPanelData.comment" id="14" name="14"
@@ -226,13 +262,24 @@ const isFirstSent = ref(true);
 
 const seventhPanelData = ref({
     comment: '',
-    places: [],
+    events: [],
 });
 
 const sixPanelData = ref({
-    count: 0,
     comment: '',
+    participants: [],
 });
+
+const participants = ref([
+    {
+        count: 0,
+        links: [
+            {
+                link: '',
+            },
+        ],
+    }
+])
 
 const places = ref([
     {
@@ -293,11 +340,17 @@ const focusOut = async () => {
     }
 };
 const addLink = () => {
-    places.value[0].links.push({ link: '' });
+    if (props.panel_number == 7) {
+        places.value[0].links.push({ link: '' });
+    }
+    participants.value[0].links.push({ link: '' });
 };
 
 const deleteLink = () => {
-    places.value[0].links.pop();
+    if (props.panel_number == 7) {
+        places.value[0].links.pop();
+    }
+    participants.value[0].links.pop();
 };
 
 watchEffect(async () => {
@@ -322,10 +375,10 @@ watchEffect(async () => {
 });
 </script>
 <style lang="scss" scoped>
-
 .number_input {
     width: 340px !important;
 }
+
 .add_link {
     color: #1f7cc0;
     cursor: pointer;
@@ -333,6 +386,10 @@ watchEffect(async () => {
     font-size: 14px;
     font-weight: 400;
     line-height: 21.1px;
+}
+
+.valid-red {
+    color: #db0000;
 }
 
 .places {
