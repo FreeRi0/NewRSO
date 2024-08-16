@@ -449,7 +449,6 @@ const routes: RouteRecordRaw[] = [
                             },
                         ],
                     },
-
                 ],
             },
             //----------------------Конец Структуры - ЛСО/Штабы/Создание/Редактирование---------------------------------------------------------96cb9a («.»)
@@ -873,7 +872,9 @@ const routes: RouteRecordRaw[] = [
                         name: 'reportingRo',
                         path: 'reporting',
                         component: () =>
-                            import('@pages/RatingRoReporting/components/RatingRoReporting.vue'),
+                            import(
+                                '@pages/RatingRoReporting/components/RatingRoReporting.vue'
+                            ),
                         meta: {
                             label: 'Отчетность',
                             redirectTo: 'reportingRo',
@@ -885,7 +886,7 @@ const routes: RouteRecordRaw[] = [
                         component: () =>
                             import(
                                 '@pages/ReportRegionalHQPartOnePage/ReportRegionalHQPartOne.vue'
-                                ),
+                            ),
                         meta: {
                             label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 1',
                         },
@@ -896,13 +897,12 @@ const routes: RouteRecordRaw[] = [
                         component: () =>
                             import(
                                 '@pages/ReportRegionalHQPartTwoPage/ReportRegionalHQPartTwo.vue'
-                                ),
+                            ),
                         meta: {
                             label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 2',
                         },
                     },
-
-                ]
+                ],
             },
             {
                 path: '/rating-ro',
@@ -921,14 +921,16 @@ const routes: RouteRecordRaw[] = [
                         path: 'places',
                         meta: {
                             label: 'Места РО по показателям',
-                            redirectTo: 'places'
+                            redirectTo: 'places',
                         },
                         children: [
                             {
                                 path: '',
                                 name: 'places',
                                 component: () =>
-                                    import('@pages/RoPlaces/components/RoPlaces.vue'),
+                                    import(
+                                        '@pages/RoPlaces/components/RoPlaces.vue'
+                                    ),
                             },
                             {
                                 path: ':id',
@@ -943,30 +945,33 @@ const routes: RouteRecordRaw[] = [
                                         path: '',
                                         name: 'Place',
                                         component: () =>
-                                            import('@pages/RatingRoPlace/components/RatingRoPlace.vue'),
+                                            import(
+                                                '@pages/RatingRoPlace/components/RatingRoPlace.vue'
+                                            ),
                                     },
-                                ]
-                            }
-
-                        ]
+                                ],
+                            },
+                        ],
                     },
 
                     {
                         path: 'reporting',
                         meta: {
                             label: 'Отчеты РО',
-                            redirectTo: 'rating-ro-reporting'
+                            redirectTo: 'rating-ro-reporting',
                         },
                         children: [
                             {
                                 path: '',
                                 name: 'rating-ro-reporting',
                                 component: () =>
-                                    import('@pages/RatingRoReporting/components/RatingRoReportingHeadquarters.vue'),
+                                    import(
+                                        '@pages/RatingRoReporting/components/RatingRoReportingHeadquarters.vue'
+                                    ),
                             },
-                        ]
+                        ],
                     },
-                ]
+                ],
             },
             {
                 path: '/references',

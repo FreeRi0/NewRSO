@@ -11,7 +11,7 @@ export const useRoleStore = defineStore('role', {
         myPositions: {},
         positions: {},
         isLoadingRoles: false,
-        status: {}
+        status: {},
     }),
     actions: {
         async getRoles() {
@@ -24,10 +24,11 @@ export const useRoleStore = defineStore('role', {
                 },
             });
             this.roles = data.data;
+            console.log(data.data);
             this.isLoadingRoles = false;
         },
 
-        async getUserRoles(id: String) {
+        async getUserRoles(id: string) {
             const dataUserRoles = await HTTP.get(`/rsousers/${id}/commander/`, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -38,15 +39,19 @@ export const useRoleStore = defineStore('role', {
         },
 
         async getUserParticipantsStatus(competition_pk: string) {
-            const dataUserStatus = await HTTP.get(`/competitions/${competition_pk}/participants/status/`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
+            const dataUserStatus = await HTTP.get(
+                `/competitions/${competition_pk}/participants/status/`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization:
+                            'JWT ' + localStorage.getItem('jwt_token'),
+                    },
                 },
-            });
+            );
             this.status = dataUserStatus.data;
+            console.log(dataUserStatus.data);
         },
-
 
         async getMyPositions() {
             if (isAuth.value) {
@@ -60,7 +65,7 @@ export const useRoleStore = defineStore('role', {
             }
         },
 
-        async getPositions(id: String) {
+        async getPositions(id: string) {
             const dataPositions = await HTTP.get(`/rsousers/${id}/positions/`, {
                 headers: {
                     'Content-Type': 'application/json',

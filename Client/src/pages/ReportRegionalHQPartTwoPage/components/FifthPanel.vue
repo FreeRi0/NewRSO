@@ -3,7 +3,7 @@
       v-if="true"
       class="form__field-group"
   >
-    <div v-for="(project, index) in projects" :key="index">
+    <div v-for="(event, index) in events" :key="index">
       <div style="display: flex;">
         <div>
           <label
@@ -11,7 +11,7 @@
               for="participants_number"
           >Общее количество человек, принявших участие в трудовом проекте <sup class="valid-red">*</sup></label>
           <InputReport
-              v-model:value="project.participants_number"
+              v-model:value="event.participants_number"
               id="participants_number"
               name="participants_number"
               class="form__input"
@@ -26,7 +26,7 @@
               for="ro_participants_number"
           >Количество человек из своего региона, принявших участие в трудовом проекте <sup class="valid-red">*</sup></label>
           <InputReport
-              v-model:value="project.ro_participants_number"
+              v-model:value="event.ro_participants_number"
               id="ro_participants_number"
               name="ro_participants_number"
               class="form__input"
@@ -49,7 +49,7 @@
               for="start_date"
           >Дата начала проведения проекта <sup class="valid-red">*</sup></label>
           <InputReport
-              v-model:value="project.start_date"
+              v-model:value="event.start_date"
               id="start_date"
               name="start_date"
               class="form__input"
@@ -63,7 +63,7 @@
               for="end_date"
           >Дата окончания проведения проекта <sup class="valid-red">*</sup></label>
           <InputReport
-              v-model:value="project.end_date"
+              v-model:value="event.end_date"
               id="end_date"
               name="end_date"
               class="form__input"
@@ -87,7 +87,7 @@
         <p
             class="form__label"
         >Ссылка на группу трудового проекта в социальных сетях <sup class="valid-red">*</sup></p>
-        <div style="display: flex;" v-for="(link, i) in projects[index].links" :key="i">
+        <div style="display: flex;" v-for="(link, i) in events[index].links" :key="i">
           <InputReport
               v-model:value="link.link"
               :id="i"
@@ -98,8 +98,14 @@
               @focusout="focusOut"
           />
           <Button
+              v-if="events[index].links.length === i+1"
               label="+ Добавить ссылку"
               @click="addLink(index)"
+          />
+          <Button
+              v-else
+              label="Удалить"
+              @click="deleteLink(index, i)"
           />
         </div>
       </div>
@@ -486,9 +492,9 @@ const tab = ref('one');
 const isFirstSent = ref(true);
 const fifthPanelData = ref({
   comment: '',
-  projects: []
+  events: []
 });
-const projects = ref([
+const events = ref([
   {
     participants_number: '',
     ro_participants_number: '',
@@ -502,10 +508,15 @@ const projects = ref([
   }
 ]);
 const addLink = (index) => {
-  projects.value[index].links.push({ link: '' })
+  events.value[index].links.push({ link: '' })
+};
+const deleteLink = async (eventIndex, linkIndex) => {
+  events.value[eventIndex].links.splice(linkIndex, 1);
+  fifthPanelData.value.events = [ ...events.value ];
+  await reportPartTwoService.createReportDraft(fifthPanelData.value, '5');
 };
 const addProject = () => {
-  projects.value.push({
+  events.value.push({
     participants_number: '',
     ro_participants_number: '',
     start_date: null,
@@ -518,7 +529,7 @@ const addProject = () => {
   })
 };
 const focusOut = async () => {
-  fifthPanelData.value.projects = [ ...projects.value ];
+  fifthPanelData.value.events = [ ...events.value ];
   try {
     if (isFirstSent.value) {
       await reportPartTwoService.createReport(fifthPanelData.value, '5');
@@ -530,8 +541,8 @@ const focusOut = async () => {
   }
 }
 const deleteProject = async (index) => {
-  projects.value = projects.value.filter((el, i) => index !== i);
-  fifthPanelData.value.projects = [ ...projects.value ];
+  events.value = events.value.filter((el, i) => index !== i);
+  fifthPanelData.value.events = [ ...events.value ];
   try {
     await reportPartTwoService.createReportDraft(fifthPanelData.value, '5');
   } catch (e) {
@@ -543,8 +554,14 @@ watchEffect(async () => {
     const { data } = await reportPartTwoService.getReport('5');
     if (data.length) {
       isFirstSent.value = false;
-      if (data.projects) projects.value = [...data[0].projects];
-      fifthPanelData.value.comment = data[0].comment;
+      for (let item of data) {
+        if (item.regional_headquarter === 1) {
+          events.value = item.events;
+          fifthPanelData.value.comment = item.comment;
+        }
+      }
+      // events.value = [...data[0].events];
+      // fifthPanelData.value.comment = data[0].comment;
     }
   } catch (e) {
     console.log(e);

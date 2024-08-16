@@ -114,8 +114,14 @@
               @focusout="focusOut"
           />
           <Button
+              v-if="events[index].links.length === i+1"
               label="+ Добавить ссылку"
               @click="addLink(index)"
+          />
+          <Button
+              v-else
+              label="Удалить"
+              @click="deleteLink(index, i)"
           />
         </div>
       </div>
@@ -547,6 +553,11 @@ const events = ref([
 const addLink = (index) => {
   events.value[index].links.push({ link: '' })
 };
+const deleteLink = async (eventIndex, linkIndex) => {
+  events.value[eventIndex].links.splice(linkIndex, 1);
+  fourthPanelData.value.events = [ ...events.value ];
+  await reportPartTwoService.createReportDraft(fourthPanelData.value, '4');
+};
 const addEvent = () => {
   events.value.push({
     participants_number: '',
@@ -586,8 +597,14 @@ watchEffect(async () => {
     const { data } = await reportPartTwoService.getReport('4');
     if (data.length) {
       isFirstSent.value = false;
-      events.value = [...data[0].events];
-      fourthPanelData.value.comment = data[0].comment;
+      for (let item of data) {
+        if (item.regional_headquarter === 1) {
+          events.value = item.events;
+          fourthPanelData.value.comment = item.comment;
+        }
+      }
+      // events.value = [...data[0].events];
+      // fourthPanelData.value.comment = data[0].comment;
     }
   } catch (e) {
     console.log(e);
