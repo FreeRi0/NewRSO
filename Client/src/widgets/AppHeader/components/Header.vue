@@ -357,7 +357,7 @@ const userPages = computed(() => [
 
 let show = ref(false);
 let nameUrl = '';
-if (roleStore.roles.centralheadquarter_commander) {
+if (roleStore.roles.centralheadquarter_commander !== null) {
     nameUrl = 'rating-ro'
 } else {
     nameUrl = 'reportingRo'
