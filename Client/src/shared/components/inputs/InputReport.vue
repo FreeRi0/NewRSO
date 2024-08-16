@@ -27,7 +27,10 @@
       v-if="isFile"
       class="form-input__text">
       <span>Перетащите файлы или выберите на&nbsp;компьютере</span>
-      <span>Выбрать файл</span>
+      <span>
+        <SvgIcon iconName="add-file" />
+        Выбрать файл
+      </span>
     </div>
   </div>
 </template>
@@ -35,6 +38,7 @@
 <script setup>
 import {ref, watchEffect} from 'vue';
 import { MaskInput } from 'vue-3-mask';
+import { SvgIcon } from '@shared/index';
 
 defineOptions({
   inheritAttrs: false,
@@ -131,6 +135,9 @@ const updateValue = (event) => {
     color: #6d6d6d;
 
     span:last-child {
+      display: flex;
+      align-items: center;
+      column-gap: 12px;
       color:#1f7cc0;
     }
   }
