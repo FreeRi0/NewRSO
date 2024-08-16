@@ -312,7 +312,7 @@ const addLink = () => {
   tenthPanelData.value.links.push({ link: '' })
 };
 watchEffect(() => {
-  tenthPanelData.value = { ...props.data[0] };
+  tenthPanelData.value = { ...props.data };
 })
 </script>
 <style lang="scss" scoped>

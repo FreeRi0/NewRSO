@@ -552,16 +552,10 @@ const deleteProject = async (index) => {
 watchEffect(async () => {
   try {
     const { data } = await reportPartTwoService.getReport('5');
-    if (data.length) {
+    if (data) {
       isFirstSent.value = false;
-      for (let item of data) {
-        if (item.regional_headquarter === 1) {
-          events.value = item.events;
-          fifthPanelData.value.comment = item.comment;
-        }
-      }
-      // events.value = [...data[0].events];
-      // fifthPanelData.value.comment = data[0].comment;
+      events.value = [...data.events];
+      fifthPanelData.value.comment = data.comment;
     }
   } catch (e) {
     console.log(e);

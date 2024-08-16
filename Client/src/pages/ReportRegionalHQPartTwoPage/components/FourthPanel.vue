@@ -595,16 +595,10 @@ const deleteEvent = async (index) => {
 watchEffect(async () => {
   try {
     const { data } = await reportPartTwoService.getReport('4');
-    if (data.length) {
+    if (data) {
       isFirstSent.value = false;
-      for (let item of data) {
-        if (item.regional_headquarter === 1) {
-          events.value = item.events;
-          fourthPanelData.value.comment = item.comment;
-        }
-      }
-      // events.value = [...data[0].events];
-      // fourthPanelData.value.comment = data[0].comment;
+      events.value = [...data.events];
+      fourthPanelData.value.comment = data.comment;
     }
   } catch (e) {
     console.log(e);
