@@ -44,18 +44,13 @@
         </div>
       </v-tabs-window-item> -->
 
-            <div class="form__field-group">
+            <div v-if="props.panel_number == 7" class="form__field-group">
                 <div style="display: flex; justify-content: space-between">
                     <div>
                         <p class="form__title">{{ props.title }}</p>
                     </div>
                     <div>
-                        <Button
-                            @click="collapseForm"
-                            class="form__btn"
-                            style="margin: 0"
-                            label="Свернуть"
-                        />
+                        <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
                     </div>
                 </div>
                 <div class="form__field places">
@@ -63,23 +58,12 @@
                         Призовое место в конкурсе <sup class="valid-red">*</sup>
                     </p>
                     <div class="places_wrap">
-                        <div
-                            class="places_item"
-                            v-for="item in prize_places"
-                            :key="item.id"
-                        >
-                            <input
-                                :id="item.id"
-                                :value="item.value"
-                                :name="item.name"
-                                class="form__input places_input"
-                                type="radio"
-                                @focusout="focusOut"
-                                v-model="places.place"
-                            />
+                        <div class="places_item" v-for="item in prize_places" :key="item.id">
+                            <input :id="item.id" :value="item.value" :name="item.name" class="form__input places_input"
+                                type="radio" @focusout="focusOut" v-model="places.place" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                            }}</label>
+                                }}</label>
                         </div>
                     </div>
                     <p>place: {{ places.place }}</p>
@@ -92,35 +76,18 @@
                     </p>
                     <div class="statement-item">
                         <SvgIcon iconName="add-file" />
-                        <FileUpload
-                            mode="basic"
-                            name="demo[]"
-                            accept=".pdf, .jpeg, .png"
-                            :maxFileSize="7000000"
-                            :customUpload="true"
-                            @select="selectFile"
-                            chooseLabel="Выбрать файл"
-                        />
+                        <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png" :maxFileSize="7000000"
+                            :customUpload="true" @select="selectFile" chooseLabel="Выбрать файл" />
                     </div>
                 </div>
 
                 <div class="form__field">
-                    <label class="form__label" for="14"
-                        >Ссылка на публикацию о победе *
-                        <sup class="valid-red">*</sup></label
-                    >
+                    <label class="form__label" for="14">Ссылка на публикацию о победе *
+                        <sup class="valid-red">*</sup></label>
 
-                    <div
-                        class="form__wrapper"
-                        v-for="(item, index) in places[0].links"
-                        :key="index"
-                    >
-                        <InputReport
-                            @focusout="focusOut"
-                            name="14"
-                            v-model:value="item.link"
-                            class="form__input mb-2"
-                        />
+                    <div class="form__wrapper" v-for="(item, index) in places[0].links" :key="index">
+                        <InputReport @focusout="focusOut" name="14" v-model:value="item.link"
+                            class="form__input mb-2" />
                         <div class="d-flex" v-if="places[0].links.length >= 2">
                             <div class="add_link" @click="deleteLink">
                                 Удалить поле ввода |
@@ -129,11 +96,7 @@
                                 + Добавить ссылку
                             </div>
                         </div>
-                        <div
-                            class="add_link"
-                            @click="deleteLink"
-                            v-else-if="places[0].links.length == 2"
-                        >
+                        <div class="add_link" @click="deleteLink" v-else-if="places[0].links.length == 2">
                             Удалить поле ввода
                         </div>
                         <div class="add_link" @click="addLink" v-else>
@@ -142,17 +105,9 @@
                     </div>
                 </div>
                 <div class="form__field">
-                    <label class="form__label" for="14"
-                        >Комментарий <sup class="valid-red">*</sup></label
-                    >
-                    <InputReport
-                        @focusout="focusOut"
-                        v-model:value="seventhPanelData.comment"
-                        id="14"
-                        name="14"
-                        class="form__input"
-                        style="width: 100%"
-                    />
+                    <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
+                    <InputReport @focusout="focusOut" v-model:value="seventhPanelData.comment" id="14" name="14"
+                        class="form__input" style="width: 100%" />
                 </div>
                 <div>
                     <v-checkbox label="Итоговое значение" />
@@ -160,6 +115,29 @@
                 <div class="hr"></div>
                 <div>
                     <p>0</p>
+                </div>
+            </div>
+            <div v-else-if="props.panel_number == 6" class="form__field-group">
+                <div style="display: flex; justify-content: space-between">
+                    <div>
+                        <p class="form__title">{{ props.title }}</p>
+                    </div>
+                    <div>
+                        <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
+                    </div>
+                </div>
+                <div class="form__field places">
+                    <p class="form__label">
+                        Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
+                    </p>
+                    <InputReport @focusout="focusOut" v-model:value="sixPanelData.count" id="15" name="14"
+                        class="form__input number_input" type="number" />
+                </div>
+                <div></div>
+                <div class="form__field">
+                    <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
+                    <InputReport @focusout="focusOut" v-model:value="sixPanelData.comment" id="14" name="14"
+                        class="form__input" style="width: 100%" />
                 </div>
             </div>
 
@@ -236,6 +214,7 @@ import { SvgIcon } from '@shared/ui';
 import { reportPartTwoService } from '@services/ReportService.ts';
 const props = defineProps({
     title: String,
+    panel_number: String
 });
 
 const emit = defineEmits(['collapse-form']);
@@ -248,6 +227,11 @@ const isFirstSent = ref(true);
 const seventhPanelData = ref({
     comment: '',
     places: [],
+});
+
+const sixPanelData = ref({
+    count: 0,
+    comment: '',
 });
 
 const places = ref([
@@ -277,16 +261,32 @@ const focusOut = async () => {
     seventhPanelData.value.events = [...places.value];
     try {
         if (isFirstSent.value) {
-            await reportPartTwoService.createReportDraft(
-                seventhPanelData.value,
-                '7',
-                true,
-            );
+            if (props.panel_number == 6) {
+                await reportPartTwoService.createReportDraft(
+                    sixPanelData.value,
+                    '6',
+                );
+            } else {
+                await reportPartTwoService.createReportDraft(
+                    seventhPanelData.value,
+                    '7',
+                    true,
+                );
+            }
+
         } else {
-            await reportPartTwoService.createReport(
-                seventhPanelData.value,
-                '7',
-            );
+            if (props.panel_number == 6) {
+                await reportPartTwoService.createReport(
+                    sixPanelData.value,
+                    '6',
+                );
+            } else {
+                await reportPartTwoService.createReport(
+                    seventhPanelData.value,
+                    '7',
+                );
+            }
+
         }
     } catch (e) {
         console.log('focusOut error:', e);
@@ -302,18 +302,30 @@ const deleteLink = () => {
 
 watchEffect(async () => {
     try {
-        const { data } = await reportPartTwoService.getReport('7');
-        if (data.length) {
+        const { data } = await reportPartTwoService.getReport(props.panel_number);
+        // const { data_six } = await reportPartTwoService.getReport('6');
+        if (data.length && props.panel_number == 7) {
             isFirstSent.value = false;
             places.value = [...data[0].places];
             seventhPanelData.value.comment = data[0].comment;
+        } else {
+            isFirstSent.value = false;
+            sixPanelData.value.comment = data[0].comment;
         }
+        // if (data_six.length) {
+        //     isFirstSent.value = false;
+        //     sixPanelData.value.comment = data_six[0].comment;
+        // }
     } catch (e) {
         console.log(e);
     }
 });
 </script>
 <style lang="scss" scoped>
+
+.number_input {
+    width: 340px !important;
+}
 .add_link {
     color: #1f7cc0;
     cursor: pointer;
