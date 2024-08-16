@@ -177,10 +177,10 @@ watchEffect(async () => {
   border: none;
   border-radius: 10px;
   margin-bottom: 8px;
-
 }
 
 .form__label {
+  display: block;
   line-height: 21px;
   color: #000000;
   margin-bottom: 8px;
