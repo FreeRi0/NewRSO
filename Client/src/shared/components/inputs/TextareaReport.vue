@@ -6,7 +6,7 @@
             :id="name"
             :name="name"
             :value="value" 
-            class="form__textarea" 
+            class="report__textarea" 
             :rows="rows"
             :maxlength="maxLength"
             :placeholder="placeholder"
@@ -18,7 +18,7 @@
         >
         </Textarea>
     
-        <div class="form__counter" v-if="counterVisible">
+        <div class="report__counter" v-if="counterVisible">
           {{ textLength }} / {{ maxLengthText }}
         </div>
     </div>
@@ -87,8 +87,10 @@
 </script>
   
 <style lang="scss" scoped>  
-    .form__textarea {
+.report {
+    &__textarea {
         padding: 9.5px 16px;
+        width: 100%;
         min-height: 40px;
         max-height: 229px;
         overflow: auto !important;
@@ -100,19 +102,21 @@
         line-height: 21px;
         cursor:text;
 
-            &::placeholder {
-                color: #6d6d6d;
-            }
+        &::placeholder {
+            color: #6d6d6d;
+        }
     }
-
-    .form__counter {
-        width: fit-content;
+    
+    &__counter {
+        margin-top: -6px;
         margin-left: auto;
+        width: fit-content;
         font-family: "Bert Sans";
         font-size: 12px;
         line-height: 16px;
+        // letter-spacing: -0.9px;
         color: #6d6d6d;
-        margin-top: 1px;
     }
+}
 </style>
   

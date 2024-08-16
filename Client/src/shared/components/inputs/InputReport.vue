@@ -99,6 +99,7 @@ watchEffect(() => textInputLength.value = typeof props.value === 'string' ? prop
 
 const updateValue = (event) => {
   emit('update:value', event.target.value);
+  // emit('update:value', event.target.maxLength ? event.target.value = event.target.value.slice(0, event.target.maxLength) : event.target.value);
 };
 </script>
 
