@@ -1,31 +1,13 @@
 <template>
-  <div
-    :is-file="isFile"
-    :class="isFile ? 'form-input form-input__file-input' : 'form-input'"
-    :style="{ width: width }">
-    <input
-      :type="type"
-      :name="name"
-      :style="{
-        height: height,
-      }"
-      :value="value"
-      :id="name"
-      :placeholder="placeholder"
-      :maxlength="maxLength"
-      :readonly="readonly"
-      max="9999-12-31"
-      class="form-input__report"
-      @input="updateValue"
-      v-bind="$attrs"
-      :disabled="disabled"
-    />
+  <div :is-file="isFile" :class="isFile ? 'form-input form-input__file-input' : 'form-input'" :style="{ width: width }">
+    <input :type="type" :name="name" :style="{
+      height: height,
+    }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly"
+      max="9999-12-31" class="form-input__report" @input="updateValue" v-bind="$attrs" :disabled="disabled" />
     <div class="form__counter" v-if="counterVisible">
-        {{ textInputLength }} / {{ maxCounter }}
+      {{ textInputLength }} / {{ maxCounter }}
     </div>
-    <div
-      v-if="isFile"
-      class="form-input__text">
+    <div v-if="isFile" class="form-input__text">
       <span>Перетащите файлы или выберите на&nbsp;компьютере</span>
       <span>Выбрать файл</span>
     </div>
@@ -33,7 +15,7 @@
 </template>
 
 <script setup>
-import {ref, watchEffect} from 'vue';
+import { ref, watchEffect } from 'vue';
 import { MaskInput } from 'vue-3-mask';
 
 defineOptions({
@@ -130,10 +112,11 @@ const updateValue = (event) => {
     color: #6d6d6d;
 
     span:last-child {
-      color:#1f7cc0;
+      color: #1f7cc0;
     }
   }
 }
+
 .form-input__report {
   padding: 8px 16px;
   background-color: #ffffff;
