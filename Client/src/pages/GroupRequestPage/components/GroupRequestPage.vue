@@ -65,7 +65,7 @@
 
 <script setup>
 import { HTTP } from '@app/http';
-import { SvgIcon } from '@shared/components/SvgIcon';
+import { SvgIcon } from '@shared/ui';
 import { onMounted, ref, inject } from 'vue';
 import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';

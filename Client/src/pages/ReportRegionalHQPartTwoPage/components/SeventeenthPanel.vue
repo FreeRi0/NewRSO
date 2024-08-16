@@ -1,10 +1,7 @@
 <template>
   <div class="form__field-group report__item">
     <div class="report__add-file">
-      <label
-        class="form__label"
-        for="scan_file"
-      >
+      <label class="form__label" for="scan_file">
         Прикрепить документ
       </label>
         <!-- скорректировать размер файла
@@ -19,7 +16,7 @@
         @change="uploadFile"
         chooseLabel="Выбрать файл"
       ></FileUpload>
-   -->
+      -->
       <InputReport
         v-if="!seventeenthPanelData.scan_file"
         isFile
@@ -40,6 +37,7 @@
           <SvgIcon v-if="seventeenthPanelData.file_type === 'png'" icon-name="file-png" />
           {{ seventeenthPanelData.scan_file }}
         </span>
+
         <span class="form__file-size">{{ seventeenthPanelData.file_size }} Мб</span>
         <button 
           @click="deleteFile"
@@ -50,10 +48,7 @@
       </div>
     </div>
     <div class="report__add-comment">
-      <label
-          class="form__label"
-          for="comment"
-      >
+      <label class="form__label" for="comment">
         Комментарий
       </label>
       <!-- <InputReport
@@ -167,7 +162,7 @@ watchEffect(async () => {
       seventeenthPanelData.value.comment = data[1].comment;
       seventeenthPanelData.value.scan_file = data[1].scan_file.split('/').at(-1)
       seventeenthPanelData.value.file_size = data[1].file_size;
-      seventeenthPanelData.value.file_type = data[1].file_type;   
+      seventeenthPanelData.value.file_type = data[1].file_type;
     }
   } catch (e) {
     console.log(e)
@@ -177,13 +172,13 @@ watchEffect(async () => {
 
 <style lang="scss" scoped>
 .form__field-group {
-    padding: 40px 40px 42px;
-    background: #F3F4F5;
-    border: none;
-    border-radius: 10px;
-    margin-bottom: 8px;
+  padding: 40px 40px 42px;
+  background: #F3F4F5;
+  border: none;
+  border-radius: 10px;
+  margin-bottom: 8px;
 
-  }
+}
 
 .form__label {
   line-height: 21px;
