@@ -38,7 +38,7 @@
         <Button
             v-if="index > 0"
             label="Удалить мероприятие"
-            style="margin: 0;"
+            class="deleteEventBtn"
             @click="deleteProject(index)"
         />
       </div>
@@ -72,22 +72,25 @@
           />
         </div>
       </div>
-      <div>
+      <div class="report__add-file">
         <label
             class="form__label"
             for="4"
         >Положение о проекте <sup class="valid-red">*</sup></label>
         <InputReport
+            isFile
             type="file"
             id="4"
             name="4"
+            width="720px"
+            height="86px"
         />
       </div>
       <div>
         <p
             class="form__label"
         >Ссылка на группу трудового проекта в социальных сетях <sup class="valid-red">*</sup></p>
-        <div style="display: flex;" v-for="(link, i) in events[index].links" :key="i">
+        <div style="display: flex; align-items: center" v-for="(link, i) in events[index].links" :key="i">
           <InputReport
               v-model:value="link.link"
               :id="i"
@@ -97,22 +100,22 @@
               placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
               @focusout="focusOut"
           />
-          <Button
+          <div
               v-if="events[index].links.length === i+1"
-              label="+ Добавить ссылку"
               @click="addLink(index)"
-          />
-          <Button
+              class="add_link"
+          >+ Добавить ссылку</div>
+          <div
               v-else
-              label="Удалить"
+              class="add_link"
               @click="deleteLink(index, i)"
-          />
+          >Удалить</div>
         </div>
       </div>
     </div>
     <div>
       <Button
-          style="margin: 0"
+          class="add_eventBtn"
           label="+ Добавить проект"
           @click="addProject"
       />
@@ -122,15 +125,17 @@
           class="form__label"
           for="comment"
       >Комментарий <sup class="valid-red">*</sup></label>
-      <InputReport
+      <TextareaReport
           v-model:value="fifthPanelData.comment"
           id="comment"
           name="comment"
-          class="form__input"
-          type="textarea"
+          :rows="1"
+          autoResize
           placeholder="Комментарий"
-          style="width: 100%;"
           @focusout="focusOut"
+          :maxlength="3000"
+          :max-length-text="3000"
+          counter-visible
       />
     </div>
     <div>
@@ -484,7 +489,7 @@
 </template>
 <script setup>
 import {ref, watchEffect} from "vue";
-import { InputReport } from '@shared/components/inputs';
+import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { reportPartTwoService } from "@services/ReportService.ts";
 
@@ -639,5 +644,35 @@ watchEffect(async () => {
       border-right: 1px solid #B6B6B6;
     }
   }
+}
+.add_link {
+  color: #1f7cc0;
+  cursor: pointer;
+  font-family: Bert Sans;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21.1px;
+  margin-left: 40px;
+}
+.add_eventBtn {
+  background-color: transparent;
+  color: #1F7CC0;
+  border-color: #1F7CC0;
+  margin: 35px 0 40px;
+}
+.deleteEventBtn {
+  background-color: #d2e4f2;
+  width: 177px;
+  height: 33px;
+  border: none;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: Akrobat;
+  line-height: 21.1px;
+  text-align: center;
+  padding: 4px 11px;
+  color: #1f7cc0;
+  border-radius: 6px;
+  margin: 0;
 }
 </style>

@@ -17,44 +17,56 @@
                 @focusout="focusOut"
             />
           </div>
-          <div>
+          <div class="report__add-file">
             <label
                 class="form__label"
                 for="scan_file"
             >Скан платежного поручения об уплате ЧВ <sup class="valid-red">*</sup></label>
-            <v-file-input
-                v-if="!firstPanelData.scan_file"
+            <InputReport
+                v-if="!firstPanelData.file_type"
+                isFile
                 type="file"
                 id="scan_file"
                 name="scan_file"
+                width="720px"
+                height="86px"
                 @change="uploadFile"
             />
-            <div v-else style="display: flex;">
-              <p>{{ firstPanelData.scan_file }}</p>
-              <p @click="deleteFile" style="
-              font-family: Bert Sans;
-              font-size: 16px;
-              font-weight: 400;
-              line-height: 20px;
-              text-align: right;
-              cursor: pointer;
-              padding-left: 8px;"
-              >Удалить</p>
-          </div>
+            <div
+                v-else
+                class="form__file-box">
+              <span class="form__file-name">
+                <SvgIcon v-if="firstPanelData.file_type === 'jpg'" icon-name="file-jpg" />
+                <SvgIcon v-if="firstPanelData.file_type === 'pdf'" icon-name="file-pdf" />
+                <SvgIcon v-if="firstPanelData.file_type === 'png'" icon-name="file-png" />
+                {{ firstPanelData.scan_file }}
+              </span>
+
+              <span class="form__file-size">{{ firstPanelData.file_size }} Мб</span>
+              <button
+                  @click="deleteFile"
+                  class="form__button-delete-file"
+              >
+                Удалить
+              </button>
+            </div>
         </div>
       </div>
       <div  class="form__field">
           <label
               class="form__label"
               for="comment"
-          >Комментарий <sup class="valid-red">*</sup></label>
-          <InputReport
+          >Комментарий</label>
+          <TextareaReport
               v-model:value="firstPanelData.comment"
               id="comment"
               name="comment"
-              class="form__input"
-              style="width: 100%"
+              :rows="1"
+              autoResize
               @focusout="focusOut"
+              :maxlength="3000"
+              :max-length-text="3000"
+              counter-visible
           />
         </div>
     </div>
@@ -182,9 +194,10 @@
 </template>
 <script setup>
 import { ref, watchEffect } from "vue";
-import { InputReport } from '@shared/components/inputs';
+import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { ReportRegionalForm } from '../../ReportRegionalHQPartOnePage/components/index'
 import { getReport, reportPartTwoService } from "@services/ReportService.ts";
+import { SvgIcon } from '@shared/index';
 
 const defaultReportData = {
   participants_number: '0',
@@ -206,6 +219,8 @@ const firstPanelData = ref({
   comment: '',
   amount_of_money: '',
   scan_file: '',
+  file_type: '',
+  file_size: '',
 });
 const focusOut = async () => {
   let formData = new FormData();
@@ -255,7 +270,9 @@ watchEffect(async () => {
       isFirstSent.value = false;
       firstPanelData.value.comment = data.comment;
       firstPanelData.value.amount_of_money = data.amount_of_money;
-      firstPanelData.value.scan_file = data.scan_file.split('/').at(-1);
+      // firstPanelData.value.scan_file = data.scan_file.split('/').at(-1);
+      firstPanelData.value.file_type = data.file_type;
+      firstPanelData.value.file_size = data.file_size;
     }
   } catch (e) {
     console.log(e)
