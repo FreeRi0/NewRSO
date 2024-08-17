@@ -8,6 +8,10 @@ export function getReport() {
     return HTTP.get('regional_competitions/statistical_report/me/')
 }
 
+export function getCurrentReport(id: string) {
+    return HTTP.get(`regional_competitions/statistical_report/${id}/`)
+}
+
 export function patchReport(data: object) {
     return HTTP.patch('regional_competitions/statistical_report/me/', data)
 }
