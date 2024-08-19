@@ -101,6 +101,7 @@
         border-radius: 10px;
         line-height: 21px;
         cursor:text;
+        resize: none;
 
         &::placeholder {
             color: #6d6d6d;

@@ -1,5 +1,5 @@
 <template>
-  <div class="form__field-group">
+  <div class="form__field-group report__field-group">
     <div v-for="(publication, index) in publications" :key="index">
       <div>
         <label
@@ -10,6 +10,7 @@
           v-if="!eighteenthPanelData.scan_file"
           isFile
           type="file"
+          accept=".jpg, .jpeg, .png, .pdf"
           id="scan_file"
           name="scan_file"
           width="720px"
@@ -46,7 +47,7 @@
               class="form__label"
               for="9"
               style="width: 100%;"
-          >Ссылка на публикацию</label>
+          >Ссылка на&nbsp;публикацию</label>
           <InputReport
               :id="i"
               :name="i"
@@ -83,18 +84,21 @@
     <div>
       <label
           class="form__label"
-          for="9"
+          for="comment"
       >Комментарий</label>
-      <InputReport
+      <TextareaReport
         v-model:value="eighteenthPanelData.comment"
         id="comment"
         name="comment"
-        class="form__input"
-        type="textarea"
-        placeholder="Комментарий"
-        style="width: 100%;"
+        placeholder="Напишите сообщение"
+        :rows="1" 
+        autoResize
+        counter-visible
+        :maxlength="3000"
+        :max-length-text="3000"
         @focusout="focusOut"
-      />
+      >
+      </TextareaReport>
     </div>
   </div>
 </template>
@@ -235,10 +239,4 @@ watchEffect(async () => {
 </script>
 
 <style lang="scss" scoped>
-.form__field-group {
-  background: #F3F4F5;
-  border: none;
-  border-radius: 0 0 10px 10px;
-  margin-bottom: 8px;
-}
 </style>

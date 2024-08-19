@@ -43,7 +43,7 @@ const collapsed = () => {
     panel.value = !panel.value;
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .panel-card {
   box-shadow: none;
 }
