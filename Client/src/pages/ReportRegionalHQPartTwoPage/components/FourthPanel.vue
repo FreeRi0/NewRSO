@@ -563,10 +563,20 @@ watchEffect(async () => {
   max-width: 910px;
 }
 
-.form__field-event-file,
-.form__field-event-interregion {
+.form__field-event-file {
   width: 720px;
 
+  @media (max-width: 568px) {
+    margin: 0 auto;
+    width: 340px;
+  }
+
+  @media (max-width: 400px) {
+    width: 300px;
+  }
+}
+
+.form__field-event-interregion {
   @media (max-width: 568px) {
     margin: 0 auto;
     width: 340px;
