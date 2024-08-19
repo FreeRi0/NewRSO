@@ -99,7 +99,7 @@
                                 <EducationalHeadquarterFilter :local-headquarter-name="filters.local_headquarter__name
                                     " :district-headquarter-name="filters.district_headquarter__name
                                         " :regional-headquarter-name="filters.regional_headquarter__name
-                                        " v-slot="{ educationalHeadquarters }">
+                                            " v-slot="{ educationalHeadquarters }">
                                     <UiSearchInput placeholder="Начните вводить" :auto-complete-values="educationalHeadquarters
                                         " v-model="filters.educational_headquarter__name
                                             " variant="small" />
@@ -120,8 +120,8 @@
                                 <DetachmentHeadquarterFilter :local-headquarter-name="filters.local_headquarter__name
                                     " :district-headquarter-name="filters.district_headquarter__name
                                         " :regional-headquarter-name="filters.regional_headquarter__name
-                                        " :educational-headquarter-name="filters.educational_headquarter__name
-                                        " v-slot="{ educationalHeadquarters }">
+                                            " :educational-headquarter-name="filters.educational_headquarter__name
+                                                " v-slot="{ educationalHeadquarters }">
                                     <UiSearchInput placeholder="Начните вводить" :auto-complete-values="educationalHeadquarters
                                         " v-model="filters.detachment__name" variant="small" />
                                 </DetachmentHeadquarterFilter>
@@ -196,7 +196,7 @@
                                     <EducationalHeadquarterFilter :local-headquarter-name="filters.local_headquarter__name
                                         " :district-headquarter-name="filters.district_headquarter__name
                                             " :regional-headquarter-name="filters.regional_headquarter__name
-                                            " v-slot="{ educationalHeadquarters }">
+                                                " v-slot="{ educationalHeadquarters }">
                                         <UiSearchInput placeholder="Начните вводить" :auto-complete-values="educationalHeadquarters
                                             " v-model="filters.educational_headquarter__name
                                                 " variant="small" />
@@ -217,8 +217,8 @@
                                     <DetachmentHeadquarterFilter :local-headquarter-name="filters.local_headquarter__name
                                         " :district-headquarter-name="filters.district_headquarter__name
                                             " :regional-headquarter-name="filters.regional_headquarter__name
-                                            " :educational-headquarter-name="filters.educational_headquarter__name
-                                            " v-slot="{ educationalHeadquarters }">
+                                                " :educational-headquarter-name="filters.educational_headquarter__name
+                                                    " v-slot="{ educationalHeadquarters }">
                                         <UiSearchInput placeholder="Начните вводить" :auto-complete-values="educationalHeadquarters
                                             " v-model="filters.detachment__name" variant="small" />
                                     </DetachmentHeadquarterFilter>
@@ -346,8 +346,11 @@ const { userIdList, selectedUsersCount, applyStatus, membersFeeStatus } =
 
 const handleStatusChange = async () => {
     await applyStatus();
-    setTimeout(() => console.log('timeout'), 1000);
-    await refetch();
+    setTimeout(async () => {
+        await refetch();
+    }, 3000);
+
+
 };
 
 const selectedUsersList = computed(() =>
