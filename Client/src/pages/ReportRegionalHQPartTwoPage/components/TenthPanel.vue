@@ -23,7 +23,7 @@
 </template>
 <script setup>
 import { ref, watchEffect } from "vue";
-import TenthPanelForm from "@pages/ReportRegionalHQPartTwoPage/components/TenthPanelForm.vue";
+import { TenthPanelForm } from './index';
 import { reportPartTwoService } from "@services/ReportService.ts";
 
 const isFirstSent = ref({
