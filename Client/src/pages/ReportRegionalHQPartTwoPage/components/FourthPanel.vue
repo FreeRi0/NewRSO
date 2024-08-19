@@ -628,7 +628,6 @@ watchEffect(async () => {
 }
 
 .form__file-name {
-  // min-width: 220px;
   display: flex;
   align-items: center;
 }
