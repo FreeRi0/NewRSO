@@ -88,7 +88,10 @@ const updateValue = (event) => {
 <style lang="scss" scoped>
 .form-input {
   &.form-input__file-input {
-    height: 86px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    height: 101px;
     position: relative;
     border-radius: 12px;
     background-color: transparent;
@@ -120,7 +123,7 @@ const updateValue = (event) => {
       display: flex;
       align-items: center;
       column-gap: 12px;
-      color:#1f7cc0;
+      color: #1f7cc0;
     }
   }
 }

@@ -96,7 +96,7 @@ const reportConfirmation = (value) => {
 }
 
 #report-modal-warning__wrapper_buttons-transparent-button {
-  background-color: #fff;
+  background-color: transparent;
   color: var(--primary);
 }
 </style>
