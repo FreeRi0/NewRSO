@@ -112,40 +112,8 @@ watchEffect(async () => {
 <style lang="scss" scoped>
 .report {
   &__field-group {
-    display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px 20px;
-    padding: 40px 40px 42px;
-    background: #F3F4F5;
-    border: none;
-    border-radius: 10px;
-    margin-bottom: 8px;
-  }
-
-  &__fieldset {
-    max-width: 530px;
-
-    &--left-block {
-      .report__label {
-        max-width: 240px;
-      }
-    }
-
-    &--right-block {
-      justify-self: flex-end;
-    }
-
-    &--comment {
-      max-width: none;
-      grid-column: -1 / 1;
-    }
-  }
-
-  &__label {
-    display: block;
-    line-height: 21px;
-    letter-spacing: 0.78px;
-    color: #000000;
+    margin-bottom: 0;
   }
 }
 </style>

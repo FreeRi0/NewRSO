@@ -1,0 +1,83 @@
+.report {
+    &__field-group {
+        display: grid;
+        gap: 16px 20px;
+        padding: 40px 40px 40px;
+        background: #F3F4F5;
+        border: none;
+        border-radius: 10px;
+      }
+    
+    &__fieldset {
+        &--left-block {
+            max-width: 530px;
+
+            .report__label {
+            max-width: 240px;
+            }
+        }
+
+        &--right-block {
+            max-width: 530px;
+            justify-self: flex-end;
+        }
+
+        &--comment {
+            margin-bottom: 17px;
+            grid-column: -1 / 1;
+        }
+    }
+    
+    &__label {
+        display: block;
+        line-height: 21px;
+        letter-spacing: 0.78px;
+        color: #000000;
+    }
+
+    // &__add-file {
+    //     display: flex;
+    //     flex-direction: column;
+    // }
+
+    //Вынести в отдельный компонент?-----------------------------
+    &__file-box {
+        margin-top: 16px;
+        max-width: 720px;
+        width: 100%;
+        padding: 1px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: "Bert Sans";
+        font-weight: 400;
+        line-height: 21px;
+    }
+    &__file-name {
+        // min-width: 220px;
+        display: flex;
+        align-items: center;
+        column-gap: 12px;
+    }
+    &__file-size {
+        width: 50px;
+        color: #6d6d6d;
+        opacity: 0.8;
+        position: relative;
+      
+        &::before {
+            position: absolute;
+            content: "";
+            width: 1px;
+            height: 15px;
+            background-color: #6d6d6d;
+            opacity: 0.8;
+            top: 3px;
+            left: -10px;
+        }
+    }
+    &__button-delete-file {
+        color: #1f7cc0;
+    }
+    //--------------------------------------------------------------
+}

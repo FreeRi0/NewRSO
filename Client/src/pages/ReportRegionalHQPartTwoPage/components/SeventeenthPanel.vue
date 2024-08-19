@@ -1,7 +1,7 @@
 <template>
-  <div class="form__field-group report__item">
-    <div class="report__add-file">
-      <label class="form__label" for="scan_file">
+  <div class="form__field-group report__field-group">
+    <div class="report__fieldset">
+      <label class="form__label report__label" for="scan_file">
         Прикрепить документ
       </label>
         <!-- скорректировать размер файла
@@ -21,6 +21,7 @@
         v-if="!seventeenthPanelData.scan_file"
         isFile
         type="file"
+        accept=".jpg, .jpeg, .png, .pdf"
         id="scan_file"
         name="scan_file"
         width="720px"
@@ -30,40 +31,27 @@
       
       <div 
         v-else
-        class="form__file-box">
-        <span class="form__file-name">
+        class="report__file-box">
+        <span class="report__file-name">
           <SvgIcon v-if="seventeenthPanelData.file_type === 'jpg'" icon-name="file-jpg" />
           <SvgIcon v-if="seventeenthPanelData.file_type === 'pdf'" icon-name="file-pdf" />
           <SvgIcon v-if="seventeenthPanelData.file_type === 'png'" icon-name="file-png" />
           {{ seventeenthPanelData.scan_file }}
         </span>
 
-        <span class="form__file-size">{{ seventeenthPanelData.file_size }} Мб</span>
+        <span class="report__file-size">{{ seventeenthPanelData.file_size }} Мб</span>
         <button 
           @click="deleteFile"
-          class="form__button-delete-file"
+          class="report__button-delete-file"
         >
           Удалить
         </button>
       </div>
     </div>
-    <div class="report__add-comment">
-      <label class="form__label" for="comment">
+    <div class="report__fieldset report__fieldset--comment">
+      <label class="form__label report__label" for="comment">
         Комментарий
       </label>
-      <!-- <InputReport
-          v-model:value="seventeenthPanelData.comment"
-          id="comment"
-          name="comment"
-          class="form__input"
-          type="textarea"
-          placeholder="Напишите сообщение"
-          style="width: 100%;"
-          :maxlength="3000"
-          counter-visible
-          :max-counter="3000"
-          @focusout="focusOut"
-      /> -->
       <TextareaReport
         v-model:value="seventeenthPanelData.comment"
         id="comment"
@@ -171,67 +159,4 @@ watchEffect(async () => {
 </script>
 
 <style lang="scss" scoped>
-.form__field-group {
-  padding: 40px 40px 42px;
-  background: #F3F4F5;
-  border: none;
-  border-radius: 10px;
-  margin-bottom: 8px;
-}
-
-.form__label {
-  display: block;
-  line-height: 21px;
-  color: #000000;
-  margin-bottom: 8px;
-}
-
-.report__add-file,
-.report__add-comment {
-  margin-bottom: 16px;
-  display: flex;
-  flex-direction: column;
-}
-
-.form__file-box {
-  margin-top: 16px;
-  max-width: 720px;
-  width: 100%;
-  padding: 1px 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-family: "Bert Sans";
-  font-weight: 400;
-  line-height: 21px;
-}
-
-.form__file-name {
-  // min-width: 220px;
-  display: flex;
-  align-items: center;
-  column-gap: 12px;
-}
-
-.form__file-size {
-  width: 50px;
-  color: #6d6d6d;
-  opacity: 0.8;
-  position: relative;
-
-  &::before {
-    position: absolute;
-    content: "";
-    width: 1px;
-    height: 15px;
-    background-color: #6d6d6d;
-    opacity: 0.8;
-    top: 3px;
-    left: -10px;
-  }
-}
-
-.form__button-delete-file {
-  color: #1f7cc0;
-}
 </style>
