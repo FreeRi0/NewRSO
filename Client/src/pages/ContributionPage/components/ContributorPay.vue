@@ -3,18 +3,12 @@
         <UiHeading> Членский взнос </UiHeading>
         <UiTabContainer initial-selection="my-contribution">
             <div class="buttons-container">
-                <UiTab
-                    tab-id="my-contribution"
-                    v-slot="{ setSelectedTab, isSelected }"
-                >
+                <UiTab tab-id="my-contribution" v-slot="{ setSelectedTab, isSelected }">
                     <UiButton @click="setSelectedTab" :active="isSelected">
                         Мой членский взнос
                     </UiButton>
                 </UiTab>
-                <UiTab
-                    tab-id="contributors-list"
-                    v-slot="{ setSelectedTab, isSelected }"
-                >
+                <UiTab tab-id="contributors-list" v-slot="{ setSelectedTab, isSelected }">
                     <UiButton @click="setSelectedTab" :active="isSelected">
                         Данные об оплате членского взноса пользователями системы
                     </UiButton>
@@ -22,229 +16,117 @@
             </div>
             <div class="tab-views-container">
                 <UiTabWindow tab-id="my-contribution">
-                    <ContributionStatus
-                        :is-paid="authorizedUser?.membership_fee"
-                        :is-loading="isLoading"
-                    />
+                    <ContributionStatus :is-paid="authorizedUser?.membership_fee" :is-loading="isLoading" />
                 </UiTabWindow>
                 <UiTabWindow tab-id="contributors-list">
                     <div class="list-container">
-                        <UiSearchInput
-                            v-model="searchQuery"
-                            placeholder="Поищем пользователей?"
-                            class="search"
-                        />
+                        <UiSearchInput v-model="searchQuery" placeholder="Поищем пользователей?" class="search" />
                         <div class="contributors-list-heading">
-                            <UiButton
-                                @click="filtersMenu.openSideMenu()"
-                                class="filter-button"
-                                variant="tertiary"
-                            >
+                            <UiButton @click="filtersMenu.openSideMenu()" class="filter-button" variant="tertiary">
                                 <SvgIcon icon-name="filter" />
                             </UiButton>
-                            <RoleGuard
-                                :needed-roles="[
-                                    UserRole.CENTRAL_HEADQUARTER_COMMANDER,
-                                    UserRole.DISTRICT_HEADQUARTER_COMMANDER,
-                                    UserRole.REGIONAL_HEADQUARTER_COMMANDER,
-                                ]"
-                            >
-                                <UiCheckbox
-                                    v-model="userIdList"
-                                    :value="usersList.map(({ id }) => id)"
-                                />
-                                <UiSelector
-                                    v-model="membersFeeStatus"
-                                    :options="[
-                                        { label: 'Оплачен', value: true },
-                                        { label: 'Не оплачен', value: false },
-                                    ]"
-                                />
+                            <RoleGuard :needed-roles="[
+                                UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                UserRole.REGIONAL_HEADQUARTER_COMMANDER,
+                            ]">
+                                <UiCheckbox v-model="userIdList" :value="usersList.map(({ id }) => id)" />
+                                <UiSelector v-model="membersFeeStatus" :options="[
+                                    { label: 'Оплачен', value: true },
+                                    { label: 'Не оплачен', value: false },
+                                ]" />
                             </RoleGuard>
-                            <SortBySelector
-                                :is-reversed="isReverseOrder"
-                                v-model="sortBy"
-                                :reverse-sort-order="reverseSortOrder"
-                                class="sort-by"
-                            />
+                            <SortBySelector :is-reversed="isReverseOrder" v-model="sortBy"
+                                :reverse-sort-order="reverseSortOrder" class="sort-by" />
                         </div>
                         <aside class="filters">
                             <UiHeading variant="h4">Основные фильтры</UiHeading>
-                            <RoleGuard
-                                :needed-roles="[
-                                    UserRole.CENTRAL_HEADQUARTER_COMMANDER,
-                                ]"
-                            >
-                                <DistrictHeadquarterFilter
-                                    v-slot="{ districtHeadquarters }"
-                                >
-                                    <UiSearchInput
-                                        placeholder="Начните вводить"
-                                        :auto-complete-values="
-                                            districtHeadquarters
-                                        "
-                                        v-model="
-                                            filters.district_headquarter__name
-                                        "
-                                        variant="small"
-                                    />
+                            <RoleGuard :needed-roles="[
+                                UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                            ]">
+                                <DistrictHeadquarterFilter v-slot="{ districtHeadquarters }">
+                                    <UiSearchInput placeholder="Начните вводить" :auto-complete-values="districtHeadquarters
+                                        " v-model="filters.district_headquarter__name
+                                            " variant="small" />
                                 </DistrictHeadquarterFilter>
                             </RoleGuard>
 
-                            <p
-                                class="filter-info"
-                                v-if="filters.district_headquarter__name"
-                            >
+                            <p class="filter-info" v-if="filters.district_headquarter__name">
                                 Выбрано:
                                 {{ filters.district_headquarter__name }}
                             </p>
 
-                            <RoleGuard
-                                :needed-roles="[
-                                    UserRole.CENTRAL_HEADQUARTER_COMMANDER,
-                                    UserRole.DISTRICT_HEADQUARTER_COMMANDER,
-                                ]"
-                            >
-                                <RegionalHeadquarterFilter
-                                    :district-headquarter-name="
-                                        filters.district_headquarter__name
-                                    "
-                                    v-slot="{ regionalHeadquarters }"
-                                >
-                                    <UiSearchInput
-                                        placeholder="Начните вводить"
-                                        :auto-complete-values="
-                                            regionalHeadquarters
-                                        "
-                                        v-model="
-                                            filters.regional_headquarter__name
-                                        "
-                                        variant="small"
-                                    />
+                            <RoleGuard :needed-roles="[
+                                UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                            ]">
+                                <RegionalHeadquarterFilter :district-headquarter-name="filters.district_headquarter__name
+                                    " v-slot="{ regionalHeadquarters }">
+                                    <UiSearchInput placeholder="Начните вводить" :auto-complete-values="regionalHeadquarters
+                                        " v-model="filters.regional_headquarter__name
+                                            " variant="small" />
                                 </RegionalHeadquarterFilter>
                             </RoleGuard>
-                            <p
-                                class="filter-info"
-                                v-if="filters.regional_headquarter__name"
-                            >
+                            <p class="filter-info" v-if="filters.regional_headquarter__name">
                                 Выбрано:
                                 {{ filters.regional_headquarter__name }}
                             </p>
 
-                            <RoleGuard
-                                :needed-roles="[
-                                    UserRole.REGIONAL_HEADQUARTER_COMMANDER,
-                                    UserRole.DISTRICT_HEADQUARTER_COMMANDER,
-                                    UserRole.CENTRAL_HEADQUARTER_COMMANDER,
-                                ]"
-                            >
-                                <LocalHeadquarterFilter
-                                    :regional-headquarter-name="
-                                        filters.regional_headquarter__name
-                                    "
-                                    :district-headquarter-name="
-                                        filters.district_headquarter__name
-                                    "
-                                    v-slot="{ localHeadquarters }"
-                                >
-                                    <UiSearchInput
-                                        placeholder="Начните вводить"
-                                        :auto-complete-values="
-                                            localHeadquarters
-                                        "
-                                        v-model="
-                                            filters.local_headquarter__name
-                                        "
-                                        variant="small"
-                                    />
+                            <RoleGuard :needed-roles="[
+                                UserRole.REGIONAL_HEADQUARTER_COMMANDER,
+                                UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                            ]">
+                                <LocalHeadquarterFilter :regional-headquarter-name="filters.regional_headquarter__name
+                                    " :district-headquarter-name="filters.district_headquarter__name
+                                        " v-slot="{ localHeadquarters }">
+                                    <UiSearchInput placeholder="Начните вводить" :auto-complete-values="localHeadquarters
+                                        " v-model="filters.local_headquarter__name
+                                            " variant="small" />
                                 </LocalHeadquarterFilter>
                             </RoleGuard>
-                            <p
-                                class="filter-info"
-                                v-if="filters.local_headquarter__name"
-                            >
+                            <p class="filter-info" v-if="filters.local_headquarter__name">
                                 Выбрано:
                                 {{ filters.local_headquarter__name }}
                             </p>
 
-                            <RoleGuard
-                                :needed-roles="[
-                                    UserRole.REGIONAL_HEADQUARTER_COMMANDER,
-                                    UserRole.LOCAL_HEADQUARTER_COMMANDER,
-                                    UserRole.DISTRICT_HEADQUARTER_COMMANDER,
-                                    UserRole.CENTRAL_HEADQUARTER_COMMANDER,
-                                ]"
-                            >
-                                <EducationalHeadquarterFilter
-                                    :local-headquarter-name="
-                                        filters.local_headquarter__name
-                                    "
-                                    :district-headquarter-name="
-                                        filters.district_headquarter__name
-                                    "
-                                    :regional-headquarter-name="
-                                        filters.regional_headquarter__name
-                                    "
-                                    v-slot="{ educationalHeadquarters }"
-                                >
-                                    <UiSearchInput
-                                        placeholder="Начните вводить"
-                                        :auto-complete-values="
-                                            educationalHeadquarters
-                                        "
-                                        v-model="
-                                            filters.educational_headquarter__name
-                                        "
-                                        variant="small"
-                                    />
+                            <RoleGuard :needed-roles="[
+                                UserRole.REGIONAL_HEADQUARTER_COMMANDER,
+                                UserRole.LOCAL_HEADQUARTER_COMMANDER,
+                                UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                            ]">
+                                <EducationalHeadquarterFilter :local-headquarter-name="filters.local_headquarter__name
+                                    " :district-headquarter-name="filters.district_headquarter__name
+                                        " :regional-headquarter-name="filters.regional_headquarter__name
+                                        " v-slot="{ educationalHeadquarters }">
+                                    <UiSearchInput placeholder="Начните вводить" :auto-complete-values="educationalHeadquarters
+                                        " v-model="filters.educational_headquarter__name
+                                            " variant="small" />
                                 </EducationalHeadquarterFilter>
                             </RoleGuard>
-                            <p
-                                class="filter-info"
-                                v-if="filters.educational_headquarter__name"
-                            >
+                            <p class="filter-info" v-if="filters.educational_headquarter__name">
                                 Выбрано:
                                 {{ filters.educational_headquarter__name }}
                             </p>
 
-                            <RoleGuard
-                                :needed-roles="[
-                                    UserRole.REGIONAL_HEADQUARTER_COMMANDER,
-                                    UserRole.LOCAL_HEADQUARTER_COMMANDER,
-                                    UserRole.DISTRICT_HEADQUARTER_COMMANDER,
-                                    UserRole.CENTRAL_HEADQUARTER_COMMANDER,
-                                    UserRole.EDUCATIONAL_HEADQUARTER_COMMANDER,
-                                ]"
-                            >
-                                <DetachmentHeadquarterFilter
-                                    :local-headquarter-name="
-                                        filters.local_headquarter__name
-                                    "
-                                    :district-headquarter-name="
-                                        filters.district_headquarter__name
-                                    "
-                                    :regional-headquarter-name="
-                                        filters.regional_headquarter__name
-                                    "
-                                    :educational-headquarter-name="
-                                        filters.educational_headquarter__name
-                                    "
-                                    v-slot="{ educationalHeadquarters }"
-                                >
-                                    <UiSearchInput
-                                        placeholder="Начните вводить"
-                                        :auto-complete-values="
-                                            educationalHeadquarters
-                                        "
-                                        v-model="filters.detachment__name"
-                                        variant="small"
-                                    />
+                            <RoleGuard :needed-roles="[
+                                UserRole.REGIONAL_HEADQUARTER_COMMANDER,
+                                UserRole.LOCAL_HEADQUARTER_COMMANDER,
+                                UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                UserRole.EDUCATIONAL_HEADQUARTER_COMMANDER,
+                            ]">
+                                <DetachmentHeadquarterFilter :local-headquarter-name="filters.local_headquarter__name
+                                    " :district-headquarter-name="filters.district_headquarter__name
+                                        " :regional-headquarter-name="filters.regional_headquarter__name
+                                        " :educational-headquarter-name="filters.educational_headquarter__name
+                                        " v-slot="{ educationalHeadquarters }">
+                                    <UiSearchInput placeholder="Начните вводить" :auto-complete-values="educationalHeadquarters
+                                        " v-model="filters.detachment__name" variant="small" />
                                 </DetachmentHeadquarterFilter>
                             </RoleGuard>
-                            <p
-                                class="filter-info"
-                                v-if="filters.detachment__name"
-                            >
+                            <p class="filter-info" v-if="filters.detachment__name">
                                 Выбрано:
                                 {{ filters.detachment__name }}
                             </p>
@@ -256,188 +138,97 @@
                                 {{ totalCount }} результатов
                             </p>
                             <UiSideMenu title="Основные фильтры">
-                                <RoleGuard
-                                    :needed-roles="[
-                                        UserRole.CENTRAL_HEADQUARTER_COMMANDER,
-                                    ]"
-                                >
-                                    <DistrictHeadquarterFilter
-                                        v-slot="{ districtHeadquarters }"
-                                    >
-                                        <UiSearchInput
-                                            placeholder="Начните вводить"
-                                            :auto-complete-values="
-                                                districtHeadquarters
-                                            "
-                                            v-model="
-                                                filters.district_headquarter__name
-                                            "
-                                            variant="small"
-                                        />
+                                <RoleGuard :needed-roles="[
+                                    UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                ]">
+                                    <DistrictHeadquarterFilter v-slot="{ districtHeadquarters }">
+                                        <UiSearchInput placeholder="Начните вводить" :auto-complete-values="districtHeadquarters
+                                            " v-model="filters.district_headquarter__name
+                                                " variant="small" />
                                     </DistrictHeadquarterFilter>
                                 </RoleGuard>
 
-                                <p
-                                    class="filter-info"
-                                    v-if="filters.district_headquarter__name"
-                                >
+                                <p class="filter-info" v-if="filters.district_headquarter__name">
                                     Выбрано:
                                     {{ filters.district_headquarter__name }}
                                 </p>
 
-                                <RoleGuard
-                                    :needed-roles="[
-                                        UserRole.CENTRAL_HEADQUARTER_COMMANDER,
-                                        UserRole.DISTRICT_HEADQUARTER_COMMANDER,
-                                    ]"
-                                >
-                                    <RegionalHeadquarterFilter
-                                        :district-headquarter-name="
-                                            filters.district_headquarter__name
-                                        "
-                                        v-slot="{ regionalHeadquarters }"
-                                    >
-                                        <UiSearchInput
-                                            placeholder="Начните вводить"
-                                            :auto-complete-values="
-                                                regionalHeadquarters
-                                            "
-                                            v-model="
-                                                filters.regional_headquarter__name
-                                            "
-                                            variant="small"
-                                        />
+                                <RoleGuard :needed-roles="[
+                                    UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                    UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                ]">
+                                    <RegionalHeadquarterFilter :district-headquarter-name="filters.district_headquarter__name
+                                        " v-slot="{ regionalHeadquarters }">
+                                        <UiSearchInput placeholder="Начните вводить" :auto-complete-values="regionalHeadquarters
+                                            " v-model="filters.regional_headquarter__name
+                                                " variant="small" />
                                     </RegionalHeadquarterFilter>
                                 </RoleGuard>
-                                <p
-                                    class="filter-info"
-                                    v-if="filters.regional_headquarter__name"
-                                >
+                                <p class="filter-info" v-if="filters.regional_headquarter__name">
                                     Выбрано:
                                     {{ filters.regional_headquarter__name }}
                                 </p>
 
-                                <RoleGuard
-                                    :needed-roles="[
-                                        UserRole.REGIONAL_HEADQUARTER_COMMANDER,
-                                        UserRole.DISTRICT_HEADQUARTER_COMMANDER,
-                                        UserRole.CENTRAL_HEADQUARTER_COMMANDER,
-                                    ]"
-                                >
-                                    <LocalHeadquarterFilter
-                                        :regional-headquarter-name="
-                                            filters.regional_headquarter__name
-                                        "
-                                        :district-headquarter-name="
-                                            filters.district_headquarter__name
-                                        "
-                                        v-slot="{ localHeadquarters }"
-                                    >
-                                        <UiSearchInput
-                                            placeholder="Начните вводить"
-                                            :auto-complete-values="
-                                                localHeadquarters
-                                            "
-                                            v-model="
-                                                filters.local_headquarter__name
-                                            "
-                                            variant="small"
-                                        />
+                                <RoleGuard :needed-roles="[
+                                    UserRole.REGIONAL_HEADQUARTER_COMMANDER,
+                                    UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                    UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                ]">
+                                    <LocalHeadquarterFilter :regional-headquarter-name="filters.regional_headquarter__name
+                                        " :district-headquarter-name="filters.district_headquarter__name
+                                            " v-slot="{ localHeadquarters }">
+                                        <UiSearchInput placeholder="Начните вводить" :auto-complete-values="localHeadquarters
+                                            " v-model="filters.local_headquarter__name
+                                                " variant="small" />
                                     </LocalHeadquarterFilter>
                                 </RoleGuard>
-                                <p
-                                    class="filter-info"
-                                    v-if="filters.local_headquarter__name"
-                                >
+                                <p class="filter-info" v-if="filters.local_headquarter__name">
                                     Выбрано:
                                     {{ filters.local_headquarter__name }}
                                 </p>
 
-                                <RoleGuard
-                                    :needed-roles="[
-                                        UserRole.REGIONAL_HEADQUARTER_COMMANDER,
-                                        UserRole.LOCAL_HEADQUARTER_COMMANDER,
-                                        UserRole.DISTRICT_HEADQUARTER_COMMANDER,
-                                        UserRole.CENTRAL_HEADQUARTER_COMMANDER,
-                                    ]"
-                                >
-                                    <EducationalHeadquarterFilter
-                                        :local-headquarter-name="
-                                            filters.local_headquarter__name
-                                        "
-                                        :district-headquarter-name="
-                                            filters.district_headquarter__name
-                                        "
-                                        :regional-headquarter-name="
-                                            filters.regional_headquarter__name
-                                        "
-                                        v-slot="{ educationalHeadquarters }"
-                                    >
-                                        <UiSearchInput
-                                            placeholder="Начните вводить"
-                                            :auto-complete-values="
-                                                educationalHeadquarters
-                                            "
-                                            v-model="
-                                                filters.educational_headquarter__name
-                                            "
-                                            variant="small"
-                                        />
+                                <RoleGuard :needed-roles="[
+                                    UserRole.REGIONAL_HEADQUARTER_COMMANDER,
+                                    UserRole.LOCAL_HEADQUARTER_COMMANDER,
+                                    UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                    UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                ]">
+                                    <EducationalHeadquarterFilter :local-headquarter-name="filters.local_headquarter__name
+                                        " :district-headquarter-name="filters.district_headquarter__name
+                                            " :regional-headquarter-name="filters.regional_headquarter__name
+                                            " v-slot="{ educationalHeadquarters }">
+                                        <UiSearchInput placeholder="Начните вводить" :auto-complete-values="educationalHeadquarters
+                                            " v-model="filters.educational_headquarter__name
+                                                " variant="small" />
                                     </EducationalHeadquarterFilter>
                                 </RoleGuard>
-                                <p
-                                    class="filter-info"
-                                    v-if="filters.educational_headquarter__name"
-                                >
+                                <p class="filter-info" v-if="filters.educational_headquarter__name">
                                     Выбрано:
                                     {{ filters.educational_headquarter__name }}
                                 </p>
 
-                                <RoleGuard
-                                    :needed-roles="[
-                                        UserRole.REGIONAL_HEADQUARTER_COMMANDER,
-                                        UserRole.LOCAL_HEADQUARTER_COMMANDER,
-                                        UserRole.DISTRICT_HEADQUARTER_COMMANDER,
-                                        UserRole.CENTRAL_HEADQUARTER_COMMANDER,
-                                        UserRole.EDUCATIONAL_HEADQUARTER_COMMANDER,
-                                    ]"
-                                >
-                                    <DetachmentHeadquarterFilter
-                                        :local-headquarter-name="
-                                            filters.local_headquarter__name
-                                        "
-                                        :district-headquarter-name="
-                                            filters.district_headquarter__name
-                                        "
-                                        :regional-headquarter-name="
-                                            filters.regional_headquarter__name
-                                        "
-                                        :educational-headquarter-name="
-                                            filters.educational_headquarter__name
-                                        "
-                                        v-slot="{ educationalHeadquarters }"
-                                    >
-                                        <UiSearchInput
-                                            placeholder="Начните вводить"
-                                            :auto-complete-values="
-                                                educationalHeadquarters
-                                            "
-                                            v-model="filters.detachment__name"
-                                            variant="small"
-                                        />
+                                <RoleGuard :needed-roles="[
+                                    UserRole.REGIONAL_HEADQUARTER_COMMANDER,
+                                    UserRole.LOCAL_HEADQUARTER_COMMANDER,
+                                    UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                    UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                    UserRole.EDUCATIONAL_HEADQUARTER_COMMANDER,
+                                ]">
+                                    <DetachmentHeadquarterFilter :local-headquarter-name="filters.local_headquarter__name
+                                        " :district-headquarter-name="filters.district_headquarter__name
+                                            " :regional-headquarter-name="filters.regional_headquarter__name
+                                            " :educational-headquarter-name="filters.educational_headquarter__name
+                                            " v-slot="{ educationalHeadquarters }">
+                                        <UiSearchInput placeholder="Начните вводить" :auto-complete-values="educationalHeadquarters
+                                            " v-model="filters.detachment__name" variant="small" />
                                     </DetachmentHeadquarterFilter>
                                 </RoleGuard>
-                                <p
-                                    class="filter-info"
-                                    v-if="filters.detachment__name"
-                                >
+                                <p class="filter-info" v-if="filters.detachment__name">
                                     Выбрано:
                                     {{ filters.detachment__name }}
                                 </p>
 
-                                <MemberFeeFilter
-                                    v-model="filters.membership_fee"
-                                />
+                                <MemberFeeFilter v-model="filters.membership_fee" />
 
                                 <p class="filter-info">
                                     Показано {{ showedRecordsCount }} из
@@ -446,110 +237,52 @@
                             </UiSideMenu>
                         </aside>
                         <div class="contributors-list-wrapper">
-                            <TransitionGroup
-                                v-if="isResultsFound"
-                                name="list"
-                                tag="ul"
-                                class="contributors-list"
-                            >
-                                <li
-                                    v-for="user in usersList"
-                                    :key="user.id"
-                                    class="list-item"
-                                >
-                                    <RoleGuard
-                                        :needed-roles="[
-                                            UserRole.CENTRAL_HEADQUARTER_COMMANDER,
-                                            UserRole.DISTRICT_HEADQUARTER_COMMANDER,
-                                            UserRole.REGIONAL_HEADQUARTER_COMMANDER,
-                                        ]"
-                                    >
+                            <TransitionGroup v-if="isResultsFound" name="list" tag="ul" class="contributors-list">
+                                <li v-for="user in usersList" :key="user.id" class="list-item">
+                                    <RoleGuard :needed-roles="[
+                                        UserRole.CENTRAL_HEADQUARTER_COMMANDER,
+                                        UserRole.DISTRICT_HEADQUARTER_COMMANDER,
+                                        UserRole.REGIONAL_HEADQUARTER_COMMANDER,
+                                    ]">
                                         <UiButton variant="tertiary">
-                                            <UiCheckbox
-                                                v-model="userIdList"
-                                                :value="user.id"
-                                            />
+                                            <UiCheckbox v-model="userIdList" :value="user.id" />
                                         </UiButton>
                                     </RoleGuard>
-                                    <ContributorItem
-                                        :avatar-url="
-                                            user.avatar.photo ?? undefined
-                                        "
-                                        :first-name="user.first_name"
-                                        :last-name="user.last_name"
-                                        :patronymic-name="
-                                            user.patronymic_name ?? undefined
-                                        "
-                                        :birthday="user.date_of_birth"
-                                        :is-fee-payed="user.membership_fee"
-                                        :id="user.id"
-                                    />
+                                    <ContributorItem :avatar-url="user.avatar.photo ?? undefined
+                                        " :first-name="user.first_name" :last-name="user.last_name" :patronymic-name="user.patronymic_name ?? undefined
+                                            " :birthday="user.date_of_birth" :is-fee-payed="user.membership_fee"
+                                        :id="user.id" />
                                 </li>
                             </TransitionGroup>
-                            <UiButton
-                                variant="secondary"
-                                v-if="isLoadMoreBtnShowed"
-                                @click="next"
-                                >Показать ещё</UiButton
-                            >
-                            <UiButton
-                                v-if="isLoadPrevBtnShowed"
-                                variant="secondary"
-                                @click="setPage(1)"
-                                >Скрыть</UiButton
-                            >
+                            <UiButton variant="secondary" v-if="isLoadMoreBtnShowed" @click="next">Показать ещё
+                            </UiButton>
+                            <UiButton v-if="isLoadPrevBtnShowed" variant="secondary" @click="setPage(1)">Скрыть
+                            </UiButton>
                             <p v-if="!isResultsFound" class="filter-info">
                                 Результаты не найдены
                             </p>
                         </div>
                     </div>
-                    <div
-                        class="change-status-list-wrapper"
-                        v-if="selectedUsersCount !== 0"
-                    >
+                    <div class="change-status-list-wrapper" v-if="selectedUsersCount !== 0">
                         <UiHeading variant="h3">
                             Итого: {{ selectedUsersCount }}
                         </UiHeading>
                         <div class="change-status-list-wrapper">
-                            <TransitionGroup
-                                v-if="isResultsFound"
-                                name="list"
-                                tag="ul"
-                                class="contributors-list change"
-                            >
-                                <li
-                                    v-for="user in selectedUsersList"
-                                    :key="user.id"
-                                    class="list-item"
-                                >
-                                    <ContributorItem
-                                        :avatar-url="
-                                            user.avatar.photo ?? undefined
-                                        "
-                                        :first-name="user.first_name"
-                                        :last-name="user.last_name"
-                                        :patronymic-name="
-                                            user.patronymic_name ?? undefined
-                                        "
-                                        :birthday="user.date_of_birth"
-                                        :is-fee-payed="membersFeeStatus"
-                                        :id="user.id"
-                                    />
+                            <TransitionGroup v-if="isResultsFound" name="list" tag="ul"
+                                class="contributors-list change">
+                                <li v-for="user in selectedUsersList" :key="user.id" class="list-item">
+                                    <ContributorItem :avatar-url="user.avatar.photo ?? undefined
+                                        " :first-name="user.first_name" :last-name="user.last_name" :patronymic-name="user.patronymic_name ?? undefined
+                                            " :birthday="user.date_of_birth" :is-fee-payed="membersFeeStatus"
+                                        :id="user.id" />
                                     <UiButton variant="tertiary">
-                                        <UiCheckbox
-                                            v-model="userIdList"
-                                            :value="user.id"
-                                        />
+                                        <UiCheckbox v-model="userIdList" :value="user.id" />
                                     </UiButton>
                                 </li>
                             </TransitionGroup>
                         </div>
-                        <UiButton
-                            class="save-status-button"
-                            variant="secondary"
-                            @click="handleStatusChange"
-                            >Сохранить</UiButton
-                        >
+                        <UiButton class="save-status-button" variant="secondary" @click="handleStatusChange">Сохранить
+                        </UiButton>
                     </div>
                 </UiTabWindow>
             </div>
@@ -613,6 +346,7 @@ const { userIdList, selectedUsersCount, applyStatus, membersFeeStatus } =
 
 const handleStatusChange = async () => {
     await applyStatus();
+    setTimeout(() => console.log('timeout'), 1000);
     await refetch();
 };
 
@@ -733,6 +467,7 @@ watch(
     align-items: center;
     gap: 15px;
 }
+
 .filter-text {
     font-family: Bert Sans;
     font-size: 18px;
@@ -753,6 +488,7 @@ watch(
 .list-leave-active {
     transition: all 0.5s ease;
 }
+
 .list-enter-from,
 .list-leave-to {
     opacity: 0;
