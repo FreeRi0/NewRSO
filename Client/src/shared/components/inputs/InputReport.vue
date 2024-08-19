@@ -1,31 +1,13 @@
 <template>
-  <div
-    :is-file="isFile"
-    :class="isFile ? 'form-input form-input__file-input' : 'form-input'"
-    :style="{ width: width }">
-    <input
-      :type="type"
-      :name="name"
-      :style="{
-        height: height,
-      }"
-      :value="value"
-      :id="name"
-      :placeholder="placeholder"
-      :maxlength="maxLength"
-      :readonly="readonly"
-      max="9999-12-31"
-      class="form-input__report"
-      @input="updateValue"
-      v-bind="$attrs"
-      :disabled="disabled"
-    />
+  <div :is-file="isFile" :class="isFile ? 'form-input form-input__file-input' : 'form-input'" :style="{ width: width }">
+    <input :type="type" :name="name" :style="{
+      height: height,
+    }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly"
+      max="9999-12-31" class="form-input__report" @input="updateValue" v-bind="$attrs" :disabled="disabled" />
     <div class="form__counter" v-if="counterVisible">
-        {{ textInputLength }} / {{ maxCounter }}
+      {{ textInputLength }} / {{ maxCounter }}
     </div>
-    <div
-      v-if="isFile"
-      class="form-input__text">
+    <div v-if="isFile" class="form-input__text">
       <span>Перетащите файлы или выберите на&nbsp;компьютере</span>
       <span>
         <SvgIcon iconName="add-file" />
@@ -36,7 +18,7 @@
 </template>
 
 <script setup>
-import {ref, watchEffect} from 'vue';
+import { ref, watchEffect } from 'vue';
 import { MaskInput } from 'vue-3-mask';
 import { SvgIcon } from '@shared/index';
 
@@ -142,6 +124,7 @@ const updateValue = (event) => {
     }
   }
 }
+
 .form-input__report {
   padding: 8px 16px;
   background-color: #ffffff;
@@ -164,4 +147,17 @@ const updateValue = (event) => {
   color: #6d6d6d;
   margin-top: 1px;
 }
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+input[type='number'],
+input[type="number"]:hover,
+input[type="number"]:focus {
+    appearance: none;
+    -moz-appearance: textfield;
+}
+
 </style>

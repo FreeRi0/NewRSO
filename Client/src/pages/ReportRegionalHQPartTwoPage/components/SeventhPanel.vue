@@ -9,10 +9,10 @@
     </v-tabs> -->
 
 
-      <v-expansion-panels  v-model="panel" >
+      <v-expansion-panels  v-model="panel" class="mb-2">
         <v-expansion-panel v-for="item in festivals" :key="item.id"><v-expansion-panel-title>{{ item.name
             }}</v-expansion-panel-title><v-expansion-panel-text>
-            <SeventhPanelForm @collapse-form="collapsed()" :title="item.name"></SeventhPanelForm>
+            <SeventhPanelForm :panel_number="7" @collapse-form="collapsed()" :title="item.name"></SeventhPanelForm>
           </v-expansion-panel-text></v-expansion-panel>
       </v-expansion-panels>
 
@@ -53,6 +53,7 @@ const collapsed = () => {
   border: none;
   border-radius: 0 0 10px 10px;
   margin-bottom: 8px;
+  margin-top: 8px;
 }
 
 .valid-red {
@@ -142,6 +143,7 @@ const collapsed = () => {
   font-weight: 600;
   line-height: 21.6px;
   text-align: left;
+  border: none;
 
 }
 </style>

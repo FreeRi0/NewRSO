@@ -65,12 +65,12 @@ const formData = async (data, reportNumber) => {
 watchEffect(async () => {
   try {
     const dataFirst = await reportPartTwoService.getMultipleReport('10', '1');
-    if (dataFirst.data.length) {
+    if (dataFirst.data) {
       isFirstSent.value.first = false;
       tenthPanelDataFirst.value = {...dataFirst.data}
     }
     const dataSecond = await reportPartTwoService.getMultipleReport('10', '2');
-    if (dataSecond.data.length) {
+    if (dataSecond.data) {
       isFirstSent.value.second = false;
       tenthPanelDataSecond.value = {...dataSecond.data}
     }

@@ -357,12 +357,7 @@ const userPages = computed(() => [
 
 let show = ref(false);
 let nameUrl = '';
-if (roleStore.roles.centralheadquarter_commander) {
-    nameUrl = 'rating-ro'
-} else {
-    nameUrl = 'reportingRo'
-}
-console.log('url', nameUrl);
+
 
 const isOpen = ref(false);
 
@@ -437,6 +432,11 @@ watch(
     (newRole, oldRole) => {
         if (Object.keys(roleStore.roles).length === 0) {
             return;
+        }
+        if (roleStore.roles.centralheadquarter_commander !== null) {
+            nameUrl = 'rating-ro'
+        } else {
+            nameUrl = 'reportingRo'
         }
         userStore.getCountApp();
     },

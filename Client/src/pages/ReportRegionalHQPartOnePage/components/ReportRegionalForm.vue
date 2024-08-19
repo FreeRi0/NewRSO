@@ -64,7 +64,7 @@
     </div>
   </form>
   <Button v-if="isNewReport" variant="text" label="Отправить отчет" size="large" :onclick="sentReport"
-    :disabled="false" />
+    :disabled="isButtonDisabled" />
 </template>
 
 <script setup>

@@ -14,11 +14,13 @@
 <script setup>
 import { inject, onActivated, ref } from "vue";
 import ReportRegionalForm from "@pages/ReportRegionalHQPartOnePage/components/ReportRegionalForm.vue";
-import { createReport, getReport } from "@services/ReportService.ts";
+import { createReport, getCurrentReport, getReport } from "@services/ReportService.ts";
 import ReportModalSuccess from "@pages/ReportRegionalHQPartOnePage/components/ReportModalSuccess.vue";
 import ReportModalWarning from "@pages/ReportRegionalHQPartOnePage/components/ReportModalWarning.vue";
+import { onBeforeRouteLeave, useRoute } from "vue-router";
 
 const swal = inject('$swal');
+const route = useRoute();
 
 const defaultReportData = {
   participants_number: '',
@@ -40,18 +42,17 @@ const isButtonDisabled = ref(false);
 
 onActivated(async () => {
   try {
-    const res = await getReport();
-    delete res.data.id;
-    for (let i in res.data) {
-      res.data[i] = res.data[i].toString()
-    }
+    const res = route.query.id ? await getCurrentReport(String(route.query.id)) : await getReport();
     reportData.value = res.data;
     isButtonDisabled.value = true;
   } catch (e) {
     console.log(e)
   }
-})
-
+});
+onBeforeRouteLeave(() => {
+  reportData.value = defaultReportData;
+  isButtonDisabled.value = false;
+});
 const reportConfirmation = async (value) => {
   if (value) {
     try {

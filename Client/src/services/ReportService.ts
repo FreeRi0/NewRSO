@@ -8,6 +8,10 @@ export function getReport() {
     return HTTP.get('regional_competitions/statistical_report/me/')
 }
 
+export function getCurrentReport(id: string) {
+    return HTTP.get(`regional_competitions/statistical_report/${id}/`)
+}
+
 export function patchReport(data: object) {
     return HTTP.patch('regional_competitions/statistical_report/me/', data)
 }
@@ -30,7 +34,7 @@ export const reportPartTwoService = {
     },
 
     getReport(panel: string) {
-        return HTTP.get(`regional_competitions/reports/${panel}/`)
+        return HTTP.get(`regional_competitions/me/reports/${panel}/`)
     },
 
     createMultipleReport(data: object, panel: string, reportNumber: string, withFile = false) {
@@ -50,6 +54,6 @@ export const reportPartTwoService = {
     },
 
     getMultipleReport(panel: string, reportNumber: string) {
-        return HTTP.get(`regional_competitions/reports/${panel}/${reportNumber}/`)
+        return HTTP.get(`regional_competitions/me/reports/${panel}/${reportNumber}/`)
     },
 }
