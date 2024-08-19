@@ -1,15 +1,18 @@
 <template>
   <div v-if="true" class="form__field-group">
     <div v-for="(event, index) in events" :key="index" class="form__field-fourth-panel">
-      <div class="form__field-members">
-        <label class="form__label" for="participants_number">Количество человек, принявших участие в мероприятии <sup
-            class="valid-red">*</sup></label>
-        <div style="display: flex; justify-content: space-between;">
-          <InputReport v-model:value="event.participants_number" :id="event.participants_number"
-            name="participants_number" class="form__input" type="number" placeholder="Введите число"
-            @focusout="focusOut" />
-          <Button v-if="index > 0" label="Удалить мероприятие" style="margin: 0;" @click="deleteEvent(index)" />
+      <div class="form__field-members-event">
+        <div class="form__field-members">
+          <label class="form__label" for="participants_number">Количество человек, принявших участие в мероприятии <sup
+              class="valid-red">*</sup></label>
+          <div style="display: flex; justify-content: space-between;">
+            <InputReport v-model:value="event.participants_number" :id="event.participants_number"
+              name="participants_number" class="form__input" type="number" placeholder="Введите число"
+              @focusout="focusOut" />
+          </div>
         </div>
+        <Button class="form__field-delete-button" v-if="index > 0" label="Удалить мероприятие"
+          @click="deleteEvent(index)" />
       </div>
       <div class="form__field-date">
         <div class="form__field">
@@ -26,16 +29,12 @@
         </div>
       </div>
       <div class="form__field-event">
-        <div>
+        <div class="form__field-event-file">
           <label class="form__label" for="4">Положение о мероприятии <sup class="valid-red">*</sup></label>
-          <!-- <InputReport class="form-input" type="file" id="4" name="4" /> -->
-          <InputReport v-if="!fourthPanelData.scan_file" isFile type="file" id="scan_file" name="scan_file"
-            width="720px" height="86px" @change="uploadFile" />
+          <InputReport v-if="!fourthPanelData.scan_file" isFile type="file" id="scan_file" name="scan_file" width="100%"
+            @change="uploadFile" />
           <div v-else class="form__file-box">
             <span class="form__file-name">
-              <!-- <SvgIcon v-if="fileType === 'image/jpeg'" icon-name="group-light" />
-              <SvgIcon v-if="fileType === 'application/pdf'" icon-name="group-light" />
-              <SvgIcon v-if="fileType === 'image/png'" icon-name="group-light" /> -->
               {{ fourthPanelData.scan_file }}
             </span>
             <span class="form__file-size">{{ fileSize }} Мб</span>
@@ -44,19 +43,19 @@
             </button>
           </div>
         </div>
-        <div>
+        <div class="form__field-event-interregion">
           <p class="form__label">Межрегиональное <sup class="valid-red">*</sup></p>
           <div style="display: flex" class="form__label-radio">
             <div style="display: flex;">
-              <input v-model="event.is_interregional" type="radio" :id="`is_interregional-true_${index}`"
-                :value="true" />
+              <input v-model="event.is_interregional" type="radio" :id="`is_interregional-true_${index}`" :value="true"
+                class="custom-radio" />
               <label :for="`is_interregional-true_${index}`">
                 Да
               </label>
             </div>
             <div style="display: flex">
               <input v-model="event.is_interregional" type="radio" :id="`is_interregional-false_${index}`"
-                :value="false" />
+                :value="false" class="custom-radio" />
               <label :for="`is_interregional-false_${index}`">
                 Нет
               </label>
@@ -64,31 +63,32 @@
           </div>
         </div>
       </div>
-      <div style="margin-top: 16px;">
+      <div class="form__field-link">
         <p class="form__label">Ссылка на группу мероприятия в социальных сетях <sup class="valid-red">*</sup></p>
-        <div style="display: flex;" v-for="(link, i) in events[index].links" :key="i">
-          <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input" type="text"
+        <div class="form__add-link" v-for="(link, i) in events[index].links" :key="i">
+          <InputReport style="width: 100%;" v-model:value="link.link" :id="i" :name="i" class="form__input" type="text"
             placeholder="https://vk.com/cco_monolit" @focusout="focusOut" />
-          <Button v-if="events[index].links.length === i + 1" label="+ Добавить ссылку" @click="addLink(index)" />
-          <Button v-else label="Удалить" @click="deleteLink(index, i)" />
+          <Button v-if="events[index].links.length === i + 1" label="+ Добавить ссылку" @click="addLink(index)"
+            class="form__add-link-button" />
+          <Button class="form__add-link-button" v-else label="Удалить" @click="deleteLink(index, i)" />
         </div>
       </div>
     </div>
 
     <div>
-      <Button style="margin: 0" label="+ Добавить мероприятие" @click="addEvent" />
+      <Button class="form__add-event" label="Добавить мероприятие" @click="addEvent" />
     </div>
-    <div>
+    <div class="form__field-comment">
       <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
       <InputReport v-model:value="fourthPanelData.comment" id="comment" name="comment" class="form__input"
         type="textarea" placeholder="Укажите наименования организованных мероприятий" style="width: 100%;"
         @focusout="focusOut" />
     </div>
-    <div>
+    <div class="form__field-result">
       <v-checkbox label="Итоговое значение" />
     </div>
     <div class="hr"></div>
-    <div>
+    <div class="form__field-result">
       <p>0</p>
     </div>
   </div>
@@ -411,6 +411,53 @@ watchEffect(async () => {
 });
 </script>
 <style lang="scss" scoped>
+.custom-radio {
+  display: none;
+  /* -стандартное отображение*/
+}
+
+.custom-radio+label {
+  position: relative;
+  padding-left: 30px;
+  cursor: pointer;
+  line-height: 20px;
+}
+
+.custom-radio+label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #1F7CC0;
+  /* Внешний синий круг */
+}
+
+.custom-radio+label::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  /* Отступ от внешнего круга */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid #1F7CC0;
+  /* Внутренний синий круг */
+  background-color: transparent;
+  /* Пустота внутри внутреннего круга */
+}
+
+.custom-radio:checked+label::after {
+  background-color: #1F7CC0;
+  /* Заполнение внутреннего круга синим цветом при выборе */
+}
+
+
 .form__field-fourth-panel {
   display: flex;
   flex-direction: column;
@@ -434,6 +481,20 @@ watchEffect(async () => {
   border: none;
   border-radius: 0 0 10px 10px;
   margin-bottom: 8px;
+  padding-top: 0;
+}
+
+.form__field-members-event {
+  display: flex;
+  height: 111px;
+  margin-top: 40px;
+  justify-content: space-between;
+
+  @media (max-width: 568px) {
+    flex-direction: column-reverse;
+    gap: 16px;
+    align-items: flex-end;
+  }
 }
 
 .form__field-members {
@@ -443,29 +504,110 @@ watchEffect(async () => {
   flex-direction: column;
   justify-content: space-between;
   margin-bottom: 10px;
+
+  @media (max-width: 400px) {
+    max-width: 300px;
+  }
 }
 
 .form__field-date {
   display: flex;
-  gap: 40px;
+  justify-content: space-between;
+  gap: 16px;
   max-width: 720px;
+  flex-wrap: wrap;
 
   @media (max-width: 768px) {
-    flex-direction: column;
+    // flex-direction: column;
     gap: 16px;
   }
 
   @media (max-width: 568px) {
     align-items: center;
+    justify-content: center;
+  }
+}
+
+.form__add-event {
+  margin: 30px 0;
+  background-color: transparent;
+  color: #1F7CC0;
+  border-color: #1F7CC0;
+  padding-left: 52px;
+  position: relative;
+
+  @media(max-width: 568px) {
+    width: 340px;
+    margin: 30px auto;
+  }
+
+  @media(max-width: 400px) {
+    width: 300px;
+    margin: 30px auto;
+  }
+}
+
+.form__add-event::before {
+  content: url('@app/assets/icon_items/event-plus.svg');
+  position: absolute;
+  left: 12px;
+
+  @media(max-width: 568px) {
+    left: 54px;
+  }
+
+  @media(max-width: 400px) {
+    left: 36px;
   }
 }
 
 .form__field-event {
   display: flex;
-  max-width: 923px;
   justify-content: space-between;
-  gap: 20px;
+  gap: 16px;
   flex-wrap: wrap;
+  max-width: 910px;
+}
+
+.form__field-event-file,
+.form__field-event-interregion {
+  width: 720px;
+
+  @media (max-width: 568px) {
+    margin: 0 auto;
+    width: 340px;
+  }
+
+  @media (max-width: 400px) {
+    width: 300px;
+  }
+}
+
+.form__field-link,
+.form__field-comment,
+.form__field-result {
+  width: 100%;
+
+  @media (max-width: 568px) {
+    margin: 0 auto;
+    width: 340px;
+  }
+
+  @media (max-width: 400px) {
+    width: 300px;
+  }
+}
+
+.form__field-delete-button {
+  margin: 0;
+  width: 177px;
+  height: 33px;
+  font-weight: 400;
+  color: #1F7CC0;
+  padding: 0;
+  background-color: #D2E4F2;
+  border: none;
+  border-radius: 4px;
 }
 
 .form__file-box {
@@ -546,6 +688,11 @@ watchEffect(async () => {
 .hr {
   width: 100%;
   border-top: 1px solid #B6B6B6;
+
+  @media (max-width: 568px) {
+    width: 340px;
+    margin: 0 auto;
+  }
 }
 
 .v-table {
@@ -590,5 +737,20 @@ watchEffect(async () => {
       border-right: 1px solid #B6B6B6;
     }
   }
+}
+
+.form__add-link {
+  display: flex;
+  flex-direction: column;
+}
+
+.form__add-link-button {
+  width: 141px;
+  margin: 8px 0;
+  border: none;
+  background-color: transparent;
+  color: #1F7CC0;
+  padding: 0;
+  text-align: left;
 }
 </style>
