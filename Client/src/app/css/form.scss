@@ -47,6 +47,7 @@
             line-height: 21px;
             color: rgba(53, 56, 63, 1);
             border: 1px solid #b6b6b6;
+
             @media (max-width: 360px) {
                 font-size: 14px;
             }
@@ -71,6 +72,7 @@
         font-size: 16px;
         font-weight: 600;
         color: #35383f;
+
         @media (max-width: 360px) {
             font-size: 14px;
         }
@@ -106,6 +108,7 @@
                 min-height: 67px;
             }
         }
+
         @media (max-width: 360px) {
             font-size: 14px;
         }
@@ -131,6 +134,7 @@
             font-size: 16px;
             line-height: 21px;
             font-weight: 400;
+
             @media (max-width: 360px) {
                 font-size: 14px;
             }
@@ -146,6 +150,7 @@
                 padding-right: 15px;
             }
         }
+
         input::placeholder {
             @media (max-width: 360px) {
                 font-size: 14px;
@@ -191,6 +196,7 @@
         .v-field__field input {
             padding: 8px 20px 8px 10px;
         }
+
         @media (max-width: 360px) {
             font-size: 14px;
         }
@@ -260,6 +266,7 @@
                 line-height: 21px;
                 right: 30px;
             }
+
             @media (max-width: 360px) {
                 font-size: 14px;
             }
@@ -298,7 +305,7 @@
             margin: 0;
         }
 
-        &--active + .v-expansion-panel {
+        &--active+.v-expansion-panel {
             margin: 0;
         }
 
