@@ -4,24 +4,24 @@
     <v-tabs
         v-model="tab"
     >
-      <v-tab value="one" class="panel-tab-btn">Отчет РО</v-tab>
-      <v-tab value="two" class="panel-tab-btn">Корректировка ОШ</v-tab>
-      <v-tab value="three" class="panel-tab-btn">Корректировка ЦШ</v-tab>
+      <v-tab value="one" class="panel-tab-btn" v-if="districtHeadquarterCommander || centralHeadquarterCommander">Отчет РО</v-tab>
+      <v-tab value="two" class="panel-tab-btn" v-if="districtHeadquarterCommander || centralHeadquarterCommander">Корректировка ОШ</v-tab>
+      <v-tab value="three" class="panel-tab-btn" v-if="centralHeadquarterCommander">Корректировка ЦШ</v-tab>
     </v-tabs>
 
     <v-card-text class="panel-card-text">
       <v-tabs-window v-model="tab">
-        <v-tabs-window-item value="one">
+        <v-tabs-window-item value="one" v-if="districtHeadquarterCommander || centralHeadquarterCommander">
           <div class="form__field-group">
             <slot name="firstTab"></slot>
           </div>
         </v-tabs-window-item>
-        <v-tabs-window-item value="two">
+        <v-tabs-window-item value="two" v-if="districtHeadquarterCommander || centralHeadquarterCommander">
           <div class="form__field-group">
             <slot name="secondTab"></slot>
           </div>
         </v-tabs-window-item>
-        <v-tabs-window-item value="three">
+        <v-tabs-window-item value="three" v-if="centralHeadquarterCommander">
           <div class="form__field-group report-table">
             <slot name="thirdTab"></slot>
           </div>
@@ -31,9 +31,22 @@
   </v-card>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, watchEffect } from "vue";
+import { useRoleStore } from "@layouts/store/role.ts";
 
-const tab = ref('one');
+const tab = ref(null);
+const districtHeadquarterCommander = ref(true);
+const centralHeadquarterCommander = ref(true);
+const roleStore = useRoleStore();
+
+watchEffect(() => {
+  if (roleStore.roles?.districtheadquarter_commander) {
+    districtHeadquarterCommander.value = true;
+  }
+  if (roleStore.roles.centralheadquarter_commander) {
+    centralHeadquarterCommander.value = true;
+  }
+})
 </script>
 <style lang="scss" scoped>
 .panel-card {

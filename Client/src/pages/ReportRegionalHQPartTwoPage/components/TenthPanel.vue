@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-right: 10px">
+  <div style="margin-right: 10px; margin-bottom: 10px;">
     <v-expansion-panels>
       <v-expansion-panel>
         <v-expansion-panel-title>
@@ -79,3 +79,16 @@ watchEffect(async () => {
   }
 });
 </script>
+<style scoped>
+.v-expansion-panel-title {
+  background: #F3F4F5;
+  margin: 0px;
+  border-radius: 0px;
+  font-family: Akrobat;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 21.6px;
+  text-align: left;
+  border: none;
+}
+</style>
