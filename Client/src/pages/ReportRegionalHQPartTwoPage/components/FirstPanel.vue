@@ -1,163 +1,89 @@
 <template>
   <div v-if="true">
     <div class="form__field-group">
-      <div style="display: flex;">
-          <div class="form__field">
-            <label
-                class="form__label"
-                for="amount_of_money"
-            >Общая сумма уплаченных членских взносов РО  <sup class="valid-red">*</sup></label>
-            <InputReport
-                v-model:value="firstPanelData.amount_of_money"
-                id="amount_of_money"
-                name="amount_of_money"
-                class="form__input"
-                type="number"
-                placeholder="Введите число"
-                @focusout="focusOut"
-            />
-          </div>
-          <div class="report__add-file">
-            <label
-                class="form__label"
-                for="scan_file"
-            >Скан платежного поручения об уплате ЧВ <sup class="valid-red">*</sup></label>
-            <InputReport
-                v-if="!firstPanelData.file_type"
-                isFile
-                type="file"
-                id="scan_file"
-                name="scan_file"
-                width="720px"
-                height="86px"
-                @change="uploadFile"
-            />
-            <div
-                v-else
-                class="form__file-box">
-              <span class="form__file-name">
-                <SvgIcon v-if="firstPanelData.file_type === 'jpg'" icon-name="file-jpg" />
-                <SvgIcon v-if="firstPanelData.file_type === 'pdf'" icon-name="file-pdf" />
-                <SvgIcon v-if="firstPanelData.file_type === 'png'" icon-name="file-png" />
-                {{ firstPanelData.scan_file }}
-              </span>
+      <div class="form__field-report">
+        <div class="form__field">
+          <label class="form__label" for="amount_of_money">Общая сумма уплаченных членских взносов РО  <sup
+              class="valid-red">*</sup></label>
+          <InputReport v-model:value="firstPanelData.amount_of_money" id="amount_of_money" name="amount_of_money"
+            class="form__input" type="number" placeholder="Введите число" @focusout="focusOut" />
+        </div>
+        <div class="report__add-file">
+          <label class="form__label" for="scan_file">Скан платежного поручения об уплате ЧВ <sup
+              class="valid-red">*</sup></label>
+          <InputReport v-if="!firstPanelData.scan_file" isFile type="file" id="scan_file" name="scan_file"
+            style="width: 100%;" @change="uploadFile" />
+          <div v-else class="form__file-box">
+            <span class="form__file-name">
+              <SvgIcon v-if="firstPanelData.file_type === 'jpg'" icon-name="file-jpg" />
+              <SvgIcon v-if="firstPanelData.file_type === 'pdf'" icon-name="file-pdf" />
+              <SvgIcon v-if="firstPanelData.file_type === 'png'" icon-name="file-png" />
+              {{ firstPanelData.scan_file }}
+            </span>
 
-              <span class="form__file-size">{{ firstPanelData.file_size }} Мб</span>
-              <button
-                  @click="deleteFile"
-                  class="form__button-delete-file"
-              >
-                Удалить
-              </button>
-            </div>
+            <span class="form__file-size">{{ firstPanelData.file_size }} Мб</span>
+            <button @click="deleteFile" class="form__button-delete-file">
+              Удалить
+            </button>
+          </div>
         </div>
       </div>
-      <div  class="form__field">
-          <label
-              class="form__label"
-              for="comment"
-          >Комментарий</label>
-          <TextareaReport
-              v-model:value="firstPanelData.comment"
-              id="comment"
-              name="comment"
-              :rows="1"
-              autoResize
-              @focusout="focusOut"
-              :maxlength="3000"
-              :max-length-text="3000"
-              counter-visible
-          />
-        </div>
+      <div class="form__field">
+        <label class="form__label" for="comment">Комментарий</label>
+        <TextareaReport placeholder="Напишите сообщение" v-model:value="firstPanelData.comment" id="comment"
+          name="comment" :rows="1" autoResize @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
+          counter-visible class="form__input" />
+      </div>
     </div>
     <ReportRegionalForm :reportData="reportData" />
   </div>
 
-  <v-card v-else class="panel-card" >
-    <v-tabs
-        v-model="tab"
-    >
+  <v-card v-else class="panel-card">
+    <v-tabs v-model="tab">
       <v-tab value="one" class="panel-tab-btn">Отчет РО</v-tab>
       <v-tab value="two" class="panel-tab-btn">Корректировка ОШ</v-tab>
       <v-tab value="three" class="panel-tab-btn">Корректировка ЦШ</v-tab>
     </v-tabs>
 
-      <v-card-text class="panel-card-text">
-        <v-tabs-window v-model="tab">
-          <v-tabs-window-item value="one">
-            <div class="form__field-group">
-              <div style="display: flex;">
-                <div class="form__field">
-                  <label
-                      class="form__label"
-                      for="1"
-                  >Общая сумма уплаченных членских взносов РО  <sup class="valid-red">*</sup></label>
-                  <InputReport
-                      id="1"
-                      name="1"
-                      class="form__input"
-                      type="number"
-                      placeholder="Введите число"
-                  />
-                </div>
-                <div>
-                  <label
-                      class="form__label"
-                      for="2"
-                  >Скан платежного поручения об уплате ЧВ <sup class="valid-red">*</sup></label>
-                  <InputReport
-                      type="file"
-                      id="2"
-                      name="2"
-                  />
-                </div>
+    <v-card-text class="panel-card-text">
+      <v-tabs-window v-model="tab">
+        <v-tabs-window-item value="one">
+          <div class="form__field-group">
+            <div style="display: flex;">
+              <div class="form__field">
+                <label class="form__label" for="1">Общая сумма уплаченных членских взносов РО  <sup
+                    class="valid-red">*</sup></label>
+                <InputReport id="1" name="1" class="form__input" type="number" placeholder="Введите число" />
               </div>
-              <div  class="form__field">
-                <label
-                    class="form__label"
-                    for="3"
-                >Комментарий <sup class="valid-red">*</sup></label>
-                <InputReport
-                    id="3"
-                    name="3"
-                    class="form__input"
-                    style="width: 100%"
-                />
+              <div>
+                <label class="form__label" for="2">Скан платежного поручения об уплате ЧВ <sup
+                    class="valid-red">*</sup></label>
+                <InputReport type="file" id="2" name="2" />
               </div>
             </div>
-          </v-tabs-window-item>
-          <v-tabs-window-item value="two">
-            <form class="form__field-group" @submit.prevent>
-                <div class="form__field">
-                  <label
-                      class="form__label"
-                      for="4"
-                  >Общая сумма уплаченных членских взносов РО  <sup class="valid-red">*</sup></label>
-                  <InputReport
-                      id="4"
-                      name="4"
-                      class="form__input"
-                      type="number"
-                      placeholder="Введите число"
-                  />
-                </div>
-                <div>
-                  <label
-                      class="form__label"
-                      for="5"
-                  >Комментарий  <sup class="valid-red">*</sup></label>
-                  <InputReport
-                      type="file"
-                      id="5"
-                      name="5"
-                  />
-                </div>
-            </form>
-          </v-tabs-window-item>
-          <v-tabs-window-item value="three">
-            <div class="form__field-group report-table">
-              <v-table>
-                <tbody>
+            <div class="form__field">
+              <label class="form__label" for="3">Комментарий <sup class="valid-red">*</sup></label>
+              <InputReport id="3" name="3" class="form__input" style="width: 100%" />
+            </div>
+          </div>
+        </v-tabs-window-item>
+        <v-tabs-window-item value="two">
+          <form class="form__field-group" @submit.prevent>
+            <div class="form__field">
+              <label class="form__label" for="4">Общая сумма уплаченных членских взносов РО  <sup
+                  class="valid-red">*</sup></label>
+              <InputReport id="4" name="4" class="form__input" type="number" placeholder="Введите число" />
+            </div>
+            <div>
+              <label class="form__label" for="5">Комментарий  <sup class="valid-red">*</sup></label>
+              <InputReport type="file" id="5" name="5" />
+            </div>
+          </form>
+        </v-tabs-window-item>
+        <v-tabs-window-item value="three">
+          <div class="form__field-group report-table">
+            <v-table>
+              <tbody>
                 <tr class="report-table__tr">
                   <td class="report-table__th report-table__th__br-left">Данные РО</td>
                   <td class="report-table__th">Корректировка ОШ</td>
@@ -168,28 +94,19 @@
                   <td class="report-table__td report-table__td__center">200</td>
                   <td class="report-table__td">200</td>
                 </tr>
-                </tbody>
-              </v-table>
-              <div>
-                <label
-                    class="form__label"
-                    for="6"
-                >Комментарий  <sup class="valid-red">*</sup></label>
-                <InputReport
-                    type="file"
-                    id="6"
-                    name="6"
-                />
-              </div>
-              <div>
-                  <v-checkbox
-                      label="Вернуть в РО на доработку"
-                  />
-              </div>
+              </tbody>
+            </v-table>
+            <div>
+              <label class="form__label" for="6">Комментарий  <sup class="valid-red">*</sup></label>
+              <InputReport type="file" id="6" name="6" />
             </div>
-          </v-tabs-window-item>
-        </v-tabs-window>
-      </v-card-text>
+            <div>
+              <v-checkbox label="Вернуть в РО на доработку" />
+            </div>
+          </div>
+        </v-tabs-window-item>
+      </v-tabs-window>
+    </v-card-text>
   </v-card>
 </template>
 <script setup>
@@ -243,7 +160,7 @@ const uploadFile = async (event) => {
     let { scan_file } = await reportPartTwoService.createReport(formData, '1', true);
     firstPanelData.value.scan_file = scan_file.split('/').at(-1);
   } else {
-    let { data : { scan_file } } = await reportPartTwoService.createReportDraft(formData, '1', true);
+    let { data: { scan_file } } = await reportPartTwoService.createReportDraft(formData, '1', true);
     firstPanelData.value.scan_file = scan_file.split('/').at(-1);
   }
 };
@@ -280,9 +197,69 @@ watchEffect(async () => {
 });
 </script>
 <style lang="scss" scoped>
+.form__field {
+  margin: 0;
+}
+
+.form__field-report {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 16px;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+.form__file-box {
+  margin-top: 16px;
+  max-width: 720px;
+  width: 100%;
+  padding: 1px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Bert Sans";
+  font-weight: 400;
+  line-height: 21px;
+}
+
+.form__file-name {
+  display: flex;
+  align-items: center;
+}
+
+.report__add-file {
+  width: 100%;
+}
+
+.form__file-size {
+  width: 48px;
+  color: #6d6d6d;
+  opacity: 0.8;
+  position: relative;
+
+  &::before {
+    position: absolute;
+    content: "";
+    width: 1px;
+    height: 15px;
+    background-color: #6d6d6d;
+    opacity: 0.8;
+    top: 3px;
+    left: -10px;
+  }
+}
+
+.form__button-delete-file {
+  color: #1f7cc0;
+}
+
 .panel-card {
   box-shadow: none;
 }
+
 .form__field-group {
   background: #F3F4F5;
   border: none;
@@ -290,21 +267,26 @@ watchEffect(async () => {
   border-radius: 0 0 10px 10px;
   margin-bottom: 8px;
 }
+
 .valid-red {
   color: #db0000;
 }
+
 .v-tab-item--selected {
   background: #F3F4F5;
 }
+
 .v-tab.v-tab.v-btn {
   min-width: 280px;
   border-radius: 10px 10px 0 0;
   letter-spacing: initial;
   border: none;
 }
+
 .panel-card-text {
   padding: 0;
 }
+
 .panel-tab-btn {
   text-transform: initial;
   font-family: Bert Sans;
@@ -314,16 +296,19 @@ watchEffect(async () => {
   text-align: left;
   margin-right: 8px;
 }
+
 .v-table {
   margin-bottom: 16px;
   border-radius: 10px;
   border: 1px solid #B6B6B6;
 }
+
 .report-table {
   &__tr {
     background-color: #FFFFFF;
     text-align: center;
   }
+
   &__th {
     font-family: Akrobat;
     font-size: 16px;
@@ -341,6 +326,7 @@ watchEffect(async () => {
       border-left: 1px solid #B6B6B6;
     }
   }
+
   &__td {
     text-align: center;
     font-family: Akrobat;
@@ -354,7 +340,6 @@ watchEffect(async () => {
     }
   }
 }
-
 </style>
 
 <style>
@@ -364,6 +349,7 @@ watchEffect(async () => {
   left: initial;
   color: #E9E9E9;
 }
+
 .v-label {
   margin: initial;
   font-family: Bert Sans;
@@ -373,10 +359,12 @@ watchEffect(async () => {
   text-align: left;
   opacity: initial;
 }
+
 .v-selection-control__input {
   justify-content: initial;
   width: initial;
 }
+
 .v-selection-control__wrapper {
   width: initial;
 }

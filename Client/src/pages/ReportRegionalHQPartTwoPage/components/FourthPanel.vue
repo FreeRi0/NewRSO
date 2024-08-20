@@ -815,7 +815,6 @@ watchEffect(async () => {
 }
 
 .form__file-name {
-  // min-width: 220px;
   display: flex;
   align-items: center;
 }
@@ -966,6 +965,39 @@ watchEffect(async () => {
       border-right: 1px solid #B6B6B6;
     }
   }
+}
+
+.add_link {
+  color: #1f7cc0;
+  cursor: pointer;
+  font-family: Bert Sans;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21.1px;
+  margin-left: 40px;
+}
+
+.add_eventBtn {
+  background-color: transparent;
+  color: #1F7CC0;
+  border-color: #1F7CC0;
+  margin: 35px 0 40px;
+}
+
+.deleteEventBtn {
+  background-color: #d2e4f2;
+  width: 177px;
+  height: 33px;
+  border: none;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: Akrobat;
+  line-height: 21.1px;
+  text-align: center;
+  padding: 4px 11px;
+  color: #1f7cc0;
+  border-radius: 6px;
+  margin: 0;
 }
 
 .form__add-link {
