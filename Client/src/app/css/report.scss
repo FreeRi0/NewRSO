@@ -1,7 +1,8 @@
 .report {
     &__field-group {
         display: grid;
-        gap: 16px 20px;
+        grid-template-columns: 340px 1fr;
+        gap: 16px 40px;
         padding: 40px 40px 40px;
         background: #F3F4F5;
         border: none;
@@ -9,18 +10,13 @@
       }
     
     &__fieldset {
-        &--left-block {
-            max-width: 530px;
+        // &--left-block {
+      
+        // }
 
-            .report__label {
-            max-width: 240px;
-            }
-        }
-
-        &--right-block {
-            max-width: 530px;
-            justify-self: flex-end;
-        }
+        // &--right-block {
+            
+        // }
 
         &--comment {
             margin-bottom: 17px;

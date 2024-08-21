@@ -13,7 +13,7 @@
           accept=".jpg, .jpeg, .png, .pdf"
           id="scan_file"
           name="scan_file"
-          width="720px"
+          width="100%"
           height="86px"
           @change="uploadFile"
         />

@@ -88,6 +88,7 @@ const updateValue = (event) => {
 <style lang="scss" scoped>
 .form-input {
   &.form-input__file-input {
+    max-width: 720px;
     height: 86px;
     position: relative;
     border-radius: 12px;
