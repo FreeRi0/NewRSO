@@ -286,6 +286,7 @@ const vertical = ref(true);
 const locals = ref([]);
 const educationals = ref([]);
 const sortedSquads = ref([]);
+// console.log('area', squadsStore.areas)
 
 const showVertical = () => {
     vertical.value = !vertical.value;
@@ -367,7 +368,7 @@ const getDetachments = async (pagination, orderLimit) => {
                     'ordering=' + (ascending.value ? '' : '-') + sortBy.value,
                 );
         }
-        
+
         const viewHeadquartersResponse = await HTTP.get(url + data.join('&'));
         isLoading.value = false;
 

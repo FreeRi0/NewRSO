@@ -569,6 +569,7 @@
                                         indeterminate
                                         color="blue"
                                     ></v-progress-circular>
+
                                     <Button
                                         v-if="!is_regional_commander"
                                         type="button"
@@ -3958,7 +3959,7 @@ const getParametersRegCom = async (id) => {
     } catch (error) {
         isError.value = error.response;
     }
-    isLoading.value = false;
+    // isLoading.value = false;
 };
 
 const getParameters = async (id) => {
@@ -4088,6 +4089,7 @@ const getParameters = async (id) => {
                 report.value[id].disabledBtn = false;
             }
         } catch (error) {
+            isLoading.value = false;
             isError.value = error.response;
         }
     }
@@ -4304,7 +4306,7 @@ watch(
 );
 
 onMounted(async (id) => {
-    await getParameters(id);
+    // await getParameters(id);
     await getMeCommander();
 });
 </script>
