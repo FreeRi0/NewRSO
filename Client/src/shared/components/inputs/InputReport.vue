@@ -88,10 +88,6 @@ const updateValue = (event) => {
 <style lang="scss" scoped>
 .form-input {
   &.form-input__file-input {
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    height: 101px;
     position: relative;
     border-radius: 12px;
     background-color: transparent;
@@ -153,14 +149,13 @@ const updateValue = (event) => {
 
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
+  -webkit-appearance: none;
 }
 
 input[type='number'],
 input[type="number"]:hover,
 input[type="number"]:focus {
-    appearance: none;
-    -moz-appearance: textfield;
+  appearance: none;
+  -moz-appearance: textfield;
 }
-
 </style>
