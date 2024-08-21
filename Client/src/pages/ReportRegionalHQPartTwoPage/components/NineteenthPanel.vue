@@ -97,11 +97,11 @@ watchEffect(async () => {
   try {
     const { data } = await reportPartTwoService.getReport(ID_PANEL);
     console.log(data);
-    if (data.length) {
+    if (data) {
       isFirstSent.value = false;
-      nineteenthPanelData.value.employed_student_start = data[0].employed_student_start;
-      nineteenthPanelData.value.employed_student_end = data[0].employed_student_end;
-      nineteenthPanelData.value.comment = data[0].comment;
+      nineteenthPanelData.value.employed_student_start = data.employed_student_start;
+      nineteenthPanelData.value.employed_student_end = data.employed_student_end;
+      nineteenthPanelData.value.comment = data.comment;
     }
   } catch (e) {
     console.log(e)
@@ -114,6 +114,14 @@ watchEffect(async () => {
   &__field-group {
     grid-template-columns: 1fr 1fr;
     margin-bottom: 0;
+  }
+
+  &__fieldset {
+    &--left-block {
+      .report__label {
+        max-width: 240px;
+      }
+    }
   }
 }
 </style>

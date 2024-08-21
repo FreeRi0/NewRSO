@@ -24,7 +24,7 @@
         accept=".jpg, .jpeg, .png, .pdf"
         id="scan_file"
         name="scan_file"
-        width="720px"
+        width="100%"
         height="86px"
         @change="uploadFile"
       />
@@ -145,12 +145,12 @@ watchEffect(async () => {
   try {
     const { data } = await reportPartTwoService.getReport(ID_PANEL);
     console.log(data);
-    if (data.length) {
+    if (data) {
       isFirstSent.value = false;
-      seventeenthPanelData.value.comment = data[1].comment;
-      seventeenthPanelData.value.scan_file = data[1].scan_file.split('/').at(-1)
-      seventeenthPanelData.value.file_size = data[1].file_size;
-      seventeenthPanelData.value.file_type = data[1].file_type;
+      seventeenthPanelData.value.comment = data.comment;
+      seventeenthPanelData.value.scan_file = data.scan_file.split('/').at(-1)
+      seventeenthPanelData.value.file_size = data.file_size;
+      seventeenthPanelData.value.file_type = data.file_type;
     }
   } catch (e) {
     console.log(e)
@@ -159,4 +159,9 @@ watchEffect(async () => {
 </script>
 
 <style lang="scss" scoped>
+.report {
+  &__field-group {
+    grid-template-columns: 1fr;
+  }
+}
 </style>
