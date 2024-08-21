@@ -121,7 +121,7 @@ const updateValue = (event) => {
       display: flex;
       align-items: center;
       column-gap: 12px;
-      color:#1f7cc0;
+      color: #1f7cc0;
     }
   }
 }

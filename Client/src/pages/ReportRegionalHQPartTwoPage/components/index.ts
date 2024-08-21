@@ -15,3 +15,4 @@ export {default as SeventeenthPanel} from './SeventeenthPanel.vue';
 export {default as EighteenthPanel} from './EighteenthPanel.vue';
 export {default as NineteenthPanel} from './NineteenthPanel.vue';
 export { default as CalculatedPanel } from './CalculatedPanel.vue';
+export { default as ReportTabs } from './ReportTabs.vue';
