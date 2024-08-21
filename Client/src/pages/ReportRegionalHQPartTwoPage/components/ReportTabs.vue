@@ -35,8 +35,8 @@ import { ref, watchEffect } from "vue";
 import { useRoleStore } from "@layouts/store/role.ts";
 
 const tab = ref(null);
-const districtHeadquarterCommander = ref(true);
-const centralHeadquarterCommander = ref(true);
+const districtHeadquarterCommander = ref(false);
+const centralHeadquarterCommander = ref(false);
 const roleStore = useRoleStore();
 
 watchEffect(() => {
