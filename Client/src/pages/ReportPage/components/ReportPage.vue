@@ -132,7 +132,12 @@
                                         />
                                         <p
                                             class="error"
-                                            v-if="isError && isError.commander_achievement && isError.commander_achievement.length > 0"
+                                            v-if="
+                                                isError &&
+                                                isError.commander_achievement &&
+                                                isError.commander_achievement
+                                                    .length > 0
+                                            "
                                         >
                                             {{
                                                 isError.commander_achievement[0]
@@ -173,7 +178,12 @@
                                         </div>
                                         <p
                                             class="error"
-                                            v-if="isError && isError.commander_link && isError.commander_link.length > 0"
+                                            v-if="
+                                                isError &&
+                                                isError.commander_link &&
+                                                isError.commander_link.length >
+                                                    0
+                                            "
                                         >
                                             {{ isError.commander_link[0] }}
                                         </p>
@@ -202,7 +212,10 @@
                                         <p
                                             class="error"
                                             v-if="
-                                            isError && isError.commissioner_achievement && isError.commissioner_achievement.length > 0
+                                                isError &&
+                                                isError.commissioner_achievement &&
+                                                isError.commissioner_achievement
+                                                    .length > 0
                                             "
                                         >
                                             {{
@@ -242,7 +255,12 @@
                                         </div>
                                         <p
                                             class="error"
-                                            v-if="isError && isError.commissioner_link && isError.commissioner_link.length > 0"
+                                            v-if="
+                                                isError &&
+                                                isError.commissioner_link &&
+                                                isError.commissioner_link
+                                                    .length > 0
+                                            "
                                         >
                                             {{ isError.commissioner_link[0] }}
                                         </p>
@@ -398,7 +416,14 @@
                                         <div class="form__counter">
                                             {{ block.name.length }} / 100
                                         </div>
-                                        <p class="error" v-if="isError && isError.name && isError.name.length > 0">
+                                        <p
+                                            class="error"
+                                            v-if="
+                                                isError &&
+                                                isError.name &&
+                                                isError.name.length > 0
+                                            "
+                                        >
                                             {{ isError.name[0] }}
                                         </p>
                                     </div>
@@ -467,7 +492,11 @@
                                         </div>
                                         <p
                                             class="error"
-                                            v-if="isError && isError.document && isError.document.length > 0"
+                                            v-if="
+                                                isError &&
+                                                isError.document &&
+                                                isError.document.length > 0
+                                            "
                                         >
                                             {{ isError.document[0] }}
                                         </p>
