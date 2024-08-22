@@ -175,7 +175,7 @@ const onChangeItem = async () => {
                     'Content-Type': 'application/json',
                 },
             });
-            items.value = ItemResponse.data.results;
+            items.value = ItemResponse.data;
             isLoading.value = false;
         }, 500);
     } catch (error) {

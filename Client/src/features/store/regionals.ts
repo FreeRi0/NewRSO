@@ -114,7 +114,7 @@ export const useRegionalsStore = defineStore('regionals', {
             const responseSearchRegions = await HTTP.get(
                 `/regions/?search=${name}`
             );
-            this.regions = responseSearchRegions.data.results;
+            this.regions = responseSearchRegions.data;
         },
         async getRegions() {
             if (this.regions.length) return;
@@ -125,7 +125,7 @@ export const useRegionalsStore = defineStore('regionals', {
                         'Content-Type': 'application/json',
                     },
                 });
-                this.regions = responseRegions.data.results;
+                this.regions = responseRegions.data;
                 this.isLoading = false;
             } catch (error) {
                 console.log('an error occured ' + error);
