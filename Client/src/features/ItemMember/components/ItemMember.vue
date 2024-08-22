@@ -21,15 +21,17 @@
             </div>
         </div>
         <div class="member__wrap">
-            <div class="member__select-box" :title=positionMember.name>
-                <v-tooltip :text=positionMember.name location="bottom">
+            <div class="member__select-box" :title="positionMember.name" v-if="positionMember !== null">
+                <v-tooltip :text="positionMember.name" location="bottom">
                     <template v-slot:activator="{ props }">
-                        <Select class="member__select" variant="outlined" clearable :items="functions" name="select_position"
-                            id="select-position" placeholder="Выберите должность" v-model="positionMember"
-                            @update:value="changeOption" v-bind="props"></Select>
-                        <!-- {{ positionMember }} -->
+                        <Select class="member__select" variant="outlined" clearable :items="functions"
+                            name="select_position" id="select-position" placeholder="Выберите должность"
+                            v-model="positionMember" @update:value="changeOption" v-bind="props"></Select>
                     </template>
                 </v-tooltip>
+            </div>
+            <div class="member__confidant ml-2 directors" v-else>
+                <span> Руководство</span>
             </div>
             <div class="member__block">
                 <div class="member__confidant">
@@ -37,7 +39,7 @@
                         v-model:checked="confidant" @update:checked="changeConfidant"></FormCheckbox>
 
                 </div>
-                <div v-if="((roleStore.roles.detachment_commander?.id === squadsStore.squad?.id)  || (item.user?.id == userStore.currentUser?.id && item.is_trusted === true)) || ((roleStore.roles.educationalheadquarter_commander?.id === educationalsStore.educational?.id )|| (item.user?.id == userStore.currentUser?.id && item.is_trusted === true)) || ((roleStore.roles.localheadquarter_commander?.id === localsStore.local?.id) || (item.user?.id == userStore.currentUser?.id && item.is_trusted === true)) || ((roleStore.roles.regionalheadquarter_commander?.id === regionalsStore.regional?.id) || (item.user?.id == userStore.currentUser?.id && item.is_trusted === true)) || ((roleStore.roles.districtheadquarter_commander?.id === districtsStore.district?.id) || (item.user?.id == userStore.currentUser?.id && item.is_trusted === true)) || ((roleStore.roles.centralheadquarter_commander === userStore.currentUser?.central_headquarter_id) || (item.user?.id == userStore.currentUser?.id && item.is_trusted === true))"
+                <div v-if="((roleStore.roles.detachment_commander?.id === squadsStore.squad?.id) || (item.user?.id == userStore.currentUser?.id && item.is_trusted === true)) || ((roleStore.roles.educationalheadquarter_commander?.id === educationalsStore.educational?.id) || (item.user?.id == userStore.currentUser?.id && item.is_trusted === true)) || ((roleStore.roles.localheadquarter_commander?.id === localsStore.local?.id) || (item.user?.id == userStore.currentUser?.id && item.is_trusted === true)) || ((roleStore.roles.regionalheadquarter_commander?.id === regionalsStore.regional?.id) || (item.user?.id == userStore.currentUser?.id && item.is_trusted === true)) || ((roleStore.roles.districtheadquarter_commander?.id === districtsStore.district?.id) || (item.user?.id == userStore.currentUser?.id && item.is_trusted === true)) || ((roleStore.roles.centralheadquarter_commander === userStore.currentUser?.central_headquarter_id) || (item.user?.id == userStore.currentUser?.id && item.is_trusted === true))"
                     class="member__delete" @click="deleteMember(item.id)">
                     <img src="@app/assets/closeDel.png" alt="del">
                 </div>

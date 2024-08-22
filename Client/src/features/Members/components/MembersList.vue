@@ -62,6 +62,13 @@ const onDeleteMember = (memId) => {
 </script>
 
 <style lang="scss">
+.directors {
+  font-size: 16px;
+  line-height: 21px;
+  font-weight: 400;
+  padding: 4px 20px !important;
+  font-family: 'Bert-Sans';
+}
 .member {
     padding: 28px 20px 20px;
     border: 1px solid #b6b6b6;
