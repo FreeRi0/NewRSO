@@ -1885,10 +1885,10 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
-    headquarterItems: {
-        type: Array,
-        default: () => [],
-    },
+    // headquarterItems: {
+    //     type: Array,
+    //     default: () => [],
+    // },
 });
 
 const deletedId = ref(null);
@@ -2004,7 +2004,7 @@ const getRegionName = computed(() => {
 const regionName = ref(props.regionName);
 regionName.value = getRegionName;
 
-const headquarterItems = ref(props.headquarterItems);
+// const headquarterItems = ref(props.headquarterItems);
 
 const getHeadquarter = async () => {
     await HTTP.get('educationals')
@@ -2015,16 +2015,16 @@ const getHeadquarter = async () => {
             console.log('an error occured ' + error);
         });
 };
-const getHeadquarterRegion = computed(() => {
-    return headquarterItems.value.filter(
-        (item) =>
-            item?.educational_institution?.region?.id ===
-            detachment?.value.region,
-    );
-});
+// const getHeadquarterRegion = computed(() => {
+//     return headquarterItems.value.filter(
+//         (item) =>
+//             item?.educational_institution?.region?.id ===
+//             detachment?.value.region,
+//     );
+// });
 
-const headquarterRegion = ref(props.headquarterRegion);
-headquarterRegion.value = getHeadquarterRegion;
+// const headquarterRegion = ref(props.headquarterRegion);
+// headquarterRegion.value = getHeadquarterRegion;
 
 // const queryCommander = computed(() => {
 

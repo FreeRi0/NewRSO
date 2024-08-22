@@ -151,7 +151,9 @@ const props = defineProps({
     },
 });
 const name = ref('');
-const addressRef = ref('/eduicational_institutions/');
+const addressRef = ref('/eduicational_institutions/' + `?limit=${limit}`);
+const limit = 0;
+
 
 
 const selected = ref(null);
