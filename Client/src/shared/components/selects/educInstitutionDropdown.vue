@@ -152,7 +152,7 @@ const props = defineProps({
 });
 const name = ref('');
 const addressRef = ref('/eduicational_institutions/' + `?limit=${limit}`);
-const limit = 0;
+const limit = -1;
 
 
 

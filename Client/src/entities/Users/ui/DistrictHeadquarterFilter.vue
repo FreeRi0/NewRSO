@@ -20,7 +20,7 @@ import { ref } from 'vue';
 const districtHeadquarters = ref<string[]>([]);
 
 districtHeadquarterApi.getDistrictHeadquarters().then((res) => {
-    districtHeadquarters.value = res.data.map(({ name }) => name);
+    districtHeadquarters.value = res.data.results.map(({ name }) => name);
 });
 </script>
 <style scoped>

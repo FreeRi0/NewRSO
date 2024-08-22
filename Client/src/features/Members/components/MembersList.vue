@@ -2,7 +2,7 @@
     <div class="member">
         <ul class="member__wrapper">
             <template v-if="items.length > 0">
-                <ItemMember class="member__item" v-for="item in items" :key="item.id" :item="item"
+                <ItemMember class="member__item" v-for="item in props.items" :key="item.id" :item="item"
                     :functions="functions" :is-error-members="isErrorMembers" @update-member="onUpdateMember"
                     @delete-member="onDeleteMember"></ItemMember>
             </template>
@@ -51,33 +51,14 @@ const props = defineProps({
 
 const emit = defineEmits(['updateMember', 'deleteMember']);
 
-// const functions = ref(props.functions);
-
-// const getPositions = async () => {
-//     HTTP.get('positions/')
-
-//         .then((res) => {
-//             functions.value = res.data;
-//             // console.log('должности в MembersList - ', res.data);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
-
 const onUpdateMember = (event, id) => {
     emit('updateMember', event, id);
 };
 
 const onDeleteMember = (memId) => {
     emit('deleteMember', memId);
-    // console.log('member', memId);
 };
 
-// onMounted(() => {
-//     // getPositions();
-//     // positionsStore.getPositions();
-// });
 </script>
 
 <style lang="scss">
@@ -293,7 +274,7 @@ const onDeleteMember = (memId) => {
             font-size: 14px;
             line-height: 18.5px;
             flex-wrap: wrap;
-           
+
         }
     }
 
