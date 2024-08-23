@@ -21,10 +21,10 @@
             </div>
         </div>
         <div class="member__wrap">
-            <div class="member__select-box" :title="positionMember.name" v-if="positionMember !== null">
+            <div class="member__select-box" :title="positionMember.name" v-if="positionMember">
                 <v-tooltip :text="positionMember.name" location="bottom">
                     <template v-slot:activator="{ props }">
-                        <Select class="member__select" variant="outlined" clearable :items="functions"
+                        <Select class="member__select" variant="outlined" :items="functions"
                             name="select_position" id="select-position" placeholder="Выберите должность"
                             v-model="positionMember" @update:value="changeOption" v-bind="props"></Select>
                     </template>
@@ -33,6 +33,7 @@
             <div class="member__confidant ml-2 directors" v-else>
                 <span> Руководство</span>
             </div>
+            <div></div>
             <div class="member__block">
                 <div class="member__confidant">
                     <FormCheckbox label="Доверенное лицо" :id="item.id" :value="item.user.last_name"
