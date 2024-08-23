@@ -134,31 +134,6 @@
                                 v-model:value="detachment.city"
                             />
                         </div>
-
-                        <!-- <div class="form__field">
-                            <label class="form__label" for="select-institution">Выберите учебное заведение
-                                 <sup class="valid-red">*</sup>
-                            </label>
-                            <Select
-                                variant="outlined"
-                                clearable
-                                name="select_institution"
-                                id="select-institution"
-                                placeholder="Например, Алтайский государственный медицинский университет"
-                                v-model="detachment.educational_institution"
-                                address="eduicational_institutions/"
-                            ></Select>
-                            <educInstitutionDropdown open-on-clear id="select-institution" name="select_institution"
-                                placeholder="Например, Алтайский государственный медицинский университет"
-                                v-model="detachment.educational_institution" @update:value="changeValue"
-                                :SortDropdown="false" address="eduicational_institutions/"></educInstitutionDropdown>
-                             <p
-                                class="form__error"
-                                v-if="isError.educational_institution"
-                            >
-                                * Это поле не может быть пустым.
-                            </p>
-                        </div> -->
                         <template v-if="detachment.region">
                             <div
                                 v-if="
@@ -1885,10 +1860,6 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
-    // headquarterItems: {
-    //     type: Array,
-    //     default: () => [],
-    // },
 });
 
 const deletedId = ref(null);
@@ -1905,7 +1876,6 @@ const getErrorField = (field) => {
 const onDeleteMember = (memId) => {
     showModal.value = true;
     deletedId.value = memId;
-    // console.log('mm', memId)
 };
 
 const close = () => {
@@ -1918,82 +1888,15 @@ const deleteMember = (id, membership_pk) => {
             `/detachments/${id}/members/${membership_pk}/`,
         );
         showModal.value = false;
-        // console.log(responseDelete);
+
         emit('deleteMember', membership_pk);
-        // areasStore.getSquadMembers(props.detachment.id);
+
     } catch (error) {
         console.log('an error occured ' + error);
     }
 };
 
 const detachment = ref(props.detachment);
-
-//-------------------------------------Валидация полей-------------------------------------------
-// const name = ref(props.detachment.name);
-// const area = ref(props.detachment.area);
-// const founding_date = ref(props.detachment.founding_date);
-// const region = ref(props.detachment.region);
-// const city = ref(props.detachment.city);
-// const educational_institution = ref(props.detachment.educational_institution);
-// const commander = ref(props.detachment.commandert);
-// const social_vk = ref(props.detachment.social_vk);
-// const social_tg = ref(props.detachment.social_tg);
-// const slogan = ref(props.detachment.slogan);
-// const about = ref(props.detachment.about);
-// const avatar = ref(props.unit.avatar);
-// const banner = ref(props.unit.banner);
-// const photoOne = ref(props.unit.photoOne);
-// const photoTwo = ref(props.unit.photoTwo);
-// const photoThree = ref(props.unit.photoThree);
-// const photoFour = ref(props.unit.photoFour);
-
-// const rules = computed(() => ({
-//     name: {
-//         required: helpers.withMessage(`* обязательно для заполнения`, required),
-//     },
-//     area: {
-//         required: helpers.withMessage(`* обязательно для заполнения`, required),
-//     },
-//     founding_date: {
-//         required: helpers.withMessage(`* обязательно для заполнения`, required),
-//     },
-//     region: {
-//         required: helpers.withMessage(`* обязательно для заполнения`, required),
-//     },
-//     educational_institution: {
-//         required: helpers.withMessage(`* обязательно для заполнения`, required),
-//     },
-//     commander: {
-//         required: helpers.withMessage(`* обязательно для заполнения`, required),
-//     },
-//     social_vk: {
-//         required: helpers.withMessage(`* обязательно для заполнения`, required),
-//     },
-//     social_tg: {
-//         required: helpers.withMessage(`* обязательно для заполнения`, required),
-//     },
-//     slogan: {
-//         required: helpers.withMessage(`* обязательно для заполнения`, required),
-//     },
-//     about: {
-//         required: helpers.withMessage(`* обязательно для заполнения`, required),
-//     },
-//     // membersList: {
-//     //     //--------------------------------
-//     //     // required,
-//     //     $each: helpers.forEach({
-//     //         position: {
-//     //             required: helpers.withMessage(
-//     //                 `* обязательно для заполнения`,
-//     //                 required,
-//     //             ),
-//     //         },
-//     //     }),
-//     // },
-// }));
-
-//------------------------------------------------------------------------------------------------
-
 const getRegionName = computed(() => {
     let item = regions.regions.value.filter(
         (item) => item.id === detachment.value.region,
@@ -2004,7 +1907,6 @@ const getRegionName = computed(() => {
 const regionName = ref(props.regionName);
 regionName.value = getRegionName;
 
-// const headquarterItems = ref(props.headquarterItems);
 
 const getHeadquarter = async () => {
     await HTTP.get('educationals')
@@ -2015,21 +1917,6 @@ const getHeadquarter = async () => {
             console.log('an error occured ' + error);
         });
 };
-// const getHeadquarterRegion = computed(() => {
-//     return headquarterItems.value.filter(
-//         (item) =>
-//             item?.educational_institution?.region?.id ===
-//             detachment?.value.region,
-//     );
-// });
-
-// const headquarterRegion = ref(props.headquarterRegion);
-// headquarterRegion.value = getHeadquarterRegion;
-
-// const queryCommander = computed(() => {
-
-//     return {search:'ssss', region:getRegionName.value};
-// });
 
 const counterSquad = computed(() => {
     return detachment.value.name.length || 0;
@@ -2047,25 +1934,6 @@ const counterAbout = computed(() => {
     } else return 0;
 });
 
-// const searchCommander = async() => {
-//     try {
-//         isLoading.value = true;
-//         setTimeout(async () => {
-//             const ItemResponse = await HTTP.get(props.address, {
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                 },
-//             });
-//             items.value = ItemResponse.data;
-//             isLoading.value = false;
-//         }, 500);
-//     } catch (error) {
-//         console.log('an error occured ' + error);
-//     }
-//     console.log(detachment.value.commanderName);
-// };
-
-//------------------------------------------------------------------------------------------------
 const panel = ref();
 
 const openPanelOne = () => {
@@ -2320,7 +2188,6 @@ const urlPhotoFour = ref(null);
 
 const selectPhotoFour = (event) => {
     filePhotoFour.value = event.target.files[0];
-    // console.log('значение file после изм - ', filePhotoFour.value);
     photoFourPreview.value = URL.createObjectURL(filePhotoFour.value);
 };
 const resetPhotoFour = () => {
@@ -2396,5 +2263,3 @@ watch(
     }
 }
 </style>
-@shared/components/selects/inputs@shared/components/selects/inputs
-<!-- <img v-if="detachment.emblem" :src="detachment.emblem" /> -->

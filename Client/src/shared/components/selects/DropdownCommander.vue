@@ -1,49 +1,25 @@
 <template>
-    <v-autocomplete
-        v-model="selected"
-        :items="items"
-        chips
-        clearable
-        variant="outlined"
-        item-title="last_name"
-        item-value="id"
-        :custom-filter="customFilter"
-        v-bind="$attrs"
-        @update:value="changeValue"
-        :address="address"
-        :no-data-text="noDataText"
-        class="option"
-    >
+    <v-autocomplete v-model="selected" :items="items" chips clearable variant="outlined" item-title="last_name"
+        item-value="id" :custom-filter="customFilter" v-bind="$attrs" @update:value="changeValue" :address="address"
+        :no-data-text="noDataText" class="option">
         <template #prepend-inner>
-            <Icon
-                icon="clarity-search-line"
-                color="#222222"
-                width="24"
-                height="24"
-                class="option__icon"
-            >
+            <Icon icon="clarity-search-line" color="#222222" width="24" height="24" class="option__icon">
             </Icon>
         </template>
         <template v-slot:chip="{ props, item }">
             <div class="option__content">
                 <div class="option__image">
-                    <img
-                        :src="
-                            item.raw?.media?.photo ??
-                            '/assets/foto-leader-squad/foto-leader-squad-stub.png'
-                        "
-                        alt="Фото бойца"
-                    />
+                    <img :src="item.raw?.avatar?.photo ??
+                        '/assets/foto-leader-squad/foto-leader-squad-stub.png'
+                        " alt="Фото бойца" />
                 </div>
                 <div class="option__wrapper">
                     <p class="option__title">
                         {{
-                            item.raw.last_name +
-                            ' ' +
-                            item.raw.first_name +
-                            ' ' +
-                            item.raw.patronymic_name
+                            item.raw.last_name
                         }}
+                        {{ item.raw.first_name }}
+                        {{ item.raw.patronymic_name }}
                     </p>
                     <p class="option__date">
                         {{ item.raw.date_of_birth }}
@@ -56,13 +32,9 @@
             <v-container v-bind="props">
                 <div class="option__content option__content--option">
                     <div class="option__image">
-                        <img
-                            :src="
-                                item.raw?.media?.photo ??
-                                '/assets/foto-leader-squad/foto-leader-squad-stub.png'
-                            "
-                            alt="Фото бойца"
-                        />
+                        <img :src="item.raw?.media?.photo ??
+                            '/assets/foto-leader-squad/foto-leader-squad-stub.png'
+                            " alt="Фото бойца" />
                     </div>
                     <div class="option__wrapper">
                         <p class="option__title">
@@ -141,7 +113,7 @@ const onChangeItem = async () => {
         },
         headers: {
             'Content-Type': 'application/json',
-             Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
+            Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
         },
     })
         .then((res) => {
