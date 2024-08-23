@@ -57,7 +57,7 @@ export const useSquadsStore = defineStore('squads', {
         async getAreas() {
             try {
                 const responseAreas = await HTTP.get('/areas/');
-                this.areas = responseAreas.data;
+                this.areas = responseAreas.data.results;
             } catch (error) {
                 console.log('an error occured ' + error);
             }
