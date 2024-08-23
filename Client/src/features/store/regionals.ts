@@ -89,7 +89,7 @@ export const useRegionalsStore = defineStore('regionals', {
                 const responseMembers = await HTTP.get(
                     `/regionals/${id}/members/`
                 );
-                this.members = responseMembers.data.results;
+                this.members = responseMembers.data;
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;
@@ -125,7 +125,7 @@ export const useRegionalsStore = defineStore('regionals', {
                         'Content-Type': 'application/json',
                     },
                 });
-                this.regions = responseRegions.data.results;
+                this.regions = responseRegions.data;
                 this.isLoading = false;
             } catch (error) {
                 console.log('an error occured ' + error);
