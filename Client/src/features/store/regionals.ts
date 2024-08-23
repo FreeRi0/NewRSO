@@ -125,7 +125,7 @@ export const useRegionalsStore = defineStore('regionals', {
                         'Content-Type': 'application/json',
                     },
                 });
-                this.regions = responseRegions.data;
+                this.regions = responseRegions.data.results;
                 this.isLoading = false;
             } catch (error) {
                 console.log('an error occured ' + error);

@@ -1158,13 +1158,6 @@ const searchMemberEd = () => {
     }, 400);
 };
 
-// const sortedMembers = computed(() => {
-//     return props.members.filter((item) => {
-//         return item.user.last_name
-//             .toUpperCase()
-//             .includes(searchMembers.value.toUpperCase());
-//     });
-// });
 
 const onUpdateMember = (event, id) => {
     emit('updateMember', event, id);
