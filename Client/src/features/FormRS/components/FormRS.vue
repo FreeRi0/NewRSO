@@ -283,11 +283,11 @@
                                 :functions="positions.positions.value"
                                 :submited="submited"
                                 :is-error-members="isErrorMembers"
-                                v-if="members && !isMembersLoading"
+                                v-if="props.members && !isMembersLoading"
                                 @update-member="onUpdateMember"
                                 @delete-member="onDeleteMember"
                             ></MembersList>
-                            <!-- здесь поменяла -->
+
                             <v-progress-circular
                                 class="circleLoader"
                                 v-else

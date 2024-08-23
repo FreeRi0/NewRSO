@@ -66,7 +66,7 @@
       <div class="form__field-link">
         <p class="form__label">Ссылка на группу мероприятия в социальных сетях <sup class="valid-red">*</sup></p>
         <div class="form__add-link" v-for="(link, i) in events[index].links" :key="i">
-          <InputReport style="width: 100%;" v-model:value="link.link" :id="i" :name="i" class="form__input" type="text"
+          <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__input-add-link" type="text"
             placeholder="https://vk.com/cco_monolit" @focusout="focusOut" />
           <Button v-if="events[index].links.length === i + 1" label="+ Добавить ссылку" @click="addLink(index)"
             class="form__add-link-button" />
@@ -723,9 +723,9 @@ watchEffect(async () => {
   border-color: #1F7CC0;
   padding-left: 52px;
   position: relative;
+  width: 340px;
 
   @media(max-width: 568px) {
-    width: 340px;
     margin: 30px auto;
   }
 
@@ -735,10 +735,11 @@ watchEffect(async () => {
   }
 }
 
+
 .form__add-event::before {
   content: url('@app/assets/icon_items/event-plus.svg');
   position: absolute;
-  left: 12px;
+  left: 50px;
 
   @media(max-width: 568px) {
     left: 54px;
@@ -1009,7 +1010,17 @@ watchEffect(async () => {
 
 .form__add-link {
   display: flex;
-  flex-direction: column;
+  gap: 40px;
+  margin-bottom: 8px;
+
+  @media (max-width: 1112px) {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+.form__input-add-link {
+  width: 720px;
 }
 
 .form__add-link-button {
