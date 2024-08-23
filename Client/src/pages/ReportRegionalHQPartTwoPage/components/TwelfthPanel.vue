@@ -85,8 +85,182 @@
     </div>
   </div>
 
+  <report-tabs>
+    <template v-slot:firstTab>
+      <div class="form__field-group report__field-group"
+        >    
+        <div class="report__fieldset report__fieldset--left-block">
+          <label 
+            class="form__label report__label"
+            for="number-of-members">
+            Количество человек, входящих в&nbsp;группу РО&nbsp;РСО в&nbsp;социальной сети &laquo;ВКонтакте&raquo;
+            <sup class="valid-red">*</sup>
+          </label>
+          <InputReport
+            v-model:value="eleventhPanelData.participants_number"
+            id="number-of-members"
+            name="number-of-members"
+            style="width: 100%;"
+            height="40px"
+            type="number"
+            placeholder="Введите число"
+            :maxlength="10"
+            :max="32767"
+            @focusout="focusOut"
+          />
+        </div>
 
-  <v-card 
+        <div class="report__fieldset report__fieldset--right-block">
+          <label
+            class="form__label report__label"
+            for="scan_file">
+            Скриншот численности <br> группы РО&nbsp;РСО
+            <sup class="valid-red">*</sup>
+          </label>
+          <InputReport
+            v-if="!eleventhPanelData.scan_file"
+            isFile
+            type="file"
+            accept=".jpg, .jpeg, .png, .pdf"
+            id="scan_file"
+            name="scan_file"
+            width="100%"
+            height="86px"
+            @change="uploadFile"
+          />
+          <div 
+            v-else
+            class="report__file-box">
+            <span class="report__file-name">
+              <SvgIcon v-if="eleventhPanelData.file_type === 'jpg'" icon-name="file-jpg" />
+              <SvgIcon v-if="eleventhPanelData.file_type === 'pdf'" icon-name="file-pdf" />
+              <SvgIcon v-if="eleventhPanelData.file_type === 'png'" icon-name="file-png" />
+              {{ eleventhPanelData.scan_file }}
+            </span>
+
+            <span class="report__file-size">
+              {{ eleventhPanelData.file_size }} Мб
+            </span>
+
+            <button 
+              @click="deleteFile"
+              class="report__button-delete-file"
+            >
+              Удалить
+            </button>
+          </div>
+        </div>
+
+        <div class="report__fieldset report__fieldset--comment">
+          <label class="form__label report__label" for="comment">
+            Комментарий
+          </label>
+          <TextareaReport
+            v-model:value="eleventhPanelData.comment"
+            id="comment"
+            name="comment"
+            placeholder="Напишите сообщение"
+            :rows="1" 
+            autoResize
+            counter-visible
+            :maxlength="3000"
+            :max-length-text="3000"
+            @focusout="focusOut"
+          >
+          </TextareaReport>
+        </div>
+      </div>
+    </template>
+    <template v-slot:secondTab>
+      <div class="form__field-group report__field-group"
+        >    
+        <div class="report__fieldset report__fieldset--left-block">
+          <label 
+            class="form__label report__label"
+            for="number-of-members">
+            Количество человек, входящих в&nbsp;группу РО&nbsp;РСО в&nbsp;социальной сети &laquo;ВКонтакте&raquo;
+            <sup class="valid-red">*</sup>
+          </label>
+          <InputReport
+            v-model:value="eleventhPanelData.participants_number"
+            id="number-of-members"
+            name="number-of-members"
+            style="width: 100%;"
+            height="40px"
+            type="number"
+            placeholder="Введите число"
+            :maxlength="10"
+            :max="32767"
+            @focusout="focusOut"
+          />
+        </div>
+
+        <div class="report__fieldset report__fieldset--right-block">
+          <label
+            class="form__label report__label"
+            for="scan_file">
+            Скриншот численности <br> группы РО&nbsp;РСО
+            <sup class="valid-red">*</sup>
+          </label>
+          <InputReport
+            v-if="!eleventhPanelData.scan_file"
+            isFile
+            type="file"
+            accept=".jpg, .jpeg, .png, .pdf"
+            id="scan_file"
+            name="scan_file"
+            width="100%"
+            height="86px"
+            @change="uploadFile"
+          />
+          <div 
+            v-else
+            class="report__file-box">
+            <span class="report__file-name">
+              <SvgIcon v-if="eleventhPanelData.file_type === 'jpg'" icon-name="file-jpg" />
+              <SvgIcon v-if="eleventhPanelData.file_type === 'pdf'" icon-name="file-pdf" />
+              <SvgIcon v-if="eleventhPanelData.file_type === 'png'" icon-name="file-png" />
+              {{ eleventhPanelData.scan_file }}
+            </span>
+
+            <span class="report__file-size">
+              {{ eleventhPanelData.file_size }} Мб
+            </span>
+
+            <button 
+              @click="deleteFile"
+              class="report__button-delete-file"
+            >
+              Удалить
+            </button>
+          </div>
+        </div>
+
+        <div class="report__fieldset report__fieldset--comment">
+          <label class="form__label report__label" for="comment">
+            Комментарий
+          </label>
+          <TextareaReport
+            v-model:value="eleventhPanelData.comment"
+            id="comment"
+            name="comment"
+            placeholder="Напишите сообщение"
+            :rows="1" 
+            autoResize
+            counter-visible
+            :maxlength="3000"
+            :max-length-text="3000"
+            @focusout="focusOut"
+          >
+          </TextareaReport>
+        </div>
+      </div>
+    </template>
+    <template v-slot:thirdTab>
+      
+    </template>
+  </report-tabs>
+  <!-- <v-card 
     v-else
     class="panel-card" >
     <v-tabs
@@ -196,7 +370,7 @@
         </v-tabs-window-item>
       </v-tabs-window>
     </v-card-text>
-  </v-card>
+  </v-card> -->
 </template>
 
 <script setup>
