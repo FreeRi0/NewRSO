@@ -176,7 +176,7 @@ const onChangeItem = async (name) => {
                 },
             },
         );
-        items.value = ItemResponse.data.results;
+        items.value = ItemResponse.data;
         isLoading.value = false;
     } catch (error) {
         console.log('an error occured ' + error);
