@@ -1,5 +1,5 @@
 <template>
-    <form class="form" enctype="multipart/form-data" @submit.prevent="changeHeadquarter">
+    <form class="form" enctype="multipart/form-data" @submit.prevent="updateCentr">
         <v-expansion-panels v-model="panel">
             <v-expansion-panel value="panelOne">
                 <v-expansion-panel-title>
@@ -98,9 +98,9 @@
                                 <sup class="valid-red">*</sup>
                             </label>
                             <div v-if="!isCommanderLoading">
-                                <Dropdown open-on-clear id="beast" name="edit_beast" placeholder="Поиск по ФИО"
-                                v-model="headquarter.commander" @update:value="changeValue">
-                                </Dropdown>
+                                <DropdownCommander open-on-clear id="beast" name="edit_beast" placeholder="Поиск по ФИО"
+                                v-model="headquarter.commander" @update:value="changeValue"  address="rsousers"   :query="regionName">
+                                </DropdownCommander>
                             </div>
                             <v-progress-circular class="circleLoader" v-else indeterminate
                                 color="blue"></v-progress-circular>
@@ -421,8 +421,8 @@
                 </v-expansion-panel-text>
             </v-expansion-panel>
             <v-card-actions class="form__button-group">
-                <Button type="button" v-show="showButtonPrev" class="form-button form-button--prev" variant="text"
-                    label="Назад" size="large" @click="openPanelTwo"></Button>
+                <Button type="button" v-show="showButtonPrev" @click="openPanelTwo" class="form-button form-button--prev" variant="text"
+                    label="Назад" size="large"></Button>
                 <Button type="submit" class="form-button" variant="text" label="Сохранить" size="large"></Button>
             </v-card-actions>
         </v-expansion-panels>
@@ -433,7 +433,7 @@
 import { ref, computed, onBeforeMount, watch } from 'vue';
 import { Input, TextareaAbout } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-import { Dropdown } from '@shared/components/selects';
+import { Dropdown, DropdownCommander } from '@shared/components/selects';
 import { MembersList } from '@features/Members/components';
 import { Icon } from '@iconify/vue';
 import { useRoleStore } from '@layouts/store/role';
@@ -523,6 +523,9 @@ const onDeleteMember = (memId) => {
     // console.log('mm', memId)
 };
 
+
+const regionName = ref('');
+
 const close = () => {
     showModal.value = false;
 };
@@ -556,6 +559,10 @@ const counterAbout = computed(() => {
 });
 //----------------------------------------------------------------------------------------------------------
 const panel = ref();
+
+const updateCentr = () => {
+    emit('changeHeadquarter', headquarter)
+}
 
 const openPanelOne = () => {
     panel.value = 'panelOne';
@@ -662,6 +669,8 @@ const deleteBanner = () => {
     fileBanner.value = null;
     emit('deleteBanner', fileBanner.value);
 };
+
+
 
 onBeforeMount(async () => {
     roleStore.getRoles();
