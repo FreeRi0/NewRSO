@@ -32,22 +32,20 @@
             <v-container v-bind="props">
                 <div class="option__content option__content--option">
                     <div class="option__image">
-                        <img :src="item.raw?.media?.photo ??
+                        <img :src="item.raw?.avatar?.photo ??
                             '/assets/foto-leader-squad/foto-leader-squad-stub.png'
                             " alt="Фото бойца" />
                     </div>
                     <div class="option__wrapper">
                         <p class="option__title">
                             {{
-                                item?.raw?.last_name +
-                                ' ' +
-                                item?.raw?.first_name +
-                                ' ' +
-                                item?.raw?.patronymic_name
+                                item.raw.last_name
                             }}
+                            {{ item.raw.first_name }}
+                            {{ item.raw.patronymic_name }}
                         </p>
                         <p class="option__date">
-                            {{ item?.raw?.date_of_birth }}
+                            {{ item.raw.date_of_birth }}
                         </p>
                     </div>
                 </div>
