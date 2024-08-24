@@ -1,28 +1,17 @@
 <template>
     <div class="container">
         <h1 class="title title--hq">Центральный штаб</h1>
-        <BannerHQ
-            :centralHeadquarter="centralHeadquarter"
-            :member="centralHeadquarter.leadership"
-            :ending="ending"
-            :endingMember="endingMember"
-        ></BannerHQ>
-        <section
-            class="about-hq"
-            v-if="
-                centralHeadquarter.about && centralHeadquarter.about != 'null'
-            "
-        >
+        <BannerHQ :centralHeadquarter="centralHeadquarter" :member="centralHeadquarter.leadership" :ending="ending"
+            :endingMember="endingMember"></BannerHQ>
+        <section class="about-hq" v-if="
+            centralHeadquarter.about && centralHeadquarter.about != 'null'
+        ">
             <h3>Описание центрального штаба</h3>
 
             <p>{{ centralHeadquarter.about }}</p>
         </section>
-        <ManagementHQ
-            :commander="centralHeadquarter.commander"
-            head="Руководство центрального штаба"
-            :position="position"
-            :leadership="centralHeadquarter.leadership"
-        >
+        <ManagementHQ :commander="centralHeadquarter.commander" head="Руководство центрального штаба"
+            :position="position" :leadership="leaderships">
         </ManagementHQ>
         <HQandSquad></HQandSquad>
     </div>
@@ -42,6 +31,7 @@ const { getEnding } = methods;
 const { getEndingMembers } = methods;
 
 const position = ref({});
+const leaderships = ref([]);
 const centralHeadquarter = ref({});
 const route = useRoute();
 let id = route.params.id;
@@ -61,12 +51,25 @@ const aboutCentralHQs = async () => {
     }
 };
 
+const getLeadership = async () => {
+    if (typeof id !== 'undefined') {
+        try {
+            const response = await HTTP.get(`/centrals/${id}/leadership/`);
+
+            leaderships.value = response.data;
+        } catch (error) {
+            console.log('an error occured ' + error);
+        }
+    }
+}
+
 watch(
     () => route.params.id,
 
     async (newId) => {
         id = newId;
         await aboutCentralHQs();
+        await getLeadership();
     },
     {
         immediate: true,
