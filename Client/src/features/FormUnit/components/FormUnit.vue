@@ -188,7 +188,7 @@
                                 >Штаб СО ОО
                             </label>
                             <SearchSelect
-                                :items="headquarterRegion.value"
+                                :items="headquarterItems"
                                 open-on-clear
                                 id="select-region"
                                 name="select-headquarter"
@@ -1769,7 +1769,7 @@ const areas = storeToRefs(areasStore);
 const showModal = ref(false);
 const regionalsStore = useRegionalsStore();
 const regions = storeToRefs(regionalsStore);
-
+const headquarterItems = ref([]);
 const positionsStore = usePositionsStore();
 const positions = storeToRefs(positionsStore);
 
@@ -1856,10 +1856,10 @@ const props = defineProps({
         type: String,
         default: '',
     },
-    headquarterRegion: {
-        type: Array,
-        default: () => [],
-    },
+    // headquarterRegion: {
+    //     type: Array,
+    //     default: () => [],
+    // },
 });
 
 const deletedId = ref(null);

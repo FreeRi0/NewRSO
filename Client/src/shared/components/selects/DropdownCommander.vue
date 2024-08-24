@@ -39,15 +39,13 @@
                     <div class="option__wrapper">
                         <p class="option__title">
                             {{
-                                item?.raw?.last_name +
-                                ' ' +
-                                item?.raw?.first_name +
-                                ' ' +
-                                item?.raw?.patronymic_name
+                                item.raw.last_name
                             }}
+                            {{ item.raw.first_name }}
+                            {{ item.raw.patronymic_name }}
                         </p>
                         <p class="option__date">
-                            {{ item?.raw?.date_of_birth }}
+                            {{ item.raw.date_of_birth }}
                         </p>
                     </div>
                 </div>
