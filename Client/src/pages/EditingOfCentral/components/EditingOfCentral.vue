@@ -202,9 +202,9 @@ const changeHeadquarter = async () => {
             !detComId
         ) {
             formData.append('commander', headquarter.value.meId);
-        } else formData.append('commander', headquarter.value.commander);
+        } else formData.append('commander', headquarter.value.commander.id);
 
-        formData.append('commander', headquarter.value.commander);
+        formData.append('commander', headquarter.value.commander.id);
         formData.append('social_vk', headquarter.value.social_vk);
         formData.append('social_tg', headquarter.value.social_tg);
         formData.append('slogan', headquarter.value.slogan);

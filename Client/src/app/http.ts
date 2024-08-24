@@ -35,6 +35,7 @@ const urls_get = [
     '/locals/',
     '/educationals/',
     '/centrals/1/',
+    '/centrals/1/leadership/'
 ]
 
 

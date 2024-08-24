@@ -523,6 +523,7 @@ const onDeleteMember = (memId) => {
     // console.log('mm', memId)
 };
 
+
 const regionName = ref('');
 
 const close = () => {
@@ -668,6 +669,8 @@ const deleteBanner = () => {
     fileBanner.value = null;
     emit('deleteBanner', fileBanner.value);
 };
+
+
 
 onBeforeMount(async () => {
     roleStore.getRoles();
