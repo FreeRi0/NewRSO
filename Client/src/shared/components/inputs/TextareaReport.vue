@@ -103,6 +103,11 @@
         cursor:text;
         resize: none;
 
+        @media (max-width: 360px) {
+            font-size: 14px;
+            line-height: 18.5px;
+        }
+
         &::placeholder {
             color: #6d6d6d;
         }

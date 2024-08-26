@@ -7,8 +7,7 @@
       <label 
         class="form__label report__label"
         for="number-of-members">
-        Объем средств, собранных бойцами РО&nbsp;РСО
-        <sup class="valid-red">*</sup>
+        Объем средств, собранных бойцами РО&nbsp;РСО&nbsp;<sup class="valid-red">*</sup>
       </label>
       <InputReport
         v-model:value="twelfthPanelData.amount_of_money"
@@ -28,8 +27,7 @@
       <label
         class="form__label report__label"
         for="scan_file">
-        Скан подтверждающего <br> документа
-        <sup class="valid-red">*</sup>
+        Скан подтверждающего <br> документа&nbsp;<sup class="valid-red">*</sup>
       </label>
       <InputReport
         v-if="!twelfthPanelData.scan_file"
@@ -39,7 +37,7 @@
         id="scan_file"
         name="scan_file"
         width="100%"
-        height="86px"
+        height="auto"
         @change="uploadFile"
       />
       <div 
