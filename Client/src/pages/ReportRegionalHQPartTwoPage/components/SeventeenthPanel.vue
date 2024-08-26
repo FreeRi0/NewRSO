@@ -1,6 +1,6 @@
 <template>
   <div class="form__field-group report__field-group">
-    <div class="report__fieldset">
+    <div class="report__fieldset report__file-input">
       <label class="form__label report__label" for="scan_file">
         Прикрепить документ
       </label>
@@ -25,7 +25,7 @@
         id="scan_file"
         name="scan_file"
         width="100%"
-        height="86px"
+        height="auto"
         @change="uploadFile"
       />
       

@@ -7,8 +7,7 @@
       <label 
         class="form__label report__label"
         for="number-of-members">
-        Количество человек, входящих в&nbsp;группу РО&nbsp;РСО в&nbsp;социальной сети &laquo;ВКонтакте&raquo;
-        <sup class="valid-red">*</sup>
+        Количество человек, входящих в&nbsp;группу РО&nbsp;РСО в&nbsp;социальной сети &laquo;ВКонтакте&raquo;&nbsp;<sup class="valid-red">*</sup>
       </label>
       <InputReport
         v-model:value="eleventhPanelData.participants_number"
@@ -28,8 +27,7 @@
       <label
         class="form__label report__label"
         for="scan_file">
-        Скриншот численности <br> группы РО&nbsp;РСО
-        <sup class="valid-red">*</sup>
+        Скриншот численности <br> группы РО&nbsp;РСО&nbsp;<sup class="valid-red">*</sup>
       </label>
       <InputReport
         v-if="!eleventhPanelData.scan_file"
@@ -39,7 +37,7 @@
         id="scan_file"
         name="scan_file"
         width="100%"
-        height="86px"
+        height="auto"
         @change="uploadFile"
       />
       <div 

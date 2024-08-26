@@ -88,13 +88,16 @@ const updateValue = (event) => {
 <style lang="scss" scoped>
 .form-input {
   &.form-input__file-input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     max-width: 720px;
-    height: 86px;
+    min-height: 86px;
     position: relative;
     border-radius: 12px;
     background-color: transparent;
     border: 1.5px dashed #1F7CC0;
-
+    
     .form-input__report[type='file'] {
       opacity: 0;
       position: absolute;
@@ -115,13 +118,24 @@ const updateValue = (event) => {
     font-weight: 400;
     font-size: 16px;
     line-height: 23px;
+    text-align: center;
     color: #6d6d6d;
+
+    @media (max-width: 360px) {
+      font-size: 14px;
+      line-height: 18.5px;
+    }
 
     span:last-child {
       display: flex;
       align-items: center;
       column-gap: 12px;
       color: #1f7cc0;
+
+      @media (max-width: 360px) {
+        font-size: 16px;
+        line-height: 24px;
+      }
     }
   }
 }
@@ -133,6 +147,11 @@ const updateValue = (event) => {
   border-radius: 10px;
   line-height: 21px;
   cursor: pointer;
+
+  @media (max-width: 360px) {
+    font-size: 14px;
+    line-height: 18.5px;
+  }
 
   &::placeholder {
     color: #6d6d6d;

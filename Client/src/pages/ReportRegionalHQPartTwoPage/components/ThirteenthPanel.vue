@@ -7,8 +7,7 @@
       <label 
         class="form__label report__label"
         for="number-of-members">
-        Количество членов РО&nbsp;РСО, принявших участие во&nbsp;Всероссийском дне ударного труда
-        <sup class="valid-red">*</sup>
+        Количество членов РО&nbsp;РСО, принявших участие во&nbsp;Всероссийском дне ударного труда&nbsp;<sup class="valid-red">*</sup>
       </label>
       <InputReport
         v-model:value="thirteenthPanelData.number_of_members"
@@ -28,8 +27,7 @@
       <label
         class="form__label report__label"
         for="scan_file">
-        Скан подтверждающего <br> документа
-        <sup class="valid-red">*</sup>
+        Скан подтверждающего <br> документа&nbsp;<sup class="valid-red">*</sup>
       </label>
       <InputReport
         v-if="!thirteenthPanelData.scan_file"
@@ -39,7 +37,7 @@
         id="scan_file"
         name="scan_file"
         width="100%"
-        height="86px"
+        height="auto"
         @change="uploadFile"
       />
       <div 
@@ -293,6 +291,15 @@ watchEffect(async () => {
     .report__label {
       line-height: 24px;
     }
+
+    @media (max-width: 768px) {
+        max-width: 344px;
+        width: 100%;
+
+        .form-input {
+          max-width: 290px;
+        }
+      }
   }
 }
 

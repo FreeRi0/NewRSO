@@ -1,18 +1,28 @@
 .report {
     &__field-group {
         display: grid;
-        grid-template-columns: 340px 1fr;
+        grid-template-columns: minmax(24.13%, 30.91%) minmax(59.13%, 65.46%);
         gap: 16px 40px;
-        padding: 40px 40px 40px;
+        padding: 40px;
         background: #F3F4F5;
         border: none;
         border-radius: 10px;
+
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+        }
+
+        @media (max-width: 360px) {
+            padding: 16px;
+        }
       }
     
     &__fieldset {
-        // &--left-block {
-      
-        // }
+        &--left-block {
+            @media (max-width: 768px) {
+                max-width: 290px;
+            }
+        }
 
         // &--right-block {
             
@@ -21,6 +31,18 @@
         &--comment {
             margin-bottom: 17px;
             grid-column: -1 / 1;
+
+            @media (max-width: 360px) {
+                margin-bottom: 16px;
+            }
+        }
+    }
+
+    &__file-input {
+        width: 65.45%;
+
+        @media (max-width: 768px) {
+            width: 100%;
         }
     }
     
@@ -29,12 +51,22 @@
         line-height: 21px;
         letter-spacing: 0.78px;
         color: #000000;
-    }
 
-    // &__add-file {
-    //     display: flex;
-    //     flex-direction: column;
-    // }
+        @media (max-width: 360px) {
+            font-size: 14px;
+            line-height: 18.5px;
+        }
+
+        .valid-red {
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 18.5px;
+
+            @media (max-width: 360px) {
+                font-size: 12px;
+            }
+        }
+    }
 
     //Вынести в отдельный компонент?-----------------------------
     &__file-box {
