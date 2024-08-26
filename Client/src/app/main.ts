@@ -45,7 +45,7 @@ app.use(vuetify)
 
 
 app.config.errorHandler = (err, _instance, info) => {
-    if (window.location.origin !== 'http://localhost:8080') {
+    if (window.location.hostname !== 'localhost') {
         HTTP.post('/services/front_errors/', {
             url: window.location.href,
             error_code: 0,
