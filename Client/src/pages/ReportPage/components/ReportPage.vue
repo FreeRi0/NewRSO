@@ -3974,7 +3974,10 @@ const getParameters = async (id) => {
             );
             if (id == 1 || id == 3 || id == 4) report.value[id] = response.data;
             else if (response.data.results.length) {
-                if (id == 6 && route.params.id == response.data.results[0].detachment) {
+                if (
+                    id == 6 &&
+                    route.params.id == response.data.results[0].detachment
+                ) {
                     if (
                         response.data.results[0].demonstration_block
                             ?.first_may_demonstration
@@ -4017,7 +4020,8 @@ const getParameters = async (id) => {
                             null;
                     }
                     if (
-                        response.data.results[0].commander_commissioner_school_block
+                        response.data.results[0]
+                            .commander_commissioner_school_block
                             ?.commander_commissioner_school
                     ) {
                         report.value[64].disabledBtn = true;
@@ -4073,7 +4077,8 @@ const getParameters = async (id) => {
                     }
                 } else {
                     if (report.value[id].participation_data) {
-                        report.value[id].participation_data = response.data.results;
+                        report.value[id].participation_data =
+                            response.data.results;
                     } else report.value[id] = response.data.results[0];
                     report.value[id].disabledBtn = true;
                 }
@@ -4301,7 +4306,6 @@ watch(
 );
 
 onMounted(async (id) => {
-    // await getParameters(id);
     await getMeCommander();
 });
 </script>

@@ -113,13 +113,35 @@ watchEffect(async () => {
 .report {
   &__field-group {
     grid-template-columns: 1fr 1fr;
+    // grid-template-columns: minmax(27.35%, 44.9%) minmax(27.35%, 44.9%);
     margin-bottom: 0;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
   }
 
   &__fieldset {
+    @media (max-width: 1024px) {
+      display: flex;
+      flex-direction: column;
+
+      .form-input {
+        margin-top: auto;
+      }
+    }
+    
     &--left-block {
+      @media (max-width: 768px) {
+        max-width: 100%;
+      }
+
       .report__label {
         max-width: 240px;
+
+        @media (max-width: 768px) {
+          max-width: 100%;
+        }
       }
     }
   }

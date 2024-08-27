@@ -39,7 +39,7 @@
           (слеты, школы, фестивали, турниры и прочие)
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <fourth-panel />
+          <fourth-panel :districtHeadquarterCommander="districtHeadquarterCommander" :centralHeadquarterCommander="centralHeadquarterCommander" />
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -198,7 +198,21 @@ import {
   NineteenthPanel
 } from './components/index'
 import { Button } from '@shared/components/buttons';
+import {ref, watchEffect} from "vue";
+import {useRoleStore} from "@layouts/store/role.ts";
 
+const districtHeadquarterCommander = ref(false);
+const centralHeadquarterCommander = ref(false);
+const roleStore = useRoleStore();
+
+watchEffect(() => {
+  if (roleStore.roles?.districtheadquarter_commander) {
+    districtHeadquarterCommander.value = true;
+  }
+  if (roleStore.roles.centralheadquarter_commander) {
+    centralHeadquarterCommander.value = true;
+  }
+})
 </script>
 <style>
 .v-expansion-panel__shadow {

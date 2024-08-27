@@ -10,7 +10,7 @@
             <p>{{ localHeadquarter.about }}</p>
         </section>
         <ManagementHQ :commander="commander" :member="member" head="Руководство местного штаба" :position="position"
-            :leadership="localHeadquarter.leadership"></ManagementHQ>
+            :leadership="leaderships"></ManagementHQ>
         <section class="headquarters_squads">
             <h3>Штабы и отряды местного штаба</h3>
             <div class="headquarters_squads__container">
@@ -46,6 +46,7 @@ const userStore = useUserStore();
 const crosspageFilters = useCrosspageFilter();
 const commander = ref({});
 const position = ref({});
+const leaderships = ref({});
 const localHeadquarter = ref({});
 const member = ref([]);
 const route = useRoute();
@@ -66,17 +67,6 @@ const aboutlocalHQ = async () => {
     }
 };
 
-// const aboutMembers = async () => {
-//     if (typeof id !== 'undefined') {
-//         try {
-//             const response = await HTTP.get(`/locals/${id}/members/`);
-//             member.value = response.data.results;
-//         } catch (error) {
-//             console.log('an error occured ' + error);
-//         }
-//     }
-// };
-
 const fetchCommander = async () => {
     try {
         let id = localHeadquarter.value.commander.id;
@@ -90,6 +80,18 @@ const fetchCommander = async () => {
     }
 };
 
+const getLeadership = async () => {
+    if (typeof id !== 'undefined') {
+        try {
+            const response = await HTTP.get(`/locals/${id}/leadership/`);
+
+            leaderships.value = response.data;
+        } catch (error) {
+            console.log('an error occured ' + error);
+        }
+    }
+}
+
 watch(
     () => route.params.id,
 
@@ -97,6 +99,7 @@ watch(
         id = newId;
         await aboutlocalHQ();
         await fetchCommander();
+        await getLeadership();
     },
     {
         immediate: true,
