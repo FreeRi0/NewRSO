@@ -10,7 +10,7 @@
                     tab.name === 'Заявки на участие в мероприятии' || 
                     tab.name === 'Конкурсы' || 
                     tab.name === 'Заявки на вступление в штаб' || 
-                    tab.name === 'Рейтинг РО'"
+                    tab.name === 'Рейтинг РО' && (roleStore.roles.districtheadquarter_commander)"
                     :key="tab.id" @click="picked = tab.name">
                     {{ tab.name }}
                 </button>
