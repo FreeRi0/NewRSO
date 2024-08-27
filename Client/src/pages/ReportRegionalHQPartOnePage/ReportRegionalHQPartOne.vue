@@ -54,6 +54,17 @@ onBeforeRouteLeave(() => {
   isButtonDisabled.value = false;
 });
 const reportConfirmation = async (value) => {
+  if (hasEmptyField(reportData.value)) {
+    showModalWarning.value = false;
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      title: `Все поля обязательны для заполнения`,
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    return;
+  }
   if (value) {
     try {
       await createReport(reportData.value)
@@ -78,10 +89,17 @@ const sentReport = (data) => {
   showModalWarning.value = true;
   reportData.value = data;
 };
-
 const closeModalSuccess = (value) => {
   showModalSuccess.value = value;
-}
+};
+const hasEmptyField = (obj) => {
+  for (let item in obj) {
+    if (!obj[item]){
+      return true;
+    }
+  }
+  return false;
+};
 </script>
 <style lang="scss" scoped>
 .report_title-h2 {
