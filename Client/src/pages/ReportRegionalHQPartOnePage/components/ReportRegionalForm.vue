@@ -87,7 +87,20 @@ const props = defineProps({
   }
 });
 
-const reportDataChildren = ref(null);
+const reportDataChildren = ref(
+    {
+      participants_number: '',
+  employed_sso: '',
+  employed_smo: '',
+  employed_specialized_detachments: '',
+  employed_spo: '',
+  employed_sservo: '',
+  employed_production_detachments: '',
+  employed_sop: '',
+  employed_ssho: '',
+  employed_top: '',
+    }
+);
 watchEffect(() => {
   reportDataChildren.value = { ...props.reportData };
 })
