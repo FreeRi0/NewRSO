@@ -5,7 +5,12 @@
 
             <div class="d-flex mt-9 mb-9 active-tabs">
                 <button class="contributorBtn" :class="{ active: picked === tab.name }" v-for="tab in tabs"
-                    v-show="tab.name === 'Верификация аккаунтов' && (roleStore.roles.detachment_commander || roleStore.roles.regionalheadquarter_commander) || tab.name === 'Заявки на вступление в отряд' && (roleStore.roles.detachment_commander) || tab.name === 'Заявки на участие в мероприятии' || tab.name === 'Конкурсы' || tab.name === 'Заявки на вступление в штаб'"
+                    v-show="tab.name === 'Верификация аккаунтов' && (roleStore.roles.detachment_commander || roleStore.roles.regionalheadquarter_commander) || 
+                    tab.name === 'Заявки на вступление в отряд' && (roleStore.roles.detachment_commander) || 
+                    tab.name === 'Заявки на участие в мероприятии' || 
+                    tab.name === 'Конкурсы' || 
+                    tab.name === 'Заявки на вступление в штаб' || 
+                    tab.name === 'Рейтинг РО'"
                     :key="tab.id" @click="picked = tab.name">
                     {{ tab.name }}
                 </button>
@@ -36,6 +41,10 @@
             <div v-else-if="picked == 'Конкурсы'">
                 <active-competitions />
             </div>
+
+            <div v-else-if="picked == 'Рейтинг РО'">
+                <ActiveRatingRO />
+            </div>
         </div>
     </div>
 </template>
@@ -48,6 +57,7 @@ import { ActiveSquads } from '@features/ActiveApplications/components';
 import { ActiveCompetitions } from '@features/ActiveCompetitions';
 import { ActiveEventsApp } from '@features/ActiveApplications/components';
 import { ActiveHeadquarters } from '@features/ActiveApplicationsHeadquarters/';
+import { ActiveRatingRO } from '@features/ActiveApplicationRatingRO';
 
 // E:\RSO\NewRSO\Client\src\features\ActiveApplicationHeadquarters\index.ts
 const roleStore = useRoleStore();
@@ -59,32 +69,26 @@ const tabs = ref([
     {
         id: '1',
         name: 'Верификация аккаунтов',
-
-
     },
     {
         id: '2',
         name: 'Заявки на вступление в отряд',
-
-
     },
     {
         id: '3',
         name: 'Заявки на вступление в штаб',
-
-
     },
     {
         id: '4',
         name: 'Заявки на участие в мероприятии',
-
-
     },
     {
         id: '5',
         name: 'Конкурсы',
-
-
+    },
+    {
+        id: '6',
+        name: 'Рейтинг РО',
     },
 ]);
 
