@@ -10,7 +10,7 @@
                     tab.name === 'Заявки на участие в мероприятии' || 
                     tab.name === 'Конкурсы' || 
                     tab.name === 'Заявки на вступление в штаб' || 
-                    tab.name === 'Рейтинг РО' && (roleStore.roles.districtheadquarter_commander)"
+                    tab.name === 'Рейтинг РО' && showRating && roleStore.roles.districtheadquarter_commander"
                     :key="tab.id" @click="picked = tab.name">
                     {{ tab.name }}
                 </button>
@@ -64,7 +64,15 @@ const roleStore = useRoleStore();
 console.log(roleStore.roles);
 
 const picked = ref('Верификация аккаунтов');
+const showRating = ref(false);
 
+if(
+    window.location.hostname.includes('localhost') || 
+    window.location.hostname.includes('rso.sprint.1t' ||
+    window.location.hostname.includes('213.139.208.147')
+    )) {
+    showRating.value = true;
+}
 const tabs = ref([
     {
         id: '1',
