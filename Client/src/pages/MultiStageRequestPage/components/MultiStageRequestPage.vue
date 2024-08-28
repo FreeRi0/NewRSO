@@ -2,22 +2,23 @@
     <div class="container">
         <p class="main_title">Многоэтапная заявка</p>
         <p class="subtitle">Подал:</p>
-        <div class="horizontallso-item__wrapper" v-for="headquarter in headquarters" :key="headquarter.id">
+        <div class="horizontallso-item__wrapper" v-for="application in applications" :key="application.id">
             <div class="horizontallso-img">
-                <img class="competition__avatar_circle" :src="headquarter?.emblem" alt="logo" />
+                <img class="competition__avatar_circle" :src="application?.emblem" alt="logo" v-if="application.emblem"/>
+                <img v-else src="@app/assets/user-avatar.png" alt="photo" />
             </div>
             <div class="containerHorizontal">
                 <p class="horizontallso-item__list-full">
-                    {{ headquarter?.district_headquarter?.name }}
-                    {{ headquarter?.regional_headquarter?.name }}
-                    {{ headquarter?.local_headquarter?.name }}
-                    {{ headquarter?.educational_headquarter?.name }}
-                    {{ headquarter?.detachment?.name }}
+                    {{ application?.district_headquarter?.name }}
+                    {{ application?.regional_headquarter?.name }}
+                    {{ application?.local_headquarter?.name }}
+                    {{ application?.educational_headquarter?.name }}
+                    {{ application?.detachment?.name }}
                 </p>
             </div>
         </div>
         <div class="document">
-            <p class="subtitle" v-if="files">Сопутствующие документы:</p>
+            <p class="subtitle" v-if="files.length">Сопутствующие документы:</p>
             <div class="file" v-for="file in files" :key="file">
                 <div class="file_name">
                     <img class="file_img" src="/assets/file_dock.svg" />
@@ -49,19 +50,13 @@ const files = ref([]);
 console.log(route.params);
 const getApplicationsInfo = async () => {
     try {
-        // const { data } = await HTTP.get(
-        //     `/events/${route.params.eventId}/multi_applications/all/`,
-
-        // );
         const { data } = await HTTP.get(
             `/events/${route.params.eventId}/multi_applications/detail/${route.params.id}/`,
         );
         for (const obj of data) {
-            // console.log(obj);
             if (!obj.is_approved) applications.value.push(obj);
         }
-        //console.log(applications.value);
-        //console.log(applications.value.length);
+        console.log(applications.value);
     } catch (e) {
         console.log('getApplicationInfo error', e);
     }
@@ -71,33 +66,16 @@ const getFilesInfo = async () => {
     try {
         const { data } = await HTTP.get(
             `/events/${route.params.id}/user_documents/`,
-
         );
-        for (const file of data) {
+        for (const file of data.results) {
             if (
                 file.user.id == applications.value[0].organizer_id &&
                 file.event.id == route.params.id
             )
                 files.value.push(file);
         }
-        //files.value = data;
-        // console.log(data);
-        // console.log(applications.value);
     } catch (e) {
         console.log('getFilesInfo error', e);
-    }
-};
-
-const getHeadquarters = async () => {
-    try {
-        const { data } = await HTTP.get(
-            `/events/${route.params.id}/multi_applications/detail/${applications.value[0].organizer_id}`,
-
-        );
-        headquarters.value = data;
-        //console.log(headquarters.value);
-    } catch (e) {
-        console.log('getHeadquarters error', e);
     }
 };
 
@@ -105,7 +83,6 @@ onMounted(async () => {
     await getApplicationsInfo();
     if (applications.value.length > 0) {
         await getFilesInfo();
-        await getHeadquarters();
     }
 });
 </script>
@@ -135,7 +112,7 @@ onMounted(async () => {
     border-radius: 10px;
     border: 1px solid #b6b6b6;
     background: #fff;
-    margin-left: 12px;
+    /* margin-left: 12px; */
     margin-bottom: 12px;
 }
 
@@ -219,7 +196,7 @@ onMounted(async () => {
 
 .container {
     margin: 0 auto;
-    padding: 0px 130px 60px 130px;
+    padding-bottom: 60px;
 }
 
 .competition__avatar_circle {
