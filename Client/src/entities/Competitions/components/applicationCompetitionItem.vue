@@ -4,7 +4,7 @@
             <input type="checkbox" v-model="checked" @change="updateCheckEvents" />
         </div>
 
-        <router-link v-if="!event.group" class="horizontallso-item__wrapper " :to="{
+        <router-link v-if="event.personal" class="horizontallso-item__wrapper " :to="{
             name: 'PersonalDataUser',
             params: { id: event.user.id },
         }">
@@ -26,13 +26,17 @@
         }"> -->
         <div v-else class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
-                <img v-if="event.headquarter_author.banner" :src="event.headquarter_author.banner" alt="logo" />
+                <img v-if="event.headquarter_author?.banner" :src="event.headquarter_author.banner" alt="logo" />
+                <img v-else-if="event.emblem" :src="event.emblem" alt="logo" />
                 <img v-else src="@app/assets/user-avatar.png" alt="photo" />
             </div>
             <div class="containerHorizontal">
                     <div class="d-flex">
-                        <p class="horizontallso-item__list-full">
+                        <p class="horizontallso-item__list-full" v-if="event.headquarter_author">
                             {{ event.headquarter_author.name }}
+                        </p>
+                        <p class="horizontallso-item__list-full" v-else>
+                            {{ event.headquarter_name }}
                         </p>
                     </div>
             </div>
@@ -46,7 +50,7 @@
                         Групповая
                     </p>
                     <p class="horizontallso-item__list-full" v-else-if="event.personal">
-                        Персональная
+                        Индивидуальная
                     </p>
                     <p class="horizontallso-item__list-full" v-else-if="event.multi">
                         Многоэтапная
@@ -78,7 +82,7 @@
                         Групповая
                     </p>
                     <p class="horizontallso-item__list-full" v-else-if="event.personal">
-                        Персональная
+                        Индивидуальная
                     </p>
                     <p class="horizontallso-item__list-full" v-else-if="event.multi">
                         Многоэтапная
@@ -121,7 +125,7 @@ const onEvent = () => {
         router.push({
             name: `GroupPage`,
             params: {
-                id: props.event.id,
+                id: props.event.organizer_id,
                 eventId: props.event.event.id,
             },
     });
@@ -129,7 +133,7 @@ const onEvent = () => {
         router.push({
             name: `MultiPage`,
             params: {
-                id: props.event.user.id,
+                id: props.event.id,
                 eventId: props.event.event.id,
             },
     });
