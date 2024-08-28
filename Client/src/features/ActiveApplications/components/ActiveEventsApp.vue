@@ -1,6 +1,6 @@
 <template>
     <p v-if="loading">Загрузка...</p>
-    <p v-else-if="!loading && (!eventsList.length && !groupEventsList.length)">Список заявок пуст</p>
+    <p v-else-if="!loading && (!eventsList.length)">Список заявок пуст</p>
     <template v-else>
         <div class="participants__actions">
             <div class="participants__actions-select mr-3">
@@ -91,11 +91,6 @@ const viewEvents = async (event_pk, application_type) => {
             } else {
                 data.results[i].personal = false;
             }
-            if (application_type == "Многоэтапная") {
-                data.results[i].multi = true;
-            } else {
-                data.results[i].multi = false;
-            }
             data.results[i].chosen = false;
             data.results[i].group = false;
             data.results[i].event.application_type = "Многоэтапная";
@@ -105,6 +100,22 @@ const viewEvents = async (event_pk, application_type) => {
         console.log("an error occured " + error);
     }
 };
+
+const viewMultistageEvents = async (event) => {
+    try {
+        const { data } = await HTTP.get(`/events/${event.id}/multi_applications/all/`);
+        for(let i in data) {
+            data[i].chosen = false;
+            data[i].multi = true;
+            data[i].event = event;
+            if(!data[i].is_approved) {
+                eventsList.value.push(data[i])
+            }
+        }
+    } catch (error) {
+        console.log("an error occured " + error);
+    }
+}
 
 const viewGroupEvents = async (event_pk) => {
     try {
@@ -125,13 +136,14 @@ const events = async (id) => {
     loading.value = true;
     try {
         const { data } = await HTTP.get(`/events/?active_organizer_user_id=${id}`);
-        // console.log(data.results);
         const myEvents = data.results;
         for (let i in myEvents) {
             if(myEvents[i].application_type === "Групповая") {
                 viewGroupEvents(myEvents[i].id);
-            } else {
+            } else if (myEvents[i].application_type === "Персональная") {
                 viewEvents(myEvents[i].id), myEvents[i].application_type;
+            } else {
+                viewMultistageEvents(myEvents[i]);
             }
         }
     } catch (error) {
@@ -174,9 +186,14 @@ const confirmApplication = async (event, id) => {
                 {},
             );
         } 
-        else {
+        else if (event.event.application_type === "Персональная") {
             await HTTP.post(
                 `/events/${event.event.id}/applications/${id}/confirm/`,
+                {},
+            );
+        } else {
+            await HTTP.post(
+                `/events/${event.event.id}/multi_applications/confirm/${id}/`,
                 {},
             );
         }
@@ -211,10 +228,15 @@ const cancelApplication = async (event, id) => {
                 {}
             );
         } 
-        else {
+        else if (event.event.application_type === "Персональная") {
             await HTTP.delete(
                 `/events/${event.event.id}/applications/${id}/`,
                 {}
+            );
+        } else {
+            await HTTP.post(
+                `/events/${event.event.id}/multi_applications/delete/${id}/`,
+                {},
             );
         }
         swal.fire({
