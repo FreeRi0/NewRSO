@@ -740,7 +740,7 @@ const routes: RouteRecordRaw[] = [
                 ],
             },
             {
-                path: ':id',
+                path: '/userpage/:id',
                 meta: {
                     redirectTo: 'userpage',
                     label: 'Страница пользователя',

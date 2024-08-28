@@ -24,7 +24,6 @@ export const useRoleStore = defineStore('role', {
                 },
             });
             this.roles = data.data;
-            console.log(data.data);
             this.isLoadingRoles = false;
         },
 
@@ -50,29 +49,31 @@ export const useRoleStore = defineStore('role', {
                 },
             );
             this.status = dataUserStatus.data;
-            console.log(dataUserStatus.data);
         },
 
         async getMyPositions() {
-            if (isAuth.value) {
-                const dataMyPositions = await HTTP.get('/rsousers/me_positions/', {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
-                    },
-                });
-                this.myPositions = dataMyPositions.data;
-            }
-        },
-
-        async getPositions(id: string) {
-            const dataPositions = await HTTP.get(`/rsousers/${id}/positions/`, {
+            const dataMyPositions = await HTTP.get('/rsousers/me_positions/', {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
                 },
             });
-            this.positions = dataPositions.data;
+            this.myPositions = dataMyPositions.data;
+        },
+
+        async getPositions(id: Number) {
+            try {
+                const dataPositions = await HTTP.get(`/rsousers/${id}/positions/`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
+                    },
+                });
+                this.positions = dataPositions.data;
+            } catch (err) {
+                console.log('Ошибка при получении позиций', err);
+            }
+
         },
     },
 });
