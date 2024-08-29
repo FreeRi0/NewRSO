@@ -348,6 +348,7 @@ watchEffect(async () => {
   height: 2px;
   left: initial;
   color: #E9E9E9;
+  bottom: 10px;
 }
 
 .v-label {

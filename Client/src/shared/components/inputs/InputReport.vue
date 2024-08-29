@@ -1,5 +1,9 @@
 <template>
-  <div :is-file="isFile" :class="isFile ? 'form-input form-input__file-input' : 'form-input'" :style="{ width: width }">
+  <div 
+    :is-file="isFile" 
+    :class="['form-input', isFile ? 'form-input__file-input' : '', isFileDistrict ? 'form-input__add-file' : '']"
+    
+    :style="{ width: width }">
     <input :type="type" :name="name" :style="{
       height: height,
     }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly"
@@ -13,6 +17,9 @@
         <SvgIcon iconName="add-file" />
         Выбрать файл
       </span>
+    </div>
+    <div v-if="isFileDistrict" class="form-input__icon">
+      <SvgIcon iconName="add-file" />
     </div>
   </div>
 </template>
@@ -73,6 +80,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  isFileDistrict: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 const textInputLength = ref(null);
@@ -87,6 +98,18 @@ const updateValue = (event) => {
 
 <style lang="scss" scoped>
 .form-input {
+  &.form-input__file-input,
+  &.form-input__add-file {
+    .form-input__report[type='file'] {
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  }
+
   &.form-input__file-input {
     display: flex;
     align-items: center;
@@ -97,15 +120,15 @@ const updateValue = (event) => {
     border-radius: 12px;
     background-color: transparent;
     border: 1.5px dashed #1F7CC0;
-    
-    .form-input__report[type='file'] {
-      opacity: 0;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-    }
+  }
+
+  &__add-file,
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
   }
 
   &__text {
@@ -155,6 +178,26 @@ const updateValue = (event) => {
 
   &::placeholder {
     color: #6d6d6d;
+  }
+
+  &:disabled {
+    border-color: #b6b6b6;
+    background-color: #f9fafb;
+    color:#8e8e93;
+    pointer-events: none;
+  }
+
+  &:focus {
+    border-color: transparent;
+    outline: 1px solid #1f7cc0;
+  }
+
+  &:invalid {
+      border-color: #db0000;
+
+      &::placeholder {
+          color: #db0000;
+      }
   }
 }
 

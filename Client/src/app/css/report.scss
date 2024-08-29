@@ -3,10 +3,10 @@
         display: grid;
         grid-template-columns: minmax(24.13%, 30.91%) minmax(59.13%, 65.46%);
         gap: 16px 40px;
-        padding: 40px;
-        background: #F3F4F5;
-        border: none;
-        border-radius: 10px;
+        // padding: 40px;
+        // background: #F3F4F5;
+        // border: none;
+        // border-radius: 10px;
 
         @media (max-width: 768px) {
             grid-template-columns: 1fr;
@@ -28,12 +28,46 @@
             
         // }
 
-        &--comment {
+        &--comment,
+        &--comment-district {
             margin-bottom: 17px;
             grid-column: -1 / 1;
 
             @media (max-width: 360px) {
                 margin-bottom: 16px;
+            }
+        }
+
+        &--comment-district {
+            position: relative;
+
+            .form-input__add-file {
+                position: absolute;
+                top: 38px;
+                left: 12px;
+                z-index: 1;
+
+                svg {
+                    color: #6D6D6D;
+                }
+            }
+
+            textarea.report__textarea {
+                padding-left: 57px;
+            }
+
+            .report__textarea-block {
+                position: relative;
+                
+                &::after {
+                    position: absolute;
+                    content: "";
+                    width: 1.5px;
+                    background-color: #6D6D6D;
+                    top: 9.5px;
+                    left: 43px;
+                    bottom: 24.5px;
+                }
             }
         }
     }
