@@ -52,13 +52,16 @@ export const useRoleStore = defineStore('role', {
         },
 
         async getMyPositions() {
-            const dataMyPositions = await HTTP.get('/rsousers/me_positions/', {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
-                },
-            });
-            this.myPositions = dataMyPositions.data;
+            if (isAuth) {
+                const dataMyPositions = await HTTP.get('/rsousers/me_positions/', {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
+                    },
+                });
+                this.myPositions = dataMyPositions.data;
+            }
+
         },
 
         async getPositions(id: Number) {
