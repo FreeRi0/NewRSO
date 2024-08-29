@@ -72,9 +72,9 @@
                             class="user-data__title"
                             v-else-if="
                                 position?.userdetachmentposition ||
-                                position.userregionalheadquarterposition ||
-                                position.userlocalheadquarterposition ||
-                                position.userdistrictheadquarterposition ||
+                                position?.userregionalheadquarterposition ||
+                                position?.userlocalheadquarterposition ||
+                                position?.userdistrictheadquarterposition ||
                                 position?.usercentralheadquarterposition
                             "
                         >
@@ -104,9 +104,9 @@
                             class="user-data__title"
                             v-if="
                                 position?.userdetachmentposition ||
-                                position.userregionalheadquarterposition ||
-                                position.userlocalheadquarterposition ||
-                                position.userdistrictheadquarterposition ||
+                                position?.userregionalheadquarterposition ||
+                                position?.userlocalheadquarterposition ||
+                                position?.userdistrictheadquarterposition ||
                                 position?.usercentralheadquarterposition
                             "
                         >

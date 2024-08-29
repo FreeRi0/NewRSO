@@ -3559,7 +3559,10 @@
                                     <Button
                                         v-if="!is_regional_commander"
                                         type="button"
-                                        :disabled="report[20].disabledBtn"
+                                        :disabled="
+                                            report[20].disabledBtn ||
+                                            report[20].is_verified
+                                        "
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"

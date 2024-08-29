@@ -60,18 +60,17 @@
                     <div class="places_wrap">
                         <div class="places_item" v-for="item in prize_places" :key="item.id">
                             <input :id="item.id" :value="item.value" :name="item.name" class="form__input places_input"
-                                type="radio" @focusout="focusOut" v-model="places.place" />
+                                type="radio" @focusout="focusOut" v-model="seventhPanelData.prize_place" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
                                 }}</label>
                         </div>
                     </div>
-                    <p>place: {{ places.place }}</p>
                 </div>
                 <div></div>
                 <div class="form__field">
                     <p class="form__label">
-                        Скан подтверждающего документа *
+                        Скан подтверждающего документа
                         <sup class="valid-red">*</sup>
                     </p>
                     <div class="statement-item">
@@ -82,31 +81,36 @@
                 </div>
 
                 <div class="form__field">
-                    <label class="form__label" for="14">Ссылка на публикацию о победе *
+                    <label class="form__label" for="14">Ссылка на публикацию о победе
                         <sup class="valid-red">*</sup></label>
 
-                    <div class="form__wrapper" v-for="(item, index) in places[0].links" :key="index">
-                        <InputReport @focusout="focusOut" name="14" v-model:value="item.link"
+                    <div class="form__wrapper" v-for="(item, index) in seventhPanelData.links" :key="index">
+                        <InputReport @focusout="focusOut" name="14" placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
                             class="form__input mb-2" />
-                        <div class="d-flex" v-if="places[0].links.length >= 2">
-                            <div class="add_link" @click="deleteLink">
-                                Удалить поле ввода |
-                            </div>
-                            <div class="add_link" @click="addLink">
-                                + Добавить ссылку
-                            </div>
-                        </div>
-                        <div class="add_link" @click="deleteLink" v-else-if="places[0].links.length == 2">
-                            Удалить поле ввода
-                        </div>
-                        <div class="add_link" @click="addLink" v-else>
+                        <div class="add_link" @click="addLink(7)" v-if="seventhPanelData.links.length === index + 1">
                             + Добавить ссылку
                         </div>
+                        <div class="add_link" @click="deleteLink(7)" v-else>
+                            Удалить поле ввода
+                        </div>
+
+                    </div>
+                </div>
+                <div class="d-flex gc-4">
+                    <div class="form__field">
+                        <label class="form__label" for="14">Дата <sup class="valid-red">*</sup></label>
+                        <InputReport @focusout="focusOut" v-model:value="seventhPanelData.comment" id="14" name="14"
+                            class="form__input" type="date" />
+                    </div>
+                    <div class="form__field">
+                        <label class="form__label" for="14">Место проведения<sup class="valid-red">*</sup></label>
+                        <InputReport placeholder="Укажите место проведения мероприятия" @focusout="focusOut"
+                            v-model:value="seventhPanelData.comment" id="14" name="14" class="form__input" style="width: 100%"/>
                     </div>
                 </div>
                 <div class="form__field">
                     <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
-                    <InputReport @focusout="focusOut" v-model:value="seventhPanelData.comment" id="14" name="14"
+                    <InputReport @focusout="focusOut"  placeholder="Напишите сообщение" v-model:value="seventhPanelData.comment" id="14" name="14"
                         class="form__input" style="width: 100%" />
                 </div>
                 <div>
@@ -130,14 +134,30 @@
                     <p class="form__label">
                         Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
                     </p>
-                    <InputReport @focusout="focusOut" v-model:value="sixPanelData.count" id="15" name="14"
-                        class="form__input number_input" type="number" />
+                    <InputReport @focusout="focusOut" v-model:value="sixPanelData.count" placeholder="Введите число"
+                        id="15" name="14" class="form__input number_input" type="number" />
                 </div>
-                <div></div>
+                <div class="form__field">
+                    <label class="form__label" for="14">Ссылка на социальные сети/ электронные
+                        СМИ, подтверждающая участие в мероприятии
+                        <sup class="valid-red">*</sup></label>
+
+                    <div class="form__wrapper" v-for="(item, index) in sixPanelData.links" :key="index">
+                        <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
+                            @focusout="focusOut" name="14" v-model:value="item.link" class="form__input mb-2" />
+                        <div class="add_link" @click="addLink(6)" v-if="sixPanelData.links.length === index + 1">
+                            + Добавить ссылку
+                        </div>
+                        <div class="add_link" @click="deleteLink(6)" v-else>
+                            Удалить поле ввода
+                        </div>
+
+                    </div>
+                </div>
                 <div class="form__field">
                     <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
-                    <InputReport @focusout="focusOut" v-model:value="sixPanelData.comment" id="14" name="14"
-                        class="form__input" style="width: 100%" />
+                    <InputReport @focusout="focusOut" v-model:value="sixPanelData.comment"
+                        placeholder="Напишите сообщение" id="14" name="14" class="form__input" style="width: 100%" />
                 </div>
             </div>
 
@@ -225,26 +245,32 @@ const collapseForm = () => {
 const isFirstSent = ref(true);
 
 const seventhPanelData = ref({
+    prize_place: null,
+    links: [{
+        link: '',
+    }],
     comment: '',
-    places: [],
 });
 
 const sixPanelData = ref({
-    count: 0,
+    number_of_members: 0,
+    links: [{
+        link: '',
+    }],
     comment: '',
 });
 
-const places = ref([
-    {
-        place: null,
-        file: null,
-        links: [
-            {
-                link: '',
-            },
-        ],
-    },
-]);
+// const places = ref([
+//     {
+//         place: null,
+//         file: null,
+//         links: [
+//             {
+//                 link: '',
+//             },
+//         ],
+//     },
+// ]);
 
 const prize_places = ref([
     { name: '1', value: 1, id: 'pp1' },
@@ -258,7 +284,7 @@ const selectFile = (event) => {
     console.log('file', places.value.file);
 };
 const focusOut = async () => {
-    seventhPanelData.value.events = [...places.value];
+    // seventhPanelData.value.events = [...places.value];
     try {
         if (isFirstSent.value) {
             if (props.panel_number == 6) {
@@ -292,40 +318,47 @@ const focusOut = async () => {
         console.log('focusOut error:', e);
     }
 };
-const addLink = () => {
-    places.value[0].links.push({ link: '' });
+const addLink = (number) => {
+    if (number == 6) {
+        sixPanelData.value.links.push({ link: '' });
+    } else {
+        seventhPanelData.value.links.push({ link: '' });
+    }
+
 };
 
-const deleteLink = () => {
-    places.value[0].links.pop();
+const deleteLink = async (number) => {
+    if (number == 6) {
+        sixPanelData.value.links.pop()
+        await reportPartTwoService.createReportDraft(sixPanelData.value, '6');
+    } else {
+        seventhPanelData.value.links.pop()
+        await reportPartTwoService.createReportDraft(seventhPanelData.value, '7');
+    }
+
 };
 
 watchEffect(async () => {
     try {
         const { data } = await reportPartTwoService.getReport(props.panel_number);
-        // const { data_six } = await reportPartTwoService.getReport('6');
         if (data.length && props.panel_number == 7) {
             isFirstSent.value = false;
-            places.value = [...data[0].places];
+            // places.value = [...data[0].places];
             seventhPanelData.value.comment = data[0].comment;
         } else {
             isFirstSent.value = false;
             sixPanelData.value.comment = data[0].comment;
         }
-        // if (data_six.length) {
-        //     isFirstSent.value = false;
-        //     sixPanelData.value.comment = data_six[0].comment;
-        // }
     } catch (e) {
         console.log(e);
     }
 });
 </script>
 <style lang="scss" scoped>
-
 .number_input {
     width: 340px !important;
 }
+
 .add_link {
     color: #1f7cc0;
     cursor: pointer;

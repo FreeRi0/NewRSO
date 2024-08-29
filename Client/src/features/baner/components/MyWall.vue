@@ -48,37 +48,37 @@
                         <li
                             class="user-data__title"
                             v-else-if="
-                                role.myPositions.value
+                                roleStore.myPositions
                                     ?.userdetachmentposition ||
-                                role.myPositions.value
-                                    .userregionalheadquarterposition ||
-                                role.myPositions.value
-                                    .usereducationalheadquarterposition ||
-                                role.myPositions.value
-                                    .userlocalheadquarterposition ||
-                                role.myPositions.value
-                                    .userdistrictheadquarterposition ||
-                                role.myPositions.value
-                                    .usercentralheadquarterposition
+                                roleStore.myPositions
+                                    ?.userregionalheadquarterposition ||
+                                roleStore.myPositions
+                                    ?.usereducationalheadquarterposition ||
+                                roleStore.myPositions
+                                    ?.userlocalheadquarterposition ||
+                                roleStore.myPositions
+                                    ?.userdistrictheadquarterposition ||
+                                roleStore.myPositions
+                                    ?.usercentralheadquarterposition
                             "
                         >
                             <p>
                                 {{
-                                    role.myPositions.value
+                                    roleStore.myPositions
                                         .userdetachmentposition?.position ??
-                                    role.myPositions.value
+                                    roleStore.myPositions
                                         .usereducationalheadquarterposition
                                         ?.position ??
-                                    role.myPositions.value
+                                    roleStore.myPositions
                                         .userregionalheadquarterposition
                                         ?.position ??
-                                    role.myPositions.value
+                                    roleStore.myPositions
                                         .userlocalheadquarterposition
                                         ?.position ??
-                                    role.myPositions.value
+                                    roleStore.myPositions
                                         .userdistrictheadquarterposition
                                         ?.position ??
-                                    role.myPositions.value
+                                    roleStore.myPositions
                                         .usercentralheadquarterposition
                                         ?.position
                                 }}
@@ -287,7 +287,7 @@ watch(
 );
 
 onMounted(() => {
-    roleStore.getMyPositions();
+    // roleStore.getMyPositions();
     getUserData();
 });
 
