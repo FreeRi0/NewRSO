@@ -49,14 +49,13 @@
             <nav class="header__nav nav-user">
                 <div class="nav-user__application-count" v-if="
                     Object.keys(userStore.currentUser).length &&
-                    (roles.roles.value.regionalheadquarter_commander ||
-                        roles.roles.value.detachment_commander)
+                    (roleStore.roles.regionalheadquarter_commander ||
+                    roleStore.roles.detachment_commander || roleStore.myPositions?.userregionalheadquarterposition?.position === 'Комиссар')
                 ">
                     <!--ССЫЛКА НА СТРАНИЦУ АКТИВНЫЕ ЗАЯВКИ?-->
                     <router-link :to="'/active'">
                         <SvgIcon iconName="bell-light" />
                     </router-link>
-                    <!--Если есть активные заявки (isActive = true), ниже отображается их количество:-->
                     <div v-if="userStore.count.count" class="nav-user__quantity-box">
                         <span v-if="userStore.count.count < 100" class="countNum">{{ userStore.count.count }}</span>
                         <span v-else>99+</span>
@@ -68,14 +67,6 @@
                     !userStore.isLoading
                 ">
                     <button class="nav-user__button" @click="show = !show">
-                        <!-- <img
-                            class="nav-user__button-mobile"
-                            src="@app/assets/icon/icon-location.svg"
-                            width="36"
-                            height="36"
-                            alt="Иконка геолокации"
-                        /> -->
-
                         <span v-if="
                             userStore.currentUser?.region &&
                             !isLoading.isLoading.value
@@ -183,7 +174,6 @@ const roleStore = useRoleStore();
 const regionalsStore = useRegionalsStore();
 const userStore = useUserStore();
 const squadsStore = useSquadsStore();
-const roles = storeToRefs(roleStore);
 
 const isLoading = storeToRefs(regionalsStore);
 
@@ -444,7 +434,7 @@ watch(
 
 onMounted(() => {
     if (localStorage.getItem('jwt_token') !== null) {
-        userStore.getCountApp();
+        roleStore.getMyPositions();
     } else {
         return;
     }

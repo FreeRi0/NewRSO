@@ -24,7 +24,7 @@
             :member="member"
             head="Руководство штаба"
             :position="position"
-            :leadership="educationalsStore.educational.leadership"
+            :leadership="leaderships"
         ></ManagementHQ>
         <DetachmentsHQ
             :items="educationalsStore.educational?.detachments"
@@ -50,6 +50,7 @@ const { getEnding } = methods;
 const educationalsStore = useEducationalsStore();
 const commander = ref({});
 const position = ref({});
+const leaderships = ref([]);
 const headquarter = storeToRefs(educationalsStore);
 const member = educationalsStore.members;
 const edict = ref({});
@@ -70,6 +71,19 @@ const fetchCommander = async () => {
     }
 };
 
+
+const getLeadership = async () => {
+    if (typeof id !== 'undefined') {
+        try {
+            const response = await HTTP.get(`/educationals/${id}/leadership/`);
+
+            leaderships.value = response.data;
+        } catch (error) {
+            console.log('an error occured ' + error);
+        }
+    }
+}
+
 watch(
     () => route.params.id,
 
@@ -78,6 +92,7 @@ watch(
         await educationalsStore.getEducationalsId(newId);
         await replaceTargetObjects([headquarter.educational.value]);
         await fetchCommander();
+        await getLeadership();
     },
     {
         immediate: true,
@@ -87,7 +102,7 @@ watch(
 
 onMounted(() => {
     replaceTargetObjects([headquarter.educational.value]);
-    fetchCommander();
+     fetchCommander();
 });
 const ending = computed(() =>
     getEnding(educationalsStore.educational.participants_count),

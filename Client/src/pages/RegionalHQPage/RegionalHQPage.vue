@@ -24,7 +24,7 @@
             :member="member"
             head="Руководство регионального штаба"
             :position="position"
-            :leadership="regionalHeadquarter.regional.value.leadership"
+            :leadership="leaderships"
         ></ManagementHQ>
         <section class="headquarters_squads">
             <h3>Штабы и отряды регионального штаба</h3>
@@ -67,6 +67,7 @@ const regionalsStore = useRegionalsStore();
 const crosspageFilters = useCrosspageFilter();
 const commander = ref({});
 const position = ref({});
+const leaderships = ref([]);
 const regionalHeadquarter = storeToRefs(regionalsStore);
 const member = storeToRefs(regionalsStore);
 const route = useRoute();
@@ -79,13 +80,23 @@ const fetchCommander = async () => {
         let id = regionalHeadquarter.regional.value.commander.id;
 
         const response = await HTTP.get(`/users/${id}/`);
-
         commander.value = response.data;
-        // console.log(response);
     } catch (error) {
         console.log('An error occurred:', error);
     }
 };
+
+const getLeadership = async () => {
+    if (typeof id !== 'undefined') {
+        try {
+            const response = await HTTP.get(`/regionals/${id}/leadership/`);
+
+            leaderships.value = response.data;
+        } catch (error) {
+            console.log('an error occured ' + error);
+        }
+    }
+}
 watch(
     () => route.params.id,
 
@@ -96,6 +107,7 @@ watch(
 
         await replaceTargetObjects([regionalHeadquarter.regional.value]);
         await fetchCommander();
+        await getLeadership();
     },
     {
         immediate: true,
