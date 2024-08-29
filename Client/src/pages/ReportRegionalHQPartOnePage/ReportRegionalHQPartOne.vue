@@ -66,11 +66,11 @@ const reportConfirmation = async (value) => {
     return;
   }
   if (value) {
+    isButtonDisabled.value = true;
     try {
       await createReport(reportData.value)
       showModalWarning.value = false;
       showModalSuccess.value = true;
-      isButtonDisabled.value = true;
     } catch (e) {
       swal.fire({
         position: 'center',
@@ -79,6 +79,7 @@ const reportConfirmation = async (value) => {
         showConfirmButton: false,
         timer: 1500,
       });
+      isButtonDisabled.value = false;
       showModalWarning.value = false;
     }
   } else {
