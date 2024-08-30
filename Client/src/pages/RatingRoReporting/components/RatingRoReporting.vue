@@ -4,12 +4,23 @@
     <div class="ratingRo_report_wrapper">
       <router-link class="ratingRo_report_item" :to="{ name: 'ReportRegionalPartOne' }">Отчет о деятельности
         регионального отделения РСО за 2024 год. Часть 1</router-link>
-      <router-link class="ratingRo_report_item" :to="{ name: 'ReportRegionalPartTwo' }">Отчет о деятельности
+      <router-link v-if="show" class="ratingRo_report_item" :to="{ name: 'ReportRegionalPartTwo' }">Отчет о деятельности
         регионального отделения РСО за 2024 год. Часть 2</router-link>
     </div>
   </div>
 </template>
 <script setup>
+import { ref, onMounted } from 'vue'
+import { showByUrl } from '@services/ProdUrlService';
+
+
+let show = ref(false);
+
+onMounted(() => {
+  const val = showByUrl();
+  show.value = val;
+})
+
 </script>
 <style lang="scss" scoped>
 .ratingRo_report_title {
