@@ -264,7 +264,7 @@ watchEffect(async () => {
   background: #F3F4F5;
   border: none;
   /*padding: 0;*/
-  border-radius: 0 0 10px 10px;
+  border-radius: 10px;
   margin-bottom: 8px;
 }
 
@@ -278,7 +278,7 @@ watchEffect(async () => {
 
 .v-tab.v-tab.v-btn {
   min-width: 280px;
-  border-radius: 10px 10px 0 0;
+  border-radius: 10px;
   letter-spacing: initial;
   border: none;
 }

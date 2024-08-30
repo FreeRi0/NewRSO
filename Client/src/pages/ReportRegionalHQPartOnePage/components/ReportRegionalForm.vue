@@ -151,6 +151,7 @@ const sentReport = () => {
   flex-direction: column;
   border: none;
   background-color: #F3F4F5;
+  border-radius: 10px;
 
   @media (max-width: 643px) {
     align-items: center;
