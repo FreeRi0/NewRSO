@@ -1,6 +1,6 @@
 <template>
   <div v-if="true" class="form__field-group">
-    <div>
+    <div class="form__field-project-existence">
       <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу <sup class="valid-red">*</sup>
       </p>
       <div class="form__label-radio">
@@ -17,14 +17,14 @@
       </div>
     </div>
     <div class="form__field-info" v-for="(project, index) in projects" :key="index">
-      <div style="display: flex; justify-content: space-between;">
+      <div class="form__field-info-project">
         <div class="form__field-info-win">
           <label class="form__label" for="9">Наименование трудового проекта, в котором ЛСО РО одержал победу <sup
               class="valid-red">*</sup></label>
           <InputReport v-model:value="project.name" id="9" name="name" class="form__input" type="text"
             placeholder="ВВС ПРО" @focusout="focusOut" style="width: 100%;" />
         </div>
-        <div>
+        <div class="deleteBtn">
           <Button v-if="index > 0" label="Удалить проект" class="deleteProjectBtn" @click="deleteProject(index)" />
         </div>
       </div>
@@ -68,10 +68,12 @@
         <p class="form__label">Ссылка на группу проекта в социальных сетях <sup class="valid-red">*</sup></p>
         <div class="form__field-link " v-for="(link, i) in projects[index].links" :key="i">
           <div class="form__field-link-wrap">
-            <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__field-link-field"
-              type="text" placeholder="https://vk.com/cco_monolit" @focusout="focusOut" style="width: 100%;" />
+            <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input" type="text"
+              placeholder="https://vk.com/cco_monolit" @focusout="focusOut" style="width: 100%;" />
           </div>
-          <div v-if="projects[index].links.length === i + 1" class="add_link" @click="addLink(index)">+ Добавить ссылку
+          <div v-if="projects[index].links.length === i + 1" class="add_link" @click="addLink(index)"><span
+              class="add_link-plus">+</span>
+            Добавить ссылку
           </div>
           <div v-else class="add_link" @click="deleteLink(index, i)">Удалить</div>
         </div>
@@ -85,7 +87,7 @@
       <div class="form__field-comment">
         <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
         <TextareaReport id="comment" name="comment" :rows="1" autoResize placeholder="Напишите сообщение"
-          @focusout="focusOut" :maxlength="3000" :max-length-text="3000" counter-visible />
+          @focusout="focusOut" :maxlength="3000" :max-length-text="3000" counter-visible style="margin-bottom: 4px ;" />
       </div>
       <div class="form__field-result">
         <v-checkbox label="Итоговое значение" />
@@ -407,6 +409,12 @@ watchEffect(async () => {
 })
 </script>
 <style lang="scss" scoped>
+.form__field-project-existence {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .form-input__file-input {
   display: flex;
   justify-content: center;
@@ -460,6 +468,9 @@ watchEffect(async () => {
 }
 
 .project-regulations-input-file {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   max-width: 720px;
   width: 100%;
 
@@ -529,11 +540,25 @@ watchEffect(async () => {
   gap: 40px;
 }
 
+.form__field-info-project {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+
+  @media (max-width: 1024px) {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+}
+
 .form__field-info-win {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   width: 720px;
 
   @media (max-width: 1024px) {
-    width: 812px;
+    width: 100%;
   }
 }
 
@@ -586,7 +611,7 @@ watchEffect(async () => {
   flex-direction: column;
   background: #F3F4F5;
   border: none;
-  border-radius: 0 0 10px 10px;
+  border-radius: 10px;
   margin-bottom: 8px;
   gap: 40px;
 }
@@ -621,6 +646,7 @@ watchEffect(async () => {
 }
 
 .hr {
+  margin-bottom: 16px;
   width: 100%;
   border-top: 1px solid #B6B6B6;
 }
@@ -670,13 +696,20 @@ watchEffect(async () => {
 }
 
 .add_link {
+  display: flex;
+  align-items: center;
+  text-align: center;
   color: #1f7cc0;
   cursor: pointer;
   font-family: Bert Sans;
   font-size: 14px;
   font-weight: 400;
-  line-height: 21.1px;
   min-width: 141px;
+
+  &-plus {
+    margin-right: 4px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+  }
 }
 
 .add_eventBtn {
@@ -714,6 +747,14 @@ watchEffect(async () => {
   }
 }
 
+.deleteBtn {
+  display: flex;
+
+  @media (max-width: 1024px) {
+    justify-content: flex-end;
+  }
+}
+
 .deleteProjectBtn {
   background-color: #d2e4f2;
   width: 131px;
@@ -727,6 +768,7 @@ watchEffect(async () => {
   padding: 4px 11px;
   color: #1f7cc0;
   border-radius: 6px;
+  margin: 0;
 }
 
 .form__field-comment {

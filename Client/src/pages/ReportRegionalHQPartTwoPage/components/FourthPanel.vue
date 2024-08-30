@@ -671,7 +671,7 @@ watchEffect(async () => {
 .form__field-group {
   background: #F3F4F5;
   border: none;
-  border-radius: 0 0 10px 10px;
+  border-radius: 10px;
   margin-bottom: 8px;
   padding-top: 0;
 }
@@ -763,6 +763,8 @@ watchEffect(async () => {
 }
 
 .form__field-event-file {
+  display: flex;
+  flex-direction: column;
   width: 720px;
 
   @media (max-width: 568px) {
@@ -776,6 +778,10 @@ watchEffect(async () => {
 }
 
 .form__field-event-interregion {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
   @media (max-width: 568px) {
     margin: 0 auto;
     width: 340px;
@@ -893,12 +899,13 @@ watchEffect(async () => {
 }
 
 .hr {
+  margin-bottom: 16px;
   width: 100%;
   border-top: 1px solid #B6B6B6;
 
   @media (max-width: 568px) {
     width: 340px;
-    margin: 0 auto;
+    margin: 0 auto 16px;
   }
 }
 
