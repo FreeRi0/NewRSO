@@ -45,9 +45,13 @@
       </v-tabs-window-item> -->
 
             <div v-if="props.panel_number == 7" class="form__field-group">
-                <div style="display: flex; justify-content: space-between">
-                    <div>
-                        <p class="form__title">{{ props.title }}</p>
+                <div class="d-flex justify-space-between">
+                    <div class="title_wrap">
+                        <p class="form__title">{{ props.title.name }}</p>
+                        <div class="d-flex gc-8">
+                            <p class="form__title">{{ props.title.month }}</p>
+                            <p class="form__title">{{ props.title.city }}</p>
+                        </div>
                     </div>
                     <div>
                         <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
@@ -67,16 +71,28 @@
                         </div>
                     </div>
                 </div>
-                <div></div>
-                <div class="form__field">
-                    <p class="form__label">
-                        Скан подтверждающего документа
-                        <sup class="valid-red">*</sup>
-                    </p>
-                    <div class="statement-item">
-                        <SvgIcon iconName="add-file" />
-                        <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png" :maxFileSize="7000000"
-                            :customUpload="true" @select="selectFile" chooseLabel="Выбрать файл" />
+                <div class="report__fieldset report__fieldset--right-block">
+                    <label class="form__label report__label" for="scan_file">
+                        Скан подтверждающего документа<sup class="valid-red">*</sup>
+                    </label>
+                    <InputReport v-if="!seventhPanelData.scan_file" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
+                        id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile"
+                        :disabled="isDisabled" />
+                    <div v-else class="report__file-box">
+                        <span class="report__file-name">
+                            <SvgIcon v-if="seventhPanelData.file_type === 'jpg'" icon-name="file-jpg" />
+                            <SvgIcon v-if="seventhPanelData.file_type === 'pdf'" icon-name="file-pdf" />
+                            <SvgIcon v-if="seventhPanelData.file_type === 'png'" icon-name="file-png" />
+                            {{ seventhPanelData.scan_file }}
+                        </span>
+
+                        <span class="report__file-size">
+                            {{ seventhPanelData.file_size }} Мб
+                        </span>
+
+                        <button @click="deleteFile" class="report__button-delete-file">
+                            Удалить
+                        </button>
                     </div>
                 </div>
 
@@ -85,7 +101,8 @@
                         <sup class="valid-red">*</sup></label>
 
                     <div class="form__wrapper" v-for="(item, index) in seventhPanelData.links" :key="index">
-                        <InputReport @focusout="focusOut" name="14" placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
+                        <InputReport @focusout="focusOut" name="14"
+                            placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
                             class="form__input mb-2" />
                         <div class="add_link" @click="addLink(7)" v-if="seventhPanelData.links.length === index + 1">
                             + Добавить ссылку
@@ -105,13 +122,15 @@
                     <div class="form__field">
                         <label class="form__label" for="14">Место проведения<sup class="valid-red">*</sup></label>
                         <InputReport placeholder="Укажите место проведения мероприятия" @focusout="focusOut"
-                            v-model:value="seventhPanelData.comment" id="14" name="14" class="form__input" style="width: 100%"/>
+                            v-model:value="seventhPanelData.comment" id="14" name="14" class="form__input"
+                            style="width: 100%" />
                     </div>
                 </div>
                 <div class="form__field">
                     <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
-                    <InputReport @focusout="focusOut"  placeholder="Напишите сообщение" v-model:value="seventhPanelData.comment" id="14" name="14"
-                        class="form__input" style="width: 100%" />
+                    <InputReport @focusout="focusOut" placeholder="Напишите сообщение"
+                        v-model:value="seventhPanelData.comment" id="14" name="14" class="form__input"
+                        style="width: 100%" />
                 </div>
                 <div>
                     <v-checkbox label="Итоговое значение" />
@@ -122,9 +141,13 @@
                 </div>
             </div>
             <div v-else-if="props.panel_number == 6" class="form__field-group">
-                <div style="display: flex; justify-content: space-between">
-                    <div>
-                        <p class="form__title">{{ props.title }}</p>
+                <div class="d-flex justify-space-between">
+                    <div class="title_wrap">
+                        <p class="form__title">{{ props.title.name }}</p>
+                        <div class="d-flex gc-8">
+                            <p class="form__title">{{ props.title.month }}</p>
+                            <p class="form__title">{{ props.title.city }}</p>
+                        </div>
                     </div>
                     <div>
                         <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
@@ -233,8 +256,12 @@ import { InputReport } from '@shared/components/inputs';
 import { SvgIcon } from '@shared/ui';
 import { reportPartTwoService } from '@services/ReportService.ts';
 const props = defineProps({
-    title: String,
-    panel_number: String
+    title: Object,
+    panel_number: String,
+    isDistrictHeadquarterCommander: Boolean,
+    isDisabled: Boolean,
+    isCentralHeadquarterCommander: Boolean,
+    isSecondTab: Boolean,
 });
 
 const emit = defineEmits(['collapse-form']);
@@ -243,12 +270,16 @@ const collapseForm = () => {
     emit('collapse-form');
 };
 const isFirstSent = ref(true);
+const scanFile = ref([]);
 
 const seventhPanelData = ref({
     prize_place: null,
     links: [{
         link: '',
     }],
+    scan_file: '',
+    file_size: null,
+    file_type: '',
     comment: '',
 });
 
@@ -260,18 +291,6 @@ const sixPanelData = ref({
     comment: '',
 });
 
-// const places = ref([
-//     {
-//         place: null,
-//         file: null,
-//         links: [
-//             {
-//                 link: '',
-//             },
-//         ],
-//     },
-// ]);
-
 const prize_places = ref([
     { name: '1', value: 1, id: 'pp1' },
     { name: '2', value: 2, id: 'pp2' },
@@ -279,13 +298,47 @@ const prize_places = ref([
     { name: 'Нет', value: false, id: 'pp4' },
 ]);
 
-const selectFile = (event) => {
-    places.value.file = event.files[0];
-    console.log('file', places.value.file);
+const uploadFile = async (event) => {
+    scanFile.value = event.target.files[0];
+    let formData = new FormData();
+    formData.append('prize_place', seventhPanelData.value.prize_place);
+    formData.append('scan_file', scanFile.value);
+    formData.append('links', seventhPanelData.value.links);
+    formData.append('comment', seventhPanelData.value.comment);
+    console.log(scanFile.value);
+    if (isFirstSent.value) {
+        let { scan_file } = await reportPartTwoService.createReport(formData, '7', true);
+        seventhPanelData.value.scan_file = scan_file.split('/').at(-1);
+    } else {
+        let { data: { scan_file } } = await reportPartTwoService.createReportDraft(formData, '7', true);
+        seventhPanelData.value.scan_file = scan_file.split('/').at(-1);
+    }
+};
+
+const deleteFile = async () => {
+    seventhPanelData.value.scan_file = '';
+    let formData = new FormData();
+    formData.append('prize_place', seventhPanelData.value.prize_place);
+    formData.append('scan_file', '');
+    formData.append('links', seventhPanelData.value.links);
+    formData.append('comment', seventhPanelData.value.comment);
+    formData.append('file_size', seventhPanelData.value.file_size);
+    formData.append('file_type', seventhPanelData.value.file_type);
+
+    console.log(formData);
+
+    if (isFirstSent.value) {
+        await reportPartTwoService.createReport(formData, ID_PANEL, true);
+    } else {
+        await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+    }
 };
 const focusOut = async () => {
-    // seventhPanelData.value.events = [...places.value];
     try {
+        let formData = new FormData();
+        formData.append('prize_place', seventhPanelData.value.prize_place);
+        formData.append('links', seventhPanelData.value.links);
+        formData.append('comment', seventhPanelData.value.comment);
         if (isFirstSent.value) {
             if (props.panel_number == 6) {
                 await reportPartTwoService.createReportDraft(
@@ -294,7 +347,7 @@ const focusOut = async () => {
                 );
             } else {
                 await reportPartTwoService.createReportDraft(
-                    seventhPanelData.value,
+                    formData,
                     '7',
                     true,
                 );
@@ -308,7 +361,7 @@ const focusOut = async () => {
                 );
             } else {
                 await reportPartTwoService.createReport(
-                    seventhPanelData.value,
+                    formData,
                     '7',
                 );
             }
@@ -343,7 +396,6 @@ watchEffect(async () => {
         const { data } = await reportPartTwoService.getReport(props.panel_number);
         if (data.length && props.panel_number == 7) {
             isFirstSent.value = false;
-            // places.value = [...data[0].places];
             seventhPanelData.value.comment = data[0].comment;
         } else {
             isFirstSent.value = false;
@@ -366,6 +418,13 @@ watchEffect(async () => {
     font-size: 14px;
     font-weight: 400;
     line-height: 21.1px;
+}
+
+.title_wrap {
+  display: flex;
+  width: 100%;
+  max-width: 700px;
+  justify-content: space-between;
 }
 
 .places {

@@ -1,5 +1,5 @@
 <template>
-  <v-card class="panel-card" >
+  <v-card class="panel-card">
     <!-- <v-tabs
         v-model="tab"
     >
@@ -8,43 +8,64 @@
       <v-tab value="three" class="panel-tab-btn">Корректировка ЦШ</v-tab>
     </v-tabs> -->
 
-    <v-expansion-panels  v-model="panel" class="mb-2" >
-        <v-expansion-panel v-for="item in festivals" :key="item.id"><v-expansion-panel-title>{{ item.name
-            }}</v-expansion-panel-title><v-expansion-panel-text>
-            <SeventhPanelForm :panel_number="6" @collapse-form="collapsed()" :title="item.name"></SeventhPanelForm>
-          </v-expansion-panel-text></v-expansion-panel>
-      </v-expansion-panels>
+    <v-expansion-panels v-model="panel" class="mb-2">
+      <v-progress-circular v-show="!items.length" class="circleLoader" indeterminate></v-progress-circular>
+      <v-expansion-panel v-show="items.length" v-for="item in items" :key="item.id"><v-expansion-panel-title>
+          <div class="title_wrap">
+            <p class="form__title">{{ item.name }}</p>
+            <div class="d-flex gc-8">
+              <p class="form__title">{{ item.month }}</p>
+              <p class="form__title">{{ item.city }}</p>
+            </div>
+          </div>
+        </v-expansion-panel-title><v-expansion-panel-text>
+          <SeventhPanelForm :panel_number="6" @collapse-form="collapsed()" :title="item"></SeventhPanelForm>
+        </v-expansion-panel-text></v-expansion-panel>
+    </v-expansion-panels>
   </v-card>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { SeventhPanelForm } from "./index";
 import { InputReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
+import { HTTP } from "@app/http";
 
 // const tab = ref('one')
 
 const panel = ref(null);
 
-const festivals = ref([
-  { id: 1, name: 'Всероссийская Спартакиада студенческих отрядов Российской Федерации 2022' },
-  { id: 2, name: 'Всероссийский Слет студенческих отрядов 2022' },
-  { id: 3, name: '«Художественное слово: соло» — СПО «Оригами» — «В РСО.В любви. В благодарности.»' },
-  { id: 4, name: 'Межрегиональный сводный студенческий сервисный отряд «Бархатные сезоны»' },
-  { id: 5, name: 'Всероссийская Спартакиада студенческих отрядов Российской Федерации 2022' },
-  { id: 6, name: 'Школа подготовки командных составов линейных студенческих отрядов ВСТП ОАО РЖД «БАМ»' },
-  { id: 7, name: 'Всероссийская Спартакиада студенческих отрядов Российской Федерации 2022' },
-  { id: 8, name: 'Всероссийская Спартакиада студенческих отрядов Российской Федерации 2022' },
-])
+const items = ref([]);
 
 const collapsed = () => {
-    panel.value = !panel.value;
+  panel.value = !panel.value;
 }
+
+const getItems = async () => {
+  try {
+    const response = await HTTP.get('regional_competitions/reports/event_names/r6-event-names/');
+    items.value = response.data;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+onMounted(async () => {
+  await getItems();
+})
 </script>
 <style lang="scss" scoped>
 .panel-card {
   box-shadow: none;
 }
+
+.panel-tab-btn {
+  // ... existing styles ...
+
+  text-align: right;
+  padding-right: 40px;
+}
+
 .form__field-group {
   background: #F3F4F5;
   border: none;
@@ -52,21 +73,26 @@ const collapsed = () => {
   margin-bottom: 8px;
   margin-top: 8px;
 }
+
 .valid-red {
   color: #db0000;
 }
+
 .v-tab-item--selected {
   background: #F3F4F5;
 }
+
 .v-tab.v-tab.v-btn {
   min-width: 280px;
   border-radius: 10px 10px 0 0;
   letter-spacing: initial;
   border: none;
 }
+
 .panel-card-text {
   padding: 0;
 }
+
 .panel-tab-btn {
   text-transform: initial;
   font-family: Bert Sans;
@@ -76,20 +102,31 @@ const collapsed = () => {
   text-align: left;
   margin-right: 8px;
 }
+
+.title_wrap {
+  display: flex;
+  width: 100%;
+  max-width: 700px;
+  justify-content: space-between;
+}
+
 .hr {
   width: 100%;
   border-top: 1px solid #B6B6B6;
 }
+
 .v-table {
   margin-bottom: 16px;
   border-radius: 10px;
   border: 1px solid #B6B6B6;
 }
+
 .report-table {
   &__tr {
     background-color: #FFFFFF;
     text-align: center;
   }
+
   &__th {
     font-family: Akrobat;
     font-size: 16px;
@@ -107,6 +144,7 @@ const collapsed = () => {
       border-left: 1px solid #B6B6B6;
     }
   }
+
   &__td {
     text-align: center;
     font-family: Akrobat;
