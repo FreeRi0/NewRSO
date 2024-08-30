@@ -1,4 +1,10 @@
 .report {
+    &__field {
+        display: flex;
+        flex-direction: column;
+        row-gap: 40px;
+      }
+
     &__field-group {
         display: grid;
         grid-template-columns: minmax(24.13%, 30.91%) minmax(59.13%, 65.46%);
@@ -72,6 +78,34 @@
         }
     }
 
+    &__links {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__link-list {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        row-gap: 8px;
+    }
+
+    &__link-item {
+        display: flex;
+
+        // flex-wrap: wrap;
+
+        // display: grid;
+        // grid-template-columns: 1fr 141px 147px;
+        // column-gap: 29px;
+    
+        .form-input {
+          // flex-grow: 1;
+          max-width: 720px;
+          width: 100%;
+        }
+      }
+
     &__file-input {
         width: 65.45%;
 
@@ -99,6 +133,68 @@
             @media (max-width: 360px) {
                 font-size: 12px;
             }
+        }
+    }
+
+    &__btn-link {
+        margin: 0;
+        padding: 9.5px 0;
+        font-family: "Bert Sans";
+        font-size: 16px;
+        line-height: 21px;
+        color: #1F7CC0;
+        transition: 0.2s;
+        
+        &:hover,
+        &:active {
+            color: #1C5C94;
+        }          
+    }
+
+    &__add-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        column-gap: 12px;
+        margin: 0;
+        padding: 8px 63.5px;
+        font-family: "Bert Sans";
+        font-size: 16px;
+        line-height: 21px;
+        color: #1f7cc0;
+        border: 1px solid #1f7cc0;
+        border-radius: 10px;
+        transition: 0.2s;
+
+        svg {
+            transition: 0.2s;
+        }
+
+        &:hover,
+        &:active {
+            color: #1c5c94;
+            border-color: #1C5C94;
+
+            svg {
+                color: #1C5C94;
+            }
+        }
+    }
+
+    &__delete-button {
+        margin: 0;
+        padding: 6px 8px;
+        font-family: "Bert Sans";
+        font-size: 16px;
+        line-height: 21px;
+        color: #1f7cc0;
+        background-color: #d2e4f2;
+        border-radius: 6px;
+        transition: 0.2s;
+
+        &:hover,
+        &:active {
+            background-color: #aaccE7;
         }
     }
 
