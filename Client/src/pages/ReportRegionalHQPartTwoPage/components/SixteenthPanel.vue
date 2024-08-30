@@ -16,7 +16,7 @@
         </div>
       </div>
     </div>
-    <div v-for="(project, index) in projects" :key="index" >
+    <div v-for="(project, index) in projects" :key="index">
       <div style="display: flex; justify-content: space-between; margin-top: 40px;">
         <div>
           <label class="form__label" for="9">Наименование трудового проекта, в котором ЛСО РО одержал победу <sup
