@@ -22,7 +22,7 @@
           <label class="form__label" for="9">Наименование трудового проекта, в котором ЛСО РО одержал победу <sup
               class="valid-red">*</sup></label>
           <InputReport v-model:value="project.name" id="9" name="name" class="form__input" type="text"
-            placeholder="ВВС ПРО" @focusout="focusOut" />
+            placeholder="ВВС ПРО" @focusout="focusOut" counter-visible :max-counter="4" :max-length="4"/>
         </div>
         <div>
           <Button v-if="index > 0" label="Удалить проект" class="deleteProjectBtn" @click="deleteProject(index)" />
