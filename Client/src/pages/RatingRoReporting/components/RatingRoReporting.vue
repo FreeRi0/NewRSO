@@ -10,11 +10,21 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
+import { useRoleStore } from '@layouts/store/role';
+import { useRouter } from 'vue-router';
 import { showByUrl } from '@services/ProdUrlService';
 
 
+const roleStore = useRoleStore();
+const router = useRouter()
 let show = ref(false);
+
+watch(() => roleStore.roles?.regionalheadquarter_commander, () => {
+  if (roleStore.roles?.regionalheadquarter_commander === null) {
+    router.push({ name: 'mypage' })
+  }
+})
 
 onMounted(() => {
   const val = showByUrl();

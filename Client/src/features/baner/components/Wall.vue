@@ -50,12 +50,13 @@
                         ">
                             <p>Командир</p>
                         </li>
-                        <li class="user-data__title" v-else-if="
-                            getPositions(position?.userdetachmentposition?.position)
+                        <li class="user-data__title" v-else-if="position?.userdetachmentposition?.position || position?.usereducationalheadquarterposition?.position || position?.userlocalheadquarterposition?.position || position?.userregionalheadquarterposition?.position ||
+                            position?.userdistrictheadquarterposition?.position ||
+                            position?.usercentralheadquarterposition?.position
                         ">
                             <p>
                                 {{
-                                    pos
+                                    getPositions()
                                 }}
                             </p>
                         </li>
@@ -359,35 +360,20 @@ watch(
 onMounted(() => {
     regionalsStore.searchRegionals(props.user.region);
 });
-const pos = ref('');
 
-const getPositions = (item) => {
-    switch (item) {
-        // case commander.detachment_commander?.id:
-        //     return pos.value = 'Командир';
-        // case commander.educationalheadquarter_commander?.id:
-        //     return pos.value = 'Командир';
-        // case commander.localheadquarter_commander?.id:
-        //     return pos.value = 'Командир';
-        // case commander.regionalheadquarter_commander?.id:
-        //     return pos.value = 'Командир';
-        // case commander.districtheadquarter_commander?.id:
-        //     return pos.value = 'Командир';
-        // case commander.centralheadquarter_commander?.id:
-        //     return pos.value = 'Командир';
-
-        case (props.position?.userdetachmentposition?.position || props.position?.usereducationalheadquarterposition?.position || props.position?.userlocalheadquarterposition?.position || props.position?.userregionalheadquarterposition?.position ||
-            props.position?.userdistrictheadquarterposition?.position ||
-            props.position?.usercentralheadquarterposition?.position) === 'Комиссар':
-            return pos.value = 'Комиссар';
-        case (props.position.userdetachmentposition?.position || props.position?.usereducationalheadquarterposition?.position || props.position?.userlocalheadquarterposition?.position || props.position?.userregionalheadquarterposition?.position ||
-            props.position?.userdistrictheadquarterposition?.position ||
-            props.position?.usercentralheadquarterposition?.position) === 'Боец':
-            return pos.value = 'Боец';
+const getPositions = () => {
+    switch (props.position?.userdetachmentposition?.position || props.position?.usereducationalheadquarterposition?.position || props.position?.userlocalheadquarterposition?.position || props.position?.userregionalheadquarterposition?.position || props.position?.userdistrictheadquarterposition?.position || props.position?.usercentralheadquarterposition?.position) {
+        case 'Комиссар':
+            return 'Комиссар';
+        case 'Боец':
+            return 'Боец';
         default:
             return 'Неизвестная должность';
     }
+
+
 };
+
 const copyL = () => {
     navigator.clipboard.writeText(window.location.href);
     const copyMessage = document.querySelector('.copy-message');
