@@ -17,8 +17,8 @@
                     roleStore.roles.centralheadquarter_commander)) ||
             props.user.privacy?.privacy_photo === 'Все' ||
             props.user.privacy?.privacy_photo === 'all'
-        " :banner="user.media?.banner" @upload-wall="uploadWall" @update-wall="updateWall"
-            @delete-wall="deleteWall" :edited="false"></bannerPhoto>
+        " :banner="user.media?.banner" @upload-wall="uploadWall" @update-wall="updateWall" @delete-wall="deleteWall"
+            :edited="false"></bannerPhoto>
         <div class="user-metric__top" v-else>
             <div class="user-metric__top-img-wrapper">
                 <img src="@/app/assets/user-banner.jpg" alt="Баннер личной страницы(пусто)" />
@@ -51,25 +51,11 @@
                             <p>Командир</p>
                         </li>
                         <li class="user-data__title" v-else-if="
-                            position?.userdetachmentposition ||
-                            position?.userregionalheadquarterposition ||
-                            position?.userlocalheadquarterposition ||
-                            position?.userdistrictheadquarterposition ||
-                            position?.usercentralheadquarterposition
+                            getPositions(position?.userdetachmentposition?.position)
                         ">
                             <p>
                                 {{
-                                    position.userdetachmentposition?.position ??
-                                    position.usereducationalheadquarterposition
-                                        ?.position ??
-                                    position.userregionalheadquarterposition
-                                        ?.position ??
-                                    position.userlocalheadquarterposition
-                                        ?.position ??
-                                    position.userdistrictheadquarterposition
-                                        ?.position ??
-                                    position.usercentralheadquarterposition
-                                        ?.position
+                                    pos
                                 }}
                             </p>
                         </li>
@@ -373,7 +359,35 @@ watch(
 onMounted(() => {
     regionalsStore.searchRegionals(props.user.region);
 });
+const pos = ref('');
 
+const getPositions = (item) => {
+    switch (item) {
+        // case commander.detachment_commander?.id:
+        //     return pos.value = 'Командир';
+        // case commander.educationalheadquarter_commander?.id:
+        //     return pos.value = 'Командир';
+        // case commander.localheadquarter_commander?.id:
+        //     return pos.value = 'Командир';
+        // case commander.regionalheadquarter_commander?.id:
+        //     return pos.value = 'Командир';
+        // case commander.districtheadquarter_commander?.id:
+        //     return pos.value = 'Командир';
+        // case commander.centralheadquarter_commander?.id:
+        //     return pos.value = 'Командир';
+
+        case (props.position?.userdetachmentposition?.position || props.position?.usereducationalheadquarterposition?.position || props.position?.userlocalheadquarterposition?.position || props.position?.userregionalheadquarterposition?.position ||
+            props.position?.userdistrictheadquarterposition?.position ||
+            props.position?.usercentralheadquarterposition?.position) === 'Комиссар':
+            return pos.value = 'Комиссар';
+        case (props.position.userdetachmentposition?.position || props.position?.usereducationalheadquarterposition?.position || props.position?.userlocalheadquarterposition?.position || props.position?.userregionalheadquarterposition?.position ||
+            props.position?.userdistrictheadquarterposition?.position ||
+            props.position?.usercentralheadquarterposition?.position) === 'Боец':
+            return pos.value = 'Боец';
+        default:
+            return 'Неизвестная должность';
+    }
+};
 const copyL = () => {
     navigator.clipboard.writeText(window.location.href);
     const copyMessage = document.querySelector('.copy-message');
