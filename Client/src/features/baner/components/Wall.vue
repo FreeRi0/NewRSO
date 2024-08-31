@@ -367,11 +367,13 @@ const getPositions = () => {
             return 'Комиссар';
         case 'Боец':
             return 'Боец';
+
+        case 'Комиссар': case 'Боец':
+            return 'Комиссар'
+
         default:
             return 'Неизвестная должность';
     }
-
-
 };
 
 const copyL = () => {
