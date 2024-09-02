@@ -70,21 +70,20 @@
                         </li>
                         <li class="user-data__title" v-if="
                             position
-                                ?.usereducationalheadquarterposition ||
-                            position
-                                ?.userlocalheadquarterposition ||
-                            position
-                                ?.userdistrictheadquarterposition">
+                                ?.usereducationalheadquarterposition">
                             <p>{{
                                 position
                                     .usereducationalheadquarterposition
-                                    ?.headquarter?.name ??
+                                    ?.headquarter?.name }}</p>
+                        </li>
+                        <li class="user-data__title" v-if="
+                            position
+                                ?.userlocalheadquarterposition">
+                            <p>{{
                                 position
                                     .userlocalheadquarterposition
-                                    ?.headquarter?.name ??
-                                position
-                                    .userdistrictheadquarterposition
-                                    ?.headquarter?.name }}</p>
+                                    ?.headquarter?.name
+                            }}</p>
                         </li>
                         <li class="user-data__regional-office">
                             <div v-if="user.region">
@@ -93,6 +92,14 @@
                                     <p>{{ item.name }}</p>
                                 </div>
                             </div>
+                        </li>
+                        <li class="user-data__title" v-if="
+                            position
+                                ?.userdistrictheadquarterposition">
+                            <p>{{
+                                position
+                                    .userdistrictheadquarterposition
+                                    ?.headquarter?.name }}</p>
                         </li>
 
                         <li v-if="user.education?.study_institution?.short_name">
@@ -365,16 +372,24 @@ const getPositions = () => {
     switch (props.position?.userdetachmentposition?.position || props.position?.usereducationalheadquarterposition?.position || props.position?.userlocalheadquarterposition?.position || props.position?.userregionalheadquarterposition?.position || props.position?.userdistrictheadquarterposition?.position || props.position?.usercentralheadquarterposition?.position) {
         case 'Комиссар':
             return 'Комиссар';
+        case 'Комиссар':
+        case 'Боец':
+            return 'Комиссар'
         case 'Боец':
             return 'Боец';
-
-        case 'Комиссар': case 'Боец':
-            return 'Комиссар'
-
         default:
-            return 'Неизвестная должность';
+            return 'Боец';
     }
 };
+// const getPositions = () => {
+//     if ((props.position?.userdetachmentposition?.position || props.position?.usereducationalheadquarterposition?.position || props.position?.userlocalheadquarterposition?.position || props.position?.userregionalheadquarterposition?.position || props.position?.userdistrictheadquarterposition?.position || props.position?.usercentralheadquarterposition?.position) === 'Комиссар') {
+//         return 'Комиссар'
+//     } else if ((props.position?.userdetachmentposition?.position || props.position?.usereducationalheadquarterposition?.position || props.position?.userlocalheadquarterposition?.position || props.position?.userregionalheadquarterposition?.position || props.position?.userdistrictheadquarterposition?.position || props.position?.usercentralheadquarterposition?.position) === 'Комиссар' && (props.position?.userdetachmentposition?.position || props.position?.usereducationalheadquarterposition?.position || props.position?.userlocalheadquarterposition?.position || props.position?.userregionalheadquarterposition?.position || props.position?.userdistrictheadquarterposition?.position || props.position?.usercentralheadquarterposition?.position) === 'Боец') {
+//         return 'Комиссар'
+//     } else {
+//         return ' боец'
+//     }
+// };
 
 const copyL = () => {
     navigator.clipboard.writeText(window.location.href);
