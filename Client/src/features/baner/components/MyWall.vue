@@ -48,23 +48,7 @@
                         ">
                             <p>
                                 {{
-                                    roleStore.myPositions
-                                        .userdetachmentposition?.position ??
-                                    roleStore.myPositions
-                                        .usereducationalheadquarterposition
-                                        ?.position ??
-                                    roleStore.myPositions
-                                        .userregionalheadquarterposition
-                                        ?.position ??
-                                    roleStore.myPositions
-                                        .userlocalheadquarterposition
-                                        ?.position ??
-                                    roleStore.myPositions
-                                        .userdistrictheadquarterposition
-                                        ?.position ??
-                                    roleStore.myPositions
-                                        .usercentralheadquarterposition
-                                        ?.position
+                                    getPositions()
                                 }}
                             </p>
                         </li>
@@ -81,21 +65,20 @@
 
                         <li class="user-data__title" v-if="
                             roleStore.myPositions
-                                ?.usereducationalheadquarterposition ||
-                            roleStore.myPositions
-                                ?.userlocalheadquarterposition ||
-                            roleStore.myPositions
-                                ?.userdistrictheadquarterposition">
+                                ?.usereducationalheadquarterposition">
                             <p>{{
                                 roleStore.myPositions
                                     .usereducationalheadquarterposition
-                                    ?.headquarter?.name ??
+                                    ?.headquarter?.name }}</p>
+                        </li>
+                        <li class="user-data__title" v-if="
+                            roleStore.myPositions
+                                ?.userlocalheadquarterposition">
+                            <p>{{
                                 roleStore.myPositions
                                     .userlocalheadquarterposition
-                                    ?.headquarter?.name ??
-                                roleStore.myPositions
-                                    .userdistrictheadquarterposition
-                                    ?.headquarter?.name }}</p>
+                                    ?.headquarter?.name
+                            }}</p>
                         </li>
                         <li class="user-data__regional-office">
                             <div v-if="user.region && !isLoading.isLoading.value">
@@ -106,6 +89,15 @@
                             </div>
 
                             <p v-else>Загрузка региона...</p>
+                        </li>
+
+                        <li class="user-data__title" v-if="
+                            roleStore.myPositions
+                                ?.userdistrictheadquarterposition">
+                            <p>{{
+                                roleStore.myPositions
+                                    .userdistrictheadquarterposition
+                                    ?.headquarter?.name }}</p>
                         </li>
 
                         <li v-if="user.education?.study_institution?.short_name">
@@ -241,6 +233,21 @@ const regionals = storeToRefs(regionalsStore);
 const isLoading = storeToRefs(regionalsStore);
 
 const participant = ref({});
+
+const getPositions = () => {
+    switch (roleStore.myPositions?.userdetachmentposition?.position || roleStore.myPositions?.usereducationalheadquarterposition?.position || roleStore.myPositions?.userlocalheadquarterposition?.position || roleStore.myPositions?.userregionalheadquarterposition?.position || roleStore.myPositions?.userdistrictheadquarterposition?.position || roleStore.myPositions?.usercentralheadquarterposition?.position) {
+        case 'Комиссар':
+            return 'Комиссар';
+        case 'Боец':
+            return 'Боец';
+
+        case 'Комиссар': case 'Боец':
+            return 'Комиссар'
+
+        default:
+            return 'Неизвестная должность';
+    }
+};
 
 watch(
     () => props.user,

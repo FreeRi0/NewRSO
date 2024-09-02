@@ -19,7 +19,7 @@
             </div>
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
-          <SeventhPanelForm :panel_number="6" @collapse-form="collapsed()" :title="item"></SeventhPanelForm>
+          <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()" :title="item"></SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
     </v-expansion-panels>
   </v-card>

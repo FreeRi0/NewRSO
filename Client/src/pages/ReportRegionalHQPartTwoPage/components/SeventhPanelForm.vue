@@ -157,7 +157,7 @@
                     <p class="form__label">
                         Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
                     </p>
-                    <InputReport @focusout="focusOut" v-model:value="sixPanelData.count" placeholder="Введите число"
+                    <InputReport @focusout="focusOut" v-model:value="sixPanelData.number_of_members" placeholder="Введите число"
                         id="15" name="14" class="form__input number_input" type="number" />
                 </div>
                 <div class="form__field">
@@ -262,6 +262,7 @@ const props = defineProps({
     isDisabled: Boolean,
     isCentralHeadquarterCommander: Boolean,
     isSecondTab: Boolean,
+    id: String
 });
 
 const emit = defineEmits(['collapse-form']);
@@ -307,10 +308,10 @@ const uploadFile = async (event) => {
     formData.append('comment', seventhPanelData.value.comment);
     console.log(scanFile.value);
     if (isFirstSent.value) {
-        let { scan_file } = await reportPartTwoService.createReport(formData, '7', true);
+        let { scan_file } = await reportPartTwoService.createReportId(formData, '7', props.id, true);
         seventhPanelData.value.scan_file = scan_file.split('/').at(-1);
     } else {
-        let { data: { scan_file } } = await reportPartTwoService.createReportDraft(formData, '7', true);
+        let { data: { scan_file } } = await reportPartTwoService.createReportDraftId(formData, '7', props.id, true);
         seventhPanelData.value.scan_file = scan_file.split('/').at(-1);
     }
 };
@@ -328,9 +329,9 @@ const deleteFile = async () => {
     console.log(formData);
 
     if (isFirstSent.value) {
-        await reportPartTwoService.createReport(formData, ID_PANEL, true);
+        await reportPartTwoService.createReportId(formData, '7', props.id, true);
     } else {
-        await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+        await reportPartTwoService.createReportDraftId(formData, '7', props.id, true);
     }
 };
 const focusOut = async () => {
@@ -341,28 +342,33 @@ const focusOut = async () => {
         formData.append('comment', seventhPanelData.value.comment);
         if (isFirstSent.value) {
             if (props.panel_number == 6) {
-                await reportPartTwoService.createReportDraft(
+                await reportPartTwoService.createReportDraftId(
                     sixPanelData.value,
                     '6',
+                    props.id
                 );
             } else {
-                await reportPartTwoService.createReportDraft(
+                await reportPartTwoService.createReportDraftId(
                     formData,
                     '7',
+                    props.id,
                     true,
                 );
             }
 
         } else {
             if (props.panel_number == 6) {
-                await reportPartTwoService.createReport(
+                await reportPartTwoService.createReportId(
                     sixPanelData.value,
                     '6',
+                    props.id
                 );
             } else {
-                await reportPartTwoService.createReport(
+                await reportPartTwoService.createReportId(
                     formData,
                     '7',
+                    props.id,
+                    true,
                 );
             }
 
@@ -383,17 +389,17 @@ const addLink = (number) => {
 const deleteLink = async (number) => {
     if (number == 6) {
         sixPanelData.value.links.pop()
-        await reportPartTwoService.createReportDraft(sixPanelData.value, '6');
+        await reportPartTwoService.createReportDraftId(sixPanelData.value, '6', props.id);
     } else {
         seventhPanelData.value.links.pop()
-        await reportPartTwoService.createReportDraft(seventhPanelData.value, '7');
+        await reportPartTwoService.createReportDraftId(seventhPanelData.value, '7', props.id, true);
     }
 
 };
 
 watchEffect(async () => {
     try {
-        const { data } = await reportPartTwoService.getReport(props.panel_number);
+        const { data } = await reportPartTwoService.getReportId(props.panel_number, props.id);
         if (data.length && props.panel_number == 7) {
             isFirstSent.value = false;
             seventhPanelData.value.comment = data[0].comment;
