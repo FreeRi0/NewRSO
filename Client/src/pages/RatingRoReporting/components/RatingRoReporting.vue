@@ -10,9 +10,22 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
+import { useRouter } from "vue-router";
+import { useRoleStore } from "@layouts/store/role";
 
 const show = ref(false);
+
+const router = useRouter();
+
+const roleStore = useRoleStore();
+
+watch(() => roleStore.roles?.regionalheadquarter_commander, () => {
+  if (roleStore.roles?.regionalheadquarter_commander === null) {
+    router.push({ name: 'mypage' })
+  }
+})
+
 
 onMounted(() => {
   if (window.location.hostname.includes('localhost') || window.location.hostname.includes('rso.sprint.1t.ru') || window.location.hostname.includes('213.139.208.147')) {

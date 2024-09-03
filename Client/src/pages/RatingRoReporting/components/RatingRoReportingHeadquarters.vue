@@ -135,7 +135,8 @@ const getRegionals = async (pagination, orderLimit) => {
       response.results = [...regionals.value.results, ...response.results];
     }
     regionals.value = response;
-    sortedRegionalHeadquarters.value = response.results
+    sortedRegionalHeadquarters.value = response.results.filter(item => item.name !== 'Идеальный тестовый' && item.name !== 'Центральный штаб');
+
   } catch (error) {
     console.log('an error occured ' + error);
   }
