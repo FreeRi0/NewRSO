@@ -1,3 +1,28 @@
 .form__field-link-field {
     width: 720px;
 }
+
+.form__field-people-count-field,
+.form__field-people-count-wrap,
+.form__field-date-wrap,
+.form__field-date-wrap-field {
+    @media (max-width: 1024px) {
+        width: 244px;
+    }
+
+    @media (max-width: 768px) {
+        width: 290px;
+    }
+
+    @media (max-width: 400px) {
+        width: 100%;
+    }
+}
+
+.form__field-link-field {
+    width: 720px;
+
+    @media (max-width: 1024px) {
+        width: 100%;
+    }
+}

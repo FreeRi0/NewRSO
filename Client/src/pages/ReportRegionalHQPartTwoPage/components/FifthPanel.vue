@@ -6,14 +6,15 @@
           <label class="form__label" for="participants_number">Общее количество человек, принявших участие в трудовом
             проекте <sup class="valid-red">*</sup></label>
           <InputReport v-model:value="event.participants_number" id="participants_number" name="participants_number"
-            class="form__input" type="number" placeholder="Введите число" @focusout="focusOut" />
+            class="form__input form__field-people-count-field" type="number" placeholder="Введите число"
+            @focusout="focusOut" />
         </div>
         <div class="form__field-people-count-wrap">
           <label class="form__label" for="ro_participants_number">Количество человек из своего региона, принявших
             участие в трудовом проекте <sup class="valid-red">*</sup></label>
           <InputReport v-model:value="event.ro_participants_number" id="ro_participants_number"
-            name="ro_participants_number" class="form__input" type="number" placeholder="Введите число"
-            @focusout="focusOut" />
+            name="ro_participants_number" class="form__input form__field-people-count-field" type="number"
+            placeholder="Введите число" @focusout="focusOut" />
         </div>
         <Button v-if="index > 0" label="Удалить мероприятие" class="deleteEventBtn" @click="deleteProject(index)" />
       </div>
@@ -21,19 +22,19 @@
         <div class="form__field-date-wrap">
           <label class="form__label" for="start_date">Дата начала проведения проекта <sup
               class="valid-red">*</sup></label>
-          <InputReport v-model:value="event.start_date" id="start_date" name="start_date" class="form__input"
-            type="date" @focusout="focusOut" />
+          <InputReport v-model:value="event.start_date" id="start_date" name="start_date"
+            class="form__input form__field-date-wrap-field" type="date" @focusout="focusOut" />
         </div>
         <div class="form__field-date-wrap">
           <label class="form__label" for="end_date">Дата окончания проведения проекта <sup
               class="valid-red">*</sup></label>
-          <InputReport v-model:value="event.end_date" id="end_date" name="end_date" class="form__input" type="date"
-            @focusout="focusOut" />
+          <InputReport v-model:value="event.end_date" id="end_date" name="end_date"
+            class="form__input form__field-date-wrap-field" type="date" @focusout="focusOut" />
         </div>
       </div>
       <div class="report__add-file">
         <label class="form__label" for="4">Положение о проекте <sup class="valid-red">*</sup></label>
-        <InputReport isFile type="file" id="4" name="4" width="720px" height="86px" />
+        <InputReport isFile type="file" id="4" name="4" width="100%" height="86px" />
       </div>
       <div style="width: 100%;">
         <p class="form__label">Ссылка на группу трудового проекта в социальных сетях <sup class="valid-red">*</sup></p>
@@ -347,6 +348,14 @@ watchEffect(async () => {
   border: none;
   border-radius: 10px;
   margin-bottom: 8px;
+
+  @media (max-width: 768px) {
+    padding: 40px 40px 60px 40px;
+  }
+
+  @media (max-width: 400px) {
+    padding: 16px 16px 32px 16px;
+  }
 }
 
 .form__field-group-general {
@@ -355,10 +364,17 @@ watchEffect(async () => {
   gap: 16px;
 }
 
-.form__field-people-count {
+.form__field-people-count,
+.form__field-date {
   display: flex;
   max-width: 720px;
   gap: 40px;
+
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: space-between;
+  }
 }
 
 .form__field-people-count-wrap,
@@ -369,20 +385,31 @@ watchEffect(async () => {
   flex-direction: column;
 }
 
-.form__field-date {
-  display: flex;
-  max-width: 720px;
-  gap: 40px;
+.report__add-file {
+  @media (max-width: 1024px) {
+    max-width: 528px;
+  }
+
+  @media (max-width: 768px) {
+    max-width: 620px;
+  }
+
+  @media (max-width: 400px) {
+    width: 100%;
+  }
 }
 
 .form__field-link-wrap {
   display: flex;
   align-items: center;
   gap: 40px;
-}
 
-.form__field-link-field {
-  width: 720px;
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    align-items: stretch;
+  }
 }
 
 .valid-red {
@@ -483,6 +510,18 @@ watchEffect(async () => {
   height: 40px;
   padding: 8px 32px 8px 52px;
   width: 340px;
+
+  @media (max-width: 1024px) {
+    width: 244px;
+  }
+
+  @media (max-width: 768px) {
+    width: 290px;
+  }
+
+  @media (max-width: 400px) {
+    width: 296px;
+  }
 }
 
 .add_eventBtn::before {
@@ -490,12 +529,16 @@ watchEffect(async () => {
   position: absolute;
   left: 122px;
 
-  @media(max-width: 568px) {
-    left: 54px;
+  @media (max-width: 1024px) {
+    left: 74px;
   }
 
-  @media(max-width: 400px) {
-    left: 36px;
+  @media (max-width: 768px) {
+    left: 96px;
+  }
+
+  @media (max-width: 400px) {
+    left: 76px;
   }
 }
 
