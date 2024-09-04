@@ -50,7 +50,7 @@
                 <div class="nav-user__application-count" v-if="
                     Object.keys(userStore.currentUser).length &&
                     (roleStore.roles.regionalheadquarter_commander ||
-                    roleStore.roles.detachment_commander || roleStore.myPositions?.userregionalheadquarterposition?.position === 'Комиссар')
+                        roleStore.roles.detachment_commander || roleStore.myPositions?.userregionalheadquarterposition?.position === 'Комиссар')
                 ">
                     <!--ССЫЛКА НА СТРАНИЦУ АКТИВНЫЕ ЗАЯВКИ?-->
                     <router-link :to="'/active'">
@@ -331,6 +331,8 @@ const userPages = computed(() => [
         title: 'Рейтинг РО',
         name: nameUrl,
         show:
+            roleStore.experts.is_central_expert === true ||
+            roleStore.experts.is_district_expert === true ||
             roleStore.roles?.regionalheadquarter_commander ||
             roleStore.roles.centralheadquarter_commander,
     },
@@ -417,24 +419,31 @@ watch(
     },
 );
 
+
 watch(
-    () => roleStore.roles,
-    (newRole, oldRole) => {
-        if (Object.keys(roleStore.roles).length === 0) {
+    () => [roleStore.roles, roleStore.experts],
+    (newRoles, newExperts) => {
+        if (Object.keys(newRoles).length === 0) {
             return;
         }
-        if (roleStore.roles.centralheadquarter_commander !== null) {
+
+        if (newRoles.centralheadquarter_commander !== null) {
+            nameUrl = 'rating-ro'
+        } else if (newExperts.is_central_expert === true || newExperts.is_district_expert === true) {
             nameUrl = 'rating-ro'
         } else {
             nameUrl = 'reportingRo'
         }
+
         userStore.getCountApp();
     },
+    { immediate: true }
 );
 
 onMounted(() => {
     if (localStorage.getItem('jwt_token') !== null) {
         roleStore.getMyPositions();
+        roleStore.getExperts();
     } else {
         return;
     }

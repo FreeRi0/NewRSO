@@ -7,6 +7,7 @@ const isAuth = ref(!!localStorage.getItem('jwt_token'));
 export const useRoleStore = defineStore('role', {
     state: () => ({
         roles: {},
+        experts: {},
         userRoles: {},
         myPositions: {},
         positions: {},
@@ -78,5 +79,14 @@ export const useRoleStore = defineStore('role', {
             }
 
         },
+        async getExperts() {
+            try {
+                const dataExperts = await HTTP.get('/regional_competitions/user_info/', {
+                });
+                this.experts = dataExperts.data;
+            } catch (err) {
+                console.log('Ошибка при получении экспертов', err);
+            }
+        }
     },
 });
