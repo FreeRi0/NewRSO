@@ -44,7 +44,7 @@
         </div>
       </div>
       <div class="RoReporting_wrapper">
-        <router-link v-if="roleStore.roles.regionalheadquarter_commander && Object.keys(reg).length"
+        <router-link  @click="goToReport(reg.id)" v-if="roleStore.roles.regionalheadquarter_commander && Object.keys(reg).length"
           :to="{ name: 'rating-ro-reporting' }" class="ratingRO__item">
           <p>{{ reg.regional_headquarter.name }}</p>
         </router-link>
@@ -85,6 +85,7 @@ import { useDistrictsStore } from '@features/store/districts';
 import { useRegionalsStore } from '@features/store/regionals';
 import { useRoleStore } from '@layouts/store/role';
 import { HTTP } from '@app/http';
+import router from "@app/router/index.ts";
 
 const districtsStore = useDistrictsStore();
 const regionalsStore = useRegionalsStore();
@@ -98,6 +99,15 @@ const next = () => {
 const prev = () => {
   getRegionals();
 };
+
+const goToReport = (id) => {
+  router.push({
+    name: 'ReportRegionalPartOne',
+    query: {
+      id: id,
+    },
+  })
+}
 
 const sortedRegionalHeadquarters = ref([]);
 
