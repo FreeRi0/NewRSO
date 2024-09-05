@@ -2,7 +2,8 @@
   <div class="container">
     <div class="RoReporting">
       <h2 class="RoReporting_title">Отчеты РО</h2>
-      <div class="RoReporting_search" v-if="roleStore.roles.centralheadquarter_commander || roleStore.experts.is_central_expert === true">
+      <div class="RoReporting_search"
+        v-if="roleStore.roles.centralheadquarter_commander || roleStore.experts.is_central_expert === true">
         <input type="text" id="search" class="RoReporting_search__input" v-model="name" @keyup="searchHeadquarters"
           placeholder="Начните вводить" />
         <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -43,23 +44,28 @@
         </div>
       </div>
       <div class="RoReporting_wrapper">
-        <router-link v-if="roleStore.roles?.regionalheadquarter_commander && Object.keys(reg).length"
+        <router-link v-if="roleStore.roles.regionalheadquarter_commander && Object.keys(reg).length"
           :to="{ name: 'rating-ro-reporting' }" class="ratingRO__item">
           <p>{{ reg.regional_headquarter.name }}</p>
         </router-link>
 
 
-        <RatingRoHeadquartersList v-else :items="sortedRegionalHeadquarters" />
+        <RatingRoHeadquartersList
+          v-else-if="roleStore.roles.centralheadquarter_commander || roleStore.experts.is_central_expert === true"
+          :items="sortedRegionalHeadquarters" />
 
         <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate color="blue"></v-progress-circular>
-        <p v-else-if="!isLoading && !Object.keys(reg).length && roleStore.roles.regionalheadquarter_commander" class="no-found-text">
+        <p v-else-if="!isLoading && !Object.keys(reg).length && roleStore.roles.regionalheadquarter_commander"
+          class="no-found-text">
           К сожалению, не удалось найти информацию о вашем штабе по вашему запросу.
         </p>
-        <p v-else-if="!isLoading && !sortedRegionalHeadquarters.length && (roleStore.roles.centralheadquarter_commander || roleStore.experts.is_central_expert === true)" class="no-found-text">
+        <p v-else-if="!isLoading && !sortedRegionalHeadquarters.length && (roleStore.roles.centralheadquarter_commander || roleStore.experts.is_central_expert === true)"
+          class="no-found-text">
           К сожалению, не удалось найти информацию о штабах по вашему запросу.
         </p>
       </div>
-      <template v-if="regionals.count && regionals.count > limit && (roleStore.roles.centralheadquarter_commander || roleStore.experts.is_central_expert === true)">
+      <template
+        v-if="regionals.count && regionals.count > limit && (roleStore.roles.centralheadquarter_commander || roleStore.experts.is_central_expert === true)">
         <Button @click="next" v-if="
           sortedRegionalHeadquarters.length <
           regionals.count
@@ -142,16 +148,19 @@ const getRegionals = async (pagination, orderLimit) => {
     const viewHeadquartersResponse = await HTTP.get(url + data.join('&'),);
     isLoading.value = false;
     let response = viewHeadquartersResponse.data;
-    console.log('resp', response)
+
     if (pagination) {
       response.results = [...regionals.value.results, ...response.results];
     }
-    regionals.value = response;
+    if (roleStore.roles.centralheadquarter_commander || roleStore.experts.is_central_expert === true) {
+      regionals.value = response;
+    }
     if (roleStore.roles.regionalheadquarter_commander) {
       reg.value = response;
     }
-
-    sortedRegionalHeadquarters.value = response.results;
+    if (roleStore.roles.centralheadquarter_commander || roleStore.experts.is_central_expert === true) {
+      sortedRegionalHeadquarters.value = response.results;
+    }
   } catch (error) {
     console.log('an error occured ' + error);
   }
@@ -164,19 +173,29 @@ watch(
   },
 );
 
-watch(
-  () => ascending.value,
-  () => {
-    getRegionals('', sortedRegionalHeadquarters.value.length);
+// watch(
+//   () => ascending.value,
+//   () => {
+//     getRegionals('', sortedRegionalHeadquarters.value.length);
+//   },
+// );
+
+watch(() => [roleStore.roles, roleStore.experts],
+  async() => {
+   await getRegionals();
   },
-);
+  {
+    immediate: true,
+    deep: true,
+  }
+)
 
 
-onMounted(() => {
+onMounted(async () => {
+  await roleStore.getRoles()
+  await roleStore.getExperts()
   districtsStore.getDistricts()
-  setTimeout(() => {
-    getRegionals();
-  }, 500)
+
 
 })
 </script>
