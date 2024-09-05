@@ -2,7 +2,7 @@
   <div class="container">
     <div class="RoReporting">
       <h2 class="RoReporting_title">Отчеты РО</h2>
-      <div class="RoReporting_search">
+      <div class="RoReporting_search" v-if="roleStore.roles.centralheadquarter_commander || roleStore.experts.is_central_expert === true">
         <input type="text" id="search" class="RoReporting_search__input" v-model="name" @keyup="searchHeadquarters"
           placeholder="Начните вводить" />
         <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -11,12 +11,13 @@
             stroke="#898989" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </div>
-      <div class="RoReporting_sort">
+      <div class="RoReporting_sort"
+        v-if="roleStore.roles.centralheadquarter_commander || roleStore.experts.is_central_expert === true">
         <div class="sort-layout">
           <div class="sort-select sort-select--width">
             <v-select class="form__select filter-item" :items="districtsStore.districts" bg-color="#F7F7F7"
-              item-color="#000000" menu-icon="mdi-chevron-down" no-data-text="Ничего не найдено..." base-color="red" variant="default"
-              name="select_item" id="select-district" v-model="SelectedSortItem" item-title="name"
+              item-color="#000000" menu-icon="mdi-chevron-down" no-data-text="Ничего не найдено..." base-color="red"
+              variant="default" name="select_item" id="select-district" v-model="SelectedSortItem" item-title="name"
               placeholder="Окружной Штаб">
               <template #selection="{ item }">
                 <pre v-if="!districtsStore.isLoading">{{
@@ -42,16 +43,23 @@
         </div>
       </div>
       <div class="RoReporting_wrapper">
-        <RatingRoHeadquartersList :items="sortedRegionalHeadquarters" />
+        <router-link v-if="roleStore.roles?.regionalheadquarter_commander && Object.keys(reg).length"
+          :to="{ name: 'rating-ro-reporting' }" class="ratingRO__item">
+          <p>{{ reg.regional_headquarter.name }}</p>
+        </router-link>
+
+
+        <RatingRoHeadquartersList v-else :items="sortedRegionalHeadquarters" />
+
         <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate color="blue"></v-progress-circular>
-        <p v-else-if="
-          !isLoading &&
-          !sortedRegionalHeadquarters.length
-        "    class="no-found-text">
+        <p v-else-if="!isLoading && !Object.keys(reg).length && roleStore.roles.regionalheadquarter_commander" class="no-found-text">
+          К сожалению, не удалось найти информацию о вашем штабе по вашему запросу.
+        </p>
+        <p v-else-if="!isLoading && !sortedRegionalHeadquarters.length && (roleStore.roles.centralheadquarter_commander || roleStore.experts.is_central_expert === true)" class="no-found-text">
           К сожалению, не удалось найти информацию о штабах по вашему запросу.
         </p>
       </div>
-      <template v-if='regionals.count && regionals.count > limit'>
+      <template v-if="regionals.count && regionals.count > limit && (roleStore.roles.centralheadquarter_commander || roleStore.experts.is_central_expert === true)">
         <Button @click="next" v-if="
           sortedRegionalHeadquarters.length <
           regionals.count
@@ -59,9 +67,6 @@
         <Button @click="prev" v-else label="Свернуть все"></Button>
       </template>
     </div>
-
-    <!-- <Button @click="prev" v-else label="Свернуть все"></Button> -->
-
   </div>
 
 </template>
@@ -72,11 +77,12 @@ import { sortByEducation } from '@shared/components/selects';
 import { RatingRoHeadquartersList } from '@features/RatingRoHeadquarterList';
 import { useDistrictsStore } from '@features/store/districts';
 import { useRegionalsStore } from '@features/store/regionals';
+import { useRoleStore } from '@layouts/store/role';
 import { HTTP } from '@app/http';
 
 const districtsStore = useDistrictsStore();
 const regionalsStore = useRegionalsStore();
-
+const roleStore = useRoleStore();
 const SelectedSortItem = ref(null);
 
 const next = () => {
@@ -92,6 +98,7 @@ const sortedRegionalHeadquarters = ref([]);
 const ascending = ref(true);
 const isLoading = ref(false);
 const detachments = ref({});
+const reg = ref({});
 const sortBy = ref('name');
 const timerSearch = ref(null);
 const regionals = ref({});
@@ -120,22 +127,31 @@ const getRegionals = async (pagination, orderLimit) => {
   try {
     isLoading.value = true;
     let data = [];
-    let url = '/regionals/?';
+    let url = '';
+    if (roleStore.roles.regionalheadquarter_commander) {
+      url = '/regional_competitions/statistical_report/me/?'
+    } else if (roleStore.roles.centralheadquarter_commander || roleStore.experts.is_central_expert === true) {
+      url = '/regional_competitions/statistical_report/?'
+    }
     if (orderLimit) data.push('limit=' + orderLimit);
     else if (!pagination) data.push('limit=' + limit);
     else if (pagination == 'next') url = regionals.value.next.replace('http', 'https');
-    if (name.value) data.push('search=' + name.value)
-    if (SelectedSortItem.value) data.push('district_headquarter__name=' + SelectedSortItem.value)
+    if (name.value) data.push('regional_headquarter_name=' + name.value)
+    if (SelectedSortItem.value) data.push('district_name=' + SelectedSortItem.value)
     if (sortBy.value && !pagination) data.push('ordering=' + (ascending.value ? '' : '-') + sortBy.value)
     const viewHeadquartersResponse = await HTTP.get(url + data.join('&'),);
     isLoading.value = false;
-
     let response = viewHeadquartersResponse.data;
+    console.log('resp', response)
     if (pagination) {
       response.results = [...regionals.value.results, ...response.results];
     }
     regionals.value = response;
-    sortedRegionalHeadquarters.value = response.results.filter(item => item.name !== 'Идеальный тестовый' && item.name !== 'Центральный штаб');
+    if (roleStore.roles.regionalheadquarter_commander) {
+      reg.value = response;
+    }
+
+    sortedRegionalHeadquarters.value = response.results;
   } catch (error) {
     console.log('an error occured ' + error);
   }
@@ -158,11 +174,13 @@ watch(
 
 onMounted(() => {
   districtsStore.getDistricts()
-  getRegionals();
+  setTimeout(() => {
+    getRegionals();
+  }, 500)
+
 })
 </script>
 <style lang="scss" scoped>
-
 .circleLoader {
   margin: 40px auto;
 }

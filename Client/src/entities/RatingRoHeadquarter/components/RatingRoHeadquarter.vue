@@ -1,6 +1,6 @@
 <template>
   <router-link :to="{ name: 'rating-ro-reporting' }" class="ratingRO__item">
-    <p>{{ item.name }}</p>
+    <p>{{ item.regional_headquarter?.name }}</p>
   </router-link>
 </template>
 <script setup>
@@ -11,7 +11,7 @@ const props = defineProps({
   }
 })
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .ratingRO__item {
   cursor: pointer;
   padding: 16px 16px 16px 32px;
