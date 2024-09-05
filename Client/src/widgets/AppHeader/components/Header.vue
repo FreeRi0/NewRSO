@@ -426,12 +426,15 @@ watch(
       return;
     }
 
-    if (newRoles.centralheadquarter_commander !== null) {
+    if (roleStore.roles.centralheadquarter_commander !== null) {
       nameUrl = 'rating-ro'
+   
     } else if (newExperts.is_central_expert === true || newExperts.is_district_expert === true) {
       nameUrl = 'rating-ro'
+
     } else {
       nameUrl = 'reportingRo'
+
     }
 
     userStore.getCountApp();
