@@ -1,6 +1,6 @@
 <template>
   <div 
-    v-if="true"
+    v-if="!(props.centralHeadquarterCommander || props.districtHeadquarterCommander)"
     class="form__field-group report__field-group"
     >    
     <div class="report__fieldset report__fieldset--left-block">
@@ -11,8 +11,8 @@
       </label>
       <InputReport
         v-model:value="twelfthPanelData.amount_of_money"
-        id="number-of-members"
-        name="number-of-members"
+        id="amount-of-money"
+        name="amount-of-money"
         style="width: 100%;"
         height="40px"
         type="number"
@@ -83,9 +83,9 @@
     </div>
   </div>
 
-  <report-tabs>
+  <report-tabs v-else>
     <template v-slot:firstTab>
-      <div class="form__field-group report__field-group"
+      <div class="report__field-group"
         >    
         <div class="report__fieldset report__fieldset--left-block">
           <label 
@@ -95,9 +95,9 @@
             <sup class="valid-red">*</sup>
           </label>
           <InputReport
-            v-model:value="eleventhPanelData.participants_number"
-            id="number-of-members"
-            name="number-of-members"
+            v-model:value="twelfthPanelData.amount_of_money"
+            id="amount-of-money"
+            name="amount-of-money"
             style="width: 100%;"
             height="40px"
             type="number"
@@ -105,18 +105,13 @@
             :maxlength="10"
             :max="32767"
             @focusout="focusOut"
+            :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"
           />
         </div>
 
         <div class="report__fieldset report__fieldset--right-block">
-          <label
-            class="form__label report__label"
-            for="scan_file">
-            Скриншот численности <br> группы РО&nbsp;РСО
-            <sup class="valid-red">*</sup>
-          </label>
           <InputReport
-            v-if="!eleventhPanelData.scan_file"
+            v-if="!twelfthPanelData.scan_file"
             isFile
             type="file"
             accept=".jpg, .jpeg, .png, .pdf"
@@ -125,19 +120,21 @@
             width="100%"
             height="86px"
             @change="uploadFile"
+            :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"
           />
+
           <div 
             v-else
             class="report__file-box">
             <span class="report__file-name">
-              <SvgIcon v-if="eleventhPanelData.file_type === 'jpg'" icon-name="file-jpg" />
-              <SvgIcon v-if="eleventhPanelData.file_type === 'pdf'" icon-name="file-pdf" />
-              <SvgIcon v-if="eleventhPanelData.file_type === 'png'" icon-name="file-png" />
-              {{ eleventhPanelData.scan_file }}
+              <SvgIcon v-if="twelfthPanelData.file_type === 'jpg'" icon-name="file-jpg" />
+              <SvgIcon v-if="twelfthPanelData.file_type === 'pdf'" icon-name="file-pdf" />
+              <SvgIcon v-if="twelfthPanelData.file_type === 'png'" icon-name="file-png" />
+              {{ twelfthPanelData.scan_file }}
             </span>
 
             <span class="report__file-size">
-              {{ eleventhPanelData.file_size }} Мб
+              {{ twelfthPanelData.file_size }} Мб
             </span>
 
             <button 
@@ -149,12 +146,16 @@
           </div>
         </div>
 
-        <div class="report__fieldset report__fieldset--comment">
+        <div class="report__fieldset report__fieldset--comment" v-if="
+            !(props.centralHeadquarterCommander || props.districtHeadquarterCommander) || 
+            (props.centralHeadquarterCommander && twelfthPanelData.scan_file) || 
+            (props.districtHeadquarterCommander && twelfthPanelData.scan_file)">
+
           <label class="form__label report__label" for="comment">
             Комментарий
           </label>
           <TextareaReport
-            v-model:value="eleventhPanelData.comment"
+            v-model:value="twelfthPanelData.comment"
             id="comment"
             name="comment"
             placeholder="Напишите сообщение"
@@ -164,13 +165,14 @@
             :maxlength="3000"
             :max-length-text="3000"
             @focusout="focusOut"
+            :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"
           >
           </TextareaReport>
         </div>
       </div>
     </template>
     <template v-slot:secondTab>
-      <div class="form__field-group report__field-group"
+      <div class="report__field-group"
         >    
         <div class="report__fieldset report__fieldset--left-block">
           <label 
@@ -180,9 +182,9 @@
             <sup class="valid-red">*</sup>
           </label>
           <InputReport
-            v-model:value="eleventhPanelData.participants_number"
-            id="number-of-members"
-            name="number-of-members"
+            v-model:value="twelfthPanelData.amount_of_money"
+            id="amount-of-money"
+            name="amount-of-money"
             style="width: 100%;"
             height="40px"
             type="number"
@@ -201,7 +203,7 @@
             <sup class="valid-red">*</sup>
           </label>
           <InputReport
-            v-if="!eleventhPanelData.scan_file"
+            v-if="!twelfthPanelData.scan_file"
             isFile
             type="file"
             accept=".jpg, .jpeg, .png, .pdf"
@@ -215,14 +217,14 @@
             v-else
             class="report__file-box">
             <span class="report__file-name">
-              <SvgIcon v-if="eleventhPanelData.file_type === 'jpg'" icon-name="file-jpg" />
-              <SvgIcon v-if="eleventhPanelData.file_type === 'pdf'" icon-name="file-pdf" />
-              <SvgIcon v-if="eleventhPanelData.file_type === 'png'" icon-name="file-png" />
-              {{ eleventhPanelData.scan_file }}
+              <SvgIcon v-if="twelfthPanelData.file_type === 'jpg'" icon-name="file-jpg" />
+              <SvgIcon v-if="twelfthPanelData.file_type === 'pdf'" icon-name="file-pdf" />
+              <SvgIcon v-if="twelfthPanelData.file_type === 'png'" icon-name="file-png" />
+              {{ twelfthPanelData.scan_file }}
             </span>
 
             <span class="report__file-size">
-              {{ eleventhPanelData.file_size }} Мб
+              {{ twelfthPanelData.file_size }} Мб
             </span>
 
             <button 
@@ -239,7 +241,7 @@
             Комментарий
           </label>
           <TextareaReport
-            v-model:value="eleventhPanelData.comment"
+            v-model:value="twelfthPanelData.comment"
             id="comment"
             name="comment"
             placeholder="Напишите сообщение"
@@ -255,129 +257,100 @@
       </div>
     </template>
     <template v-slot:thirdTab>
-      
+      <div class="form__field-group report-table">
+        <label
+            class="form__label"
+        >Объем средств, собранных бойцами РО РСО <sup class="valid-red">*</sup></label>
+        <v-table>
+          <tbody>
+            <tr class="report-table__tr">
+              <td class="report-table__th report-table__th__br-left">Данные РО</td>
+              <td class="report-table__th">Корректировка ОШ</td>
+              <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
+            </tr>
+            <tr>
+              <td class="report-table__td">200</td>
+              <td class="report-table__td report-table__td__center">200</td>
+              <td class="report-table__td">200</td>
+            </tr>
+          </tbody>
+        </v-table>
+        <div class="form__field">
+          <label
+              class="form__label"
+              for="15"
+          >Комментарий</label>
+          <InputReport
+              id="15"
+              name="15"
+              class="form__input"
+              style="width: 100%"
+          />
+        </div>
+        <div>
+          <v-checkbox
+              label="Вернуть в РО на доработку"
+          />
+        </div>
+      </div>
     </template>
   </report-tabs>
-  <!-- <v-card 
-    v-else
-    class="panel-card" >
-    <v-tabs
-        v-model="tab"
-    >
-      <v-tab value="one" class="panel-tab-btn">Отчет РО</v-tab>
-      <v-tab value="two" class="panel-tab-btn">Корректировка ОШ</v-tab>
-      <v-tab value="three" class="panel-tab-btn">Корректировка ЦШ</v-tab>
-    </v-tabs>
 
-    <v-card-text class="panel-card-text">
-      <v-tabs-window v-model="tab">
-        <v-tabs-window-item value="one">
-          <div class="form__field-group">
-            <div style="display: flex">
-              <div class="form__field">
-                <label
-                    class="form__label"
-                >Объем средств, собранных бойцами РО РСО <sup class="valid-red">*</sup></label>
-                <InputReport
-                    id="2"
-                    name="2"
-                    class="form__input"
-                    type="number"
-                />
-              </div>
-              <div class="form__field">
-                <label
-                    class="form__label"
-                    for="4"
-                >Скан подтверждающего документа</label>
-                <InputReport
-                    type="file"
-                    id="4"
-                    name="4"
-                />
-              </div>
-            </div>
-          </div>
-        </v-tabs-window-item>
-
-        <v-tabs-window-item value="two">
-          <div class="form__field-group">
-            <div class="form__field">
-              <label
-                  class="form__label"
-              >Объем средств, собранных бойцами РО РСО <sup class="valid-red">*</sup></label>
-              <InputReport
-                  id="2"
-                  name="2"
-                  class="form__input"
-                  type="number"
-              />
-            </div>
-            <div class="form__field">
-              <label
-                  class="form__label"
-                  for="14"
-              >Комментарий <sup class="valid-red">*</sup></label>
-              <InputReport
-                  id="14"
-                  name="14"
-                  class="form__input"
-                  style="width: 100%"
-              />
-            </div>
-          </div>
-        </v-tabs-window-item>
-
-        <v-tabs-window-item value="three">
-          <div class="form__field-group report-table">
-            <label
-                class="form__label"
-            >Объем средств, собранных бойцами РО РСО <sup class="valid-red">*</sup></label>
-            <v-table>
-              <tbody>
-              <tr class="report-table__tr">
-                <td class="report-table__th report-table__th__br-left">Данные РО</td>
-                <td class="report-table__th">Корректировка ОШ</td>
-                <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
-              </tr>
-              <tr>
-                <td class="report-table__td">200</td>
-                <td class="report-table__td report-table__td__center">200</td>
-                <td class="report-table__td">200</td>
-              </tr>
-              </tbody>
-            </v-table>
-            <div class="form__field">
-              <label
-                  class="form__label"
-                  for="15"
-              >Комментарий</label>
-              <InputReport
-                  id="15"
-                  name="15"
-                  class="form__input"
-                  style="width: 100%"
-              />
-            </div>
-            <div>
-              <v-checkbox
-                  label="Вернуть в РО на доработку"
-              />
-            </div>
-          </div>
-        </v-tabs-window-item>
-      </v-tabs-window>
-    </v-card-text>
-  </v-card> -->
+  <!-- <v-tabs-window-item value="three">
+    <div class="form__field-group report-table">
+      <label
+          class="form__label"
+      >Объем средств, собранных бойцами РО РСО <sup class="valid-red">*</sup></label>
+      <v-table>
+        <tbody>
+        <tr class="report-table__tr">
+          <td class="report-table__th report-table__th__br-left">Данные РО</td>
+          <td class="report-table__th">Корректировка ОШ</td>
+          <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
+        </tr>
+        <tr>
+          <td class="report-table__td">200</td>
+          <td class="report-table__td report-table__td__center">200</td>
+          <td class="report-table__td">200</td>
+        </tr>
+        </tbody>
+      </v-table>
+      <div class="form__field">
+        <label
+            class="form__label"
+            for="15"
+        >Комментарий</label>
+        <InputReport
+            id="15"
+            name="15"
+            class="form__input"
+            style="width: 100%"
+        />
+      </div>
+      <div>
+        <v-checkbox
+            label="Вернуть в РО на доработку"
+        />
+      </div>
+    </div>
+  </v-tabs-window-item> -->
 </template>
 
 <script setup>
 import { ref, watchEffect } from "vue";
 import { InputReport, TextareaReport } from '@shared/components/inputs';
+import { ReportTabs } from './index';
 import { getReport, reportPartTwoService } from "@services/ReportService.ts";
 import { SvgIcon } from '@shared/index';
 
-const tab = ref('one')
+const props = defineProps({
+  districtHeadquarterCommander: {
+    type: Boolean
+  },
+  centralHeadquarterCommander: {
+    type: Boolean
+  },
+});
 
 const ID_PANEL = '12';
 const isFirstSent = ref(true);
@@ -444,7 +417,7 @@ const deleteFile = async () => {
 
 watchEffect(async () => {
   try {
-    const { data } = await reportPartTwoService.getReport(ID_PANEL);
+    const { data } = props.centralHeadquarterCommander || props.districtHeadquarterCommander ? await reportPartTwoService.getReportDH(ID_PANEL) : await reportPartTwoService.getReport(ID_PANEL);
     console.log(data);
     if (data) {
       isFirstSent.value = false;
@@ -458,8 +431,6 @@ watchEffect(async () => {
     console.log(e)
   }
 });
-
-
 </script>
 
 <style lang="scss" scoped>
@@ -470,7 +441,6 @@ watchEffect(async () => {
     }
   }
 }
-
 
 .panel-card {
   box-shadow: none;

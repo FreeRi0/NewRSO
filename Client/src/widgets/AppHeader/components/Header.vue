@@ -421,24 +421,30 @@ watch(
 
 
 watch(
-    () => [roleStore.roles, roleStore.experts],
-    (newRoles, newExperts) => {
-        if (Object.keys(newRoles).length === 0) {
-            return;
-        }
+  () => [roleStore.roles, roleStore.experts],
+  (newRoles, newExperts) => {
+    if (Object.keys(newRoles).length === 0) {
+      return;
+    }
 
-        if (newRoles.centralheadquarter_commander !== null) {
-            nameUrl = 'rating-ro'
-        } else if (newExperts.is_central_expert === true || newExperts.is_district_expert === true) {
-            nameUrl = 'rating-ro'
-        } else {
-            nameUrl = 'reportingRo'
-        }
+    if (roleStore.roles.centralheadquarter_commander !== null) {
+      nameUrl = 'rating-ro'
 
-        userStore.getCountApp();
-    },
-    { immediate: true }
+    } else if (newExperts.is_central_expert === true || newExperts.is_district_expert === true) {
+      nameUrl = 'rating-ro'
+
+    } else {
+      nameUrl = 'reportingRo'
+
+    }
+
+    userStore.getCountApp();
+  },
+  { immediate: true }
 );
+
+
+
 
 onMounted(() => {
     if (localStorage.getItem('jwt_token') !== null) {

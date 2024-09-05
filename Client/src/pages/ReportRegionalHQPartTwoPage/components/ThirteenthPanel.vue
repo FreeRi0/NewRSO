@@ -1,6 +1,6 @@
 <template>
   <div 
-    v-if="true"
+    v-if="!(props.centralHeadquarterCommander || props.districtHeadquarterCommander)"
     class="form__field-group report__field-group"
     >    
     <div class="report__fieldset report__fieldset--left-block">
@@ -83,8 +83,217 @@
     </div>
   </div>
 
+  <report-tabs v-else>
+    <template v-slot:firstTab>
+      <div class="report__field-group">    
+        <div class="report__fieldset report__fieldset--left-block">
+          <label 
+            class="form__label report__label"
+            for="number-of-members">
+            Количество членов РО&nbsp;РСО, принявших участие во&nbsp;Всероссийском дне ударного труда&nbsp;<sup class="valid-red">*</sup>
+          </label>
+          <InputReport
+            v-model:value="thirteenthPanelData.number_of_members"
+            id="number-of-members"
+            name="number-of-members"
+            style="width: 100%;"
+            height="40px"
+            type="number"
+            placeholder="Введите число"
+            :maxlength="10"
+            :max="32767"
+            @focusout="focusOut"
+            :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"
+          />
+        </div>
 
-  <v-card 
+        <div class="report__fieldset report__fieldset--right-block">
+          <label
+            class="form__label report__label"
+            for="scan_file">
+            Скан подтверждающего <br> документа&nbsp;<sup class="valid-red">*</sup>
+          </label>
+          <InputReport
+            v-if="!thirteenthPanelData.scan_file"
+            isFile
+            type="file"
+            accept=".jpg, .jpeg, .png, .pdf"
+            id="scan_file"
+            name="scan_file"
+            width="100%"
+            height="auto"
+            @change="uploadFile"
+            :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"
+          />
+          <div 
+            v-else
+            class="report__file-box">
+            <span class="report__file-name">
+              <SvgIcon v-if="thirteenthPanelData.file_type === 'jpg'" icon-name="file-jpg" />
+              <SvgIcon v-if="thirteenthPanelData.file_type === 'pdf'" icon-name="file-pdf" />
+              <SvgIcon v-if="thirteenthPanelData.file_type === 'png'" icon-name="file-png" />
+              {{ thirteenthPanelData.scan_file }}
+            </span>
+
+            <span class="report__file-size">
+              {{ thirteenthPanelData.file_size }} Мб
+            </span>
+
+            <button 
+              @click="deleteFile"
+              class="report__button-delete-file"
+            >
+              Удалить
+            </button>
+          </div>
+        </div>
+
+        <div class="report__fieldset report__fieldset--comment">
+          <label class="form__label report__label" for="comment">
+            Комментарий
+          </label>
+          <TextareaReport
+            v-model:value="thirteenthPanelData.comment"
+            id="comment"
+            name="comment"
+            placeholder="Напишите сообщение"
+            :rows="1" 
+            autoResize
+            counter-visible
+            :maxlength="3000"
+            :max-length-text="3000"
+            @focusout="focusOut"
+            :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"
+          >
+          </TextareaReport>
+        </div>
+      </div>
+    </template>
+
+    <template v-slot:secondTab>
+      <div class="report__field-group">    
+        <div class="report__fieldset report__fieldset--left-block">
+          <label 
+            class="form__label report__label"
+            for="number-of-members">
+            Количество членов РО&nbsp;РСО, принявших участие во&nbsp;Всероссийском дне ударного труда&nbsp;<sup class="valid-red">*</sup>
+          </label>
+          <InputReport
+            v-model:value="thirteenthPanelData.number_of_members"
+            id="number-of-members"
+            name="number-of-members"
+            style="width: 100%;"
+            height="40px"
+            type="number"
+            placeholder="Введите число"
+            :maxlength="10"
+            :max="32767"
+            @focusout="focusOut"
+          />
+        </div>
+
+        <div class="report__fieldset report__fieldset--right-block">
+          <label
+            class="form__label report__label"
+            for="scan_file">
+            Скан подтверждающего <br> документа&nbsp;<sup class="valid-red">*</sup>
+          </label>
+          <InputReport
+            v-if="!thirteenthPanelData.scan_file"
+            isFile
+            type="file"
+            accept=".jpg, .jpeg, .png, .pdf"
+            id="scan_file"
+            name="scan_file"
+            width="100%"
+            height="auto"
+            @change="uploadFile"
+          />
+          <div 
+            v-else
+            class="report__file-box">
+            <span class="report__file-name">
+              <SvgIcon v-if="thirteenthPanelData.file_type === 'jpg'" icon-name="file-jpg" />
+              <SvgIcon v-if="thirteenthPanelData.file_type === 'pdf'" icon-name="file-pdf" />
+              <SvgIcon v-if="thirteenthPanelData.file_type === 'png'" icon-name="file-png" />
+              {{ thirteenthPanelData.scan_file }}
+            </span>
+
+            <span class="report__file-size">
+              {{ thirteenthPanelData.file_size }} Мб
+            </span>
+
+            <button 
+              @click="deleteFile"
+              class="report__button-delete-file"
+            >
+              Удалить
+            </button>
+          </div>
+        </div>
+
+        <div class="report__fieldset report__fieldset--comment">
+          <label class="form__label report__label" for="comment">
+            Комментарий
+          </label>
+          <TextareaReport
+            v-model:value="thirteenthPanelData.comment"
+            id="comment"
+            name="comment"
+            placeholder="Напишите сообщение"
+            :rows="1" 
+            autoResize
+            counter-visible
+            :maxlength="3000"
+            :max-length-text="3000"
+            @focusout="focusOut"
+          >
+          </TextareaReport>
+        </div>
+      </div>
+    </template>
+
+    <template v-slot:thirdTab>
+      <div class="form__field-group report-table">
+        <label
+            class="form__label"
+        >Количество членов РО РСО, принявших участие во Всероссийском дне ударного  труда <sup class="valid-red">*</sup></label>
+        <v-table>
+          <tbody>
+            <tr class="report-table__tr">
+              <td class="report-table__th report-table__th__br-left">Данные РО</td>
+              <td class="report-table__th">Корректировка ОШ</td>
+              <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
+            </tr>
+            <tr>
+              <td class="report-table__td">200</td>
+              <td class="report-table__td report-table__td__center">200</td>
+              <td class="report-table__td">200</td>
+            </tr>
+          </tbody>
+        </v-table>
+        <div class="form__field">
+          <label
+              class="form__label"
+              for="15"
+          >Комментарий</label>
+          <InputReport
+              id="15"
+              name="15"
+              class="form__input"
+              style="width: 100%"
+          />
+        </div>
+        <div>
+          <v-checkbox
+              label="Вернуть в РО на доработку"
+          />
+        </div>
+      </div>
+    </template>
+  </report-tabs>
+
+  <!-- <v-card 
     v-else
     class="panel-card" >
     <v-tabs
@@ -194,15 +403,25 @@
         </v-tabs-window-item>
       </v-tabs-window>
     </v-card-text>
-  </v-card>
+  </v-card> -->
 </template>
 <script setup>
 import { ref, watchEffect } from "vue";
 import { InputReport, TextareaReport } from '@shared/components/inputs';
+import { ReportTabs } from './index';
 import { getReport, reportPartTwoService } from "@services/ReportService.ts";
 import { SvgIcon } from '@shared/index';
 
-const tab = ref('one')
+// const tab = ref('one')
+
+const props = defineProps({
+  districtHeadquarterCommander: {
+    type: Boolean
+  },
+  centralHeadquarterCommander: {
+    type: Boolean
+  },
+});
 
 const ID_PANEL = '13';
 const isFirstSent = ref(true);
@@ -269,7 +488,7 @@ const deleteFile = async () => {
 
 watchEffect(async () => {
   try {
-    const { data } = await reportPartTwoService.getReport(ID_PANEL);
+    const { data } = props.centralHeadquarterCommander || props.districtHeadquarterCommander ? await reportPartTwoService.getReportDH(ID_PANEL) : await reportPartTwoService.getReport(ID_PANEL);
     console.log(data);
     if (data) {
       isFirstSent.value = false;

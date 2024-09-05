@@ -106,6 +106,7 @@ const LoginUser = async () => {
         roleStore.getRoles();
         roleStore.getExperts();
         roleStore.getMyPositions();
+        roleStore.getExperts();
         roleStore.getUserParticipantsStatus(competition_pk);
 
 
