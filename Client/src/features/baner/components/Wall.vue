@@ -17,8 +17,8 @@
                     roleStore.roles.centralheadquarter_commander)) ||
             props.user.privacy?.privacy_photo === 'Все' ||
             props.user.privacy?.privacy_photo === 'all'
-        " :banner="user.media?.banner" @upload-wall="uploadWall" @update-wall="updateWall"
-            @delete-wall="deleteWall" :edited="false"></bannerPhoto>
+        " :banner="user.media?.banner" @upload-wall="uploadWall" @update-wall="updateWall" @delete-wall="deleteWall"
+            :edited="false"></bannerPhoto>
         <div class="user-metric__top" v-else>
             <div class="user-metric__top-img-wrapper">
                 <img src="@/app/assets/user-banner.jpg" alt="Баннер личной страницы(пусто)" />
@@ -50,26 +50,13 @@
                         ">
                             <p>Командир</p>
                         </li>
-                        <li class="user-data__title" v-else-if="
-                            position?.userdetachmentposition ||
-                            position?.userregionalheadquarterposition ||
-                            position?.userlocalheadquarterposition ||
-                            position?.userdistrictheadquarterposition ||
-                            position?.usercentralheadquarterposition
+                        <li class="user-data__title" v-else-if="position?.userdetachmentposition?.position || position?.usereducationalheadquarterposition?.position || position?.userlocalheadquarterposition?.position || position?.userregionalheadquarterposition?.position ||
+                            position?.userdistrictheadquarterposition?.position ||
+                            position?.usercentralheadquarterposition?.position
                         ">
                             <p>
                                 {{
-                                    position.userdetachmentposition?.position ??
-                                    position.usereducationalheadquarterposition
-                                        ?.position ??
-                                    position.userregionalheadquarterposition
-                                        ?.position ??
-                                    position.userlocalheadquarterposition
-                                        ?.position ??
-                                    position.userdistrictheadquarterposition
-                                        ?.position ??
-                                    position.usercentralheadquarterposition
-                                        ?.position
+                                    getPositions()
                                 }}
                             </p>
                         </li>
@@ -83,21 +70,20 @@
                         </li>
                         <li class="user-data__title" v-if="
                             position
-                                ?.usereducationalheadquarterposition ||
-                            position
-                                ?.userlocalheadquarterposition ||
-                            position
-                                ?.userdistrictheadquarterposition">
+                                ?.usereducationalheadquarterposition">
                             <p>{{
                                 position
                                     .usereducationalheadquarterposition
-                                    ?.headquarter?.name ??
+                                    ?.headquarter?.name }}</p>
+                        </li>
+                        <li class="user-data__title" v-if="
+                            position
+                                ?.userlocalheadquarterposition">
+                            <p>{{
                                 position
                                     .userlocalheadquarterposition
-                                    ?.headquarter?.name ??
-                                position
-                                    .userdistrictheadquarterposition
-                                    ?.headquarter?.name }}</p>
+                                    ?.headquarter?.name
+                            }}</p>
                         </li>
                         <li class="user-data__regional-office">
                             <div v-if="user.region">
@@ -106,6 +92,14 @@
                                     <p>{{ item.name }}</p>
                                 </div>
                             </div>
+                        </li>
+                        <li class="user-data__title" v-if="
+                            position
+                                ?.userdistrictheadquarterposition">
+                            <p>{{
+                                position
+                                    .userdistrictheadquarterposition
+                                    ?.headquarter?.name }}</p>
                         </li>
 
                         <li v-if="user.education?.study_institution?.short_name">
@@ -373,6 +367,29 @@ watch(
 onMounted(() => {
     regionalsStore.searchRegionals(props.user.region);
 });
+
+const getPositions = () => {
+    switch (props.position?.userdetachmentposition?.position || props.position?.usereducationalheadquarterposition?.position || props.position?.userlocalheadquarterposition?.position || props.position?.userregionalheadquarterposition?.position || props.position?.userdistrictheadquarterposition?.position || props.position?.usercentralheadquarterposition?.position) {
+        case 'Комиссар':
+            return 'Комиссар';
+        case 'Комиссар':
+        case 'Боец':
+            return 'Комиссар'
+        case 'Боец':
+            return 'Боец';
+        default:
+            return 'Боец';
+    }
+};
+// const getPositions = () => {
+//     if ((props.position?.userdetachmentposition?.position || props.position?.usereducationalheadquarterposition?.position || props.position?.userlocalheadquarterposition?.position || props.position?.userregionalheadquarterposition?.position || props.position?.userdistrictheadquarterposition?.position || props.position?.usercentralheadquarterposition?.position) === 'Комиссар') {
+//         return 'Комиссар'
+//     } else if ((props.position?.userdetachmentposition?.position || props.position?.usereducationalheadquarterposition?.position || props.position?.userlocalheadquarterposition?.position || props.position?.userregionalheadquarterposition?.position || props.position?.userdistrictheadquarterposition?.position || props.position?.usercentralheadquarterposition?.position) === 'Комиссар' && (props.position?.userdetachmentposition?.position || props.position?.usereducationalheadquarterposition?.position || props.position?.userlocalheadquarterposition?.position || props.position?.userregionalheadquarterposition?.position || props.position?.userdistrictheadquarterposition?.position || props.position?.usercentralheadquarterposition?.position) === 'Боец') {
+//         return 'Комиссар'
+//     } else {
+//         return ' боец'
+//     }
+// };
 
 const copyL = () => {
     navigator.clipboard.writeText(window.location.href);
