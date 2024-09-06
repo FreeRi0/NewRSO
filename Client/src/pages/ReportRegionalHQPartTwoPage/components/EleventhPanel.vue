@@ -278,7 +278,11 @@
       </div> -->
     </template>
     <template v-slot:thirdTab>
-      
+      <EleventhPanelComponent
+        :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
+        :isDistrictHeadquarterCommander="props.districtHeadquarterCommander"
+        is-third-tab
+      ></EleventhPanelComponent>
     </template>
   </report-tabs>
 
@@ -326,7 +330,8 @@
 <script setup>
 import { ref, watchEffect } from "vue";
 import { EleventhPanelComponent } from "@features/RatingRoPanelComponents";
-// import { InputReport, TextareaReport } from '@shared/components/inputs';
+import { InputReport, TextareaReport } from '@shared/components/inputs';
+import { CommentFileComponent } from '@entities/RatingRoComponents/components';
 import { ReportTabs } from './index';
 // import { getReport, reportPartTwoService } from "@services/ReportService.ts";
 // import { SvgIcon } from '@shared/index';
@@ -422,80 +427,9 @@ const props = defineProps({
   });
 
 </script>
-<style lang="scss" scoped>
-// .panel-card {
-//   box-shadow: none;
-// }
 
+<style lang="scss" scoped>
 .valid-red {
   color: #db0000;
-}
-.v-tab-item--selected {
-  background: #F3F4F5;
-}
-.v-tab.v-tab.v-btn {
-  min-width: 280px;
-  border-radius: 10px 10px 0 0;
-  letter-spacing: initial;
-  border: none;
-}
-// .panel-card-text {
-//   padding: 0;
-// }
-// .panel-tab-btn {
-//   text-transform: initial;
-//   font-family: Bert Sans;
-//   font-size: 16px;
-//   font-weight: 400;
-//   line-height: 21.1px;
-//   text-align: left;
-//   margin-right: 8px;
-// }
-
-.hr {
-  width: 100%;
-  border-top: 1px solid #B6B6B6;
-}
-
-.v-table {
-  margin-bottom: 16px;
-  border-radius: 10px;
-  border: 1px solid #B6B6B6;
-}
-
-.report-table {
-  &__tr {
-    background-color: #FFFFFF;
-    text-align: center;
-  }
-  &__th {
-    font-family: Akrobat;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 19.2px;
-    text-align: center;
-
-    &__br-left {
-      border-radius: 10px 0 0 0;
-      border-right: 1px solid #B6B6B6;
-    }
-
-    &__br-right {
-      border-radius: 0 10px 0 0;
-      border-left: 1px solid #B6B6B6;
-    }
-  }
-  &__td {
-    text-align: center;
-    font-family: Akrobat;
-    font-size: 16px;
-    font-weight: 500;
-    color: #8E8E93;
-
-    &__center {
-      border-left: 1px solid #B6B6B6;
-      border-right: 1px solid #B6B6B6;
-    }
-  }
 }
 </style>
