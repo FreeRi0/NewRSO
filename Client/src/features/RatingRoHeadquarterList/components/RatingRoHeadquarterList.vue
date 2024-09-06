@@ -12,7 +12,7 @@ const props = defineProps({
 })
 const goToReport = (id) => {
   router.push({
-    name: 'ReportRegionalPartOne',
+    name: 'ReportRegionalPartOneComander',
     query: {
       id: id,
     },
