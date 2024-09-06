@@ -1,7 +1,7 @@
 <template>
-  <router-link :to="{ name: 'rating-ro-reporting' }" class="ratingRO__item">
+  <div class="ratingRO__item">
     <p>{{ item.regional_headquarter?.name }}</p>
-  </router-link>
+  </div>
 </template>
 <script setup>
 const props = defineProps({
