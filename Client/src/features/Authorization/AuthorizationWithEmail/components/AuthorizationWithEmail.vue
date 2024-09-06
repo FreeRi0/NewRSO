@@ -36,7 +36,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup scoped>
 import { ref, inject, onMounted } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { Input, passwordInput } from '@shared/components/inputs';

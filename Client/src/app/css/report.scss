@@ -14,6 +14,10 @@
         // border: none;
         // border-radius: 10px;
 
+        &--column {
+            grid-template-columns: 1fr;
+        }
+
         @media (max-width: 768px) {
             grid-template-columns: 1fr;
         }
@@ -35,7 +39,7 @@
         // }
 
         &--comment,
-        &--comment-district {
+        &--comment-expert {
             margin-bottom: 17px;
             grid-column: -1 / 1;
 
@@ -44,7 +48,7 @@
             }
         }
 
-        &--comment-district {
+        &--comment-expert {
             position: relative;
 
             .form-input__add-file {
@@ -236,6 +240,12 @@
     }
     &__button-delete-file {
         color: #1f7cc0;
+        transition: 0.2s;
+
+        &:hover,
+        &:active {
+            color: #1C5C94;
+        } 
     }
     //--------------------------------------------------------------
 }
