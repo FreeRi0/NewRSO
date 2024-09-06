@@ -1,22 +1,27 @@
 <template>
   <div v-if="true" class="form__field-group">
     <div class="form__field-group-general" v-for="(event, index) in events" :key="index">
-      <div class="form__field-people-count">
-        <div class="form__field-people-count-wrap">
-          <label class="form__label" for="participants_number">Общее количество человек, принявших участие в трудовом
-            проекте <sup class="valid-red">*</sup></label>
-          <InputReport v-model:value="event.participants_number" id="participants_number" name="participants_number"
-            class="form__input form__field-people-count-field" type="number" placeholder="Введите число"
-            @focusout="focusOut" />
+
+      <div class="form__field-people">
+        <div class="form__field-people-count">
+
+          <div class="form__field-people-count-wrap">
+            <label class="form__label" for="participants_number">Общее количество человек, принявших участие в трудовом
+              проекте <sup class="valid-red">*</sup></label>
+            <InputReport v-model:value="event.participants_number" id="participants_number" name="participants_number"
+              class="form__input form__field-people-count-field" type="number" placeholder="Введите число"
+              @focusout="focusOut" />
+          </div>
+          <div class="form__field-people-count-wrap">
+            <label class="form__label" for="ro_participants_number">Количество человек из своего региона, принявших
+              участие в трудовом проекте <sup class="valid-red">*</sup></label>
+            <InputReport v-model:value="event.ro_participants_number" id="ro_participants_number"
+              name="ro_participants_number" class="form__input form__field-people-count-field" type="number"
+              placeholder="Введите число" @focusout="focusOut" />
+          </div>
         </div>
-        <div class="form__field-people-count-wrap">
-          <label class="form__label" for="ro_participants_number">Количество человек из своего региона, принявших
-            участие в трудовом проекте <sup class="valid-red">*</sup></label>
-          <InputReport v-model:value="event.ro_participants_number" id="ro_participants_number"
-            name="ro_participants_number" class="form__input form__field-people-count-field" type="number"
-            placeholder="Введите число" @focusout="focusOut" />
-        </div>
-        <Button v-if="index > 0" label="Удалить мероприятие" class="deleteEventBtn" @click="deleteProject(index)" />
+
+        <Button v-if="index > 0" label="Удалить проект" class="deleteEventBtn" @click="deleteProject(index)" />
       </div>
       <div class="form__field-date" style="display: flex;">
         <div class="form__field-date-wrap">
@@ -56,7 +61,7 @@
         placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :max-length-text="3000" counter-visible />
     </div>
     <div>
-      <v-checkbox label="Итоговое значение" />
+      <v-checkbox class="result-checkbox" label="Итоговое значение" />
     </div>
     <div class="hr"></div>
     <div>
@@ -348,13 +353,14 @@ watchEffect(async () => {
   border: none;
   border-radius: 10px;
   margin-bottom: 8px;
+  padding-top: 0;
 
   @media (max-width: 768px) {
-    padding: 40px 40px 60px 40px;
+    padding: 0 40px 60px 40px;
   }
 
   @media (max-width: 400px) {
-    padding: 16px 16px 32px 16px;
+    padding: 0 16px 32px 16px;
   }
 }
 
@@ -362,6 +368,20 @@ watchEffect(async () => {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  padding-top: 40px;
+
+  @media (max-width: 400px) {
+    padding-top: 16px;
+  }
+}
+
+.form__field-people {
+  display: flex;
+  max-width: 901px;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap-reverse;
+  align-items: flex-end;
 }
 
 .form__field-people-count,
@@ -401,13 +421,16 @@ watchEffect(async () => {
 
 .form__field-link-wrap {
   display: flex;
+  max-width: 901px;
   align-items: center;
-  gap: 40px;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
 
   @media (max-width: 1024px) {
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
     align-items: stretch;
   }
 }
@@ -505,7 +528,7 @@ watchEffect(async () => {
   background-color: transparent;
   color: #1F7CC0;
   border-color: #1F7CC0;
-  margin: 35px 0 40px;
+  margin: 28px 0 40px;
   max-height: 40px;
   height: 40px;
   padding: 8px 32px 8px 52px;
@@ -544,17 +567,22 @@ watchEffect(async () => {
 
 .deleteEventBtn {
   background-color: #d2e4f2;
-  width: 177px;
-  height: 33px;
+  min-width: 131px;
+  max-height: 33px;
+  min-height: 33px;
   border: none;
   font-size: 16px;
   font-weight: 400;
   font-family: Akrobat;
   line-height: 21.1px;
+  padding: 0;
   text-align: center;
-  padding: 4px 11px;
   color: #1f7cc0;
   border-radius: 6px;
   margin: 0;
+}
+
+.result-checkbox>input {
+  color: red;
 }
 </style>
