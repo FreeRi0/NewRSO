@@ -1,5 +1,5 @@
 <template>
-  <div v-if="true">
+  <div v-if="!(props.centralHeadquarterCommander || props.districtHeadquarterCommander)">
     <div class="form__field-group">
       <div class="form__field-report">
         <div class="form__field">
@@ -38,7 +38,78 @@
     <ReportRegionalForm :reportData="reportData" />
   </div>
 
-  <v-card v-else class="panel-card">
+  <report-tabs >
+    <template v-slot:firstTab>
+      <div class="form__field-group">
+        <div class="form__field-report">
+          <div class="form__field">
+            <label class="form__label" for="amount_of_money">Общая сумма уплаченных членских взносов РО  <sup
+                class="valid-red">*</sup></label>
+            <InputReport
+                v-model:value="firstPanelData.amount_of_money"
+                id="amount_of_money" name="amount_of_money"
+                class="form__input" type="number"
+                placeholder="Введите число"
+                @focusout="focusOut"
+                :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"
+            />
+          </div>
+          <div class="report__add-file">
+            <label class="form__label" for="scan_file">Скан платежного поручения об уплате ЧВ <sup
+                class="valid-red">*</sup></label>
+            <div class="form__file-box">
+              <span class="form__file-name">
+                <SvgIcon v-if="firstPanelData.file_type === 'jpg'" icon-name="file-jpg" />
+                <SvgIcon v-if="firstPanelData.file_type === 'pdf'" icon-name="file-pdf" />
+                <SvgIcon v-if="firstPanelData.file_type === 'png'" icon-name="file-png" />
+                {{ firstPanelData.scan_file || 'Тестовое название' }}
+              </span>
+                <span class="form__file-size">{{ firstPanelData.file_size || '123' }} Мб</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+    <template v-slot:secondTab>
+      <div class="form__field-group">
+        <div class="form__field-report">
+          <div class="form__field">
+            <label class="form__label" for="amount_of_money">Общая сумма уплаченных членских взносов РО  <sup
+                class="valid-red">*</sup></label>
+            <InputReport
+                v-model:value="firstPanelData.amount_of_money"
+                id="amount_of_money"
+                name="amount_of_money"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                @focusout="focusOut"
+            />
+          </div>
+        </div>
+        <div class="form__field">
+          <label class="form__label" for="comment">Комментарий <sup
+              class="valid-red">*</sup></label>
+          <TextareaReport
+              placeholder="Напишите сообщение"
+              v-model:value="firstPanelData.comment"
+              id="comment"
+              name="comment"
+              :rows="1"
+              autoResize
+              @focusout="focusOut"
+              :maxlength="3000"
+              :max-length-text="3000"
+              counter-visible
+              class="form__input"
+          />
+        </div>
+      </div>
+    </template>
+  </report-tabs>
+
+
+  <v-card class="panel-card" v-if="false">
     <v-tabs v-model="tab">
       <v-tab value="one" class="panel-tab-btn">Отчет РО</v-tab>
       <v-tab value="two" class="panel-tab-btn">Корректировка ОШ</v-tab>
@@ -115,6 +186,20 @@ import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { ReportRegionalForm } from '../../ReportRegionalHQPartOnePage/components/index'
 import { getReport, reportPartTwoService } from "@services/ReportService.ts";
 import { SvgIcon } from '@shared/index';
+import { ReportTabs } from './index';
+
+const props = defineProps({
+  districtHeadquarterCommander: {
+    type: Boolean
+  },
+  centralHeadquarterCommander: {
+    type: Boolean
+  },
+  reportId: {
+    type: String,
+    default: '',
+  }
+});
 
 const defaultReportData = {
   participants_number: '0',
@@ -179,10 +264,16 @@ const deleteFile = async () => {
 };
 watchEffect(async () => {
   try {
-    const res = await getReport();
-    reportData.value = res.data;
+    if (!(props.centralHeadquarterCommander || props.districtHeadquarterCommander)) {
+      const res = await getReport();
+      reportData.value = res.data;
+    }
 
-    const { data } = await reportPartTwoService.getReport('1');
+
+    const { data } = props.centralHeadquarterCommander || props.districtHeadquarterCommander
+        ? await reportPartTwoService.getReportDH('1', props.reportId)
+        : await reportPartTwoService.getReport('1');
+
     if (data) {
       isFirstSent.value = false;
       firstPanelData.value.comment = data.comment;

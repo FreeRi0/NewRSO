@@ -374,6 +374,10 @@ const props = defineProps({
   centralHeadquarterCommander: {
     type: Boolean
   },
+  reportId: {
+    type: String,
+    default: '',
+  }
 });
 
 const isFirstSent = ref(true);
@@ -469,7 +473,9 @@ const deleteFile = async () => {
 watchEffect(async () => {
   console.log('districtHeadquarterCommander: ', !(props.districtHeadquarterCommander || props.centralHeadquarterCommander));
   try {
-    const { data } = props.centralHeadquarterCommander || props.districtHeadquarterCommander ? await reportPartTwoService.getReportDH('4') : await reportPartTwoService.getReport('4');
+    const { data } = props.centralHeadquarterCommander || props.districtHeadquarterCommander
+        ? await reportPartTwoService.getReportDH('4', props.reportId)
+        : await reportPartTwoService.getReport('4');
     if (data) {
       isFirstSent.value = false;
       events.value = [...data.events];

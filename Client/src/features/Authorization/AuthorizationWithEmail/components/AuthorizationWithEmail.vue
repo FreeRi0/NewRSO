@@ -151,7 +151,7 @@ onMounted(() => {
 </script>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
 .justify-end {
     @media screen and (max-width: 768px) {
         justify-content: center !important;

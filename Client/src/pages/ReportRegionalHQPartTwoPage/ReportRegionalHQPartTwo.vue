@@ -8,7 +8,10 @@
           1. Численность членов РО РСО в соответствии с объемом уплаченных членских взносов
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <first-panel />
+          <first-panel
+              :districtHeadquarterCommander="districtHeadquarterCommander"
+              :centralHeadquarterCommander="centralHeadquarterCommander"
+          />
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -39,7 +42,10 @@
           (слеты, школы, фестивали, турниры и прочие)
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <fourth-panel :districtHeadquarterCommander="districtHeadquarterCommander" :centralHeadquarterCommander="centralHeadquarterCommander" />
+          <fourth-panel
+              :districtHeadquarterCommander="districtHeadquarterCommander"
+              :centralHeadquarterCommander="centralHeadquarterCommander"
+          />
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
