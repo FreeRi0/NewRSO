@@ -100,7 +100,7 @@
           11. Активность РО РСО в социальных сетях «К»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <eleventh-panel />
+          <eleventh-panel :districtHeadquarterCommander="districtHeadquarterCommander" :centralHeadquarterCommander="centralHeadquarterCommander" />
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -108,7 +108,7 @@
           12. Объем средств, собранных бойцами РО РСО во Всероссийском дне ударного труда
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <twelfth-panel />
+          <twelfth-panel :districtHeadquarterCommander="districtHeadquarterCommander" :centralHeadquarterCommander="centralHeadquarterCommander" />
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -116,7 +116,7 @@
           13. Охват членов РО РСО, принявших участие во Всероссийском дне ударного труда «К»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <thirteenth-panel />
+          <thirteenth-panel :districtHeadquarterCommander="districtHeadquarterCommander" :centralHeadquarterCommander="centralHeadquarterCommander" />
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>

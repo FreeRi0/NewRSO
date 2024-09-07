@@ -2,112 +2,72 @@
     <div class="container">
         <div class="user-wrapper" v-if="!isLoading.isLoading.value">
             <h2 class="page-title">Страница пользователя</h2>
-            <Wall
-                :user="user.user.value"
-                :education="education"
-                :user_region="region"
-                :position="roles.positions.value"
-                :commander="roles.userRoles.value"
-                class="mt-3"
-                @upload-wall="uploadWall"
-                @update-wall="updateWall"
-                @delete-wall="deleteWall"
-                @upload="uploadAva"
-                @update="updateAva"
-                @delete="deleteAva"
-            ></Wall>
+            <Wall :user="user.user.value" :education="education" :user_region="region" :position="roleStore.positions"
+                :commander="roleStore.userRoles" class="mt-3" @upload-wall="uploadWall" @update-wall="updateWall"
+                @delete-wall="deleteWall" @upload="uploadAva" @update="updateAva" @delete="deleteAva"></Wall>
 
-            <div
-                class="mt-14"
-                v-if="
-                    user.user.value.is_verified ||
-                    (user.user.value.privacy?.privacy_about ===
-                        'Члены отряда' &&
-                        user.user.value.detachment_id ===
-                            currentUser.currentUser.value.detachment_id) ||
-                    (user.user.value.privacy?.privacy_about === 'Руководство' &&
-                        ((roleStore.roles.detachment_commander &&
-                            roleStore.roles.detachment_commander?.id ===
-                                user.user.value.detachment_id) ||
-                            (roleStore.roles.regionalheadquarter_commander &&
-                                roleStore.roles.regionalheadquarter_commander
-                                    ?.id ===
-                                    user.user.value.regional_headquarter_id) ||
-                            roleStore.roles.localheadquarter_commander ||
-                            roleStore.roles.educationalheadquarter_commander ||
-                            roleStore.roles.districtheadquarter_commander ||
-                            roleStore.roles.centralheadquarter_commander)) ||
-                    user.user.value.privacy?.privacy_about === 'Все' ||
-                    user.user.value.privacy?.privacy_about === 'all'
-                "
-            >
+            <div class="mt-14" v-if="
+                user.user.value.is_verified ||
+                (user.user.value.privacy?.privacy_about ===
+                    'Члены отряда' &&
+                    user.user.value.detachment_id ===
+                    currentUser.currentUser.value.detachment_id) ||
+                (user.user.value.privacy?.privacy_about === 'Руководство' &&
+                    ((roleStore.roles.detachment_commander &&
+                        roleStore.roles.detachment_commander?.id ===
+                        user.user.value.detachment_id) ||
+                        (roleStore.roles.regionalheadquarter_commander &&
+                            roleStore.roles.regionalheadquarter_commander
+                                ?.id ===
+                            user.user.value.regional_headquarter_id) ||
+                        roleStore.roles.localheadquarter_commander ||
+                        roleStore.roles.educationalheadquarter_commander ||
+                        roleStore.roles.districtheadquarter_commander ||
+                        roleStore.roles.centralheadquarter_commander)) ||
+                user.user.value.privacy?.privacy_about === 'Все' ||
+                user.user.value.privacy?.privacy_about === 'all'
+            ">
                 {{ user.user.value.bio }}
             </div>
-            <div
-                class="mt-8 photoWrapper"
-                v-if="
-                    (user.user.value.privacy?.privacy_photo ===
-                        'Члены отряда' &&
-                        user.user.value.detachment_id ===
-                            currentUser.currentUser.value.detachment_id) ||
-                    (user.user.value.privacy?.privacy_photo === 'Руководство' &&
-                        ((roleStore.roles.detachment_commander &&
-                            roleStore.roles.detachment_commander?.id ===
-                                user.user.value.detachment_id) ||
-                            (roleStore.roles.regionalheadquarter_commander &&
-                                roleStore.roles.regionalheadquarter_commander
-                                    ?.id ===
-                                    user.user.value.regional_headquarter_id) ||
-                            roleStore.roles.localheadquarter_commander ||
-                            roleStore.roles.educationalheadquarter_commander ||
-                            roleStore.roles.districtheadquarter_commander ||
-                            roleStore.roles.centralheadquarter_commander)) ||
-                    user.user.value.privacy?.privacy_photo === 'Все' ||
-                    user.user.value.privacy?.privacy_photo === 'all'
-                "
-            >
-                <user-photo 
-                    v-for="(photo, index) in media" 
-                    :key="index"
-                    class="photo-item" 
-                    :photo="photo" 
-                    :add="false" 
-                    :number="index"
-                />
+            <div class="mt-8 photoWrapper" v-if="
+                (user.user.value.privacy?.privacy_photo ===
+                    'Члены отряда' &&
+                    user.user.value.detachment_id ===
+                    currentUser.currentUser.value.detachment_id) ||
+                (user.user.value.privacy?.privacy_photo === 'Руководство' &&
+                    ((roleStore.roles.detachment_commander &&
+                        roleStore.roles.detachment_commander?.id ===
+                        user.user.value.detachment_id) ||
+                        (roleStore.roles.regionalheadquarter_commander &&
+                            roleStore.roles.regionalheadquarter_commander
+                                ?.id ===
+                            user.user.value.regional_headquarter_id) ||
+                        roleStore.roles.localheadquarter_commander ||
+                        roleStore.roles.educationalheadquarter_commander ||
+                        roleStore.roles.districtheadquarter_commander ||
+                        roleStore.roles.centralheadquarter_commander)) ||
+                user.user.value.privacy?.privacy_photo === 'Все' ||
+                user.user.value.privacy?.privacy_photo === 'all'
+            ">
+                <user-photo v-for="(photo, index) in media" :key="index" class="photo-item" :photo="photo" :add="false"
+                    :number="index" />
             </div>
             <div class="mt-8 photoWrapper" v-else>
                 <div class="avatar-preview my_photo__plug photo-item">
-                    <img
-                        src="@/app/assets/user-banner.jpg"
-                        alt="Фото пользователя(пусто)"
-                    />
+                    <img src="@/app/assets/user-banner.jpg" alt="Фото пользователя(пусто)" />
                 </div>
                 <div class="avatar-preview my_photo__plug photo-item">
-                    <img
-                        src="@/app/assets/user-banner.jpg"
-                        alt="Фото пользователя(пусто)"
-                    />
+                    <img src="@/app/assets/user-banner.jpg" alt="Фото пользователя(пусто)" />
                 </div>
                 <div class="avatar-preview my_photo__plug photo-item">
-                    <img
-                        src="@/app/assets/user-banner.jpg"
-                        alt="Фото пользователя(пусто)"
-                    />
+                    <img src="@/app/assets/user-banner.jpg" alt="Фото пользователя(пусто)" />
                 </div>
                 <div class="avatar-preview my_photo__plug photo-item">
-                    <img
-                        src="@/app/assets/user-banner.jpg"
-                        alt="Фото пользователя(пусто)"
-                    />
+                    <img src="@/app/assets/user-banner.jpg" alt="Фото пользователя(пусто)" />
                 </div>
             </div>
         </div>
-        <v-progress-circular
-            class="circleLoader"
-            v-else
-            indeterminate
-            color="blue"
-        ></v-progress-circular>
+        <v-progress-circular class="circleLoader" v-else indeterminate color="blue"></v-progress-circular>
     </div>
 </template>
 <script setup>
@@ -184,28 +144,34 @@ const deleteWall = (imageWall) => {
 watch(
     () => route.params.id,
 
-    (newId) => {
-        if (!newId ) return;
+    async (newId) => {
+        if (!newId && route.name !== "userpage") {
+            return false;
+        }
         id = newId;
-        userStore.getUserId(id);
-        roleStore.getPositions(id);
-        roleStore.getUserRoles(id);
+        await userStore.getUserId(id);
+        await roleStore.getPositions(id);
+        await roleStore.getUserRoles(id);
+    },
+    {
+        immediate: true,
+        deep: true,
     },
 );
 
-watch (() => user.user.value.media, (photos)=> {
+watch(() => user.user.value.media, (photos) => {
     media.value = {
         photo1: photos?.photo1,
         photo2: photos?.photo2,
         photo3: photos?.photo3,
         photo4: photos?.photo4,
     }
-}, {deep: true});
+}, { deep: true });
 
 onMounted(() => {
-    userStore.getUserId(id);
-    roleStore.getPositions(id);
-    roleStore.getUserRoles(id);
+    // userStore.getUserId(id);
+    // roleStore.getPositions(id);
+    // roleStore.getUserRoles(id);
 });
 </script>
 <style lang="scss" scoped>
@@ -215,6 +181,7 @@ onMounted(() => {
 
 .photoWrapper {
     display: flex;
+
     @media screen and (max-width: 768px) {
         display: grid;
         grid-template-columns: 0.28fr 0.28fr;
@@ -222,10 +189,12 @@ onMounted(() => {
         grid-row-gap: 20px;
         justify-content: center;
     }
+
     @media screen and (max-width: 575px) {
         grid-template-columns: 0.28fr;
     }
 }
+
 .circleLoader {
     width: 60px;
     height: 60px;
@@ -236,14 +205,17 @@ onMounted(() => {
 .user-verify {
     margin-top: 60px;
     margin-bottom: 40px;
+
     &__title {
         font-size: 32px;
         color: #35383f;
         font-weight: 600;
+
         @media screen and (max-width: 575px) {
             font-size: 28px;
         }
     }
+
     &__desc {
         font-size: 18px;
         color: #35383f;
@@ -251,9 +223,11 @@ onMounted(() => {
         margin-top: 40px;
         max-width: 835px;
         margin-bottom: 40px;
+
         @media screen and (max-width: 768px) {
             max-width: 620px;
         }
+
         @media screen and (max-width: 575px) {
             width: 100%;
         }
@@ -263,12 +237,14 @@ onMounted(() => {
 .photo-item {
     width: 280px;
     margin-right: 20px;
+
     @media screen and (max-width: 575px) {
         height: 373px;
         width: 280px;
         margin-right: 0;
     }
 }
+
 .photo-item-last {
     margin-right: 0;
 }
@@ -277,6 +253,7 @@ onMounted(() => {
     margin: 0px;
     padding: 12px 62px;
     height: 52px;
+
     @media screen and (max-width: 575px) {
         margin: 0px auto;
         width: 100%;

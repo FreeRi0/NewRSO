@@ -2,7 +2,7 @@
     <section class="headquarters-management">
         <h3>{{ head }}</h3>
         <div class="headquarters-management__container">
-            <router-link :to="{ name: 'userpage', params: { id: props.commander?.id } }">
+            <div class="link" @click="linkUsers()">
                 <div class="manager-card">
                     <div class="manager-card__avatar">
                         <img :src="props.commander?.avatar?.photo" alt="фото" v-if="props.commander?.avatar?.photo" />
@@ -17,9 +17,8 @@
                         <p>Командир</p>
                     </div>
                 </div>
-            </router-link>
-            <router-link :to="{ name: 'userpage', params: { id: manager?.user?.id } }" :key="manager"
-                v-for="(manager, index) in props.leadership">
+            </div>
+            <div class="link" @click="linkUsers(manager)" :key="manager" v-for="(manager, index) in props.leadership">
                 <div class="manager-card" :class="{
                     'align-left': index % 2 === 0,
                     'align-right': index % 2 !== 0,
@@ -37,12 +36,16 @@
                         <p>{{ manager.position.name }}</p>
                     </div>
                 </div>
-            </router-link>
+            </div>
         </div>
     </section>
 </template>
 
 <script setup>
+import { useUserStore } from '@features/store';
+import { useRouter } from 'vue-router';
+const userStore = useUserStore();
+const router = useRouter();
 const props = defineProps({
     member: {
         type: Array,
@@ -60,11 +63,33 @@ const props = defineProps({
         type: Array,
     },
 });
+
+const linkUsers = (item) => {
+    if (item) {
+        if (item.user.id === userStore.currentUser.id) {
+            router.push({ name: 'mypage' })
+        } else {
+            router.push({ name: 'userpage', params: { id: item.user.id } })
+        }
+    } else {
+        if (props.commander.id === userStore.currentUser.id) {
+            router.push({ name: 'mypage' })
+        } else {
+            router.push({ name: 'userpage', params: { id: props.commander.id } })
+        }
+    }
+
+}
+
 </script>
 
 <style scoped lang="scss">
 section.headquarters-management {
     margin-bottom: 60px;
+}
+
+.link {
+    cursor: pointer;
 }
 
 section.headquarters-management h3 {
