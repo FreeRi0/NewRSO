@@ -137,8 +137,13 @@
             <p class="form__label">Межрегиональное <sup class="valid-red">*</sup></p>
             <div class="form__label-radio">
               <div v-if="event.is_interregional" style="display: flex;">
-                <input v-model="event.is_interregional" type="radio" :id="`is_interregional-true_${index}`" :value="true"
-                       class="custom-radio" />
+                <input
+                    v-model="event.is_interregional"
+                    type="radio"
+                    :id="`is_interregional-true_${index}`"
+                    :value="true"
+                    class="custom-radio"
+                />
                 <label :for="`is_interregional-true_${index}`">
                   Да
                 </label>

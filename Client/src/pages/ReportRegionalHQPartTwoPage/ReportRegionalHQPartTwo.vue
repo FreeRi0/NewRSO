@@ -48,8 +48,10 @@
           (слеты, школы, фестивали, турниры и прочие)
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <fourth-panel :districtHeadquarterCommander="districtHeadquarterCommander"
-            :centralHeadquarterCommander="centralHeadquarterCommander" />
+          <fourth-panel
+            :districtHeadquarterCommander="districtHeadquarterCommander"
+            :centralHeadquarterCommander="centralHeadquarterCommander"
+          />
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -105,7 +107,10 @@
           10. Организация РО РСО всероссийских (международных) добровольческих и патриотических акций «К»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <tenth-panel />
+          <tenth-panel
+              :districtHeadquarterCommander="districtHeadquarterCommander"
+              :centralHeadquarterCommander="centralHeadquarterCommander"
+          />
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
