@@ -55,7 +55,10 @@
           трудовых проектов РСО
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <fifth-panel />
+          <fifth-panel
+              :districtHeadquarterCommander="districtHeadquarterCommander"
+              :centralHeadquarterCommander="centralHeadquarterCommander"
+          />
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>

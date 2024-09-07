@@ -95,8 +95,8 @@
 
   <report-tabs v-else>
     <template v-slot:firstTab>
-      <div v-for="(event, index) in events" :key="index" class="form__field-fourth-panel">
-        <div class="form__field-members-event">
+      <div v-for="(event, index) in events" :key="index">
+        <div>
           <div class="form__field-members">
             <label class="form__label" for="participants_number">Количество человек, принявших участие в мероприятии <sup
                 class="valid-red">*</sup></label>
@@ -155,9 +155,21 @@
         </div>
         <div class="form__field-link">
           <p class="form__label">Ссылка на группу мероприятия в социальных сетях <sup class="valid-red">*</sup></p>
-          <div class="form__add-link" v-for="(link, i) in events[index].links" :key="i">
-            <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__input-add-link" type="text"
-                         placeholder="https://vk.com/cco_monolit" @focusout="focusOut" :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" />
+          <div
+              class="form__add-link"
+              v-for="(link, i) in events[index].links"
+              :key="i"
+          >
+            <InputReport
+                v-model:value="link.link"
+                :id="i"
+                :name="i"
+                class="form__input form__input-add-link"
+                type="text"
+                placeholder="https://vk.com/cco_monolit"
+                @focusout="focusOut"
+                :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"
+            />
           </div>
         </div>
       </div>
@@ -177,7 +189,7 @@
     </template>
     <template v-slot:secondTab>
       <div v-for="(event, index) in events" :key="index" class="form__field-fourth-panel">
-        <div class="form__field-members-event">
+        <div>
           <div class="form__field-members">
             <label class="form__label" for="participants_number">Количество человек, принявших участие в мероприятии <sup
                 class="valid-red">*</sup></label>
