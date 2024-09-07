@@ -302,6 +302,9 @@ const copyL = () => {
     @media screen and (max-width: 575px) {
         padding: 116px 14px 32px 14px;
     }
+    @media screen and (max-width: 320px) and (max-height:462px) {
+    transform: translateX(-7px);
+    }
 }
 
 /* Данные пользователя */
