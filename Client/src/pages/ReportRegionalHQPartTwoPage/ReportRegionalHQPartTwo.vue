@@ -1,7 +1,13 @@
 <template>
   <div class="container">
     <h1 class="title title--mb">Отчет о деятельности регионального отделения РСО за 2024 год. Часть 2</h1>
-
+    <div class="download-item">
+      <SvgIcon iconName="download" />
+      <button type="button" id="download" class="download-item__report"
+        @click="downloadReportAll(roleStore.roles.regionalheadquarter_commander?.id)">
+        Скачать архив
+      </button>
+    </div>
     <v-expansion-panels>
       <v-expansion-panel>
         <v-expansion-panel-title>
@@ -42,10 +48,8 @@
           (слеты, школы, фестивали, турниры и прочие)
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <fourth-panel
-              :districtHeadquarterCommander="districtHeadquarterCommander"
-              :centralHeadquarterCommander="centralHeadquarterCommander"
-          />
+          <fourth-panel :districtHeadquarterCommander="districtHeadquarterCommander"
+            :centralHeadquarterCommander="centralHeadquarterCommander" />
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -109,7 +113,8 @@
           11. Активность РО РСО в социальных сетях «К»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <eleventh-panel :districtHeadquarterCommander="districtHeadquarterCommander" :centralHeadquarterCommander="centralHeadquarterCommander" />
+          <eleventh-panel :districtHeadquarterCommander="districtHeadquarterCommander"
+            :centralHeadquarterCommander="centralHeadquarterCommander" />
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -117,7 +122,8 @@
           12. Объем средств, собранных бойцами РО РСО во Всероссийском дне ударного труда
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <twelfth-panel :districtHeadquarterCommander="districtHeadquarterCommander" :centralHeadquarterCommander="centralHeadquarterCommander" />
+          <twelfth-panel :districtHeadquarterCommander="districtHeadquarterCommander"
+            :centralHeadquarterCommander="centralHeadquarterCommander" />
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -125,7 +131,8 @@
           13. Охват членов РО РСО, принявших участие во Всероссийском дне ударного труда «К»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <thirteenth-panel :districtHeadquarterCommander="districtHeadquarterCommander" :centralHeadquarterCommander="centralHeadquarterCommander" />
+          <thirteenth-panel :districtHeadquarterCommander="districtHeadquarterCommander"
+            :centralHeadquarterCommander="centralHeadquarterCommander" />
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -207,12 +214,33 @@ import {
   NineteenthPanel
 } from './components/index'
 import { Button } from '@shared/components/buttons';
-import {ref, watchEffect} from "vue";
-import {useRoleStore} from "@layouts/store/role.ts";
+import { ref, watchEffect} from "vue";
+import { SvgIcon } from '@shared/ui/SvgIcon';
+import { useRoleStore } from "@layouts/store/role.ts";
+import { HTTP } from '@app/http';
 
 const districtHeadquarterCommander = ref(false);
 const centralHeadquarterCommander = ref(false);
 const roleStore = useRoleStore();
+
+const downloadReportAll = (id) => {
+  HTTP.get(`/regionals/${id}/download_regional_competition_report/`, {
+    responseType: 'arraybuffer',
+    headers: {
+      'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    }
+  }).then((response) => {
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'RO_report.xlsx');
+    document.body.appendChild(link);
+    link.click();
+  })
+    .catch(function (error) {
+      console.log('an error occured ' + error);
+    });
+}
 
 watchEffect(() => {
   if (roleStore.roles?.districtheadquarter_commander) {
@@ -236,6 +264,20 @@ watchEffect(() => {
   content: "";
 }
 
+.download-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 13px;
+  cursor: pointer;
+  column-gap: 4px;
+  font-size: 18px;
+  color: #1f7cc0;
+  font-family: 'Akrobat';
+  line-height: 21.6px;
+  font-weight: 500;
+}
+
 .v-expansion-panel-title {
   background: #F3F4F5;
   border-left: 6px solid #1f7cc0;
@@ -248,7 +290,7 @@ watchEffect(() => {
   text-align: left;
 }
 
-.v-expansion-panel--active > .v-expansion-panel-title {
+.v-expansion-panel--active>.v-expansion-panel-title {
   border-radius: 10px;
   min-height: none;
   border-left: none;
@@ -264,7 +306,7 @@ watchEffect(() => {
 }
 
 .v-expansion-panel--active:not(:first-child),
-.v-expansion-panel--active + .v-expansion-panel {
+.v-expansion-panel--active+.v-expansion-panel {
   margin-top: 0;
   opacity: unset;
 }
