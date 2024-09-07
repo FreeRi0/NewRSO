@@ -168,7 +168,7 @@ onMounted(() => {
 
     &_item {
         width: 252px;
-        max-width: 100%;
+        max-width: 90%;
         height: 48px;
         display: grid;
         grid-template-columns: auto 1fr auto auto;
@@ -181,7 +181,9 @@ onMounted(() => {
         border: 1px solid #b6b6b6;
         background: #fff;
         margin-bottom: 12px;
-
+        @media screen and (max-width: 320px) and (max-height:462px) {
+            
+            }
         @media screen and (max-width: 820px) {
             width: 100%;
             max-width: 100%;
@@ -219,9 +221,14 @@ onMounted(() => {
         border: 1px solid #b6b6b6;
         background: #fff;
         margin-bottom: 12px;
-
+    
         &-title {
             margin-left: 10px;
+            @media screen and (max-width: 320px) and (max-height:462px) {
+                margin-left: -35px;
+                transform: translateX(20px);
+              
+            }
         }
     }
 
@@ -230,6 +237,10 @@ onMounted(() => {
             width: 40px;
             height: 40px;
             border-radius: 100%;
+            @media screen and (max-width: 320px) and (max-height:462px) {
+                transform: translateX(-10px);
+                margin-left: 0px;
+            }
         }
     }
 }

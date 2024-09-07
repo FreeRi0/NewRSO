@@ -294,6 +294,7 @@ const deleteAvatar = async () => {
 </script>
 
 <style lang="scss">
+
 .user-metric__avatar {
     /*    display: grid;*/
     grid-column-start: 1;
@@ -303,7 +304,19 @@ const deleteAvatar = async () => {
     width: 80%;
     height: 100%;
     border-radius: 50%;
-
+    @media screen and (max-width: 320px) and (max-height:462px) {
+    /*    display: grid;*/
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    width: 80%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateX(3px)
+}
     &-wrapper {
         display: grid;
         grid-template-columns: 160px 90px;
@@ -315,13 +328,13 @@ const deleteAvatar = async () => {
         grid-row-start: 2;
         grid-row-end: 4;
     }
-
     &-add {
         display: grid;
         grid-column-start: 2;
         grid-column-end: 3;
         grid-row-start: 2;
         grid-row-end: 3;
+        
     }
 }
 
@@ -333,18 +346,50 @@ const deleteAvatar = async () => {
     border-radius: 50%;
 }
 
+
+.parent{
+
+ .v-btn--icon.v-btn--density-default {
+    background: rgba(0, 0, 0, 0.4);
+    margin-right: 25px;
+
+    @media screen and (max-width: 320px) and (max-height: 462px) {
+        &:nth-of-type(1) { // Указываем, какой элемент таргетить
+            margin-right: 15px;
+            transform: translateY(120px) translateX(-20px);
+        }
+    }
+}
+}
+
 .v-btn--icon.v-btn--density-default {
     background: rgba(0, 0, 0, 0.4);
-    margin-right: 15px;
+    margin-right: 25px;
+    transform: translateY(0px) translateX(0px);
+
+
+    @media screen and (max-width: 320px) and (max-height: 462px) {
+        margin-right: 25px;
+        transform: translateY(20px) translateX(5px);
+        &.banner{
+            margin-right: 15px;
+            transform: translateY(-80px) translateX(-20px);
+        }
+    }
 }
 
 .v-btn--icon {
     border-radius: 50%;
     border: 2px solid white;
     color: white;
+    
+    
+    
 }
 
 .v-avatar i {
     color: white;
 }
+
+
 </style>

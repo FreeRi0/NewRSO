@@ -64,7 +64,7 @@
         </v-menu>
         <v-menu min-width="200px" rounded v-else-if="props.banner && props.edited">
             <template v-slot:activator="{ props }">
-                <v-btn class="user-metric__avatar-add" icon v-bind="props">
+                <v-btn class="user-metric__avatar-add banner" icon v-bind="props" >
                     <v-avatar size="large">
                         <v-icon icon="mdi-pencil"></v-icon>
                     </v-avatar>
@@ -280,6 +280,7 @@ const deleteBanner = async () => {
     grid-row-start: 1;
     grid-row-end: 2;
     border-radius: 10px 10px 0px 0px;
+    
 
     &-img-wrapper {
         display: grid;
@@ -289,6 +290,7 @@ const deleteBanner = async () => {
         grid-column-end: 6;
         grid-row-start: 1;
         grid-row-end: 3;
+        
     }
 
     img {
@@ -296,6 +298,7 @@ const deleteBanner = async () => {
         height: 100%;
         object-fit: cover;
         border-radius: 10px 10px 0px 0px;
+        
     }
 }
 
@@ -307,6 +310,50 @@ const deleteBanner = async () => {
     grid-row-start: 2;
     grid-row-end: 3;
     margin: 0 16px 16px 0;
+ 
+}
+
+.user-metrichq__top {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 100px 100px;
+    grid-column-start: 1;
+    grid-column-end: 6;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    border-radius: 10px 10px 0px 0px;
+    
+
+    &-img-wrapper {
+        display: grid;
+        grid-template-columns: 3fr;
+        grid-template-rows: 200px;
+        grid-column-start: 1;
+        grid-column-end: 6;
+        grid-row-start: 1;
+        grid-row-end: 3;
+        
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px 10px 0px 0px;
+        
+    }
+}
+
+.user-metrichq__baner-add {
+    display: grid;
+    align-items: end;
+    grid-column-start: 5;
+    grid-column-end: 6;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    margin: 0 16px 16px 0;
+    
+    
 }
 
 @media (max-width: 690px) {
@@ -314,4 +361,78 @@ const deleteBanner = async () => {
         grid-template-rows: 16px 100px;
     }
 }
+
+@media screen and (max-width: 320px) and (max-height:462px) {
+    .user-metric__top {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 100px 100px;
+        grid-column-start: 1;
+        grid-column-end: 6;
+        grid-row-start: 1;
+        grid-row-end: 2;
+        border-radius: 10px 10px 0px 0px;
+    
+    
+
+    &-img-wrapper {
+        display: grid;
+        grid-template-columns: 3fr;
+        grid-template-rows: 200px;
+        grid-column-start: 1;
+        grid-column-end: 6;
+        grid-row-start: 1;
+        grid-row-end: 3;
+        
+        
+    }
+
+    img {
+        width: 91.13%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px 10px 0px 0px;
+        transform: translateX(-1px);
+        
+
+    }
+    
+}
+    .user-metrichq__top {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 100px 100px;
+        grid-column-start: 1;
+        grid-column-end: 6;
+        grid-row-start: 1;
+        grid-row-end: 2;
+        border-radius: 10px 10px 0px 0px;
+        
+        
+
+        &-img-wrapper {
+            display: grid;
+            grid-template-columns: 3fr;
+            grid-template-rows: 200px;
+            grid-column-start: 1;
+            grid-column-end: 6;
+            grid-row-start: 1;
+            grid-row-end: 3;
+            
+            
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px 10px 0px 0px;
+            transform: translateX(0px);
+            
+
+        }
+        
+    }
+
+    }
 </style>

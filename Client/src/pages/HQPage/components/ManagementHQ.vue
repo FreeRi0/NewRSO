@@ -196,4 +196,30 @@ section.headquarters-management h3 {
         margin-bottom: 0;
     }
 }
+@media screen and (max-width: 320px) and (max-height:462px) {
+    .manager-card {
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.08);
+    /*  */
+    padding: 24px 20px;
+    width: 100%;
+    height: 100%;
+}
+    .manager-card__box {
+    width: 116px;
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+    .manager-card__box p{
+    color: #676767;
+    font-family: 'Akrobat';
+    text-align: center;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 22.4px;
+    }
+}
 </style>

@@ -364,6 +364,7 @@ watch(
 </script>
 
 <style lang="scss">
+
 .headquarters {
     padding-bottom: 60px;
     &-title {
@@ -395,8 +396,18 @@ watch(
             position: absolute;
             top: 10px;
             left: 16px;
+            @media screen and (max-width: 320px) and (max-height:462px) {
+                position: absolute;
+                top: 5px;
+                left: 7px;
+        }
         }
         &__input {
+            @media screen and (max-width: 320px) and (max-height:462px) {
+            padding: 7px 0px 7px 39px;
+            font-size: 15.5px;
+            
+        }
             width: 100%;
             padding: 13px 0px 10px 60px;
             border-radius: 10px;
@@ -405,6 +416,13 @@ watch(
     }
 
     &-wrapper {
+        @media screen and (max-width: 320px) and (max-height:462px) {
+            padding: 10px 0px;
+            transform: translateX(-1px);
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            grid-row-gap: 10px;
+        }
         padding: 60px 0px;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -465,6 +483,11 @@ pre {
         }
     }
     &-title {
+        @media screen and (max-width: 320px) and (max-height:462px) {
+        padding: 5px 10px 0px 10px;
+        font-size: 15.5px;
+        transform: translateX(center);
+        }
         text-align: center;
         font-size: 20px;
         font-family: 'Akrobat';
@@ -571,6 +594,7 @@ pre {
 .form__select .v-field__input input::placeholder {
     color: #35383f;
     opacity: revert;
+    
 }
 
 .v-field--variant-outlined .v-field__outline__end,

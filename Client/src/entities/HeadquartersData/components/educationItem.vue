@@ -39,9 +39,17 @@ const props = defineProps({
             width: 100px;
             height: 100px;
         }
+        @media screen and (max-width: 320px) and (max-height:462px) {
+            width: 128px;
+            height: 128px;
+            transform: translateX(-35px);
+        }
     }
 }
 .container-headquarters {
     padding-top: 10px;
+    @media screen and (max-width: 320px) and (max-height:462px) {
+            transform: translateX(-35px);
+        }
 }
 </style>

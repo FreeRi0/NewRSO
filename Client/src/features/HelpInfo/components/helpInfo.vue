@@ -29,6 +29,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -66,6 +67,8 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
+
                                         />
                                     </v-list-item>
                                 </template>
@@ -92,6 +95,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -118,6 +122,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -144,6 +149,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -171,6 +177,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -199,6 +206,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -226,6 +234,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -328,6 +337,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -358,6 +368,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -387,6 +398,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -417,6 +429,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -448,6 +461,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -477,6 +491,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -506,6 +521,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -536,6 +552,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -591,6 +608,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -620,6 +638,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -649,6 +668,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -679,6 +699,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -708,6 +729,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -759,6 +781,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -788,6 +811,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -818,6 +842,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -869,6 +894,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -917,6 +943,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -948,6 +975,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -979,6 +1007,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1010,6 +1039,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1048,7 +1078,7 @@
                     </template>
                 </v-expansion-panel-title>
 
-                <v-expansion-panel-text>
+                <v-expansion-panel-text class="optimiz">
                     <v-card class="mx-auto">
                         <v-list>
                             <v-list-group value="Programming Group">
@@ -1060,6 +1090,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1091,6 +1122,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1150,6 +1182,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1183,6 +1216,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1216,6 +1250,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1251,6 +1286,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1286,6 +1322,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1327,6 +1364,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1359,6 +1397,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1388,6 +1427,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1414,6 +1454,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1439,6 +1480,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1463,6 +1505,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1488,6 +1531,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1533,6 +1577,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1563,6 +1608,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1594,6 +1640,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1618,6 +1665,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1644,6 +1692,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1673,6 +1722,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1703,6 +1753,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1731,6 +1782,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1757,6 +1809,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1786,6 +1839,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1815,6 +1869,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1838,6 +1893,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1869,6 +1925,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1897,6 +1954,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1924,6 +1982,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -1950,6 +2009,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
+                                            class="optimiz_button"
                                         />
                                     </v-list-item>
                                 </template>
@@ -2051,5 +2111,40 @@ usePage({ isHidden: true });
 }
 .accordion_text-link {
     text-decoration: underline;
+}
+
+@media screen and (max-width: 320px) and (max-height:462px) {
+    .v-list-item-title {
+    white-space: wrap;
+    margin-right: 50px;
+    }
+
+    .v-expansion-panel:nth-child(6){
+        top: 0px;
+        padding: 20px 0px;
+    }
+
+    .v-expansion-panel:nth-child(7){
+        transform: translateY(0px);
+        margin-bottom: 30px
+    }
+    .optimiz{
+        transform: translateY(20px);
+    }
+    .optimiz_button{
+        margin-left: 242px;
+        position: absolute;
+    }
+
+    .v-list-item__append {
+        display: none;
+    }
+
+    .v-list-item__content {
+        display: flex;
+        justify-content: space-between;
+        margin-inline: -5px;
+    }
+
 }
 </style>

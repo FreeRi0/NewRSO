@@ -821,7 +821,7 @@
                             v-else-if="Object.keys(applications).length !== 0"
                             class="d-flex"
                         >
-                            <div class="AddApplication mr-2">
+                            <div class="AddApplication mr-2 ">
                                 Заявка на рассмотрении
                             </div>
                             <Button
@@ -1336,6 +1336,7 @@ const copyL = () => {
 .hq-data__contacts {
     display: flex;
     flex-direction: column;
+    
 }
 
 .hq-data__social-network {
@@ -1448,5 +1449,65 @@ const copyL = () => {
     .Squad-HQ__name {
         text-align: center;
     }
+}
+
+@media screen and (max-width: 320px) and (max-height:462px) {
+    
+    .AddApplication {
+    display: block;
+    width: 100%; /* Ensures full width */
+    border-radius: 10px;
+    background: #39bfbf;
+    text-align: center;
+    font-family: 'Bert Sans';
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    color: white;
+    padding: 16px 57px;
+    margin-bottom: 90px;
+    margin-right: -165px;
+    
+    }
+    .AddApplication:first-child {
+        transform: translateX(32px) translateY(0px);
+                 /* Removes the bottom margin for the last block */
+    }
+
+    .AddApplication:last-child {
+        transform: translateX(-198px) translateY(90px);
+        padding: 14px 79px;
+        /* Removes the bottom margin for the last block */
+    }
+
+
+    .hq-data__social-network-central {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        // justify-content: space-between;
+        margin: 12px 0 0;
+        block-size: 20px;
+        column-gap: 12px;
+    }
+    .hq-data__contacts-wrapper {
+        display: grid;
+        row-gap: 20px;
+        
+    }
+
+    .hq-data__wrapper {
+        margin: -100px 0 16px 0;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        
+    }
+
+    .Squad-HQ__date-central time {
+    border-right: 1px solid #35383f;
+    margin-right: 8px;
+    padding-right: 8px;
+}
 }
 </style>

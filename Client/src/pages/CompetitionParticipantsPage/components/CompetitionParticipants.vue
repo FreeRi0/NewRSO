@@ -241,6 +241,7 @@ onMounted(() => {
     background-image: url('@app/assets/icon/switch.svg');
     background-repeat: no-repeat;
     background-position: center;
+    
 }
 
 .v-select__selection {
@@ -281,6 +282,12 @@ onMounted(() => {
         display: flex;
         justify-content: flex-end;
         align-items: flex-end;
+        @media screen and (max-width: 320px) and (max-height:462px) {
+            display: block;
+            justify-content: start;
+            align-items: start;
+    
+        }
     }
 
     &-tabs {
@@ -380,4 +387,26 @@ onMounted(() => {
         margin-top: 12px;
     }
 }
+@media screen and (max-width: 320px) and (max-height:462px) {
+    .squads-sort {
+        flex-direction:column-reverse;
+        align-items: start;        
+    }
+
+    .sort-filters {
+        flex-wrap: wrap;
+        margin-bottom: 40px;
+        align-items: end;
+        
+        
+    }
+
+    .sort-select {
+        margin-top: 12px;
+        right: 8px;
+        width: 83%;
+
+    }
+}
+
 </style>

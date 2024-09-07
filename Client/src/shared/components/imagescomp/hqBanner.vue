@@ -1,6 +1,6 @@
 <template>
-    <div class="user-metric__top">
-        <div class="user-metric__top-img-wrapper">
+    <div class="user-metrichq__top">
+        <div class="user-metrichq__top-img-wrapper">
             <!-- Заглушка Банер -->
 
             <img :src="banner" alt="Баннер отряда" v-if="banner" />
