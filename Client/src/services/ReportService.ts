@@ -25,6 +25,14 @@ export const reportPartTwoService = {
         })
     },
 
+    createReportId(data: object, panel: string, id: string, withFile = false) {
+        return HTTP.post(`regional_competitions/reports/${panel}/${id}/`, data, {
+            headers: {
+                'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
+            },
+        })
+    },
+
     createReportDraft(data: object, panel: string, withFile = false) {
         return HTTP.put(`regional_competitions/me/reports/${panel}/`, data, {
             headers: {
@@ -32,13 +40,24 @@ export const reportPartTwoService = {
             },
         })
     },
+    createReportDraftId(data: object, panel: string, id: string, withFile = false) {
+        return HTTP.put(`regional_competitions/me/reports/${panel}/${id}/`, data, {
+            headers: {
+                'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
+            },
+        })
+    },
+
 
     getReport(panel: string) {
         return HTTP.get(`regional_competitions/me/reports/${panel}/`)
     },
 
-    getReportDH(panel: string) {
-        return HTTP.get(`regional_competitions/reports/${panel}`)
+    getReportId(panel: string, id: string) {
+        return HTTP.get(`regional_competitions/me/reports/${panel}/${id}/`)
+    },
+    getReportDH(panel: string, reportId: string) {
+        return HTTP.get(`regional_competitions/reports/${panel}/${reportId}`)
     },
 
     createMultipleReport(data: object, panel: string, reportNumber: string, withFile = false) {
