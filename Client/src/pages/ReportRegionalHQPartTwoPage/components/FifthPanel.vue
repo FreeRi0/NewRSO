@@ -386,116 +386,116 @@
       </div>
     </template>
     <template v-slot:thirdTab>
-      <!--<div class="form__field-group report-table">-->
-        <!--            <div>-->
-        <!--              <Button-->
-        <!--                  style="margin-right: 0"-->
-        <!--                  label="Удалить мероприятие"-->
-        <!--                  size="large"-->
-        <!--              />-->
-        <!--            </div>-->
-        <!--            <label-->
-        <!--                class="form__label"-->
-        <!--            >Общее количество человек, принявших участие в трудовом проекте <sup class="valid-red">*</sup></label>-->
-        <!--            <v-table>-->
-        <!--              <tbody>-->
-        <!--              <tr class="report-table__tr">-->
-        <!--                <td class="report-table__th report-table__th__br-left">Данные РО</td>-->
-        <!--                <td class="report-table__th">Корректировка ОШ</td>-->
-        <!--                <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>-->
-        <!--              </tr>-->
-        <!--              <tr>-->
-        <!--                <td class="report-table__td">200</td>-->
-        <!--                <td class="report-table__td report-table__td__center">200</td>-->
-        <!--                <td class="report-table__td">200</td>-->
-        <!--              </tr>-->
-        <!--              </tbody>-->
-        <!--            </v-table>-->
-        <!--            <label-->
-        <!--                class="form__label"-->
-        <!--            >Количество человек из своего региона, принявших участие в трудовом проекте <sup class="valid-red">*</sup></label>-->
-        <!--            <v-table>-->
-        <!--              <tbody>-->
-        <!--              <tr class="report-table__tr">-->
-        <!--                <td class="report-table__th report-table__th__br-left">Данные РО</td>-->
-        <!--                <td class="report-table__th">Корректировка ОШ</td>-->
-        <!--                <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>-->
-        <!--              </tr>-->
-        <!--              <tr>-->
-        <!--                <td class="report-table__td">200</td>-->
-        <!--                <td class="report-table__td report-table__td__center">200</td>-->
-        <!--                <td class="report-table__td">200</td>-->
-        <!--              </tr>-->
-        <!--              </tbody>-->
-        <!--            </v-table>-->
-        <!--            <label-->
-        <!--                class="form__label"-->
-        <!--            >Дата начала проведения проекта <sup class="valid-red">*</sup></label>-->
-        <!--            <v-table>-->
-        <!--              <tbody>-->
-        <!--              <tr class="report-table__tr">-->
-        <!--                <td class="report-table__th report-table__th__br-left">Данные РО</td>-->
-        <!--                <td class="report-table__th">Корректировка ОШ</td>-->
-        <!--                <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>-->
-        <!--              </tr>-->
-        <!--              <tr>-->
-        <!--                <td class="report-table__td">25.03.2024</td>-->
-        <!--                <td class="report-table__td report-table__td__center">25.03.2024</td>-->
-        <!--                <td class="report-table__td">25.03.2024</td>-->
-        <!--              </tr>-->
-        <!--              </tbody>-->
-        <!--            </v-table>-->
-        <!--            <label-->
-        <!--                class="form__label"-->
-        <!--            >Дата окончания проведения проекта <sup class="valid-red">*</sup></label>-->
-        <!--            <v-table>-->
-        <!--              <tbody>-->
-        <!--              <tr class="report-table__tr">-->
-        <!--                <td class="report-table__th report-table__th__br-left">Данные РО</td>-->
-        <!--                <td class="report-table__th">Корректировка ОШ</td>-->
-        <!--                <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>-->
-        <!--              </tr>-->
-        <!--              <tr>-->
-        <!--                <td class="report-table__td">25.03.2024</td>-->
-        <!--                <td class="report-table__td report-table__td__center">25.03.2024</td>-->
-        <!--                <td class="report-table__td">25.03.2024</td>-->
-        <!--              </tr>-->
-        <!--              </tbody>-->
-        <!--            </v-table>-->
-        <!--            <div>-->
-        <!--              <Button-->
-        <!--                  style="margin: 0"-->
-        <!--                  label="Добавить проект"-->
-        <!--                  size="large"-->
-        <!--              />-->
-        <!--            </div>-->
-        <!--            <div class="form__field">-->
-        <!--              <label-->
-        <!--                  class="form__label"-->
-        <!--                  for="15"-->
-        <!--              >Комментарий <sup class="valid-red">*</sup></label>-->
-        <!--              <InputReport-->
-        <!--                  id="15"-->
-        <!--                  name="15"-->
-        <!--                  class="form__input"-->
-        <!--                  style="width: 100%"-->
-        <!--              />-->
-        <!--            </div>-->
-        <!--            <div>-->
-        <!--              <v-checkbox-->
-        <!--                  label="Итоговое значение"-->
-        <!--              />-->
-        <!--            </div>-->
-        <!--            <div class="hr"></div>-->
-        <!--            <div>-->
-        <!--              <p>(4-1)*2+(4-2)+(4-3)=9</p>-->
-        <!--            </div>-->
-        <!--            <div>-->
-        <!--              <v-checkbox-->
-        <!--                  label="Вернуть в РО на доработку"-->
-        <!--              />-->
-        <!--            </div>-->
-        <!--          </div>-->
+      <div class="form__field-group report-table">
+                    <div>
+                      <Button
+                          style="margin-right: 0"
+                          label="Удалить мероприятие"
+                          size="large"
+                      />
+                    </div>
+                    <label
+                        class="form__label"
+                    >Общее количество человек, принявших участие в трудовом проекте <sup class="valid-red">*</sup></label>
+                    <v-table>
+                      <tbody>
+                      <tr class="report-table__tr">
+                        <td class="report-table__th report-table__th__br-left">Данные РО</td>
+                        <td class="report-table__th">Корректировка ОШ</td>
+                        <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
+                      </tr>
+                      <tr>
+                        <td class="report-table__td">200</td>
+                        <td class="report-table__td report-table__td__center">200</td>
+                        <td class="report-table__td">200</td>
+                      </tr>
+                      </tbody>
+                    </v-table>
+                    <label
+                        class="form__label"
+                    >Количество человек из своего региона, принявших участие в трудовом проекте <sup class="valid-red">*</sup></label>
+                    <v-table>
+                      <tbody>
+                      <tr class="report-table__tr">
+                        <td class="report-table__th report-table__th__br-left">Данные РО</td>
+                        <td class="report-table__th">Корректировка ОШ</td>
+                        <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
+                      </tr>
+                      <tr>
+                        <td class="report-table__td">200</td>
+                        <td class="report-table__td report-table__td__center">200</td>
+                        <td class="report-table__td">200</td>
+                      </tr>
+                      </tbody>
+                    </v-table>
+                    <label
+                        class="form__label"
+                    >Дата начала проведения проекта <sup class="valid-red">*</sup></label>
+                    <v-table>
+                      <tbody>
+                      <tr class="report-table__tr">
+                        <td class="report-table__th report-table__th__br-left">Данные РО</td>
+                        <td class="report-table__th">Корректировка ОШ</td>
+                        <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
+                      </tr>
+                      <tr>
+                        <td class="report-table__td">25.03.2024</td>
+                        <td class="report-table__td report-table__td__center">25.03.2024</td>
+                        <td class="report-table__td">25.03.2024</td>
+                      </tr>
+                      </tbody>
+                    </v-table>
+                    <label
+                        class="form__label"
+                    >Дата окончания проведения проекта <sup class="valid-red">*</sup></label>
+                    <v-table>
+                      <tbody>
+                      <tr class="report-table__tr">
+                        <td class="report-table__th report-table__th__br-left">Данные РО</td>
+                        <td class="report-table__th">Корректировка ОШ</td>
+                        <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
+                      </tr>
+                      <tr>
+                        <td class="report-table__td">25.03.2024</td>
+                        <td class="report-table__td report-table__td__center">25.03.2024</td>
+                        <td class="report-table__td">25.03.2024</td>
+                      </tr>
+                      </tbody>
+                    </v-table>
+                    <div>
+                      <Button
+                          style="margin: 0"
+                          label="Добавить проект"
+                          size="large"
+                      />
+                    </div>
+                    <div class="form__field">
+                      <label
+                          class="form__label"
+                          for="15"
+                      >Комментарий <sup class="valid-red">*</sup></label>
+                      <InputReport
+                          id="15"
+                          name="15"
+                          class="form__input"
+                          style="width: 100%"
+                      />
+                    </div>
+                    <div>
+                      <v-checkbox
+                          label="Итоговое значение"
+                      />
+                    </div>
+                    <div class="hr"></div>
+                    <div>
+                      <p>(4-1)*2+(4-2)+(4-3)=9</p>
+                    </div>
+                    <div>
+                      <v-checkbox
+                          label="Вернуть в РО на доработку"
+                      />
+                    </div>
+                  </div>
     </template>
   </report-tabs>
 </template>

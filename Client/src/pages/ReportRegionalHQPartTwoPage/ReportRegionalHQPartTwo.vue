@@ -2,9 +2,9 @@
   <div class="container">
     <h1 class="title title--mb">Отчет о деятельности регионального отделения РСО за 2024 год. Часть 2</h1>
     <div class="download-item">
-      <SvgIcon iconName="download" />
+      <SvgIcon iconName="download"/>
       <button type="button" id="download" class="download-item__report"
-        @click="downloadReportAll(roleStore.roles.regionalheadquarter_commander?.id)">
+              @click="downloadReportAll(roleStore.roles.regionalheadquarter_commander?.id)">
         Скачать архив
       </button>
     </div>
@@ -30,7 +30,7 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <calculated-panel
-            text="Показатель рассчитывается автоматически на основе данных, предоставленных Аппаратом РСО." />
+              text="Показатель рассчитывается автоматически на основе данных, предоставленных Аппаратом РСО."/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -39,7 +39,7 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <calculated-panel
-            text="Показатель рассчитывается автоматически на основе данных, предоставленных Аппаратом РСО." />
+              text="Показатель рассчитывается автоматически на основе данных, предоставленных Аппаратом РСО."/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -49,8 +49,8 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <fourth-panel
-            :districtHeadquarterCommander="districtHeadquarterCommander"
-            :centralHeadquarterCommander="centralHeadquarterCommander"
+              :districtHeadquarterCommander="districtHeadquarterCommander"
+              :centralHeadquarterCommander="centralHeadquarterCommander"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -73,7 +73,7 @@
           мероприятиях и проектах (в том числе и трудовых) «К»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <sixth-panel />
+          <sixth-panel/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -81,7 +81,7 @@
           7. Победители студенческих отрядов РО РСО во всероссийских (международных) проектах и конкурсах «К»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <seventh-panel />
+          <seventh-panel/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -91,7 +91,7 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <calculated-panel
-            text="Показатель рассчитывается автоматически на основе данных сервиса «Медиалогия», предоставленных Аппаратом РСО." />
+              text="Показатель рассчитывается автоматически на основе данных сервиса «Медиалогия», предоставленных Аппаратом РСО."/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -99,7 +99,7 @@
           9. Организация обязательных общесистемных мероприятий РСО на региональном уровне «К»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <ninth-panel />
+          <ninth-panel/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -119,7 +119,7 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <eleventh-panel :districtHeadquarterCommander="districtHeadquarterCommander"
-            :centralHeadquarterCommander="centralHeadquarterCommander" />
+                          :centralHeadquarterCommander="centralHeadquarterCommander"/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -128,7 +128,7 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <twelfth-panel :districtHeadquarterCommander="districtHeadquarterCommander"
-            :centralHeadquarterCommander="centralHeadquarterCommander" />
+                         :centralHeadquarterCommander="centralHeadquarterCommander"/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -137,7 +137,7 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <thirteenth-panel :districtHeadquarterCommander="districtHeadquarterCommander"
-            :centralHeadquarterCommander="centralHeadquarterCommander" />
+                            :centralHeadquarterCommander="centralHeadquarterCommander"/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -147,7 +147,7 @@
           принявших участие во Всероссийском дне ударного труда
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <calculated-panel text="Показатель рассчитывается автоматически на основе данных из 12 и 13 показателей." />
+          <calculated-panel text="Показатель рассчитывается автоматически на основе данных из 12 и 13 показателей."/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -160,7 +160,7 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <calculated-panel
-            text="Показатель рассчитывается автоматически на основе данных, предоставленных Аппаратом РСО." />
+              text="Показатель рассчитывается автоматически на основе данных, предоставленных Аппаратом РСО."/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -169,7 +169,10 @@
           деятельности «К»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <sixteenth-panel />
+          <sixteenth-panel
+              :districtHeadquarterCommander="districtHeadquarterCommander"
+              :centralHeadquarterCommander="centralHeadquarterCommander"
+          />
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -177,7 +180,7 @@
           17. Дислокация студенческих отрядов РО РСО
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <seventeenth-panel />
+          <seventeenth-panel/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -185,7 +188,7 @@
           18. Количество научных работ и публикаций по теме СО, выпущенных в текущем году
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <eighteenth-panel />
+          <eighteenth-panel/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -193,12 +196,12 @@
           19. Трудоустройство
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <nineteenth-panel />
+          <nineteenth-panel/>
         </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
   </div>
-  <Button variant="text" label="Отправить отчет" size="large" />
+  <Button variant="text" label="Отправить отчет" size="large"/>
 </template>
 <script setup>
 import {
@@ -218,11 +221,11 @@ import {
   EighteenthPanel,
   NineteenthPanel
 } from './components/index'
-import { Button } from '@shared/components/buttons';
-import { ref, watchEffect} from "vue";
-import { SvgIcon } from '@shared/ui/SvgIcon';
-import { useRoleStore } from "@layouts/store/role.ts";
-import { HTTP } from '@app/http';
+import {Button} from '@shared/components/buttons';
+import {ref, watchEffect} from "vue";
+import {SvgIcon} from '@shared/ui/SvgIcon';
+import {useRoleStore} from "@layouts/store/role.ts";
+import {HTTP} from '@app/http';
 
 const districtHeadquarterCommander = ref(false);
 const centralHeadquarterCommander = ref(false);
@@ -242,9 +245,9 @@ const downloadReportAll = (id) => {
     document.body.appendChild(link);
     link.click();
   })
-    .catch(function (error) {
-      console.log('an error occured ' + error);
-    });
+      .catch(function (error) {
+        console.log('an error occured ' + error);
+      });
 }
 
 watchEffect(() => {
@@ -295,7 +298,7 @@ watchEffect(() => {
   text-align: left;
 }
 
-.v-expansion-panel--active>.v-expansion-panel-title {
+.v-expansion-panel--active > .v-expansion-panel-title {
   border-radius: 10px;
   min-height: none;
   border-left: none;
@@ -311,7 +314,7 @@ watchEffect(() => {
 }
 
 .v-expansion-panel--active:not(:first-child),
-.v-expansion-panel--active+.v-expansion-panel {
+.v-expansion-panel--active + .v-expansion-panel {
   margin-top: 0;
   opacity: unset;
 }
