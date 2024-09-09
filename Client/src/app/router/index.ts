@@ -32,6 +32,7 @@ router.beforeEach((to, _from, next) => {
     to.name !== 'CentralHQ' &&
     to.name !== 'privacy_policy' &&
     to.name !== 'terms_of_use' &&
+    to.name !== 'mypage' &&
     localStorage.getItem('jwt_token') === null
   )
     next({ name: 'Login' });
