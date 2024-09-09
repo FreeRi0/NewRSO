@@ -257,36 +257,69 @@
       </div>
     </template>
     <template v-slot:thirdTab>
-      <div class="form__field-group report-table">
-        <label
+      <div class="report__field-group report-table">
+        <div class="report__fieldset">
+          <label
             class="form__label"
-        >Объем средств, собранных бойцами РО РСО <sup class="valid-red">*</sup></label>
-        <v-table>
-          <tbody>
-            <tr class="report-table__tr">
-              <td class="report-table__th report-table__th__br-left">Данные РО</td>
-              <td class="report-table__th">Корректировка ОШ</td>
-              <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
-            </tr>
-            <tr>
-              <td class="report-table__td">200</td>
-              <td class="report-table__td report-table__td__center">200</td>
-              <td class="report-table__td">200</td>
-            </tr>
-          </tbody>
-        </v-table>
-        <div class="form__field">
+          >Объем средств, собранных бойцами РО РСО <sup class="valid-red">*</sup></label>
+          <v-table>
+            <tbody>
+              <tr class="report-table__tr">
+                <td class="report-table__th report-table__th__br-left">Данные РО</td>
+                <td class="report-table__th report-table__td__center">Корректировка ОШ</td>
+                <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
+              </tr>
+              <tr class="report-table__tr">
+                <td class="report-table__td">200</td>
+                <td class="report-table__td report-table__td__center">200</td>
+                <td class="report-table__td">
+                  <InputReport
+                    
+                    id="number-of-members"
+                    name="number-of-members"
+                    style="width: 100%;"
+                    type="number"
+                    placeholder="0"
+                    :maxlength="10"
+                    :max="32767"
+                    
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </v-table>
+        </div>
+        
+        <div class="report__fieldset report__fieldset--comment-district">
           <label
               class="form__label"
               for="15"
-          >Комментарий</label>
+          >Комментарий <sup class="valid-red">*</sup></label>
           <InputReport
-              id="15"
-              name="15"
-              class="form__input"
-              style="width: 100%"
-          />
+            is-file-district
+            type="file"
+            accept=".jpg, .jpeg, .png, .pdf"
+            id="scan_file"
+            name="scan_file"
+            width="20px"
+            height="20px"
+            @change="uploadFile"
+            />
+          <TextareaReport
+            
+            id="comment-central"
+            name="comment-central"
+            placeholder="Примечания, ссылки"
+            :rows="1" 
+            autoResize
+            counter-visible
+            :maxlength="3000"
+            :max-length-text="3000"
+            @focusout="focusOut"
+            :disabled="isDisabled"
+          ></TextareaReport>
         </div>
+
         <div>
           <v-checkbox
               label="Вернуть в РО на доработку"
@@ -434,7 +467,15 @@ watchEffect(async () => {
 </script>
 
 <style lang="scss" scoped>
+.form__label {
+  display: block;
+}
+
 .report {
+  // &__field-group {
+  //   grid-template-columns: 1fr;
+  // }
+
   &__fieldset--left-block {
     .report__label {
       line-height: 24px;
@@ -442,75 +483,7 @@ watchEffect(async () => {
   }
 }
 
-.panel-card {
-  box-shadow: none;
-}
 .valid-red {
   color: #db0000;
-}
-.v-tab-item--selected {
-  background: #F3F4F5;
-}
-.v-tab.v-tab.v-btn {
-  min-width: 280px;
-  border-radius: 10px 10px 0 0;
-  letter-spacing: initial;
-  border: none;
-}
-.panel-card-text {
-  padding: 0;
-}
-.panel-tab-btn {
-  text-transform: initial;
-  font-family: Bert Sans;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 21.1px;
-  text-align: left;
-  margin-right: 8px;
-}
-.hr {
-  width: 100%;
-  border-top: 1px solid #B6B6B6;
-}
-.v-table {
-  margin-bottom: 16px;
-  border-radius: 10px;
-  border: 1px solid #B6B6B6;
-}
-.report-table {
-  &__tr {
-    background-color: #FFFFFF;
-    text-align: center;
-  }
-  &__th {
-    font-family: Akrobat;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 19.2px;
-    text-align: center;
-
-    &__br-left {
-      border-radius: 10px 0 0 0;
-      border-right: 1px solid #B6B6B6;
-    }
-
-    &__br-right {
-      border-radius: 0 10px 0 0;
-      border-left: 1px solid #B6B6B6;
-    }
-  }
-  &__td {
-    text-align: center;
-    font-family: Akrobat;
-    font-size: 16px;
-    font-weight: 500;
-    color: #8E8E93;
-
-    &__center {
-      border-left: 1px solid #B6B6B6;
-      border-right: 1px solid #B6B6B6;
-    }
-  }
 }
 </style>

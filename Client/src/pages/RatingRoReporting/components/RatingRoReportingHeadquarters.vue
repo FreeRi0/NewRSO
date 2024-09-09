@@ -43,7 +43,6 @@
       </div>
       <div class="RoReporting_wrapper">
         <RatingRoHeadquartersList :items="sortedRegionalHeadquarters" />
-
         <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate color="blue"></v-progress-circular>
         <p v-else-if="!isLoading && !sortedRegionalHeadquarters.length" class="no-found-text">
           К сожалению, не удалось найти информацию о штабах по вашему запросу.
@@ -146,12 +145,12 @@ watch(
   },
 );
 
-// watch(
-//   () => ascending.value,
-//   () => {
-//     getRegionals('', sortedRegionalHeadquarters.value.length);
-//   },
-// );
+watch(
+  () => ascending.value,
+  () => {
+    getRegionals('', sortedRegionalHeadquarters.value.length);
+  },
+);
 
 // watch(() => [roleStore.roles, roleStore.experts],
 //   async () => {

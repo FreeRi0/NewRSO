@@ -1,23 +1,23 @@
 <template>
-  <div v-if="true">
+  <div v-if="!(props.centralHeadquarterCommander || props.districtHeadquarterCommander)">
     <div class="form__field-group">
       <div class="form__field-report">
         <div class="form__field">
           <label class="form__label" for="amount_of_money">Общая сумма уплаченных членских взносов РО  <sup
               class="valid-red">*</sup></label>
           <InputReport v-model:value="firstPanelData.amount_of_money" id="amount_of_money" name="amount_of_money"
-            class="form__input" type="number" placeholder="Введите число" @focusout="focusOut" />
+                       class="form__input" type="number" placeholder="Введите число" @focusout="focusOut"/>
         </div>
         <div class="report__add-file">
           <label class="form__label" for="scan_file">Скан платежного поручения об уплате ЧВ <sup
               class="valid-red">*</sup></label>
           <InputReport v-if="!firstPanelData.scan_file" isFile type="file" id="scan_file" name="scan_file"
-            style="width: 100%;" @change="uploadFile" />
+                       style="width: 100%;" @change="uploadFile"/>
           <div v-else class="form__file-box">
             <span class="form__file-name">
-              <SvgIcon v-if="firstPanelData.file_type === 'jpg'" icon-name="file-jpg" />
-              <SvgIcon v-if="firstPanelData.file_type === 'pdf'" icon-name="file-pdf" />
-              <SvgIcon v-if="firstPanelData.file_type === 'png'" icon-name="file-png" />
+              <SvgIcon v-if="firstPanelData.file_type === 'jpg'" icon-name="file-jpg"/>
+              <SvgIcon v-if="firstPanelData.file_type === 'pdf'" icon-name="file-pdf"/>
+              <SvgIcon v-if="firstPanelData.file_type === 'png'" icon-name="file-png"/>
               {{ firstPanelData.scan_file }}
             </span>
 
@@ -31,90 +31,125 @@
       <div class="form__field">
         <label class="form__label" for="comment">Комментарий</label>
         <TextareaReport placeholder="Напишите сообщение" v-model:value="firstPanelData.comment" id="comment"
-          name="comment" :rows="1" autoResize @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
-          counter-visible class="form__input" />
+                        name="comment" :rows="1" autoResize @focusout="focusOut" :maxlength="3000"
+                        :max-length-text="3000"
+                        counter-visible class="form__input"/>
       </div>
     </div>
-    <ReportRegionalForm :reportData="reportData" />
+    <ReportRegionalForm :reportData="reportData"/>
   </div>
 
-  <v-card v-else class="panel-card">
-    <v-tabs v-model="tab">
-      <v-tab value="one" class="panel-tab-btn">Отчет РО</v-tab>
-      <v-tab value="two" class="panel-tab-btn">Корректировка ОШ</v-tab>
-      <v-tab value="three" class="panel-tab-btn">Корректировка ЦШ</v-tab>
-    </v-tabs>
-
-    <v-card-text class="panel-card-text">
-      <v-tabs-window v-model="tab">
-        <v-tabs-window-item value="one">
-          <div class="form__field-group">
-            <div style="display: flex;">
-              <div class="form__field">
-                <label class="form__label" for="1">Общая сумма уплаченных членских взносов РО  <sup
-                    class="valid-red">*</sup></label>
-                <InputReport id="1" name="1" class="form__input" type="number" placeholder="Введите число" />
-              </div>
-              <div>
-                <label class="form__label" for="2">Скан платежного поручения об уплате ЧВ <sup
-                    class="valid-red">*</sup></label>
-                <InputReport type="file" id="2" name="2" />
-              </div>
-            </div>
-            <div class="form__field">
-              <label class="form__label" for="3">Комментарий <sup class="valid-red">*</sup></label>
-              <InputReport id="3" name="3" class="form__input" style="width: 100%" />
-            </div>
+  <report-tabs v-else>
+    <template v-slot:firstTab>
+      <div class="form__field-report">
+        <div class="form__field">
+          <label class="form__label" for="amount_of_money">Общая сумма уплаченных членских взносов РО  <sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="firstPanelData.amount_of_money"
+              id="amount_of_money" name="amount_of_money"
+              class="form__input" type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+              :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"
+          />
+        </div>
+        <div class="report__add-file">
+          <label class="form__label" for="scan_file">Скан платежного поручения об уплате ЧВ <sup
+              class="valid-red">*</sup></label>
+          <div class="form__file-box">
+              <span class="form__file-name">
+                <SvgIcon v-if="firstPanelData.file_type === 'jpg'" icon-name="file-jpg"/>
+                <SvgIcon v-if="firstPanelData.file_type === 'pdf'" icon-name="file-pdf"/>
+                <SvgIcon v-if="firstPanelData.file_type === 'png'" icon-name="file-png"/>
+                {{ firstPanelData.scan_file || 'Тестовое название' }}
+              </span>
+            <span class="form__file-size">{{ firstPanelData.file_size || '123' }} Мб</span>
           </div>
-        </v-tabs-window-item>
-        <v-tabs-window-item value="two">
-          <form class="form__field-group" @submit.prevent>
-            <div class="form__field">
-              <label class="form__label" for="4">Общая сумма уплаченных членских взносов РО  <sup
-                  class="valid-red">*</sup></label>
-              <InputReport id="4" name="4" class="form__input" type="number" placeholder="Введите число" />
-            </div>
-            <div>
-              <label class="form__label" for="5">Комментарий  <sup class="valid-red">*</sup></label>
-              <InputReport type="file" id="5" name="5" />
-            </div>
-          </form>
-        </v-tabs-window-item>
-        <v-tabs-window-item value="three">
-          <div class="form__field-group report-table">
-            <v-table>
-              <tbody>
-                <tr class="report-table__tr">
-                  <td class="report-table__th report-table__th__br-left">Данные РО</td>
-                  <td class="report-table__th">Корректировка ОШ</td>
-                  <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
-                </tr>
-                <tr>
-                  <td class="report-table__td">200</td>
-                  <td class="report-table__td report-table__td__center">200</td>
-                  <td class="report-table__td">200</td>
-                </tr>
-              </tbody>
-            </v-table>
-            <div>
-              <label class="form__label" for="6">Комментарий  <sup class="valid-red">*</sup></label>
-              <InputReport type="file" id="6" name="6" />
-            </div>
-            <div>
-              <v-checkbox label="Вернуть в РО на доработку" />
-            </div>
-          </div>
-        </v-tabs-window-item>
-      </v-tabs-window>
-    </v-card-text>
-  </v-card>
+        </div>
+      </div>
+    </template>
+    <template v-slot:secondTab>
+      <div class="form__field-report">
+        <div class="form__field">
+          <label class="form__label" for="amount_of_money">Общая сумма уплаченных членских взносов РО  <sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="firstPanelData.amount_of_money"
+              id="amount_of_money"
+              name="amount_of_money"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+          />
+        </div>
+      </div>
+      <div class="form__field">
+        <label class="form__label" for="comment">Комментарий <sup
+            class="valid-red">*</sup></label>
+        <TextareaReport
+            placeholder="Напишите сообщение"
+            v-model:value="firstPanelData.comment"
+            id="comment"
+            name="comment"
+            :rows="1"
+            autoResize
+            @focusout="focusOut"
+            :maxlength="3000"
+            :max-length-text="3000"
+            counter-visible
+            class="form__input"
+        />
+      </div>
+    </template>
+    <template v-slot:thirdTab>
+      <div class="form__field-group report-table">
+        <v-table>
+          <tbody>
+          <tr class="report-table__tr">
+            <td class="report-table__th report-table__th__br-left">Данные РО</td>
+            <td class="report-table__th">Корректировка ОШ</td>
+            <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
+          </tr>
+          <tr>
+            <td class="report-table__td">200</td>
+            <td class="report-table__td report-table__td__center">200</td>
+            <td class="report-table__td">200</td>
+          </tr>
+          </tbody>
+        </v-table>
+        <div>
+          <label class="form__label" for="6">Комментарий  <sup class="valid-red">*</sup></label>
+          <InputReport type="file" id="6" name="6"/>
+        </div>
+        <div>
+          <v-checkbox label="Вернуть в РО на доработку"/>
+        </div>
+      </div>
+    </template>
+  </report-tabs>
 </template>
 <script setup>
-import { ref, watchEffect } from "vue";
-import { InputReport, TextareaReport } from '@shared/components/inputs';
-import { ReportRegionalForm } from '../../ReportRegionalHQPartOnePage/components/index'
-import { getReport, reportPartTwoService } from "@services/ReportService.ts";
-import { SvgIcon } from '@shared/index';
+import {ref, watchEffect} from "vue";
+import {InputReport, TextareaReport} from '@shared/components/inputs';
+import {ReportRegionalForm} from '../../ReportRegionalHQPartOnePage/components/index'
+import {getReport, reportPartTwoService} from "@services/ReportService.ts";
+import {SvgIcon} from '@shared/index';
+import {ReportTabs} from './index';
+
+const props = defineProps({
+  districtHeadquarterCommander: {
+    type: Boolean
+  },
+  centralHeadquarterCommander: {
+    type: Boolean
+  },
+  reportId: {
+    type: String,
+    default: '',
+  }
+});
 
 const defaultReportData = {
   participants_number: '0',
@@ -128,7 +163,7 @@ const defaultReportData = {
   employed_ssho: '0',
   employed_top: '0',
 };
-const tab = ref('one');
+// const tab = ref('one');
 const reportData = ref(defaultReportData);
 const isFirstSent = ref(true);
 const scanFile = ref([]);
@@ -157,10 +192,10 @@ const uploadFile = async (event) => {
   formData.append('comment', firstPanelData.value.comment);
   formData.append('amount_of_money', firstPanelData.value.amount_of_money);
   if (isFirstSent.value) {
-    let { scan_file } = await reportPartTwoService.createReport(formData, '1', true);
+    let {scan_file} = await reportPartTwoService.createReport(formData, '1', true);
     firstPanelData.value.scan_file = scan_file.split('/').at(-1);
   } else {
-    let { data: { scan_file } } = await reportPartTwoService.createReportDraft(formData, '1', true);
+    let {data: {scan_file}} = await reportPartTwoService.createReportDraft(formData, '1', true);
     firstPanelData.value.scan_file = scan_file.split('/').at(-1);
   }
 };
@@ -179,10 +214,16 @@ const deleteFile = async () => {
 };
 watchEffect(async () => {
   try {
-    const res = await getReport();
-    reportData.value = res.data;
+    if (!(props.centralHeadquarterCommander || props.districtHeadquarterCommander)) {
+      const res = await getReport();
+      reportData.value = res.data;
+    }
 
-    const { data } = await reportPartTwoService.getReport('1');
+
+    const {data} = props.centralHeadquarterCommander || props.districtHeadquarterCommander
+        ? await reportPartTwoService.getReportDH('1', props.reportId)
+        : await reportPartTwoService.getReport('1');
+
     if (data) {
       isFirstSent.value = false;
       firstPanelData.value.comment = data.comment;

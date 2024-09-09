@@ -119,7 +119,7 @@
 <script setup>
 import { ref, watchEffect } from 'vue';
 import { InputReport, TextareaReport } from '@shared/components/inputs';
-import { Button } from '@shared/components/buttons';
+// import { Button } from '@shared/components/buttons';
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { SvgIcon } from '@shared/index';
 
@@ -264,6 +264,9 @@ watchEffect(async () => {
 </script>
 
 <style lang="scss" scoped>
+.form__label {
+  display: block;
+}
 .report {
   &__field-group {
     grid-template-columns: 1fr;
