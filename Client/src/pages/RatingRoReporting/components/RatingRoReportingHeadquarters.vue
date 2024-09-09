@@ -44,7 +44,8 @@
         </div>
       </div>
       <div class="RoReporting_wrapper">
-        <router-link  @click="goToReport(reg.id)" v-if="roleStore.roles.regionalheadquarter_commander && Object.keys(reg).length"
+        <router-link @click="goToReport(reg.id)"
+          v-if="roleStore.roles.regionalheadquarter_commander && Object.keys(reg).length"
           :to="{ name: 'rating-ro-reporting' }" class="ratingRO__item">
           <p>{{ reg.regional_headquarter.name }}</p>
         </router-link>
@@ -143,12 +144,7 @@ const getRegionals = async (pagination, orderLimit) => {
   try {
     isLoading.value = true;
     let data = [];
-    let url = '';
-    if (roleStore.roles.regionalheadquarter_commander) {
-      url = '/regional_competitions/statistical_report/me/?'
-    } else if (roleStore.roles.centralheadquarter_commander || roleStore.experts.is_central_expert === true) {
-      url = '/regional_competitions/statistical_report/?'
-    }
+    let url = '/regional_competitions/statistical_report/?'
     if (orderLimit) data.push('limit=' + orderLimit);
     else if (!pagination) data.push('limit=' + limit);
     else if (pagination == 'next') url = regionals.value.next.replace('http', 'https');
@@ -183,16 +179,16 @@ watch(
   },
 );
 
-// watch(
-//   () => ascending.value,
-//   () => {
-//     getRegionals('', sortedRegionalHeadquarters.value.length);
-//   },
-// );
+watch(
+  () => ascending.value,
+  () => {
+    getRegionals('', sortedRegionalHeadquarters.value.length);
+  },
+);
 
 watch(() => [roleStore.roles, roleStore.experts],
-  async() => {
-   await getRegionals();
+  async () => {
+    await getRegionals();
   },
   {
     immediate: true,
