@@ -60,7 +60,9 @@ jobs:
         run: |
           branch_name="${GITHUB_REF#refs/heads/}"
           author_name=$(git log -1 --pretty=format:'%an')
+          echo "branch_name=$branch_name" >> $GITHUB_ENV
           echo "author_name=$author_name" >> $GITHUB_ENV
+          echo "Branch: $branch_name"
           echo "Author: $author_name"
 
       - name: Send success or error based on status code
