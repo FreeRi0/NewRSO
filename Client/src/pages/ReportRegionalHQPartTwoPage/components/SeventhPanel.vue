@@ -33,8 +33,6 @@ import { InputReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { HTTP } from "@app/http";
 
-// const tab = ref('one')
-
 const panel = ref(null);
 
 const items = ref([]);
@@ -59,6 +57,10 @@ onMounted(async () => {
 <style lang="scss" scoped>
 .panel-card {
   box-shadow: none;
+}
+
+.v-expansion-panel-title[aria-expanded="true"] {
+  display: none;
 }
 
 .title_wrap {

@@ -11,7 +11,8 @@
             </div>
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
-          <SeventhPanelForm  :id="item.id" :panel_number="6" @collapse-form="collapsed()" :title="item"></SeventhPanelForm>
+          <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()" :title="item">
+          </SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
     </v-expansion-panels>
   </v-card>
@@ -21,7 +22,6 @@ import { ref, onMounted } from "vue";
 import { SeventhPanelForm } from "./index";
 import { InputReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-
 import { HTTP } from "@app/http";
 
 
@@ -50,7 +50,6 @@ const getItems = async () => {
     console.error(err);
   }
 }
-
 onMounted(async () => {
   await getItems();
 })
@@ -60,9 +59,11 @@ onMounted(async () => {
   box-shadow: none;
 }
 
-.panel-tab-btn {
-  // ... existing styles ...
+.v-expansion-panel-title[aria-expanded="true"] {
+  display: none;
+}
 
+.panel-tab-btn {
   text-align: right;
   padding-right: 40px;
 }
