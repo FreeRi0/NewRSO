@@ -470,12 +470,7 @@
                                                         class="addFile"
                                                         iconName="add-file"
                                                     />
-                                                    <a
-                                                        :href="
-                                                            'http://213.139.208.147:30000' +
-                                                            block.document
-                                                        "
-                                                    >
+                                                    <a :href="block.document">
                                                         <span
                                                             class="font-semibold"
                                                             >{{
@@ -484,12 +479,7 @@
                                                             }}</span
                                                         >
                                                     </a>
-                                                    <a
-                                                        :href="
-                                                            'http://213.139.208.147:30000' +
-                                                            block.document
-                                                        "
-                                                    >
+                                                    <a :href="block.document">
                                                         <span
                                                             v-if="block.id"
                                                             class="font-semibold"
