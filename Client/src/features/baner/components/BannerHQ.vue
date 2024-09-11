@@ -1455,7 +1455,7 @@ const copyL = () => {
     
     .AddApplication {
     display: block;
-    width: 100%; /* Ensures full width */
+    width: 100%;
     border-radius: 10px;
     background: #39bfbf;
     text-align: center;
@@ -1467,17 +1467,14 @@ const copyL = () => {
     padding: 16px 57px;
     margin-bottom: 90px;
     margin-right: -165px;
-    
     }
     .AddApplication:first-child {
         transform: translateX(32px) translateY(0px);
-                 /* Removes the bottom margin for the last block */
     }
 
     .AddApplication:last-child {
         transform: translateX(-198px) translateY(90px);
         padding: 14px 79px;
-        /* Removes the bottom margin for the last block */
     }
 
 
@@ -1485,7 +1482,6 @@ const copyL = () => {
         display: flex;
         align-items: center;
         justify-content: center;
-        // justify-content: space-between;
         margin: 12px 0 0;
         block-size: 20px;
         column-gap: 12px;

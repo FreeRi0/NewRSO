@@ -92,6 +92,9 @@ onMounted(() => {
     font-size: 16px;
     transition: 0.2s;
     text-transform: none;
+    @media screen and (max-width: 320px) and (max-height:462px) {
+        width: 100%;
+    }
 
     &_primary {
         background: var(--primary);
@@ -179,107 +182,5 @@ onMounted(() => {
         margin: 0px auto;
     }
 }
-@media screen and (max-width: 320px) and (max-height:462px) {
-    .btn {
-    display: block;
-    margin: 20px auto;
-    padding: 12px 32px;
-    // height: 52px;
-    color: white;
-    box-shadow: none;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    transition: 0.2s;
-    text-transform: none;
-    width: 100%;
 
-    &_primary {
-        background: var(--primary);
-        border: 1px solid var(--primary);
-    }
-
-    &_second {
-        background: var(--second);
-        border: 1px solid var(--second);
-    }
-
-    &_success {
-        background: var(--success);
-        border: 1px solid var(--success);
-    }
-
-    &_info {
-        background: var(--info);
-        border: 1px solid var(--info);
-    }
-
-    &_warning {
-        background: var(--warning);
-        border: 1px solid var(--warning);
-    }
-
-    &_danger {
-        background: var(--danger);
-        border: 1px solid var(--danger);
-    }
-
-    &:disabled {
-        opacity: 0.6;
-        cursor: default;
-    }
-
-    &_rounded {
-        border-radius: 15px;
-    }
-
-    &_outlined {
-        background: transparent;
-        color: #000;
-
-        &:hover {
-            color: #fff;
-        }
-    }
-
-    &_icon {
-        border-radius: 5px;
-        height: 40px;
-        width: 40px;
-        margin: 0px;
-        margin-left: 8px;
-        padding: 0;
-    }
-
-    &_iconn {
-        border-radius: 10px;
-        height: 40px;
-        width: 40px;
-        margin: 0px;
-        padding: 0;
-    }
-
-    &_switchh {
-        border-radius: 10px;
-        height: 40px;
-        width: 40px;
-        margin: 0px;
-        margin-left: 8px;
-        padding: 0;
-    }
-
-    &_large {
-        height: 52px;
-        padding: 16px 32px;
-    }
-
-    .circleLoader {
-        width: 20px;
-        height: 20px;
-        display: block;
-        margin: 0px auto;
-    }
-}
-}
 </style>

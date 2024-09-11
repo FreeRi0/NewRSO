@@ -115,7 +115,7 @@
         </ul>
 
         <div class="competition__documents">
-            <p id="file-chosen-statement" class="text competition__documents-description text-column">
+            <p id="file-chosen-statement" class="text competition__documents-description competition__text-column">
                 Положение о проведении<a class="a-spacing"/> конкурса и формировании рейтинга линейных
                 студенческих отрядов Молодёжной<a class="a-spacing1"/> общероссийской общественной
                 <a class="a-spacing2"/>организации «Российский<a class="a-spacing3" /> Студенческие Отряды»
@@ -373,22 +373,18 @@ onUnmounted(() => {
 </script>
 <style lang="scss">
 @media screen and (max-width: 320px) and (max-height:462px) {
-.text-column{
-    // margin: -5px;
-    word-spacing: 0px;
 
-}
 .a-spacing{
-    // margin-left: 1px;
+     margin-left: 1px;
 }
 .a-spacing1{
-    // margin-left: -4px;
+     margin-left: -4px;
 }
 .a-spacing2{
-    // margin-right: -57px;
+     margin-right: -57px;
 }
 .a-spacing3{
-    // margin-left: -17px;
+     margin-left: -17px;
     
 }
 }
