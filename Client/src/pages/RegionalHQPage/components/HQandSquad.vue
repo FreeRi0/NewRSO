@@ -125,4 +125,19 @@ section.headquarters_squads h3 {
         font-size: 18px;
     }
 }
+@media screen and (max-width: 320px) and (max-height:462px) {
+    .headquarters_squads__container {
+        grid-template-columns: repeat(auto-fill, minmax(156px, 1fr));
+        column-gap: 16px;
+        row-gap: 16px;
+    }
+    .card {
+        padding: 16px;
+        width: 256px;
+        height: 125px;
+    }
+    .card p {
+        font-size: 20px;
+    }
+}
 </style>

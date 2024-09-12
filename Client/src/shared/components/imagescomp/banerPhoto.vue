@@ -397,8 +397,7 @@ const deleteBanner = async () => {
 
     }
     
-}
-    .user-metrichq__top {
+    &-hq{
         display: grid;
         grid-template-columns: 1fr;
         grid-template-rows: 100px 100px;
@@ -408,8 +407,6 @@ const deleteBanner = async () => {
         grid-row-end: 2;
         border-radius: 10px 10px 0px 0px;
         
-        
-
         &-img-wrapper {
             display: grid;
             grid-template-columns: 3fr;
@@ -428,11 +425,10 @@ const deleteBanner = async () => {
             object-fit: cover;
             border-radius: 10px 10px 0px 0px;
             transform: translateX(0px);
-            
-
         }
-        
     }
+    
+}
 
-    }
+}
 </style>

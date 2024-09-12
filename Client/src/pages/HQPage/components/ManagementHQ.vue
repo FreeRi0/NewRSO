@@ -232,7 +232,7 @@ section.headquarters-management h3 {
     height: 100%;
 }
     .manager-card__box {
-    width: 116px;
+    width: 216px;
     margin-top: 16px;
     display: flex;
     flex-direction: column;

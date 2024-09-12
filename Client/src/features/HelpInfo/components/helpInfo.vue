@@ -1078,7 +1078,7 @@
                     </template>
                 </v-expansion-panel-title>
 
-                <v-expansion-panel-text class="optimiz">
+                <v-expansion-panel-text class="optimize">
                     <v-card class="mx-auto">
                         <v-list>
                             <v-list-group value="Programming Group">
