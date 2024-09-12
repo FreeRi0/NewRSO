@@ -1,6 +1,6 @@
 <template>
     <v-card-text class="panel-card-text">
-        <v-tabs-window v-if="!(props.centralHeadquarterCommander || props.districtHeadquarterCommander)">
+        <v-tabs-window v-if="!(props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)">
             <div v-if="props.panel_number == 7" class="form__field-group">
                 <div class="d-flex justify-space-between">
                     <div class="title_wrap">
@@ -115,7 +115,8 @@
                         Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
                     </p>
                     <InputReport @focusout="focusOut" v-model:value="sixPanelData.number_of_members"
-                        placeholder="Введите число" id="15" name="14" class="form__input number_input" type="number" />
+                        placeholder="Введите число" id="15" name="14" class="form__input number_input" type="number"
+                        :maxlength="10" :max="32767" />
                 </div>
                 <div class="form__field">
                     <label class="form__label" for="14">Ссылка на социальные сети/ электронные
@@ -142,156 +143,149 @@
             </div>
         </v-tabs-window>
         <report-tabs v-else>
-            <template v-slot:firstTab>
-                <v-tabs-window>
-                    <div v-if="props.panel_number == 7" class="form__field-group">
-                        <div class="d-flex justify-space-between">
-                            <div class="title_wrap">
-                                <p class="form__title">{{ props.title.name }}</p>
-                                <div class="d-flex gc-8">
-                                    <p class="form__title">{{ props.title.month }}</p>
-                                    <p class="form__title">{{ props.title.city }}</p>
-                                </div>
-                            </div>
-                            <div>
-                                <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
-                            </div>
-                        </div>
-                        <div class="form__field places">
-                            <p class="form__label">
-                                Призовое место в конкурсе <sup class="valid-red">*</sup>
-                            </p>
-                            <div class="places_wrap">
-                                <div class="places_item" v-for="item in prize_places" :key="item.id">
-                                    <input :id="item.id" :value="item.value" :name="item.name"
-                                        class="form__input places_input" type="radio" @focusout="focusOut"
-                                        v-model="seventhPanelData.prize_place" />
-                                    <label class="places_item_label" :for="id">{{
-                                        item.name
-                                        }}</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="report__fieldset report__fieldset--right-block">
-                            <label class="form__label report__label" for="scan_file">
-                                Скан подтверждающего документа<sup class="valid-red">*</sup>
-                            </label>
-                            <InputReport v-if="!seventhPanelData.scan_file" isFile type="file"
-                                accept=".jpg, .jpeg, .png, .pdf" id="scan_file" name="scan_file" width="100%"
-                                height="auto" @change="uploadFile" :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" />
-                            <div v-else class="report__file-box">
-                                <span class="report__file-name">
-                                    <SvgIcon v-if="seventhPanelData.file_type === 'jpg'" icon-name="file-jpg" />
-                                    <SvgIcon v-if="seventhPanelData.file_type === 'pdf'" icon-name="file-pdf" />
-                                    <SvgIcon v-if="seventhPanelData.file_type === 'png'" icon-name="file-png" />
-                                    {{ seventhPanelData.scan_file }}
-                                </span>
-
-                                <span class="report__file-size">
-                                    {{ seventhPanelData.file_size }} Мб
-                                </span>
-
-                                <button @click="deleteFile" class="report__button-delete-file">
-                                    Удалить
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="form__field">
-                            <label class="form__label" for="14">Ссылка на публикацию о победе
-                                <sup class="valid-red">*</sup></label>
-
-                            <div class="form__wrapper" v-for="(item, index) in seventhPanelData.links" :key="index">
-                                <InputReport @focusout="focusOut" name="14"
-                                    placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                                    v-model:value="item.link" :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" class="form__input mb-2" />
-                                <div class="add_link" @click="addLink(7)"
-                                    v-if="seventhPanelData.links.length === index + 1">
-                                    + Добавить ссылку
-                                </div>
-                                <div class="add_link" @click="deleteLink(7)" v-else>
-                                    Удалить поле ввода
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="d-flex gc-4">
-                            <div class="form__field">
-                                <label class="form__label" for="14">Дата <sup class="valid-red">*</sup></label>
-                                <InputReport @focusout="focusOut" v-model:value="seventhPanelData.comment" id="14"
-                                    name="14" class="form__input" type="date" />
-                            </div>
-                            <div class="form__field">
-                                <label class="form__label" for="14">Место проведения<sup
-                                        class="valid-red">*</sup></label>
-                                <InputReport placeholder="Укажите место проведения мероприятия" @focusout="focusOut"
-                                    v-model:value="seventhPanelData.comment" :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" id="14" name="14" class="form__input"
-                                    style="width: 100%" />
-                            </div>
-                        </div>
-                        <div class="form__field">
-                            <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
-                            <InputReport @focusout="focusOut" :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" placeholder="Напишите сообщение"
-                                v-model:value="seventhPanelData.comment" id="14" name="14" class="form__input"
-                                style="width: 100%" />
-                        </div>
-                        <div>
-                            <v-checkbox label="Итоговое значение" />
-                        </div>
-                        <div class="hr"></div>
-                        <div>
-                            <p>0</p>
+           <template v-slot:firstTab>
+            <div v-if="props.panel_number == 7" class="form__field-group">
+                <div class="d-flex justify-space-between">
+                    <div class="title_wrap">
+                        <p class="form__title">{{ props.title.name }}</p>
+                        <div class="d-flex gc-8">
+                            <p class="form__title">{{ props.title.month }}</p>
+                            <p class="form__title">{{ props.title.city }}</p>
                         </div>
                     </div>
-                    <div v-else-if="props.panel_number == 6" class="form__field-group">
-                        <div class="d-flex justify-space-between">
-                            <div class="title_wrap">
-                                <p class="form__title">{{ props.title.name }}</p>
-                                <div class="d-flex gc-8">
-                                    <p class="form__title">{{ props.title.month }}</p>
-                                    <p class="form__title">{{ props.title.city }}</p>
-                                </div>
-                            </div>
-                            <div>
-                                <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
-                            </div>
-                        </div>
-                        <div class="form__field places">
-                            <p class="form__label">
-                                Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
-                            </p>
-                            <InputReport @focusout="focusOut" v-model:value="sixPanelData.number_of_members"
-                                placeholder="Введите число" id="15" name="14" :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" class="form__input number_input"
-                                type="number" />
-                        </div>
-                        <div class="form__field">
-                            <label class="form__label" for="14">Ссылка на социальные сети/ электронные
-                                СМИ, подтверждающая участие в мероприятии
-                                <sup class="valid-red">*</sup></label>
-
-                            <div class="form__wrapper" v-for="(item, index) in sixPanelData.links" :key="index">
-                                <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                                    @focusout="focusOut" :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" name="14" v-model:value="item.link" class="form__input mb-2" />
-                                <div class="add_link" @click="addLink(6)"
-                                    v-if="sixPanelData.links.length === index + 1">
-                                    + Добавить ссылку
-                                </div>
-                                <div class="add_link" @click="deleteLink(6)" v-else>
-                                    Удалить поле ввода
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="form__field">
-                            <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
-                            <InputReport @focusout="focusOut" :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" v-model:value="sixPanelData.comment"
-                                placeholder="Напишите сообщение" id="14" name="14" class="form__input"
-                                style="width: 100%" />
+                    <div>
+                        <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
+                    </div>
+                </div>
+                <div class="form__field places">
+                    <p class="form__label">
+                        Призовое место в конкурсе <sup class="valid-red">*</sup>
+                    </p>
+                    <div class="places_wrap">
+                        <div class="places_item" v-for="item in prize_places" :key="item.id">
+                            <input :id="item.id" :value="item.value" :name="item.name" class="form__input places_input"
+                                type="radio" @focusout="focusOut" v-model="seventhPanelData.prize_place" />
+                            <label class="places_item_label" :for="id">{{
+                                item.name
+                            }}</label>
                         </div>
                     </div>
-                </v-tabs-window>
-            </template>
+                </div>
+                <div class="report__fieldset report__fieldset--right-block">
+                    <label class="form__label report__label" for="scan_file">
+                        Скан подтверждающего документа<sup class="valid-red">*</sup>
+                    </label>
+                    <InputReport v-if="!seventhPanelData.scan_file" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
+                        id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile"
+                        :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"/>
+                    <div v-else class="report__file-box">
+                        <span class="report__file-name">
+                            <SvgIcon v-if="seventhPanelData.file_type === 'jpg'" icon-name="file-jpg" />
+                            <SvgIcon v-if="seventhPanelData.file_type === 'pdf'" icon-name="file-pdf" />
+                            <SvgIcon v-if="seventhPanelData.file_type === 'png'" icon-name="file-png" />
+                            {{ seventhPanelData.scan_file }}
+                        </span>
 
+                        <span class="report__file-size">
+                            {{ seventhPanelData.file_size }} Мб
+                        </span>
+
+                        <button @click="deleteFile" class="report__button-delete-file">
+                            Удалить
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form__field">
+                    <label class="form__label" for="14">Ссылка на публикацию о победе
+                        <sup class="valid-red">*</sup></label>
+
+                    <div class="form__wrapper" v-for="(item, index) in seventhPanelData.links" :key="index">
+                        <InputReport @focusout="focusOut" name="14"
+                            placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
+                            class="form__input mb-2" :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"/>
+                        <div class="add_link" @click="addLink(7)" v-if="seventhPanelData.links.length === index + 1">
+                            + Добавить ссылку
+                        </div>
+                        <div class="add_link" @click="deleteLink(7)" v-else>
+                            Удалить поле ввода
+                        </div>
+
+                    </div>
+                </div>
+                <div class="d-flex gc-4">
+                    <div class="form__field">
+                        <label class="form__label" for="14">Дата <sup class="valid-red">*</sup></label>
+                        <InputReport @focusout="focusOut" v-model:value="seventhPanelData.comment" id="14" name="14"
+                            class="form__input" type="date" :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
+                    </div>
+                    <div class="form__field">
+                        <label class="form__label" for="14">Место проведения<sup class="valid-red">*</sup></label>
+                        <InputReport placeholder="Укажите место проведения мероприятия" @focusout="focusOut"
+                            v-model:value="seventhPanelData.comment" id="14" name="14" class="form__input"
+                            style="width: 100%" :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
+                    </div>
+                </div>
+                <div class="form__field">
+                    <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
+                    <InputReport @focusout="focusOut" placeholder="Напишите сообщение"
+                        v-model:value="seventhPanelData.comment" id="14" name="14" class="form__input"
+                        style="width: 100%" :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
+                </div>
+                <div>
+                    <v-checkbox label="Итоговое значение" />
+                </div>
+                <div class="hr"></div>
+                <div>
+                    <p>0</p>
+                </div>
+            </div>
+            <div v-else-if="props.panel_number == 6" class="form__field-group">
+                <div class="d-flex justify-space-between">
+                    <div class="title_wrap">
+                        <p class="form__title">{{ props.title.name }}</p>
+                        <div class="d-flex gc-8">
+                            <p class="form__title">{{ props.title.month }}</p>
+                            <p class="form__title">{{ props.title.city }}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
+                    </div>
+                </div>
+                <div class="form__field places">
+                    <p class="form__label">
+                        Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
+                    </p>
+                    <InputReport @focusout="focusOut" v-model:value="sixPanelData.number_of_members"
+                        placeholder="Введите число" id="15" name="14" class="form__input number_input" type="number"
+                        :maxlength="10" :max="32767" :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
+                </div>
+                <div class="form__field">
+                    <label class="form__label" for="14">Ссылка на социальные сети/ электронные
+                        СМИ, подтверждающая участие в мероприятии
+                        <sup class="valid-red">*</sup></label>
+
+                    <div class="form__wrapper" v-for="(item, index) in sixPanelData.links" :key="index">
+                        <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
+                            @focusout="focusOut" :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" name="14" v-model:value="item.link" class="form__input mb-2" />
+                        <div class="add_link" @click="addLink(6)" v-if="sixPanelData.links.length === index + 1">
+                            + Добавить ссылку
+                        </div>
+                        <div class="add_link" @click="deleteLink(6)" v-else>
+                            Удалить поле ввода
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form__field">
+                    <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
+                    <InputReport @focusout="focusOut" v-model:value="sixPanelData.comment" :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
+                        placeholder="Напишите сообщение" id="14" name="14" class="form__input" style="width: 100%" />
+                </div>
+            </div>
+           </template>
+           <template v-slot:secondTab></template>
         </report-tabs>
     </v-card-text>
 </template>
@@ -305,13 +299,12 @@ import { reportPartTwoService } from '@services/ReportService.ts';
 const props = defineProps({
     title: Object,
     panel_number: String,
-    isDistrictHeadquarterCommander: Boolean,
     isDisabled: Boolean,
-    isCentralHeadquarterCommander: Boolean,
     isSecondTab: Boolean,
+    isThirdTab: Boolean,
+    isCentralHeadquarterCommander: Boolean,
+    isDistrictHeadquarterCommander: Boolean,
     id: String,
-    districtHeadquarterCommander: Boolean,
-    centralHeadquarterCommander: Boolean,
 });
 
 const emit = defineEmits(['collapse-form']);
@@ -391,13 +384,13 @@ const focusOut = async () => {
         formData.append('comment', seventhPanelData.value.comment);
         if (isFirstSent.value) {
             if (props.panel_number == 6) {
-                await reportPartTwoService.createReportDraftId(
+                await reportPartTwoService.createReportId(
                     sixPanelData.value,
                     '6',
                     props.id
                 );
             } else {
-                await reportPartTwoService.createReportDraftId(
+                await reportPartTwoService.createReportId(
                     formData,
                     '7',
                     props.id,
@@ -407,13 +400,13 @@ const focusOut = async () => {
 
         } else {
             if (props.panel_number == 6) {
-                await reportPartTwoService.createReportId(
+                await reportPartTwoService.createReportDraftId(
                     sixPanelData.value,
                     '6',
                     props.id
                 );
             } else {
-                await reportPartTwoService.createReportId(
+                await reportPartTwoService.createReportDraftId(
                     formData,
                     '7',
                     props.id,
@@ -451,10 +444,17 @@ watchEffect(async () => {
         const { data } = await reportPartTwoService.getReportId(props.panel_number, props.id);
         if (data.length && props.panel_number == 7) {
             isFirstSent.value = false;
-            seventhPanelData.value.comment = data[0].comment;
+            seventhPanelData.value.prize_place = data.prize_place;
+            seventhPanelData.value.scan_file = data.scan_file.split('/').at(-1);
+            seventhPanelData.value.links = data.links;
+            seventhPanelData.value.file_size = data.file_size;
+            seventhPanelData.value.file_type = data.file_type;
+            seventhPanelData.value.comment = data.comment;
         } else {
             isFirstSent.value = false;
-            sixPanelData.value.comment = data[0].comment;
+            sixPanelData.value.number_of_members = data.number_of_members;
+            sixPanelData.value.links = data.links;
+            sixPanelData.value.comment = data.comment;
         }
     } catch (e) {
         console.log(e);

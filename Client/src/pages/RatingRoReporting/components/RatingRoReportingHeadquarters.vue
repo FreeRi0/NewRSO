@@ -38,13 +38,14 @@
         </div>
         <div class="sort-filters">
           <div class="sort-select">
-            <div @click="sortAlphabet" class="sorting_btn">{{ sortOptions.name }}</div>
+            <div @click="sortAlphabet" class="sorting_btn"><span>{{ sortOptions.name }}</span></div>
           </div>
           <Button class="ascend grey" @click="ascending = !ascending" iconn="/assets/icon/new-sort-icon.svg"></Button>
         </div>
       </div>
       <div class="RoReporting_wrapper">
-        <router-link  @click="goToReport(reg.id)" v-if="roleStore.roles.regionalheadquarter_commander && Object.keys(reg).length"
+        <router-link @click="goToReport(reg.id)"
+          v-if="roleStore.roles.regionalheadquarter_commander && Object.keys(reg).length"
           :to="{ name: 'rating-ro-reporting' }" class="ratingRO__item">
           <p>{{ reg.regional_headquarter.name }}</p>
         </router-link>
@@ -115,7 +116,7 @@ const ascending = ref(true);
 const isLoading = ref(false);
 const detachments = ref({});
 const reg = ref({});
-const sortBy = ref('name');
+const sortBy = ref('regional_headquarter__name');
 const timerSearch = ref(null);
 const regionals = ref({});
 const name = ref('');
@@ -124,7 +125,7 @@ const limit = 20;
 const sortOptions = ref(
   {
     value: 'name',
-    name: 'По Алфавиту',
+    name: 'По алфавиту',
   });
 
 
@@ -143,12 +144,7 @@ const getRegionals = async (pagination, orderLimit) => {
   try {
     isLoading.value = true;
     let data = [];
-    let url = '';
-    if (roleStore.roles.regionalheadquarter_commander) {
-      url = '/regional_competitions/statistical_report/me/?'
-    } else if (roleStore.roles.centralheadquarter_commander || roleStore.experts.is_central_expert === true) {
-      url = '/regional_competitions/statistical_report/?'
-    }
+    let url = '/regional_competitions/statistical_report/?'
     if (orderLimit) data.push('limit=' + orderLimit);
     else if (!pagination) data.push('limit=' + limit);
     else if (pagination == 'next') url = regionals.value.next.replace('http', 'https');
@@ -183,16 +179,16 @@ watch(
   },
 );
 
-// watch(
-//   () => ascending.value,
-//   () => {
-//     getRegionals('', sortedRegionalHeadquarters.value.length);
-//   },
-// );
+watch(
+  () => ascending.value,
+  () => {
+    getRegionals('', sortedRegionalHeadquarters.value.length);
+  },
+);
 
 watch(() => [roleStore.roles, roleStore.experts],
-  async() => {
-   await getRegionals();
+  async () => {
+    await getRegionals();
   },
   {
     immediate: true,
@@ -228,8 +224,10 @@ onMounted(async () => {
   color: #000000;
   line-height: 21.1px;
   font-family: 'Bert Sans';
-  height: 40px;
+  height: auto;
+  overflow-x: hidden;
   margin-right: 8px;
+  width: 130px;
 }
 
 .grey {
@@ -241,6 +239,7 @@ onMounted(async () => {
 .sort-layout {
   display: flex;
   column-gap: 8px;
+  width: 100%;
 }
 
 .no-found-text {
@@ -309,6 +308,13 @@ onMounted(async () => {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+
+    @media screen and (max-width: 768px) {
+      flex-direction: column-reverse;
+      align-items: flex-start;
+      gap: 20px 0;
+      margin-top: 0;
+    }
   }
 
   &_search {

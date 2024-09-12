@@ -6,7 +6,12 @@
           Всероссийская патриотическая акция «Снежный Десант РСО»
         </v-expansion-panel-title>
         <v-expansion-panel-text >
-          <TenthPanelForm :data="tenthPanelDataFirst" @formData="formData($event, 1)"/>
+          <TenthPanelForm
+              :districtHeadquarterCommander="districtHeadquarterCommander"
+              :centralHeadquarterCommander="centralHeadquarterCommander"
+              :data="tenthPanelDataFirst"
+              @formData="formData($event, 1)"
+          />
         </v-expansion-panel-text>
       </v-expansion-panel>
 
@@ -15,7 +20,11 @@
           Всероссийская трудовая патриотическая акция «Поклонимся Великим годам»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <TenthPanelForm :data="tenthPanelDataSecond" @formData="formData($event, 2)"/>
+          <TenthPanelForm
+              :districtHeadquarterCommander="districtHeadquarterCommander"
+              :centralHeadquarterCommander="centralHeadquarterCommander"
+              :data="tenthPanelDataSecond"
+              @formData="formData($event, 2)"/>
         </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -26,26 +35,39 @@ import { ref, watchEffect } from "vue";
 import { TenthPanelForm } from './index';
 import { reportPartTwoService } from "@services/ReportService.ts";
 
+defineProps({
+  districtHeadquarterCommander: {
+    type: Boolean
+  },
+  centralHeadquarterCommander: {
+    type: Boolean
+  },
+  reportId: {
+    type: String,
+    default: '',
+  }
+});
+
 const isFirstSent = ref({
   first: true,
   second: true,
 });
-const tenthPanelDataFirst = ref([{
+const tenthPanelDataFirst = ref({
   event_happened: false,
   links: [
     {
       link: '',
     },
   ],
-}]);
-const tenthPanelDataSecond = ref([{
+});
+const tenthPanelDataSecond = ref({
   event_happened: false,
   links: [
     {
       link: '',
     },
   ],
-}]);
+});
 
 const formData = async (data, reportNumber) => {
   if (reportNumber === 1) {

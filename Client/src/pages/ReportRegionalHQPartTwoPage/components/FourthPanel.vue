@@ -95,8 +95,8 @@
 
   <report-tabs v-else>
     <template v-slot:firstTab>
-      <div v-for="(event, index) in events" :key="index" class="form__field-fourth-panel">
-        <div class="form__field-members-event">
+      <div v-for="(event, index) in events" :key="index">
+        <div>
           <div class="form__field-members">
             <label class="form__label" for="participants_number">Количество человек, принявших участие в мероприятии <sup
                 class="valid-red">*</sup></label>
@@ -137,8 +137,13 @@
             <p class="form__label">Межрегиональное <sup class="valid-red">*</sup></p>
             <div class="form__label-radio">
               <div v-if="event.is_interregional" style="display: flex;">
-                <input v-model="event.is_interregional" type="radio" :id="`is_interregional-true_${index}`" :value="true"
-                       class="custom-radio" />
+                <input
+                    v-model="event.is_interregional"
+                    type="radio"
+                    :id="`is_interregional-true_${index}`"
+                    :value="true"
+                    class="custom-radio"
+                />
                 <label :for="`is_interregional-true_${index}`">
                   Да
                 </label>
@@ -155,9 +160,21 @@
         </div>
         <div class="form__field-link">
           <p class="form__label">Ссылка на группу мероприятия в социальных сетях <sup class="valid-red">*</sup></p>
-          <div class="form__add-link" v-for="(link, i) in events[index].links" :key="i">
-            <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__input-add-link" type="text"
-                         placeholder="https://vk.com/cco_monolit" @focusout="focusOut" :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" />
+          <div
+              class="form__add-link"
+              v-for="(link, i) in events[index].links"
+              :key="i"
+          >
+            <InputReport
+                v-model:value="link.link"
+                :id="i"
+                :name="i"
+                class="form__input form__input-add-link"
+                type="text"
+                placeholder="https://vk.com/cco_monolit"
+                @focusout="focusOut"
+                :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"
+            />
           </div>
         </div>
       </div>
@@ -177,7 +194,7 @@
     </template>
     <template v-slot:secondTab>
       <div v-for="(event, index) in events" :key="index" class="form__field-fourth-panel">
-        <div class="form__field-members-event">
+        <div>
           <div class="form__field-members">
             <label class="form__label" for="participants_number">Количество человек, принявших участие в мероприятии <sup
                 class="valid-red">*</sup></label>
@@ -374,6 +391,10 @@ const props = defineProps({
   centralHeadquarterCommander: {
     type: Boolean
   },
+  reportId: {
+    type: String,
+    default: '',
+  }
 });
 
 const isFirstSent = ref(true);
@@ -469,7 +490,9 @@ const deleteFile = async () => {
 watchEffect(async () => {
   console.log('districtHeadquarterCommander: ', !(props.districtHeadquarterCommander || props.centralHeadquarterCommander));
   try {
-    const { data } = props.centralHeadquarterCommander || props.districtHeadquarterCommander ? await reportPartTwoService.getReportDH('4') : await reportPartTwoService.getReport('4');
+    const { data } = props.centralHeadquarterCommander || props.districtHeadquarterCommander
+        ? await reportPartTwoService.getReportDH('4', props.reportId)
+        : await reportPartTwoService.getReport('4');
     if (data) {
       isFirstSent.value = false;
       events.value = [...data.events];
