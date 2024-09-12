@@ -3,11 +3,12 @@ import {
     EducationalHeadquarter,
     GetEducationalHeadquartersParams,
 } from './types';
+import { PaginatedResponse } from '../types';
 
 export function getEducationalHeadquarters(
-    params: GetEducationalHeadquartersParams,
+    params?: GetEducationalHeadquartersParams,
 ) {
-    return HTTP.get<EducationalHeadquarter[]>('/educationals', {
+    return HTTP.get<PaginatedResponse<EducationalHeadquarter>>('/educationals', {
         params,
     });
 }

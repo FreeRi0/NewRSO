@@ -1,14 +1,23 @@
 <template>
   <div class="container">
     <h1 class="title title--mb">Отчет о деятельности регионального отделения РСО за 2024 год. Часть 2</h1>
-
+    <div class="download-item">
+      <SvgIcon iconName="download"/>
+      <button type="button" id="download" class="download-item__report"
+              @click="downloadReportAll(roleStore.roles.regionalheadquarter_commander?.id)">
+        Скачать архив
+      </button>
+    </div>
     <v-expansion-panels>
       <v-expansion-panel>
         <v-expansion-panel-title>
           1. Численность членов РО РСО в соответствии с объемом уплаченных членских взносов
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <first-panel />
+          <first-panel
+              :districtHeadquarterCommander="districtHeadquarterCommander"
+              :centralHeadquarterCommander="centralHeadquarterCommander"
+          />
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -21,7 +30,7 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <calculated-panel
-            text="Показатель рассчитывается автоматически на основе данных, предоставленных Аппаратом РСО." />
+              text="Показатель рассчитывается автоматически на основе данных, предоставленных Аппаратом РСО."/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -30,7 +39,7 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <calculated-panel
-            text="Показатель рассчитывается автоматически на основе данных, предоставленных Аппаратом РСО." />
+              text="Показатель рассчитывается автоматически на основе данных, предоставленных Аппаратом РСО."/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -39,7 +48,10 @@
           (слеты, школы, фестивали, турниры и прочие)
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <fourth-panel />
+          <fourth-panel
+              :districtHeadquarterCommander="districtHeadquarterCommander"
+              :centralHeadquarterCommander="centralHeadquarterCommander"
+          />
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -49,7 +61,10 @@
           трудовых проектов РСО
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <fifth-panel />
+          <fifth-panel
+              :districtHeadquarterCommander="districtHeadquarterCommander"
+              :centralHeadquarterCommander="centralHeadquarterCommander"
+          />
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -58,7 +73,7 @@
           мероприятиях и проектах (в том числе и трудовых) «К»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <sixth-panel />
+          <sixth-panel/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -66,7 +81,7 @@
           7. Победители студенческих отрядов РО РСО во всероссийских (международных) проектах и конкурсах «К»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <seventh-panel />
+          <seventh-panel/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -76,7 +91,7 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <calculated-panel
-            text="Показатель рассчитывается автоматически на основе данных сервиса «Медиалогия», предоставленных Аппаратом РСО." />
+              text="Показатель рассчитывается автоматически на основе данных сервиса «Медиалогия», предоставленных Аппаратом РСО."/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -84,7 +99,7 @@
           9. Организация обязательных общесистемных мероприятий РСО на региональном уровне «К»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <ninth-panel />
+          <ninth-panel/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -92,7 +107,10 @@
           10. Организация РО РСО всероссийских (международных) добровольческих и патриотических акций «К»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <tenth-panel />
+          <tenth-panel
+              :districtHeadquarterCommander="districtHeadquarterCommander"
+              :centralHeadquarterCommander="centralHeadquarterCommander"
+          />
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -100,7 +118,8 @@
           11. Активность РО РСО в социальных сетях «К»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <eleventh-panel />
+          <eleventh-panel :districtHeadquarterCommander="districtHeadquarterCommander"
+                          :centralHeadquarterCommander="centralHeadquarterCommander"/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -108,7 +127,8 @@
           12. Объем средств, собранных бойцами РО РСО во Всероссийском дне ударного труда
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <twelfth-panel />
+          <twelfth-panel :districtHeadquarterCommander="districtHeadquarterCommander"
+                         :centralHeadquarterCommander="centralHeadquarterCommander"/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -116,7 +136,8 @@
           13. Охват членов РО РСО, принявших участие во Всероссийском дне ударного труда «К»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <thirteenth-panel />
+          <thirteenth-panel :districtHeadquarterCommander="districtHeadquarterCommander"
+                            :centralHeadquarterCommander="centralHeadquarterCommander"/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -126,7 +147,7 @@
           принявших участие во Всероссийском дне ударного труда
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <calculated-panel text="Показатель рассчитывается автоматически на основе данных из 12 и 13 показателей." />
+          <calculated-panel text="Показатель рассчитывается автоматически на основе данных из 12 и 13 показателей."/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -139,7 +160,7 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <calculated-panel
-            text="Показатель рассчитывается автоматически на основе данных, предоставленных Аппаратом РСО." />
+              text="Показатель рассчитывается автоматически на основе данных, предоставленных Аппаратом РСО."/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -148,7 +169,10 @@
           деятельности «К»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <sixteenth-panel />
+          <sixteenth-panel
+              :districtHeadquarterCommander="districtHeadquarterCommander"
+              :centralHeadquarterCommander="centralHeadquarterCommander"
+          />
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -156,7 +180,7 @@
           17. Дислокация студенческих отрядов РО РСО
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <seventeenth-panel />
+          <seventeenth-panel/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -164,7 +188,7 @@
           18. Количество научных работ и публикаций по теме СО, выпущенных в текущем году
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <eighteenth-panel />
+          <eighteenth-panel/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -172,12 +196,12 @@
           19. Трудоустройство
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <nineteenth-panel />
+          <nineteenth-panel/>
         </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
   </div>
-  <Button variant="text" label="Отправить отчет" size="large" />
+  <Button variant="text" label="Отправить отчет" size="large"/>
 </template>
 <script setup>
 import {
@@ -197,8 +221,43 @@ import {
   EighteenthPanel,
   NineteenthPanel
 } from './components/index'
-import { Button } from '@shared/components/buttons';
+import {Button} from '@shared/components/buttons';
+import {ref, watchEffect} from "vue";
+import {SvgIcon} from '@shared/ui/SvgIcon';
+import {useRoleStore} from "@layouts/store/role.ts";
+import {HTTP} from '@app/http';
 
+const districtHeadquarterCommander = ref(false);
+const centralHeadquarterCommander = ref(false);
+const roleStore = useRoleStore();
+
+const downloadReportAll = (id) => {
+  HTTP.get(`/regionals/${id}/download_regional_competition_report/`, {
+    responseType: 'arraybuffer',
+    headers: {
+      'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    }
+  }).then((response) => {
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'RO_report.xlsx');
+    document.body.appendChild(link);
+    link.click();
+  })
+      .catch(function (error) {
+        console.log('an error occured ' + error);
+      });
+}
+
+watchEffect(() => {
+  if (roleStore.roles?.districtheadquarter_commander) {
+    districtHeadquarterCommander.value = true;
+  }
+  if (roleStore.roles.centralheadquarter_commander) {
+    centralHeadquarterCommander.value = true;
+  }
+})
 </script>
 <style>
 .v-expansion-panel__shadow {
@@ -211,6 +270,20 @@ import { Button } from '@shared/components/buttons';
 
 .mdi-chevron-up::before {
   content: "";
+}
+
+.download-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 13px;
+  cursor: pointer;
+  column-gap: 4px;
+  font-size: 18px;
+  color: #1f7cc0;
+  font-family: 'Akrobat';
+  line-height: 21.6px;
+  font-weight: 500;
 }
 
 .v-expansion-panel-title {

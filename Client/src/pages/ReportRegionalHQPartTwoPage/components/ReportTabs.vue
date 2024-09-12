@@ -49,6 +49,12 @@ watchEffect(() => {
 })
 </script>
 <style lang="scss" scoped>
+.v-slide-group {
+  margin-bottom: -10px;
+}
+.v-tabs--density-default {
+  --v-tabs-height: 54px;
+}
 .panel-card {
   box-shadow: none;
 }
@@ -65,13 +71,19 @@ watchEffect(() => {
 
 .v-tab-item--selected {
   background: #F3F4F5;
+  pointer-events: none;
 }
 
 .v-tab.v-tab.v-btn {
   min-width: 280px;
   border-radius: 10px;
   letter-spacing: initial;
-  border: none;
+  border: 1px solid #000000;
+  border-bottom: none;
+  padding-bottom: 10px;
+}
+.v-tab.v-tab.v-btn.v-tab-item--selected {
+  border-color: #F3F4F5;
 }
 
 .panel-card-text {
@@ -83,6 +95,10 @@ watchEffect(() => {
   border: none;
   border-radius: 10px;
   margin-bottom: 8px;
+
+  @media (min-width: 768px) {
+    padding: 40px;
+  }
 }
 
 //.report-table {

@@ -23,6 +23,9 @@ const urls = [
     '/regions/',
     '/reset_password/',
     '/users/reset_password_confirm/',
+];
+
+const urls_get = [
     'competitions/1/',
     '/events/',
     '/detachments/',
@@ -32,13 +35,14 @@ const urls = [
     '/locals/',
     '/educationals/',
     '/centrals/1/',
-];
+    '/centrals/1/leadership/'
+]
+
 
 HTTP.interceptors.request.use(
     (config) => {
         const configUrl = config.url?.split('?').shift();
-        // console.log("результат", configUrl);
-        if (urls.some((item) => item === configUrl)) {
+        if (urls.some((item) => item === configUrl) || urls_get.some((item) => item === configUrl) && config.method === 'get') {
             delete config.headers.Authorization;
         } else {
             config.headers.Authorization =
@@ -72,9 +76,9 @@ HTTP.interceptors.response.use(
                         console.log(
                             'refreshTokenPromise',
                             JSON.stringify(refreshTokenPromise) ===
-                                JSON.stringify({}),
+                            JSON.stringify({}),
                             JSON.stringify(refreshTokenPromise.value) ===
-                                JSON.stringify({}),
+                            JSON.stringify({}),
                         );
                         if (
                             JSON.stringify(refreshTokenPromise.value) ===

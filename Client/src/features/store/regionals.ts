@@ -25,7 +25,7 @@ export const useRegionalsStore = defineStore('regionals', {
                 const responseSearchRegionals = await HTTP.get(
                     `/regionals/?region=${regionName}`
                 );
-                this.filteredRegional = responseSearchRegionals.data;
+                this.filteredRegional = responseSearchRegionals.data.results;
             } catch (err) {
                 console.log('an error occured ' + err);
             }
@@ -39,7 +39,7 @@ export const useRegionalsStore = defineStore('regionals', {
                     `/regionals/?region=${regionName}`
                 );
                 this.filteredMyRegional =
-                    responseSearchMyRegionals.data;
+                    responseSearchMyRegionals.data.results;
             } catch (err) {
                 console.log('an error occured ' + err);
             }
@@ -89,7 +89,7 @@ export const useRegionalsStore = defineStore('regionals', {
                 const responseMembers = await HTTP.get(
                     `/regionals/${id}/members/`
                 );
-                this.members = responseMembers.data.results;
+                this.members = responseMembers.data;
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;
@@ -120,7 +120,7 @@ export const useRegionalsStore = defineStore('regionals', {
             if (this.regions.length) return;
             try {
                 this.isLoading = true;
-                const responseRegions = await HTTP.get(`/regions/` + `?limit=0`, {
+                const responseRegions = await HTTP.get(`/regions/` + `?limit=-1`, {
                     headers: {
                         'Content-Type': 'application/json',
                     },

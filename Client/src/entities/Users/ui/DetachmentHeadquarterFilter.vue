@@ -50,7 +50,7 @@ const fetchDetachmentHeadquarters = ({
             educational_headquarter__name: educationalHeadquarterName,
         })
         .then((res) => {
-            detachmentHeadquarters.value = res.data.map(({ name }) => name);
+            detachmentHeadquarters.value = res.data.results.map(({ name }) => name);
         });
 };
 

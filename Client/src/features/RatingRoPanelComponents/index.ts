@@ -1,0 +1,1 @@
+export {default as EleventhPanelComponent} from './components/EleventhPanelComponent.vue';

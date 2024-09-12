@@ -120,11 +120,28 @@
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="form__inner-content">
                         <div class="form__field-group">
+                          <div class="selectIndicatorsWrapper">
+                            <v-select
+                                variant="outlined"
+                                class="selectIndicators"
+                                :items="actionsList"
+                                v-model="action"
+                                placeholder="Выберите действие"
+                            />
+                          </div>
                             <div
                                 class="form__field-group-top"
                                 v-for="participant in applicationData.participants_data"
                                 :key="participant.id"
                             >
+                              <div class="checkboxIndicators">
+                                <input
+                                    type="checkbox"
+                                    @change="onCheckbox"
+                                    :value="participant.id"
+                                    :name="participant.id"
+                                />
+                              </div>
                                 <div class="form__field-group-left">
                                     <div class="form__field">
                                         <label class="form__label"
@@ -1748,6 +1765,7 @@
                     </v-expansion-panel-text>
                 </v-expansion-panel>
             </v-expansion-panels>
+          <Button v-if="selectedList.length" class="save" type="button" label="Сохранить" @click="onAction"></Button>
         </form>
     </div>
 </template>
@@ -1756,6 +1774,7 @@
 import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { HTTP } from '@app/http';
+import { Button } from '@shared/components/buttons';
 
 import { Input } from '@shared/components/inputs';
 import { SvgIcon } from '@shared/ui';
@@ -1765,6 +1784,10 @@ const id = ref(route.params.id);
 
 const applicationData = ref({});
 const loading = ref(true);
+
+const selectedList = ref([]);
+const action = ref('Одобрить');
+const actionsList = ref(['Одобрить', 'Отклонить']);
 
 const idHasCert = ['7', '8', '9', '10', '11', '12'];
 
@@ -1797,6 +1820,32 @@ const getApplicationData = async (_id, applicationId) => {
     }
 };
 
+const onCheckbox = (e) => {
+  if (e.target.checked) {
+    selectedList.value.push(e.target.value)
+  } else {
+    selectedList.value = selectedList.value.filter(i => i !== e.target.value)
+  }
+
+};
+const onAction = async () =>{
+  if (action.value === 'Одобрить') {
+    for (let item of selectedList.value) {
+      await HTTP.post(
+          `/competitions/1/reports/q${5}/${applicationData.value.id}/accept/${item}/`,
+          {},
+      );
+    }
+  } else {
+    for (let item of selectedList.value) {
+      await HTTP.delete(
+          `/competitions/1/reports/q${5}/${applicationData.value.id}/accept/${item}/`,
+          {},
+      );
+    }
+  }
+  await getApplicationData(route.params.id, route.params.applicationId);
+}
 watch(
     [() => route.params.id, () => route.params.applicationId],
     async (newParams) => {
@@ -1810,7 +1859,7 @@ onMounted(async () => {
 });
 </script>
 
-<style>
+<style lang="scss">
 .expanded {
     transform: rotate(180deg);
     transition: transform 0.3s ease;
@@ -1854,8 +1903,38 @@ onMounted(async () => {
 
 .form__field-group-top {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 80px;
+    grid-template-columns: 1fr auto auto;
+    column-gap: 40px;
+    align-items: center;
+}
+
+.checkboxIndicators {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  input {
+    width: 25px;
+    height: 25px
+  }
+}
+
+.selectIndicatorsWrapper {
+  display: flex;
+  justify-content: flex-end;
+
+}
+.v-select .v-select__selection-text {
+  font-family: Bert Sans;
+  font-size: 16px !important;
+  font-weight: 400;
+  line-height: 21px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+.selectIndicators {
+  border: 1px solid #b6b6b6;
+  border-radius: 10px;
+  max-width: 224px;
 }
 
 .form__field-group-bottom {

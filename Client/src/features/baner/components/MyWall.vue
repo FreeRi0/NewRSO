@@ -1,19 +1,9 @@
 <template>
     <div class="user-metric">
-        <bannerPhoto
-            :banner="user.media?.banner"
-            @upload-wall="uploadWall"
-            @update-wall="updateWall"
-            @delete-wall="deleteWall"
-            :edited="true"
-        ></bannerPhoto>
-        <Avatar
-            :avatar="user.media?.photo"
-            @upload="uploadAva"
-            @update="updateAva"
-            @delete="deleteAva"
-            :edited="true"
-        ></Avatar>
+        <bannerPhoto :banner="user.media?.banner" @upload-wall="uploadWall" @update-wall="updateWall"
+            @delete-wall="deleteWall" :edited="true"></bannerPhoto>
+        <Avatar :avatar="user.media?.photo" @upload="uploadAva" @update="updateAva" @delete="deleteAva" :edited="true">
+        </Avatar>
 
         <div class="user-metric__bottom">
             <!-- Данные пользователя  -->
@@ -26,83 +16,74 @@
 
                 <div class="user-data__list-wrapper">
                     <ul class="user-data__list">
-                        <li
-                            class="user-data__title"
-                            v-if="
-                                roleStore.roles.detachment_commander !== null ||
-                                roleStore.roles
-                                    .educationalheadquarter_commander !==
-                                    null ||
-                                roleStore.roles.localheadquarter_commander !==
-                                    null ||
-                                roleStore.roles
-                                    .regionalheadquarter_commander !== null ||
-                                roleStore.roles
-                                    .districtheadquarter_commander !== null ||
-                                roleStore.roles.centralheadquarter_commander !==
-                                    null
-                            "
-                        >
+                        <li class="user-data__title" v-if="
+                            roleStore.roles.detachment_commander !== null ||
+                            roleStore.roles
+                                .educationalheadquarter_commander !==
+                            null ||
+                            roleStore.roles.localheadquarter_commander !==
+                            null ||
+                            roleStore.roles
+                                .regionalheadquarter_commander !== null ||
+                            roleStore.roles
+                                .districtheadquarter_commander !== null ||
+                            roleStore.roles.centralheadquarter_commander !==
+                            null
+                        ">
                             <p>Командир</p>
                         </li>
-                        <li
-                            class="user-data__title"
-                            v-else-if="
-                                role.myPositions.value
-                                    ?.userdetachmentposition ||
-                                role.myPositions.value
-                                    .userregionalheadquarterposition ||
-                                role.myPositions.value
-                                    .usereducationalheadquarterposition ||
-                                role.myPositions.value
-                                    .userlocalheadquarterposition ||
-                                role.myPositions.value
-                                    .userdistrictheadquarterposition ||
-                                role.myPositions.value
-                                    .usercentralheadquarterposition
-                            "
-                        >
+                        <li class="user-data__title" v-else-if="
+                            roleStore.myPositions
+                                ?.userdetachmentposition ||
+                            roleStore.myPositions
+                                ?.userregionalheadquarterposition ||
+                            roleStore.myPositions
+                                ?.usereducationalheadquarterposition ||
+                            roleStore.myPositions
+                                ?.userlocalheadquarterposition ||
+                            roleStore.myPositions
+                                ?.userdistrictheadquarterposition ||
+                            roleStore.myPositions
+                                ?.usercentralheadquarterposition
+                        ">
                             <p>
                                 {{
-                                    role.myPositions.value
-                                        .userdetachmentposition?.position ??
-                                    role.myPositions.value
-                                        .usereducationalheadquarterposition
-                                        ?.position ??
-                                    role.myPositions.value
-                                        .userregionalheadquarterposition
-                                        ?.position ??
-                                    role.myPositions.value
-                                        .userlocalheadquarterposition
-                                        ?.position ??
-                                    role.myPositions.value
-                                        .userdistrictheadquarterposition
-                                        ?.position ??
-                                    role.myPositions.value
-                                        .usercentralheadquarterposition
-                                        ?.position
+                                    getPositions()
                                 }}
                             </p>
                         </li>
-                        <li class="user-data__title" v-else><p>Кандидат</p></li>
-                        <li class="user-data__title" v-if="detachment?.name">
-                            <p>{{ detachment?.name }}</p>
+                        <li class="user-data__title" v-else>
+                            <p>Кандидат</p>
+                        </li>
+                        <li class="user-data__title" v-if="
+                            roleStore.myPositions
+                                ?.userdetachmentposition">
+                            <p>{{
+                                roleStore.myPositions
+                                    ?.userdetachmentposition?.headquarter?.name }}</p>
                         </li>
 
-                        <li
-                            class="user-data__title"
-                            v-if="educationalHeadquarter?.name"
-                        >
-                            <p>Штаб {{ educationalHeadquarter?.name }}</p>
+                        <li class="user-data__title" v-if="
+                            roleStore.myPositions
+                                ?.usereducationalheadquarterposition">
+                            <p>{{
+                                roleStore.myPositions
+                                    .usereducationalheadquarterposition
+                                    ?.headquarter?.name }}</p>
+                        </li>
+                        <li class="user-data__title" v-if="
+                            roleStore.myPositions
+                                ?.userlocalheadquarterposition">
+                            <p>{{
+                                roleStore.myPositions
+                                    .userlocalheadquarterposition
+                                    ?.headquarter?.name
+                            }}</p>
                         </li>
                         <li class="user-data__regional-office">
-                            <div
-                                v-if="user.region && !isLoading.isLoading.value"
-                            >
-                                <div
-                                    v-for="item in regionals.filteredMyRegional
-                                        .value"
-                                >
+                            <div v-if="user.region && !isLoading.isLoading.value">
+                                <div v-for="item in regionals.filteredMyRegional
+                                    .value">
                                     <p>{{ item.name }}</p>
                                 </div>
                             </div>
@@ -110,9 +91,16 @@
                             <p v-else>Загрузка региона...</p>
                         </li>
 
-                        <li
-                            v-if="user.education?.study_institution?.short_name"
-                        >
+                        <li class="user-data__title" v-if="
+                            roleStore.myPositions
+                                ?.userdistrictheadquarterposition">
+                            <p>{{
+                                roleStore.myPositions
+                                    .userdistrictheadquarterposition
+                                    ?.headquarter?.name }}</p>
+                        </li>
+
+                        <li v-if="user.education?.study_institution?.short_name">
                             <p>
                                 {{
                                     user.education?.study_institution
@@ -136,24 +124,18 @@
                 </div>
                 <div class="user-data__contact">
                     <div class="user-data__social-network">
-                        <div
-                            class="user-data__link-vk mr-2"
-                            v-if="
-                                user.social_vk &&
-                                user.social_vk !== 'https://vk.com/'
-                            "
-                        >
+                        <div class="user-data__link-vk mr-2" v-if="
+                            user.social_vk &&
+                            user.social_vk !== 'https://vk.com/'
+                        ">
                             <a :href="user.social_vk" target="_blank">
                                 <SvgIcon icon-name="vk" />
                             </a>
                         </div>
-                        <div
-                            class="user-data__link-telegram mr-2"
-                            v-if="
-                                user.social_tg &&
-                                user.social_tg !== 'https://t.me/'
-                            "
-                        >
+                        <div class="user-data__link-telegram mr-2" v-if="
+                            user.social_tg &&
+                            user.social_tg !== 'https://t.me/'
+                        ">
                             <a :href="user.social_tg">
                                 <SvgIcon icon-name="telegram" />
                             </a>
@@ -249,29 +231,21 @@ const roleStore = useRoleStore();
 const role = storeToRefs(roleStore);
 const regionals = storeToRefs(regionalsStore);
 const isLoading = storeToRefs(regionalsStore);
-const detachment = ref({});
-const educationalHeadquarter = ref({});
 
 const participant = ref({});
 
-const getUserData = async () => {
-    try {
-        if (props.user.detachment_id) {
-            const responseSquad = await HTTP.get(
-                `/detachments/${props.user.detachment_id}/`,
-            );
-            detachment.value = responseSquad.data;
-        }
+const getPositions = () => {
+    switch (roleStore.myPositions?.userdetachmentposition?.position || roleStore.myPositions?.usereducationalheadquarterposition?.position || roleStore.myPositions?.userlocalheadquarterposition?.position || roleStore.myPositions?.userregionalheadquarterposition?.position || roleStore.myPositions?.userdistrictheadquarterposition?.position || roleStore.myPositions?.usercentralheadquarterposition?.position) {
+        case 'Комиссар':
+            return 'Комиссар';
+        case 'Боец':
+            return 'Боец';
 
-        if (props.user.educational_headquarter_id) {
-            const responseEducHead = await HTTP.get(
-                `/educationals/${props.user.educational_headquarter_id}/`,
-            );
+        case 'Комиссар': case 'Боец':
+            return 'Комиссар'
 
-            educationalHeadquarter.value = responseEducHead.data;
-        }
-    } catch (error) {
-        console.log('an error occured ' + error);
+        default:
+            return 'Неизвестная должность';
     }
 };
 
@@ -285,11 +259,6 @@ watch(
         regionalsStore.searchMyRegionals(props.user.region);
     },
 );
-
-onMounted(() => {
-    roleStore.getMyPositions();
-    getUserData();
-});
 
 const copyL = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -325,9 +294,11 @@ const copyL = () => {
     grid-row-start: 3;
     grid-row-end: 5;
     padding: 36px 38px 32px 300px;
+
     @media screen and (max-width: 768px) {
         padding: 116px 90px 36px 60px;
     }
+
     @media screen and (max-width: 575px) {
         padding: 116px 14px 32px 14px;
     }
@@ -343,23 +314,28 @@ const copyL = () => {
 .user-data__name {
     display: flex;
     margin-bottom: 32px;
+
     @media screen and (max-width: 768px) {
         margin-bottom: 20px;
     }
+
     @media screen and (max-width: 575px) {
         flex-wrap: wrap;
         align-items: center;
         justify-content: center;
     }
 }
+
 .user-data__social-network {
     display: flex;
     align-items: center;
     margin-right: 40px;
+
     @media screen and (max-width: 768px) {
         margin-top: 16px;
         margin-right: 0;
     }
+
     @media screen and (max-width: 575px) {
         margin-top: 16px;
         margin-right: 0;
@@ -368,27 +344,34 @@ const copyL = () => {
 
 .user-data__contact {
     display: flex;
+
     p {
         color: #35383f;
     }
+
     &-contact {
         display: flex;
+
         @media screen and (max-width: 575px) {
             flex-direction: column;
             align-items: center;
         }
+
         &_item {
             display: flex;
             align-items: center;
             margin-right: 20px;
+
             @media screen and (max-width: 575px) {
                 margin-right: 0;
             }
         }
     }
+
     @media screen and (max-width: 768px) {
         flex-direction: column-reverse;
     }
+
     @media screen and (max-width: 575px) {
         flex-direction: column-reverse;
         align-items: center;
@@ -413,6 +396,7 @@ const copyL = () => {
     align-items: center;
     max-width: 700px;
     margin-bottom: 32px;
+
     @media screen and (max-width: 768px) {
         margin-bottom: 20px;
     }
@@ -424,6 +408,7 @@ const copyL = () => {
     align-items: center;
     justify-content: flex-start;
     list-style: none;
+
     @media screen and (max-width: 575px) {
         justify-content: center;
     }

@@ -30,7 +30,8 @@ export type IconName =
     | 'file-jpg'
     | 'file-png'
     | 'upside-down-arrow'
-    | 'filter';
+    | 'filter'
+    | 'add-icon';
 
 
 type IconsRecord = Record<
@@ -198,5 +199,10 @@ export const defaultIconSizes: IconsRecord = {
         width: 24,
         height: 24,
         color: '#35383F',
+    },
+    'add-icon': {
+        width: 24,
+        height: 24,
+        color: '#1f7cc0',
     },
 };

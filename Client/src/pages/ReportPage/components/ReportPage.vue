@@ -470,23 +470,30 @@
                                                         class="addFile"
                                                         iconName="add-file"
                                                     />
-                                                    <span
-                                                        class="font-semibold"
-                                                        >{{
-                                                            block.document.name
-                                                        }}</span
-                                                    >
-                                                    <span
-                                                        v-if="block.id"
-                                                        class="font-semibold"
-                                                        >{{
-                                                            decodeURIComponent(
+                                                    <a :href="block.document">
+                                                        <span
+                                                            class="font-semibold"
+                                                            >{{
                                                                 block.document
-                                                                    .split('/')
-                                                                    .pop(),
-                                                            )
-                                                        }}</span
-                                                    >
+                                                                    .name
+                                                            }}</span
+                                                        >
+                                                    </a>
+                                                    <a :href="block.document">
+                                                        <span
+                                                            v-if="block.id"
+                                                            class="font-semibold"
+                                                            >{{
+                                                                decodeURIComponent(
+                                                                    block.document
+                                                                        .split(
+                                                                            '/',
+                                                                        )
+                                                                        .pop(),
+                                                                )
+                                                            }}</span
+                                                        >
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -1304,25 +1311,39 @@
                                                         class="addFile"
                                                         iconName="add-file"
                                                     />
-                                                    <span
-                                                        class="font-semibold"
-                                                        >{{
-                                                            block
-                                                                .certificate_scans
-                                                                .name
-                                                        }}</span
+                                                    <a
+                                                        :href="
+                                                            block.certificate_scans
+                                                        "
                                                     >
-                                                    <span
-                                                        v-if="block.id"
-                                                        class="font-semibold"
-                                                        >{{
-                                                            decodeURIComponent(
-                                                                block.certificate_scans
-                                                                    .split('/')
-                                                                    .pop(),
-                                                            )
-                                                        }}</span
+                                                        <span
+                                                            class="font-semibold"
+                                                            >{{
+                                                                block
+                                                                    .certificate_scans
+                                                                    .name
+                                                            }}</span
+                                                        >
+                                                    </a>
+                                                    <a
+                                                        :href="
+                                                            block.certificate_scans
+                                                        "
                                                     >
+                                                        <span
+                                                            v-if="block.id"
+                                                            class="font-semibold"
+                                                            >{{
+                                                                decodeURIComponent(
+                                                                    block.certificate_scans
+                                                                        .split(
+                                                                            '/',
+                                                                        )
+                                                                        .pop(),
+                                                                )
+                                                            }}</span
+                                                        >
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -1585,25 +1606,38 @@
                                                         class="addFile"
                                                         iconName="add-file"
                                                     />
-
-                                                    <span
-                                                        class="font-semibold"
-                                                        >{{
-                                                            block
-                                                                .certificate_scans
-                                                                .name
-                                                        }}</span
+                                                    <a
+                                                        :href="
+                                                            block.certificate_scans
+                                                        "
                                                     >
-                                                    <span
-                                                        v-if="block.id"
-                                                        class="font-semibold"
-                                                        >{{
-                                                            decodeURIComponent(
-                                                                block.certificate_scans
-                                                                    .split('/')
-                                                                    .pop(),
-                                                            )
-                                                        }}</span
+                                                        <span
+                                                            class="font-semibold"
+                                                            >{{
+                                                                block
+                                                                    .certificate_scans
+                                                                    .name
+                                                            }}</span
+                                                        >
+                                                    </a>
+                                                    <a
+                                                        :href="
+                                                            block.certificate_scans
+                                                        "
+                                                    >
+                                                        <span
+                                                            v-if="block.id"
+                                                            class="font-semibold"
+                                                            >{{
+                                                                decodeURIComponent(
+                                                                    block.certificate_scans
+                                                                        .split(
+                                                                            '/',
+                                                                        )
+                                                                        .pop(),
+                                                                )
+                                                            }}</span
+                                                        ></a
                                                     >
                                                 </div>
                                             </div>
@@ -1788,26 +1822,39 @@
                                                         class="addFile"
                                                         iconName="add-file"
                                                     />
-
-                                                    <span
-                                                        class="font-semibold"
-                                                        >{{
-                                                            block
-                                                                .certificate_scans
-                                                                .name
-                                                        }}</span
+                                                    <a
+                                                        :href="
+                                                            block.certificate_scans
+                                                        "
                                                     >
-                                                    <span
-                                                        v-if="block.id"
-                                                        class="font-semibold"
-                                                        >{{
-                                                            decodeURIComponent(
-                                                                block.certificate_scans
-                                                                    .split('/')
-                                                                    .pop(),
-                                                            )
-                                                        }}</span
+                                                        <span
+                                                            class="font-semibold"
+                                                            >{{
+                                                                block
+                                                                    .certificate_scans
+                                                                    .name
+                                                            }}</span
+                                                        >
+                                                    </a>
+                                                    <a
+                                                        :href="
+                                                            block.certificate_scans
+                                                        "
                                                     >
+                                                        <span
+                                                            v-if="block.id"
+                                                            class="font-semibold"
+                                                            >{{
+                                                                decodeURIComponent(
+                                                                    block.certificate_scans
+                                                                        .split(
+                                                                            '/',
+                                                                        )
+                                                                        .pop(),
+                                                                )
+                                                            }}</span
+                                                        >
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -1990,25 +2037,39 @@
                                                         iconName="add-file"
                                                         class="addFile"
                                                     />
-                                                    <span
-                                                        class="font-semibold"
-                                                        >{{
-                                                            block
-                                                                .certificate_scans
-                                                                .name
-                                                        }}</span
+                                                    <a
+                                                        :href="
+                                                            block.certificate_scans
+                                                        "
                                                     >
-                                                    <span
-                                                        v-if="block.id"
-                                                        class="font-semibold"
-                                                        >{{
-                                                            decodeURIComponent(
-                                                                block.certificate_scans
-                                                                    .split('/')
-                                                                    .pop(),
-                                                            )
-                                                        }}</span
+                                                        <span
+                                                            class="font-semibold"
+                                                            >{{
+                                                                block
+                                                                    .certificate_scans
+                                                                    .name
+                                                            }}</span
+                                                        >
+                                                    </a>
+                                                    <a
+                                                        :href="
+                                                            block.certificate_scans
+                                                        "
                                                     >
+                                                        <span
+                                                            v-if="block.id"
+                                                            class="font-semibold"
+                                                            >{{
+                                                                decodeURIComponent(
+                                                                    block.certificate_scans
+                                                                        .split(
+                                                                            '/',
+                                                                        )
+                                                                        .pop(),
+                                                                )
+                                                            }}</span
+                                                        >
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -2192,26 +2253,39 @@
                                                         class="addFile"
                                                         iconName="add-file"
                                                     />
-
-                                                    <span
-                                                        class="font-semibold"
-                                                        >{{
-                                                            block
-                                                                .certificate_scans
-                                                                .name
-                                                        }}</span
+                                                    <a
+                                                        :href="
+                                                            block.certificate_scans
+                                                        "
                                                     >
-                                                    <span
-                                                        v-if="block.id"
-                                                        class="font-semibold"
-                                                        >{{
-                                                            decodeURIComponent(
-                                                                block.certificate_scans
-                                                                    .split('/')
-                                                                    .pop(),
-                                                            )
-                                                        }}</span
+                                                        <span
+                                                            class="font-semibold"
+                                                            >{{
+                                                                block
+                                                                    .certificate_scans
+                                                                    .name
+                                                            }}</span
+                                                        >
+                                                    </a>
+                                                    <a
+                                                        :href="
+                                                            block.certificate_scans
+                                                        "
                                                     >
+                                                        <span
+                                                            v-if="block.id"
+                                                            class="font-semibold"
+                                                            >{{
+                                                                decodeURIComponent(
+                                                                    block.certificate_scans
+                                                                        .split(
+                                                                            '/',
+                                                                        )
+                                                                        .pop(),
+                                                                )
+                                                            }}</span
+                                                        >
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -2395,26 +2469,39 @@
                                                         class="addFile"
                                                         iconName="add-file"
                                                     />
-
-                                                    <span
-                                                        class="font-semibold"
-                                                        >{{
-                                                            block
-                                                                .certificate_scans
-                                                                .name
-                                                        }}</span
+                                                    <a
+                                                        :href="
+                                                            block.certificate_scans
+                                                        "
                                                     >
-                                                    <span
-                                                        v-if="block.id"
-                                                        class="font-semibold"
-                                                        >{{
-                                                            decodeURIComponent(
-                                                                block.certificate_scans
-                                                                    .split('/')
-                                                                    .pop(),
-                                                            )
-                                                        }}</span
+                                                        <span
+                                                            class="font-semibold"
+                                                            >{{
+                                                                block
+                                                                    .certificate_scans
+                                                                    .name
+                                                            }}</span
+                                                        >
+                                                    </a>
+                                                    <a
+                                                        :href="
+                                                            block.certificate_scans
+                                                        "
                                                     >
+                                                        <span
+                                                            v-if="block.id"
+                                                            class="font-semibold"
+                                                            >{{
+                                                                decodeURIComponent(
+                                                                    block.certificate_scans
+                                                                        .split(
+                                                                            '/',
+                                                                        )
+                                                                        .pop(),
+                                                                )
+                                                            }}</span
+                                                        >
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -3559,7 +3646,10 @@
                                     <Button
                                         v-if="!is_regional_commander"
                                         type="button"
-                                        :disabled="report[20].disabledBtn"
+                                        :disabled="
+                                            report[20].disabledBtn ||
+                                            report[20].is_verified
+                                        "
                                         class="form__button form__button-color"
                                         label="Отправить данные на верификацию"
                                         size="large"
@@ -3973,16 +4063,19 @@ const getParameters = async (id) => {
                     (id == 1 ? 'info/' : 'me/'),
             );
             if (id == 1 || id == 3 || id == 4) report.value[id] = response.data;
-            else if (response.data.length) {
-                if (id == 6 && route.params.id == response.data[0].detachment) {
+            else if (response.data.results.length) {
+                if (
+                    id == 6 &&
+                    route.params.id == response.data.results[0].detachment
+                ) {
                     if (
-                        response.data[0].demonstration_block
+                        response.data.results[0].demonstration_block
                             ?.first_may_demonstration
                     ) {
                         report.value[61].demonstration_block.first_may_demonstration =
-                            response.data[0].demonstration_block.first_may_demonstration;
+                            response.data.results[0].demonstration_block.first_may_demonstration;
                         report.value[61].demonstration_block.first_may_demonstration_participants =
-                            response.data[0].demonstration_block.first_may_demonstration_participants;
+                            response.data.results[0].demonstration_block.first_may_demonstration_participants;
                         report.value[61].disabledBtn = true;
                     } else {
                         report.value[61].demonstration_block.first_may_demonstration =
@@ -3991,13 +4084,13 @@ const getParameters = async (id) => {
                             '';
                     }
                     if (
-                        response.data[0].patriotic_action_block
+                        response.data.results[0].patriotic_action_block
                             ?.patriotic_action_participants
                     ) {
                         report.value[62].patriotic_action_block.patriotic_action =
-                            response.data[0].patriotic_action_block.patriotic_action;
+                            response.data.results[0].patriotic_action_block.patriotic_action;
                         report.value[62].patriotic_action_block.patriotic_action_participants =
-                            response.data[0].patriotic_action_block.patriotic_action_participants;
+                            response.data.results[0].patriotic_action_block.patriotic_action_participants;
                         report.value[62].disabledBtn = true;
                     } else {
                         report.value[62].patriotic_action_block.patriotic_action =
@@ -4006,36 +4099,37 @@ const getParameters = async (id) => {
                             '';
                     }
                     if (
-                        response.data[0].safety_work_week_block
+                        response.data.results[0].safety_work_week_block
                             ?.safety_work_week
                     ) {
                         report.value[63].disabledBtn = true;
                         report.value[63].safety_work_week_block.safety_work_week =
-                            response.data[0].safety_work_week_block.safety_work_week;
+                            response.data.results[0].safety_work_week_block.safety_work_week;
                     } else {
                         report.value[63].safety_work_week_block.safety_work_week =
                             null;
                     }
                     if (
-                        response.data[0].commander_commissioner_school_block
+                        response.data.results[0]
+                            .commander_commissioner_school_block
                             ?.commander_commissioner_school
                     ) {
                         report.value[64].disabledBtn = true;
                         report.value[64].commander_commissioner_school_block.commander_commissioner_school =
-                            response.data[0].commander_commissioner_school_block.commander_commissioner_school;
+                            response.data.results[0].commander_commissioner_school_block.commander_commissioner_school;
                     } else {
                         report.value[64].commander_commissioner_school_block.commander_commissioner_school =
                             null;
                     }
                     if (
-                        response.data[0].working_semester_opening_block
+                        response.data.results[0].working_semester_opening_block
                             ?.working_semester_opening
                     ) {
                         report.value[65].disabledBtn = true;
                         report.value[65].working_semester_opening_block.working_semester_opening =
-                            response.data[0].working_semester_opening_block.working_semester_opening;
+                            response.data.results[0].working_semester_opening_block.working_semester_opening;
                         report.value[65].working_semester_opening_block.working_semester_opening_participants =
-                            response.data[0].working_semester_opening_block.working_semester_opening_participants;
+                            response.data.results[0].working_semester_opening_block.working_semester_opening_participants;
                     } else {
                         report.value[65].working_semester_opening_block.working_semester_opening =
                             null;
@@ -4043,38 +4137,39 @@ const getParameters = async (id) => {
                             '';
                     }
                     if (
-                        response.data[0].creative_festival_block
+                        response.data.results[0].creative_festival_block
                             ?.creative_festival
                     ) {
                         report.value[66].disabledBtn = true;
                         report.value[66].creative_festival_block.creative_festival =
-                            response.data[0].creative_festival_block.creative_festival;
+                            response.data.results[0].creative_festival_block.creative_festival;
                     } else {
                         report.value[66].creative_festival_block.creative_festival =
                             null;
                     }
-                    if (response.data[0].spartakiad_block?.spartakiad) {
+                    if (response.data.results[0].spartakiad_block?.spartakiad) {
                         report.value[67].disabledBtn = true;
                         report.value[67].spartakiad_block.spartakiad =
-                            response.data[0].spartakiad_block.spartakiad;
+                            response.data.results[0].spartakiad_block.spartakiad;
                     } else {
                         report.value[67].spartakiad_block.spartakiad = null;
                     }
                     if (
-                        response.data[0].professional_competition_block
+                        response.data.results[0].professional_competition_block
                             ?.professional_competition
                     ) {
                         report.value[68].disabledBtn = true;
                         report.value[68].professional_competition_block.professional_competition =
-                            response.data[0].professional_competition_block.professional_competition;
+                            response.data.results[0].professional_competition_block.professional_competition;
                     } else {
                         report.value[68].professional_competition_block.professional_competition =
                             null;
                     }
                 } else {
                     if (report.value[id].participation_data) {
-                        report.value[id].participation_data = response.data;
-                    } else report.value[id] = response.data[0];
+                        report.value[id].participation_data =
+                            response.data.results;
+                    } else report.value[id] = response.data.results[0];
                     report.value[id].disabledBtn = true;
                 }
             }
@@ -4301,7 +4396,6 @@ watch(
 );
 
 onMounted(async (id) => {
-    // await getParameters(id);
     await getMeCommander();
 });
 </script>

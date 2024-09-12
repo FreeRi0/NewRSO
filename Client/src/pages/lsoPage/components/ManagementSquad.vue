@@ -2,7 +2,7 @@
     <section class="headquarters-management">
         <h3>{{ head }}</h3>
         <div class="headquarters-management__container">
-            <router-link :to="{ name: 'userpage', params: { id: props.commander.id } }">
+            <div class="link" @click="goLink">
                 <div class="manager-card">
                     <div class="manager-card__avatar">
                         <img :src="props.commander?.avatar?.photo" alt="фото" v-if="props.commander?.avatar?.photo" />
@@ -17,12 +17,16 @@
                         <p>Командир</p>
                     </div>
                 </div>
-            </router-link>
+            </div>
         </div>
     </section>
 </template>
 
 <script setup>
+import { useUserStore } from '@features/store';
+import { useRouter } from 'vue-router';
+const userStore = useUserStore();
+const router = useRouter();
 const props = defineProps({
     member: {
         type: Array,
@@ -37,6 +41,14 @@ const props = defineProps({
         type: String,
     },
 });
+
+const goLink = () => {
+    if (props.commander.id === userStore.currentUser.id) {
+        router.push({ name: 'mypage' })
+    } else {
+        router.push({ name: 'userpage', params: { id: props.commander.id } })
+    }
+}
 </script>
 
 <style scoped lang="scss">
@@ -51,6 +63,10 @@ section.headquarters-management h3 {
     font-style: normal;
     font-weight: 600;
     line-height: normal;
+}
+
+.link {
+    cursor: pointer;
 }
 
 .headquarters-management__container {

@@ -136,7 +136,7 @@ const props = defineProps({
         type: String,
         default: '',
     },
-    desk: {
+    desc: {
         type: String,
         default: '',
     },

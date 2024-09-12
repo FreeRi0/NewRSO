@@ -39,7 +39,7 @@ const fetchLocalHeadquarters = ({
             district_headquarter__name: districtHeadquarterName,
         })
         .then((res) => {
-            localHeadquarters.value = res.data.map(({ name }) => name);
+            localHeadquarters.value = res.data.results.map(({ name }) => name);
         });
 };
 

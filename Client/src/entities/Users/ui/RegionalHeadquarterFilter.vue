@@ -34,7 +34,7 @@ const fetchRegionalHeadquarters = ({ districtHeadquarterName }: Props) => {
             district_headquarter__name: districtHeadquarterName,
         })
         .then((res) => {
-            regionalHeadquarters.value = res.data.map(({ name }) => name);
+            regionalHeadquarters.value = res.data.results.map(({ name }) => name);
         });
 };
 

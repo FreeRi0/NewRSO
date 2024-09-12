@@ -1,5 +1,5 @@
 <template>
-  <div v-if="true" class="form__field-group">
+  <div v-if="!(props.centralHeadquarterCommander || props.districtHeadquarterCommander)" class="form__field-group">
     <div v-for="(event, index) in events" :key="index" class="form__field-fourth-panel">
       <div class="form__field-members-event">
         <div class="form__field-members">
@@ -92,52 +92,104 @@
       <p>0</p>
     </div>
   </div>
-  <report-tabs>
+
+  <report-tabs v-else>
     <template v-slot:firstTab>
-      <div>
-        <label class="form__label" for="1">Количество человек, принявших участие в мероприятии <sup
-            class="valid-red">*</sup></label>
-        <InputReport id="1" name="1" class="form__input" type="number" placeholder="Введите число" />
-      </div>
-      <div style="display: flex;">
-        <div class="form__field">
-          <label class="form__label" for="2">Дата начала проведения мероприятия <sup class="valid-red">*</sup></label>
-          <InputReport id="2" name="2" class="form__input" type="date" />
-        </div>
-        <div class="form__field">
-          <label class="form__label" for="3">Дата окончания проведения мероприятия <sup
-              class="valid-red">*</sup></label>
-          <InputReport id="3" name="3" class="form__input" type="date" />
-        </div>
-      </div>
-      <div style="display: flex;">
+      <div v-for="(event, index) in events" :key="index">
         <div>
-          <label class="form__label" for="4">Положение о мероприятии <sup class="valid-red">*</sup></label>
-          <InputReport type="file" id="4" name="4" />
+          <div class="form__field-members">
+            <label class="form__label" for="participants_number">Количество человек, принявших участие в мероприятии <sup
+                class="valid-red">*</sup></label>
+            <div style="display: flex; justify-content: space-between;">
+              <InputReport v-model:value="event.participants_number" :id="event.participants_number"
+                           name="participants_number" class="form__input" type="number" placeholder="Введите число"
+                           @focusout="focusOut" :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" />
+            </div>
+          </div>
+          <Button class="form__field-delete-button" v-if="index > 0" label="Удалить мероприятие"
+                  @click="deleteEvent(index)" />
         </div>
-        <div>
-          <label class="form__label" for="5">Межрегиональное <sup class="valid-red">*</sup></label>
-          <InputReport type="radio" id="5" name="5" />
+        <div class="form__field-date">
+          <div class="form__field">
+            <label style="max-width: 280px;" class="form__label" for="start_date">Дата начала проведения мероприятия <sup
+                class="valid-red">*</sup></label>
+            <InputReport v-model:value="event.start_date" :id="event.start_date" name="start_date" class="form__input"
+                         type="date" @focusout="focusOut" :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" />
+          </div>
+          <div class="form__field">
+            <label style="max-width: 300px;" class="form__label" for="end_date">Дата окончания проведения мероприятия <sup
+                class="valid-red">*</sup></label>
+            <InputReport v-model:value="event.end_date" :id="event.end_date" name="end_date" class="form__input"
+                         type="date" @focusout="focusOut" :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" />
+          </div>
+        </div>
+        <div class="form__field-event">
+          <div class="form__field-event-file">
+            <label class="form__label" for="4">Положение о мероприятии <sup class="valid-red">*</sup></label>
+            <div class="form__file-box">
+              <span class="form__file-name">
+                {{ 'fourthPanelData.scan_file' }}
+              </span>
+                <span class="form__file-size">{{ fileSize || 1 }} Мб</span>
+            </div>
+          </div>
+          <div class="form__field-event-interregion">
+            <p class="form__label">Межрегиональное <sup class="valid-red">*</sup></p>
+            <div class="form__label-radio">
+              <div v-if="event.is_interregional" style="display: flex;">
+                <input
+                    v-model="event.is_interregional"
+                    type="radio"
+                    :id="`is_interregional-true_${index}`"
+                    :value="true"
+                    class="custom-radio"
+                />
+                <label :for="`is_interregional-true_${index}`">
+                  Да
+                </label>
+              </div>
+              <div v-else style="display: flex">
+                <input v-model="event.is_interregional" type="radio" :id="`is_interregional-false_${index}`"
+                       :value="false" class="custom-radio" />
+                <label :for="`is_interregional-false_${index}`">
+                  Нет
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form__field-link">
+          <p class="form__label">Ссылка на группу мероприятия в социальных сетях <sup class="valid-red">*</sup></p>
+          <div
+              class="form__add-link"
+              v-for="(link, i) in events[index].links"
+              :key="i"
+          >
+            <InputReport
+                v-model:value="link.link"
+                :id="i"
+                :name="i"
+                class="form__input form__input-add-link"
+                type="text"
+                placeholder="https://vk.com/cco_monolit"
+                @focusout="focusOut"
+                :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"
+            />
+          </div>
         </div>
       </div>
-      <div>
-        <label class="form__label" for="6">Ссылка на группу мероприятия в социальных сетях <sup
-            class="valid-red">*</sup></label>
-        <InputReport id="6" name="6" class="form__input" type="text" placeholder="https://vk.com/cco_monolit" />
-        <InputReport id="7" name="7" class="form__input" type="text" placeholder="https://vk.com/ccorobot" />
-        <InputReport id="8" name="8" class="form__input" type="text" placeholder="https://vk.com/cco_monolit11" />
+      <div class="form__field-comment">
+        <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
+        <InputReport v-model:value="fourthPanelData.comment" id="comment" name="comment" class="form__input"
+                     type="textarea" placeholder="Укажите наименования организованных мероприятий" style="width: 100%;"
+                     @focusout="focusOut" :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" />
       </div>
-      <div>
-        <label class="form__label" for="9">Комментарий <sup class="valid-red">*</sup></label>
-        <InputReport id="9" name="9" class="form__input" type="textarea" placeholder="Комментарий"
-          style="width: 100%; height: 100px" />
-      </div>
-      <div>
+      <div class="form__field-result">
         <v-checkbox label="Итоговое значение" />
       </div>
       <div class="hr"></div>
-      <div>
-        <p>(4-1)*2+(4-2)+(4-3)=9</p>
+      <div class="form__field-result">
+        <p>0</p>
       </div>
     </template>
     <template v-slot:secondTab>
@@ -159,32 +211,94 @@
       </div>
       <div style="display: flex;">
         <div>
-          <label class="form__label" for="4">Положение о мероприятии <sup class="valid-red">*</sup></label>
-          <InputReport type="file" id="4" name="4" />
+          <div class="form__field-members">
+            <label class="form__label" for="participants_number">Количество человек, принявших участие в мероприятии <sup
+                class="valid-red">*</sup></label>
+            <div style="display: flex; justify-content: space-between;">
+              <InputReport v-model:value="event.participants_number" :id="event.participants_number"
+                           name="participants_number" class="form__input" type="number" placeholder="Введите число"
+                           @focusout="focusOut" />
+            </div>
+          </div>
+          <Button class="form__field-delete-button" v-if="index > 0" label="Удалить мероприятие"
+                  @click="deleteEvent(index)" />
         </div>
-        <div>
-          <label class="form__label" for="5">Межрегиональное <sup class="valid-red">*</sup></label>
-          <InputReport type="radio" id="5" name="5" />
+        <div class="form__field-date">
+          <div class="form__field">
+            <label style="max-width: 280px;" class="form__label" for="start_date">Дата начала проведения мероприятия <sup
+                class="valid-red">*</sup></label>
+            <InputReport v-model:value="event.start_date" :id="event.start_date" name="start_date" class="form__input"
+                         type="date" @focusout="focusOut" />
+          </div>
+          <div class="form__field">
+            <label style="max-width: 300px;" class="form__label" for="end_date">Дата окончания проведения мероприятия <sup
+                class="valid-red">*</sup></label>
+            <InputReport v-model:value="event.end_date" :id="event.end_date" name="end_date" class="form__input"
+                         type="date" @focusout="focusOut" />
+          </div>
+        </div>
+        <div class="form__field-event">
+          <div class="form__field-event-file">
+            <label class="form__label" for="4">Положение о мероприятии <sup class="valid-red">*</sup></label>
+            <InputReport class="form-input__file-input" v-if="!fourthPanelData.scan_file" isFile type="file"
+                         id="scan_file" name="scan_file" width="100%" @change="uploadFile" />
+            <div v-else class="form__file-box">
+            <span class="form__file-name">
+              {{ fourthPanelData.scan_file }}
+            </span>
+              <span class="form__file-size">{{ fileSize }} Мб</span>
+              <button @click="deleteFile" class="form__button-delete-file">
+                Удалить
+              </button>
+            </div>
+          </div>
+          <div class="form__field-event-interregion">
+            <p class="form__label">Межрегиональное <sup class="valid-red">*</sup></p>
+            <div class="form__label-radio">
+              <div style="display: flex;">
+                <input v-model="event.is_interregional" type="radio" :id="`is_interregional-true_${index}`" :value="true"
+                       class="custom-radio" />
+                <label :for="`is_interregional-true_${index}`">
+                  Да
+                </label>
+              </div>
+              <div style="display: flex">
+                <input v-model="event.is_interregional" type="radio" :id="`is_interregional-false_${index}`"
+                       :value="false" class="custom-radio" />
+                <label :for="`is_interregional-false_${index}`">
+                  Нет
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form__field-link">
+          <p class="form__label">Ссылка на группу мероприятия в социальных сетях <sup class="valid-red">*</sup></p>
+          <div class="form__add-link" v-for="(link, i) in events[index].links" :key="i">
+            <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__input-add-link" type="text"
+                         placeholder="https://vk.com/cco_monolit" @focusout="focusOut" />
+            <Button v-if="events[index].links.length === i + 1" label="+ Добавить ссылку" @click="addLink(index)"
+                    class="form__add-link-button" />
+            <Button class="form__add-link-button" v-else label="Удалить" @click="deleteLink(index, i)" />
+          </div>
         </div>
       </div>
+
       <div>
-        <label class="form__label" for="6">Ссылка на группу мероприятия в социальных сетях <sup
-            class="valid-red">*</sup></label>
-        <InputReport id="6" name="6" class="form__input" type="text" placeholder="https://vk.com/cco_monolit" />
-        <InputReport id="7" name="7" class="form__input" type="text" placeholder="https://vk.com/ccorobot" />
-        <InputReport id="8" name="8" class="form__input" type="text" placeholder="https://vk.com/cco_monolit11" />
+        <Button class="form__add-event" label="Добавить мероприятие" @click="addEvent" />
       </div>
-      <div>
-        <label class="form__label" for="9">Комментарий <sup class="valid-red">*</sup></label>
-        <InputReport id="9" name="9" class="form__input" type="textarea" placeholder="Комментарий"
-          style="width: 100%; height: 100px" />
+      <div class="form__field-comment">
+        <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
+        <InputReport v-model:value="fourthPanelData.comment" id="comment" name="comment" class="form__input"
+                     type="textarea" placeholder="Укажите наименования организованных мероприятий" style="width: 100%;"
+                     @focusout="focusOut" />
       </div>
-      <div>
+      <div class="form__field-result">
         <v-checkbox label="Итоговое значение" />
       </div>
       <div class="hr"></div>
-      <div>
-        <p>(4-1)*2+(4-2)+(4-3)=9</p>
+      <div class="form__field-result">
+        <p>0</p>
       </div>
     </template>
     <template v-slot:thirdTab>
@@ -483,11 +597,23 @@
 </template>
 <script setup>
 import { ref, watchEffect } from "vue";
-import { InputReport, TextareaReport } from '@shared/components/inputs';
+import { InputReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { ReportTabs } from './index';
-import { getReport, reportPartTwoService } from "@services/ReportService.ts";
-import { SvgIcon } from '@shared/index';
+import { reportPartTwoService } from "@services/ReportService.ts";
+
+const props = defineProps({
+  districtHeadquarterCommander: {
+    type: Boolean
+  },
+  centralHeadquarterCommander: {
+    type: Boolean
+  },
+  reportId: {
+    type: String,
+    default: '',
+  }
+});
 
 const isFirstSent = ref(true);
 const fourthPanelData = ref({
@@ -551,36 +677,40 @@ const deleteEvent = async (index) => {
 };
 // new
 const uploadFile = async (event) => {
-  scanFile.value = event.target.files[0];
-  let formData = new FormData();
-  formData.append('scan_file', scanFile.value);
-  formData.append('comment', seventeenthPanelData.value.comment);
-
-  console.log(scanFile.value);
-
-  if (isFirstSent.value) {
-    let { scan_file } = await reportPartTwoService.createReport(formData, '17', true);
-    seventeenthPanelData.value.scan_file = scan_file.split('/').at(-1);
-  } else {
-    let { data: { scan_file } } = await reportPartTwoService.createReportDraft(formData, '17', true);
-    seventeenthPanelData.value.scan_file = scan_file.split('/').at(-1);
-  }
+//   scanFile.value = event.target.files[0];
+//   let formData = new FormData();
+//   formData.append('scan_file', scanFile.value);
+//   formData.append('comment', seventeenthPanelData.value.comment);
+//
+//   console.log(scanFile.value);
+//
+//   if (isFirstSent.value) {
+//     let { scan_file } = await reportPartTwoService.createReport(formData, '17', true);
+//     seventeenthPanelData.value.scan_file = scan_file.split('/').at(-1);
+//   } else {
+//     let { data: { scan_file } } = await reportPartTwoService.createReportDraft(formData, '17', true);
+//     seventeenthPanelData.value.scan_file = scan_file.split('/').at(-1);
+//   }
 };
 const deleteFile = async () => {
-  seventeenthPanelData.value.scan_file = '';
-  let formData = new FormData();
-  formData.append('scan_file', '');
-  formData.append('comment', seventeenthPanelData.value.comment);
-
-  if (isFirstSent.value) {
-    await reportPartTwoService.createReport(formData, '17', true);
-  } else {
-    await reportPartTwoService.createReportDraft(formData, '17', true);
-  }
+//   seventeenthPanelData.value.scan_file = '';
+//   let formData = new FormData();
+//   formData.append('scan_file', '');
+//   formData.append('comment', seventeenthPanelData.value.comment);
+//
+//   if (isFirstSent.value) {
+//     await reportPartTwoService.createReport(formData, '17', true);
+//   } else {
+//     await reportPartTwoService.createReportDraft(formData, '17', true);
+//   }
 };
+//
 watchEffect(async () => {
+  console.log('districtHeadquarterCommander: ', !(props.districtHeadquarterCommander || props.centralHeadquarterCommander));
   try {
-    const { data } = await reportPartTwoService.getReport('4');
+    const { data } = props.centralHeadquarterCommander || props.districtHeadquarterCommander
+        ? await reportPartTwoService.getReportDH('4', props.reportId)
+        : await reportPartTwoService.getReport('4');
     if (data) {
       isFirstSent.value = false;
       events.value = [...data.events];
