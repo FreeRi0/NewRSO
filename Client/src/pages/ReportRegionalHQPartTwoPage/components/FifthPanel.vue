@@ -20,8 +20,9 @@
               placeholder="Введите число" @focusout="focusOut" />
           </div>
         </div>
-
-        <Button v-if="index > 0" label="Удалить проект" class="deleteEventBtn" @click="deleteProject(index)" />
+        <div class="form__field-people-deleteBtn">
+          <Button v-if="index > 0" label="Удалить проект" class="deleteEventBtn" @click="deleteProject(index)" />
+        </div>
       </div>
       <div class="form__field-date" style="display: flex;">
         <div class="form__field-date-wrap">
@@ -60,8 +61,9 @@
       <TextareaReport v-model:value="fifthPanelData.comment" id="comment" name="comment" :rows="1" autoResize
         placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :max-length-text="3000" counter-visible />
     </div>
-    <div>
-      <v-checkbox class="result-checkbox" label="Итоговое значение" />
+    <div style="display: flex; align-items: center;">
+      <v-checkbox class="result-checkbox" id="v-checkbox" />
+      <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
     </div>
     <div class="hr"></div>
     <div>
@@ -384,6 +386,12 @@ watchEffect(async () => {
   align-items: flex-end;
 }
 
+.form__field-people-deleteBtn {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+}
+
 .form__field-people-count,
 .form__field-date {
   display: flex;
@@ -395,6 +403,10 @@ watchEffect(async () => {
     gap: 16px;
     justify-content: space-between;
   }
+}
+
+.form__field-people-count {
+  width: 100%;
 }
 
 .form__field-people-count-wrap,
@@ -582,7 +594,13 @@ watchEffect(async () => {
   margin: 0;
 }
 
-.result-checkbox>input {
-  color: red;
+.result-checkbox {
+  color: #39BF39;
+  margin-right: 12px;
+}
+
+.result-checkbox-text {
+  font-family: 'Bert sans';
+  font-weight: 700;
 }
 </style>
