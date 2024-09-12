@@ -9,7 +9,7 @@
         <template v-slot:chip="{ props, item }">
             <div class="option__content">
                 <div class="option__image">
-                    <img :src="item.raw?.media?.photo ??
+                    <img :src="item.raw?.avatar?.photo ??
                         '/assets/foto-leader-squad/foto-leader-squad-stub.png'
                         " alt="Фото бойца" />
                 </div>
@@ -17,12 +17,12 @@
                 <div class="option__wrapper">
                     <p class="option__title">
                         {{
-                            item.raw.last_name +
-                            ' ' +
-                            item.raw.first_name +
-                            ' ' +
-                            item.raw.patronymic_name
+                            item.raw.last_name
                         }}
+                        {{
+                            item.raw.first_name
+                        }}
+                        {{ item.raw.patronymic_name }}
                     </p>
                     <p class="option__date">
                         {{ item.raw.date_of_birth }}
@@ -35,19 +35,19 @@
             <v-container v-bind="props">
                 <div class="option__content option__content--option">
                     <div class="option__image">
-                        <img :src="item.raw?.media?.photo ??
+                        <img :src="item.raw?.avatar?.photo ??
                             '/assets/foto-leader-squad/foto-leader-squad-stub.png'
                             " alt="Фото бойца" />
                     </div>
                     <div class="option__wrapper">
                         <p class="option__title">
                             {{
-                                item?.raw?.last_name +
-                                ' ' +
-                                item?.raw?.first_name +
-                                ' ' +
-                                item?.raw?.patronymic_name
+                                item.raw.last_name
                             }}
+                            {{
+                                item.raw.first_name
+                            }}
+                            {{ item.raw.patronymic_name }}
                         </p>
                         <p class="option__date">
                             {{ item?.raw?.date_of_birth }}
@@ -57,17 +57,11 @@
             </v-container>
         </template>
     </v-autocomplete>
-    <!-- <TransitionGroup>
-        <div class="error-wrapper" v-for="element of error" :key="element.$uid">
-            <div class="form-error__message">{{ element.$message }}</div>
-        </div>
-    </TransitionGroup> -->
 </template>
 
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { Icon } from '@iconify/vue';
-import axios from 'axios';
 import { HTTP } from '@app/http';
 
 defineOptions({
@@ -125,9 +119,7 @@ const onChangeItem = async () => {
         await HTTP.get(`rsousers?regional_headquarter__name=${props.headVal}`)
 
             .then((res) => {
-                // console.log(props.address);
                 items.value = res.data.results;
-                // console.log(res.data);
             })
             .catch(function (error) {
                 console.log('an error occured ' + error);
@@ -136,9 +128,7 @@ const onChangeItem = async () => {
         await HTTP.get(`rsousers?region=${props.headVal}`)
 
             .then((res) => {
-                // console.log(props.address);
                 items.value = res.data.results;
-                // console.log(res.data);
             })
             .catch(function (error) {
                 console.log('an error occured ' + error);
@@ -146,6 +136,15 @@ const onChangeItem = async () => {
     }
 
 };
+
+// else if (props.isCentral === true) {
+//         await HTTP.get(`rsousers`)
+//             .then((res) => {
+//                 items.value = res.data.results;
+//             })
+//             .catch(function (error) {
+//                 console.log('an error occured ' + error);
+//             });
 
 watch(() => props.headVal,
     (newRegName) => {

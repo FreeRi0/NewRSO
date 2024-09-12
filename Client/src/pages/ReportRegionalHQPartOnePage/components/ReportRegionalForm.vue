@@ -63,14 +63,18 @@
       </div>
     </div>
   </form>
-  <Button v-if="isNewReport" variant="text" label="Отправить отчет" size="large" :onclick="sentReport"
-    :disabled="false" />
+  <Button v-if="isNewReport && (roleStore.experts.is_central_expert === false && roleStore.is_district_expert === false)" variant="text"
+    label="Отправить отчет" size="large" :onclick="sentReport" :disabled="isButtonDisabled" />
 </template>
 
 <script setup>
 import { InputReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { ref, watchEffect } from "vue";
+import { useRoleStore } from '@layouts/store/role';
+
+
+const roleStore = useRoleStore();
 
 const emit = defineEmits(['sentReport']);
 const props = defineProps({
@@ -87,7 +91,20 @@ const props = defineProps({
   }
 });
 
-const reportDataChildren = ref(null);
+const reportDataChildren = ref(
+  {
+    participants_number: '',
+    employed_sso: '',
+    employed_smo: '',
+    employed_specialized_detachments: '',
+    employed_spo: '',
+    employed_sservo: '',
+    employed_production_detachments: '',
+    employed_sop: '',
+    employed_ssho: '',
+    employed_top: '',
+  }
+);
 watchEffect(() => {
   reportDataChildren.value = { ...props.reportData };
 })

@@ -63,22 +63,6 @@ const positionsStore = usePositionsStore();
 const isVerify = ref(false);
 const competition_pk = 1;
 
-/*const updateToken = async () => {
-    try {
-        const resp = await HTTP.post('/jwt/refresh/', {
-            refresh: localStorage.getItem('refresh_token'),
-        });
-        if (resp.status === 200) {
-            localStorage.setItem('jwt_token', resp.data.access);
-        }
-    } catch (e) {
-        const userStore = useUserStore();
-        userStore.logOut();
-        localStorage.removeItem('jwt_token');
-        localStorage.removeItem('refresh_token');
-        router.push({ name: 'Login' });
-    }
-};*/
 
 const verifyToken = async () => {
     try {
@@ -91,9 +75,7 @@ const verifyToken = async () => {
             positionsStore.getPositions();
             squadsStore.getAreas();
             roleStore.getUserParticipantsStatus(competition_pk);
-        }/* else if (resp.status == 401) {
-            updateToken();
-        }*/
+        }
     } catch (error) {
         console.log(error);
     }
@@ -103,12 +85,7 @@ const squadsStore = useSquadsStore();
 const currentUser = storeToRefs(userStore);
 
 onMounted(() => {
-    setTimeout(() => {
-        verifyToken();
-
-    }, 1000);
-
-
+    verifyToken();
     regionsStore.getRegions();
 });
 </script>

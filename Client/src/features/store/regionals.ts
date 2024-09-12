@@ -89,7 +89,7 @@ export const useRegionalsStore = defineStore('regionals', {
                 const responseMembers = await HTTP.get(
                     `/regionals/${id}/members/`
                 );
-                this.members = responseMembers.data.results;
+                this.members = responseMembers.data;
                 this.isLoading = false;
             } catch (error) {
                 this.isLoading = false;
@@ -114,13 +114,13 @@ export const useRegionalsStore = defineStore('regionals', {
             const responseSearchRegions = await HTTP.get(
                 `/regions/?search=${name}`
             );
-            this.regions = responseSearchRegions.data.results;
+            this.regions = responseSearchRegions.data;
         },
         async getRegions() {
             if (this.regions.length) return;
             try {
                 this.isLoading = true;
-                const responseRegions = await HTTP.get(`/regions/`, {
+                const responseRegions = await HTTP.get(`/regions/` + `?limit=-1`, {
                     headers: {
                         'Content-Type': 'application/json',
                     },

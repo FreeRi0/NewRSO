@@ -151,7 +151,9 @@ const props = defineProps({
     },
 });
 const name = ref('');
-const addressRef = ref('/eduicational_institutions/');
+const addressRef = ref('/eduicational_institutions/' + `?limit=${limit}`);
+const limit = -1;
+
 
 
 const selected = ref(null);
@@ -167,7 +169,7 @@ const onChangeItem = async (name) => {
     try {
         isLoading.value = true;
         const ItemResponse = await HTTP.get(
-            addressRef.value + (name ? '?search=' + name : ''),
+            addressRef.value + (name ? '&search=' + name : ''),
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -191,13 +193,6 @@ const searchEducInstitution = (val) => {
     }, 200);
 };
 
-// watch(
-//     () => user.currentUser.value,
-//     (newUser, oldUser) => {
-//         if (!addressRef.value) addressRef.value = '/eduicational_institutions/?region__name='+user?.currentUser?.value?.region?.name;
-//         onChangeItem();
-//     },
-// );
 
 onMounted(() => {
 

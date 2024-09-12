@@ -740,7 +740,7 @@ const routes: RouteRecordRaw[] = [
                 ],
             },
             {
-                path: ':id',
+                path: '/userpage/:id',
                 meta: {
                     redirectTo: 'userpage',
                     label: 'Страница пользователя',
@@ -879,6 +879,7 @@ const routes: RouteRecordRaw[] = [
                             label: 'Отчетность',
                             redirectTo: 'reportingRo',
                         },
+
                     },
                     {
                         path: 'report-regional-one',
@@ -918,6 +919,34 @@ const routes: RouteRecordRaw[] = [
                             import('@pages/RatingRO/components/RatingRo.vue'),
                     },
                     {
+                        path: 'reporting',
+                        meta: {
+                            label: 'Отчеты РО',
+                            redirectTo: 'rating-ro-reporting',
+                        },
+                        children: [
+                            {
+                                path: '',
+                                name: 'rating-ro-reporting',
+                                component: () =>
+                                    import(
+                                        '@pages/RatingRoReporting/components/RatingRoReportingHeadquarters.vue'
+                                    ),
+                            },
+                            {
+                                path: 'report-regional-one-comander',
+                                name: 'ReportRegionalPartOneComander',
+                                component: () =>
+                                    import(
+                                        '@pages/ReportRegionalHQPartOnePage/ReportRegionalHQPartOne.vue'
+                                    ),
+                                meta: {
+                                    label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 1',
+                                },
+                            },
+                        ],
+                    },
+                    {
                         path: 'places',
                         meta: {
                             label: 'Места РО по показателям',
@@ -954,23 +983,7 @@ const routes: RouteRecordRaw[] = [
                         ],
                     },
 
-                    {
-                        path: 'reporting',
-                        meta: {
-                            label: 'Отчеты РО',
-                            redirectTo: 'rating-ro-reporting',
-                        },
-                        children: [
-                            {
-                                path: '',
-                                name: 'rating-ro-reporting',
-                                component: () =>
-                                    import(
-                                        '@pages/RatingRoReporting/components/RatingRoReportingHeadquarters.vue'
-                                    ),
-                            },
-                        ],
-                    },
+
                 ],
             },
             {

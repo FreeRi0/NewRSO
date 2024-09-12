@@ -97,11 +97,11 @@ watchEffect(async () => {
   try {
     const { data } = await reportPartTwoService.getReport(ID_PANEL);
     console.log(data);
-    if (data.length) {
+    if (data) {
       isFirstSent.value = false;
-      nineteenthPanelData.value.employed_student_start = data[0].employed_student_start;
-      nineteenthPanelData.value.employed_student_end = data[0].employed_student_end;
-      nineteenthPanelData.value.comment = data[0].comment;
+      nineteenthPanelData.value.employed_student_start = data.employed_student_start;
+      nineteenthPanelData.value.employed_student_end = data.employed_student_end;
+      nineteenthPanelData.value.comment = data.comment;
     }
   } catch (e) {
     console.log(e)
@@ -112,40 +112,38 @@ watchEffect(async () => {
 <style lang="scss" scoped>
 .report {
   &__field-group {
-    display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px 20px;
-    padding: 40px 40px 42px;
-    background: #F3F4F5;
-    border: none;
-    border-radius: 10px;
-    margin-bottom: 8px;
+    // grid-template-columns: minmax(27.35%, 44.9%) minmax(27.35%, 44.9%);
+    margin-bottom: 0;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
   }
 
   &__fieldset {
-    max-width: 530px;
+    @media (max-width: 1024px) {
+      display: flex;
+      flex-direction: column;
 
-    &--left-block {
-      .report__label {
-        max-width: 240px;
+      .form-input {
+        margin-top: auto;
       }
     }
+    
+    &--left-block {
+      @media (max-width: 768px) {
+        max-width: 100%;
+      }
 
-    &--right-block {
-      justify-self: flex-end;
+      .report__label {
+        max-width: 240px;
+
+        @media (max-width: 768px) {
+          max-width: 100%;
+        }
+      }
     }
-
-    &--comment {
-      max-width: none;
-      grid-column: -1 / 1;
-    }
-  }
-
-  &__label {
-    display: block;
-    line-height: 21px;
-    letter-spacing: 0.78px;
-    color: #000000;
   }
 }
 </style>

@@ -44,33 +44,6 @@ const route = useRoute();
 let id = route.params.id;
 
 const headquarter = ref(null);
-// const members = ref(regionalsStore.members);
-
-// const positions = ref([]);
-// const regions = ref([]);
-
-// const getPositions = async () => {
-//     HTTP.get('positions/')
-
-//         .then((res) => {
-//             positions.value = res.data;
-//             console.log('должности - ', res.data);
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
-
-// const getRegions = async () => {
-//     await HTTP.get('regions/')
-
-//         .then((res) => {
-//             regions.value = res.data;
-//         })
-//         .catch(function (error) {
-//             console.log('an error occured ' + error);
-//         });
-// };
 const { replaceTargetObjects } = usePage();
 
 const loading = ref(false);
@@ -136,10 +109,10 @@ const isMembersLoading = ref(false);
 //     }
 // };
 
-onMounted(() => {
+onMounted(async() => {
     // getRegions();
     // getPositions();
-    regionalsStore.getRegionalsMembers(id)
+    await regionalsStore.getRegionalsMembers(id)
     getHeadquarter();
 });
 

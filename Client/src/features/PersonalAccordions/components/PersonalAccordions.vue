@@ -4520,7 +4520,7 @@ const updateData = async () => {
             );
         }
 
-        props.foreignUserDocs = axiosrequestForeignDocs.value.data;
+        props.foreignUserDocs = axiosrequestForeignDocs.value?.data;
         fd = axiosrequest5.data;
         data.value = axiosrequest6.value?.data;
         swal.fire({

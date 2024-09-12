@@ -56,13 +56,10 @@ export const useSquadsStore = defineStore('squads', {
 
         async getAreas() {
             try {
-                this.isLoading = true;
                 const responseAreas = await HTTP.get('/areas/');
                 this.areas = responseAreas.data.results;
-                this.isLoading = false;
             } catch (error) {
                 console.log('an error occured ' + error);
-                this.isLoading = false;
             }
         },
         async getCompetitionSquads() {
@@ -128,7 +125,7 @@ export const useSquadsStore = defineStore('squads', {
             this.squads = responseFilteredSquads.data;
         },
 
-        
+
         async getSquadMembers(id: String) {
             try {
                 this.isLoading = true;

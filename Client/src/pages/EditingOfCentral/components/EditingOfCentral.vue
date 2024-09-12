@@ -4,18 +4,18 @@
         <FormCentr :participants="true" :headquarter="headquarter" :members="members" :submited="submited"
             :is-commander-loading="isCommanderLoading" :is-members-loading="isMembersLoading" :is-error="isError"
             :is-error-members="isErrorMembers" v-if="headquarter && isError && isErrorMembers && !loading"
-            @submit.prevent="changeHeadquarter" @select-emblem="onSelectEmblem" @select-banner="onSelectBanner"
+            @change-headquarter="changeHeadquarter" @select-emblem="onSelectEmblem" @select-banner="onSelectBanner"
             @delete-emblem="onDeleteEmblem" @delete-banner="onDeleteBanner" @update-search-member="onUpdateSearchMember"
-            @update-member="onUpdateMember"  @delete-member="onDeleteMember">
+            @update-member="onUpdateMember" @delete-member="onDeleteMember">
         </FormCentr>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, inject } from 'vue';
+import { ref, onMounted, inject, watch } from 'vue';
 import { FormCentr } from '@features/FormCentr';
 import { HTTP } from '@app/http';
-import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { usePage } from '@shared';
 import { useUserStore } from '@features/store/index';
 import { useRoleStore } from '@layouts/store/role';
@@ -50,12 +50,12 @@ const isCommanderLoading = ref(false);
 const getHeadquarter = async () => {
     loading.value = true;
     isCommanderLoading.value = true;
-    await HTTP.get(`/centrals/1/`,)
+    await HTTP.get(`/centrals/${id}/`,)
         .then((response) => {
             headquarter.value = response.data;
-            if (headquarter.value.commander) {
-                headquarter.value.commander = headquarter.value.commander.id;
-            }
+            // if (headquarter.value.commander) {
+            //     headquarter.value.commander = headquarter.value.commander.id;
+            // }
             replaceTargetObjects([headquarter.value]);
             loading.value = false;
             isCommanderLoading.value = false;
@@ -65,11 +65,6 @@ const getHeadquarter = async () => {
         });
 };
 
-onBeforeRouteUpdate(async (to, from) => {
-    if (to.params.id !== from.params.id) {
-        getHeadquarter();
-    }
-});
 
 const isMembersLoading = ref(false);
 
@@ -87,9 +82,21 @@ const getMembers = async (name) => {
         });
 };
 
-onMounted(() => {
-    getHeadquarter();
-});
+watch(
+    () => route.params.id,
+
+    async (newId) => {
+        id = newId;
+        await getHeadquarter();
+    },
+    {
+        immediate: true,
+        deep: true,
+    },
+);
+
+
+
 
 const onUpdateSearchMember = (event) => {
     clearTimeout(timerSearchMember.value);
@@ -110,23 +117,23 @@ const onUpdateMember = (event, id) => {
     if (firstkey == 'position')
         members.value[memberIndex].position.id = event[firstkey];
     else members.value[memberIndex][firstkey] = event[firstkey];
-    if (firstkey == 'is_trusted'){
+    if (firstkey == 'is_trusted') {
         const payload = {
             id_trusted: event[firstkey],
         }
-        try{
+        try {
             HTTP.patch(
                 `/detachments/${route.params.id}/members/${id}/`,
                 payload
             )
-        } catch(e){
+        } catch (e) {
             console.log(e);
         }
     }
 };
 
 const onDeleteMember = (id) => {
-    const memberIndex =  members.value.findIndex((member) => member.id === id);
+    const memberIndex = members.value.findIndex((member) => member.id === id);
     members.value.splice(memberIndex, 1);
     // members.value[memberIndex].change = true;
 }
@@ -195,9 +202,9 @@ const changeHeadquarter = async () => {
             !detComId
         ) {
             formData.append('commander', headquarter.value.meId);
-        } else formData.append('commander', headquarter.value.commander);
+        } else formData.append('commander', headquarter.value.commander.id);
 
-        formData.append('commander', headquarter.value.commander);
+        formData.append('commander', headquarter.value.commander.id);
         formData.append('social_vk', headquarter.value.social_vk);
         formData.append('social_tg', headquarter.value.social_tg);
         formData.append('slogan', headquarter.value.slogan);
@@ -242,7 +249,7 @@ const changeHeadquarter = async () => {
         await HTTP.patch(`/centrals/1/`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                 Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
+                Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
             },
         });
         swal.fire({

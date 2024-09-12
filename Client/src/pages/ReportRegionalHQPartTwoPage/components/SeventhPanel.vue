@@ -1,51 +1,75 @@
 <template>
   <v-card class="panel-card">
-    <!-- <v-tabs
-        v-model="tab"
-    >
-      <v-tab value="one" class="panel-tab-btn">Отчет РО</v-tab>
-      <v-tab value="two" class="panel-tab-btn">Корректировка ОШ</v-tab>
-      <v-tab value="three" class="panel-tab-btn">Корректировка ЦШ</v-tab>
-    </v-tabs> -->
-
-
-      <v-expansion-panels  v-model="panel" >
-        <v-expansion-panel v-for="item in festivals" :key="item.id"><v-expansion-panel-title>{{ item.name
-            }}</v-expansion-panel-title><v-expansion-panel-text>
-            <SeventhPanelForm @collapse-form="collapsed()" :title="item.name"></SeventhPanelForm>
-          </v-expansion-panel-text></v-expansion-panel>
-      </v-expansion-panels>
+    <v-expansion-panels v-model="panel" class="mb-2">
+      <v-progress-circular v-show="!items.length" class="circleLoader" indeterminate></v-progress-circular>
+      <v-expansion-panel v-show="items.length" v-for="item in items" :key="item.id"><v-expansion-panel-title>
+          <div class="title_wrap">
+            <p class="form__title">{{ item.name }}</p>
+            <div class="d-flex gc-8">
+              <p class="form__title">{{ item.month }}</p>
+              <p class="form__title">{{ item.city }}</p>
+            </div>
+          </div>
+        </v-expansion-panel-title><v-expansion-panel-text>
+          <SeventhPanelForm :id="item.id" :panel_number="7" @collapse-form="collapsed()"
+            :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
+            :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
+        </v-expansion-panel-text></v-expansion-panel>
+    </v-expansion-panels>
 
   </v-card>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { SeventhPanelForm } from "./index";
 import { InputReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
+import { HTTP } from "@app/http";
 
-// const tab = ref('one')
+const props = defineProps({
+  districtHeadquarterCommander: {
+    type: Boolean
+  },
+  centralHeadquarterCommander: {
+    type: Boolean
+  },
+});
 
 const panel = ref(null);
 
-const festivals = ref([
-  { id: 1, name: 'Всероссийская Спартакиада студенческих отрядов Российской Федерации 2022' },
-  { id: 2, name: 'Всероссийский Слет студенческих отрядов 2022' },
-  { id: 3, name: '«Художественное слово: соло» — СПО «Оригами» — «В РСО.В любви. В благодарности.»' },
-  { id: 4, name: 'Межрегиональный сводный студенческий сервисный отряд «Бархатные сезоны»' },
-  { id: 5, name: 'Всероссийская Спартакиада студенческих отрядов Российской Федерации 2022' },
-  { id: 6, name: 'Школа подготовки командных составов линейных студенческих отрядов ВСТП ОАО РЖД «БАМ»' },
-  { id: 7, name: 'Всероссийская Спартакиада студенческих отрядов Российской Федерации 2022' },
-  { id: 8, name: 'Всероссийская Спартакиада студенческих отрядов Российской Федерации 2022' },
-])
+const items = ref([]);
 
 const collapsed = () => {
-    panel.value = !panel.value;
+  panel.value = !panel.value;
 }
+
+const getItems = async () => {
+  try {
+    const response = await HTTP.get('regional_competitions/reports/event_names/r7-event-names/');
+    items.value = response.data;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+onMounted(async () => {
+  await getItems();
+})
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .panel-card {
   box-shadow: none;
+}
+
+.v-expansion-panel-title[aria-expanded="true"] {
+  display: none;
+}
+
+.title_wrap {
+  display: flex;
+  width: 100%;
+  max-width: 700px;
+  justify-content: space-between;
 }
 
 .form__field-group {
@@ -53,6 +77,7 @@ const collapsed = () => {
   border: none;
   border-radius: 0 0 10px 10px;
   margin-bottom: 8px;
+  margin-top: 8px;
 }
 
 .valid-red {
@@ -142,6 +167,7 @@ const collapsed = () => {
   font-weight: 600;
   line-height: 21.6px;
   text-align: left;
+  border: none;
 
 }
 </style>

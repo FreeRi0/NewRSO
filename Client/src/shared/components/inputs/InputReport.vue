@@ -1,5 +1,9 @@
 <template>
-  <div :is-file="isFile" :class="isFile ? 'form-input form-input__file-input' : 'form-input'" :style="{ width: width }">
+  <div 
+    :is-file="isFile" 
+    :class="['form-input', isFile ? 'form-input__file-input' : '', isFileDistrict ? 'form-input__add-file' : '']"
+    
+    :style="{ width: width }">
     <input :type="type" :name="name" :style="{
       height: height,
     }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly"
@@ -13,6 +17,9 @@
         <SvgIcon iconName="add-file" />
         Выбрать файл
       </span>
+    </div>
+    <div v-if="isFileDistrict" class="form-input__icon">
+      <SvgIcon iconName="add-file" />
     </div>
   </div>
 </template>
@@ -73,6 +80,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  isFileDistrict: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 const textInputLength = ref(null);
@@ -87,16 +98,8 @@ const updateValue = (event) => {
 
 <style lang="scss" scoped>
 .form-input {
-  &.form-input__file-input {
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    height: 101px;
-    position: relative;
-    border-radius: 12px;
-    background-color: transparent;
-    border: 1.5px dashed #1F7CC0;
-
+  &.form-input__file-input,
+  &.form-input__add-file {
     .form-input__report[type='file'] {
       opacity: 0;
       position: absolute;
@@ -105,6 +108,27 @@ const updateValue = (event) => {
       right: 0;
       bottom: 0;
     }
+  }
+
+  &.form-input__file-input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 720px;
+    min-height: 86px;
+    position: relative;
+    border-radius: 12px;
+    background-color: transparent;
+    border: 1.5px dashed #1F7CC0;
+  }
+
+  &__add-file,
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
   }
 
   &__text {
@@ -117,13 +141,24 @@ const updateValue = (event) => {
     font-weight: 400;
     font-size: 16px;
     line-height: 23px;
+    text-align: center;
     color: #6d6d6d;
+
+    @media (max-width: 360px) {
+      font-size: 14px;
+      line-height: 18.5px;
+    }
 
     span:last-child {
       display: flex;
       align-items: center;
       column-gap: 12px;
       color: #1f7cc0;
+
+      @media (max-width: 360px) {
+        font-size: 16px;
+        line-height: 24px;
+      }
     }
   }
 }
@@ -136,9 +171,41 @@ const updateValue = (event) => {
   line-height: 21px;
   cursor: pointer;
 
+  @media (max-width: 360px) {
+    font-size: 14px;
+    line-height: 18.5px;
+  }
+
   &::placeholder {
     color: #6d6d6d;
   }
+
+  &:disabled {
+    border-color: #b6b6b6;
+    background-color: #f9fafb;
+    color:#8e8e93;
+    pointer-events: none;
+  }
+
+  &:focus[type='text'] {
+    border-color: transparent;
+    outline: 1px solid #1f7cc0;
+  }
+
+  &:invalid {
+      border-color: #db0000;
+
+      &::placeholder {
+          color: #db0000;
+      }
+  }
+}
+
+.report-table__td input.form-input__report {
+  border: none;
+  border-radius: 0;
+  text-align: center;
+  padding: 0;
 }
 
 .form__counter {
@@ -149,5 +216,17 @@ const updateValue = (event) => {
   line-height: 16px;
   color: #6d6d6d;
   margin-top: 1px;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type='number'],
+input[type="number"]:hover,
+input[type="number"]:focus {
+  appearance: none;
+  -moz-appearance: textfield;
 }
 </style>
