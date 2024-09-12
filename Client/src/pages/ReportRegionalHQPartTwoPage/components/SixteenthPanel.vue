@@ -90,7 +90,8 @@
           @focusout="focusOut" :maxlength="3000" :max-length-text="3000" counter-visible style="margin-bottom: 4px ;" />
       </div>
       <div class="form__field-result">
-        <v-checkbox label="Итоговое значение" />
+        <v-checkbox class="result-checkbox" id="v-checkbox" />
+        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
       </div>
       <div class="hr"></div>
       <div>
@@ -778,6 +779,8 @@ watchEffect(async () => {
 
 .form__field-result {
   margin-top: 25px;
+  display: flex;
+  align-items: center;
 
   @media (max-width: 768px) {
     margin-top: 15px;
@@ -786,5 +789,15 @@ watchEffect(async () => {
 
 .result-count {
   color: #6D6D6D;
+}
+
+.result-checkbox {
+  color: #39BF39;
+  margin-right: 12px;
+}
+
+.result-checkbox-text {
+  font-family: 'Bert sans';
+  font-weight: 700;
 }
 </style>
