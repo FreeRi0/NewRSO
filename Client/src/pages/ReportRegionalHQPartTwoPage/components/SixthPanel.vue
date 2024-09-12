@@ -11,7 +11,9 @@
             </div>
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
-          <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()" :title="item">
+          <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()"
+            :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
+            :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item">
           </SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
     </v-expansion-panels>
