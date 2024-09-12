@@ -84,8 +84,9 @@
         type="textarea" placeholder="Укажите наименования организованных мероприятий" style="width: 100%;"
         @focusout="focusOut" />
     </div>
-    <div class="form__field-result">
-      <v-checkbox label="Итоговое значение" />
+    <div class="form__field-result" style="display: flex; align-items: center;">
+      <v-checkbox class="result-checkbox" id="v-checkbox" />
+      <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
     </div>
     <div class="hr"></div>
     <div class="form__field-result">
@@ -773,5 +774,15 @@ watchEffect(async () => {
   color: #1F7CC0;
   padding: 0;
   text-align: left;
+}
+
+.result-checkbox {
+  color: #39BF39;
+  margin-right: 12px;
+}
+
+.result-checkbox-text {
+  font-family: 'Bert sans';
+  font-weight: 700;
 }
 </style>
