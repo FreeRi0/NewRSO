@@ -29,7 +29,7 @@
                                         <SvgIcon
                                             iconName="wrap"
                                             :class="{ expanded }"
-                                            class="helpInfo_helpInfo_optimize_button"
+                                            class="helpInfo_optimize_button"
                                         />
                                     </v-list-item>
                                 </template>
