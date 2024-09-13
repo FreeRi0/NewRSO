@@ -6,8 +6,8 @@
           <div class="title_wrap">
             <p class="form__title">{{ item.name }}</p>
             <div class="d-flex gc-8">
-              <p class="form__title">{{ item.month }}</p>
-              <p class="form__title">{{ item.city }}</p>
+              <p class="form__title" v-if="item.month">{{ item.month }}</p>
+              <p class="form__title" v-if="item.city">{{ item.city }}</p>
             </div>
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
@@ -66,19 +66,24 @@ onMounted(async () => {
 }
 
 .title_wrap {
-  display: flex;
+  display: grid;
+  grid-template-columns: 600px 300px;
+  column-gap: 40px;
   width: 100%;
-  max-width: 700px;
-  justify-content: space-between;
+  max-width: 900px;
+
+  @media screen and (max-width: 1024px) {
+    max-width: 700px;
+    grid-template-columns: 400px 300px;
+    column-gap: 20px;
+  }
+
+  @media screen and (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+
 }
 
-.form__field-group {
-  background: #F3F4F5;
-  border: none;
-  border-radius: 0 0 10px 10px;
-  margin-bottom: 8px;
-  margin-top: 8px;
-}
 
 .valid-red {
   color: #db0000;
@@ -168,6 +173,6 @@ onMounted(async () => {
   line-height: 21.6px;
   text-align: left;
   border: none;
-
+  padding-left: 40px;
 }
 </style>
