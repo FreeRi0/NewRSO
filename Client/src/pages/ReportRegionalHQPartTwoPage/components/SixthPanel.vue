@@ -6,12 +6,15 @@
           <div class="title_wrap">
             <p class="form__title">{{ item.name }}</p>
             <div class="d-flex gc-8">
-              <p class="form__title">{{ item.month }}</p>
-              <p class="form__title">{{ item.city }}</p>
+              <p class="form__title" v-if="item.month">{{ item.month }}</p>
+              <p class="form__title" v-if="item.city">{{ item.city }}</p>
             </div>
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
-          <SeventhPanelForm  :id="item.id" :panel_number="6" @collapse-form="collapsed()" :title="item"></SeventhPanelForm>
+          <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()"
+            :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
+            :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item">
+          </SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
     </v-expansion-panels>
   </v-card>
@@ -21,7 +24,6 @@ import { ref, onMounted } from "vue";
 import { SeventhPanelForm } from "./index";
 import { InputReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
-
 import { HTTP } from "@app/http";
 
 
@@ -50,7 +52,6 @@ const getItems = async () => {
     console.error(err);
   }
 }
-
 onMounted(async () => {
   await getItems();
 })
@@ -60,9 +61,11 @@ onMounted(async () => {
   box-shadow: none;
 }
 
-.panel-tab-btn {
-  // ... existing styles ...
+.v-expansion-panel-title[aria-expanded="true"] {
+  display: none;
+}
 
+.panel-tab-btn {
   text-align: right;
   padding-right: 40px;
 }
@@ -104,11 +107,24 @@ onMounted(async () => {
   margin-right: 8px;
 }
 
+
 .title_wrap {
-  display: flex;
+  display: grid;
+  grid-template-columns: 600px 300px;
+  column-gap: 40px;
   width: 100%;
-  max-width: 700px;
-  justify-content: space-between;
+  max-width: 900px;
+
+  @media screen and (max-width: 1024px) {
+   max-width: 700px;
+   grid-template-columns: 400px 300px;
+   column-gap: 20px;
+  }
+
+  @media screen and (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+
 }
 
 .hr {
@@ -171,6 +187,7 @@ onMounted(async () => {
   line-height: 21.6px;
   text-align: left;
   border: none;
+  padding-left: 40px;
 
 }
 </style>
