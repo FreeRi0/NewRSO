@@ -4,12 +4,33 @@
     <div class="ratingRo_report_wrapper">
       <router-link class="ratingRo_report_item" :to="{ name: 'ReportRegionalPartOne' }">Отчет о деятельности
         регионального отделения РСО за 2024 год. Часть 1</router-link>
-      <router-link class="ratingRo_report_item" :to="{ name: 'ReportRegionalPartTwo' }">Отчет о деятельности
+      <router-link v-if="show" class="ratingRo_report_item" :to="{ name: 'ReportRegionalPartTwo' }">Отчет о деятельности
         регионального отделения РСО за 2024 год. Часть 2</router-link>
     </div>
   </div>
 </template>
 <script setup>
+import { ref, onMounted, watch } from 'vue'
+import { useRoleStore } from '@layouts/store/role';
+import { useRouter } from 'vue-router';
+import { showByUrl } from '@services/ProdUrlService';
+
+
+const roleStore = useRoleStore();
+const router = useRouter()
+let show = ref(false);
+
+watch(() => roleStore.roles?.regionalheadquarter_commander, () => {
+  if (roleStore.roles?.regionalheadquarter_commander === null) {
+    router.push({ name: 'mypage' })
+  }
+})
+
+onMounted(() => {
+  const val = showByUrl();
+  show.value = val;
+})
+
 </script>
 <style lang="scss" scoped>
 .ratingRo_report_title {

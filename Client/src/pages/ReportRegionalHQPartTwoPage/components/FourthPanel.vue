@@ -95,8 +95,8 @@
 
   <report-tabs v-else>
     <template v-slot:firstTab>
-      <div v-for="(event, index) in events" :key="index" class="form__field-fourth-panel">
-        <div class="form__field-members-event">
+      <div v-for="(event, index) in events" :key="index">
+        <div>
           <div class="form__field-members">
             <label class="form__label" for="participants_number">Количество человек, принявших участие в мероприятии
               <sup class="valid-red">*</sup></label>
@@ -180,15 +180,19 @@
       </div>
     </template>
     <template v-slot:secondTab>
-      <div>
-        <label class="form__label" for="1">Количество человек, принявших участие в мероприятии <sup
-            class="valid-red">*</sup></label>
-        <InputReport id="1" name="1" class="form__input" type="number" placeholder="Введите число" />
-      </div>
-      <div style="display: flex;">
-        <div class="form__field">
-          <label class="form__label" for="2">Дата начала проведения мероприятия <sup class="valid-red">*</sup></label>
-          <InputReport id="2" name="2" class="form__input" type="date" />
+      <div v-for="(event, index) in events" :key="index" class="form__field-fourth-panel">
+        <div>
+          <div class="form__field-members">
+            <label class="form__label" for="participants_number">Количество человек, принявших участие в мероприятии <sup
+                class="valid-red">*</sup></label>
+            <div style="display: flex; justify-content: space-between;">
+              <InputReport v-model:value="event.participants_number" :id="event.participants_number"
+                           name="participants_number" class="form__input" type="number" placeholder="Введите число"
+                           @focusout="focusOut" />
+            </div>
+          </div>
+          <Button class="form__field-delete-button" v-if="index > 0" label="Удалить мероприятие"
+                  @click="deleteEvent(index)" />
         </div>
         <div class="form__field-date">
           <div class="form__field">
@@ -576,6 +580,10 @@ const props = defineProps({
   centralHeadquarterCommander: {
     type: Boolean
   },
+  reportId: {
+    type: String,
+    default: '',
+  }
 });
 
 const isFirstSent = ref(true);
@@ -671,7 +679,9 @@ const deleteFile = async () => {
 watchEffect(async () => {
   console.log('districtHeadquarterCommander: ', !(props.districtHeadquarterCommander || props.centralHeadquarterCommander));
   try {
-    const { data } = props.centralHeadquarterCommander || props.districtHeadquarterCommander ? await reportPartTwoService.getReportDH('4') : await reportPartTwoService.getReport('4');
+    const { data } = props.centralHeadquarterCommander || props.districtHeadquarterCommander
+        ? await reportPartTwoService.getReportDH('4', props.reportId)
+        : await reportPartTwoService.getReport('4');
     if (data) {
       isFirstSent.value = false;
       events.value = [...data.events];

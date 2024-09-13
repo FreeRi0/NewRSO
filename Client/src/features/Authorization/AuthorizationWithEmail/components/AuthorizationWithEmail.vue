@@ -36,7 +36,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup scoped>
 import { ref, inject, onMounted } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { Input, passwordInput } from '@shared/components/inputs';
@@ -105,6 +105,7 @@ const LoginUser = async () => {
         userStore.getCountApp();
         roleStore.getRoles();
         roleStore.getMyPositions();
+        roleStore.getExperts();
         roleStore.getUserParticipantsStatus(competition_pk);
 
 
@@ -150,7 +151,7 @@ onMounted(() => {
 </script>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
 .justify-end {
     @media screen and (max-width: 768px) {
         justify-content: center !important;

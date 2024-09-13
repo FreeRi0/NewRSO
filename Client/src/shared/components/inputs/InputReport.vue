@@ -187,7 +187,7 @@ const updateValue = (event) => {
     pointer-events: none;
   }
 
-  &:focus {
+  &:focus[type='text'] {
     border-color: transparent;
     outline: 1px solid #1f7cc0;
   }
@@ -199,6 +199,13 @@ const updateValue = (event) => {
           color: #db0000;
       }
   }
+}
+
+.report-table__td input.form-input__report {
+  border: none;
+  border-radius: 0;
+  text-align: center;
+  padding: 0;
 }
 
 .form__counter {
