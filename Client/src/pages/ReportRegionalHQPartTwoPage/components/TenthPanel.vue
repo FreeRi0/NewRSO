@@ -5,13 +5,10 @@
         <v-expansion-panel-title>
           Всероссийская патриотическая акция «Снежный Десант РСО»
         </v-expansion-panel-title>
-        <v-expansion-panel-text >
-          <TenthPanelForm
-              :districtHeadquarterCommander="districtHeadquarterCommander"
-              :centralHeadquarterCommander="centralHeadquarterCommander"
-              :data="tenthPanelDataFirst"
-              @formData="formData($event, 1)"
-          />
+        <v-expansion-panel-text>
+          <TenthPanelForm :districtHeadquarterCommander="districtHeadquarterCommander"
+            :centralHeadquarterCommander="centralHeadquarterCommander" :data="tenthPanelDataFirst"
+            @formData="formData($event, 1)" />
         </v-expansion-panel-text>
       </v-expansion-panel>
 
@@ -20,11 +17,9 @@
           Всероссийская трудовая патриотическая акция «Поклонимся Великим годам»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <TenthPanelForm
-              :districtHeadquarterCommander="districtHeadquarterCommander"
-              :centralHeadquarterCommander="centralHeadquarterCommander"
-              :data="tenthPanelDataSecond"
-              @formData="formData($event, 2)"/>
+          <TenthPanelForm :districtHeadquarterCommander="districtHeadquarterCommander"
+            :centralHeadquarterCommander="centralHeadquarterCommander" :data="tenthPanelDataSecond"
+            @formData="formData($event, 2)" />
         </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -89,12 +84,12 @@ watchEffect(async () => {
     const dataFirst = await reportPartTwoService.getMultipleReport('10', '1');
     if (dataFirst.data) {
       isFirstSent.value.first = false;
-      tenthPanelDataFirst.value = {...dataFirst.data}
+      tenthPanelDataFirst.value = { ...dataFirst.data }
     }
     const dataSecond = await reportPartTwoService.getMultipleReport('10', '2');
     if (dataSecond.data) {
       isFirstSent.value.second = false;
-      tenthPanelDataSecond.value = {...dataSecond.data}
+      tenthPanelDataSecond.value = { ...dataSecond.data }
     }
   } catch (e) {
     console.log(e);
@@ -102,10 +97,14 @@ watchEffect(async () => {
 });
 </script>
 <style scoped>
+.v-expansion-panels {
+  gap: 8px;
+}
+
 .v-expansion-panel-title {
   background: #F3F4F5;
   margin: 0px;
-  border-radius: 0px;
+  border-radius: 10px;
   font-family: Akrobat;
   font-size: 18px;
   font-weight: 600;

@@ -1,6 +1,6 @@
 <template>
   <div v-if="!(props.centralHeadquarterCommander || props.districtHeadquarterCommander)" class="form__field-group">
-    <div style="display: flex; justify-content: space-between;">
+    <div class="title">
       <div>
         <p class="form__title">Всероссийская патриотическая акция «Снежный Десант РСО»</p>
       </div>
@@ -195,9 +195,22 @@ watchEffect(() => {
 .form__field-group {
   background: #F3F4F5;
   border: none;
-  border-radius: 0 0 10px 10px;
-  margin-bottom: 8px;
+  border-radius: 10px;
+  margin: 0;
+  margin-top: 8px;
 }
+
+.form__field {
+  gap: 8px;
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+
 
 .valid-red {
   color: #db0000;
