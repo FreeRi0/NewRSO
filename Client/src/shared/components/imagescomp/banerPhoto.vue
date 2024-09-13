@@ -290,7 +290,6 @@ const deleteBanner = async () => {
         grid-column-end: 6;
         grid-row-start: 1;
         grid-row-end: 3;
-        
     }
 
     img {
@@ -298,22 +297,9 @@ const deleteBanner = async () => {
         height: 100%;
         object-fit: cover;
         border-radius: 10px 10px 0px 0px;
-        
     }
-}
-
-.user-metric__baner-add {
-    display: grid;
-    align-items: end;
-    grid-column-start: 5;
-    grid-column-end: 6;
-    grid-row-start: 2;
-    grid-row-end: 3;
-    margin: 0 16px 16px 0;
- 
-}
-
-.user-metrichq__top {
+    
+    &-hq{
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 100px 100px;
@@ -332,7 +318,6 @@ const deleteBanner = async () => {
         grid-column-end: 6;
         grid-row-start: 1;
         grid-row-end: 3;
-        
     }
 
     img {
@@ -340,8 +325,19 @@ const deleteBanner = async () => {
         height: 100%;
         object-fit: cover;
         border-radius: 10px 10px 0px 0px;
-        
     }
+}
+
+.user-metric__baner-add {
+    display: grid;
+    align-items: end;
+    grid-column-start: 5;
+    grid-column-end: 6;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    margin: 0 16px 16px 0;
+}
+
 }
 
 .user-metrichq__baner-add {
@@ -352,8 +348,6 @@ const deleteBanner = async () => {
     grid-row-start: 2;
     grid-row-end: 3;
     margin: 0 16px 16px 0;
-    
-    
 }
 
 @media (max-width: 690px) {
