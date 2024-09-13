@@ -5,9 +5,9 @@
       <v-expansion-panel v-show="items.length" v-for="item in items" :key="item.id"><v-expansion-panel-title>
           <div class="title_wrap">
             <p class="form__title">{{ item.name }}</p>
-            <div class="d-flex gc-8">
-              <p class="form__title" v-if="item.month">{{ item.month }}</p>
-              <p class="form__title" v-if="item.city">{{ item.city }}</p>
+            <div class="title_wrap__items">
+              <p class="form__title month" v-if="item.month">{{ item.month }}</p>
+              <p class="form__title city" v-if="item.city">{{ item.city }}</p>
             </div>
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
@@ -107,6 +107,16 @@ onMounted(async () => {
   margin-right: 8px;
 }
 
+.month {
+  width: 100%;
+  max-width: 70px;
+
+}
+
+.city {
+  width: 100%;
+  max-width: 200px;
+}
 
 .title_wrap {
   display: grid;
@@ -115,10 +125,17 @@ onMounted(async () => {
   width: 100%;
   max-width: 900px;
 
+  &__items {
+    display: flex;
+    width: 100%;
+    column-gap: 20px;
+    max-width: 290px;
+  }
+
   @media screen and (max-width: 1024px) {
-   max-width: 700px;
-   grid-template-columns: 400px 300px;
-   column-gap: 20px;
+    max-width: 700px;
+    grid-template-columns: 400px 300px;
+    column-gap: 20px;
   }
 
   @media screen and (max-width: 768px) {

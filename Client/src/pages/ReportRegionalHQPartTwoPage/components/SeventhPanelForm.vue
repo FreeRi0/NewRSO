@@ -5,9 +5,9 @@
                 <div class="d-flex justify-space-between">
                     <div class="title_wrap">
                         <p class="form__title">{{ props.title.name }}</p>
-                        <div class="d-flex gc-8">
-                            <p class="form__title" v-if="props.title.month">{{ props.title.month }}</p>
-                            <p class="form__title" v-if="props.title.city">{{ props.title.city }}</p>
+                        <div class="title_wrap__items">
+                            <p class="form__title month" v-if="props.title.month">{{ props.title.month }}</p>
+                            <p class="form__title city" v-if="props.title.city">{{ props.title.city }}</p>
                         </div>
                     </div>
                     <div>
@@ -26,7 +26,7 @@
                                 type="radio" @focusout="focusOut" v-model="seventhPanelData.prize_place" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                            }}</label>
+                                }}</label>
                         </div>
                     </div>
                 </div>
@@ -157,7 +157,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -299,7 +299,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -410,7 +410,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -582,10 +582,10 @@ const focusOut = async () => {
                 );
             } else {
                 await reportPartTwoService.createReportId(
-                    formData,
+                    seventhPanelData.value,
                     '7',
                     props.id,
-                    true
+
                 );
             }
             isFirstSent.value = false;
@@ -600,10 +600,10 @@ const focusOut = async () => {
                 );
             } else {
                 await reportPartTwoService.createReportDraftId(
-                    formData,
+                    seventhPanelData.value,
                     '7',
                     props.id,
-                    true
+
                 );
             }
 
@@ -636,17 +636,18 @@ watchEffect(async () => {
         const { data } = await reportPartTwoService.getReportId(props.panel_number, props.id);
 
         if (data && props.panel_number == 7) {
-          
+
             isFirstSent.value = false;
 
-        
+
             seventhPanelData.value.prize_place = data.prize_place;
             seventhPanelData.value.document = data?.document?.split('/').at(-1);
             seventhPanelData.value.file_size = data.file_size;
             seventhPanelData.value.file_type = data.file_type;
             // console.log('links', seventhPanelData.value.links, 'linksData', data.links)
             // seventhPanelData.value.links = JSON.parse(seventhPanelData.value.links)
-            seventhPanelData.value.links = JSON.parse(data.links);
+            //JSON.parse(data.links)
+            seventhPanelData.value.links = data.links;
             seventhPanelData.value.comment = data.comment;
         } else if (data && props.panel_number == 6) {
             isFirstSent.value = false;
@@ -680,6 +681,13 @@ watchEffect(async () => {
     width: 100%;
     max-width: 900px;
 
+    &__items {
+        display: flex;
+        width: 100%;
+        column-gap: 20px;
+        max-width: 290px;
+    }
+
     @media screen and (max-width: 1024px) {
         max-width: 700px;
         grid-template-columns: 400px 300px;
@@ -691,6 +699,18 @@ watchEffect(async () => {
     }
 
 }
+
+.month {
+    width: 100%;
+    max-width: 70px;
+
+}
+
+.city {
+    width: 100%;
+    max-width: 200px;
+}
+
 
 .places {
     margin-bottom: 16px;
