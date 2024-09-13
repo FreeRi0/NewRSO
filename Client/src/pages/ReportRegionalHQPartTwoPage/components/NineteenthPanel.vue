@@ -1,6 +1,19 @@
 <template>
-  <div class="form__field-group report__field-group">
-    <div class="report__fieldset report__fieldset--left-block">
+  <div class="form__field-group report__field-group report__field-group--column"
+    v-if="(props.centralExpert || props.districtExpert) &&
+          !nineteenthPanelData.employed_student_start &&
+          !nineteenthPanelData.employed_student_end &&
+          !nineteenthPanelData.comment">
+    <p class="report__text-info">
+      Информация о&nbsp;показателе региональным отделением не&nbsp;предоставлена.
+    </p>
+  </div>
+
+  <div v-else class="form__field-group report__field-group">
+    <div class="report__fieldset report__fieldset--left-block"
+      v-if="!(props.centralExpert || props.districtExpert) ||
+            (props.districtExpert && nineteenthPanelData.employed_student_start) ||
+            (props.centralExpert && nineteenthPanelData.employed_student_start)">
       <label
         class="form__label report__label"
         for="employed-student-start"
@@ -18,10 +31,14 @@
         :maxlength="10"
         :max="32767"
         @focusout="focusOut"
+        :disabled="props.centralExpert || props.districtExpert"
       />
     </div>
 
-    <div class="report__fieldset report__fieldset--right-block">
+    <div class="report__fieldset report__fieldset--right-block"
+      v-if="!(props.centralExpert || props.districtExpert) ||
+            (props.districtExpert && nineteenthPanelData.employed_student_end) ||
+            (props.centralExpert && nineteenthPanelData.employed_student_end)">
       <label
         class="form__label report__label"
         for="employed-student-end"
@@ -39,10 +56,14 @@
         :maxlength="10"
         :max="32767"
         @focusout="focusOut"
+        :disabled="props.centralExpert || props.districtExpert"
       />
     </div>
   
-    <div class="report__fieldset report__fieldset--comment">
+    <div class="report__fieldset report__fieldset--comment"
+      v-if="!(props.centralExpert || props.districtExpert) ||
+            (props.districtExpert && nineteenthPanelData.comment) ||
+            (props.centralExpert && nineteenthPanelData.comment)">
       <label
         class="form__label report__label"
         for="comment"
@@ -60,6 +81,7 @@
         :maxlength="3000"
         :max-length-text="3000"
         @focusout="focusOut"
+        :disabled="props.centralExpert || props.districtExpert"
       >
       </TextareaReport>
     </div>
@@ -70,6 +92,19 @@
 import { ref, watchEffect } from 'vue';
 import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { getReport, reportPartTwoService } from "@services/ReportService.ts";
+
+const props = defineProps({
+  districtExpert: {
+    type: Boolean
+  },
+  centralExpert: {
+    type: Boolean
+  },
+  reportId: {
+    type: String,
+    default: '1',
+  }
+});
 
 const ID_PANEL = '19';
 const isFirstSent = ref(true);
@@ -94,8 +129,12 @@ const focusOut = async () => {
 };
 
 watchEffect(async () => {
+  console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
   try {
-    const { data } = await reportPartTwoService.getReport(ID_PANEL);
+    const { data } = 
+      props.districtExpert || props.centralExpert
+        ? await reportPartTwoService.getReportDH(ID_PANEL, props.reportId)
+        : await reportPartTwoService.getReport(ID_PANEL);
     console.log(data);
     if (data) {
       isFirstSent.value = false;
@@ -115,6 +154,10 @@ watchEffect(async () => {
     grid-template-columns: 1fr 1fr;
     // grid-template-columns: minmax(27.35%, 44.9%) minmax(27.35%, 44.9%);
     margin-bottom: 0;
+
+    &--column {
+      grid-template-columns: 1fr;
+    }
 
     @media (max-width: 768px) {
       grid-template-columns: 1fr;
@@ -137,7 +180,7 @@ watchEffect(async () => {
       }
 
       .report__label {
-        max-width: 240px;
+        max-width: 247px;
 
         @media (max-width: 768px) {
           max-width: 100%;

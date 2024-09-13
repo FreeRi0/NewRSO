@@ -48,7 +48,7 @@ export const reportPartTwoService = {
         })
     },
 
-
+    
     getReport(panel: string) {
         return HTTP.get(`regional_competitions/me/reports/${panel}/`)
     },
@@ -57,7 +57,7 @@ export const reportPartTwoService = {
         return HTTP.get(`regional_competitions/me/reports/${panel}/${id}/`)
     },
     getReportDH(panel: string, reportId: string) {
-        return HTTP.get(`regional_competitions/reports/${panel}/${reportId}`)
+        return HTTP.get(`regional_competitions/reports/${panel}/${reportId}/`)
     },
 
     createMultipleReport(data: object, panel: string, reportNumber: string, withFile = false) {
