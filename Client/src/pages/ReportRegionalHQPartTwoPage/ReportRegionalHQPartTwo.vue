@@ -118,8 +118,8 @@
           11. Активность РО РСО в социальных сетях «К»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <eleventh-panel :districtHeadquarterCommander="districtHeadquarterCommander"
-                          :centralHeadquarterCommander="centralHeadquarterCommander"/>
+          <eleventh-panel :districtExpert="districtExpert"
+                          :centralExpert="centralExpert"/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -127,8 +127,8 @@
           12. Объем средств, собранных бойцами РО РСО во Всероссийском дне ударного труда
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <twelfth-panel :districtHeadquarterCommander="districtHeadquarterCommander"
-                         :centralHeadquarterCommander="centralHeadquarterCommander"/>
+          <twelfth-panel :districtExpert="districtExpert"
+                         :centralExpert="centralExpert"/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -136,8 +136,8 @@
           13. Охват членов РО РСО, принявших участие во Всероссийском дне ударного труда «К»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <thirteenth-panel :districtHeadquarterCommander="districtHeadquarterCommander"
-                            :centralHeadquarterCommander="centralHeadquarterCommander"/>
+          <thirteenth-panel :districtExpert="districtExpert"
+                            :centralExpert="centralExpert"/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -180,7 +180,9 @@
           17. Дислокация студенческих отрядов РО РСО
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <seventeenth-panel/>
+          <seventeenth-panel 
+            :districtExpert="districtExpert"
+            :centralExpert="centralExpert"/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -188,7 +190,9 @@
           18. Количество научных работ и публикаций по теме СО, выпущенных в текущем году
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <eighteenth-panel/>
+          <eighteenth-panel
+            :districtExpert="districtExpert"
+            :centralExpert="centralExpert"/>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -196,7 +200,9 @@
           19. Трудоустройство
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <nineteenth-panel/>
+          <nineteenth-panel 
+            :districtExpert="districtExpert"
+            :centralExpert="centralExpert"/>
         </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -229,6 +235,10 @@ import {HTTP} from '@app/http';
 
 const districtHeadquarterCommander = ref(false);
 const centralHeadquarterCommander = ref(false);
+
+const districtExpert = ref(false);
+const centralExpert =ref(false);
+
 const roleStore = useRoleStore();
 
 const downloadReportAll = (id) => {
@@ -256,6 +266,14 @@ watchEffect(() => {
   }
   if (roleStore.roles.centralheadquarter_commander) {
     centralHeadquarterCommander.value = true;
+  }
+
+  console.log(roleStore.experts);
+  if (roleStore.experts?.is_district_expert) {
+    districtExpert.value = true;
+  }
+  if (roleStore.experts?.is_central_expert) {
+    centralExpert.value = true;
   }
 })
 </script>

@@ -1,11 +1,11 @@
 <template>
     <div class="report__file-box">
-        <span class="report__file-name">
+        <div class="report__file-name">
             <SvgIcon v-if="fileType === 'jpg'" icon-name="file-jpg" />
             <SvgIcon v-if="fileType === 'pdf'" icon-name="file-pdf" />
             <SvgIcon v-if="fileType === 'png'" icon-name="file-png" />
-            {{ file }}
-        </span>
+            <a :href=file>{{ file.split('/').at(-1) }}</a>
+        </div>
 
         <span class="report__file-size">
             {{ fileSize }} Мб
@@ -15,6 +15,7 @@
             @click="clickOnButton"
             class="report__button-delete-file"
             v-bind="$attrs"
+            v-if="!(props.centralExpert || props.districtExpert)"
         >
             Удалить
         </button>
@@ -40,6 +41,12 @@ const props = defineProps({
     fileSize: {
         type: Number,
         default: null,
+    },
+    districtExpert: {
+    type: Boolean,
+    },
+    centralExpert: {
+        type: Boolean,
     },
 });
 

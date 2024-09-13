@@ -28,15 +28,20 @@
       }
     
     &__fieldset {
+        display: flex;
+        flex-direction: column;
+
         &--left-block {
             @media (max-width: 768px) {
                 max-width: 290px;
             }
         }
 
-        // &--right-block {
-            
-        // }
+        &--right-block {
+            .form-input {
+                margin-top: auto;
+            }
+        }
 
         &--comment,
         &--comment-expert {
@@ -80,6 +85,14 @@
                 }
             }
         }
+    }
+
+    &__text-info {
+        font-family: "Akrobat";
+        font-weight: 600;
+        font-size: 18px;
+        line-height: 22px;
+        color: #000000;
     }
 
     &__links {
@@ -202,7 +215,6 @@
         }
     }
 
-    //Вынести в отдельный компонент?-----------------------------
     &__file-box {
         margin-top: 16px;
         max-width: 720px;
@@ -247,5 +259,4 @@
             color: #1C5C94;
         } 
     }
-    //--------------------------------------------------------------
 }
