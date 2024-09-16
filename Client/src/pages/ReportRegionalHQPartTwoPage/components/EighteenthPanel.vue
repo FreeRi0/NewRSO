@@ -8,7 +8,7 @@
     </p>
   </div>
 
-  <div v-else class="form__field-group report__field-group">
+  <div v-else class="form__field-group report__field">
     <div class="report__field" 
       v-if="!(props.centralExpert || props.districtExpert) ||
             (props.districtExpert && eighteenthPanelData.projects) ||
@@ -91,9 +91,8 @@
         </div>
       </div>
       
-      <div >
+      <div v-if="!(props.centralExpert || props.districtExpert)">
         <button
-          v-if="!(props.centralExpert || props.districtExpert)"
           class="report__add-button"
           @click="addPublication"
         >
