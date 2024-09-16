@@ -15,8 +15,9 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <first-panel
-              :districtHeadquarterCommander="districtHeadquarterCommander"
-              :centralHeadquarterCommander="centralHeadquarterCommander"
+              :districtExpert="districtExpert"
+              :centralExpert="centralExpert"
+              @get-data="setData"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -49,8 +50,9 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <fourth-panel
-              :districtHeadquarterCommander="districtHeadquarterCommander"
-              :centralHeadquarterCommander="centralHeadquarterCommander"
+              :districtExpert="districtExpert"
+              :centralExpert="centralExpert"
+              @get-data="setData"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -62,8 +64,9 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <fifth-panel
-              :districtHeadquarterCommander="districtHeadquarterCommander"
-              :centralHeadquarterCommander="centralHeadquarterCommander"
+              :districtExpert="districtExpert"
+              :centralExpert="centralExpert"
+              @get-data="setData"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -108,8 +111,9 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <tenth-panel
-              :districtHeadquarterCommander="districtHeadquarterCommander"
-              :centralHeadquarterCommander="centralHeadquarterCommander"
+              :districtExpert="districtExpert"
+              :centralExpert="centralExpert"
+              @get-data="setData"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -170,8 +174,9 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <sixteenth-panel
-              :districtHeadquarterCommander="districtHeadquarterCommander"
-              :centralHeadquarterCommander="centralHeadquarterCommander"
+              :districtExpert="districtExpert"
+              :centralExpert="centralExpert"
+              @get-data="setData"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -232,12 +237,20 @@ import {ref, watchEffect} from "vue";
 import {SvgIcon} from '@shared/ui/SvgIcon';
 import {useRoleStore} from "@layouts/store/role.ts";
 import {HTTP} from '@app/http';
-
-const districtHeadquarterCommander = ref(false);
-const centralHeadquarterCommander = ref(false);
+import {reportPartTwoService} from "@services/ReportService.ts";
 
 const districtExpert = ref(false);
-const centralExpert =ref(false);
+const centralExpert = ref(false);
+const reportData = ref({
+  first: null,
+  fourth: null,
+  fifth: null,
+  tenth: {
+    first: null,
+    second: null,
+  },
+  sixteenth: null,
+});
 
 const roleStore = useRoleStore();
 
@@ -258,16 +271,19 @@ const downloadReportAll = (id) => {
       .catch(function (error) {
         console.log('an error occured ' + error);
       });
+};
+
+const getReportData = async () => {
+  reportData.value.first = (await reportPartTwoService.getReport('1')).data;
+  reportData.value.fourth = (await reportPartTwoService.getReport('4')).data;
+  reportData.value.fifth = (await reportPartTwoService.getReport('5')).data;
+  reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
+  reportData.value.tenth.second = (await reportPartTwoService.getMultipleReport('10', '2')).data;
+  reportData.value.sixteenth = (await reportPartTwoService.getReport('16')).data;
+  console.log('getReportData: ', reportData.value)
 }
 
 watchEffect(() => {
-  if (roleStore.roles?.districtheadquarter_commander) {
-    districtHeadquarterCommander.value = true;
-  }
-  if (roleStore.roles.centralheadquarter_commander) {
-    centralHeadquarterCommander.value = true;
-  }
-
   console.log(roleStore.experts);
   if (roleStore.experts?.is_district_expert) {
     districtExpert.value = true;
@@ -275,7 +291,35 @@ watchEffect(() => {
   if (roleStore.experts?.is_central_expert) {
     centralExpert.value = true;
   }
-})
+  getReportData();
+});
+
+const setData = (data, panel, number = 0) => {
+  switch (panel) {
+    case 1:
+      reportData.value.first = data
+      break;
+    case 4:
+      reportData.value.fourth = data
+      break;
+    case 5:
+      reportData.value.fifth = data
+      break;
+    case 10:
+      if (number === 1) {
+        reportData.value.tenth.first = data;
+      } else {
+        reportData.value.tenth.second = data;
+      }
+      break;
+    case 16:
+      reportData.value.sixteenth = data
+      break;
+  }
+  console.log('setData: ', reportData.value)
+};
+
+
 </script>
 <style>
 .v-expansion-panel__shadow {

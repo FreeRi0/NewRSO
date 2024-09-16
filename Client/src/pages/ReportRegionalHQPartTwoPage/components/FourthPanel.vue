@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!(props.centralHeadquarterCommander || props.districtHeadquarterCommander)" class="form__field-group">
+  <div v-if="!(props.centralExpert || props.districtExpert)" class="form__field-group">
     <div v-for="(event, index) in events" :key="index" class="form__field-fourth-panel">
       <div class="form__field-members-event">
         <div class="form__field-members">
@@ -104,7 +104,7 @@
               <InputReport v-model:value="event.participants_number" :id="event.participants_number"
                 name="participants_number" class="form__input" type="number" placeholder="Введите число"
                 @focusout="focusOut"
-                :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" />
+                :disabled="props.centralExpert || props.districtExpert" />
             </div>
           </div>
           <Button class="form__field-delete-button" v-if="index > 0" label="Удалить мероприятие"
@@ -116,14 +116,14 @@
               <sup class="valid-red">*</sup></label>
             <InputReport v-model:value="event.start_date" :id="event.start_date" name="start_date" class="form__input"
               type="date" @focusout="focusOut"
-              :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" />
+              :disabled="props.centralExpert || props.districtExpert" />
           </div>
           <div class="form__field">
             <label style="max-width: 300px;" class="form__label" for="end_date">Дата окончания проведения мероприятия
               <sup class="valid-red">*</sup></label>
             <InputReport v-model:value="event.end_date" :id="event.end_date" name="end_date" class="form__input"
               type="date" @focusout="focusOut"
-              :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" />
+              :disabled="props.centralExpert || props.districtExpert" />
           </div>
         </div>
         <div class="form__field-event">
@@ -161,7 +161,7 @@
           <div class="form__add-link" v-for="(link, i) in events[index].links" :key="i">
             <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__input-add-link"
               type="text" placeholder="https://vk.com/cco_monolit" @focusout="focusOut"
-              :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" />
+              :disabled="props.centralExpert || props.districtExpert" />
           </div>
         </div>
       </div>
@@ -169,7 +169,7 @@
         <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
         <InputReport v-model:value="fourthPanelData.comment" id="comment" name="comment" class="form__input"
           type="textarea" placeholder="Укажите наименования организованных мероприятий" style="width: 100%;"
-          @focusout="focusOut" :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" />
+          @focusout="focusOut" :disabled="props.centralExpert || props.districtExpert" />
       </div>
       <div class="form__field-result">
         <v-checkbox label="Итоговое значение" />
@@ -574,10 +574,10 @@ import { ReportTabs } from './index';
 import { reportPartTwoService } from "@services/ReportService.ts";
 
 const props = defineProps({
-  districtHeadquarterCommander: {
+  districtExpert: {
     type: Boolean
   },
-  centralHeadquarterCommander: {
+  centralExpert: {
     type: Boolean
   },
   reportId: {
@@ -604,6 +604,9 @@ const events = ref([
     is_interregional: false,
   }
 ]);
+
+const emit = defineEmits(['getData']);
+
 const addLink = (index) => {
   events.value[index].links.push({ link: '' })
 };
@@ -631,7 +634,8 @@ const focusOut = async () => {
     if (isFirstSent.value) {
       await reportPartTwoService.createReport(fourthPanelData.value, '4');
     } else {
-      await reportPartTwoService.createReportDraft(fourthPanelData.value, '4');
+      const { data } = await reportPartTwoService.createReportDraft(fourthPanelData.value, '4');
+      emit('getData', data, 4);
     }
   } catch (e) {
     console.log('focusOut error:', e);
@@ -677,9 +681,8 @@ const deleteFile = async () => {
 };
 //
 watchEffect(async () => {
-  console.log('districtHeadquarterCommander: ', !(props.districtHeadquarterCommander || props.centralHeadquarterCommander));
   try {
-    const { data } = props.centralHeadquarterCommander || props.districtHeadquarterCommander
+    const { data } = props.centralExpert || props.districtExpert
         ? await reportPartTwoService.getReportDH('4', props.reportId)
         : await reportPartTwoService.getReport('4');
     if (data) {

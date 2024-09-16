@@ -271,6 +271,8 @@ import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { reportPartTwoService } from "@services/ReportService.ts";
 
+const emit = defineEmits(['getData']);
+
 const tab = ref('one');
 const isFirstSent = ref(true);
 const fifthPanelData = ref({
@@ -317,7 +319,8 @@ const focusOut = async () => {
     if (isFirstSent.value) {
       await reportPartTwoService.createReport(fifthPanelData.value, '5');
     } else {
-      await reportPartTwoService.createReportDraft(fifthPanelData.value, '5');
+      const { data } = await reportPartTwoService.createReportDraft(fifthPanelData.value, '5');
+      emit('getData', data, 5);
     }
   } catch (e) {
     console.log('focusOut error:', e);

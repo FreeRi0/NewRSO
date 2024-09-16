@@ -161,7 +161,7 @@
                 counter-visible
                 :max-counter="300"
                 :max-length="300"
-                :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"
+                :disabled="props.centralExpert || props.districtExpert"
             />
           </div>
         </div>
@@ -429,10 +429,10 @@ import {SvgIcon} from '@shared/index';
 import {ReportTabs} from './index';
 
 const props = defineProps({
-  districtHeadquarterCommander: {
+  districtExpert: {
     type: Boolean
   },
-  centralHeadquarterCommander: {
+  centralExpert: {
     type: Boolean
   },
   reportId: {
@@ -441,7 +441,9 @@ const props = defineProps({
   }
 });
 
-const tab = ref('one');
+const emit = defineEmits(['getData']);
+
+// const tab = ref('one');
 const sixteenthPanelData = ref({
   is_project: false,
   projects: [],
@@ -466,7 +468,8 @@ const focusOut = async () => {
       await reportPartTwoService.createReport(sixteenthPanelData.value, '16');
       isFirstSent.value = false;
     } else {
-      await reportPartTwoService.createReportDraft(sixteenthPanelData.value, '16');
+      const { data } = await reportPartTwoService.createReportDraft(sixteenthPanelData.value, '16');
+      emit('getData', data, 16);
     }
   } catch (e) {
     console.log('focusOut error:', e);
