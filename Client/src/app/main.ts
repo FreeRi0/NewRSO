@@ -44,13 +44,13 @@ app.use(vuetify)
     .mount('#app');
 
 
-app.config.errorHandler = (err, _instance, info) => {
-    if (window.location.hostname !== 'localhost') {
+app.config.errorHandler = (err: any, _instance, info) => {
+    if (localStorage.getItem('jwt_token')) {
         HTTP.post('/services/front_errors/', {
             url: window.location.href,
             error_code: 0,
             error_description: 'Where: ' + JSON.stringify(info) + '. Error: ' + err.toString(),
-            method: 'Vue.js Code Error',
+            method: 'Vue Error',
         }).then().catch()
     }
     console.error('ERROR ERROR', err);
