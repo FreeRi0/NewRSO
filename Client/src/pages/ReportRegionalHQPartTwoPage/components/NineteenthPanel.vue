@@ -117,9 +117,14 @@ const nineteenthPanelData = ref({
 
 const focusOut = async () => {
   let formData = new FormData();
-  formData.append('employed_student_start', nineteenthPanelData.value.employed_student_start);
-  formData.append('employed_student_end', nineteenthPanelData.value.employed_student_end);
+  console.log(nineteenthPanelData.value);
+  nineteenthPanelData.value.employed_student_start ? formData.append('employed_student_start', nineteenthPanelData.value.employed_student_start) : formData.append('employed_student_start', null);
+  nineteenthPanelData.value.employed_student_end ? formData.append('employed_student_end', nineteenthPanelData.value.employed_student_end) : formData.append('employed_student_end', null);
+  // formData.append('employed_student_start', nineteenthPanelData.value.employed_student_start);
+  // formData.append('employed_student_end', nineteenthPanelData.value.employed_student_end);
   formData.append('comment', nineteenthPanelData.value.comment);
+
+  // console.log ("start -", typeof(nineteenthPanelData.value.employed_student_start), "end - ", typeof(nineteenthPanelData.value.employed_student_end));
 
   if (isFirstSent.value) {
     await reportPartTwoService.createReport(formData, ID_PANEL);
