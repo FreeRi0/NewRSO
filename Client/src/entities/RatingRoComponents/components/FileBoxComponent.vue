@@ -8,7 +8,7 @@
         </div>
 
         <span class="report__file-size">
-            {{ fileSize }} Мб
+            {{ fileSize.toFixed(1) }}&nbsp;Мб
         </span>
 
         <button 

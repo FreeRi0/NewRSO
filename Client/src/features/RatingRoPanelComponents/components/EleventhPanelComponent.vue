@@ -181,6 +181,7 @@ const changeValue = (event) => {
 };
 
 const focusOut = async () => {
+  console.log(eleventhPanelData.value);
   let formData = new FormData();
   formData.append("participants_number", eleventhPanelData.value.participants_number);
   formData.append("comment", eleventhPanelData.value.comment);
