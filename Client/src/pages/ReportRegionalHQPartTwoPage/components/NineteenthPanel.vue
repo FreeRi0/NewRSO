@@ -110,8 +110,8 @@ const ID_PANEL = '19';
 const isFirstSent = ref(true);
 
 const nineteenthPanelData = ref({
-  employed_student_start: '',
-  employed_student_end: '',
+  employed_student_start: null,
+  employed_student_end: null,
   comment: '',
 });
 
@@ -122,10 +122,11 @@ const focusOut = async () => {
   formData.append('comment', nineteenthPanelData.value.comment);
 
   if (isFirstSent.value) {
-    await reportPartTwoService.createReport(formData, ID_PANEL, true);
+    await reportPartTwoService.createReport(formData, ID_PANEL);
   } else {
-    await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+    await reportPartTwoService.createReportDraft(formData, ID_PANEL);
   }
+  
 };
 
 watchEffect(async () => {
