@@ -34,7 +34,7 @@
                     <label class="form__label report__label mb-2" for="scan_file">
                         Скан подтверждающего документа<sup class="valid-red">*</sup>
                     </label>
-                    <InputReport v-if="!seventhPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
+                    <InputReport v-if="!seventhPanelData.document"  isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
                         id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile"
                         :disabled="isDisabled" />
                     <FileBoxComponent v-else :file="seventhPanelData.document" :fileType="seventhPanelData.file_type"
@@ -46,9 +46,9 @@
                         <sup class="valid-red">*</sup></label>
 
                     <div class="form__wrapper" v-for="(item, index) in seventhPanelData.links" :key="index">
-                        <InputReport @focusout="focusOut" name="14"
+                        <InputReport @focusout="focusOut" name="14" :is-link="true"
                             placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
-                            class="form__input mb-2" />
+                            class="mb-2" />
                         <div class="add_link" @click="addLink(7)" v-if="seventhPanelData.links.length === index + 1">
                             + Добавить ссылку
                         </div>
@@ -64,11 +64,11 @@
                         <InputReport @focusout="focusOut" v-model:value="seventhPanelData.comment" id="14" name="14"
                             class="form__input" type="date" />
                     </div>
-                    <div class="form__field">
+                    <div class="form__field" style="width: 100%">
                         <label class="form__label" for="14">Место проведения<sup class="valid-red">*</sup></label>
                         <InputReport placeholder="Укажите место проведения мероприятия" @focusout="focusOut"
-                            v-model:value="seventhPanelData.comment" id="14" name="14" class="form__input"
-                            style="width: 100%" />
+                            v-model:value="seventhPanelData.comment" id="14" name="14" class=""
+                            style="max-width: 744px; width: 100%" />
                     </div>
                 </div>
                 <div class="form__field">
@@ -107,13 +107,13 @@
                         :maxlength="10" :max="32767" />
                 </div>
                 <div class="form__field">
-                    <label class="form__label" for="14">Ссылка на социальные сети/ электронные
+                    <label class="form__label" for="14">Ссылка на социальные сети/ электронные<br>
                         СМИ, подтверждающая участие в мероприятии
                         <sup class="valid-red">*</sup></label>
 
                     <div class="form__wrapper" v-for="(item, index) in sixPanelData.links" :key="index">
                         <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                            @focusout="focusOut" name="14" v-model:value="item.link" class="form__input mb-2" />
+                            @focusout="focusOut" name="14" v-model:value="item.link" :is-link="true" class="mb-2" />
                         <div class="add_link" @click="addLink(6)" v-if="sixPanelData.links.length === index + 1">
                             + Добавить ссылку
                         </div>
@@ -124,7 +124,7 @@
                     </div>
                 </div>
                 <div class="form__field">
-                    <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
+                    <label class="form__label" for="14">Комментарий </label>
                     <InputReport @focusout="focusOut" v-model:value="sixPanelData.comment"
                         placeholder="Напишите сообщение" id="14" name="14" class="form__input" style="width: 100%" />
                 </div>
@@ -179,9 +179,9 @@
                             <sup class="valid-red">*</sup></label>
 
                         <div class="form__wrapper" v-for="(item, index) in seventhPanelData.links" :key="index">
-                            <InputReport @focusout="focusOut" name="14"
+                            <InputReport @focusout="focusOut" name="14" :is-link="true"
                                 placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                                v-model:value="item.link" class="form__input mb-2"
+                                v-model:value="item.link" class="mb-2" 
                                 :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
                             <div class="add_link" @click="addLink(7)"
                                 v-if="seventhPanelData.links.length === index + 1">
@@ -200,11 +200,11 @@
                                 class="form__input" type="date"
                                 :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
                         </div>
-                        <div class="form__field">
+                        <div class="form__field" style="width: 100%;">
                             <label class="form__label" for="14">Место проведения<sup class="valid-red">*</sup></label>
                             <InputReport placeholder="Укажите место проведения мероприятия" @focusout="focusOut"
-                                v-model:value="seventhPanelData.comment" id="14" name="14" class="form__input"
-                                style="width: 100%"
+                                v-model:value="seventhPanelData.comment" id="14" name="14" class=""
+                               style="max-width: 744px; width: 100%"
                                 :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
                         </div>
                     </div>
@@ -253,8 +253,9 @@
                         <div class="form__wrapper" v-for="(item, index) in sixPanelData.links" :key="index">
                             <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
                                 @focusout="focusOut"
+                                :is-link="true"
                                 :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
-                                name="14" v-model:value="item.link" class="form__input mb-2" />
+                                name="14" v-model:value="item.link" class="mb-2" />
                             <div class="add_link" @click="addLink(6)" v-if="sixPanelData.links.length === index + 1">
                                 + Добавить ссылку
                             </div>
@@ -265,7 +266,7 @@
                         </div>
                     </div>
                     <div class="form__field">
-                        <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
+                        <label class="form__label" for="14">Комментарий</label>
                         <InputReport @focusout="focusOut" v-model:value="sixPanelData.comment"
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                             placeholder="Напишите сообщение" id="14" name="14" class="form__input"
@@ -320,11 +321,12 @@
                             <InputReport @focusout="focusOut" v-model:value="seventhPanelData.comment" id="14" name="14"
                                 class="form__input" type="date" />
                         </div>
-                        <div class="form__field">
+                        <div class="form__field" style="width: 100%">
                             <label class="form__label" for="14">Место проведения<sup class="valid-red">*</sup></label>
                             <InputReport placeholder="Укажите место проведения мероприятия" @focusout="focusOut"
-                                v-model:value="seventhPanelData.comment" id="14" name="14" class="form__input"
-                                style="width: 100%" />
+                                v-model:value="seventhPanelData.comment" id="14" name="14" class=""
+                                   style="max-width: 744px; width: 100%"
+                                 />
                         </div>
                     </div>
                     <div class="form__field">
@@ -364,7 +366,7 @@
                     </div>
 
                     <div class="form__field">
-                        <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
+                        <label class="form__label" for="14">Комментарий</label>
                         <InputReport @focusout="focusOut" v-model:value="sixPanelData.comment"
                             placeholder="Напишите сообщение" id="14" name="14" class="form__input"
                             style="width: 100%" />
@@ -462,7 +464,7 @@
                     </v-table>
 
                     <div class="form__field">
-                        <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
+                        <label class="form__label" for="14">Комментарий</label>
                         <InputReport @focusout="focusOut" v-model:value="sixPanelData.comment"
                             placeholder="Напишите сообщение" id="14" name="14" class="form__input"
                             style="width: 100%" />
@@ -673,7 +675,10 @@ watchEffect(async () => {
     font-weight: 400;
     line-height: 21.1px;
 }
-
+// .link__input {
+//     width: 100%;
+//     max-width: 720px;
+// }
 .title_wrap {
     display: grid;
     grid-template-columns: 600px 300px;
@@ -699,7 +704,9 @@ watchEffect(async () => {
     }
 
 }
-
+.valid-red {
+    color: #DB0000;
+}
 .month {
     width: 100%;
     max-width: 70px;
@@ -714,6 +721,7 @@ watchEffect(async () => {
 
 .places {
     margin-bottom: 16px;
+    margin-top: 16px;
 
     &_wrap {
         display: flex;
@@ -776,6 +784,7 @@ watchEffect(async () => {
         display: flex;
         column-gap: 40px;
         align-items: center;
+        max-width: 901px;
     }
 
     .statement-item {
