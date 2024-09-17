@@ -1,8 +1,23 @@
 <template>
-  <div v-if="!(props.centralHeadquarterCommander || props.districtHeadquarterCommander)" class="form__field-group">
-    <div class="report__field">
+  <div class="form__field-group report__field-group report__field-group--column"
+    v-if="(props.centralExpert || props.districtExpert) && 
+          !eighteenthPanelData.projects && 
+          !eighteenthPanelData.comment">
+    <p class="report__text-info">
+      Информация о&nbsp;показателе региональным отделением не&nbsp;предоставлена.
+    </p>
+  </div>
+
+  <div v-else class="form__field-group report__field">
+    <div class="report__field" 
+      v-if="!(props.centralExpert || props.districtExpert) ||
+            (props.districtExpert && eighteenthPanelData.projects) ||
+            (props.centralExpert && eighteenthPanelData.projects)">
       <div class="report__field-group" v-for="(project, index) in projects" :key="index">
-        <div class="report__fieldset">
+        <div class="report__fieldset"
+          v-if="!(props.centralExpert || props.districtExpert) ||
+                (props.districtExpert && project.file) ||
+                (props.centralExpert && project.file)">
           <label
             class="form__label"
             :for="project.file"
@@ -19,25 +34,15 @@
             height="86px"
             @change="uploadFile"
           />
-          <div 
+          <FileBoxComponent
             v-else
-            class="form__file-box">
-            <span class="form__file-name">
-              <SvgIcon v-if="project.file_type === 'jpg'" icon-name="group-light" />
-              <SvgIcon v-if="project.file_type === 'pdf'" icon-name="group-light" />
-              <SvgIcon v-if="project.file_type === 'png'" icon-name="group-light" />
-              {{ project.file }}
-            </span>
-            <span class="form__file-size">{{ project.file_size }} Мб</span>
-            <button 
-              @click="deleteFile"
-              class="form__button-delete-file"
-            >
-              Удалить
-            </button>
-          </div>
+            :file="project.file"
+            :fileType="project.file_type"
+            :fileSize="project.file_size"
+            @click="deleteFile"
+          ></FileBoxComponent>
           <button
-            v-if="index > 0"
+            v-if="!(props.centralExpert || props.districtExpert) && (index > 0)"
             class="report__delete-button"
             @click="deletePublication(index)"
           >
@@ -45,7 +50,10 @@
           </button>
         </div>
 
-        <div class="report__links">
+        <div class="report__links"
+          v-if="!(props.centralExpert || props.districtExpert) ||
+                (props.districtExpert && project.links) ||
+                (props.centralExpert && project.links)">
           <p
             class="form__label"
             >Ссылка на&nbsp;публикацию
@@ -59,9 +67,10 @@
                   placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
                   style="width: 100%;"
                   @focusout="focusOut"
+                  :disabled="props.centralExpert || props.districtExpert"
               />
               <button
-                v-if="i > 0"
+                v-if="!(props.centralExpert || props.districtExpert) && (i > 0)"
                 @click="deleteLink(index, i)"
                 class="report__btn-link report__btn-link--delete-field"
               >
@@ -70,6 +79,7 @@
             </div>
 
             <button
+              v-if="!(props.centralExpert || props.districtExpert)"
               class="report__btn-link report__btn-link--add-link"
               @click="addLink(index)"
             >
@@ -81,7 +91,7 @@
         </div>
       </div>
       
-      <div >
+      <div v-if="!(props.centralExpert || props.districtExpert)">
         <button
           class="report__add-button"
           @click="addPublication"
@@ -90,46 +100,53 @@
           Добавить публикацию
         </button>
       </div>
+    </div>
 
-      <div class="report__fieldset report__fieldset--comment">
-        <label
-            class="form__label"
-            for="comment"
-        >Комментарий</label>
-        <TextareaReport
-          v-model:value="eighteenthPanelData.comment"
-          id="comment"
-          name="comment"
-          placeholder="Напишите сообщение"
-          :rows="1" 
-          autoResize
-          counter-visible
-          :maxlength="3000"
-          :max-length-text="3000"
-          @focusout="focusOut"
-        >
-        </TextareaReport>
-      </div>
+    <div class="report__fieldset report__fieldset--comment"
+      v-if="!(props.centralExpert || props.districtExpert) ||
+            (props.districtExpert && eighteenthPanelData.comment) ||
+            (props.centralExpert && eighteenthPanelData.comment)">
+      <label
+          class="form__label"
+          for="comment"
+      >Комментарий</label>
+      <TextareaReport
+        v-model:value="eighteenthPanelData.comment"
+        id="comment"
+        name="comment"
+        placeholder="Напишите сообщение"
+        :rows="1" 
+        autoResize
+        counter-visible
+        :maxlength="3000"
+        :max-length-text="3000"
+        @focusout="focusOut"
+        :disabled="props.centralExpert || props.districtExpert"
+      >
+      </TextareaReport>
     </div>
   </div>
-
-  <div v-else></div>
 </template>
 
 <script setup>
 import { ref, watchEffect } from 'vue';
 import { InputReport, TextareaReport } from '@shared/components/inputs';
+import { FileBoxComponent } from "@entities/RatingRoComponents/components";
 // import { Button } from '@shared/components/buttons';
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { SvgIcon } from '@shared/index';
 
 const props = defineProps({
-  districtHeadquarterCommander: {
+  districtExpert: {
     type: Boolean
   },
-  centralHeadquarterCommander: {
+  centralExpert: {
     type: Boolean
   },
+  reportId: {
+    type: String,
+    default: '1',
+  }
 });
 
 const ID_PANEL = '18';
@@ -167,10 +184,12 @@ const uploadFile = async (event) => {
 
   // if (isFirstSent.value) {
   //   let { scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-  //   eighteenthPanelData.value.scan_file = scan_file.split('/').at(-1);
+    // eighteenthPanelData.value.scan_file = scan_file.split('/').at(-1);
+    // eighteenthPanelData.value.scan_file = scan_file;
   // } else {
   //   let { data : { scan_file } } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
   //   eighteenthPanelData.value.scan_file = scan_file.split('/').at(-1);
+  // eighteenthPanelData.value.scan_file = scan_file;
   // }
 };
 
@@ -248,9 +267,12 @@ const deletePublication = async (index) => {
 };
 
 watchEffect(async () => {
-  console.log('regionalHeadquarterCommander: ', !(props.districtHeadquarterCommander || props.centralHeadquarterCommander));
+  console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
   try {
-    const { data } = props.centralHeadquarterCommander || props.districtHeadquarterCommander ? await reportPartTwoService.getReportDH(ID_PANEL) : await reportPartTwoService.getReport(ID_PANEL);
+    const { data } = 
+      props.districtExpert || props.centralExpert
+        ? await reportPartTwoService.getReportDH(ID_PANEL, props.reportId)
+        : await reportPartTwoService.getReport(ID_PANEL);
     console.log(data);
     if (data) {
       isFirstSent.value = false;
@@ -271,6 +293,10 @@ watchEffect(async () => {
   &__field-group {
     grid-template-columns: 1fr;
     // margin-bottom: 0;
+
+    &--column {
+      grid-template-columns: 1fr;
+    }
 
     // @media (max-width: 768px) {
     //   grid-template-columns: 1fr;

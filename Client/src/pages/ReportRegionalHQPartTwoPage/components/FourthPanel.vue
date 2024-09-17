@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!(props.centralHeadquarterCommander || props.districtHeadquarterCommander)" class="form__field-group">
+  <div v-if="!(props.centralExpert || props.districtExpert)" class="form__field-group">
     <div v-for="(event, index) in events" :key="index" class="form__field-fourth-panel">
       <div class="form__field-members-event">
         <div class="form__field-members">
@@ -99,29 +99,32 @@
       <div v-for="(event, index) in events" :key="index">
         <div>
           <div class="form__field-members">
-            <label class="form__label" for="participants_number">Количество человек, принявших участие в мероприятии <sup
-                class="valid-red">*</sup></label>
+            <label class="form__label" for="participants_number">Количество человек, принявших участие в мероприятии
+              <sup class="valid-red">*</sup></label>
             <div style="display: flex; justify-content: space-between;">
               <InputReport v-model:value="event.participants_number" :id="event.participants_number"
-                           name="participants_number" class="form__input" type="number" placeholder="Введите число"
-                           @focusout="focusOut" :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" />
+                name="participants_number" class="form__input" type="number" placeholder="Введите число"
+                @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert" />
             </div>
           </div>
           <Button class="form__field-delete-button" v-if="index > 0" label="Удалить мероприятие"
-                  @click="deleteEvent(index)" />
+            @click="deleteEvent(index)" />
         </div>
         <div class="form__field-date">
           <div class="form__field">
-            <label style="max-width: 280px;" class="form__label" for="start_date">Дата начала проведения мероприятия <sup
-                class="valid-red">*</sup></label>
+            <label style="max-width: 280px;" class="form__label" for="start_date">Дата начала проведения мероприятия
+              <sup class="valid-red">*</sup></label>
             <InputReport v-model:value="event.start_date" :id="event.start_date" name="start_date" class="form__input"
-                         type="date" @focusout="focusOut" :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" />
+              type="date" @focusout="focusOut"
+              :disabled="props.centralExpert || props.districtExpert" />
           </div>
           <div class="form__field">
-            <label style="max-width: 300px;" class="form__label" for="end_date">Дата окончания проведения мероприятия <sup
-                class="valid-red">*</sup></label>
+            <label style="max-width: 300px;" class="form__label" for="end_date">Дата окончания проведения мероприятия
+              <sup class="valid-red">*</sup></label>
             <InputReport v-model:value="event.end_date" :id="event.end_date" name="end_date" class="form__input"
-                         type="date" @focusout="focusOut" :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" />
+              type="date" @focusout="focusOut"
+              :disabled="props.centralExpert || props.districtExpert" />
           </div>
         </div>
         <div class="form__field-event">
@@ -131,27 +134,22 @@
               <span class="form__file-name">
                 {{ 'fourthPanelData.scan_file' }}
               </span>
-                <span class="form__file-size">{{ fileSize || 1 }} Мб</span>
+              <span class="form__file-size">{{ fileSize || 1 }} Мб</span>
             </div>
           </div>
           <div class="form__field-event-interregion">
             <p class="form__label">Межрегиональное <sup class="valid-red">*</sup></p>
             <div class="form__label-radio">
               <div v-if="event.is_interregional" style="display: flex;">
-                <input
-                    v-model="event.is_interregional"
-                    type="radio"
-                    :id="`is_interregional-true_${index}`"
-                    :value="true"
-                    class="custom-radio"
-                />
+                <input v-model="event.is_interregional" type="radio" :id="`is_interregional-true_${index}`"
+                  :value="true" class="custom-radio" />
                 <label :for="`is_interregional-true_${index}`">
                   Да
                 </label>
               </div>
               <div v-else style="display: flex">
                 <input v-model="event.is_interregional" type="radio" :id="`is_interregional-false_${index}`"
-                       :value="false" class="custom-radio" />
+                  :value="false" class="custom-radio" />
                 <label :for="`is_interregional-false_${index}`">
                   Нет
                 </label>
@@ -161,29 +159,18 @@
         </div>
         <div class="form__field-link">
           <p class="form__label">Ссылка на группу мероприятия в социальных сетях <sup class="valid-red">*</sup></p>
-          <div
-              class="form__add-link"
-              v-for="(link, i) in events[index].links"
-              :key="i"
-          >
-            <InputReport
-                v-model:value="link.link"
-                :id="i"
-                :name="i"
-                class="form__input form__input-add-link"
-                type="text"
-                placeholder="https://vk.com/cco_monolit"
-                @focusout="focusOut"
-                :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"
-            />
+          <div class="form__add-link" v-for="(link, i) in events[index].links" :key="i">
+            <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__input-add-link"
+              type="text" placeholder="https://vk.com/cco_monolit" @focusout="focusOut"
+              :disabled="props.centralExpert || props.districtExpert" />
           </div>
         </div>
       </div>
       <div class="form__field-comment">
         <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
         <InputReport v-model:value="fourthPanelData.comment" id="comment" name="comment" class="form__input"
-                     type="textarea" placeholder="Укажите наименования организованных мероприятий" style="width: 100%;"
-                     @focusout="focusOut" :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" />
+          type="textarea" placeholder="Укажите наименования организованных мероприятий" style="width: 100%;"
+          @focusout="focusOut" :disabled="props.centralExpert || props.districtExpert" />
       </div>
       <div class="form__field-result">
         <v-checkbox label="Итоговое значение" />
@@ -210,27 +197,27 @@
         </div>
         <div class="form__field-date">
           <div class="form__field">
-            <label style="max-width: 280px;" class="form__label" for="start_date">Дата начала проведения мероприятия <sup
-                class="valid-red">*</sup></label>
+            <label style="max-width: 280px;" class="form__label" for="start_date">Дата начала проведения мероприятия
+              <sup class="valid-red">*</sup></label>
             <InputReport v-model:value="event.start_date" :id="event.start_date" name="start_date" class="form__input"
-                         type="date" @focusout="focusOut" />
+              type="date" @focusout="focusOut" />
           </div>
           <div class="form__field">
-            <label style="max-width: 300px;" class="form__label" for="end_date">Дата окончания проведения мероприятия <sup
-                class="valid-red">*</sup></label>
+            <label style="max-width: 300px;" class="form__label" for="end_date">Дата окончания проведения мероприятия
+              <sup class="valid-red">*</sup></label>
             <InputReport v-model:value="event.end_date" :id="event.end_date" name="end_date" class="form__input"
-                         type="date" @focusout="focusOut" />
+              type="date" @focusout="focusOut" />
           </div>
         </div>
         <div class="form__field-event">
           <div class="form__field-event-file">
             <label class="form__label" for="4">Положение о мероприятии <sup class="valid-red">*</sup></label>
             <InputReport class="form-input__file-input" v-if="!fourthPanelData.scan_file" isFile type="file"
-                         id="scan_file" name="scan_file" width="100%" @change="uploadFile" />
+              id="scan_file" name="scan_file" width="100%" @change="uploadFile" />
             <div v-else class="form__file-box">
-            <span class="form__file-name">
-              {{ fourthPanelData.scan_file }}
-            </span>
+              <span class="form__file-name">
+                {{ fourthPanelData.scan_file }}
+              </span>
               <span class="form__file-size">{{ fileSize }} Мб</span>
               <button @click="deleteFile" class="form__button-delete-file">
                 Удалить
@@ -241,15 +228,15 @@
             <p class="form__label">Межрегиональное <sup class="valid-red">*</sup></p>
             <div class="form__label-radio">
               <div style="display: flex;">
-                <input v-model="event.is_interregional" type="radio" :id="`is_interregional-true_${index}`" :value="true"
-                       class="custom-radio" />
+                <input v-model="event.is_interregional" type="radio" :id="`is_interregional-true_${index}`"
+                  :value="true" class="custom-radio" />
                 <label :for="`is_interregional-true_${index}`">
                   Да
                 </label>
               </div>
               <div style="display: flex">
                 <input v-model="event.is_interregional" type="radio" :id="`is_interregional-false_${index}`"
-                       :value="false" class="custom-radio" />
+                  :value="false" class="custom-radio" />
                 <label :for="`is_interregional-false_${index}`">
                   Нет
                 </label>
@@ -260,10 +247,10 @@
         <div class="form__field-link">
           <p class="form__label">Ссылка на группу мероприятия в социальных сетях <sup class="valid-red">*</sup></p>
           <div class="form__add-link" v-for="(link, i) in events[index].links" :key="i">
-            <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__input-add-link" type="text"
-                         placeholder="https://vk.com/cco_monolit" @focusout="focusOut" />
+            <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__input-add-link"
+              type="text" placeholder="https://vk.com/cco_monolit" @focusout="focusOut" />
             <Button v-if="events[index].links.length === i + 1" label="+ Добавить ссылку" @click="addLink(index)"
-                    class="form__add-link-button" />
+              class="form__add-link-button" />
             <Button class="form__add-link-button" v-else label="Удалить" @click="deleteLink(index, i)" />
           </div>
         </div>
@@ -275,8 +262,8 @@
       <div class="form__field-comment">
         <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
         <InputReport v-model:value="fourthPanelData.comment" id="comment" name="comment" class="form__input"
-                     type="textarea" placeholder="Укажите наименования организованных мероприятий" style="width: 100%;"
-                     @focusout="focusOut" />
+          type="textarea" placeholder="Укажите наименования организованных мероприятий" style="width: 100%;"
+          @focusout="focusOut" />
       </div>
       <div class="form__field-result">
         <v-checkbox label="Итоговое значение" />
@@ -377,6 +364,208 @@
       </div>
     </template>
   </report-tabs>
+
+  <!--  <v-card v-else class="panel-card">-->
+  <!--    <v-tabs v-model="tab">-->
+  <!--      <v-tab value="one" class="panel-tab-btn">Отчет РО</v-tab>-->
+  <!--      <v-tab value="two" class="panel-tab-btn">Корректировка ОШ</v-tab>-->
+  <!--      <v-tab value="three" class="panel-tab-btn">Корректировка ЦШ</v-tab>-->
+  <!--    </v-tabs>-->
+
+  <!--    <v-card-text class="panel-card-text">-->
+  <!--      <v-tabs-window v-model="tab">-->
+  <!--        <v-tabs-window-item value="one">-->
+  <!--          <div class="form__field-group">-->
+  <!--            <div>-->
+  <!--              <label class="form__label" for="1">Количество человек, принявших участие в мероприятии <sup-->
+  <!--                  class="valid-red">*</sup></label>-->
+  <!--              <InputReport id="1" name="1" class="form__input" type="number" placeholder="Введите число" />-->
+  <!--            </div>-->
+  <!--            <div style="display: flex;">-->
+  <!--              <div class="form__field">-->
+  <!--                <label class="form__label" for="2">Дата начала проведения мероприятия <sup-->
+  <!--                    class="valid-red">*</sup></label>-->
+  <!--                <InputReport id="2" name="2" class="form__input" type="date" />-->
+  <!--              </div>-->
+  <!--              <div class="form__field">-->
+  <!--                <label class="form__label" for="3">Дата окончания проведения мероприятия <sup-->
+  <!--                    class="valid-red">*</sup></label>-->
+  <!--                <InputReport id="3" name="3" class="form__input" type="date" />-->
+  <!--              </div>-->
+  <!--            </div>-->
+  <!--            <div style="display: flex;">-->
+  <!--              <div>-->
+  <!--                <label class="form__label" for="4">Положение о мероприятии <sup class="valid-red">*</sup></label>-->
+  <!--                <InputReport type="file" id="4" name="4" />-->
+  <!--              </div>-->
+  <!--              <div>-->
+  <!--                <label class="form__label" for="5">Межрегиональное <sup class="valid-red">*</sup></label>-->
+  <!--                <InputReport type="radio" id="5" name="5" />-->
+  <!--              </div>-->
+  <!--            </div>-->
+  <!--            <div>-->
+  <!--              <label class="form__label" for="6">Ссылка на группу мероприятия в социальных сетях <sup-->
+  <!--                  class="valid-red">*</sup></label>-->
+  <!--              <InputReport id="6" name="6" class="form__input" type="text" placeholder="https://vk.com/cco_monolit" />-->
+  <!--              <InputReport id="7" name="7" class="form__input" type="text" placeholder="https://vk.com/ccorobot" />-->
+  <!--              <InputReport id="8" name="8" class="form__input" type="text" placeholder="https://vk.com/cco_monolit11" />-->
+  <!--            </div>-->
+  <!--            <div>-->
+  <!--              <label class="form__label" for="9">Комментарий <sup class="valid-red">*</sup></label>-->
+  <!--              <InputReport id="9" name="9" class="form__input" type="textarea" placeholder="Комментарий"-->
+  <!--                style="width: 100%; height: 100px" />-->
+  <!--            </div>-->
+  <!--            <div>-->
+  <!--              <v-checkbox label="Итоговое значение" />-->
+  <!--            </div>-->
+  <!--            <div class="hr"></div>-->
+  <!--            <div>-->
+  <!--              <p>(4-1)*2+(4-2)+(4-3)=9</p>-->
+  <!--            </div>-->
+  <!--          </div>-->
+  <!--        </v-tabs-window-item>-->
+
+  <!--        <v-tabs-window-item value="two">-->
+  <!--          <form class="form__field-group" @submit.prevent>-->
+  <!--            <div style="display: flex;">-->
+  <!--              <div>-->
+  <!--                <label class="form__label" for="10">Количество человек, принявших участие в мероприятии <sup-->
+  <!--                    class="valid-red">*</sup></label>-->
+  <!--                <InputReport id="10" name="10" class="form__input" type="number" placeholder="Введите число" />-->
+  <!--              </div>-->
+  <!--              <div>-->
+  <!--                <label class="form__label" for="11">Межрегиональное <sup class="valid-red">*</sup></label>-->
+  <!--                <div style="display: flex;">-->
+  <!--                  <InputReport id="11" name="11" class="form__input" type="radio" />-->
+  <!--                  <InputReport id="12" name="12" class="form__input" type="radio" />-->
+  <!--                </div>-->
+  <!--              </div>-->
+  <!--              <Button label="Удалить мероприятие" />-->
+  <!--            </div>-->
+  <!--            <div style="display: flex;">-->
+  <!--              <div class="form__field">-->
+  <!--                <label class="form__label" for="13">Дата начала проведения мероприятия <sup-->
+  <!--                    class="valid-red">*</sup></label>-->
+  <!--                <InputReport id="13" name="13" class="form__input" type="date" />-->
+  <!--              </div>-->
+  <!--              <div class="form__field">-->
+  <!--                <label class="form__label" for="3">Дата окончания проведения мероприятия <sup-->
+  <!--                    class="valid-red">*</sup></label>-->
+  <!--                <InputReport id="14" name="14" class="form__input" type="date" />-->
+  <!--              </div>-->
+  <!--            </div>-->
+  <!--            <div>-->
+  <!--              <Button style="margin: 0" label="Добавить мероприятие" size="large" />-->
+  <!--            </div>-->
+  <!--            <div class="form__field">-->
+  <!--              <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>-->
+  <!--              <InputReport id="14" name="14" class="form__input" style="width: 100%" />-->
+  <!--            </div>-->
+  <!--            <div>-->
+  <!--              <v-checkbox label="Итоговое значение" />-->
+  <!--            </div>-->
+  <!--            <div class="hr"></div>-->
+  <!--            <div>-->
+  <!--              <p>(4-1)*2+(4-2)+(4-3)=9</p>-->
+  <!--            </div>-->
+  <!--          </form>-->
+  <!--        </v-tabs-window-item>-->
+
+  <!--        <v-tabs-window-item value="three">-->
+  <!--          <div class="form__field-group report-table">-->
+  <!--            <div>-->
+  <!--              <Button style="margin-right: 0" label="Удалить мероприятие" size="large" />-->
+  <!--            </div>-->
+  <!--            <label class="form__label">Количество человек, принявших участие в мероприятии <sup-->
+  <!--                class="valid-red">*</sup></label>-->
+  <!--            <v-table>-->
+  <!--              <tbody>-->
+  <!--                <tr class="report-table__tr">-->
+  <!--                  <td class="report-table__th report-table__th__br-left">Данные РО</td>-->
+  <!--                  <td class="report-table__th">Корректировка ОШ</td>-->
+  <!--                  <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>-->
+  <!--                </tr>-->
+  <!--                <tr>-->
+  <!--                  <td class="report-table__td">200</td>-->
+  <!--                  <td class="report-table__td report-table__td__center">200</td>-->
+  <!--                  <td class="report-table__td">200</td>-->
+  <!--                </tr>-->
+  <!--              </tbody>-->
+  <!--            </v-table>-->
+  <!--            <label class="form__label">Межрегиональное <sup class="valid-red">*</sup></label>-->
+  <!--            <v-table>-->
+  <!--              <tbody>-->
+  <!--                <tr class="report-table__tr">-->
+  <!--                  <td class="report-table__th report-table__th__br-left">Данные РО</td>-->
+  <!--                  <td class="report-table__th">Корректировка ОШ</td>-->
+  <!--                  <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>-->
+  <!--                </tr>-->
+  <!--                <tr>-->
+  <!--                  <td class="report-table__td">200</td>-->
+  <!--                  <td class="report-table__td report-table__td__center">200</td>-->
+  <!--                  <td class="report-table__td">200</td>-->
+  <!--                </tr>-->
+  <!--              </tbody>-->
+  <!--            </v-table>-->
+  <!--            <div>-->
+  <!--              <label class="form__label" for="11">Межрегиональное <sup class="valid-red">*</sup></label>-->
+  <!--              <div style="display: flex;">-->
+  <!--                <InputReport id="11" name="11" class="form__input" type="radio" />-->
+  <!--                <InputReport id="12" name="12" class="form__input" type="radio" />-->
+  <!--              </div>-->
+  <!--            </div>-->
+  <!--            <label class="form__label">Дата начала проведения мероприятия <sup class="valid-red">*</sup></label>-->
+  <!--            <v-table>-->
+  <!--              <tbody>-->
+  <!--                <tr class="report-table__tr">-->
+  <!--                  <td class="report-table__th report-table__th__br-left">Данные РО</td>-->
+  <!--                  <td class="report-table__th">Корректировка ОШ</td>-->
+  <!--                  <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>-->
+  <!--                </tr>-->
+  <!--                <tr>-->
+  <!--                  <td class="report-table__td">25.03.2024</td>-->
+  <!--                  <td class="report-table__td report-table__td__center">25.03.2024</td>-->
+  <!--                  <td class="report-table__td">25.03.2024</td>-->
+  <!--                </tr>-->
+  <!--              </tbody>-->
+  <!--            </v-table>-->
+  <!--            <label class="form__label">Дата окончания проведения мероприятия <sup class="valid-red">*</sup></label>-->
+  <!--            <v-table>-->
+  <!--              <tbody>-->
+  <!--                <tr class="report-table__tr">-->
+  <!--                  <td class="report-table__th report-table__th__br-left">Данные РО</td>-->
+  <!--                  <td class="report-table__th">Корректировка ОШ</td>-->
+  <!--                  <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>-->
+  <!--                </tr>-->
+  <!--                <tr>-->
+  <!--                  <td class="report-table__td">25.03.2024</td>-->
+  <!--                  <td class="report-table__td report-table__td__center">25.03.2024</td>-->
+  <!--                  <td class="report-table__td">25.03.2024</td>-->
+  <!--                </tr>-->
+  <!--              </tbody>-->
+  <!--            </v-table>-->
+  <!--            <div>-->
+  <!--              <Button style="margin: 0" label="Добавить мероприятие" size="large" />-->
+  <!--            </div>-->
+  <!--            <div class="form__field">-->
+  <!--              <label class="form__label" for="15">Комментарий <sup class="valid-red">*</sup></label>-->
+  <!--              <InputReport id="15" name="15" class="form__input" style="width: 100%" />-->
+  <!--            </div>-->
+  <!--            <div>-->
+  <!--              <v-checkbox label="Итоговое значение" />-->
+  <!--            </div>-->
+  <!--            <div class="hr"></div>-->
+  <!--            <div>-->
+  <!--              <p>(4-1)*2+(4-2)+(4-3)=9</p>-->
+  <!--            </div>-->
+  <!--            <div>-->
+  <!--              <v-checkbox label="Вернуть в РО на доработку" />-->
+  <!--            </div>-->
+  <!--          </div>-->
+  <!--        </v-tabs-window-item>-->
+  <!--      </v-tabs-window>-->
+  <!--    </v-card-text>-->
+  <!--  </v-card>-->
 </template>
 <script setup>
 import { ref, watchEffect } from "vue";
@@ -386,10 +575,10 @@ import { ReportTabs } from './index';
 import { reportPartTwoService } from "@services/ReportService.ts";
 
 const props = defineProps({
-  districtHeadquarterCommander: {
+  districtExpert: {
     type: Boolean
   },
-  centralHeadquarterCommander: {
+  centralExpert: {
     type: Boolean
   },
   reportId: {
@@ -416,6 +605,9 @@ const events = ref([
     is_interregional: false,
   }
 ]);
+
+const emit = defineEmits(['getData']);
+
 const addLink = (index) => {
   events.value[index].links.push({ link: '' })
 };
@@ -443,7 +635,8 @@ const focusOut = async () => {
     if (isFirstSent.value) {
       await reportPartTwoService.createReport(fourthPanelData.value, '4');
     } else {
-      await reportPartTwoService.createReportDraft(fourthPanelData.value, '4');
+      const { data } = await reportPartTwoService.createReportDraft(fourthPanelData.value, '4');
+      emit('getData', data, 4);
     }
   } catch (e) {
     console.log('focusOut error:', e);
@@ -460,38 +653,37 @@ const deleteEvent = async (index) => {
 };
 // new
 const uploadFile = async (event) => {
-//   scanFile.value = event.target.files[0];
-//   let formData = new FormData();
-//   formData.append('scan_file', scanFile.value);
-//   formData.append('comment', seventeenthPanelData.value.comment);
-//
-//   console.log(scanFile.value);
-//
-//   if (isFirstSent.value) {
-//     let { scan_file } = await reportPartTwoService.createReport(formData, '17', true);
-//     seventeenthPanelData.value.scan_file = scan_file.split('/').at(-1);
-//   } else {
-//     let { data: { scan_file } } = await reportPartTwoService.createReportDraft(formData, '17', true);
-//     seventeenthPanelData.value.scan_file = scan_file.split('/').at(-1);
-//   }
+  //   scanFile.value = event.target.files[0];
+  //   let formData = new FormData();
+  //   formData.append('scan_file', scanFile.value);
+  //   formData.append('comment', seventeenthPanelData.value.comment);
+  //
+  //   console.log(scanFile.value);
+  //
+  //   if (isFirstSent.value) {
+  //     let { scan_file } = await reportPartTwoService.createReport(formData, '17', true);
+  //     seventeenthPanelData.value.scan_file = scan_file.split('/').at(-1);
+  //   } else {
+  //     let { data: { scan_file } } = await reportPartTwoService.createReportDraft(formData, '17', true);
+  //     seventeenthPanelData.value.scan_file = scan_file.split('/').at(-1);
+  //   }
 };
 const deleteFile = async () => {
-//   seventeenthPanelData.value.scan_file = '';
-//   let formData = new FormData();
-//   formData.append('scan_file', '');
-//   formData.append('comment', seventeenthPanelData.value.comment);
-//
-//   if (isFirstSent.value) {
-//     await reportPartTwoService.createReport(formData, '17', true);
-//   } else {
-//     await reportPartTwoService.createReportDraft(formData, '17', true);
-//   }
+  //   seventeenthPanelData.value.scan_file = '';
+  //   let formData = new FormData();
+  //   formData.append('scan_file', '');
+  //   formData.append('comment', seventeenthPanelData.value.comment);
+  //
+  //   if (isFirstSent.value) {
+  //     await reportPartTwoService.createReport(formData, '17', true);
+  //   } else {
+  //     await reportPartTwoService.createReportDraft(formData, '17', true);
+  //   }
 };
 //
 watchEffect(async () => {
-  console.log('districtHeadquarterCommander: ', !(props.districtHeadquarterCommander || props.centralHeadquarterCommander));
   try {
-    const { data } = props.centralHeadquarterCommander || props.districtHeadquarterCommander
+    const { data } = props.centralExpert || props.districtExpert
         ? await reportPartTwoService.getReportDH('4', props.reportId)
         : await reportPartTwoService.getReport('4');
     if (data) {
@@ -509,7 +701,11 @@ watchEffect(async () => {
   display: flex;
   justify-content: center;
   text-align: center;
-  // height: 101px;
+  min-height: 86px;
+
+  @media (max-width: 568px) {
+    min-height: 101px;
+  }
 }
 
 .custom-radio {
@@ -580,7 +776,7 @@ watchEffect(async () => {
 .form__field-group {
   background: #F3F4F5;
   border: none;
-  border-radius: 0 0 10px 10px;
+  border-radius: 10px;
   margin-bottom: 8px;
   padding-top: 0;
 }
@@ -634,8 +830,9 @@ watchEffect(async () => {
   background-color: transparent;
   color: #1F7CC0;
   border-color: #1F7CC0;
-  padding-left: 52px;
+  padding: 8px 32px 8px 52px;
   position: relative;
+  max-height: 40px;
   width: 340px;
 
   @media(max-width: 568px) {
@@ -672,6 +869,8 @@ watchEffect(async () => {
 }
 
 .form__field-event-file {
+  display: flex;
+  flex-direction: column;
   width: 720px;
 
   @media (max-width: 568px) {
@@ -685,6 +884,10 @@ watchEffect(async () => {
 }
 
 .form__field-event-interregion {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
   @media (max-width: 568px) {
     margin: 0 auto;
     width: 340px;
@@ -708,6 +911,11 @@ watchEffect(async () => {
   @media (max-width: 400px) {
     width: 300px;
   }
+}
+
+.form__field-comment {
+  display: flex;
+  flex-direction: column;
 }
 
 .form__field-delete-button {
@@ -797,12 +1005,13 @@ watchEffect(async () => {
 }
 
 .hr {
+  margin-bottom: 16px;
   width: 100%;
   border-top: 1px solid #B6B6B6;
 
   @media (max-width: 568px) {
     width: 340px;
-    margin: 0 auto;
+    margin: 0 auto 16px;
   }
 }
 

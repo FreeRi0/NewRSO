@@ -28,15 +28,20 @@
       }
     
     &__fieldset {
+        display: flex;
+        flex-direction: column;
+
         &--left-block {
             @media (max-width: 768px) {
                 max-width: 290px;
             }
         }
 
-        // &--right-block {
-            
-        // }
+        &--right-block {
+            .form-input {
+                margin-top: auto;
+            }
+        }
 
         &--comment,
         &--comment-expert {
@@ -80,6 +85,14 @@
                 }
             }
         }
+    }
+
+    &__text-info {
+        font-family: "Akrobat";
+        font-weight: 600;
+        font-size: 18px;
+        line-height: 22px;
+        color: #000000;
     }
 
     &__links {
@@ -202,14 +215,16 @@
         }
     }
 
-    //Вынести в отдельный компонент?-----------------------------
     &__file-box {
         margin-top: 16px;
         max-width: 720px;
         width: 100%;
         padding: 1px 16px;
-        display: flex;
-        justify-content: space-between;
+        // display: flex;
+        // justify-content: space-between;
+        display: grid;
+        grid-template-columns: 1fr 61px min-content;
+        column-gap: 12px;
         align-items: center;
         font-family: "Bert Sans";
         font-weight: 400;
@@ -222,6 +237,7 @@
         column-gap: 12px;
     }
     &__file-size {
+        padding-left: 11px;
         width: 50px;
         color: #6d6d6d;
         opacity: 0.8;
@@ -235,7 +251,7 @@
             background-color: #6d6d6d;
             opacity: 0.8;
             top: 3px;
-            left: -10px;
+            left: 0;
         }
     }
     &__button-delete-file {
@@ -247,5 +263,4 @@
             color: #1C5C94;
         } 
     }
-    //--------------------------------------------------------------
 }
