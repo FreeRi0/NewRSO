@@ -1,13 +1,12 @@
 <template>
-  <div 
-    :is-file="isFile" 
-    :class="['form-input', isFile ? 'form-input__file-input' : '', isFileDistrict ? 'form-input__add-file' : '']"
-    
+  <div :is-file="isFile"
+    :class="['form-input', isFile ? 'form-input__file-input' : '', isFileDistrict ? 'form-input__add-file' : '', isLink ? 'form-input__link' : '']"
     :style="{ width: width }">
     <input :type="type" :name="name" :style="{
       height: height,
     }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly"
-      max="9999-12-31" class="form-input__report" @input="updateValue" v-bind="$attrs" :disabled="disabled" />
+      max="9999-12-31" class="form-input__report" :class="{ 'link__input': isLink }" @input="updateValue" v-bind="$attrs"
+      :disabled="disabled" />
     <div class="form__counter" v-if="counterVisible">
       {{ textInputLength }} / {{ maxCounter }}
     </div>
@@ -21,6 +20,7 @@
     <div v-if="isFileDistrict" class="form-input__icon">
       <SvgIcon iconName="add-file" />
     </div>
+
   </div>
 </template>
 
@@ -83,6 +83,10 @@ const props = defineProps({
   isFileDistrict: {
     type: Boolean,
     default: false,
+  },
+  isLink: {
+    type: Boolean,
+    default: false,
   }
 });
 
@@ -97,7 +101,13 @@ const updateValue = (event) => {
 </script>
 
 <style lang="scss" scoped>
+.link__input {
+  width: 100%;
+  max-width: 720px;
+}
+
 .form-input {
+
   &.form-input__file-input,
   &.form-input__add-file {
     .form-input__report[type='file'] {
@@ -163,6 +173,11 @@ const updateValue = (event) => {
   }
 }
 
+.form-input__link {
+  width: 100%;
+  max-width: 720px;
+}
+
 .form-input__report {
   padding: 8px 16px;
   background-color: #ffffff;
@@ -183,7 +198,7 @@ const updateValue = (event) => {
   &:disabled {
     border-color: #b6b6b6;
     background-color: #f9fafb;
-    color:#8e8e93;
+    color: #8e8e93;
     pointer-events: none;
   }
 
@@ -193,11 +208,11 @@ const updateValue = (event) => {
   }
 
   &:invalid {
-      border-color: #db0000;
+    border-color: #db0000;
 
-      &::placeholder {
-          color: #db0000;
-      }
+    &::placeholder {
+      color: #db0000;
+    }
   }
 }
 

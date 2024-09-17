@@ -31,10 +31,10 @@ import { TenthPanelForm } from './index';
 import { reportPartTwoService } from "@services/ReportService.ts";
 
 defineProps({
-  districtHeadquarterCommander: {
+  districtExpert: {
     type: Boolean
   },
-  centralHeadquarterCommander: {
+  centralExpert: {
     type: Boolean
   },
   reportId: {
@@ -42,6 +42,8 @@ defineProps({
     default: '',
   }
 });
+
+const emit = defineEmits(['getData']);
 
 const isFirstSent = ref({
   first: true,
@@ -64,20 +66,27 @@ const tenthPanelDataSecond = ref({
   ],
 });
 
-const formData = async (data, reportNumber) => {
-  if (reportNumber === 1) {
-    if (isFirstSent.value.first) {
-      await reportPartTwoService.createMultipleReport(data, '10', '1');
-    } else {
-      await reportPartTwoService.createMultipleReportDraft(data, '10', '1');
+const formData = async (reportData, reportNumber) => {
+  try {
+    if (reportNumber === 1) {
+      if (isFirstSent.value.first) {
+        await reportPartTwoService.createMultipleReport(reportData, '10', '1');
+      } else {
+        const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '10', '1');
+        emit('getData', data, 10, 1);
+      }
+    } else if (reportNumber === 2) {
+      if (isFirstSent.value.second) {
+        await reportPartTwoService.createMultipleReport(reportData, '10', '2');
+      } else {
+        const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '10', '2');
+        emit('getData', data, 10, 2);
+      }
     }
-  } else if (reportNumber === 2) {
-    if (isFirstSent.value.second) {
-      await reportPartTwoService.createMultipleReport(data, '10', '2');
-    } else {
-      await reportPartTwoService.createMultipleReportDraft(data, '10', '2');
-    }
+  } catch (e) {
+    console.log('tenth panel error: ', e);
   }
+
 };
 watchEffect(async () => {
   try {
