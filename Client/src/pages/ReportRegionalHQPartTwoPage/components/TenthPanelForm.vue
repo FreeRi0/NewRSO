@@ -10,14 +10,14 @@
     </div>
     <div class="form__field">
       <p class="form__label">Проведение акции <sup class="valid-red">*</sup></p>
-      <div style="display: flex">
+      <div class="form__field-radio" style="display: flex">
         <div style="display: flex; align-items: center">
-          <input v-model="tenthPanelData.event_happened" id="event_happened-true" class="form__input" type="radio"
+          <input v-model="tenthPanelData.event_happened" id="event_happened-true" class="custom-radio" type="radio"
             :value="true" />
           <label for="event_happened-true">Да</label>
         </div>
         <div style="display: flex; align-items: center">
-          <input v-model="tenthPanelData.event_happened" id="event_happened-false" class="form__input" type="radio"
+          <input v-model="tenthPanelData.event_happened" id="event_happened-false" class="custom-radio" type="radio"
             :value="false" />
           <label for="event_happened-false">Нет</label>
         </div>
@@ -163,6 +163,52 @@ watchEffect(() => {
 })
 </script>
 <style lang="scss" scoped>
+.custom-radio {
+  display: none;
+  /* -стандартное отображение*/
+}
+
+.custom-radio+label {
+  position: relative;
+  padding-left: 30px;
+  cursor: pointer;
+  line-height: 20px;
+}
+
+.custom-radio+label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #1F7CC0;
+  /* Внешний синий круг */
+}
+
+.custom-radio+label::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  /* Отступ от внешнего круга */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid #1F7CC0;
+  /* Внутренний синий круг */
+  background-color: transparent;
+  /* Пустота внутри внутреннего круга */
+}
+
+.custom-radio:checked+label::after {
+  background-color: #1F7CC0;
+  /* Заполнение внутреннего круга синим цветом при выборе */
+}
+
 .form {
   &__title {
     font-family: Akrobat;
@@ -202,6 +248,11 @@ watchEffect(() => {
 
 .form__field {
   gap: 8px;
+
+  &-radio {
+    gap: 40px;
+    margin-bottom: 8px;
+  }
 }
 
 .title {
