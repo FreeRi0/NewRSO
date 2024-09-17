@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!(props.centralHeadquarterCommander || props.districtHeadquarterCommander)">
+  <div v-if="!(props.centralExpert || props.districtExpert)">
     <div class="form__field-group">
       <div class="form__field-report">
         <div class="form__field">
@@ -51,7 +51,7 @@
               class="form__input" type="number"
               placeholder="Введите число"
               @focusout="focusOut"
-              :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"
+              :disabled="props.centralExpert || props.districtExpert"
           />
         </div>
         <div class="report__add-file">
@@ -139,10 +139,10 @@ import {SvgIcon} from '@shared/index';
 import {ReportTabs} from './index';
 
 const props = defineProps({
-  districtHeadquarterCommander: {
+  districtExpert: {
     type: Boolean
   },
-  centralHeadquarterCommander: {
+  centralExpert: {
     type: Boolean
   },
   reportId: {
@@ -150,6 +150,8 @@ const props = defineProps({
     default: '',
   }
 });
+
+const emit = defineEmits(['getData']);
 
 const defaultReportData = {
   participants_number: '0',
@@ -174,16 +176,23 @@ const firstPanelData = ref({
   file_type: '',
   file_size: '',
 });
+
 const focusOut = async () => {
   let formData = new FormData();
   formData.append('comment', firstPanelData.value.comment);
   formData.append('amount_of_money', firstPanelData.value.amount_of_money);
 
-  if (isFirstSent.value) {
-    await reportPartTwoService.createReport(formData, '1', true);
-  } else {
-    await reportPartTwoService.createReportDraft(formData, '1', true);
+  try {
+    if (isFirstSent.value) {
+      await reportPartTwoService.createReport(formData, '1', true);
+    } else {
+      const { data } = await reportPartTwoService.createReportDraft(formData, '1', true);
+      emit('getData', data, 1);
+    }
+  } catch (e) {
+    console.log(e)
   }
+
 };
 const uploadFile = async (event) => {
   scanFile.value = event.target.files[0];
@@ -214,13 +223,12 @@ const deleteFile = async () => {
 };
 watchEffect(async () => {
   try {
-    if (!(props.centralHeadquarterCommander || props.districtHeadquarterCommander)) {
+    if (!(props.centralExpert || props.districtExpert)) {
       const res = await getReport();
       reportData.value = res.data;
     }
 
-
-    const {data} = props.centralHeadquarterCommander || props.districtHeadquarterCommander
+    const {data} = props.centralExpert || props.districtExpert
         ? await reportPartTwoService.getReportDH('1', props.reportId)
         : await reportPartTwoService.getReport('1');
 

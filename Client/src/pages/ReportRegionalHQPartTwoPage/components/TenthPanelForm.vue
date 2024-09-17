@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!(props.centralHeadquarterCommander || props.districtHeadquarterCommander)" class="form__field-group">
+  <div v-if="!(props.centralExpert || props.districtExpert)" class="form__field-group">
     <div style="display: flex; justify-content: space-between;">
       <div>
         <p class="form__title">Всероссийская патриотическая акция «Снежный Десант РСО»</p>
@@ -141,7 +141,7 @@
                 type="text"
                 placeholder="https://vk.com/cco_monolit"
                 @focusout="formData"
-                :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"
+                :disabled="props.centralExpert || props.districtExpert"
             />
           </div>
         </div>
@@ -217,10 +217,10 @@ import { SvgIcon } from '@shared/index';
 
 const props = defineProps({
   data: Object,
-  districtHeadquarterCommander: {
+  districtExpert: {
     type: Boolean
   },
-  centralHeadquarterCommander: {
+  centralExpert: {
     type: Boolean
   },
   reportId: {

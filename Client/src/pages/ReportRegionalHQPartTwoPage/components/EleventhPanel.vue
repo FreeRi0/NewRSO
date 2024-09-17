@@ -1,6 +1,6 @@
 <template>
   <!-- <div 
-    v-if="!(props.centralHeadquarterCommander || props.districtHeadquarterCommander)"
+    v-if="!(props.centralExpert || props.districtExpert)"
     class="form__field-group report__field-group"
     >    
     <div class="report__fieldset report__fieldset--left-block">
@@ -20,7 +20,7 @@
         :maxlength="10"
         :max="32767"
         @focusout="focusOut"
-        :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"
+        :disabled="props.centralExpert || props.districtExpert"
       />
     </div>
 
@@ -40,7 +40,7 @@
         width="100%"
         height="auto"
         @change="uploadFile"
-        :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"
+        :disabled="props.centralExpert || props.districtExpert"
       />
       <div 
         v-else
@@ -80,29 +80,30 @@
         :maxlength="3000"
         :max-length-text="3000"
         @focusout="focusOut"
-        :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"
+        :disabled="props.centralExpert || props.districtExpert"
       >
       </TextareaReport>
     </div>
   </div> -->
 
   <div 
-    v-if="!(props.centralHeadquarterCommander || props.districtHeadquarterCommander)"
+    v-if="!(props.districtExpert || props.centralExpert)"
     class="form__field-group"
   >
     <EleventhPanelComponent
-      :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
-      :isDistrictHeadquarterCommander="props.districtHeadquarterCommander"
+      :central-expert="props.centralExpert"
+      :district-expert="props.districtExpert"
     ></EleventhPanelComponent>
   </div>
 
   <report-tabs v-else>
     <template v-slot:firstTab>
       <EleventhPanelComponent
-        :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
-        :isDistrictHeadquarterCommander="props.districtHeadquarterCommander"
-        :is-disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"
+        :central-expert="props.centralExpert"
+        :district-expert="props.districtExpert"
+        :is-disabled="props.districtExpert || props.centralExpert"
       ></EleventhPanelComponent>
+
       <!-- <div class="report__field-group"
         >    
         <div class="report__fieldset report__fieldset--left-block">
@@ -187,12 +188,14 @@
         </div>
       </div> -->
     </template>
+
     <template v-slot:secondTab>
       <EleventhPanelComponent
-        :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
-        :isDistrictHeadquarterCommander="props.districtHeadquarterCommander"
+        :central-expert="props.centralExpert"
+        :district-expert="props.districtExpert"
         is-second-tab
       ></EleventhPanelComponent>
+
       <!-- <div class="report__field-group"
         >    
         <div class="report__fieldset report__fieldset--left-block">
@@ -277,10 +280,11 @@
         </div>
       </div> -->
     </template>
+    
     <template v-slot:thirdTab>
       <EleventhPanelComponent
-        :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
-        :isDistrictHeadquarterCommander="props.districtHeadquarterCommander"
+        :central-expert="props.centralExpert"
+        :district-expert="props.districtExpert"
         is-third-tab
       ></EleventhPanelComponent>
     </template>
@@ -330,19 +334,22 @@
 <script setup>
 import { ref, watchEffect } from "vue";
 import { EleventhPanelComponent } from "@features/RatingRoPanelComponents";
-import { InputReport, TextareaReport } from '@shared/components/inputs';
-import { CommentFileComponent } from '@entities/RatingRoComponents/components';
+// import { InputReport, TextareaReport } from '@shared/components/inputs';
+// import { CommentFileComponent } from '@entities/RatingRoComponents/components';
 import { ReportTabs } from './index';
 // import { getReport, reportPartTwoService } from "@services/ReportService.ts";
-// import { SvgIcon } from '@shared/index';
 
 const props = defineProps({
-  districtHeadquarterCommander: {
+  districtExpert: {
     type: Boolean
   },
-  centralHeadquarterCommander: {
+  centralExpert: {
     type: Boolean
   },
+  reportId: {
+    type: String,
+    default: '',
+  }
 });
 
 // const ID_PANEL = '11';
@@ -409,9 +416,9 @@ const props = defineProps({
 // };
 
   watchEffect(async () => {
-    console.log('regionalHeadquarterCommander: ', !(props.districtHeadquarterCommander || props.centralHeadquarterCommander));
+    console.log('не эксперт: ', !(props.districtExpert || props.centralExpert));
   //   try {
-  //     const { data } = props.centralHeadquarterCommander || props.districtHeadquarterCommander ? await reportPartTwoService.getReportDH(ID_PANEL) : await reportPartTwoService.getReport(ID_PANEL);
+      // const { data } = props.centralExpert || props.districtExpert ? await reportPartTwoService.getReportDH(ID_PANEL) : await reportPartTwoService.getReport(ID_PANEL);
   //     console.log(data);
   //     if (data) {
   //       isFirstSent.value = false;
@@ -429,7 +436,7 @@ const props = defineProps({
 </script>
 
 <style lang="scss" scoped>
-.valid-red {
-  color: #db0000;
-}
+// .valid-red {
+//   color: #db0000;
+// }
 </style>
