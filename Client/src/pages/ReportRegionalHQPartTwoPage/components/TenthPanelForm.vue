@@ -22,18 +22,35 @@
           <label for="event_happened-false">Нет</label>
         </div>
       </div>
-      <div>
-        <label class="form__label" for="4">Скан документа, подтверждающего проведение акции</label>
-        <InputReport type="file" id="4" name="4" />
+      <div style="margin-bottom: 8px;">
+        <label style="display: flex; " class="form__label" for="4">Скан документа, подтверждающего проведение
+          акции</label>
+        <InputReport class="form-input__file-input" v-if="!tenthPanelData.scan_file" isFile type="file" id="scan_file"
+          name="scan_file" width="100%" @change="uploadFile" />
+        <div v-else class="form__file-box">
+          <span class="form__file-name">
+            {{ tenthPanelData.scan_file }}
+          </span>
+          <span class="form__file-size">{{ fileSize }} Мб</span>
+          <button @click="deleteFile" class="form__button-delete-file">
+            Удалить
+          </button>
+        </div>
       </div>
       <div>
-        <p class="form__label">Ссылка на социальные сети/электронные
+        <p class="form__label">Ссылка на социальные сети/ электронные <br>
           СМИ, подтверждающая проведение акции <sup class="valid-red">*</sup></p>
-        <div style="display: flex;" v-for="(link, i) in tenthPanelData.links" :key="i">
-          <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input" type="text"
+        <div class="input-link" v-for="(link, i) in tenthPanelData.links" :key="i">
+          <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__input-add-link" type="text"
             placeholder="https://vk.com/cco_monolit" @focusout="formData" />
-          <Button label="+ Добавить ссылку" @click="addLink" />
+          <Button class="addLinkBtn" label="+ Добавить ссылку" @click="addLink" />
         </div>
+      </div>
+      <div class="form__field-comment">
+        <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
+        <InputReport v-model:value="fourthPanelData.comment" id="comment" name="comment" class="form__input"
+          type="textarea" placeholder="Укажите наименования организованных мероприятий" style="width: 100%;"
+          @focusout="focusOut" />
       </div>
     </div>
   </div>
@@ -163,6 +180,77 @@ watchEffect(() => {
 })
 </script>
 <style lang="scss" scoped>
+.form-input__file-input {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  min-height: 86px;
+
+  @media (max-width: 568px) {
+    min-height: 101px;
+  }
+}
+
+.form__file-box {
+  margin-top: 16px;
+  max-width: 720px;
+  width: 100%;
+  padding: 1px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Bert Sans";
+  font-weight: 400;
+  line-height: 21px;
+}
+
+.form__file-name {
+  display: flex;
+  align-items: center;
+}
+
+.form__file-size {
+  width: 48px;
+  color: #6d6d6d;
+  opacity: 0.8;
+  position: relative;
+
+  &::before {
+    position: absolute;
+    content: "";
+    width: 1px;
+    height: 15px;
+    background-color: #6d6d6d;
+    opacity: 0.8;
+    top: 3px;
+    left: -10px;
+  }
+}
+
+.form__button-delete-file {
+  color: #1f7cc0;
+}
+
+.input-link {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 8px;
+}
+
+.form__input-add-link {
+  width: 720px;
+}
+
+.addLinkBtn {
+  min-width: 141px;
+  margin: 8px 0;
+  border: none;
+  background-color: transparent;
+  color: #1F7CC0;
+  padding: 0;
+  text-align: left;
+}
+
 .custom-radio {
   display: none;
   /* -стандартное отображение*/
@@ -261,7 +349,9 @@ watchEffect(() => {
   margin-bottom: 10px;
 }
 
-
+.form__field-comment {
+  width: 100%;
+}
 
 .valid-red {
   color: #db0000;
