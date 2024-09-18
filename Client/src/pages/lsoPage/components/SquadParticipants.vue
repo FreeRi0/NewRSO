@@ -184,7 +184,9 @@ watch(
         font-size: 14px;
         font-family: 'Akrobat';
     }
-
+    @media screen and (max-width: 320px) and (max-height:462px) {
+    text-wrap: nowrap;
+  }
 }
 
 .active {

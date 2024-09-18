@@ -448,6 +448,10 @@ const copyL = () => {
 
 .Squad-HQ__date {
   display: flex;
+  @media screen and (max-width: 320px) and (max-height:462px) {
+    justify-content: center;
+
+  }
 }
 
 .Squad-HQ__date p {

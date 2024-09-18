@@ -1,6 +1,6 @@
 <template>
-    <div class="user-metrichq__avatar-wrapper">
-        <div class="user-metrichq__avatar">
+    <div class="user-metric-hq__avatar-wrapper">
+        <div class="user-metric-hq__avatar">
             <!-- Аватар штаба  -->
 
             <img :src="emblem" alt="Эмблема" v-if="emblem" />
@@ -29,7 +29,7 @@ const props = defineProps({
 
 <style lang="scss">
 
-.user-metrichq__avatar {
+.user-metric-hq__avatar {
     grid-column-start: 1;
     grid-column-end: 3;
     grid-row-start: 1;
@@ -57,7 +57,7 @@ const props = defineProps({
     }
 }
 
-.user-metrichq__avatar img {
+.user-metric-hq__avatar img {
     width: 90%;
     height: 90%;
     clip-path: circle(50%);
@@ -80,31 +80,11 @@ const props = defineProps({
     }
 }
 @media screen and (max-width: 320px) and (max-height:462px) {
-    .user-metrichq__avatar {
-        &-wrapper {
-            display: grid;
-            grid-template-columns: 160px 90px;
-            grid-template-rows: 130px 80px;
-            align-content: center;
-            justify-content: center;
-            grid-column-start: 2;
-            grid-column-end: 4;
-            grid-row-start: 2;
-            grid-row-end: 4;
-            transform: translateX(20px) translateY(-100px);
-
-        }
-        &-add {
-            display: grid;
-            grid-column-start: 2;
-            grid-column-end: 3;
-            grid-row-start: 2;
-            grid-row-end: 3;
-            
-        }
+    .user-metric-hq__avatar {
+        transform: translateX(20px) translateY(-100px);
     }
 
-    .user-metrichq__avatar img {
+    .user-metric-hq__avatar img {
         width: 90%;
         height: 90%;
         clip-path: circle(50%);

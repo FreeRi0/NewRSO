@@ -298,7 +298,34 @@ const deleteBanner = async () => {
         object-fit: cover;
         border-radius: 10px 10px 0px 0px;
     }
-    
+    &-sp{
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 100px 100px;
+        grid-column-start: 1;
+        grid-column-end: 6;
+        grid-row-start: 1;
+        grid-row-end: 2;
+        border-radius: 10px 10px 0px 0px;
+
+    &-img-wrapper {
+        display: grid;
+        grid-template-columns: 3fr;
+        grid-template-rows: 200px;
+        grid-column-start: 1;
+        grid-column-end: 6;
+        grid-row-start: 1;
+        grid-row-end: 3;
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px 10px 0px 0px;
+
+    }
+    }
     &-hq{
     display: grid;
     grid-template-columns: 1fr;
@@ -418,7 +445,6 @@ const deleteBanner = async () => {
             height: 100%;
             object-fit: cover;
             border-radius: 10px 10px 0px 0px;
-            transform: translateX(0px);
         }
     }
     

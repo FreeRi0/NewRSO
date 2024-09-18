@@ -334,8 +334,8 @@ const deleteAvatar = async () => {
         grid-column-end: 3;
         grid-row-start: 2;
         grid-row-end: 3;
-        
     }
+
 }
 
 .user-metric__avatar img {
