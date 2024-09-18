@@ -30,7 +30,7 @@ import { ref, watchEffect } from "vue";
 import { TenthPanelForm } from './index';
 import { reportPartTwoService } from "@services/ReportService.ts";
 
-defineProps({
+const props = defineProps({
   districtExpert: {
     type: Boolean
   },
@@ -40,7 +40,8 @@ defineProps({
   reportId: {
     type: String,
     default: '',
-  }
+  },
+  data: Object,
 });
 
 const emit = defineEmits(['getData']);
@@ -88,20 +89,14 @@ const formData = async (reportData, reportNumber) => {
   }
 
 };
-watchEffect(async () => {
-  try {
-    const dataFirst = await reportPartTwoService.getMultipleReport('10', '1');
-    if (dataFirst.data) {
-      isFirstSent.value.first = false;
-      tenthPanelDataFirst.value = { ...dataFirst.data }
-    }
-    const dataSecond = await reportPartTwoService.getMultipleReport('10', '2');
-    if (dataSecond.data) {
-      isFirstSent.value.second = false;
-      tenthPanelDataSecond.value = { ...dataSecond.data }
-    }
-  } catch (e) {
-    console.log(e);
+watchEffect( () => {
+  if (props.data.first) {
+    isFirstSent.value.first = false;
+    tenthPanelDataFirst.value = { ...props.data.first }
+  }
+  if (props.data.second) {
+    isFirstSent.value.second = false;
+    tenthPanelDataSecond.value = { ...props.data.second }
   }
 });
 </script>

@@ -438,12 +438,12 @@ const props = defineProps({
   reportId: {
     type: String,
     default: '',
-  }
+  },
+  data: Object,
 });
 
 const emit = defineEmits(['getData']);
 
-// const tab = ref('one');
 const sixteenthPanelData = ref({
   is_project: false,
   projects: [],
@@ -462,7 +462,6 @@ const projects = ref([
 const isFirstSent = ref(true);
 const focusOut = async () => {
   sixteenthPanelData.value.projects = [...projects.value];
-  console.log(sixteenthPanelData.value);
   try {
     if (isFirstSent.value) {
       await reportPartTwoService.createReport(sixteenthPanelData.value, '16');
@@ -504,16 +503,22 @@ const deleteProject = async (index) => {
   }
 };
 watchEffect(async () => {
-  try {
-    const {data} = await reportPartTwoService.getReport('16');
-    if (data) {
-      isFirstSent.value = false;
-      projects.value = [...data.projects];
-      sixteenthPanelData.value.is_project = data.is_project;
-      // sixteenthPanelData.value.comment = data.comment;
-    }
-  } catch (e) {
-    console.log(e);
+  // try {
+  //   const {data} = await reportPartTwoService.getReport('16');
+  //   if (data) {
+  //     isFirstSent.value = false;
+  //     projects.value = [...data.projects];
+  //     sixteenthPanelData.value.is_project = data.is_project;
+  //     // sixteenthPanelData.value.comment = data.comment;
+  //   }
+  // } catch (e) {
+  //   console.log(e);
+  // }
+  if (props.data) {
+    isFirstSent.value = false;
+    projects.value = [...props.data.projects];
+    sixteenthPanelData.value.is_project = props.data.is_project;
+    // sixteenthPanelData.value.comment = props.data.comment;
   }
 })
 </script>

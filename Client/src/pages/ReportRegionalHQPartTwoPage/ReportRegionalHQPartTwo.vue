@@ -23,6 +23,7 @@
                   :districtExpert="districtExpert"
                   :centralExpert="centralExpert"
                   @get-data="setData"
+                  :data="reportData.first"
               />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -58,6 +59,7 @@
                   :districtExpert="districtExpert"
                   :centralExpert="centralExpert"
                   @get-data="setData"
+                  :data="reportData.fourth"
               />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -72,6 +74,7 @@
                   :districtExpert="districtExpert"
                   :centralExpert="centralExpert"
                   @get-data="setData"
+                  :data="reportData.fifth"
               />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -119,6 +122,7 @@
                   :districtExpert="districtExpert"
                   :centralExpert="centralExpert"
                   @get-data="setData"
+                  :data="reportData.tenth"
               />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -182,6 +186,7 @@
                   :districtExpert="districtExpert"
                   :centralExpert="centralExpert"
                   @get-data="setData"
+                  :data="reportData.sixteenth"
               />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -258,7 +263,7 @@ const reportData = ref({
   },
   sixteenth: null,
 });
-const preloader = ref(true)
+const preloader = ref(true);
 
 const roleStore = useRoleStore();
 
@@ -283,30 +288,28 @@ const downloadReportAll = (id) => {
 
 const getReportData = async () => {
   try {
-    reportData.value.first = (await reportPartTwoService.getReport('1')).data;
-    reportData.value.fourth = (await reportPartTwoService.getReport('4')).data;
-    reportData.value.fifth = (await reportPartTwoService.getReport('5')).data;
-    reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
-    reportData.value.tenth.second = (await reportPartTwoService.getMultipleReport('10', '2')).data;
-    reportData.value.sixteenth = (await reportPartTwoService.getReport('16')).data;
+    if(centralExpert.value || districtExpert.value) {
+      reportData.value.first = (await reportPartTwoService.getReportDH('1', '1')).data;
+      reportData.value.fourth = (await reportPartTwoService.getReportDH('4', '1')).data;
+      reportData.value.fifth = (await reportPartTwoService.getReportDH('5', '1')).data;
+      reportData.value.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', '1')).data;
+      reportData.value.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', '1')).data;
+      reportData.value.sixteenth = (await reportPartTwoService.getReportDH('16', '1')).data;
+    } else {
+      reportData.value.first = (await reportPartTwoService.getReport('1')).data;
+      reportData.value.fourth = (await reportPartTwoService.getReport('4')).data;
+      reportData.value.fifth = (await reportPartTwoService.getReport('5')).data;
+      reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
+      reportData.value.tenth.second = (await reportPartTwoService.getMultipleReport('10', '2')).data;
+      reportData.value.sixteenth = (await reportPartTwoService.getReport('16')).data;
+    }
   } catch (e) {
     console.log('getReportData error: ', e)
   } finally {
     preloader.value = false;
   }
   console.log('getReportData: ', reportData.value);
-}
-
-watchEffect(() => {
-  console.log(roleStore.experts);
-  if (roleStore.experts?.is_district_expert) {
-    districtExpert.value = true;
-  }
-  if (roleStore.experts?.is_central_expert) {
-    centralExpert.value = true;
-  }
-  getReportData();
-});
+};
 
 const setData = (data, panel, number = 0) => {
   switch (panel) {
@@ -333,7 +336,16 @@ const setData = (data, panel, number = 0) => {
   console.log('setData: ', reportData.value)
 };
 
-
+watchEffect(() => {
+  console.log(roleStore.experts);
+  if (roleStore.experts?.is_district_expert) {
+    districtExpert.value = true;
+  }
+  if (roleStore.experts?.is_central_expert) {
+    centralExpert.value = true;
+  }
+  getReportData();
+});
 </script>
 <style>
 .v-expansion-panel__shadow {

@@ -37,7 +37,7 @@
             <span class="form__file-name">
               {{ fourthPanelData.scan_file }}
             </span>
-            <span class="form__file-size">{{ fileSize }} Мб</span>
+            <span class="form__file-size">{{ fourthPanelData.file_size }} Мб</span>
             <button @click="deleteFile" class="form__button-delete-file">
               Удалить
             </button>
@@ -134,7 +134,7 @@
               <span class="form__file-name">
                 {{ 'fourthPanelData.scan_file' }}
               </span>
-              <span class="form__file-size">{{ fileSize || 1 }} Мб</span>
+              <span class="form__file-size">{{ fourthPanelData.file_size || 1 }} Мб</span>
             </div>
           </div>
           <div class="form__field-event-interregion">
@@ -218,7 +218,7 @@
               <span class="form__file-name">
                 {{ fourthPanelData.scan_file }}
               </span>
-              <span class="form__file-size">{{ fileSize }} Мб</span>
+              <span class="form__file-size">{{ fourthPanelData.file_size }} Мб</span>
               <button @click="deleteFile" class="form__button-delete-file">
                 Удалить
               </button>
@@ -364,208 +364,6 @@
       </div>
     </template>
   </report-tabs>
-
-  <!--  <v-card v-else class="panel-card">-->
-  <!--    <v-tabs v-model="tab">-->
-  <!--      <v-tab value="one" class="panel-tab-btn">Отчет РО</v-tab>-->
-  <!--      <v-tab value="two" class="panel-tab-btn">Корректировка ОШ</v-tab>-->
-  <!--      <v-tab value="three" class="panel-tab-btn">Корректировка ЦШ</v-tab>-->
-  <!--    </v-tabs>-->
-
-  <!--    <v-card-text class="panel-card-text">-->
-  <!--      <v-tabs-window v-model="tab">-->
-  <!--        <v-tabs-window-item value="one">-->
-  <!--          <div class="form__field-group">-->
-  <!--            <div>-->
-  <!--              <label class="form__label" for="1">Количество человек, принявших участие в мероприятии <sup-->
-  <!--                  class="valid-red">*</sup></label>-->
-  <!--              <InputReport id="1" name="1" class="form__input" type="number" placeholder="Введите число" />-->
-  <!--            </div>-->
-  <!--            <div style="display: flex;">-->
-  <!--              <div class="form__field">-->
-  <!--                <label class="form__label" for="2">Дата начала проведения мероприятия <sup-->
-  <!--                    class="valid-red">*</sup></label>-->
-  <!--                <InputReport id="2" name="2" class="form__input" type="date" />-->
-  <!--              </div>-->
-  <!--              <div class="form__field">-->
-  <!--                <label class="form__label" for="3">Дата окончания проведения мероприятия <sup-->
-  <!--                    class="valid-red">*</sup></label>-->
-  <!--                <InputReport id="3" name="3" class="form__input" type="date" />-->
-  <!--              </div>-->
-  <!--            </div>-->
-  <!--            <div style="display: flex;">-->
-  <!--              <div>-->
-  <!--                <label class="form__label" for="4">Положение о мероприятии <sup class="valid-red">*</sup></label>-->
-  <!--                <InputReport type="file" id="4" name="4" />-->
-  <!--              </div>-->
-  <!--              <div>-->
-  <!--                <label class="form__label" for="5">Межрегиональное <sup class="valid-red">*</sup></label>-->
-  <!--                <InputReport type="radio" id="5" name="5" />-->
-  <!--              </div>-->
-  <!--            </div>-->
-  <!--            <div>-->
-  <!--              <label class="form__label" for="6">Ссылка на группу мероприятия в социальных сетях <sup-->
-  <!--                  class="valid-red">*</sup></label>-->
-  <!--              <InputReport id="6" name="6" class="form__input" type="text" placeholder="https://vk.com/cco_monolit" />-->
-  <!--              <InputReport id="7" name="7" class="form__input" type="text" placeholder="https://vk.com/ccorobot" />-->
-  <!--              <InputReport id="8" name="8" class="form__input" type="text" placeholder="https://vk.com/cco_monolit11" />-->
-  <!--            </div>-->
-  <!--            <div>-->
-  <!--              <label class="form__label" for="9">Комментарий <sup class="valid-red">*</sup></label>-->
-  <!--              <InputReport id="9" name="9" class="form__input" type="textarea" placeholder="Комментарий"-->
-  <!--                style="width: 100%; height: 100px" />-->
-  <!--            </div>-->
-  <!--            <div>-->
-  <!--              <v-checkbox label="Итоговое значение" />-->
-  <!--            </div>-->
-  <!--            <div class="hr"></div>-->
-  <!--            <div>-->
-  <!--              <p>(4-1)*2+(4-2)+(4-3)=9</p>-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--        </v-tabs-window-item>-->
-
-  <!--        <v-tabs-window-item value="two">-->
-  <!--          <form class="form__field-group" @submit.prevent>-->
-  <!--            <div style="display: flex;">-->
-  <!--              <div>-->
-  <!--                <label class="form__label" for="10">Количество человек, принявших участие в мероприятии <sup-->
-  <!--                    class="valid-red">*</sup></label>-->
-  <!--                <InputReport id="10" name="10" class="form__input" type="number" placeholder="Введите число" />-->
-  <!--              </div>-->
-  <!--              <div>-->
-  <!--                <label class="form__label" for="11">Межрегиональное <sup class="valid-red">*</sup></label>-->
-  <!--                <div style="display: flex;">-->
-  <!--                  <InputReport id="11" name="11" class="form__input" type="radio" />-->
-  <!--                  <InputReport id="12" name="12" class="form__input" type="radio" />-->
-  <!--                </div>-->
-  <!--              </div>-->
-  <!--              <Button label="Удалить мероприятие" />-->
-  <!--            </div>-->
-  <!--            <div style="display: flex;">-->
-  <!--              <div class="form__field">-->
-  <!--                <label class="form__label" for="13">Дата начала проведения мероприятия <sup-->
-  <!--                    class="valid-red">*</sup></label>-->
-  <!--                <InputReport id="13" name="13" class="form__input" type="date" />-->
-  <!--              </div>-->
-  <!--              <div class="form__field">-->
-  <!--                <label class="form__label" for="3">Дата окончания проведения мероприятия <sup-->
-  <!--                    class="valid-red">*</sup></label>-->
-  <!--                <InputReport id="14" name="14" class="form__input" type="date" />-->
-  <!--              </div>-->
-  <!--            </div>-->
-  <!--            <div>-->
-  <!--              <Button style="margin: 0" label="Добавить мероприятие" size="large" />-->
-  <!--            </div>-->
-  <!--            <div class="form__field">-->
-  <!--              <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>-->
-  <!--              <InputReport id="14" name="14" class="form__input" style="width: 100%" />-->
-  <!--            </div>-->
-  <!--            <div>-->
-  <!--              <v-checkbox label="Итоговое значение" />-->
-  <!--            </div>-->
-  <!--            <div class="hr"></div>-->
-  <!--            <div>-->
-  <!--              <p>(4-1)*2+(4-2)+(4-3)=9</p>-->
-  <!--            </div>-->
-  <!--          </form>-->
-  <!--        </v-tabs-window-item>-->
-
-  <!--        <v-tabs-window-item value="three">-->
-  <!--          <div class="form__field-group report-table">-->
-  <!--            <div>-->
-  <!--              <Button style="margin-right: 0" label="Удалить мероприятие" size="large" />-->
-  <!--            </div>-->
-  <!--            <label class="form__label">Количество человек, принявших участие в мероприятии <sup-->
-  <!--                class="valid-red">*</sup></label>-->
-  <!--            <v-table>-->
-  <!--              <tbody>-->
-  <!--                <tr class="report-table__tr">-->
-  <!--                  <td class="report-table__th report-table__th__br-left">Данные РО</td>-->
-  <!--                  <td class="report-table__th">Корректировка ОШ</td>-->
-  <!--                  <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>-->
-  <!--                </tr>-->
-  <!--                <tr>-->
-  <!--                  <td class="report-table__td">200</td>-->
-  <!--                  <td class="report-table__td report-table__td__center">200</td>-->
-  <!--                  <td class="report-table__td">200</td>-->
-  <!--                </tr>-->
-  <!--              </tbody>-->
-  <!--            </v-table>-->
-  <!--            <label class="form__label">Межрегиональное <sup class="valid-red">*</sup></label>-->
-  <!--            <v-table>-->
-  <!--              <tbody>-->
-  <!--                <tr class="report-table__tr">-->
-  <!--                  <td class="report-table__th report-table__th__br-left">Данные РО</td>-->
-  <!--                  <td class="report-table__th">Корректировка ОШ</td>-->
-  <!--                  <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>-->
-  <!--                </tr>-->
-  <!--                <tr>-->
-  <!--                  <td class="report-table__td">200</td>-->
-  <!--                  <td class="report-table__td report-table__td__center">200</td>-->
-  <!--                  <td class="report-table__td">200</td>-->
-  <!--                </tr>-->
-  <!--              </tbody>-->
-  <!--            </v-table>-->
-  <!--            <div>-->
-  <!--              <label class="form__label" for="11">Межрегиональное <sup class="valid-red">*</sup></label>-->
-  <!--              <div style="display: flex;">-->
-  <!--                <InputReport id="11" name="11" class="form__input" type="radio" />-->
-  <!--                <InputReport id="12" name="12" class="form__input" type="radio" />-->
-  <!--              </div>-->
-  <!--            </div>-->
-  <!--            <label class="form__label">Дата начала проведения мероприятия <sup class="valid-red">*</sup></label>-->
-  <!--            <v-table>-->
-  <!--              <tbody>-->
-  <!--                <tr class="report-table__tr">-->
-  <!--                  <td class="report-table__th report-table__th__br-left">Данные РО</td>-->
-  <!--                  <td class="report-table__th">Корректировка ОШ</td>-->
-  <!--                  <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>-->
-  <!--                </tr>-->
-  <!--                <tr>-->
-  <!--                  <td class="report-table__td">25.03.2024</td>-->
-  <!--                  <td class="report-table__td report-table__td__center">25.03.2024</td>-->
-  <!--                  <td class="report-table__td">25.03.2024</td>-->
-  <!--                </tr>-->
-  <!--              </tbody>-->
-  <!--            </v-table>-->
-  <!--            <label class="form__label">Дата окончания проведения мероприятия <sup class="valid-red">*</sup></label>-->
-  <!--            <v-table>-->
-  <!--              <tbody>-->
-  <!--                <tr class="report-table__tr">-->
-  <!--                  <td class="report-table__th report-table__th__br-left">Данные РО</td>-->
-  <!--                  <td class="report-table__th">Корректировка ОШ</td>-->
-  <!--                  <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>-->
-  <!--                </tr>-->
-  <!--                <tr>-->
-  <!--                  <td class="report-table__td">25.03.2024</td>-->
-  <!--                  <td class="report-table__td report-table__td__center">25.03.2024</td>-->
-  <!--                  <td class="report-table__td">25.03.2024</td>-->
-  <!--                </tr>-->
-  <!--              </tbody>-->
-  <!--            </v-table>-->
-  <!--            <div>-->
-  <!--              <Button style="margin: 0" label="Добавить мероприятие" size="large" />-->
-  <!--            </div>-->
-  <!--            <div class="form__field">-->
-  <!--              <label class="form__label" for="15">Комментарий <sup class="valid-red">*</sup></label>-->
-  <!--              <InputReport id="15" name="15" class="form__input" style="width: 100%" />-->
-  <!--            </div>-->
-  <!--            <div>-->
-  <!--              <v-checkbox label="Итоговое значение" />-->
-  <!--            </div>-->
-  <!--            <div class="hr"></div>-->
-  <!--            <div>-->
-  <!--              <p>(4-1)*2+(4-2)+(4-3)=9</p>-->
-  <!--            </div>-->
-  <!--            <div>-->
-  <!--              <v-checkbox label="Вернуть в РО на доработку" />-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--        </v-tabs-window-item>-->
-  <!--      </v-tabs-window>-->
-  <!--    </v-card-text>-->
-  <!--  </v-card>-->
 </template>
 <script setup>
 import { ref, watchEffect } from "vue";
@@ -581,16 +379,16 @@ const props = defineProps({
   centralExpert: {
     type: Boolean
   },
-  reportId: {
-    type: String,
-    default: '',
-  }
+  data: Object,
 });
 
 const isFirstSent = ref(true);
+const scanFile = ref([]);
 const fourthPanelData = ref({
   comment: '',
-  events: []
+  events: [],
+  file_type: '',
+  file_size: '',
 });
 const events = ref([
   {
@@ -651,22 +449,14 @@ const deleteEvent = async (index) => {
     console.log('deleteEvent error: ', e);
   }
 };
-// new
+
 const uploadFile = async (event) => {
-  //   scanFile.value = event.target.files[0];
-  //   let formData = new FormData();
-  //   formData.append('scan_file', scanFile.value);
-  //   formData.append('comment', seventeenthPanelData.value.comment);
-  //
-  //   console.log(scanFile.value);
-  //
-  //   if (isFirstSent.value) {
-  //     let { scan_file } = await reportPartTwoService.createReport(formData, '17', true);
-  //     seventeenthPanelData.value.scan_file = scan_file.split('/').at(-1);
-  //   } else {
-  //     let { data: { scan_file } } = await reportPartTwoService.createReportDraft(formData, '17', true);
-  //     seventeenthPanelData.value.scan_file = scan_file.split('/').at(-1);
-  //   }
+  let formData = new FormData();
+  formData.append('scan_file', event.target.files[0]);
+  formData.append('comment', fourthPanelData.value.comment);
+  formData.append('events', JSON.stringify(events.value));
+
+  // await reportPartTwoService.createReportDraft(formData, '4', true);
 };
 const deleteFile = async () => {
   //   seventeenthPanelData.value.scan_file = '';
@@ -680,19 +470,12 @@ const deleteFile = async () => {
   //     await reportPartTwoService.createReportDraft(formData, '17', true);
   //   }
 };
-//
-watchEffect(async () => {
-  try {
-    const { data } = props.centralHeadquarterCommander || props.districtHeadquarterCommander
-      ? await reportPartTwoService.getReportDH('4', props.reportId)
-      : await reportPartTwoService.getReport('4');
-    if (data) {
-      isFirstSent.value = false;
-      events.value = [...data.events];
-      fourthPanelData.value.comment = data.comment;
-    }
-  } catch (e) {
-    console.log(e);
+
+watchEffect(() => {
+  if (props.data) {
+    isFirstSent.value = false;
+    events.value = [...props.data.events];
+    fourthPanelData.value.comment = props.data.comment;
   }
 });
 </script>
