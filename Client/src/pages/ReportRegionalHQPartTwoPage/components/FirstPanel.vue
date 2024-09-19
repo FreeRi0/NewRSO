@@ -9,8 +9,8 @@
             class="form__input" type="number" placeholder="Введите число" @focusout="focusOut" />
         </div>
         <div class="report__add-file">
-          <label class="form__label" for="scan_file">Скан платежного поручения об уплате ЧВ <sup
-              class="valid-red">*</sup></label>
+          <label style="display: flex;" class="form__label" for="scan_file">Скан платежного поручения<br> об уплате ЧВ
+            <sup class="valid-red">*</sup></label>
           <InputReport v-if="!firstPanelData.scan_file" isFile type="file" id="scan_file" name="scan_file"
             style="width: 100%;" @change="uploadFile" />
           <div v-else class="form__file-box">
@@ -32,7 +32,7 @@
         <label class="form__label" for="comment">Комментарий</label>
         <TextareaReport placeholder="Напишите сообщение" v-model:value="firstPanelData.comment" id="comment"
           name="comment" :rows="1" autoResize @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
-          counter-visible class="form__input" />
+          counter-visible class="form__input" style="margin-bottom: 4px;" />
       </div>
     </div>
     <ReportRegionalForm :reportData="reportData" />
