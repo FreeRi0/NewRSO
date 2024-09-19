@@ -167,7 +167,7 @@ const ID_PANEL = '13';
 const isFirstSent = ref(true);
 const scanFile = ref([]);
 const thirteenthPanelData = ref({
-    number_of_members: '',
+    number_of_members: null,
     scan_file: '',
     file_size: null,
     file_type: '',
@@ -183,7 +183,9 @@ const changeValue = (event) => {
 
 const focusOut = async () => {
     let formData = new FormData();
-    formData.append('number_of_members', thirteenthPanelData.value.number_of_members);
+
+    // formData.append('number_of_members', thirteenthPanelData.value.number_of_members);
+    thirteenthPanelData.value.number_of_members ? formData.append('number_of_members', thirteenthPanelData.value.number_of_members) : formData.append('number_of_members', "");
     formData.append('comment', thirteenthPanelData.value.comment);
 
     if (isFirstSent.value) {
@@ -191,28 +193,31 @@ const focusOut = async () => {
     } else {
         await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
     }
+
+    // if (isFirstSent.value) {
+    //     await reportPartTwoService.createReport(thirteenthPanelData.value, ID_PANEL, true);
+    // } else {
+    //     await reportPartTwoService.createReportDraft(thirteenthPanelData.value, ID_PANEL, true);
+    // }
 };
 
 const uploadFile = async (event) => {
     scanFile.value = event.target.files[0];
     let formData = new FormData();
-    formData.append('number_of_members', thirteenthPanelData.value.number_of_members);
-    formData.append('scan_file', scanFile.value);
-    formData.append('comment', thirteenthPanelData.value.comment);
-    // formData.append('file_size', seventeenthPanelData.value.file_size);
-    // formData.append('file_type', seventeenthPanelData.value.file_type);
-    // formData.append('file_size', (scanFile.value.size/( 1024 * 1024 )).toFixed(1));
-    // formData.append('file_type', scanFile.value.type);
+    // formData.append('number_of_members', thirteenthPanelData.value.number_of_members);
+    // formData.append('comment', thirteenthPanelData.value.comment);
 
-    console.log(scanFile.value);
+    formData.append('scan_file', scanFile.value);
+    thirteenthPanelData.value.file_size = (scanFile.value.size / Math.pow(1024, 2));
+    thirteenthPanelData.value.file_type = scanFile.value.type.split('/').at(-1);
+    // console.log(twelfthPanelData.value.file_type);
+    // console.log(scanFile.value);
 
     if (isFirstSent.value) {
         let { scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-        // thirteenthPanelData.value.scan_file = scan_file.split('/').at(-1);
         thirteenthPanelData.value.scan_file = scan_file;
     } else {
         let { data : { scan_file } } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-        // thirteenthPanelData.value.scan_file = scan_file.split('/').at(-1);
         thirteenthPanelData.value.scan_file = scan_file;
     }
 };
@@ -220,13 +225,11 @@ const uploadFile = async (event) => {
 const deleteFile = async () => {
     thirteenthPanelData.value.scan_file = '';
     let formData = new FormData();
-    formData.append('number_of_members', thirteenthPanelData.value.number_of_members);
+    // formData.append('number_of_members', thirteenthPanelData.value.number_of_members);
     formData.append('scan_file', '');
-    formData.append('comment', thirteenthPanelData.value.comment);
+    // formData.append('comment', thirteenthPanelData.value.comment);
     formData.append('file_size', thirteenthPanelData.value.file_size);
     formData.append('file_type', thirteenthPanelData.value.file_type);
-
-    console.log(formData);
 
     if (isFirstSent.value) {
         await reportPartTwoService.createReport(formData, ID_PANEL, true);
@@ -236,7 +239,7 @@ const deleteFile = async () => {
 };
 
 watchEffect(async () => {
-    console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
+    // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
     try {
         const { data } = 
         props.districtExpert || props.centralExpert
