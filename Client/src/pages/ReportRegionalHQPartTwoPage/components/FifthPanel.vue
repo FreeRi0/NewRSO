@@ -271,11 +271,23 @@ import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { reportPartTwoService } from "@services/ReportService.ts";
 
+const props = defineProps({
+  districtExpert: {
+    type: Boolean
+  },
+  centralExpert: {
+    type: Boolean
+  },
+  data: Object,
+});
+
+const emit = defineEmits(['getData']);
+
 const tab = ref('one');
 const isFirstSent = ref(true);
 const fifthPanelData = ref({
   comment: '',
-  events: []
+  events: [],
 });
 const events = ref([
   {
@@ -317,7 +329,8 @@ const focusOut = async () => {
     if (isFirstSent.value) {
       await reportPartTwoService.createReport(fifthPanelData.value, '5');
     } else {
-      await reportPartTwoService.createReportDraft(fifthPanelData.value, '5');
+      const { data } = await reportPartTwoService.createReportDraft(fifthPanelData.value, '5');
+      emit('getData', data, 5);
     }
   } catch (e) {
     console.log('focusOut error:', e);
@@ -332,16 +345,11 @@ const deleteProject = async (index) => {
     console.log('deleteEvent error: ', e);
   }
 };
-watchEffect(async () => {
-  try {
-    const { data } = await reportPartTwoService.getReport('5');
-    if (data) {
-      isFirstSent.value = false;
-      events.value = [...data.events];
-      fifthPanelData.value.comment = data.comment;
-    }
-  } catch (e) {
-    console.log(e);
+watchEffect( () => {
+  if (props.data) {
+    isFirstSent.value = false;
+    events.value = [...props.data.events];
+    fifthPanelData.value.comment = props.data.comment;
   }
 });
 </script>

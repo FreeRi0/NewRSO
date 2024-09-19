@@ -161,7 +161,7 @@
                 counter-visible
                 :max-counter="300"
                 :max-length="300"
-                :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"
+                :disabled="props.centralExpert || props.districtExpert"
             />
           </div>
         </div>
@@ -429,19 +429,21 @@ import {SvgIcon} from '@shared/index';
 import {ReportTabs} from './index';
 
 const props = defineProps({
-  districtHeadquarterCommander: {
+  districtExpert: {
     type: Boolean
   },
-  centralHeadquarterCommander: {
+  centralExpert: {
     type: Boolean
   },
   reportId: {
     type: String,
     default: '',
-  }
+  },
+  data: Object,
 });
 
-const tab = ref('one');
+const emit = defineEmits(['getData']);
+
 const sixteenthPanelData = ref({
   is_project: false,
   projects: [],
@@ -460,13 +462,13 @@ const projects = ref([
 const isFirstSent = ref(true);
 const focusOut = async () => {
   sixteenthPanelData.value.projects = [...projects.value];
-  console.log(sixteenthPanelData.value);
   try {
     if (isFirstSent.value) {
       await reportPartTwoService.createReport(sixteenthPanelData.value, '16');
       isFirstSent.value = false;
     } else {
-      await reportPartTwoService.createReportDraft(sixteenthPanelData.value, '16');
+      const { data } = await reportPartTwoService.createReportDraft(sixteenthPanelData.value, '16');
+      emit('getData', data, 16);
     }
   } catch (e) {
     console.log('focusOut error:', e);
@@ -501,16 +503,22 @@ const deleteProject = async (index) => {
   }
 };
 watchEffect(async () => {
-  try {
-    const {data} = await reportPartTwoService.getReport('16');
-    if (data) {
-      isFirstSent.value = false;
-      projects.value = [...data.projects];
-      sixteenthPanelData.value.is_project = data.is_project;
-      // sixteenthPanelData.value.comment = data.comment;
-    }
-  } catch (e) {
-    console.log(e);
+  // try {
+  //   const {data} = await reportPartTwoService.getReport('16');
+  //   if (data) {
+  //     isFirstSent.value = false;
+  //     projects.value = [...data.projects];
+  //     sixteenthPanelData.value.is_project = data.is_project;
+  //     // sixteenthPanelData.value.comment = data.comment;
+  //   }
+  // } catch (e) {
+  //   console.log(e);
+  // }
+  if (props.data) {
+    isFirstSent.value = false;
+    projects.value = [...props.data.projects];
+    sixteenthPanelData.value.is_project = props.data.is_project;
+    // sixteenthPanelData.value.comment = props.data.comment;
   }
 })
 </script>

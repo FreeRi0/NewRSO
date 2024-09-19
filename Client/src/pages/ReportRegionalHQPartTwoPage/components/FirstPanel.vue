@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!(props.centralHeadquarterCommander || props.districtHeadquarterCommander)">
+  <div v-if="!(props.centralExpert || props.districtExpert)">
     <div class="form__field-group">
       <div class="form__field-report">
         <div class="form__field">
@@ -51,7 +51,7 @@
               class="form__input" type="number"
               placeholder="Введите число"
               @focusout="focusOut"
-              :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"
+              :disabled="props.centralExpert || props.districtExpert"
           />
         </div>
         <div class="report__add-file">
@@ -139,17 +139,20 @@ import {SvgIcon} from '@shared/index';
 import {ReportTabs} from './index';
 
 const props = defineProps({
-  districtHeadquarterCommander: {
+  districtExpert: {
     type: Boolean
   },
-  centralHeadquarterCommander: {
+  centralExpert: {
     type: Boolean
   },
-  reportId: {
-    type: String,
-    default: '',
-  }
+  // reportId: {
+  //   type: String,
+  //   default: '',
+  // },
+  data: Object,
 });
+
+const emit = defineEmits(['getData']);
 
 const defaultReportData = {
   participants_number: '0',
@@ -163,7 +166,7 @@ const defaultReportData = {
   employed_ssho: '0',
   employed_top: '0',
 };
-// const tab = ref('one');
+
 const reportData = ref(defaultReportData);
 const isFirstSent = ref(true);
 const scanFile = ref([]);
@@ -174,21 +177,28 @@ const firstPanelData = ref({
   file_type: '',
   file_size: '',
 });
+
 const focusOut = async () => {
   let formData = new FormData();
   formData.append('comment', firstPanelData.value.comment);
   formData.append('amount_of_money', firstPanelData.value.amount_of_money);
 
-  if (isFirstSent.value) {
-    await reportPartTwoService.createReport(formData, '1', true);
-  } else {
-    await reportPartTwoService.createReportDraft(formData, '1', true);
+  try {
+    if (isFirstSent.value) {
+      await reportPartTwoService.createReport(formData, '1', true);
+    } else {
+      const { data } = await reportPartTwoService.createReportDraft(formData, '1', true);
+      emit('getData', data, 1);
+    }
+  } catch (e) {
+    console.log(e)
   }
+
 };
 const uploadFile = async (event) => {
-  scanFile.value = event.target.files[0];
   let formData = new FormData();
-  formData.append('scan_file', scanFile.value);
+
+  formData.append('scan_file', event.target.files[0]);
   formData.append('comment', firstPanelData.value.comment);
   formData.append('amount_of_money', firstPanelData.value.amount_of_money);
   if (isFirstSent.value) {
@@ -214,26 +224,20 @@ const deleteFile = async () => {
 };
 watchEffect(async () => {
   try {
-    if (!(props.centralHeadquarterCommander || props.districtHeadquarterCommander)) {
+    if (!(props.centralExpert || props.districtExpert)) {
       const res = await getReport();
       reportData.value = res.data;
     }
-
-
-    const {data} = props.centralHeadquarterCommander || props.districtHeadquarterCommander
-        ? await reportPartTwoService.getReportDH('1', props.reportId)
-        : await reportPartTwoService.getReport('1');
-
-    if (data) {
-      isFirstSent.value = false;
-      firstPanelData.value.comment = data.comment;
-      firstPanelData.value.amount_of_money = data.amount_of_money;
-      // firstPanelData.value.scan_file = data.scan_file.split('/').at(-1);
-      firstPanelData.value.file_type = data.file_type;
-      firstPanelData.value.file_size = data.file_size;
-    }
   } catch (e) {
     console.log(e)
+  }
+  if (props.data) {
+    isFirstSent.value = false;
+    firstPanelData.value.comment = props.data.comment;
+    firstPanelData.value.amount_of_money = props.data.amount_of_money;
+    firstPanelData.value.scan_file = props.data.scan_file.split('/').at(-1);
+    firstPanelData.value.file_type = props.data.file_type;
+    firstPanelData.value.file_size = props.data.file_size;
   }
 });
 </script>
