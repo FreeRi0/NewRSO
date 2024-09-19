@@ -5,13 +5,10 @@
         <v-expansion-panel-title>
           Всероссийская патриотическая акция «Снежный Десант РСО»
         </v-expansion-panel-title>
-        <v-expansion-panel-text >
-          <TenthPanelForm
-              :districtExpert="districtExpert"
-              :centralExpert="centralExpert"
-              :data="tenthPanelDataFirst"
-              @formData="formData($event, 1)"
-          />
+        <v-expansion-panel-text>
+          <TenthPanelForm :districtHeadquarterCommander="districtHeadquarterCommander"
+            :centralHeadquarterCommander="centralHeadquarterCommander" :data="tenthPanelDataFirst"
+            @formData="formData($event, 1)" />
         </v-expansion-panel-text>
       </v-expansion-panel>
 
@@ -20,11 +17,9 @@
           Всероссийская трудовая патриотическая акция «Поклонимся Великим годам»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <TenthPanelForm
-              :districtExpert="districtExpert"
-              :centralExpert="centralExpert"
-              :data="tenthPanelDataSecond"
-              @formData="formData($event, 2)"/>
+          <TenthPanelForm :districtHeadquarterCommander="districtHeadquarterCommander"
+            :centralHeadquarterCommander="centralHeadquarterCommander" :data="tenthPanelDataSecond"
+            @formData="formData($event, 2)" />
         </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -35,7 +30,7 @@ import { ref, watchEffect } from "vue";
 import { TenthPanelForm } from './index';
 import { reportPartTwoService } from "@services/ReportService.ts";
 
-defineProps({
+const props = defineProps({
   districtExpert: {
     type: Boolean
   },
@@ -45,7 +40,8 @@ defineProps({
   reportId: {
     type: String,
     default: '',
-  }
+  },
+  data: Object,
 });
 
 const emit = defineEmits(['getData']);
@@ -93,28 +89,26 @@ const formData = async (reportData, reportNumber) => {
   }
 
 };
-watchEffect(async () => {
-  try {
-    const dataFirst = await reportPartTwoService.getMultipleReport('10', '1');
-    if (dataFirst.data) {
-      isFirstSent.value.first = false;
-      tenthPanelDataFirst.value = {...dataFirst.data}
-    }
-    const dataSecond = await reportPartTwoService.getMultipleReport('10', '2');
-    if (dataSecond.data) {
-      isFirstSent.value.second = false;
-      tenthPanelDataSecond.value = {...dataSecond.data}
-    }
-  } catch (e) {
-    console.log(e);
+watchEffect( () => {
+  if (props.data.first) {
+    isFirstSent.value.first = false;
+    tenthPanelDataFirst.value = { ...props.data.first }
+  }
+  if (props.data.second) {
+    isFirstSent.value.second = false;
+    tenthPanelDataSecond.value = { ...props.data.second }
   }
 });
 </script>
 <style scoped>
+.v-expansion-panels {
+  gap: 8px;
+}
+
 .v-expansion-panel-title {
   background: #F3F4F5;
   margin: 0px;
-  border-radius: 0px;
+  border-radius: 10px;
   font-family: Akrobat;
   font-size: 18px;
   font-weight: 600;

@@ -166,7 +166,7 @@ const ID_PANEL = "11";
 const isFirstSent = ref(true);
 const scanFile = ref([]);
 const eleventhPanelData = ref({
-  participants_number: "",
+  participants_number: null,
   scan_file: "",
   file_size: null,
   file_type: "",
@@ -176,14 +176,15 @@ const eleventhPanelData = ref({
 const emit = defineEmits(["update:value"]);
 
 const changeValue = (event) => {
-  // console.log(event);
   emit("update:value", event);
 };
 
 const focusOut = async () => {
   console.log(eleventhPanelData.value);
   let formData = new FormData();
-  formData.append("participants_number", eleventhPanelData.value.participants_number);
+
+  eleventhPanelData.value.participants_number ? formData.append("participants_number", eleventhPanelData.value.participants_number) : formData.append("participants_number", "");
+  // formData.append("participants_number", eleventhPanelData.value.participants_number);
   formData.append("comment", eleventhPanelData.value.comment);
 
   if (isFirstSent.value) {
@@ -191,6 +192,12 @@ const focusOut = async () => {
   } else {
     await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
   }
+
+  // if (isFirstSent.value) {
+  //   await reportPartTwoService.createReport(eleventhPanelData.value, ID_PANEL, true);
+  // } else {
+  //   await reportPartTwoService.createReportDraft(eleventhPanelData.value, ID_PANEL, true);
+  // }
 
   // if (isFirstSent.value) {
   //     await reportPartTwoService.createReport(formData, ID_PANEL, true);
@@ -204,25 +211,32 @@ const focusOut = async () => {
 const uploadFile = async (event) => {
   scanFile.value = event.target.files[0];
   let formData = new FormData();
-  formData.append("participants_number", eleventhPanelData.value.participants_number);
+  // if (eleventhPanelData.value.participants_number) {
+  //   formData.append("participants_number", eleventhPanelData.value.participants_number)
+  // }
+  // eleventhPanelData.value.participants_number ? formData.append("participants_number", eleventhPanelData.value.participants_number) : formData.getAll("participants_number");
+  // console.log(eleventhPanelData.value.participants_number, formData.get("participants_number"));
+
+  // formData.append("participants_number", eleventhPanelData.value.participants_number)
   formData.append("scan_file", scanFile.value);
-  formData.append("comment", eleventhPanelData.value.comment);
+  // formData.append("comment", eleventhPanelData.value.comment);
   // formData.append('file_size', seventeenthPanelData.value.file_size);
   // formData.append('file_type', seventeenthPanelData.value.file_type);
   // formData.append('file_size', (scanFile.value.size/( 1024 * 1024 )).toFixed(1));
   // formData.append('file_type', scanFile.value.type);
 
-  console.log(scanFile.value);
+  eleventhPanelData.value.file_size = (scanFile.value.size / Math.pow(1024, 2));
+  eleventhPanelData.value.file_type = scanFile.value.type.split('/').at(-1);
+  // console.log(eleventhPanelData.value.file_type);
+  // console.log(scanFile.value);
 
   if (isFirstSent.value) {
     let { scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-    // eleventhPanelData.value.scan_file = scan_file.split('/').at(-1);
     eleventhPanelData.value.scan_file = scan_file;
   } else {
     let {
       data: { scan_file },
     } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-    // eleventhPanelData.value.scan_file = scan_file.split('/').at(-1);
     eleventhPanelData.value.scan_file = scan_file;
   }
 };
@@ -230,13 +244,11 @@ const uploadFile = async (event) => {
 const deleteFile = async () => {
   eleventhPanelData.value.scan_file = "";
   let formData = new FormData();
-  formData.append("participants_number", eleventhPanelData.value.participants_number);
+  // formData.append("participants_number", eleventhPanelData.value.participants_number);
   formData.append("scan_file", "");
-  formData.append("comment", eleventhPanelData.value.comment);
+  // formData.append("comment", eleventhPanelData.value.comment);
   formData.append("file_size", eleventhPanelData.value.file_size);
   formData.append("file_type", eleventhPanelData.value.file_type);
-
-  console.log(formData);
 
   if (isFirstSent.value) {
     await reportPartTwoService.createReport(formData, ID_PANEL, true);
@@ -246,7 +258,7 @@ const deleteFile = async () => {
 };
 
 watchEffect(async () => {
-  console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
+  // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
   try {
     const { data } =
       props.districtExpert || props.centralExpert
