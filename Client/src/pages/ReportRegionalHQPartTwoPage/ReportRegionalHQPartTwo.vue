@@ -288,7 +288,7 @@ const downloadReportAll = (id) => {
 
 const getReportData = async () => {
   try {
-    if(centralExpert.value || districtExpert.value) {
+    if (centralExpert.value || districtExpert.value) {
       reportData.value.first = (await reportPartTwoService.getReportDH('1', '1')).data;
       reportData.value.fourth = (await reportPartTwoService.getReportDH('4', '1')).data;
       reportData.value.fifth = (await reportPartTwoService.getReportDH('5', '1')).data;
