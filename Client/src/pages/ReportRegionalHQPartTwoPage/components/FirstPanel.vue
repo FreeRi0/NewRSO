@@ -145,10 +145,11 @@ const props = defineProps({
   centralExpert: {
     type: Boolean
   },
-  reportId: {
-    type: String,
-    default: '',
-  }
+  // reportId: {
+  //   type: String,
+  //   default: '',
+  // },
+  data: Object,
 });
 
 const emit = defineEmits(['getData']);
@@ -165,7 +166,7 @@ const defaultReportData = {
   employed_ssho: '0',
   employed_top: '0',
 };
-// const tab = ref('one');
+
 const reportData = ref(defaultReportData);
 const isFirstSent = ref(true);
 const scanFile = ref([]);
@@ -195,9 +196,9 @@ const focusOut = async () => {
 
 };
 const uploadFile = async (event) => {
-  scanFile.value = event.target.files[0];
   let formData = new FormData();
-  formData.append('scan_file', scanFile.value);
+
+  formData.append('scan_file', event.target.files[0]);
   formData.append('comment', firstPanelData.value.comment);
   formData.append('amount_of_money', firstPanelData.value.amount_of_money);
   if (isFirstSent.value) {
@@ -227,21 +228,16 @@ watchEffect(async () => {
       const res = await getReport();
       reportData.value = res.data;
     }
-
-    const {data} = props.centralExpert || props.districtExpert
-        ? await reportPartTwoService.getReportDH('1', props.reportId)
-        : await reportPartTwoService.getReport('1');
-
-    if (data) {
-      isFirstSent.value = false;
-      firstPanelData.value.comment = data.comment;
-      firstPanelData.value.amount_of_money = data.amount_of_money;
-      // firstPanelData.value.scan_file = data.scan_file.split('/').at(-1);
-      firstPanelData.value.file_type = data.file_type;
-      firstPanelData.value.file_size = data.file_size;
-    }
   } catch (e) {
     console.log(e)
+  }
+  if (props.data) {
+    isFirstSent.value = false;
+    firstPanelData.value.comment = props.data.comment;
+    firstPanelData.value.amount_of_money = props.data.amount_of_money;
+    firstPanelData.value.scan_file = props.data.scan_file.split('/').at(-1);
+    firstPanelData.value.file_type = props.data.file_type;
+    firstPanelData.value.file_size = props.data.file_size;
   }
 });
 </script>

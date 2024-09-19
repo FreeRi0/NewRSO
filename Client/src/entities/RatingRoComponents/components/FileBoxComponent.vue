@@ -1,7 +1,11 @@
 <template>
     <div class="report__file-box">
         <div class="report__file-name">
-            <SvgIcon v-if="fileType === 'jpg'" icon-name="file-jpg" />
+            <SvgIcon v-if="fileType === 'jpg' ||
+                    fileType === 'jpeg' ||
+                    fileType === 'JPG' ||
+                    fileType === 'JPEG'"
+                    icon-name="file-jpg" />
             <SvgIcon v-if="fileType === 'pdf'" icon-name="file-pdf" />
             <SvgIcon v-if="fileType === 'png'" icon-name="file-png" />
             <a :href=file>{{ file.split('/').at(-1) }}</a>
