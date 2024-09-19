@@ -116,26 +116,42 @@ const nineteenthPanelData = ref({
 });
 
 const focusOut = async () => {
-  let formData = new FormData();
   console.log(nineteenthPanelData.value);
-  nineteenthPanelData.value.employed_student_start ? formData.append('employed_student_start', nineteenthPanelData.value.employed_student_start) : formData.append('employed_student_start', null);
-  nineteenthPanelData.value.employed_student_end ? formData.append('employed_student_end', nineteenthPanelData.value.employed_student_end) : formData.append('employed_student_end', null);
+  // let formData = new FormData();
+  // nineteenthPanelData.value.employed_student_start ? formData.append('employed_student_start', nineteenthPanelData.value.employed_student_start) : formData.delete('employed_student_start');
+  // nineteenthPanelData.value.employed_student_end ? formData.append('employed_student_end', nineteenthPanelData.value.employed_student_end) : formData.append('employed_student_end', '');
+
   // formData.append('employed_student_start', nineteenthPanelData.value.employed_student_start);
   // formData.append('employed_student_end', nineteenthPanelData.value.employed_student_end);
-  formData.append('comment', nineteenthPanelData.value.comment);
+
+  // if (isFirstSent.value) {
+  //   await reportPartTwoService.createReport(formData, ID_PANEL);
+  // } else {
+  //   await reportPartTwoService.createReportDraft(formData, ID_PANEL);
+  // }
+  //--------------------------------------------------------------------------------------------
+
+  if (nineteenthPanelData.value.employed_student_start === '') {
+    nineteenthPanelData.value.employed_student_start = null;
+  }
+  
+  if (nineteenthPanelData.value.employed_student_end === '') {
+    nineteenthPanelData.value.employed_student_end = null;
+  }
 
   // console.log ("start -", typeof(nineteenthPanelData.value.employed_student_start), "end - ", typeof(nineteenthPanelData.value.employed_student_end));
 
+  console.log(nineteenthPanelData.value.employed_student_start, nineteenthPanelData.value.employed_student_end);
+
   if (isFirstSent.value) {
-    await reportPartTwoService.createReport(formData, ID_PANEL);
+    await reportPartTwoService.createReport(nineteenthPanelData.value, ID_PANEL);
   } else {
-    await reportPartTwoService.createReportDraft(formData, ID_PANEL);
+    await reportPartTwoService.createReportDraft(nineteenthPanelData.value, ID_PANEL);
   }
-  
 };
 
 watchEffect(async () => {
-  console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
+  // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
   try {
     const { data } = 
       props.districtExpert || props.centralExpert
