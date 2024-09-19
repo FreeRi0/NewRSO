@@ -166,7 +166,7 @@ const ID_PANEL = '12';
 const isFirstSent = ref(true);
 const scanFile = ref([]);
 const twelfthPanelData = ref({
-    amount_of_money: '',
+    amount_of_money: null,
     scan_file: '',
     file_size: null,
     file_type: '',
@@ -176,13 +176,15 @@ const twelfthPanelData = ref({
 const emit = defineEmits(["update:value"]);
 
 const changeValue = (event) => {
-  // console.log(event);
   emit("update:value", event);
 };
 
 const focusOut = async () => {
+    console.log(twelfthPanelData.value);
     let formData = new FormData();
-    formData.append('amount_of_money', twelfthPanelData.value.amount_of_money);
+    
+    // formData.append('amount_of_money', twelfthPanelData.value.amount_of_money);
+    twelfthPanelData.value.amount_of_money ? formData.append('amount_of_money', twelfthPanelData.value.amount_of_money) : formData.append('amount_of_money', "");
     formData.append('comment', twelfthPanelData.value.comment);
 
     if (isFirstSent.value) {
@@ -190,42 +192,43 @@ const focusOut = async () => {
     } else {
         await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
     }
+
+    // if (isFirstSent.value) {
+    //     await reportPartTwoService.createReport(twelfthPanelData.value, ID_PANEL, true);
+    // } else {
+    //     await reportPartTwoService.createReportDraft(twelfthPanelData.value, ID_PANEL, true);
+    // }
 };
 
 const uploadFile = async (event) => {
     scanFile.value = event.target.files[0];
     let formData = new FormData();
-    formData.append('amount_of_money', twelfthPanelData.value.amount_of_money);
-    formData.append('scan_file', scanFile.value);
-    formData.append('comment', twelfthPanelData.value.comment);
-    // formData.append('file_size', seventeenthPanelData.value.file_size);
-    // formData.append('file_type', seventeenthPanelData.value.file_type);
-    // formData.append('file_size', (scanFile.value.size/( 1024 * 1024 )).toFixed(1));
-    // formData.append('file_type', scanFile.value.type);
+    // formData.append('amount_of_money', twelfthPanelData.value.amount_of_money);
+    // formData.append('comment', twelfthPanelData.value.comment);
 
-    console.log(scanFile.value);
+    formData.append('scan_file', scanFile.value);
+    twelfthPanelData.value.file_size = (scanFile.value.size / Math.pow(1024, 2));
+    twelfthPanelData.value.file_type = scanFile.value.type.split('/').at(-1);
+    // console.log(twelfthPanelData.value.file_type);
+    // console.log(scanFile.value);
 
     if (isFirstSent.value) {
         let { scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-        // twelfthPanelData.value.scan_file = scan_file.split('/').at(-1);
-        twelfthPanelData.value.scan_file = scan_file
+        twelfthPanelData.value.scan_file = scan_file;
     } else {
         let { data : { scan_file } } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-        // twelfthPanelData.value.scan_file = scan_file.split('/').at(-1);
-        twelfthPanelData.value.scan_file = scan_file
+        twelfthPanelData.value.scan_file = scan_file;
     }
 };
 
 const deleteFile = async () => {
     twelfthPanelData.value.scan_file = '';
     let formData = new FormData();
-    formData.append('amount_of_money', twelfthPanelData.value.amount_of_money);
+    // formData.append('amount_of_money', twelfthPanelData.value.amount_of_money);
     formData.append('scan_file', '');
-    formData.append('comment', twelfthPanelData.value.comment);
+    // formData.append('comment', twelfthPanelData.value.comment);
     formData.append('file_size', twelfthPanelData.value.file_size);
     formData.append('file_type', twelfthPanelData.value.file_type);
-
-    console.log(formData);
 
     if (isFirstSent.value) {
         await reportPartTwoService.createReport(formData, ID_PANEL, true);
@@ -235,7 +238,7 @@ const deleteFile = async () => {
 };
 
 watchEffect(async () => {
-    console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
+    // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
     try {
         const { data } = 
         props.districtExpert || props.centralExpert
