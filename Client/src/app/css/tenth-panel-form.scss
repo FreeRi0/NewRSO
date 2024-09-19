@@ -1,0 +1,7 @@
+.form__input-add-link {
+    width: 720px;
+
+    @media (max-width: 1024px) {
+        width: 100%;
+    }
+}

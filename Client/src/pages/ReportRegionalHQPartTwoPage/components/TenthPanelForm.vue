@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="form__field">
-      <p class="form__label">Проведение акции <sup class="valid-red">*</sup></p>
+      <p class="form__label" id="form__label-radio">Проведение акции <sup class="valid-red">*</sup></p>
       <div class="form__field-radio" style="display: flex">
         <div style="display: flex; align-items: center">
           <input v-model="tenthPanelData.event_happened" id="event_happened-true" class="custom-radio" type="radio"
@@ -26,7 +26,7 @@
         <label style="display: flex; " class="form__label" for="4">Скан документа, подтверждающего проведение
           акции</label>
         <InputReport class="form-input__file-input" v-if="!tenthPanelData.scan_file" isFile type="file" id="scan_file"
-          name="scan_file" width="100%" @change="uploadFile" />
+          name="scan_file" @change="uploadFile" />
         <div v-else class="form__file-box">
           <span class="form__file-name">
             {{ tenthPanelData.scan_file }}
@@ -46,12 +46,13 @@
           <Button class="addLinkBtn" label="+ Добавить ссылку" @click="addLink" />
         </div>
       </div>
-<!--      <div class="form__field-comment">-->
-<!--        <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>-->
-<!--        <InputReport v-model:value="fourthPanelData.comment" id="comment" name="comment" class="form__input"-->
-<!--          type="textarea" placeholder="Укажите наименования организованных мероприятий" style="width: 100%;"-->
-<!--          @focusout="focusOut" />-->
-<!--      </div>-->
+      <div class="form__field-comment">
+        <label style="display: flex; align-items: center;" class="form__label" for="comment">Комментарий <sup
+            class="valid-red">*</sup></label>
+        <TextareaReport placeholder="Напишите сообщение" v-model:value="tenthPanelData.comment" id="comment"
+          name="comment" :rows="1" autoResize @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
+          counter-visible class="form__input form__input-comment" style="margin-bottom: 4px;" />
+      </div>
     </div>
   </div>
   <report-tabs v-else>
@@ -124,12 +125,12 @@
             <label for="event_happened-false">Нет</label>
           </div>
         </div>
-<!--        <div class="form__field">-->
-<!--          <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>-->
-<!--          <TextareaReport placeholder="Напишите сообщение" v-model:value="tenthPanelData.comment" id="comment"-->
-<!--            name="comment" :rows="1" autoResize @focusout="formData" :maxlength="3000" :max-length-text="3000"-->
-<!--            counter-visible class="form__input" />-->
-<!--        </div>-->
+        <!--        <div class="form__field">-->
+        <!--          <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>-->
+        <!--          <TextareaReport placeholder="Напишите сообщение" v-model:value="tenthPanelData.comment" id="comment"-->
+        <!--            name="comment" :rows="1" autoResize @focusout="formData" :maxlength="3000" :max-length-text="3000"-->
+        <!--            counter-visible class="form__input" />-->
+        <!--        </div>-->
       </div>
     </template>
   </report-tabs>
@@ -186,6 +187,14 @@ watchEffect(() => {
   text-align: center;
   min-height: 86px;
 
+  @media (max-width: 1024px) {
+    width: 528px;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+
   @media (max-width: 568px) {
     min-height: 101px;
   }
@@ -235,15 +244,26 @@ watchEffect(() => {
   display: flex;
   gap: 40px;
   margin-bottom: 8px;
+  flex-wrap: wrap;
+  row-gap: 8px;
+
+  @media (max-width: 1024px) {
+    align-items: stretch;
+    flex-direction: column;
+  }
 }
 
 .form__input-add-link {
   width: 720px;
+
+  @media (max-width: 1024px) {
+    width: 100%;
+  }
 }
 
 .addLinkBtn {
   min-width: 141px;
-  margin: 8px 0;
+  margin: 0;
   border: none;
   background-color: transparent;
   color: #1F7CC0;
@@ -332,6 +352,15 @@ watchEffect(() => {
   border-radius: 10px;
   margin: 0;
   margin-top: 8px;
+  padding: 40px 40px 60px;
+
+  @media (max-width: 568px) {
+    padding: 16px 16px 32px;
+  }
+}
+
+.form__title {
+  margin-bottom: 16px;
 }
 
 .form__field {
@@ -340,6 +369,17 @@ watchEffect(() => {
   &-radio {
     gap: 40px;
     margin-bottom: 8px;
+
+    @media (max-width: 568px) {
+      gap: 32px;
+      margin-bottom: 0;
+    }
+  }
+}
+
+#form__label-radio {
+  @media (max-width: 568px) {
+    margin-bottom: 0;
   }
 }
 
@@ -351,6 +391,10 @@ watchEffect(() => {
 
 .form__field-comment {
   width: 100%;
+
+  @media (max-width: 1024px) {
+    margin-top: 0;
+  }
 }
 
 .valid-red {
