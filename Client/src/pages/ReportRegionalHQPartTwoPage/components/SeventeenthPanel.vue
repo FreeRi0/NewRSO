@@ -88,11 +88,14 @@ const props = defineProps({
   centralExpert: {
     type: Boolean
   },
-  reportId: {
-    type: String,
-    default: '1',
-  }
+  // reportId: {
+  //   type: String,
+  //   default: '1',
+  // },
+  data: Object,
 });
+
+const emit = defineEmits(['getData']);
 
 const ID_PANEL = '17';
 const isFirstSent = ref(true);
@@ -108,10 +111,21 @@ const focusOut = async () => {
   let formData = new FormData();
   formData.append('comment', seventeenthPanelData.value.comment);
 
-  if (isFirstSent.value) {
-    await reportPartTwoService.createReport(formData, ID_PANEL, true);
-  } else {
-    await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+  // if (isFirstSent.value) {
+  //   await reportPartTwoService.createReport(formData, ID_PANEL, true);
+  // } else {
+  //   await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+  // }
+
+  try {
+    if (isFirstSent.value) {
+      await reportPartTwoService.createReport(formData, ID_PANEL, true);
+    } else {
+      const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+      emit('getData', data, Number(ID_PANEL));
+    }
+  } catch (e) {
+    console.log('focusOut error:', e);
   }
 };
 
@@ -125,12 +139,25 @@ const uploadFile = async (event) => {
   seventeenthPanelData.value.file_type = scanFile.value.type.split('/').at(-1);
   // console.log(scanFile.value);
 
-  if (isFirstSent.value) {
-    let { scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-    seventeenthPanelData.value.scan_file = scan_file;
-  } else {
-    let { data : { scan_file } } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-    seventeenthPanelData.value.scan_file = scan_file;
+  // if (isFirstSent.value) {
+  //   let { scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+  //   seventeenthPanelData.value.scan_file = scan_file;
+  // } else {
+  //   let { data : { scan_file } } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+  //   seventeenthPanelData.value.scan_file = scan_file;
+  // }
+
+  try {
+    if (isFirstSent.value) {
+      let { scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+      seventeenthPanelData.value.scan_file = scan_file;
+    } else {
+      let { data :  scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+      seventeenthPanelData.value.scan_file = scan_file;
+      emit('getData', scan_file, Number(ID_PANEL));
+    }
+  } catch (e) {
+    console.log('focusOut error:', e);
   }
 };
 
@@ -142,32 +169,53 @@ const deleteFile = async () => {
   formData.append('file_size', seventeenthPanelData.value.file_size);
   formData.append('file_type', seventeenthPanelData.value.file_type);
 
-  if (isFirstSent.value) {
-    await reportPartTwoService.createReport(formData, ID_PANEL, true);
-  } else {
-    await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+  // if (isFirstSent.value) {
+  //   await reportPartTwoService.createReport(formData, ID_PANEL, true);
+  // } else {
+  //   await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+  // }
+
+  try {
+    if (isFirstSent.value) {
+      await reportPartTwoService.createReport(formData, ID_PANEL, true);
+    } else {
+      let { data :  scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+      emit('getData', scan_file, Number(ID_PANEL));
+    }
+  } catch (e) {
+    console.log('focusOut error:', e);
   }
 };
 
-watchEffect(async () => {
+// watchEffect(async () => {
+watchEffect(() => {
   // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
-  try {
-    const { data } = 
-      props.districtExpert || props.centralExpert
-        ? await reportPartTwoService.getReportDH(ID_PANEL, props.reportId)
-        : await reportPartTwoService.getReport(ID_PANEL);
-    console.log(data);
-    if (data) {
-      isFirstSent.value = false;
-      seventeenthPanelData.value.comment = data.comment;
-      // seventeenthPanelData.value.scan_file = data.scan_file.split('/').at(-1)
-      seventeenthPanelData.value.scan_file = data.scan_file;
-      seventeenthPanelData.value.file_size = data.file_size;
-      seventeenthPanelData.value.file_type = data.file_type;
-    }
-  } catch (e) {
-    console.log(e)
+
+  if (props.data) {
+    isFirstSent.value = false;
+    seventeenthPanelData.value.comment = props.data.comment;
+    seventeenthPanelData.value.scan_file = props.data.scan_file;
+    seventeenthPanelData.value.file_size = props.data.file_size;
+    seventeenthPanelData.value.file_type = props.data.file_type;
   }
+
+  // try {
+  //   const { data } = 
+  //     props.districtExpert || props.centralExpert
+  //       ? await reportPartTwoService.getReportDH(ID_PANEL, props.reportId)
+  //       : await reportPartTwoService.getReport(ID_PANEL);
+  //   console.log(data);
+  //   if (data) {
+  //     isFirstSent.value = false;
+  //     seventeenthPanelData.value.comment = data.comment;
+  //     // seventeenthPanelData.value.scan_file = data.scan_file.split('/').at(-1)
+  //     seventeenthPanelData.value.scan_file = data.scan_file;
+  //     seventeenthPanelData.value.file_size = data.file_size;
+  //     seventeenthPanelData.value.file_type = data.file_type;
+  //   }
+  // } catch (e) {
+  //   console.log(e)
+  // }
 });
 </script>
 

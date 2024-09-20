@@ -146,7 +146,8 @@ const props = defineProps({
   reportId: {
     type: String,
     default: '1',
-  }
+  },
+  data: Object,
 });
 
 const ID_PANEL = '18';
