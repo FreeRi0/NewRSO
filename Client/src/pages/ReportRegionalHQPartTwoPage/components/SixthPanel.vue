@@ -11,8 +11,8 @@
             </div>
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
-          <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()"
-            :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
+          <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()" @get-data="getData()"
+            :data="props.data" :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item">
           </SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
@@ -34,7 +34,14 @@ const props = defineProps({
   centralHeadquarterCommander: {
     type: Boolean
   },
+  data: Object,
 });
+
+const emit = defineEmits(['getData'])
+
+const getData = () => {
+  emit('getData');
+}
 
 const panel = ref(null);
 
