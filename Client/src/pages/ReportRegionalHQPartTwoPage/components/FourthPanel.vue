@@ -32,7 +32,7 @@
         <div class="form__field-event-file">
           <label class="form__label" for="4">Положение о мероприятии <sup class="valid-red">*</sup></label>
           <InputReport class="form-input__file-input" v-if="!fourthPanelData.scan_file" isFile type="file"
-            id="scan_file" name="scan_file" width="100%" @change="uploadFile" />
+            id="scan_file" name="scan_file" width="100%" @change="uploadFile($event, index)" />
           <div v-else class="form__file-box">
             <span class="form__file-name">
               {{ fourthPanelData.scan_file }}
@@ -387,8 +387,6 @@ const scanFile = ref([]);
 const fourthPanelData = ref({
   comment: '',
   events: [],
-  file_type: '',
-  file_size: '',
 });
 const events = ref([
   {
@@ -401,6 +399,7 @@ const events = ref([
       },
     ],
     is_interregional: false,
+    regulations: null,
   }
 ]);
 
@@ -450,13 +449,18 @@ const deleteEvent = async (index) => {
   }
 };
 
-const uploadFile = async (event) => {
+const uploadFile = async (event, index = 0) => {
+  events.value[0].regulations = event.target.files[0];
   let formData = new FormData();
-  formData.append('scan_file', event.target.files[0]);
   formData.append('comment', fourthPanelData.value.comment);
-  formData.append('events', JSON.stringify(events.value));
+  formData.append(`events[${index}][links]`, JSON.stringify(events.value[0].links));
+  formData.append(`events[${index}][regulations]`, event.target.files[0]);
+  formData.append(`events[${index}][participants_number]`, events.value[0].participants_number);
+  formData.append(`events[${index}][end_date]`, events.value[0].end_date);
+  formData.append(`events[${index}][start_date]`, events.value[0].start_date);
+  formData.append(`events[${index}][is_interregional]`, events.value[0].is_interregional);
 
-  // await reportPartTwoService.createReportDraft(formData, '4', true);
+  await reportPartTwoService.createReportDraft(formData, '4', true);
 };
 const deleteFile = async () => {
   //   seventeenthPanelData.value.scan_file = '';
