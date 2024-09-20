@@ -32,7 +32,7 @@
         <div class="form__field-event-file">
           <label class="form__label" for="4">Положение о мероприятии <sup class="valid-red">*</sup></label>
           <InputReport class="form-input__file-input" v-if="!fourthPanelData.scan_file" isFile type="file"
-            id="scan_file" name="scan_file" width="100%" @change="uploadFile($event, index)" />
+            id="scan_file" name="scan_file" width="100%" @change="uploadFile" />
           <div v-else class="form__file-box">
             <span class="form__file-name">
               {{ fourthPanelData.scan_file }}
@@ -80,16 +80,16 @@
     </div>
     <div class="form__field-comment">
       <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
-      <InputReport v-model:value="fourthPanelData.comment" id="comment" name="comment" class="form__input"
-        type="textarea" placeholder="Укажите наименования организованных мероприятий" style="width: 100%;"
-        @focusout="focusOut" />
+      <InputReport :maxlength="3000" :max-counter="3000" counter-visible v-model:value="fourthPanelData.comment"
+        id="comment" name="comment" class="form__input" type="textarea"
+        placeholder="Укажите наименования организованных мероприятий" style="width: 100%;" @focusout="focusOut" />
     </div>
     <div class="form__field-result" style="display: flex; align-items: center;">
       <v-checkbox class="result-checkbox" id="v-checkbox" />
       <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
     </div>
     <div class="hr"></div>
-    <div class="form__field-result">
+    <div class="form__field-result result-count">
       <p>0</p>
     </div>
   </div>
@@ -387,6 +387,8 @@ const scanFile = ref([]);
 const fourthPanelData = ref({
   comment: '',
   events: [],
+  file_type: '',
+  file_size: '',
 });
 const events = ref([
   {
@@ -399,7 +401,6 @@ const events = ref([
       },
     ],
     is_interregional: false,
-    regulations: null,
   }
 ]);
 
@@ -449,18 +450,13 @@ const deleteEvent = async (index) => {
   }
 };
 
-const uploadFile = async (event, index = 0) => {
-  events.value[0].regulations = event.target.files[0];
+const uploadFile = async (event) => {
   let formData = new FormData();
+  formData.append('scan_file', event.target.files[0]);
   formData.append('comment', fourthPanelData.value.comment);
-  formData.append(`events[${index}][links]`, JSON.stringify(events.value[0].links));
-  formData.append(`events[${index}][regulations]`, event.target.files[0]);
-  formData.append(`events[${index}][participants_number]`, events.value[0].participants_number);
-  formData.append(`events[${index}][end_date]`, events.value[0].end_date);
-  formData.append(`events[${index}][start_date]`, events.value[0].start_date);
-  formData.append(`events[${index}][is_interregional]`, events.value[0].is_interregional);
+  formData.append('events', JSON.stringify(events.value));
 
-  await reportPartTwoService.createReportDraft(formData, '4', true);
+  // await reportPartTwoService.createReportDraft(formData, '4', true);
 };
 const deleteFile = async () => {
   //   seventeenthPanelData.value.scan_file = '';
@@ -566,6 +562,10 @@ watchEffect(() => {
   border-radius: 10px;
   margin-bottom: 8px;
   padding-top: 0;
+
+  @media (max-width: 568px) {
+    padding: 0;
+  }
 }
 
 .form__field-members-event {
@@ -576,8 +576,9 @@ watchEffect(() => {
 
   @media (max-width: 568px) {
     flex-direction: column-reverse;
-    gap: 16px;
+    gap: 8px;
     align-items: flex-end;
+    margin-top: 32px;
   }
 }
 
@@ -700,9 +701,18 @@ watchEffect(() => {
   }
 }
 
+.result-count {
+  color: #6D6D6D;
+}
+
 .form__field-comment {
   display: flex;
   flex-direction: column;
+  margin-bottom: 14px;
+
+  @media (max-width: 568px) {
+    margin-bottom: 6px;
+  }
 }
 
 .form__field-delete-button {
@@ -715,6 +725,7 @@ watchEffect(() => {
   background-color: #D2E4F2;
   border: none;
   border-radius: 4px;
+
 }
 
 .form__file-box {
@@ -799,6 +810,10 @@ watchEffect(() => {
   @media (max-width: 568px) {
     width: 340px;
     margin: 0 auto 16px;
+  }
+
+  @media (max-width: 400px) {
+    width: 296px;
   }
 }
 
