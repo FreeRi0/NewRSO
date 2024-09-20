@@ -34,7 +34,7 @@
                     <label class="form__label report__label mb-2" for="scan_file">
                         Скан подтверждающего документа<sup class="valid-red">*</sup>
                     </label>
-                    <InputReport v-if="!seventhPanelData.document"  isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
+                    <InputReport v-if="!seventhPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
                         id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile"
                         :disabled="isDisabled" />
                     <FileBoxComponent v-else :file="seventhPanelData.document" :fileType="seventhPanelData.file_type"
@@ -73,9 +73,9 @@
                 </div>
                 <div class="form__field">
                     <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
-                    <InputReport @focusout="focusOut" placeholder="Напишите сообщение"
-                        v-model:value="seventhPanelData.comment" id="14" name="14" class="form__input"
-                        style="width: 100%" />
+                    <TextareaReport v-model:value="seventhPanelData.comment" id="comment" name="comment" :rows="1"
+                        autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
+                        :max-length-text="3000" counter-visible />
                 </div>
                 <div>
                     <v-checkbox label="Итоговое значение" />
@@ -125,8 +125,10 @@
                 </div>
                 <div class="form__field">
                     <label class="form__label" for="14">Комментарий </label>
-                    <InputReport @focusout="focusOut" v-model:value="sixPanelData.comment"
-                        placeholder="Напишите сообщение" id="14" name="14" class="form__input" style="width: 100%" />
+                    <TextareaReport v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1"
+                        autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
+                        :max-length-text="3000" counter-visible />
+
                 </div>
             </div>
         </v-tabs-window>
@@ -181,7 +183,7 @@
                         <div class="form__wrapper" v-for="(item, index) in seventhPanelData.links" :key="index">
                             <InputReport @focusout="focusOut" name="14" :is-link="true"
                                 placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                                v-model:value="item.link" class="mb-2" 
+                                v-model:value="item.link" class="mb-2"
                                 :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
                             <div class="add_link" @click="addLink(7)"
                                 v-if="seventhPanelData.links.length === index + 1">
@@ -204,7 +206,7 @@
                             <label class="form__label" for="14">Место проведения<sup class="valid-red">*</sup></label>
                             <InputReport placeholder="Укажите место проведения мероприятия" @focusout="focusOut"
                                 v-model:value="seventhPanelData.comment" id="14" name="14" class=""
-                               style="max-width: 744px; width: 100%"
+                                style="max-width: 744px; width: 100%"
                                 :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
                         </div>
                     </div>
@@ -252,8 +254,7 @@
 
                         <div class="form__wrapper" v-for="(item, index) in sixPanelData.links" :key="index">
                             <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                                @focusout="focusOut"
-                                :is-link="true"
+                                @focusout="focusOut" :is-link="true"
                                 :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                                 name="14" v-model:value="item.link" class="mb-2" />
                             <div class="add_link" @click="addLink(6)" v-if="sixPanelData.links.length === index + 1">
@@ -325,8 +326,7 @@
                             <label class="form__label" for="14">Место проведения<sup class="valid-red">*</sup></label>
                             <InputReport placeholder="Укажите место проведения мероприятия" @focusout="focusOut"
                                 v-model:value="seventhPanelData.comment" id="14" name="14" class=""
-                                   style="max-width: 744px; width: 100%"
-                                 />
+                                style="max-width: 744px; width: 100%" />
                         </div>
                     </div>
                     <div class="form__field">
@@ -481,7 +481,7 @@
 import { ref, watchEffect, watch } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { FileBoxComponent } from '@entities/RatingRoComponents/components';
-import { InputReport } from '@shared/components/inputs';
+import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { SvgIcon } from '@shared/ui';
 import { ReportTabs } from './index';
 import { reportPartTwoService } from '@services/ReportService.ts';
@@ -494,9 +494,10 @@ const props = defineProps({
     isCentralHeadquarterCommander: Boolean,
     isDistrictHeadquarterCommander: Boolean,
     id: String,
+    data: Object,
 });
 
-const emit = defineEmits(['collapse-form']);
+const emit = defineEmits(['collapse-form', 'getData']);
 
 const collapseForm = () => {
     emit('collapse-form');
@@ -570,43 +571,36 @@ const deleteFile = async () => {
 };
 const focusOut = async () => {
     try {
-        let formData = new FormData();
-        formData.append('prize_place', seventhPanelData.value.prize_place);
-        formData.append('links', JSON.stringify(seventhPanelData.value.links));
-        formData.append('comment', seventhPanelData.value.comment);
+        // let formData = new FormData();
+        // formData.append('prize_place', seventhPanelData.value.prize_place);
+        // formData.append('links', JSON.stringify(seventhPanelData.value.links));
+        // formData.append('comment', seventhPanelData.value.comment);
         if (isFirstSent.value) {
             // console.log('createReportId'), props.panel_number;
             if (props.panel_number == 6) {
-                await reportPartTwoService.createReportId(
-                    sixPanelData.value,
-                    '6',
-                    props.id
-                );
+                await reportPartTwoService.createMultipleReport(sixPanelData.value, '6', props.id);
             } else {
-                await reportPartTwoService.createReportId(
-                    seventhPanelData.value,
-                    '7',
-                    props.id,
-
-                );
+                await reportPartTwoService.createMultipleReport(seventhPanelData.value, '7', props.id)
             }
             isFirstSent.value = false;
 
         } else {
             // console.log('createId', props.panel_number);
             if (props.panel_number == 6) {
-                await reportPartTwoService.createReportDraftId(
+                const { data } = await reportPartTwoService.createMultipleReportDraft(
                     sixPanelData.value,
                     '6',
                     props.id
                 );
+                emit('getData', data, 6);
             } else {
-                await reportPartTwoService.createReportDraftId(
+                const { data } = await reportPartTwoService.createMultipleReportDraft(
                     seventhPanelData.value,
                     '7',
                     props.id,
 
                 );
+                emit('getData', data, 7);
             }
 
         }
@@ -675,6 +669,7 @@ watchEffect(async () => {
     font-weight: 400;
     line-height: 21.1px;
 }
+
 // .link__input {
 //     width: 100%;
 //     max-width: 720px;
@@ -704,9 +699,11 @@ watchEffect(async () => {
     }
 
 }
+
 .valid-red {
     color: #DB0000;
 }
+
 .month {
     width: 100%;
     max-width: 70px;

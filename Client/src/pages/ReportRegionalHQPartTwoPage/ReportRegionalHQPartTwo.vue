@@ -7,9 +7,9 @@
       </div>
       <div v-else>
         <div class="download-item">
-          <SvgIcon iconName="download"/>
+          <SvgIcon iconName="download" />
           <button type="button" id="download" class="download-item__report"
-                  @click="downloadReportAll(roleStore.roles.regionalheadquarter_commander?.id)">
+            @click="downloadReportAll(roleStore.roles.regionalheadquarter_commander?.id)">
             Скачать архив
           </button>
         </div>
@@ -19,12 +19,8 @@
               1. Численность членов РО РСО в соответствии с объемом уплаченных членских взносов
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <first-panel
-                  :districtExpert="districtExpert"
-                  :centralExpert="centralExpert"
-                  @get-data="setData"
-                  :data="reportData.first"
-              />
+              <first-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.first" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -37,16 +33,17 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                  text="Показатель рассчитывается автоматически на основе данных, предоставленных Аппаратом РСО."/>
+                text="Показатель рассчитывается автоматически на основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-title>
-              3. Прирост численности членов РО РСО относительно количества членов в соответствии с отчетом РО РСО за 2023 г.
+              3. Прирост численности членов РО РСО относительно количества членов в соответствии с отчетом РО РСО
+              за 2023 г.
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                  text="Показатель рассчитывается автоматически на основе данных, предоставленных Аппаратом РСО."/>
+                text="Показатель рассчитывается автоматически на основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -55,12 +52,8 @@
               (слеты, школы, фестивали, турниры и прочие)
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <fourth-panel
-                  :districtExpert="districtExpert"
-                  :centralExpert="centralExpert"
-                  @get-data="setData"
-                  :data="reportData.fourth"
-              />
+              <fourth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.fourth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -70,12 +63,8 @@
               трудовых проектов РСО
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <fifth-panel
-                  :districtExpert="districtExpert"
-                  :centralExpert="centralExpert"
-                  @get-data="setData"
-                  :data="reportData.fifth"
-              />
+              <fifth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.fifth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -84,7 +73,8 @@
               мероприятиях и проектах (в том числе и трудовых) «К»
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <sixth-panel/>
+              <sixth-panel @get-data="setData" :district-headquarter-commander="districtExpert" :data="reportData.six"
+                :central-headquarter-commander="centralExpert" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -92,7 +82,8 @@
               7. Победители студенческих отрядов РО РСО во всероссийских (международных) проектах и конкурсах «К»
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <seventh-panel/>
+              <seventh-panel @get-data="setData" :district-headquarter-commander="districtExpert"
+                :data="reportData.seventh" :central-headquarter-commander="centralExpert" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -102,7 +93,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                  text="Показатель рассчитывается автоматически на основе данных сервиса «Медиалогия», предоставленных Аппаратом РСО."/>
+                text="Показатель рассчитывается автоматически на основе данных сервиса «Медиалогия», предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -110,7 +101,7 @@
               9. Организация обязательных общесистемных мероприятий РСО на региональном уровне «К»
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <ninth-panel/>
+              <ninth-panel />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -118,12 +109,8 @@
               10. Организация РО РСО всероссийских (международных) добровольческих и патриотических акций «К»
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <tenth-panel
-                  :districtExpert="districtExpert"
-                  :centralExpert="centralExpert"
-                  @get-data="setData"
-                  :data="reportData.tenth"
-              />
+              <tenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.tenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -131,8 +118,7 @@
               11. Активность РО РСО в социальных сетях «К»
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <eleventh-panel :districtExpert="districtExpert"
-                              :centralExpert="centralExpert"/>
+              <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -140,8 +126,7 @@
               12. Объем средств, собранных бойцами РО РСО во Всероссийском дне ударного труда
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <twelfth-panel :districtExpert="districtExpert"
-                             :centralExpert="centralExpert"/>
+              <twelfth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -149,31 +134,33 @@
               13. Охват членов РО РСО, принявших участие во Всероссийском дне ударного труда «К»
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <thirteenth-panel :districtExpert="districtExpert"
-                                :centralExpert="centralExpert"/>
+              <thirteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-title>
-              14. Отношение объема средств, собранных бойцами РО РСО во Всероссийском дне ударного труда к количеству членов
+              14. Отношение объема средств, собранных бойцами РО РСО во Всероссийском дне ударного труда к количеству
+              членов
               РО РСО,
               принявших участие во Всероссийском дне ударного труда
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <calculated-panel text="Показатель рассчитывается автоматически на основе данных из 12 и 13 показателей."/>
+              <calculated-panel
+                text="Показатель рассчитывается автоматически на основе данных из 12 и 13 показателей." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-title>
               15. Исполнительская дисциплина РО РСО, соблюдение условий охраны труда на трудовых проектах РСО,
-              наличие проблемной неурегулированной задолженности по выплате заработной платы перед бойцами РСО за трудовой
+              наличие проблемной неурегулированной задолженности по выплате заработной платы перед бойцами РСО
+              за трудовой
               семестр предыдущего года,
               отсутствие отчислений от членских взносов в Центральный штаб,
               исполнение решений Центральных руководящих органов РСО, наличие ежегодного акта проверки КРК РО РСО
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                  text="Показатель рассчитывается автоматически на основе данных, предоставленных Аппаратом РСО."/>
+                text="Показатель рассчитывается автоматически на основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -182,12 +169,8 @@
               деятельности «К»
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <sixteenth-panel
-                  :districtExpert="districtExpert"
-                  :centralExpert="centralExpert"
-                  @get-data="setData"
-                  :data="reportData.sixteenth"
-              />
+              <sixteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.sixteenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -195,9 +178,7 @@
               17. Дислокация студенческих отрядов РО РСО
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <seventeenth-panel
-                  :districtExpert="districtExpert"
-                  :centralExpert="centralExpert"/>
+              <seventeenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -205,9 +186,7 @@
               18. Количество научных работ и публикаций по теме СО, выпущенных в текущем году
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <eighteenth-panel
-                  :districtExpert="districtExpert"
-                  :centralExpert="centralExpert"/>
+              <eighteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -215,15 +194,13 @@
               19. Трудоустройство
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <nineteenth-panel
-                  :districtExpert="districtExpert"
-                  :centralExpert="centralExpert"/>
+              <nineteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" />
             </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
       </div>
     </div>
-    <Button v-if="!preloader" variant="text" label="Отправить отчет" size="large"/>
+    <Button v-if="!preloader" variant="text" label="Отправить отчет" size="large" />
   </div>
 </template>
 <script setup>
@@ -244,12 +221,13 @@ import {
   EighteenthPanel,
   NineteenthPanel
 } from './components/index'
-import {Button} from '@shared/components/buttons';
-import {ref, watchEffect} from "vue";
-import {SvgIcon} from '@shared/ui/SvgIcon';
-import {useRoleStore} from "@layouts/store/role.ts";
-import {HTTP} from '@app/http';
-import {reportPartTwoService} from "@services/ReportService.ts";
+import { Button } from '@shared/components/buttons';
+import { ref, watchEffect } from "vue";
+import { SvgIcon } from '@shared/ui/SvgIcon';
+import { useRoleStore } from "@layouts/store/role.ts";
+import { HTTP } from '@app/http';
+import { reportPartTwoService } from "@services/ReportService.ts";
+import { report } from 'process';
 
 const districtExpert = ref(false);
 const centralExpert = ref(false);
@@ -257,6 +235,8 @@ const reportData = ref({
   first: null,
   fourth: null,
   fifth: null,
+  six: null,
+  seventh: null,
   tenth: {
     first: null,
     second: null,
@@ -281,14 +261,14 @@ const downloadReportAll = (id) => {
     document.body.appendChild(link);
     link.click();
   })
-      .catch(function (error) {
-        console.log('an error occured ' + error);
-      });
+    .catch(function (error) {
+      console.log('an error occured ' + error);
+    });
 };
 
 const getReportData = async () => {
   try {
-    if(centralExpert.value || districtExpert.value) {
+    if (centralExpert.value || districtExpert.value) {
       reportData.value.first = (await reportPartTwoService.getReportDH('1', '1')).data;
       reportData.value.fourth = (await reportPartTwoService.getReportDH('4', '1')).data;
       reportData.value.fifth = (await reportPartTwoService.getReportDH('5', '1')).data;
@@ -299,6 +279,8 @@ const getReportData = async () => {
       reportData.value.first = (await reportPartTwoService.getReport('1')).data;
       reportData.value.fourth = (await reportPartTwoService.getReport('4')).data;
       reportData.value.fifth = (await reportPartTwoService.getReport('5')).data;
+      reportData.value.six = (await reportPartTwoService.getReport('6')).data;
+      reportData.value.seventh = (await reportPartTwoService.getReport('7')).data;
       reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
       reportData.value.tenth.second = (await reportPartTwoService.getMultipleReport('10', '2')).data;
       reportData.value.sixteenth = (await reportPartTwoService.getReport('16')).data;
@@ -321,6 +303,12 @@ const setData = (data, panel, number = 0) => {
       break;
     case 5:
       reportData.value.fifth = data
+      break;
+    case 6:
+      reportData.value.six = data
+      break;
+    case 7:
+      reportData.value.seventh = data
       break;
     case 10:
       if (number === 1) {
@@ -386,7 +374,7 @@ watchEffect(() => {
   text-align: left;
 }
 
-.v-expansion-panel--active > .v-expansion-panel-title {
+.v-expansion-panel--active>.v-expansion-panel-title {
   border-radius: 10px;
   min-height: none;
   border-left: none;
@@ -402,7 +390,7 @@ watchEffect(() => {
 }
 
 .v-expansion-panel--active:not(:first-child),
-.v-expansion-panel--active + .v-expansion-panel {
+.v-expansion-panel--active+.v-expansion-panel {
   margin-top: 0;
   opacity: unset;
 }
