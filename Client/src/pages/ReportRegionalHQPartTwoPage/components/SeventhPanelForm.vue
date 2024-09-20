@@ -497,12 +497,12 @@ const props = defineProps({
     data: Object,
 });
 
-const emit = defineEmits(['collapse-form', 'getData']);
+const emit = defineEmits(['collapse-form', 'formData', 'getId']);
 
 const collapseForm = () => {
     emit('collapse-form');
 };
-const isFirstSent = ref(true);
+// const isFirstSent = ref(true);
 const scanFile = ref([]);
 
 const seventhPanelData = ref({
@@ -569,45 +569,55 @@ const deleteFile = async () => {
         await reportPartTwoService.createReportDraftId(formData, '7', props.id, true);
     }
 };
-const focusOut = async () => {
-    try {
-        // let formData = new FormData();
-        // formData.append('prize_place', seventhPanelData.value.prize_place);
-        // formData.append('links', JSON.stringify(seventhPanelData.value.links));
-        // formData.append('comment', seventhPanelData.value.comment);
-        if (isFirstSent.value) {
-            // console.log('createReportId'), props.panel_number;
-            if (props.panel_number == 6) {
-                await reportPartTwoService.createMultipleReport(sixPanelData.value, '6', props.id);
-            } else {
-                await reportPartTwoService.createMultipleReport(seventhPanelData.value, '7', props.id)
-            }
-            isFirstSent.value = false;
+// const focusOut = async () => {
+//     try {
+//         // let formData = new FormData();
+//         // formData.append('prize_place', seventhPanelData.value.prize_place);
+//         // formData.append('links', JSON.stringify(seventhPanelData.value.links));
+//         // formData.append('comment', seventhPanelData.value.comment);
+//         if (isFirstSent.value) {
+//             // console.log('createReportId'), props.panel_number;
+//             if (props.panel_number == 6) {
+//                 await reportPartTwoService.createMultipleReport(sixPanelData.value, '6', props.id);
+//             } else {
+//                 await reportPartTwoService.createMultipleReport(seventhPanelData.value, '7', props.id)
+//             }
+//             isFirstSent.value = false;
 
-        } else {
-            // console.log('createId', props.panel_number);
-            if (props.panel_number == 6) {
-                const { data } = await reportPartTwoService.createMultipleReportDraft(
-                    sixPanelData.value,
-                    '6',
-                    props.id
-                );
-                emit('getData', data, 6);
-            } else {
-                const { data } = await reportPartTwoService.createMultipleReportDraft(
-                    seventhPanelData.value,
-                    '7',
-                    props.id,
+//         } else {
+//             // console.log('createId', props.panel_number);
+//             if (props.panel_number == 6) {
+//                 const { data } = await reportPartTwoService.createMultipleReportDraft(
+//                     sixPanelData.value,
+//                     '6',
+//                     props.id
+//                 );
+//                 emit('getData', data, 6);
+//             } else {
+//                 const { data } = await reportPartTwoService.createMultipleReportDraft(
+//                     seventhPanelData.value,
+//                     '7',
+//                     props.id,
 
-                );
-                emit('getData', data, 7);
-            }
+//                 );
+//                 emit('getData', data, 7);
+//             }
 
-        }
-    } catch (e) {
-        // console.log('focusOut error:', e);
+//         }
+//     } catch (e) {
+//         // console.log('focusOut error:', e);
+//     }
+// };
+
+const focusOut = () => {
+    if (props.panel_number == 6) {
+        emit('formData', sixPanelData.value)
     }
-};
+    else if (props.panel_number == 7) {
+        emit('formData', seventhPanelData.value)
+    }
+
+}
 const addLink = (number) => {
     if (number == 6) {
         sixPanelData.value.links.push({ link: '' });
@@ -627,34 +637,46 @@ const deleteLink = async (number) => {
     }
 };
 
-watchEffect(async () => {
-    try {
-        const { data } = await reportPartTwoService.getReportId(props.panel_number, props.id);
+// watchEffect(async () => {
+//     // try {
+//     //     const { data } = await reportPartTwoService.getReportId(props.panel_number, props.id);
 
-        if (data && props.panel_number == 7) {
+//     //     if (data && props.panel_number == 7) {
 
-            isFirstSent.value = false;
+//     //         isFirstSent.value = false;
 
 
-            seventhPanelData.value.prize_place = data.prize_place;
-            seventhPanelData.value.document = data?.document?.split('/').at(-1);
-            seventhPanelData.value.file_size = data.file_size;
-            seventhPanelData.value.file_type = data.file_type;
-            // console.log('links', seventhPanelData.value.links, 'linksData', data.links)
-            // seventhPanelData.value.links = JSON.parse(seventhPanelData.value.links)
-            //JSON.parse(data.links)
-            seventhPanelData.value.links = data.links;
-            seventhPanelData.value.comment = data.comment;
-        } else if (data && props.panel_number == 6) {
-            isFirstSent.value = false;
-            sixPanelData.value.number_of_members = data.number_of_members;
-            sixPanelData.value.links = data.links;
-            sixPanelData.value.comment = data.comment;
-        }
-    } catch (e) {
-        // console.log(e);
+//     //         seventhPanelData.value.prize_place = data.prize_place;
+//     //         seventhPanelData.value.document = data?.document?.split('/').at(-1);
+//     //         seventhPanelData.value.file_size = data.file_size;
+//     //         seventhPanelData.value.file_type = data.file_type;
+//     //         // console.log('links', seventhPanelData.value.links, 'linksData', data.links)
+//     //         // seventhPanelData.value.links = JSON.parse(seventhPanelData.value.links)
+//     //         //JSON.parse(data.links)
+//     //         seventhPanelData.value.links = data.links;
+//     //         seventhPanelData.value.comment = data.comment;
+//     //     } else if (data && props.panel_number == 6) {
+//     //         isFirstSent.value = false;
+//     //         sixPanelData.value.number_of_members = data.number_of_members;
+//     //         sixPanelData.value.links = data.links;
+//     //         sixPanelData.value.comment = data.comment;
+//     //     }
+//     // } catch (e) {
+//     //     // console.log(e);
+//     // }
+// });
+
+watchEffect(() => {
+    if (props.panel_number == 6) {
+        console.log('data 6', props.id)
+        emit('getId', props.id)
+        sixPanelData.value = { ...props.data }
+    } else if (props.panel_number == 7) {
+        console.log('data 7', props.id)
+        emit('getId', props.id)
+        seventhPanelData.value = { ...props.data }
     }
-});
+})
 </script>
 <style lang="scss" scoped>
 .number_input {

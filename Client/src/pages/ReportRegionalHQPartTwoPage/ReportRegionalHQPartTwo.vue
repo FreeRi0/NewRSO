@@ -73,8 +73,8 @@
               мероприятиях и проектах (в том числе и трудовых) «К»
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <sixth-panel @get-data="setData" :district-headquarter-commander="districtExpert" :data="reportData.six"
-                :central-headquarter-commander="centralExpert" />
+              <sixth-panel @get-data="setData" @getId="setId" :district-headquarter-commander="districtExpert"
+                :data="reportData.six" :central-headquarter-commander="centralExpert" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -82,7 +82,7 @@
               7. Победители студенческих отрядов РО РСО во всероссийских (международных) проектах и конкурсах «К»
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <seventh-panel @get-data="setData" :district-headquarter-commander="districtExpert"
+              <seventh-panel @get-data="setData" @getId="setId" :district-headquarter-commander="districtExpert"
                 :data="reportData.seventh" :central-headquarter-commander="centralExpert" />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -222,7 +222,7 @@ import {
   NineteenthPanel
 } from './components/index'
 import { Button } from '@shared/components/buttons';
-import { ref, watchEffect } from "vue";
+import { ref, watchEffect, watch } from "vue";
 import { SvgIcon } from '@shared/ui/SvgIcon';
 import { useRoleStore } from "@layouts/store/role.ts";
 import { HTTP } from '@app/http';
@@ -244,6 +244,12 @@ const reportData = ref({
   sixteenth: null,
 });
 const preloader = ref(true);
+const panel_id = ref(0);
+
+const setId = (id) => {
+  panel_id.value = id;
+  console.log('panel_id', panel_id.value, id);
+}
 
 const roleStore = useRoleStore();
 
@@ -266,7 +272,7 @@ const downloadReportAll = (id) => {
     });
 };
 
-const getReportData = async () => {
+const getReportData = async (id) => {
   try {
     if (centralExpert.value || districtExpert.value) {
       reportData.value.first = (await reportPartTwoService.getReportDH('1', '1')).data;
@@ -279,8 +285,8 @@ const getReportData = async () => {
       reportData.value.first = (await reportPartTwoService.getReport('1')).data;
       reportData.value.fourth = (await reportPartTwoService.getReport('4')).data;
       reportData.value.fifth = (await reportPartTwoService.getReport('5')).data;
-      reportData.value.six = (await reportPartTwoService.getReport('6')).data;
-      reportData.value.seventh = (await reportPartTwoService.getReport('7')).data;
+      reportData.value.six = (await reportPartTwoService.getMultipleReport('6', id)).data;
+      reportData.value.seventh = (await reportPartTwoService.getMultipleReport('7', id)).data;
       reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
       reportData.value.tenth.second = (await reportPartTwoService.getMultipleReport('10', '2')).data;
       reportData.value.sixteenth = (await reportPartTwoService.getReport('16')).data;
@@ -332,8 +338,19 @@ watchEffect(() => {
   if (roleStore.experts?.is_central_expert) {
     centralExpert.value = true;
   }
-  getReportData();
+  getReportData(panel_id.value);
 });
+// watch(
+//   () => panel_id.value,
+//   async (newId) => {
+//     panel_id.value = newId;
+//     await getReportData(newId);
+//   },
+//   {
+//     immediate: true,
+//     deep: true,
+//   },
+// );
 </script>
 <style>
 .v-expansion-panel__shadow {

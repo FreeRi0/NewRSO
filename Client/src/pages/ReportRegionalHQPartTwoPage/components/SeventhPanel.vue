@@ -11,8 +11,9 @@
             </div>
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
-          <SeventhPanelForm :id="item.id" :panel_number="7" @collapse-form="collapsed()" @get-data="getData()"
-          :data="props.data" :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
+          <SeventhPanelForm :id="item.id" :panel_number="7" @collapse-form="collapsed()"
+            @formData="formData($event, item.id)" @getId="getId($event)" :data="seventhPanelData"
+            :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
     </v-expansion-panels>
@@ -20,10 +21,8 @@
   </v-card>
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watchEffect } from "vue";
 import { SeventhPanelForm } from "./index";
-import { InputReport } from '@shared/components/inputs';
-import { Button } from '@shared/components/buttons';
 import { HTTP } from "@app/http";
 
 const props = defineProps({
@@ -37,16 +36,43 @@ const props = defineProps({
 });
 
 const panel = ref(null);
-const emit = defineEmits(['getData'])
+const emit = defineEmits(['getData', 'getId'])
+const seventhPanelData = ref({
+  prize_place: 'Нет',
+  links: [{
+    link: '',
+  }],
+  document: '',
+  file_size: null,
+  file_type: '',
+  comment: '',
+});
+const isFirstSent = ref(true);
 
-const getData = () => {
-  emit('getData');
-}
+const formData = async (reportData, reportNumber) => {
+  try {
+    if (isFirstSent.value) {
+      console.log('First time sending data');
+      await reportPartTwoService.createMultipleReport(reportData, '7', reportNumber);
+    } else {
+      console.log('Second time sending data');
+      const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber);
+      emit('getData', data, 7, reportNumber);
+    }
+  } catch (e) {
+    console.log('seventh panel error: ', e);
+  }
+};
 
 const items = ref([]);
 
 const collapsed = () => {
   panel.value = !panel.value;
+}
+
+const getId = (id) => {
+  console.log('id', id);
+  emit('getId', id);
 }
 
 const getItems = async () => {
@@ -57,6 +83,13 @@ const getItems = async () => {
     console.error(err);
   }
 }
+
+watchEffect(() => {
+  if (props.data) {
+    isFirstSent.value = false;
+    seventhPanelData.value = { ...props.data }
+  }
+});
 
 onMounted(async () => {
   await getItems();
