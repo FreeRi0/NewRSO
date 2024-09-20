@@ -160,6 +160,7 @@ const props = defineProps({
     type: String,
     default: "1",
   },
+  data: Object,
 });
 
 const ID_PANEL = "11";
@@ -173,57 +174,38 @@ const eleventhPanelData = ref({
   comment: "",
 });
 
-const emit = defineEmits(["update:value"]);
+const emit = defineEmits(["update:value", 'getData']);
 
 const changeValue = (event) => {
   emit("update:value", event);
 };
 
 const focusOut = async () => {
-  console.log(eleventhPanelData.value);
+  // console.log(eleventhPanelData.value);
   let formData = new FormData();
 
   eleventhPanelData.value.participants_number ? formData.append("participants_number", eleventhPanelData.value.participants_number) : formData.append("participants_number", "");
-  // formData.append("participants_number", eleventhPanelData.value.participants_number);
   formData.append("comment", eleventhPanelData.value.comment);
 
-  if (isFirstSent.value) {
-    await reportPartTwoService.createReport(formData, ID_PANEL, true);
-  } else {
-    await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+  try {
+    if (isFirstSent.value) {
+      await reportPartTwoService.createReport(formData, ID_PANEL, true);
+    } else {
+      const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+      emit('getData', data, Number(ID_PANEL));
+    }
+  } catch (e) {
+    console.log(e)
   }
-
-  // if (isFirstSent.value) {
-  //   await reportPartTwoService.createReport(eleventhPanelData.value, ID_PANEL, true);
-  // } else {
-  //   await reportPartTwoService.createReportDraft(eleventhPanelData.value, ID_PANEL, true);
-  // }
-
-  // if (isFirstSent.value) {
-  //     await reportPartTwoService.createReport(formData, ID_PANEL, true);
-  // } else {
-  // props.centralExpert || props.districtExpert
-  //     ? await reportPartTwoService.createReportDistrict(formData, ID_PANEL, props.reportId, true)
-  //     : await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-  // }
 };
 
 const uploadFile = async (event) => {
   scanFile.value = event.target.files[0];
   let formData = new FormData();
-  // if (eleventhPanelData.value.participants_number) {
-  //   formData.append("participants_number", eleventhPanelData.value.participants_number)
-  // }
-  // eleventhPanelData.value.participants_number ? formData.append("participants_number", eleventhPanelData.value.participants_number) : formData.getAll("participants_number");
-  // console.log(eleventhPanelData.value.participants_number, formData.get("participants_number"));
-
-  // formData.append("participants_number", eleventhPanelData.value.participants_number)
   formData.append("scan_file", scanFile.value);
+
   // formData.append("comment", eleventhPanelData.value.comment);
-  // formData.append('file_size', seventeenthPanelData.value.file_size);
-  // formData.append('file_type', seventeenthPanelData.value.file_type);
-  // formData.append('file_size', (scanFile.value.size/( 1024 * 1024 )).toFixed(1));
-  // formData.append('file_type', scanFile.value.type);
+  // eleventhPanelData.value.participants_number ? formData.append("participants_number", eleventhPanelData.value.participants_number) : formData.append("participants_number", "");
 
   eleventhPanelData.value.file_size = (scanFile.value.size / Math.pow(1024, 2));
   eleventhPanelData.value.file_type = scanFile.value.type.split('/').at(-1);
@@ -244,11 +226,11 @@ const uploadFile = async (event) => {
 const deleteFile = async () => {
   eleventhPanelData.value.scan_file = "";
   let formData = new FormData();
-  // formData.append("participants_number", eleventhPanelData.value.participants_number);
-  formData.append("scan_file", "");
+  // eleventhPanelData.value.participants_number ? formData.append("participants_number", eleventhPanelData.value.participants_number) : formData.append("participants_number", "");
   // formData.append("comment", eleventhPanelData.value.comment);
-  formData.append("file_size", eleventhPanelData.value.file_size);
-  formData.append("file_type", eleventhPanelData.value.file_type);
+  formData.append("scan_file", "");  
+  // formData.append("file_size", eleventhPanelData.value.file_size);
+  // formData.append("file_type", eleventhPanelData.value.file_type);
 
   if (isFirstSent.value) {
     await reportPartTwoService.createReport(formData, ID_PANEL, true);
@@ -257,28 +239,44 @@ const deleteFile = async () => {
   }
 };
 
-watchEffect(async () => {
+watchEffect(() => {
   // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
-  try {
-    const { data } =
-      props.districtExpert || props.centralExpert
-        ? await reportPartTwoService.getReportDH(ID_PANEL, props.reportId)
-        : await reportPartTwoService.getReport(ID_PANEL);
-    console.log(data);
-    // const { reports } = await HTTP.get(`regional_competitions/get_sent_reports/`);
-    // console.log(reports);
-    if (data) {
-      isFirstSent.value = false;
-      eleventhPanelData.value.participants_number = data.participants_number;
-      eleventhPanelData.value.comment = data.comment;
-      // eleventhPanelData.value.scan_file = data.scan_file.split('/').at(-1)
-      eleventhPanelData.value.scan_file = data.scan_file;
-      eleventhPanelData.value.file_size = data.file_size;
-      eleventhPanelData.value.file_type = data.file_type;
-    }
-  } catch (e) {
-    console.log(e);
+
+  // try {
+  //   if (!(props.centralExpert || props.districtExpert)) {
+  //     const res = await getReport();
+  //     reportData.value = res.data;
+  //   }
+  // } catch (e) {
+  //   console.log(e)
+  // }
+  if (props.data) {
+    console.log(props.data);
+    isFirstSent.value = false;
+    eleventhPanelData.value.participants_number = props.data.participants_number;
+    eleventhPanelData.value.comment = props.data.comment;
+    eleventhPanelData.value.scan_file = props.data.scan_file;
+    eleventhPanelData.value.file_size = props.data.file_size;
+    eleventhPanelData.value.file_type = props.data.file_type;
   }
+
+  // try {
+  //   const { data } =
+  //     props.districtExpert || props.centralExpert
+  //       ? await reportPartTwoService.getReportDH(ID_PANEL, props.reportId)
+  //       : await reportPartTwoService.getReport(ID_PANEL);
+  //   console.log(data);
+  //   if (data) {
+  //     isFirstSent.value = false;
+  //     eleventhPanelData.value.participants_number = data.participants_number;
+  //     eleventhPanelData.value.comment = data.comment;
+  //     eleventhPanelData.value.scan_file = data.scan_file;
+  //     eleventhPanelData.value.file_size = data.file_size;
+  //     eleventhPanelData.value.file_type = data.file_type;
+  //   }
+  // } catch (e) {
+  //   console.log(e);
+  // }
 });
 </script>
 
