@@ -270,7 +270,7 @@ const reportData = ref({
   nineteenth: null,
 });
 const preloader = ref(true);
-const panel_id = ref(0);
+const panel_id = ref(1);
 
 const setId = (id) => {
   panel_id.value = id;
