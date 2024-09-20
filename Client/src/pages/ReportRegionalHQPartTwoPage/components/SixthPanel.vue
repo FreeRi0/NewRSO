@@ -171,16 +171,26 @@ onMounted(async () => {
     width: 100%;
     column-gap: 20px;
     max-width: 290px;
+
+    @media screen and (max-width: 578px) {
+      flex-direction: column;
+    }
   }
 
   @media screen and (max-width: 1024px) {
-    max-width: 700px;
-    grid-template-columns: 400px 300px;
-    column-gap: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 6px;
+    max-width: 828px;
+    width: auto;
   }
 
   @media screen and (max-width: 768px) {
-    grid-template-columns: 1fr;
+    max-width: 636px;
+  }
+
+  @media screen and (max-width: 578px) {
+    max-width: 360px;
   }
 
 }

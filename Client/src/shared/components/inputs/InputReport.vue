@@ -5,8 +5,8 @@
     <input :type="type" :name="name" :style="{
       height: height,
     }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly"
-      max="9999-12-31" class="form-input__report" :class="{ 'link__input': isLink }" @input="updateValue" v-bind="$attrs"
-      :disabled="disabled" />
+      max="9999-12-31" class="form-input__report" :class="{ 'link__input': isLink }" @input="updateValue"
+      v-bind="$attrs" :disabled="disabled" />
     <div class="form__counter" v-if="counterVisible">
       {{ textInputLength }} / {{ maxCounter }}
     </div>
@@ -104,6 +104,10 @@ const updateValue = (event) => {
 .link__input {
   width: 100%;
   max-width: 720px;
+
+  @media screen and (max-width: 1024px) {
+    max-width: 100%;
+  }
 }
 
 .form-input {

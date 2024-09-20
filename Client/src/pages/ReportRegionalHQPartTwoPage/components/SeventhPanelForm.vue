@@ -26,7 +26,7 @@
                                 type="radio" @focusout="focusOut" v-model="seventhPanelData.prize_place" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                                }}</label>
+                            }}</label>
                         </div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
 
                     </div>
                 </div>
-                <div class="d-flex gc-4">
+                <!-- <div class="d-flex gc-4">
                     <div class="form__field">
                         <label class="form__label" for="14">Дата <sup class="valid-red">*</sup></label>
                         <InputReport @focusout="focusOut" v-model:value="seventhPanelData.comment" id="14" name="14"
@@ -70,7 +70,7 @@
                             v-model:value="seventhPanelData.comment" id="14" name="14" class=""
                             style="max-width: 744px; width: 100%" />
                     </div>
-                </div>
+                </div> -->
                 <div class="form__field">
                     <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
                     <TextareaReport v-model:value="seventhPanelData.comment" id="comment" name="comment" :rows="1"
@@ -85,13 +85,13 @@
                     <p>0</p>
                 </div>
             </div>
-            <div v-else-if="props.panel_number == 6" class="form__field-group">
+            <div v-else-if="props.panel_number == 6" class="form__field-group group-seventh">
                 <div class="d-flex justify-space-between">
                     <div class="title_wrap">
                         <p class="form__title">{{ props.title.name }}</p>
-                        <div class="d-flex gc-8">
-                            <p class="form__title">{{ props.title.month }}</p>
-                            <p class="form__title">{{ props.title.city }}</p>
+                        <div class="title_wrap__items">
+                            <p class="form__title month">{{ props.title.month }}</p>
+                            <p class="form__title city">{{ props.title.city }}</p>
                         </div>
                     </div>
                     <div>
@@ -134,13 +134,13 @@
         </v-tabs-window>
         <report-tabs v-else>
             <template v-slot:firstTab>
-                <div v-if="props.panel_number == 7" class="form__field-group">
+                <div v-if="props.panel_number == 7" class="form__field-group group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
-                            <div class="d-flex gc-8">
-                                <p class="form__title">{{ props.title.month }}</p>
-                                <p class="form__title">{{ props.title.city }}</p>
+                            <div class="title_wrap__items">
+                                <p class="form__title month">{{ props.title.month }}</p>
+                                <p class="form__title city">{{ props.title.city }}</p>
                             </div>
                         </div>
                         <div>
@@ -159,7 +159,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -195,7 +195,7 @@
 
                         </div>
                     </div>
-                    <div class="d-flex gc-4">
+                    <!-- <div class="d-flex gc-4">
                         <div class="form__field">
                             <label class="form__label" for="14">Дата <sup class="valid-red">*</sup></label>
                             <InputReport @focusout="focusOut" v-model:value="seventhPanelData.comment" id="14" name="14"
@@ -209,7 +209,7 @@
                                 style="max-width: 744px; width: 100%"
                                 :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form__field">
                         <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
                         <InputReport @focusout="focusOut" placeholder="Напишите сообщение"
@@ -225,13 +225,13 @@
                         <p>0</p>
                     </div>
                 </div>
-                <div v-else-if="props.panel_number == 6" class="form__field-group">
+                <div v-else-if="props.panel_number == 6" class="form__field-group group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
-                            <div class="d-flex gc-8">
-                                <p class="form__title">{{ props.title.month }}</p>
-                                <p class="form__title">{{ props.title.city }}</p>
+                            <div class="title_wrap__items">
+                                <p class="form__title month">{{ props.title.month }}</p>
+                                <p class="form__title city">{{ props.title.city }}</p>
                             </div>
                         </div>
                         <div>
@@ -276,13 +276,13 @@
                 </div>
             </template>
             <template v-slot:secondTab>
-                <div v-if="props.panel_number == 7" class="form__field-group">
+                <div v-if="props.panel_number == 7" class="form__field-group group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
-                            <div class="d-flex gc-8">
-                                <p class="form__title">{{ props.title.month }}</p>
-                                <p class="form__title">{{ props.title.city }}</p>
+                            <div class="title_wrap__items">
+                                <p class="form__title month">{{ props.title.month }}</p>
+                                <p class="form__title city">{{ props.title.city }}</p>
                             </div>
                         </div>
                         <div>
@@ -301,7 +301,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -316,7 +316,7 @@
                             :fileType="seventhPanelData.file_type" :fileSize="seventhPanelData.file_size"
                             @click="deleteFile"></FileBoxComponent>
                     </div>
-                    <div class="d-flex gc-4">
+                    <!-- <div class="d-flex gc-4">
                         <div class="form__field">
                             <label class="form__label" for="14">Дата <sup class="valid-red">*</sup></label>
                             <InputReport @focusout="focusOut" v-model:value="seventhPanelData.comment" id="14" name="14"
@@ -328,7 +328,7 @@
                                 v-model:value="seventhPanelData.comment" id="14" name="14" class=""
                                 style="max-width: 744px; width: 100%" />
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form__field">
                         <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
                         <InputReport @focusout="focusOut" placeholder="Напишите сообщение"
@@ -343,13 +343,13 @@
                         <p>0</p>
                     </div>
                 </div>
-                <div v-else-if="props.panel_number == 6" class="form__field-group">
+                <div v-else-if="props.panel_number == 6" class="form__field-group group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
-                            <div class="d-flex gc-8">
-                                <p class="form__title">{{ props.title.month }}</p>
-                                <p class="form__title">{{ props.title.city }}</p>
+                            <div class="title_wrap__items">
+                                <p class="form__title month">{{ props.title.month }}</p>
+                                <p class="form__title city">{{ props.title.city }}</p>
                             </div>
                         </div>
                         <div>
@@ -374,13 +374,13 @@
                 </div>
             </template>
             <template v-slot:thirdTab>
-                <div v-if="props.panel_number == 7" class="form__field-group">
+                <div v-if="props.panel_number == 7" class="form__field-group group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
-                            <div class="d-flex gc-8">
-                                <p class="form__title">{{ props.title.month }}</p>
-                                <p class="form__title">{{ props.title.city }}</p>
+                            <div class="title_wrap__items">
+                                <p class="form__title month">{{ props.title.month }}</p>
+                                <p class="form__title city">{{ props.title.city }}</p>
                             </div>
                         </div>
                         <div>
@@ -412,7 +412,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -433,13 +433,13 @@
                         <v-checkbox label="Вернуть в РО на доработку" />
                     </div>
                 </div>
-                <div v-else-if="props.panel_number == 6" class="form__field-group">
+                <div v-else-if="props.panel_number == 6" class="form__field-group group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
-                            <div class="d-flex gc-8">
-                                <p class="form__title">{{ props.title.month }}</p>
-                                <p class="form__title">{{ props.title.city }}</p>
+                            <div class="title_wrap__items">
+                                <p class="form__title month">{{ props.title.month }}</p>
+                                <p class="form__title city">{{ props.title.city }}</p>
                             </div>
                         </div>
                         <div>
@@ -692,10 +692,7 @@ watchEffect(() => {
     line-height: 21.1px;
 }
 
-// .link__input {
-//     width: 100%;
-//     max-width: 720px;
-// }
+
 .title_wrap {
     display: grid;
     grid-template-columns: 600px 300px;
@@ -708,16 +705,26 @@ watchEffect(() => {
         width: 100%;
         column-gap: 20px;
         max-width: 290px;
+
+        @media screen and (max-width: 578px) {
+            flex-direction: column;
+        }
     }
 
     @media screen and (max-width: 1024px) {
-        max-width: 700px;
-        grid-template-columns: 400px 300px;
-        column-gap: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        row-gap: 6px;
+        max-width: 828px;
+        width: auto;
     }
 
     @media screen and (max-width: 768px) {
-        grid-template-columns: 1fr;
+        max-width: 636px;
+    }
+
+    @media screen and (max-width: 578px) {
+        max-width: 360px;
     }
 
 }
@@ -804,6 +811,13 @@ watchEffect(() => {
         column-gap: 40px;
         align-items: center;
         max-width: 901px;
+
+        @media screen and (max-width: 1024px) {
+            flex-wrap: wrap;
+            max-width: 100%;
+            width: 100%;
+            margin-bottom: 8px;
+        }
     }
 
     .statement-item {
