@@ -9,8 +9,8 @@
             class="form__input" type="number" placeholder="Введите число" @focusout="focusOut" />
         </div>
         <div class="report__add-file">
-          <label style="display: flex;" class="form__label" for="scan_file">Скан платежного поручения<br> об уплате ЧВ
-            <sup class="valid-red">*</sup></label>
+          <label class="form__label report__add-file-form-label" for="scan_file">Скан
+            платежного поручения об уплате ЧВ <sup class="valid-red">*</sup></label>
           <InputReport v-if="!firstPanelData.scan_file" isFile type="file" id="scan_file" name="scan_file"
             style="width: 100%;" @change="uploadFile" />
           <div v-else class="form__file-box">
@@ -253,6 +253,11 @@ watchEffect(async () => {
 
 .report__add-file {
   width: 100%;
+}
+
+.report__add-file-form-label {
+  display: block;
+  width: 232px;
 }
 
 .form__file-size {
