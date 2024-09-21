@@ -450,13 +450,17 @@ const deleteEvent = async (index) => {
   }
 };
 
-const uploadFile = async (event) => {
+const uploadFile = async (event, index = 0) => {
+  events.value[0].regulations = event.target.files[0];
   let formData = new FormData();
-  formData.append('scan_file', event.target.files[0]);
   formData.append('comment', fourthPanelData.value.comment);
-  formData.append('events', JSON.stringify(events.value));
-
-  // await reportPartTwoService.createReportDraft(formData, '4', true);
+  formData.append(`events[${index}][links]`, JSON.stringify(events.value[0].links));
+  formData.append(`events[${index}][regulations]`, event.target.files[0]);
+  formData.append(`events[${index}][participants_number]`, events.value[0].participants_number);
+  formData.append(`events[${index}][end_date]`, events.value[0].end_date);
+  formData.append(`events[${index}][start_date]`, events.value[0].start_date);
+  formData.append(`events[${index}][is_interregional]`, events.value[0].is_interregional);
+  await reportPartTwoService.createReportDraft(formData, '4', true);
 };
 const deleteFile = async () => {
   //   seventeenthPanelData.value.scan_file = '';
