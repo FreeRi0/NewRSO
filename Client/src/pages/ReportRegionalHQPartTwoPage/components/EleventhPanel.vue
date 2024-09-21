@@ -57,13 +57,15 @@ const props = defineProps({
     type: String,
     default: '',
   },
-   data: Object,
+  data: Object,
 });
+
+const ID_PANEL = "11";
 
 const emit = defineEmits(['getData']);
 
 const getData = (event) => {
-  emit("getData", event);
+  emit("getData", event, Number(ID_PANEL));
 };
 
 // const ID_PANEL = '11';
