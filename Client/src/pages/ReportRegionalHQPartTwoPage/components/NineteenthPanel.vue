@@ -158,7 +158,7 @@ const focusOut = async () => {
       emit('getData', data, Number(ID_PANEL));
     }
   } catch (e) {
-    console.log(e)
+    console.log('focusOut error:', e);
   }
 };
 

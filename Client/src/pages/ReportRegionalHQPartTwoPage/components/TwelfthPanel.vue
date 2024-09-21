@@ -1,90 +1,4 @@
 <template>
-  <!-- <div 
-    v-if="!(props.centralHeadquarterCommander || props.districtHeadquarterCommander)"
-    class="form__field-group report__field-group"
-    >    
-    <div class="report__fieldset report__fieldset--left-block">
-      <label 
-        class="form__label report__label"
-        for="number-of-members">
-        Объем средств, собранных бойцами РО&nbsp;РСО&nbsp;<sup class="valid-red">*</sup>
-      </label>
-      <InputReport
-        v-model:value="twelfthPanelData.amount_of_money"
-        id="amount-of-money"
-        name="amount-of-money"
-        style="width: 100%;"
-        height="40px"
-        type="number"
-        placeholder="Введите число"
-        :maxlength="10"
-        :max="32767"
-        @focusout="focusOut"
-      />
-    </div>
-
-    <div class="report__fieldset report__fieldset--right-block">
-      <label
-        class="form__label report__label"
-        for="scan_file">
-        Скан подтверждающего <br> документа&nbsp;<sup class="valid-red">*</sup>
-      </label>
-      <InputReport
-        v-if="!twelfthPanelData.scan_file"
-        isFile
-        type="file"
-        accept=".jpg, .jpeg, .png, .pdf"
-        id="scan_file"
-        name="scan_file"
-        width="100%"
-        height="auto"
-        @change="uploadFile"
-      />
-      <div 
-        v-else
-        class="report__file-box">
-        <span class="report__file-name">
-          <SvgIcon v-if="twelfthPanelData.file_type === 'jpg'" icon-name="file-jpg" />
-          <SvgIcon v-if="twelfthPanelData.file_type === 'pdf'" icon-name="file-pdf" />
-          <SvgIcon v-if="twelfthPanelData.file_type === 'png'" icon-name="file-png" />
-          <a :href=twelfthPanelData.scan_file>
-            {{ twelfthPanelData.scan_file.split('/').at(-1) }}
-          </a>
-        </span>
-
-        <span class="report__file-size">
-          {{ twelfthPanelData.file_size }} Мб
-        </span>
-
-        <button 
-          @click="deleteFile"
-          class="report__button-delete-file"
-        >
-          Удалить
-        </button>
-      </div>
-    </div>
-
-    <div class="report__fieldset report__fieldset--comment">
-      <label class="form__label report__label" for="comment">
-        Комментарий
-      </label>
-      <TextareaReport
-        v-model:value="twelfthPanelData.comment"
-        id="comment"
-        name="comment"
-        placeholder="Напишите сообщение"
-        :rows="1" 
-        autoResize
-        counter-visible
-        :maxlength="3000"
-        :max-length-text="3000"
-        @focusout="focusOut"
-      >
-      </TextareaReport>
-    </div>
-  </div> -->
-
   <div 
     v-if="!(props.districtExpert || props.centralExpert)"
     class="form__field-group"
@@ -92,6 +6,8 @@
     <TwelfthPanelComponent
       :central-expert="props.centralExpert"
       :district-expert="props.districtExpert"
+      :data="data"
+      @get-data="getData"
     ></TwelfthPanelComponent>
   </div>
 
@@ -102,188 +18,16 @@
         :district-expert="props.districtExpert"
         :is-disabled="props.districtExpert || props.centralExpert"
       ></TwelfthPanelComponent>
-
-      <!-- <div class="report__field-group"
-        >    
-        <div class="report__fieldset report__fieldset--left-block">
-          <label 
-            class="form__label report__label"
-            for="number-of-members">
-            Количество человек, входящих в&nbsp;группу РО&nbsp;РСО в&nbsp;социальной сети &laquo;ВКонтакте&raquo;
-            <sup class="valid-red">*</sup>
-          </label>
-          <InputReport
-            v-model:value="twelfthPanelData.amount_of_money"
-            id="amount-of-money"
-            name="amount-of-money"
-            style="width: 100%;"
-            height="40px"
-            type="number"
-            placeholder="Введите число"
-            :maxlength="10"
-            :max="32767"
-            @focusout="focusOut"
-            :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"
-          />
-        </div>
-
-        <div class="report__fieldset report__fieldset--right-block">
-          <InputReport
-            v-if="!twelfthPanelData.scan_file"
-            isFile
-            type="file"
-            accept=".jpg, .jpeg, .png, .pdf"
-            id="scan_file"
-            name="scan_file"
-            width="100%"
-            height="86px"
-            @change="uploadFile"
-            :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"
-          />
-
-          <div 
-            v-else
-            class="report__file-box">
-            <span class="report__file-name">
-              <SvgIcon v-if="twelfthPanelData.file_type === 'jpg'" icon-name="file-jpg" />
-              <SvgIcon v-if="twelfthPanelData.file_type === 'pdf'" icon-name="file-pdf" />
-              <SvgIcon v-if="twelfthPanelData.file_type === 'png'" icon-name="file-png" />
-              <a :href=twelfthPanelData.scan_file>
-                {{ twelfthPanelData.scan_file.split('/').at(-1) }}
-              </a>
-            </span>
-
-            <span class="report__file-size">
-              {{ twelfthPanelData.file_size }} Мб
-            </span>
-
-            <button 
-              @click="deleteFile"
-              class="report__button-delete-file"
-            >
-              Удалить
-            </button>
-          </div>
-        </div>
-
-        <div class="report__fieldset report__fieldset--comment" v-if="
-            !(props.centralHeadquarterCommander || props.districtHeadquarterCommander) || 
-            (props.centralHeadquarterCommander && twelfthPanelData.scan_file) || 
-            (props.districtHeadquarterCommander && twelfthPanelData.scan_file)">
-
-          <label class="form__label report__label" for="comment">
-            Комментарий
-          </label>
-          <TextareaReport
-            v-model:value="twelfthPanelData.comment"
-            id="comment"
-            name="comment"
-            placeholder="Напишите сообщение"
-            :rows="1" 
-            autoResize
-            counter-visible
-            :maxlength="3000"
-            :max-length-text="3000"
-            @focusout="focusOut"
-            :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"
-          >
-          </TextareaReport>
-        </div>
-      </div> -->
     </template>
+
     <template v-slot:secondTab>
       <TwelfthPanelComponent
         :central-expert="props.centralExpert"
         :district-expert="props.districtExpert"
         is-second-tab
       ></TwelfthPanelComponent>
-
-      <!-- <div class="report__field-group"
-        >    
-        <div class="report__fieldset report__fieldset--left-block">
-          <label 
-            class="form__label report__label"
-            for="number-of-members">
-            Количество человек, входящих в&nbsp;группу РО&nbsp;РСО в&nbsp;социальной сети &laquo;ВКонтакте&raquo;
-            <sup class="valid-red">*</sup>
-          </label>
-          <InputReport
-            v-model:value="twelfthPanelData.amount_of_money"
-            id="amount-of-money"
-            name="amount-of-money"
-            style="width: 100%;"
-            height="40px"
-            type="number"
-            placeholder="Введите число"
-            :maxlength="10"
-            :max="32767"
-            @focusout="focusOut"
-          />
-        </div>
-
-        <div class="report__fieldset report__fieldset--right-block">
-          <label
-            class="form__label report__label"
-            for="scan_file">
-            Скриншот численности <br> группы РО&nbsp;РСО
-            <sup class="valid-red">*</sup>
-          </label>
-          <InputReport
-            v-if="!twelfthPanelData.scan_file"
-            isFile
-            type="file"
-            accept=".jpg, .jpeg, .png, .pdf"
-            id="scan_file"
-            name="scan_file"
-            width="100%"
-            height="86px"
-            @change="uploadFile"
-          />
-          <div 
-            v-else
-            class="report__file-box">
-            <span class="report__file-name">
-              <SvgIcon v-if="twelfthPanelData.file_type === 'jpg'" icon-name="file-jpg" />
-              <SvgIcon v-if="twelfthPanelData.file_type === 'pdf'" icon-name="file-pdf" />
-              <SvgIcon v-if="twelfthPanelData.file_type === 'png'" icon-name="file-png" />
-              <a :href=twelfthPanelData.scan_file>
-                {{ twelfthPanelData.scan_file.split('/').at(-1) }}
-              </a>
-            </span>
-
-            <span class="report__file-size">
-              {{ twelfthPanelData.file_size }} Мб
-            </span>
-
-            <button 
-              @click="deleteFile"
-              class="report__button-delete-file"
-            >
-              Удалить
-            </button>
-          </div>
-        </div>
-
-        <div class="report__fieldset report__fieldset--comment">
-          <label class="form__label report__label" for="comment">
-            Комментарий
-          </label>
-          <TextareaReport
-            v-model:value="twelfthPanelData.comment"
-            id="comment"
-            name="comment"
-            placeholder="Напишите сообщение"
-            :rows="1" 
-            autoResize
-            counter-visible
-            :maxlength="3000"
-            :max-length-text="3000"
-            @focusout="focusOut"
-          >
-          </TextareaReport>
-        </div>
-      </div> -->
     </template>
+
     <template v-slot:thirdTab>
       <TwelfthPanelComponent
         :central-expert="props.centralExpert"
@@ -299,7 +43,7 @@ import { ref, watchEffect } from "vue";
 import { TwelfthPanelComponent } from "@features/RatingRoPanelComponents";
 // import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { ReportTabs } from './index';
-import { getReport, reportPartTwoService } from "@services/ReportService.ts";
+// import { getReport, reportPartTwoService } from "@services/ReportService.ts";
 
 const props = defineProps({
   districtExpert: {
@@ -311,10 +55,18 @@ const props = defineProps({
   reportId: {
     type: String,
     default: '',
-  }
+  },
+  data: Object,
 });
 
-// const ID_PANEL = '12';
+const ID_PANEL = '12';
+
+const emit = defineEmits(['getData']);
+
+const getData = (event) => {
+  emit("getData", event, Number(ID_PANEL));
+};
+
 // const isFirstSent = ref(true);
 // const scanFile = ref([]);
 // const twelfthPanelData = ref({
