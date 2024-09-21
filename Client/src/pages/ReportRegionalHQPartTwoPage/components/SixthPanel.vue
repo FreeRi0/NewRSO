@@ -72,7 +72,7 @@ const formData = async (reportData, reportNumber) => {
     // console.log('num', reportNumber)
     if (isFirstSent.value) {
       console.log('First time sending data');
-      await reportPartTwoService.createMultipleReport(reportData, '6', reportNumber);
+      await reportPartTwoService.createMultipleReportAll(reportData, '6', reportNumber);
     } else {
       console.log('Second time sending data');
       const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '6', reportNumber);

@@ -12,7 +12,8 @@
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="7" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)" @getId="getId($event)" :data="seventhPanelData"
+            @formData="formData($event, item.id)" @uploadFile="uploadFile($event, item.id)"
+            @deleteFile="deleteFile($event, item.id)" @getId="getId($event)" :data="seventhPanelData"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
@@ -23,6 +24,7 @@
 <script setup>
 import { ref, onMounted, watchEffect } from "vue";
 import { SeventhPanelForm } from "./index";
+import { reportPartTwoService } from "@services/ReportService.ts";
 import { HTTP } from "@app/http";
 
 const props = defineProps({
@@ -53,10 +55,10 @@ const formData = async (reportData, reportNumber) => {
   try {
     if (isFirstSent.value) {
       console.log('First time sending data');
-      await reportPartTwoService.createMultipleReport(reportData, '7', reportNumber);
+      await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber, true);
     } else {
       console.log('Second time sending data');
-      const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber);
+      const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber, true);
       emit('getData', data, 7, reportNumber);
     }
   } catch (e) {
@@ -64,6 +66,26 @@ const formData = async (reportData, reportNumber) => {
   }
 };
 
+
+const uploadFile = async (reportData, reportNumber) => {
+  if (isFirstSent.value) {
+    let { document } = await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber, true);
+    seventhPanelData.value.document = document.split('/').at(-1);
+  } else {
+    let { data: { document } } = await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber, true);
+
+    seventhPanelData.value.document = document.split('/').at(-1);
+  }
+};
+
+const deleteFile = async (reportData, reportNumber) => {
+
+  if (isFirstSent.value) {
+    await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber, true);
+  } else {
+    await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber, true);
+  }
+};
 const items = ref([]);
 
 const collapsed = () => {
