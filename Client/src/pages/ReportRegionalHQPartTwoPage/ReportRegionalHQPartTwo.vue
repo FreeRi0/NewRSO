@@ -296,6 +296,9 @@ const getReportData = async (id) => {
       reportData.value.first = (await reportPartTwoService.getReportDH('1', '1')).data;
       reportData.value.fourth = (await reportPartTwoService.getReportDH('4', '1')).data;
       reportData.value.fifth = (await reportPartTwoService.getReportDH('5', '1')).data;
+      reportData.value.six = (await reportPartTwoService.getMultipleReportDH('6', id)).data;
+      reportData.value.seventh = (await reportPartTwoService.getMultipleReportDH('7', id)).data;
+      reportData.value.ninth = (await reportPartTwoService.getMultipleReportDH('9', id)).data;
       reportData.value.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', '1')).data;
       reportData.value.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', '1')).data;
       reportData.value.eleventh = (await reportPartTwoService.getReportDH('11', '1')).data;
