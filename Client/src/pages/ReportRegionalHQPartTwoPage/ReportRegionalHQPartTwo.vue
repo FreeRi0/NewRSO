@@ -311,7 +311,7 @@ const getReportData = async (id) => {
       reportData.value.fifth = (await reportPartTwoService.getReport('5')).data;
       reportData.value.six = (await reportPartTwoService.getMultipleReport('6', id)).data;
       reportData.value.seventh = (await reportPartTwoService.getMultipleReport('7', id)).data;
-      reportData.value.ninth = (await reportPartTwoService.getMultipleReport('9', id)).data;
+      // reportData.value.ninth = (await reportPartTwoService.getMultipleReport('9', id)).data; todo: ломает загрузку остальных показателей
       reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
       reportData.value.tenth.second = (await reportPartTwoService.getMultipleReport('10', '2')).data;
       reportData.value.eleventh = (await reportPartTwoService.getReport('11')).data;
