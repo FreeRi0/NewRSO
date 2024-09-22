@@ -819,7 +819,9 @@ const uploadFile = (event) => {
     let formData = new FormData();
     console.log(scanFile.value);
     formData.append('prize_place', seventhPanelData.value.prize_place);
-    formData.append('document', scanFile.value);
+    if(!seventhPanelData.value.document || !ninthPanelData.value.document) {
+        formData.append('document', scanFile.value);
+    }
     formData.append('links', JSON.stringify(seventhPanelData.value.links));
     formData.append('comment', seventhPanelData.value.comment);
     emit('uploadFile', formData);

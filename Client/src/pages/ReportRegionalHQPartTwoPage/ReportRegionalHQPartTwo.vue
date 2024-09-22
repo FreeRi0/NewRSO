@@ -312,6 +312,7 @@ const getReportData = async (id) => {
       reportData.value.first = (await reportPartTwoService.getReport('1')).data;
       reportData.value.fourth = (await reportPartTwoService.getReport('4')).data;
       reportData.value.fifth = (await reportPartTwoService.getReport('5')).data;
+
       reportData.value.six = (await reportPartTwoService.getMultipleReport('6', id)).data;
       reportData.value.seventh = (await reportPartTwoService.getMultipleReport('7', id)).data;
       reportData.value.ninth = (await reportPartTwoService.getMultipleReport('9', id)).data;
@@ -326,6 +327,26 @@ const getReportData = async (id) => {
       reportData.value.nineteenth = (await reportPartTwoService.getReport('19')).data;
     }
   } catch (e) {
+    if (e.response && e.response.status === 404) {
+      if (e.response.request.responseURL.includes('http://213.139.208.147:30000/api/v1/regional_competitions/me/reports/6/')) {
+        console.log('Data not found for panel 6');
+        reportData.value.six = {};
+      } else {
+        reportData.value.six = (await reportPartTwoService.getMultipleReport('6', id)).data;
+      }
+      if (e.response.request.responseURL.includes('http://213.139.208.147:30000/api/v1/regional_competitions/me/reports/7/')) {
+        console.log('Data not found for panel 7');
+        reportData.value.seventh = {};
+      } else {
+        reportData.value.seventh = (await reportPartTwoService.getMultipleReport('7', id)).data;
+      }
+      if (e.response.request.responseURL.includes('http://213.139.208.147:30000/api/v1/regional_competitions/me/reports/9/')) {
+        console.log('Data not found for panel 9');
+        reportData.value.ninth = {};
+      } else {
+        reportData.value.ninth = (await reportPartTwoService.getMultipleReport('9', id)).data;
+      }
+    }
     console.log('getReportData error: ', e)
   } finally {
     preloader.value = false;
