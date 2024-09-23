@@ -35,10 +35,10 @@
                         Скан подтверждающего документа<sup class="valid-red">*</sup>
                     </label>
                     <InputReport v-if="!seventhPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
-                        id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile"
+                        id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile(7)"
                         :disabled="isDisabled" />
                     <FileBoxComponent v-else :file="seventhPanelData.document" :fileType="seventhPanelData.file_type"
-                        :fileSize="seventhPanelData.file_size" @click="deleteFile"></FileBoxComponent>
+                        :fileSize="seventhPanelData.file_size" @click="deleteFile(9)"></FileBoxComponent>
                 </div>
 
                 <div class="form__field">
@@ -177,9 +177,9 @@
                         Скан документа, подтверждающего проведение акции
                     </label>
                     <InputReport v-if="!ninthPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
-                        id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile" />
+                        id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile(9)" />
                     <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
-                        :fileSize="ninthPanelData.file_size" @click="deleteFile"></FileBoxComponent>
+                        :fileSize="ninthPanelData.file_size" @click="deleteFile(9)"></FileBoxComponent>
                 </div>
 
                 <div class="form__field">
@@ -191,10 +191,10 @@
                         <InputReport @focusout="focusOut" name="14" :is-link="true"
                             placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
                             class="mb-2" />
-                        <div class="add_link" @click="addLink(7)" v-if="ninthPanelData.links.length === index + 1">
+                        <div class="add_link" @click="addLink(9)" v-if="ninthPanelData.links.length === index + 1">
                             + Добавить ссылку
                         </div>
-                        <div class="add_link" @click="deleteLink(7)" v-else>
+                        <div class="add_link" @click="deleteLink(9)" v-else>
                             Удалить поле ввода
                         </div>
 
@@ -830,39 +830,80 @@ const events = ref([
     { name: 'Нет', value: 'Нет', id: 'pp2' },
 ])
 
-const uploadFile = (event) => {
+const uploadFile = (event, number) => {
     scanFile.value = event.target.files[0];
     let formData = new FormData();
     console.log(scanFile.value);
-    formData.append('prize_place', seventhPanelData.value.prize_place);
-    if (!seventhPanelData.value.document || !ninthPanelData.value.document) {
-        formData.append('document', scanFile.value);
-    }
-    if (seventhPanelData.value.links.length) {
-        for (let i = 0; i < seventhPanelData.value.links.length; i++) {
-            formData.append(`seventhPanelData.value[links][${i}][link]`, seventhPanelData.value.links[i].link);
+    if (number === 7) {
+        formData.append('prize_place', seventhPanelData.value.prize_place);
+        if (!seventhPanelData.value.document) {
+            formData.append('document', scanFile.value);
         }
+        if (seventhPanelData.value.links.length) {
+            for (let i = 0; i < seventhPanelData.value.links.length; i++) {
+                !seventhPanelData.value.links[i].link
+                    ? formData.append(`seventhPanelData.value[links][${i}][link]`, '')
+                    : formData.append(`seventhPanelData.value[links][${i}][link]`, seventhPanelData.value.links[i].link);
+            }
+        }
+        formData.append('comment', seventhPanelData.value.comment);
+        emit('uploadFile', formData);
+        emit('formData', formData)
+    } else if (number === 9) {
+        formData.append('event_happened', ninthPanelData.value.event_happened);
+        if (!ninthPanelData.value.document) {
+            formData.append('document', scanFile.value);
+        }
+        if (ninthPanelData.value.links.length) {
+            for (let i = 0; i < ninthPanelData.value.links.length; i++) {
+                !ninthPanelData.value.links[i].link
+                    ? formData.append(`ninthPanelData.value[links][${i}][link]`, '')
+                    : formData.append(`ninthPanelData.value[links][${i}][link]`, ninthPanelData.value.links[i].link);
+            }
+        }
+        formData.append('comment', ninthPanelData.value.comment);
+        emit('uploadFile', formData);
+        emit('formData', formData)
     }
-    formData.append('comment', seventhPanelData.value.comment);
-    emit('uploadFile', formData);
-    emit('formData', formData)
+
 }
 
-const deleteFile = () => {
-    seventhPanelData.value.document = '';
+const deleteFile = (number) => {
     let formData = new FormData();
-    formData.append('prize_place', seventhPanelData.value.prize_place);
-    formData.append('document', '');
-    if (seventhPanelData.value.links.length) {
-        for (let i = 0; i < seventhPanelData.value.links.length; i++) {
-            formData.append(`seventhPanelData.value[links][${i}][link]`, seventhPanelData.value.links[i].link);
+    if (number === 7) {
+        seventhPanelData.value.document = '';
+        formData.append('prize_place', seventhPanelData.value.prize_place);
+        formData.append('document', '');
+        if (seventhPanelData.value.links.length) {
+            for (let i = 0; i < seventhPanelData.value.links.length; i++) {
+                !seventhPanelData.value.links[i].link
+                    ? formData.append(`seventhPanelData.value[links][${i}][link]`, '')
+                    : formData.append(`seventhPanelData.value[links][${i}][link]`, seventhPanelData.value.links[i].link);
+            }
         }
+        formData.append('comment', seventhPanelData.value.comment);
+        formData.append('file_size', seventhPanelData.value.file_size);
+        formData.append('file_type', seventhPanelData.value.file_type);
+        emit('deleteFile', formData);
+        emit('formData', formData)
+    } else if (number === 9) {
+        ninthPanelData.value.document = '';
+        formData.append('event_happened', ninthPanelData.value.event_happened);
+        formData.append('document', '');
+        if (ninthPanelData.value.links.length) {
+            for (let i = 0; i < ninthPanelData.value.links.length; i++) {
+                !ninthPanelData.value.links[i].link
+                    ? formData.append(`ninthPanelData.value[links][${i}][link]`, '')
+                    : formData.append(`ninthPanelData.value[links][${i}][link]`, ninthPanelData.value.links[i].link);
+            }
+        }
+        formData.append('comment', ninthPanelData.value.comment);
+        formData.append('file_size', ninthPanelData.value.file_size);
+        formData.append('file_type', ninthPanelData.value.file_type);
+        emit('deleteFile', formData);
+        emit('formData', formData)
     }
-    formData.append('comment', seventhPanelData.value.comment);
-    formData.append('file_size', seventhPanelData.value.file_size);
-    formData.append('file_type', seventhPanelData.value.file_type);
-    emit('deleteFile', formData);
-    emit('formData', formData)
+
 }
 
 
@@ -883,7 +924,9 @@ const focusOut = () => {
             formData.append('prize_place', seventhPanelData.value.prize_place);
             if (seventhPanelData.value.links.length) {
                 for (let i = 0; i < seventhPanelData.value.links.length; i++) {
-                    formData.append(`seventhPanelData.value[links][${i}][link]`, seventhPanelData.value.links[i].link);
+                    !seventhPanelData.value.links[i].link
+                        ? formData.append(`seventhPanelData.value[links][${i}][link]`, '')
+                        : formData.append(`seventhPanelData.value[links][${i}][link]`, seventhPanelData.value.links[i].link);
                 }
             }
             emit('isSent', isFirstSent.value)
@@ -902,7 +945,9 @@ const focusOut = () => {
             formData.append('event_happened', ninthPanelData.value.event_happened);
             if (ninthPanelData.value.links.length) {
                 for (let i = 0; i < ninthPanelData.value.links.length; i++) {
-                    formData.append(`ninthPanelData.value[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                    !ninthPanelData.value.links[i].link
+                        ? formData.append(`ninthPanelData.value.value[links][${i}][link]`, '')
+                        : formData.append(`ninthPanelData.value[links][${i}][link]`, ninthPanelData.value.links[i].link);
                 }
             }
             emit('isSent', isFirstSent.value)
@@ -928,13 +973,13 @@ const addLink = (number) => {
 const deleteLink = async (number) => {
     if (number == 6) {
         sixPanelData.value.links.pop()
-        await reportPartTwoService.createReportDraftId(sixPanelData.value, '6', props.id);
+        await reportPartTwoService.createMultipleReportDraft(sixPanelData.value, '6', props.id);
     } else if (number == 7) {
         seventhPanelData.value.links.pop()
-        await reportPartTwoService.createReportDraftId(seventhPanelData.value, '7', props.id, true);
+        await reportPartTwoService.createMultipleReportDraft(seventhPanelData.value, '7', props.id, true);
     } else if (number == 9) {
         ninthPanelData.value.links.pop()
-        await reportPartTwoService.createReportDraftId(ninthPanelData.value, '9', props.id);
+        await reportPartTwoService.createMultipleReportDraft(ninthPanelData.value, '9', props.id);
     }
 
 };
