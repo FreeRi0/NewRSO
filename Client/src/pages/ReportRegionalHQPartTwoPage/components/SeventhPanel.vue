@@ -12,7 +12,7 @@
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="7" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)" @uploadFile="uploadFile($event, item.id)"
+            @formData="formData($event, item.id)" @is-sent="sent($event)" @uploadFile="uploadFile($event, item.id)"
             @deleteFile="deleteFile($event, item.id)" @getId="getId($event)" :data="seventhPanelData"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
@@ -50,12 +50,16 @@ const seventhPanelData = ref({
   comment: '',
 });
 const isFirstSent = ref(true);
+const sent = (sentVal) => {
+  console.log('is sent: ', sentVal, isFirstSent.value);
+  isFirstSent.value = sentVal;
+}
 
 const formData = async (reportData, reportNumber) => {
   try {
     if (isFirstSent.value) {
       console.log('First time sending data');
-      await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber, true);
+      await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber);
     } else {
       console.log('Second time sending data');
       const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber, true);

@@ -68,7 +68,7 @@ export const reportPartTwoService = {
         })
     },
     createMultipleReportAll(data: object, panel: string, reportNumber: string, withFile = false) {
-        return HTTP.post(`regional_competitions/reports/${panel}/${reportNumber}/all`, data, {
+        return HTTP.post(`regional_competitions/me/reports/${panel}/${reportNumber}/all`, data, {
             headers: {
                 'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
             },

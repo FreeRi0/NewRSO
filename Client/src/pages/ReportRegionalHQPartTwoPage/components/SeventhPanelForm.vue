@@ -44,7 +44,17 @@
                 <div class="form__field">
                     <label class="form__label mt-4" for="14">Ссылка на публикацию о победе
                         <sup class="valid-red">*</sup></label>
-
+                    <!-- <div class="form__wrapper" v-if="!seventhPanelData.links.length">
+                        <InputReport @focusout="focusOut" name="14" :is-link="true"
+                            placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
+                            v-model:value="seventhPanelData.links[0].link" class="mb-2" />
+                    </div> -->
+                    <pre>count{{ seventhPanelData.links }}</pre>
+                    <!-- <div v-if="!seventhPanelData.links.length">
+                        <InputReport @focusout="focusOut" name="14" :is-link="true"
+                            placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
+                            v-model:value="seventhPanelData.links" class="mb-2" />
+                    </div> -->
                     <div class="form__wrapper" v-for="(item, index) in seventhPanelData.links" :key="index">
                         <InputReport @focusout="focusOut" name="14" :is-link="true"
                             placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
@@ -77,8 +87,10 @@
                         autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
                         :max-length-text="3000" counter-visible />
                 </div>
-                <div>
-                    <v-checkbox label="Итоговое значение" />
+                <div class="form__field-result" style="display: flex; align-items: center;">
+                    <v-checkbox class="result-checkbox" id="v-checkbox" />
+                    <div class="hr"></div>
+                    <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
                 </div>
                 <div class="hr"></div>
                 <div>
@@ -194,8 +206,10 @@
                         autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
                         :max-length-text="3000" counter-visible />
                 </div>
-                <div>
-                    <v-checkbox label="Итоговое значение" />
+                <div class="form__field-result" style="display: flex; align-items: center;">
+                    <v-checkbox class="result-checkbox" id="v-checkbox" />
+                    <div class="hr"></div>
+                    <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
                 </div>
                 <div class="hr"></div>
                 <div>
@@ -764,12 +778,14 @@ const props = defineProps({
     data: Object,
 });
 
-const emit = defineEmits(['collapse-form', 'formData', 'getId', 'uploadFile', 'deleteFile']);
+const emit = defineEmits(['collapse-form', 'formData', 'getId', 'uploadFile', 'deleteFile', 'isSent']);
 
 const collapseForm = () => {
     emit('collapse-form');
 };
-// const isFirstSent = ref(true);
+
+const isFirstSent = ref(true);
+
 const scanFile = ref([]);
 
 const seventhPanelData = ref({
@@ -819,10 +835,14 @@ const uploadFile = (event) => {
     let formData = new FormData();
     console.log(scanFile.value);
     formData.append('prize_place', seventhPanelData.value.prize_place);
-    if(!seventhPanelData.value.document || !ninthPanelData.value.document) {
+    if (!seventhPanelData.value.document || !ninthPanelData.value.document) {
         formData.append('document', scanFile.value);
     }
-    formData.append('links', JSON.stringify(seventhPanelData.value.links));
+    if (seventhPanelData.value.links.length) {
+        for (let i = 0; i < seventhPanelData.value.links.length; i++) {
+            formData.append(`seventhPanelData.value[links][${i}][link]`, seventhPanelData.value.links[i].link);
+        }
+    }
     formData.append('comment', seventhPanelData.value.comment);
     emit('uploadFile', formData);
     emit('formData', formData)
@@ -833,7 +853,11 @@ const deleteFile = () => {
     let formData = new FormData();
     formData.append('prize_place', seventhPanelData.value.prize_place);
     formData.append('document', '');
-    formData.append('links', JSON.stringify(seventhPanelData.value.links));
+    if (seventhPanelData.value.links.length) {
+        for (let i = 0; i < seventhPanelData.value.links.length; i++) {
+            formData.append(`seventhPanelData.value[links][${i}][link]`, seventhPanelData.value.links[i].link);
+        }
+    }
     formData.append('comment', seventhPanelData.value.comment);
     formData.append('file_size', seventhPanelData.value.file_size);
     formData.append('file_type', seventhPanelData.value.file_type);
@@ -842,46 +866,6 @@ const deleteFile = () => {
 }
 
 
-// const focusOut = async () => {
-//     try {
-//         // let formData = new FormData();
-//         // formData.append('prize_place', seventhPanelData.value.prize_place);
-//         // formData.append('links', JSON.stringify(seventhPanelData.value.links));
-//         // formData.append('comment', seventhPanelData.value.comment);
-//         if (isFirstSent.value) {
-//             // console.log('createReportId'), props.panel_number;
-//             if (props.panel_number == 6) {
-//                 await reportPartTwoService.createMultipleReport(sixPanelData.value, '6', props.id);
-//             } else {
-//                 await reportPartTwoService.createMultipleReport(seventhPanelData.value, '7', props.id)
-//             }
-//             isFirstSent.value = false;
-
-//         } else {
-//             // console.log('createId', props.panel_number);
-//             if (props.panel_number == 6) {
-//                 const { data } = await reportPartTwoService.createMultipleReportDraft(
-//                     sixPanelData.value,
-//                     '6',
-//                     props.id
-//                 );
-//                 emit('getData', data, 6);
-//             } else {
-//                 const { data } = await reportPartTwoService.createMultipleReportDraft(
-//                     seventhPanelData.value,
-//                     '7',
-//                     props.id,
-
-//                 );
-//                 emit('getData', data, 7);
-//             }
-
-//         }
-//     } catch (e) {
-//         // console.log('focusOut error:', e);
-//     }
-// };
-
 const focusOut = () => {
     if (props.panel_number == 6) {
         emit('formData', sixPanelData.value)
@@ -889,15 +873,42 @@ const focusOut = () => {
     }
 
     else if (props.panel_number == 7) {
-        let formData = new FormData();
-        formData.append('prize_place', seventhPanelData.value.prize_place);
-        formData.append('links', JSON.stringify(seventhPanelData.value.links));
-        formData.append('comment', seventhPanelData.value.comment);
-        emit('formData', formData)
-        console.log('7')
+        if (isFirstSent.value) {
+            console.log('7', '1')
+            emit('isSent', isFirstSent.value)
+            emit('formData', seventhPanelData.value)
+        } else {
+            let formData = new FormData();
+            formData.append('comment', seventhPanelData.value.comment);
+            formData.append('prize_place', seventhPanelData.value.prize_place);
+            if (seventhPanelData.value.links.length) {
+                for (let i = 0; i < seventhPanelData.value.links.length; i++) {
+                    formData.append(`seventhPanelData.value[links][${i}][link]`, seventhPanelData.value.links[i].link);
+                }
+            }
+            emit('isSent', isFirstSent.value)
+            emit('formData', formData)
+            console.log('7', '2')
+        }
     }
     else if (props.panel_number == 9) {
-        emit('formData', ninthPanelData.value)
+        if (isFirstSent.value) {
+            console.log('9', '1')
+            emit('isSent', isFirstSent.value)
+            emit('formData', ninthPanelData.value)
+        } else {
+            let formData = new FormData();
+            formData.append('comment', ninthPanelData.value.comment);
+            formData.append('event_happened', ninthPanelData.value.event_happened);
+            if (ninthPanelData.value.links.length) {
+                for (let i = 0; i < ninthPanelData.value.links.length; i++) {
+                    formData.append(`ninthPanelData.value[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                }
+            }
+            emit('isSent', isFirstSent.value)
+            emit('formData', formData)
+            console.log('9', '2')
+        }
     }
 
 }
@@ -928,35 +939,6 @@ const deleteLink = async (number) => {
 
 };
 
-// watchEffect(async () => {
-//     // try {
-//     //     const { data } = await reportPartTwoService.getReportId(props.panel_number, props.id);
-
-//     //     if (data && props.panel_number == 7) {
-
-//     //         isFirstSent.value = false;
-
-
-//     //         seventhPanelData.value.prize_place = data.prize_place;
-//     //         seventhPanelData.value.document = data?.document?.split('/').at(-1);
-//     //         seventhPanelData.value.file_size = data.file_size;
-//     //         seventhPanelData.value.file_type = data.file_type;
-//     //         // console.log('links', seventhPanelData.value.links, 'linksData', data.links)
-//     //         // seventhPanelData.value.links = JSON.parse(seventhPanelData.value.links)
-//     //         //JSON.parse(data.links)
-//     //         seventhPanelData.value.links = data.links;
-//     //         seventhPanelData.value.comment = data.comment;
-//     //     } else if (data && props.panel_number == 6) {
-//     //         isFirstSent.value = false;
-//     //         sixPanelData.value.number_of_members = data.number_of_members;
-//     //         sixPanelData.value.links = data.links;
-//     //         sixPanelData.value.comment = data.comment;
-//     //     }
-//     // } catch (e) {
-//     //     // console.log(e);
-//     // }
-// });
-
 watchEffect(() => {
     if (props.panel_number == 6) {
         console.log('data 6', props.id)
@@ -964,8 +946,12 @@ watchEffect(() => {
         sixPanelData.value = { ...props.data }
     } else if (props.panel_number == 7) {
         console.log('data 7', props.id)
+        if (props.data) {
+            isFirstSent.value = false;
+            seventhPanelData.value = { ...props.data }
+        }
         emit('getId', props.id)
-        seventhPanelData.value = { ...props.data }
+
     } else if (props.panel_number == 9) {
         console.log('data 9', props.id)
         emit('getId', props.id)
@@ -985,6 +971,16 @@ watchEffect(() => {
     font-size: 14px;
     font-weight: 400;
     line-height: 21.1px;
+}
+
+.result-checkbox {
+    color: #39BF39;
+    margin-right: 12px;
+}
+
+.result-checkbox-text {
+    font-family: 'Bert sans';
+    font-weight: 700;
 }
 
 

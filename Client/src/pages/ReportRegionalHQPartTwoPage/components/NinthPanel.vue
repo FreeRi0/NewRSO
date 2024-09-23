@@ -8,8 +8,9 @@
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="9" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)"  @uploadFile="uploadFile($event, item.id)" @getId="getId($event)" :data="ninthPanelData"
-            @deleteFile="deleteFile($event, item.id)" :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
+            @formData="formData($event, item.id)" @is-sent="sent($event)" @uploadFile="uploadFile($event, item.id)"
+            @getId="getId($event)" :data="ninthPanelData" @deleteFile="deleteFile($event, item.id)"
+            :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
     </v-expansion-panels>
@@ -44,6 +45,10 @@ const ninthPanelData = ref({
   comment: '',
 });
 const isFirstSent = ref(true);
+
+const sent = (sentVal) => {
+  isFirstSent.value = sentVal;
+}
 
 const formData = async (reportData, reportNumber) => {
   try {
@@ -87,7 +92,7 @@ const uploadFile = async (reportData, reportNumber) => {
   } else {
     let { data: { document } } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
 
-   ninthPanelData.value.document = document.split('/').at(-1);
+    ninthPanelData.value.document = document.split('/').at(-1);
   }
 };
 
