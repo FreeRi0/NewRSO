@@ -20,6 +20,7 @@
 <script setup>
 import { ref, onMounted, watchEffect } from "vue";
 import { SeventhPanelForm } from "./index";
+import { reportPartTwoService } from "@services/ReportService.ts";
 import { HTTP } from "@app/http";
 
 const props = defineProps({
@@ -35,7 +36,7 @@ const props = defineProps({
 const panel = ref(null);
 const emit = defineEmits(['getData', 'getId'])
 const ninthPanelData = ref({
-  event_happened: 'Нет',
+  event_happened: false,
   links: [{
     link: '',
   }],

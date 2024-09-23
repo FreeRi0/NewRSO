@@ -35,10 +35,10 @@
                         Скан подтверждающего документа<sup class="valid-red">*</sup>
                     </label>
                     <InputReport v-if="!seventhPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
-                        id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile(7)"
+                        id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile($event, 7)"
                         :disabled="isDisabled" />
                     <FileBoxComponent v-else :file="seventhPanelData.document" :fileType="seventhPanelData.file_type"
-                        :fileSize="seventhPanelData.file_size" @click="deleteFile(9)"></FileBoxComponent>
+                        :fileSize="seventhPanelData.file_size" @click="deleteFile(7)"></FileBoxComponent>
                 </div>
 
                 <div class="form__field">
@@ -177,7 +177,7 @@
                         Скан документа, подтверждающего проведение акции
                     </label>
                     <InputReport v-if="!ninthPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
-                        id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile(9)" />
+                        id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile($event, 9)" />
                     <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
                         :fileSize="ninthPanelData.file_size" @click="deleteFile(9)"></FileBoxComponent>
                 </div>
@@ -800,7 +800,7 @@ const seventhPanelData = ref({
 });
 
 const ninthPanelData = ref({
-    event_happened: 'Нет',
+    event_happened: false,
     links: [{
         link: '',
     }],
@@ -826,15 +826,16 @@ const prize_places = ref([
 ]);
 
 const events = ref([
-    { name: 'Да', value: 'Да', id: 'pp1' },
-    { name: 'Нет', value: 'Нет', id: 'pp2' },
+    { name: 'Да', value: true, id: 'pp1' },
+    { name: 'Нет', value: false, id: 'pp2' },
 ])
 
 const uploadFile = (event, number) => {
-    scanFile.value = event.target.files[0];
+  
     let formData = new FormData();
-    console.log(scanFile.value);
+    console.log('num', number);
     if (number === 7) {
+        scanFile.value = event.target.files[0];
         formData.append('prize_place', seventhPanelData.value.prize_place);
         if (!seventhPanelData.value.document) {
             formData.append('document', scanFile.value);
@@ -850,6 +851,7 @@ const uploadFile = (event, number) => {
         emit('uploadFile', formData);
         emit('formData', formData)
     } else if (number === 9) {
+        scanFile.value = event.target.files[0];
         formData.append('event_happened', ninthPanelData.value.event_happened);
         if (!ninthPanelData.value.document) {
             formData.append('document', scanFile.value);
@@ -999,8 +1001,11 @@ watchEffect(() => {
 
     } else if (props.panel_number == 9) {
         console.log('data 9', props.id)
+        if(props.data) {
+            isFirstSent.value = false;
+            ninthPanelData.value = {...props.data }
+        }
         emit('getId', props.id)
-        ninthPanelData.value = { ...props.data }
     }
 })
 </script>
