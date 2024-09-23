@@ -45,13 +45,10 @@ app.use(vuetify)
 
 
 app.config.errorHandler = (err: any, _instance, info) => {
-    if (localStorage.getItem('jwt_token')) {
-        HTTP.post('/services/front_errors/', {
-            url: window.location.href,
-            error_code: 0,
-            error_description: 'Where: ' + JSON.stringify(info) + '. Error: ' + err.toString(),
-            method: 'Vue Error',
-        }).then().catch()
-    }
-    console.error('ERROR ERROR', err);
+    HTTP.post('/services/front_errors/', {
+        url: window.location.href,
+        error_code: 0,
+        error_description: 'Where: ' + JSON.stringify(info) + '. Error: ' + err.toString(),
+        method: 'Vue Error',
+    }).then().catch()
 }
