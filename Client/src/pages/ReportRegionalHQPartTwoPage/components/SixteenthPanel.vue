@@ -501,7 +501,6 @@ watchEffect(async () => {
 .project-regulations-input-file {
   display: flex;
   flex-direction: column;
-  gap: 8px;
   max-width: 720px;
   width: 100%;
 
@@ -585,7 +584,6 @@ watchEffect(async () => {
 .form__field-info-win {
   display: flex;
   flex-direction: column;
-  gap: 8px;
   width: 720px;
 
   @media (max-width: 1024px) {
