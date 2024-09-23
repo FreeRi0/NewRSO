@@ -263,4 +263,16 @@
             color: #1C5C94;
         } 
     }
+    &__error-text {
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 100%;
+        display: block;
+        color: #db0000;
+        font-family: "Bert Sans";
+        font-weight: 400;
+        font-size: 10px;
+        line-height: 12px;
+      }
 }

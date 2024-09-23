@@ -32,14 +32,56 @@
             :name="index"
             width="100%"
             height="86px"
-            @change="uploadFile"
+            @change="uploadFile($event, index)"
           />
+
+          <!-- <p v-if="project.file">
+            {{project.file}}<br>
+            {{project.file_type }}<br>
+            {{typeof(project.file_size) }}, {{project.file_size}}
+          </p>  -->
+
+          <!-- <div v-if="project.file && typeof project.file === 'string'" class="report__file-box" style=" border: 1px solid red; ">
+            <div class="report__file-name">
+              <SvgIcon 
+                v-if="project.file_type === 'jpg' ||
+                      project.file_type === 'jpeg' ||
+                      project.file_type === 'JPG' ||
+                      project.file_type === 'JPEG'"
+                icon-name="file-jpg" />
+              <SvgIcon v-if="project.file_type === 'pdf'" icon-name="file-pdf" />
+              <SvgIcon v-if="project.file_type === 'png'" icon-name="file-png" />
+
+              <a :href=project.file>{{ project.file.split('/').at(-1) }}</a>
+            </div>
+
+            <span class="report__file-size" v-if="project.file_size">
+                {{ project.file_size.toFixed(1) }}&nbsp;Мб
+            </span>
+
+            <button 
+              v-if="!(props.centralExpert || props.districtExpert)"
+              class="report__button-delete-file"
+              @click="deleteFile(index)"
+            >
+                Удалить
+            </button>
+          </div> -->
+              
+          <div 
+            v-if="project.file && (typeof project.file !== 'string')"
+            class="text-center"
+          >
+            <v-progress-circular color="primary" indeterminate></v-progress-circular>
+          </div>
+
           <FileBoxComponent
-            v-else
+            style=" border: 1px solid green; "
+            v-if="project.file && typeof project.file === 'string'"
             :file="project.file"
             :fileType="project.file_type"
             :fileSize="project.file_size"
-            @click="deleteFile"
+            @click="deleteFile(index)"
           ></FileBoxComponent>
           <button
             v-if="!(props.centralExpert || props.districtExpert) && (index > 0)"
@@ -69,6 +111,9 @@
                   @focusout="focusOut"
                   :disabled="props.centralExpert || props.districtExpert"
               />
+              <div v-if="isError && (i > 0)" class="report__error-block">
+                <span class="report__error-text">Укажите ссылку публикации</span>
+              </div>
               <button
                 v-if="!(props.centralExpert || props.districtExpert) && (i > 0)"
                 @click="deleteLink(index, i)"
@@ -143,12 +188,20 @@ const props = defineProps({
   centralExpert: {
     type: Boolean
   },
-  reportId: {
-    type: String,
-    default: '1',
+  isError: {
+    type: Boolean,
+    default: false,
   },
+  // reportId: {
+  //   type: String,
+  //   default: '1',
+  // },
   data: Object,
 });
+
+let isError = ref(props.isError);
+
+const emit = defineEmits(['getData']);
 
 const ID_PANEL = '18';
 const isFirstSent = ref(true);
@@ -161,8 +214,8 @@ const eighteenthPanelData = ref({
 const projects = ref([
   {
     file: '',
-    // file_size: null,
-    // file_type: '',
+    file_size: null,
+    file_type: '',
     links: [
       {
         link: '',
@@ -171,38 +224,107 @@ const projects = ref([
   }
 ])
 
-const uploadFile = async (event) => {
-  // scanFile.value = event.target.files[0];
-  // let formData = new FormData();
-  // formData.append('file', scanFile.value);
-  // // formData.append('comment', eighteenthPanelData.value.comment);
-  // formData.append('file_size', eighteenthPanelData.value.projects[1].file_size);
-  // formData.append('file_type', eighteenthPanelData.value.projects[1].file_type);
-  // formData.append('file_size', (scanFile.value.size/( 1024 * 1024 )).toFixed(1));
-  // formData.append('file_type', scanFile.value.type);
+const uploadFile = async (event, index) => {
+  projects.value[index].file = event.target.files[0];
 
-  // console.log(scanFile.value);
+  // console.log('файл - ', projects.value[index].file, 
+  // 'тип данных - ', typeof(projects.value[index].file),
+  // 'имя - ', projects.value[index].file.name, 
+  // 'размер -', projects.value[index].file.size, 
+  // 'тип -', projects.value[index].file.type);
 
-  // if (isFirstSent.value) {
-  //   let { scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-    // eighteenthPanelData.value.scan_file = scan_file.split('/').at(-1);
-    // eighteenthPanelData.value.scan_file = scan_file;
-  // } else {
-  //   let { data : { scan_file } } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-  //   eighteenthPanelData.value.scan_file = scan_file.split('/').at(-1);
-  // eighteenthPanelData.value.scan_file = scan_file;
+  let formData = new FormData();
+  formData.append('comment', eighteenthPanelData.value.comment);
+
+  formData.append(`projects[${index}][file]`, projects.value[index].file);
+
+  if (projects.value.length) {
+    for (let index = 0; index < projects.value.length; index++) {
+      if (projects.value[index].links.length) {
+        for (let i = 0; i < projects.value[index].links.length; i++) {
+          !projects.value[index].links[i].link 
+          ? formData.append(`projects[${index}][links][${i}][link]`, '')
+          : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+        }
+
+        // для первой и остальных ссылок
+        // projects.value[index].links[0].link 
+        // ? formData.append(`projects[${index}][links][0][link]`, projects.value[index].links[0].link)
+        // : formData.append(`projects[${index}][links][0][link]`, '');
+        // for (let i = 0; i < projects.value[index].links.length; i++) {
+
+          // if (!projects.value[index].links[i].link) {
+          //   isError.value = true;
+          //   console.log('ошибка отправки');
+          //   return
+          // } else {
+          //   isError.value = false;
+          //   formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+          // }
+        // }
+
+      }
+    }
+  }
+
+  // if (projects.value[index].links.length) {
+  //   for (let i = 0; i < projects.value[index].links.length; i++) {
+  //     formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+  //   }
+  // }
+  // formData.append(`projects[${index}][file]`, projects.value[index].file);  
+
+  // if (!isError.value) {
+  //   const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+  //   emit('getData', data, Number(ID_PANEL));
+  // }
+
+  const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+  emit('getData', data, Number(ID_PANEL));
+
+  // try {
+  //   if (isFirstSent.value) {
+  //     let { scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+  //     eighteenthPanelData.value.scan_file = scan_file;
+  //   } else {
+  //     let { data :  scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+  //     eighteenthPanelData.value.scan_file = scan_file;
+  //     emit('getData', scan_file, Number(ID_PANEL));
+  //   }
+  // } catch (e) {
+  //   console.log('focusOut error:', e);
   // }
 };
 
-const deleteFile = async () => {
-  // eighteenthPanelData.value.scan_file = '';
-  // let formData = new FormData();
-  // formData.append('scan_file', '');
-  // formData.append('comment', eighteenthPanelData.value.comment);
-  // formData.append('file_size', seventeenthPanelData.value.file_size);
-  // formData.append('file_type', seventeenthPanelData.value.file_type);
+const deleteFile = async (index) => {
+  // projects.value[index].file = '';
+  let formData = new FormData();
+  formData.append('comment', eighteenthPanelData.value.comment);
 
-  // console.log(formData);
+  formData.append(`projects[${index}][file]`, '');
+
+  if (projects.value.length) {
+    for (let index = 0; index < projects.value.length; index++) {
+      console.log('этот код выполняется');
+      if (projects.value[index].links.length) {
+        for (let i = 0; i < projects.value[index].links.length; i++) {
+          !projects.value[index].links[i].link 
+          ? formData.append(`projects[${index}][links][${i}][link]`, '')
+          : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+        }
+      }
+    }
+  }
+
+  // if (projects.value[index].links.length) {
+  //   for (let i = 0; i < projects.value[index].links.length; i++) {
+  //     formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+  //   }
+  // }
+  // formData.append(`projects[${index}][file]`, '');
+
+  const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+  emit('getData', data, Number(ID_PANEL));
 
   // if (isFirstSent.value) {
   //   await reportPartTwoService.createReport(formData, ID_PANEL, true);
@@ -217,19 +339,39 @@ const addLink = (index) => {
 
 const deleteLink = async (projectIndex, linkIndex) => {
   projects.value[projectIndex].links.splice(linkIndex, 1);
-  eighteenthPanelData.value.projects = [ ...projects.value ];
-  try {
-    await reportPartTwoService.createReportDraft(eighteenthPanelData.value, ID_PANEL);
-  } catch (e) {
-    console.log('deletePublication error: ', e);
+
+  let formData = new FormData();
+  formData.append('comment', eighteenthPanelData.value.comment);
+
+  if (projects.value.length) {
+    for (let index = 0; index < projects.value.length; index++) {
+      if (projects.value[index].links.length) {
+        for (let i = 0; i < projects.value[index].links.length; i++) {
+          !projects.value[index].links[i].link 
+          ? formData.append(`projects[${index}][links][${i}][link]`, '')
+          : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+        }
+      }
+    }
   }
+
+  const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+  emit('getData', data, Number(ID_PANEL));
+
+  // eighteenthPanelData.value.projects = [ ...projects.value ];
+  // await reportPartTwoService.createReportDraft(eighteenthPanelData.value, ID_PANEL);
+  // try {
+  //   await reportPartTwoService.createReportDraft(eighteenthPanelData.value, ID_PANEL);
+  // } catch (e) {
+  //   console.log('deletePublication error: ', e);
+  // }
 };
 
 const addPublication = () => {
   projects.value.push({
-    scan_file: '',
-    // file_size: null,
-    // file_type: '',
+    file: '',
+    file_size: null,
+    file_type: '',
     links: [
       {
         link: '',
@@ -238,19 +380,47 @@ const addPublication = () => {
   })
 };
 
-const focusOut = async () => {
-  // let formData = new FormData();
-  // formData.append('comment', eighteenthPanelData.value.comment);
-  // formData.append('file_size', seventeenthPanelData.value.file_size);
-  // formData.append('file_type', seventeenthPanelData.value.file_type);
-
+const focusOut = async () => { 
+  // try {
+  //   if (isFirstSent.value) {
+  //     await reportPartTwoService.createReport(formData, ID_PANEL, true);
+  //   } else {
+  //     const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+  //     emit('getData', data, Number(ID_PANEL));
+  //   }
+  // } catch (e) {
+  //   console.log('focusOut error:', e);
+  // }
+  console.log(eighteenthPanelData.value.comment);
   eighteenthPanelData.value.projects = [ ...projects.value ];
-  console.log(eighteenthPanelData.value.projects);
+  // console.log(eighteenthPanelData.value.projects);
   try {
     if (isFirstSent.value) {
     await reportPartTwoService.createReport(eighteenthPanelData.value, ID_PANEL);
     } else {
-      await reportPartTwoService.createReportDraft(eighteenthPanelData.value, ID_PANEL);
+      let formData = new FormData();
+      formData.append('comment', eighteenthPanelData.value.comment);
+
+      if (projects.value.length) {
+        for (let index = 0; index < projects.value.length; index++) {
+          if (projects.value[index].links.length) {
+            for (let i = 0; i < projects.value[index].links.length; i++) {
+              !projects.value[index].links[i].link 
+              ? formData.append(`projects[${index}][links][${i}][link]`, '')
+              : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+            }
+          }
+        }
+      }
+
+      // if (projects.value[index].links.length) {
+      //   for (let i = 0; i < projects.value[index].links.length; i++) {
+      //     // formData.append(`projects.value[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+      //     formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+      //   }
+      // }
+      const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+      emit('getData', data, Number(ID_PANEL));
     }
   } catch (e) {
     console.log('focusOut error:', e);
@@ -259,30 +429,57 @@ const focusOut = async () => {
 
 const deletePublication = async (index) => {
   projects.value = projects.value.filter((el, i) => index !== i);
-  eighteenthPanelData.value.projects = [ ...projects.value ];
-  try {
-    await reportPartTwoService.createReportDraft(eighteenthPanelData.value, ID_PANEL);
-  } catch (e) {
-    console.log('deletePublication error: ', e);
+
+  let formData = new FormData();
+  formData.append('comment', eighteenthPanelData.value.comment);
+
+  if (projects.value.length) {
+    for (let index = 0; index < projects.value.length; index++) {
+      if (projects.value[index].links.length) {
+        for (let i = 0; i < projects.value[index].links.length; i++) {
+          !projects.value[index].links[i].link 
+          ? formData.append(`projects[${index}][links][${i}][link]`, '')
+          : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+        }
+      }
+    }
   }
+
+  const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+  emit('getData', data, Number(ID_PANEL));
+
+  // eighteenthPanelData.value.projects = [ ...projects.value ];
+  // try {
+  //   await reportPartTwoService.createReportDraft(eighteenthPanelData.value, ID_PANEL);
+  // } catch (e) {
+  //   console.log('deletePublication error: ', e);
+  // }
 };
 
 watchEffect(async () => {
-  console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
-  try {
-    const { data } = 
-      props.districtExpert || props.centralExpert
-        ? await reportPartTwoService.getReportDH(ID_PANEL, props.reportId)
-        : await reportPartTwoService.getReport(ID_PANEL);
-    console.log(data);
-    if (data) {
-      isFirstSent.value = false;
-      projects.value = [...data.projects];
-      eighteenthPanelData.value.comment = data.comment;
-    }
-  } catch (e) {
-    console.log(e);
+  // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
+
+  if (props.data) {
+    console.log(props.data);
+    isFirstSent.value = false;
+    projects.value = [...props.data.projects];
+    eighteenthPanelData.value.comment = props.data.comment;
+    if (!projects.value[0].links.length) projects.value[0].links.push({link: ''});
   }
+  // try {
+  //   const { data } = 
+  //     props.districtExpert || props.centralExpert
+  //       ? await reportPartTwoService.getReportDH(ID_PANEL, props.reportId)
+  //       : await reportPartTwoService.getReport(ID_PANEL);
+  //   console.log(data);
+  //   if (data) {
+  //     isFirstSent.value = false;
+  //     projects.value = [...data.projects];
+  //     eighteenthPanelData.value.comment = data.comment;
+  //   }
+  // } catch (e) {
+  //   console.log(e);
+  // }
 });
 </script>
 
