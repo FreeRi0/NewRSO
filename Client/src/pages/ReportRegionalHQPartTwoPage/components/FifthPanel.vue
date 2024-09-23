@@ -1,5 +1,5 @@
 <template>
-  <div v-if="true" class="form__field-group">
+  <div v-if="!(props.centralExpert || props.districtExpert)" class="form__field-group">
     <div class="form__field-group-general" v-for="(event, index) in events" :key="index">
 
       <div class="form__field-people">
@@ -71,205 +71,464 @@
     </div>
   </div>
 
-  <v-card v-else class="panel-card">
-    <v-tabs v-model="tab">
-      <v-tab value="one" class="panel-tab-btn">Отчет РО</v-tab>
-      <v-tab value="two" class="panel-tab-btn">Корректировка ОШ</v-tab>
-      <v-tab value="three" class="panel-tab-btn">Корректировка ЦШ</v-tab>
-    </v-tabs>
-
-    <v-card-text class="panel-card-text">
-      <v-tabs-window v-model="tab">
-        <v-tabs-window-item value="one">
-          <div class="form__field-group">
-            <div style="display: flex;">
-              <div>
-                <label class="form__label" for="1">Общее количество человек, принявших участие в трудовом проекте <sup
-                    class="valid-red">*</sup></label>
-                <InputReport id="1" name="1" class="form__input" type="number" placeholder="Введите число" />
-              </div>
-              <div>
-                <label class="form__label" for="1_2">Количество человек из своего региона, принявших участие в трудовом
-                  проекте <sup class="valid-red">*</sup></label>
-                <InputReport id="1_2" name="1_2" class="form__input" type="number" placeholder="Введите число" />
-              </div>
+  <report-tabs v-else>
+    <template v-slot:firstTab>
+      <div class="form__field-group-general" v-for="(event, index) in events" :key="index">
+        <div class="form__field-people">
+          <div class="form__field-people-count">
+            <div class="form__field-people-count-wrap">
+              <label class="form__label" for="participants_number">Общее количество человек, принявших участие в трудовом
+                проекте <sup class="valid-red">*</sup></label>
+              <InputReport
+                  v-model:value="event.participants_number"
+                  id="participants_number"
+                  name="participants_number"
+                  class="form__input form__field-people-count-field"
+                  type="number"
+                  placeholder="Введите число"
+                  @focusout="focusOut"
+                  :disabled="props.centralExpert || props.districtExpert"
+              />
             </div>
-            <div style="display: flex;">
-              <div class="form__field">
-                <label class="form__label" for="2">Дата начала проведения проекта <sup class="valid-red">*</sup></label>
-                <InputReport id="2" name="2" class="form__input" type="date" />
-              </div>
-              <div class="form__field">
-                <label class="form__label" for="3">Дата окончания проведения проекта <sup
-                    class="valid-red">*</sup></label>
-                <InputReport id="3" name="3" class="form__input" type="date" />
-              </div>
-            </div>
-            <div>
-              <label class="form__label" for="4">Положение о проекте <sup class="valid-red">*</sup></label>
-              <InputReport type="file" id="4" name="4" />
-            </div>
-            <div>
-              <label class="form__label" for="6">Ссылка на группу трудового проекта в социальных сетях <sup
-                  class="valid-red">*</sup></label>
-              <InputReport id="6" name="6" class="form__input" type="text" placeholder="https://vk.com/cco_monolit" />
-              <InputReport id="7" name="7" class="form__input" type="text" placeholder="https://vk.com/ccorobot" />
-              <InputReport id="8" name="8" class="form__input" type="text" placeholder="https://vk.com/cco_monolit11" />
-            </div>
-            <div>
-              <label class="form__label" for="9">Комментарий <sup class="valid-red">*</sup></label>
-              <InputReport id="9" name="9" class="form__input" type="textarea" placeholder="Комментарий"
-                style="width: 100%; height: 100px" />
-            </div>
-            <div>
-              <v-checkbox label="Итоговое значение" />
-            </div>
-            <div class="hr"></div>
-            <div>
-              <p>(4-1)*2+(4-2)+(4-3)=9</p>
+            <div class="form__field-people-count-wrap">
+              <label class="form__label" for="ro_participants_number">Количество человек из своего региона, принявших
+                участие в трудовом проекте <sup class="valid-red">*</sup></label>
+              <InputReport
+                  v-model:value="event.ro_participants_number"
+                  id="ro_participants_number"
+                  name="ro_participants_number"
+                  class="form__input form__field-people-count-field"
+                  type="number"
+                  placeholder="Введите число"
+                  @focusout="focusOut"
+                  :disabled="props.centralExpert || props.districtExpert"
+              />
             </div>
           </div>
-        </v-tabs-window-item>
-
-        <v-tabs-window-item value="two">
-          <form class="form__field-group" @submit.prevent>
-            <div style="display: flex;">
-              <div>
-                <label class="form__label" for="_2">Общее количество человек, принявших участие в трудовом проекте <sup
-                    class="valid-red">*</sup></label>
-                <InputReport id="_2" name="_2" class="form__input" type="number" placeholder="Введите число" />
-              </div>
-              <div>
-                <label class="form__label" for="2_2">Количество человек из своего региона, принявших участие в трудовом
-                  проекте <sup class="valid-red">*</sup></label>
-                <InputReport id="2_2" name="2_2" class="form__input" type="number" placeholder="Введите число" />
-              </div>
-              <Button label="Удалить проект" size="large" />
-            </div>
-            <div style="display: flex;">
-              <div class="form__field">
-                <label class="form__label" for="13">Дата начала проведения проекта <sup
-                    class="valid-red">*</sup></label>
-                <InputReport id="13" name="13" class="form__input" type="date" />
-              </div>
-              <div class="form__field">
-                <label class="form__label" for="3">Дата окончания проведения проекта <sup
-                    class="valid-red">*</sup></label>
-                <InputReport id="14" name="14" class="form__input" type="date" />
-              </div>
-            </div>
-            <div>
-              <Button style="margin: 0" label="Добавить проект" size="large" />
-            </div>
-            <div class="form__field">
-              <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
-              <InputReport id="14" name="14" class="form__input" style="width: 100%" />
-            </div>
-            <div>
-              <v-checkbox label="Итоговое значение" />
-            </div>
-            <div class="hr"></div>
-            <div>
-              <p>(4-1)*2+(4-2)+(4-3)=9</p>
-            </div>
-          </form>
-        </v-tabs-window-item>
-
-        <v-tabs-window-item value="three">
-          <div class="form__field-group report-table">
-            <div>
-              <Button style="margin-right: 0" label="Удалить мероприятие" size="large" />
-            </div>
-            <label class="form__label">Общее количество человек, принявших участие в трудовом проекте <sup
+        </div>
+        <div class="form__field-date" style="display: flex;">
+          <div class="form__field-date-wrap">
+            <label class="form__label" for="start_date">Дата начала проведения проекта <sup
                 class="valid-red">*</sup></label>
-            <v-table>
-              <tbody>
-                <tr class="report-table__tr">
-                  <td class="report-table__th report-table__th__br-left">Данные РО</td>
-                  <td class="report-table__th">Корректировка ОШ</td>
-                  <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
-                </tr>
-                <tr>
-                  <td class="report-table__td">200</td>
-                  <td class="report-table__td report-table__td__center">200</td>
-                  <td class="report-table__td">200</td>
-                </tr>
-              </tbody>
-            </v-table>
-            <label class="form__label">Количество человек из своего региона, принявших участие в трудовом проекте <sup
+            <InputReport
+                v-model:value="event.start_date"
+                id="start_date"
+                name="start_date"
+                class="form__input form__field-date-wrap-field"
+                type="date"
+                @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert"
+            />
+          </div>
+          <div class="form__field-date-wrap">
+            <label class="form__label" for="end_date">Дата окончания проведения проекта <sup
                 class="valid-red">*</sup></label>
-            <v-table>
-              <tbody>
-                <tr class="report-table__tr">
-                  <td class="report-table__th report-table__th__br-left">Данные РО</td>
-                  <td class="report-table__th">Корректировка ОШ</td>
-                  <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
-                </tr>
-                <tr>
-                  <td class="report-table__td">200</td>
-                  <td class="report-table__td report-table__td__center">200</td>
-                  <td class="report-table__td">200</td>
-                </tr>
-              </tbody>
-            </v-table>
-            <label class="form__label">Дата начала проведения проекта <sup class="valid-red">*</sup></label>
-            <v-table>
-              <tbody>
-                <tr class="report-table__tr">
-                  <td class="report-table__th report-table__th__br-left">Данные РО</td>
-                  <td class="report-table__th">Корректировка ОШ</td>
-                  <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
-                </tr>
-                <tr>
-                  <td class="report-table__td">25.03.2024</td>
-                  <td class="report-table__td report-table__td__center">25.03.2024</td>
-                  <td class="report-table__td">25.03.2024</td>
-                </tr>
-              </tbody>
-            </v-table>
-            <label class="form__label">Дата окончания проведения проекта <sup class="valid-red">*</sup></label>
-            <v-table>
-              <tbody>
-                <tr class="report-table__tr">
-                  <td class="report-table__th report-table__th__br-left">Данные РО</td>
-                  <td class="report-table__th">Корректировка ОШ</td>
-                  <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
-                </tr>
-                <tr>
-                  <td class="report-table__td">25.03.2024</td>
-                  <td class="report-table__td report-table__td__center">25.03.2024</td>
-                  <td class="report-table__td">25.03.2024</td>
-                </tr>
-              </tbody>
-            </v-table>
-            <div>
-              <Button style="margin: 0" label="Добавить проект" size="large" />
+            <InputReport
+                v-model:value="event.end_date"
+                id="end_date"
+                name="end_date"
+                class="form__input form__field-date-wrap-field"
+                type="date"
+                @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert"
+            />
+          </div>
+        </div>
+        <div class="report__add-file">
+          <label class="form__label" for="4">Положение о проекте <sup class="valid-red">*</sup></label>
+          <div class="form__file-box">
+              <span class="form__file-name">
+                <SvgIcon v-if="fifthPanelData.file_type === 'jpg'" icon-name="file-jpg"/>
+                <SvgIcon v-if="fifthPanelData.file_type === 'pdf'" icon-name="file-pdf"/>
+                <SvgIcon v-if="fifthPanelData.file_type === 'png'" icon-name="file-png"/>
+                {{ fifthPanelData.scan_file || 'Тестовое название' }}
+              </span>
+            <span class="form__file-size">{{ fifthPanelData.file_size || '123' }} Мб</span>
+          </div>
+        </div>
+        <div style="width: 100%;">
+          <p class="form__label">Ссылка на группу трудового проекта в социальных сетях <sup class="valid-red">*</sup></p>
+          <div class="form__field-link-wrap" v-for="(link, i) in events[index].links" :key="i">
+            <InputReport
+                v-model:value="link.link"
+                :id="i"
+                :name="i"
+                class="form__input form__field-link-field"
+                type="text"
+                placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
+                @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="form__field-comment">
+        <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
+        <TextareaReport
+            v-model:value="fifthPanelData.comment"
+            id="comment"
+            name="comment"
+            :rows="1"
+            autoResize
+            placeholder="Комментарий"
+            @focusout="focusOut"
+            :maxlength="3000"
+            :max-length-text="3000"
+            counter-visible
+            :disabled="props.centralExpert || props.districtExpert"
+        />
+      </div>
+      <div style="display: flex; align-items: center;">
+        <v-checkbox class="result-checkbox" id="v-checkbox" />
+        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
+      </div>
+      <div class="hr"></div>
+      <div>
+        <p>0</p>
+      </div>
+    </template>
+    <template v-slot:secondTab>
+      <div class="form__field-group-general" v-for="(event, index) in events" :key="index">
+        <div class="form__field-people">
+          <div class="form__field-people-count">
+            <div class="form__field-people-count-wrap">
+              <label class="form__label" for="participants_number">Общее количество человек, принявших участие в трудовом
+                проекте <sup class="valid-red">*</sup></label>
+              <InputReport v-model:value="event.participants_number" id="participants_number" name="participants_number"
+                           class="form__input form__field-people-count-field" type="number" placeholder="Введите число"
+                           @focusout="focusOut" />
             </div>
-            <div class="form__field">
-              <label class="form__label" for="15">Комментарий <sup class="valid-red">*</sup></label>
-              <InputReport id="15" name="15" class="form__input" style="width: 100%" />
-            </div>
-            <div>
-              <v-checkbox label="Итоговое значение" />
-            </div>
-            <div class="hr"></div>
-            <div>
-              <p>(4-1)*2+(4-2)+(4-3)=9</p>
-            </div>
-            <div>
-              <v-checkbox label="Вернуть в РО на доработку" />
+            <div class="form__field-people-count-wrap">
+              <label class="form__label" for="ro_participants_number">Количество человек из своего региона, принявших
+                участие в трудовом проекте <sup class="valid-red">*</sup></label>
+              <InputReport v-model:value="event.ro_participants_number" id="ro_participants_number"
+                           name="ro_participants_number" class="form__input form__field-people-count-field" type="number"
+                           placeholder="Введите число" @focusout="focusOut" />
             </div>
           </div>
-        </v-tabs-window-item>
-      </v-tabs-window>
-    </v-card-text>
-  </v-card>
+          <div class="form__field-people-deleteBtn">
+            <Button v-if="index > 0" label="Удалить проект" class="deleteEventBtn" @click="deleteProject(index)" />
+          </div>
+        </div>
+        <div class="form__field-date" style="display: flex;">
+          <div class="form__field-date-wrap">
+            <label class="form__label" for="start_date">Дата начала проведения проекта <sup
+                class="valid-red">*</sup></label>
+            <InputReport v-model:value="event.start_date" id="start_date" name="start_date"
+                         class="form__input form__field-date-wrap-field" type="date" @focusout="focusOut" />
+          </div>
+          <div class="form__field-date-wrap">
+            <label class="form__label" for="end_date">Дата окончания проведения проекта <sup
+                class="valid-red">*</sup></label>
+            <InputReport v-model:value="event.end_date" id="end_date" name="end_date"
+                         class="form__input form__field-date-wrap-field" type="date" @focusout="focusOut" />
+          </div>
+        </div>
+      </div>
+      <div>
+        <Button class="add_eventBtn" label="Добавить проект" @click="addProject" />
+      </div>
+      <div class="form__field-comment">
+        <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
+        <TextareaReport v-model:value="fifthPanelData.comment" id="comment" name="comment" :rows="1" autoResize
+                        placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :max-length-text="3000" counter-visible />
+      </div>
+      <div style="display: flex; align-items: center;">
+        <v-checkbox class="result-checkbox" id="v-checkbox" />
+        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
+      </div>
+      <div class="hr"></div>
+      <div>
+        <p>0</p>
+      </div>
+    </template>
+    <template v-slot:thirdTab>
+      <div>
+        <Button style="margin-right: 0" label="Удалить мероприятие" size="large" />
+      </div>
+      <label class="form__label">Общее количество человек, принявших участие в трудовом проекте <sup
+          class="valid-red">*</sup></label>
+      <v-table>
+        <tbody>
+        <tr class="report-table__tr">
+          <td class="report-table__th report-table__th__br-left">Данные РО</td>
+          <td class="report-table__th">Корректировка ОШ</td>
+          <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
+        </tr>
+        <tr>
+          <td class="report-table__td">200</td>
+          <td class="report-table__td report-table__td__center">200</td>
+          <td class="report-table__td">200</td>
+        </tr>
+        </tbody>
+      </v-table>
+      <label class="form__label">Количество человек из своего региона, принявших участие в трудовом проекте <sup
+          class="valid-red">*</sup></label>
+      <v-table>
+        <tbody>
+        <tr class="report-table__tr">
+          <td class="report-table__th report-table__th__br-left">Данные РО</td>
+          <td class="report-table__th">Корректировка ОШ</td>
+          <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
+        </tr>
+        <tr>
+          <td class="report-table__td">200</td>
+          <td class="report-table__td report-table__td__center">200</td>
+          <td class="report-table__td">200</td>
+        </tr>
+        </tbody>
+      </v-table>
+      <label class="form__label">Дата начала проведения проекта <sup class="valid-red">*</sup></label>
+      <v-table>
+        <tbody>
+        <tr class="report-table__tr">
+          <td class="report-table__th report-table__th__br-left">Данные РО</td>
+          <td class="report-table__th">Корректировка ОШ</td>
+          <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
+        </tr>
+        <tr>
+          <td class="report-table__td">25.03.2024</td>
+          <td class="report-table__td report-table__td__center">25.03.2024</td>
+          <td class="report-table__td">25.03.2024</td>
+        </tr>
+        </tbody>
+      </v-table>
+      <label class="form__label">Дата окончания проведения проекта <sup class="valid-red">*</sup></label>
+      <v-table>
+        <tbody>
+        <tr class="report-table__tr">
+          <td class="report-table__th report-table__th__br-left">Данные РО</td>
+          <td class="report-table__th">Корректировка ОШ</td>
+          <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
+        </tr>
+        <tr>
+          <td class="report-table__td">25.03.2024</td>
+          <td class="report-table__td report-table__td__center">25.03.2024</td>
+          <td class="report-table__td">25.03.2024</td>
+        </tr>
+        </tbody>
+      </v-table>
+      <div>
+        <Button style="margin: 0" label="Добавить проект" size="large" />
+      </div>
+      <div class="form__field">
+        <label class="form__label" for="15">Комментарий <sup class="valid-red">*</sup></label>
+        <InputReport id="15" name="15" class="form__input" style="width: 100%" />
+      </div>
+      <div>
+        <v-checkbox label="Итоговое значение" />
+      </div>
+      <div class="hr"></div>
+      <div>
+        <p>(4-1)*2+(4-2)+(4-3)=9</p>
+      </div>
+      <div>
+        <v-checkbox label="Вернуть в РО на доработку" />
+      </div>
+    </template>
+  </report-tabs>
+
+<!--  <v-card v-if="false" class="panel-card">-->
+<!--    <v-tabs v-model="tab">-->
+<!--      <v-tab value="one" class="panel-tab-btn">Отчет РО</v-tab>-->
+<!--      <v-tab value="two" class="panel-tab-btn">Корректировка ОШ</v-tab>-->
+<!--      <v-tab value="three" class="panel-tab-btn">Корректировка ЦШ</v-tab>-->
+<!--    </v-tabs>-->
+
+<!--    <v-card-text class="panel-card-text">-->
+<!--      <v-tabs-window v-model="tab">-->
+<!--        <v-tabs-window-item value="one">-->
+<!--          <div class="form__field-group">-->
+<!--            <div style="display: flex;">-->
+<!--              <div>-->
+<!--                <label class="form__label" for="1">Общее количество человек, принявших участие в трудовом проекте <sup-->
+<!--                    class="valid-red">*</sup></label>-->
+<!--                <InputReport id="1" name="1" class="form__input" type="number" placeholder="Введите число" />-->
+<!--              </div>-->
+<!--              <div>-->
+<!--                <label class="form__label" for="1_2">Количество человек из своего региона, принявших участие в трудовом-->
+<!--                  проекте <sup class="valid-red">*</sup></label>-->
+<!--                <InputReport id="1_2" name="1_2" class="form__input" type="number" placeholder="Введите число" />-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div style="display: flex;">-->
+<!--              <div class="form__field">-->
+<!--                <label class="form__label" for="2">Дата начала проведения проекта <sup class="valid-red">*</sup></label>-->
+<!--                <InputReport id="2" name="2" class="form__input" type="date" />-->
+<!--              </div>-->
+<!--              <div class="form__field">-->
+<!--                <label class="form__label" for="3">Дата окончания проведения проекта <sup-->
+<!--                    class="valid-red">*</sup></label>-->
+<!--                <InputReport id="3" name="3" class="form__input" type="date" />-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--              <label class="form__label" for="4">Положение о проекте <sup class="valid-red">*</sup></label>-->
+<!--              <InputReport type="file" id="4" name="4" />-->
+<!--            </div>-->
+<!--            <div>-->
+<!--              <label class="form__label" for="6">Ссылка на группу трудового проекта в социальных сетях <sup-->
+<!--                  class="valid-red">*</sup></label>-->
+<!--              <InputReport id="6" name="6" class="form__input" type="text" placeholder="https://vk.com/cco_monolit" />-->
+<!--              <InputReport id="7" name="7" class="form__input" type="text" placeholder="https://vk.com/ccorobot" />-->
+<!--              <InputReport id="8" name="8" class="form__input" type="text" placeholder="https://vk.com/cco_monolit11" />-->
+<!--            </div>-->
+<!--            <div>-->
+<!--              <label class="form__label" for="9">Комментарий <sup class="valid-red">*</sup></label>-->
+<!--              <InputReport id="9" name="9" class="form__input" type="textarea" placeholder="Комментарий"-->
+<!--                style="width: 100%; height: 100px" />-->
+<!--            </div>-->
+<!--            <div>-->
+<!--              <v-checkbox label="Итоговое значение" />-->
+<!--            </div>-->
+<!--            <div class="hr"></div>-->
+<!--            <div>-->
+<!--              <p>(4-1)*2+(4-2)+(4-3)=9</p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </v-tabs-window-item>-->
+
+<!--        <v-tabs-window-item value="two">-->
+<!--          <form class="form__field-group" @submit.prevent>-->
+<!--            <div style="display: flex;">-->
+<!--              <div>-->
+<!--                <label class="form__label" for="_2">Общее количество человек, принявших участие в трудовом проекте <sup-->
+<!--                    class="valid-red">*</sup></label>-->
+<!--                <InputReport id="_2" name="_2" class="form__input" type="number" placeholder="Введите число" />-->
+<!--              </div>-->
+<!--              <div>-->
+<!--                <label class="form__label" for="2_2">Количество человек из своего региона, принявших участие в трудовом-->
+<!--                  проекте <sup class="valid-red">*</sup></label>-->
+<!--                <InputReport id="2_2" name="2_2" class="form__input" type="number" placeholder="Введите число" />-->
+<!--              </div>-->
+<!--              <Button label="Удалить проект" size="large" />-->
+<!--            </div>-->
+<!--            <div style="display: flex;">-->
+<!--              <div class="form__field">-->
+<!--                <label class="form__label" for="13">Дата начала проведения проекта <sup-->
+<!--                    class="valid-red">*</sup></label>-->
+<!--                <InputReport id="13" name="13" class="form__input" type="date" />-->
+<!--              </div>-->
+<!--              <div class="form__field">-->
+<!--                <label class="form__label" for="3">Дата окончания проведения проекта <sup-->
+<!--                    class="valid-red">*</sup></label>-->
+<!--                <InputReport id="14" name="14" class="form__input" type="date" />-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--              <Button style="margin: 0" label="Добавить проект" size="large" />-->
+<!--            </div>-->
+<!--            <div class="form__field">-->
+<!--              <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>-->
+<!--              <InputReport id="14" name="14" class="form__input" style="width: 100%" />-->
+<!--            </div>-->
+<!--            <div>-->
+<!--              <v-checkbox label="Итоговое значение" />-->
+<!--            </div>-->
+<!--            <div class="hr"></div>-->
+<!--            <div>-->
+<!--              <p>(4-1)*2+(4-2)+(4-3)=9</p>-->
+<!--            </div>-->
+<!--          </form>-->
+<!--        </v-tabs-window-item>-->
+
+<!--        <v-tabs-window-item value="three">-->
+<!--          <div class="form__field-group report-table">-->
+<!--            <div>-->
+<!--              <Button style="margin-right: 0" label="Удалить мероприятие" size="large" />-->
+<!--            </div>-->
+<!--            <label class="form__label">Общее количество человек, принявших участие в трудовом проекте <sup-->
+<!--                class="valid-red">*</sup></label>-->
+<!--            <v-table>-->
+<!--              <tbody>-->
+<!--                <tr class="report-table__tr">-->
+<!--                  <td class="report-table__th report-table__th__br-left">Данные РО</td>-->
+<!--                  <td class="report-table__th">Корректировка ОШ</td>-->
+<!--                  <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                  <td class="report-table__td">200</td>-->
+<!--                  <td class="report-table__td report-table__td__center">200</td>-->
+<!--                  <td class="report-table__td">200</td>-->
+<!--                </tr>-->
+<!--              </tbody>-->
+<!--            </v-table>-->
+<!--            <label class="form__label">Количество человек из своего региона, принявших участие в трудовом проекте <sup-->
+<!--                class="valid-red">*</sup></label>-->
+<!--            <v-table>-->
+<!--              <tbody>-->
+<!--                <tr class="report-table__tr">-->
+<!--                  <td class="report-table__th report-table__th__br-left">Данные РО</td>-->
+<!--                  <td class="report-table__th">Корректировка ОШ</td>-->
+<!--                  <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                  <td class="report-table__td">200</td>-->
+<!--                  <td class="report-table__td report-table__td__center">200</td>-->
+<!--                  <td class="report-table__td">200</td>-->
+<!--                </tr>-->
+<!--              </tbody>-->
+<!--            </v-table>-->
+<!--            <label class="form__label">Дата начала проведения проекта <sup class="valid-red">*</sup></label>-->
+<!--            <v-table>-->
+<!--              <tbody>-->
+<!--                <tr class="report-table__tr">-->
+<!--                  <td class="report-table__th report-table__th__br-left">Данные РО</td>-->
+<!--                  <td class="report-table__th">Корректировка ОШ</td>-->
+<!--                  <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                  <td class="report-table__td">25.03.2024</td>-->
+<!--                  <td class="report-table__td report-table__td__center">25.03.2024</td>-->
+<!--                  <td class="report-table__td">25.03.2024</td>-->
+<!--                </tr>-->
+<!--              </tbody>-->
+<!--            </v-table>-->
+<!--            <label class="form__label">Дата окончания проведения проекта <sup class="valid-red">*</sup></label>-->
+<!--            <v-table>-->
+<!--              <tbody>-->
+<!--                <tr class="report-table__tr">-->
+<!--                  <td class="report-table__th report-table__th__br-left">Данные РО</td>-->
+<!--                  <td class="report-table__th">Корректировка ОШ</td>-->
+<!--                  <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                  <td class="report-table__td">25.03.2024</td>-->
+<!--                  <td class="report-table__td report-table__td__center">25.03.2024</td>-->
+<!--                  <td class="report-table__td">25.03.2024</td>-->
+<!--                </tr>-->
+<!--              </tbody>-->
+<!--            </v-table>-->
+<!--            <div>-->
+<!--              <Button style="margin: 0" label="Добавить проект" size="large" />-->
+<!--            </div>-->
+<!--            <div class="form__field">-->
+<!--              <label class="form__label" for="15">Комментарий <sup class="valid-red">*</sup></label>-->
+<!--              <InputReport id="15" name="15" class="form__input" style="width: 100%" />-->
+<!--            </div>-->
+<!--            <div>-->
+<!--              <v-checkbox label="Итоговое значение" />-->
+<!--            </div>-->
+<!--            <div class="hr"></div>-->
+<!--            <div>-->
+<!--              <p>(4-1)*2+(4-2)+(4-3)=9</p>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--              <v-checkbox label="Вернуть в РО на доработку" />-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </v-tabs-window-item>-->
+<!--      </v-tabs-window>-->
+<!--    </v-card-text>-->
+<!--  </v-card>-->
 </template>
 <script setup>
 import { ref, watchEffect } from "vue";
 import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { reportPartTwoService } from "@services/ReportService.ts";
+import { ReportTabs } from './index';
+import { SvgIcon } from '@shared/index';
 
 const props = defineProps({
   districtExpert: {
@@ -280,10 +539,9 @@ const props = defineProps({
   },
   data: Object,
 });
-
 const emit = defineEmits(['getData']);
 
-const tab = ref('one');
+// const tab = ref('one');
 const isFirstSent = ref(true);
 const fifthPanelData = ref({
   comment: '',
@@ -302,6 +560,7 @@ const events = ref([
     ],
   }
 ]);
+
 const addLink = (index) => {
   events.value[index].links.push({ link: '' })
 };

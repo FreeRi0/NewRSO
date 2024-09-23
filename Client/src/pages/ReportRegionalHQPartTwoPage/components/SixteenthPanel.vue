@@ -125,7 +125,7 @@
                 class="valid-red">*</sup></label>
             <InputReport v-model:value="project.name" id="9" name="name" class="form__input" type="text"
               placeholder="ВВС ПРО" @focusout="focusOut" counter-visible :max-counter="300" :max-length="300"
-              :disabled="props.centralExpert || props.districtExpert" />
+              :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" />
           </div>
         </div>
         <div>

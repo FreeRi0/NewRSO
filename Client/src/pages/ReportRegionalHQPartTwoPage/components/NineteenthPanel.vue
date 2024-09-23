@@ -100,11 +100,14 @@ const props = defineProps({
   centralExpert: {
     type: Boolean
   },
-  reportId: {
-    type: String,
-    default: '1',
-  }
+  // reportId: {
+  //   type: String,
+  //   default: '1',
+  // },
+  data: Object,
 });
+
+const emit = defineEmits(['getData']);
 
 const ID_PANEL = '19';
 const isFirstSent = ref(true);
@@ -118,11 +121,9 @@ const nineteenthPanelData = ref({
 const focusOut = async () => {
   console.log(nineteenthPanelData.value);
   // let formData = new FormData();
-  // nineteenthPanelData.value.employed_student_start ? formData.append('employed_student_start', nineteenthPanelData.value.employed_student_start) : formData.delete('employed_student_start');
+  // nineteenthPanelData.value.employed_student_start ? formData.append('employed_student_start', nineteenthPanelData.value.employed_student_start) : formData.append('employed_student_start', '');
   // nineteenthPanelData.value.employed_student_end ? formData.append('employed_student_end', nineteenthPanelData.value.employed_student_end) : formData.append('employed_student_end', '');
-
-  // formData.append('employed_student_start', nineteenthPanelData.value.employed_student_start);
-  // formData.append('employed_student_end', nineteenthPanelData.value.employed_student_end);
+  // formData.append('comment', nineteenthPanelData.value.comment);
 
   // if (isFirstSent.value) {
   //   await reportPartTwoService.createReport(formData, ID_PANEL);
@@ -140,33 +141,53 @@ const focusOut = async () => {
   }
 
   // console.log ("start -", typeof(nineteenthPanelData.value.employed_student_start), "end - ", typeof(nineteenthPanelData.value.employed_student_end));
+  // console.log(nineteenthPanelData.value.employed_student_start, nineteenthPanelData.value.employed_student_end);
 
-  console.log(nineteenthPanelData.value.employed_student_start, nineteenthPanelData.value.employed_student_end);
-
-  if (isFirstSent.value) {
-    await reportPartTwoService.createReport(nineteenthPanelData.value, ID_PANEL);
-  } else {
-    await reportPartTwoService.createReportDraft(nineteenthPanelData.value, ID_PANEL);
+  // if (isFirstSent.value) {
+  //   await reportPartTwoService.createReport(nineteenthPanelData.value, ID_PANEL);
+  // } else {
+  //   await reportPartTwoService.createReportDraft(nineteenthPanelData.value, ID_PANEL);
+  // }
+//-------------------------------------------------------------------------------------------------
+  try {
+    if (isFirstSent.value) {
+      await reportPartTwoService.createReport(nineteenthPanelData.value, ID_PANEL);
+    } else {
+      // await reportPartTwoService.createReportDraft(nineteenthPanelData.value, ID_PANEL);
+      const { data } = await reportPartTwoService.createReportDraft(nineteenthPanelData.value, ID_PANEL);
+      emit('getData', data, Number(ID_PANEL));
+    }
+  } catch (e) {
+    console.log('focusOut error:', e);
   }
 };
 
-watchEffect(async () => {
+watchEffect(() => {
+// watchEffect(async () => {
   // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
-  try {
-    const { data } = 
-      props.districtExpert || props.centralExpert
-        ? await reportPartTwoService.getReportDH(ID_PANEL, props.reportId)
-        : await reportPartTwoService.getReport(ID_PANEL);
-    console.log(data);
-    if (data) {
-      isFirstSent.value = false;
-      nineteenthPanelData.value.employed_student_start = data.employed_student_start;
-      nineteenthPanelData.value.employed_student_end = data.employed_student_end;
-      nineteenthPanelData.value.comment = data.comment;
-    }
-  } catch (e) {
-    console.log(e)
+
+  if (props.data) {
+    isFirstSent.value = false;
+    nineteenthPanelData.value.employed_student_start = props.data.employed_student_start;
+    nineteenthPanelData.value.employed_student_end = props.data.employed_student_end;
+    nineteenthPanelData.value.comment = props.data.comment;
   }
+
+  // try {
+  //   const { data } = 
+  //     props.districtExpert || props.centralExpert
+  //       ? await reportPartTwoService.getReportDH(ID_PANEL, props.reportId)
+  //       : await reportPartTwoService.getReport(ID_PANEL);
+  //   console.log(data);
+  //   if (data) {
+  //     isFirstSent.value = false;
+  //     nineteenthPanelData.value.employed_student_start = data.employed_student_start;
+  //     nineteenthPanelData.value.employed_student_end = data.employed_student_end;
+  //     nineteenthPanelData.value.comment = data.comment;
+  //   }
+  // } catch (e) {
+  //   console.log(e)
+  // }
 });
 </script>
 

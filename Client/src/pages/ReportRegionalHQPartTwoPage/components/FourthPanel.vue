@@ -8,7 +8,7 @@
           <div style="display: flex; justify-content: space-between;">
             <InputReport v-model:value="event.participants_number" :id="event.participants_number"
               name="participants_number" class="form__input" type="number" placeholder="Введите число"
-              @focusout="focusOut" />
+              @focusout="focusOut(index)" />
           </div>
         </div>
         <Button class="form__field-delete-button" v-if="index > 0" label="Удалить мероприятие"
@@ -19,26 +19,26 @@
           <label style="max-width: 280px;" class="form__label" for="start_date">Дата начала проведения мероприятия <sup
               class="valid-red">*</sup></label>
           <InputReport v-model:value="event.start_date" :id="event.start_date" name="start_date" class="form__input"
-            type="date" @focusout="focusOut" />
+            type="date" @focusout="focusOut(index)" />
         </div>
         <div class="form__field">
           <label style="max-width: 300px;" class="form__label" for="end_date">Дата окончания проведения мероприятия <sup
               class="valid-red">*</sup></label>
           <InputReport v-model:value="event.end_date" :id="event.end_date" name="end_date" class="form__input"
-            type="date" @focusout="focusOut" />
+            type="date" @focusout="focusOut(index)" />
         </div>
       </div>
       <div class="form__field-event">
         <div class="form__field-event-file">
           <label class="form__label" for="4">Положение о мероприятии <sup class="valid-red">*</sup></label>
-          <InputReport class="form-input__file-input" v-if="!fourthPanelData.scan_file" isFile type="file"
-            id="scan_file" name="scan_file" width="100%" @change="uploadFile" />
+          <InputReport class="form-input__file-input" v-if="!event.regulations" isFile type="file"
+            id="scan_file" name="scan_file" width="100%" @change="uploadFile($event, index)" />
           <div v-else class="form__file-box">
             <span class="form__file-name">
-              {{ fourthPanelData.scan_file }}
+              {{ event.regulations.split('/').at(-1) }}
             </span>
-            <span class="form__file-size">{{ fourthPanelData.file_size }} Мб</span>
-            <button @click="deleteFile" class="form__button-delete-file">
+            <span class="form__file-size">{{ '123' }} Мб</span>
+            <button @click="deleteFile(index)" class="form__button-delete-file">
               Удалить
             </button>
           </div>
@@ -67,7 +67,7 @@
         <p class="form__label">Ссылка на группу мероприятия в социальных сетях <sup class="valid-red">*</sup></p>
         <div class="form__add-link" v-for="(link, i) in events[index].links" :key="i">
           <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__input-add-link" type="text"
-            placeholder="https://vk.com/cco_monolit" @focusout="focusOut" />
+            placeholder="https://vk.com/cco_monolit" @focusout="focusOut(index)" />
           <Button v-if="events[index].links.length === i + 1" label="+ Добавить ссылку" @click="addLink(index)"
             class="form__add-link-button" />
           <Button class="form__add-link-button" v-else label="Удалить" @click="deleteLink(index, i)" />
@@ -80,16 +80,16 @@
     </div>
     <div class="form__field-comment">
       <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
-      <InputReport v-model:value="fourthPanelData.comment" id="comment" name="comment" class="form__input"
-        type="textarea" placeholder="Укажите наименования организованных мероприятий" style="width: 100%;"
-        @focusout="focusOut" />
+      <InputReport :maxlength="3000" :max-counter="3000" counter-visible v-model:value="fourthPanelData.comment"
+        id="comment" name="comment" class="form__input" type="textarea"
+        placeholder="Укажите наименования организованных мероприятий" style="width: 100%;" @focusout="focusOut" />
     </div>
     <div class="form__field-result" style="display: flex; align-items: center;">
       <v-checkbox class="result-checkbox" id="v-checkbox" />
       <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
     </div>
     <div class="hr"></div>
-    <div class="form__field-result">
+    <div class="form__field-result result-count">
       <p>0</p>
     </div>
   </div>
@@ -213,13 +213,13 @@
           <div class="form__field-event-file">
             <label class="form__label" for="4">Положение о мероприятии <sup class="valid-red">*</sup></label>
             <InputReport class="form-input__file-input" v-if="!fourthPanelData.scan_file" isFile type="file"
-              id="scan_file" name="scan_file" width="100%" @change="uploadFile" />
+              id="scan_file" name="scan_file" width="100%" @change="uploadFile($event, index)" />
             <div v-else class="form__file-box">
               <span class="form__file-name">
                 {{ fourthPanelData.scan_file }}
               </span>
               <span class="form__file-size">{{ fourthPanelData.file_size }} Мб</span>
-              <button @click="deleteFile" class="form__button-delete-file">
+              <button @click="deleteFile(index)" class="form__button-delete-file">
                 Удалить
               </button>
             </div>
@@ -383,18 +383,16 @@ const props = defineProps({
 });
 
 const isFirstSent = ref(true);
-const scanFile = ref([]);
 const fourthPanelData = ref({
   comment: '',
   events: [],
-  file_type: '',
-  file_size: '',
 });
 const events = ref([
   {
     participants_number: '',
     start_date: null,
     end_date: null,
+    regulations: '',
     links: [
       {
         link: '',
@@ -419,6 +417,7 @@ const addEvent = () => {
     participants_number: '',
     start_date: null,
     end_date: null,
+    regulations: '',
     links: [
       {
         link: '',
@@ -427,13 +426,25 @@ const addEvent = () => {
     is_interregional: false,
   })
 };
-const focusOut = async () => {
+const focusOut = async (index) => {
   fourthPanelData.value.events = [...events.value];
   try {
     if (isFirstSent.value) {
       await reportPartTwoService.createReport(fourthPanelData.value, '4');
     } else {
-      const { data } = await reportPartTwoService.createReportDraft(fourthPanelData.value, '4');
+      let formData = new FormData();
+      formData.append('comment', fourthPanelData.value.comment);
+      if (events.value[index].links.length) {
+        for (let i = 0; i < events.value[index].links.length; i++) {
+          formData.append(`events.value[${index}][links][${i}][link]`, events.value[index].links[i].link);
+        }
+      }
+      if(events.value[index].participants_number)formData.append(`events[${index}][participants_number]`, events.value[index].participants_number);
+      if(events.value[index].end_date) formData.append(`events[${index}][end_date]`, events.value[index].end_date);
+      if(events.value[index].start_date) formData.append(`events[${index}][start_date]`, events.value[index].start_date);
+      formData.append(`events[${index}][is_interregional]`, events.value[index].is_interregional);
+
+      const { data } = await reportPartTwoService.createReportDraft(formData, '4', true);
       emit('getData', data, 4);
     }
   } catch (e) {
@@ -450,25 +461,39 @@ const deleteEvent = async (index) => {
   }
 };
 
-const uploadFile = async (event) => {
+const uploadFile = async (event, index) => {
   let formData = new FormData();
-  formData.append('scan_file', event.target.files[0]);
   formData.append('comment', fourthPanelData.value.comment);
-  formData.append('events', JSON.stringify(events.value));
 
-  // await reportPartTwoService.createReportDraft(formData, '4', true);
+  if (events.value[index].links.length) {
+    for (let i = 0; i < events.value[index].links.length; i++) {
+      formData.append(`events.value[${index}][links][${i}][link]`, events.value[index].links[i].link);
+    }
+  }
+  formData.append(`events[${index}][regulations]`, event.target.files[0]);
+  formData.append(`events[${index}][participants_number]`, events.value[index].participants_number);
+  formData.append(`events[${index}][end_date]`, events.value[index].end_date);
+  formData.append(`events[${index}][start_date]`, events.value[index].start_date);
+  formData.append(`events[${index}][is_interregional]`, events.value[index].is_interregional);
+  const { data } = await reportPartTwoService.createReportDraft(formData, '4', true);
+  emit('getData', data, 4);
 };
-const deleteFile = async () => {
-  //   seventeenthPanelData.value.scan_file = '';
-  //   let formData = new FormData();
-  //   formData.append('scan_file', '');
-  //   formData.append('comment', seventeenthPanelData.value.comment);
-  //
-  //   if (isFirstSent.value) {
-  //     await reportPartTwoService.createReport(formData, '17', true);
-  //   } else {
-  //     await reportPartTwoService.createReportDraft(formData, '17', true);
-  //   }
+const deleteFile = async (index) => {
+  let formData = new FormData();
+  formData.append('comment', fourthPanelData.value.comment);
+
+  if (events.value[index].links.length) {
+    for (let i = 0; i < events.value[index].links.length; i++) {
+      formData.append(`events.value[${index}][links][${i}][link]`, events.value[index].links[i].link);
+    }
+  }
+  formData.append(`events[${index}][regulations]`, '');
+  formData.append(`events[${index}][participants_number]`, events.value[index].participants_number);
+  formData.append(`events[${index}][end_date]`, events.value[index].end_date);
+  formData.append(`events[${index}][start_date]`, events.value[index].start_date);
+  formData.append(`events[${index}][is_interregional]`, events.value[index].is_interregional);
+  const { data } = await reportPartTwoService.createReportDraft(formData, '4', true);
+  emit('getData', data, 4);
 };
 
 watchEffect(() => {
@@ -476,6 +501,7 @@ watchEffect(() => {
     isFirstSent.value = false;
     events.value = [...props.data.events];
     fourthPanelData.value.comment = props.data.comment;
+    if (!events.value[0].links.length) events.value[0].links.push({link: ''})
   }
 });
 </script>
@@ -562,6 +588,10 @@ watchEffect(() => {
   border-radius: 10px;
   margin-bottom: 8px;
   padding-top: 0;
+
+  @media (max-width: 568px) {
+    padding: 0;
+  }
 }
 
 .form__field-members-event {
@@ -572,8 +602,9 @@ watchEffect(() => {
 
   @media (max-width: 568px) {
     flex-direction: column-reverse;
-    gap: 16px;
+    gap: 8px;
     align-items: flex-end;
+    margin-top: 32px;
   }
 }
 
@@ -696,9 +727,18 @@ watchEffect(() => {
   }
 }
 
+.result-count {
+  color: #6D6D6D;
+}
+
 .form__field-comment {
   display: flex;
   flex-direction: column;
+  margin-bottom: 14px;
+
+  @media (max-width: 568px) {
+    margin-bottom: 6px;
+  }
 }
 
 .form__field-delete-button {
@@ -711,6 +751,7 @@ watchEffect(() => {
   background-color: #D2E4F2;
   border: none;
   border-radius: 4px;
+
 }
 
 .form__file-box {
@@ -795,6 +836,10 @@ watchEffect(() => {
   @media (max-width: 568px) {
     width: 340px;
     margin: 0 auto 16px;
+  }
+
+  @media (max-width: 400px) {
+    width: 296px;
   }
 }
 
