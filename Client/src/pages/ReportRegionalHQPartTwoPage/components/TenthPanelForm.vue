@@ -25,13 +25,16 @@
       <div style="margin-bottom: 8px;">
         <label style="display: flex; " class="form__label" for="4">Скан документа, подтверждающего проведение
           акции</label>
-        <InputReport class="form-input__file-input" v-if="!tenthPanelData.scan_file" isFile type="file" id="scan_file"
+        <InputReport class="form-input__file-input" v-if="!tenthPanelData.document" isFile type="file" id="scan_file"
           name="scan_file" @change="uploadFile" />
         <div v-else class="form__file-box">
           <span class="form__file-name">
-            {{ tenthPanelData.scan_file }}
+            <SvgIcon v-if="tenthPanelData.file_type === 'jpg'" icon-name="file-jpg" />
+            <SvgIcon v-if="tenthPanelData.file_type === 'pdf'" icon-name="file-pdf" />
+            <SvgIcon v-if="tenthPanelData.file_type === 'png'" icon-name="file-png" />
+            {{ tenthPanelData.document.split('/').at(-1) }}
           </span>
-          <span class="form__file-size">{{ fileSize }} Мб</span>
+          <span class="form__file-size">{{ tenthPanelData.file_size }} Мб</span>
           <button @click="deleteFile" class="form__button-delete-file">
             Удалить
           </button>
@@ -50,7 +53,7 @@
         <label style="display: flex; align-items: center;" class="form__label" for="comment">Комментарий <sup
             class="valid-red">*</sup></label>
         <TextareaReport placeholder="Напишите сообщение" v-model:value="tenthPanelData.comment" id="comment"
-          name="comment" :rows="1" autoResize @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
+          name="comment" :rows="1" autoResize @focusout="formData" :maxlength="3000" :max-length-text="3000"
           counter-visible class="form__input form__input-comment" style="margin-bottom: 4px;" />
       </div>
     </div>
@@ -86,7 +89,7 @@
               <SvgIcon v-if="tenthPanelData.file_type === 'jpg'" icon-name="file-jpg" />
               <SvgIcon v-if="tenthPanelData.file_type === 'pdf'" icon-name="file-pdf" />
               <SvgIcon v-if="tenthPanelData.file_type === 'png'" icon-name="file-png" />
-              {{ tenthPanelData.scan_file || 'Тестовое название' }}
+              {{ tenthPanelData.document.split('/').at(-1) || 'Тестовое название' }}
             </span>
             <span class="form__file-size">{{ tenthPanelData.file_size || '123' }} Мб</span>
           </div>
@@ -125,12 +128,12 @@
             <label for="event_happened-false">Нет</label>
           </div>
         </div>
-        <!--        <div class="form__field">-->
-        <!--          <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>-->
-        <!--          <TextareaReport placeholder="Напишите сообщение" v-model:value="tenthPanelData.comment" id="comment"-->
-        <!--            name="comment" :rows="1" autoResize @focusout="formData" :maxlength="3000" :max-length-text="3000"-->
-        <!--            counter-visible class="form__input" />-->
-        <!--        </div>-->
+                <div class="form__field">
+                  <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
+                  <TextareaReport placeholder="Напишите сообщение" v-model:value="tenthPanelData.comment" id="comment"
+                    name="comment" :rows="1" autoResize @focusout="formData" :maxlength="3000" :max-length-text="3000"
+                    counter-visible class="form__input" />
+                </div>
       </div>
     </template>
   </report-tabs>
@@ -151,15 +154,13 @@ const props = defineProps({
   centralExpert: {
     type: Boolean
   },
-  reportId: {
-    type: String,
-    default: '',
-  }
 });
 
-// const tab = ref('one');
 const tenthPanelData = ref({
   event_happened: false,
+  document: '',
+  file_size: '',
+  file_type: '',
   links: [
     {
       link: '',
@@ -167,7 +168,7 @@ const tenthPanelData = ref({
   ],
 });
 
-const emit = defineEmits(['formData']);
+const emit = defineEmits(['formData', 'uploadFile']);
 
 const formData = () => {
   emit('formData', tenthPanelData.value);
@@ -176,6 +177,11 @@ const formData = () => {
 const addLink = () => {
   tenthPanelData.value.links.push({ link: '' })
 };
+
+const uploadFile = async (event) => {
+  emit('uploadFile', event)
+};
+
 watchEffect(() => {
   tenthPanelData.value = { ...props.data };
 })
