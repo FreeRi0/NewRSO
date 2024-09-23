@@ -11,7 +11,7 @@
             <a :href=file>{{ file.split('/').at(-1) }}</a>
         </div>
 
-        <span class="report__file-size">
+        <span class="report__file-size" v-if="fileSize">
             {{ fileSize.toFixed(1) }}&nbsp;Мб
         </span>
 
