@@ -14,3 +14,9 @@ const props = defineProps({
     },
 })
 </script>
+
+<style lang="scss" scoped>
+.form__field-group {
+    border-radius: 10px;
+}
+</style>

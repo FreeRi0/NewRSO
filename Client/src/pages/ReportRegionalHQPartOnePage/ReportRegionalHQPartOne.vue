@@ -12,15 +12,18 @@
 </template>
 
 <script setup>
-import { inject, onActivated, ref } from "vue";
+import { inject, onActivated, ref, watch } from "vue";
+import { useRoleStore } from '@layouts/store/role';
 import ReportRegionalForm from "@pages/ReportRegionalHQPartOnePage/components/ReportRegionalForm.vue";
 import { createReport, getCurrentReport, getReport } from "@services/ReportService.ts";
 import ReportModalSuccess from "@pages/ReportRegionalHQPartOnePage/components/ReportModalSuccess.vue";
 import ReportModalWarning from "@pages/ReportRegionalHQPartOnePage/components/ReportModalWarning.vue";
-import { onBeforeRouteLeave, useRoute } from "vue-router";
+import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
 
 const swal = inject('$swal');
 const route = useRoute();
+const roleStore = useRoleStore();
+const router = useRouter()
 
 const defaultReportData = {
   participants_number: '',
@@ -54,12 +57,23 @@ onBeforeRouteLeave(() => {
   isButtonDisabled.value = false;
 });
 const reportConfirmation = async (value) => {
+  if (hasEmptyField(reportData.value)) {
+    showModalWarning.value = false;
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      title: `Все поля обязательны для заполнения`,
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    return;
+  }
   if (value) {
+    isButtonDisabled.value = true;
     try {
       await createReport(reportData.value)
       showModalWarning.value = false;
       showModalSuccess.value = true;
-      isButtonDisabled.value = true;
     } catch (e) {
       swal.fire({
         position: 'center',
@@ -68,6 +82,7 @@ const reportConfirmation = async (value) => {
         showConfirmButton: false,
         timer: 1500,
       });
+      isButtonDisabled.value = false;
       showModalWarning.value = false;
     }
   } else {
@@ -78,10 +93,26 @@ const sentReport = (data) => {
   showModalWarning.value = true;
   reportData.value = data;
 };
-
 const closeModalSuccess = (value) => {
   showModalSuccess.value = value;
-}
+};
+
+
+
+
+watch(() => roleStore.roles?.regionalheadquarter_commander, () => {
+  if (roleStore.roles?.regionalheadquarter_commander === null) {
+    router.push({ name: 'mypage' })
+  }
+})
+const hasEmptyField = (obj) => {
+  for (let item in obj) {
+    if (!obj[item]){
+      return true;
+    }
+  }
+  return false;
+};
 </script>
 <style lang="scss" scoped>
 .report_title-h2 {

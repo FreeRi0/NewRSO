@@ -1,6 +1,19 @@
 <template>
-  <div class="form__field-group report__field-group">
-    <div class="report__fieldset report__fieldset--left-block">
+  <div class="form__field-group report__field-group report__field-group--column"
+    v-if="(props.centralExpert || props.districtExpert) &&
+          !nineteenthPanelData.employed_student_start &&
+          !nineteenthPanelData.employed_student_end &&
+          !nineteenthPanelData.comment">
+    <p class="report__text-info">
+      Информация о&nbsp;показателе региональным отделением не&nbsp;предоставлена.
+    </p>
+  </div>
+
+  <div v-else class="form__field-group report__field-group">
+    <div class="report__fieldset report__fieldset--left-block"
+      v-if="!(props.centralExpert || props.districtExpert) ||
+            (props.districtExpert && nineteenthPanelData.employed_student_start) ||
+            (props.centralExpert && nineteenthPanelData.employed_student_start)">
       <label
         class="form__label report__label"
         for="employed-student-start"
@@ -18,10 +31,14 @@
         :maxlength="10"
         :max="32767"
         @focusout="focusOut"
+        :disabled="props.centralExpert || props.districtExpert"
       />
     </div>
 
-    <div class="report__fieldset report__fieldset--right-block">
+    <div class="report__fieldset report__fieldset--right-block"
+      v-if="!(props.centralExpert || props.districtExpert) ||
+            (props.districtExpert && nineteenthPanelData.employed_student_end) ||
+            (props.centralExpert && nineteenthPanelData.employed_student_end)">
       <label
         class="form__label report__label"
         for="employed-student-end"
@@ -39,10 +56,14 @@
         :maxlength="10"
         :max="32767"
         @focusout="focusOut"
+        :disabled="props.centralExpert || props.districtExpert"
       />
     </div>
   
-    <div class="report__fieldset report__fieldset--comment">
+    <div class="report__fieldset report__fieldset--comment"
+      v-if="!(props.centralExpert || props.districtExpert) ||
+            (props.districtExpert && nineteenthPanelData.comment) ||
+            (props.centralExpert && nineteenthPanelData.comment)">
       <label
         class="form__label report__label"
         for="comment"
@@ -60,6 +81,7 @@
         :maxlength="3000"
         :max-length-text="3000"
         @focusout="focusOut"
+        :disabled="props.centralExpert || props.districtExpert"
       >
       </TextareaReport>
     </div>
@@ -71,41 +93,101 @@ import { ref, watchEffect } from 'vue';
 import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { getReport, reportPartTwoService } from "@services/ReportService.ts";
 
+const props = defineProps({
+  districtExpert: {
+    type: Boolean
+  },
+  centralExpert: {
+    type: Boolean
+  },
+  // reportId: {
+  //   type: String,
+  //   default: '1',
+  // },
+  data: Object,
+});
+
+const emit = defineEmits(['getData']);
+
 const ID_PANEL = '19';
 const isFirstSent = ref(true);
 
 const nineteenthPanelData = ref({
-  employed_student_start: '',
-  employed_student_end: '',
+  employed_student_start: null,
+  employed_student_end: null,
   comment: '',
 });
 
 const focusOut = async () => {
-  let formData = new FormData();
-  formData.append('employed_student_start', nineteenthPanelData.value.employed_student_start);
-  formData.append('employed_student_end', nineteenthPanelData.value.employed_student_end);
-  formData.append('comment', nineteenthPanelData.value.comment);
+  console.log(nineteenthPanelData.value);
+  // let formData = new FormData();
+  // nineteenthPanelData.value.employed_student_start ? formData.append('employed_student_start', nineteenthPanelData.value.employed_student_start) : formData.append('employed_student_start', '');
+  // nineteenthPanelData.value.employed_student_end ? formData.append('employed_student_end', nineteenthPanelData.value.employed_student_end) : formData.append('employed_student_end', '');
+  // formData.append('comment', nineteenthPanelData.value.comment);
 
-  if (isFirstSent.value) {
-    await reportPartTwoService.createReport(formData, ID_PANEL, true);
-  } else {
-    await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+  // if (isFirstSent.value) {
+  //   await reportPartTwoService.createReport(formData, ID_PANEL);
+  // } else {
+  //   await reportPartTwoService.createReportDraft(formData, ID_PANEL);
+  // }
+  //--------------------------------------------------------------------------------------------
+
+  if (nineteenthPanelData.value.employed_student_start === '') {
+    nineteenthPanelData.value.employed_student_start = null;
+  }
+  
+  if (nineteenthPanelData.value.employed_student_end === '') {
+    nineteenthPanelData.value.employed_student_end = null;
+  }
+
+  // console.log ("start -", typeof(nineteenthPanelData.value.employed_student_start), "end - ", typeof(nineteenthPanelData.value.employed_student_end));
+  // console.log(nineteenthPanelData.value.employed_student_start, nineteenthPanelData.value.employed_student_end);
+
+  // if (isFirstSent.value) {
+  //   await reportPartTwoService.createReport(nineteenthPanelData.value, ID_PANEL);
+  // } else {
+  //   await reportPartTwoService.createReportDraft(nineteenthPanelData.value, ID_PANEL);
+  // }
+//-------------------------------------------------------------------------------------------------
+  try {
+    if (isFirstSent.value) {
+      await reportPartTwoService.createReport(nineteenthPanelData.value, ID_PANEL);
+    } else {
+      // await reportPartTwoService.createReportDraft(nineteenthPanelData.value, ID_PANEL);
+      const { data } = await reportPartTwoService.createReportDraft(nineteenthPanelData.value, ID_PANEL);
+      emit('getData', data, Number(ID_PANEL));
+    }
+  } catch (e) {
+    console.log('focusOut error:', e);
   }
 };
 
-watchEffect(async () => {
-  try {
-    const { data } = await reportPartTwoService.getReport(ID_PANEL);
-    console.log(data);
-    if (data) {
-      isFirstSent.value = false;
-      nineteenthPanelData.value.employed_student_start = data.employed_student_start;
-      nineteenthPanelData.value.employed_student_end = data.employed_student_end;
-      nineteenthPanelData.value.comment = data.comment;
-    }
-  } catch (e) {
-    console.log(e)
+watchEffect(() => {
+// watchEffect(async () => {
+  // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
+
+  if (props.data) {
+    isFirstSent.value = false;
+    nineteenthPanelData.value.employed_student_start = props.data.employed_student_start;
+    nineteenthPanelData.value.employed_student_end = props.data.employed_student_end;
+    nineteenthPanelData.value.comment = props.data.comment;
   }
+
+  // try {
+  //   const { data } = 
+  //     props.districtExpert || props.centralExpert
+  //       ? await reportPartTwoService.getReportDH(ID_PANEL, props.reportId)
+  //       : await reportPartTwoService.getReport(ID_PANEL);
+  //   console.log(data);
+  //   if (data) {
+  //     isFirstSent.value = false;
+  //     nineteenthPanelData.value.employed_student_start = data.employed_student_start;
+  //     nineteenthPanelData.value.employed_student_end = data.employed_student_end;
+  //     nineteenthPanelData.value.comment = data.comment;
+  //   }
+  // } catch (e) {
+  //   console.log(e)
+  // }
 });
 </script>
 
@@ -113,13 +195,39 @@ watchEffect(async () => {
 .report {
   &__field-group {
     grid-template-columns: 1fr 1fr;
+    // grid-template-columns: minmax(27.35%, 44.9%) minmax(27.35%, 44.9%);
     margin-bottom: 0;
+
+    &--column {
+      grid-template-columns: 1fr;
+    }
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
   }
 
   &__fieldset {
+    @media (max-width: 1024px) {
+      display: flex;
+      flex-direction: column;
+
+      .form-input {
+        margin-top: auto;
+      }
+    }
+    
     &--left-block {
+      @media (max-width: 768px) {
+        max-width: 100%;
+      }
+
       .report__label {
-        max-width: 240px;
+        max-width: 247px;
+
+        @media (max-width: 768px) {
+          max-width: 100%;
+        }
       }
     }
   }

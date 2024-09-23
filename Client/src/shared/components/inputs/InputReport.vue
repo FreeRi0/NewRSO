@@ -1,9 +1,25 @@
 <template>
-  <div :is-file="isFile" :class="isFile ? 'form-input form-input__file-input' : 'form-input'" :style="{ width: width }">
-    <input :type="type" :name="name" :style="{
-      height: height,
-    }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly"
-      max="9999-12-31" class="form-input__report" @input="updateValue" v-bind="$attrs" :disabled="disabled" />
+  <div 
+    :is-file="isFile"
+    :class="['form-input', isFile ? 'form-input__file-input' : '', isFileDistrict ? 'form-input__add-file' : '', isLink ? 'form-input__link' : '']"
+    :style="{ width: width }">
+    <input 
+      :type="type" 
+      :name="name" 
+      :style="{
+        height: height,
+      }" 
+      :value="value" 
+      :id="name" 
+      :placeholder="placeholder" 
+      :maxlength="maxLength" 
+      :readonly="readonly"
+      :max="max" 
+      class="form-input__report" 
+      :class="{ 'link__input': isLink }" 
+      @input="updateValue"
+      v-bind="$attrs" 
+      :disabled="disabled" />
     <div class="form__counter" v-if="counterVisible">
       {{ textInputLength }} / {{ maxCounter }}
     </div>
@@ -14,6 +30,13 @@
         Выбрать файл
       </span>
     </div>
+    <div v-if="isFileDistrict" class="form-input__icon">
+      <SvgIcon iconName="add-file" />
+    </div>
+    <div v-if="isError" class="form-input__error-block">
+      <span class="form-input__error-text">Превышено&nbsp;максимальное&nbsp;значение&nbsp;{{ max }}</span>
+    </div>
+
   </div>
 </template>
 
@@ -51,6 +74,10 @@ const props = defineProps({
   maxLength: {
     type: Number,
   },
+  max: {
+    type: [String, Number],
+    default: "9999-12-31",
+  },
   value: {
     type: [String, Number],
   },
@@ -73,11 +100,34 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  isFileDistrict: {
+    type: Boolean,
+    default: false,
+  },
+  isLink: {
+    type: Boolean,
+    default: false,
+  },
+  isError: {
+    type: Boolean,
+    default: false,
+  },
 });
+
+let isError = ref(props.isError);
 
 const textInputLength = ref(null);
 
 watchEffect(() => textInputLength.value = typeof props.value === 'string' ? props.value.length : 0)
+
+watchEffect(() => {
+  if (typeof props.max === 'number' && props.value > props.max) {
+    isError.value = true;
+    // console.log(props.max, props.value, isError.value);
+  } else {
+    isError.value = false;
+  }
+});
 
 const updateValue = (event) => {
   emit('update:value', event.target.value);
@@ -86,15 +136,20 @@ const updateValue = (event) => {
 </script>
 
 <style lang="scss" scoped>
-.form-input {
-  &.form-input__file-input {
-    max-width: 720px;
-    height: 86px;
-    position: relative;
-    border-radius: 12px;
-    background-color: transparent;
-    border: 1.5px dashed #1F7CC0;
+.link__input {
+  width: 100%;
+  max-width: 720px;
 
+  @media screen and (max-width: 1024px) {
+    max-width: 100%;
+  }
+}
+
+.form-input {
+  position: relative;
+
+  &.form-input__file-input,
+  &.form-input__add-file {
     .form-input__report[type='file'] {
       opacity: 0;
       position: absolute;
@@ -103,6 +158,27 @@ const updateValue = (event) => {
       right: 0;
       bottom: 0;
     }
+  }
+
+  &.form-input__file-input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 720px;
+    min-height: 86px;
+    position: relative;
+    border-radius: 12px;
+    background-color: transparent;
+    border: 1.5px dashed #1F7CC0;
+  }
+
+  &__add-file,
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
   }
 
   &__text {
@@ -115,15 +191,43 @@ const updateValue = (event) => {
     font-weight: 400;
     font-size: 16px;
     line-height: 23px;
+    text-align: center;
     color: #6d6d6d;
+
+    @media (max-width: 360px) {
+      font-size: 14px;
+      line-height: 18.5px;
+    }
 
     span:last-child {
       display: flex;
       align-items: center;
       column-gap: 12px;
       color: #1f7cc0;
+
+      @media (max-width: 360px) {
+        font-size: 16px;
+        line-height: 24px;
+      }
     }
   }
+
+  &__error-text {
+    position: absolute;
+    bottom: -10px;
+    width: 100%;
+    display: block;
+    color: #db0000;
+    font-family: "Bert Sans";
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+  }
+}
+
+.form-input__link {
+  width: 100%;
+  max-width: 720px;
 }
 
 .form-input__report {
@@ -134,9 +238,42 @@ const updateValue = (event) => {
   line-height: 21px;
   cursor: pointer;
 
+  @media (max-width: 360px) {
+    font-size: 14px;
+    line-height: 18.5px;
+  }
+
   &::placeholder {
     color: #6d6d6d;
   }
+
+  &:disabled {
+    border-color: #b6b6b6;
+    background-color: #f9fafb;
+    color: #8e8e93;
+    pointer-events: none;
+  }
+
+  &:focus[type='text'] {
+    border-color: transparent;
+    outline: 1px solid #1f7cc0;
+  }
+
+  &:invalid {
+    border-color: #db0000;
+    color: #db0000;
+
+    &::placeholder {
+      color: #db0000;
+    }
+  }
+}
+
+.report-table__td input.form-input__report {
+  border: none;
+  border-radius: 0;
+  text-align: center;
+  padding: 0;
 }
 
 .form__counter {

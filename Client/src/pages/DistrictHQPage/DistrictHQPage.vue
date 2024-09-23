@@ -22,7 +22,7 @@
             :member="member"
             head="Руководство окружного штаба"
             :position="position"
-            :leadership="districtHeadquarter.leadership"
+            :leadership="leaderships"
         ></ManagementHQ>
         <section class="headquarters_squads">
             <h3>Штабы и отряды окружного штаба</h3>
@@ -47,7 +47,7 @@
 <script setup>
 import { BannerHQ } from '@features/baner/components';
 import ManagementHQ from '../HQPage/components/ManagementHQ.vue';
-import { ref, onMounted, watch, computed } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
@@ -62,6 +62,7 @@ const { getEndingMembers } = methods;
 const crosspageFilters = useCrosspageFilter();
 const userStore = useUserStore();
 const commander = ref({});
+const leaderships = ref([]);
 const position = ref({});
 const districtHeadquarter = ref({});
 const member = ref([]);
@@ -94,6 +95,17 @@ const aboutMembers = async () => {
     }
 };
 
+const getLeadership = async () => {
+    if (typeof id !== 'undefined') {
+        try {
+            const response = await HTTP.get(`/districts/${id}/leadership/`);
+
+            leaderships.value = response.data;
+        } catch (error) {
+            console.log('an error occured ' + error);
+        }
+    }
+}
 
 
 const fetchCommander = async () => {
@@ -117,15 +129,13 @@ watch(
         id = newId;
         await aboutDistrictHQ();
         await fetchCommander();
+        await getLeadership();
     },
     {
         immediate: true,
         deep: true,
     },
 );
-
-onMounted(() => {
-});
 
 const HQandSquads = ref([
     {
