@@ -45,7 +45,7 @@
           СМИ, подтверждающая проведение акции <sup class="valid-red">*</sup></p>
         <div class="input-link" v-for="(link, i) in tenthPanelData.links" :key="i">
           <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__input-add-link" type="text"
-            placeholder="https://vk.com/cco_monolit" @focusout="formData" />
+            placeholder="Введите ссылку, например, https://vk.com/cco_monolit" @focusout="formData" />
           <Button class="addLinkBtn" label="+ Добавить ссылку" @click="addLink" />
         </div>
       </div>
@@ -128,12 +128,12 @@
             <label for="event_happened-false">Нет</label>
           </div>
         </div>
-                <div class="form__field">
-                  <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
-                  <TextareaReport placeholder="Напишите сообщение" v-model:value="tenthPanelData.comment" id="comment"
-                    name="comment" :rows="1" autoResize @focusout="formData" :maxlength="3000" :max-length-text="3000"
-                    counter-visible class="form__input" />
-                </div>
+        <div class="form__field">
+          <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
+          <TextareaReport placeholder="Напишите сообщение" v-model:value="tenthPanelData.comment" id="comment"
+            name="comment" :rows="1" autoResize @focusout="formData" :maxlength="3000" :max-length-text="3000"
+            counter-visible class="form__input" />
+        </div>
       </div>
     </template>
   </report-tabs>
