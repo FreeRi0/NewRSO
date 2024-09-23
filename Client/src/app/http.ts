@@ -143,7 +143,7 @@ HTTP.interceptors.response.use(
                     console.log('here 8');
                     return Promise.reject(error);
                 }
-            } else if (err.response.status !== 401 && originalRequest.url !== '/services/front_errors/' && localStorage.getItem('jwt_token')) {
+            } else if (err.response.status !== 401 && originalRequest.url !== '/services/front_errors/') {
                 HTTP.post('/services/front_errors/', {
                     url: err.config.baseURL.substring(0, err.config.baseURL.length - 1) + err.config.url,
                     error_code: err.response.status,
