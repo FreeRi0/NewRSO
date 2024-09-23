@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="container">
-      <h1 class="title title--mb">Отчет о&nbsp;деятельности регионального отделения РСО за&nbsp;2024&nbsp;год. Часть&nbsp;2</h1>
+      <h1 class="title title--mb">Отчет о&nbsp;деятельности регионального отделения РСО за&nbsp;2024&nbsp;год.
+        Часть&nbsp;2</h1>
       <div v-if="preloader" class="text-center">
         <v-progress-circular color="primary" indeterminate></v-progress-circular>
       </div>
@@ -29,20 +30,22 @@
               очной формы обучения субъекта Российской Федерации, обучающихся в&nbsp;профессиональных образовательных
               организациях и&nbsp;образовательных организациях высшего образования в&nbsp;государственных,
               муниципальных и&nbsp;частных образовательных организациях, включая филиалы
-              (исключения&nbsp;&mdash; учебные заведения специальных ведомств, проводящих обучение на&nbsp;казарменном положении)
+              (исключения&nbsp;&mdash; учебные заведения специальных ведомств, проводящих обучение на&nbsp;казарменном
+              положении)
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                  text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО."/>
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-title>
-              3. Прирост численности членов РО&nbsp;РСО относительно количества членов в&nbsp;соответствии с&nbsp;отчетом РО&nbsp;РСО за&nbsp;2023&nbsp;г.
+              3. Прирост численности членов РО&nbsp;РСО относительно количества членов в&nbsp;соответствии
+              с&nbsp;отчетом РО&nbsp;РСО за&nbsp;2023&nbsp;г.
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                  text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО."/>
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -58,7 +61,8 @@
           <v-expansion-panel>
             <v-expansion-panel-title>
               5. Организация всероссийских (международных) (организатор&nbsp;&mdash; региональное отделение РСО),
-              окружных и&nbsp;межрегиональных трудовых проектов в&nbsp;соответствии с&nbsp;Положением об&nbsp;организации
+              окружных и&nbsp;межрегиональных трудовых проектов в&nbsp;соответствии с&nbsp;Положением
+              об&nbsp;организации
               трудовых проектов РСО
             </v-expansion-panel-title>
             <v-expansion-panel-text>
@@ -78,7 +82,8 @@
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-title>
-              7. Победители студенческих отрядов РО&nbsp;РСО во&nbsp;всероссийских (международных) проектах и&nbsp;конкурсах &laquo;К&raquo;
+              7. Победители студенческих отрядов РО&nbsp;РСО во&nbsp;всероссийских (международных) проектах
+              и&nbsp;конкурсах &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <seventh-panel @get-data="setData" @getId="setId" :district-headquarter-commander="districtExpert"
@@ -87,12 +92,13 @@
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-title>
-              8. Количество упоминаний в&nbsp;СМИ о&nbsp;прошедших творческих, добровольческих и&nbsp;патриотических мероприятиях
+              8. Количество упоминаний в&nbsp;СМИ о&nbsp;прошедших творческих, добровольческих и&nbsp;патриотических
+              мероприятиях
               и&nbsp;трудовых проектах, организованных РО&nbsp;РСО &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                  text="Показатель рассчитывается автоматически на&nbsp;основе данных сервиса &laquo;Медиалогия&raquo;, предоставленных Аппаратом РСО."/>
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных сервиса &laquo;Медиалогия&raquo;, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -100,12 +106,14 @@
               9. Организация обязательных общесистемных мероприятий РСО на&nbsp;региональном уровне &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <ninth-panel />
+              <ninth-panel @get-data="setData" @getId="setId" :district-headquarter-commander="districtExpert"
+                :data="reportData.ninth" :central-headquarter-commander="centralExpert" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-title>
-              10. Организация РО&nbsp;РСО всероссийских (международных) добровольческих и&nbsp;патриотических акций &laquo;К&raquo;
+              10. Организация РО&nbsp;РСО всероссийских (международных) добровольческих и&nbsp;патриотических акций
+              &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <tenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
@@ -117,12 +125,8 @@
               11. Активность РО&nbsp;РСО в&nbsp;социальных сетях &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <eleventh-panel 
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                :data="reportData.eleventh"
-              />
+              <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.eleventh" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -130,12 +134,8 @@
               12. Объем средств, собранных бойцами РО&nbsp;РСО во&nbsp;Всероссийском дне ударного труда
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <twelfth-panel 
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                :data="reportData.twelfth"
-              />
+              <twelfth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.twelfth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -143,35 +143,38 @@
               13. Охват членов РО&nbsp;РСО, принявших участие во&nbsp;Всероссийском дне ударного труда &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <thirteenth-panel 
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                :data="reportData.thirteenth"
-              />
+              <thirteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.thirteenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-title>
-              14. Отношение объема средств, собранных бойцами РО&nbsp;РСО во&nbsp;Всероссийском дне ударного труда к&nbsp;количеству членов
+              14. Отношение объема средств, собранных бойцами РО&nbsp;РСО во&nbsp;Всероссийском дне ударного труда
+              к&nbsp;количеству членов
               РО&nbsp;РСО, принявших участие во&nbsp;Всероссийском дне ударного труда
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <calculated-panel text="Показатель рассчитывается автоматически на&nbsp;основе данных из&nbsp;12&nbsp;и&nbsp;13&nbsp;показателей."/>
+              <calculated-panel
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных из&nbsp;12&nbsp;и&nbsp;13&nbsp;показателей." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-title>
-              15. Исполнительская дисциплина РО&nbsp;РСО, соблюдение условий охраны труда на&nbsp;трудовых проектах РСО, наличие проблемной неурегулированной задолженности по&nbsp;выплате заработной платы перед бойцами РСО за&nbsp;трудовой семестр предыдущего года, отсутствие отчислений от&nbsp;членских взносов в&nbsp;Центральный штаб, исполнение решений Центральных руководящих органов РСО, наличие ежегодного акта проверки КРК РО&nbsp;РСО
+              15. Исполнительская дисциплина РО&nbsp;РСО, соблюдение условий охраны труда на&nbsp;трудовых проектах РСО,
+              наличие проблемной неурегулированной задолженности по&nbsp;выплате заработной платы перед бойцами РСО
+              за&nbsp;трудовой семестр предыдущего года, отсутствие отчислений от&nbsp;членских взносов
+              в&nbsp;Центральный штаб, исполнение решений Центральных руководящих органов РСО, наличие ежегодного акта
+              проверки КРК РО&nbsp;РСО
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                  text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО."/>
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-title>
-              16. Победители всероссийских (международных), окружных и&nbsp;межрегиональных трудовых проектов по&nbsp;комиссарской деятельности &laquo;К&raquo;
+              16. Победители всероссийских (международных), окружных и&nbsp;межрегиональных трудовых проектов
+              по&nbsp;комиссарской деятельности &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <sixteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
@@ -183,12 +186,8 @@
               17. Дислокация студенческих отрядов РО&nbsp;РСО
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <seventeenth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                :data="reportData.seventeenth"
-              />
+              <seventeenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.seventeenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -196,12 +195,8 @@
               18. Количество научных работ и&nbsp;публикаций по&nbsp;теме&nbsp;СО, выпущенных в&nbsp;текущем году
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <eighteenth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                :data="reportData.eighteenth"
-              />
+              <eighteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.eighteenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -209,12 +204,8 @@
               19. Трудоустройство
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <nineteenth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                :data="reportData.nineteenth"
-              />
+              <nineteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.nineteenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -257,6 +248,7 @@ const reportData = ref({
   fifth: null,
   six: null,
   seventh: null,
+  ninth: null,
   tenth: {
     first: null,
     second: null,
@@ -319,6 +311,7 @@ const getReportData = async (id) => {
       reportData.value.fifth = (await reportPartTwoService.getReport('5')).data;
       reportData.value.six = (await reportPartTwoService.getMultipleReport('6', id)).data;
       reportData.value.seventh = (await reportPartTwoService.getMultipleReport('7', id)).data;
+      // reportData.value.ninth = (await reportPartTwoService.getMultipleReport('9', id)).data; todo: ломает загрузку остальных показателей
       reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
       reportData.value.tenth.second = (await reportPartTwoService.getMultipleReport('10', '2')).data;
       reportData.value.eleventh = (await reportPartTwoService.getReport('11')).data;
@@ -353,6 +346,9 @@ const setData = (data, panel, number = 0) => {
       break;
     case 7:
       reportData.value.seventh = data
+      break;
+    case 9:
+      reportData.value.ninth = data
       break;
     case 10:
       if (number === 1) {
@@ -396,17 +392,6 @@ watchEffect(() => {
   }
   getReportData(panel_id.value);
 });
-// watch(
-//   () => panel_id.value,
-//   async (newId) => {
-//     panel_id.value = newId;
-//     await getReportData(newId);
-//   },
-//   {
-//     immediate: true,
-//     deep: true,
-//   },
-// );
 </script>
 <style>
 .v-expansion-panel__shadow {
