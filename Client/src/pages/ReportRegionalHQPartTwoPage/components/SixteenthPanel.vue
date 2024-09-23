@@ -5,23 +5,13 @@
       </p>
       <div class="form__label-radio">
         <div style="display: flex; align-items: center">
-          <input
-              class="custom-radio"
-              v-model="sixteenthPanelData.is_project"
-              id="is_project-true"
-              type="radio"
-              :value="true"
-          />
+          <input class="custom-radio" v-model="sixteenthPanelData.is_project" id="is_project-true" type="radio"
+            :value="true" />
           <label for="is_project-true">Да</label>
         </div>
         <div style="display: flex; align-items: center">
-          <input
-              class="custom-radio"
-              v-model="sixteenthPanelData.is_project"
-              id="is_project-false"
-              type="radio"
-              :value="false"
-          />
+          <input class="custom-radio" v-model="sixteenthPanelData.is_project" id="is_project-false" type="radio"
+            :value="false" />
           <label for="is_project-false">Нет</label>
         </div>
       </div>
@@ -116,194 +106,121 @@
         <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу <sup class="valid-red">*</sup>
         </p>
         <div class="form__label-radio">
-          <div
-              v-if="sixteenthPanelData.is_project"
-              style="display: flex; align-items: center"
-          >
-            <input
-                class="custom-radio"
-                v-model="sixteenthPanelData.is_project"
-                id="is_project-true"
-                type="radio"
-                :value="true"
-            />
+          <div v-if="sixteenthPanelData.is_project" style="display: flex; align-items: center">
+            <input class="custom-radio" v-model="sixteenthPanelData.is_project" id="is_project-true" type="radio"
+              :value="true" />
             <label for="is_project-true">Да</label>
           </div>
-          <div
-              v-else
-              style="display: flex; align-items: center"
-          >
-            <input
-                class="custom-radio"
-                v-model="sixteenthPanelData.is_project"
-                id="is_project-false"
-                type="radio"
-                :value="false"
-            />
+          <div v-else style="display: flex; align-items: center">
+            <input class="custom-radio" v-model="sixteenthPanelData.is_project" id="is_project-false" type="radio"
+              :value="false" />
             <label for="is_project-false">Нет</label>
           </div>
         </div>
       </div>
-      <div
-          v-for="(project, index) in projects"
-          :key="index"
-      >
+      <div v-for="(project, index) in projects" :key="index">
         <div style="display: flex; justify-content: space-between; margin-top: 40px;">
           <div>
             <label class="form__label" for="9">Наименование трудового проекта, в котором ЛСО РО одержал победу <sup
                 class="valid-red">*</sup></label>
-            <InputReport
-                v-model:value="project.name"
-                id="9"
-                name="name" class="form__input" type="text"
-                placeholder="ВВС ПРО"
-                @focusout="focusOut"
-                counter-visible
-                :max-counter="300"
-                :max-length="300"
-                :disabled="props.centralExpert || props.districtExpert"
-            />
+            <InputReport v-model:value="project.name" id="9" name="name" class="form__input" type="text"
+              placeholder="ВВС ПРО" @focusout="focusOut" counter-visible :max-counter="300" :max-length="300"
+              :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" />
           </div>
         </div>
         <div>
-        <v-tabs-window-item>
-          <div style="display: flex;">
-            <div>
-              <label class="form__label" for="4">Положение о проекте <sup class="valid-red">*</sup></label>
-              <div class="form__file-box">
-              <span class="form__file-name">
-                <SvgIcon v-if="sixteenthPanelData.file_type === 'jpg'" icon-name="file-jpg"/>
-                <SvgIcon v-if="sixteenthPanelData.file_type === 'pdf'" icon-name="file-pdf"/>
-                <SvgIcon v-if="sixteenthPanelData.file_type === 'png'" icon-name="file-png"/>
-                {{ sixteenthPanelData.scan_file || 'Тестовое название' }}
-              </span>
-                <span class="form__file-size">{{ sixteenthPanelData.file_size || '123' }} Мб</span>
-              </div>
-            </div>
-            <div style="margin-left: 40px;">
-              <p class="form__label">Масштаб проекта <sup class="valid-red">*</sup></p>
-              <div
-                  v-if="project.project_scale === 'Всероссийский'"
-                  style="display: flex;"
-              >
-                <input
-                    v-model="project.project_scale"
-                    type="radio"
-                    :id="`All-${index}`"
-                    value="Всероссийский"/>
-                <label>Всероссийский</label>
-              </div>
-              <div
-                  v-else-if="project.project_scale === 'Окружной'"
-                  style="display: flex;"
-              >
-                <input
-                    v-model="project.project_scale"
-                    type="radio"
-                    :id="`District-${index}`"
-                    value="Окружной"
-                />
-                <label>Окружной</label>
-              </div>
-              <div
-                  v-else
-                  style="display: flex;"
-              >
-                <input
-                    v-model="project.project_scale"
-                    type="radio"
-                    :id="`Interregional-${index}`"
-                    value="Межрегиональный"
-                />
-                <label>Межрегиональный</label>
-              </div>
-            </div>
-          </div>
-        </v-tabs-window-item>
-
-        <v-tabs-window-item value="two">
-          <div class="form__field-group">
-            <div class="form__field">
-              <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу <sup
-                  class="valid-red">*</sup></p>
-              <div style="display: flex;">
-                <div style="display: flex; align-items: center">
-                  <InputReport id="2" name="2" class="form__input" type="radio" />
-                  <label for="2">Да</label>
-                </div>
-                <div style="display: flex; align-items: center">
-                  <InputReport id="2" name="2" class="form__input" type="radio" />
-                  <label for="2">Нет</label>
+          <v-tabs-window-item>
+            <div style="display: flex;">
+              <div>
+                <label class="form__label" for="4">Положение о проекте <sup class="valid-red">*</sup></label>
+                <div class="form__file-box">
+                  <span class="form__file-name">
+                    <SvgIcon v-if="sixteenthPanelData.file_type === 'jpg'" icon-name="file-jpg" />
+                    <SvgIcon v-if="sixteenthPanelData.file_type === 'pdf'" icon-name="file-pdf" />
+                    <SvgIcon v-if="sixteenthPanelData.file_type === 'png'" icon-name="file-png" />
+                    {{ sixteenthPanelData.scan_file || 'Тестовое название' }}
+                  </span>
+                  <span class="form__file-size">{{ sixteenthPanelData.file_size || '123' }} Мб</span>
                 </div>
               </div>
-            </div>
-            <div style="display: flex; justify-content: space-between;">
-              <div>
-                <label class="form__label" for="9">Наименование трудового проекта, в котором ЛСО РО одержал победу <sup
-                    class="valid-red">*</sup></label>
-                <InputReport id="9" name="9" class="form__input" type="text" placeholder="ВВС ПРО" />
-              </div>
-              <div>
-                <Button class="form__btn" label="Удалить проект" />
-              </div>
-            </div>
-            <div class="form__field">
-              <p class="form__label">Масштаб проекта <sup class="valid-red">*</sup>
-              </p>
-              <div>
-                <div style="display: flex">
-                  <InputReport id="2" name="2" class="form__input" type="radio" />
+              <div style="margin-left: 40px;">
+                <p class="form__label">Масштаб проекта <sup class="valid-red">*</sup></p>
+                <div v-if="project.project_scale === 'Всероссийский'" style="display: flex;">
+                  <input v-model="project.project_scale" type="radio" :id="`All-${index}`" value="Всероссийский" />
                   <label>Всероссийский</label>
                 </div>
-                <div style="display: flex;">
-                  <input
-                      v-model="project.project_scale"
-                      type="radio"
-                      :id="`District-${index}`"
-                      value="Окружной"
-                  />
+                <div v-else-if="project.project_scale === 'Окружной'" style="display: flex;">
+                  <input v-model="project.project_scale" type="radio" :id="`District-${index}`" value="Окружной" />
                   <label>Окружной</label>
                 </div>
-                <div style="display: flex;">
-                  <input
-                      v-model="project.project_scale"
-                      type="radio"
-                      :id="`Interregional-${index}`"
-                      value="Межрегиональный"
-                  />
+                <div v-else style="display: flex;">
+                  <input v-model="project.project_scale" type="radio" :id="`Interregional-${index}`"
+                    value="Межрегиональный" />
                   <label>Межрегиональный</label>
                 </div>
               </div>
             </div>
-          </div>
-        </v-tabs-window-item>  
+          </v-tabs-window-item>
+
+          <v-tabs-window-item value="two">
+            <div class="form__field-group">
+              <div class="form__field">
+                <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу <sup
+                    class="valid-red">*</sup></p>
+                <div style="display: flex;">
+                  <div style="display: flex; align-items: center">
+                    <InputReport id="2" name="2" class="form__input" type="radio" />
+                    <label for="2">Да</label>
+                  </div>
+                  <div style="display: flex; align-items: center">
+                    <InputReport id="2" name="2" class="form__input" type="radio" />
+                    <label for="2">Нет</label>
+                  </div>
+                </div>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <div>
+                  <label class="form__label" for="9">Наименование трудового проекта, в котором ЛСО РО одержал победу
+                    <sup class="valid-red">*</sup></label>
+                  <InputReport id="9" name="9" class="form__input" type="text" placeholder="ВВС ПРО" />
+                </div>
+                <div>
+                  <Button class="form__btn" label="Удалить проект" />
+                </div>
+              </div>
+              <div class="form__field">
+                <p class="form__label">Масштаб проекта <sup class="valid-red">*</sup>
+                </p>
+                <div>
+                  <div style="display: flex">
+                    <InputReport id="2" name="2" class="form__input" type="radio" />
+                    <label>Всероссийский</label>
+                  </div>
+                  <div style="display: flex;">
+                    <input v-model="project.project_scale" type="radio" :id="`District-${index}`" value="Окружной" />
+                    <label>Окружной</label>
+                  </div>
+                  <div style="display: flex;">
+                    <input v-model="project.project_scale" type="radio" :id="`Interregional-${index}`"
+                      value="Межрегиональный" />
+                    <label>Межрегиональный</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </v-tabs-window-item>
         </div>
       </div>
       <div>
-        <Button
-            class="add_eventBtn"
-            label="+ Добавить проект"
-            @click="addProject"
-        />
+        <Button class="add_eventBtn" label="+ Добавить проект" @click="addProject" />
       </div>
       <div>
         <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
-        <TextareaReport
-            id="comment"
-            name="comment"
-            :rows="1"
-            autoResize
-            placeholder="Напишите сообщение"
-            @focusout="focusOut"
-            :maxlength="3000"
-            :max-length-text="3000"
-            counter-visible
-        />
+        <TextareaReport id="comment" name="comment" :rows="1" autoResize placeholder="Напишите сообщение"
+          @focusout="focusOut" :maxlength="3000" :max-length-text="3000" counter-visible />
       </div>
       <div>
-        <v-checkbox
-            label="Итоговое значение"
-        />
+        <v-checkbox label="Итоговое значение" />
       </div>
       <div class="hr"></div>
       <div>
@@ -317,11 +234,11 @@
               class="valid-red">*</sup></p>
           <div style="display: flex;">
             <div style="display: flex; align-items: center">
-              <InputReport id="2" name="2" class="form__input" type="radio"/>
+              <InputReport id="2" name="2" class="form__input" type="radio" />
               <label for="2">Да</label>
             </div>
             <div style="display: flex; align-items: center">
-              <InputReport id="2" name="2" class="form__input" type="radio"/>
+              <InputReport id="2" name="2" class="form__input" type="radio" />
               <label for="2">Нет</label>
             </div>
           </div>
@@ -332,55 +249,55 @@
                 class="valid-red">*</sup></label>
             <v-table>
               <tbody>
-              <tr class="report-table__tr">
-                <td>Данные РО</td>
-              </tr>
-              <tr class="report-table__tr">
-                <td>ВВС Всеросийская сельскохозяйственная неделя</td>
-              </tr>
-              <tr class="report-table__tr">
-                <td>Корректировка ОШ</td>
-              </tr>
-              <tr class="report-table__tr">
-                <td>ВВС Всеросийская сельскохозяйственная неделя</td>
-              </tr>
-              <tr class="report-table__tr">
-                <td>Корректировка ЦШ</td>
-              </tr>
-              <tr class="report-table__tr">
-                <td>ВВС Всеросийская сельскохозяйственная неделя</td>
-              </tr>
+                <tr class="report-table__tr">
+                  <td>Данные РО</td>
+                </tr>
+                <tr class="report-table__tr">
+                  <td>ВВС Всеросийская сельскохозяйственная неделя</td>
+                </tr>
+                <tr class="report-table__tr">
+                  <td>Корректировка ОШ</td>
+                </tr>
+                <tr class="report-table__tr">
+                  <td>ВВС Всеросийская сельскохозяйственная неделя</td>
+                </tr>
+                <tr class="report-table__tr">
+                  <td>Корректировка ЦШ</td>
+                </tr>
+                <tr class="report-table__tr">
+                  <td>ВВС Всеросийская сельскохозяйственная неделя</td>
+                </tr>
               </tbody>
             </v-table>
           </div>
           <div>
-            <Button style="margin: 0;" label="Удалить проект"/>
+            <Button style="margin: 0;" label="Удалить проект" />
           </div>
         </div>
         <label class="form__label">Масштаб проекта <sup class="valid-red">*</sup></label>
         <v-table>
           <tbody>
-          <tr class="report-table__tr">
-            <td class="report-table__th report-table__th__br-left">Данные РО</td>
-            <td class="report-table__th">Корректировка ОШ</td>
-            <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
-          </tr>
-          <tr>
-            <td class="report-table__td">Всероссийский</td>
-            <td class="report-table__td report-table__td__center">Всероссийский</td>
-            <td class="report-table__td">Всероссийский</td>
-          </tr>
+            <tr class="report-table__tr">
+              <td class="report-table__th report-table__th__br-left">Данные РО</td>
+              <td class="report-table__th">Корректировка ОШ</td>
+              <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
+            </tr>
+            <tr>
+              <td class="report-table__td">Всероссийский</td>
+              <td class="report-table__td report-table__td__center">Всероссийский</td>
+              <td class="report-table__td">Всероссийский</td>
+            </tr>
           </tbody>
         </v-table>
         <div class="form__field">
           <p class="form__label">Масштаб проекта <sup class="valid-red">*</sup></p>
           <div style="display: flex">
             <div style="display: flex">
-              <InputReport id="2" name="2" class="form__input" type="radio"/>
+              <InputReport id="2" name="2" class="form__input" type="radio" />
               <label>Всероссийский</label>
             </div>
             <div style="display: flex">
-              <InputReport id="2" name="2" class="form__input" type="radio"/>
+              <InputReport id="2" name="2" class="form__input" type="radio" />
               <label>Окружной</label>
             </div>
             <div class="form__field">
@@ -400,33 +317,33 @@
           </div>
         </div>
         <div>
-          <Button style="margin: 0;" label="Добавить проект"/>
+          <Button style="margin: 0;" label="Добавить проект" />
         </div>
         <div class="form__field">
           <label class="form__label" for="15">Комментарий <sup class="valid-red">*</sup></label>
-          <InputReport id="15" name="15" class="form__input" style="width: 100%"/>
+          <InputReport id="15" name="15" class="form__input" style="width: 100%" />
         </div>
         <div>
-          <v-checkbox label="Итоговое значение"/>
+          <v-checkbox label="Итоговое значение" />
         </div>
         <div class="hr"></div>
         <div>
           <p>(4-1)*2+(4-2)+(4-3)=9</p>
         </div>
         <div>
-          <v-checkbox label="Вернуть в РО на доработку"/>
+          <v-checkbox label="Вернуть в РО на доработку" />
         </div>
       </div>
     </template>
   </report-tabs>
 </template>
 <script setup>
-import {ref, watchEffect} from "vue";
-import {InputReport, TextareaReport} from '@shared/components/inputs';
-import {Button} from '@shared/components/buttons';
-import {reportPartTwoService} from "@services/ReportService.ts";
-import {SvgIcon} from '@shared/index';
-import {ReportTabs} from './index';
+import { ref, watchEffect } from "vue";
+import { InputReport, TextareaReport } from '@shared/components/inputs';
+import { Button } from '@shared/components/buttons';
+import { reportPartTwoService } from "@services/ReportService.ts";
+import { SvgIcon } from '@shared/index';
+import { ReportTabs } from './index';
 
 const props = defineProps({
   districtExpert: {
@@ -475,7 +392,7 @@ const focusOut = async () => {
   }
 };
 const addLink = (index) => {
-  projects.value[index].links.push({link: ''})
+  projects.value[index].links.push({ link: '' })
 };
 const deleteLink = async (projectIndex, linkIndex) => {
   projects.value[projectIndex].links.splice(linkIndex, 1);
@@ -584,7 +501,6 @@ watchEffect(async () => {
 .project-regulations-input-file {
   display: flex;
   flex-direction: column;
-  gap: 8px;
   max-width: 720px;
   width: 100%;
 
@@ -607,14 +523,14 @@ watchEffect(async () => {
   /* -стандартное отображение*/
 }
 
-.custom-radio + label {
+.custom-radio+label {
   position: relative;
   padding-left: 30px;
   cursor: pointer;
   line-height: 20px;
 }
 
-.custom-radio + label::before {
+.custom-radio+label::before {
   content: '';
   position: absolute;
   left: 0;
@@ -627,7 +543,7 @@ watchEffect(async () => {
   /* Внешний синий круг */
 }
 
-.custom-radio + label::after {
+.custom-radio+label::after {
   content: '';
   position: absolute;
   left: 5px;
@@ -643,7 +559,7 @@ watchEffect(async () => {
   /* Пустота внутри внутреннего круга */
 }
 
-.custom-radio:checked + label::after {
+.custom-radio:checked+label::after {
   background-color: #1F7CC0;
   /* Заполнение внутреннего круга синим цветом при выборе */
 }
@@ -668,7 +584,6 @@ watchEffect(async () => {
 .form__field-info-win {
   display: flex;
   flex-direction: column;
-  gap: 8px;
   width: 720px;
 
   @media (max-width: 1024px) {
