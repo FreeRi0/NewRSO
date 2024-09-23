@@ -144,12 +144,14 @@ HTTP.interceptors.response.use(
                     return Promise.reject(error);
                 }
             } else if (err.response.status !== 401 && originalRequest.url !== '/services/front_errors/') {
-                HTTP.post('/services/front_errors/', {
-                    url: err.config.baseURL.substring(0, err.config.baseURL.length - 1) + err.config.url,
-                    error_code: err.response.status,
-                    error_description: 'Error: ' + JSON.stringify(err.response.data),
-                    method: err.config.method
-                }).then().catch()
+                if (window.location.hostname === 'localhost' || window.location.hostname === 'rso.sprint.1t' || window.location.hostname === '213.129.208.147') {
+                    HTTP.post('/services/front_errors/', {
+                        url: err.config.baseURL.substring(0, err.config.baseURL.length - 1) + err.config.url,
+                        error_code: err.response.status,
+                        error_description: 'Error: ' + JSON.stringify(err.response.data),
+                        method: err.config.method
+                    }).then().catch()
+                }
             }
 
             if (err.response.status === 403 && err.response.data) {
