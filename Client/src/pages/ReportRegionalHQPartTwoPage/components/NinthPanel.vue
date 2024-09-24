@@ -54,7 +54,8 @@ const sent = (sentVal) => {
 
 const formData = async (reportData, reportNumber) => {
   try {
-    if (isFirstSent.value) {
+    console.log('send2', isFirstSent.value)
+    if (isFirstSent.value === true) {
       console.log('First time sending data');
       await reportPartTwoService.createMultipleReportAll(reportData, '9', reportNumber, true);
     } else {
@@ -113,6 +114,7 @@ const deleteFile = async (reportData, reportNumber) => {
 };
 
 watchEffect(() => {
+  console.log(isFirstSent, props.data)
   if (props.data) {
     isFirstSent.value = false;
     ninthPanelData.value = { ...props.data }

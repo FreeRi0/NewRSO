@@ -899,14 +899,14 @@ const deleteFile = (number) => {
 
 const focusOut = () => {
     if (props.panel_number == 6) {
-        emit('isSent', isFirstSent.value)
+        // emit('isSent', isFirstSent.value)
         emit('formData', sixPanelData.value)
         console.log('6')
     }
     else if (props.panel_number == 7) {
         if (isFirstSent.value) {
             console.log('7', '1')
-            emit('isSent', isFirstSent.value)
+            // emit('isSent', isFirstSent.value)
             emit('formData', seventhPanelData.value)
         } else {
             let formData = new FormData();
@@ -919,15 +919,15 @@ const focusOut = () => {
                     : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
             }
 
-            emit('isSent', isFirstSent.value)
+            // emit('isSent', isFirstSent.value)
             emit('formData', formData)
             console.log('7', '2')
         }
     }
     else if (props.panel_number == 9) {
-        if (isFirstSent.value) {
+        console.log('send', isFirstSent.value)
+        if (isFirstSent.value === true) {
             console.log('9', '1')
-            emit('isSent', isFirstSent.value)
             emit('formData', ninthPanelData.value)
         } else {
             let formData = new FormData();
@@ -940,7 +940,7 @@ const focusOut = () => {
                         : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
                 }
             }
-            emit('isSent', isFirstSent.value)
+        
             emit('formData', formData)
             console.log('9', '2')
         }
@@ -975,40 +975,38 @@ const deleteLink = async (number) => {
 watchEffect(() => {
     if (props.panel_number == 6) {
         console.log('data 6', props.id)
-
-
-        if (props.data) {
+        if (Object.keys(props.data).length > 0) {
             console.log('6')
-            isFirstSent.value = false
+            // isFirstSent.value = false
             sixPanelData.value = { ...props.data }
             if (!sixPanelData.value.links.length) sixPanelData.value.links.push({ link: '' })
+            // emit('isSent', isFirstSent.value)
         }
 
         emit('getId', props.id)
         emit('getPanelNumber', props.panel_number)
     } else if (props.panel_number == 7) {
         console.log('data 7', props.id)
-        if (props.data) {
+        if (Object.keys(props.data).length > 0) {
             console.log('7')
-            isFirstSent.value = false;
+            // isFirstSent.value = false;
             seventhPanelData.value = { ...props.data }
             if (!seventhPanelData.value.links.length) seventhPanelData.value.links.push({ link: '' })
+            // emit('isSent', isFirstSent.value)
         }
-
-
         emit('getId', props.id)
         emit('getPanelNumber', props.panel_number)
 
-
     } else if (props.panel_number == 9) {
         console.log('data 9', props.id)
-
-        if (props.data) {
-            console.log('9')
-            isFirstSent.value = false;
+        if (Object.keys(props.data).length > 0) {
+            console.log('9', props.data)
+            // isFirstSent.value = false;
             ninthPanelData.value = { ...props.data }
             if (!ninthPanelData.value.links.length) ninthPanelData.value.links.push({ link: '' })
+            // emit('isSent', isFirstSent.value)
         }
+        emit('isSent', isFirstSent.value)
         emit('getId', props.id)
         emit('getPanelNumber', props.panel_number)
 
