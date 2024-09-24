@@ -26,7 +26,7 @@
                                 type="radio" @focusout="focusOut" v-model="seventhPanelData.prize_place" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                                }}</label>
+                            }}</label>
                         </div>
                     </div>
                 </div>
@@ -44,17 +44,6 @@
                 <div class="form__field">
                     <label class="form__label mt-4" for="14">Ссылка на публикацию о победе
                         <sup class="valid-red">*</sup></label>
-                    <!-- <div class="form__wrapper" v-if="!seventhPanelData.links.length">
-                        <InputReport @focusout="focusOut" name="14" :is-link="true"
-                            placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                            v-model:value="seventhPanelData.links[0].link" class="mb-2" />
-                    </div> -->
-                    <pre>count{{ seventhPanelData.links }}</pre>
-                    <!-- <div v-if="!seventhPanelData.links.length">
-                        <InputReport @focusout="focusOut" name="14" :is-link="true"
-                            placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                            v-model:value="seventhPanelData.links" class="mb-2" />
-                    </div> -->
                     <div class="form__wrapper" v-for="(item, index) in seventhPanelData.links" :key="index">
                         <InputReport @focusout="focusOut" name="14" :is-link="true"
                             placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
@@ -168,7 +157,7 @@
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                                }}</label>
+                            }}</label>
                         </div>
                     </div>
                 </div>
@@ -244,7 +233,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -383,7 +372,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -462,7 +451,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -555,7 +544,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -641,7 +630,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -739,7 +728,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -778,7 +767,7 @@ const props = defineProps({
     data: Object,
 });
 
-const emit = defineEmits(['collapse-form', 'formData', 'getId', 'getPanelNumber',  'uploadFile', 'deleteFile', 'isSent']);
+const emit = defineEmits(['collapse-form', 'formData', 'getId', 'getPanelNumber', 'uploadFile', 'deleteFile', 'isSent']);
 
 const collapseForm = () => {
     emit('collapse-form');
@@ -908,7 +897,6 @@ const deleteFile = (number) => {
 
 }
 
-
 const focusOut = () => {
     if (props.panel_number == 6) {
         emit('formData', sixPanelData.value)
@@ -927,16 +915,13 @@ const focusOut = () => {
             if (seventhPanelData.value.links.length) {
                 for (let i = 0; i < seventhPanelData.value.links.length; i++) {
                     !seventhPanelData.value.links[i].link
-                        ? formData.append(`seventhPanelData.value[links][${i}][link]`, '')
-                        : formData.append(`seventhPanelData.value[links][${i}][link]`, seventhPanelData.value.links[i].link);
+                        ? formData.append(`seventhPanelData[links][${i}][link]`, '')
+                        : formData.append(`seventhPanelData[links][${i}][link]`, seventhPanelData.value.links[i].link);
 
                     //Если ссылка пустая и у нее нет id, то не отправляем данные
                     //Если все ссылку удалили, то остается пустая заглушка
                 }
             }
-            // else {
-            //     formData.append(`links`, '');
-            // }
             emit('isSent', isFirstSent.value)
             emit('formData', formData)
             console.log('7', '2')
@@ -970,11 +955,9 @@ const addLink = (number) => {
         sixPanelData.value.links.push({ link: '' });
     } else if (number == 7) {
         seventhPanelData.value.links.push({ link: '' });
-        console.log('seventhPanelData.value.links', seventhPanelData.value.links);
     }
     else if (number == 9) {
         ninthPanelData.value.links.push({ link: '' });
-        console.log('ninthPanelData.value.links', ninthPanelData.value.links);
     }
 };
 
@@ -987,7 +970,7 @@ const deleteLink = async (number) => {
         await reportPartTwoService.createMultipleReportDraft(seventhPanelData.value, '7', props.id, true);
     } else if (number == 9) {
         ninthPanelData.value.links.pop()
-        await reportPartTwoService.createMultipleReportDraft(ninthPanelData.value, '9', props.id);
+        await reportPartTwoService.createMultipleReportDraft(ninthPanelData.value, '9', props.id, true);
     }
 
 };
@@ -997,24 +980,33 @@ watchEffect(() => {
         console.log('data 6', props.id)
         emit('getId', props.id)
         emit('getPanelNumber', props.panel_number)
-        sixPanelData.value = { ...props.data }
+        if (props.data) {
+            sixPanelData.value = { ...props.data }
+        }
     } else if (props.panel_number == 7) {
         console.log('data 7', props.id)
+        if (!props.data.links.length) {
+            props.data.links.push({ link: '' });
+            seventhPanelData.value.links.push({ link: ' ' });
+            console.log('data 7', props.data.links, seventhPanelData.links)
+        }
+        emit('getId', props.id)
+        emit('getPanelNumber', props.panel_number)
         if (props.data) {
             isFirstSent.value = false;
             seventhPanelData.value = { ...props.data }
         }
-        emit('getId', props.id)
-        emit('getPanelNumber', props.panel_number)
-
     } else if (props.panel_number == 9) {
         console.log('data 9', props.id)
+        if (!props.data.links.length) {
+            ninthPanelData.value.links.push({ link: '' });
+        }
+        emit('getId', props.id)
+        emit('getPanelNumber', props.panel_number)
         if (props.data) {
             isFirstSent.value = false;
             ninthPanelData.value = { ...props.data }
         }
-        emit('getId', props.id)
-        emit('getPanelNumber', props.panel_number)
     }
 })
 </script>
