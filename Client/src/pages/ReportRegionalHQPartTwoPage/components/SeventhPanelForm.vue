@@ -778,7 +778,7 @@ const props = defineProps({
     data: Object,
 });
 
-const emit = defineEmits(['collapse-form', 'formData', 'getId', 'uploadFile', 'deleteFile', 'isSent']);
+const emit = defineEmits(['collapse-form', 'formData', 'getId', 'getPanelNumber',  'uploadFile', 'deleteFile', 'isSent']);
 
 const collapseForm = () => {
     emit('collapse-form');
@@ -831,7 +831,7 @@ const events = ref([
 ])
 
 const uploadFile = (event, number) => {
-  
+
     let formData = new FormData();
     console.log('num', number);
     if (number === 7) {
@@ -929,8 +929,14 @@ const focusOut = () => {
                     !seventhPanelData.value.links[i].link
                         ? formData.append(`seventhPanelData.value[links][${i}][link]`, '')
                         : formData.append(`seventhPanelData.value[links][${i}][link]`, seventhPanelData.value.links[i].link);
+
+                    //Если ссылка пустая и у нее нет id, то не отправляем данные
+                    //Если все ссылку удалили, то остается пустая заглушка
                 }
             }
+            // else {
+            //     formData.append(`links`, '');
+            // }
             emit('isSent', isFirstSent.value)
             emit('formData', formData)
             console.log('7', '2')
@@ -990,6 +996,7 @@ watchEffect(() => {
     if (props.panel_number == 6) {
         console.log('data 6', props.id)
         emit('getId', props.id)
+        emit('getPanelNumber', props.panel_number)
         sixPanelData.value = { ...props.data }
     } else if (props.panel_number == 7) {
         console.log('data 7', props.id)
@@ -998,14 +1005,16 @@ watchEffect(() => {
             seventhPanelData.value = { ...props.data }
         }
         emit('getId', props.id)
+        emit('getPanelNumber', props.panel_number)
 
     } else if (props.panel_number == 9) {
         console.log('data 9', props.id)
-        if(props.data) {
+        if (props.data) {
             isFirstSent.value = false;
-            ninthPanelData.value = {...props.data }
+            ninthPanelData.value = { ...props.data }
         }
         emit('getId', props.id)
+        emit('getPanelNumber', props.panel_number)
     }
 })
 </script>

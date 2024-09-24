@@ -13,7 +13,7 @@
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="7" @collapse-form="collapsed()"
             @formData="formData($event, item.id)" @is-sent="sent($event)" @uploadFile="uploadFile($event, item.id)"
-            @deleteFile="deleteFile($event, item.id)" @getId="getId($event)" :data="seventhPanelData"
+            @deleteFile="deleteFile($event, item.id)" @getId="getId($event)" @getPanelNumber="getPanelNumber($event)" :data="seventhPanelData"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
@@ -38,7 +38,7 @@ const props = defineProps({
 });
 
 const panel = ref(null);
-const emit = defineEmits(['getData', 'getId'])
+const emit = defineEmits(['getData', 'getId', 'getPanelNumber'])
 const seventhPanelData = ref({
   prize_place: 'Нет',
   links: [{
@@ -101,6 +101,11 @@ const getId = (id) => {
   emit('getId', id);
 }
 
+const getPanelNumber = (number) => {
+  console.log('num', number);
+  emit('getPanelNumber', number);
+}
+
 const getItems = async () => {
   try {
     const response = await HTTP.get('regional_competitions/reports/event_names/r7-event-names/');
@@ -114,7 +119,9 @@ watchEffect(() => {
   if (props.data) {
     isFirstSent.value = false;
     seventhPanelData.value = { ...props.data }
+    emit('send-panel', panel.value);
   }
+
 });
 
 onMounted(async () => {

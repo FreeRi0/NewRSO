@@ -12,7 +12,7 @@
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)" @getId="getId($event)" :data="sixPanelData"
+            @formData="formData($event, item.id)" @getId="getId($event)" @getPanelNumber="getPanelNumber($event)" :data="sixPanelData"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item">
           </SeventhPanelForm>
@@ -38,7 +38,9 @@ const props = defineProps({
 });
 
 
-const emit = defineEmits(['getData', 'getId'])
+
+
+const emit = defineEmits(['getData', 'getId', 'getPanelNumber'])
 
 const isFirstSent = ref(true);
 
@@ -50,13 +52,15 @@ const sixPanelData = ref({
   comment: '',
 });
 
-const panel = ref(null);
+const panel = ref(false);
 
 const items = ref([]);
 
 const collapsed = () => {
   panel.value = !panel.value;
 }
+
+// console.log('panel', panel.value)
 
 const getItems = async () => {
   try {
@@ -87,11 +91,17 @@ const getId = (id) => {
   console.log('id', id);
   emit('getId', id);
 }
+const getPanelNumber = (number) => {
+  console.log('num', number);
+  emit('getPanelNumber', number);
+}
 watchEffect(() => {
   if (props.data) {
     isFirstSent.value = false;
     sixPanelData.value = { ...props.data }
+    // emit('send-panel', panel.value);
   }
+  
 });
 onMounted(async () => {
   await getItems();
