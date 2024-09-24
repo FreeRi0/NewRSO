@@ -48,6 +48,7 @@ const ninthPanelData = ref({
 const isFirstSent = ref(true);
 
 const sent = (sentVal) => {
+  console.log('is sent: ', sentVal, isFirstSent.value);
   isFirstSent.value = sentVal;
 }
 

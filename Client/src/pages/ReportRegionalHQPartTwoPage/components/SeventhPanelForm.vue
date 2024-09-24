@@ -26,7 +26,7 @@
                                 type="radio" @focusout="focusOut" v-model="seventhPanelData.prize_place" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                            }}</label>
+                                }}</label>
                         </div>
                     </div>
                 </div>
@@ -157,7 +157,7 @@
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                            }}</label>
+                                }}</label>
                         </div>
                     </div>
                 </div>
@@ -233,7 +233,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -372,7 +372,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -451,7 +451,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -544,7 +544,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -630,7 +630,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -728,7 +728,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -832,8 +832,8 @@ const uploadFile = (event, number) => {
         if (seventhPanelData.value.links.length) {
             for (let i = 0; i < seventhPanelData.value.links.length; i++) {
                 !seventhPanelData.value.links[i].link
-                    ? formData.append(`seventhPanelData.value[links][${i}][link]`, '')
-                    : formData.append(`seventhPanelData.value[links][${i}][link]`, seventhPanelData.value.links[i].link);
+                    ? formData.append(`[links][${i}][link]`, '')
+                    : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
             }
         }
         formData.append('comment', seventhPanelData.value.comment);
@@ -848,8 +848,8 @@ const uploadFile = (event, number) => {
         if (ninthPanelData.value.links.length) {
             for (let i = 0; i < ninthPanelData.value.links.length; i++) {
                 !ninthPanelData.value.links[i].link
-                    ? formData.append(`ninthPanelData.value[links][${i}][link]`, '')
-                    : formData.append(`ninthPanelData.value[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                    ? formData.append(`[links][${i}][link]`, '')
+                    : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
             }
         }
         formData.append('comment', ninthPanelData.value.comment);
@@ -868,8 +868,8 @@ const deleteFile = (number) => {
         if (seventhPanelData.value.links.length) {
             for (let i = 0; i < seventhPanelData.value.links.length; i++) {
                 !seventhPanelData.value.links[i].link
-                    ? formData.append(`seventhPanelData.value[links][${i}][link]`, '')
-                    : formData.append(`seventhPanelData.value[links][${i}][link]`, seventhPanelData.value.links[i].link);
+                    ? formData.append(`[links][${i}][link]`, '')
+                    : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
             }
         }
         formData.append('comment', seventhPanelData.value.comment);
@@ -884,8 +884,8 @@ const deleteFile = (number) => {
         if (ninthPanelData.value.links.length) {
             for (let i = 0; i < ninthPanelData.value.links.length; i++) {
                 !ninthPanelData.value.links[i].link
-                    ? formData.append(`ninthPanelData.value[links][${i}][link]`, '')
-                    : formData.append(`ninthPanelData.value[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                    ? formData.append(`[links][${i}][link]`, '')
+                    : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
             }
         }
         formData.append('comment', ninthPanelData.value.comment);
@@ -899,10 +899,10 @@ const deleteFile = (number) => {
 
 const focusOut = () => {
     if (props.panel_number == 6) {
+        emit('isSent', isFirstSent.value)
         emit('formData', sixPanelData.value)
         console.log('6')
     }
-
     else if (props.panel_number == 7) {
         if (isFirstSent.value) {
             console.log('7', '1')
@@ -912,16 +912,13 @@ const focusOut = () => {
             let formData = new FormData();
             formData.append('comment', seventhPanelData.value.comment);
             formData.append('prize_place', seventhPanelData.value.prize_place);
-            if (seventhPanelData.value.links.length) {
-                for (let i = 0; i < seventhPanelData.value.links.length; i++) {
-                    !seventhPanelData.value.links[i].link
-                        ? formData.append(`seventhPanelData[links][${i}][link]`, '')
-                        : formData.append(`seventhPanelData[links][${i}][link]`, seventhPanelData.value.links[i].link);
 
-                    //Если ссылка пустая и у нее нет id, то не отправляем данные
-                    //Если все ссылку удалили, то остается пустая заглушка
-                }
+            for (let i = 0; i < seventhPanelData.value.links.length; i++) {
+                !seventhPanelData.value.links[i].link
+                    ? formData.append(`[links][${i}][link]`, '')
+                    : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
             }
+
             emit('isSent', isFirstSent.value)
             emit('formData', formData)
             console.log('7', '2')
@@ -939,8 +936,8 @@ const focusOut = () => {
             if (ninthPanelData.value.links.length) {
                 for (let i = 0; i < ninthPanelData.value.links.length; i++) {
                     !ninthPanelData.value.links[i].link
-                        ? formData.append(`ninthPanelData.value.value[links][${i}][link]`, '')
-                        : formData.append(`ninthPanelData.value[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                        ? formData.append(`[links][${i}][link]`, '')
+                        : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
                 }
             }
             emit('isSent', isFirstSent.value)
@@ -978,35 +975,43 @@ const deleteLink = async (number) => {
 watchEffect(() => {
     if (props.panel_number == 6) {
         console.log('data 6', props.id)
+
+
+        if (props.data) {
+            console.log('6')
+            isFirstSent.value = false
+            sixPanelData.value = { ...props.data }
+            if (!sixPanelData.value.links.length) sixPanelData.value.links.push({ link: '' })
+        }
+
         emit('getId', props.id)
         emit('getPanelNumber', props.panel_number)
-        if (props.data) {
-            sixPanelData.value = { ...props.data }
-        }
     } else if (props.panel_number == 7) {
         console.log('data 7', props.id)
-        if (!props.data.links.length) {
-            props.data.links.push({ link: '' });
-            seventhPanelData.value.links.push({ link: ' ' });
-            console.log('data 7', props.data.links, seventhPanelData.links)
-        }
-        emit('getId', props.id)
-        emit('getPanelNumber', props.panel_number)
         if (props.data) {
+            console.log('7')
             isFirstSent.value = false;
             seventhPanelData.value = { ...props.data }
+            if (!seventhPanelData.value.links.length) seventhPanelData.value.links.push({ link: '' })
         }
+
+
+        emit('getId', props.id)
+        emit('getPanelNumber', props.panel_number)
+
+
     } else if (props.panel_number == 9) {
         console.log('data 9', props.id)
-        if (!props.data.links.length) {
-            ninthPanelData.value.links.push({ link: '' });
+
+        if (props.data) {
+            console.log('9')
+            isFirstSent.value = false;
+            ninthPanelData.value = { ...props.data }
+            if (!ninthPanelData.value.links.length) ninthPanelData.value.links.push({ link: '' })
         }
         emit('getId', props.id)
         emit('getPanelNumber', props.panel_number)
-        if (props.data) {
-            isFirstSent.value = false;
-            ninthPanelData.value = { ...props.data }
-        }
+
     }
 })
 </script>

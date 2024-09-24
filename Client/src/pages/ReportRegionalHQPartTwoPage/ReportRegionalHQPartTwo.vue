@@ -265,17 +265,18 @@ const reportData = ref({
 });
 const preloader = ref(true);
 const panel_id = ref(1);
-const panel_num = ref(6);
+const panel_num = ref(null);
 // const panel = ref(null);
 
 const setId = (id) => {
   panel_id.value = id;
   console.log('panel_id', panel_id.value, id);
 }
+
 const setPanelNumber = (number) => {
-  panel_num.value = number;
   console.log('panel_num', panel_num.value, number);
-}
+    panel_num.value = number;
+  }
 
 // const sendPanel = (p) => {
 //   panel.value = p;
@@ -440,7 +441,9 @@ watchEffect(() => {
   if (roleStore.experts?.is_central_expert) {
     centralExpert.value = true;
   }
+
   getReportData(panel_id.value);
+
 });
 </script>
 <style>

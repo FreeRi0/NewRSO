@@ -12,7 +12,7 @@
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)" @getId="getId($event)" @getPanelNumber="getPanelNumber($event)" :data="sixPanelData"
+            @formData="formData($event, item.id)" @getId="getId($event)" @is-sent="sent($event)" @getPanelNumber="getPanelNumber($event)" :data="sixPanelData"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item">
           </SeventhPanelForm>
@@ -37,12 +37,14 @@ const props = defineProps({
   data: Object,
 });
 
-
-
-
+const isFirstSent = ref(true);
+const sent = (sentVal) => {
+  console.log('is sent: ', sentVal, isFirstSent.value);
+  isFirstSent.value = sentVal;
+}
 const emit = defineEmits(['getData', 'getId', 'getPanelNumber'])
 
-const isFirstSent = ref(true);
+
 
 const sixPanelData = ref({
   number_of_members: 0,
