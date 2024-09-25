@@ -5,14 +5,11 @@
       <v-expansion-panel v-show="items.length" v-for="item in items" :key="item.id"><v-expansion-panel-title>
           <div class="title_wrap">
             <p class="form__title">{{ item.name }}</p>
-            <div class="title_wrap__items">
-              <p class="form__title month" v-if="item.month">{{ item.month }}</p>
-              <p class="form__title city" v-if="item.city">{{ item.city }}</p>
-            </div>
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="9" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)"  @uploadFile="uploadFile($event, item.id)" @getId="getId($event)" :data="ninthPanelData"
+            @formData="formData($event, item.id)" @uploadFile="uploadFile($event, item.id)"
+            @getId="getId($event)" @getPanelNumber="getPanelNumber($event)" :data="ninthPanelData"
             @deleteFile="deleteFile($event, item.id)" :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
@@ -23,6 +20,7 @@
 <script setup>
 import { ref, onMounted, watchEffect } from "vue";
 import { SeventhPanelForm } from "./index";
+import { reportPartTwoService } from "@services/ReportService.ts";
 import { HTTP } from "@app/http";
 
 const props = defineProps({
@@ -36,9 +34,9 @@ const props = defineProps({
 });
 
 const panel = ref(null);
-const emit = defineEmits(['getData', 'getId'])
+const emit = defineEmits(['getData', 'getId', 'getPanelNumber'])
 const ninthPanelData = ref({
-  event_happened: 'Нет',
+  event_happened: false,
   links: [{
     link: '',
   }],
@@ -47,11 +45,17 @@ const ninthPanelData = ref({
   file_type: '',
   comment: '',
 });
-const isFirstSent = ref(true);
+const isFirstSent = ref(null);
+
+// const sent = (sentVal) => {
+//   console.log('is sent: ', sentVal, isFirstSent.value);
+//   isFirstSent.value = sentVal;
+// }
 
 const formData = async (reportData, reportNumber) => {
   try {
-    if (isFirstSent.value) {
+    console.log('send2', isFirstSent.value)
+    if (isFirstSent.value === true) {
       console.log('First time sending data');
       await reportPartTwoService.createMultipleReportAll(reportData, '9', reportNumber, true);
     } else {
@@ -75,6 +79,11 @@ const getId = (id) => {
   emit('getId', id);
 }
 
+const getPanelNumber = (number) => {
+  console.log('num', number);
+  emit('getPanelNumber', number);
+}
+
 const getItems = async () => {
   try {
     const response = await HTTP.get('regional_competitions/reports/event_names/r9-event-names/');
@@ -91,7 +100,7 @@ const uploadFile = async (reportData, reportNumber) => {
   } else {
     let { data: { document } } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
 
-   ninthPanelData.value.document = document.split('/').at(-1);
+    ninthPanelData.value.document = document.split('/').at(-1);
   }
 };
 
@@ -105,9 +114,24 @@ const deleteFile = async (reportData, reportNumber) => {
 };
 
 watchEffect(() => {
-  if (props.data) {
+  console.log(isFirstSent, props.data)
+  if (Object.keys(props.data).length > 0) {
+    console.log('data yes')
     isFirstSent.value = false;
     ninthPanelData.value = { ...props.data }
+  } else {
+    console.log('data no')
+    isFirstSent.value = true;
+    ninthPanelData.value = {
+      event_happened: false,
+      links: [{
+        link: '',
+      }],
+      document: '',
+      file_size: null,
+      file_type: '',
+      comment: '',
+    };
   }
 });
 
@@ -142,17 +166,6 @@ onMounted(async () => {
   column-gap: 40px;
   width: 100%;
   max-width: 900px;
-
-  &__items {
-    display: flex;
-    width: 100%;
-    column-gap: 20px;
-    max-width: 290px;
-
-    @media screen and (max-width: 578px) {
-      flex-direction: column;
-    }
-  }
 
   @media screen and (max-width: 1024px) {
     display: flex;

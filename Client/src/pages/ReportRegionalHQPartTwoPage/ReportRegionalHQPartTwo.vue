@@ -76,8 +76,9 @@
               мероприятиях и&nbsp;проектах (в&nbsp;том числе и&nbsp;трудовых) &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <sixth-panel @get-data="setData" @getId="setId" :district-headquarter-commander="districtExpert"
-                :data="reportData.six" :central-headquarter-commander="centralExpert" />
+              <sixth-panel @get-data="setData" @getId="setId" @getPanelNumber="setPanelNumber"
+                :district-headquarter-commander="districtExpert" :data="reportData.six"
+                :central-headquarter-commander="centralExpert" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -86,8 +87,9 @@
               и&nbsp;конкурсах &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <seventh-panel @get-data="setData" @getId="setId" :district-headquarter-commander="districtExpert"
-                :data="reportData.seventh" :central-headquarter-commander="centralExpert" />
+              <seventh-panel @get-data="setData" @getId="setId" @getPanelNumber="setPanelNumber"
+                :district-headquarter-commander="districtExpert" :data="reportData.seventh"
+                :central-headquarter-commander="centralExpert" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -106,8 +108,9 @@
               9. Организация обязательных общесистемных мероприятий РСО на&nbsp;региональном уровне &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <ninth-panel @get-data="setData" @getId="setId" :district-headquarter-commander="districtExpert"
-                :data="reportData.ninth" :central-headquarter-commander="centralExpert" />
+              <ninth-panel @get-data="setData" @getId="setId" @getPanelNumber="setPanelNumber"
+                :district-headquarter-commander="districtExpert" :data="reportData.ninth"
+                :central-headquarter-commander="centralExpert" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -239,7 +242,6 @@ import { useRoleStore } from "@layouts/store/role.ts";
 import { HTTP } from '@app/http';
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { report } from 'process';
-
 const districtExpert = ref(false);
 const centralExpert = ref(false);
 const reportData = ref({
@@ -263,11 +265,23 @@ const reportData = ref({
 });
 const preloader = ref(true);
 const panel_id = ref(1);
+const panel_num = ref(null);
+// const panel = ref(null);
 
 const setId = (id) => {
   panel_id.value = id;
   console.log('panel_id', panel_id.value, id);
 }
+
+const setPanelNumber = (number) => {
+  console.log('panel_num', panel_num.value, number);
+    panel_num.value = number;
+  }
+
+// const sendPanel = (p) => {
+//   panel.value = p;
+//   console.log('panel', panel.value, p)
+// }
 
 const roleStore = useRoleStore();
 
@@ -290,12 +304,42 @@ const downloadReportAll = (id) => {
     });
 };
 
+const errorHandler = async (error, id) => {
+  if (error.response && error.response.status === 404) {
+    console.log('An error occurred: ', error);
+
+    const url = 'http://213.139.208.147:30000/api/v1/regional_competitions/me/reports';
+
+    if (error.response.request.responseURL.includes(url + '/6/')) {
+      reportData.value.six = {};
+      console.log('Data not found for panel 6', reportData.value.six);
+    } else if (error.response.request.responseURL.includes(url + '/7/')) {
+      console.log('Data not found for panel 7');
+      reportData.value.seventh = {};
+    } else if (error.response.request.responseURL.includes(url + '/9/')) {
+      console.log('Data not found for panel 9');
+      reportData.value.ninth = {};
+    } else {
+      console.log('Data found for panel 6');
+      reportData.value.six = (await reportPartTwoService.getMultipleReport('6', id)).data;
+      console.log('Data found for panel 7');
+      reportData.value.seventh = (await reportPartTwoService.getMultipleReport('7', id)).data;
+      console.log('Data found for panel 9');
+      reportData.value.ninth = (await reportPartTwoService.getMultipleReport('9', id)).data;
+    }
+  } else {
+    console.log('An unexpected error occurred: ', error);
+  }
+};
 const getReportData = async (id) => {
   try {
     if (centralExpert.value || districtExpert.value) {
       reportData.value.first = (await reportPartTwoService.getReportDH('1', '1')).data;
       reportData.value.fourth = (await reportPartTwoService.getReportDH('4', '1')).data;
       reportData.value.fifth = (await reportPartTwoService.getReportDH('5', '1')).data;
+      reportData.value.six = (await reportPartTwoService.getMultipleReportDH('6', id)).data;
+      reportData.value.seventh = (await reportPartTwoService.getMultipleReportDH('7', id)).data;
+      reportData.value.ninth = (await reportPartTwoService.getMultipleReportDH('9', id)).data;
       reportData.value.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', '1')).data;
       reportData.value.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', '1')).data;
       reportData.value.eleventh = (await reportPartTwoService.getReportDH('11', '1')).data;
@@ -309,9 +353,15 @@ const getReportData = async (id) => {
       reportData.value.first = (await reportPartTwoService.getReport('1')).data;
       reportData.value.fourth = (await reportPartTwoService.getReport('4')).data;
       reportData.value.fifth = (await reportPartTwoService.getReport('5')).data;
-      reportData.value.six = (await reportPartTwoService.getMultipleReport('6', id)).data;
-      reportData.value.seventh = (await reportPartTwoService.getMultipleReport('7', id)).data;
-      // reportData.value.ninth = (await reportPartTwoService.getMultipleReport('9', id)).data; todo: ломает загрузку остальных показателей
+      if (panel_num.value == 6) {
+        reportData.value.six = (await reportPartTwoService.getMultipleReport('6', id)).data;
+      }
+      else if (panel_num.value == 7) {
+        reportData.value.seventh = (await reportPartTwoService.getMultipleReport('7', id)).data;
+      }
+      else if (panel_num.value == 9) {
+        reportData.value.ninth = (await reportPartTwoService.getMultipleReport('9', id)).data;
+      }
       reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
       reportData.value.tenth.second = (await reportPartTwoService.getMultipleReport('10', '2')).data;
       reportData.value.eleventh = (await reportPartTwoService.getReport('11')).data;
@@ -323,6 +373,7 @@ const getReportData = async (id) => {
       reportData.value.nineteenth = (await reportPartTwoService.getReport('19')).data;
     }
   } catch (e) {
+    errorHandler(e, id);
     console.log('getReportData error: ', e)
   } finally {
     preloader.value = false;
@@ -390,7 +441,9 @@ watchEffect(() => {
   if (roleStore.experts?.is_central_expert) {
     centralExpert.value = true;
   }
+
   getReportData(panel_id.value);
+
 });
 </script>
 <style>
