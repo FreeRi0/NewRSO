@@ -8,9 +8,9 @@
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="9" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)" @is-sent="sent($event)" @uploadFile="uploadFile($event, item.id)"
-            @getId="getId($event)" @getPanelNumber="getPanelNumber($event)" :data="ninthPanelData" @deleteFile="deleteFile($event, item.id)"
-            :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
+            @formData="formData($event, item.id)" @uploadFile="uploadFile($event, item.id)"
+            @getId="getId($event)" @getPanelNumber="getPanelNumber($event)" :data="ninthPanelData"
+            @deleteFile="deleteFile($event, item.id)" :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
     </v-expansion-panels>
@@ -45,12 +45,12 @@ const ninthPanelData = ref({
   file_type: '',
   comment: '',
 });
-const isFirstSent = ref(true);
+const isFirstSent = ref(null);
 
-const sent = (sentVal) => {
-  console.log('is sent: ', sentVal, isFirstSent.value);
-  isFirstSent.value = sentVal;
-}
+// const sent = (sentVal) => {
+//   console.log('is sent: ', sentVal, isFirstSent.value);
+//   isFirstSent.value = sentVal;
+// }
 
 const formData = async (reportData, reportNumber) => {
   try {
@@ -115,9 +115,23 @@ const deleteFile = async (reportData, reportNumber) => {
 
 watchEffect(() => {
   console.log(isFirstSent, props.data)
-  if (props.data) {
+  if (Object.keys(props.data).length > 0) {
+    console.log('data yes')
     isFirstSent.value = false;
     ninthPanelData.value = { ...props.data }
+  } else {
+    console.log('data no')
+    isFirstSent.value = true;
+    ninthPanelData.value = {
+      event_happened: false,
+      links: [{
+        link: '',
+      }],
+      document: '',
+      file_size: null,
+      file_type: '',
+      comment: '',
+    };
   }
 });
 

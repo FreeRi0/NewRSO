@@ -12,7 +12,7 @@
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="7" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)" @is-sent="sent($event)" @uploadFile="uploadFile($event, item.id)"
+            @formData="formData($event, item.id)"  @uploadFile="uploadFile($event, item.id)"
             @deleteFile="deleteFile($event, item.id)" @getId="getId($event)" @getPanelNumber="getPanelNumber($event)" :data="seventhPanelData"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
@@ -27,6 +27,7 @@ import { SeventhPanelForm } from "./index";
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { HTTP } from "@app/http";
 
+// @is-sent="sent($event)"
 const props = defineProps({
   districtHeadquarterCommander: {
     type: Boolean
@@ -49,11 +50,11 @@ const seventhPanelData = ref({
   file_type: '',
   comment: '',
 });
-const isFirstSent = ref(true);
-const sent = (sentVal) => {
-  console.log('is sent: ', sentVal, isFirstSent.value);
-  isFirstSent.value = sentVal;
-}
+const isFirstSent = ref(null);
+// const sent = (sentVal) => {
+//   console.log('is sent: ', sentVal, isFirstSent.value);
+//   isFirstSent.value = sentVal;
+// }
 
 const formData = async (reportData, reportNumber) => {
   try {
@@ -116,10 +117,22 @@ const getItems = async () => {
 }
 
 watchEffect(() => {
-  if (props.data) {
+  if (Object.keys(props.data).length > 0) {
+    console.log('data received', props.data);
     isFirstSent.value = false;
     seventhPanelData.value = { ...props.data }
-    emit('send-panel', panel.value);
+  } else {
+    isFirstSent.value = true;
+    seventhPanelData.value = {
+      prize_place: 'Нет',
+      links: [{
+        link: '',
+      }],
+      document: '',
+      file_size: null,
+      file_type: '',
+      comment: '',
+    };
   }
 
 });

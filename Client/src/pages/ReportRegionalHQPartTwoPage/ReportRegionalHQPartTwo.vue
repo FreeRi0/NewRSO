@@ -311,8 +311,8 @@ const errorHandler = async (error, id) => {
     const url = 'http://213.139.208.147:30000/api/v1/regional_competitions/me/reports';
 
     if (error.response.request.responseURL.includes(url + '/6/')) {
-      console.log('Data not found for panel 6');
       reportData.value.six = {};
+      console.log('Data not found for panel 6', reportData.value.six);
     } else if (error.response.request.responseURL.includes(url + '/7/')) {
       console.log('Data not found for panel 7');
       reportData.value.seventh = {};
@@ -360,7 +360,7 @@ const getReportData = async (id) => {
         reportData.value.seventh = (await reportPartTwoService.getMultipleReport('7', id)).data;
       }
       else if (panel_num.value == 9) {
-        reportData.value.seventh = (await reportPartTwoService.getMultipleReport('9', id)).data;
+        reportData.value.ninth = (await reportPartTwoService.getMultipleReport('9', id)).data;
       }
       reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
       reportData.value.tenth.second = (await reportPartTwoService.getMultipleReport('10', '2')).data;
