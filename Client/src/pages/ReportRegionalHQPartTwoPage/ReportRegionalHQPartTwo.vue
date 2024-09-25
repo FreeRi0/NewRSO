@@ -158,8 +158,12 @@
               13. Охват членов РО&nbsp;РСО, принявших участие во&nbsp;Всероссийском дне ударного труда &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <thirteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                                :data="reportData.thirteenth"/>
+              <thirteenth-panel
+                  :districtExpert="districtExpert"
+                  :centralExpert="centralExpert"
+                  @get-data="setData"
+                  :data="reportData.thirteenth"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -234,7 +238,7 @@
         variant="text"
         label="Отправить отчет"
         size="large"
-        @click="sentReport"
+        @click="sendReport"
     />
   </div>
 </template>
@@ -452,8 +456,21 @@ const setData = (data, panel, number = 0) => {
   console.log('setData: ', reportData.value)
 };
 
-const sentReport = () => {
+const sendReport = async () => {
   console.log('reportData: ', reportData.value)
+  // try {
+  //   await reportPartTwoService.sendReport(reportData.value.first, '1');
+  //   await reportPartTwoService.sendReport(reportData.value.fourth, '4');
+  //   await reportPartTwoService.sendReport(reportData.value.fifth, '5');
+  //   await reportPartTwoService.sendReport(reportData.value.eleventh, '11');
+  //   await reportPartTwoService.sendReport(reportData.value.twelfth, '12');
+  //   await reportPartTwoService.sendReport(reportData.value.thirteenth, '13');
+  //   await reportPartTwoService.sendReport(reportData.value.sixteenth, '16');
+  //   await reportPartTwoService.sendMultipleReport(reportData.value.tenth.first, '10', '1');
+  //   await reportPartTwoService.sendMultipleReport(reportData.value.tenth.second, '10', '2');
+  // } catch (e) {
+  //   console.log('sendReport error: ', e)
+  // }
 }
 
 watchEffect(() => {
