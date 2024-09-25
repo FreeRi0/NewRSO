@@ -42,7 +42,10 @@ const urls_get = [
 HTTP.interceptors.request.use(
     (config) => {
         const configUrl = config.url?.split('?').shift();
-        if (urls.some((item) => item === configUrl) || urls_get.some((item) => item === configUrl) && config.method === 'get') {
+        if (urls.some((item) => item === configUrl) ||
+            urls_get.some((item) => item === configUrl) && config.method === 'get' ||
+            configUrl === '/services/front_errors/' && !localStorage.getItem('jwt_token')
+        ) {
             delete config.headers.Authorization;
         } else {
             config.headers.Authorization =
@@ -62,8 +65,8 @@ HTTP.interceptors.response.use(
     async (err) => {
         if (err.response) {
             // Access Token was expired
+            const originalRequest = err.config;
             if (err.response.status === 401) {
-                const originalRequest = err.config;
                 const userStore = useUserStore();
                 try {
                     console.log('here');
@@ -139,6 +142,15 @@ HTTP.interceptors.response.use(
                 } catch (error) {
                     console.log('here 8');
                     return Promise.reject(error);
+                }
+            } else if (err.response.status !== 401 && originalRequest.url !== '/services/front_errors/') {
+                if (window.location.hostname === 'localhost' || window.location.hostname === 'rso.sprint.1t' || window.location.hostname === '213.129.208.147') {
+                    HTTP.post('/services/front_errors/', {
+                        url: err.config.baseURL.substring(0, err.config.baseURL.length - 1) + err.config.url,
+                        error_code: err.response.status,
+                        error_description: 'Error: ' + JSON.stringify(err.response.data),
+                        method: err.config.method
+                    }).then().catch()
                 }
             }
 

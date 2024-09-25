@@ -8,7 +8,7 @@
           <div style="display: flex; justify-content: space-between;">
             <InputReport v-model:value="event.participants_number" :id="event.participants_number"
               name="participants_number" class="form__input" type="number" placeholder="Введите число"
-              @focusout="focusOut(index)" />
+              @focusout="focusOut" />
           </div>
         </div>
         <Button class="form__field-delete-button" v-if="index > 0" label="Удалить мероприятие"
@@ -19,13 +19,13 @@
           <label style="max-width: 280px;" class="form__label" for="start_date">Дата начала проведения мероприятия <sup
               class="valid-red">*</sup></label>
           <InputReport v-model:value="event.start_date" :id="event.start_date" name="start_date" class="form__input"
-            type="date" @focusout="focusOut(index)" />
+            type="date" @focusout="focusOut" />
         </div>
         <div class="form__field">
           <label style="max-width: 300px;" class="form__label" for="end_date">Дата окончания проведения мероприятия <sup
               class="valid-red">*</sup></label>
           <InputReport v-model:value="event.end_date" :id="event.end_date" name="end_date" class="form__input"
-            type="date" @focusout="focusOut(index)" />
+            type="date" @focusout="focusOut" />
         </div>
       </div>
       <div class="form__field-event">
@@ -67,7 +67,7 @@
         <p class="form__label">Ссылка на группу мероприятия в социальных сетях <sup class="valid-red">*</sup></p>
         <div class="form__add-link" v-for="(link, i) in events[index].links" :key="i">
           <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__input-add-link" type="text"
-            placeholder="https://vk.com/cco_monolit" @focusout="focusOut(index)" />
+            placeholder="https://vk.com/cco_monolit" @focusout="focusOut" />
           <Button v-if="events[index].links.length === i + 1" label="+ Добавить ссылку" @click="addLink(index)"
             class="form__add-link-button" />
           <Button class="form__add-link-button" v-else label="Удалить" @click="deleteLink(index, i)" />
@@ -404,14 +404,28 @@ const events = ref([
 
 const emit = defineEmits(['getData']);
 
+const focusOut = async () => {
+  fourthPanelData.value.events = [...events.value];
+  try {
+    if (isFirstSent.value) {
+      await reportPartTwoService.createReport(fourthPanelData.value, '4');
+    } else {
+      const { data } = await reportPartTwoService.createReportDraft(setFormData(), '4', true);
+      emit('getData', data, 4);
+    }
+  } catch (e) {
+    console.log('focusOut error:', e);
+  }
+};
+
 const addLink = (index) => {
   events.value[index].links.push({ link: '' })
 };
 const deleteLink = async (eventIndex, linkIndex) => {
-  events.value[eventIndex].links.splice(linkIndex, 1);
-  fourthPanelData.value.events = [...events.value];
-  await reportPartTwoService.createReportDraft(fourthPanelData.value, '4');
+  let { data } = await reportPartTwoService.createReportDraft(setFormData(null, eventIndex, false, false, true, linkIndex), '4', true);
+  emit('getData', data, 4);
 };
+
 const addEvent = () => {
   events.value.push({
     participants_number: '',
@@ -426,74 +440,56 @@ const addEvent = () => {
     is_interregional: false,
   })
 };
-const focusOut = async (index) => {
-  fourthPanelData.value.events = [...events.value];
-  try {
-    if (isFirstSent.value) {
-      await reportPartTwoService.createReport(fourthPanelData.value, '4');
-    } else {
-      let formData = new FormData();
-      formData.append('comment', fourthPanelData.value.comment);
-      if (events.value[index].links.length) {
-        for (let i = 0; i < events.value[index].links.length; i++) {
-          formData.append(`events.value[${index}][links][${i}][link]`, events.value[index].links[i].link);
-        }
-      }
-      if(events.value[index].participants_number)formData.append(`events[${index}][participants_number]`, events.value[index].participants_number);
-      if(events.value[index].end_date) formData.append(`events[${index}][end_date]`, events.value[index].end_date);
-      if(events.value[index].start_date) formData.append(`events[${index}][start_date]`, events.value[index].start_date);
-      formData.append(`events[${index}][is_interregional]`, events.value[index].is_interregional);
-
-      const { data } = await reportPartTwoService.createReportDraft(formData, '4', true);
-      emit('getData', data, 4);
-    }
-  } catch (e) {
-    console.log('focusOut error:', e);
-  }
-};
 const deleteEvent = async (index) => {
-  events.value = events.value.filter((el, i) => index !== i);
-  fourthPanelData.value.events = [...events.value];
+  // events.value = events.value.filter((el, i) => index !== i);
+  // fourthPanelData.value.events = [...events.value];
   try {
-    await reportPartTwoService.createReportDraft(fourthPanelData.value, '4');
+    let { data } = await reportPartTwoService.createReportDraft(setFormData(null, index, true), '4', true);
+    emit('getData', data, 4);
   } catch (e) {
     console.log('deleteEvent error: ', e);
   }
 };
 
 const uploadFile = async (event, index) => {
-  let formData = new FormData();
-  formData.append('comment', fourthPanelData.value.comment);
-
-  if (events.value[index].links.length) {
-    for (let i = 0; i < events.value[index].links.length; i++) {
-      formData.append(`events.value[${index}][links][${i}][link]`, events.value[index].links[i].link);
-    }
-  }
-  formData.append(`events[${index}][regulations]`, event.target.files[0]);
-  formData.append(`events[${index}][participants_number]`, events.value[index].participants_number);
-  formData.append(`events[${index}][end_date]`, events.value[index].end_date);
-  formData.append(`events[${index}][start_date]`, events.value[index].start_date);
-  formData.append(`events[${index}][is_interregional]`, events.value[index].is_interregional);
-  const { data } = await reportPartTwoService.createReportDraft(formData, '4', true);
+  const { data } = await reportPartTwoService.createReportDraft(setFormData(event.target.files[0], index), '4', true);
   emit('getData', data, 4);
 };
 const deleteFile = async (index) => {
-  let formData = new FormData();
-  formData.append('comment', fourthPanelData.value.comment);
-
-  if (events.value[index].links.length) {
-    for (let i = 0; i < events.value[index].links.length; i++) {
-      formData.append(`events.value[${index}][links][${i}][link]`, events.value[index].links[i].link);
-    }
-  }
-  formData.append(`events[${index}][regulations]`, '');
-  formData.append(`events[${index}][participants_number]`, events.value[index].participants_number);
-  formData.append(`events[${index}][end_date]`, events.value[index].end_date);
-  formData.append(`events[${index}][start_date]`, events.value[index].start_date);
-  formData.append(`events[${index}][is_interregional]`, events.value[index].is_interregional);
-  const { data } = await reportPartTwoService.createReportDraft(formData, '4', true);
+  setFormData(null, index, false, true)
+  const { data } = await reportPartTwoService.createReportDraft(setFormData(null, index, false, true), '4', true);
   emit('getData', data, 4);
+};
+
+const setFormData = (file = null, index = null, isDeleteEvent = false, isDeleteFile = false, isLinkDelete = false, linkIndex = null) => {
+  let formData = new FormData();
+
+  formData.append('comment', fourthPanelData.value.comment);
+  events.value.forEach((event, i) => {
+    if (isDeleteEvent && index === i) {
+      return;
+    } else {
+      if (event.participants_number) formData.append(`events[${i}][participants_number]`, event.participants_number);
+      if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
+      if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
+      formData.append(`events[${i}][is_interregional]`, event.is_interregional);
+      if (isLinkDelete && index === i) {
+        event.links.splice(linkIndex, 1);
+      }
+      if (file && index === i) {
+        formData.append(`events[${i}][regulations]`, file);
+      }
+      if (isDeleteFile  && index === i) {
+        formData.append(`events[${i}][regulations]`, '');
+      }
+      if (event.links.length) {
+        for (let j = 0; j < event.links.length; j++) {
+          if (event.links[j].link) formData.append(`events[${i}][links][${j}][link]`, event.links[j].link);
+        }
+      }
+    }
+  })
+  return formData;
 };
 
 watchEffect(() => {
@@ -501,7 +497,10 @@ watchEffect(() => {
     isFirstSent.value = false;
     events.value = [...props.data.events];
     fourthPanelData.value.comment = props.data.comment;
-    if (!events.value[0].links.length) events.value[0].links.push({link: ''})
+
+    // events.value.forEach((event) => {
+    //   if (!event.links.length) event.links.push({link: ''})
+    // });
   }
 });
 </script>
