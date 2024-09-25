@@ -40,7 +40,7 @@
       </div>
       <div class="report__add-file">
         <div class="form__field-event-file">
-          <label class="form__label" for="4">Положение о мероприятии <sup class="valid-red">*</sup></label>
+          <label class="form__label" for="4">Положение о проекте <sup class="valid-red">*</sup></label>
           <InputReport class="form-input__file-input" v-if="!event.regulations" isFile type="file"
                        id="scan_file" name="scan_file" width="100%" @change="uploadFile($event, index)"/>
           <div v-else class="form__file-box">

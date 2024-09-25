@@ -58,8 +58,12 @@
               (слеты, школы, фестивали, турниры и&nbsp;прочие)
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <fourth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                            :data="reportData.fourth"/>
+              <fourth-panel
+                  :districtExpert="districtExpert"
+                  :centralExpert="centralExpert"
+                  @get-data="setData"
+                  :data="reportData.fourth"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -188,8 +192,11 @@
               по&nbsp;комиссарской деятельности &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <sixteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                               :data="reportData.sixteenth"/>
+              <sixteenth-panel
+                  :districtExpert="districtExpert"
+                  :centralExpert="centralExpert"
+                  @get-data="setData"
+                  :data="reportData.sixteenth"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -255,6 +262,7 @@ import { SvgIcon } from '@shared/ui/SvgIcon';
 import { useRoleStore } from "@layouts/store/role.ts";
 import { HTTP } from '@app/http';
 import { reportPartTwoService } from "@services/ReportService.ts";
+
 const districtExpert = ref(false);
 const centralExpert = ref(false);
 const reportData = ref({
