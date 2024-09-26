@@ -14,12 +14,12 @@
             (props.districtExpert && eighteenthPanelData.projects) ||
             (props.centralExpert && eighteenthPanelData.projects)">
       <div class="report__field-group" v-for="(project, index) in projects" :key="index">
-        <div class="report__fieldset"
+        <div class="report__fieldset report__file-input"
           v-if="!(props.centralExpert || props.districtExpert) ||
                 (props.districtExpert && project.file) ||
                 (props.centralExpert && project.file)">
           <label
-            class="form__label"
+            class="form__label report__label"
             :for="project.file"
           >Прикрепить документ</label>
           <InputReport
@@ -35,39 +35,6 @@
             @change="uploadFile($event, index)"
           />
 
-          <!-- <p v-if="project.file">
-            {{project.file}}<br>
-            {{project.file_type }}<br>
-            {{typeof(project.file_size) }}, {{project.file_size}}
-          </p>  -->
-
-          <!-- <div v-if="project.file && typeof project.file === 'string'" class="report__file-box" style=" border: 1px solid red; ">
-            <div class="report__file-name">
-              <SvgIcon 
-                v-if="project.file_type === 'jpg' ||
-                      project.file_type === 'jpeg' ||
-                      project.file_type === 'JPG' ||
-                      project.file_type === 'JPEG'"
-                icon-name="file-jpg" />
-              <SvgIcon v-if="project.file_type === 'pdf'" icon-name="file-pdf" />
-              <SvgIcon v-if="project.file_type === 'png'" icon-name="file-png" />
-
-              <a :href=project.file>{{ project.file.split('/').at(-1) }}</a>
-            </div>
-
-            <span class="report__file-size" v-if="project.file_size">
-                {{ project.file_size.toFixed(1) }}&nbsp;Мб
-            </span>
-
-            <button 
-              v-if="!(props.centralExpert || props.districtExpert)"
-              class="report__button-delete-file"
-              @click="deleteFile(index)"
-            >
-                Удалить
-            </button>
-          </div> -->
-              
           <div 
             v-if="project.file && (typeof project.file !== 'string')"
             class="text-center"
@@ -76,7 +43,6 @@
           </div>
 
           <FileBoxComponent
-            style=" border: 1px solid green; "
             v-if="project.file && typeof project.file === 'string'"
             :file="project.file"
             :fileType="project.file_type"
@@ -97,7 +63,7 @@
                 (props.districtExpert && project.links) ||
                 (props.centralExpert && project.links)">
           <p
-            class="form__label"
+            class="form__label report__label"
             >Ссылка на&nbsp;публикацию
           </p>
           <div class="report__link-list">
@@ -114,24 +80,28 @@
               <div v-if="isError && (i > 0)" class="report__error-block">
                 <span class="report__error-text">Укажите ссылку публикации</span>
               </div>
-              <button
-                v-if="!(props.centralExpert || props.districtExpert) && (i > 0)"
-                @click="deleteLink(index, i)"
-                class="report__btn-link report__btn-link--delete-field"
-              >
-              Удалить поле ввода
-              </button>
-            </div>
 
-            <button
-              v-if="!(props.centralExpert || props.districtExpert)"
-              class="report__btn-link report__btn-link--add-link"
-              @click="addLink(index)"
-            >
-              + Добавить ссылку
-            </button>
-            
-            
+              <!-- <div class="report__btn-block"> -->
+                <button
+                  v-if="!(props.centralExpert || props.districtExpert) && (projects[index].links.length === i + 1)"
+                  class="report__btn-link report__btn-link--add-link"
+                  @click="addLink(index)"
+                >
+                  + Добавить ссылку
+                </button>
+
+                <button
+                  v-if="!(props.centralExpert || props.districtExpert) && (i > 0)"
+                  @click="deleteLink(index, i)"
+                  class="report__btn-link report__btn-link--delete-field"
+                  aria-label="Удалить поле ввода"
+                >
+                  <span>Удалить
+                    <span>поле ввода</span>
+                  </span>
+                </button>
+              <!-- </div> -->
+            </div>
           </div>
         </div>
       </div>
@@ -152,7 +122,7 @@
             (props.districtExpert && eighteenthPanelData.comment) ||
             (props.centralExpert && eighteenthPanelData.comment)">
       <label
-          class="form__label"
+          class="form__label report__label"
           for="comment"
       >Комментарий</label>
       <TextareaReport
@@ -177,7 +147,6 @@
 import { ref, watchEffect } from 'vue';
 import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { FileBoxComponent } from "@entities/RatingRoComponents/components";
-// import { Button } from '@shared/components/buttons';
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { SvgIcon } from '@shared/index';
 
@@ -246,54 +215,12 @@ const uploadFile = async (event, index) => {
           ? formData.append(`projects[${index}][links][${i}][link]`, '')
           : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
         }
-
-        // для первой и остальных ссылок
-        // projects.value[index].links[0].link 
-        // ? formData.append(`projects[${index}][links][0][link]`, projects.value[index].links[0].link)
-        // : formData.append(`projects[${index}][links][0][link]`, '');
-        // for (let i = 0; i < projects.value[index].links.length; i++) {
-
-          // if (!projects.value[index].links[i].link) {
-          //   isError.value = true;
-          //   console.log('ошибка отправки');
-          //   return
-          // } else {
-          //   isError.value = false;
-          //   formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
-          // }
-        // }
-
       }
     }
   }
 
-  // if (projects.value[index].links.length) {
-  //   for (let i = 0; i < projects.value[index].links.length; i++) {
-  //     formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
-  //   }
-  // }
-  // formData.append(`projects[${index}][file]`, projects.value[index].file);  
-
-  // if (!isError.value) {
-  //   const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-  //   emit('getData', data, Number(ID_PANEL));
-  // }
-
   const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
   emit('getData', data, Number(ID_PANEL));
-
-  // try {
-  //   if (isFirstSent.value) {
-  //     let { scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-  //     eighteenthPanelData.value.scan_file = scan_file;
-  //   } else {
-  //     let { data :  scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-  //     eighteenthPanelData.value.scan_file = scan_file;
-  //     emit('getData', scan_file, Number(ID_PANEL));
-  //   }
-  // } catch (e) {
-  //   console.log('focusOut error:', e);
-  // }
 };
 
 const deleteFile = async (index) => {
@@ -316,21 +243,8 @@ const deleteFile = async (index) => {
     }
   }
 
-  // if (projects.value[index].links.length) {
-  //   for (let i = 0; i < projects.value[index].links.length; i++) {
-  //     formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
-  //   }
-  // }
-  // formData.append(`projects[${index}][file]`, '');
-
   const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
   emit('getData', data, Number(ID_PANEL));
-
-  // if (isFirstSent.value) {
-  //   await reportPartTwoService.createReport(formData, ID_PANEL, true);
-  // } else {
-  //   await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-  // }
 };
 
 const addLink = (index) => {
@@ -357,14 +271,6 @@ const deleteLink = async (projectIndex, linkIndex) => {
 
   const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
   emit('getData', data, Number(ID_PANEL));
-
-  // eighteenthPanelData.value.projects = [ ...projects.value ];
-  // await reportPartTwoService.createReportDraft(eighteenthPanelData.value, ID_PANEL);
-  // try {
-  //   await reportPartTwoService.createReportDraft(eighteenthPanelData.value, ID_PANEL);
-  // } catch (e) {
-  //   console.log('deletePublication error: ', e);
-  // }
 };
 
 const addPublication = () => {
@@ -381,17 +287,7 @@ const addPublication = () => {
 };
 
 const focusOut = async () => { 
-  // try {
-  //   if (isFirstSent.value) {
-  //     await reportPartTwoService.createReport(formData, ID_PANEL, true);
-  //   } else {
-  //     const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-  //     emit('getData', data, Number(ID_PANEL));
-  //   }
-  // } catch (e) {
-  //   console.log('focusOut error:', e);
-  // }
-  console.log(eighteenthPanelData.value.comment);
+  // console.log(eighteenthPanelData.value.comment);
   eighteenthPanelData.value.projects = [ ...projects.value ];
   // console.log(eighteenthPanelData.value.projects);
   try {
@@ -413,12 +309,6 @@ const focusOut = async () => {
         }
       }
 
-      // if (projects.value[index].links.length) {
-      //   for (let i = 0; i < projects.value[index].links.length; i++) {
-      //     // formData.append(`projects.value[${index}][links][${i}][link]`, projects.value[index].links[i].link);
-      //     formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
-      //   }
-      // }
       const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
       emit('getData', data, Number(ID_PANEL));
     }
@@ -447,13 +337,6 @@ const deletePublication = async (index) => {
 
   const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
   emit('getData', data, Number(ID_PANEL));
-
-  // eighteenthPanelData.value.projects = [ ...projects.value ];
-  // try {
-  //   await reportPartTwoService.createReportDraft(eighteenthPanelData.value, ID_PANEL);
-  // } catch (e) {
-  //   console.log('deletePublication error: ', e);
-  // }
 };
 
 watchEffect(async () => {
@@ -466,20 +349,6 @@ watchEffect(async () => {
     eighteenthPanelData.value.comment = props.data.comment;
     if (!projects.value[0].links.length) projects.value[0].links.push({link: ''});
   }
-  // try {
-  //   const { data } = 
-  //     props.districtExpert || props.centralExpert
-  //       ? await reportPartTwoService.getReportDH(ID_PANEL, props.reportId)
-  //       : await reportPartTwoService.getReport(ID_PANEL);
-  //   console.log(data);
-  //   if (data) {
-  //     isFirstSent.value = false;
-  //     projects.value = [...data.projects];
-  //     eighteenthPanelData.value.comment = data.comment;
-  //   }
-  // } catch (e) {
-  //   console.log(e);
-  // }
 });
 </script>
 
@@ -490,32 +359,14 @@ watchEffect(async () => {
 .report {
   &__field-group {
     grid-template-columns: 1fr;
-    // margin-bottom: 0;
+    position: relative;
 
     &--column {
       grid-template-columns: 1fr;
     }
 
-    // @media (max-width: 768px) {
-    //   grid-template-columns: 1fr;
-    // }
-  }
-
-  &__fieldset {
-    position: relative;
-  }
-
-  &__btn-link {
-    &--add-link {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-    }
-
-    &--delete-field {
-      margin: 0;
-      // margin-left: auto;
-      margin-left: 40px;
+    @media (max-width: 360px) {
+      padding: 0;
     }
   }
 

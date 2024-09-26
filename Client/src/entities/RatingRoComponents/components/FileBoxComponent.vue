@@ -19,9 +19,10 @@
             @click="clickOnButton"
             class="report__button-delete-file"
             v-bind="$attrs"
+            aria-label="Удалить файл"
             v-if="!(props.centralExpert || props.districtExpert)"
         >
-            Удалить
+            <span>Удалить</span>
         </button>
     </div>
 </template>
