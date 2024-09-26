@@ -437,13 +437,12 @@ watch(
 
     }
 
-    userStore.getCountApp();
+    if (localStorage.getItem('jwt_token') !== null) {
+      userStore.getCountApp();
+    }
   },
   { immediate: true }
 );
-
-
-
 
 onMounted(() => {
     if (localStorage.getItem('jwt_token') !== null) {
