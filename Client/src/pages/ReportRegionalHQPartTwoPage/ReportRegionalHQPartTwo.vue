@@ -291,7 +291,6 @@ const reportData = ref({
 const preloader = ref(true);
 const panel_id = ref(1);
 const panel_num = ref(null);
-// const panel = ref(null);
 
 const setId = (id) => {
   panel_id.value = id;
@@ -299,15 +298,9 @@ const setId = (id) => {
 }
 
 const setPanelNumber = (number) => {
-  console.log('panel_num', panel_num.value, number);
   panel_num.value = number;
+  console.log('panel_num', panel_num.value, number);
 }
-
-// const sendPanel = (p) => {
-//   panel.value = p;
-//   console.log('panel', panel.value, p)
-// }
-
 const roleStore = useRoleStore();
 
 const downloadReportAll = (id) => {
@@ -485,6 +478,12 @@ watchEffect(() => {
   getReportData(panel_id.value);
 
 });
+
+watch(() => panel_num.value, (newPanel) => {
+ panel_num.value = newPanel
+//  console.log(panel_num.value, newPanel)
+ getReportData(panel_id.value);
+})
 </script>
 <style>
 .v-expansion-panel__shadow {

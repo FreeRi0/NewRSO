@@ -78,11 +78,11 @@
                 </div>
                 <div class="form__field-result" style="display: flex; align-items: center;">
                     <v-checkbox class="result-checkbox" id="v-checkbox" />
-                    <div class="hr"></div>
+
                     <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
                 </div>
                 <div class="hr"></div>
-                <div>
+                <div class="form__field-result result-count">
                     <p>0</p>
                 </div>
             </div>
@@ -197,11 +197,10 @@
                 </div>
                 <div class="form__field-result" style="display: flex; align-items: center;">
                     <v-checkbox class="result-checkbox" id="v-checkbox" />
-                    <div class="hr"></div>
                     <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
                 </div>
                 <div class="hr"></div>
-                <div>
+                <div class="form__field-result result-count">
                     <p>0</p>
                 </div>
             </div>
@@ -292,11 +291,12 @@
                             placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
                             counter-visible />
                     </div>
-                    <div>
-                        <v-checkbox label="Итоговое значение" />
+                    <div class="form__field-result" style="display: flex; align-items: center;">
+                        <v-checkbox class="result-checkbox" id="v-checkbox" />
+                        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
                     </div>
                     <div class="hr"></div>
-                    <div>
+                    <div class="form__field-result result-count">
                         <p>0</p>
                     </div>
                 </div>
@@ -416,11 +416,12 @@
                             placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
                             counter-visible />
                     </div>
-                    <div>
-                        <v-checkbox label="Итоговое значение" />
+                    <div class="form__field-result" style="display: flex; align-items: center;">
+                        <v-checkbox class="result-checkbox" id="v-checkbox" />
+                        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
                     </div>
                     <div class="hr"></div>
-                    <div>
+                    <div class="form__field-result result-count">
                         <p>0</p>
                     </div>
                 </div>
@@ -485,11 +486,12 @@
                             autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
                             :max-length-text="3000" counter-visible />
                     </div>
-                    <div>
-                        <v-checkbox label="Итоговое значение" />
+                    <div class="form__field-result" style="display: flex; align-items: center;">
+                        <v-checkbox class="result-checkbox" id="v-checkbox" />
+                        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
                     </div>
                     <div class="hr"></div>
-                    <div>
+                    <div class="form__field-result result-count">
                         <p>0</p>
                     </div>
                 </div>
@@ -582,11 +584,12 @@
                             autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
                             :max-length-text="3000" counter-visible />
                     </div>
-                    <div>
-                        <v-checkbox label="Итоговое значение" />
+                    <div class="form__field-result" style="display: flex; align-items: center;">
+                        <v-checkbox class="result-checkbox" id="v-checkbox" />
+                        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
                     </div>
                     <div class="hr"></div>
-                    <div>
+                    <div class="form__field-result result-count">
                         <p>0</p>
                     </div>
                 </div>
@@ -1001,7 +1004,7 @@ watchEffect(() => {
             isFirstSentSeventh.value = false;
             // emit('isSent', isFirstSentSeventh.value)
             seventhPanelData.value = { ...props.data }
-            if (!seventhPanelData.value.links.length) seventhPanelData.value.links.push({ link: '' })
+            //if (!seventhPanelData.value.links.length) seventhPanelData.value.links.push({ link: '' })
 
         } else {
             console.log('data not received');
@@ -1022,9 +1025,9 @@ watchEffect(() => {
             isFirstSentNinth.value = false;
             // emit('isSent', isFirstSentNinth.value)
             ninthPanelData.value = { ...props.data }
-            if (ninthPanelData.value && !ninthPanelData.value.links.length) {
-                ninthPanelData.value.links.push({ link: '' })
-            }
+            //if (ninthPanelData.value && !ninthPanelData.value.links.length) {
+            //ninthPanelData.value.links.push({ link: '' })
+            // }
 
         } else {
             console.log('data not received');
@@ -1067,6 +1070,25 @@ watchEffect(() => {
 .result-checkbox-text {
     font-family: 'Bert sans';
     font-weight: 700;
+}
+
+.result-count {
+  color: #6D6D6D;
+}
+
+.hr {
+    margin-bottom: 16px;
+    width: 100%;
+    border-top: 1px solid #B6B6B6;
+
+    @media (max-width: 568px) {
+        width: 340px;
+        margin: 0 auto 16px;
+    }
+
+    @media (max-width: 400px) {
+        width: 296px;
+    }
 }
 
 
@@ -1157,6 +1179,19 @@ watchEffect(() => {
 .group-seventh {
     margin-top: 8px;
     border-radius: 10px;
+}
+
+.form__field-result {
+  width: 100%;
+
+  @media (max-width: 568px) {
+    margin: 0 auto;
+    width: 340px;
+  }
+
+  @media (max-width: 400px) {
+    width: 300px;
+  }
 }
 
 .form {
