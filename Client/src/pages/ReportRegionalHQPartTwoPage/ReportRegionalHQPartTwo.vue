@@ -261,7 +261,7 @@ import {
   NineteenthPanel
 } from './components/index'
 import { Button } from '@shared/components/buttons';
-import { ref, watchEffect } from "vue";
+import { ref, watchEffect, watch } from "vue";
 import { SvgIcon } from '@shared/ui/SvgIcon';
 import { useRoleStore } from "@layouts/store/role.ts";
 import { HTTP } from '@app/http';
@@ -474,6 +474,7 @@ watchEffect(() => {
   if (roleStore.experts?.is_central_expert) {
     centralExpert.value = true;
   }
+  console.log('rep', reportData.value)
 
   getReportData(panel_id.value);
 
