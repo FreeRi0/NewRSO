@@ -12,8 +12,8 @@
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="7" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)" @uploadFile="uploadFile($event, item.id)"
-            @deleteFile="deleteFile($event, item.id)" @getId="getId($event)" :data="seventhPanelData"
+            @formData="formData($event, item.id)"  @uploadFile="uploadFile($event, item.id)"
+            @deleteFile="deleteFile($event, item.id)" @getId="getId($event)" @getPanelNumber="getPanelNumber($event)" :data="seventhPanelData"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
@@ -27,6 +27,7 @@ import { SeventhPanelForm } from "./index";
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { HTTP } from "@app/http";
 
+// @is-sent="sent($event)"
 const props = defineProps({
   districtHeadquarterCommander: {
     type: Boolean
@@ -38,7 +39,7 @@ const props = defineProps({
 });
 
 const panel = ref(null);
-const emit = defineEmits(['getData', 'getId'])
+const emit = defineEmits(['getData', 'getId', 'getPanelNumber'])
 const seventhPanelData = ref({
   prize_place: 'Нет',
   links: [{
@@ -49,13 +50,18 @@ const seventhPanelData = ref({
   file_type: '',
   comment: '',
 });
-const isFirstSent = ref(true);
+const isFirstSent = ref(null);
+// const sent = (sentVal) => {
+//   console.log('is sent: ', sentVal, isFirstSent.value);
+//   isFirstSent.value = sentVal;
+// }
 
 const formData = async (reportData, reportNumber) => {
   try {
     if (isFirstSent.value) {
       console.log('First time sending data');
-      await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber, true);
+      await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber);
+      isFirstSent.value = false;
     } else {
       console.log('Second time sending data');
       const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber, true);
@@ -97,6 +103,11 @@ const getId = (id) => {
   emit('getId', id);
 }
 
+const getPanelNumber = (number) => {
+  console.log('num', number);
+  emit('getPanelNumber', number);
+}
+
 const getItems = async () => {
   try {
     const response = await HTTP.get('regional_competitions/reports/event_names/r7-event-names/');
@@ -107,10 +118,24 @@ const getItems = async () => {
 }
 
 watchEffect(() => {
-  if (props.data) {
+  if (Object.keys(props.data).length > 0) {
+    console.log('data received', props.data);
     isFirstSent.value = false;
     seventhPanelData.value = { ...props.data }
+  } else {
+    isFirstSent.value = true;
+    seventhPanelData.value = {
+      prize_place: 'Нет',
+      links: [{
+        link: '',
+      }],
+      document: '',
+      file_size: null,
+      file_type: '',
+      comment: '',
+    };
   }
+
 });
 
 onMounted(async () => {

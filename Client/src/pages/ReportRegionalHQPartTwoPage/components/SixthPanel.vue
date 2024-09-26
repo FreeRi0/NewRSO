@@ -12,7 +12,8 @@
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)" @getId="getId($event)" :data="sixPanelData"
+            @formData="formData($event, item.id)" @getId="getId($event)"
+            @getPanelNumber="getPanelNumber($event)" :data="sixPanelData"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item">
           </SeventhPanelForm>
@@ -37,10 +38,12 @@ const props = defineProps({
   data: Object,
 });
 
-
-const emit = defineEmits(['getData', 'getId'])
-
-const isFirstSent = ref(true);
+const isFirstSent = ref(null);
+// const sent = (sentVal) => {
+//   console.log('is sent: ', sentVal, isFirstSent.value);
+//   isFirstSent.value = sentVal;
+// }
+const emit = defineEmits(['getData', 'getId', 'getPanelNumber'])
 
 const sixPanelData = ref({
   number_of_members: 0,
@@ -50,13 +53,15 @@ const sixPanelData = ref({
   comment: '',
 });
 
-const panel = ref(null);
+const panel = ref(false);
 
 const items = ref([]);
 
 const collapsed = () => {
   panel.value = !panel.value;
 }
+
+// console.log('panel', panel.value)
 
 const getItems = async () => {
   try {
@@ -69,10 +74,12 @@ const getItems = async () => {
 
 const formData = async (reportData, reportNumber) => {
   try {
+    console.log('sent-value', isFirstSent.value)
     // console.log('num', reportNumber)
     if (isFirstSent.value) {
       console.log('First time sending data');
       await reportPartTwoService.createMultipleReportAll(reportData, '6', reportNumber);
+      isFirstSent.value = false;
     } else {
       console.log('Second time sending data');
       const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '6', reportNumber);
@@ -87,10 +94,26 @@ const getId = (id) => {
   console.log('id', id);
   emit('getId', id);
 }
+const getPanelNumber = (number) => {
+  console.log('num', number);
+  emit('getPanelNumber', number);
+}
 watchEffect(() => {
-  if (props.data) {
+  if (Object.keys(props.data).length > 0) {
+    console.log('data received', props.data);
     isFirstSent.value = false;
     sixPanelData.value = { ...props.data }
+    // emit('send-panel', panel.value);
+  } else {
+    console.log('data not received');
+    isFirstSent.value = true;
+    sixPanelData.value = {
+      number_of_members: 0,
+      links: [{
+        link: '',
+      }],
+      comment: '',
+    };
   }
 });
 onMounted(async () => {

@@ -68,7 +68,7 @@ export const reportPartTwoService = {
         })
     },
     createMultipleReportAll(data: object, panel: string, reportNumber: string, withFile = false) {
-        return HTTP.post(`regional_competitions/reports/${panel}/${reportNumber}/all`, data, {
+        return HTTP.post(`regional_competitions/me/reports/${panel}/${reportNumber}/all`, data, {
             headers: {
                 'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
             },
@@ -89,5 +89,13 @@ export const reportPartTwoService = {
 
     getMultipleReportDH(panel: string, reportNumber: string, reportId: string) {
         return HTTP.get(`/regional_competitions/reports/${panel}/${reportNumber}/${reportId}/`)
-    }
+    },
+
+    sendReport(data: object, panel: string) {
+        return HTTP.post(`regional_competitions/me/reports/${panel}/send`, data)
+    },
+
+    sendMultipleReport(data: object, panel: string, reportNumber: string) {
+        return HTTP.post(`regional_competitions/me/reports/${reportNumber}/${panel}/send`, data)
+    },
 }

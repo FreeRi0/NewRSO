@@ -26,7 +26,7 @@
                                 type="radio" @focusout="focusOut" v-model="seventhPanelData.prize_place" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                                }}</label>
+                            }}</label>
                         </div>
                     </div>
                 </div>
@@ -35,16 +35,15 @@
                         Скан подтверждающего документа<sup class="valid-red">*</sup>
                     </label>
                     <InputReport v-if="!seventhPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
-                        id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile"
+                        id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile($event, 7)"
                         :disabled="isDisabled" />
                     <FileBoxComponent v-else :file="seventhPanelData.document" :fileType="seventhPanelData.file_type"
-                        :fileSize="seventhPanelData.file_size" @click="deleteFile"></FileBoxComponent>
+                        :fileSize="seventhPanelData.file_size" @click="deleteFile(7)"></FileBoxComponent>
                 </div>
 
                 <div class="form__field">
                     <label class="form__label mt-4" for="14">Ссылка на публикацию о победе
                         <sup class="valid-red">*</sup></label>
-
                     <div class="form__wrapper" v-for="(item, index) in seventhPanelData.links" :key="index">
                         <InputReport @focusout="focusOut" name="14" :is-link="true"
                             placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
@@ -77,11 +76,13 @@
                         autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
                         :max-length-text="3000" counter-visible />
                 </div>
-                <div>
-                    <v-checkbox label="Итоговое значение" />
+                <div class="form__field-result" style="display: flex; align-items: center;">
+                    <v-checkbox class="result-checkbox" id="v-checkbox" />
+
+                    <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
                 </div>
                 <div class="hr"></div>
-                <div>
+                <div class="form__field-result result-count">
                     <p>0</p>
                 </div>
             </div>
@@ -156,7 +157,7 @@
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                                }}</label>
+                            }}</label>
                         </div>
                     </div>
                 </div>
@@ -165,9 +166,9 @@
                         Скан документа, подтверждающего проведение акции
                     </label>
                     <InputReport v-if="!ninthPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
-                        id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile" />
+                        id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile($event, 9)" />
                     <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
-                        :fileSize="ninthPanelData.file_size" @click="deleteFile"></FileBoxComponent>
+                        :fileSize="ninthPanelData.file_size" @click="deleteFile(9)"></FileBoxComponent>
                 </div>
 
                 <div class="form__field">
@@ -179,10 +180,10 @@
                         <InputReport @focusout="focusOut" name="14" :is-link="true"
                             placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
                             class="mb-2" />
-                        <div class="add_link" @click="addLink(7)" v-if="ninthPanelData.links.length === index + 1">
+                        <div class="add_link" @click="addLink(9)" v-if="ninthPanelData.links.length === index + 1">
                             + Добавить ссылку
                         </div>
-                        <div class="add_link" @click="deleteLink(7)" v-else>
+                        <div class="add_link" @click="deleteLink(9)" v-else>
                             Удалить поле ввода
                         </div>
 
@@ -194,11 +195,12 @@
                         autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
                         :max-length-text="3000" counter-visible />
                 </div>
-                <div>
-                    <v-checkbox label="Итоговое значение" />
+                <div class="form__field-result" style="display: flex; align-items: center;">
+                    <v-checkbox class="result-checkbox" id="v-checkbox" />
+                    <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
                 </div>
                 <div class="hr"></div>
-                <div>
+                <div class="form__field-result result-count">
                     <p>0</p>
                 </div>
             </div>
@@ -230,7 +232,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -283,16 +285,18 @@
                     </div> -->
                     <div class="form__field">
                         <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
-                        <InputReport @focusout="focusOut" placeholder="Напишите сообщение"
-                            v-model:value="seventhPanelData.comment" id="14" name="14" class="form__input"
-                            style="width: 100%"
-                            :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
+                        <TextareaReport
+                            :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
+                            v-model:value="seventhPanelData.comment" id="comment" name="comment" :rows="1" autoResize
+                            placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
+                            counter-visible />
                     </div>
-                    <div>
-                        <v-checkbox label="Итоговое значение" />
+                    <div class="form__field-result" style="display: flex; align-items: center;">
+                        <v-checkbox class="result-checkbox" id="v-checkbox" />
+                        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
                     </div>
                     <div class="hr"></div>
-                    <div>
+                    <div class="form__field-result result-count">
                         <p>0</p>
                     </div>
                 </div>
@@ -339,10 +343,86 @@
                     </div>
                     <div class="form__field">
                         <label class="form__label" for="14">Комментарий</label>
-                        <InputReport @focusout="focusOut" v-model:value="sixPanelData.comment"
+                        <TextareaReport
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
-                            placeholder="Напишите сообщение" id="14" name="14" class="form__input"
-                            style="width: 100%" />
+                            v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1" autoResize
+                            placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
+                            counter-visible />
+                    </div>
+                </div>
+                <div v-else-if="props.panel_number == 9" class="form__field-group group-seventh">
+                    <div class="d-flex justify-space-between">
+                        <div class="title_wrap">
+                            <p class="form__title">{{ props.title.name }}</p>
+                        </div>
+                        <div>
+                            <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
+                        </div>
+                    </div>
+                    <div class="form__field places mt-4">
+                        <p class="form__label">
+                            Проведение мероприятия <sup class="valid-red">*</sup>
+                        </p>
+
+                        <div class="places_wrap">
+                            <div class="places_item" v-for="item in events" :key="item.id">
+                                <input :id="item.id" :value="item.value" :name="item.name"
+                                    :checked="ninthPanelData.event_happened == item.value"
+                                    class="form__input places_input" type="radio" @focusout="focusOut"
+                                    v-model="ninthPanelData.event_happened" />
+                                <label class="places_item_label" :for="id">{{
+                                    item.name
+                                    }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="report__fieldset report__fieldset--right-block">
+                        <label class="form__label report__label mb-2" for="scan_file">
+                            Скан документа, подтверждающего проведение акции
+                        </label>
+                        <InputReport
+                            :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
+                            v-if="!ninthPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
+                            id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile" />
+                        <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
+                            :fileSize="ninthPanelData.file_size" @click="deleteFile"></FileBoxComponent>
+                    </div>
+
+                    <div class="form__field">
+                        <label class="form__label mt-4" for="14">Ссылка на социальные сети/ электронные
+                            СМИ, подтверждающая проведение акции
+                            <sup class="valid-red">*</sup></label>
+
+                        <div class="form__wrapper" v-for="(item, index) in ninthPanelData.links" :key="index">
+                            <InputReport
+                                :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
+                                @focusout="focusOut" name="14" :is-link="true"
+                                placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
+                                v-model:value="item.link" class="mb-2" />
+                            <div class="add_link" @click="addLink(7)" v-if="ninthPanelData.links.length === index + 1">
+                                + Добавить ссылку
+                            </div>
+                            <div class="add_link" @click="deleteLink(7)" v-else>
+                                Удалить поле ввода
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form__field">
+                        <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
+                        <TextareaReport
+                            :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
+                            v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1" autoResize
+                            placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
+                            counter-visible />
+                    </div>
+                    <div class="form__field-result" style="display: flex; align-items: center;">
+                        <v-checkbox class="result-checkbox" id="v-checkbox" />
+                        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
+                    </div>
+                    <div class="hr"></div>
+                    <div class="form__field-result result-count">
+                        <p>0</p>
                     </div>
                 </div>
             </template>
@@ -372,7 +452,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -402,15 +482,16 @@
                     </div> -->
                     <div class="form__field">
                         <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
-                        <InputReport @focusout="focusOut" placeholder="Напишите сообщение"
-                            v-model:value="seventhPanelData.comment" id="14" name="14" class="form__input"
-                            style="width: 100%" />
+                        <TextareaReport v-model:value="seventhPanelData.comment" id="comment" name="comment" :rows="1"
+                            autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
+                            :max-length-text="3000" counter-visible />
                     </div>
-                    <div>
-                        <v-checkbox label="Итоговое значение" />
+                    <div class="form__field-result" style="display: flex; align-items: center;">
+                        <v-checkbox class="result-checkbox" id="v-checkbox" />
+                        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
                     </div>
                     <div class="hr"></div>
-                    <div>
+                    <div class="form__field-result result-count">
                         <p>0</p>
                     </div>
                 </div>
@@ -438,9 +519,78 @@
 
                     <div class="form__field">
                         <label class="form__label" for="14">Комментарий</label>
-                        <InputReport @focusout="focusOut" v-model:value="sixPanelData.comment"
-                            placeholder="Напишите сообщение" id="14" name="14" class="form__input"
-                            style="width: 100%" />
+                        <TextareaReport v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1"
+                            autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
+                            :max-length-text="3000" counter-visible />
+                    </div>
+                </div>
+                <div v-else-if="props.panel_number == 9" class="form__field-group group-seventh">
+                    <div class="d-flex justify-space-between">
+                        <div class="title_wrap">
+                            <p class="form__title">{{ props.title.name }}</p>
+                        </div>
+                        <div>
+                            <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
+                        </div>
+                    </div>
+                    <div class="form__field places mt-4">
+                        <p class="form__label">
+                            Проведение мероприятия <sup class="valid-red">*</sup>
+                        </p>
+
+                        <div class="places_wrap">
+                            <div class="places_item" v-for="item in events" :key="item.id">
+                                <input :id="item.id" :value="item.value" :name="item.name"
+                                    :checked="ninthPanelData.event_happened == item.value"
+                                    class="form__input places_input" type="radio" @focusout="focusOut"
+                                    v-model="ninthPanelData.event_happened" />
+                                <label class="places_item_label" :for="id">{{
+                                    item.name
+                                }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="report__fieldset report__fieldset--right-block">
+                        <label class="form__label report__label mb-2" for="scan_file">
+                            Скан документа, подтверждающего проведение акции
+                        </label>
+                        <InputReport v-if="!ninthPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
+                            id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile" />
+                        <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
+                            :fileSize="ninthPanelData.file_size" @click="deleteFile"></FileBoxComponent>
+                    </div>
+
+                    <div class="form__field">
+                        <label class="form__label mt-4" for="14">Ссылка на социальные сети/ электронные
+                            СМИ, подтверждающая проведение акции
+                            <sup class="valid-red">*</sup></label>
+
+                        <div class="form__wrapper" v-for="(item, index) in ninthPanelData.links" :key="index">
+                            <InputReport @focusout="focusOut" name="14" :is-link="true"
+                                placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
+                                v-model:value="item.link" class="mb-2" />
+                            <div class="add_link" @click="addLink(7)" v-if="ninthPanelData.links.length === index + 1">
+                                + Добавить ссылку
+                            </div>
+                            <div class="add_link" @click="deleteLink(7)" v-else>
+                                Удалить поле ввода
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form__field">
+                        <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
+                        <TextareaReport v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1"
+                            autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
+                            :max-length-text="3000" counter-visible />
+                    </div>
+                    <div class="form__field-result" style="display: flex; align-items: center;">
+                        <v-checkbox class="result-checkbox" id="v-checkbox" />
+                        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
+                    </div>
+                    <div class="hr"></div>
+                    <div class="form__field-result result-count">
+                        <p>0</p>
                     </div>
                 </div>
             </template>
@@ -483,15 +633,15 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
                     <div class="form__field">
                         <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
-                        <InputReport @focusout="focusOut" placeholder="Напишите сообщение"
-                            v-model:value="seventhPanelData.comment" id="14" name="14" class="form__input"
-                            style="width: 100%" />
+                        <TextareaReport v-model:value="seventhPanelData.comment" id="comment" name="comment" :rows="1"
+                            autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
+                            :max-length-text="3000" counter-visible />
                     </div>
                     <div>
                         <v-checkbox label="Итоговое значение" />
@@ -536,9 +686,61 @@
 
                     <div class="form__field">
                         <label class="form__label" for="14">Комментарий</label>
-                        <InputReport @focusout="focusOut" v-model:value="sixPanelData.comment"
-                            placeholder="Напишите сообщение" id="14" name="14" class="form__input"
-                            style="width: 100%" />
+                        <TextareaReport v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1"
+                            autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
+                            :max-length-text="3000" counter-visible />
+                    </div>
+                    <div>
+                        <v-checkbox label="Вернуть в РО на доработку" />
+                    </div>
+                </div>
+                <div v-else-if="props.panel_number == 9" class="form__field-group group-seventh">
+                    <div class="d-flex justify-space-between">
+                        <div class="title_wrap">
+                            <p class="form__title">{{ props.title.name }}</p>
+                        </div>
+                        <div>
+                            <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
+                        </div>
+                    </div>
+                    <label class="form__label">Проведение мероприятия <sup class="valid-red">*</sup></label>
+                    <v-table>
+                        <tbody>
+                            <tr class="report-table__tr">
+                                <td class="report-table__th">Данные РО</td>
+                                <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
+                                <td class="report-table__th">Корректировка ЦШ</td>
+                            </tr>
+                            <tr>
+                                <td class="report-table__td">Да</td>
+                                <td class="report-table__td report-table__td__center">Да</td>
+                                <td class="report-table__td">Да</td>
+                            </tr>
+                        </tbody>
+                    </v-table>
+                    <div class="form__field places mt-4">
+                        <p class="form__label">
+                            Проведение мероприятия <sup class="valid-red">*</sup>
+                        </p>
+
+                        <div class="places_wrap">
+                            <div class="places_item" v-for="item in events" :key="item.id">
+                                <input :id="item.id" :value="item.value" :name="item.name"
+                                    :checked="ninthPanelData.event_happened == item.value"
+                                    class="form__input places_input" type="radio" @focusout="focusOut"
+                                    v-model="ninthPanelData.event_happened" />
+                                <label class="places_item_label" :for="id">{{
+                                    item.name
+                                }}</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form__field">
+                        <label class="form__label" for="14">Комментарий</label>
+                        <TextareaReport v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1"
+                            autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
+                            :max-length-text="3000" counter-visible />
                     </div>
                     <div>
                         <v-checkbox label="Вернуть в РО на доработку" />
@@ -568,12 +770,16 @@ const props = defineProps({
     data: Object,
 });
 
-const emit = defineEmits(['collapse-form', 'formData', 'getId', 'uploadFile', 'deleteFile']);
+const emit = defineEmits(['collapse-form', 'formData', 'getId', 'getPanelNumber', 'uploadFile', 'deleteFile']);
 
 const collapseForm = () => {
     emit('collapse-form');
 };
-// const isFirstSent = ref(true);
+
+const isFirstSentSix = ref(true);
+const isFirstSentSeventh = ref(true);
+const isFirstSentNinth = ref(true);
+
 const scanFile = ref([]);
 
 const seventhPanelData = ref({
@@ -588,7 +794,7 @@ const seventhPanelData = ref({
 });
 
 const ninthPanelData = ref({
-    event_happened: 'Нет',
+    event_happened: false,
     links: [{
         link: '',
     }],
@@ -614,92 +820,134 @@ const prize_places = ref([
 ]);
 
 const events = ref([
-    { name: 'Да', value: 'Да', id: 'pp1' },
-    { name: 'Нет', value: 'Нет', id: 'pp2' },
+    { name: 'Да', value: true, id: 'pp1' },
+    { name: 'Нет', value: false, id: 'pp2' },
 ])
 
-const uploadFile = (event) => {
-    scanFile.value = event.target.files[0];
+const uploadFile = (event, number) => {
+
     let formData = new FormData();
-    console.log(scanFile.value);
-    formData.append('prize_place', seventhPanelData.value.prize_place);
-    formData.append('document', scanFile.value);
-    formData.append('links', JSON.stringify(seventhPanelData.value.links));
-    formData.append('comment', seventhPanelData.value.comment);
-    emit('uploadFile', formData);
-    emit('formData', formData)
+    console.log('num', number);
+    if (number === 7) {
+        scanFile.value = event.target.files[0];
+        formData.append('prize_place', seventhPanelData.value.prize_place);
+        if (!seventhPanelData.value.document) {
+            formData.append('document', scanFile.value);
+        }
+        if (seventhPanelData.value.links.length) {
+            for (let i = 0; i < seventhPanelData.value.links.length; i++) {
+                !seventhPanelData.value.links[i].link
+                    ? formData.append(`[links][${i}][link]`, '')
+                    : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
+            }
+        }
+        formData.append('comment', seventhPanelData.value.comment);
+        emit('uploadFile', formData);
+        emit('formData', formData)
+    } else if (number === 9) {
+        scanFile.value = event.target.files[0];
+        formData.append('event_happened', ninthPanelData.value.event_happened);
+        if (!ninthPanelData.value.document) {
+            formData.append('document', scanFile.value);
+        }
+        if (ninthPanelData.value.links.length) {
+            for (let i = 0; i < ninthPanelData.value.links.length; i++) {
+                !ninthPanelData.value.links[i].link
+                    ? formData.append(`[links][${i}][link]`, '')
+                    : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+            }
+        }
+        formData.append('comment', ninthPanelData.value.comment);
+        emit('uploadFile', formData);
+        emit('formData', formData)
+    }
+
 }
 
-const deleteFile = () => {
-    seventhPanelData.value.document = '';
+const deleteFile = (number) => {
     let formData = new FormData();
-    formData.append('prize_place', seventhPanelData.value.prize_place);
-    formData.append('document', '');
-    formData.append('links', JSON.stringify(seventhPanelData.value.links));
-    formData.append('comment', seventhPanelData.value.comment);
-    formData.append('file_size', seventhPanelData.value.file_size);
-    formData.append('file_type', seventhPanelData.value.file_type);
-    emit('deleteFile', formData);
-    emit('formData', formData)
+    if (number === 7) {
+        seventhPanelData.value.document = '';
+        formData.append('prize_place', seventhPanelData.value.prize_place);
+        formData.append('document', '');
+        if (seventhPanelData.value.links.length) {
+            for (let i = 0; i < seventhPanelData.value.links.length; i++) {
+                !seventhPanelData.value.links[i].link
+                    ? formData.append(`[links][${i}][link]`, '')
+                    : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
+            }
+        }
+        formData.append('comment', seventhPanelData.value.comment);
+        formData.append('file_size', seventhPanelData.value.file_size);
+        formData.append('file_type', seventhPanelData.value.file_type);
+        emit('deleteFile', formData);
+        emit('formData', formData)
+    } else if (number === 9) {
+        ninthPanelData.value.document = '';
+        formData.append('event_happened', ninthPanelData.value.event_happened);
+        formData.append('document', '');
+        if (ninthPanelData.value.links.length) {
+            for (let i = 0; i < ninthPanelData.value.links.length; i++) {
+                !ninthPanelData.value.links[i].link
+                    ? formData.append(`[links][${i}][link]`, '')
+                    : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+            }
+        }
+        formData.append('comment', ninthPanelData.value.comment);
+        formData.append('file_size', ninthPanelData.value.file_size);
+        formData.append('file_type', ninthPanelData.value.file_type);
+        emit('deleteFile', formData);
+        emit('formData', formData)
+    }
+
 }
-
-
-// const focusOut = async () => {
-//     try {
-//         // let formData = new FormData();
-//         // formData.append('prize_place', seventhPanelData.value.prize_place);
-//         // formData.append('links', JSON.stringify(seventhPanelData.value.links));
-//         // formData.append('comment', seventhPanelData.value.comment);
-//         if (isFirstSent.value) {
-//             // console.log('createReportId'), props.panel_number;
-//             if (props.panel_number == 6) {
-//                 await reportPartTwoService.createMultipleReport(sixPanelData.value, '6', props.id);
-//             } else {
-//                 await reportPartTwoService.createMultipleReport(seventhPanelData.value, '7', props.id)
-//             }
-//             isFirstSent.value = false;
-
-//         } else {
-//             // console.log('createId', props.panel_number);
-//             if (props.panel_number == 6) {
-//                 const { data } = await reportPartTwoService.createMultipleReportDraft(
-//                     sixPanelData.value,
-//                     '6',
-//                     props.id
-//                 );
-//                 emit('getData', data, 6);
-//             } else {
-//                 const { data } = await reportPartTwoService.createMultipleReportDraft(
-//                     seventhPanelData.value,
-//                     '7',
-//                     props.id,
-
-//                 );
-//                 emit('getData', data, 7);
-//             }
-
-//         }
-//     } catch (e) {
-//         // console.log('focusOut error:', e);
-//     }
-// };
 
 const focusOut = () => {
     if (props.panel_number == 6) {
+        // emit('isSent', isFirstSent.value)
         emit('formData', sixPanelData.value)
         console.log('6')
     }
-
     else if (props.panel_number == 7) {
-        let formData = new FormData();
-        formData.append('prize_place', seventhPanelData.value.prize_place);
-        formData.append('links', JSON.stringify(seventhPanelData.value.links));
-        formData.append('comment', seventhPanelData.value.comment);
-        emit('formData', formData)
-        console.log('7')
+        if (isFirstSentSeventh.value) {
+            console.log('7', '1')
+
+            emit('formData', seventhPanelData.value)
+        } else {
+            let formData = new FormData();
+            formData.append('comment', seventhPanelData.value.comment);
+            formData.append('prize_place', seventhPanelData.value.prize_place);
+
+            for (let i = 0; i < seventhPanelData.value.links.length; i++) {
+                !seventhPanelData.value.links[i].link
+                    ? formData.append(`[links][${i}][link]`, '')
+                    : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
+            }
+
+            // emit('isSent', isFirstSent.value)
+            emit('formData', formData)
+            console.log('7', '2')
+        }
     }
     else if (props.panel_number == 9) {
-        emit('formData', ninthPanelData.value)
+        if (isFirstSentNinth.value === true) {
+            console.log('9', '1')
+            emit('formData', ninthPanelData.value)
+        } else {
+            let formData = new FormData();
+            formData.append('comment', ninthPanelData.value.comment);
+            formData.append('event_happened', ninthPanelData.value.event_happened);
+            if (ninthPanelData.value.links.length) {
+                for (let i = 0; i < ninthPanelData.value.links.length; i++) {
+                    !ninthPanelData.value.links[i].link
+                        ? formData.append(`[links][${i}][link]`, '')
+                        : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                }
+            }
+
+            emit('formData', formData)
+            console.log('9', '2')
+        }
     }
 
 }
@@ -708,70 +956,95 @@ const addLink = (number) => {
         sixPanelData.value.links.push({ link: '' });
     } else if (number == 7) {
         seventhPanelData.value.links.push({ link: '' });
-        console.log('seventhPanelData.value.links', seventhPanelData.value.links);
     }
     else if (number == 9) {
         ninthPanelData.value.links.push({ link: '' });
-        console.log('ninthPanelData.value.links', ninthPanelData.value.links);
     }
 };
 
 const deleteLink = async (number) => {
     if (number == 6) {
         sixPanelData.value.links.pop()
-        await reportPartTwoService.createReportDraftId(sixPanelData.value, '6', props.id);
+        await reportPartTwoService.createMultipleReportDraft(sixPanelData.value, '6', props.id);
     } else if (number == 7) {
         seventhPanelData.value.links.pop()
-        await reportPartTwoService.createReportDraftId(seventhPanelData.value, '7', props.id, true);
+        await reportPartTwoService.createMultipleReportDraft(seventhPanelData.value, '7', props.id, true);
     } else if (number == 9) {
         ninthPanelData.value.links.pop()
-        await reportPartTwoService.createReportDraftId(ninthPanelData.value, '9', props.id);
+        await reportPartTwoService.createMultipleReportDraft(ninthPanelData.value, '9', props.id, true);
     }
 
 };
 
-// watchEffect(async () => {
-//     // try {
-//     //     const { data } = await reportPartTwoService.getReportId(props.panel_number, props.id);
-
-//     //     if (data && props.panel_number == 7) {
-
-//     //         isFirstSent.value = false;
-
-
-//     //         seventhPanelData.value.prize_place = data.prize_place;
-//     //         seventhPanelData.value.document = data?.document?.split('/').at(-1);
-//     //         seventhPanelData.value.file_size = data.file_size;
-//     //         seventhPanelData.value.file_type = data.file_type;
-//     //         // console.log('links', seventhPanelData.value.links, 'linksData', data.links)
-//     //         // seventhPanelData.value.links = JSON.parse(seventhPanelData.value.links)
-//     //         //JSON.parse(data.links)
-//     //         seventhPanelData.value.links = data.links;
-//     //         seventhPanelData.value.comment = data.comment;
-//     //     } else if (data && props.panel_number == 6) {
-//     //         isFirstSent.value = false;
-//     //         sixPanelData.value.number_of_members = data.number_of_members;
-//     //         sixPanelData.value.links = data.links;
-//     //         sixPanelData.value.comment = data.comment;
-//     //     }
-//     // } catch (e) {
-//     //     // console.log(e);
-//     // }
-// });
-
 watchEffect(() => {
     if (props.panel_number == 6) {
-        console.log('data 6', props.id)
+        if (Object.keys(props.data).length > 0) {
+            isFirstSentSix.value = false
+            sixPanelData.value = { ...props.data }
+            // if (!sixPanelData.value.links.length) sixPanelData.value.links.push({ link: '' })
+
+            // emit('isSent', isFirstSentSix.value)
+        } else {
+            console.log('data not received');
+            isFirstSentSix.value = true;
+            sixPanelData.value = {
+                number_of_members: 0,
+                links: [{
+                    link: '',
+                }],
+                comment: '',
+            };
+        }
+
         emit('getId', props.id)
-        sixPanelData.value = { ...props.data }
+        emit('getPanelNumber', props.panel_number)
     } else if (props.panel_number == 7) {
-        console.log('data 7', props.id)
+        if (Object.keys(props.data).length > 0) {
+            console.log('7')
+            isFirstSentSeventh.value = false;
+            // emit('isSent', isFirstSentSeventh.value)
+            seventhPanelData.value = { ...props.data }
+            //if (!seventhPanelData.value.links.length) seventhPanelData.value.links.push({ link: '' })
+
+        } else {
+            console.log('data not received');
+            isFirstSentSeventh.value = true;
+            seventhPanelData.value = {
+                prize_place: '',
+                links: [{
+                    link: '',
+                }],
+                comment: '',
+            };
+        }
         emit('getId', props.id)
-        seventhPanelData.value = { ...props.data }
+        emit('getPanelNumber', props.panel_number)
+
     } else if (props.panel_number == 9) {
-        console.log('data 9', props.id)
+        if (Object.keys(props.data).length > 0) {
+            isFirstSentNinth.value = false;
+            // emit('isSent', isFirstSentNinth.value)
+            ninthPanelData.value = { ...props.data }
+            //if (ninthPanelData.value && !ninthPanelData.value.links.length) {
+            //ninthPanelData.value.links.push({ link: '' })
+            // }
+
+        } else {
+            console.log('data not received');
+            isFirstSentNinth.value = true;
+            ninthPanelData.value = {
+                event_happened: '',
+                links: [{
+                    link: '',
+                }],
+                comment: '',
+                file_size: '',
+                file_type: '',
+            };
+        }
         emit('getId', props.id)
-        ninthPanelData.value = { ...props.data }
+        emit('getPanelNumber', props.panel_number)
+
     }
 })
 </script>
@@ -787,6 +1060,35 @@ watchEffect(() => {
     font-size: 14px;
     font-weight: 400;
     line-height: 21.1px;
+}
+
+.result-checkbox {
+    color: #39BF39;
+    margin-right: 12px;
+}
+
+.result-checkbox-text {
+    font-family: 'Bert sans';
+    font-weight: 700;
+}
+
+.result-count {
+  color: #6D6D6D;
+}
+
+.hr {
+    margin-bottom: 16px;
+    width: 100%;
+    border-top: 1px solid #B6B6B6;
+
+    @media (max-width: 568px) {
+        width: 340px;
+        margin: 0 auto 16px;
+    }
+
+    @media (max-width: 400px) {
+        width: 296px;
+    }
 }
 
 
@@ -877,6 +1179,19 @@ watchEffect(() => {
 .group-seventh {
     margin-top: 8px;
     border-radius: 10px;
+}
+
+.form__field-result {
+  width: 100%;
+
+  @media (max-width: 568px) {
+    margin: 0 auto;
+    width: 340px;
+  }
+
+  @media (max-width: 400px) {
+    width: 300px;
+  }
 }
 
 .form {

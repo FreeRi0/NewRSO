@@ -53,7 +53,7 @@
         <label style="display: flex; align-items: center;" class="form__label" for="comment">Комментарий <sup
             class="valid-red">*</sup></label>
         <TextareaReport placeholder="Напишите сообщение" v-model:value="tenthPanelData.comment" id="comment"
-          name="comment" :rows="1" autoResize @focusout="formData" :maxlength="3000" :max-length-text="3000"
+          name="comment" :rows="1" autoResize :maxlength="3000" :max-length-text="3000"
           counter-visible class="form__input form__input-comment" style="margin-bottom: 4px;" />
       </div>
     </div>
@@ -168,7 +168,7 @@ const tenthPanelData = ref({
   ],
 });
 
-const emit = defineEmits(['formData', 'uploadFile']);
+const emit = defineEmits(['formData', 'uploadFile', 'deleteFile']);
 
 const formData = () => {
   emit('formData', tenthPanelData.value);
@@ -181,6 +181,10 @@ const addLink = () => {
 const uploadFile = async (event) => {
   emit('uploadFile', event)
 };
+
+const deleteFile = () => {
+  emit('deleteFile')
+}
 
 watchEffect(() => {
   tenthPanelData.value = { ...props.data };
