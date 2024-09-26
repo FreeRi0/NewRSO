@@ -1,25 +1,15 @@
 <template>
     <div class="form-input" :style="{ width: width }">
-        <input
-            :type="type"
-            :name="name"
-            :style="{ height: height }"
-            :value="value"
-            :id="name"
-            :placeholder="placeholder"
-            :maxlength="maxLength"
-            :readonly="readonly"
-            max="9999-12-31"
-            class="mb-2"
-            @input="updateValue"
-            v-bind="$attrs"
-        />
+        <input :type="type" :name="name" :style="{ height: height }" :value="value" :id="name"
+            :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly" max="9999-12-31" class="mb-2"
+            @input="updateValue" v-bind="$attrs" />
         <span class="error-text">{{ errorMessage }}</span>
     </div>
 </template>
 
 <script setup>
 import { MaskInput } from 'vue-3-mask';
+import { watch, ref } from 'vue';
 
 defineOptions({
     inheritAttrs: false,
@@ -67,7 +57,18 @@ const props = defineProps({
     }
 });
 
+const inputValue = ref(props.value);
+
+watch(inputValue, (newValue) => {
+    console.log('pooo');
+    const cyrillicRegex = /^[\u0400-\u04FF\s]+$/;
+    if (!cyrillicRegex.test(newValue)) {
+        inputValue.value = newValue.replace(/[^\u0400-\u04FF\s]/g, '');
+    }
+});
+
 const updateValue = (event) => {
+    console.log('val', event.target.value)
     emit('update:value', event.target.value);
 };
 </script>

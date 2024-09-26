@@ -8,9 +8,9 @@
       </div>
       <div v-else>
         <div class="download-item">
-          <SvgIcon iconName="download"/>
+          <SvgIcon iconName="download" />
           <button type="button" id="download" class="download-item__report"
-                  @click="downloadReportAll(roleStore.roles.regionalheadquarter_commander?.id)">
+            @click="downloadReportAll(roleStore.roles.regionalheadquarter_commander?.id)">
             Скачать архив
           </button>
         </div>
@@ -20,12 +20,8 @@
               1. Численность членов РО&nbsp;РСО в&nbsp;соответствии с&nbsp;объемом уплаченных членских взносов
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <first-panel
-                  :districtExpert="districtExpert"
-                  :centralExpert="centralExpert"
-                  @get-data="setData"
-                  :data="reportData.first"
-              />
+              <first-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.first" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -39,7 +35,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                  text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО."/>
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -49,7 +45,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                  text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО."/>
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -58,12 +54,8 @@
               (слеты, школы, фестивали, турниры и&nbsp;прочие)
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <fourth-panel
-                  :districtExpert="districtExpert"
-                  :centralExpert="centralExpert"
-                  @get-data="setData"
-                  :data="reportData.fourth"
-              />
+              <fourth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.fourth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -75,7 +67,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <fifth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                           :data="reportData.fifth"/>
+                :data="reportData.fifth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -85,8 +77,8 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <sixth-panel @get-data="setData" @getId="setId" @getPanelNumber="setPanelNumber"
-                           :district-headquarter-commander="districtExpert" :data="reportData.six"
-                           :central-headquarter-commander="centralExpert"/>
+                :district-headquarter-commander="districtExpert" :data="reportData.six"
+                :central-headquarter-commander="centralExpert" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -96,8 +88,8 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <seventh-panel @get-data="setData" @getId="setId" @getPanelNumber="setPanelNumber"
-                             :district-headquarter-commander="districtExpert" :data="reportData.seventh"
-                             :central-headquarter-commander="centralExpert"/>
+                :district-headquarter-commander="districtExpert" :data="reportData.seventh"
+                :central-headquarter-commander="centralExpert" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -108,7 +100,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                  text="Показатель рассчитывается автоматически на&nbsp;основе данных сервиса &laquo;Медиалогия&raquo;, предоставленных Аппаратом РСО."/>
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных сервиса &laquo;Медиалогия&raquo;, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -117,8 +109,8 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <ninth-panel @get-data="setData" @getId="setId" @getPanelNumber="setPanelNumber"
-                           :district-headquarter-commander="districtExpert" :data="reportData.ninth"
-                           :central-headquarter-commander="centralExpert"/>
+                :district-headquarter-commander="districtExpert" :data="reportData.ninth"
+                :central-headquarter-commander="centralExpert" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -127,12 +119,8 @@
               &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <tenth-panel
-                  :districtExpert="districtExpert"
-                  :centralExpert="centralExpert"
-                  @get-data="setData"
-                  :data="reportData.tenth"
-              />
+              <tenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.tenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -141,7 +129,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                              :data="reportData.eleventh"/>
+                :data="reportData.eleventh" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -150,7 +138,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <twelfth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                             :data="reportData.twelfth"/>
+                :data="reportData.twelfth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -158,12 +146,8 @@
               13. Охват членов РО&nbsp;РСО, принявших участие во&nbsp;Всероссийском дне ударного труда &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <thirteenth-panel
-                  :districtExpert="districtExpert"
-                  :centralExpert="centralExpert"
-                  @get-data="setData"
-                  :data="reportData.thirteenth"
-              />
+              <thirteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.thirteenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -174,7 +158,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                  text="Показатель рассчитывается автоматически на&nbsp;основе данных из&nbsp;12&nbsp;и&nbsp;13&nbsp;показателей."/>
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных из&nbsp;12&nbsp;и&nbsp;13&nbsp;показателей." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -187,7 +171,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                  text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО."/>
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -196,11 +180,8 @@
               по&nbsp;комиссарской деятельности &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <sixteenth-panel
-                  :districtExpert="districtExpert"
-                  :centralExpert="centralExpert"
-                  @get-data="setData"
-                  :data="reportData.sixteenth"/>
+              <sixteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.sixteenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -209,7 +190,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <seventeenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                                 :data="reportData.seventeenth"/>
+                :data="reportData.seventeenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -218,7 +199,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <eighteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                                :data="reportData.eighteenth"/>
+                :data="reportData.eighteenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -227,19 +208,13 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <nineteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                                :data="reportData.nineteenth"/>
+                :data="reportData.nineteenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
       </div>
     </div>
-    <Button
-        v-if="!preloader"
-        variant="text"
-        label="Отправить отчет"
-        size="large"
-        @click="sendReport"
-    />
+    <Button v-if="!preloader" variant="text" label="Отправить отчет" size="large" @click="sendReport" />
   </div>
 </template>
 <script setup>
@@ -292,6 +267,9 @@ const preloader = ref(true);
 const panel_id = ref(1);
 const panel_num = ref(null);
 
+
+
+
 const setId = (id) => {
   panel_id.value = id;
   console.log('panel_id', panel_id.value, id);
@@ -317,9 +295,9 @@ const downloadReportAll = (id) => {
     document.body.appendChild(link);
     link.click();
   })
-      .catch(function (error) {
-        console.log('an error occured ' + error);
-      });
+    .catch(function (error) {
+      console.log('an error occured ' + error);
+    });
 };
 
 const errorHandler = async (error, id) => {
@@ -371,13 +349,9 @@ const getReportData = async (id) => {
       reportData.value.first = (await reportPartTwoService.getReport('1')).data;
       reportData.value.fourth = (await reportPartTwoService.getReport('4')).data;
       reportData.value.fifth = (await reportPartTwoService.getReport('5')).data;
-      if (panel_num.value == 6) {
-        reportData.value.six = (await reportPartTwoService.getMultipleReport('6', id)).data;
-      } else if (panel_num.value == 7) {
-        reportData.value.seventh = (await reportPartTwoService.getMultipleReport('7', id)).data;
-      } else if (panel_num.value == 9) {
-        reportData.value.ninth = (await reportPartTwoService.getMultipleReport('9', id)).data;
-      }
+      reportData.value.six = (await reportPartTwoService.getMultipleReport('6', id)).data;
+      reportData.value.seventh = (await reportPartTwoService.getMultipleReport('7', id)).data;
+      reportData.value.ninth = (await reportPartTwoService.getMultipleReport('9', id)).data;
       reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
       reportData.value.tenth.second = (await reportPartTwoService.getMultipleReport('10', '2')).data;
       reportData.value.eleventh = (await reportPartTwoService.getReport('11')).data;
@@ -481,9 +455,9 @@ watchEffect(() => {
 });
 
 watch(() => panel_num.value, (newPanel) => {
- panel_num.value = newPanel
-//  console.log(panel_num.value, newPanel)
- getReportData(panel_id.value);
+  panel_num.value = newPanel
+  //  console.log(panel_num.value, newPanel)
+  getReportData(panel_id.value);
 })
 </script>
 <style>
@@ -525,7 +499,7 @@ watch(() => panel_num.value, (newPanel) => {
   text-align: left;
 }
 
-.v-expansion-panel--active > .v-expansion-panel-title {
+.v-expansion-panel--active>.v-expansion-panel-title {
   border-radius: 10px;
   min-height: none;
   border-left: none;
@@ -541,7 +515,7 @@ watch(() => panel_num.value, (newPanel) => {
 }
 
 .v-expansion-panel--active:not(:first-child),
-.v-expansion-panel--active + .v-expansion-panel {
+.v-expansion-panel--active+.v-expansion-panel {
   margin-top: 0;
   opacity: unset;
 }
