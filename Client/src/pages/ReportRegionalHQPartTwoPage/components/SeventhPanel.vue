@@ -13,7 +13,8 @@
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="7" @collapse-form="collapsed()"
             @formData="formData($event, item.id)"  @uploadFile="uploadFile($event, item.id)"
-            @deleteFile="deleteFile($event, item.id)" @getId="getId($event)" @getPanelNumber="getPanelNumber($event)" :data="seventhPanelData"
+            @deleteFile="deleteFile($event, item.id)"    @getPanelNumber="getPanelNumber($event)"
+            @getId="getId($event)" :data="seventhPanelData"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
@@ -22,10 +23,9 @@
   </v-card>
 </template>
 <script setup>
-import { ref, onMounted, watchEffect } from "vue";
+import { ref, watchEffect } from "vue";
 import { SeventhPanelForm } from "./index";
 import { reportPartTwoService } from "@services/ReportService.ts";
-import { HTTP } from "@app/http";
 
 // @is-sent="sent($event)"
 const props = defineProps({
@@ -35,11 +35,13 @@ const props = defineProps({
   centralHeadquarterCommander: {
     type: Boolean
   },
+  items: Array,
   data: Object
 });
+let el_id = ref(null);
 
 const panel = ref(null);
-const emit = defineEmits(['getData', 'getId', 'getPanelNumber'])
+const emit = defineEmits(['getData'])
 const seventhPanelData = ref({
   prize_place: 'Нет',
   links: [{
@@ -92,7 +94,6 @@ const deleteFile = async (reportData, reportNumber) => {
     await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber, true);
   }
 };
-const items = ref([]);
 
 const collapsed = () => {
   panel.value = !panel.value;
@@ -100,6 +101,7 @@ const collapsed = () => {
 
 const getId = (id) => {
   console.log('id', id);
+  el_id.value = id;
   emit('getId', id);
 }
 
@@ -108,20 +110,12 @@ const getPanelNumber = (number) => {
   emit('getPanelNumber', number);
 }
 
-const getItems = async () => {
-  try {
-    const response = await HTTP.get('regional_competitions/reports/event_names/r7-event-names/');
-    items.value = response.data;
-  } catch (err) {
-    console.error(err);
-  }
-}
 
 watchEffect(() => {
-  if (Object.keys(props.data).length > 0) {
+  if (Object.keys(props.data[el_id.value]).length > 0) {
     console.log('data received', props.data);
     isFirstSent.value = false;
-    seventhPanelData.value = { ...props.data }
+    seventhPanelData.value = { ...props.data[el_id.value] }
   } else {
     isFirstSent.value = true;
     seventhPanelData.value = {
@@ -137,10 +131,6 @@ watchEffect(() => {
   }
 
 });
-
-onMounted(async () => {
-  await getItems();
-})
 </script>
 <style lang="scss" scoped>
 .panel-card {

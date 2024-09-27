@@ -143,8 +143,15 @@ HTTP.interceptors.response.use(
                     console.log('here 8');
                     return Promise.reject(error);
                 }
-            } else if (err.response.status !== 401 && originalRequest.url !== '/services/front_errors/') {
-                if (window.location.hostname === 'localhost' || window.location.hostname === 'rso.sprint.1t' || window.location.hostname === '213.129.208.147') {
+            } else if (err.response.status !== 401 &&
+                originalRequest.url !== '/services/front_errors/') {
+                let matches_1 = originalRequest.url.match(/regional_competitions\/me\/reports\/\d{1,}\/\d{1,}\//gm)
+                let matches_2 = originalRequest.url.match(/regional_competitions\/me\/reports\/\d{1,}\//gm)
+                let matches = (matches_1 || []).length + (matches_2 || []).length;
+
+                if ((window.location.hostname === 'localhost' ||
+                    window.location.hostname === 'rso.sprint.1t' ||
+                    window.location.hostname === '213.129.208.147') && !(err.response.status === 404 && matches > 0)) {
                     HTTP.post('/services/front_errors/', {
                         url: err.config.baseURL.substring(0, err.config.baseURL.length - 1) + err.config.url,
                         error_code: err.response.status,
