@@ -24,6 +24,10 @@
         >
             <span>Удалить</span>
         </button>
+
+        <div v-if="isErrorFile" class="report__error-text">
+            {{ isErrorMessage }}
+        </div>
     </div>
 </template>
 
@@ -52,6 +56,14 @@ const props = defineProps({
     },
     centralExpert: {
         type: Boolean,
+    },
+    isErrorFile: {
+        type: Boolean,
+        default: false,
+    },
+    isErrorMessage: {
+        type: String,
+        default: '',
     },
 });
 

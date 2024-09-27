@@ -342,12 +342,15 @@ const deletePublication = async (index) => {
 watchEffect(async () => {
   // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
 
-  if (props.data) {
+  if (Object.keys(props.data).length > 0) {
     console.log(props.data);
     isFirstSent.value = false;
     projects.value = [...props.data.projects];
     eighteenthPanelData.value.comment = props.data.comment;
     if (!projects.value[0].links.length) projects.value[0].links.push({link: ''});
+  } else {
+    console.log('отчет по показателю еще не создан', eighteenthPanelData.value);
+    isFirstSent.value = true;
   }
 });
 </script>

@@ -127,7 +127,7 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from "vue";
+import { ref, watchEffect, onMounted, watch } from "vue";
 import { InputReport, TextareaReport } from "@shared/components/inputs";
 import {
   CommentFileComponent,
@@ -161,11 +161,21 @@ const props = defineProps({
     default: "1",
   },
   data: Object,
+  // isErrorFile: {
+  //     type: Boolean,
+  //     default: false,
+  // },
+  // isErrorMessage: {
+  //     type: String,
+  //     default: '',
+  // },
 });
 
 const ID_PANEL = "11";
 const isFirstSent = ref(true);
 const scanFile = ref([]);
+// let isError = ref(false);
+// const MAX_SIZE_FILE = 80 / 1000;
 const eleventhPanelData = ref({
   participants_number: null,
   scan_file: "",
@@ -205,14 +215,9 @@ const uploadFile = async (event) => {
 
   formData.append("scan_file", scanFile.value);
   formData.append("comment", eleventhPanelData.value.comment);
-  // eleventhPanelData.value.participants_number 
-  // ? formData.append("participants_number", eleventhPanelData.value.participants_number) 
-  // : formData.append("participants_number", "");
 
   eleventhPanelData.value.file_size = (scanFile.value.size / Math.pow(1024, 2));
   eleventhPanelData.value.file_type = scanFile.value.type.split('/').at(-1);
-  // console.log(eleventhPanelData.value.file_type);
-  // console.log(scanFile.value);
 
   try {
     if (isFirstSent.value) {
@@ -222,6 +227,16 @@ const uploadFile = async (event) => {
       let {  data: scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
       eleventhPanelData.value.scan_file = scan_file;
       emit('getData', scan_file, Number(ID_PANEL));
+
+      // if ((scanFile.value.size / Math.pow(1024, 2)) > MAX_SIZE_FILE) {
+      //   isError.value = true;
+      //   console.log('ошибка прикрепления файла', isError.value, scanFile.value.size / Math.pow(1024, 2), MAX_SIZE_FILE);
+      // } else {
+      //   isError.value = false;
+      //   let {  data: scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+      //   eleventhPanelData.value.scan_file = scan_file;
+      //   emit('getData', scan_file, Number(ID_PANEL));
+      // }
     }
   } catch (e) {
     console.log('focusOut error:', e);
@@ -231,11 +246,7 @@ const uploadFile = async (event) => {
 const deleteFile = async () => {
   eleventhPanelData.value.scan_file = "";
   let formData = new FormData();
-  // eleventhPanelData.value.participants_number ? formData.append("participants_number", eleventhPanelData.value.participants_number) : formData.append("participants_number", "");
-  // formData.append("comment", eleventhPanelData.value.comment);
-  formData.append("scan_file", "");  
-  // formData.append("file_size", eleventhPanelData.value.file_size);
-  // formData.append("file_type", eleventhPanelData.value.file_type);
+  formData.append("scan_file", "");
 
   try {
     if (isFirstSent.value) {
@@ -249,6 +260,17 @@ const deleteFile = async () => {
   }  
 };
 
+// onMounted(() => {
+//   if (props.data) {
+//     isFirstSent.value = false;
+//     eleventhPanelData.value.participants_number = props.data.participants_number;
+//     eleventhPanelData.value.comment = props.data.comment;
+//     eleventhPanelData.value.scan_file = props.data.scan_file;
+//     eleventhPanelData.value.file_size = props.data.file_size;
+//     eleventhPanelData.value.file_type = props.data.file_type;
+//   }
+// });
+
 watchEffect(() => {
   // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
 
@@ -261,24 +283,6 @@ watchEffect(() => {
     eleventhPanelData.value.file_size = props.data.file_size;
     eleventhPanelData.value.file_type = props.data.file_type;
   }
-
-  // try {
-  //   const { data } =
-  //     props.districtExpert || props.centralExpert
-  //       ? await reportPartTwoService.getReportDH(ID_PANEL, props.reportId)
-  //       : await reportPartTwoService.getReport(ID_PANEL);
-  //   console.log(data);
-  //   if (data) {
-  //     isFirstSent.value = false;
-  //     eleventhPanelData.value.participants_number = data.participants_number;
-  //     eleventhPanelData.value.comment = data.comment;
-  //     eleventhPanelData.value.scan_file = data.scan_file;
-  //     eleventhPanelData.value.file_size = data.file_size;
-  //     eleventhPanelData.value.file_type = data.file_type;
-  //   }
-  // } catch (e) {
-  //   console.log(e);
-  // }
 });
 </script>
 

@@ -163,31 +163,24 @@ const focusOut = async () => {
 };
 
 watchEffect(() => {
-// watchEffect(async () => {
   // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
 
-  if (props.data) {
+  if (Object.keys(props.data).length > 0) {
+    console.log(props.data);
     isFirstSent.value = false;
     nineteenthPanelData.value.employed_student_start = props.data.employed_student_start;
     nineteenthPanelData.value.employed_student_end = props.data.employed_student_end;
     nineteenthPanelData.value.comment = props.data.comment;
+  } 
+  else {
+    console.log('отчет по показателю еще не создан', nineteenthPanelData.value);
+    isFirstSent.value = true;
+  //   nineteenthPanelData.value = {
+  //     employed_student_start: null,
+  //     employed_student_end: null,
+  //     comment: '',
+  //   };
   }
-
-  // try {
-  //   const { data } = 
-  //     props.districtExpert || props.centralExpert
-  //       ? await reportPartTwoService.getReportDH(ID_PANEL, props.reportId)
-  //       : await reportPartTwoService.getReport(ID_PANEL);
-  //   console.log(data);
-  //   if (data) {
-  //     isFirstSent.value = false;
-  //     nineteenthPanelData.value.employed_student_start = data.employed_student_start;
-  //     nineteenthPanelData.value.employed_student_end = data.employed_student_end;
-  //     nineteenthPanelData.value.comment = data.comment;
-  //   }
-  // } catch (e) {
-  //   console.log(e)
-  // }
 });
 </script>
 
