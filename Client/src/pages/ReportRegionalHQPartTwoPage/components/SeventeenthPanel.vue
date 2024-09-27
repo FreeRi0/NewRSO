@@ -48,6 +48,8 @@
         :fileType="seventeenthPanelData.file_type"
         :fileSize="seventeenthPanelData.file_size"
         @click="deleteFile"
+        :is-error-file="isErrorFile"
+        is-error-message="Прикрепите файл формата jpg, png, pdf не более 7 Мб"
       ></FileBoxComponent>
     </div>
     <div class="report__fieldset report__fieldset--comment"
@@ -100,6 +102,8 @@ const emit = defineEmits(['getData']);
 const ID_PANEL = '17';
 const isFirstSent = ref(true);
 const scanFile = ref([]);
+let isErrorFile = ref(false);
+const MAX_SIZE_FILE = 7;
 const seventeenthPanelData = ref({
   scan_file: '',
   file_size: null,
@@ -137,24 +141,26 @@ const uploadFile = async (event) => {
   formData.append('scan_file', scanFile.value);
   seventeenthPanelData.value.file_size = (scanFile.value.size / Math.pow(1024, 2));
   seventeenthPanelData.value.file_type = scanFile.value.type.split('/').at(-1);
-  // console.log(scanFile.value);
-
-  // if (isFirstSent.value) {
-  //   let { scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-  //   seventeenthPanelData.value.scan_file = scan_file;
-  // } else {
-  //   let { data : { scan_file } } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-  //   seventeenthPanelData.value.scan_file = scan_file;
-  // }
 
   try {
     if (isFirstSent.value) {
       let { scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
       seventeenthPanelData.value.scan_file = scan_file;
     } else {
-      let { data :  scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-      seventeenthPanelData.value.scan_file = scan_file;
-      emit('getData', scan_file, Number(ID_PANEL));
+      // let { data :  scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+      // seventeenthPanelData.value.scan_file = scan_file;
+      // emit('getData', scan_file, Number(ID_PANEL));
+      if ((scanFile.value.size / Math.pow(1024, 2)) > MAX_SIZE_FILE) {
+        isErrorFile.value = true;
+        seventeenthPanelData.value.scan_file = scanFile.value.name;
+        console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ', isErrorFile.value, scanFile.value.size / Math.pow(1024, 2), MAX_SIZE_FILE);
+      } else {
+        isErrorFile.value = false;
+        let {  data: scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+        seventeenthPanelData.value.scan_file = scan_file;
+        emit('getData', scan_file, Number(ID_PANEL));
+        console.log('ФАЙЛ ОТПРАВЛЯЕТСЯ', isErrorFile.value);
+      }
     }
   } catch (e) {
     console.log('focusOut error:', e);
@@ -179,43 +185,35 @@ const deleteFile = async () => {
     if (isFirstSent.value) {
       await reportPartTwoService.createReport(formData, ID_PANEL, true);
     } else {
-      let { data :  scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-      emit('getData', scan_file, Number(ID_PANEL));
+      // let { data :  scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+      // emit('getData', scan_file, Number(ID_PANEL));
+      if (isErrorFile.value) {
+        isErrorFile.value = false;
+      } else {
+        let { data :  scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+        emit('getData', scan_file, Number(ID_PANEL));
+      }
     }
   } catch (e) {
     console.log('focusOut error:', e);
   }
 };
 
-// watchEffect(async () => {
+
 watchEffect(() => {
   // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
 
-  if (props.data) {
+  if (Object.keys(props.data).length > 0) {
+    console.log(props.data);
     isFirstSent.value = false;
     seventeenthPanelData.value.comment = props.data.comment;
     seventeenthPanelData.value.scan_file = props.data.scan_file;
     seventeenthPanelData.value.file_size = props.data.file_size;
     seventeenthPanelData.value.file_type = props.data.file_type;
+  } else {
+    console.log('отчет по показателю еще не создан', seventeenthPanelData.value);
+    isFirstSent.value = true;
   }
-
-  // try {
-  //   const { data } = 
-  //     props.districtExpert || props.centralExpert
-  //       ? await reportPartTwoService.getReportDH(ID_PANEL, props.reportId)
-  //       : await reportPartTwoService.getReport(ID_PANEL);
-  //   console.log(data);
-  //   if (data) {
-  //     isFirstSent.value = false;
-  //     seventeenthPanelData.value.comment = data.comment;
-  //     // seventeenthPanelData.value.scan_file = data.scan_file.split('/').at(-1)
-  //     seventeenthPanelData.value.scan_file = data.scan_file;
-  //     seventeenthPanelData.value.file_size = data.file_size;
-  //     seventeenthPanelData.value.file_type = data.file_type;
-  //   }
-  // } catch (e) {
-  //   console.log(e)
-  // }
 });
 </script>
 
