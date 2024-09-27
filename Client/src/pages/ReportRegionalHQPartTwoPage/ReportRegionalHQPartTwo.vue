@@ -87,8 +87,9 @@
               и&nbsp;конкурсах &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <seventh-panel @get-data="setData"  @getId="setId" @getPanelNumber="setPanelNumber" :items="seventh_items" :district-headquarter-commander="districtExpert"
-                :data="reportData.seventh" :central-headquarter-commander="centralExpert" />
+              <seventh-panel @get-data="setData" @getId="setId" @getPanelNumber="setPanelNumber" :items="seventh_items"
+                :district-headquarter-commander="districtExpert" :data="reportData.seventh"
+                :central-headquarter-commander="centralExpert" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -107,8 +108,9 @@
               9. Организация обязательных общесистемных мероприятий РСО на&nbsp;региональном уровне &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <ninth-panel @get-data="setData"  @getId="setId" @getPanelNumber="setPanelNumber" :items="ninth_items" :district-headquarter-commander="districtExpert"
-                :data="reportData.ninth" :central-headquarter-commander="centralExpert" />
+              <ninth-panel @get-data="setData" @getId="setId" @getPanelNumber="setPanelNumber" :items="ninth_items"
+                :district-headquarter-commander="districtExpert" :data="reportData.ninth"
+                :central-headquarter-commander="centralExpert" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -536,10 +538,10 @@ watchEffect(() => {
 
 });
 
-onMounted(async () => {
-  await getItems(6);
-  await getItems(7);
-  await getItems(9);
+onMounted(() => {
+  getItems(6);
+  getItems(7);
+  getItems(9);
 })
 
 // watch(() => panel_num.value, (newPanel) => {
