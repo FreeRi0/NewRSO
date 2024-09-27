@@ -9,7 +9,9 @@
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="9" @collapse-form="collapsed()"
             @formData="formData($event, item.id)" @uploadFile="uploadFile($event, item.id)"
-            @getId="getId($event)" @getPanelNumber="getPanelNumber($event)" :data="ninthPanelData"
+             :data="ninthPanelData"
+                @getPanelNumber="getPanelNumber($event)"
+            @getId="getId($event)"
             @deleteFile="deleteFile($event, item.id)" :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
@@ -18,10 +20,9 @@
   </v-card>
 </template>
 <script setup>
-import { ref, onMounted, watchEffect } from "vue";
+import { ref, watchEffect } from "vue";
 import { SeventhPanelForm } from "./index";
 import { reportPartTwoService } from "@services/ReportService.ts";
-import { HTTP } from "@app/http";
 
 const props = defineProps({
   districtHeadquarterCommander: {
@@ -30,11 +31,12 @@ const props = defineProps({
   centralHeadquarterCommander: {
     type: Boolean
   },
+  items: Array,
   data: Object
 });
 
 const panel = ref(null);
-const emit = defineEmits(['getData', 'getId', 'getPanelNumber'])
+const emit = defineEmits(['getData'])
 const ninthPanelData = ref({
   event_happened: false,
   links: [{
@@ -46,6 +48,7 @@ const ninthPanelData = ref({
   comment: '',
 });
 const isFirstSent = ref(null);
+let el_id = ref(null);
 
 // const sent = (sentVal) => {
 //   console.log('is sent: ', sentVal, isFirstSent.value);
@@ -69,29 +72,22 @@ const formData = async (reportData, reportNumber) => {
   }
 };
 
-const items = ref([]);
 
 const collapsed = () => {
   panel.value = !panel.value;
 }
 
+
+
 const getId = (id) => {
   console.log('id', id);
+  el_id.value = id;
   emit('getId', id);
 }
 
 const getPanelNumber = (number) => {
   console.log('num', number);
   emit('getPanelNumber', number);
-}
-
-const getItems = async () => {
-  try {
-    const response = await HTTP.get('regional_competitions/reports/event_names/r9-event-names/');
-    items.value = response.data;
-  } catch (err) {
-    console.error(err);
-  }
 }
 
 const uploadFile = async (reportData, reportNumber) => {
@@ -116,10 +112,10 @@ const deleteFile = async (reportData, reportNumber) => {
 
 watchEffect(() => {
   console.log(isFirstSent, props.data)
-  if (Object.keys(props.data).length > 0) {
+  if (Object.keys(props.data[el_id.value]).length > 0) {
     console.log('data yes')
     isFirstSent.value = false;
-    ninthPanelData.value = { ...props.data }
+    ninthPanelData.value = { ...props.data[el_id.value] }
   } else {
     console.log('data no')
     isFirstSent.value = true;
@@ -135,10 +131,6 @@ watchEffect(() => {
     };
   }
 });
-
-onMounted(async () => {
-  await getItems();
-})
 
 </script>
 <style lang="scss" scoped>

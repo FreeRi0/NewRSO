@@ -12,8 +12,10 @@
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)" @getId="getId($event)"
-            @getPanelNumber="getPanelNumber($event)" :data="sixPanelData"
+            @formData="formData($event, item.id)"
+            @getPanelNumber="getPanelNumber($event)"
+            @getId="getId($event)"
+            :data="sixPanelData"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item">
           </SeventhPanelForm>
@@ -22,10 +24,9 @@
   </v-card>
 </template>
 <script setup>
-import { ref, onMounted, watchEffect } from "vue";
+import { ref, watchEffect } from "vue";
 import { SeventhPanelForm } from "./index";
 import { reportPartTwoService } from "@services/ReportService.ts";
-import { HTTP } from "@app/http";
 
 
 const props = defineProps({
@@ -35,6 +36,7 @@ const props = defineProps({
   centralHeadquarterCommander: {
     type: Boolean
   },
+  items: Array,
   data: Object,
 });
 
@@ -43,7 +45,7 @@ const isFirstSent = ref(null);
 //   console.log('is sent: ', sentVal, isFirstSent.value);
 //   isFirstSent.value = sentVal;
 // }
-const emit = defineEmits(['getData', 'getId', 'getPanelNumber'])
+const emit = defineEmits(['getData', 'getId', 'getPanelNumber']);
 
 const sixPanelData = ref({
   number_of_members: 0,
@@ -55,22 +57,10 @@ const sixPanelData = ref({
 
 const panel = ref(false);
 
-const items = ref([]);
-
 const collapsed = () => {
   panel.value = !panel.value;
 }
-
-// console.log('panel', panel.value)
-
-const getItems = async () => {
-  try {
-    const response = await HTTP.get('regional_competitions/reports/event_names/r6-event-names/');
-    items.value = response.data;
-  } catch (err) {
-    console.error(err);
-  }
-}
+let el_id = ref(null);
 
 const formData = async (reportData, reportNumber) => {
   try {
@@ -92,6 +82,7 @@ const formData = async (reportData, reportNumber) => {
 
 const getId = (id) => {
   console.log('id', id);
+  el_id.value = id
   emit('getId', id);
 }
 const getPanelNumber = (number) => {
@@ -99,10 +90,10 @@ const getPanelNumber = (number) => {
   emit('getPanelNumber', number);
 }
 watchEffect(() => {
-  if (Object.keys(props.data).length > 0) {
+  if (Object.keys(props.data[el_id.value]).length > 0) {
     console.log('data received', props.data);
     isFirstSent.value = false;
-    sixPanelData.value = { ...props.data }
+    sixPanelData.value = { ...props.data[el_id.value] }
     // emit('send-panel', panel.value);
   } else {
     console.log('data not received');
@@ -116,9 +107,6 @@ watchEffect(() => {
     };
   }
 });
-onMounted(async () => {
-  await getItems();
-})
 </script>
 <style lang="scss" scoped>
 .panel-card {

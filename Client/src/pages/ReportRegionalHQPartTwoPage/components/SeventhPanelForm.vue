@@ -770,7 +770,7 @@ const props = defineProps({
     data: Object,
 });
 
-const emit = defineEmits(['collapse-form', 'formData', 'getId', 'getPanelNumber', 'uploadFile', 'deleteFile']);
+const emit = defineEmits(['collapse-form', 'formData',  'uploadFile', 'getId', 'getPanelNumber', 'deleteFile']);
 
 const collapseForm = () => {
     emit('collapse-form');
