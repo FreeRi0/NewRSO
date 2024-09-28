@@ -509,19 +509,22 @@ const setData = (data, panel, number = 0) => {
 
 const sendReport = async () => {
   console.log('reportData: ', reportData.value)
-  // try {
-  //   await reportPartTwoService.sendReport(reportData.value.first, '1');
-  //   await reportPartTwoService.sendReport(reportData.value.fourth, '4');
-  //   await reportPartTwoService.sendReport(reportData.value.fifth, '5');
-  //   await reportPartTwoService.sendReport(reportData.value.eleventh, '11');
-  //   await reportPartTwoService.sendReport(reportData.value.twelfth, '12');
-  //   await reportPartTwoService.sendReport(reportData.value.thirteenth, '13');
-  //   await reportPartTwoService.sendReport(reportData.value.sixteenth, '16');
-  //   await reportPartTwoService.sendMultipleReport(reportData.value.tenth.first, '10', '1');
-  //   await reportPartTwoService.sendMultipleReport(reportData.value.tenth.second, '10', '2');
-  // } catch (e) {
-  //   console.log('sendReport error: ', e)
-  // }
+  try {
+    await reportPartTwoService.sendReport(reportData.value.first, '1');
+    await reportPartTwoService.sendReport(reportData.value.fourth, '4');
+    await reportPartTwoService.sendReport(reportData.value.fifth, '5');
+    await reportPartTwoService.sendReportWithSlash(reportData.value.six, '6');
+    await reportPartTwoService.sendReportWithSlash(reportData.value.seventh, '7');
+    await reportPartTwoService.sendReportWithSlash(reportData.value.nineteenth, '9');
+    await reportPartTwoService.sendReport(reportData.value.eleventh, '11');
+    await reportPartTwoService.sendReport(reportData.value.twelfth, '12');
+    await reportPartTwoService.sendReport(reportData.value.thirteenth, '13');
+    await reportPartTwoService.sendReport(reportData.value.sixteenth, '16');
+    await reportPartTwoService.sendMultipleReport(reportData.value.tenth.first, '10', '1');
+    await reportPartTwoService.sendMultipleReport(reportData.value.tenth.second, '10', '2');
+  } catch (e) {
+    console.log('sendReport error: ', e)
+  }
 }
 
 watchEffect(() => {
@@ -535,14 +538,16 @@ watchEffect(() => {
   // console.log('rep', reportData.value)
 
   getReportData();
-
-});
-
-onMounted(() => {
   getItems(6);
   getItems(7);
   getItems(9);
-})
+});
+
+// onMounted(() => {
+//   getItems(6);
+//   getItems(7);
+//   getItems(9);
+// })
 
 // watch(() => panel_num.value, (newPanel) => {
 //   panel_num.value = newPanel

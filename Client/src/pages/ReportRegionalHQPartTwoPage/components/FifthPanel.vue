@@ -1,54 +1,93 @@
 <template>
   <div v-if="!(props.centralExpert || props.districtExpert)" class="form__field-group">
     <div class="form__field-group-general" v-for="(event, index) in events" :key="index">
-
       <div class="form__field-people">
         <div class="form__field-people-count">
-
           <div class="form__field-people-count-wrap">
             <label class="form__label" for="participants_number">Общее количество человек, принявших участие в трудовом
               проекте <sup class="valid-red">*</sup></label>
-            <InputReport v-model:value="event.participants_number" id="participants_number" name="participants_number"
-                         class="form__input form__field-people-count-field" type="number" placeholder="Введите число"
-                         @focusout="focusOut"/>
+            <InputReport
+                v-model:value="event.participants_number"
+                id="participants_number" name="participants_number"
+                class="form__input form__field-people-count-field"
+                type="number"
+                placeholder="Введите число"
+                @focusout="focusOut"
+                :disabled="isSent"
+            />
           </div>
           <div class="form__field-people-count-wrap">
-            <label class="form__label" for="ro_participants_number">Количество человек из своего региона, принявших
-              участие в трудовом проекте <sup class="valid-red">*</sup></label>
-            <InputReport v-model:value="event.ro_participants_number" id="ro_participants_number"
-                         name="ro_participants_number" class="form__input form__field-people-count-field" type="number"
-                         placeholder="Введите число" @focusout="focusOut"/>
+            <label class="form__label" for="ro_participants_number">Количество человек из&nbsp;своего региона, принявших
+              участие в&nbsp;трудовом проекте <sup class="valid-red">*</sup></label>
+            <InputReport
+                v-model:value="event.ro_participants_number"
+                id="ro_participants_number"
+                name="ro_participants_number"
+                class="form__input form__field-people-count-field"
+                type="number"
+                placeholder="Введите число"
+                @focusout="focusOut"
+                :disabled="isSent"
+            />
           </div>
         </div>
         <div class="form__field-people-deleteBtn">
-          <Button v-if="index > 0" label="Удалить проект" class="deleteEventBtn" @click="deleteProject(index)"/>
+          <Button
+              v-if="index > 0 && !isSent"
+              label="Удалить проект"
+              class="deleteEventBtn"
+              @click="deleteProject(index)"
+          />
         </div>
       </div>
       <div class="form__field-date" style="display: flex;">
         <div class="form__field-date-wrap">
           <label class="form__label" for="start_date">Дата начала проведения проекта <sup
               class="valid-red">*</sup></label>
-          <InputReport v-model:value="event.start_date" id="start_date" name="start_date"
-                       class="form__input form__field-date-wrap-field" type="date" @focusout="focusOut"/>
+          <InputReport
+              v-model:value="event.start_date"
+              id="start_date"
+              name="start_date"
+              class="form__input form__field-date-wrap-field"
+              type="date"
+              @focusout="focusOut"
+              :disabled="isSent"
+          />
         </div>
         <div class="form__field-date-wrap">
           <label class="form__label" for="end_date">Дата окончания проведения проекта <sup
               class="valid-red">*</sup></label>
-          <InputReport v-model:value="event.end_date" id="end_date" name="end_date"
-                       class="form__input form__field-date-wrap-field" type="date" @focusout="focusOut"/>
+          <InputReport
+              v-model:value="event.end_date"
+              id="end_date"
+              name="end_date"
+              class="form__input form__field-date-wrap-field"
+              type="date"
+              @focusout="focusOut"
+              :disabled="isSent"
+          />
         </div>
       </div>
       <div class="report__add-file">
         <div class="form__field-event-file">
           <label class="form__label" for="4">Положение о проекте <sup class="valid-red">*</sup></label>
-          <InputReport class="form-input__file-input" v-if="!event.regulations" isFile type="file"
-                       id="scan_file" name="scan_file" width="100%" @change="uploadFile($event, index)"/>
+          <InputReport
+              class="form-input__file-input"
+              v-if="!event.regulations"
+              isFile
+              type="file"
+              id="scan_file"
+              name="scan_file"
+              width="100%"
+              @change="uploadFile($event, index)"
+              :disabled="isSent"
+          />
           <div v-else class="form__file-box">
             <span class="form__file-name">
               {{ event.regulations.split('/').at(-1) }}
             </span>
             <span class="form__file-size">{{ '123' }} Мб</span>
-            <button @click="deleteFile(index)" class="form__button-delete-file">
+            <button v-if="!isSent" @click="deleteFile(index)" class="form__button-delete-file">
               Удалить
             </button>
           </div>
@@ -57,23 +96,46 @@
       <div style="width: 100%;">
         <p class="form__label">Ссылка на группу трудового проекта в социальных сетях <sup class="valid-red">*</sup></p>
         <div class="form__field-link-wrap" v-for="(link, i) in events[index].links" :key="i">
-          <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__field-link-field"
-                       type="text" placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                       @focusout="focusOut"/>
-          <div v-if="events[index].links.length === i + 1" @click="addLink(index)" class="add_link">+ Добавить ссылку
+          <InputReport
+              v-model:value="link.link"
+              :id="i"
+              :name="i"
+              class="form__input form__field-link-field"
+              type="text"
+              placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
+              @focusout="focusOut"
+              :disabled="isSent"
+          />
+          <div v-if="!isSent">
+            <div
+                v-if="events[index].links.length === i + 1"
+                @click="addLink(index)"
+                class="add_link"
+            >+ Добавить ссылку
+            </div>
+            <div v-else class="add_link" @click="deleteLink(index, i)">Удалить</div>
           </div>
-          <div v-else class="add_link" @click="deleteLink(index, i)">Удалить</div>
         </div>
       </div>
     </div>
-    <div>
+    <div v-if="!isSent">
       <Button class="add_eventBtn" label="Добавить проект" @click="addProject"/>
     </div>
     <div class="form__field-comment">
       <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
-      <TextareaReport v-model:value="fifthPanelData.comment" id="comment" name="comment" :rows="1" autoResize
-                      placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
-                      counter-visible/>
+      <TextareaReport
+          v-model:value="fifthPanelData.comment"
+          id="comment"
+          name="comment"
+          :rows="1"
+          autoResize
+          placeholder="Комментарий"
+          @focusout="focusOut"
+          :maxlength="3000"
+          :max-length-text="3000"
+          counter-visible
+          :disabled="isSent"
+      />
     </div>
     <div class="form__field-result">
       <v-checkbox class="result-checkbox" id="v-checkbox"/>
@@ -346,6 +408,7 @@ const events = ref([
     ],
   }
 ]);
+const isSent = ref(false);
 
 const focusOut = async () => {
   fifthPanelData.value.events = [...events.value];
@@ -383,10 +446,24 @@ const addProject = () => {
   })
 };
 const deleteProject = async (index) => {
+  let formData = new FormData();
   events.value = events.value.filter((el, i) => index !== i);
-  fifthPanelData.value.events = [...events.value];
+  // fifthPanelData.value.events = [...events.value];
+  formData.append('comment', fifthPanelData.value.comment);
+  events.value.forEach((event, i) => {
+    if (event.participants_number) formData.append(`events[${i}][participants_number]`, event.participants_number);
+    if (event.ro_participants_number) formData.append(`events[${i}][ro_participants_number]`, event.ro_participants_number);
+    if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
+    if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
+    if (event.links.length) {
+      for (let j = 0; j < event.links.length; j++) {
+        if (event.links[j].link) formData.append(`events[${i}][links][${j}][link]`, event.links[j].link);
+      }
+    }
+  })
   try {
-    await reportPartTwoService.createReportDraft(fifthPanelData.value, '5');
+    let {data} = await reportPartTwoService.createReportDraft(formData, '5', true);
+    emit('getData', data, 5);
   } catch (e) {
     console.log('deleteEvent error: ', e);
   }
@@ -438,6 +515,7 @@ watchEffect(() => {
     isFirstSent.value = false;
     events.value = [...props.data.events];
     fifthPanelData.value.comment = props.data.comment;
+    isSent.value = props.data.is_sent;
   }
 });
 </script>

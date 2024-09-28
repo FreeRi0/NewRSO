@@ -6,39 +6,76 @@
           <label class="form__label" for="participants_number">Количество человек, принявших участие в мероприятии <sup
               class="valid-red">*</sup></label>
           <div style="display: flex; justify-content: space-between;">
-            <InputReport v-model:value="event.participants_number" :id="event.participants_number"
-                         name="participants_number" class="form__input" type="number" placeholder="Введите число"
-                         @focusout="focusOut"/>
+            <InputReport
+                v-model:value="event.participants_number"
+                :id="event.participants_number"
+                name="participants_number"
+                class="form__input" type="number"
+                placeholder="Введите число"
+                @focusout="focusOut"
+                :disabled="isSent"
+            />
           </div>
         </div>
-        <Button class="form__field-delete-button" v-if="index > 0" label="Удалить мероприятие"
-                @click="deleteEvent(index)"/>
+        <Button
+            class="form__field-delete-button"
+            v-if="index > 0 && !isSent"
+            label="Удалить мероприятие"
+            @click="deleteEvent(index)"
+        />
       </div>
       <div class="form__field-date">
         <div class="form__field">
           <label style="max-width: 280px;" class="form__label" for="start_date">Дата начала проведения мероприятия <sup
               class="valid-red">*</sup></label>
-          <InputReport v-model:value="event.start_date" :id="event.start_date" name="start_date" class="form__input"
-                       type="date" @focusout="focusOut"/>
+          <InputReport
+              v-model:value="event.start_date"
+              :id="event.start_date"
+              name="start_date"
+              class="form__input"
+              type="date"
+              @focusout="focusOut"
+              :disabled="isSent"
+          />
         </div>
         <div class="form__field">
           <label style="max-width: 300px;" class="form__label" for="end_date">Дата окончания проведения мероприятия <sup
               class="valid-red">*</sup></label>
-          <InputReport v-model:value="event.end_date" :id="event.end_date" name="end_date" class="form__input"
-                       type="date" @focusout="focusOut"/>
+          <InputReport
+              v-model:value="event.end_date"
+              :id="event.end_date"
+              name="end_date"
+              class="form__input"
+              type="date"
+              @focusout="focusOut"
+              :disabled="isSent"
+          />
         </div>
       </div>
       <div class="form__field-event">
         <div class="form__field-event-file">
           <label class="form__label" for="4">Положение о мероприятии <sup class="valid-red">*</sup></label>
-          <InputReport class="form-input__file-input" v-if="!event.regulations" isFile type="file"
-                       id="scan_file" name="scan_file" width="100%" @change="uploadFile($event, index)"/>
+          <InputReport
+              class="form-input__file-input"
+              v-if="!event.regulations"
+              isFile
+              type="file"
+              id="scan_file"
+              name="scan_file"
+              width="100%"
+              @change="uploadFile($event, index)"
+              :disabled="isSent"
+          />
           <div v-else class="form__file-box">
             <span class="form__file-name">
               {{ event.regulations.split('/').at(-1) }}
             </span>
-            <span class="form__file-size">{{ '123' }} Мб</span>
-            <button @click="deleteFile(index)" class="form__button-delete-file">
+            <!--            <span class="form__file-size">{{ '123' }} Мб</span>-->
+            <button
+                v-if="!isSent"
+                @click="deleteFile(index)"
+                class="form__button-delete-file"
+            >
               Удалить
             </button>
           </div>
@@ -47,15 +84,27 @@
           <p class="form__label">Межрегиональное <sup class="valid-red">*</sup></p>
           <div class="form__label-radio">
             <div style="display: flex;">
-              <input v-model="event.is_interregional" type="radio" :id="`is_interregional-true_${index}`" :value="true"
-                     class="custom-radio"/>
+              <input
+                  v-model="event.is_interregional"
+                  type="radio"
+                  :id="`is_interregional-true_${index}`"
+                  :value="true"
+                  class="custom-radio"
+                  :disabled="isSent"
+              />
               <label :for="`is_interregional-true_${index}`">
                 Да
               </label>
             </div>
             <div style="display: flex">
-              <input v-model="event.is_interregional" type="radio" :id="`is_interregional-false_${index}`"
-                     :value="false" class="custom-radio"/>
+              <input
+                  v-model="event.is_interregional"
+                  type="radio"
+                  :id="`is_interregional-false_${index}`"
+                  :value="false"
+                  class="custom-radio"
+                  :disabled="isSent"
+              />
               <label :for="`is_interregional-false_${index}`">
                 Нет
               </label>
@@ -66,24 +115,44 @@
       <div class="form__field-link">
         <p class="form__label">Ссылка на группу мероприятия в социальных сетях <sup class="valid-red">*</sup></p>
         <div class="form__add-link" v-for="(link, i) in events[index].links" :key="i">
-          <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__input-add-link" type="text"
-                       placeholder="https://vk.com/cco_monolit" @focusout="focusOut"/>
-          <Button v-if="events[index].links.length === i + 1" label="+ Добавить ссылку" @click="addLink(index)"
-                  class="form__add-link-button"/>
-          <Button class="form__add-link-button" v-else label="Удалить" @click="deleteLink(index, i)"/>
+          <InputReport
+              v-model:value="link.link"
+              :id="i"
+              :name="i"
+              class="form__input form__input-add-link"
+              type="text"
+              placeholder="https://vk.com/cco_monolit"
+              @focusout="focusOut"
+              :disabled="isSent"
+          />
+          <div v-if="!isSent">
+            <Button v-if="events[index].links.length === i + 1" label="+ Добавить ссылку" @click="addLink(index)"
+                    class="form__add-link-button"/>
+            <Button class="form__add-link-button" v-else label="Удалить" @click="deleteLink(index, i)"/>
+          </div>
         </div>
       </div>
     </div>
 
-    <div>
+    <div v-if="!isSent">
       <Button class="form__add-event" label="Добавить мероприятие" @click="addEvent"/>
     </div>
     <div class="form__field-comment">
       <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
-      <InputReport :maxlength="3000" :max-counter="3000" counter-visible v-model:value="fourthPanelData.comment"
-                   id="comment" name="comment" class="form__input" type="textarea"
-                   placeholder="Укажите наименования организованных мероприятий" style="width: 100%;"
-                   @focusout="focusOut"/>
+      <InputReport
+          :maxlength="3000"
+          :max-counter="3000"
+          counter-visible
+          v-model:value="fourthPanelData.comment"
+          id="comment"
+          name="comment"
+          class="form__input"
+          type="textarea"
+          placeholder="Укажите наименования организованных мероприятий"
+          style="width: 100%;"
+          @focusout="focusOut"
+          :disabled="isSent"
+      />
     </div>
     <div class="form__field-result" style="display: flex; align-items: center;">
       <v-checkbox class="result-checkbox" id="v-checkbox"/>
@@ -106,11 +175,11 @@
               <InputReport v-model:value="event.participants_number" :id="event.participants_number"
                            name="participants_number" class="form__input" type="number" placeholder="Введите число"
                            @focusout="focusOut"
-                           :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"/>
+                           :disabled="props.centralExpert || props.districtExpert"/>
             </div>
           </div>
-          <Button class="form__field-delete-button" v-if="index > 0" label="Удалить мероприятие"
-                  @click="deleteEvent(index)"/>
+          <!--          <Button class="form__field-delete-button" v-if="index > 0" label="Удалить мероприятие"-->
+          <!--                  @click="deleteEvent(index)"/>-->
         </div>
         <div class="form__field-date">
           <div class="form__field">
@@ -118,14 +187,14 @@
               <sup class="valid-red">*</sup></label>
             <InputReport v-model:value="event.start_date" :id="event.start_date" name="start_date" class="form__input"
                          type="date" @focusout="focusOut"
-                         :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"/>
+                         :disabled="props.centralExpert || props.districtExpert"/>
           </div>
           <div class="form__field">
             <label style="max-width: 300px;" class="form__label" for="end_date">Дата окончания проведения мероприятия
               <sup class="valid-red">*</sup></label>
             <InputReport v-model:value="event.end_date" :id="event.end_date" name="end_date" class="form__input"
                          type="date" @focusout="focusOut"
-                         :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"/>
+                         :disabled="props.centralExpert || props.districtExpert"/>
           </div>
         </div>
         <div class="form__field-event">
@@ -163,7 +232,7 @@
           <div class="form__add-link" v-for="(link, i) in events[index].links" :key="i">
             <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__input-add-link"
                          type="text" placeholder="https://vk.com/cco_monolit" @focusout="focusOut"
-                         :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"/>
+                         :disabled="props.centralExpert || props.districtExpert"/>
           </div>
         </div>
       </div>
@@ -172,7 +241,7 @@
         <InputReport v-model:value="fourthPanelData.comment" id="comment" name="comment" class="form__input"
                      type="textarea" placeholder="Укажите наименования организованных мероприятий" style="width: 100%;"
                      @focusout="focusOut"
-                     :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"/>
+                     :disabled="props.centralExpert || props.districtExpert"/>
       </div>
       <div class="form__field-result">
         <v-checkbox label="Итоговое значение"/>
@@ -403,6 +472,7 @@ const events = ref([
     is_interregional: false,
   }
 ]);
+const isSent = ref(false);
 
 const emit = defineEmits(['getData']);
 
@@ -443,10 +513,23 @@ const addEvent = () => {
   })
 };
 const deleteEvent = async (index) => {
-  // events.value = events.value.filter((el, i) => index !== i);
+  let formData = new FormData();
+  events.value = events.value.filter((el, i) => index !== i);
   // fourthPanelData.value.events = [...events.value];
+  formData.append('comment', fourthPanelData.value.comment);
+  events.value.forEach((event, i) => {
+    if (event.participants_number) formData.append(`events[${i}][participants_number]`, event.participants_number);
+    if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
+    if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
+    formData.append(`events[${i}][is_interregional]`, event.is_interregional);
+    if (event.links.length) {
+      for (let j = 0; j < event.links.length; j++) {
+        if (event.links[j].link) formData.append(`events[${i}][links][${j}][link]`, event.links[j].link);
+      }
+    }
+  })
   try {
-    let {data} = await reportPartTwoService.createReportDraft(setFormData(null, index, true), '4', true);
+    let {data} = await reportPartTwoService.createReportDraft(formData, '4', true);
     emit('getData', data, 4);
   } catch (e) {
     console.log('deleteEvent error: ', e);
@@ -498,7 +581,7 @@ watchEffect(() => {
     isFirstSent.value = false;
     events.value = [...props.data.events];
     fourthPanelData.value.comment = props.data.comment;
-
+    isSent.value = props.data.is_sent;
     // events.value.forEach((event) => {
     //   if (!event.links.length) event.links.push({link: ''})
     // });
