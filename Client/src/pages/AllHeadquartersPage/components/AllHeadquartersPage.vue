@@ -392,7 +392,11 @@ watch(
     &-search {
         position: relative;
         box-sizing: border-box;
-        @media screen and (min-width: 320px) and (max-width:480px) {
+        @media screen and (max-width:480px) {
+            width: 410px; /* фиксированная ширина */
+            max-width: 410px; /* предотвращает увеличение */
+        }
+        @media screen and (min-width: 320px) and (max-width:439px) {
             width: 290px; /* фиксированная ширина */
             max-width: 290px; /* предотвращает увеличение */
        
@@ -408,7 +412,11 @@ watch(
         }
         }
         &__input {
-            @media screen and (min-width: 320px) and (max-width:480px) {
+            @media screen and (max-width:480px) {
+            padding: 12px 135px 10px 50px;
+            font-size: 17.5px; 
+        }
+            @media screen and (min-width: 320px) and (max-width:439px) {
             padding: 12px 15px 10px 50px;
             font-size: 17.5px; 
         }
