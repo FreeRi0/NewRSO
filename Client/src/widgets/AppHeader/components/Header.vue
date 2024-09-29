@@ -49,14 +49,13 @@
             <nav class="header__nav nav-user">
                 <div class="nav-user__application-count" v-if="
                     Object.keys(userStore.currentUser).length &&
-                    (roles.roles.value.regionalheadquarter_commander ||
-                        roles.roles.value.detachment_commander)
+                    (roleStore.roles.regionalheadquarter_commander ||
+                        roleStore.roles.detachment_commander || roleStore.myPositions?.userregionalheadquarterposition?.position === 'Комиссар')
                 ">
                     <!--ССЫЛКА НА СТРАНИЦУ АКТИВНЫЕ ЗАЯВКИ?-->
                     <router-link :to="'/active'">
                         <SvgIcon iconName="bell-light" />
                     </router-link>
-                    <!--Если есть активные заявки (isActive = true), ниже отображается их количество:-->
                     <div v-if="userStore.count.count" class="nav-user__quantity-box">
                         <span v-if="userStore.count.count < 100" class="countNum">{{ userStore.count.count }}</span>
                         <span v-else>99+</span>
@@ -68,14 +67,6 @@
                     !userStore.isLoading
                 ">
                     <button class="nav-user__button" @click="show = !show">
-                        <!-- <img
-                            class="nav-user__button-mobile"
-                            src="@app/assets/icon/icon-location.svg"
-                            width="36"
-                            height="36"
-                            alt="Иконка геолокации"
-                        /> -->
-
                         <span v-if="
                             userStore.currentUser?.region &&
                             !isLoading.isLoading.value
@@ -183,7 +174,6 @@ const roleStore = useRoleStore();
 const regionalsStore = useRegionalsStore();
 const userStore = useUserStore();
 const squadsStore = useSquadsStore();
-const roles = storeToRefs(roleStore);
 
 const isLoading = storeToRefs(regionalsStore);
 
@@ -341,6 +331,8 @@ const userPages = computed(() => [
         title: 'Рейтинг РО',
         name: nameUrl,
         show:
+            roleStore.experts.is_central_expert === true ||
+            roleStore.experts.is_district_expert === true ||
             roleStore.roles?.regionalheadquarter_commander ||
             roleStore.roles.centralheadquarter_commander,
     },
@@ -428,23 +420,34 @@ watch(
 );
 
 watch(
-    () => roleStore.roles,
-    (newRole, oldRole) => {
-        if (Object.keys(roleStore.roles).length === 0) {
-            return;
-        }
-        if (roleStore.roles.centralheadquarter_commander !== null) {
-            nameUrl = 'rating-ro'
-        } else {
-            nameUrl = 'reportingRo'
-        }
-        userStore.getCountApp();
-    },
+  () => [roleStore.roles, roleStore.experts],
+  (newRoles, newExperts) => {
+    if (Object.keys(newRoles).length === 0) {
+      return;
+    }
+
+    if (roleStore.roles.centralheadquarter_commander !== null) {
+      nameUrl = 'rating-ro'
+   
+    } else if (newExperts.is_central_expert === true || newExperts.is_district_expert === true) {
+      nameUrl = 'rating-ro'
+
+    } else {
+      nameUrl = 'reportingRo'
+
+    }
+
+    if (localStorage.getItem('jwt_token') !== null) {
+      userStore.getCountApp();
+    }
+  },
+  { immediate: true }
 );
 
 onMounted(() => {
     if (localStorage.getItem('jwt_token') !== null) {
-        userStore.getCountApp();
+        roleStore.getMyPositions();
+        roleStore.getExperts();
     } else {
         return;
     }

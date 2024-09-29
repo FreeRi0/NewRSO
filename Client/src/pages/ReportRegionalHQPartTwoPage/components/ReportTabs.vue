@@ -1,11 +1,11 @@
 <template>
   <v-card class="panel-card">
 
-    <v-tabs
-        v-model="tab"
-    >
-      <v-tab value="one" class="panel-tab-btn" v-if="districtHeadquarterCommander || centralHeadquarterCommander">Отчет РО</v-tab>
-      <v-tab value="two" class="panel-tab-btn" v-if="districtHeadquarterCommander || centralHeadquarterCommander">Корректировка ОШ</v-tab>
+    <v-tabs v-model="tab">
+      <v-tab value="one" class="panel-tab-btn" v-if="districtHeadquarterCommander || centralHeadquarterCommander">Отчет
+        РО</v-tab>
+      <v-tab value="two" class="panel-tab-btn"
+        v-if="districtHeadquarterCommander || centralHeadquarterCommander">Корректировка ОШ</v-tab>
       <v-tab value="three" class="panel-tab-btn" v-if="centralHeadquarterCommander">Корректировка ЦШ</v-tab>
     </v-tabs>
 
@@ -49,9 +49,16 @@ watchEffect(() => {
 })
 </script>
 <style lang="scss" scoped>
+.v-slide-group {
+  margin-bottom: -10px;
+}
+.v-tabs--density-default {
+  --v-tabs-height: 54px;
+}
 .panel-card {
   box-shadow: none;
 }
+
 .panel-tab-btn {
   text-transform: initial;
   font-family: Bert Sans;
@@ -61,24 +68,39 @@ watchEffect(() => {
   text-align: left;
   margin-right: 8px;
 }
+
 .v-tab-item--selected {
   background: #F3F4F5;
+  pointer-events: none;
 }
+
 .v-tab.v-tab.v-btn {
   min-width: 280px;
-  border-radius: 10px 10px 0 0;
+  border-radius: 10px;
   letter-spacing: initial;
-  border: none;
+  border: 1px solid #000000;
+  border-bottom: none;
+  padding-bottom: 10px;
 }
+.v-tab.v-tab.v-btn.v-tab-item--selected {
+  border-color: #F3F4F5;
+}
+
 .panel-card-text {
   padding: 0;
 }
+
 .form__field-group {
   background: #F3F4F5;
   border: none;
-  border-radius: 0 0 10px 10px;
+  border-radius: 10px;
   margin-bottom: 8px;
+
+  @media (min-width: 768px) {
+    padding: 40px;
+  }
 }
+
 //.report-table {
 //  &__tr {
 //    background-color: #FFFFFF;
@@ -118,5 +140,4 @@ watchEffect(() => {
 //  margin-bottom: 16px;
 //  border-radius: 10px;
 //  border: 1px solid #B6B6B6;
-//}
-</style>
+//}</style>
