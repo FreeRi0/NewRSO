@@ -832,7 +832,7 @@
                                     )
                                 "
                                 label="Удалить заявку"
-                                class="AddApplication"
+                                class="AddApplication AddApplication-but-bidel"
                             ></Button>
                         </div>
 
@@ -1451,14 +1451,14 @@ const copyL = () => {
     }
 }
 
-@media screen and (max-width: 320px) and (max-height:462px) {
-    
+@media screen and (min-width: 320px) and (max-width: 480px) {
     .AddApplication {
     display: block;
     width: 100%;
     border-radius: 10px;
     background: #39bfbf;
     text-align: center;
+    align-items: center;
     font-family: 'Bert Sans';
     font-size: 16px;
     font-weight: 500;
@@ -1467,15 +1467,19 @@ const copyL = () => {
     padding: 16px 57px;
     margin-bottom: 90px;
     margin-right: -165px;
+
+    &-but-bidel{
+        text-align: center;
+        align-items: center;
+        margin-block: 10px;
+        margin-inline-start: -140px;
+        transform: translateX(-105px);
+        margin-bottom: 20px;
     }
-    .AddApplication:first-child {
-        transform: translateX(32px) translateY(0px);
     }
 
-    .AddApplication:last-child {
-        transform: translateX(-198px) translateY(90px);
-        padding: 14px 79px;
-    }
+
+   
 
 
     .hq-data__social-network-central {

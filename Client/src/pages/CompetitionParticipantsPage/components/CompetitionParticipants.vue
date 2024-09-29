@@ -282,7 +282,7 @@ onMounted(() => {
         display: flex;
         justify-content: flex-end;
         align-items: flex-end;
-        @media screen and (max-width: 320px) and (max-height:462px) {
+        @media screen and (min-width: 320px) and (max-width:480px) {
             display: block;
             justify-content: start;
             align-items: start;
@@ -387,7 +387,7 @@ onMounted(() => {
         margin-top: 12px;
     }
 }
-@media screen and (max-width: 320px) and (max-height:462px) {
+@media screen and (min-width: 320px) and (max-width:480px) {
     .squads-sort {
         flex-direction:column-reverse;
         align-items: start;        

@@ -92,7 +92,7 @@ onMounted(() => {
     font-size: 16px;
     transition: 0.2s;
     text-transform: none;
-    @media screen and (max-width: 320px) and (max-height:462px) {
+    @media screen and (min-width: 320px) and (max-width: 480px) {
         width: 100%;
     }
 

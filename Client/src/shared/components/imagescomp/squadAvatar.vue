@@ -65,7 +65,7 @@ const props = defineProps({
             grid-column-end: 4;
             grid-row-start: 2;
             grid-row-end: 4;
-            @media screen and (max-width: 320px) and (max-height:462px) {
+            @media screen and (min-width: 320px) and (max-width: 480px) {
               transform: translateX(35px);
               margin-top: -100px;
           }

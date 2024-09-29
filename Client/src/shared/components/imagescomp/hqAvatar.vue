@@ -64,7 +64,6 @@ const props = defineProps({
     object-fit: cover;
     border-radius: 50%;
     align-items: center;
-    transform: translateX(0px);
 }
 
 .vue-image-crop-upload .vicp-wrap .vicp-operate a {
@@ -79,7 +78,7 @@ const props = defineProps({
         background: var(--primary);
     }
 }
-@media screen and (max-width: 320px) and (max-height:462px) {
+@media screen and (min-width: 320px) and (max-width: 480px) {
     .user-metric-hq__avatar {
         transform: translateX(20px) translateY(-100px);
     }

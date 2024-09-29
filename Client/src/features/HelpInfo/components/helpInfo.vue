@@ -2113,7 +2113,7 @@ usePage({ isHidden: true });
     text-decoration: underline;
 }
 
-@media screen and (max-width: 320px) and (max-height:462px) {
+@media screen and (min-width: 320px) and (max-width:480px) {
     .v-list-item-title {
     white-space: wrap;
     margin-right: 50px;
@@ -2132,8 +2132,9 @@ usePage({ isHidden: true });
         transform: translateY(20px);
     }
     .helpInfo_optimize_button{
-        margin-left: 242px;
         position: absolute;
+        top: 10px;
+        right: 1px;
     }
 
     .v-list-item__append {

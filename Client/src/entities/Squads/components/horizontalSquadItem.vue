@@ -181,9 +181,6 @@ onMounted(() => {
         border: 1px solid #b6b6b6;
         background: #fff;
         margin-bottom: 12px;
-        @media screen and (max-width: 320px) and (max-height:462px) {
-            
-            }
         @media screen and (max-width: 820px) {
             width: 100%;
             max-width: 100%;
@@ -224,7 +221,7 @@ onMounted(() => {
     
         &-title {
             margin-left: 10px;
-            @media screen and (max-width: 320px) and (max-height:462px) {
+            @media screen and (min-width: 320px) and (max-width:480px) {
                 margin-left: -35px;
                 transform: translateX(20px);
               
@@ -237,7 +234,7 @@ onMounted(() => {
             width: 40px;
             height: 40px;
             border-radius: 100%;
-            @media screen and (max-width: 320px) and (max-height:462px) {
+            @media screen and (min-width: 320px) and (max-width:480px) {
                 transform: translateX(-10px);
                 margin-left: 0px;
             }

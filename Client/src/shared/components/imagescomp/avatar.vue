@@ -296,7 +296,6 @@ const deleteAvatar = async () => {
 <style lang="scss">
 
 .user-metric__avatar {
-    /*    display: grid;*/
     grid-column-start: 1;
     grid-column-end: 3;
     grid-row-start: 1;
@@ -304,18 +303,17 @@ const deleteAvatar = async () => {
     width: 80%;
     height: 100%;
     border-radius: 50%;
-    @media screen and (max-width: 320px) and (max-height:462px) {
-    /*    display: grid;*/
+    @media screen and (min-width: 320px) and (max-width: 480px) {
+    display: flex;
     grid-column-start: 1;
     grid-column-end: 3;
     grid-row-start: 1;
     grid-row-end: 3;
     width: 80%;
     height: 100%;
-    display: flex;
     justify-content: center;
     align-items: center;
-    transform: translateX(3px)
+    transform: translateX(center);
 }
     &-wrapper {
         display: grid;
@@ -344,6 +342,11 @@ const deleteAvatar = async () => {
     clip-path: circle(50%);
     object-fit: cover;
     border-radius: 50%;
+    align-items: center;
+    @media screen and (min-width: 320px) and (max-width: 480px) {
+    transform: translateX(25px);
+    margin-bottom: 200px;
+    }
 }
 
 
@@ -353,8 +356,8 @@ const deleteAvatar = async () => {
     background: rgba(0, 0, 0, 0.4);
     margin-right: 25px;
 
-    @media screen and (max-width: 320px) and (max-height: 462px) {
-        &:nth-of-type(1) { // Указываем, какой элемент таргетить
+    @media screen and (min-width: 320px) and (max-width: 480px) {
+        &:nth-of-type(1) { 
             margin-right: 15px;
             transform: translateY(120px) translateX(-20px);
         }
@@ -368,12 +371,16 @@ const deleteAvatar = async () => {
     transform: translateY(0px) translateX(0px);
 
 
-    @media screen and (max-width: 320px) and (max-height: 462px) {
+    @media screen and (min-width: 320px) and (max-width: 480px) {
         margin-right: 25px;
-        transform: translateY(20px) translateX(5px);
+        transform: translateX(5px) translateY(-70px);
         &.banner{
             margin-right: 15px;
-            transform: translateY(-80px) translateX(-20px);
+            transform: translateY(20px) translateX(75vw);
+            position: absolute;
+            @media screen and (max-width: 340px) {
+                transform: translateY(20px) translateX(73vw);
+            }
         }
     }
 }

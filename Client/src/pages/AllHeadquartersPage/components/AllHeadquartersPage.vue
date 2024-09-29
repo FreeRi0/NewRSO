@@ -392,21 +392,25 @@ watch(
     &-search {
         position: relative;
         box-sizing: border-box;
+        @media screen and (min-width: 320px) and (max-width:480px) {
+            width: 290px; /* фиксированная ширина */
+            max-width: 290px; /* предотвращает увеличение */
+       
+        } 
         svg {
             position: absolute;
             top: 10px;
             left: 16px;
-            @media screen and (max-width: 320px) and (max-height:462px) {
+            @media screen and (min-width: 320px) and (max-width:480px) {
                 position: absolute;
-                top: 5px;
-                left: 7px;
+                top: 10px;
+                left: 14px;
         }
         }
         &__input {
-            @media screen and (max-width: 320px) and (max-height:462px) {
-            padding: 7px 0px 7px 39px;
-            font-size: 15.5px;
-            
+            @media screen and (min-width: 320px) and (max-width:480px) {
+            padding: 12px 15px 10px 50px;
+            font-size: 17.5px; 
         }
             width: 100%;
             padding: 13px 0px 10px 60px;
@@ -416,7 +420,7 @@ watch(
     }
 
     &-wrapper {
-        @media screen and (max-width: 320px) and (max-height:462px) {
+        @media screen and (min-width: 320px) and (max-width:480px) {
             padding: 10px 0px;
             transform: translateX(-1px);
             display: grid;
@@ -483,7 +487,7 @@ pre {
         }
     }
     &-title {
-        @media screen and (max-width: 320px) and (max-height:462px) {
+        @media screen and (min-width: 320px) and (max-width:340px) {
         padding: 5px 10px 0px 10px;
         font-size: 15.5px;
         transform: translateX(center);

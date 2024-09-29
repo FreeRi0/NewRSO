@@ -355,27 +355,8 @@ const deleteBanner = async () => {
     }
 }
 
-.user-metric__baner-add {
-    display: grid;
-    align-items: end;
-    grid-column-start: 5;
-    grid-column-end: 6;
-    grid-row-start: 2;
-    grid-row-end: 3;
-    margin: 0 16px 16px 0;
 }
 
-}
-
-.user-metrichq__baner-add {
-    display: grid;
-    align-items: end;
-    grid-column-start: 5;
-    grid-column-end: 6;
-    grid-row-start: 2;
-    grid-row-end: 3;
-    margin: 0 16px 16px 0;
-}
 
 @media (max-width: 690px) {
     .user-metric__top {
@@ -383,7 +364,7 @@ const deleteBanner = async () => {
     }
 }
 
-@media screen and (max-width: 320px) and (max-height:462px) {
+@media screen and (min-width: 320px) and (max-width: 480px) {
     .user-metric__top {
         display: grid;
         grid-template-columns: 1fr;
@@ -393,9 +374,6 @@ const deleteBanner = async () => {
         grid-row-start: 1;
         grid-row-end: 2;
         border-radius: 10px 10px 0px 0px;
-    
-    
-
     &-img-wrapper {
         display: grid;
         grid-template-columns: 3fr;
@@ -404,18 +382,14 @@ const deleteBanner = async () => {
         grid-column-end: 6;
         grid-row-start: 1;
         grid-row-end: 3;
-        
-        
+      
     }
 
     img {
-        width: 91.13%;
         height: 100%;
         object-fit: cover;
         border-radius: 10px 10px 0px 0px;
-        transform: translateX(-1px);
         
-
     }
     
     &-hq{
@@ -449,6 +423,6 @@ const deleteBanner = async () => {
     }
     
 }
-
 }
+
 </style>

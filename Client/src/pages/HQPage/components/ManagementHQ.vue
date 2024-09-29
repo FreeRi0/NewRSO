@@ -190,43 +190,13 @@ section.headquarters-management h3 {
     }
 }
 
-@media (max-width: 450px) {
-    .headquarters-management__container {
-        grid-template-columns: repeat(auto-fill, minmax(156px, 1fr));
-        column-gap: 16px;
-        row-gap: 16px;
-    }
 
-    .manager-card {
-        width: 156px;
-        height: 173px;
-    }
 
-    .manager-card__box {
-        width: 114px;
-    }
-
-    .manager-card__box #name_length {
-        font-size: 12px;
-        margin-bottom: 8px;
-    }
-
-    .manager-card__box p {
-        font-size: 12px;
-    }
-
-    .manager-card__avatar img {
-        width: 60px;
-        height: 60px;
-        margin-bottom: 0;
-    }
-}
-@media screen and (max-width: 320px) and (max-height:462px) {
+@media screen and (min-width: 320px) and (max-width: 480px) {
     .manager-card {
     border-radius: 10px;
     background: #fff;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.08);
-    /*  */
     padding: 24px 20px;
     width: 100%;
     height: 100%;
