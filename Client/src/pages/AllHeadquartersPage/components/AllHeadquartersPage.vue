@@ -430,10 +430,7 @@ watch(
     &-wrapper {
         @media screen and (min-width: 320px) and (max-width:480px) {
             padding: 10px 0px;
-            transform: translateX(-1px);
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            grid-row-gap: 10px;
+            justify-content: center;
         }
         padding: 60px 0px;
         display: grid;
@@ -495,7 +492,7 @@ pre {
         }
     }
     &-title {
-        @media screen and (min-width: 320px) and (max-width:340px) {
+        @media screen and (min-width: 320px) and (max-width:480px) {
         padding: 5px 10px 0px 10px;
         font-size: 15.5px;
         transform: translateX(center);
