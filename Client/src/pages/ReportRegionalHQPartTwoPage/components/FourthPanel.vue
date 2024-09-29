@@ -480,7 +480,8 @@ const focusOut = async () => {
   fourthPanelData.value.events = [...events.value];
   try {
     if (isFirstSent.value) {
-      await reportPartTwoService.createReport(fourthPanelData.value, '4');
+      const {data} = await reportPartTwoService.createReport(setFormData(), '4', true);
+      emit('getData', data, 4);
     } else {
       const {data} = await reportPartTwoService.createReportDraft(setFormData(), '4', true);
       emit('getData', data, 4);

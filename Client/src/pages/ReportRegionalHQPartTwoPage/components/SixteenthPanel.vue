@@ -445,8 +445,8 @@ const focusOut = async () => {
   sixteenthPanelData.value.projects = [...projects.value];
   try {
     if (isFirstSent.value) {
-      await reportPartTwoService.createReport(sixteenthPanelData.value, '16');
-      isFirstSent.value = false;
+      const {data} = await reportPartTwoService.createReport(sixteenthPanelData.value, '16');
+      emit('getData', data, 16);
     } else {
       const {data} = await reportPartTwoService.createReportDraft(setFormData(), '16', true);
       emit('getData', data, 16);
@@ -481,7 +481,7 @@ const addProject = () => {
 const deleteProject = async (index) => {
   let formData = new FormData();
   projects.value = projects.value.filter((el, i) => index !== i);
-  // sixteenthPanelData.value.projects = [...projects.value];
+
   formData.append('comment', sixteenthPanelData.value.comment);
   formData.append('is_project', sixteenthPanelData.value.is_project);
   projects.value.forEach((project, i) => {

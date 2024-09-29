@@ -181,11 +181,12 @@ const isSent = ref(false);
 
 const focusOut = async () => {
   let formData = new FormData();
-  formData.append('comment', firstPanelData.value.comment);
+  formData.append('comment', firstPanelData.value.comment || '');
   formData.append('amount_of_money', firstPanelData.value.amount_of_money);
   try {
     if (isFirstSent.value) {
-      await reportPartTwoService.createReport(formData, '1', true);
+      const {data} = await reportPartTwoService.createReport(formData, '1', true);
+      emit('getData', data, 1)
     } else {
       const {data} = await reportPartTwoService.createReportDraft(formData, '1', true);
       emit('getData', data, 1);

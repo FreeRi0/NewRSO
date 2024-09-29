@@ -414,7 +414,8 @@ const focusOut = async () => {
   fifthPanelData.value.events = [...events.value];
   try {
     if (isFirstSent.value) {
-      await reportPartTwoService.createReport(fifthPanelData.value, '5');
+      const {data} = await reportPartTwoService.createReport(setFormData(), '5', true);
+      emit('getData', data, 5);
     } else {
       const {data} = await reportPartTwoService.createReportDraft(setFormData(), '5', true);
       emit('getData', data, 5);
