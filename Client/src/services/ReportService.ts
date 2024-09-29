@@ -102,4 +102,8 @@ export const reportPartTwoService = {
     sendMultipleReport(data: object, panel: string, reportNumber: string) {
         return HTTP.post(`regional_competitions/me/reports/${panel}/${reportNumber}/send`, data)
     },
+
+    getSentReports() {
+        return HTTP.get('/regional_competitions/get_sent_reports/')
+    }
 }

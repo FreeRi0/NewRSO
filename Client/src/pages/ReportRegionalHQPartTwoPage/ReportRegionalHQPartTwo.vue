@@ -214,7 +214,8 @@
         </v-expansion-panels>
       </div>
     </div>
-    <Button v-if="!preloader" variant="text" label="Отправить отчет" size="large" @click="sendReport" :disabled="blockSendButton"/>
+    <Button v-if="!preloader" variant="text" label="Отправить отчет" size="large" @click="sendReport"
+            :disabled="blockSendButton"/>
   </div>
 </template>
 <script setup>
@@ -236,11 +237,12 @@ import {
   NineteenthPanel
 } from './components/index'
 import { Button } from '@shared/components/buttons';
-import { ref, watchEffect, watch, onMounted } from "vue";
+import { ref, watchEffect } from "vue";
 import { SvgIcon } from '@shared/ui/SvgIcon';
 import { useRoleStore } from "@layouts/store/role.ts";
 import { HTTP } from '@app/http';
 import { reportPartTwoService } from "@services/ReportService.ts";
+import { useRoute } from "vue-router";
 
 const districtExpert = ref(false);
 const centralExpert = ref(false);
@@ -281,6 +283,7 @@ const setPanelNumber = (number) => {
   console.log('panel_num', panel_num.value, number);
 }
 const roleStore = useRoleStore();
+const route = useRoute();
 
 const downloadReportAll = (id) => {
   HTTP.get(`/regionals/${id}/download_regional_competition_report/`, {
@@ -406,24 +409,24 @@ const getMultiplyData = async () => {
     reportData.value.ninth[result.id] = result.data;
   });
 }
-const getReportData = async () => {
+const getReportData = async (reportId) => {
   try {
     if (centralExpert.value || districtExpert.value) {
-      reportData.value.first = (await reportPartTwoService.getReportDH('1', '1')).data;
-      reportData.value.fourth = (await reportPartTwoService.getReportDH('4', '1')).data;
-      reportData.value.fifth = (await reportPartTwoService.getReportDH('5', '1')).data;
+      reportData.value.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
+      reportData.value.fourth = (await reportPartTwoService.getReportDH('4', reportId)).data;
+      reportData.value.fifth = (await reportPartTwoService.getReportDH('5', reportId)).data;
       // reportData.value.six = (await reportPartTwoService.getMultipleReportDH('6', id)).data;
       // reportData.value.seventh = (await reportPartTwoService.getMultipleReportDH('7', id)).data;
       // reportData.value.ninth = (await reportPartTwoService.getMultipleReportDH('9', id)).data;
-      reportData.value.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', '1')).data;
-      reportData.value.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', '1')).data;
-      reportData.value.eleventh = (await reportPartTwoService.getReportDH('11', '1')).data;
-      reportData.value.twelfth = (await reportPartTwoService.getReportDH('12', '1')).data;
-      reportData.value.thirteenth = (await reportPartTwoService.getReportDH('13', '1')).data;
-      reportData.value.sixteenth = (await reportPartTwoService.getReportDH('16', '1')).data;
-      reportData.value.seventeenth = (await reportPartTwoService.getReportDH('17', '1')).data;
-      reportData.value.eighteenth = (await reportPartTwoService.getReportDH('18', '1')).data;
-      reportData.value.nineteenth = (await reportPartTwoService.getReportDH('19', '1')).data;
+      reportData.value.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
+      reportData.value.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', reportId)).data;
+      reportData.value.eleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
+      reportData.value.twelfth = (await reportPartTwoService.getReportDH('12', reportId)).data;
+      reportData.value.thirteenth = (await reportPartTwoService.getReportDH('13', reportId)).data;
+      reportData.value.sixteenth = (await reportPartTwoService.getReportDH('16', reportId)).data;
+      reportData.value.seventeenth = (await reportPartTwoService.getReportDH('17', reportId)).data;
+      reportData.value.eighteenth = (await reportPartTwoService.getReportDH('18', reportId)).data;
+      reportData.value.nineteenth = (await reportPartTwoService.getReportDH('19', reportId)).data;
     } else {
       try {
         reportData.value.first = (await reportPartTwoService.getReport('1')).data;
@@ -588,7 +591,7 @@ watchEffect(() => {
   getItems(6);
   getItems(7);
   getItems(9);
-  getReportData();
+  getReportData(route.query.reportId);
 });
 
 // onMounted(() => {
