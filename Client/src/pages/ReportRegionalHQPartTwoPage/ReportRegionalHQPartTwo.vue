@@ -214,7 +214,7 @@
         </v-expansion-panels>
       </div>
     </div>
-    <Button v-if="!preloader" variant="text" label="Отправить отчет" size="large" @click="sendReport"/>
+    <Button v-if="!preloader" variant="text" label="Отправить отчет" size="large" @click="sendReport" :disabled="blockSendButton"/>
   </div>
 </template>
 <script setup>
@@ -269,6 +269,7 @@ const panel_num = ref(null);
 const six_items = ref([])
 const seventh_items = ref([]);
 const ninth_items = ref([]);
+const blockSendButton = ref(false);
 
 const setId = (id) => {
   panel_id.value = id;
@@ -471,6 +472,10 @@ const getReportData = async () => {
       }
       try {
         reportData.value.sixteenth = (await reportPartTwoService.getReport('16')).data;
+        // TODO: продумать логику блокировки кнопки, когда все отчеты отправлены
+        if (reportData.value.sixteenth.is_sent) {
+          blockSendButton.value = true;
+        }
       } catch (e) {
         console.log(e.message)
       }
@@ -553,6 +558,7 @@ const setData = (data, panel, number = 0) => {
 
 const sendReport = async () => {
   // console.log('reportData: ', reportData.value)
+  blockSendButton.value = true;
   try {
     await reportPartTwoService.sendReport(reportData.value.first, '1');
     await reportPartTwoService.sendReport(reportData.value.fourth, '4');
@@ -567,6 +573,7 @@ const sendReport = async () => {
     await reportPartTwoService.sendMultipleReport(reportData.value.tenth.first, '10', '1');
     await reportPartTwoService.sendMultipleReport(reportData.value.tenth.second, '10', '2');
   } catch (e) {
+    blockSendButton.value = false;
     console.log('sendReport error: ', e)
   }
 }

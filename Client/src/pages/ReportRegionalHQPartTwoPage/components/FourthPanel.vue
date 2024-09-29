@@ -549,7 +549,7 @@ const deleteFile = async (index) => {
 const setFormData = (file = null, index = null, isDeleteEvent = false, isDeleteFile = false, isLinkDelete = false, linkIndex = null) => {
   let formData = new FormData();
 
-  formData.append('comment', fourthPanelData.value.comment);
+  formData.append('comment', fourthPanelData.value.comment || '');
   events.value.forEach((event, i) => {
     if (isDeleteEvent && index === i) {
       return;
