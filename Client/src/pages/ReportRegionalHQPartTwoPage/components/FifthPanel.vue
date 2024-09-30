@@ -411,7 +411,6 @@ const events = ref([
 const isSent = ref(false);
 
 const focusOut = async () => {
-  fifthPanelData.value.events = [...events.value];
   try {
     if (isFirstSent.value) {
       const {data} = await reportPartTwoService.createReport(setFormData(), '5', true);
@@ -483,7 +482,7 @@ const deleteFile = async (index) => {
 const setFormData = (file = null, index = null, isDeleteEvent = false, isDeleteFile = false, isLinkDelete = false, linkIndex = null) => {
   let formData = new FormData();
 
-  formData.append('comment', fifthPanelData.value.comment);
+  formData.append('comment', fifthPanelData.value.comment || '');
   events.value.forEach((event, i) => {
     if (isDeleteEvent && index === i) {
       return;
