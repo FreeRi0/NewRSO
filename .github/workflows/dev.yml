@@ -1,4 +1,4 @@
-name: update frontend on the server
+name: update frontend (dev)
 on:
   push:
     branches:
