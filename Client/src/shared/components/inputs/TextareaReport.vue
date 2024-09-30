@@ -1,9 +1,9 @@
 <template>
     <div
         :style="{ width: width }"
-        class="report__textarea-block"
     >
-        <Textarea 
+        <div class="report__textarea-block">
+            <Textarea 
             :id="name"
             :name="name"
             :value="value" 
@@ -18,7 +18,8 @@
             v-bind="$attrs"
         >
         </Textarea>
-    
+        </div>
+
         <div class="report__counter" v-if="counterVisible">
           {{ textLength }} / {{ maxLengthText }}
         </div>
@@ -92,11 +93,17 @@
   
 <style lang="scss" scoped>  
 .report {
+    &__textarea-block {
+        max-height: 229px;
+        overflow-y: auto;
+        padding: 1px;
+    }
+
     &__textarea {
         padding: 9.5px 16px;
         width: 100%;
         min-height: 40px;
-        max-height: 229px;
+        // max-height: 229px;
         overflow: auto !important;
         background-color: #ffffff;
         color: #35383F;
