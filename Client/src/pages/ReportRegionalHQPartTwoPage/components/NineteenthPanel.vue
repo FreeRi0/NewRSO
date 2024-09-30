@@ -31,7 +31,7 @@
         :maxlength="10"
         :max="32767"
         @focusout="focusOut"
-        :disabled="props.centralExpert || props.districtExpert"
+        :disabled="isSent"
       />
     </div>
 
@@ -56,7 +56,7 @@
         :maxlength="10"
         :max="32767"
         @focusout="focusOut"
-        :disabled="props.centralExpert || props.districtExpert"
+        :disabled="isSent"
       />
     </div>
   
@@ -81,7 +81,7 @@
         :maxlength="3000"
         :max-length-text="3000"
         @focusout="focusOut"
-        :disabled="props.centralExpert || props.districtExpert"
+        :readonly="isSent"
       >
       </TextareaReport>
     </div>
@@ -91,7 +91,7 @@
 <script setup>
 import { ref, watchEffect } from 'vue';
 import { InputReport, TextareaReport } from '@shared/components/inputs';
-import { getReport, reportPartTwoService } from "@services/ReportService.ts";
+import { reportPartTwoService } from "@services/ReportService.ts";
 
 const props = defineProps({
   districtExpert: {
@@ -100,11 +100,10 @@ const props = defineProps({
   centralExpert: {
     type: Boolean
   },
-  // reportId: {
-  //   type: String,
-  //   default: '1',
-  // },
   data: Object,
+  isSent: {
+    type: Boolean,
+  },
 });
 
 const emit = defineEmits(['getData']);
@@ -120,17 +119,6 @@ const nineteenthPanelData = ref({
 
 const focusOut = async () => {
   console.log(nineteenthPanelData.value);
-  // let formData = new FormData();
-  // nineteenthPanelData.value.employed_student_start ? formData.append('employed_student_start', nineteenthPanelData.value.employed_student_start) : formData.append('employed_student_start', '');
-  // nineteenthPanelData.value.employed_student_end ? formData.append('employed_student_end', nineteenthPanelData.value.employed_student_end) : formData.append('employed_student_end', '');
-  // formData.append('comment', nineteenthPanelData.value.comment);
-
-  // if (isFirstSent.value) {
-  //   await reportPartTwoService.createReport(formData, ID_PANEL);
-  // } else {
-  //   await reportPartTwoService.createReportDraft(formData, ID_PANEL);
-  // }
-  //--------------------------------------------------------------------------------------------
 
   if (nineteenthPanelData.value.employed_student_start === '') {
     nineteenthPanelData.value.employed_student_start = null;
@@ -140,20 +128,11 @@ const focusOut = async () => {
     nineteenthPanelData.value.employed_student_end = null;
   }
 
-  // console.log ("start -", typeof(nineteenthPanelData.value.employed_student_start), "end - ", typeof(nineteenthPanelData.value.employed_student_end));
-  // console.log(nineteenthPanelData.value.employed_student_start, nineteenthPanelData.value.employed_student_end);
-
-  // if (isFirstSent.value) {
-  //   await reportPartTwoService.createReport(nineteenthPanelData.value, ID_PANEL);
-  // } else {
-  //   await reportPartTwoService.createReportDraft(nineteenthPanelData.value, ID_PANEL);
-  // }
-//-------------------------------------------------------------------------------------------------
   try {
     if (isFirstSent.value) {
-      await reportPartTwoService.createReport(nineteenthPanelData.value, ID_PANEL);
+      const { data } = await reportPartTwoService.createReport(nineteenthPanelData.value, ID_PANEL);
+      emit('getData', data, Number(ID_PANEL));
     } else {
-      // await reportPartTwoService.createReportDraft(nineteenthPanelData.value, ID_PANEL);
       const { data } = await reportPartTwoService.createReportDraft(nineteenthPanelData.value, ID_PANEL);
       emit('getData', data, Number(ID_PANEL));
     }
@@ -164,23 +143,15 @@ const focusOut = async () => {
 
 watchEffect(() => {
   // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
-
-  if (Object.keys(props.data).length > 0) {
-    console.log(props.data);
+  console.log(props.data);
+  if (props.data) {
     isFirstSent.value = false;
     nineteenthPanelData.value.employed_student_start = props.data.employed_student_start;
     nineteenthPanelData.value.employed_student_end = props.data.employed_student_end;
     nineteenthPanelData.value.comment = props.data.comment;
-  } 
-  else {
-    console.log('отчет по показателю еще не создан', nineteenthPanelData.value);
-    isFirstSent.value = true;
-  //   nineteenthPanelData.value = {
-  //     employed_student_start: null,
-  //     employed_student_end: null,
-  //     comment: '',
-  //   };
   }
+}, {
+  flush: 'post'
 });
 </script>
 
