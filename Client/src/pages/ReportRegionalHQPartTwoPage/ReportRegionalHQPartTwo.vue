@@ -615,7 +615,6 @@ onMounted(() => {
   getItems(7);
   getItems(9);
   getReportData(route.query.reportId);
-  console.log(reportData.value.sixteenth?.is_sent);
 });
 
 // onMounted(() => {

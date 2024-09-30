@@ -193,7 +193,7 @@ watchEffect(() => {
   console.log(props.data);
   if (props.data) {
     isFirstSent.value = false;
-    seventeenthPanelData.value.comment = props.data.comment  || '';
+    seventeenthPanelData.value.comment = props.data.comment;
     seventeenthPanelData.value.scan_file = props.data.scan_file;
     seventeenthPanelData.value.file_size = props.data.file_size;
     seventeenthPanelData.value.file_type = props.data.file_type;

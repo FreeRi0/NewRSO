@@ -310,6 +310,7 @@ const focusOut = async () => {
       if (projects.value.length) {
         for (let index = 0; index < projects.value.length; index++) {
           if (projects.value[index].links.length) {
+            // const links = [...projects.value[index].links];
             for (let i = 0; i < projects.value[index].links.length; i++) {
               !projects.value[index].links[i].link 
               ? formData.append(`projects[${index}][links][${i}][link]`, '')
@@ -358,8 +359,8 @@ watchEffect(async () => {
   if (props.data) {
     isFirstSent.value = false;
     projects.value = [...props.data.projects];
-    eighteenthPanelData.value.comment = props.data.comment  || '';
-    if (!projects.value[0].links.length) projects.value[0].links.push({link: ''});
+    eighteenthPanelData.value.comment = props.data.comment;
+    // if (!projects.value[0].links.length) projects.value[0].links.push({link: ''});
   }
 }, {
   flush: 'post'
