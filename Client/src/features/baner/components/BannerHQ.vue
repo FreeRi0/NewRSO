@@ -1120,7 +1120,6 @@ const copyL = () => {
     grid-template-columns: 30px 135px 135px 2fr 16px;
     grid-template-rows: 100px 100px 112px auto;
     margin-bottom: 40px;
-    /*  */
     border-radius: 10px 10px;
     border-right: 1px solid rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -1475,7 +1474,7 @@ const copyL = () => {
         margin-inline-start: -140px;
         transform: translateX(-105px);
         margin-bottom: 20px;
-    }
+        }
     }
 
 

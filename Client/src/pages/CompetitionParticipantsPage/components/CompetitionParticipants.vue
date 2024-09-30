@@ -286,7 +286,6 @@ onMounted(() => {
             display: block;
             justify-content: start;
             align-items: start;
-    
         }
     }
 
@@ -397,15 +396,12 @@ onMounted(() => {
         flex-wrap: wrap;
         margin-bottom: 40px;
         align-items: end;
-        
-        
     }
 
     .sort-select {
         margin-top: 12px;
         right: 8px;
         width: 83%;
-
     }
 }
 

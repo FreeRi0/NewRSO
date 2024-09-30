@@ -1,5 +1,5 @@
 <template>
-    <div class="user-metric" >
+    <div class="user-metric">
         <bannerPhoto :banner="user.media?.banner" @upload-wall="uploadWall" @update-wall="updateWall"
             @delete-wall="deleteWall" :edited="true"></bannerPhoto>
         <Avatar :avatar="user.media?.photo" @upload="uploadAva" @update="updateAva" @delete="deleteAva" :edited="true">
@@ -285,8 +285,9 @@ const copyL = () => {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     border-left: 1px solid rgba(0, 0, 0, 0.1);
     background: rgba(244, 244, 244, 0);
+
     @media screen and (min-width: 320px) and (max-width: 480px) {
-    display: block;
+        display: block;
     }
 }
 
@@ -299,7 +300,6 @@ const copyL = () => {
 
     @media screen and (max-width: 768px) {
         padding: 116px 90px 36px 60px;
-        transform: translateX(-10px)
     }
 
     @media screen and (max-width: 575px) {
@@ -312,6 +312,7 @@ const copyL = () => {
         justify-content: center;
         margin-left: auto;
         margin-right: auto;
+        transform: translateX(-10px)
     }
     
 }
