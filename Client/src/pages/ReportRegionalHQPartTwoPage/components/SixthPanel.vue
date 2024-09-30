@@ -5,13 +5,17 @@
       <v-expansion-panel v-show="items.length" v-for="item in items" :key="item.id"><v-expansion-panel-title>
           <div class="title_wrap">
             <p class="form__title">{{ item.name }}</p>
-            <div class="d-flex gc-8">
-              <p class="form__title">{{ item.month }}</p>
-              <p class="form__title">{{ item.city }}</p>
+            <div class="title_wrap__items">
+              <p class="form__title month" v-if="item.month">{{ item.month }}</p>
+              <p class="form__title city" v-if="item.city">{{ item.city }}</p>
             </div>
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()"
+            @formData="formData($event, item.id)"
+            @getPanelNumber="getPanelNumber($event)"
+            @getId="getId($event)"
+            :data="sixPanelData"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item">
           </SeventhPanelForm>
@@ -20,11 +24,9 @@
   </v-card>
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, watchEffect } from "vue";
 import { SeventhPanelForm } from "./index";
-import { InputReport } from '@shared/components/inputs';
-import { Button } from '@shared/components/buttons';
-import { HTTP } from "@app/http";
+import { reportPartTwoService } from "@services/ReportService.ts";
 
 
 const props = defineProps({
@@ -34,27 +36,77 @@ const props = defineProps({
   centralHeadquarterCommander: {
     type: Boolean
   },
+  items: Array,
+  data: Object,
 });
 
-const panel = ref(null);
+const isFirstSent = ref(null);
+// const sent = (sentVal) => {
+//   console.log('is sent: ', sentVal, isFirstSent.value);
+//   isFirstSent.value = sentVal;
+// }
+const emit = defineEmits(['getData', 'getId', 'getPanelNumber']);
 
-const items = ref([]);
+const sixPanelData = ref({
+  number_of_members: 0,
+  links: [{
+    link: '',
+  }],
+  comment: '',
+});
+
+const panel = ref(false);
 
 const collapsed = () => {
   panel.value = !panel.value;
 }
+let el_id = ref(null);
 
-const getItems = async () => {
+const formData = async (reportData, reportNumber) => {
   try {
-    const response = await HTTP.get('regional_competitions/reports/event_names/r6-event-names/');
-    items.value = response.data;
-  } catch (err) {
-    console.error(err);
+    console.log('sent-value', isFirstSent.value)
+    // console.log('num', reportNumber)
+    if (isFirstSent.value) {
+      console.log('First time sending data');
+      await reportPartTwoService.createMultipleReportAll(reportData, '6', reportNumber);
+      isFirstSent.value = false;
+    } else {
+      console.log('Second time sending data');
+      const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '6', reportNumber);
+      emit('getData', data, 6, reportNumber);
+    }
+  } catch (e) {
+    console.log('six panel error: ', e);
   }
+};
+
+const getId = (id) => {
+  console.log('id', id);
+  el_id.value = id
+  emit('getId', id);
 }
-onMounted(async () => {
-  await getItems();
-})
+const getPanelNumber = (number) => {
+  console.log('num', number);
+  emit('getPanelNumber', number);
+}
+watchEffect(() => {
+  if (Object.keys(props.data[el_id.value]).length > 0) {
+    console.log('data received', props.data);
+    isFirstSent.value = false;
+    sixPanelData.value = { ...props.data[el_id.value] }
+    // emit('send-panel', panel.value);
+  } else {
+    console.log('data not received');
+    isFirstSent.value = true;
+    sixPanelData.value = {
+      number_of_members: 0,
+      links: [{
+        link: '',
+      }],
+      comment: '',
+    };
+  }
+});
 </script>
 <style lang="scss" scoped>
 .panel-card {
@@ -107,11 +159,51 @@ onMounted(async () => {
   margin-right: 8px;
 }
 
-.title_wrap {
-  display: flex;
+.month {
   width: 100%;
-  max-width: 700px;
-  justify-content: space-between;
+  max-width: 70px;
+
+}
+
+.city {
+  width: 100%;
+  max-width: 200px;
+}
+
+.title_wrap {
+  display: grid;
+  grid-template-columns: 600px 300px;
+  column-gap: 40px;
+  width: 100%;
+  max-width: 900px;
+
+  &__items {
+    display: flex;
+    width: 100%;
+    column-gap: 20px;
+    max-width: 290px;
+
+    @media screen and (max-width: 578px) {
+      flex-direction: column;
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 6px;
+    max-width: 828px;
+    width: auto;
+  }
+
+  @media screen and (max-width: 768px) {
+    max-width: 636px;
+  }
+
+  @media screen and (max-width: 578px) {
+    max-width: 360px;
+  }
+
 }
 
 .hr {
@@ -174,6 +266,7 @@ onMounted(async () => {
   line-height: 21.6px;
   text-align: left;
   border: none;
+  padding-left: 40px;
 
 }
 </style>

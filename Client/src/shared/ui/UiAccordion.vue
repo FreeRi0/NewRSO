@@ -2,19 +2,14 @@
     <div class="accordion">
         <div class="heading">
             <slot :isOpen="isOpen" :toggle="toggle" name="header" />
-            <i
-                :class="[
-                    'mdi-chevron-down mdi v-icon notranslate v-theme--light v-icon--size-default icon',
-                    ,
-                    { open: isOpen },
-                ]"
-            />
+            <i :class="[
+                'mdi-chevron-down mdi v-icon notranslate v-theme--light v-icon--size-default icon',
+                ,
+                { open: isOpen },
+            ]" />
         </div>
         <Transition name="accordion">
-            <div
-                :class="['accordion-content', { 'accordion-open': isOpen }]"
-                v-show="isOpen"
-            >
+            <div :class="['accordion-content', { 'accordion-open': isOpen }]" v-show="isOpen">
                 <slot name="content" />
             </div>
         </Transition>
@@ -42,11 +37,13 @@ const toggle = () => {
     top: 6px;
     right: 6px;
 }
+
 .heading {
     position: relative;
     padding-right: 36px;
     cursor: pointer;
 }
+
 .accordion-content {
     overflow: hidden;
     transition: max-height 0.3s ease-in-out;

@@ -1,13 +1,25 @@
 <template>
   <div 
-    :is-file="isFile" 
-    :class="['form-input', isFile ? 'form-input__file-input' : '', isFileDistrict ? 'form-input__add-file' : '']"
-    
+    :is-file="isFile"
+    :class="['form-input', isFile ? 'form-input__file-input' : '', isFileDistrict ? 'form-input__add-file' : '', isLink ? 'form-input__link' : '']"
     :style="{ width: width }">
-    <input :type="type" :name="name" :style="{
-      height: height,
-    }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly"
-      max="9999-12-31" class="form-input__report" @input="updateValue" v-bind="$attrs" :disabled="disabled" />
+    <input 
+      :type="type" 
+      :name="name" 
+      :style="{
+        height: height,
+      }" 
+      :value="value" 
+      :id="name" 
+      :placeholder="placeholder" 
+      :maxlength="maxLength" 
+      :readonly="readonly"
+      :max="max" 
+      class="form-input__report" 
+      :class="{ 'link__input': isLink }" 
+      @input="updateValue"
+      v-bind="$attrs" 
+      :disabled="disabled" />
     <div class="form__counter" v-if="counterVisible">
       {{ textInputLength }} / {{ maxCounter }}
     </div>
@@ -21,6 +33,10 @@
     <div v-if="isFileDistrict" class="form-input__icon">
       <SvgIcon iconName="add-file" />
     </div>
+    <div v-if="isError" class="form-input__error-block">
+      <span class="form-input__error-text">Превышено&nbsp;максимальное&nbsp;значение&nbsp;{{ max }}</span>
+    </div>
+
   </div>
 </template>
 
@@ -58,6 +74,10 @@ const props = defineProps({
   maxLength: {
     type: Number,
   },
+  max: {
+    type: [String, Number],
+    default: "9999-12-31",
+  },
   value: {
     type: [String, Number],
   },
@@ -83,12 +103,31 @@ const props = defineProps({
   isFileDistrict: {
     type: Boolean,
     default: false,
-  }
+  },
+  isLink: {
+    type: Boolean,
+    default: false,
+  },
+  isError: {
+    type: Boolean,
+    default: false,
+  },
 });
+
+let isError = ref(props.isError);
 
 const textInputLength = ref(null);
 
 watchEffect(() => textInputLength.value = typeof props.value === 'string' ? props.value.length : 0)
+
+watchEffect(() => {
+  if (typeof props.max === 'number' && props.value > props.max) {
+    isError.value = true;
+    // console.log(props.max, props.value, isError.value);
+  } else {
+    isError.value = false;
+  }
+});
 
 const updateValue = (event) => {
   emit('update:value', event.target.value);
@@ -97,7 +136,18 @@ const updateValue = (event) => {
 </script>
 
 <style lang="scss" scoped>
+.link__input {
+  width: 100%;
+  max-width: 720px;
+
+  @media screen and (max-width: 1024px) {
+    max-width: 100%;
+  }
+}
+
 .form-input {
+  position: relative;
+
   &.form-input__file-input,
   &.form-input__add-file {
     .form-input__report[type='file'] {
@@ -161,6 +211,23 @@ const updateValue = (event) => {
       }
     }
   }
+
+  &__error-text {
+    position: absolute;
+    bottom: -10px;
+    width: 100%;
+    display: block;
+    color: #db0000;
+    font-family: "Bert Sans";
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+  }
+}
+
+.form-input__link {
+  width: 100%;
+  max-width: 720px;
 }
 
 .form-input__report {
@@ -183,7 +250,7 @@ const updateValue = (event) => {
   &:disabled {
     border-color: #b6b6b6;
     background-color: #f9fafb;
-    color:#8e8e93;
+    color: #8e8e93;
     pointer-events: none;
   }
 
@@ -193,11 +260,12 @@ const updateValue = (event) => {
   }
 
   &:invalid {
-      border-color: #db0000;
+    border-color: #db0000;
+    color: #db0000;
 
-      &::placeholder {
-          color: #db0000;
-      }
+    &::placeholder {
+      color: #db0000;
+    }
   }
 }
 

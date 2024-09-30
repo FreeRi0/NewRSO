@@ -5,13 +5,16 @@
       <v-expansion-panel v-show="items.length" v-for="item in items" :key="item.id"><v-expansion-panel-title>
           <div class="title_wrap">
             <p class="form__title">{{ item.name }}</p>
-            <div class="d-flex gc-8">
-              <p class="form__title">{{ item.month }}</p>
-              <p class="form__title">{{ item.city }}</p>
+            <div class="title_wrap__items">
+              <p class="form__title month" v-if="item.month">{{ item.month }}</p>
+              <p class="form__title city" v-if="item.city">{{ item.city }}</p>
             </div>
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="7" @collapse-form="collapsed()"
+            @formData="formData($event, item.id)"  @uploadFile="uploadFile($event, item.id)"
+            @deleteFile="deleteFile($event, item.id)"    @getPanelNumber="getPanelNumber($event)"
+            @getId="getId($event)" :data="seventhPanelData"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
@@ -20,12 +23,11 @@
   </v-card>
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, watchEffect } from "vue";
 import { SeventhPanelForm } from "./index";
-import { InputReport } from '@shared/components/inputs';
-import { Button } from '@shared/components/buttons';
-import { HTTP } from "@app/http";
+import { reportPartTwoService } from "@services/ReportService.ts";
 
+// @is-sent="sent($event)"
 const props = defineProps({
   districtHeadquarterCommander: {
     type: Boolean
@@ -33,28 +35,102 @@ const props = defineProps({
   centralHeadquarterCommander: {
     type: Boolean
   },
+  items: Array,
+  data: Object
 });
+let el_id = ref(null);
 
 const panel = ref(null);
+const emit = defineEmits(['getData'])
+const seventhPanelData = ref({
+  prize_place: 'Нет',
+  links: [{
+    link: '',
+  }],
+  document: '',
+  file_size: null,
+  file_type: '',
+  comment: '',
+});
+const isFirstSent = ref(null);
+// const sent = (sentVal) => {
+//   console.log('is sent: ', sentVal, isFirstSent.value);
+//   isFirstSent.value = sentVal;
+// }
 
-const items = ref([]);
+const formData = async (reportData, reportNumber) => {
+  try {
+    if (isFirstSent.value) {
+      console.log('First time sending data');
+      await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber);
+      isFirstSent.value = false;
+    } else {
+      console.log('Second time sending data');
+      const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber, true);
+      emit('getData', data, 7, reportNumber);
+    }
+  } catch (e) {
+    console.log('seventh panel error: ', e);
+  }
+};
+
+
+const uploadFile = async (reportData, reportNumber) => {
+  if (isFirstSent.value) {
+    let { document } = await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber, true);
+    seventhPanelData.value.document = document.split('/').at(-1);
+  } else {
+    let { data: { document } } = await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber, true);
+
+    seventhPanelData.value.document = document.split('/').at(-1);
+  }
+};
+
+const deleteFile = async (reportData, reportNumber) => {
+
+  if (isFirstSent.value) {
+    await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber, true);
+  } else {
+    await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber, true);
+  }
+};
 
 const collapsed = () => {
   panel.value = !panel.value;
 }
 
-const getItems = async () => {
-  try {
-    const response = await HTTP.get('regional_competitions/reports/event_names/r7-event-names/');
-    items.value = response.data;
-  } catch (err) {
-    console.error(err);
-  }
+const getId = (id) => {
+  console.log('id', id);
+  el_id.value = id;
+  emit('getId', id);
 }
 
-onMounted(async () => {
-  await getItems();
-})
+const getPanelNumber = (number) => {
+  console.log('num', number);
+  emit('getPanelNumber', number);
+}
+
+
+watchEffect(() => {
+  if (Object.keys(props.data[el_id.value]).length > 0) {
+    console.log('data received', props.data);
+    isFirstSent.value = false;
+    seventhPanelData.value = { ...props.data[el_id.value] }
+  } else {
+    isFirstSent.value = true;
+    seventhPanelData.value = {
+      prize_place: 'Нет',
+      links: [{
+        link: '',
+      }],
+      document: '',
+      file_size: null,
+      file_type: '',
+      comment: '',
+    };
+  }
+
+});
 </script>
 <style lang="scss" scoped>
 .panel-card {
@@ -65,20 +141,54 @@ onMounted(async () => {
   display: none;
 }
 
-.title_wrap {
-  display: flex;
+.month {
   width: 100%;
-  max-width: 700px;
-  justify-content: space-between;
+  max-width: 70px;
+
 }
 
-.form__field-group {
-  background: #F3F4F5;
-  border: none;
-  border-radius: 0 0 10px 10px;
-  margin-bottom: 8px;
-  margin-top: 8px;
+.city {
+  width: 100%;
+  max-width: 200px;
 }
+
+.title_wrap {
+  display: grid;
+  grid-template-columns: 600px 300px;
+  column-gap: 40px;
+  width: 100%;
+  max-width: 900px;
+
+  &__items {
+    display: flex;
+    width: 100%;
+    column-gap: 20px;
+    max-width: 290px;
+
+    @media screen and (max-width: 578px) {
+      flex-direction: column;
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 6px;
+    max-width: 828px;
+    width: auto;
+  }
+
+  @media screen and (max-width: 768px) {
+    max-width: 636px;
+  }
+
+  @media screen and (max-width: 578px) {
+    max-width: 360px;
+  }
+
+}
+
+
 
 .valid-red {
   color: #db0000;
@@ -168,6 +278,6 @@ onMounted(async () => {
   line-height: 21.6px;
   text-align: left;
   border: none;
-
+  padding-left: 40px;
 }
 </style>

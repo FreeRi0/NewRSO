@@ -1,23 +1,33 @@
 <template>
     <div class="report__file-box">
-        <span class="report__file-name">
-            <SvgIcon v-if="fileType === 'jpg'" icon-name="file-jpg" />
+        <div class="report__file-name">
+            <SvgIcon v-if="fileType === 'jpg' ||
+                    fileType === 'jpeg' ||
+                    fileType === 'JPG' ||
+                    fileType === 'JPEG'"
+                    icon-name="file-jpg" />
             <SvgIcon v-if="fileType === 'pdf'" icon-name="file-pdf" />
             <SvgIcon v-if="fileType === 'png'" icon-name="file-png" />
-            {{ file }}
-        </span>
+            <a :href=file>{{ file.split('/').at(-1) }}</a>
+        </div>
 
-        <span class="report__file-size">
-            {{ fileSize }} Мб
+        <span class="report__file-size" v-if="fileSize">
+            {{ fileSize.toFixed(1) }}&nbsp;Мб
         </span>
 
         <button 
             @click="clickOnButton"
             class="report__button-delete-file"
             v-bind="$attrs"
+            aria-label="Удалить файл"
+            v-if="!isSent"
         >
-            Удалить
+            <span>Удалить</span>
         </button>
+
+        <div v-if="isErrorFile" class="report__error-text">
+            {{ isErrorMessage }}
+        </div>
     </div>
 </template>
 
@@ -30,7 +40,7 @@ defineOptions({
 
 const props = defineProps({
     file: {
-        type: String,
+        type: [ String, Object],
         default: null,
     },
     fileType: {
@@ -40,6 +50,23 @@ const props = defineProps({
     fileSize: {
         type: Number,
         default: null,
+    },
+    districtExpert: {
+        type: Boolean,
+    },
+    centralExpert: {
+        type: Boolean,
+    },
+    isErrorFile: {
+        type: Boolean,
+        default: false,
+    },
+    isErrorMessage: {
+        type: String,
+        default: '',
+    },
+    isSent: {
+        type: Boolean,
     },
 });
 
