@@ -1,17 +1,17 @@
 <template>
-  <div v-if="true" class="form__field-group">
+  <div v-if="!(props.centralExpert || props.districtExpert)" class="form__field-group">
     <div class="form__field-project-existence">
       <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу <sup class="valid-red">*</sup>
       </p>
       <div class="form__label-radio">
         <div style="display: flex; align-items: center">
           <input class="custom-radio" v-model="sixteenthPanelData.is_project" id="is_project-true" type="radio"
-                 :value="true"/>
+                 :value="true" :disabled="isSent"/>
           <label for="is_project-true">Да</label>
         </div>
         <div style="display: flex; align-items: center">
           <input class="custom-radio" v-model="sixteenthPanelData.is_project" id="is_project-false" type="radio"
-                 :value="false"/>
+                 :value="false" :disabled="isSent"/>
           <label for="is_project-false">Нет</label>
         </div>
       </div>
@@ -29,10 +29,11 @@
               type="text"
               placeholder="ВВС ПРО"
               @focusout="focusOut"
+              :disabled="isSent"
               style="width: 100%;"
           />
         </div>
-        <div class="deleteBtn">
+        <div v-if="!isSent" class="deleteBtn">
           <Button
               v-if="index > 0"
               label="Удалить проект"
@@ -54,6 +55,7 @@
                 name="scan_file"
                 width="100%"
                 @change="uploadFile($event, index)"
+                :disabled="isSent"
             />
             <div v-else class="form__file-box">
             <span class="form__file-name">
@@ -63,7 +65,7 @@
               {{ project.regulations.split('/').at(-1) }}
             </span>
               <span class="form__file-size">{{ project.file_size }} Мб</span>
-              <button @click="deleteFile(index)" class="form__button-delete-file">
+              <button v-if="!isSent" @click="deleteFile(index)" class="form__button-delete-file">
                 Удалить
               </button>
             </div>
@@ -89,7 +91,7 @@
         </div>
       </div>
       <div>
-        <p class="form__label">Ссылка на группу проекта в социальных сетях <sup class="valid-red">*</sup></p>
+        <p class="form__label">Ссылка на&nbsp;группу проекта в социальных сетях <sup class="valid-red">*</sup></p>
         <div class="form__field-link " v-for="(link, i) in projects[index].links" :key="i">
           <div class="form__field-link-wrap">
             <InputReport
@@ -100,26 +102,29 @@
                 type="text"
                 placeholder="https://vk.com/cco_monolit"
                 @focusout="focusOut"
+                :disabled="isSent"
                 style="width: 100%;"
             />
           </div>
-          <div
-              v-if="projects[index].links.length === i + 1"
-              class="add_link"
-              @click="addLink(index)">
-            <span class="add_link-plus">+</span>
-            Добавить ссылку
-          </div>
-          <div
-              v-else
-              class="add_link"
-              @click="deleteLink(index, i)"
-          >Удалить
+          <div v-if="!isSent">
+            <div
+                v-if="projects[index].links.length === i + 1"
+                class="add_link"
+                @click="addLink(index)">
+              <span class="add_link-plus">+</span>
+              Добавить ссылку
+            </div>
+            <div
+                v-else
+                class="add_link"
+                @click="deleteLink(index, i)"
+            >Удалить
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div>
+    <div v-if="!isSent">
       <Button class="add_eventBtn" label="Добавить проект" @click="addProject"/>
     </div>
     <div>
@@ -136,6 +141,7 @@
             :maxlength="3000"
             :max-length-text="3000"
             counter-visible
+            :disabled="isSent"
             style="margin-bottom: 4px ;"
         />
       </div>
@@ -175,7 +181,7 @@
                 class="valid-red">*</sup></label>
             <InputReport v-model:value="project.name" id="9" name="name" class="form__input" type="text"
                          placeholder="ВВС ПРО" @focusout="focusOut" counter-visible :max-counter="300" :max-length="300"
-                         :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"/>
+                         :disabled="props.centralExpert || props.districtExpert"/>
           </div>
         </div>
         <div>
@@ -261,13 +267,15 @@
           </v-tabs-window-item>
         </div>
       </div>
-      <div>
-        <Button class="add_eventBtn" label="+ Добавить проект" @click="addProject"/>
-      </div>
+      <!--      <div>-->
+      <!--        <Button class="add_eventBtn" label="+ Добавить проект" @click="addProject"/>-->
+      <!--      </div>-->
       <div>
         <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
         <TextareaReport id="comment" name="comment" :rows="1" autoResize placeholder="Напишите сообщение"
-                        @focusout="focusOut" :maxlength="3000" :max-length-text="3000" counter-visible/>
+                        @focusout="focusOut" :maxlength="3000" :max-length-text="3000" counter-visible
+                        :disabled="props.centralExpert || props.districtExpert"
+        />
       </div>
       <div>
         <v-checkbox label="Итоговое значение"/>
@@ -431,13 +439,14 @@ const projects = ref([
   }
 ]);
 const isFirstSent = ref(true);
+const isSent = ref(false);
 
 const focusOut = async () => {
   sixteenthPanelData.value.projects = [...projects.value];
   try {
     if (isFirstSent.value) {
-      await reportPartTwoService.createReport(sixteenthPanelData.value, '16');
-      isFirstSent.value = false;
+      const {data} = await reportPartTwoService.createReport(sixteenthPanelData.value, '16');
+      emit('getData', data, 16);
     } else {
       const {data} = await reportPartTwoService.createReportDraft(setFormData(), '16', true);
       emit('getData', data, 16);
@@ -469,15 +478,28 @@ const addProject = () => {
     ],
   })
 };
-// const deleteProject = async (index) => {
-//   projects.value = projects.value.filter((el, i) => index !== i);
-//   sixteenthPanelData.value.projects = [...projects.value];
-//   try {
-//     await reportPartTwoService.createReportDraft(sixteenthPanelData.value, '16');
-//   } catch (e) {
-//     console.log('deleteEvent error: ', e);
-//   }
-// };
+const deleteProject = async (index) => {
+  let formData = new FormData();
+  projects.value = projects.value.filter((el, i) => index !== i);
+
+  formData.append('comment', sixteenthPanelData.value.comment);
+  formData.append('is_project', sixteenthPanelData.value.is_project);
+  projects.value.forEach((project, i) => {
+    if (project.name) formData.append(`projects[${i}][name]`, project.name);
+    if (project.project_scale) formData.append(`projects[${i}][project_scale]`, project.project_scale);
+    if (project.links.length) {
+      for (let j = 0; j < project.links.length; j++) {
+        if (project.links[j].link) formData.append(`projects[${i}][links][${j}][link]`, project.links[j].link);
+      }
+    }
+  })
+  try {
+    let {data} = await reportPartTwoService.createReportDraft(sixteenthPanelData.value, '16', true);
+    emit('getData', data, 16);
+  } catch (e) {
+    console.log('deleteEvent error: ', e);
+  }
+};
 
 const uploadFile = async (event, index) => {
   const {data} = await reportPartTwoService.createReportDraft(setFormData(event.target.files[0], index), '16', true);
@@ -525,6 +547,7 @@ watchEffect(async () => {
     projects.value = [...props.data.projects];
     sixteenthPanelData.value.is_project = props.data.is_project;
     sixteenthPanelData.value.comment = props.data.comment;
+    isSent.value = props.data.is_sent;
 
     // projects.value.forEach((event) => {
     //   if (!event.links.length) event.links.push({link: ''})

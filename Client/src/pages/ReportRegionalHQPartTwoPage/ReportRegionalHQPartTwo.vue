@@ -8,9 +8,9 @@
       </div>
       <div v-else>
         <div class="download-item">
-          <SvgIcon iconName="download" />
+          <SvgIcon iconName="download"/>
           <button type="button" id="download" class="download-item__report"
-            @click="downloadReportAll(roleStore.roles.regionalheadquarter_commander?.id)">
+                  @click="downloadReportAll(roleStore.roles.regionalheadquarter_commander?.id)">
             Скачать архив
           </button>
         </div>
@@ -21,7 +21,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <first-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.first" />
+                           :data="reportData.first"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -35,7 +35,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
+                  text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО."/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -45,7 +45,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
+                  text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО."/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -55,7 +55,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <fourth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.fourth" />
+                            :data="reportData.fourth"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -67,7 +67,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <fifth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.fifth" />
+                           :data="reportData.fifth"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -77,8 +77,8 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <sixth-panel @get-data="setData" :items="six_items" @getId="setId" @getPanelNumber="setPanelNumber"
-                :district-headquarter-commander="districtExpert" :data="reportData.six"
-                :central-headquarter-commander="centralExpert" />
+                           :district-headquarter-commander="districtExpert" :data="reportData.six"
+                           :central-headquarter-commander="centralExpert"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -88,8 +88,8 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <seventh-panel @get-data="setData" @getId="setId" @getPanelNumber="setPanelNumber" :items="seventh_items"
-                :district-headquarter-commander="districtExpert" :data="reportData.seventh"
-                :central-headquarter-commander="centralExpert" />
+                             :district-headquarter-commander="districtExpert" :data="reportData.seventh"
+                             :central-headquarter-commander="centralExpert"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -100,7 +100,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                text="Показатель рассчитывается автоматически на&nbsp;основе данных сервиса &laquo;Медиалогия&raquo;, предоставленных Аппаратом РСО." />
+                  text="Показатель рассчитывается автоматически на&nbsp;основе данных сервиса &laquo;Медиалогия&raquo;, предоставленных Аппаратом РСО."/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -109,8 +109,8 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <ninth-panel @get-data="setData" @getId="setId" @getPanelNumber="setPanelNumber" :items="ninth_items"
-                :district-headquarter-commander="districtExpert" :data="reportData.ninth"
-                :central-headquarter-commander="centralExpert" />
+                           :district-headquarter-commander="districtExpert" :data="reportData.ninth"
+                           :central-headquarter-commander="centralExpert"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -120,7 +120,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <tenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.tenth" />
+                           :data="reportData.tenth"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -129,7 +129,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.eleventh" />
+                              :data="reportData.eleventh"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -138,7 +138,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <twelfth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.twelfth" />
+                             :data="reportData.twelfth"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -147,7 +147,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <thirteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.thirteenth" />
+                                :data="reportData.thirteenth"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -158,7 +158,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                text="Показатель рассчитывается автоматически на&nbsp;основе данных из&nbsp;12&nbsp;и&nbsp;13&nbsp;показателей." />
+                  text="Показатель рассчитывается автоматически на&nbsp;основе данных из&nbsp;12&nbsp;и&nbsp;13&nbsp;показателей."/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -171,7 +171,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
+                  text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО."/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -181,7 +181,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <sixteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.sixteenth" />
+                               :data="reportData.sixteenth"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -190,7 +190,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <seventeenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.seventeenth" />
+                                 :data="reportData.seventeenth"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -199,7 +199,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <eighteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.eighteenth" />
+                                :data="reportData.eighteenth"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -208,13 +208,14 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <nineteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.nineteenth" />
+                                :data="reportData.nineteenth"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
       </div>
     </div>
-    <Button v-if="!preloader" variant="text" label="Отправить отчет" size="large" @click="sendReport" />
+    <Button v-if="!preloader" variant="text" label="Отправить отчет" size="large" @click="sendReport"
+            :disabled="blockSendButton"/>
   </div>
 </template>
 <script setup>
@@ -236,11 +237,12 @@ import {
   NineteenthPanel
 } from './components/index'
 import { Button } from '@shared/components/buttons';
-import { ref, watchEffect, watch, onMounted } from "vue";
+import { ref, watchEffect } from "vue";
 import { SvgIcon } from '@shared/ui/SvgIcon';
 import { useRoleStore } from "@layouts/store/role.ts";
 import { HTTP } from '@app/http';
 import { reportPartTwoService } from "@services/ReportService.ts";
+import { useRoute } from "vue-router";
 
 const districtExpert = ref(false);
 const centralExpert = ref(false);
@@ -269,6 +271,7 @@ const panel_num = ref(null);
 const six_items = ref([])
 const seventh_items = ref([]);
 const ninth_items = ref([]);
+const blockSendButton = ref(false);
 
 const setId = (id) => {
   panel_id.value = id;
@@ -280,6 +283,7 @@ const setPanelNumber = (number) => {
   console.log('panel_num', panel_num.value, number);
 }
 const roleStore = useRoleStore();
+const route = useRoute();
 
 const downloadReportAll = (id) => {
   HTTP.get(`/regionals/${id}/download_regional_competition_report/`, {
@@ -405,46 +409,94 @@ const getMultiplyData = async () => {
     reportData.value.ninth[result.id] = result.data;
   });
 }
-const getReportData = async () => {
+const getReportData = async (reportId) => {
   try {
     if (centralExpert.value || districtExpert.value) {
-      reportData.value.first = (await reportPartTwoService.getReportDH('1', '1')).data;
-      reportData.value.fourth = (await reportPartTwoService.getReportDH('4', '1')).data;
-      reportData.value.fifth = (await reportPartTwoService.getReportDH('5', '1')).data;
+      reportData.value.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
+      reportData.value.fourth = (await reportPartTwoService.getReportDH('4', reportId)).data;
+      reportData.value.fifth = (await reportPartTwoService.getReportDH('5', reportId)).data;
       // reportData.value.six = (await reportPartTwoService.getMultipleReportDH('6', id)).data;
       // reportData.value.seventh = (await reportPartTwoService.getMultipleReportDH('7', id)).data;
       // reportData.value.ninth = (await reportPartTwoService.getMultipleReportDH('9', id)).data;
-      reportData.value.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', '1')).data;
-      reportData.value.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', '1')).data;
-      reportData.value.eleventh = (await reportPartTwoService.getReportDH('11', '1')).data;
-      reportData.value.twelfth = (await reportPartTwoService.getReportDH('12', '1')).data;
-      reportData.value.thirteenth = (await reportPartTwoService.getReportDH('13', '1')).data;
-      reportData.value.sixteenth = (await reportPartTwoService.getReportDH('16', '1')).data;
-      reportData.value.seventeenth = (await reportPartTwoService.getReportDH('17', '1')).data;
-      reportData.value.eighteenth = (await reportPartTwoService.getReportDH('18', '1')).data;
-      reportData.value.nineteenth = (await reportPartTwoService.getReportDH('19', '1')).data;
+      reportData.value.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
+      reportData.value.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', reportId)).data;
+      reportData.value.eleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
+      reportData.value.twelfth = (await reportPartTwoService.getReportDH('12', reportId)).data;
+      reportData.value.thirteenth = (await reportPartTwoService.getReportDH('13', reportId)).data;
+      reportData.value.sixteenth = (await reportPartTwoService.getReportDH('16', reportId)).data;
+      reportData.value.seventeenth = (await reportPartTwoService.getReportDH('17', reportId)).data;
+      reportData.value.eighteenth = (await reportPartTwoService.getReportDH('18', reportId)).data;
+      reportData.value.nineteenth = (await reportPartTwoService.getReportDH('19', reportId)).data;
     } else {
-      reportData.value.first = (await reportPartTwoService.getReport('1')).data;
-      reportData.value.fourth = (await reportPartTwoService.getReport('4')).data;
-      reportData.value.fifth = (await reportPartTwoService.getReport('5')).data;
-
+      try {
+        reportData.value.first = (await reportPartTwoService.getReport('1')).data;
+      } catch (e) {
+        console.log(e.message)
+      }
+      try {
+        reportData.value.fourth = (await reportPartTwoService.getReport('4')).data;
+      } catch (e) {
+        console.log(e.message)
+      }
+      try {
+        reportData.value.fifth = (await reportPartTwoService.getReport('5')).data;
+      } catch (e) {
+        console.log(e.message)
+      }
       await getMultiplyData();
 
       // reportData.value.six = (await reportPartTwoService.getMultipleReport('6', id)).data;
-
       // reportData.value.seventh = (await reportPartTwoService.getMultipleReport('7', id)).data;
-
       // reportData.value.ninth = (await reportPartTwoService.getMultipleReport('9', id)).data;
-
-      reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
-      reportData.value.tenth.second = (await reportPartTwoService.getMultipleReport('10', '2')).data;
-      reportData.value.eleventh = (await reportPartTwoService.getReport('11')).data;
-      reportData.value.twelfth = (await reportPartTwoService.getReport('12')).data;
-      reportData.value.thirteenth = (await reportPartTwoService.getReport('13')).data;
-      reportData.value.sixteenth = (await reportPartTwoService.getReport('16')).data;
-      reportData.value.seventeenth = (await reportPartTwoService.getReport('17')).data;
-      reportData.value.eighteenth = (await reportPartTwoService.getReport('18')).data;
-      reportData.value.nineteenth = (await reportPartTwoService.getReport('19')).data;
+      try {
+        reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
+      } catch (e) {
+        console.log(e.message)
+      }
+      try {
+        reportData.value.tenth.second = (await reportPartTwoService.getMultipleReport('10', '2')).data;
+      } catch (e) {
+        console.log(e.message)
+      }
+      try {
+        reportData.value.eleventh = (await reportPartTwoService.getReport('11')).data;
+      } catch (e) {
+        console.log(e.message)
+      }
+      try {
+        reportData.value.twelfth = (await reportPartTwoService.getReport('12')).data;
+      } catch (e) {
+        console.log(e.message)
+      }
+      try {
+        reportData.value.thirteenth = (await reportPartTwoService.getReport('13')).data;
+      } catch (e) {
+        console.log(e.message)
+      }
+      try {
+        reportData.value.sixteenth = (await reportPartTwoService.getReport('16')).data;
+        // TODO: продумать логику блокировки кнопки, когда все отчеты отправлены
+        if (reportData.value.sixteenth.is_sent) {
+          blockSendButton.value = true;
+        }
+      } catch (e) {
+        console.log(e.message)
+      }
+      try {
+        reportData.value.seventeenth = (await reportPartTwoService.getReport('17')).data;
+      } catch (e) {
+        console.log(e.message)
+      }
+      try {
+        reportData.value.eighteenth = (await reportPartTwoService.getReport('18')).data;
+      } catch (e) {
+        console.log(e.message)
+      }
+      try {
+        reportData.value.nineteenth = (await reportPartTwoService.getReport('19')).data;
+      } catch (e) {
+        console.log(e.message)
+      }
     }
   } catch (e) {
     // errorHandler(e, id);
@@ -452,7 +504,7 @@ const getReportData = async () => {
   } finally {
     preloader.value = false;
   }
-  console.log('getReportData: ', reportData.value);
+  // console.log('getReportData: ', reportData.value);
 };
 
 const setData = (data, panel, number = 0) => {
@@ -504,45 +556,49 @@ const setData = (data, panel, number = 0) => {
       reportData.value.nineteenth = data
       break;
   }
-  console.log('setData: ', reportData.value)
+  // console.log('setData: ', reportData.value)
 };
 
 const sendReport = async () => {
-  console.log('reportData: ', reportData.value)
-  // try {
-  //   await reportPartTwoService.sendReport(reportData.value.first, '1');
-  //   await reportPartTwoService.sendReport(reportData.value.fourth, '4');
-  //   await reportPartTwoService.sendReport(reportData.value.fifth, '5');
-  //   await reportPartTwoService.sendReport(reportData.value.eleventh, '11');
-  //   await reportPartTwoService.sendReport(reportData.value.twelfth, '12');
-  //   await reportPartTwoService.sendReport(reportData.value.thirteenth, '13');
-  //   await reportPartTwoService.sendReport(reportData.value.sixteenth, '16');
-  //   await reportPartTwoService.sendMultipleReport(reportData.value.tenth.first, '10', '1');
-  //   await reportPartTwoService.sendMultipleReport(reportData.value.tenth.second, '10', '2');
-  // } catch (e) {
-  //   console.log('sendReport error: ', e)
-  // }
+  // console.log('reportData: ', reportData.value)
+  blockSendButton.value = true;
+  try {
+    await reportPartTwoService.sendReport(reportData.value.first, '1');
+    await reportPartTwoService.sendReport(reportData.value.fourth, '4');
+    await reportPartTwoService.sendReport(reportData.value.fifth, '5');
+    await reportPartTwoService.sendReportWithSlash(reportData.value.six, '6');
+    await reportPartTwoService.sendReportWithSlash(reportData.value.seventh, '7');
+    await reportPartTwoService.sendReportWithSlash(reportData.value.nineteenth, '9');
+    await reportPartTwoService.sendReport(reportData.value.eleventh, '11');
+    await reportPartTwoService.sendReport(reportData.value.twelfth, '12');
+    await reportPartTwoService.sendReport(reportData.value.thirteenth, '13');
+    await reportPartTwoService.sendReport(reportData.value.sixteenth, '16');
+    await reportPartTwoService.sendMultipleReport(reportData.value.tenth.first, '10', '1');
+    await reportPartTwoService.sendMultipleReport(reportData.value.tenth.second, '10', '2');
+  } catch (e) {
+    blockSendButton.value = false;
+    console.log('sendReport error: ', e)
+  }
 }
 
 watchEffect(() => {
-  // console.log(roleStore.experts);
   if (roleStore.experts?.is_district_expert) {
     districtExpert.value = true;
   }
   if (roleStore.experts?.is_central_expert) {
     centralExpert.value = true;
   }
-  // console.log('rep', reportData.value)
-
-  getReportData();
-
-});
-
-onMounted(() => {
   getItems(6);
   getItems(7);
   getItems(9);
-})
+  getReportData(route.query.reportId);
+});
+
+// onMounted(() => {
+//   getItems(6);
+//   getItems(7);
+//   getItems(9);
+// })
 
 // watch(() => panel_num.value, (newPanel) => {
 //   panel_num.value = newPanel
@@ -589,7 +645,7 @@ onMounted(() => {
   text-align: left;
 }
 
-.v-expansion-panel--active>.v-expansion-panel-title {
+.v-expansion-panel--active > .v-expansion-panel-title {
   border-radius: 10px;
   min-height: none;
   border-left: none;
@@ -605,7 +661,7 @@ onMounted(() => {
 }
 
 .v-expansion-panel--active:not(:first-child),
-.v-expansion-panel--active+.v-expansion-panel {
+.v-expansion-panel--active + .v-expansion-panel {
   margin-top: 0;
   opacity: unset;
 }

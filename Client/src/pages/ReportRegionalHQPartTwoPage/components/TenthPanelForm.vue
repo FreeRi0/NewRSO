@@ -5,37 +5,57 @@
         <p class="form__title">Всероссийская патриотическая акция «Снежный Десант РСО»</p>
       </div>
       <div>
-        <Button class="form__btn" style="margin: 0" label="Свернуть" />
+        <Button class="form__btn" style="margin: 0" label="Свернуть"/>
       </div>
     </div>
     <div class="form__field">
       <p class="form__label" id="form__label-radio">Проведение акции <sup class="valid-red">*</sup></p>
       <div class="form__field-radio" style="display: flex">
         <div style="display: flex; align-items: center">
-          <input v-model="tenthPanelData.event_happened" id="event_happened-true" class="custom-radio" type="radio"
-            :value="true" />
+          <input
+              v-model="tenthPanelData.event_happened"
+              id="event_happened-true"
+              class="custom-radio"
+              type="radio"
+              :value="true"
+              :disabled="isSent"
+          />
           <label for="event_happened-true">Да</label>
         </div>
         <div style="display: flex; align-items: center">
-          <input v-model="tenthPanelData.event_happened" id="event_happened-false" class="custom-radio" type="radio"
-            :value="false" />
+          <input
+              v-model="tenthPanelData.event_happened"
+              id="event_happened-false"
+              class="custom-radio"
+              type="radio"
+              :value="false"
+              :disabled="isSent"
+          />
           <label for="event_happened-false">Нет</label>
         </div>
       </div>
       <div style="margin-bottom: 8px;">
         <label style="display: flex; " class="form__label" for="4">Скан документа, подтверждающего проведение
           акции</label>
-        <InputReport class="form-input__file-input" v-if="!tenthPanelData.document" isFile type="file" id="scan_file"
-          name="scan_file" @change="uploadFile" />
+        <InputReport
+            class="form-input__file-input"
+            v-if="!tenthPanelData.document"
+            isFile
+            type="file"
+            id="scan_file"
+            name="scan_file"
+            @change="uploadFile"
+            :disabled="isSent"
+        />
         <div v-else class="form__file-box">
           <span class="form__file-name">
-            <SvgIcon v-if="tenthPanelData.file_type === 'jpg'" icon-name="file-jpg" />
-            <SvgIcon v-if="tenthPanelData.file_type === 'pdf'" icon-name="file-pdf" />
-            <SvgIcon v-if="tenthPanelData.file_type === 'png'" icon-name="file-png" />
+            <SvgIcon v-if="tenthPanelData.file_type === 'jpg'" icon-name="file-jpg"/>
+            <SvgIcon v-if="tenthPanelData.file_type === 'pdf'" icon-name="file-pdf"/>
+            <SvgIcon v-if="tenthPanelData.file_type === 'png'" icon-name="file-png"/>
             {{ tenthPanelData.document.split('/').at(-1) }}
           </span>
           <span class="form__file-size">{{ tenthPanelData.file_size }} Мб</span>
-          <button @click="deleteFile" class="form__button-delete-file">
+          <button v-if="!isSent" @click="deleteFile" class="form__button-delete-file">
             Удалить
           </button>
         </div>
@@ -44,20 +64,40 @@
         <p class="form__label">Ссылка на социальные сети/ электронные <br>
           СМИ, подтверждающая проведение акции <sup class="valid-red">*</sup></p>
         <div class="input-link" v-for="(link, i) in tenthPanelData.links" :key="i">
-          <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__input-add-link" type="text"
-            placeholder="Введите ссылку, например, https://vk.com/cco_monolit" @focusout="formData" />
-          <Button class="addLinkBtn" label="+ Добавить ссылку" @click="addLink" />
+          <InputReport
+              v-model:value="link.link"
+              :id="i"
+              :name="i"
+              class="form__input form__input-add-link"
+              type="text"
+              placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
+              @focusout="formData"
+              :disabled="isSent"
+          />
+          <Button v-if="!isSent" class="addLinkBtn" label="+ Добавить ссылку" @click="addLink"/>
         </div>
       </div>
       <div class="form__field-comment">
         <label style="display: flex; align-items: center;" class="form__label" for="comment">Комментарий <sup
             class="valid-red">*</sup></label>
-        <TextareaReport placeholder="Напишите сообщение" v-model:value="tenthPanelData.comment" id="comment"
-          name="comment" :rows="1" autoResize :maxlength="3000" :max-length-text="3000"
-          counter-visible class="form__input form__input-comment" style="margin-bottom: 4px;" />
+        <TextareaReport
+            placeholder="Напишите сообщение"
+            v-model:value="tenthPanelData.comment"
+            id="comment"
+            name="comment"
+            :rows="1"
+            autoResize
+            :maxlength="3000"
+            :max-length-text="3000"
+            counter-visible
+            class="form__input form__input-comment"
+            style="margin-bottom: 4px;"
+            :disabled="isSent"
+        />
       </div>
     </div>
   </div>
+
   <report-tabs v-else>
     <template v-slot:firstTab>
       <div style="display: flex; justify-content: space-between;">
@@ -65,7 +105,7 @@
           <p class="form__title">Всероссийская патриотическая акция «Снежный Десант РСО»</p>
         </div>
         <div>
-          <Button class="form__btn" style="margin: 0" label="Свернуть" />
+          <Button class="form__btn" style="margin: 0" label="Свернуть"/>
         </div>
       </div>
       <div class="form__field">
@@ -73,12 +113,12 @@
         <div style="display: flex">
           <div v-if="tenthPanelData.event_happened" style="display: flex; align-items: center">
             <input v-model="tenthPanelData.event_happened" id="event_happened-true" class="form__input" type="radio"
-              :value="true" />
+                   :value="true"/>
             <label for="event_happened-true">Да</label>
           </div>
           <div v-else style="display: flex; align-items: center">
             <input v-model="tenthPanelData.event_happened" id="event_happened-false" class="form__input" type="radio"
-              :value="false" />
+                   :value="false"/>
             <label for="event_happened-false">Нет</label>
           </div>
         </div>
@@ -86,9 +126,9 @@
           <label class="form__label" for="4">Скан документа, подтверждающего проведение акции</label>
           <div class="form__file-box">
             <span class="form__file-name">
-              <SvgIcon v-if="tenthPanelData.file_type === 'jpg'" icon-name="file-jpg" />
-              <SvgIcon v-if="tenthPanelData.file_type === 'pdf'" icon-name="file-pdf" />
-              <SvgIcon v-if="tenthPanelData.file_type === 'png'" icon-name="file-png" />
+              <SvgIcon v-if="tenthPanelData.file_type === 'jpg'" icon-name="file-jpg"/>
+              <SvgIcon v-if="tenthPanelData.file_type === 'pdf'" icon-name="file-pdf"/>
+              <SvgIcon v-if="tenthPanelData.file_type === 'png'" icon-name="file-png"/>
               {{ tenthPanelData.document.split('/').at(-1) || 'Тестовое название' }}
             </span>
             <span class="form__file-size">{{ tenthPanelData.file_size || '123' }} Мб</span>
@@ -99,8 +139,8 @@
             СМИ, подтверждающая проведение акции <sup class="valid-red">*</sup></p>
           <div style="display: flex;" v-for="(link, i) in tenthPanelData.links" :key="i">
             <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input" type="text"
-              placeholder="https://vk.com/cco_monolit" @focusout="formData"
-              :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander" />
+                         placeholder="https://vk.com/cco_monolit" @focusout="formData"
+                         :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"/>
           </div>
         </div>
       </div>
@@ -111,7 +151,7 @@
           <p class="form__title">Всероссийская патриотическая акция «Снежный Десант РСО»</p>
         </div>
         <div>
-          <Button class="form__btn" style="margin: 0" label="Свернуть" />
+          <Button class="form__btn" style="margin: 0" label="Свернуть"/>
         </div>
       </div>
       <div class="form__field">
@@ -119,25 +159,25 @@
         <div style="display: flex">
           <div style="display: flex; align-items: center">
             <input v-model="tenthPanelData.event_happened" id="event_happened-true" class="form__input" type="radio"
-              :value="true" />
+                   :value="true"/>
             <label for="event_happened-true">Да</label>
           </div>
           <div style="display: flex; align-items: center">
             <input v-model="tenthPanelData.event_happened" id="event_happened-false" class="form__input" type="radio"
-              :value="false" />
+                   :value="false"/>
             <label for="event_happened-false">Нет</label>
           </div>
         </div>
         <div class="form__field">
           <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
           <TextareaReport placeholder="Напишите сообщение" v-model:value="tenthPanelData.comment" id="comment"
-            name="comment" :rows="1" autoResize @focusout="formData" :maxlength="3000" :max-length-text="3000"
-            counter-visible class="form__input" />
+                          name="comment" :rows="1" autoResize @focusout="formData" :maxlength="3000"
+                          :max-length-text="3000"
+                          counter-visible class="form__input"/>
         </div>
       </div>
     </template>
   </report-tabs>
-
 </template>
 <script setup>
 import { ref, watchEffect } from "vue";
@@ -167,6 +207,7 @@ const tenthPanelData = ref({
     },
   ],
 });
+const isSent = ref(false);
 
 const emit = defineEmits(['formData', 'uploadFile', 'deleteFile']);
 
@@ -175,7 +216,7 @@ const formData = () => {
 };
 
 const addLink = () => {
-  tenthPanelData.value.links.push({ link: '' })
+  tenthPanelData.value.links.push({link: ''})
 };
 
 const uploadFile = async (event) => {
@@ -187,7 +228,8 @@ const deleteFile = () => {
 }
 
 watchEffect(() => {
-  tenthPanelData.value = { ...props.data };
+  tenthPanelData.value = {...props.data};
+  isSent.value = props.data.is_sent;
 })
 </script>
 <style lang="scss" scoped>
@@ -286,14 +328,14 @@ watchEffect(() => {
   /* -стандартное отображение*/
 }
 
-.custom-radio+label {
+.custom-radio + label {
   position: relative;
   padding-left: 30px;
   cursor: pointer;
   line-height: 20px;
 }
 
-.custom-radio+label::before {
+.custom-radio + label::before {
   content: '';
   position: absolute;
   left: 0;
@@ -306,7 +348,7 @@ watchEffect(() => {
   /* Внешний синий круг */
 }
 
-.custom-radio+label::after {
+.custom-radio + label::after {
   content: '';
   position: absolute;
   left: 5px;
@@ -322,7 +364,7 @@ watchEffect(() => {
   /* Пустота внутри внутреннего круга */
 }
 
-.custom-radio:checked+label::after {
+.custom-radio:checked + label::after {
   background-color: #1F7CC0;
   /* Заполнение внутреннего круга синим цветом при выборе */
 }
