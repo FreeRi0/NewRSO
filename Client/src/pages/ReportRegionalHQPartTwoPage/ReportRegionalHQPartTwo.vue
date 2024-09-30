@@ -190,7 +190,8 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <seventeenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                                 :data="reportData.seventeenth"/>
+                                 :data="reportData.seventeenth"
+                                 :is-sent="blockSendButton"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -199,7 +200,8 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <eighteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                                :data="reportData.eighteenth"/>
+                                :data="reportData.eighteenth"
+                                :is-sent="blockSendButton"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -208,7 +210,8 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <nineteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                                :data="reportData.nineteenth"/>
+                                :data="reportData.nineteenth"
+                                :is-sent="blockSendButton"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -612,6 +615,7 @@ onMounted(() => {
   getItems(7);
   getItems(9);
   getReportData(route.query.reportId);
+  console.log(reportData.value.sixteenth?.is_sent);
 });
 
 // onMounted(() => {
