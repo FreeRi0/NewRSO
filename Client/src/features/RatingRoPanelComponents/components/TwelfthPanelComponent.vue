@@ -17,7 +17,7 @@
                 :maxlength="10"
                 :max="32767"
                 @focusout="focusOut"
-                :disabled="isDisabled"
+                :disabled="isSent"
             />
         </div>
   
@@ -35,7 +35,7 @@
                 width="100%"
                 height="auto"
                 @change="uploadFile"
-                :disabled="isDisabled"
+                :disabled="isSent"
             />
             <FileBoxComponent
                 v-else
@@ -43,6 +43,7 @@
                 :fileType="twelfthPanelData.file_type"
                 :fileSize="twelfthPanelData.file_size"
                 @click="deleteFile"
+                :is-sent="isSent"
             ></FileBoxComponent>
         </div>
   
@@ -67,7 +68,7 @@
                 :maxlength="3000"
                 :max-length-text="3000"
                 @focusout="focusOut"
-                :disabled="isDisabled"
+                :readonly="isSent"
             >
             </TextareaReport>
         </div>
@@ -136,7 +137,7 @@ import {
     FileBoxComponent,
     ReportTable,
 } from "@entities/RatingRoComponents/components";
-import { getReport, reportPartTwoService } from "@services/ReportService.ts";
+import { reportPartTwoService } from "@services/ReportService.ts";
 
 const props = defineProps({
     districtExpert: {
@@ -156,10 +157,6 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
-    reportId: {
-        type: String,
-        default: "1",
-    },
     data: Object,
 });
 
@@ -173,6 +170,7 @@ const twelfthPanelData = ref({
     file_type: '',
     comment: '',
 });
+const isSent = ref(false);
 
 const emit = defineEmits(["update:value", "getData"]);
 
@@ -190,7 +188,8 @@ const focusOut = async () => {
 
     try {
         if (isFirstSent.value) {
-            await reportPartTwoService.createReport(formData, ID_PANEL, true);
+            const { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+            emit('getData', data, Number(ID_PANEL));
         } else {
             const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
             emit('getData', data, Number(ID_PANEL));
@@ -216,6 +215,7 @@ const uploadFile = async (event) => {
         if (isFirstSent.value) {
             let { scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
             twelfthPanelData.value.scan_file = scan_file;
+            emit('getData', scan_file, Number(ID_PANEL));
         } else {
             let { data : scan_file } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
             twelfthPanelData.value.scan_file = scan_file;
@@ -237,7 +237,8 @@ const deleteFile = async () => {
 
     try {
         if (isFirstSent.value) {
-            await reportPartTwoService.createReport(formData, ID_PANEL, true);
+            let { data :  scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+            emit('getData', scan_file, Number(ID_PANEL));
         } else {
             let { data :  scan_file } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
             emit('getData', scan_file, Number(ID_PANEL));
@@ -254,29 +255,14 @@ watchEffect(async () => {
         console.log(props.data);
         isFirstSent.value = false;
         twelfthPanelData.value.amount_of_money = props.data.amount_of_money;
-        twelfthPanelData.value.comment = props.data.comment;
+        twelfthPanelData.value.comment = props.data.comment  || '';
         twelfthPanelData.value.scan_file = props.data.scan_file;
         twelfthPanelData.value.file_size = props.data.file_size;
         twelfthPanelData.value.file_type = props.data.file_type;
+        isSent.value = props.data.is_sent;
     }
-
-    // try {
-    //     const { data } = 
-    //     props.districtExpert || props.centralExpert
-    //         ? await reportPartTwoService.getReportDH(ID_PANEL, props.reportId)
-    //         : await reportPartTwoService.getReport(ID_PANEL);
-    //     console.log(data);
-    //     if (data) {
-    //         isFirstSent.value = false;
-    //         twelfthPanelData.value.amount_of_money = data.amount_of_money;
-    //         twelfthPanelData.value.comment = data.comment;
-    //         twelfthPanelData.value.scan_file = data.scan_file;
-    //         twelfthPanelData.value.file_size = data.file_size;
-    //         twelfthPanelData.value.file_type = data.file_type;
-    //     }
-    // } catch (e) {
-    //     console.log(e)
-    // }
+}, {
+    flush: 'post'
 });
 </script>
   

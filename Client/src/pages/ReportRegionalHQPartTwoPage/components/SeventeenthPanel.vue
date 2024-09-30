@@ -40,6 +40,7 @@
         width="100%"
         height="auto"
         @change="uploadFile"
+        :disabled="isSent"
       />
 
       <FileBoxComponent
@@ -50,6 +51,7 @@
         @click="deleteFile"
         :is-error-file="isErrorFile"
         is-error-message="Прикрепите файл формата jpg, png, pdf не более 7 Мб"
+        :is-sent="isSent"
       ></FileBoxComponent>
     </div>
     <div class="report__fieldset report__fieldset--comment"
@@ -70,7 +72,7 @@
         :maxlength="3000"
         :max-length-text="3000"
         @focusout="focusOut"
-        :disabled="props.centralExpert || props.districtExpert"
+        :readonly="isSent"
       >
       </TextareaReport>
     </div>
@@ -81,7 +83,7 @@
 import { ref, watchEffect } from 'vue';
 import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { FileBoxComponent } from "@entities/RatingRoComponents/components";
-import { getReport, reportPartTwoService } from "@services/ReportService.ts";
+import { reportPartTwoService } from "@services/ReportService.ts";
 
 const props = defineProps({
   districtExpert: {
@@ -90,11 +92,10 @@ const props = defineProps({
   centralExpert: {
     type: Boolean
   },
-  // reportId: {
-  //   type: String,
-  //   default: '1',
-  // },
   data: Object,
+  isSent: {
+    type: Boolean,
+  },
 });
 
 const emit = defineEmits(['getData']);
@@ -115,15 +116,10 @@ const focusOut = async () => {
   let formData = new FormData();
   formData.append('comment', seventeenthPanelData.value.comment);
 
-  // if (isFirstSent.value) {
-  //   await reportPartTwoService.createReport(formData, ID_PANEL, true);
-  // } else {
-  //   await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-  // }
-
   try {
     if (isFirstSent.value) {
-      await reportPartTwoService.createReport(formData, ID_PANEL, true);
+      const { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+      emit('getData', data, Number(ID_PANEL));
     } else {
       const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
       emit('getData', data, Number(ID_PANEL));
@@ -142,29 +138,27 @@ const uploadFile = async (event) => {
   seventeenthPanelData.value.file_size = (scanFile.value.size / Math.pow(1024, 2));
   seventeenthPanelData.value.file_type = scanFile.value.type.split('/').at(-1);
 
-  try {
-    if (isFirstSent.value) {
-      let { scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-      seventeenthPanelData.value.scan_file = scan_file;
-    } else {
-      // let { data :  scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-      // seventeenthPanelData.value.scan_file = scan_file;
-      // emit('getData', scan_file, Number(ID_PANEL));
-      if ((scanFile.value.size / Math.pow(1024, 2)) > MAX_SIZE_FILE) {
-        isErrorFile.value = true;
-        seventeenthPanelData.value.scan_file = scanFile.value.name;
-        console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ', isErrorFile.value, scanFile.value.size / Math.pow(1024, 2), MAX_SIZE_FILE);
-      } else {
-        isErrorFile.value = false;
-        let {  data: scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+  if ((scanFile.value.size / Math.pow(1024, 2)) > MAX_SIZE_FILE) {
+    isErrorFile.value = true;
+    seventeenthPanelData.value.scan_file = scanFile.value.name;
+    console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ', isErrorFile.value, scanFile.value.size / Math.pow(1024, 2), MAX_SIZE_FILE);
+  } else {
+    try {
+      if (isFirstSent.value) {
+        let { data :  scan_file  } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
         seventeenthPanelData.value.scan_file = scan_file;
         emit('getData', scan_file, Number(ID_PANEL));
-        console.log('ФАЙЛ ОТПРАВЛЯЕТСЯ', isErrorFile.value);
+        console.log('ФАЙЛ ОТПРАВЛЯЕТСЯ ПЕРВЫЙ РАЗ', isErrorFile.value);
+      } else {
+        let { data :  scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+        seventeenthPanelData.value.scan_file = scan_file;
+        emit('getData', scan_file, Number(ID_PANEL));
+        console.log('ФАЙЛ ОТПРАВЛЯЕТСЯ ПОВТОРНО', isErrorFile.value);
       }
+    } catch (e) {
+      console.log('focusOut error:', e);
     }
-  } catch (e) {
-    console.log('focusOut error:', e);
-  }
+  }  
 };
 
 const deleteFile = async () => {
@@ -175,15 +169,10 @@ const deleteFile = async () => {
   formData.append('file_size', seventeenthPanelData.value.file_size);
   formData.append('file_type', seventeenthPanelData.value.file_type);
 
-  // if (isFirstSent.value) {
-  //   await reportPartTwoService.createReport(formData, ID_PANEL, true);
-  // } else {
-  //   await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-  // }
-
   try {
     if (isFirstSent.value) {
-      await reportPartTwoService.createReport(formData, ID_PANEL, true);
+      let { data :  scan_file  } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+      emit('getData', scan_file, Number(ID_PANEL));
     } else {
       // let { data :  scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
       // emit('getData', scan_file, Number(ID_PANEL));
@@ -199,21 +188,18 @@ const deleteFile = async () => {
   }
 };
 
-
 watchEffect(() => {
   // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
-
-  if (Object.keys(props.data).length > 0) {
-    console.log(props.data);
+  console.log(props.data);
+  if (props.data) {
     isFirstSent.value = false;
-    seventeenthPanelData.value.comment = props.data.comment;
+    seventeenthPanelData.value.comment = props.data.comment  || '';
     seventeenthPanelData.value.scan_file = props.data.scan_file;
     seventeenthPanelData.value.file_size = props.data.file_size;
     seventeenthPanelData.value.file_type = props.data.file_type;
-  } else {
-    console.log('отчет по показателю еще не создан', seventeenthPanelData.value);
-    isFirstSent.value = true;
   }
+}, {
+  flush: 'post'
 });
 </script>
 

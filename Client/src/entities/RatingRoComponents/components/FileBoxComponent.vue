@@ -20,7 +20,7 @@
             class="report__button-delete-file"
             v-bind="$attrs"
             aria-label="Удалить файл"
-            v-if="!(props.centralExpert || props.districtExpert)"
+            v-if="!isSent"
         >
             <span>Удалить</span>
         </button>
@@ -40,7 +40,7 @@ defineOptions({
 
 const props = defineProps({
     file: {
-        type: String,
+        type: [ String, Object],
         default: null,
     },
     fileType: {
@@ -52,7 +52,7 @@ const props = defineProps({
         default: null,
     },
     districtExpert: {
-    type: Boolean,
+        type: Boolean,
     },
     centralExpert: {
         type: Boolean,
@@ -64,6 +64,9 @@ const props = defineProps({
     isErrorMessage: {
         type: String,
         default: '',
+    },
+    isSent: {
+        type: Boolean,
     },
 });
 
