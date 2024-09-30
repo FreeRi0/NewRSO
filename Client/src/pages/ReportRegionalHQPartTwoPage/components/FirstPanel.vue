@@ -58,7 +58,8 @@
             @focusout="focusOut"
             :maxlength="3000"
             :max-length-text="3000"
-            counter-visible class="form__input"
+            counter-visible
+            class="form__input"
             :disabled="isSent"
             style="margin-bottom: 4px;"/>
       </div>

@@ -237,12 +237,12 @@ import {
   NineteenthPanel
 } from './components/index'
 import { Button } from '@shared/components/buttons';
-import { ref, watchEffect } from "vue";
+import { inject, ref, watchEffect } from "vue";
 import { SvgIcon } from '@shared/ui/SvgIcon';
 import { useRoleStore } from "@layouts/store/role.ts";
 import { HTTP } from '@app/http';
 import { reportPartTwoService } from "@services/ReportService.ts";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const districtExpert = ref(false);
 const centralExpert = ref(false);
@@ -272,6 +272,9 @@ const six_items = ref([])
 const seventh_items = ref([]);
 const ninth_items = ref([]);
 const blockSendButton = ref(false);
+
+const swal = inject('$swal');
+const router = useRouter();
 
 const setId = (id) => {
   panel_id.value = id;
@@ -303,7 +306,6 @@ const downloadReportAll = (id) => {
       console.log('an error occured ' + error);
     });
 };
-
 
 const getItems = async (number) => {
   try {
@@ -575,8 +577,26 @@ const sendReport = async () => {
     await reportPartTwoService.sendReport(reportData.value.sixteenth, '16');
     await reportPartTwoService.sendMultipleReport(reportData.value.tenth.first, '10', '1');
     await reportPartTwoService.sendMultipleReport(reportData.value.tenth.second, '10', '2');
+
+    swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: 'успешно',
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    await router.push({
+      name: 'reportingRo',
+    });
   } catch (e) {
     blockSendButton.value = false;
+    swal.fire({
+      position: 'center',
+      icon: 'error',
+      title: `ошибка`,
+      showConfirmButton: false,
+      timer: 2500,
+    })
     console.log('sendReport error: ', e)
   }
 }
