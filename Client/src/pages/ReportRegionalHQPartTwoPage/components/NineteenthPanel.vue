@@ -81,7 +81,7 @@
         :maxlength="3000"
         :max-length-text="3000"
         @focusout="focusOut"
-        :readonly="isSent"
+        :disabled="isSent"
       >
       </TextareaReport>
     </div>

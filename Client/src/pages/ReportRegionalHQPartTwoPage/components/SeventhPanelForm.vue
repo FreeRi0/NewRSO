@@ -77,7 +77,7 @@
                 <div class="form__field">
                     <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
                     <TextareaReport v-model:value="seventhPanelData.comment" id="comment" name="comment" :rows="1"
-                        autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :readonly="isSent"
+                        autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :disabled="isSent"
                         max-length-text="3000" counter-visible />
                 </div>
                 <div class="form__field-result" style="display: flex; align-items: center;">
@@ -136,7 +136,7 @@
                     <label class="form__label" for="14">Комментарий </label>
                     <TextareaReport v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1"
                         autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
-                        :readonly="isSentSix" :max-length-text="3000" counter-visible />
+                        :disabled="isSentSix" :max-length-text="3000" counter-visible />
 
                 </div>
             </div>
@@ -205,7 +205,7 @@
                     <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
                     <TextareaReport v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1"
                         autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
-                        :max-length-text="3000" counter-visible :readonly="isSentNine" />
+                        :max-length-text="3000" counter-visible :disabled="isSentNine" />
                 </div>
                 <div class="form__field-result" style="display: flex; align-items: center;">
                     <v-checkbox class="result-checkbox" id="v-checkbox" />
