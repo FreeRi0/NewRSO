@@ -21,7 +21,7 @@
 
                     <div class="places_wrap">
                         <div class="places_item" v-for="item in prize_places" :key="item.id">
-                            <input :id="item.id" :value="item.value" :name="item.name"
+                            <input :id="item.id" :value="item.value" :disabled="isSent" :name="item.name"
                                 :checked="seventhPanelData.prize_place == item.value" class="form__input places_input"
                                 type="radio" @focusout="focusOut" v-model="seventhPanelData.prize_place" />
                             <label class="places_item_label" :for="id">{{
@@ -36,7 +36,7 @@
                     </label>
                     <InputReport v-if="!seventhPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
                         id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile($event, 7)"
-                        :disabled="isDisabled" />
+                        :disabled="isSent" />
                     <FileBoxComponent v-else :file="seventhPanelData.document" :fileType="seventhPanelData.file_type"
                         :fileSize="seventhPanelData.file_size" @click="deleteFile(7)"></FileBoxComponent>
                 </div>
@@ -45,15 +45,19 @@
                     <label class="form__label mt-4" for="14">Ссылка на публикацию о победе
                         <sup class="valid-red">*</sup></label>
                     <div class="form__wrapper" v-for="(item, index) in seventhPanelData.links" :key="index">
-                        <InputReport @focusout="focusOut" name="14" :is-link="true"
+                        <InputReport @focusout="focusOut" name="14" :is-link="true" :disabled="isSent"
                             placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
                             class="mb-2" />
-                        <div class="add_link" @click="addLink(7)" v-if="seventhPanelData.links.length === index + 1">
-                            + Добавить ссылку
+                        <div v-if="!isSent">
+                            <div class="add_link" @click="addLink(7)"
+                                v-if="seventhPanelData.links.length === index + 1">
+                                + Добавить ссылку
+                            </div>
+                            <div class="add_link" @click="deleteLink(7)" v-else>
+                                Удалить поле ввода
+                            </div>
                         </div>
-                        <div class="add_link" @click="deleteLink(7)" v-else>
-                            Удалить поле ввода
-                        </div>
+
 
                     </div>
                 </div>
@@ -73,8 +77,8 @@
                 <div class="form__field">
                     <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
                     <TextareaReport v-model:value="seventhPanelData.comment" id="comment" name="comment" :rows="1"
-                        autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
-                        :max-length-text="3000" counter-visible />
+                        autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :readonly="isSent"
+                        max-length-text="3000" counter-visible />
                 </div>
                 <div class="form__field-result" style="display: flex; align-items: center;">
                     <v-checkbox class="result-checkbox" id="v-checkbox" />
@@ -104,8 +108,8 @@
                         Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
                     </p>
                     <InputReport @focusout="focusOut" v-model:value="sixPanelData.number_of_members"
-                        placeholder="Введите число" id="15" name="14" class="form__input number_input" type="number"
-                        :maxlength="10" :max="32767" />
+                        :disabled="isSentSix" placeholder="Введите число" id="15" name="14"
+                        class="form__input number_input" type="number" :maxlength="10" :max="32767" />
                 </div>
                 <div class="form__field">
                     <label class="form__label" for="14">Ссылка на социальные сети/ электронные<br>
@@ -114,13 +118,17 @@
 
                     <div class="form__wrapper" v-for="(item, index) in sixPanelData.links" :key="index">
                         <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                            @focusout="focusOut" name="14" v-model:value="item.link" :is-link="true" class="mb-2" />
-                        <div class="add_link" @click="addLink(6)" v-if="sixPanelData.links.length === index + 1">
-                            + Добавить ссылку
+                            @focusout="focusOut" :disabled="isSentSix" name="14" v-model:value="item.link"
+                            :is-link="true" class="mb-2" />
+                        <div v-if="!isSentSix">
+                            <div class="add_link" @click="addLink(6)" v-if="sixPanelData.links.length === index + 1">
+                                + Добавить ссылку
+                            </div>
+                            <div class="add_link" @click="deleteLink(6)" v-else>
+                                Удалить поле ввода
+                            </div>
                         </div>
-                        <div class="add_link" @click="deleteLink(6)" v-else>
-                            Удалить поле ввода
-                        </div>
+
 
                     </div>
                 </div>
@@ -128,7 +136,7 @@
                     <label class="form__label" for="14">Комментарий </label>
                     <TextareaReport v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1"
                         autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
-                        :max-length-text="3000" counter-visible />
+                        :readonly="isSentSix" :max-length-text="3000" counter-visible />
 
                 </div>
             </div>
@@ -152,7 +160,7 @@
 
                     <div class="places_wrap">
                         <div class="places_item" v-for="item in events" :key="item.id">
-                            <input :id="item.id" :value="item.value" :name="item.name"
+                            <input :id="item.id" :value="item.value" :name="item.name" :disabled="isSentNine"
                                 :checked="ninthPanelData.event_happened == item.value" class="form__input places_input"
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
@@ -166,7 +174,8 @@
                         Скан документа, подтверждающего проведение акции
                     </label>
                     <InputReport v-if="!ninthPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
-                        id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile($event, 9)" />
+                        id="scan_file" name="scan_file" width="100%" :disabled="isSentNine" height="auto"
+                        @change="uploadFile($event, 9)" />
                     <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
                         :fileSize="ninthPanelData.file_size" @click="deleteFile(9)"></FileBoxComponent>
                 </div>
@@ -177,15 +186,18 @@
                         <sup class="valid-red">*</sup></label>
 
                     <div class="form__wrapper" v-for="(item, index) in ninthPanelData.links" :key="index">
-                        <InputReport @focusout="focusOut" name="14" :is-link="true"
+                        <InputReport @focusout="focusOut" :disabled="isSentNine" name="14" :is-link="true"
                             placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
                             class="mb-2" />
-                        <div class="add_link" @click="addLink(9)" v-if="ninthPanelData.links.length === index + 1">
-                            + Добавить ссылку
+                        <div v-if="!isSentNine">
+                            <div class="add_link" @click="addLink(9)" v-if="ninthPanelData.links.length === index + 1">
+                                + Добавить ссылку
+                            </div>
+                            <div class="add_link" @click="deleteLink(9)" v-else>
+                                Удалить поле ввода
+                            </div>
                         </div>
-                        <div class="add_link" @click="deleteLink(9)" v-else>
-                            Удалить поле ввода
-                        </div>
+
 
                     </div>
                 </div>
@@ -193,7 +205,7 @@
                     <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
                     <TextareaReport v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1"
                         autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
-                        :max-length-text="3000" counter-visible />
+                        :max-length-text="3000" counter-visible :readonly="isSentNine" />
                 </div>
                 <div class="form__field-result" style="display: flex; align-items: center;">
                     <v-checkbox class="result-checkbox" id="v-checkbox" />
@@ -770,7 +782,7 @@ const props = defineProps({
     data: Object,
 });
 
-const emit = defineEmits(['collapse-form', 'formData',  'uploadFile', 'getId', 'getPanelNumber', 'deleteFile']);
+const emit = defineEmits(['collapse-form', 'formData', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile']);
 
 const collapseForm = () => {
     emit('collapse-form');
@@ -823,6 +835,10 @@ const events = ref([
     { name: 'Да', value: true, id: 'pp1' },
     { name: 'Нет', value: false, id: 'pp2' },
 ])
+
+const isSent = ref(false);
+const isSentSix = ref(false);
+const isSentNine = ref(false);
 
 const uploadFile = (event, number) => {
 
@@ -981,6 +997,7 @@ watchEffect(() => {
         if (Object.keys(props.data).length > 0) {
             isFirstSentSix.value = false
             sixPanelData.value = { ...props.data }
+            isSentSix.value = props.data.is_sent;
             // if (!sixPanelData.value.links.length) sixPanelData.value.links.push({ link: '' })
 
             // emit('isSent', isFirstSentSix.value)
@@ -1004,7 +1021,9 @@ watchEffect(() => {
             isFirstSentSeventh.value = false;
             // emit('isSent', isFirstSentSeventh.value)
             seventhPanelData.value = { ...props.data }
-            //if (!seventhPanelData.value.links.length) seventhPanelData.value.links.push({ link: '' })
+            isSent.value = props.data.is_sent;
+
+            if (!seventhPanelData.value.links.length) seventhPanelData.value.links.push({ link: '' })
 
         } else {
             console.log('data not received');
@@ -1025,9 +1044,10 @@ watchEffect(() => {
             isFirstSentNinth.value = false;
             // emit('isSent', isFirstSentNinth.value)
             ninthPanelData.value = { ...props.data }
-            //if (ninthPanelData.value && !ninthPanelData.value.links.length) {
-            //ninthPanelData.value.links.push({ link: '' })
-            // }
+            isSentNine.value = props.data.is_sent;
+            if (!ninthPanelData.value.links.length) {
+            ninthPanelData.value.links.push({ link: '' })
+            }
 
         } else {
             console.log('data not received');
@@ -1073,7 +1093,7 @@ watchEffect(() => {
 }
 
 .result-count {
-  color: #6D6D6D;
+    color: #6D6D6D;
 }
 
 .hr {
@@ -1182,16 +1202,16 @@ watchEffect(() => {
 }
 
 .form__field-result {
-  width: 100%;
+    width: 100%;
 
-  @media (max-width: 568px) {
-    margin: 0 auto;
-    width: 340px;
-  }
+    @media (max-width: 568px) {
+        margin: 0 auto;
+        width: 340px;
+    }
 
-  @media (max-width: 400px) {
-    width: 300px;
-  }
+    @media (max-width: 400px) {
+        width: 300px;
+    }
 }
 
 .form {
