@@ -76,11 +76,14 @@
         maxLengthText: {
             type: Number,
         },
+        isSent: {
+            type: Boolean,
+    },
     });
     
     const textLength = ref(null);
   
-    watchEffect(() => textLength.value = typeof props.value === 'string' ? props.value.length : 0)
+    watchEffect(() => textLength.value = typeof props.value === 'string' ? props.value.length : 0);
   
     const updateValue = (event) => {
         emit('update:value', event.target.value);

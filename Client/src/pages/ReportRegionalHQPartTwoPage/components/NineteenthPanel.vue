@@ -31,7 +31,7 @@
         :maxlength="10"
         :max="32767"
         @focusout="focusOut"
-        :disabled="props.centralExpert || props.districtExpert"
+        :disabled="isSent"
       />
     </div>
 
@@ -56,7 +56,7 @@
         :maxlength="10"
         :max="32767"
         @focusout="focusOut"
-        :disabled="props.centralExpert || props.districtExpert"
+        :disabled="isSent"
       />
     </div>
   
@@ -81,7 +81,7 @@
         :maxlength="3000"
         :max-length-text="3000"
         @focusout="focusOut"
-        :disabled="props.centralExpert || props.districtExpert"
+        :readonly="isSent"
       >
       </TextareaReport>
     </div>
@@ -91,7 +91,7 @@
 <script setup>
 import { ref, watchEffect } from 'vue';
 import { InputReport, TextareaReport } from '@shared/components/inputs';
-import { getReport, reportPartTwoService } from "@services/ReportService.ts";
+import { reportPartTwoService } from "@services/ReportService.ts";
 
 const props = defineProps({
   districtExpert: {
@@ -100,11 +100,10 @@ const props = defineProps({
   centralExpert: {
     type: Boolean
   },
-  // reportId: {
-  //   type: String,
-  //   default: '1',
-  // },
   data: Object,
+  isSent: {
+    type: Boolean,
+  },
 });
 
 const emit = defineEmits(['getData']);
@@ -145,13 +144,14 @@ const focusOut = async () => {
 watchEffect(() => {
   // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
   console.log(props.data);
-  // if (Object.keys(props.data).length > 0) {
   if (props.data) {
     isFirstSent.value = false;
     nineteenthPanelData.value.employed_student_start = props.data.employed_student_start;
     nineteenthPanelData.value.employed_student_end = props.data.employed_student_end;
     nineteenthPanelData.value.comment = props.data.comment;
   }
+}, {
+  flush: 'post'
 });
 </script>
 

@@ -40,6 +40,7 @@
         width="100%"
         height="auto"
         @change="uploadFile"
+        :disabled="isSent"
       />
 
       <FileBoxComponent
@@ -50,6 +51,7 @@
         @click="deleteFile"
         :is-error-file="isErrorFile"
         is-error-message="Прикрепите файл формата jpg, png, pdf не более 7 Мб"
+        :is-sent="isSent"
       ></FileBoxComponent>
     </div>
     <div class="report__fieldset report__fieldset--comment"
@@ -70,7 +72,7 @@
         :maxlength="3000"
         :max-length-text="3000"
         @focusout="focusOut"
-        :disabled="props.centralExpert || props.districtExpert"
+        :readonly="isSent"
       >
       </TextareaReport>
     </div>
@@ -81,7 +83,7 @@
 import { ref, watchEffect } from 'vue';
 import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { FileBoxComponent } from "@entities/RatingRoComponents/components";
-import { getReport, reportPartTwoService } from "@services/ReportService.ts";
+import { reportPartTwoService } from "@services/ReportService.ts";
 
 const props = defineProps({
   districtExpert: {
@@ -90,11 +92,10 @@ const props = defineProps({
   centralExpert: {
     type: Boolean
   },
-  // reportId: {
-  //   type: String,
-  //   default: '1',
-  // },
   data: Object,
+  isSent: {
+    type: Boolean,
+  },
 });
 
 const emit = defineEmits(['getData']);
@@ -187,18 +188,18 @@ const deleteFile = async () => {
   }
 };
 
-
 watchEffect(() => {
   // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
   console.log(props.data);
-  // if ((Object.keys(props.data).length > 0) || props.data) {
   if (props.data) {
     isFirstSent.value = false;
-    seventeenthPanelData.value.comment = props.data.comment;
+    seventeenthPanelData.value.comment = props.data.comment  || '';
     seventeenthPanelData.value.scan_file = props.data.scan_file;
     seventeenthPanelData.value.file_size = props.data.file_size;
     seventeenthPanelData.value.file_type = props.data.file_type;
   }
+}, {
+  flush: 'post'
 });
 </script>
 

@@ -33,6 +33,7 @@
             width="100%"
             height="86px"
             @change="uploadFile($event, index)"
+            :disabled="isSent"
           />
 
           <div 
@@ -48,9 +49,10 @@
             :fileType="project.file_type"
             :fileSize="project.file_size"
             @click="deleteFile(index)"
+            :is-sent="isSent"
           ></FileBoxComponent>
           <button
-            v-if="!(props.centralExpert || props.districtExpert) && (index > 0)"
+            v-if="!isSent && (index > 0)"
             class="report__delete-button"
             @click="deletePublication(index)"
           >
@@ -75,7 +77,7 @@
                   placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
                   style="width: 100%;"
                   @focusout="focusOut"
-                  :disabled="props.centralExpert || props.districtExpert"
+                  :disabled="isSent"
               />
               <div v-if="isError && (i > 0)" class="report__error-block">
                 <span class="report__error-text">Укажите ссылку публикации</span>
@@ -83,7 +85,7 @@
 
               <!-- <div class="report__btn-block"> -->
                 <button
-                  v-if="!(props.centralExpert || props.districtExpert) && (projects[index].links.length === i + 1)"
+                  v-if="!isSent && (projects[index].links.length === i + 1)"
                   class="report__btn-link report__btn-link--add-link"
                   @click="addLink(index)"
                 >
@@ -91,7 +93,7 @@
                 </button>
 
                 <button
-                  v-if="!(props.centralExpert || props.districtExpert) && (i > 0)"
+                  v-if="!isSent && (i > 0)"
                   @click="deleteLink(index, i)"
                   class="report__btn-link report__btn-link--delete-field"
                   aria-label="Удалить поле ввода"
@@ -106,7 +108,7 @@
         </div>
       </div>
       
-      <div v-if="!(props.centralExpert || props.districtExpert)">
+      <div v-if="!isSent">
         <button
           class="report__add-button"
           @click="addPublication"
@@ -136,7 +138,7 @@
         :maxlength="3000"
         :max-length-text="3000"
         @focusout="focusOut"
-        :disabled="props.centralExpert || props.districtExpert"
+        :readonly="isSent"
       >
       </TextareaReport>
     </div>
@@ -161,11 +163,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  // reportId: {
-  //   type: String,
-  //   default: '1',
-  // },
   data: Object,
+  isSent: {
+    type: Boolean,
+  },
 });
 
 let isError = ref(props.isError);
@@ -174,7 +175,6 @@ const emit = defineEmits(['getData']);
 
 const ID_PANEL = '18';
 const isFirstSent = ref(true);
-// const scanFile = ref([]);
 const eighteenthPanelData = ref({
   comment: '',
   projects: []
@@ -355,13 +355,14 @@ const deletePublication = async (index) => {
 watchEffect(async () => {
   // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
   console.log(props.data);
-  // if (Object.keys(props.data).length > 0) {
   if (props.data) {
     isFirstSent.value = false;
     projects.value = [...props.data.projects];
-    eighteenthPanelData.value.comment = props.data.comment;
+    eighteenthPanelData.value.comment = props.data.comment  || '';
     if (!projects.value[0].links.length) projects.value[0].links.push({link: ''});
   }
+}, {
+  flush: 'post'
 });
 </script>
 
