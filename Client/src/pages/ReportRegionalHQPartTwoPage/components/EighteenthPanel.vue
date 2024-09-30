@@ -219,8 +219,17 @@ const uploadFile = async (event, index) => {
     }
   }
 
-  const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-  emit('getData', data, Number(ID_PANEL));
+  try {
+    if (isFirstSent.value) {
+      const { data } = await reportPartTwoService.createReport(eighteenthPanelData.value, ID_PANEL);
+      emit('getData', data, Number(ID_PANEL));
+    } else {
+      const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+      emit('getData', data, Number(ID_PANEL));
+    }
+  } catch (e) {
+    console.log('focusOut error:', e);
+  }
 };
 
 const deleteFile = async (index) => {
@@ -292,7 +301,8 @@ const focusOut = async () => {
   // console.log(eighteenthPanelData.value.projects);
   try {
     if (isFirstSent.value) {
-    await reportPartTwoService.createReport(eighteenthPanelData.value, ID_PANEL);
+      const { data } = await reportPartTwoService.createReport(eighteenthPanelData.value, ID_PANEL);
+      emit('getData', data, Number(ID_PANEL));
     } else {
       let formData = new FormData();
       formData.append('comment', eighteenthPanelData.value.comment);
@@ -304,6 +314,9 @@ const focusOut = async () => {
               !projects.value[index].links[i].link 
               ? formData.append(`projects[${index}][links][${i}][link]`, '')
               : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+              // if (projects.value[index].links[i].link && projects.value[index].links[i].link !== '') {
+              //   formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+              // }
             }
           }
         }
@@ -341,16 +354,13 @@ const deletePublication = async (index) => {
 
 watchEffect(async () => {
   // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
-
-  if (Object.keys(props.data).length > 0) {
-    console.log(props.data);
+  console.log(props.data);
+  // if (Object.keys(props.data).length > 0) {
+  if (props.data) {
     isFirstSent.value = false;
     projects.value = [...props.data.projects];
     eighteenthPanelData.value.comment = props.data.comment;
     if (!projects.value[0].links.length) projects.value[0].links.push({link: ''});
-  } else {
-    console.log('отчет по показателю еще не создан', eighteenthPanelData.value);
-    isFirstSent.value = true;
   }
 });
 </script>

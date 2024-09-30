@@ -120,17 +120,6 @@ const nineteenthPanelData = ref({
 
 const focusOut = async () => {
   console.log(nineteenthPanelData.value);
-  // let formData = new FormData();
-  // nineteenthPanelData.value.employed_student_start ? formData.append('employed_student_start', nineteenthPanelData.value.employed_student_start) : formData.append('employed_student_start', '');
-  // nineteenthPanelData.value.employed_student_end ? formData.append('employed_student_end', nineteenthPanelData.value.employed_student_end) : formData.append('employed_student_end', '');
-  // formData.append('comment', nineteenthPanelData.value.comment);
-
-  // if (isFirstSent.value) {
-  //   await reportPartTwoService.createReport(formData, ID_PANEL);
-  // } else {
-  //   await reportPartTwoService.createReportDraft(formData, ID_PANEL);
-  // }
-  //--------------------------------------------------------------------------------------------
 
   if (nineteenthPanelData.value.employed_student_start === '') {
     nineteenthPanelData.value.employed_student_start = null;
@@ -140,20 +129,11 @@ const focusOut = async () => {
     nineteenthPanelData.value.employed_student_end = null;
   }
 
-  // console.log ("start -", typeof(nineteenthPanelData.value.employed_student_start), "end - ", typeof(nineteenthPanelData.value.employed_student_end));
-  // console.log(nineteenthPanelData.value.employed_student_start, nineteenthPanelData.value.employed_student_end);
-
-  // if (isFirstSent.value) {
-  //   await reportPartTwoService.createReport(nineteenthPanelData.value, ID_PANEL);
-  // } else {
-  //   await reportPartTwoService.createReportDraft(nineteenthPanelData.value, ID_PANEL);
-  // }
-//-------------------------------------------------------------------------------------------------
   try {
     if (isFirstSent.value) {
-      await reportPartTwoService.createReport(nineteenthPanelData.value, ID_PANEL);
+      const { data } = await reportPartTwoService.createReport(nineteenthPanelData.value, ID_PANEL);
+      emit('getData', data, Number(ID_PANEL));
     } else {
-      // await reportPartTwoService.createReportDraft(nineteenthPanelData.value, ID_PANEL);
       const { data } = await reportPartTwoService.createReportDraft(nineteenthPanelData.value, ID_PANEL);
       emit('getData', data, Number(ID_PANEL));
     }
@@ -164,22 +144,13 @@ const focusOut = async () => {
 
 watchEffect(() => {
   // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
-
-  if (Object.keys(props.data).length > 0) {
-    console.log(props.data);
+  console.log(props.data);
+  // if (Object.keys(props.data).length > 0) {
+  if (props.data) {
     isFirstSent.value = false;
     nineteenthPanelData.value.employed_student_start = props.data.employed_student_start;
     nineteenthPanelData.value.employed_student_end = props.data.employed_student_end;
     nineteenthPanelData.value.comment = props.data.comment;
-  } 
-  else {
-    console.log('отчет по показателю еще не создан', nineteenthPanelData.value);
-    isFirstSent.value = true;
-  //   nineteenthPanelData.value = {
-  //     employed_student_start: null,
-  //     employed_student_end: null,
-  //     comment: '',
-  //   };
   }
 });
 </script>
