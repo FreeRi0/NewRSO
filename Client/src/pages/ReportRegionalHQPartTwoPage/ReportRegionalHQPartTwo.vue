@@ -237,7 +237,7 @@ import {
   NineteenthPanel
 } from './components/index'
 import { Button } from '@shared/components/buttons';
-import { inject, ref, watchEffect } from "vue";
+import {inject, onMounted, ref, watchEffect} from "vue";
 import { SvgIcon } from '@shared/ui/SvgIcon';
 import { useRoleStore } from "@layouts/store/role.ts";
 import { HTTP } from '@app/http';
@@ -601,7 +601,7 @@ const sendReport = async () => {
   }
 }
 
-watchEffect(() => {
+onMounted(() => {
   if (roleStore.experts?.is_district_expert) {
     districtExpert.value = true;
   }
