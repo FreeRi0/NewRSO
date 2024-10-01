@@ -26,7 +26,7 @@
                                 type="radio" @focusout="focusOut" v-model="seventhPanelData.prize_place" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                            }}</label>
+                                }}</label>
                         </div>
                     </div>
                 </div>
@@ -46,8 +46,11 @@
                         <sup class="valid-red">*</sup></label>
                     <div class="form__wrapper" v-for="(item, index) in seventhPanelData.links" :key="index">
                         <InputReport @focusout="focusOut" name="14" :is-link="true" :disabled="isSent"
-                            placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
-                            class="mb-2" />
+                            placeholder="Введите ссылку, например,  https://vk.com/cco_monolit" :maxlength="200"
+                            v-model:value="item.link" class="mb-2" />
+                        <!-- <div v-if="!isValidURL(item.link)">
+                            <p class="error-message">Invalid URL 7</p>
+                        </div> -->
                         <div v-if="!isSent">
                             <div class="add_link" @click="addLink(7)"
                                 v-if="seventhPanelData.links.length === index + 1">
@@ -109,7 +112,7 @@
                     </p>
                     <InputReport @focusout="focusOut" v-model:value="sixPanelData.number_of_members"
                         :disabled="isSentSix" placeholder="Введите число" id="15" name="14"
-                        class="form__input number_input" type="number" :maxlength="10" :max="32767" />
+                        class="form__input number_input" type="number" :max="32767" />
                 </div>
                 <div class="form__field">
                     <label class="form__label" for="14">Ссылка на социальные сети/ электронные<br>
@@ -118,8 +121,9 @@
 
                     <div class="form__wrapper" v-for="(item, index) in sixPanelData.links" :key="index">
                         <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                            @focusout="focusOut" :disabled="isSentSix" name="14" v-model:value="item.link"
-                            :is-link="true" class="mb-2" />
+                            @focusout="focusOut" :disabled="isSentSix" :maxlength="200" name="14"
+                            v-model:value="item.link" :is-link="true" class="mb-2" />
+                  
                         <div v-if="!isSentSix">
                             <div class="add_link" @click="addLink(6)" v-if="sixPanelData.links.length === index + 1">
                                 + Добавить ссылку
@@ -128,9 +132,9 @@
                                 Удалить поле ввода
                             </div>
                         </div>
-
-
                     </div>
+                    
+
                 </div>
                 <div class="form__field">
                     <label class="form__label" for="14">Комментарий </label>
@@ -165,7 +169,7 @@
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                            }}</label>
+                                }}</label>
                         </div>
                     </div>
                 </div>
@@ -186,9 +190,9 @@
                         <sup class="valid-red">*</sup></label>
 
                     <div class="form__wrapper" v-for="(item, index) in ninthPanelData.links" :key="index">
-                        <InputReport @focusout="focusOut" :disabled="isSentNine" name="14" :is-link="true"
-                            placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
-                            class="mb-2" />
+                        <InputReport @focusout="focusOut" :disabled="isSentNine" name="14" :maxlength="200"
+                            :is-link="true" placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
+                            v-model:value="item.link" class="mb-2" />
                         <div v-if="!isSentNine">
                             <div class="add_link" @click="addLink(9)" v-if="ninthPanelData.links.length === index + 1">
                                 + Добавить ссылку
@@ -244,7 +248,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -384,7 +388,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -464,7 +468,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -558,7 +562,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -645,7 +649,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -743,7 +747,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -823,6 +827,10 @@ const sixPanelData = ref({
     }],
     comment: '',
 });
+// const isValidURL = (url) => {
+//     const urlRegex = /^(https?:\/\/)?[\w\-]+(\.[\w\-]+)+[/#?]?.*$/;
+//     return urlRegex.test(url);
+// }
 
 const prize_places = ref([
     { name: '1', value: 1, id: 'pp1' },
@@ -998,7 +1006,7 @@ watchEffect(() => {
             isFirstSentSix.value = false
             sixPanelData.value = { ...props.data }
             isSentSix.value = props.data.is_sent;
-            // if (!sixPanelData.value.links.length) sixPanelData.value.links.push({ link: '' })
+            if (!sixPanelData.value.links.length) sixPanelData.value.links.push({ link: '' })
 
             // emit('isSent', isFirstSentSix.value)
         } else {
@@ -1046,7 +1054,7 @@ watchEffect(() => {
             ninthPanelData.value = { ...props.data }
             isSentNine.value = props.data.is_sent;
             if (!ninthPanelData.value.links.length) {
-            ninthPanelData.value.links.push({ link: '' })
+                ninthPanelData.value.links.push({ link: '' })
             }
 
         } else {
