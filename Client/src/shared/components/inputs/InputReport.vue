@@ -126,10 +126,13 @@ watchEffect(() => {
 watchEffect(() => {
   const isValid = isValidURL(props.value);
   isLinkError.value = !isValid;
+  emit('error', isLinkError.value);
+  console.log('err_link_1', isLinkError.value);
 });
 
 
 const updateValue = (event) => {
+  
   emit('update:value', event.target.value);
   // emit('update:value', event.target.maxLength ? event.target.value = event.target.value.slice(0, event.target.maxLength) : event.target.value);
 };

@@ -13,7 +13,7 @@
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="7" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)" @uploadFile="uploadFile($event, item.id)"
+            @formData="formData($event, item.id)" @error="setError" @uploadFile="uploadFile($event, item.id)"
             @deleteFile="deleteFile($event, item.id)" @getPanelNumber="getPanelNumber($event)" @getId="getId($event)"
             :data="seventhPanelData" :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
@@ -52,6 +52,12 @@ const seventhPanelData = ref({
   file_type: '',
   comment: '',
 });
+
+const link_err = ref(false);
+
+const setError = (err) => {
+  link_err.value = err;
+}
 const isFirstSent = ref(null);
 // const sent = (sentVal) => {
 //   console.log('is sent: ', sentVal, isFirstSent.value);
@@ -60,6 +66,8 @@ const isFirstSent = ref(null);
 
 const formData = async (reportData, reportNumber) => {
   try {
+    console.log('is_link_err_3_7', link_err.value)
+    if (link_err.value) return;
     if (isFirstSent.value) {
       console.log('First time sending data');
       await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber);
