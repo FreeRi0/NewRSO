@@ -93,6 +93,7 @@
             class="form__input form__input-comment"
             style="margin-bottom: 4px;"
             :disabled="isSent"
+            @focusout="formData"
         />
       </div>
     </div>
@@ -180,11 +181,11 @@
   </report-tabs>
 </template>
 <script setup>
-import { ref, watchEffect } from "vue";
-import { InputReport, TextareaReport } from '@shared/components/inputs';
-import { Button } from '@shared/components/buttons';
-import { ReportTabs } from './index';
-import { SvgIcon } from '@shared/index';
+import {ref, watchEffect, watchPostEffect} from "vue";
+import {InputReport, TextareaReport} from '@shared/components/inputs';
+import {Button} from '@shared/components/buttons';
+import {ReportTabs} from './index';
+import {SvgIcon} from '@shared/index';
 
 const props = defineProps({
   data: Object,
@@ -201,6 +202,7 @@ const tenthPanelData = ref({
   document: '',
   file_size: '',
   file_type: '',
+  comment: '',
   links: [
     {
       link: '',
@@ -230,6 +232,9 @@ const deleteFile = () => {
 watchEffect(() => {
   tenthPanelData.value = {...props.data};
   isSent.value = props.data.is_sent;
+})
+watchPostEffect(() => {
+  if (!tenthPanelData.value.links.length) tenthPanelData.value.links.push({link: ''})
 })
 </script>
 <style lang="scss" scoped>
