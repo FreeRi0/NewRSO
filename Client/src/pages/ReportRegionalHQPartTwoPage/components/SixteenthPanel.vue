@@ -396,12 +396,14 @@
   </report-tabs>
 </template>
 <script setup>
-import { ref, watchEffect } from "vue";
+import {inject, ref, watchEffect, watchPostEffect} from "vue";
 import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { SvgIcon } from '@shared/index';
 import { ReportTabs } from './index';
+
+const swal = inject('$swal');
 
 const props = defineProps({
   districtExpert: {
@@ -453,6 +455,21 @@ const focusOut = async () => {
     }
   } catch (e) {
     console.log('focusOut error:', e);
+    e.response.data.projects.forEach(project => {
+      if (project.links) {
+        for (let i in project.links) {
+          if (Object.keys(project.links[i]).length !== 0 && project.links[i].link.includes('Введите правильный URL.')) {
+            swal.fire({
+              position: 'center',
+              icon: 'warning',
+              title: `Введите корректный URL`,
+              showConfirmButton: false,
+              timer: 2500,
+            })
+          }
+        }
+      }
+    })
   }
 };
 
@@ -548,11 +565,12 @@ watchEffect(async () => {
     sixteenthPanelData.value.is_project = props.data.is_project;
     sixteenthPanelData.value.comment = props.data.comment;
     isSent.value = props.data.is_sent;
-
-    // projects.value.forEach((event) => {
-    //   if (!event.links.length) event.links.push({link: ''})
-    // });
   }
+});
+watchPostEffect(() => {
+  projects.value.forEach((project) => {
+    if (!project.links.length) project.links.push({link: ''})
+  });
 })
 </script>
 <style lang="scss" scoped>
