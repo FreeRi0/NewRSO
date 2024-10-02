@@ -64,7 +64,7 @@ let el_id = ref(null);
 const formData = async (reportData, reportNumber) => {
   try {
     console.log('send2', isFirstSent.value)
-    if(link_err.value) return false;
+    // if(link_err.value) return false;
     if (isFirstSent.value === true) {
       console.log('First time sending data');
       await reportPartTwoService.createMultipleReportAll(reportData, '9', reportNumber, true);
