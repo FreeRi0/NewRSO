@@ -2,7 +2,8 @@
   <v-card class="panel-card">
     <v-expansion-panels v-model="panel" class="mb-2">
       <v-progress-circular v-show="!items.length" class="circleLoader" indeterminate></v-progress-circular>
-      <v-expansion-panel :disabled="panel" v-show="items.length" v-for="item in items" :key="item.id"><v-expansion-panel-title>
+      <v-expansion-panel :disabled="disabled" v-show="items.length" v-for="item in items"
+        :key="item.id"><v-expansion-panel-title>
           <div class="title_wrap">
             <p class="form__title">{{ item.name }}</p>
             <div class="title_wrap__items">
@@ -12,11 +13,8 @@
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)"
-            @getPanelNumber="getPanelNumber($event)"
-            @getId="getId($event)"
-            :data="sixPanelData"
-            :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
+            @formData="formData($event, item.id)" @getPanelNumber="getPanelNumber($event)" @getId="getId($event)"
+            :data="sixPanelData" :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item">
           </SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
@@ -40,6 +38,8 @@ const props = defineProps({
   data: Object,
 });
 
+const disabled = ref(false);
+
 const isFirstSent = ref(null);
 // const sent = (sentVal) => {
 //   console.log('is sent: ', sentVal, isFirstSent.value);
@@ -57,8 +57,10 @@ const sixPanelData = ref({
 
 const panel = ref(false);
 
+
+
 const collapsed = () => {
-  panel.value = !panel.value;
+  panel.value = false;
 }
 let el_id = ref(null);
 
@@ -81,15 +83,20 @@ const formData = async (reportData, reportNumber) => {
 };
 
 const getId = (id) => {
-  console.log('id', id);
+  // console.log('id', id);
   el_id.value = id
   emit('getId', id);
 }
 const getPanelNumber = (number) => {
-  console.log('num', number);
+  // console.log('num', number);
   emit('getPanelNumber', number);
 }
 watchEffect(() => {
+  if (panel.value || panel.value === 0) {
+    disabled.value = true;
+  } else {
+    disabled.value = false;
+  }
   if (Object.keys(props.data[el_id.value]).length > 0) {
     console.log('data received', props.data);
     isFirstSent.value = false;

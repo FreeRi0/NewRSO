@@ -2,7 +2,8 @@
   <v-card class="panel-card">
     <v-expansion-panels v-model="panel" class="mb-2">
       <v-progress-circular v-show="!items.length" class="circleLoader" indeterminate></v-progress-circular>
-      <v-expansion-panel :disabled="panel" v-show="items.length" v-for="item in items" :key="item.id"><v-expansion-panel-title>
+      <v-expansion-panel :disabled="disabled" v-show="items.length" v-for="item in items"
+        :key="item.id"><v-expansion-panel-title>
           <div class="title_wrap">
             <p class="form__title">{{ item.name }}</p>
             <div class="title_wrap__items">
@@ -12,10 +13,9 @@
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="7" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)"  @uploadFile="uploadFile($event, item.id)"
-            @deleteFile="deleteFile($event, item.id)"    @getPanelNumber="getPanelNumber($event)"
-            @getId="getId($event)" :data="seventhPanelData"
-            :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
+            @formData="formData($event, item.id)" @uploadFile="uploadFile($event, item.id)"
+            @deleteFile="deleteFile($event, item.id)" @getPanelNumber="getPanelNumber($event)" @getId="getId($event)"
+            :data="seventhPanelData" :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
     </v-expansion-panels>
@@ -39,8 +39,8 @@ const props = defineProps({
   data: Object
 });
 let el_id = ref(null);
-
-const panel = ref(null);
+const disabled = ref(false);
+const panel = ref(false);
 const emit = defineEmits(['getData'])
 const seventhPanelData = ref({
   prize_place: 'Нет',
@@ -96,7 +96,7 @@ const deleteFile = async (reportData, reportNumber) => {
 };
 
 const collapsed = () => {
-  panel.value = !panel.value;
+  panel.value = false;
 }
 
 const getId = (id) => {
@@ -112,6 +112,11 @@ const getPanelNumber = (number) => {
 
 
 watchEffect(() => {
+  if (panel.value || panel.value === 0) {
+    disabled.value = true;
+  } else {
+    disabled.value = false;
+  }
   if (Object.keys(props.data[el_id.value]).length > 0) {
     console.log('data received', props.data);
     isFirstSent.value = false;

@@ -1,24 +1,11 @@
 <template>
-  <div 
-    :is-file="isFile"
+  <div :is-file="isFile"
     :class="['form-input', isFile ? 'form-input__file-input' : '', isFileDistrict ? 'form-input__add-file' : '', isLink ? 'form-input__link' : '']"
     :style="{ width: width }">
-    <input 
-      :type="type" 
-      :name="name" 
-      :style="{
-        height: height,
-      }" 
-      :value="value" 
-      :id="name" 
-      :placeholder="placeholder" 
-      :maxlength="maxLength" 
-      :readonly="readonly"
-      :max="max" 
-      class="form-input__report" 
-      :class="{ 'link__input': isLink }" 
-      @input="updateValue"
-      v-bind="$attrs" 
+    <input :type="type" :name="name" :style="{
+      height: height,
+    }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly" :max="max"
+      class="form-input__report" :class="{ 'link__input': isLink }" @input="updateValue" v-bind="$attrs"
       :disabled="disabled" />
     <div class="form__counter" v-if="counterVisible">
       {{ textInputLength }} / {{ maxCounter }}
@@ -36,6 +23,8 @@
     <div v-if="isError" class="form-input__error-block">
       <span class="form-input__error-text">Превышено&nbsp;максимальное&nbsp;значение&nbsp;{{ max }}</span>
     </div>
+    <div v-show="isLinkError && props.isLink && props.value"> <span class="form-input__error-text">Не верный формат
+        url</span></div>
 
   </div>
 </template>
@@ -49,7 +38,7 @@ defineOptions({
   inheritAttrs: false,
 });
 
-const emit = defineEmits(['update:value']);
+const emit = defineEmits(['update:value', 'error']);
 const props = defineProps({
   name: {
     type: [String, Number],
@@ -115,8 +104,13 @@ const props = defineProps({
 });
 
 let isError = ref(props.isError);
+let isLinkError = ref(false);
 
 const textInputLength = ref(null);
+const urlRegex = new RegExp('^http[s]?:\\/\\/[a-zA-Z\\d.-]+[:]?\\d{0,4}[\\/]?[a-zA-Z\\d\\/\\-]+$');
+function isValidURL(url) {
+  return urlRegex.test(url);
+}
 
 watchEffect(() => textInputLength.value = typeof props.value === 'string' ? props.value.length : 0)
 
@@ -128,6 +122,12 @@ watchEffect(() => {
     isError.value = false;
   }
 });
+
+watchEffect(() => {
+  const isValid = isValidURL(props.value);
+  isLinkError.value = !isValid;
+});
+
 
 const updateValue = (event) => {
   emit('update:value', event.target.value);

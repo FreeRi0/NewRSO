@@ -26,7 +26,7 @@
                                 type="radio" @focusout="focusOut" v-model="seventhPanelData.prize_place" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                                }}</label>
+                            }}</label>
                         </div>
                     </div>
                 </div>
@@ -123,7 +123,7 @@
                         <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
                             @focusout="focusOut" :disabled="isSentSix" :maxlength="200" name="14"
                             v-model:value="item.link" :is-link="true" class="mb-2" />
-                  
+
                         <div v-if="!isSentSix">
                             <div class="add_link" @click="addLink(6)" v-if="sixPanelData.links.length === index + 1">
                                 + Добавить ссылку
@@ -133,7 +133,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
 
                 </div>
                 <div class="form__field">
@@ -169,7 +169,7 @@
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                                }}</label>
+                            }}</label>
                         </div>
                     </div>
                 </div>
@@ -248,7 +248,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -388,7 +388,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -468,7 +468,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -562,7 +562,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -649,7 +649,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -747,7 +747,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -767,7 +767,7 @@
     </v-card-text>
 </template>
 <script setup>
-import { ref, watchEffect, watch } from 'vue';
+import { ref, watchEffect, watch, inject } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { FileBoxComponent } from '@entities/RatingRoComponents/components';
 import { InputReport, TextareaReport } from '@shared/components/inputs';
@@ -792,11 +792,16 @@ const collapseForm = () => {
     emit('collapse-form');
 };
 
+const swal = inject('$swal');
+
 const isFirstSentSix = ref(true);
 const isFirstSentSeventh = ref(true);
 const isFirstSentNinth = ref(true);
 
+
 const scanFile = ref([]);
+
+
 
 const seventhPanelData = ref({
     prize_place: 'Нет',
@@ -928,50 +933,106 @@ const deleteFile = (number) => {
 
 const focusOut = () => {
     if (props.panel_number == 6) {
-        // emit('isSent', isFirstSent.value)
-        emit('formData', sixPanelData.value)
-        console.log('6')
+        try {
+            emit('formData', sixPanelData.value)
+            console.log('6')
+        } catch (e) {
+            e.response.data.forEach(item => {
+                console.log('yy', item.links);
+                if (item.links) {
+                    for (let i in item.links) {
+                        if (Object.keys(item.links[i]).length !== 0 && item.links[i].link.includes('Введите правильный URL.')) {
+                            swal.fire({
+                                position: 'center',
+                                icon: 'warning',
+                                title: `Введите корректный URL`,
+                                showConfirmButton: false,
+                                timer: 2500,
+                            })
+                        }
+                    }
+                }
+            })
+        }
     }
     else if (props.panel_number == 7) {
-        if (isFirstSentSeventh.value) {
-            console.log('7', '1')
+        try {
+            if (isFirstSentSeventh.value) {
+                console.log('7', '1')
 
-            emit('formData', seventhPanelData.value)
-        } else {
-            let formData = new FormData();
-            formData.append('comment', seventhPanelData.value.comment);
-            formData.append('prize_place', seventhPanelData.value.prize_place);
+                emit('formData', seventhPanelData.value)
+            } else {
+                let formData = new FormData();
+                formData.append('comment', seventhPanelData.value.comment);
+                formData.append('prize_place', seventhPanelData.value.prize_place);
 
-            for (let i = 0; i < seventhPanelData.value.links.length; i++) {
-                !seventhPanelData.value.links[i].link
-                    ? formData.append(`[links][${i}][link]`, '')
-                    : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
+                for (let i = 0; i < seventhPanelData.value.links.length; i++) {
+                    !seventhPanelData.value.links[i].link
+                        ? formData.append(`[links][${i}][link]`, '')
+                        : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
+                }
+
+                // emit('isSent', isFirstSent.value)
+                emit('formData', formData)
+                console.log('7', '2')
             }
-
-            // emit('isSent', isFirstSent.value)
-            emit('formData', formData)
-            console.log('7', '2')
+        } catch (e) {
+            e.response.data.forEach(item => {
+                if (item.links) {
+                    for (let i in item.links) {
+                        if (Object.keys(item.links[i]).length !== 0 && item.links[i].link.includes('Введите правильный URL.')) {
+                            swal.fire({
+                                position: 'center',
+                                icon: 'warning',
+                                title: `Введите корректный URL`,
+                                showConfirmButton: false,
+                                timer: 2500,
+                            })
+                        }
+                    }
+                }
+            })
         }
+
     }
     else if (props.panel_number == 9) {
-        if (isFirstSentNinth.value === true) {
-            console.log('9', '1')
-            emit('formData', ninthPanelData.value)
-        } else {
-            let formData = new FormData();
-            formData.append('comment', ninthPanelData.value.comment);
-            formData.append('event_happened', ninthPanelData.value.event_happened);
-            if (ninthPanelData.value.links.length) {
-                for (let i = 0; i < ninthPanelData.value.links.length; i++) {
-                    !ninthPanelData.value.links[i].link
-                        ? formData.append(`[links][${i}][link]`, '')
-                        : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+        try {
+            if (isFirstSentNinth.value === true) {
+                console.log('9', '1')
+                emit('formData', ninthPanelData.value)
+            } else {
+                let formData = new FormData();
+                formData.append('comment', ninthPanelData.value.comment);
+                formData.append('event_happened', ninthPanelData.value.event_happened);
+                if (ninthPanelData.value.links.length) {
+                    for (let i = 0; i < ninthPanelData.value.links.length; i++) {
+                        !ninthPanelData.value.links[i].link
+                            ? formData.append(`[links][${i}][link]`, '')
+                            : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                    }
                 }
-            }
 
-            emit('formData', formData)
-            console.log('9', '2')
+                emit('formData', formData)
+                console.log('9', '2')
+            }
+        } catch (e) {
+            e.response.data.forEach(item => {
+                if (item.links) {
+                    for (let i in item.links) {
+                        if (Object.keys(item.links[i]).length !== 0 && item.links[i].link.includes('Введите правильный URL.')) {
+                            swal.fire({
+                                position: 'center',
+                                icon: 'warning',
+                                title: `Введите корректный URL`,
+                                showConfirmButton: false,
+                                timer: 2500,
+                            })
+                        }
+                    }
+                }
+            })
         }
+
     }
 
 }
