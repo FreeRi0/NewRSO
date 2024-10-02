@@ -82,13 +82,13 @@ const MAX_SIZE_FILE = 3;
 const isErrorFile = ref(false);
 
 const checkValidFile = () => {
-    console.log('до', isErrorFile.value);
+    // console.log('до', isErrorFile.value);
     if (props.fileSize > MAX_SIZE_FILE) {
     isErrorFile.value = true;
   } else {
     isErrorFile.value = false;
   }
-  console.log('после', isErrorFile.value);
+//   console.log('после', isErrorFile.value);
 }
 
 watchEffect(() => {
