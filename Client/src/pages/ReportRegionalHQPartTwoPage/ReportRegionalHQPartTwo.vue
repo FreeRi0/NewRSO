@@ -622,7 +622,7 @@ const checkEmptyFields = (data) => {
   }
   if (data.fourth) {
     for (let event of data.fourth.events) {
-      if (!(event.participants_number && event.end_date && event.start_date && event.regulations)) {
+      if (!(event.participants_number && event.end_date && event.start_date && event.regulations && data.fourth.comment)) {
         swal.fire({
           position: 'center',
           icon: 'warning',
@@ -645,7 +645,7 @@ const checkEmptyFields = (data) => {
   }
   if (data.fifth) {
     for (let event of data.fifth.events) {
-      if (!(event.participants_number && event.ro_participants_number && event.end_date && event.start_date && event.regulations)) {
+      if (!(event.participants_number && event.ro_participants_number && event.end_date && event.start_date && event.regulations && data.fifth.comment)) {
         swal.fire({
           position: 'center',
           icon: 'warning',
@@ -667,7 +667,7 @@ const checkEmptyFields = (data) => {
     return false;
   }
   if (data.tenth.first && data.tenth.second) {
-    if (!data.tenth.first.comment && !data.tenth.second.comment) {
+    if (!(data.tenth.first.comment && data.tenth.second.comment)) {
       swal.fire({
         position: 'center',
         icon: 'warning',
@@ -687,6 +687,20 @@ const checkEmptyFields = (data) => {
       timer: 2500,
     })
     return false;
+  }
+  if (data.sixteenth) {
+    for (let project of data.sixteenth.projects) {
+      if (!(project.name && project.regulations && data.sixteenth.comment)) {
+        swal.fire({
+          position: 'center',
+          icon: 'warning',
+          title: `Заполните обязательные поля в 16 показателе`,
+          showConfirmButton: false,
+          timer: 2500,
+        })
+        return false;
+      }
+    }
   }
   return true;
 }
