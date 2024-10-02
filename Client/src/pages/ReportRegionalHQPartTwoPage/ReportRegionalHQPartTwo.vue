@@ -124,7 +124,7 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
-            <v-expansion-panel-title>
+            <v-expansion-panel-title :class="isErrorPanel.eleventh ? 'visible-error' : ''">
               11. Активность РО&nbsp;РСО в&nbsp;социальных сетях &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
@@ -133,7 +133,7 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
-            <v-expansion-panel-title>
+            <v-expansion-panel-title :class="isErrorPanel.twelfth ? 'visible-error' : ''">
               12. Объем средств, собранных бойцами РО&nbsp;РСО во&nbsp;Всероссийском дне ударного труда
             </v-expansion-panel-title>
             <v-expansion-panel-text>
@@ -142,7 +142,7 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
-            <v-expansion-panel-title>
+            <v-expansion-panel-title :class="isErrorPanel.thirteenth ? 'visible-error' : ''">
               13. Охват членов РО&nbsp;РСО, принявших участие во&nbsp;Всероссийском дне ударного труда &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
@@ -278,6 +278,12 @@ const blockSendButton = ref(false);
 
 const swal = inject('$swal');
 const router = useRouter();
+
+const isErrorPanel = ref({
+  eleventh: false,
+  twelfth: false,
+  thirteenth: false,
+});
 
 const setId = (id) => {
   panel_id.value = id;
@@ -688,6 +694,39 @@ const checkEmptyFields = (data) => {
     })
     return false;
   }
+  if (!data.eleventh || !(data.eleventh.participants_number && data.eleventh.scan_file)) {
+    isErrorPanel.value.eleventh = true;
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      title: `Заполните обязательные поля в 11 показателе`,
+      showConfirmButton: false,
+      timer: 2500,
+    })
+    return false;
+  }
+  if (!data.twelfth || !(data.twelfth.amount_of_money && data.twelfth.scan_file)) {
+    isErrorPanel.value.twelfth = true;
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      title: `Заполните обязательные поля в 12 показателе`,
+      showConfirmButton: false,
+      timer: 2500,
+    })
+    return false;
+  }
+  if (!data.thirteenth || !(data.thirteenth.number_of_members && data.thirteenth.scan_file)) {
+    isErrorPanel.value.thirteenth = true;
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      title: `Заполните обязательные поля в 13 показателе`,
+      showConfirmButton: false,
+      timer: 2500,
+    })
+    return false;
+  }
   if (data.sixteenth) {
     for (let project of data.sixteenth.projects) {
       if (!(project.name && project.regulations && data.sixteenth.comment)) {
@@ -774,6 +813,11 @@ onMounted(() => {
   min-height: none;
   border-left: none;
   border-right: 6px solid #1f7cc0;
+}
+
+.v-expansion-panel-title.visible-error,
+.v-expansion-panel--active > .v-expansion-panel-title.visible-error {
+  border-color: #db0000;
 }
 
 .v-expansion-panel-text__wrapper {

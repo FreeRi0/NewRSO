@@ -78,6 +78,7 @@
                   style="width: 100%;"
                   @focusout="focusOut"
                   :disabled="isSent"
+                  is-link
               />
               <div v-if="isError && (i > 0)" class="report__error-block">
                 <span class="report__error-text">Укажите ссылку публикации</span>
