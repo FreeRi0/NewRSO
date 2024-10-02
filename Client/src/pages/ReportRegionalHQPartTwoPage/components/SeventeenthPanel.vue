@@ -17,19 +17,6 @@
       <label class="form__label report__label" for="scan_file">
         Прикрепить документ
       </label>
-        <!-- скорректировать размер файла
-      <FileUpload
-        v-if="!seventeenthPanelData.scan_file"
-        mode="advanced"
-        name="demo[]"
-        accept=".pdf, .jpeg, .jpg, .png"
-        :maxFileSize="3000000"
-        invalidFileSizeMessage="Превышен размер загружаемого файла"
-        @select="uploadFile"
-        @change="uploadFile"
-        chooseLabel="Выбрать файл"
-      ></FileUpload>
-      -->
       <InputReport
         v-if="!seventeenthPanelData.scan_file"
         isFile
@@ -96,6 +83,10 @@ const props = defineProps({
   isSent: {
     type: Boolean,
   },
+  // isErrorFile: {
+  //   type: Boolean,
+    // default: false,
+  // },
 });
 
 const emit = defineEmits(['getData']);
@@ -104,7 +95,7 @@ const ID_PANEL = '17';
 const isFirstSent = ref(true);
 const scanFile = ref([]);
 let isErrorFile = ref(false);
-const MAX_SIZE_FILE = 7;
+// const MAX_SIZE_FILE = 7;
 const seventeenthPanelData = ref({
   scan_file: '',
   file_size: null,
@@ -138,10 +129,9 @@ const uploadFile = async (event) => {
   seventeenthPanelData.value.file_size = (scanFile.value.size / Math.pow(1024, 2));
   seventeenthPanelData.value.file_type = scanFile.value.type.split('/').at(-1);
 
-  if ((scanFile.value.size / Math.pow(1024, 2)) > MAX_SIZE_FILE) {
-    isErrorFile.value = true;
+  if (isErrorFile.value) {
     seventeenthPanelData.value.scan_file = scanFile.value.name;
-    console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ', isErrorFile.value, scanFile.value.size / Math.pow(1024, 2), MAX_SIZE_FILE);
+    console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ', isErrorFile.value, scanFile.value.size / Math.pow(1024, 2));
   } else {
     try {
       if (isFirstSent.value) {
@@ -174,14 +164,14 @@ const deleteFile = async () => {
       let { data :  scan_file  } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
       emit('getData', scan_file, Number(ID_PANEL));
     } else {
-      // let { data :  scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-      // emit('getData', scan_file, Number(ID_PANEL));
-      if (isErrorFile.value) {
-        isErrorFile.value = false;
-      } else {
-        let { data :  scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-        emit('getData', scan_file, Number(ID_PANEL));
-      }
+      let { data :  scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+      emit('getData', scan_file, Number(ID_PANEL));
+      // if (isErrorFile.value) {
+      //   isErrorFile.value = false;
+      // } else {
+      //   let { data :  scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+      //   emit('getData', scan_file, Number(ID_PANEL));
+      // }
     }
   } catch (e) {
     console.log('focusOut error:', e);

@@ -32,6 +32,7 @@
 </template>
 
 <script setup>
+import { ref, watchEffect } from 'vue';
 import { SvgIcon } from '@shared/index';
 
 defineOptions({
@@ -57,10 +58,10 @@ const props = defineProps({
     centralExpert: {
         type: Boolean,
     },
-    isErrorFile: {
-        type: Boolean,
-        default: false,
-    },
+    // isErrorFile: {
+    //     type: Boolean,
+    //     default: false,
+    // },
     isErrorMessage: {
         type: String,
         default: '',
@@ -75,4 +76,22 @@ const emit = defineEmits(['click']);
 const clickOnButton = () => {
     emit('click');
 };
+
+// const MAX_SIZE_FILE = 7;
+const MAX_SIZE_FILE = 3;
+const isErrorFile = ref(false);
+
+const checkValidFile = () => {
+    console.log('до', isErrorFile.value);
+    if (props.fileSize > MAX_SIZE_FILE) {
+    isErrorFile.value = true;
+  } else {
+    isErrorFile.value = false;
+  }
+  console.log('после', isErrorFile.value);
+}
+
+watchEffect(() => {
+    checkValidFile();
+})
 </script>
