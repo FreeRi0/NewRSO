@@ -7,7 +7,10 @@
             :id="name"
             :name="name"
             :value="value" 
-            class="report__textarea" 
+            :class="[
+                'report__textarea',
+                (isErrorPanel && !value) ? 'report__textarea--error' : '',
+            ]"
             :rows="rows"
             :maxlength="maxLength"
             :placeholder="placeholder"
@@ -79,7 +82,10 @@
         },
         isSent: {
             type: Boolean,
-    },
+        },
+        isErrorPanel: {
+            type: Boolean,
+        },
     });
     
     const textLength = ref(null);
@@ -114,13 +120,22 @@
         line-height: 21px;
         resize: none;
 
+        &::placeholder {
+            color: #6d6d6d;
+        }
+
+        &--error {
+            outline: 1px solid #db0000;
+            color: #db0000;
+
+            &::placeholder {
+                color: #db0000;
+            }
+        }
+
         @media (max-width: 360px) {
             font-size: 14px;
             line-height: 18.5px;
-        }
-
-        &::placeholder {
-            color: #6d6d6d;
         }
 
         &:disabled {

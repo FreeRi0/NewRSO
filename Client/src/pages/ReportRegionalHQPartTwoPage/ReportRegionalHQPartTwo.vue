@@ -16,12 +16,13 @@
         </div>
         <v-expansion-panels>
           <v-expansion-panel>
-            <v-expansion-panel-title>
+            <v-expansion-panel-title :class="isErrorPanel.first ? 'visible-error' : ''">
               1. Численность членов РО&nbsp;РСО в&nbsp;соответствии с&nbsp;объемом уплаченных членских взносов
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <first-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.first" />
+                :data="reportData.first" 
+                :is-error-panel="isErrorPanel.first"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -49,17 +50,18 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
-            <v-expansion-panel-title>
+            <v-expansion-panel-title :class="isErrorPanel.fourth ? 'visible-error' : ''">
               4. Организация всероссийских (международных), окружных и&nbsp;межрегиональных мероприятий и&nbsp;проектов
               (слеты, школы, фестивали, турниры и&nbsp;прочие)
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <fourth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.fourth" />
+                :data="reportData.fourth"
+                :is-error-panel="isErrorPanel.fourth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
-            <v-expansion-panel-title>
+            <v-expansion-panel-title :class="isErrorPanel.fifth ? 'visible-error' : ''">
               5. Организация всероссийских (международных) (организатор&nbsp;&mdash; региональное отделение РСО),
               окружных и&nbsp;межрегиональных трудовых проектов в&nbsp;соответствии с&nbsp;Положением
               об&nbsp;организации
@@ -67,7 +69,8 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <fifth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.fifth" />
+                :data="reportData.fifth" 
+                :is-error-panel="isErrorPanel.fifth"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -78,7 +81,8 @@
             <v-expansion-panel-text>
               <sixth-panel @get-data="setData" :items="six_items" @getId="setId" @getPanelNumber="setPanelNumber"
                 :district-headquarter-commander="districtExpert" :data="reportData.six"
-                :central-headquarter-commander="centralExpert" />
+                :central-headquarter-commander="centralExpert"
+                :is-error-panel="isErrorPanel.six" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -89,7 +93,8 @@
             <v-expansion-panel-text>
               <seventh-panel @get-data="setData" @getId="setId" @getPanelNumber="setPanelNumber" :items="seventh_items"
                 :district-headquarter-commander="districtExpert" :data="reportData.seventh"
-                :central-headquarter-commander="centralExpert" />
+                :central-headquarter-commander="centralExpert"
+                :is-error-panel="isErrorPanel.seventh" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -110,17 +115,19 @@
             <v-expansion-panel-text>
               <ninth-panel @get-data="setData" @getId="setId" @getPanelNumber="setPanelNumber" :items="ninth_items"
                 :district-headquarter-commander="districtExpert" :data="reportData.ninth"
-                :central-headquarter-commander="centralExpert" />
+                :central-headquarter-commander="centralExpert"
+                :is-error-panel="isErrorPanel.ninth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
-            <v-expansion-panel-title>
+            <v-expansion-panel-title :class="isErrorPanel.tenth ? 'visible-error' : ''">
               10. Организация РО&nbsp;РСО всероссийских (международных) добровольческих и&nbsp;патриотических акций
               &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <tenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.tenth" />
+                :data="reportData.tenth"
+                :is-error-panel="isErrorPanel.tenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -129,7 +136,8 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.eleventh" />
+                :data="reportData.eleventh" 
+                :is-error-panel="isErrorPanel.eleventh"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -138,7 +146,8 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <twelfth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.twelfth" />
+                :data="reportData.twelfth"
+                :is-error-panel="isErrorPanel.twelfth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -147,7 +156,8 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <thirteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.thirteenth" />
+                :data="reportData.thirteenth"
+                :is-error-panel="isErrorPanel.thirteenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -175,13 +185,14 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
-            <v-expansion-panel-title>
+            <v-expansion-panel-title :class="isErrorPanel.sixteenth ? 'visible-error' : ''">
               16. Победители всероссийских (международных), окружных и&nbsp;межрегиональных трудовых проектов
               по&nbsp;комиссарской деятельности &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <sixteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.sixteenth" />
+                :data="reportData.sixteenth"
+                :is-error-panel="isErrorPanel.sixteenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -277,9 +288,17 @@ const swal = inject('$swal');
 const router = useRouter();
 
 const isErrorPanel = ref({
+  first: false,
+  fourth: false,
+  fifth: false,
+  six: false,
+  seventh: false,
+  ninth: false,
+  tenth: false,
   eleventh: false,
   twelfth: false,
   thirteenth: false,
+  sixteenth: false,
 });
 
 const setId = (id) => {
@@ -614,6 +633,7 @@ const sendReport = async () => {
 const checkEmptyFields = (data) => {
   console.log('data', data)
   if (!data.first || !(data.first.amount_of_money && data.first.scan_file)) {
+    isErrorPanel.value.first = true;
     swal.fire({
       position: 'center',
       icon: 'warning',
@@ -626,6 +646,7 @@ const checkEmptyFields = (data) => {
   if (data.fourth) {
     for (let event of data.fourth.events) {
       if (!(event.participants_number && event.end_date && event.start_date && event.regulations && data.fourth.comment)) {
+        isErrorPanel.value.fourth = true;
         swal.fire({
           position: 'center',
           icon: 'warning',
@@ -637,6 +658,7 @@ const checkEmptyFields = (data) => {
       }
     }
   } else {
+    isErrorPanel.value.fourth = true;
     swal.fire({
       position: 'center',
       icon: 'warning',
@@ -649,6 +671,7 @@ const checkEmptyFields = (data) => {
   if (data.fifth) {
     for (let event of data.fifth.events) {
       if (!(event.participants_number && event.ro_participants_number && event.end_date && event.start_date && event.regulations && data.fifth.comment)) {
+        isErrorPanel.value.fifth = true;
         swal.fire({
           position: 'center',
           icon: 'warning',
@@ -660,6 +683,7 @@ const checkEmptyFields = (data) => {
       }
     }
   } else {
+    isErrorPanel.value.fifth = true;
     swal.fire({
       position: 'center',
       icon: 'warning',
@@ -715,6 +739,7 @@ const checkEmptyFields = (data) => {
   }
   if (data.tenth.first && data.tenth.second) {
     if (!(data.tenth.first.comment && data.tenth.second.comment)) {
+      isErrorPanel.value.tenth = true;
       swal.fire({
         position: 'center',
         icon: 'warning',
@@ -726,6 +751,7 @@ const checkEmptyFields = (data) => {
     }
 
   } else {
+    isErrorPanel.value.tenth = true;
     swal.fire({
       position: 'center',
       icon: 'warning',
@@ -771,6 +797,7 @@ const checkEmptyFields = (data) => {
   if (data.sixteenth) {
     for (let project of data.sixteenth.projects) {
       if (!(project.name && project.regulations && data.sixteenth.comment)) {
+        isErrorPanel.value.sixteenth = true;
         swal.fire({
           position: 'center',
           icon: 'warning',
