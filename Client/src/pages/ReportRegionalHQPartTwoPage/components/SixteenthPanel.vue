@@ -75,17 +75,17 @@
             <div style="display: flex;">
               <input class="custom-radio" v-model="project.project_scale" type="radio" :id="`All-${index}`"
                      value="Всероссийский"/>
-              <label>Всероссийский</label>
+              <label :for="`All-${index}`">Всероссийский</label>
             </div>
             <div style="display: flex;">
               <input class="custom-radio" v-model="project.project_scale" type="radio" :id="`District-${index}`"
                      value="Окружной"/>
-              <label>Окружной</label>
+              <label :for="`District-${index}`">Окружной</label>
             </div>
             <div style="display: flex;">
               <input class="custom-radio" v-model="project.project_scale" type="radio" :id="`Interregional-${index}`"
                      value="Межрегиональный"/>
-              <label>Межрегиональный</label>
+              <label :for="`Interregional-${index}`">Межрегиональный</label>
             </div>
           </div>
         </div>
@@ -103,6 +103,7 @@
                 placeholder="https://vk.com/cco_monolit"
                 @focusout="focusOut"
                 :disabled="isSent"
+                isLink
                 style="width: 100%;"
             />
           </div>
@@ -504,6 +505,7 @@ const deleteProject = async (index) => {
   projects.value.forEach((project, i) => {
     if (project.name) formData.append(`projects[${i}][name]`, project.name);
     if (project.project_scale) formData.append(`projects[${i}][project_scale]`, project.project_scale);
+    if (project.regulations) formData.append(`projects[${i}][regulations]`, '');
     if (project.links.length) {
       for (let j = 0; j < project.links.length; j++) {
         if (project.links[j].link) formData.append(`projects[${i}][links][${j}][link]`, project.links[j].link);
@@ -511,7 +513,7 @@ const deleteProject = async (index) => {
     }
   })
   try {
-    let {data} = await reportPartTwoService.createReportDraft(sixteenthPanelData.value, '16', true);
+    let {data} = await reportPartTwoService.createReportDraft(formData, '16', true);
     emit('getData', data, 16);
   } catch (e) {
     console.log('deleteEvent error: ', e);
