@@ -240,7 +240,7 @@ import {
   NineteenthPanel
 } from './components/index'
 import { Button } from '@shared/components/buttons';
-import {inject, onMounted, ref, watchEffect} from "vue";
+import { inject, onMounted, ref } from "vue";
 import { SvgIcon } from '@shared/ui/SvgIcon';
 import { useRoleStore } from "@layouts/store/role.ts";
 import { HTTP } from '@app/http';
@@ -567,41 +567,142 @@ const setData = (data, panel, number = 0) => {
 const sendReport = async () => {
   // console.log('reportData: ', reportData.value)
   blockSendButton.value = true;
-  try {
-    await reportPartTwoService.sendReport(reportData.value.first, '1');
-    await reportPartTwoService.sendReport(reportData.value.fourth, '4');
-    await reportPartTwoService.sendReport(reportData.value.fifth, '5');
-    await reportPartTwoService.sendReportWithSlash(reportData.value.six, '6');
-    await reportPartTwoService.sendReportWithSlash(reportData.value.seventh, '7');
-    await reportPartTwoService.sendReportWithSlash(reportData.value.nineteenth, '9');
-    await reportPartTwoService.sendReport(reportData.value.eleventh, '11');
-    await reportPartTwoService.sendReport(reportData.value.twelfth, '12');
-    await reportPartTwoService.sendReport(reportData.value.thirteenth, '13');
-    await reportPartTwoService.sendReport(reportData.value.sixteenth, '16');
-    await reportPartTwoService.sendMultipleReport(reportData.value.tenth.first, '10', '1');
-    await reportPartTwoService.sendMultipleReport(reportData.value.tenth.second, '10', '2');
+  if (checkEmptyFields(reportData.value)) {
+    try {
+      await reportPartTwoService.sendReport(reportData.value.first, '1');
+      await reportPartTwoService.sendReport(reportData.value.fourth, '4');
+      await reportPartTwoService.sendReport(reportData.value.fifth, '5');
+      await reportPartTwoService.sendReportWithSlash(reportData.value.six, '6');
+      await reportPartTwoService.sendReportWithSlash(reportData.value.seventh, '7');
+      await reportPartTwoService.sendReportWithSlash(reportData.value.nineteenth, '9');
+      await reportPartTwoService.sendReport(reportData.value.eleventh, '11');
+      await reportPartTwoService.sendReport(reportData.value.twelfth, '12');
+      await reportPartTwoService.sendReport(reportData.value.thirteenth, '13');
+      await reportPartTwoService.sendReport(reportData.value.sixteenth, '16');
+      await reportPartTwoService.sendMultipleReport(reportData.value.tenth.first, '10', '1');
+      await reportPartTwoService.sendMultipleReport(reportData.value.tenth.second, '10', '2');
 
-    swal.fire({
-      position: 'center',
-      icon: 'success',
-      title: 'успешно',
-      showConfirmButton: false,
-      timer: 1500,
-    });
-    await router.push({
-      name: 'reportingRo',
-    });
-  } catch (e) {
+      swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'успешно',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      await router.push({
+        name: 'reportingRo',
+      });
+    } catch (e) {
+      blockSendButton.value = false;
+      swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: `ошибка`,
+        showConfirmButton: false,
+        timer: 2500,
+      })
+      console.log('sendReport error: ', e)
+    }
+  } else {
     blockSendButton.value = false;
+  }
+};
+
+const checkEmptyFields = (data) => {
+  console.log('data', data)
+  if (!data.first || !(data.first.amount_of_money && data.first.scan_file)) {
     swal.fire({
       position: 'center',
-      icon: 'error',
-      title: `ошибка`,
+      icon: 'warning',
+      title: `Заполните обязательные поля в 1 показателе`,
       showConfirmButton: false,
       timer: 2500,
     })
-    console.log('sendReport error: ', e)
+    return false;
   }
+  if (data.fourth) {
+    for (let event of data.fourth.events) {
+      if (!(event.participants_number && event.end_date && event.start_date && event.regulations && data.fourth.comment)) {
+        swal.fire({
+          position: 'center',
+          icon: 'warning',
+          title: `Заполните обязательные поля в 4 показателе`,
+          showConfirmButton: false,
+          timer: 2500,
+        })
+        return false;
+      }
+    }
+  } else {
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      title: `Заполните обязательные поля в 4 показателе`,
+      showConfirmButton: false,
+      timer: 2500,
+    })
+    return false;
+  }
+  if (data.fifth) {
+    for (let event of data.fifth.events) {
+      if (!(event.participants_number && event.ro_participants_number && event.end_date && event.start_date && event.regulations && data.fifth.comment)) {
+        swal.fire({
+          position: 'center',
+          icon: 'warning',
+          title: `Заполните обязательные поля в 5 показателе`,
+          showConfirmButton: false,
+          timer: 2500,
+        })
+        return false;
+      }
+    }
+  } else {
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      title: `Заполните обязательные поля в 5 показателе`,
+      showConfirmButton: false,
+      timer: 2500,
+    })
+    return false;
+  }
+  if (data.tenth.first && data.tenth.second) {
+    if (!(data.tenth.first.comment && data.tenth.second.comment)) {
+      swal.fire({
+        position: 'center',
+        icon: 'warning',
+        title: `Заполните обязательные поля в 10 показателе`,
+        showConfirmButton: false,
+        timer: 2500,
+      })
+      return false;
+    }
+
+  } else {
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      title: `Заполните обязательные поля в 10 показателе`,
+      showConfirmButton: false,
+      timer: 2500,
+    })
+    return false;
+  }
+  if (data.sixteenth) {
+    for (let project of data.sixteenth.projects) {
+      if (!(project.name && project.regulations && data.sixteenth.comment)) {
+        swal.fire({
+          position: 'center',
+          icon: 'warning',
+          title: `Заполните обязательные поля в 16 показателе`,
+          showConfirmButton: false,
+          timer: 2500,
+        })
+        return false;
+      }
+    }
+  }
+  return true;
 }
 
 onMounted(() => {

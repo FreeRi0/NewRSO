@@ -722,6 +722,10 @@ onBeforeMount(async () => {
 
 <style lang="scss" scoped>
 // $expansion-panel-active-title-min-height 64px
+.photo-add__label--logo {
+    background-color: #c7e3fa;
+}
+
 .form__field-group {
     background-color: #fff;
     border: 1px solid #B6B6B6;

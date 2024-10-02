@@ -73,7 +73,9 @@ const clickOnButton = () => {
     emit('click');
 };
 onMounted(() => {
-    if (props.icon || props.iconn) {
+    if (props.icon) {
+        document.getElementById('icon').src = props.icon;
+    } else {
         document.getElementById('iconn').src = props.iconn;
     }
 })

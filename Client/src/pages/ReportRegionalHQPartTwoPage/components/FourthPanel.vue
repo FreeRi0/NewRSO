@@ -437,11 +437,13 @@
   </report-tabs>
 </template>
 <script setup>
-import { ref, watchEffect } from "vue";
+import { inject, ref, watchEffect, watchPostEffect } from "vue";
 import { InputReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { ReportTabs } from './index';
 import { reportPartTwoService } from "@services/ReportService.ts";
+
+const swal = inject('$swal');
 
 const props = defineProps({
   districtExpert: {
@@ -487,7 +489,21 @@ const focusOut = async () => {
       emit('getData', data, 4);
     }
   } catch (e) {
-    console.log('focusOut error:', e);
+    e.response.data.events.forEach(event => {
+      if (event.links) {
+        for (let i in event.links) {
+          if (Object.keys(event.links[i]).length !== 0 && event.links[i].link.includes('Введите правильный URL.')) {
+            swal.fire({
+              position: 'center',
+              icon: 'warning',
+              title: `Введите корректный URL`,
+              showConfirmButton: false,
+              timer: 2500,
+            })
+          }
+        }
+      }
+    })
   }
 };
 
@@ -583,11 +599,13 @@ watchEffect(() => {
     events.value = [...props.data.events];
     fourthPanelData.value.comment = props.data.comment;
     isSent.value = props.data.is_sent;
-    // events.value.forEach((event) => {
-    //   if (!event.links.length) event.links.push({link: ''})
-    // });
   }
 });
+watchPostEffect(() => {
+  events.value.forEach((event) => {
+    if (!event.links.length) event.links.push({link: ''})
+  });
+})
 </script>
 <style lang="scss" scoped>
 .form-input__file-input {

@@ -46,8 +46,11 @@
                         <sup class="valid-red">*</sup></label>
                     <div class="form__wrapper" v-for="(item, index) in seventhPanelData.links" :key="index">
                         <InputReport @focusout="focusOut" name="14" :is-link="true" :disabled="isSent"
-                            placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
-                            class="mb-2" />
+                            placeholder="Введите ссылку, например,  https://vk.com/cco_monolit" :maxlength="200"
+                            v-model:value="item.link" class="mb-2" />
+                        <!-- <div v-if="!isValidURL(item.link)">
+                            <p class="error-message">Invalid URL 7</p>
+                        </div> -->
                         <div v-if="!isSent">
                             <div class="add_link" @click="addLink(7)"
                                 v-if="seventhPanelData.links.length === index + 1">
@@ -109,7 +112,7 @@
                     </p>
                     <InputReport @focusout="focusOut" v-model:value="sixPanelData.number_of_members"
                         :disabled="isSentSix" placeholder="Введите число" id="15" name="14"
-                        class="form__input number_input" type="number" :maxlength="10" :max="32767" />
+                        class="form__input number_input" type="number" :max="32767" />
                 </div>
                 <div class="form__field">
                     <label class="form__label" for="14">Ссылка на социальные сети/ электронные<br>
@@ -118,8 +121,9 @@
 
                     <div class="form__wrapper" v-for="(item, index) in sixPanelData.links" :key="index">
                         <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                            @focusout="focusOut" :disabled="isSentSix" name="14" v-model:value="item.link"
-                            :is-link="true" class="mb-2" />
+                            @focusout="focusOut" :disabled="isSentSix" :maxlength="200" name="14"
+                            v-model:value="item.link" :is-link="true" class="mb-2" />
+
                         <div v-if="!isSentSix">
                             <div class="add_link" @click="addLink(6)" v-if="sixPanelData.links.length === index + 1">
                                 + Добавить ссылку
@@ -128,9 +132,9 @@
                                 Удалить поле ввода
                             </div>
                         </div>
-
-
                     </div>
+
+
                 </div>
                 <div class="form__field">
                     <label class="form__label" for="14">Комментарий </label>
@@ -186,9 +190,9 @@
                         <sup class="valid-red">*</sup></label>
 
                     <div class="form__wrapper" v-for="(item, index) in ninthPanelData.links" :key="index">
-                        <InputReport @focusout="focusOut" :disabled="isSentNine" name="14" :is-link="true"
-                            placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
-                            class="mb-2" />
+                        <InputReport @focusout="focusOut" :disabled="isSentNine" name="14" :maxlength="200"
+                            :is-link="true" placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
+                            v-model:value="item.link" class="mb-2" />
                         <div v-if="!isSentNine">
                             <div class="add_link" @click="addLink(9)" v-if="ninthPanelData.links.length === index + 1">
                                 + Добавить ссылку
@@ -763,7 +767,7 @@
     </v-card-text>
 </template>
 <script setup>
-import { ref, watchEffect, watch } from 'vue';
+import { ref, watchEffect, watch, inject } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { FileBoxComponent } from '@entities/RatingRoComponents/components';
 import { InputReport, TextareaReport } from '@shared/components/inputs';
@@ -788,11 +792,16 @@ const collapseForm = () => {
     emit('collapse-form');
 };
 
+const swal = inject('$swal');
+
 const isFirstSentSix = ref(true);
 const isFirstSentSeventh = ref(true);
 const isFirstSentNinth = ref(true);
 
+
 const scanFile = ref([]);
+
+
 
 const seventhPanelData = ref({
     prize_place: 'Нет',
@@ -823,6 +832,10 @@ const sixPanelData = ref({
     }],
     comment: '',
 });
+// const isValidURL = (url) => {
+//     const urlRegex = /^(https?:\/\/)?[\w\-]+(\.[\w\-]+)+[/#?]?.*$/;
+//     return urlRegex.test(url);
+// }
 
 const prize_places = ref([
     { name: '1', value: 1, id: 'pp1' },
@@ -920,50 +933,106 @@ const deleteFile = (number) => {
 
 const focusOut = () => {
     if (props.panel_number == 6) {
-        // emit('isSent', isFirstSent.value)
-        emit('formData', sixPanelData.value)
-        console.log('6')
+        try {
+            emit('formData', sixPanelData.value)
+            console.log('6')
+        } catch (e) {
+            e.response.data.forEach(item => {
+                console.log('yy', item.links);
+                if (item.links) {
+                    for (let i in item.links) {
+                        if (Object.keys(item.links[i]).length !== 0 && item.links[i].link.includes('Введите правильный URL.')) {
+                            swal.fire({
+                                position: 'center',
+                                icon: 'warning',
+                                title: `Введите корректный URL`,
+                                showConfirmButton: false,
+                                timer: 2500,
+                            })
+                        }
+                    }
+                }
+            })
+        }
     }
     else if (props.panel_number == 7) {
-        if (isFirstSentSeventh.value) {
-            console.log('7', '1')
+        try {
+            if (isFirstSentSeventh.value) {
+                console.log('7', '1')
 
-            emit('formData', seventhPanelData.value)
-        } else {
-            let formData = new FormData();
-            formData.append('comment', seventhPanelData.value.comment);
-            formData.append('prize_place', seventhPanelData.value.prize_place);
+                emit('formData', seventhPanelData.value)
+            } else {
+                let formData = new FormData();
+                formData.append('comment', seventhPanelData.value.comment);
+                formData.append('prize_place', seventhPanelData.value.prize_place);
 
-            for (let i = 0; i < seventhPanelData.value.links.length; i++) {
-                !seventhPanelData.value.links[i].link
-                    ? formData.append(`[links][${i}][link]`, '')
-                    : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
+                for (let i = 0; i < seventhPanelData.value.links.length; i++) {
+                    !seventhPanelData.value.links[i].link
+                        ? formData.append(`[links][${i}][link]`, '')
+                        : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
+                }
+
+                // emit('isSent', isFirstSent.value)
+                emit('formData', formData)
+                console.log('7', '2')
             }
-
-            // emit('isSent', isFirstSent.value)
-            emit('formData', formData)
-            console.log('7', '2')
+        } catch (e) {
+            e.response.data.forEach(item => {
+                if (item.links) {
+                    for (let i in item.links) {
+                        if (Object.keys(item.links[i]).length !== 0 && item.links[i].link.includes('Введите правильный URL.')) {
+                            swal.fire({
+                                position: 'center',
+                                icon: 'warning',
+                                title: `Введите корректный URL`,
+                                showConfirmButton: false,
+                                timer: 2500,
+                            })
+                        }
+                    }
+                }
+            })
         }
+
     }
     else if (props.panel_number == 9) {
-        if (isFirstSentNinth.value === true) {
-            console.log('9', '1')
-            emit('formData', ninthPanelData.value)
-        } else {
-            let formData = new FormData();
-            formData.append('comment', ninthPanelData.value.comment);
-            formData.append('event_happened', ninthPanelData.value.event_happened);
-            if (ninthPanelData.value.links.length) {
-                for (let i = 0; i < ninthPanelData.value.links.length; i++) {
-                    !ninthPanelData.value.links[i].link
-                        ? formData.append(`[links][${i}][link]`, '')
-                        : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+        try {
+            if (isFirstSentNinth.value === true) {
+                console.log('9', '1')
+                emit('formData', ninthPanelData.value)
+            } else {
+                let formData = new FormData();
+                formData.append('comment', ninthPanelData.value.comment);
+                formData.append('event_happened', ninthPanelData.value.event_happened);
+                if (ninthPanelData.value.links.length) {
+                    for (let i = 0; i < ninthPanelData.value.links.length; i++) {
+                        !ninthPanelData.value.links[i].link
+                            ? formData.append(`[links][${i}][link]`, '')
+                            : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                    }
                 }
-            }
 
-            emit('formData', formData)
-            console.log('9', '2')
+                emit('formData', formData)
+                console.log('9', '2')
+            }
+        } catch (e) {
+            e.response.data.forEach(item => {
+                if (item.links) {
+                    for (let i in item.links) {
+                        if (Object.keys(item.links[i]).length !== 0 && item.links[i].link.includes('Введите правильный URL.')) {
+                            swal.fire({
+                                position: 'center',
+                                icon: 'warning',
+                                title: `Введите корректный URL`,
+                                showConfirmButton: false,
+                                timer: 2500,
+                            })
+                        }
+                    }
+                }
+            })
         }
+
     }
 
 }
@@ -998,7 +1067,7 @@ watchEffect(() => {
             isFirstSentSix.value = false
             sixPanelData.value = { ...props.data }
             isSentSix.value = props.data.is_sent;
-            // if (!sixPanelData.value.links.length) sixPanelData.value.links.push({ link: '' })
+            if (!sixPanelData.value.links.length) sixPanelData.value.links.push({ link: '' })
 
             // emit('isSent', isFirstSentSix.value)
         } else {
@@ -1046,7 +1115,7 @@ watchEffect(() => {
             ninthPanelData.value = { ...props.data }
             isSentNine.value = props.data.is_sent;
             if (!ninthPanelData.value.links.length) {
-            ninthPanelData.value.links.push({ link: '' })
+                ninthPanelData.value.links.push({ link: '' })
             }
 
         } else {
