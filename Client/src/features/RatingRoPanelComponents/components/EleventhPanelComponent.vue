@@ -46,7 +46,6 @@
         :fileSize="eleventhPanelData.file_size"
         @click="deleteFile"
         :is-sent="isSent"
-        @file-error="setError"
         is-error-message="Прикрепите файл формата jpg, png, pdf не более 7 Мб"
       ></FileBoxComponent>
     </div>
@@ -162,14 +161,6 @@ const props = defineProps({
     default: false,
   },
   data: Object,
-  // isErrorFile: {
-  //     type: Boolean,
-  //     default: false,
-  // },
-  // isErrorMessage: {
-  //     type: String,
-  //     default: '',
-  // },
   isErrorPanel: {
     type: Boolean,
   },
@@ -189,16 +180,16 @@ const eleventhPanelData = ref({
 
 const isSent = ref(false);
 
-const emit = defineEmits(["update:value", 'getData', 'fileError']);
+const emit = defineEmits(["update:value", 'getData']);
 
 const changeValue = (event) => {
   emit("update:value", event);
 };
 
-const setError = (err) => {
-    isErrorFile.value = err;
-    // console.log('ошибка файла 2', err);
-}
+// const setError = (err) => {
+//     isErrorFile.value = err;
+//     // console.log('ошибка файла 2', err);
+// }
 
 const focusOut = async () => {
   // console.log(eleventhPanelData.value);
@@ -230,11 +221,11 @@ const uploadFile = async (event) => {
   eleventhPanelData.value.file_size = (scanFile.value.size / Math.pow(1024, 2));
   eleventhPanelData.value.file_type = scanFile.value.type.split('/').at(-1);
 
-  console.log('перед проверкой',isErrorFile.value);
-  if (isErrorFile.value) {
-    eleventhPanelData.value.scan_file = scanFile.value.name;
-    console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ', isErrorFile.value, scanFile.value.size / Math.pow(1024, 2));
-  } else {
+  // console.log('перед проверкой',isErrorFile.value);
+  // if (isErrorFile.value) {
+  //   eleventhPanelData.value.scan_file = scanFile.value.name;
+  //   console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ', isErrorFile.value, scanFile.value.size / Math.pow(1024, 2));
+  // } else {
     try {
       if (isFirstSent.value) {
         let { scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
@@ -250,7 +241,7 @@ const uploadFile = async (event) => {
     } catch (e) {
       console.log('focusOut error:', e);
     }
-  }
+  // }
   
 };
 
@@ -259,7 +250,7 @@ const deleteFile = async () => {
   let formData = new FormData();
   formData.append("scan_file", "");
 
-  console.log('при удалении было', isErrorFile.value);
+  // console.log('при удалении было', isErrorFile.value);
   // if (isErrorFile.value) {
   //   eleventhPanelData.value.scan_file = "";
   // } else {
@@ -283,7 +274,7 @@ watchEffect(() => {
   // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
 
   // console.log('file_err- isErrorFile', isErrorFile.value)
-  emit('fileError',  isErrorFile.value);
+  // emit('fileError',  isErrorFile.value);
 
   if (props.data) {
     // console.log(props.data);

@@ -58,10 +58,6 @@ const props = defineProps({
     centralExpert: {
         type: Boolean,
     },
-    // isErrorFile: {
-    //     type: Boolean,
-    //     default: false,
-    // },
     isErrorMessage: {
         type: String,
         default: '',
@@ -71,29 +67,31 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(['click', 'fileError']);
+const emit = defineEmits(['click']);
+// const emit = defineEmits(['click', 'fileError']);
 
 const clickOnButton = () => {
     emit('click');
 };
 
-// const MAX_SIZE_FILE = 7;
-const MAX_SIZE_FILE = 3;
+const MAX_SIZE_FILE = 7;
+// const MAX_SIZE_FILE = 3;
 const isErrorFile = ref(false);
 
 const checkValidFile = () => {
-    console.log('до', isErrorFile.value);
+    // console.log('до', isErrorFile.value);
     if (props.fileSize > MAX_SIZE_FILE) {
-    return false;
-  } else {
-    return true;
-  }
+        isErrorFile.value = true;
+    } else {
+        isErrorFile.value = false;
+    }
 }
 
 watchEffect(() => {
-    const isValid = checkValidFile();
-    isErrorFile.value = !isValid;
-    emit('fileError', isErrorFile.value);
-    console.log('ошибка файла', isErrorFile.value);
+    // const isValid = checkValidFile();
+    // isErrorFile.value = !isValid;
+    // emit('fileError', isErrorFile.value);
+    // console.log('ошибка файла', isErrorFile.value);
+    checkValidFile();
 })
 </script>
