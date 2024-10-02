@@ -71,7 +71,7 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(['click']);
+const emit = defineEmits(['click', 'fileError']);
 
 const clickOnButton = () => {
     emit('click');
@@ -82,16 +82,18 @@ const MAX_SIZE_FILE = 3;
 const isErrorFile = ref(false);
 
 const checkValidFile = () => {
-    // console.log('до', isErrorFile.value);
+    console.log('до', isErrorFile.value);
     if (props.fileSize > MAX_SIZE_FILE) {
-    isErrorFile.value = true;
+    return false;
   } else {
-    isErrorFile.value = false;
+    return true;
   }
-//   console.log('после', isErrorFile.value);
 }
 
 watchEffect(() => {
-    checkValidFile();
+    const isValid = checkValidFile();
+    isErrorFile.value = !isValid;
+    emit('fileError', isErrorFile.value);
+    console.log('ошибка файла', isErrorFile.value);
 })
 </script>
