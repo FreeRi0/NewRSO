@@ -13,8 +13,9 @@
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)" @getPanelNumber="getPanelNumber($event)" @getId="getId($event)"
-            :data="sixPanelData" :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
+            @formData="formData($event, item.id)" @error="setError" @getPanelNumber="getPanelNumber($event)"
+            @getId="getId($event)" :data="sixPanelData"
+            :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item">
           </SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
@@ -39,6 +40,11 @@ const props = defineProps({
 });
 
 const disabled = ref(false);
+const link_err = ref(false);
+
+const setError = (err) => {
+  link_err.value = err;
+}
 
 const isFirstSent = ref(null);
 // const sent = (sentVal) => {
@@ -66,8 +72,8 @@ let el_id = ref(null);
 
 const formData = async (reportData, reportNumber) => {
   try {
-    console.log('sent-value', isFirstSent.value)
-    // console.log('num', reportNumber)
+    console.log('is_link_err_3_6', link_err.value)
+    if (link_err.value) return;
     if (isFirstSent.value) {
       console.log('First time sending data');
       await reportPartTwoService.createMultipleReportAll(reportData, '6', reportNumber);

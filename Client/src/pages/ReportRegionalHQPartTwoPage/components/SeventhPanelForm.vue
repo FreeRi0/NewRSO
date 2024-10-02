@@ -45,7 +45,7 @@
                     <label class="form__label mt-4" for="14">Ссылка на публикацию о победе
                         <sup class="valid-red">*</sup></label>
                     <div class="form__wrapper" v-for="(item, index) in seventhPanelData.links" :key="index">
-                        <InputReport @focusout="focusOut" name="14" :is-link="true" :disabled="isSent"
+                        <InputReport @focusout="focusOut" @error="setError" name="14" :is-link="true" :disabled="isSent"
                             placeholder="Введите ссылку, например,  https://vk.com/cco_monolit" :maxlength="200"
                             v-model:value="item.link" class="mb-2" />
                         <!-- <div v-if="!isValidURL(item.link)">
@@ -121,7 +121,7 @@
 
                     <div class="form__wrapper" v-for="(item, index) in sixPanelData.links" :key="index">
                         <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                            @focusout="focusOut" :disabled="isSentSix" :maxlength="200" name="14"
+                            @focusout="focusOut" @error="setError" :disabled="isSentSix" :maxlength="200" name="14"
                             v-model:value="item.link" :is-link="true" class="mb-2" />
 
                         <div v-if="!isSentSix">
@@ -190,9 +190,10 @@
                         <sup class="valid-red">*</sup></label>
 
                     <div class="form__wrapper" v-for="(item, index) in ninthPanelData.links" :key="index">
-                        <InputReport @focusout="focusOut" :disabled="isSentNine" name="14" :maxlength="200"
-                            :is-link="true" placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                            v-model:value="item.link" class="mb-2" />
+                        <InputReport  @focusout="focusOut" @error="setError" :disabled="isSentNine" name="14"
+                            :maxlength="200" :is-link="true"
+                            placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
+                            class="mb-2" />
                         <div v-if="!isSentNine">
                             <div class="add_link" @click="addLink(9)" v-if="ninthPanelData.links.length === index + 1">
                                 + Добавить ссылку
@@ -786,7 +787,7 @@ const props = defineProps({
     data: Object,
 });
 
-const emit = defineEmits(['collapse-form', 'formData', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile']);
+const emit = defineEmits(['collapse-form', 'formData', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'error']);
 
 const collapseForm = () => {
     emit('collapse-form');
@@ -797,11 +798,16 @@ const swal = inject('$swal');
 const isFirstSentSix = ref(true);
 const isFirstSentSeventh = ref(true);
 const isFirstSentNinth = ref(true);
-
+const isLinkError = ref(false);
+// const isLinkError_Seventh = ref(false);
+// const isLinkError_Nine = ref(false);
 
 const scanFile = ref([]);
 
-
+const setError = (err) => {
+    isLinkError.value = err;
+    console.log('errorr', err);
+}
 
 const seventhPanelData = ref({
     prize_place: 'Нет',
@@ -832,10 +838,6 @@ const sixPanelData = ref({
     }],
     comment: '',
 });
-// const isValidURL = (url) => {
-//     const urlRegex = /^(https?:\/\/)?[\w\-]+(\.[\w\-]+)+[/#?]?.*$/;
-//     return urlRegex.test(url);
-// }
 
 const prize_places = ref([
     { name: '1', value: 1, id: 'pp1' },
@@ -935,7 +937,8 @@ const focusOut = () => {
     if (props.panel_number == 6) {
         try {
             emit('formData', sixPanelData.value)
-            console.log('6')
+    
+          
         } catch (e) {
             e.response.data.forEach(item => {
                 console.log('yy', item.links);
@@ -1063,6 +1066,8 @@ const deleteLink = async (number) => {
 
 watchEffect(() => {
     if (props.panel_number == 6) {
+        console.log('6_err', isLinkError.value)
+        emit('error',  isLinkError.value);
         if (Object.keys(props.data).length > 0) {
             isFirstSentSix.value = false
             sixPanelData.value = { ...props.data }
@@ -1085,6 +1090,8 @@ watchEffect(() => {
         emit('getId', props.id)
         emit('getPanelNumber', props.panel_number)
     } else if (props.panel_number == 7) {
+        console.log('7_err', isLinkError.value)
+        emit('error',  isLinkError.value);
         if (Object.keys(props.data).length > 0) {
             console.log('7')
             isFirstSentSeventh.value = false;
@@ -1109,6 +1116,7 @@ watchEffect(() => {
         emit('getPanelNumber', props.panel_number)
 
     } else if (props.panel_number == 9) {
+        emit('error',  isLinkError.value);
         if (Object.keys(props.data).length > 0) {
             isFirstSentNinth.value = false;
             // emit('isSent', isFirstSentNinth.value)
