@@ -1,11 +1,29 @@
 <template>
   <div :is-file="isFile"
-    :class="['form-input', isFile ? 'form-input__file-input' : '', isFileDistrict ? 'form-input__add-file' : '', isLink ? 'form-input__link' : '']"
+    :class="[
+      'form-input',
+      isFile ? 'form-input__file-input' : '',
+      isFileDistrict ? 'form-input__add-file' : '',
+      isLink ? 'form-input__link' : '',
+      (isErrorPanel && !value) ? 'form-input__file-error' : '',
+    ]"
     :style="{ width: width }">
-    <input :type="type" :name="name" :style="{
-      height: height,
-    }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly" :max="max"
-      class="form-input__report" :class="{ 'link__input': isLink }" @input="updateValue" v-bind="$attrs"
+    <input 
+      :type="type" 
+      :name="name" 
+      :style="{
+        height: height,
+      }" 
+      :value="value" 
+      :id="name" 
+      :placeholder="placeholder" 
+      :maxlength="maxLength" 
+      :readonly="readonly" 
+      :max="max"
+      :class="{ 'link__input': isLink, 'form-input__report--error': (isErrorPanel && !value) }" 
+      class="form-input__report"
+      @input="updateValue" 
+      v-bind="$attrs"
       :disabled="disabled" />
     <div class="form__counter" v-if="counterVisible">
       {{ textInputLength }} / {{ maxCounter }}
@@ -101,6 +119,9 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  isErrorPanel: {
+    type: Boolean,
+  },
 });
 
 let isError = ref(props.isError);
@@ -173,6 +194,14 @@ const updateValue = (event) => {
     border-radius: 12px;
     background-color: transparent;
     border: 1.5px dashed #1F7CC0;
+  }
+
+  &.form-input__file-error {
+    border-color: #db0000;
+
+    span:last-child {
+      color: #db0000;
+    }
   }
 
   &__add-file,
@@ -261,16 +290,18 @@ const updateValue = (event) => {
     border-color: transparent;
     outline: 1px solid #1f7cc0;
   }
+}
 
-  &:invalid {
-    border-color: #db0000;
+.form-input__report:invalid,
+.form-input__report--error {
+  border-color: #db0000;
+  color: #db0000;
+
+  &::placeholder {
     color: #db0000;
-
-    &::placeholder {
-      color: #db0000;
-    }
   }
 }
+
 
 .report-table__td input.form-input__report {
   border: none;

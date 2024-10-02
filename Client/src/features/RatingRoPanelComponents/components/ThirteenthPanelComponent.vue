@@ -18,6 +18,7 @@
                 :max="32767"
                 @focusout="focusOut"
                 :disabled="isSent"
+                :is-error-panel="isErrorPanel"
             />
         </div>
   
@@ -36,6 +37,7 @@
                 height="auto"
                 @change="uploadFile"
                 :disabled="isSent"
+                :is-error-panel="isErrorPanel"
             />
             <FileBoxComponent
                 v-else
@@ -159,6 +161,9 @@ const props = defineProps({
         default: false,
     },
     data: Object,
+    isErrorPanel: {
+        type: Boolean,
+    },
 });
 
 const ID_PANEL = '13';
