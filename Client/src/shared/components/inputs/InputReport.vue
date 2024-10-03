@@ -1,30 +1,16 @@
 <template>
-  <div :is-file="isFile"
-    :class="[
-      'form-input',
-      isFile ? 'form-input__file-input' : '',
-      isFileDistrict ? 'form-input__add-file' : '',
-      isLink ? 'form-input__link' : '',
-      (isErrorPanel && !value) ? 'form-input__file-error' : '',
-    ]"
-    :style="{ width: width }">
-    <input 
-      :type="type" 
-      :name="name" 
-      :style="{
-        height: height,
-      }" 
-      :value="value" 
-      :id="name" 
-      :placeholder="placeholder" 
-      :maxlength="maxLength" 
-      :readonly="readonly" 
-      :max="max"
-      :class="{ 'link__input': isLink, 'form-input__report--error': (isErrorPanel && !value) }" 
-      class="form-input__report"
-      @input="updateValue" 
-      v-bind="$attrs"
-      :disabled="disabled" />
+  <div :is-file="isFile" :class="[
+    'form-input',
+    isFile ? 'form-input__file-input' : '',
+    isFileDistrict ? 'form-input__add-file' : '',
+    isLink ? 'form-input__link' : '',
+    (isErrorPanel && !value) ? 'form-input__file-error' : '',
+  ]" :style="{ width: width }">
+    <input :type="type" :name="name" :style="{
+      height: height,
+    }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly" :max="max"
+      class="form-input__report" :class="{ 'link__input': isLink, 'form-input__report--error': (isErrorPanel && !value) }"
+      @input="updateValue" v-bind="$attrs" :disabled="disabled" />
     <div class="form__counter" v-if="counterVisible">
       {{ textInputLength }} / {{ maxCounter }}
     </div>
@@ -41,7 +27,7 @@
     <div v-if="isError" class="form-input__error-block">
       <span class="form-input__error-text">Превышено&nbsp;максимальное&nbsp;значение&nbsp;{{ max }}</span>
     </div>
-    <div v-show="isLinkError && props.isLink && props.value"> <span class="form-input__error-text">Не верный формат
+    <div v-show="isLinkError && props.isLink"> <span class="form-input__error-text">Не верный формат
         url</span></div>
 
   </div>
@@ -133,6 +119,16 @@ function isValidURL(url) {
   return urlRegex.test(url);
 }
 
+const validateLink = (value) => {
+  // console.log(props.isLink, props.name)
+  if (value && props.isLink == true) {
+    const isValid = isValidURL(value);
+    isLinkError.value = !isValid;
+    emit('error', isLinkError.value);
+    console.log('err_link_1', isLinkError.value);
+  }
+};
+
 watchEffect(() => textInputLength.value = typeof props.value === 'string' ? props.value.length : 0)
 
 watchEffect(() => {
@@ -148,13 +144,13 @@ watchEffect(() => {
   const isValid = isValidURL(props.value);
   isLinkError.value = !isValid;
   emit('error', isLinkError.value);
-  // console.log('err_link_1', isLinkError.value);
+  console.log('err_link_1', isLinkError.value);
 });
 
 
 const updateValue = (event) => {
-  
   emit('update:value', event.target.value);
+  validateLink(event.target.value);
   // emit('update:value', event.target.maxLength ? event.target.value = event.target.value.slice(0, event.target.maxLength) : event.target.value);
 };
 </script>

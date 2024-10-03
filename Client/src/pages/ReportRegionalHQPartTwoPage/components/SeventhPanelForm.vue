@@ -111,7 +111,7 @@
                         Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
                     </p>
                     <InputReport @focusout="focusOut" v-model:value="sixPanelData.number_of_members"
-                        :disabled="isSentSix" placeholder="Введите число" id="15" name="14"
+                        :disabled="isSentSix" :is-link="false" placeholder="Введите число" id="15" name="14"
                         class="form__input number_input" type="number" :max="32767" />
                 </div>
                 <div class="form__field">
@@ -121,7 +121,7 @@
 
                     <div class="form__wrapper" v-for="(item, index) in sixPanelData.links" :key="index">
                         <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                            @focusout="focusOut" @error="setError" :disabled="isSentSix" :maxlength="200" name="14"
+                            @focusout="focusOut" @error="setError" :disabled="isSentSix" :maxlength="200" name="link"
                             v-model:value="item.link" :is-link="true" class="mb-2" />
 
                         <div v-if="!isSentSix">
@@ -190,7 +190,7 @@
                         <sup class="valid-red">*</sup></label>
 
                     <div class="form__wrapper" v-for="(item, index) in ninthPanelData.links" :key="index">
-                        <InputReport  @focusout="focusOut" @error="setError" :disabled="isSentNine" name="14"
+                        <InputReport @focusout="focusOut" @error="setError" :disabled="isSentNine" name="14"
                             :maxlength="200" :is-link="true"
                             placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
                             class="mb-2" />
@@ -936,9 +936,10 @@ const deleteFile = (number) => {
 const focusOut = () => {
     if (props.panel_number == 6) {
         try {
+            // if(isLinkError.value && )
             emit('formData', sixPanelData.value)
-    
-          
+
+
         } catch (e) {
             e.response.data.forEach(item => {
                 console.log('yy', item.links);
@@ -1066,8 +1067,7 @@ const deleteLink = async (number) => {
 
 watchEffect(() => {
     if (props.panel_number == 6) {
-        console.log('6_err', isLinkError.value)
-        emit('error',  isLinkError.value);
+      
         if (Object.keys(props.data).length > 0) {
             isFirstSentSix.value = false
             sixPanelData.value = { ...props.data }
@@ -1087,11 +1087,20 @@ watchEffect(() => {
             };
         }
 
+        for (let i in sixPanelData.value.links) {
+            if (isLinkError.value && sixPanelData.value.links[i].link) {
+                emit('error', isLinkError.value)
+                console.log('ggg')
+            } else {
+                console.log('hew')
+            }
+        }
+
         emit('getId', props.id)
         emit('getPanelNumber', props.panel_number)
     } else if (props.panel_number == 7) {
-        console.log('7_err', isLinkError.value)
-        emit('error',  isLinkError.value);
+        // console.log('7_err', isLinkError.value)
+        // emit('error',  isLinkError.value);
         if (Object.keys(props.data).length > 0) {
             console.log('7')
             isFirstSentSeventh.value = false;
@@ -1116,7 +1125,7 @@ watchEffect(() => {
         emit('getPanelNumber', props.panel_number)
 
     } else if (props.panel_number == 9) {
-        emit('error',  isLinkError.value);
+        // emit('error',  isLinkError.value);
         if (Object.keys(props.data).length > 0) {
             isFirstSentNinth.value = false;
             // emit('isSent', isFirstSentNinth.value)
@@ -1143,7 +1152,16 @@ watchEffect(() => {
         emit('getPanelNumber', props.panel_number)
 
     }
+
+
 })
+
+// watch(() => {
+//     if (isLinkError.value) {
+//         console.log('go', isLinkError.value)
+//         emit('error', isLinkError.value);
+//     }
+// });
 </script>
 <style lang="scss" scoped>
 .number_input {

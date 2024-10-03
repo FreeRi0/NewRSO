@@ -73,19 +73,34 @@ let el_id = ref(null);
 const formData = async (reportData, reportNumber) => {
   try {
     console.log('is_link_err_3_6', link_err.value)
-    // if (link_err.value) return;
-    if (isFirstSent.value) {
-      console.log('First time sending data');
-      await reportPartTwoService.createMultipleReportAll(reportData, '6', reportNumber);
-      isFirstSent.value = false;
-    } else {
-      console.log('Second time sending data');
-      const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '6', reportNumber);
-      emit('getData', data, 6, reportNumber);
+
+    if (!link_err.value) {
+      if (isFirstSent.value) {
+        console.log('First time sending data');
+        await reportPartTwoService.createMultipleReportAll(reportData, '6', reportNumber);
+        isFirstSent.value = false;
+      } else {
+        console.log('Second time sending data');
+        const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '6', reportNumber);
+        emit('getData', data, 6, reportNumber);
+      }
     }
   } catch (e) {
     console.log('six panel error: ', e);
   }
+  //    if (isFirstSent.value) {
+  //     console.log('First time sending data');
+  //     await reportPartTwoService.createMultipleReportAll(reportData, '6', reportNumber);
+  //     isFirstSent.value = false;
+  //   } else {
+  //     console.log('Second time sending data');
+  //     const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '6', reportNumber);
+  //     emit('getData', data, 6, reportNumber);
+
+  //   }
+  // } catch (e) {
+  //   console.log('six panel error: ', e);
+  // }
 };
 
 const getId = (id) => {
