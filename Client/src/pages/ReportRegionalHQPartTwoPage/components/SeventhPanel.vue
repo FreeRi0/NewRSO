@@ -67,15 +67,16 @@ const isFirstSent = ref(null);
 const formData = async (reportData, reportNumber) => {
   try {
     console.log('is_link_err_3_7', link_err.value)
-    // if (link_err.value) return;
-    if (isFirstSent.value) {
-      console.log('First time sending data');
-      await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber);
-      isFirstSent.value = false;
-    } else {
-      console.log('Second time sending data');
-      const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber, true);
-      emit('getData', data, 7, reportNumber);
+    if (!link_err.value) {
+      if (isFirstSent.value) {
+        console.log('First time sending data');
+        await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber);
+        isFirstSent.value = false;
+      } else {
+        console.log('Second time sending data');
+        const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber);
+        emit('getData', data, 7, reportNumber);
+      }
     }
   } catch (e) {
     console.log('seventh panel error: ', e);

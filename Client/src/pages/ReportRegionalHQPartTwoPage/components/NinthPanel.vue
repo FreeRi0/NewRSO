@@ -65,14 +65,25 @@ const formData = async (reportData, reportNumber) => {
   try {
     console.log('send2', isFirstSent.value)
     // if(link_err.value) return false;
-    if (isFirstSent.value === true) {
-      console.log('First time sending data');
-      await reportPartTwoService.createMultipleReportAll(reportData, '9', reportNumber, true);
-      isFirstSent.value = false;
-    } else {
-      console.log('Second time sending data');
-      const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
-      emit('getData', data, 9, reportNumber);
+    // if (isFirstSent.value === true) {
+    //   console.log('First time sending data');
+    //   await reportPartTwoService.createMultipleReportAll(reportData, '9', reportNumber, true);
+    //   isFirstSent.value = false;
+    // } else {
+    //   console.log('Second time sending data');
+    //   const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
+    //   emit('getData', data, 9, reportNumber);
+    // }
+    if (!link_err.value) {
+      if (isFirstSent.value) {
+        console.log('First time sending data');
+        await reportPartTwoService.createMultipleReportAll(reportData, '9', reportNumber);
+        isFirstSent.value = false;
+      } else {
+        console.log('Second time sending data');
+        const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber);
+        emit('getData', data, 9, reportNumber);
+      }
     }
   } catch (e) {
     console.log('ninth panel error: ', e);

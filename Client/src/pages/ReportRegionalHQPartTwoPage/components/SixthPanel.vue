@@ -88,19 +88,6 @@ const formData = async (reportData, reportNumber) => {
   } catch (e) {
     console.log('six panel error: ', e);
   }
-  //    if (isFirstSent.value) {
-  //     console.log('First time sending data');
-  //     await reportPartTwoService.createMultipleReportAll(reportData, '6', reportNumber);
-  //     isFirstSent.value = false;
-  //   } else {
-  //     console.log('Second time sending data');
-  //     const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '6', reportNumber);
-  //     emit('getData', data, 6, reportNumber);
-
-  //   }
-  // } catch (e) {
-  //   console.log('six panel error: ', e);
-  // }
 };
 
 const getId = (id) => {

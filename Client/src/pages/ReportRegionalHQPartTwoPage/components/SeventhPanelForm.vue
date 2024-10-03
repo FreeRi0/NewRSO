@@ -1067,87 +1067,97 @@ const deleteLink = async (number) => {
 
 watchEffect(() => {
     if (props.panel_number == 6) {
-      
+
         if (Object.keys(props.data).length > 0) {
             isFirstSentSix.value = false
             sixPanelData.value = { ...props.data }
             isSentSix.value = props.data.is_sent;
+            if (isLinkError.value) {
+                console.log('gg');
+                emit('error', isLinkError.value)
+            } else {
+                console.log('hh')
+                emit('error', false)
+            }
+
             if (!sixPanelData.value.links.length) sixPanelData.value.links.push({ link: '' })
 
-            // emit('isSent', isFirstSentSix.value)
-        } else {
+        }
+        else {
             console.log('data not received');
-            isFirstSentSix.value = true;
-            sixPanelData.value = {
-                number_of_members: 0,
-                links: [{
-                    link: '',
-                }],
-                comment: '',
-            };
+            // isFirstSentSix.value = true;
+            // sixPanelData.value = {
+            //     number_of_members: 0,
+            //     links: [{
+            //         link: '',
+            //     }],
+            //     comment: '',
         }
-
-        for (let i in sixPanelData.value.links) {
-            if (isLinkError.value && sixPanelData.value.links[i].link) {
-                emit('error', isLinkError.value)
-                console.log('ggg')
-            } else {
-                console.log('hew')
-            }
-        }
-
         emit('getId', props.id)
         emit('getPanelNumber', props.panel_number)
     } else if (props.panel_number == 7) {
-        // console.log('7_err', isLinkError.value)
-        // emit('error',  isLinkError.value);
         if (Object.keys(props.data).length > 0) {
             console.log('7')
             isFirstSentSeventh.value = false;
             // emit('isSent', isFirstSentSeventh.value)
             seventhPanelData.value = { ...props.data }
             isSent.value = props.data.is_sent;
+            if (isLinkError.value) {
+                console.log('gg');
+                emit('error', isLinkError.value)
+            } else {
+                console.log('hh')
+                emit('error', false)
+            }
 
             if (!seventhPanelData.value.links.length) seventhPanelData.value.links.push({ link: '' })
 
-        } else {
-            console.log('data not received');
-            isFirstSentSeventh.value = true;
-            seventhPanelData.value = {
-                prize_place: '',
-                links: [{
-                    link: '',
-                }],
-                comment: '',
-            };
         }
+        //else {
+        //     console.log('data not received');
+        //     isFirstSentSeventh.value = true;
+        //     seventhPanelData.value = {
+        //         prize_place: '',
+        //         links: [{
+        //             link: '',
+        //         }],
+        //         comment: '',
+        //     };
+        // }
         emit('getId', props.id)
         emit('getPanelNumber', props.panel_number)
 
     } else if (props.panel_number == 9) {
-        // emit('error',  isLinkError.value);
         if (Object.keys(props.data).length > 0) {
             isFirstSentNinth.value = false;
-            // emit('isSent', isFirstSentNinth.value)
             ninthPanelData.value = { ...props.data }
             isSentNine.value = props.data.is_sent;
+            if (isLinkError.value) {
+                console.log('gg');
+                emit('error', isLinkError.value)
+            } else {
+                console.log('hh')
+                emit('error', false)
+            }
             if (!ninthPanelData.value.links.length) {
                 ninthPanelData.value.links.push({ link: '' })
             }
 
-        } else {
-            console.log('data not received');
-            isFirstSentNinth.value = true;
-            ninthPanelData.value = {
-                event_happened: '',
-                links: [{
-                    link: '',
-                }],
-                comment: '',
-                file_size: '',
-                file_type: '',
-            };
         }
+
+        // else {
+        //     console.log('data not received');
+        //     isFirstSentNinth.value = true;
+        //     ninthPanelData.value = {
+        //         event_happened: '',
+        //         links: [{
+        //             link: '',
+        //         }],
+        //         comment: '',
+        //         file_size: '',
+        //         file_type: '',
+        //     };
+        // }
         emit('getId', props.id)
         emit('getPanelNumber', props.panel_number)
 
