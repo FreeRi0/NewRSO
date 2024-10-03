@@ -77,8 +77,9 @@ const formData = async (reportData, reportNumber) => {
     if (!link_err.value) {
       if (isFirstSent.value) {
         console.log('First time sending data');
-        await reportPartTwoService.createMultipleReportAll(reportData, '6', reportNumber);
+        const {data} = await reportPartTwoService.createMultipleReportAll(reportData, '6', reportNumber);
         isFirstSent.value = false;
+        emit('getData', data, 6, reportNumber);
       } else {
         console.log('Second time sending data');
         const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '6', reportNumber);
@@ -100,17 +101,14 @@ const getPanelNumber = (number) => {
   emit('getPanelNumber', number);
 }
 watchEffect(() => {
-  if (panel.value || panel.value === 0) {
-    disabled.value = true;
-  } else {
-    disabled.value = false;
-  }
+ 
   if (Object.keys(props.data[el_id.value]).length > 0) {
     console.log('data received', props.data);
     isFirstSent.value = false;
     sixPanelData.value = { ...props.data[el_id.value] }
     // emit('send-panel', panel.value);
-  } else {
+  }
+  else {
     console.log('data not received');
     isFirstSent.value = true;
     sixPanelData.value = {
@@ -120,6 +118,12 @@ watchEffect(() => {
       }],
       comment: '',
     };
+  }
+
+  if (panel.value || panel.value === 0) {
+    disabled.value = true;
+  } else {
+    disabled.value = false;
   }
 });
 </script>

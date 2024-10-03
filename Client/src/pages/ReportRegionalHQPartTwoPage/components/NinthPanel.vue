@@ -9,9 +9,9 @@
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="9" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)" @error="setError" @uploadFile="uploadFile($event, item.id)" :data="ninthPanelData"
-            @getPanelNumber="getPanelNumber($event)" @getId="getId($event)" @deleteFile="deleteFile($event, item.id)"
-            :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
+            @formData="formData($event, item.id)" @error="setError" @uploadFile="uploadFile($event, item.id)"
+            :data="ninthPanelData" @getPanelNumber="getPanelNumber($event)" @getId="getId($event)"
+            @deleteFile="deleteFile($event, item.id)" :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
     </v-expansion-panels>
@@ -64,21 +64,12 @@ let el_id = ref(null);
 const formData = async (reportData, reportNumber) => {
   try {
     console.log('send2', isFirstSent.value)
-    // if(link_err.value) return false;
-    // if (isFirstSent.value === true) {
-    //   console.log('First time sending data');
-    //   await reportPartTwoService.createMultipleReportAll(reportData, '9', reportNumber, true);
-    //   isFirstSent.value = false;
-    // } else {
-    //   console.log('Second time sending data');
-    //   const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
-    //   emit('getData', data, 9, reportNumber);
-    // }
     if (!link_err.value) {
       if (isFirstSent.value) {
         console.log('First time sending data');
-        await reportPartTwoService.createMultipleReportAll(reportData, '9', reportNumber);
+        const { data } = await reportPartTwoService.createMultipleReportAll(reportData, '9', reportNumber);
         isFirstSent.value = false;
+        emit('getData', data, 9, reportNumber);
       } else {
         console.log('Second time sending data');
         const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber);
@@ -130,11 +121,6 @@ const deleteFile = async (reportData, reportNumber) => {
 
 watchEffect(() => {
   console.log(isFirstSent, props.data)
-  if (panel.value || panel.value === 0) {
-    disabled.value = true;
-  } else {
-    disabled.value = false;
-  }
   if (Object.keys(props.data[el_id.value]).length > 0) {
     console.log('data yes')
     isFirstSent.value = false;
@@ -152,6 +138,12 @@ watchEffect(() => {
       file_type: '',
       comment: '',
     };
+  }
+
+  if (panel.value || panel.value === 0) {
+    disabled.value = true;
+  } else {
+    disabled.value = false;
   }
 });
 

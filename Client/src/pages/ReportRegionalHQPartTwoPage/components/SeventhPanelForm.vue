@@ -1165,13 +1165,6 @@ watchEffect(() => {
 
 
 })
-
-// watch(() => {
-//     if (isLinkError.value) {
-//         console.log('go', isLinkError.value)
-//         emit('error', isLinkError.value);
-//     }
-// });
 </script>
 <style lang="scss" scoped>
 .number_input {

@@ -8,8 +8,8 @@
   ]" :style="{ width: width }">
     <input :type="type" :name="name" :style="{
       height: height,
-    }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly" :max="max"
-      class="form-input__report"
+    }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength"
+      :readonly="readonly" :max="max" class="form-input__report"
       :class="{ 'link__input': isLink, 'form-input__report--error': (isErrorPanel && !value) }" @input="updateValue"
       v-bind="$attrs" :disabled="disabled" />
     <div class="form__counter" v-if="counterVisible">
@@ -28,7 +28,7 @@
     <div v-if="isError" class="form-input__error-block">
       <span class="form-input__error-text">Превышено&nbsp;максимальное&nbsp;значение&nbsp;{{ max }}</span>
     </div>
-    <div v-show="isLinkError && props.isLink && props.value"> <span class="form-input__error-text">Не верный формат
+    <div v-show="isLinkError && props.isLink && value"> <span class="form-input__error-text">Не верный формат
         url</span></div>
 
   </div>
@@ -73,6 +73,9 @@ const props = defineProps({
     default: "9999-12-31",
   },
   value: {
+    type: [String, Number],
+  },
+  linkVal: {
     type: [String, Number],
   },
   disabled: {
@@ -123,7 +126,8 @@ function isValidURL(url) {
 
 const validateLink = (value) => {
   // console.log(props.isLink, props.name)
-  if (value && props.isLink == true) {
+  console.log('val', value)
+  if (value !== '' && props.isLink == true) {
     const isValid = isValidURL(value);
     isLinkError.value = !isValid;
     emit('error', isLinkError.value);
@@ -131,7 +135,7 @@ const validateLink = (value) => {
   }
 };
 
- watchEffect(() => textInputLength.value = typeof props.value === 'string' ? props.value.length : 0)
+watchEffect(() => textInputLength.value = typeof props.value === 'string' ? props.value.length : 0)
 
 watchEffect(() => {
   if (typeof props.max === 'number' && props.value > props.max) {
