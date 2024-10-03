@@ -118,15 +118,13 @@ let isError = ref(props.isError);
 let isLinkError = ref(false);
 
 const textInputLength = ref(null);
-// const urlRegex = new RegExp('^http[s]?:\\/\\/[a-zA-Z\\d.-]+[:]?\\d{0,4}[\\/]?[a-zA-Z\\d\\/\\-]+$');
-const urlRegex = new RegExp('(^http[s]?://)?(?:[\\-\\w]+:[\\-\\w]+@)?(?:[0-9a-z][\\-0-9a-z]*[0-9a-z]\\.)+[a-z]{2,6}(?::\\d{1,5})?(?:[?/\\\\#][?!^$.(){}:|=[\\]+\\-/\\\\*;&~#@,%\\wА-Яа-я]*)?');
+const urlRegex = /^https:\/\/(?:[a-zA-Z0-9а-я](?:[a-zA-Z0-9а-я-]{0,61}[a-zA-Z0-9а-я])?\.)+[a-zA-Z0-9а-я][a-zA-Z0-9а-я-]{0,61}[a-zA-Z0-9а-я]$/i;
+
 function isValidURL(url) {
   return urlRegex.test(url);
 }
 
 const validateLink = (value) => {
-  // console.log(props.isLink, props.name)
-  console.log('val', value)
   if (value !== '' && props.isLink == true) {
     const isValid = isValidURL(value);
     isLinkError.value = !isValid;
@@ -153,7 +151,6 @@ watchEffect(() => {
 
 const updateValue = (event) => {
   emit('update:value', event.target.value);
-  // validateLink(event.target.value);
   // emit('update:value', event.target.maxLength ? event.target.value = event.target.value.slice(0, event.target.maxLength) : event.target.value);
 };
 </script>

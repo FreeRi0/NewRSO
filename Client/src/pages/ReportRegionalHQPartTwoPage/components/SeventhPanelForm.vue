@@ -26,7 +26,7 @@
                                 type="radio" @focusout="focusOut" v-model="seventhPanelData.prize_place" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                            }}</label>
+                                }}</label>
                         </div>
                     </div>
                 </div>
@@ -48,9 +48,6 @@
                         <InputReport @focusout="focusOut" @error="setError" name="14" :is-link="true" :disabled="isSent"
                             placeholder="Введите ссылку, например,  https://vk.com/cco_monolit" :maxlength="200"
                             v-model:value="item.link" class="mb-2" />
-                        <!-- <div v-if="!isValidURL(item.link)">
-                            <p class="error-message">Invalid URL 7</p>
-                        </div> -->
                         <div v-if="!isSent">
                             <div class="add_link" @click="addLink(7)"
                                 v-if="seventhPanelData.links.length === index + 1">
@@ -169,7 +166,7 @@
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                            }}</label>
+                                }}</label>
                         </div>
                     </div>
                 </div>
@@ -249,7 +246,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -389,7 +386,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -469,7 +466,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -563,7 +560,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -650,7 +647,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -748,7 +745,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -1091,7 +1088,8 @@ watchEffect(() => {
             //     links: [{
             //         link: '',
             //     }],
-            //     comment: '',
+            //     comment: ''
+            // }
         }
         emit('getId', props.id)
         emit('getPanelNumber', props.panel_number)
@@ -1113,17 +1111,17 @@ watchEffect(() => {
             if (!seventhPanelData.value.links.length) seventhPanelData.value.links.push({ link: '' })
 
         }
-        //else {
-        //     console.log('data not received');
-        //     isFirstSentSeventh.value = true;
-        //     seventhPanelData.value = {
-        //         prize_place: '',
-        //         links: [{
-        //             link: '',
-        //         }],
-        //         comment: '',
-        //     };
-        // }
+        else {
+            console.log('data not received');
+            isFirstSentSeventh.value = true;
+            seventhPanelData.value = {
+                prize_place: '',
+                links: [{
+                    link: '',
+                }],
+                comment: '',
+            };
+        }
         emit('getId', props.id)
         emit('getPanelNumber', props.panel_number)
 
@@ -1145,25 +1143,23 @@ watchEffect(() => {
 
         }
 
-        // else {
-        //     console.log('data not received');
-        //     isFirstSentNinth.value = true;
-        //     ninthPanelData.value = {
-        //         event_happened: '',
-        //         links: [{
-        //             link: '',
-        //         }],
-        //         comment: '',
-        //         file_size: '',
-        //         file_type: '',
-        //     };
-        // }
+        else {
+            console.log('data not received');
+            isFirstSentNinth.value = true;
+            ninthPanelData.value = {
+                event_happened: '',
+                links: [{
+                    link: '',
+                }],
+                comment: '',
+                file_size: '',
+                file_type: '',
+            };
+        }
         emit('getId', props.id)
         emit('getPanelNumber', props.panel_number)
 
     }
-
-
 })
 </script>
 <style lang="scss" scoped>
