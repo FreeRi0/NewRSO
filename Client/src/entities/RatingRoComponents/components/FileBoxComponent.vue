@@ -26,13 +26,13 @@
         </button>
 
         <div v-if="isErrorFile" class="report__error-text">
-            {{ isErrorMessage }}
+            Прикрепите файл формата jpg, png, pdf не&nbsp;более 7&nbsp;Мб
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, watchEffect } from 'vue';
+// import { ref, watchEffect } from 'vue';
 import { SvgIcon } from '@shared/index';
 
 defineOptions({
@@ -52,46 +52,27 @@ const props = defineProps({
         type: Number,
         default: null,
     },
-    districtExpert: {
-        type: Boolean,
-    },
-    centralExpert: {
-        type: Boolean,
-    },
-    isErrorMessage: {
-        type: String,
-        default: '',
-    },
+    // districtExpert: {
+    //     type: Boolean,
+    // },
+    // centralExpert: {
+    //     type: Boolean,
+    // },
     isSent: {
+        type: Boolean,
+    },
+    isErrorFile: {
         type: Boolean,
     },
 });
 
 const emit = defineEmits(['click']);
-// const emit = defineEmits(['click', 'fileError']);
 
 const clickOnButton = () => {
     emit('click');
 };
 
-const MAX_SIZE_FILE = 7;
-// const MAX_SIZE_FILE = 3;
-const isErrorFile = ref(false);
-
-const checkValidFile = () => {
-    // console.log('до', isErrorFile.value);
-    if (props.fileSize > MAX_SIZE_FILE) {
-        isErrorFile.value = true;
-    } else {
-        isErrorFile.value = false;
-    }
-}
-
-watchEffect(() => {
-    // const isValid = checkValidFile();
-    // isErrorFile.value = !isValid;
-    // emit('fileError', isErrorFile.value);
-    // console.log('ошибка файла', isErrorFile.value);
-    checkValidFile();
-})
+// watchEffect(() => {
+    
+// })
 </script>

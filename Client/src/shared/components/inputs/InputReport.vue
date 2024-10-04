@@ -133,12 +133,11 @@ function isValidURL(url) {
   return urlRegex.test(url);
 }
 
-watchEffect(() => textInputLength.value = typeof props.value === 'string' ? props.value.length : 0)
-
 watchEffect(() => {
+  textInputLength.value = typeof props.value === 'string' ? props.value.length : 0;
+
   if (typeof props.max === 'number' && props.value > props.max) {
     isError.value = true;
-    // console.log(props.max, props.value, isError.value);
   } else {
     isError.value = false;
   }
@@ -151,9 +150,7 @@ watchEffect(() => {
   // console.log('err_link_1', isLinkError.value);
 });
 
-
 const updateValue = (event) => {
-  
   emit('update:value', event.target.value);
   // emit('update:value', event.target.maxLength ? event.target.value = event.target.value.slice(0, event.target.maxLength) : event.target.value);
 };
