@@ -1,13 +1,17 @@
 <template>
-  <div 
-    :is-file="isFile" 
-    :class="['form-input', isFile ? 'form-input__file-input' : '', isFileDistrict ? 'form-input__add-file' : '']"
-    
-    :style="{ width: width }">
+  <div :is-file="isFile" :class="[
+    'form-input',
+    isFile ? 'form-input__file-input' : '',
+    isFileDistrict ? 'form-input__add-file' : '',
+    isLink ? 'form-input__link' : '',
+    (isErrorPanel && !value) ? 'form-input__file-error' : '',
+  ]" :style="{ width: width }">
     <input :type="type" :name="name" :style="{
       height: height,
-    }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly"
-      max="9999-12-31" class="form-input__report" @input="updateValue" v-bind="$attrs" :disabled="disabled" />
+    }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly" :max="max"
+      class="form-input__report"
+      :class="{ 'link__input': isLink, 'form-input__report--error': (isErrorPanel && !value) }" @input="updateValue"
+      v-bind="$attrs" :disabled="disabled" />
     <div class="form__counter" v-if="counterVisible">
       {{ textInputLength }} / {{ maxCounter }}
     </div>
@@ -21,6 +25,12 @@
     <div v-if="isFileDistrict" class="form-input__icon">
       <SvgIcon iconName="add-file" />
     </div>
+    <div v-if="isError" class="form-input__error-block">
+      <span class="form-input__error-text">Превышено&nbsp;максимальное&nbsp;значение&nbsp;{{ max }}</span>
+    </div>
+    <div v-show="isLinkError && props.isLink && value"> <span class="form-input__error-text">Не верный формат
+        url</span></div>
+
   </div>
 </template>
 
@@ -33,7 +43,7 @@ defineOptions({
   inheritAttrs: false,
 });
 
-const emit = defineEmits(['update:value']);
+const emit = defineEmits(['update:value', 'error']);
 const props = defineProps({
   name: {
     type: [String, Number],
@@ -58,7 +68,14 @@ const props = defineProps({
   maxLength: {
     type: Number,
   },
+  max: {
+    type: [String, Number],
+    default: "9999-12-31",
+  },
   value: {
+    type: [String, Number],
+  },
+  linkVal: {
     type: [String, Number],
   },
   disabled: {
@@ -83,12 +100,51 @@ const props = defineProps({
   isFileDistrict: {
     type: Boolean,
     default: false,
+  },
+  isLink: {
+    type: Boolean,
+    default: false,
+  },
+  isError: {
+    type: Boolean,
+    default: false,
+  },
+  isErrorPanel: {
+    type: Boolean,
+  },
+});
+
+let isError = ref(props.isError);
+let isLinkError = ref(false);
+
+const textInputLength = ref(null);
+const urlRegex = /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
+function isValidURL(url) {
+  return urlRegex.test(url);
+}
+
+const validateLink = (value) => {
+  if (value !== '' && props.isLink == true) {
+    const isValid = isValidURL(value);
+    isLinkError.value = !isValid;
+    emit('error', isLinkError.value);
+    console.log('err_link_1', isLinkError.value);
+  }
+};
+
+watchEffect(() => {
+  textInputLength.value = typeof props.value === 'string' ? props.value.length : 0;
+
+  if (typeof props.max === 'number' && props.value > props.max) {
+    isError.value = true;
+  } else {
+    isError.value = false;
   }
 });
 
-const textInputLength = ref(null);
-
-watchEffect(() => textInputLength.value = typeof props.value === 'string' ? props.value.length : 0)
+watchEffect(() => {
+  validateLink(props.value)
+});
 
 const updateValue = (event) => {
   emit('update:value', event.target.value);
@@ -97,7 +153,18 @@ const updateValue = (event) => {
 </script>
 
 <style lang="scss" scoped>
+.link__input {
+  width: 100%;
+  max-width: 720px;
+
+  @media screen and (max-width: 1024px) {
+    max-width: 100%;
+  }
+}
+
 .form-input {
+  position: relative;
+
   &.form-input__file-input,
   &.form-input__add-file {
     .form-input__report[type='file'] {
@@ -120,6 +187,14 @@ const updateValue = (event) => {
     border-radius: 12px;
     background-color: transparent;
     border: 1.5px dashed #1F7CC0;
+  }
+
+  &.form-input__file-error {
+    border-color: #db0000;
+
+    span:last-child {
+      color: #db0000;
+    }
   }
 
   &__add-file,
@@ -161,6 +236,23 @@ const updateValue = (event) => {
       }
     }
   }
+
+  &__error-text {
+    position: absolute;
+    bottom: -10px;
+    width: 100%;
+    display: block;
+    color: #db0000;
+    font-family: "Bert Sans";
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+  }
+}
+
+.form-input__link {
+  width: 100%;
+  max-width: 720px;
 }
 
 .form-input__report {
@@ -183,7 +275,7 @@ const updateValue = (event) => {
   &:disabled {
     border-color: #b6b6b6;
     background-color: #f9fafb;
-    color:#8e8e93;
+    color: #8e8e93;
     pointer-events: none;
   }
 
@@ -191,15 +283,18 @@ const updateValue = (event) => {
     border-color: transparent;
     outline: 1px solid #1f7cc0;
   }
+}
 
-  &:invalid {
-      border-color: #db0000;
+.form-input__report:invalid,
+.form-input__report--error {
+  border-color: #db0000;
+  color: #db0000;
 
-      &::placeholder {
-          color: #db0000;
-      }
+  &::placeholder {
+    color: #db0000;
   }
 }
+
 
 .report-table__td input.form-input__report {
   border: none;

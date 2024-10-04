@@ -1,10 +1,25 @@
 <template>
-  <div v-if="!(props.centralHeadquarterCommander || props.districtHeadquarterCommander)" class="form__field-group">
-    <div class="report__field">
+  <div class="form__field-group report__field-group report__field-group--column"
+    v-if="(props.centralExpert || props.districtExpert) && 
+          !eighteenthPanelData.projects && 
+          !eighteenthPanelData.comment">
+    <p class="report__text-info">
+      Информация о&nbsp;показателе региональным отделением не&nbsp;предоставлена.
+    </p>
+  </div>
+
+  <div v-else class="form__field-group report__field">
+    <div class="report__field" 
+      v-if="!(props.centralExpert || props.districtExpert) ||
+            (props.districtExpert && eighteenthPanelData.projects) ||
+            (props.centralExpert && eighteenthPanelData.projects)">
       <div class="report__field-group" v-for="(project, index) in projects" :key="index">
-        <div class="report__fieldset">
+        <div class="report__fieldset report__file-input"
+          v-if="!(props.centralExpert || props.districtExpert) ||
+                (props.districtExpert && project.file) ||
+                (props.centralExpert && project.file)">
           <label
-            class="form__label"
+            class="form__label report__label"
             :for="project.file"
           >Прикрепить документ</label>
           <InputReport
@@ -17,27 +32,29 @@
             :name="index"
             width="100%"
             height="86px"
-            @change="uploadFile"
+            @change="uploadFile($event, index)"
+            :disabled="isSent"
           />
+
           <div 
-            v-else
-            class="form__file-box">
-            <span class="form__file-name">
-              <SvgIcon v-if="project.file_type === 'jpg'" icon-name="group-light" />
-              <SvgIcon v-if="project.file_type === 'pdf'" icon-name="group-light" />
-              <SvgIcon v-if="project.file_type === 'png'" icon-name="group-light" />
-              {{ project.file }}
-            </span>
-            <span class="form__file-size">{{ project.file_size }} Мб</span>
-            <button 
-              @click="deleteFile"
-              class="form__button-delete-file"
-            >
-              Удалить
-            </button>
+            v-if="project.file && (typeof project.file !== 'string')"
+            class="text-center"
+          >
+            <v-progress-circular color="primary" indeterminate></v-progress-circular>
           </div>
+
+          <FileBoxComponent
+            v-if="project.file && typeof project.file === 'string'"
+            :file="project.file"
+            :fileType="project.file_type"
+            :fileSize="project.file_size"
+            @click="deleteFile(index)"
+            :is-sent="isSent"
+            @error="setError"
+            :is-error-file="isErrorFile"
+          ></FileBoxComponent>
           <button
-            v-if="index > 0"
+            v-if="!isSent && (index > 0)"
             class="report__delete-button"
             @click="deletePublication(index)"
           >
@@ -45,9 +62,12 @@
           </button>
         </div>
 
-        <div class="report__links">
+        <div class="report__links"
+          v-if="!(props.centralExpert || props.districtExpert) ||
+                (props.districtExpert && project.links) ||
+                (props.centralExpert && project.links)">
           <p
-            class="form__label"
+            class="form__label report__label"
             >Ссылка на&nbsp;публикацию
           </p>
           <div class="report__link-list">
@@ -59,29 +79,39 @@
                   placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
                   style="width: 100%;"
                   @focusout="focusOut"
+                  :disabled="isSent"
+                  is-link
               />
-              <button
-                v-if="i > 0"
-                @click="deleteLink(index, i)"
-                class="report__btn-link report__btn-link--delete-field"
-              >
-              Удалить поле ввода
-              </button>
-            </div>
+              <div v-if="isError && (i > 0)" class="report__error-block">
+                <span class="report__error-text">Укажите ссылку публикации</span>
+              </div>
 
-            <button
-              class="report__btn-link report__btn-link--add-link"
-              @click="addLink(index)"
-            >
-              + Добавить ссылку
-            </button>
-            
-            
+              <!-- <div class="report__btn-block"> -->
+                <button
+                  v-if="!isSent && (projects[index].links.length === i + 1)"
+                  class="report__btn-link report__btn-link--add-link"
+                  @click="addLink(index)"
+                >
+                  + Добавить ссылку
+                </button>
+
+                <button
+                  v-if="!isSent && (i > 0)"
+                  @click="deleteLink(index, i)"
+                  class="report__btn-link report__btn-link--delete-field"
+                  aria-label="Удалить поле ввода"
+                >
+                  <span>Удалить
+                    <span>поле ввода</span>
+                  </span>
+                </button>
+              <!-- </div> -->
+            </div>
           </div>
         </div>
       </div>
       
-      <div >
+      <div v-if="!isSent">
         <button
           class="report__add-button"
           @click="addPublication"
@@ -90,51 +120,74 @@
           Добавить публикацию
         </button>
       </div>
+    </div>
 
-      <div class="report__fieldset report__fieldset--comment">
-        <label
-            class="form__label"
-            for="comment"
-        >Комментарий</label>
-        <TextareaReport
-          v-model:value="eighteenthPanelData.comment"
-          id="comment"
-          name="comment"
-          placeholder="Напишите сообщение"
-          :rows="1" 
-          autoResize
-          counter-visible
-          :maxlength="3000"
-          :max-length-text="3000"
-          @focusout="focusOut"
-        >
-        </TextareaReport>
-      </div>
+    <div class="report__fieldset report__fieldset--comment"
+      v-if="!(props.centralExpert || props.districtExpert) ||
+            (props.districtExpert && eighteenthPanelData.comment) ||
+            (props.centralExpert && eighteenthPanelData.comment)">
+      <label
+          class="form__label report__label"
+          for="comment"
+      >Комментарий</label>
+      <TextareaReport
+        v-model:value="eighteenthPanelData.comment"
+        id="comment"
+        name="comment"
+        placeholder="Напишите сообщение"
+        :rows="1" 
+        autoResize
+        counter-visible
+        :maxlength="3000"
+        :max-length-text="3000"
+        @focusout="focusOut"
+        :disabled="isSent"
+      >
+      </TextareaReport>
     </div>
   </div>
-
-  <div v-else></div>
 </template>
 
 <script setup>
-import { ref, watchEffect } from 'vue';
+import { inject, ref, watchEffect, watchPostEffect } from 'vue';
 import { InputReport, TextareaReport } from '@shared/components/inputs';
-// import { Button } from '@shared/components/buttons';
+import { FileBoxComponent } from "@entities/RatingRoComponents/components";
 import { reportPartTwoService } from "@services/ReportService.ts";
+import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 import { SvgIcon } from '@shared/index';
 
+const swal = inject('$swal');
+
 const props = defineProps({
-  districtHeadquarterCommander: {
+  districtExpert: {
     type: Boolean
   },
-  centralHeadquarterCommander: {
+  centralExpert: {
     type: Boolean
+  },
+  isError: {
+    type: Boolean,
+    default: false,
+  },
+  data: Object,
+  isSent: {
+    type: Boolean,
   },
 });
 
+let isError = ref(props.isError);
+
+const emit = defineEmits(['getData']);
+
+const link_err = ref(false);
+const setError = (err) => {
+  link_err.value = err;
+}
+
 const ID_PANEL = '18';
 const isFirstSent = ref(true);
-// const scanFile = ref([]);
+const scanFile = ref([]);
+let isErrorFile = ref(false);
 const eighteenthPanelData = ref({
   comment: '',
   projects: []
@@ -143,8 +196,8 @@ const eighteenthPanelData = ref({
 const projects = ref([
   {
     file: '',
-    // file_size: null,
-    // file_type: '',
+    file_size: null,
+    file_type: '',
     links: [
       {
         link: '',
@@ -153,42 +206,100 @@ const projects = ref([
   }
 ])
 
-const uploadFile = async (event) => {
-  // scanFile.value = event.target.files[0];
-  // let formData = new FormData();
-  // formData.append('file', scanFile.value);
-  // // formData.append('comment', eighteenthPanelData.value.comment);
-  // formData.append('file_size', eighteenthPanelData.value.projects[1].file_size);
-  // formData.append('file_type', eighteenthPanelData.value.projects[1].file_type);
-  // formData.append('file_size', (scanFile.value.size/( 1024 * 1024 )).toFixed(1));
-  // formData.append('file_type', scanFile.value.type);
+// const uploadFile = async (event, index) => {
+//   projects.value[index].file = event.target.files[0];
+//   let formData = new FormData();
+//   formData.append('comment', eighteenthPanelData.value.comment);
 
-  // console.log(scanFile.value);
+//   formData.append(`projects[${index}][file]`, projects.value[index].file);
 
-  // if (isFirstSent.value) {
-  //   let { scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-  //   eighteenthPanelData.value.scan_file = scan_file.split('/').at(-1);
-  // } else {
-  //   let { data : { scan_file } } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-  //   eighteenthPanelData.value.scan_file = scan_file.split('/').at(-1);
-  // }
+//   if (projects.value.length) {
+//     for (let index = 0; index < projects.value.length; index++) {
+//       if (projects.value[index].links.length) {
+//         for (let i = 0; i < projects.value[index].links.length; i++) {
+//           !projects.value[index].links[i].link 
+//           ? formData.append(`projects[${index}][links][${i}][link]`, '')
+//           : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+//         }
+//       }
+//     }
+//   }
+
+//   try {
+//     if (isFirstSent.value) {
+//       const { data } = await reportPartTwoService.createReport(eighteenthPanelData.value, ID_PANEL);
+//       emit('getData', data, Number(ID_PANEL));
+//     } else {
+//       const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+//       emit('getData', data, Number(ID_PANEL));
+//     }
+//   } catch (e) {
+//     console.log('focusOut error:', e);
+//   }
+// };
+
+const uploadFile = async (event, index) => {
+  fileValidate(event.target.files[0], 7, isErrorFile);
+  console.log('(4)', 'перед отправкой в uploadFile', isErrorFile.value);
+
+  if (isErrorFile.value) {
+    scanFile.value = event.target.files[0];
+    projects.value[index].file = scanFile.value.name;
+    console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
+  } else {
+    projects.value[index].file = event.target.files[0];
+    let formData = new FormData();
+    formData.append('comment', eighteenthPanelData.value.comment);
+
+    formData.append(`projects[${index}][file]`, projects.value[index].file);
+
+    if (projects.value.length) {
+      for (let index = 0; index < projects.value.length; index++) {
+        if (projects.value[index].links.length) {
+          for (let i = 0; i < projects.value[index].links.length; i++) {
+            !projects.value[index].links[i].link 
+            ? formData.append(`projects[${index}][links][${i}][link]`, '')
+            : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+          }
+        }
+      }
+    }
+    try {
+      if (isFirstSent.value) {
+        const { data } = await reportPartTwoService.createReport(eighteenthPanelData.value, ID_PANEL);
+        emit('getData', data, Number(ID_PANEL));
+      } else {
+        const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+        emit('getData', data, Number(ID_PANEL));
+      }
+    } catch (e) {
+      console.log('focusOut error:', e);
+    }
+  }
 };
 
-const deleteFile = async () => {
-  // eighteenthPanelData.value.scan_file = '';
-  // let formData = new FormData();
-  // formData.append('scan_file', '');
-  // formData.append('comment', eighteenthPanelData.value.comment);
-  // formData.append('file_size', seventeenthPanelData.value.file_size);
-  // formData.append('file_type', seventeenthPanelData.value.file_type);
+const deleteFile = async (index) => {
+  // projects.value[index].file = '';
+  let formData = new FormData();
+  formData.append('comment', eighteenthPanelData.value.comment);
 
-  // console.log(formData);
+  formData.append(`projects[${index}][file]`, '');
 
-  // if (isFirstSent.value) {
-  //   await reportPartTwoService.createReport(formData, ID_PANEL, true);
-  // } else {
-  //   await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-  // }
+  if (projects.value.length) {
+    for (let index = 0; index < projects.value.length; index++) {
+      console.log('этот код выполняется');
+      if (projects.value[index].links.length) {
+        for (let i = 0; i < projects.value[index].links.length; i++) {
+          !projects.value[index].links[i].link 
+          ? formData.append(`projects[${index}][links][${i}][link]`, '')
+          : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+        }
+      }
+    }
+  }
+
+  const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+  emit('getData', data, Number(ID_PANEL));
 };
 
 const addLink = (index) => {
@@ -197,19 +308,31 @@ const addLink = (index) => {
 
 const deleteLink = async (projectIndex, linkIndex) => {
   projects.value[projectIndex].links.splice(linkIndex, 1);
-  eighteenthPanelData.value.projects = [ ...projects.value ];
-  try {
-    await reportPartTwoService.createReportDraft(eighteenthPanelData.value, ID_PANEL);
-  } catch (e) {
-    console.log('deletePublication error: ', e);
+
+  let formData = new FormData();
+  formData.append('comment', eighteenthPanelData.value.comment);
+
+  if (projects.value.length) {
+    for (let index = 0; index < projects.value.length; index++) {
+      if (projects.value[index].links.length) {
+        for (let i = 0; i < projects.value[index].links.length; i++) {
+          !projects.value[index].links[i].link 
+          ? formData.append(`projects[${index}][links][${i}][link]`, '')
+          : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+        }
+      }
+    }
   }
+
+  const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+  emit('getData', data, Number(ID_PANEL));
 };
 
 const addPublication = () => {
   projects.value.push({
-    scan_file: '',
-    // file_size: null,
-    // file_type: '',
+    file: '',
+    file_size: null,
+    file_type: '',
     links: [
       {
         link: '',
@@ -218,49 +341,97 @@ const addPublication = () => {
   })
 };
 
-const focusOut = async () => {
-  // let formData = new FormData();
-  // formData.append('comment', eighteenthPanelData.value.comment);
-  // formData.append('file_size', seventeenthPanelData.value.file_size);
-  // formData.append('file_type', seventeenthPanelData.value.file_type);
-
+const focusOut = async () => { 
+  // console.log(eighteenthPanelData.value.comment);
   eighteenthPanelData.value.projects = [ ...projects.value ];
-  console.log(eighteenthPanelData.value.projects);
+  // console.log(eighteenthPanelData.value.projects);
   try {
     if (isFirstSent.value) {
-    await reportPartTwoService.createReport(eighteenthPanelData.value, ID_PANEL);
+      const { data } = await reportPartTwoService.createReport(eighteenthPanelData.value, ID_PANEL);
+      emit('getData', data, Number(ID_PANEL));
     } else {
-      await reportPartTwoService.createReportDraft(eighteenthPanelData.value, ID_PANEL);
+      let formData = new FormData();
+      formData.append('comment', eighteenthPanelData.value.comment);
+
+      if (projects.value.length) {
+        for (let index = 0; index < projects.value.length; index++) {
+          if (projects.value[index].links.length) {
+            // const links = [...projects.value[index].links];
+            for (let i = 0; i < projects.value[index].links.length; i++) {
+              !projects.value[index].links[i].link 
+              ? formData.append(`projects[${index}][links][${i}][link]`, '')
+              : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+              // if (projects.value[index].links[i].link && projects.value[index].links[i].link !== '') {
+              //   formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+              // }
+            }
+          }
+        }
+      }
+
+      const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+      emit('getData', data, Number(ID_PANEL));
     }
   } catch (e) {
     console.log('focusOut error:', e);
+    e.response.data.projects.forEach(project => {
+      if (project.links) {
+        for (let i in project.links) {
+          if (Object.keys(project.links[i]).length !== 0 && project.links[i].link.includes('Введите правильный URL.')) {
+            swal.fire({
+              position: 'center',
+              icon: 'warning',
+              title: `Введите корректный URL`,
+              showConfirmButton: false,
+              timer: 2500,
+            })
+          }
+        }
+      }
+    })
   }
 };
 
 const deletePublication = async (index) => {
   projects.value = projects.value.filter((el, i) => index !== i);
-  eighteenthPanelData.value.projects = [ ...projects.value ];
-  try {
-    await reportPartTwoService.createReportDraft(eighteenthPanelData.value, ID_PANEL);
-  } catch (e) {
-    console.log('deletePublication error: ', e);
+
+  let formData = new FormData();
+  formData.append('comment', eighteenthPanelData.value.comment);
+
+  if (projects.value.length) {
+    for (let index = 0; index < projects.value.length; index++) {
+      if (projects.value[index].links.length) {
+        for (let i = 0; i < projects.value[index].links.length; i++) {
+          !projects.value[index].links[i].link 
+          ? formData.append(`projects[${index}][links][${i}][link]`, '')
+          : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+        }
+      }
+    }
   }
+
+  const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+  emit('getData', data, Number(ID_PANEL));
 };
 
 watchEffect(async () => {
-  console.log('regionalHeadquarterCommander: ', !(props.districtHeadquarterCommander || props.centralHeadquarterCommander));
-  try {
-    const { data } = props.centralHeadquarterCommander || props.districtHeadquarterCommander ? await reportPartTwoService.getReportDH(ID_PANEL) : await reportPartTwoService.getReport(ID_PANEL);
-    console.log(data);
-    if (data) {
-      isFirstSent.value = false;
-      projects.value = [...data.projects];
-      eighteenthPanelData.value.comment = data.comment;
-    }
-  } catch (e) {
-    console.log(e);
+  // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
+  console.log(props.data, props.data.projects);
+  if (props.data) {
+    isFirstSent.value = false;
+    projects.value = [...props.data.projects];
+    eighteenthPanelData.value.comment = props.data.comment;
+    // if (!projects.value[0].links.length) projects.value[0].links.push({link: ''});
   }
+}, {
+  flush: 'post'
 });
+
+watchPostEffect(() => {
+  projects.value.forEach((event) => {
+    if (!event.links.length) event.links.push({link: ''})
+  });
+})
 </script>
 
 <style lang="scss" scoped>
@@ -270,28 +441,14 @@ watchEffect(async () => {
 .report {
   &__field-group {
     grid-template-columns: 1fr;
-    // margin-bottom: 0;
-
-    // @media (max-width: 768px) {
-    //   grid-template-columns: 1fr;
-    // }
-  }
-
-  &__fieldset {
     position: relative;
-  }
 
-  &__btn-link {
-    &--add-link {
-      position: absolute;
-      bottom: 0;
-      right: 0;
+    &--column {
+      grid-template-columns: 1fr;
     }
 
-    &--delete-field {
-      margin: 0;
-      // margin-left: auto;
-      margin-left: 40px;
+    @media (max-width: 360px) {
+      padding: 0;
     }
   }
 

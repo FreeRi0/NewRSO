@@ -1,207 +1,222 @@
 <template>
-  <div class="container">
-    <h1 class="title title--mb">Отчет о деятельности регионального отделения РСО за 2024 год. Часть 2</h1>
-    <div class="download-item">
-      <SvgIcon iconName="download"/>
-      <button type="button" id="download" class="download-item__report"
-              @click="downloadReportAll(roleStore.roles.regionalheadquarter_commander?.id)">
-        Скачать архив
-      </button>
+  <div>
+    <div class="container">
+      <h1 class="title title--mb">Отчет о&nbsp;деятельности регионального отделения РСО за&nbsp;2024&nbsp;год.
+        Часть&nbsp;2</h1>
+      <div v-if="preloader" class="text-center">
+        <v-progress-circular color="primary" indeterminate></v-progress-circular>
+      </div>
+      <div v-else>
+        <div class="download-item">
+          <SvgIcon iconName="download" />
+          <button type="button" id="download" class="download-item__report"
+            @click="downloadReportAll(roleStore.roles.regionalheadquarter_commander?.id)">
+            Скачать архив
+          </button>
+        </div>
+        <v-expansion-panels>
+          <v-expansion-panel>
+            <v-expansion-panel-title :class="isErrorPanel.first ? 'visible-error' : ''">
+              1. Численность членов РО&nbsp;РСО в&nbsp;соответствии с&nbsp;объемом уплаченных членских взносов
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <first-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.first" :is-error-panel="isErrorPanel.first" />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-title>
+              2. Отношение численности членов РО&nbsp;РСО к&nbsp;численности студентов
+              очной формы обучения субъекта Российской Федерации, обучающихся в&nbsp;профессиональных образовательных
+              организациях и&nbsp;образовательных организациях высшего образования в&nbsp;государственных,
+              муниципальных и&nbsp;частных образовательных организациях, включая филиалы
+              (исключения&nbsp;&mdash; учебные заведения специальных ведомств, проводящих обучение на&nbsp;казарменном
+              положении)
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <calculated-panel
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-title>
+              3. Прирост численности членов РО&nbsp;РСО относительно количества членов в&nbsp;соответствии
+              с&nbsp;отчетом РО&nbsp;РСО за&nbsp;2023&nbsp;г.
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <calculated-panel
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-title :class="isErrorPanel.fourth ? 'visible-error' : ''">
+              4. Организация всероссийских (международных), окружных и&nbsp;межрегиональных мероприятий и&nbsp;проектов
+              (слеты, школы, фестивали, турниры и&nbsp;прочие)
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <fourth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.fourth" :is-error-panel="isErrorPanel.fourth" />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-title :class="isErrorPanel.fifth ? 'visible-error' : ''">
+              5. Организация всероссийских (международных) (организатор&nbsp;&mdash; региональное отделение РСО),
+              окружных и&nbsp;межрегиональных трудовых проектов в&nbsp;соответствии с&nbsp;Положением
+              об&nbsp;организации
+              трудовых проектов РСО
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <fifth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.fifth" :is-error-panel="isErrorPanel.fifth" />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-title :class="isErrorPanel.six ? 'visible-error' : ''">
+              6. Участие бойцов студенческих отрядов РО&nbsp;РСО во&nbsp;всероссийских (международных)
+              мероприятиях и&nbsp;проектах (в&nbsp;том числе и&nbsp;трудовых) &laquo;К&raquo;
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <sixth-panel @get-data="setData" :items="six_items" @getId="setId" @getPanelNumber="setPanelNumber"
+                :district-headquarter-commander="districtExpert" :data="reportData.six"
+                :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.six" />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-title :class="isErrorPanel.seventh ? 'visible-error' : ''">
+              7. Победители студенческих отрядов РО&nbsp;РСО во&nbsp;всероссийских (международных) проектах
+              и&nbsp;конкурсах &laquo;К&raquo;
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <seventh-panel @get-data="setData" @getId="setId" @getPanelNumber="setPanelNumber" :items="seventh_items"
+                :district-headquarter-commander="districtExpert" :data="reportData.seventh"
+                :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.seventh" />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-title>
+              8. Количество упоминаний в&nbsp;СМИ о&nbsp;прошедших творческих, добровольческих и&nbsp;патриотических
+              мероприятиях
+              и&nbsp;трудовых проектах, организованных РО&nbsp;РСО &laquo;К&raquo;
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <calculated-panel
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных сервиса &laquo;Медиалогия&raquo;, предоставленных Аппаратом РСО." />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-title :class="isErrorPanel.ninth ? 'visible-error' : ''">
+              9. Организация обязательных общесистемных мероприятий РСО на&nbsp;региональном уровне &laquo;К&raquo;
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <ninth-panel @get-data="setData" @getId="setId" @getPanelNumber="setPanelNumber" :items="ninth_items"
+                :district-headquarter-commander="districtExpert" :data="reportData.ninth"
+                :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.ninth" />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-title :class="isErrorPanel.tenth ? 'visible-error' : ''">
+              10. Организация РО&nbsp;РСО всероссийских (международных) добровольческих и&nbsp;патриотических акций
+              &laquo;К&raquo;
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <tenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.tenth" :is-error-panel="isErrorPanel.tenth" />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-title :class="isErrorPanel.eleventh ? 'visible-error' : ''">
+              11. Активность РО&nbsp;РСО в&nbsp;социальных сетях &laquo;К&raquo;
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.eleventh" :is-error-panel="isErrorPanel.eleventh" />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-title :class="isErrorPanel.twelfth ? 'visible-error' : ''">
+              12. Объем средств, собранных бойцами РО&nbsp;РСО во&nbsp;Всероссийском дне ударного труда
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <twelfth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.twelfth" :is-error-panel="isErrorPanel.twelfth" />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-title :class="isErrorPanel.thirteenth ? 'visible-error' : ''">
+              13. Охват членов РО&nbsp;РСО, принявших участие во&nbsp;Всероссийском дне ударного труда &laquo;К&raquo;
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <thirteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.thirteenth" :is-error-panel="isErrorPanel.thirteenth" />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-title>
+              14. Отношение объема средств, собранных бойцами РО&nbsp;РСО во&nbsp;Всероссийском дне ударного труда
+              к&nbsp;количеству членов
+              РО&nbsp;РСО, принявших участие во&nbsp;Всероссийском дне ударного труда
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <calculated-panel
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных из&nbsp;12&nbsp;и&nbsp;13&nbsp;показателей." />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-title>
+              15. Исполнительская дисциплина РО&nbsp;РСО, соблюдение условий охраны труда на&nbsp;трудовых проектах РСО,
+              наличие проблемной неурегулированной задолженности по&nbsp;выплате заработной платы перед бойцами РСО
+              за&nbsp;трудовой семестр предыдущего года, отсутствие отчислений от&nbsp;членских взносов
+              в&nbsp;Центральный штаб, исполнение решений Центральных руководящих органов РСО, наличие ежегодного акта
+              проверки КРК РО&nbsp;РСО
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <calculated-panel
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-title :class="isErrorPanel.sixteenth ? 'visible-error' : ''">
+              16. Победители всероссийских (международных), окружных и&nbsp;межрегиональных трудовых проектов
+              по&nbsp;комиссарской деятельности &laquo;К&raquo;
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <sixteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.sixteenth" :is-error-panel="isErrorPanel.sixteenth" />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-title>
+              17. Дислокация студенческих отрядов РО&nbsp;РСО
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <seventeenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.seventeenth" :is-sent="blockSendButton" />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-title>
+              18. Количество научных работ и&nbsp;публикаций по&nbsp;теме&nbsp;СО, выпущенных в&nbsp;текущем году
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <eighteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.eighteenth" :is-sent="blockSendButton" />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-title>
+              19. Трудоустройство
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <nineteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.nineteenth" :is-sent="blockSendButton" />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </div>
     </div>
-    <v-expansion-panels>
-      <v-expansion-panel>
-        <v-expansion-panel-title>
-          1. Численность членов РО РСО в соответствии с объемом уплаченных членских взносов
-        </v-expansion-panel-title>
-        <v-expansion-panel-text>
-          <first-panel
-              :districtHeadquarterCommander="districtHeadquarterCommander"
-              :centralHeadquarterCommander="centralHeadquarterCommander"
-          />
-        </v-expansion-panel-text>
-      </v-expansion-panel>
-      <v-expansion-panel>
-        <v-expansion-panel-title>
-          2. Отношение численности членов РО РСО к численности студентов
-          очной формы обучения субъекта Российской Федерации, обучающихся в профессиональных образовательных
-          организациях и образовательных организациях высшего образования в государственных,
-          муниципальных и частных образовательных организациях, включая филиалы
-          (исключения — учебные заведения специальных ведомств, проводящих обучение на казарменном положении)
-        </v-expansion-panel-title>
-        <v-expansion-panel-text>
-          <calculated-panel
-              text="Показатель рассчитывается автоматически на основе данных, предоставленных Аппаратом РСО."/>
-        </v-expansion-panel-text>
-      </v-expansion-panel>
-      <v-expansion-panel>
-        <v-expansion-panel-title>
-          3. Прирост численности членов РО РСО относительно количества членов в соответствии с отчетом РО РСО за 2023 г.
-        </v-expansion-panel-title>
-        <v-expansion-panel-text>
-          <calculated-panel
-              text="Показатель рассчитывается автоматически на основе данных, предоставленных Аппаратом РСО."/>
-        </v-expansion-panel-text>
-      </v-expansion-panel>
-      <v-expansion-panel>
-        <v-expansion-panel-title>
-          4. Организация всероссийских (международных), окружных и межрегиональных мероприятий и проектов
-          (слеты, школы, фестивали, турниры и прочие)
-        </v-expansion-panel-title>
-        <v-expansion-panel-text>
-          <fourth-panel
-              :districtHeadquarterCommander="districtHeadquarterCommander"
-              :centralHeadquarterCommander="centralHeadquarterCommander"
-          />
-        </v-expansion-panel-text>
-      </v-expansion-panel>
-      <v-expansion-panel>
-        <v-expansion-panel-title>
-          5. Организация всероссийских (международных) (организатор — региональное отделение РСО),
-          окружных и межрегиональных трудовых проектов в соответствии с Положением об организации
-          трудовых проектов РСО
-        </v-expansion-panel-title>
-        <v-expansion-panel-text>
-          <fifth-panel
-              :districtHeadquarterCommander="districtHeadquarterCommander"
-              :centralHeadquarterCommander="centralHeadquarterCommander"
-          />
-        </v-expansion-panel-text>
-      </v-expansion-panel>
-      <v-expansion-panel>
-        <v-expansion-panel-title>
-          6. Участие бойцов студенческих отрядов РО РСО во всероссийских (международных)
-          мероприятиях и проектах (в том числе и трудовых) «К»
-        </v-expansion-panel-title>
-        <v-expansion-panel-text>
-          <sixth-panel/>
-        </v-expansion-panel-text>
-      </v-expansion-panel>
-      <v-expansion-panel>
-        <v-expansion-panel-title>
-          7. Победители студенческих отрядов РО РСО во всероссийских (международных) проектах и конкурсах «К»
-        </v-expansion-panel-title>
-        <v-expansion-panel-text>
-          <seventh-panel/>
-        </v-expansion-panel-text>
-      </v-expansion-panel>
-      <v-expansion-panel>
-        <v-expansion-panel-title>
-          8. Количество упоминаний в СМИ о прошедших творческих, добровольческих и патриотических мероприятиях
-          и трудовых проектах, организованных РО РСО «К»
-        </v-expansion-panel-title>
-        <v-expansion-panel-text>
-          <calculated-panel
-              text="Показатель рассчитывается автоматически на основе данных сервиса «Медиалогия», предоставленных Аппаратом РСО."/>
-        </v-expansion-panel-text>
-      </v-expansion-panel>
-      <v-expansion-panel>
-        <v-expansion-panel-title>
-          9. Организация обязательных общесистемных мероприятий РСО на региональном уровне «К»
-        </v-expansion-panel-title>
-        <v-expansion-panel-text>
-          <ninth-panel/>
-        </v-expansion-panel-text>
-      </v-expansion-panel>
-      <v-expansion-panel>
-        <v-expansion-panel-title>
-          10. Организация РО РСО всероссийских (международных) добровольческих и патриотических акций «К»
-        </v-expansion-panel-title>
-        <v-expansion-panel-text>
-          <tenth-panel
-              :districtHeadquarterCommander="districtHeadquarterCommander"
-              :centralHeadquarterCommander="centralHeadquarterCommander"
-          />
-        </v-expansion-panel-text>
-      </v-expansion-panel>
-      <v-expansion-panel>
-        <v-expansion-panel-title>
-          11. Активность РО РСО в социальных сетях «К»
-        </v-expansion-panel-title>
-        <v-expansion-panel-text>
-          <eleventh-panel :districtHeadquarterCommander="districtHeadquarterCommander"
-                          :centralHeadquarterCommander="centralHeadquarterCommander"/>
-        </v-expansion-panel-text>
-      </v-expansion-panel>
-      <v-expansion-panel>
-        <v-expansion-panel-title>
-          12. Объем средств, собранных бойцами РО РСО во Всероссийском дне ударного труда
-        </v-expansion-panel-title>
-        <v-expansion-panel-text>
-          <twelfth-panel :districtHeadquarterCommander="districtHeadquarterCommander"
-                         :centralHeadquarterCommander="centralHeadquarterCommander"/>
-        </v-expansion-panel-text>
-      </v-expansion-panel>
-      <v-expansion-panel>
-        <v-expansion-panel-title>
-          13. Охват членов РО РСО, принявших участие во Всероссийском дне ударного труда «К»
-        </v-expansion-panel-title>
-        <v-expansion-panel-text>
-          <thirteenth-panel :districtHeadquarterCommander="districtHeadquarterCommander"
-                            :centralHeadquarterCommander="centralHeadquarterCommander"/>
-        </v-expansion-panel-text>
-      </v-expansion-panel>
-      <v-expansion-panel>
-        <v-expansion-panel-title>
-          14. Отношение объема средств, собранных бойцами РО РСО во Всероссийском дне ударного труда к количеству членов
-          РО РСО,
-          принявших участие во Всероссийском дне ударного труда
-        </v-expansion-panel-title>
-        <v-expansion-panel-text>
-          <calculated-panel text="Показатель рассчитывается автоматически на основе данных из 12 и 13 показателей."/>
-        </v-expansion-panel-text>
-      </v-expansion-panel>
-      <v-expansion-panel>
-        <v-expansion-panel-title>
-          15. Исполнительская дисциплина РО РСО, соблюдение условий охраны труда на трудовых проектах РСО,
-          наличие проблемной неурегулированной задолженности по выплате заработной платы перед бойцами РСО за трудовой
-          семестр предыдущего года,
-          отсутствие отчислений от членских взносов в Центральный штаб,
-          исполнение решений Центральных руководящих органов РСО, наличие ежегодного акта проверки КРК РО РСО
-        </v-expansion-panel-title>
-        <v-expansion-panel-text>
-          <calculated-panel
-              text="Показатель рассчитывается автоматически на основе данных, предоставленных Аппаратом РСО."/>
-        </v-expansion-panel-text>
-      </v-expansion-panel>
-      <v-expansion-panel>
-        <v-expansion-panel-title>
-          16. Победители всероссийских (международных), окружных и межрегиональных трудовых проектов по комиссарской
-          деятельности «К»
-        </v-expansion-panel-title>
-        <v-expansion-panel-text>
-          <sixteenth-panel
-              :districtHeadquarterCommander="districtHeadquarterCommander"
-              :centralHeadquarterCommander="centralHeadquarterCommander"
-          />
-        </v-expansion-panel-text>
-      </v-expansion-panel>
-      <v-expansion-panel>
-        <v-expansion-panel-title>
-          17. Дислокация студенческих отрядов РО РСО
-        </v-expansion-panel-title>
-        <v-expansion-panel-text>
-          <seventeenth-panel/>
-        </v-expansion-panel-text>
-      </v-expansion-panel>
-      <v-expansion-panel>
-        <v-expansion-panel-title>
-          18. Количество научных работ и публикаций по теме СО, выпущенных в текущем году
-        </v-expansion-panel-title>
-        <v-expansion-panel-text>
-          <eighteenth-panel/>
-        </v-expansion-panel-text>
-      </v-expansion-panel>
-      <v-expansion-panel>
-        <v-expansion-panel-title>
-          19. Трудоустройство
-        </v-expansion-panel-title>
-        <v-expansion-panel-text>
-          <nineteenth-panel/>
-        </v-expansion-panel-text>
-      </v-expansion-panel>
-    </v-expansion-panels>
+    <Button v-if="!preloader" variant="text" label="Отправить отчет" size="large" @click="sendReport"
+      :disabled="blockSendButton" />
   </div>
-  <Button variant="text" label="Отправить отчет" size="large"/>
 </template>
 <script setup>
 import {
@@ -221,15 +236,71 @@ import {
   EighteenthPanel,
   NineteenthPanel
 } from './components/index'
-import {Button} from '@shared/components/buttons';
-import {ref, watchEffect} from "vue";
-import {SvgIcon} from '@shared/ui/SvgIcon';
-import {useRoleStore} from "@layouts/store/role.ts";
-import {HTTP} from '@app/http';
+import { Button } from '@shared/components/buttons';
+import { inject, onMounted, ref } from "vue";
+import { SvgIcon } from '@shared/ui/SvgIcon';
+import { useRoleStore } from "@layouts/store/role.ts";
+import { HTTP } from '@app/http';
+import { reportPartTwoService } from "@services/ReportService.ts";
+import { useRoute, useRouter } from "vue-router";
 
-const districtHeadquarterCommander = ref(false);
-const centralHeadquarterCommander = ref(false);
+const districtExpert = ref(false);
+const centralExpert = ref(false);
+const reportData = ref({
+  first: null,
+  fourth: null,
+  fifth: null,
+  six: {},
+  seventh: {},
+  ninth: {},
+  tenth: {
+    first: null,
+    second: null,
+  },
+  eleventh: null,
+  twelfth: null,
+  thirteenth: null,
+  sixteenth: null,
+  seventeenth: null,
+  eighteenth: null,
+  nineteenth: null,
+});
+const preloader = ref(true);
+const panel_id = ref(1);
+const panel_num = ref(null);
+const six_items = ref([])
+const seventh_items = ref([]);
+const ninth_items = ref([]);
+const blockSendButton = ref(false);
+
+const swal = inject('$swal');
+const router = useRouter();
+
+const isErrorPanel = ref({
+  first: false,
+  fourth: false,
+  fifth: false,
+  six: false,
+  seventh: false,
+  ninth: false,
+  tenth: false,
+  eleventh: false,
+  twelfth: false,
+  thirteenth: false,
+  sixteenth: false,
+});
+
+const setId = (id) => {
+  panel_id.value = id;
+  console.log('panel_id', panel_id.value, id);
+}
+
+const setPanelNumber = (number) => {
+  panel_num.value = number;
+  console.log('panel_num', panel_num.value, number);
+}
 const roleStore = useRoleStore();
+const route = useRoute();
 
 const downloadReportAll = (id) => {
   HTTP.get(`/regionals/${id}/download_regional_competition_report/`, {
@@ -245,19 +316,521 @@ const downloadReportAll = (id) => {
     document.body.appendChild(link);
     link.click();
   })
-      .catch(function (error) {
-        console.log('an error occured ' + error);
-      });
+    .catch(function (error) {
+      console.log('an error occured ' + error);
+    });
+};
+
+const getItems = async (number) => {
+  try {
+    const response = await HTTP.get(`regional_competitions/reports/event_names/r${number}-event-names/`);
+    switch (number) {
+      case 6:
+        six_items.value = response.data;
+        break;
+      case 7:
+        seventh_items.value = response.data;
+        break;
+      case 9:
+        ninth_items.value = response.data;
+        break;
+      default:
+        break;
+    }
+  } catch (err) {
+    console.error(err);
+  }
 }
 
-watchEffect(() => {
-  if (roleStore.roles?.districtheadquarter_commander) {
-    districtHeadquarterCommander.value = true;
+// const errorHandler = async (error, id) => {
+//   if (error.response && error.response.status === 404) {
+//     console.log('An error occurred: ', error);
+
+//     const url = 'http://213.139.208.147:30000/api/v1/regional_competitions/me/reports';
+
+//     if (error.response.request.responseURL.includes(url + '/6/')) {
+//       reportData.value.six = {};
+//       console.log('Data not found for panel 6', reportData.value.six);
+//     } else if (error.response.request.responseURL.includes(url + '/7/')) {
+//       console.log('Data not found for panel 7');
+//       reportData.value.seventh = {};
+//     } else if (error.response.request.responseURL.includes(url + '/9/')) {
+//       console.log('Data not found for panel 9');
+//       reportData.value.ninth = {};
+//     } else {
+//       console.log('Data found for panel 6');
+//       reportData.value.six = (await reportPartTwoService.getMultipleReport('6', id)).data;
+//       console.log('Data found for panel 7');
+//       reportData.value.seventh = (await reportPartTwoService.getMultipleReport('7', id)).data;
+//       console.log('Data found for panel 9');
+//       reportData.value.ninth = (await reportPartTwoService.getMultipleReport('9', id)).data;
+//     }
+//   } else {
+//     console.log('An unexpected error occurred: ', error);
+//   }
+// };
+
+const getMultiplyData = async () => {
+  const sixDataPromises = six_items.value.map(async (item) => {
+    try {
+      return { id: item.id, data: (await reportPartTwoService.getMultipleReport('6', item.id)).data };
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        return { id: item.id, data: {} };
+      } else {
+        throw error;
+      }
+    }
+  });
+
+  const seventhDataPromises = seventh_items.value.map(async (item) => {
+    try {
+      return { id: item.id, data: (await reportPartTwoService.getMultipleReport('7', item.id)).data };
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        return { id: item.id, data: {} };
+      } else {
+        throw error;
+      }
+    }
+  });
+
+  const ninthDataPromises = ninth_items.value.map(async (item) => {
+    try {
+      return { id: item.id, data: (await reportPartTwoService.getMultipleReport('9', item.id)).data };
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        return { id: item.id, data: {} };
+      } else {
+        throw error;
+      }
+    }
+  });
+
+  const [sixDataResults, seventhDataResults, ninthDataResults] = await Promise.all([
+    Promise.all(sixDataPromises),
+    Promise.all(seventhDataPromises),
+    Promise.all(ninthDataPromises),
+  ]);
+
+  sixDataResults.forEach((result) => {
+    reportData.value.six[result.id] = result.data;
+  });
+
+  seventhDataResults.forEach((result) => {
+    reportData.value.seventh[result.id] = result.data;
+  });
+
+  ninthDataResults.forEach((result) => {
+    reportData.value.ninth[result.id] = result.data;
+  });
+}
+const getReportData = async (reportId) => {
+  try {
+    if (centralExpert.value || districtExpert.value) {
+      reportData.value.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
+      reportData.value.fourth = (await reportPartTwoService.getReportDH('4', reportId)).data;
+      reportData.value.fifth = (await reportPartTwoService.getReportDH('5', reportId)).data;
+      // reportData.value.six = (await reportPartTwoService.getMultipleReportDH('6', id)).data;
+      // reportData.value.seventh = (await reportPartTwoService.getMultipleReportDH('7', id)).data;
+      // reportData.value.ninth = (await reportPartTwoService.getMultipleReportDH('9', id)).data;
+      reportData.value.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
+      reportData.value.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', reportId)).data;
+      reportData.value.eleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
+      reportData.value.twelfth = (await reportPartTwoService.getReportDH('12', reportId)).data;
+      reportData.value.thirteenth = (await reportPartTwoService.getReportDH('13', reportId)).data;
+      reportData.value.sixteenth = (await reportPartTwoService.getReportDH('16', reportId)).data;
+      reportData.value.seventeenth = (await reportPartTwoService.getReportDH('17', reportId)).data;
+      reportData.value.eighteenth = (await reportPartTwoService.getReportDH('18', reportId)).data;
+      reportData.value.nineteenth = (await reportPartTwoService.getReportDH('19', reportId)).data;
+    } else {
+      try {
+        reportData.value.first = (await reportPartTwoService.getReport('1')).data;
+      } catch (e) {
+        console.log(e.message)
+      }
+      try {
+        reportData.value.fourth = (await reportPartTwoService.getReport('4')).data;
+      } catch (e) {
+        console.log(e.message)
+      }
+      try {
+        reportData.value.fifth = (await reportPartTwoService.getReport('5')).data;
+      } catch (e) {
+        console.log(e.message)
+      }
+      await getMultiplyData();
+
+      // reportData.value.six = (await reportPartTwoService.getMultipleReport('6', id)).data;
+      // reportData.value.seventh = (await reportPartTwoService.getMultipleReport('7', id)).data;
+      // reportData.value.ninth = (await reportPartTwoService.getMultipleReport('9', id)).data;
+      try {
+        reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
+      } catch (e) {
+        console.log(e.message)
+      }
+      try {
+        reportData.value.tenth.second = (await reportPartTwoService.getMultipleReport('10', '2')).data;
+      } catch (e) {
+        console.log(e.message)
+      }
+      try {
+        reportData.value.eleventh = (await reportPartTwoService.getReport('11')).data;
+      } catch (e) {
+        console.log(e.message)
+      }
+      try {
+        reportData.value.twelfth = (await reportPartTwoService.getReport('12')).data;
+      } catch (e) {
+        console.log(e.message)
+      }
+      try {
+        reportData.value.thirteenth = (await reportPartTwoService.getReport('13')).data;
+      } catch (e) {
+        console.log(e.message)
+      }
+      try {
+        reportData.value.sixteenth = (await reportPartTwoService.getReport('16')).data;
+        // TODO: продумать логику блокировки кнопки, когда все отчеты отправлены
+        if (reportData.value.sixteenth.is_sent) {
+          blockSendButton.value = true;
+        }
+      } catch (e) {
+        console.log(e.message)
+      }
+      try {
+        reportData.value.seventeenth = (await reportPartTwoService.getReport('17')).data;
+      } catch (e) {
+        console.log(e.message)
+      }
+      try {
+        reportData.value.eighteenth = (await reportPartTwoService.getReport('18')).data;
+      } catch (e) {
+        console.log(e.message)
+      }
+      try {
+        reportData.value.nineteenth = (await reportPartTwoService.getReport('19')).data;
+      } catch (e) {
+        console.log(e.message)
+      }
+    }
+  } catch (e) {
+    // errorHandler(e, id);
+    console.log('getReportData error: ', e)
+  } finally {
+    preloader.value = false;
   }
-  if (roleStore.roles.centralheadquarter_commander) {
-    centralHeadquarterCommander.value = true;
+  // console.log('getReportData: ', reportData.value);
+};
+
+const setData = (data, panel, number = 0) => {
+  switch (panel) {
+    case 1:
+      reportData.value.first = data
+      break;
+    case 4:
+      reportData.value.fourth = data
+      break;
+    case 5:
+      reportData.value.fifth = data
+      break;
+    case 6:
+      reportData.value.six[number] = data
+      break;
+    case 7:
+      reportData.value.seventh[number] = data
+      break;
+    case 9:
+      reportData.value.ninth[number] = data
+      break;
+    case 10:
+      if (number === 1) {
+        reportData.value.tenth.first = data;
+      } else {
+        reportData.value.tenth.second = data;
+      }
+      break;
+    case 11:
+      reportData.value.eleventh = data
+      break;
+    case 12:
+      reportData.value.twelfth = data
+      break;
+    case 13:
+      reportData.value.thirteenth = data
+      break;
+    case 16:
+      reportData.value.sixteenth = data
+      break;
+    case 17:
+      reportData.value.seventeenth = data
+      break;
+    case 18:
+      reportData.value.eighteenth = data
+      break;
+    case 19:
+      reportData.value.nineteenth = data
+      break;
   }
-})
+  // console.log('setData: ', reportData.value)
+};
+
+// const filteredSix = reportData.value.six.filter(item => (item.number_of_members > 0 || item.number_of_members !== null) || item.links.length > 0);
+
+
+const sendReport = async () => {
+  // console.log('reportData: ', reportData.value)
+  blockSendButton.value = true;
+  if (checkEmptyFields(reportData.value)) {
+    try {
+
+      const filteredSix = reportData.value.six.filter(item => (item.number_of_members > 0 && item.number_of_members !== null));
+      const filteredSeventh = reportData.value.seventh.filter(item => item.prize_lace !== 'Нет');
+      const filteredNinth = reportData.value.ninth.filter(item => item.event_happened !== false);
+      await reportPartTwoService.sendReport(reportData.value.first, '1');
+      await reportPartTwoService.sendReport(reportData.value.fourth, '4');
+      await reportPartTwoService.sendReport(reportData.value.fifth, '5');
+      await reportPartTwoService.sendReportWithSlash(filteredSix, '6');
+      await reportPartTwoService.sendReportWithSlash(filteredSeventh, '7');
+      await reportPartTwoService.sendReportWithSlash(filteredNinth.ninth, '9');
+      await reportPartTwoService.sendReport(reportData.value.eleventh, '11');
+      await reportPartTwoService.sendReport(reportData.value.twelfth, '12');
+      await reportPartTwoService.sendReport(reportData.value.thыirteenth, '13');
+      await reportPartTwoService.sendReport(reportData.value.sixteenth, '16');
+      await reportPartTwoService.sendMultipleReport(reportData.value.tenth.first, '10', '1');
+      await reportPartTwoService.sendMultipleReport(reportData.value.tenth.second, '10', '2');
+
+      swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'успешно',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      await router.push({
+        name: 'reportingRo',
+      });
+    } catch (e) {
+      blockSendButton.value = false;
+      swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: `ошибка`,
+        showConfirmButton: false,
+        timer: 2500,
+      })
+      console.log('sendReport error: ', e)
+    }
+  } else {
+    blockSendButton.value = false;
+  }
+};
+
+const checkEmptyFields = (data) => {
+  console.log('data', data)
+  const filteredSix = reportData.value.six.filter(item => (item.number_of_members > 0 && item.number_of_members !== null));
+  const filteredSeventh = reportData.value.seventh.filter(item => item.prize_lace !== 'Нет');
+  const filteredNinth = reportData.value.ninth.filter(item => item.event_happened !== false);
+  if (!data.first || !(data.first.amount_of_money && data.first.scan_file)) {
+    isErrorPanel.value.first = true;
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      title: `Заполните обязательные поля в 1 показателе`,
+      showConfirmButton: false,
+      timer: 2500,
+    })
+    return false;
+  }
+  if (data.fourth) {
+    for (let event of data.fourth.events) {
+      if (!(event.participants_number && event.end_date && event.start_date && event.regulations && data.fourth.comment)) {
+        isErrorPanel.value.fourth = true;
+        swal.fire({
+          position: 'center',
+          icon: 'warning',
+          title: `Заполните обязательные поля в 4 показателе`,
+          showConfirmButton: false,
+          timer: 2500,
+        })
+        return false;
+      }
+    }
+  } else {
+    isErrorPanel.value.fourth = true;
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      title: `Заполните обязательные поля в 4 показателе`,
+      showConfirmButton: false,
+      timer: 2500,
+    })
+    return false;
+  }
+  if (data.fifth) {
+    for (let event of data.fifth.events) {
+      if (!(event.participants_number && event.ro_participants_number && event.end_date && event.start_date && event.regulations && data.fifth.comment)) {
+        isErrorPanel.value.fifth = true;
+        swal.fire({
+          position: 'center',
+          icon: 'warning',
+          title: `Заполните обязательные поля в 5 показателе`,
+          showConfirmButton: false,
+          timer: 2500,
+        })
+        return false;
+      }
+    }
+  } else {
+    isErrorPanel.value.fifth = true;
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      title: `Заполните обязательные поля в 5 показателе`,
+      showConfirmButton: false,
+      timer: 2500,
+    })
+    return false;
+  }
+
+  for (let item of filteredSix) {
+    if (!(item.participants_number && item.links.lenght)) {
+      isErrorPanel.value.six = true;
+      swal.fire({
+        position: 'center',
+        icon: 'warning',
+        title: `Заполните обязательные поля в 6 показателе`,
+        showConfirmButton: false,
+        timer: 2500,
+      })
+      return false;
+    }
+  }
+  for (let item of filteredSeventh) {
+    if (!(item.prize_place && item.links.lenght && item.document && item.comment)) {
+      isErrorPanel.value.seventh = true;
+      swal.fire({
+        position: 'center',
+        icon: 'warning',
+        title: `Заполните обязательные поля в 7 показателе`,
+        showConfirmButton: false,
+        timer: 2500,
+      })
+      return false;
+    }
+  }
+  for (let item of filteredNinth) {
+    if (!(item.event_happened && item.links.lenght)) {
+      isErrorPanel.value.ninth = true;
+      swal.fire({
+        position: 'center',
+        icon: 'warning',
+        title: `Заполните обязательные поля в 9 показателе`,
+        showConfirmButton: false,
+        timer: 2500,
+      })
+      return false;
+    }
+  }
+  if (data.tenth.first && data.tenth.second) {
+    if (!(data.tenth.first.comment && data.tenth.second.comment)) {
+      isErrorPanel.value.tenth = true;
+      swal.fire({
+        position: 'center',
+        icon: 'warning',
+        title: `Заполните обязательные поля в 10 показателе`,
+        showConfirmButton: false,
+        timer: 2500,
+      })
+      return false;
+    }
+
+  } else {
+    isErrorPanel.value.tenth = true;
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      title: `Заполните обязательные поля в 10 показателе`,
+      showConfirmButton: false,
+      timer: 2500,
+    })
+    return false;
+  }
+  if (!data.eleventh || !(data.eleventh.participants_number && data.eleventh.scan_file)) {
+    isErrorPanel.value.eleventh = true;
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      title: `Заполните обязательные поля в 11 показателе`,
+      showConfirmButton: false,
+      timer: 2500,
+    })
+    return false;
+  }
+  if (!data.twelfth || !(data.twelfth.amount_of_money && data.twelfth.scan_file)) {
+    isErrorPanel.value.twelfth = true;
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      title: `Заполните обязательные поля в 12 показателе`,
+      showConfirmButton: false,
+      timer: 2500,
+    })
+    return false;
+  }
+  if (!data.thirteenth || !(data.thirteenth.number_of_members && data.thirteenth.scan_file)) {
+    isErrorPanel.value.thirteenth = true;
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      title: `Заполните обязательные поля в 13 показателе`,
+      showConfirmButton: false,
+      timer: 2500,
+    })
+    return false;
+  }
+  if (data.sixteenth) {
+    for (let project of data.sixteenth.projects) {
+      if (!(project.name && project.regulations && data.sixteenth.comment)) {
+        isErrorPanel.value.sixteenth = true;
+        swal.fire({
+          position: 'center',
+          icon: 'warning',
+          title: `Заполните обязательные поля в 16 показателе`,
+          showConfirmButton: false,
+          timer: 2500,
+        })
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+onMounted(() => {
+  if (roleStore.experts?.is_district_expert) {
+    districtExpert.value = true;
+  }
+  if (roleStore.experts?.is_central_expert) {
+    centralExpert.value = true;
+  }
+  getItems(6);
+  getItems(7);
+  getItems(9);
+  getReportData(route.query.reportId);
+});
+
+// onMounted(() => {
+//   getItems(6);
+//   getItems(7);
+//   getItems(9);
+// })
+
+// watch(() => panel_num.value, (newPanel) => {
+//   panel_num.value = newPanel
+//   //  console.log(panel_num.value, newPanel)
+//   getReportData();
+// })
 </script>
 <style>
 .v-expansion-panel__shadow {
@@ -298,11 +871,16 @@ watchEffect(() => {
   text-align: left;
 }
 
-.v-expansion-panel--active > .v-expansion-panel-title {
+.v-expansion-panel--active>.v-expansion-panel-title {
   border-radius: 10px;
   min-height: none;
   border-left: none;
   border-right: 6px solid #1f7cc0;
+}
+
+.v-expansion-panel-title.visible-error,
+.v-expansion-panel--active>.v-expansion-panel-title.visible-error {
+  border-color: #db0000;
 }
 
 .v-expansion-panel-text__wrapper {
@@ -314,7 +892,7 @@ watchEffect(() => {
 }
 
 .v-expansion-panel--active:not(:first-child),
-.v-expansion-panel--active + .v-expansion-panel {
+.v-expansion-panel--active+.v-expansion-panel {
   margin-top: 0;
   opacity: unset;
 }

@@ -1,272 +1,236 @@
 <template>
-  <v-card class="panel-card" >
-    <div class="form__field-group">
-      <p>Снежный десант РСО</p>
-      <p>Спартакиада студенческих отрядов и комплекс мероприятий РСО-спорт</p>
-      <p>Конкурс профессионального мастерства (по любому из направлений деятельности РСО)</p>
-      <p>День РСО</p>
-      <p>Региональная школа подготовки командиров и комиссаров РСО</p>
-      <p>Открытие трудового семестра</p>
-      <p>Закрытие трудового семестра</p>
-      <p>Всероссийская акция «Вожатский диктант»</p>
-    </div>
-    <v-tabs
-        v-model="tab"
-    >
-      <v-tab value="one" class="panel-tab-btn">Отчет РО</v-tab>
-      <v-tab value="two" class="panel-tab-btn">Корректировка ОШ</v-tab>
-      <v-tab value="three" class="panel-tab-btn">Корректировка ЦШ</v-tab>
-    </v-tabs>
-
-    <v-card-text class="panel-card-text">
-      <v-tabs-window v-model="tab">
-        <v-tabs-window-item value="one">
-          <div class="form__field-group">
-            <div style="display: flex; justify-content: space-between;">
-              <div>
-                <p>Мероприятие по развитию направления ТОП в субъекте Российской Федерации</p>
-              </div>
-              <div>
-                <Button
-                    style="margin: 0;"
-                    label="Свернуть"
-                />
-              </div>
-            </div>
-            <div class="form__field">
-              <p
-                  class="form__label"
-              >Проведение мероприятия <sup class="valid-red">*</sup></p>
-              <div style="display: flex; align-items: center">
-                <InputReport
-                    id="2"
-                    name="2"
-                    class="form__input"
-                    type="radio"
-                />
-                <label for="2">Да</label>
-              </div>
-
-            </div>
-            <div>
-              <label
-                  class="form__label"
-                  for="4"
-              >Скан документа, подтверждающего проведение мероприятия</label>
-              <InputReport
-                  type="file"
-                  id="4"
-                  name="4"
-              />
-            </div>
-            <div>
-              <label
-                  class="form__label"
-                  for="6"
-              >Ссылка на социальные сети/ электронные
-                СМИ, подтверждающая проведение мероприятия <sup class="valid-red">*</sup></label>
-              <InputReport
-                  id="6"
-                  name="6"
-                  class="form__input"
-                  type="text"
-                  placeholder="https://vk.com/cco_monolit"
-              />
-              <InputReport
-                  id="7"
-                  name="7"
-                  class="form__input"
-                  type="text"
-                  placeholder="https://vk.com/ccorobot"
-              />
-              <InputReport
-                  id="8"
-                  name="8"
-                  class="form__input"
-                  type="text"
-                  placeholder="https://vk.com/cco_monolit11"
-              />
-            </div>
-            <div>
-              <label
-                  class="form__label"
-                  for="9"
-              >Комментарий <sup class="valid-red">*</sup></label>
-              <InputReport
-                  id="9"
-                  name="9"
-                  class="form__input"
-                  type="textarea"
-                  placeholder="Комментарий"
-                  style="width: 100%; height: 100px"
-              />
-            </div>
+  <v-card class="panel-card">
+    <v-expansion-panels v-model="panel" class="mb-2">
+      <v-progress-circular v-show="!items.length" class="circleLoader" indeterminate></v-progress-circular>
+      <v-expansion-panel :disabled="disabled" v-show="items.length" v-for="item in items"
+        :key="item.id"><v-expansion-panel-title :class="isErrorPanel ? 'visible-error' : ''">
+          <div class="title_wrap">
+            <p class="form__title">{{ item.name }}</p>
           </div>
-        </v-tabs-window-item>
+        </v-expansion-panel-title><v-expansion-panel-text>
+          <SeventhPanelForm :id="item.id" :panel_number="9" @collapse-form="collapsed()"
+            @formData="formData($event, item.id)" @error="setError" @uploadFile="uploadFile($event, item.id)"
+            :data="ninthPanelData" @getPanelNumber="getPanelNumber($event)" @getId="getId($event)"
+            @deleteFile="deleteFile($event, item.id)" :is-error-panel="isErrorPanel"
+            :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
+            :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
+        </v-expansion-panel-text></v-expansion-panel>
+    </v-expansion-panels>
 
-        <v-tabs-window-item value="two">
-          <div class="form__field-group">
-            <div style="display: flex; justify-content: space-between;">
-              <div>
-                <p>Мероприятие по развитию направления ТОП в субъекте Российской Федерации</p>
-              </div>
-              <div>
-                <Button
-                    style="margin: 0;"
-                    label="Свернуть"
-                />
-              </div>
-            </div>
-            <div class="form__field">
-              <p
-                  class="form__label"
-              >Проведение мероприятия <sup class="valid-red">*</sup></p>
-              <div style="display: flex">
-                <div style="display: flex">
-                  <InputReport
-                      id="2"
-                      name="2"
-                      class="form__input"
-                      type="radio"
-                  />
-                  <label>Да</label>
-                </div>
-                <div style="display: flex">
-                  <InputReport
-                      id="2"
-                      name="2"
-                      class="form__input"
-                      type="radio"
-                  />
-                  <label>Нет</label>
-                </div>
-              </div>
-            </div>
-            <div class="form__field">
-              <label
-                  class="form__label"
-                  for="14"
-              >Комментарий <sup class="valid-red">*</sup></label>
-              <InputReport
-                  id="14"
-                  name="14"
-                  class="form__input"
-                  style="width: 100%"
-              />
-            </div>
-          </div>
-        </v-tabs-window-item>
-
-        <v-tabs-window-item value="three">
-          <div class="form__field-group report-table">
-            <div style="display: flex; justify-content: space-between;">
-              <div>
-                <p>Мероприятие по развитию направления ТОП в субъекте Российской Федерации</p>
-              </div>
-              <div>
-                <Button
-                    style="margin: 0;"
-                    label="Свернуть"
-                />
-              </div>
-            </div>
-            <label
-                class="form__label"
-            >Проведение мероприятия <sup class="valid-red">*</sup></label>
-            <v-table>
-              <tbody>
-              <tr class="report-table__tr">
-                <td class="report-table__th report-table__th__br-left">Данные РО</td>
-                <td class="report-table__th">Корректировка ОШ</td>
-                <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
-              </tr>
-              <tr>
-                <td class="report-table__td">Да</td>
-                <td class="report-table__td report-table__td__center">Да</td>
-                <td class="report-table__td">Да</td>
-              </tr>
-              </tbody>
-            </v-table>
-            <div class="form__field">
-              <p
-                  class="form__label"
-              >Проведение мероприятия <sup class="valid-red">*</sup></p>
-              <div style="display: flex">
-                <div style="display: flex">
-                  <InputReport
-                      id="2"
-                      name="2"
-                      class="form__input"
-                      type="radio"
-                  />
-                  <label>Да</label>
-                </div>
-                <div style="display: flex">
-                  <InputReport
-                      id="2"
-                      name="2"
-                      class="form__input"
-                      type="radio"
-                  />
-                  <label>Нет</label>
-                </div>
-              </div>
-            </div>
-            <div class="form__field">
-              <label
-                  class="form__label"
-                  for="15"
-              >Комментарий <sup class="valid-red">*</sup></label>
-              <InputReport
-                  id="15"
-                  name="15"
-                  class="form__input"
-                  style="width: 100%"
-              />
-            </div>
-            <div>
-              <v-checkbox
-                  label="Вернуть в РО на доработку"
-              />
-            </div>
-          </div>
-        </v-tabs-window-item>
-      </v-tabs-window>
-    </v-card-text>
   </v-card>
 </template>
 <script setup>
-import { ref } from "vue";
-import { InputReport } from '@shared/components/inputs';
-import { Button } from '@shared/components/buttons';
+import { ref, watchEffect, inject } from "vue";
+import { SeventhPanelForm } from "./index";
+import { reportPartTwoService } from "@services/ReportService.ts";
 
-const tab = ref('one')
+const props = defineProps({
+  districtHeadquarterCommander: {
+    type: Boolean
+  },
+  centralHeadquarterCommander: {
+    type: Boolean
+  },
+  isErrorPanel: Boolean,
+  items: Array,
+  data: Object
+});
+
+const link_err = ref(false);
+const swal = inject('$swal');
+
+const setError = (err) => {
+  link_err.value = err;
+}
+
+const disabled = ref(false);
+const panel = ref(null);
+const emit = defineEmits(['getData'])
+const ninthPanelData = ref({
+  event_happened: false,
+  links: [{
+    link: '',
+  }],
+  document: '',
+  file_size: null,
+  file_type: '',
+  comment: '',
+});
+const isFirstSent = ref(null);
+let el_id = ref(null);
+
+// const sent = (sentVal) => {
+//   console.log('is sent: ', sentVal, isFirstSent.value);
+//   isFirstSent.value = sentVal;
+// }
+
+const formData = async (reportData, reportNumber) => {
+  try {
+    console.log('send2', isFirstSent.value)
+    if (!link_err.value) {
+      if (isFirstSent.value) {
+        console.log('First time sending data');
+        const { data } = await reportPartTwoService.createMultipleReportAll(reportData, '9', reportNumber);
+        isFirstSent.value = false;
+        emit('getData', data, 9, reportNumber);
+      } else {
+        console.log('Second time sending data');
+        const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber);
+        emit('getData', data, 9, reportNumber);
+      }
+    }
+  } catch (e) {
+    console.log('ninth panel error: ', e);
+    if (e.response.data.links) {
+      e.response.data.links.forEach(item => {
+        console.log('item', item)
+        if (item.link.includes('Введите правильный URL.')) {
+          swal.fire({
+            position: 'center',
+            icon: 'warning',
+            title: `Введите корректный URL`,
+            showConfirmButton: false,
+            timer: 2500,
+          })
+        }
+      })
+    }
+  }
+};
+
+
+const collapsed = () => {
+  panel.value = false;
+}
+
+
+
+const getId = (id) => {
+  console.log('id', id);
+  el_id.value = id;
+  emit('getId', id);
+}
+
+const getPanelNumber = (number) => {
+  console.log('num', number);
+  emit('getPanelNumber', number);
+}
+
+const uploadFile = async (reportData, reportNumber) => {
+  if (isFirstSent.value) {
+    let { document } = await reportPartTwoService.createMultipleReportAll(reportData, '9', reportNumber, true);
+    ninthPanelData.value.document = document.split('/').at(-1);
+  } else {
+    let { data: { document } } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
+
+    ninthPanelData.value.document = document.split('/').at(-1);
+  }
+};
+
+const deleteFile = async (reportData, reportNumber) => {
+
+  if (isFirstSent.value) {
+    await reportPartTwoService.createMultipleReportAll(reportData, '9', reportNumber, true);
+  } else {
+    await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
+  }
+};
+
+watchEffect(() => {
+  console.log(isFirstSent, props.data)
+  if (Object.keys(props.data[el_id.value]).length > 0) {
+    console.log('data yes')
+    isFirstSent.value = false;
+    ninthPanelData.value = { ...props.data[el_id.value] }
+  } else {
+    console.log('data no')
+    isFirstSent.value = true;
+    ninthPanelData.value = {
+      event_happened: false,
+      links: [{
+        link: '',
+      }],
+      document: '',
+      file_size: null,
+      file_type: '',
+      comment: '',
+    };
+  }
+
+  if (panel.value || panel.value === 0) {
+    disabled.value = true;
+  } else {
+    disabled.value = false;
+  }
+});
+
 </script>
 <style lang="scss" scoped>
 .panel-card {
   box-shadow: none;
 }
-.form__field-group {
-  background: #F3F4F5;
-  border: none;
-  border-radius: 0 0 10px 10px;
-  margin-bottom: 8px;
+
+.v-expansion-panel-title[aria-expanded="true"] {
+  display: none;
 }
+
+.month {
+  width: 100%;
+  max-width: 70px;
+
+}
+
+.city {
+  width: 100%;
+  max-width: 200px;
+}
+
+.title_wrap {
+  display: grid;
+  grid-template-columns: 600px 300px;
+  column-gap: 40px;
+  width: 100%;
+  max-width: 900px;
+
+  @media screen and (max-width: 1024px) {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 6px;
+    max-width: 828px;
+    width: auto;
+  }
+
+  @media screen and (max-width: 768px) {
+    max-width: 636px;
+  }
+
+  @media screen and (max-width: 578px) {
+    max-width: 360px;
+  }
+
+}
+
+
+
 .valid-red {
   color: #db0000;
 }
+
 .v-tab-item--selected {
   background: #F3F4F5;
 }
+
 .v-tab.v-tab.v-btn {
   min-width: 280px;
   border-radius: 10px 10px 0 0;
   letter-spacing: initial;
   border: none;
 }
+
 .panel-card-text {
   padding: 0;
 }
+
 .panel-tab-btn {
   text-transform: initial;
   font-family: Bert Sans;
@@ -276,20 +240,24 @@ const tab = ref('one')
   text-align: left;
   margin-right: 8px;
 }
+
 .hr {
   width: 100%;
   border-top: 1px solid #B6B6B6;
 }
+
 .v-table {
   margin-bottom: 16px;
   border-radius: 10px;
   border: 1px solid #B6B6B6;
 }
+
 .report-table {
   &__tr {
     background-color: #FFFFFF;
     text-align: center;
   }
+
   &__th {
     font-family: Akrobat;
     font-size: 16px;
@@ -307,6 +275,7 @@ const tab = ref('one')
       border-left: 1px solid #B6B6B6;
     }
   }
+
   &__td {
     text-align: center;
     font-family: Akrobat;
@@ -319,5 +288,18 @@ const tab = ref('one')
       border-right: 1px solid #B6B6B6;
     }
   }
+}
+
+.v-expansion-panel-title {
+  background: #F3F4F5;
+  margin: 0px;
+  border-radius: 0px;
+  font-family: Akrobat;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 21.6px;
+  text-align: left;
+  border: none;
+  padding-left: 40px;
 }
 </style>
