@@ -132,12 +132,11 @@ const validateLink = (value) => {
   }
 };
 
-watchEffect(() => textInputLength.value = typeof props.value === 'string' ? props.value.length : 0)
-
 watchEffect(() => {
+  textInputLength.value = typeof props.value === 'string' ? props.value.length : 0;
+
   if (typeof props.max === 'number' && props.value > props.max) {
     isError.value = true;
-    // console.log(props.max, props.value, isError.value);
   } else {
     isError.value = false;
   }
@@ -146,7 +145,6 @@ watchEffect(() => {
 watchEffect(() => {
   validateLink(props.value)
 });
-
 
 const updateValue = (event) => {
   emit('update:value', event.target.value);
