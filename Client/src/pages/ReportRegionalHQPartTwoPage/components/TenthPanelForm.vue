@@ -5,7 +5,7 @@
         <p class="form__title">Всероссийская патриотическая акция «Снежный Десант РСО»</p>
       </div>
       <div>
-        <Button class="form__btn" style="margin: 0" label="Свернуть"/>
+        <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть"/>
       </div>
     </div>
     <div class="form__field">
@@ -45,7 +45,7 @@
             id="scan_file"
             name="scan_file"
             @change="uploadFile"
-            :disabled="isSent"
+            :disabled="isSent || !tenthPanelData.event_happened"
         />
         <div v-else class="form__file-box">
           <span class="form__file-name">
@@ -72,7 +72,7 @@
               type="text"
               placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
               @focusout="formData"
-              :disabled="isSent"
+              :disabled="isSent || !tenthPanelData.event_happened"
           />
           <Button v-if="!isSent" class="addLinkBtn" label="+ Добавить ссылку" @click="addLink"/>
         </div>
@@ -92,7 +92,7 @@
             counter-visible
             class="form__input form__input-comment"
             style="margin-bottom: 4px;"
-            :disabled="isSent"
+            :disabled="isSent || !tenthPanelData.event_happened"
             @focusout="formData"
         />
       </div>
@@ -106,7 +106,7 @@
           <p class="form__title">Всероссийская патриотическая акция «Снежный Десант РСО»</p>
         </div>
         <div>
-          <Button class="form__btn" style="margin: 0" label="Свернуть"/>
+          <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть"/>
         </div>
       </div>
       <div class="form__field">
@@ -152,7 +152,7 @@
           <p class="form__title">Всероссийская патриотическая акция «Снежный Десант РСО»</p>
         </div>
         <div>
-          <Button class="form__btn" style="margin: 0" label="Свернуть"/>
+          <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть"/>
         </div>
       </div>
       <div class="form__field">
@@ -211,7 +211,11 @@ const tenthPanelData = ref({
 });
 const isSent = ref(false);
 
-const emit = defineEmits(['formData', 'uploadFile', 'deleteFile']);
+const emit = defineEmits(['collapse-form','formData', 'uploadFile', 'deleteFile']);
+
+const collapseForm = () => {
+  emit('collapse-form');
+};
 
 const formData = () => {
   emit('formData', tenthPanelData.value);
