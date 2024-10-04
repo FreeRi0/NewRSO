@@ -13,6 +13,7 @@
 import { ref, onMounted, watch } from 'vue'
 import { useRouter } from "vue-router";
 import { useRoleStore } from "@layouts/store/role";
+import { showByUrl } from '@services/ProdUrlService';
 
 const show = ref(false);
 
@@ -28,9 +29,10 @@ watch(() => roleStore.roles?.regionalheadquarter_commander, () => {
 
 
 onMounted(() => {
-  if (window.location.hostname.includes('localhost') || window.location.hostname.includes('rso.sprint.1t.ru') || window.location.hostname.includes('213.139.208.147')) {
-    show.value = true;
-  }
+  // if (window.location.hostname.includes('localhost') || window.location.hostname.includes('rso.sprint.1t.ru') || window.location.hostname.includes('213.139.208.147')) {
+  //   show.value = true;
+  // }
+  show.value = showByUrl();
 });
 </script>
 <style lang="scss" scoped>
