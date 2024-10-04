@@ -21,8 +21,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <first-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.first" 
-                :is-error-panel="isErrorPanel.first"/>
+                :data="reportData.first" :is-error-panel="isErrorPanel.first" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -56,8 +55,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <fourth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.fourth"
-                :is-error-panel="isErrorPanel.fourth" />
+                :data="reportData.fourth" :is-error-panel="isErrorPanel.fourth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -69,8 +67,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <fifth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.fifth" 
-                :is-error-panel="isErrorPanel.fifth"/>
+                :data="reportData.fifth" :is-error-panel="isErrorPanel.fifth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -81,8 +78,7 @@
             <v-expansion-panel-text>
               <sixth-panel @get-data="setData" :items="six_items" @getId="setId" @getPanelNumber="setPanelNumber"
                 :district-headquarter-commander="districtExpert" :data="reportData.six"
-                :central-headquarter-commander="centralExpert"
-                :is-error-panel="isErrorPanel.six" />
+                :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.six" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -93,8 +89,7 @@
             <v-expansion-panel-text>
               <seventh-panel @get-data="setData" @getId="setId" @getPanelNumber="setPanelNumber" :items="seventh_items"
                 :district-headquarter-commander="districtExpert" :data="reportData.seventh"
-                :central-headquarter-commander="centralExpert"
-                :is-error-panel="isErrorPanel.seventh" />
+                :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.seventh" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -115,8 +110,7 @@
             <v-expansion-panel-text>
               <ninth-panel @get-data="setData" @getId="setId" @getPanelNumber="setPanelNumber" :items="ninth_items"
                 :district-headquarter-commander="districtExpert" :data="reportData.ninth"
-                :central-headquarter-commander="centralExpert"
-                :is-error-panel="isErrorPanel.ninth" />
+                :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.ninth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -126,8 +120,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <tenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.tenth"
-                :is-error-panel="isErrorPanel.tenth" />
+                :data="reportData.tenth" :is-error-panel="isErrorPanel.tenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -136,8 +129,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.eleventh" 
-                :is-error-panel="isErrorPanel.eleventh"/>
+                :data="reportData.eleventh" :is-error-panel="isErrorPanel.eleventh" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -146,8 +138,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <twelfth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.twelfth"
-                :is-error-panel="isErrorPanel.twelfth" />
+                :data="reportData.twelfth" :is-error-panel="isErrorPanel.twelfth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -156,8 +147,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <thirteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.thirteenth"
-                :is-error-panel="isErrorPanel.thirteenth" />
+                :data="reportData.thirteenth" :is-error-panel="isErrorPanel.thirteenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -191,8 +181,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <sixteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.sixteenth"
-                :is-error-panel="isErrorPanel.sixteenth" />
+                :data="reportData.sixteenth" :is-error-panel="isErrorPanel.sixteenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -586,20 +575,27 @@ const setData = (data, panel, number = 0) => {
   // console.log('setData: ', reportData.value)
 };
 
+// const filteredSix = reportData.value.six.filter(item => (item.number_of_members > 0 || item.number_of_members !== null) || item.links.length > 0);
+
+
 const sendReport = async () => {
   // console.log('reportData: ', reportData.value)
   blockSendButton.value = true;
   if (checkEmptyFields(reportData.value)) {
     try {
+
+      const filteredSix = reportData.value.six.filter(item => (item.number_of_members > 0 && item.number_of_members !== null));
+      const filteredSeventh = reportData.value.seventh.filter(item => item.prize_lace !== 'Нет');
+      const filteredNinth = reportData.value.ninth.filter(item => item.event_happened !== false);
       await reportPartTwoService.sendReport(reportData.value.first, '1');
       await reportPartTwoService.sendReport(reportData.value.fourth, '4');
       await reportPartTwoService.sendReport(reportData.value.fifth, '5');
-      await reportPartTwoService.sendReportWithSlash(reportData.value.six, '6');
-      await reportPartTwoService.sendReportWithSlash(reportData.value.seventh, '7');
-      await reportPartTwoService.sendReportWithSlash(reportData.value.ninth, '9');
+      await reportPartTwoService.sendReportWithSlash(filteredSix, '6');
+      await reportPartTwoService.sendReportWithSlash(filteredSeventh, '7');
+      await reportPartTwoService.sendReportWithSlash(filteredNinth.ninth, '9');
       await reportPartTwoService.sendReport(reportData.value.eleventh, '11');
       await reportPartTwoService.sendReport(reportData.value.twelfth, '12');
-      await reportPartTwoService.sendReport(reportData.value.thirteenth, '13');
+      await reportPartTwoService.sendReport(reportData.value.thыirteenth, '13');
       await reportPartTwoService.sendReport(reportData.value.sixteenth, '16');
       await reportPartTwoService.sendMultipleReport(reportData.value.tenth.first, '10', '1');
       await reportPartTwoService.sendMultipleReport(reportData.value.tenth.second, '10', '2');
@@ -632,6 +628,9 @@ const sendReport = async () => {
 
 const checkEmptyFields = (data) => {
   console.log('data', data)
+  const filteredSix = reportData.value.six.filter(item => (item.number_of_members > 0 && item.number_of_members !== null));
+  const filteredSeventh = reportData.value.seventh.filter(item => item.prize_lace !== 'Нет');
+  const filteredNinth = reportData.value.ninth.filter(item => item.event_happened !== false);
   if (!data.first || !(data.first.amount_of_money && data.first.scan_file)) {
     isErrorPanel.value.first = true;
     swal.fire({
@@ -693,49 +692,45 @@ const checkEmptyFields = (data) => {
     })
     return false;
   }
-  // if (data.six) {
-  //    else {
-  //   swal.fire({
-  //     position: 'center',
-  //     icon: 'warning',
-  //     title: `Заполните обязательные поля в 5 показателе`,
-  //     showConfirmButton: false,
-  //     timer: 2500,
-  //   })
-  //   return false;
-  // }
-  if (!data.six || !(data.six.number_of_members)) {
-    isErrorPanel.value.six = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      title: `Заполните обязательные поля в 6 показателе`,
-      showConfirmButton: false,
-      timer: 2500,
-    })
-    return false;
+
+  for (let item of filteredSix) {
+    if (!(item.participants_number && item.links.lenght)) {
+      isErrorPanel.value.six = true;
+      swal.fire({
+        position: 'center',
+        icon: 'warning',
+        title: `Заполните обязательные поля в 6 показателе`,
+        showConfirmButton: false,
+        timer: 2500,
+      })
+      return false;
+    }
   }
-  if (!data.seventh || !(data.seventh.prize_place && data.seventh.document)) {
-    isErrorPanel.value.seventh = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      title: `Заполните обязательные поля в 7 показателе`,
-      showConfirmButton: false,
-      timer: 2500,
-    })
-    return false;
+  for (let item of filteredSeventh) {
+    if (!(item.prize_place && item.links.lenght && item.document && item.comment)) {
+      isErrorPanel.value.seventh = true;
+      swal.fire({
+        position: 'center',
+        icon: 'warning',
+        title: `Заполните обязательные поля в 7 показателе`,
+        showConfirmButton: false,
+        timer: 2500,
+      })
+      return false;
+    }
   }
-  if (!data.ninth || !(data.ninth.event_happened)) {
-    isErrorPanel.value.ninth = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      title: `Заполните обязательные поля в 9 показателе`,
-      showConfirmButton: false,
-      timer: 2500,
-    })
-    return false;
+  for (let item of filteredNinth) {
+    if (!(item.event_happened && item.links.lenght)) {
+      isErrorPanel.value.ninth = true;
+      swal.fire({
+        position: 'center',
+        icon: 'warning',
+        title: `Заполните обязательные поля в 9 показателе`,
+        showConfirmButton: false,
+        timer: 2500,
+      })
+      return false;
+    }
   }
   if (data.tenth.first && data.tenth.second) {
     if (!(data.tenth.first.comment && data.tenth.second.comment)) {

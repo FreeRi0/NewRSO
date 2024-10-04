@@ -8,8 +8,8 @@
   ]" :style="{ width: width }">
     <input :type="type" :name="name" :style="{
       height: height,
-    }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength"
-      :readonly="readonly" :max="max" class="form-input__report"
+    }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly" :max="max"
+      class="form-input__report"
       :class="{ 'link__input': isLink, 'form-input__report--error': (isErrorPanel && !value) }" @input="updateValue"
       v-bind="$attrs" :disabled="disabled" />
     <div class="form__counter" v-if="counterVisible">
@@ -118,8 +118,16 @@ let isError = ref(props.isError);
 let isLinkError = ref(false);
 
 const textInputLength = ref(null);
-const urlRegex = /^https:\/\/(?:[a-zA-Z0-9а-я](?:[a-zA-Z0-9а-я-]{0,61}[a-zA-Z0-9а-я])?\.)+[a-zA-Z0-9а-я][a-zA-Z0-9а-я-]{0,61}[a-zA-Z0-9а-я]$/i;
-
+// const urlRegex = /^https:\/\/(?:[a-zA-Z0-9а-я](?:[a-zA-Z0-9а-я-]{0,61}[a-zA-Z0-9а-я])?\.)+[a-zA-Z0-9а-я][a-zA-Z0-9а-я-]{0,61}[a-zA-Z0-9а-я]$/i;
+//const urlRegex = /^(https?:\/\/)?[\w\-\._~:/?#[\]@!$&'()*+,;=%]+$/;
+// const urlRegex = new RegExp('^(?:http|ftp)s?:\\/\\/(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\\.)+(?:[A-Z]{2,6}\\.?|[A-Z0-9-]{2,}\\.?)|localhost|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|\\[?[A-F0-9]*:[A-F0-9:]+\\]?)\\?(::\\d+)?(?:\\/?|\\/\\S+)$', 'i');
+// const urlRegex = new RegExp('^(https?:\\/\\/)?' + // проверка протокола
+//   '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // проверка имени домена
+//   '((\\d{1,3}\\.){3}\\d{1,3}))' + // проверка ip адреса (версия 4, не 6)
+//   '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // проверка порта и пути
+//   '(\\?[;&a-z\\d%_.~+=-]*)?' + // проверка параметров запроса
+//   '(\\#[-a-z\\d_]*)?$', 'i');                            // проверка хэша
+const urlRegex = new RegExp(/^(https?:\/\/)?[\w\-\._~:/?#[\]@!$&'()*+,;=%а-яА-Я]+$/u);
 function isValidURL(url) {
   return urlRegex.test(url);
 }

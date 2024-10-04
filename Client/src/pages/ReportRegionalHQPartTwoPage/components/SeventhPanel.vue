@@ -3,7 +3,7 @@
     <v-expansion-panels v-model="panel" class="mb-2">
       <v-progress-circular v-show="!items.length" class="circleLoader" indeterminate></v-progress-circular>
       <v-expansion-panel :disabled="disabled" v-show="items.length" v-for="item in items"
-        :key="item.id"><v-expansion-panel-title>
+        :key="item.id"><v-expansion-panel-title  :class="isErrorPanel ? 'visible-error' : ''">
           <div class="title_wrap">
             <p class="form__title">{{ item.name }}</p>
             <div class="title_wrap__items">
@@ -14,7 +14,7 @@
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="7" @collapse-form="collapsed()"
             @formData="formData($event, item.id)" @error="setError" @uploadFile="uploadFile($event, item.id)"
-            @deleteFile="deleteFile($event, item.id)" @getPanelNumber="getPanelNumber($event)" @getId="getId($event)"
+            @deleteFile="deleteFile($event, item.id)" @getPanelNumber="getPanelNumber($event)"   :is-error-panel="isErrorPanel" @getId="getId($event)"
             :data="seventhPanelData" :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
@@ -35,6 +35,7 @@ const props = defineProps({
   centralHeadquarterCommander: {
     type: Boolean
   },
+  isErrorPanel: Boolean,
   items: Array,
   data: Object
 });
