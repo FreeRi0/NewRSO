@@ -766,7 +766,7 @@
     </v-card-text>
 </template>
 <script setup>
-import { ref, watchEffect, watch, inject } from 'vue';
+import { ref, watchEffect, watch } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { FileBoxComponent } from '@entities/RatingRoComponents/components';
 import { InputReport, TextareaReport } from '@shared/components/inputs';
@@ -792,7 +792,7 @@ const collapseForm = () => {
     emit('collapse-form');
 };
 
-const swal = inject('$swal');
+
 
 const isFirstSentSix = ref(true);
 const isFirstSentSeventh = ref(true);
@@ -940,22 +940,7 @@ const focusOut = () => {
 
 
         } catch (e) {
-            e.response.data.forEach(item => {
-                console.log('yy', item.links);
-                if (item.links) {
-                    for (let i in item.links) {
-                        if (Object.keys(item.links[i]).length !== 0 && item.links[i].link.includes('Введите правильный URL.')) {
-                            swal.fire({
-                                position: 'center',
-                                icon: 'warning',
-                                title: `Введите корректный URL`,
-                                showConfirmButton: false,
-                                timer: 2500,
-                            })
-                        }
-                    }
-                }
-            })
+            console.log('data', e.response.data)
         }
     }
     else if (props.panel_number == 7) {
@@ -980,21 +965,8 @@ const focusOut = () => {
                 console.log('7', '2')
             }
         } catch (e) {
-            e.response.data.forEach(item => {
-                if (item.links) {
-                    for (let i in item.links) {
-                        if (Object.keys(item.links[i]).length !== 0 && item.links[i].link.includes('Введите правильный URL.')) {
-                            swal.fire({
-                                position: 'center',
-                                icon: 'warning',
-                                title: `Введите корректный URL`,
-                                showConfirmButton: false,
-                                timer: 2500,
-                            })
-                        }
-                    }
-                }
-            })
+            console.log('data', e.response.data);
+            
         }
 
     }
@@ -1019,21 +991,7 @@ const focusOut = () => {
                 console.log('9', '2')
             }
         } catch (e) {
-            e.response.data.forEach(item => {
-                if (item.links) {
-                    for (let i in item.links) {
-                        if (Object.keys(item.links[i]).length !== 0 && item.links[i].link.includes('Введите правильный URL.')) {
-                            swal.fire({
-                                position: 'center',
-                                icon: 'warning',
-                                title: `Введите корректный URL`,
-                                showConfirmButton: false,
-                                timer: 2500,
-                            })
-                        }
-                    }
-                }
-            })
+            console.log('data', e.response.data);
         }
 
     }
