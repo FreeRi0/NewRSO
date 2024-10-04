@@ -217,7 +217,7 @@ const uploadFile = async (event) => {
   eleventhPanelData.value.file_size = (scanFile.value.size / Math.pow(1024, 2));
   eleventhPanelData.value.file_type = scanFile.value.type.split('/').at(-1);
 
-  fileValidate(scanFile.value, 3, isErrorFile);
+  fileValidate(scanFile.value, 7, isErrorFile);
   console.log('(4)', 'перед отправкой в uploadFile', isErrorFile.value);
   if (isErrorFile.value) {
     eleventhPanelData.value.scan_file = scanFile.value.name;
