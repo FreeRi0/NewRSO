@@ -38,14 +38,16 @@
                         id="scan_file" :is-error-panel="isErrorPanel" name="scan_file" width="100%" height="auto"
                         @change="uploadFile($event, 7)" :disabled="isSent || seventhPanelData.prize_place === 'Нет'" />
                     <FileBoxComponent v-else :file="seventhPanelData.document" :fileType="seventhPanelData.file_type"
-                        :fileSize="seventhPanelData.file_size" @click="deleteFile(7)"></FileBoxComponent>
+                        :fileSize="seventhPanelData.file_size" @click="deleteFile(7)" :is-error-file="isErrorFile">
+                    </FileBoxComponent>
                 </div>
 
                 <div class="form__field">
                     <label class="form__label mt-4" for="14">Ссылка на публикацию о победе
                         <sup class="valid-red">*</sup></label>
                     <div class="form__wrapper" v-for="(item, index) in seventhPanelData.links" :key="index">
-                        <InputReport @focusout="focusOut" @error="setError" name="14" :is-link="true" :disabled="isSent || seventhPanelData.prize_place === 'Нет'"
+                        <InputReport @focusout="focusOut" @error="setError" name="14" :is-link="true"
+                            :disabled="isSent || seventhPanelData.prize_place === 'Нет'"
                             placeholder="Введите ссылку, например,  https://vk.com/cco_monolit" :maxlength="200"
                             v-model:value="item.link" :is-error-panel="isErrorPanel" class="mb-2" />
                         <div v-if="!isSent">
@@ -77,8 +79,9 @@
                 <div class="form__field">
                     <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
                     <TextareaReport v-model:value="seventhPanelData.comment" id="comment" name="comment" :rows="1"
-                        autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :disabled="isSent || seventhPanelData.prize_place === 'Нет'"
-                        max-length-text="3000" counter-visible />
+                        autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
+                        :disabled="isSent || seventhPanelData.prize_place === 'Нет'" max-length-text="3000"
+                        counter-visible />
                 </div>
                 <div class="form__field-result" style="display: flex; align-items: center;">
                     <v-checkbox class="result-checkbox" id="v-checkbox" />
@@ -119,7 +122,8 @@
 
                     <div class="form__wrapper" v-for="(item, index) in sixPanelData.links" :key="index">
                         <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                            @focusout="focusOut" :is-error-panel="isErrorPanel" @error="setError" :disabled="isSentSix || (sixPanelData.number_of_members == 0 || sixPanelData.number_of_members === null)"
+                            @focusout="focusOut" :is-error-panel="isErrorPanel" @error="setError"
+                            :disabled="isSentSix || (sixPanelData.number_of_members == 0 || sixPanelData.number_of_members === null)"
                             :maxlength="200" name="link" v-model:value="item.link" :is-link="true" class="mb-2" />
 
                         <div v-if="!isSentSix">
@@ -138,7 +142,8 @@
                     <label class="form__label" for="14">Комментарий </label>
                     <TextareaReport v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1"
                         autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
-                        :disabled="isSentSix || (sixPanelData.number_of_members == 0 || sixPanelData.number_of_members === null)" :max-length-text="3000" counter-visible />
+                        :disabled="isSentSix || (sixPanelData.number_of_members == 0 || sixPanelData.number_of_members === null)"
+                        :max-length-text="3000" counter-visible />
 
                 </div>
             </div>
@@ -177,9 +182,11 @@
                     </label>
                     <InputReport v-if="!ninthPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
                         id="scan_file" :is-error-panel="isErrorPanel" name="scan_file" width="100%"
-                        :disabled="isSentNine || ninthPanelData.event_happened === false" height="auto" @change="uploadFile($event, 9)" />
+                        :disabled="isSentNine || ninthPanelData.event_happened === false" height="auto"
+                        @change="uploadFile($event, 9)" />
                     <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
-                        :fileSize="ninthPanelData.file_size" @click="deleteFile(9)"></FileBoxComponent>
+                        :is-error-file="isErrorFile" :fileSize="ninthPanelData.file_size" @click="deleteFile(9)">
+                    </FileBoxComponent>
                 </div>
 
                 <div class="form__field">
@@ -188,8 +195,9 @@
                         <sup class="valid-red">*</sup></label>
 
                     <div class="form__wrapper" v-for="(item, index) in ninthPanelData.links" :key="index">
-                        <InputReport @focusout="focusOut" @error="setError" :disabled="isSentNine || ninthPanelData.event_happened === false" name="14"
-                            :maxlength="200" :is-error-panel="isErrorPanel" :is-link="true"
+                        <InputReport @focusout="focusOut" @error="setError"
+                            :disabled="isSentNine || ninthPanelData.event_happened === false" name="14" :maxlength="200"
+                            :is-error-panel="isErrorPanel" :is-link="true"
                             placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
                             class="mb-2" />
                         <div v-if="!isSentNine">
@@ -208,7 +216,8 @@
                     <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
                     <TextareaReport v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1"
                         autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
-                        :max-length-text="3000" counter-visible :disabled="isSentNine || ninthPanelData.event_happened === false" />
+                        :max-length-text="3000" counter-visible
+                        :disabled="isSentNine || ninthPanelData.event_happened === false" />
                 </div>
                 <div class="form__field-result" style="display: flex; align-items: center;">
                     <v-checkbox class="result-checkbox" id="v-checkbox" />
@@ -773,6 +782,7 @@ import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { SvgIcon } from '@shared/ui';
 import { ReportTabs } from './index';
 import { reportPartTwoService } from '@services/ReportService.ts';
+import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 const props = defineProps({
     title: Object,
     panel_number: String,
@@ -793,7 +803,7 @@ const collapseForm = () => {
 };
 
 
-
+let isErrorFile = ref(false);
 const isFirstSentSix = ref(true);
 const isFirstSentSeventh = ref(true);
 const isFirstSentNinth = ref(true);
@@ -872,8 +882,17 @@ const uploadFile = (event, number) => {
             }
         }
         formData.append('comment', seventhPanelData.value.comment);
-        emit('uploadFile', formData);
-        emit('formData', formData)
+
+        fileValidate(scanFile.value, 3, isErrorFile);
+        if (isErrorFile.value) {
+            seventhPanelData.value.document = scanFile.value.name;
+            console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
+            return false;
+        } else {
+            emit('uploadFile', formData);
+            emit('formData', formData);
+        }
+
     } else if (number === 9) {
         scanFile.value = event.target.files[0];
         formData.append('event_happened', ninthPanelData.value.event_happened);
@@ -888,8 +907,15 @@ const uploadFile = (event, number) => {
             }
         }
         formData.append('comment', ninthPanelData.value.comment);
-        emit('uploadFile', formData);
-        emit('formData', formData)
+        fileValidate(scanFile.value, 3, isErrorFile);
+        if (isErrorFile.value) {
+            ninthPanelData.value.document = scanFile.value.name;
+            console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
+            return false;
+        } else {
+            emit('uploadFile', formData);
+            emit('formData', formData);
+        }
     }
 
 }
@@ -910,6 +936,7 @@ const deleteFile = (number) => {
         formData.append('comment', seventhPanelData.value.comment);
         formData.append('file_size', seventhPanelData.value.file_size);
         formData.append('file_type', seventhPanelData.value.file_type);
+
         emit('deleteFile', formData);
         emit('formData', formData)
     } else if (number === 9) {
@@ -966,7 +993,7 @@ const focusOut = () => {
             }
         } catch (e) {
             console.log('data', e.response.data);
-            
+
         }
 
     }
