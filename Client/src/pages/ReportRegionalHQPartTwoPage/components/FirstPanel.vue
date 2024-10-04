@@ -27,7 +27,16 @@
               :disabled="isSent"
               style="width: 100%;"
               @change="uploadFile"/>
-          <div v-else class="form__file-box">
+          <FileBoxComponent
+            v-else
+            :file="firstPanelData.scan_file"
+            :fileType="firstPanelData.file_type"
+            :fileSize="firstPanelData.file_size"
+            @click="deleteFile"
+            :is-sent="isSent"
+            :is-error-file="isErrorFile"
+          ></FileBoxComponent>
+          <!-- <div v-else class="form__file-box">
             <span class="form__file-name">
               <SvgIcon v-if="firstPanelData.file_type === 'jpg'" icon-name="file-jpg"/>
               <SvgIcon v-if="firstPanelData.file_type === 'pdf'" icon-name="file-pdf"/>
@@ -43,7 +52,7 @@
             >
               Удалить
             </button>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="form__field">
@@ -139,10 +148,12 @@
 <script setup>
 import {ref, watchEffect} from "vue";
 import { InputReport, TextareaReport } from '@shared/components/inputs';
+import { FileBoxComponent } from "@entities/RatingRoComponents/components";
 import { ReportRegionalForm } from '../../ReportRegionalHQPartOnePage/components/index'
 import { getReport, reportPartTwoService } from "@services/ReportService.ts";
 import { SvgIcon } from '@shared/index';
 import { ReportTabs } from './index';
+import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 
 const props = defineProps({
   districtExpert: {
@@ -169,6 +180,7 @@ const defaultReportData = {
   employed_top: '0',
 };
 
+let isErrorFile = ref(false);
 const reportData = ref(defaultReportData);
 const isFirstSent = ref(true);
 const firstPanelData = ref({
@@ -176,7 +188,7 @@ const firstPanelData = ref({
   amount_of_money: '',
   scan_file: '',
   file_type: '',
-  file_size: '',
+  file_size: null,
 });
 const isSent = ref(false);
 
@@ -203,7 +215,18 @@ const uploadFile = async (event) => {
   formData.append('scan_file', event.target.files[0]);
   formData.append('comment', firstPanelData.value.comment);
   formData.append('amount_of_money', firstPanelData.value.amount_of_money);
-  if (isFirstSent.value) {
+
+  firstPanelData.value.file_size = (event.target.files[0].size / Math.pow(1024, 2));
+  firstPanelData.value.file_type = event.target.files[0].type.split('/').at(-1);
+
+  fileValidate(event.target.files[0], 7, isErrorFile);
+  // console.log('(4)', 'перед отправкой в uploadFile', isErrorFile.value);
+
+  if (isErrorFile.value) {
+    firstPanelData.value.scan_file = event.target.files[0].name;
+    // console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
+  } else {
+    if (isFirstSent.value) {
     let {data} = await reportPartTwoService.createReport(formData, '1', true);
     emit('getData', data, 1);
     firstPanelData.value.scan_file = data.scan_file.split('/').at(-1);
@@ -211,6 +234,7 @@ const uploadFile = async (event) => {
     let {data} = await reportPartTwoService.createReportDraft(formData, '1', true);
     emit('getData', data, 1);
     firstPanelData.value.scan_file = data.scan_file.split('/').at(-1);
+  }
   }
 };
 const deleteFile = async () => {
@@ -222,6 +246,9 @@ const deleteFile = async () => {
   formData.append('comment', firstPanelData.value.comment);
   formData.append('amount_of_money', firstPanelData.value.amount_of_money);
 
+  if (isErrorFile.value) {
+    firstPanelData.value.scan_file = "";
+  } else {
   if (isFirstSent.value) {
     const {data} = await reportPartTwoService.createReport(formData, '1', true);
     emit('getData', data, 1);
@@ -229,6 +256,7 @@ const deleteFile = async () => {
     const {data} = await reportPartTwoService.createReportDraft(formData, '1', true);
     emit('getData', data, 1);
   }
+} 
 };
 watchEffect(async () => {
   try {

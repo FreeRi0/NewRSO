@@ -29,7 +29,6 @@
         @change="uploadFile"
         :disabled="isSent"
       />
-
       <FileBoxComponent
         v-else
         :file="seventeenthPanelData.scan_file"
@@ -37,7 +36,6 @@
         :fileSize="seventeenthPanelData.file_size"
         @click="deleteFile"
         :is-error-file="isErrorFile"
-        is-error-message="Прикрепите файл формата jpg, png, pdf не более 7 Мб"
         :is-sent="isSent"
       ></FileBoxComponent>
     </div>
@@ -71,6 +69,7 @@ import { ref, watchEffect } from 'vue';
 import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { FileBoxComponent } from "@entities/RatingRoComponents/components";
 import { reportPartTwoService } from "@services/ReportService.ts";
+import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 
 const props = defineProps({
   districtExpert: {
@@ -95,7 +94,6 @@ const ID_PANEL = '17';
 const isFirstSent = ref(true);
 const scanFile = ref([]);
 let isErrorFile = ref(false);
-// const MAX_SIZE_FILE = 7;
 const seventeenthPanelData = ref({
   scan_file: '',
   file_size: null,
@@ -129,9 +127,11 @@ const uploadFile = async (event) => {
   seventeenthPanelData.value.file_size = (scanFile.value.size / Math.pow(1024, 2));
   seventeenthPanelData.value.file_type = scanFile.value.type.split('/').at(-1);
 
+  fileValidate(scanFile.value, 7, isErrorFile);
+  console.log('(4)', 'перед отправкой в uploadFile', isErrorFile.value);
   if (isErrorFile.value) {
     seventeenthPanelData.value.scan_file = scanFile.value.name;
-    console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ', isErrorFile.value, scanFile.value.size / Math.pow(1024, 2));
+    console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
   } else {
     try {
       if (isFirstSent.value) {
@@ -156,32 +156,29 @@ const deleteFile = async () => {
   let formData = new FormData();
   formData.append('scan_file', '');
   // formData.append('comment', seventeenthPanelData.value.comment);
-  formData.append('file_size', seventeenthPanelData.value.file_size);
-  formData.append('file_type', seventeenthPanelData.value.file_type);
 
-  try {
-    if (isFirstSent.value) {
-      let { data :  scan_file  } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-      emit('getData', scan_file, Number(ID_PANEL));
-    } else {
-      let { data :  scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-      emit('getData', scan_file, Number(ID_PANEL));
-      // if (isErrorFile.value) {
-      //   isErrorFile.value = false;
-      // } else {
-      //   let { data :  scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-      //   emit('getData', scan_file, Number(ID_PANEL));
-      // }
+  if (isErrorFile.value) {
+    seventeenthPanelData.value.scan_file = "";
+  } else {
+    try {
+      if (isFirstSent.value) {
+        let { data :  scan_file  } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+        emit('getData', scan_file, Number(ID_PANEL));
+      } else {
+        let { data :  scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+        emit('getData', scan_file, Number(ID_PANEL));
+      }
+    } catch (e) {
+      console.log('focusOut error:', e);
     }
-  } catch (e) {
-    console.log('focusOut error:', e);
   }
 };
 
 watchEffect(() => {
   // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
-  console.log(props.data);
+
   if (props.data) {
+    // console.log(props.data);
     isFirstSent.value = false;
     seventeenthPanelData.value.comment = props.data.comment;
     seventeenthPanelData.value.scan_file = props.data.scan_file;
