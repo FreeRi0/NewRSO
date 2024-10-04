@@ -7,6 +7,7 @@
       :central-expert="props.centralExpert"
       :district-expert="props.districtExpert"
       :data="data"
+      :is-error-panel="isErrorPanel"
       @get-data="getData"
     ></TwelfthPanelComponent>
   </div>
@@ -57,6 +58,9 @@ const props = defineProps({
     default: '',
   },
   data: Object,
+  isErrorPanel: {
+    type: Boolean,
+  },
 });
 
 const ID_PANEL = '12';

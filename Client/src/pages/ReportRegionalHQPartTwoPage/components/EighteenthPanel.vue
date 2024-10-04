@@ -50,6 +50,7 @@
             :fileSize="project.file_size"
             @click="deleteFile(index)"
             :is-sent="isSent"
+            @error="setError"
           ></FileBoxComponent>
           <button
             v-if="!isSent && (index > 0)"
@@ -78,6 +79,7 @@
                   style="width: 100%;"
                   @focusout="focusOut"
                   :disabled="isSent"
+                  is-link
               />
               <div v-if="isError && (i > 0)" class="report__error-block">
                 <span class="report__error-text">Укажите ссылку публикации</span>
@@ -146,11 +148,13 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from 'vue';
+import { inject, ref, watchEffect, watchPostEffect } from 'vue';
 import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { FileBoxComponent } from "@entities/RatingRoComponents/components";
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { SvgIcon } from '@shared/index';
+
+const swal = inject('$swal');
 
 const props = defineProps({
   districtExpert: {
@@ -172,6 +176,11 @@ const props = defineProps({
 let isError = ref(props.isError);
 
 const emit = defineEmits(['getData']);
+
+const link_err = ref(false);
+const setError = (err) => {
+  link_err.value = err;
+}
 
 const ID_PANEL = '18';
 const isFirstSent = ref(true);
@@ -328,6 +337,21 @@ const focusOut = async () => {
     }
   } catch (e) {
     console.log('focusOut error:', e);
+    e.response.data.projects.forEach(project => {
+      if (project.links) {
+        for (let i in project.links) {
+          if (Object.keys(project.links[i]).length !== 0 && project.links[i].link.includes('Введите правильный URL.')) {
+            swal.fire({
+              position: 'center',
+              icon: 'warning',
+              title: `Введите корректный URL`,
+              showConfirmButton: false,
+              timer: 2500,
+            })
+          }
+        }
+      }
+    })
   }
 };
 
@@ -365,6 +389,12 @@ watchEffect(async () => {
 }, {
   flush: 'post'
 });
+
+watchPostEffect(() => {
+  projects.value.forEach((event) => {
+    if (!event.links.length) event.links.push({link: ''})
+  });
+})
 </script>
 
 <style lang="scss" scoped>

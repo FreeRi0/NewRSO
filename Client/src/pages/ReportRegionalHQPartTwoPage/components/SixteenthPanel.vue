@@ -75,17 +75,17 @@
             <div style="display: flex;">
               <input class="custom-radio" v-model="project.project_scale" type="radio" :id="`All-${index}`"
                      value="Всероссийский"/>
-              <label>Всероссийский</label>
+              <label :for="`All-${index}`">Всероссийский</label>
             </div>
             <div style="display: flex;">
               <input class="custom-radio" v-model="project.project_scale" type="radio" :id="`District-${index}`"
                      value="Окружной"/>
-              <label>Окружной</label>
+              <label :for="`District-${index}`">Окружной</label>
             </div>
             <div style="display: flex;">
               <input class="custom-radio" v-model="project.project_scale" type="radio" :id="`Interregional-${index}`"
                      value="Межрегиональный"/>
-              <label>Межрегиональный</label>
+              <label :for="`Interregional-${index}`">Межрегиональный</label>
             </div>
           </div>
         </div>
@@ -103,6 +103,7 @@
                 placeholder="https://vk.com/cco_monolit"
                 @focusout="focusOut"
                 :disabled="isSent"
+                isLink
                 style="width: 100%;"
             />
           </div>
@@ -396,12 +397,14 @@
   </report-tabs>
 </template>
 <script setup>
-import { ref, watchEffect } from "vue";
+import {inject, ref, watchEffect, watchPostEffect} from "vue";
 import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { SvgIcon } from '@shared/index';
 import { ReportTabs } from './index';
+
+const swal = inject('$swal');
 
 const props = defineProps({
   districtExpert: {
@@ -453,6 +456,21 @@ const focusOut = async () => {
     }
   } catch (e) {
     console.log('focusOut error:', e);
+    e.response.data.projects.forEach(project => {
+      if (project.links) {
+        for (let i in project.links) {
+          if (Object.keys(project.links[i]).length !== 0 && project.links[i].link.includes('Введите правильный URL.')) {
+            swal.fire({
+              position: 'center',
+              icon: 'warning',
+              title: `Введите корректный URL`,
+              showConfirmButton: false,
+              timer: 2500,
+            })
+          }
+        }
+      }
+    })
   }
 };
 
@@ -487,6 +505,7 @@ const deleteProject = async (index) => {
   projects.value.forEach((project, i) => {
     if (project.name) formData.append(`projects[${i}][name]`, project.name);
     if (project.project_scale) formData.append(`projects[${i}][project_scale]`, project.project_scale);
+    if (project.regulations) formData.append(`projects[${i}][regulations]`, '');
     if (project.links.length) {
       for (let j = 0; j < project.links.length; j++) {
         if (project.links[j].link) formData.append(`projects[${i}][links][${j}][link]`, project.links[j].link);
@@ -494,7 +513,7 @@ const deleteProject = async (index) => {
     }
   })
   try {
-    let {data} = await reportPartTwoService.createReportDraft(sixteenthPanelData.value, '16', true);
+    let {data} = await reportPartTwoService.createReportDraft(formData, '16', true);
     emit('getData', data, 16);
   } catch (e) {
     console.log('deleteEvent error: ', e);
@@ -548,11 +567,12 @@ watchEffect(async () => {
     sixteenthPanelData.value.is_project = props.data.is_project;
     sixteenthPanelData.value.comment = props.data.comment;
     isSent.value = props.data.is_sent;
-
-    // projects.value.forEach((event) => {
-    //   if (!event.links.length) event.links.push({link: ''})
-    // });
   }
+});
+watchPostEffect(() => {
+  projects.value.forEach((project) => {
+    if (!project.links.length) project.links.push({link: ''})
+  });
 })
 </script>
 <style lang="scss" scoped>

@@ -371,12 +371,14 @@
   </report-tabs>
 </template>
 <script setup>
-import { ref, watchEffect } from "vue";
+import {inject, ref, watchEffect, watchPostEffect} from "vue";
 import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { ReportTabs } from './index';
 import { SvgIcon } from '@shared/index';
+
+const swal = inject('$swal');
 
 const props = defineProps({
   districtExpert: {
@@ -421,6 +423,21 @@ const focusOut = async () => {
     }
   } catch (e) {
     console.log('focusOut error:', e);
+    e.response.data.events.forEach(event => {
+      if (event.links) {
+        for (let i in event.links) {
+          if (Object.keys(event.links[i]).length !== 0 && event.links[i].link.includes('Введите правильный URL.')) {
+            swal.fire({
+              position: 'center',
+              icon: 'warning',
+              title: `Введите корректный URL`,
+              showConfirmButton: false,
+              timer: 2500,
+            })
+          }
+        }
+      }
+    })
   }
 }
 
@@ -518,6 +535,11 @@ watchEffect(() => {
     isSent.value = props.data.is_sent;
   }
 });
+watchPostEffect(() => {
+  events.value.forEach((event) => {
+    if (!event.links.length) event.links.push({link: ''})
+  });
+})
 </script>
 <style lang="scss" scoped>
 .panel-card {

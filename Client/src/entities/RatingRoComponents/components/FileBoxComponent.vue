@@ -26,12 +26,13 @@
         </button>
 
         <div v-if="isErrorFile" class="report__error-text">
-            {{ isErrorMessage }}
+            Прикрепите файл формата jpg, png, pdf не&nbsp;более 7&nbsp;Мб
         </div>
     </div>
 </template>
 
 <script setup>
+// import { ref, watchEffect } from 'vue';
 import { SvgIcon } from '@shared/index';
 
 defineOptions({
@@ -51,21 +52,16 @@ const props = defineProps({
         type: Number,
         default: null,
     },
-    districtExpert: {
-        type: Boolean,
-    },
-    centralExpert: {
+    // districtExpert: {
+    //     type: Boolean,
+    // },
+    // centralExpert: {
+    //     type: Boolean,
+    // },
+    isSent: {
         type: Boolean,
     },
     isErrorFile: {
-        type: Boolean,
-        default: false,
-    },
-    isErrorMessage: {
-        type: String,
-        default: '',
-    },
-    isSent: {
         type: Boolean,
     },
 });
@@ -75,4 +71,8 @@ const emit = defineEmits(['click']);
 const clickOnButton = () => {
     emit('click');
 };
+
+// watchEffect(() => {
+    
+// })
 </script>

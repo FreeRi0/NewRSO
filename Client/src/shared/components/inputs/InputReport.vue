@@ -1,25 +1,17 @@
 <template>
-  <div 
-    :is-file="isFile"
-    :class="['form-input', isFile ? 'form-input__file-input' : '', isFileDistrict ? 'form-input__add-file' : '', isLink ? 'form-input__link' : '']"
-    :style="{ width: width }">
-    <input 
-      :type="type" 
-      :name="name" 
-      :style="{
-        height: height,
-      }" 
-      :value="value" 
-      :id="name" 
-      :placeholder="placeholder" 
-      :maxlength="maxLength" 
-      :readonly="readonly"
-      :max="max" 
-      class="form-input__report" 
-      :class="{ 'link__input': isLink }" 
-      @input="updateValue"
-      v-bind="$attrs" 
-      :disabled="disabled" />
+  <div :is-file="isFile" :class="[
+    'form-input',
+    isFile ? 'form-input__file-input' : '',
+    isFileDistrict ? 'form-input__add-file' : '',
+    isLink ? 'form-input__link' : '',
+    (isErrorPanel && !value) ? 'form-input__file-error' : '',
+  ]" :style="{ width: width }">
+    <input :type="type" :name="name" :style="{
+      height: height,
+    }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly" :max="max"
+      class="form-input__report"
+      :class="{ 'link__input': isLink, 'form-input__report--error': (isErrorPanel && !value) }" @input="updateValue"
+      v-bind="$attrs" :disabled="disabled" />
     <div class="form__counter" v-if="counterVisible">
       {{ textInputLength }} / {{ maxCounter }}
     </div>
@@ -36,6 +28,8 @@
     <div v-if="isError" class="form-input__error-block">
       <span class="form-input__error-text">Превышено&nbsp;максимальное&nbsp;значение&nbsp;{{ max }}</span>
     </div>
+    <div v-show="isLinkError && props.isLink && value"> <span class="form-input__error-text">Не верный формат
+        url</span></div>
 
   </div>
 </template>
@@ -49,7 +43,7 @@ defineOptions({
   inheritAttrs: false,
 });
 
-const emit = defineEmits(['update:value']);
+const emit = defineEmits(['update:value', 'error']);
 const props = defineProps({
   name: {
     type: [String, Number],
@@ -79,6 +73,9 @@ const props = defineProps({
     default: "9999-12-31",
   },
   value: {
+    type: [String, Number],
+  },
+  linkVal: {
     type: [String, Number],
   },
   disabled: {
@@ -112,21 +109,41 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  isErrorPanel: {
+    type: Boolean,
+  },
 });
 
 let isError = ref(props.isError);
+let isLinkError = ref(false);
 
 const textInputLength = ref(null);
+const urlRegex = /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
+function isValidURL(url) {
+  return urlRegex.test(url);
+}
 
-watchEffect(() => textInputLength.value = typeof props.value === 'string' ? props.value.length : 0)
+const validateLink = (value) => {
+  if (value !== '' && props.isLink == true) {
+    const isValid = isValidURL(value);
+    isLinkError.value = !isValid;
+    emit('error', isLinkError.value);
+    console.log('err_link_1', isLinkError.value);
+  }
+};
 
 watchEffect(() => {
+  textInputLength.value = typeof props.value === 'string' ? props.value.length : 0;
+
   if (typeof props.max === 'number' && props.value > props.max) {
     isError.value = true;
-    // console.log(props.max, props.value, isError.value);
   } else {
     isError.value = false;
   }
+});
+
+watchEffect(() => {
+  validateLink(props.value)
 });
 
 const updateValue = (event) => {
@@ -170,6 +187,14 @@ const updateValue = (event) => {
     border-radius: 12px;
     background-color: transparent;
     border: 1.5px dashed #1F7CC0;
+  }
+
+  &.form-input__file-error {
+    border-color: #db0000;
+
+    span:last-child {
+      color: #db0000;
+    }
   }
 
   &__add-file,
@@ -258,16 +283,18 @@ const updateValue = (event) => {
     border-color: transparent;
     outline: 1px solid #1f7cc0;
   }
+}
 
-  &:invalid {
-    border-color: #db0000;
+.form-input__report:invalid,
+.form-input__report--error {
+  border-color: #db0000;
+  color: #db0000;
+
+  &::placeholder {
     color: #db0000;
-
-    &::placeholder {
-      color: #db0000;
-    }
   }
 }
+
 
 .report-table__td input.form-input__report {
   border: none;

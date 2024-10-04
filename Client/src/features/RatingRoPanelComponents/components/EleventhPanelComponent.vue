@@ -17,6 +17,7 @@
         :max="2147483647"
         @focusout="focusOut"
         :disabled="isSent"
+        :is-error-panel="isErrorPanel"
       />
     </div>
 
@@ -36,6 +37,7 @@
         height="auto"
         @change="uploadFile"
         :disabled="isSent"
+        :is-error-panel="isErrorPanel"
       />
       <FileBoxComponent
         v-else
@@ -44,6 +46,7 @@
         :fileSize="eleventhPanelData.file_size"
         @click="deleteFile"
         :is-sent="isSent"
+        :is-error-file="isErrorFile"
       ></FileBoxComponent>
     </div>
 
@@ -136,6 +139,7 @@ import {
   ReportTable,
 } from "@entities/RatingRoComponents/components";
 import { reportPartTwoService } from "@services/ReportService.ts";
+import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 
 // import { HTTP } from '@app/http';
 
@@ -158,21 +162,15 @@ const props = defineProps({
     default: false,
   },
   data: Object,
-  // isErrorFile: {
-  //     type: Boolean,
-  //     default: false,
-  // },
-  // isErrorMessage: {
-  //     type: String,
-  //     default: '',
-  // },
+  isErrorPanel: {
+    type: Boolean,
+  },
 });
 
 const ID_PANEL = "11";
 const isFirstSent = ref(true);
 const scanFile = ref([]);
-// let isError = ref(false);
-// const MAX_SIZE_FILE = 80 / 1000;
+let isErrorFile = ref(false);
 const eleventhPanelData = ref({
   participants_number: null,
   scan_file: "",
@@ -219,29 +217,27 @@ const uploadFile = async (event) => {
   eleventhPanelData.value.file_size = (scanFile.value.size / Math.pow(1024, 2));
   eleventhPanelData.value.file_type = scanFile.value.type.split('/').at(-1);
 
-  try {
-    if (isFirstSent.value) {
-      let { scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-      eleventhPanelData.value.scan_file = scan_file;
-      emit('getData', scan_file, Number(ID_PANEL));
-    } else {
-      let {  data: scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-      eleventhPanelData.value.scan_file = scan_file;
-      emit('getData', scan_file, Number(ID_PANEL));
-
-      // if ((scanFile.value.size / Math.pow(1024, 2)) > MAX_SIZE_FILE) {
-      //   isError.value = true;
-      //   console.log('ошибка прикрепления файла', isError.value, scanFile.value.size / Math.pow(1024, 2), MAX_SIZE_FILE);
-      // } else {
-      //   isError.value = false;
-      //   let {  data: scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-      //   eleventhPanelData.value.scan_file = scan_file;
-      //   emit('getData', scan_file, Number(ID_PANEL));
-      // }
+  fileValidate(scanFile.value, 3, isErrorFile);
+  console.log('(4)', 'перед отправкой в uploadFile', isErrorFile.value);
+  if (isErrorFile.value) {
+    eleventhPanelData.value.scan_file = scanFile.value.name;
+    console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
+  } else {
+    try {
+      if (isFirstSent.value) {
+        let { scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+        eleventhPanelData.value.scan_file = scan_file;
+        emit('getData', scan_file, Number(ID_PANEL));
+      } else {
+        let {  data: scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+        eleventhPanelData.value.scan_file = scan_file;
+        emit('getData', scan_file, Number(ID_PANEL));
+        console.log('ФАЙЛ ОТПРАВЛЯЕТСЯ ПОВТОРНО');
+      }
+    } catch (e) {
+      console.log('focusOut error:', e);
     }
-  } catch (e) {
-    console.log('focusOut error:', e);
-  }  
+  }
 };
 
 const deleteFile = async () => {
@@ -249,24 +245,29 @@ const deleteFile = async () => {
   let formData = new FormData();
   formData.append("scan_file", "");
 
-  try {
-    if (isFirstSent.value) {
-      let { data : scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-      emit('getData', scan_file, Number(ID_PANEL));
-    } else {
-      let { data : scan_file } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-      emit('getData', scan_file, Number(ID_PANEL));
-    }
-  } catch (e) {
-    console.log('focusOut error:', e);
-  }  
+  if (isErrorFile.value) {
+    eleventhPanelData.value.scan_file = "";
+  } else {
+    try {
+      if (isFirstSent.value) {
+        let { data : scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+        emit('getData', scan_file, Number(ID_PANEL));
+      } else {
+        
+        let { data : scan_file } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+        emit('getData', scan_file, Number(ID_PANEL));
+      }
+    } catch (e) {
+      console.log('focusOut error:', e);
+    }  
+  }
 };
 
 watchEffect(() => {
   // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
 
   if (props.data) {
-    console.log(props.data);
+    // console.log(props.data);
     isFirstSent.value = false;
     eleventhPanelData.value.participants_number = props.data.participants_number;
     eleventhPanelData.value.comment = props.data.comment;

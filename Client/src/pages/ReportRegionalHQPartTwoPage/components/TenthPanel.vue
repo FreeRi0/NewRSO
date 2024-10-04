@@ -1,6 +1,6 @@
 <template>
   <div style="margin-right: 10px; margin-bottom: 10px;">
-    <v-expansion-panels>
+    <v-expansion-panels v-model="panel">
       <v-expansion-panel>
         <v-expansion-panel-title>
           Всероссийская патриотическая акция «Снежный Десант РСО»
@@ -12,6 +12,7 @@
               @formData="formData($event, 1)"
               @uploadFile="uploadFile($event, 1)"
               @deleteFile="deleteFile(1)"
+              @collapse-form="collapseForm"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -28,6 +29,7 @@
               @formData="formData($event, 2)"
               @uploadFile="uploadFile($event, 2)"
               @deleteFile="deleteFile(2)"
+              @collapse-form="collapseForm"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -35,9 +37,11 @@
   </div>
 </template>
 <script setup>
-import {ref, watchEffect} from "vue";
+import {inject, ref, watchEffect} from "vue";
 import {TenthPanelForm} from './index';
 import {reportPartTwoService} from "@services/ReportService.ts";
+
+const swal = inject('$swal');
 
 const props = defineProps({
   districtExpert: {
@@ -64,6 +68,7 @@ const tenthPanelDataFirst = ref({
   document: '',
   file_size: '',
   file_type: '',
+  comment: '',
   links: [
     {
       link: '',
@@ -75,18 +80,27 @@ const tenthPanelDataSecond = ref({
   document: '',
   file_size: '',
   file_type: '',
+  comment: '',
   links: [
     {
       link: '',
     },
   ],
 });
+const panel = ref(false);
+
+const collapseForm = () => {
+  panel.value = false;
+};
 
 const formData = async (reportData, reportNumber) => {
+  console.log('reportData: ', reportData)
   let formData = new FormData();
   try {
     if (reportNumber === 1) {
+      tenthPanelDataFirst.value = {...reportData}
       formData.append('event_happened', tenthPanelDataFirst.value.event_happened);
+      formData.append('comment', tenthPanelDataFirst.value.comment || '');
       if (tenthPanelDataFirst.value.links.length) {
         for (let j = 0; j < tenthPanelDataFirst.value.links.length; j++) {
           if (tenthPanelDataFirst.value.links[j].link) formData.append(`[links][${j}][link]`, tenthPanelDataFirst.value.links[j].link);
@@ -100,7 +114,9 @@ const formData = async (reportData, reportNumber) => {
         emit('getData', data, 10, 1);
       }
     } else if (reportNumber === 2) {
+      tenthPanelDataSecond.value = {...reportData}
       formData.append('event_happened', tenthPanelDataSecond.value.event_happened);
+      formData.append('comment', tenthPanelDataSecond.value.comment || '');
       if (tenthPanelDataSecond.value.links.length) {
         for (let j = 0; j < tenthPanelDataSecond.value.links.length; j++) {
           if (tenthPanelDataSecond.value.links[j].link) formData.append(`[links][${j}][link]`, tenthPanelDataSecond.value.links[j].link);
@@ -116,6 +132,19 @@ const formData = async (reportData, reportNumber) => {
     }
   } catch (e) {
     console.log('tenth panel error: ', e);
+    if (e.response.data.links.length) {
+      for (let i of e.response.data.links) {
+        if (Object.keys(i).length !== 0 && i.link.includes('Введите правильный URL.')) {
+          swal.fire({
+            position: 'center',
+            icon: 'warning',
+            title: `Введите корректный URL`,
+            showConfirmButton: false,
+            timer: 2500,
+          })
+        }
+      }
+    }
   }
 };
 
