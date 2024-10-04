@@ -3,7 +3,7 @@
     <v-expansion-panels v-model="panel" class="mb-2">
       <v-progress-circular v-show="!items.length" class="circleLoader" indeterminate></v-progress-circular>
       <v-expansion-panel :disabled="disabled" v-show="items.length" v-for="item in items"
-        :key="item.id"><v-expansion-panel-title>
+        :key="item.id"><v-expansion-panel-title :class="isErrorPanel ? 'visible-error' : ''">
           <div class="title_wrap">
             <p class="form__title">{{ item.name }}</p>
             <div class="title_wrap__items">
@@ -15,7 +15,7 @@
           <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()"
             @formData="formData($event, item.id)" @error="setError" @getPanelNumber="getPanelNumber($event)"
             @getId="getId($event)" :data="sixPanelData"
-            :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
+            :isCentralHeadquarterCommander="props.centralHeadquarterCommander" :is-error-panel="isErrorPanel"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item">
           </SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
@@ -23,7 +23,7 @@
   </v-card>
 </template>
 <script setup>
-import { ref, watchEffect } from "vue";
+import { ref, watchEffect, inject } from "vue";
 import { SeventhPanelForm } from "./index";
 import { reportPartTwoService } from "@services/ReportService.ts";
 
@@ -35,13 +35,14 @@ const props = defineProps({
   centralHeadquarterCommander: {
     type: Boolean
   },
+  isErrorPanel: Boolean,
   items: Array,
   data: Object,
 });
 
 const disabled = ref(false);
 const link_err = ref(false);
-
+const swal = inject('$swal');
 const setError = (err) => {
   link_err.value = err;
 }
@@ -63,8 +64,6 @@ const sixPanelData = ref({
 
 const panel = ref(false);
 
-
-
 const collapsed = () => {
   panel.value = false;
 }
@@ -73,18 +72,36 @@ let el_id = ref(null);
 const formData = async (reportData, reportNumber) => {
   try {
     console.log('is_link_err_3_6', link_err.value)
-    // if (link_err.value) return;
-    if (isFirstSent.value) {
-      console.log('First time sending data');
-      await reportPartTwoService.createMultipleReportAll(reportData, '6', reportNumber);
-      isFirstSent.value = false;
-    } else {
-      console.log('Second time sending data');
-      const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '6', reportNumber);
-      emit('getData', data, 6, reportNumber);
+
+    if (!link_err.value) {
+      if (isFirstSent.value) {
+        console.log('First time sending data');
+        const { data } = await reportPartTwoService.createMultipleReportAll(reportData, '6', reportNumber);
+        emit('getData', data, 6, reportNumber);
+        isFirstSent.value = false;
+
+      } else {
+        console.log('Second time sending data');
+        const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '6', reportNumber);
+        emit('getData', data, 6, reportNumber);
+      }
     }
   } catch (e) {
     console.log('six panel error: ', e);
+    if (e.response.data.links) {
+      e.response.data.links.forEach(item => {
+        console.log('item', item)
+        if (item.link.includes('Введите правильный URL.')) {
+          swal.fire({
+            position: 'center',
+            icon: 'warning',
+            title: `Введите корректный URL`,
+            showConfirmButton: false,
+            timer: 2500,
+          })
+        }
+      })
+    }
   }
 };
 
@@ -98,17 +115,13 @@ const getPanelNumber = (number) => {
   emit('getPanelNumber', number);
 }
 watchEffect(() => {
-  if (panel.value || panel.value === 0) {
-    disabled.value = true;
-  } else {
-    disabled.value = false;
-  }
+
   if (Object.keys(props.data[el_id.value]).length > 0) {
     console.log('data received', props.data);
     isFirstSent.value = false;
     sixPanelData.value = { ...props.data[el_id.value] }
-    // emit('send-panel', panel.value);
-  } else {
+  }
+  else {
     console.log('data not received');
     isFirstSent.value = true;
     sixPanelData.value = {
@@ -118,6 +131,12 @@ watchEffect(() => {
       }],
       comment: '',
     };
+  }
+
+  if (panel.value || panel.value === 0) {
+    disabled.value = true;
+  } else {
+    disabled.value = false;
   }
 });
 </script>

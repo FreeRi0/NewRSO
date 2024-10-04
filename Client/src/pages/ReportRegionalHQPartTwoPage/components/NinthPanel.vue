@@ -3,14 +3,15 @@
     <v-expansion-panels v-model="panel" class="mb-2">
       <v-progress-circular v-show="!items.length" class="circleLoader" indeterminate></v-progress-circular>
       <v-expansion-panel :disabled="disabled" v-show="items.length" v-for="item in items"
-        :key="item.id"><v-expansion-panel-title>
+        :key="item.id"><v-expansion-panel-title :class="isErrorPanel ? 'visible-error' : ''">
           <div class="title_wrap">
             <p class="form__title">{{ item.name }}</p>
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="9" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)" @error="setError" @uploadFile="uploadFile($event, item.id)" :data="ninthPanelData"
-            @getPanelNumber="getPanelNumber($event)" @getId="getId($event)" @deleteFile="deleteFile($event, item.id)"
+            @formData="formData($event, item.id)" @error="setError" @uploadFile="uploadFile($event, item.id)"
+            :data="ninthPanelData" @getPanelNumber="getPanelNumber($event)" @getId="getId($event)"
+            @deleteFile="deleteFile($event, item.id)" :is-error-panel="isErrorPanel"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
@@ -19,7 +20,7 @@
   </v-card>
 </template>
 <script setup>
-import { ref, watchEffect } from "vue";
+import { ref, watchEffect, inject } from "vue";
 import { SeventhPanelForm } from "./index";
 import { reportPartTwoService } from "@services/ReportService.ts";
 
@@ -30,11 +31,13 @@ const props = defineProps({
   centralHeadquarterCommander: {
     type: Boolean
   },
+  isErrorPanel: Boolean,
   items: Array,
   data: Object
 });
 
 const link_err = ref(false);
+const swal = inject('$swal');
 
 const setError = (err) => {
   link_err.value = err;
@@ -64,18 +67,34 @@ let el_id = ref(null);
 const formData = async (reportData, reportNumber) => {
   try {
     console.log('send2', isFirstSent.value)
-    // if(link_err.value) return false;
-    if (isFirstSent.value === true) {
-      console.log('First time sending data');
-      await reportPartTwoService.createMultipleReportAll(reportData, '9', reportNumber, true);
-      isFirstSent.value = false;
-    } else {
-      console.log('Second time sending data');
-      const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
-      emit('getData', data, 9, reportNumber);
+    if (!link_err.value) {
+      if (isFirstSent.value) {
+        console.log('First time sending data');
+        const { data } = await reportPartTwoService.createMultipleReportAll(reportData, '9', reportNumber);
+        isFirstSent.value = false;
+        emit('getData', data, 9, reportNumber);
+      } else {
+        console.log('Second time sending data');
+        const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber);
+        emit('getData', data, 9, reportNumber);
+      }
     }
   } catch (e) {
     console.log('ninth panel error: ', e);
+    if (e.response.data.links) {
+      e.response.data.links.forEach(item => {
+        console.log('item', item)
+        if (item.link.includes('Введите правильный URL.')) {
+          swal.fire({
+            position: 'center',
+            icon: 'warning',
+            title: `Введите корректный URL`,
+            showConfirmButton: false,
+            timer: 2500,
+          })
+        }
+      })
+    }
   }
 };
 
@@ -119,11 +138,6 @@ const deleteFile = async (reportData, reportNumber) => {
 
 watchEffect(() => {
   console.log(isFirstSent, props.data)
-  if (panel.value || panel.value === 0) {
-    disabled.value = true;
-  } else {
-    disabled.value = false;
-  }
   if (Object.keys(props.data[el_id.value]).length > 0) {
     console.log('data yes')
     isFirstSent.value = false;
@@ -141,6 +155,12 @@ watchEffect(() => {
       file_type: '',
       comment: '',
     };
+  }
+
+  if (panel.value || panel.value === 0) {
+    disabled.value = true;
+  } else {
+    disabled.value = false;
   }
 });
 

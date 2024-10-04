@@ -35,8 +35,8 @@
                         Скан подтверждающего документа<sup class="valid-red">*</sup>
                     </label>
                     <InputReport v-if="!seventhPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
-                        id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile($event, 7)"
-                        :disabled="isSent" />
+                        id="scan_file" :is-error-panel="isErrorPanel" name="scan_file" width="100%" height="auto"
+                        @change="uploadFile($event, 7)" :disabled="isSent || seventhPanelData.prize_place === 'Нет'" />
                     <FileBoxComponent v-else :file="seventhPanelData.document" :fileType="seventhPanelData.file_type"
                         :fileSize="seventhPanelData.file_size" @click="deleteFile(7)"></FileBoxComponent>
                 </div>
@@ -45,12 +45,9 @@
                     <label class="form__label mt-4" for="14">Ссылка на публикацию о победе
                         <sup class="valid-red">*</sup></label>
                     <div class="form__wrapper" v-for="(item, index) in seventhPanelData.links" :key="index">
-                        <InputReport @focusout="focusOut" @error="setError" name="14" :is-link="true" :disabled="isSent"
+                        <InputReport @focusout="focusOut" @error="setError" name="14" :is-link="true" :disabled="isSent || seventhPanelData.prize_place === 'Нет'"
                             placeholder="Введите ссылку, например,  https://vk.com/cco_monolit" :maxlength="200"
-                            v-model:value="item.link" class="mb-2" />
-                        <!-- <div v-if="!isValidURL(item.link)">
-                            <p class="error-message">Invalid URL 7</p>
-                        </div> -->
+                            v-model:value="item.link" :is-error-panel="isErrorPanel" class="mb-2" />
                         <div v-if="!isSent">
                             <div class="add_link" @click="addLink(7)"
                                 v-if="seventhPanelData.links.length === index + 1">
@@ -80,7 +77,7 @@
                 <div class="form__field">
                     <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
                     <TextareaReport v-model:value="seventhPanelData.comment" id="comment" name="comment" :rows="1"
-                        autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :disabled="isSent"
+                        autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :disabled="isSent || seventhPanelData.prize_place === 'Нет'"
                         max-length-text="3000" counter-visible />
                 </div>
                 <div class="form__field-result" style="display: flex; align-items: center;">
@@ -111,8 +108,9 @@
                         Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
                     </p>
                     <InputReport @focusout="focusOut" v-model:value="sixPanelData.number_of_members"
-                        :disabled="isSentSix" placeholder="Введите число" id="15" name="14"
-                        class="form__input number_input" type="number" :max="32767" />
+                        :disabled="isSentSix" :is-error-panel="isErrorPanel" :is-link="false"
+                        placeholder="Введите число" id="15" name="14" class="form__input number_input" type="number"
+                        :max="32767" />
                 </div>
                 <div class="form__field">
                     <label class="form__label" for="14">Ссылка на социальные сети/ электронные<br>
@@ -121,8 +119,8 @@
 
                     <div class="form__wrapper" v-for="(item, index) in sixPanelData.links" :key="index">
                         <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                            @focusout="focusOut" @error="setError" :disabled="isSentSix" :maxlength="200" name="14"
-                            v-model:value="item.link" :is-link="true" class="mb-2" />
+                            @focusout="focusOut" :is-error-panel="isErrorPanel" @error="setError" :disabled="isSentSix || (sixPanelData.number_of_members == 0 || sixPanelData.number_of_members === null)"
+                            :maxlength="200" name="link" v-model:value="item.link" :is-link="true" class="mb-2" />
 
                         <div v-if="!isSentSix">
                             <div class="add_link" @click="addLink(6)" v-if="sixPanelData.links.length === index + 1">
@@ -140,7 +138,7 @@
                     <label class="form__label" for="14">Комментарий </label>
                     <TextareaReport v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1"
                         autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
-                        :disabled="isSentSix" :max-length-text="3000" counter-visible />
+                        :disabled="isSentSix || (sixPanelData.number_of_members == 0 || sixPanelData.number_of_members === null)" :max-length-text="3000" counter-visible />
 
                 </div>
             </div>
@@ -178,8 +176,8 @@
                         Скан документа, подтверждающего проведение акции
                     </label>
                     <InputReport v-if="!ninthPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
-                        id="scan_file" name="scan_file" width="100%" :disabled="isSentNine" height="auto"
-                        @change="uploadFile($event, 9)" />
+                        id="scan_file" :is-error-panel="isErrorPanel" name="scan_file" width="100%"
+                        :disabled="isSentNine || ninthPanelData.event_happened === false" height="auto" @change="uploadFile($event, 9)" />
                     <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
                         :fileSize="ninthPanelData.file_size" @click="deleteFile(9)"></FileBoxComponent>
                 </div>
@@ -190,8 +188,8 @@
                         <sup class="valid-red">*</sup></label>
 
                     <div class="form__wrapper" v-for="(item, index) in ninthPanelData.links" :key="index">
-                        <InputReport  @focusout="focusOut" @error="setError" :disabled="isSentNine" name="14"
-                            :maxlength="200" :is-link="true"
+                        <InputReport @focusout="focusOut" @error="setError" :disabled="isSentNine || ninthPanelData.event_happened === false" name="14"
+                            :maxlength="200" :is-error-panel="isErrorPanel" :is-link="true"
                             placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
                             class="mb-2" />
                         <div v-if="!isSentNine">
@@ -210,7 +208,7 @@
                     <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
                     <TextareaReport v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1"
                         autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
-                        :max-length-text="3000" counter-visible :disabled="isSentNine" />
+                        :max-length-text="3000" counter-visible :disabled="isSentNine || ninthPanelData.event_happened === false" />
                 </div>
                 <div class="form__field-result" style="display: flex; align-items: center;">
                     <v-checkbox class="result-checkbox" id="v-checkbox" />
@@ -768,7 +766,7 @@
     </v-card-text>
 </template>
 <script setup>
-import { ref, watchEffect, watch, inject } from 'vue';
+import { ref, watchEffect, watch } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { FileBoxComponent } from '@entities/RatingRoComponents/components';
 import { InputReport, TextareaReport } from '@shared/components/inputs';
@@ -784,6 +782,7 @@ const props = defineProps({
     isCentralHeadquarterCommander: Boolean,
     isDistrictHeadquarterCommander: Boolean,
     id: String,
+    isErrorPanel: Boolean,
     data: Object,
 });
 
@@ -793,7 +792,7 @@ const collapseForm = () => {
     emit('collapse-form');
 };
 
-const swal = inject('$swal');
+
 
 const isFirstSentSix = ref(true);
 const isFirstSentSeventh = ref(true);
@@ -936,26 +935,12 @@ const deleteFile = (number) => {
 const focusOut = () => {
     if (props.panel_number == 6) {
         try {
+            // if(isLinkError.value && )
             emit('formData', sixPanelData.value)
-    
-          
+
+
         } catch (e) {
-            e.response.data.forEach(item => {
-                console.log('yy', item.links);
-                if (item.links) {
-                    for (let i in item.links) {
-                        if (Object.keys(item.links[i]).length !== 0 && item.links[i].link.includes('Введите правильный URL.')) {
-                            swal.fire({
-                                position: 'center',
-                                icon: 'warning',
-                                title: `Введите корректный URL`,
-                                showConfirmButton: false,
-                                timer: 2500,
-                            })
-                        }
-                    }
-                }
-            })
+            console.log('data', e.response.data)
         }
     }
     else if (props.panel_number == 7) {
@@ -980,21 +965,8 @@ const focusOut = () => {
                 console.log('7', '2')
             }
         } catch (e) {
-            e.response.data.forEach(item => {
-                if (item.links) {
-                    for (let i in item.links) {
-                        if (Object.keys(item.links[i]).length !== 0 && item.links[i].link.includes('Введите правильный URL.')) {
-                            swal.fire({
-                                position: 'center',
-                                icon: 'warning',
-                                title: `Введите корректный URL`,
-                                showConfirmButton: false,
-                                timer: 2500,
-                            })
-                        }
-                    }
-                }
-            })
+            console.log('data', e.response.data);
+            
         }
 
     }
@@ -1019,21 +991,7 @@ const focusOut = () => {
                 console.log('9', '2')
             }
         } catch (e) {
-            e.response.data.forEach(item => {
-                if (item.links) {
-                    for (let i in item.links) {
-                        if (Object.keys(item.links[i]).length !== 0 && item.links[i].link.includes('Введите правильный URL.')) {
-                            swal.fire({
-                                position: 'center',
-                                icon: 'warning',
-                                title: `Введите корректный URL`,
-                                showConfirmButton: false,
-                                timer: 2500,
-                            })
-                        }
-                    }
-                }
-            })
+            console.log('data', e.response.data);
         }
 
     }
@@ -1066,46 +1024,58 @@ const deleteLink = async (number) => {
 
 watchEffect(() => {
     if (props.panel_number == 6) {
-        console.log('6_err', isLinkError.value)
-        emit('error',  isLinkError.value);
+
         if (Object.keys(props.data).length > 0) {
             isFirstSentSix.value = false
             sixPanelData.value = { ...props.data }
             isSentSix.value = props.data.is_sent;
+            if (isLinkError.value) {
+                console.log('gg');
+                emit('error', isLinkError.value)
+            } else {
+                console.log('hh')
+                emit('error', false)
+            }
+
             if (!sixPanelData.value.links.length) sixPanelData.value.links.push({ link: '' })
 
-            // emit('isSent', isFirstSentSix.value)
-        } else {
-            console.log('data not received');
-            isFirstSentSix.value = true;
-            sixPanelData.value = {
-                number_of_members: 0,
-                links: [{
-                    link: '',
-                }],
-                comment: '',
-            };
         }
-
+        else {
+            console.log('data not received');
+            // isFirstSentSix.value = true;
+            // sixPanelData.value = {
+            //     number_of_members: 0,
+            //     links: [{
+            //         link: '',
+            //     }],
+            //     comment: ''
+            // }
+        }
         emit('getId', props.id)
         emit('getPanelNumber', props.panel_number)
     } else if (props.panel_number == 7) {
-        console.log('7_err', isLinkError.value)
-        emit('error',  isLinkError.value);
         if (Object.keys(props.data).length > 0) {
             console.log('7')
             isFirstSentSeventh.value = false;
             // emit('isSent', isFirstSentSeventh.value)
             seventhPanelData.value = { ...props.data }
             isSent.value = props.data.is_sent;
+            if (isLinkError.value) {
+                console.log('gg');
+                emit('error', isLinkError.value)
+            } else {
+                console.log('hh')
+                emit('error', false)
+            }
 
             if (!seventhPanelData.value.links.length) seventhPanelData.value.links.push({ link: '' })
 
-        } else {
+        }
+        else {
             console.log('data not received');
             isFirstSentSeventh.value = true;
             seventhPanelData.value = {
-                prize_place: '',
+                prize_place: 'Нет',
                 links: [{
                     link: '',
                 }],
@@ -1116,21 +1086,28 @@ watchEffect(() => {
         emit('getPanelNumber', props.panel_number)
 
     } else if (props.panel_number == 9) {
-        emit('error',  isLinkError.value);
         if (Object.keys(props.data).length > 0) {
             isFirstSentNinth.value = false;
-            // emit('isSent', isFirstSentNinth.value)
             ninthPanelData.value = { ...props.data }
             isSentNine.value = props.data.is_sent;
+            if (isLinkError.value) {
+                console.log('gg');
+                emit('error', isLinkError.value)
+            } else {
+                console.log('hh')
+                emit('error', false)
+            }
             if (!ninthPanelData.value.links.length) {
                 ninthPanelData.value.links.push({ link: '' })
             }
 
-        } else {
+        }
+
+        else {
             console.log('data not received');
             isFirstSentNinth.value = true;
             ninthPanelData.value = {
-                event_happened: '',
+                event_happened: false,
                 links: [{
                     link: '',
                 }],

@@ -1,30 +1,17 @@
 <template>
-  <div :is-file="isFile"
-    :class="[
-      'form-input',
-      isFile ? 'form-input__file-input' : '',
-      isFileDistrict ? 'form-input__add-file' : '',
-      isLink ? 'form-input__link' : '',
-      (isErrorPanel && !value) ? 'form-input__file-error' : '',
-    ]"
-    :style="{ width: width }">
-    <input 
-      :type="type" 
-      :name="name" 
-      :style="{
-        height: height,
-      }" 
-      :value="value" 
-      :id="name" 
-      :placeholder="placeholder" 
-      :maxlength="maxLength" 
-      :readonly="readonly" 
-      :max="max"
-      :class="{ 'link__input': isLink, 'form-input__report--error': (isErrorPanel && !value) }" 
+  <div :is-file="isFile" :class="[
+    'form-input',
+    isFile ? 'form-input__file-input' : '',
+    isFileDistrict ? 'form-input__add-file' : '',
+    isLink ? 'form-input__link' : '',
+    (isErrorPanel && !value) ? 'form-input__file-error' : '',
+  ]" :style="{ width: width }">
+    <input :type="type" :name="name" :style="{
+      height: height,
+    }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly" :max="max"
       class="form-input__report"
-      @input="updateValue" 
-      v-bind="$attrs"
-      :disabled="disabled" />
+      :class="{ 'link__input': isLink, 'form-input__report--error': (isErrorPanel && !value) }" @input="updateValue"
+      v-bind="$attrs" :disabled="disabled" />
     <div class="form__counter" v-if="counterVisible">
       {{ textInputLength }} / {{ maxCounter }}
     </div>
@@ -41,7 +28,7 @@
     <div v-if="isError" class="form-input__error-block">
       <span class="form-input__error-text">Превышено&nbsp;максимальное&nbsp;значение&nbsp;{{ max }}</span>
     </div>
-    <div v-show="isLinkError && props.isLink && props.value"> <span class="form-input__error-text">Не верный формат
+    <div v-show="isLinkError && props.isLink && value"> <span class="form-input__error-text">Не верный формат
         url</span></div>
 
   </div>
@@ -88,6 +75,9 @@ const props = defineProps({
   value: {
     type: [String, Number],
   },
+  linkVal: {
+    type: [String, Number],
+  },
   disabled: {
     type: Boolean,
     default: false,
@@ -128,10 +118,19 @@ let isError = ref(props.isError);
 let isLinkError = ref(false);
 
 const textInputLength = ref(null);
-const urlRegex = new RegExp('^http[s]?:\\/\\/[a-zA-Z\\d.-]+[:]?\\d{0,4}[\\/]?[a-zA-Z\\d\\/\\-]+$');
+const urlRegex = /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
 function isValidURL(url) {
   return urlRegex.test(url);
 }
+
+const validateLink = (value) => {
+  if (value !== '' && props.isLink == true) {
+    const isValid = isValidURL(value);
+    isLinkError.value = !isValid;
+    emit('error', isLinkError.value);
+    console.log('err_link_1', isLinkError.value);
+  }
+};
 
 watchEffect(() => {
   textInputLength.value = typeof props.value === 'string' ? props.value.length : 0;
@@ -144,10 +143,7 @@ watchEffect(() => {
 });
 
 watchEffect(() => {
-  const isValid = isValidURL(props.value);
-  isLinkError.value = !isValid;
-  emit('error', isLinkError.value);
-  // console.log('err_link_1', isLinkError.value);
+  validateLink(props.value)
 });
 
 const updateValue = (event) => {

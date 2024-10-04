@@ -1,6 +1,6 @@
 <template>
   <div style="margin-right: 10px; margin-bottom: 10px;">
-    <v-expansion-panels>
+    <v-expansion-panels v-model="panel">
       <v-expansion-panel>
         <v-expansion-panel-title>
           Всероссийская патриотическая акция «Снежный Десант РСО»
@@ -12,6 +12,7 @@
               @formData="formData($event, 1)"
               @uploadFile="uploadFile($event, 1)"
               @deleteFile="deleteFile(1)"
+              @collapse-form="collapseForm"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -28,6 +29,7 @@
               @formData="formData($event, 2)"
               @uploadFile="uploadFile($event, 2)"
               @deleteFile="deleteFile(2)"
+              @collapse-form="collapseForm"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -85,6 +87,11 @@ const tenthPanelDataSecond = ref({
     },
   ],
 });
+const panel = ref(false);
+
+const collapseForm = () => {
+  panel.value = false;
+};
 
 const formData = async (reportData, reportNumber) => {
   console.log('reportData: ', reportData)
