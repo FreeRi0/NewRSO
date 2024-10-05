@@ -102,7 +102,7 @@
     &__textarea-block {
         max-height: 229px;
         overflow-y: auto;
-        padding: 1px;
+        padding: 2px 1px 1px;
     }
 
     &__textarea {
