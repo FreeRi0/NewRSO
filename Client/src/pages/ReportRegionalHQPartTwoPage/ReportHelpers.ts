@@ -1,5 +1,9 @@
 import { Ref } from "vue";
 
+type error = {
+  id: number;
+  error: boolean;
+}
 export const fileValidate = (value: { size: number; type: string; }, maxSizeFile: number, isErrorFile: Ref,) => {
   const FILE_TYPES = ['jpg', 'jpeg', 'png', 'pdf'];
 
@@ -17,7 +21,7 @@ export const fileValidate = (value: { size: number; type: string; }, maxSizeFile
   }
 }
 
-export const dateValidate = (events: Ref, isErrorDate: Ref, noDateError: Ref) => {
+export const dateValidate = (events: Ref, isErrorDate: Ref<error[]>, noDateError: Ref) => {
  
   events.value.forEach(() => {
 
@@ -40,7 +44,7 @@ export const dateValidate = (events: Ref, isErrorDate: Ref, noDateError: Ref) =>
             };
           }
         }
-        if (Object.values(isErrorDate.value).some((item: any) => item.error === true)) {
+        if (Object.values(isErrorDate.value).some((item: error) => item.error === true)) {
           noDateError.value = true;
         } else {
           noDateError.value = false;
