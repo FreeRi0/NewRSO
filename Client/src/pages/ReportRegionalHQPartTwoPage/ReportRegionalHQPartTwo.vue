@@ -903,6 +903,11 @@ onMounted(() => {
 
 </script>
 <style>
+.swal2-shown {
+  overflow: unset !important;
+  padding-right: 0px !important;
+}
+
 .v-expansion-panel__shadow {
   box-shadow: none;
 }

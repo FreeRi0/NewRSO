@@ -52,6 +52,7 @@
               type="date"
               @focusout="focusOut"
               :disabled="isSent"
+              :min-date="event.start_date"
               :is-error-date="Object.values(isErrorDate).some(item => item.error === true && item.id === index)"
           />
         </div>

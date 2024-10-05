@@ -9,21 +9,22 @@
     <input :type="type" :name="name" :style="{
       height: height,
     }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly" :max="max"
-      class="form-input__report" :step="step"
-      :class="{ 'link__input': isLink, 'form-input__report--error': (isErrorPanel && !value), 'form__input--error': isErrorDate, }" @input="updateValue"
-      v-bind="$attrs" :disabled="disabled" />
+           class="form-input__report" :step="step"
+           :class="{ 'link__input': isLink, 'form-input__report--error': (isErrorPanel && !value), 'form__input--error': isErrorDate, }"
+           @input="updateValue"
+           v-bind="$attrs" :disabled="disabled" :min="props.minDate"/>
     <div class="form__counter" v-if="counterVisible">
       {{ textInputLength }} / {{ maxCounter }}
     </div>
     <div v-if="isFile" class="form-input__text">
       <span>Перетащите файлы или выберите на&nbsp;компьютере</span>
       <span>
-        <SvgIcon iconName="add-file" />
+        <SvgIcon iconName="add-file"/>
         Выбрать файл
       </span>
     </div>
     <div v-if="isFileDistrict" class="form-input__icon">
-      <SvgIcon iconName="add-file" />
+      <SvgIcon iconName="add-file"/>
     </div>
     <div v-if="isError" class="form-input__error-block">
       <span class="form-input__error-text">
@@ -43,7 +44,7 @@
 
 <script setup>
 import { ref, watchEffect } from 'vue';
-import { MaskInput } from 'vue-3-mask';
+// import { MaskInput } from 'vue-3-mask';
 import { SvgIcon } from '@shared/index';
 
 defineOptions({
@@ -125,6 +126,7 @@ const props = defineProps({
   isErrorPanel: {
     type: Boolean,
   },
+  minDate: String
 });
 
 // let isError = ref(props.isError);
@@ -132,6 +134,7 @@ let isLinkError = ref(false);
 
 const textInputLength = ref(null);
 const urlRegex = /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
+
 function isValidURL(url) {
   return urlRegex.test(url);
 }
@@ -184,7 +187,7 @@ const updateValue = (event) => {
   } else {
     isError.value = false;
   }
-   
+
 };
 </script>
 
@@ -304,7 +307,7 @@ const updateValue = (event) => {
     color: #db0000;
 
     &::placeholder {
-        color: #db0000;
+      color: #db0000;
     }
   }
 
