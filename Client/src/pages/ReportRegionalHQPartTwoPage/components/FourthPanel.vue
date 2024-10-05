@@ -12,6 +12,9 @@
                 name="participants_number"
                 class="form__input" type="number"
                 placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="2147483647"
                 @focusout="focusOut"
                 :disabled="isSent"
             />

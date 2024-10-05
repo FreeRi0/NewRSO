@@ -12,6 +12,9 @@
                 class="form__input form__field-people-count-field"
                 type="number"
                 placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="2147483647"
                 @focusout="focusOut"
                 :disabled="isSent"
             />
@@ -26,6 +29,9 @@
                 class="form__input form__field-people-count-field"
                 type="number"
                 placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="2147483647"
                 @focusout="focusOut"
                 :disabled="isSent"
             />
