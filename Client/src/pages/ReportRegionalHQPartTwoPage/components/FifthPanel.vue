@@ -82,15 +82,14 @@
               @change="uploadFile($event, index)"
               :disabled="isSent"
           />
-          <div v-else class="form__file-box">
-            <span class="form__file-name">
-              {{ event.regulations.split('/').at(-1) }}
-            </span>
-            <span class="form__file-size">{{ '123' }} Мб</span>
-            <button v-if="!isSent" @click="deleteFile(index)" class="form__button-delete-file">
-              Удалить
-            </button>
-          </div>
+          <FileBoxComponent
+            v-if="event.regulations && typeof event.regulations === 'string'"
+            :file="event.regulations"
+            :fileType="event.file_type"
+            :fileSize="event.file_size"
+            @click="deleteFile(index)"
+            :is-sent="isSent"
+          ></FileBoxComponent>
         </div>
       </div>
       <div style="width: 100%;">
@@ -377,6 +376,7 @@ import { Button } from '@shared/components/buttons';
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { ReportTabs } from './index';
 import { SvgIcon } from '@shared/index';
+import { FileBoxComponent } from "@entities/RatingRoComponents/components";
 
 const swal = inject('$swal');
 
@@ -403,6 +403,8 @@ const events = ref([
     start_date: null,
     end_date: null,
     regulations: '',
+    file_size: null,
+    file_type: '',
     links: [
       {
         link: '',
