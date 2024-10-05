@@ -118,7 +118,7 @@ const nineteenthPanelData = ref({
 });
 
 const focusOut = async () => {
-  console.log(nineteenthPanelData.value);
+  // console.log(nineteenthPanelData.value);
 
   if (nineteenthPanelData.value.employed_student_start === '') {
     nineteenthPanelData.value.employed_student_start = null;
@@ -143,7 +143,7 @@ const focusOut = async () => {
 
 watchEffect(() => {
   // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
-  console.log(props.data);
+  // console.log(props.data);
   if (props.data) {
     isFirstSent.value = false;
     nineteenthPanelData.value.employed_student_start = props.data.employed_student_start;

@@ -187,7 +187,7 @@ const changeValue = (event) => {
 };
 
 const focusOut = async () => {
-    console.log(twelfthPanelData.value);
+    // console.log(twelfthPanelData.value);
     let formData = new FormData();
     
     // formData.append('amount_of_money', twelfthPanelData.value.amount_of_money);
@@ -218,7 +218,7 @@ const uploadFile = async (event) => {
     fileValidate(scanFile.value, 7, isErrorFile);
     if (isErrorFile.value) {
     twelfthPanelData.value.scan_file = scanFile.value.name;
-    console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
+    // console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
   } else {
     try {
         if (isFirstSent.value) {
