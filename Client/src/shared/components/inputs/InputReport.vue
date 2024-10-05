@@ -166,8 +166,8 @@ const updateValue = (event) => {
   emit('update:value', event.target.value);
   // emit('update:value', event.target.maxLength ? event.target.value = event.target.value.slice(0, event.target.maxLength) : event.target.value);
 
-  // console.log(event.target.validity);//------------------------------------------
-  if (event.target === typeof 'number' && !event.target.validity.valid) {
+  console.log(event.target.validity);//------------------------------------------
+  if (!event.target.validity.valid) {
     isError.value = true;
 
     if (event.target.validity.badInput) {
