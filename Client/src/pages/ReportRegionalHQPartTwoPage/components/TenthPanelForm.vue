@@ -73,8 +73,10 @@
               placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
               @focusout="formData"
               :disabled="isSent || !tenthPanelData.event_happened"
+              is-link
           />
-          <Button v-if="!isSent" class="addLinkBtn" label="+ Добавить ссылку" @click="addLink"/>
+          <Button v-if="tenthPanelData.links.length === i + 1" class="form__add-link-button" label="+ Добавить ссылку" @click="addLink"/>
+          <Button class="form__add-link-button" v-else label="Удалить" @click="onDeleteLink(i)"/>
         </div>
       </div>
       <div class="form__field-comment">
@@ -211,7 +213,7 @@ const tenthPanelData = ref({
 });
 const isSent = ref(false);
 
-const emit = defineEmits(['collapse-form','formData', 'uploadFile', 'deleteFile']);
+const emit = defineEmits(['collapse-form','formData', 'uploadFile', 'deleteFile', 'deleteLink']);
 
 const collapseForm = () => {
   emit('collapse-form');
@@ -224,6 +226,10 @@ const formData = () => {
 const addLink = () => {
   tenthPanelData.value.links.push({link: ''})
 };
+
+const onDeleteLink = (linkIndex) => {
+  emit('deleteLink', linkIndex)
+}
 
 const uploadFile = async (event) => {
   emit('uploadFile', event)
@@ -242,6 +248,15 @@ watchPostEffect(() => {
 })
 </script>
 <style lang="scss" scoped>
+.form__add-link-button {
+  width: 141px;
+  margin: 8px 0;
+  border: none;
+  background-color: transparent;
+  color: #1F7CC0;
+  padding: 0;
+  text-align: left;
+}
 .form-input__file-input {
   display: flex;
   justify-content: center;
