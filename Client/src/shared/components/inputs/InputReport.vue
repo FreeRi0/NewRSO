@@ -30,6 +30,11 @@
         {{ isErrorMessage }}
         </span>
     </div>
+    <!-- <div v-if="isErrorDate" class="form-input__error-block">
+      <span class="form-input__error-text">
+        Дата окончания не может быть меньше даты начала
+        </span>
+    </div> -->
     <div v-show="isLinkError && props.isLink && value"> <span class="form-input__error-text">Не верный формат
         url</span></div>
 
@@ -114,6 +119,9 @@ const props = defineProps({
   //   type: Boolean,
   //   default: false,
   // },
+  // isErrorDate: {
+  //   type: Boolean,
+  // },
   isErrorPanel: {
     type: Boolean,
   },
@@ -159,7 +167,7 @@ const updateValue = (event) => {
   // emit('update:value', event.target.maxLength ? event.target.value = event.target.value.slice(0, event.target.maxLength) : event.target.value);
 
   // console.log(event.target.validity);//------------------------------------------
-  if (!event.target.validity.valid) {
+  if (event.target === typeof 'number' && !event.target.validity.valid) {
     isError.value = true;
 
     if (event.target.validity.badInput) {
