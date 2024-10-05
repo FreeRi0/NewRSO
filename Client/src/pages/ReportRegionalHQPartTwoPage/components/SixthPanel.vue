@@ -3,7 +3,7 @@
     <v-expansion-panels v-model="panel" class="mb-2">
       <v-progress-circular v-show="!items.length" class="circleLoader" indeterminate></v-progress-circular>
       <v-expansion-panel :disabled="disabled" v-show="items.length" v-for="item in items"
-        :key="item.id"><v-expansion-panel-title :class="isErrorPanel ? 'visible-error' : ''">
+        :key="item.id"><v-expansion-panel-title :class="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id) ? 'visible-error' : ''">
           <div class="title_wrap">
             <p class="form__title">{{ item.name }}</p>
             <div class="title_wrap__items">
@@ -15,7 +15,7 @@
           <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()"
             @formData="formData($event, item.id)" @error="setError" @getPanelNumber="getPanelNumber($event)"
             @getId="getId($event)" :data="sixPanelData"
-            :isCentralHeadquarterCommander="props.centralHeadquarterCommander" :is-error-panel="isErrorPanel"
+            :isCentralHeadquarterCommander="props.centralHeadquarterCommander" :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item">
           </SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
@@ -35,10 +35,12 @@ const props = defineProps({
   centralHeadquarterCommander: {
     type: Boolean
   },
-  isErrorPanel: Boolean,
+  isErrorPanel: Object,
   items: Array,
   data: Object,
 });
+
+console.log('error66', props.isErrorPanel)
 
 const disabled = ref(false);
 const link_err = ref(false);
@@ -97,7 +99,7 @@ const getPanelNumber = (number) => {
   emit('getPanelNumber', number);
 }
 watchEffect(() => {
-    console.log('error', props.isErrorPanel)
+
   if (Object.keys(props.data[el_id.value]).length > 0) {
     console.log('data received', props.data);
     isFirstSent.value = false;
@@ -281,13 +283,9 @@ watchEffect(() => {
   font-weight: 600;
   line-height: 21.6px;
   text-align: left;
-  // border: none;
+  border-left: 6px solid #F3F4F5;
   padding-left: 40px;
 
 }
 
-.v-expansion-panel-title.visible-error,
-.v-expansion-panel--active>.v-expansion-panel-title.visible-error {
-  border-color: #db0000;
-}
 </style>

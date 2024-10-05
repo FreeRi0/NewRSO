@@ -71,7 +71,8 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
-            <v-expansion-panel-title :class="isErrorPanel.six ? 'visible-error' : ''">
+            <v-expansion-panel-title
+              :class="Object.values(isErrorPanel.six).some(item => item.error === true) ? 'visible-error' : ''">
               6. Участие бойцов студенческих отрядов РО&nbsp;РСО во&nbsp;всероссийских (международных)
               мероприятиях и&nbsp;проектах (в&nbsp;том числе и&nbsp;трудовых) &laquo;К&raquo;
             </v-expansion-panel-title>
@@ -82,7 +83,8 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
-            <v-expansion-panel-title :class="isErrorPanel.seventh ? 'visible-error' : ''">
+            <v-expansion-panel-title
+              :class="Object.values(isErrorPanel.seventh).some(item => item.error === true) ? 'visible-error' : ''">
               7. Победители студенческих отрядов РО&nbsp;РСО во&nbsp;всероссийских (международных) проектах
               и&nbsp;конкурсах &laquo;К&raquo;
             </v-expansion-panel-title>
@@ -104,7 +106,8 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
-            <v-expansion-panel-title :class="isErrorPanel.ninth ? 'visible-error' : ''">
+            <v-expansion-panel-title
+              :class="Object.values(isErrorPanel.ninth).some(item => item.error === true) ? 'visible-error' : ''">
               9. Организация обязательных общесистемных мероприятий РСО на&nbsp;региональном уровне &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
@@ -279,9 +282,9 @@ const isErrorPanel = ref({
   first: false,
   fourth: false,
   fifth: false,
-  six: false,
-  seventh: false,
-  ninth: false,
+  six: {},
+  seventh: {},
+  ninth: {},
   tenth: false,
   eleventh: false,
   twelfth: false,
@@ -381,17 +384,6 @@ const getMultiplyData = async () => {
       }
     }
   });
-  // const sixDataErrPromises = six_items.value.map(async (item) => {
-  //   try {
-  //     return { id: item.id, data: {err: false} };
-  //   } catch (error) {
-  //     if (error.response && error.response.status === 404) {
-  //       return { id: item.id, data: {} };
-  //     } else {
-  //       throw error;
-  //     }
-  //   }
-  // });
 
   const seventhDataPromises = seventh_items.value.map(async (item) => {
     try {
@@ -419,7 +411,6 @@ const getMultiplyData = async () => {
 
   const [sixDataResults, seventhDataResults, ninthDataResults] = await Promise.all([
     Promise.all(sixDataPromises),
-    // Promise.all(sixDataErrPromises),
     Promise.all(seventhDataPromises),
     Promise.all(ninthDataPromises),
   ]);
@@ -427,10 +418,6 @@ const getMultiplyData = async () => {
   sixDataResults.forEach((result) => {
     reportData.value.six[result.id] = result.data;
   });
-  // sixDataErr.forEach((result) => {
-  //   isErrorPanel.value.six[result.id] = result.data;
-  // });
-
   seventhDataResults.forEach((result) => {
     reportData.value.seventh[result.id] = result.data;
   });
@@ -597,16 +584,34 @@ const filterPanelsData = () => {
       filteredSix[i] = reportData.value.six[i];
     }
   }
+  for (let i in filteredSix) {
+    isErrorPanel.value.six[i] = {
+      id: i,
+      error: false,
+    }
+  }
 
   for (let i in reportData.value.seventh) {
     if (reportData.value.seventh[i].prize_place !== 'Нет') {
       filteredSeventh[i] = reportData.value.seventh[i];
     }
   }
+  for (let i in filteredSeventh) {
+    isErrorPanel.value.seventh[i] = {
+      id: i,
+      error: false,
+    }
+  }
 
   for (let i in reportData.value.ninth) {
     if (reportData.value.ninth[i].event_happened !== false) {
       filteredNinth[i] = reportData.value.ninth[i];
+    }
+  }
+  for (let i in filteredNinth) {
+    isErrorPanel.value.ninth[i] = {
+      id: i,
+      error: false,
     }
   }
 
@@ -694,8 +699,8 @@ const sendReport = async () => {
 };
 
 const checkEmptyFields = (data) => {
-  console.log('data', data)
   const { filteredSix, filteredSeventh, filteredNinth } = filterPanelsData();
+  console.log('data', data)
 
   if (!data.first || !(data.first.amount_of_money && data.first.scan_file)) {
     isErrorPanel.value.first = true;
@@ -733,7 +738,7 @@ const checkEmptyFields = (data) => {
     })
     return false;
   }
-  if (data.fifth && data.fifth.events.length) {
+  if (data.fifth) {
     for (let event of data.fifth.events) {
       if (!(event.participants_number && event.ro_participants_number && event.end_date && event.start_date && event.regulations && data.fifth.comment)) {
         isErrorPanel.value.fifth = true;
@@ -761,8 +766,10 @@ const checkEmptyFields = (data) => {
 
   for (let item in filteredSix) {
     if (!(filteredSix[item].links.length)) {
-      isErrorPanel.value.six= true;
-      console.log('errors', isErrorPanel.value.six)
+      isErrorPanel.value.six[item] = {
+        id: item,
+        error: true,
+      };
       swal.fire({
         position: 'center',
         icon: 'warning',
@@ -775,7 +782,10 @@ const checkEmptyFields = (data) => {
   }
   for (let item in filteredSeventh) {
     if (!(filteredSeventh[item].links.length && filteredSeventh[item].document && filteredSeventh[item].comment)) {
-      isErrorPanel.value.seventh = true;
+      isErrorPanel.value.seventh[item] = {
+        id: item,
+        error: true,
+      };
       swal.fire({
         position: 'center',
         icon: 'warning',
@@ -788,7 +798,10 @@ const checkEmptyFields = (data) => {
   }
   for (let item in filteredNinth) {
     if (!(filteredNinth[item].links.length)) {
-      isErrorPanel.value.ninth = true;
+      isErrorPanel.value.ninth[item] = {
+        id: item,
+        error: true,
+      };
       swal.fire({
         position: 'center',
         icon: 'warning',
