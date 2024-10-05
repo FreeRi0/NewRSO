@@ -3,7 +3,7 @@
     <v-expansion-panels v-model="panel" class="mb-2">
       <v-progress-circular v-show="!items.length" class="circleLoader" indeterminate></v-progress-circular>
       <v-expansion-panel :disabled="disabled" v-show="items.length" v-for="item in items"
-        :key="item.id"><v-expansion-panel-title :class="isErrorPanel ? 'visible-error' : ''">
+        :key="item.id"><v-expansion-panel-title :class="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)  ? 'visible-error' : ''">
           <div class="title_wrap">
             <p class="form__title">{{ item.name }}</p>
           </div>
@@ -11,7 +11,7 @@
           <SeventhPanelForm :id="item.id" :panel_number="9" @collapse-form="collapsed()"
             @formData="formData($event, item.id)" @error="setError" @uploadFile="uploadFile($event, item.id)"
             :data="ninthPanelData" @getPanelNumber="getPanelNumber($event)" @getId="getId($event)"
-            @deleteFile="deleteFile($event, item.id)" :is-error-panel="isErrorPanel"
+            @deleteFile="deleteFile($event, item.id)" :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
@@ -20,7 +20,7 @@
   </v-card>
 </template>
 <script setup>
-import { ref, watchEffect, inject } from "vue";
+import { ref, watchEffect } from "vue";
 import { SeventhPanelForm } from "./index";
 import { reportPartTwoService } from "@services/ReportService.ts";
 
@@ -31,13 +31,13 @@ const props = defineProps({
   centralHeadquarterCommander: {
     type: Boolean
   },
-  isErrorPanel: Boolean,
+  isErrorPanel: Object,
   items: Array,
   data: Object
 });
 
 const link_err = ref(false);
-const swal = inject('$swal');
+// const swal = inject('$swal');
 
 const setError = (err) => {
   link_err.value = err;
@@ -59,11 +59,6 @@ const ninthPanelData = ref({
 const isFirstSent = ref(null);
 let el_id = ref(null);
 
-// const sent = (sentVal) => {
-//   console.log('is sent: ', sentVal, isFirstSent.value);
-//   isFirstSent.value = sentVal;
-// }
-
 const formData = async (reportData, reportNumber) => {
   try {
     console.log('send2', isFirstSent.value)
@@ -81,20 +76,6 @@ const formData = async (reportData, reportNumber) => {
     }
   } catch (e) {
     console.log('ninth panel error: ', e);
-    if (e.response.data.links) {
-      e.response.data.links.forEach(item => {
-        console.log('item', item)
-        if (item.link.includes('Введите правильный URL.')) {
-          swal.fire({
-            position: 'center',
-            icon: 'warning',
-            title: `Введите корректный URL`,
-            showConfirmButton: false,
-            timer: 2500,
-          })
-        }
-      })
-    }
   }
 };
 
@@ -299,7 +280,7 @@ watchEffect(() => {
   font-weight: 600;
   line-height: 21.6px;
   text-align: left;
-  border: none;
+  border-left: 6px solid #F3F4F5;
   padding-left: 40px;
 }
 </style>

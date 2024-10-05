@@ -3,7 +3,7 @@
     <v-expansion-panels v-model="panel" class="mb-2">
       <v-progress-circular v-show="!items.length" class="circleLoader" indeterminate></v-progress-circular>
       <v-expansion-panel :disabled="disabled" v-show="items.length" v-for="item in items"
-        :key="item.id"><v-expansion-panel-title :class="isErrorPanel ? 'visible-error' : ''">
+        :key="item.id"><v-expansion-panel-title :class="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id) ? 'visible-error' : ''">
           <div class="title_wrap">
             <p class="form__title">{{ item.name }}</p>
             <div class="title_wrap__items">
@@ -15,7 +15,7 @@
           <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()"
             @formData="formData($event, item.id)" @error="setError" @getPanelNumber="getPanelNumber($event)"
             @getId="getId($event)" :data="sixPanelData"
-            :isCentralHeadquarterCommander="props.centralHeadquarterCommander" :is-error-panel="isErrorPanel"
+            :isCentralHeadquarterCommander="props.centralHeadquarterCommander" :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item">
           </SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
@@ -23,7 +23,7 @@
   </v-card>
 </template>
 <script setup>
-import { ref, watchEffect, inject } from "vue";
+import { ref, watchEffect} from "vue";
 import { SeventhPanelForm } from "./index";
 import { reportPartTwoService } from "@services/ReportService.ts";
 
@@ -35,23 +35,21 @@ const props = defineProps({
   centralHeadquarterCommander: {
     type: Boolean
   },
-  isErrorPanel: Boolean,
+  isErrorPanel: Object,
   items: Array,
   data: Object,
 });
 
+console.log('error66', props.isErrorPanel)
+
 const disabled = ref(false);
 const link_err = ref(false);
-const swal = inject('$swal');
+// const swal = inject('$swal');
 const setError = (err) => {
   link_err.value = err;
 }
 
 const isFirstSent = ref(null);
-// const sent = (sentVal) => {
-//   console.log('is sent: ', sentVal, isFirstSent.value);
-//   isFirstSent.value = sentVal;
-// }
 const emit = defineEmits(['getData', 'getId', 'getPanelNumber']);
 
 const sixPanelData = ref({
@@ -88,20 +86,6 @@ const formData = async (reportData, reportNumber) => {
     }
   } catch (e) {
     console.log('six panel error: ', e);
-    if (e.response.data.links) {
-      e.response.data.links.forEach(item => {
-        console.log('item', item)
-        if (item.link.includes('Введите правильный URL.')) {
-          swal.fire({
-            position: 'center',
-            icon: 'warning',
-            title: `Введите корректный URL`,
-            showConfirmButton: false,
-            timer: 2500,
-          })
-        }
-      })
-    }
   }
 };
 
@@ -144,6 +128,8 @@ watchEffect(() => {
 .panel-card {
   box-shadow: none;
 }
+
+
 
 .v-expansion-panel-title[aria-expanded="true"] {
   display: none;
@@ -297,8 +283,9 @@ watchEffect(() => {
   font-weight: 600;
   line-height: 21.6px;
   text-align: left;
-  border: none;
+  border-left: 6px solid #F3F4F5;
   padding-left: 40px;
 
 }
+
 </style>
