@@ -12,6 +12,9 @@
                 class="form__input form__field-people-count-field"
                 type="number"
                 placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="2147483647"
                 @focusout="focusOut"
                 :disabled="isSent"
             />
@@ -26,6 +29,9 @@
                 class="form__input form__field-people-count-field"
                 type="number"
                 placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="2147483647"
                 @focusout="focusOut"
                 :disabled="isSent"
             />
@@ -468,7 +474,7 @@ const deleteProject = async (index) => {
   let formData = new FormData();
   events.value = events.value.filter((el, i) => index !== i);
   // fifthPanelData.value.events = [...events.value];
-  formData.append('comment', fifthPanelData.value.comment);
+  formData.append('comment', fifthPanelData.value.comment || '');
   events.value.forEach((event, i) => {
     if (event.participants_number) formData.append(`events[${i}][participants_number]`, event.participants_number);
     if (event.ro_participants_number) formData.append(`events[${i}][ro_participants_number]`, event.ro_participants_number);
@@ -541,6 +547,9 @@ watchPostEffect(() => {
   events.value.forEach((event) => {
     if (!event.links.length) event.links.push({link: ''})
   });
+  if (!events.value.length) {
+    addProject()
+  }
 })
 </script>
 <style lang="scss" scoped>

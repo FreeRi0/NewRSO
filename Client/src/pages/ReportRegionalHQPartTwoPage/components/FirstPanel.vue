@@ -11,6 +11,10 @@
               class="form__input"
               type="number"
               placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="9999999999"
+              :step="0.01"
               @focusout="focusOut"
               :disabled="isSent"
           />

@@ -13,6 +13,7 @@
               @uploadFile="uploadFile($event, 1)"
               @deleteFile="deleteFile(1)"
               @collapse-form="collapseForm"
+              @deleteLink="deleteLink($event, 1)"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -30,6 +31,7 @@
               @uploadFile="uploadFile($event, 2)"
               @deleteFile="deleteFile(2)"
               @collapse-form="collapseForm"
+              @deleteLink="deleteLink($event, 2)"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -221,6 +223,17 @@ const deleteFile = async (reportNumber) => {
     }
   }
 };
+
+const deleteLink = (linkIndex, reportNumber) => {
+  if (reportNumber === 1) {
+    tenthPanelDataFirst.value.links.splice(linkIndex, 1)
+    formData(tenthPanelDataFirst.value, 1)
+  }
+  if (reportNumber === 2) {
+    tenthPanelDataSecond.value.links.splice(linkIndex, 1)
+    formData(tenthPanelDataSecond.value, 2)
+  }
+}
 
 watchEffect(() => {
   if (props.data.first) {

@@ -733,7 +733,7 @@ const checkEmptyFields = (data) => {
     })
     return false;
   }
-  if (data.fifth) {
+  if (data.fifth && data.fifth.events.length) {
     for (let event of data.fifth.events) {
       if (!(event.participants_number && event.ro_participants_number && event.end_date && event.start_date && event.regulations && data.fifth.comment)) {
         isErrorPanel.value.fifth = true;
