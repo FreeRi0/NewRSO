@@ -460,10 +460,6 @@ const getReportData = async (reportId) => {
         console.log(e.message)
       }
       await getMultiplyData();
-
-      // reportData.value.six = (await reportPartTwoService.getMultipleReport('6', id)).data;
-      // reportData.value.seventh = (await reportPartTwoService.getMultipleReport('7', id)).data;
-      // reportData.value.ninth = (await reportPartTwoService.getMultipleReport('9', id)).data;
       try {
         reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
       } catch (e) {
@@ -575,16 +571,13 @@ const setData = (data, panel, number = 0) => {
   // console.log('setData: ', reportData.value)
 };
 
-// const filteredSix = reportData.value.six.filter(item => (item.number_of_members > 0 || item.number_of_members !== null) || item.links.length > 0);
-
-
 const sendReport = async () => {
   // console.log('reportData: ', reportData.value)
   blockSendButton.value = true;
   if (checkEmptyFields(reportData.value)) {
     try {
       const filteredSix = reportData.value.six.filter(item => (item.number_of_members > 0 && item.number_of_members !== null));
-      const filteredSeventh = reportData.value.seventh.filter(item => item.prize_lace !== 'Нет');//TODO: prize_lace опечатка?
+      const filteredSeventh = reportData.value.seventh.filter(item => item.prize_place !== 'Нет');
       const filteredNinth = reportData.value.ninth.filter(item => item.event_happened !== false);
 
       if (!reportData.value.first.is_sent) {
@@ -596,11 +589,21 @@ const sendReport = async () => {
       if (!reportData.value.fifth.is_sent) {
         await reportPartTwoService.sendReport(reportData.value.fifth, '5');
       }
-
-      await reportPartTwoService.sendReportWithSlash(filteredSix, '6');
-      await reportPartTwoService.sendReportWithSlash(filteredSeventh, '7');
-      await reportPartTwoService.sendReportWithSlash(filteredNinth.ninth, '9');
-
+      for (item of filteredSix.value) {
+        if (!item.is_sent) {
+          await reportPartTwoService.sendReportWithSlash(filteredSix, '6');
+        }
+      }
+      for (item of filteredSeventh.value) {
+        if (!item.is_sent) {
+          await reportPartTwoService.sendReportWithSlash(filteredSeventh, '7');
+        }
+      }
+      for (item of filteredNinth.value) {
+        if (!item.is_sent) {
+          await reportPartTwoService.sendReportWithSlash(filteredNinth, '9');
+        }
+      }
       if (!reportData.value.tenth.first.is_sent) {
         await reportPartTwoService.sendMultipleReport(reportData.value.tenth.first, '10', '1');
       }
@@ -649,7 +652,7 @@ const sendReport = async () => {
 const checkEmptyFields = (data) => {
   console.log('data', data)
   const filteredSix = reportData.value.six.filter(item => (item.number_of_members > 0 && item.number_of_members !== null));
-  const filteredSeventh = reportData.value.seventh.filter(item => item.prize_lace !== 'Нет');
+  const filteredSeventh = reportData.value.seventh.filter(item => item.prize_place !== 'Нет');
   const filteredNinth = reportData.value.ninth.filter(item => item.event_happened !== false);
 
   if (!data.first || !(data.first.amount_of_money && data.first.scan_file)) {
@@ -841,17 +844,6 @@ onMounted(() => {
   getReportData(route.query.reportId);
 });
 
-// onMounted(() => {
-//   getItems(6);
-//   getItems(7);
-//   getItems(9);
-// })
-
-// watch(() => panel_num.value, (newPanel) => {
-//   panel_num.value = newPanel
-//   //  console.log(panel_num.value, newPanel)
-//   getReportData();
-// })
 </script>
 <style>
 .v-expansion-panel__shadow {
