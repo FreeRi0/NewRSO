@@ -10,7 +10,7 @@
       height: height,
     }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly" :max="max"
       class="form-input__report" :step="step"
-      :class="{ 'link__input': isLink, 'form-input__report--error': (isErrorPanel && !value) }" @input="updateValue"
+      :class="{ 'link__input': isLink, 'form-input__report--error': (isErrorPanel && !value), 'form__input--error': isErrorDate, }" @input="updateValue"
       v-bind="$attrs" :disabled="disabled" />
     <div class="form__counter" v-if="counterVisible">
       {{ textInputLength }} / {{ maxCounter }}
@@ -30,11 +30,11 @@
         {{ isErrorMessage }}
         </span>
     </div>
-    <!-- <div v-if="isErrorDate" class="form-input__error-block">
+    <div v-if="isErrorDate" class="form-input__error-block">
       <span class="form-input__error-text">
         Дата окончания не может быть меньше даты начала
-        </span>
-    </div> -->
+      </span>
+    </div>
     <div v-show="isLinkError && props.isLink && value"> <span class="form-input__error-text">Не верный формат
         url</span></div>
 
@@ -119,9 +119,9 @@ const props = defineProps({
   //   type: Boolean,
   //   default: false,
   // },
-  // isErrorDate: {
-  //   type: Boolean,
-  // },
+  isErrorDate: {
+    type: Boolean,
+  },
   isErrorPanel: {
     type: Boolean,
   },
@@ -298,6 +298,15 @@ const updateValue = (event) => {
   border-radius: 10px;
   line-height: 21px;
   cursor: pointer;
+
+  &.form__input--error {
+    border-color: #db0000;
+    color: #db0000;
+
+    &::placeholder {
+        color: #db0000;
+    }
+  }
 
   @media (max-width: 360px) {
     font-size: 14px;
