@@ -218,10 +218,10 @@ const uploadFile = async (event) => {
   eleventhPanelData.value.file_type = scanFile.value.type.split('/').at(-1);
 
   fileValidate(scanFile.value, 7, isErrorFile);
-  console.log('(4)', 'перед отправкой в uploadFile', isErrorFile.value);
+  // console.log('(4)', 'перед отправкой в uploadFile', isErrorFile.value);
   if (isErrorFile.value) {
     eleventhPanelData.value.scan_file = scanFile.value.name;
-    console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
+    // console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
   } else {
     try {
       if (isFirstSent.value) {
@@ -232,7 +232,7 @@ const uploadFile = async (event) => {
         let {  data: scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
         eleventhPanelData.value.scan_file = scan_file;
         emit('getData', scan_file, Number(ID_PANEL));
-        console.log('ФАЙЛ ОТПРАВЛЯЕТСЯ ПОВТОРНО');
+        // console.log('ФАЙЛ ОТПРАВЛЯЕТСЯ ПОВТОРНО');
       }
     } catch (e) {
       console.log('focusOut error:', e);
