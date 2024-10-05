@@ -29,7 +29,8 @@
         type="number"
         placeholder="Введите число"
         :maxlength="10"
-        :max="32767"
+        :min="0"
+        :max="2147483647"
         @focusout="focusOut"
         :disabled="isSent"
       />
@@ -54,7 +55,8 @@
         type="number"
         placeholder="Введите число"
         :maxlength="10"
-        :max="32767"
+        :min="0"
+        :max="2147483647"
         @focusout="focusOut"
         :disabled="isSent"
       />
