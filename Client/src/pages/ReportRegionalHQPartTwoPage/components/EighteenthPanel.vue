@@ -50,7 +50,7 @@
             :fileSize="project.file_size"
             @click="deleteFile(index)"
             :is-sent="isSent"
-            @error="setError"
+            
             :is-error-file="isErrorFile"
           ></FileBoxComponent>
           <button
@@ -80,6 +80,7 @@
                   style="width: 100%;"
                   :max-length="200"
                   @focusout="focusOut"
+                  @error="setError"
                   :disabled="isSent"
                   is-link
               />

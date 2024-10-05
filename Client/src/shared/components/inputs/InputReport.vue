@@ -25,9 +25,9 @@
     <div v-if="isFileDistrict" class="form-input__icon">
       <SvgIcon iconName="add-file" />
     </div>
-    <div v-if="isError" class="form-input__error-block">
+    <!-- <div v-if="isError" class="form-input__error-block">
       <span class="form-input__error-text">Превышено&nbsp;максимальное&nbsp;значение&nbsp;{{ max }}</span>
-    </div>
+    </div> -->
     <div v-show="isLinkError && props.isLink && value"> <span class="form-input__error-text">Не верный формат
         url</span></div>
 
@@ -105,16 +105,16 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  isError: {
-    type: Boolean,
-    default: false,
-  },
+  // isError: {
+  //   type: Boolean,
+  //   default: false,
+  // },
   isErrorPanel: {
     type: Boolean,
   },
 });
 
-let isError = ref(props.isError);
+// let isError = ref(props.isError);
 let isLinkError = ref(false);
 
 const textInputLength = ref(null);
@@ -135,11 +135,11 @@ const validateLink = (value) => {
 watchEffect(() => {
   textInputLength.value = typeof props.value === 'string' ? props.value.length : 0;
 
-  if (typeof props.max === 'number' && props.value > props.max) {
-    isError.value = true;
-  } else {
-    isError.value = false;
-  }
+  // if (typeof props.max === 'number' && props.value > props.max) {
+  //   isError.value = true;
+  // } else {
+  //   isError.value = false;
+  // }
 });
 
 watchEffect(() => {
