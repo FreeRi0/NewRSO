@@ -48,7 +48,8 @@
             color: rgba(53, 56, 63, 1);
             border: 1px solid #b6b6b6;
 
-            &:invalid {
+            &:invalid,
+            &.form__input--error {
                 border-color: #db0000;
                 color: #db0000;
 
