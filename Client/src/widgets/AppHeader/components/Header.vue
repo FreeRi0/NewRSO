@@ -419,6 +419,7 @@ watch(
     },
 );
 
+
 watch(
   () => [roleStore.roles, roleStore.experts],
   (newRoles, newExperts) => {
@@ -428,8 +429,8 @@ watch(
 
     if (roleStore.roles.centralheadquarter_commander !== null) {
       nameUrl = 'rating-ro'
-   
-    } else if (newExperts.is_central_expert === true || newExperts.is_district_expert === true) {
+
+    } else if (roleStore.experts.is_central_expert === true || roleStore.experts.is_district_expert === true) {
       nameUrl = 'rating-ro'
 
     } else {

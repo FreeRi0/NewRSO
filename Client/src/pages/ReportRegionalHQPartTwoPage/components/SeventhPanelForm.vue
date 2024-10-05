@@ -883,7 +883,7 @@ const uploadFile = (event, number) => {
         }
         formData.append('comment', seventhPanelData.value.comment);
 
-        fileValidate(scanFile.value, 3, isErrorFile);
+        fileValidate(scanFile.value, 7, isErrorFile);
         if (isErrorFile.value) {
             seventhPanelData.value.document = scanFile.value.name;
             console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
@@ -907,7 +907,7 @@ const uploadFile = (event, number) => {
             }
         }
         formData.append('comment', ninthPanelData.value.comment);
-        fileValidate(scanFile.value, 3, isErrorFile);
+        fileValidate(scanFile.value, 7, isErrorFile);
         if (isErrorFile.value) {
             ninthPanelData.value.document = scanFile.value.name;
             console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
