@@ -275,7 +275,7 @@ const updateValue = (event) => {
 
   &__error-text {
     position: absolute;
-    bottom: -10px;
+    bottom: -12px;
     width: 100%;
     display: block;
     color: #db0000;
