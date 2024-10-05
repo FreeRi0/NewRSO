@@ -23,7 +23,7 @@
   </v-card>
 </template>
 <script setup>
-import { ref, watchEffect, inject } from "vue";
+import { ref, watchEffect} from "vue";
 import { SeventhPanelForm } from "./index";
 import { reportPartTwoService } from "@services/ReportService.ts";
 
@@ -42,16 +42,12 @@ const props = defineProps({
 
 const disabled = ref(false);
 const link_err = ref(false);
-const swal = inject('$swal');
+// const swal = inject('$swal');
 const setError = (err) => {
   link_err.value = err;
 }
 
 const isFirstSent = ref(null);
-// const sent = (sentVal) => {
-//   console.log('is sent: ', sentVal, isFirstSent.value);
-//   isFirstSent.value = sentVal;
-// }
 const emit = defineEmits(['getData', 'getId', 'getPanelNumber']);
 
 const sixPanelData = ref({
@@ -88,20 +84,6 @@ const formData = async (reportData, reportNumber) => {
     }
   } catch (e) {
     console.log('six panel error: ', e);
-    if (e.response.data.links) {
-      e.response.data.links.forEach(item => {
-        console.log('item', item)
-        if (item.link.includes('Введите правильный URL.')) {
-          swal.fire({
-            position: 'center',
-            icon: 'warning',
-            title: `Введите корректный URL`,
-            showConfirmButton: false,
-            timer: 2500,
-          })
-        }
-      })
-    }
   }
 };
 
@@ -115,7 +97,7 @@ const getPanelNumber = (number) => {
   emit('getPanelNumber', number);
 }
 watchEffect(() => {
-
+    console.log('error', props.isErrorPanel)
   if (Object.keys(props.data[el_id.value]).length > 0) {
     console.log('data received', props.data);
     isFirstSent.value = false;
@@ -144,6 +126,8 @@ watchEffect(() => {
 .panel-card {
   box-shadow: none;
 }
+
+
 
 .v-expansion-panel-title[aria-expanded="true"] {
   display: none;
@@ -297,8 +281,13 @@ watchEffect(() => {
   font-weight: 600;
   line-height: 21.6px;
   text-align: left;
-  border: none;
+  // border: none;
   padding-left: 40px;
 
+}
+
+.v-expansion-panel-title.visible-error,
+.v-expansion-panel--active>.v-expansion-panel-title.visible-error {
+  border-color: #db0000;
 }
 </style>

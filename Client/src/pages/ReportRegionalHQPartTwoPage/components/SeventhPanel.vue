@@ -24,7 +24,7 @@
   </v-card>
 </template>
 <script setup>
-import { ref, watchEffect, inject } from "vue";
+import { ref, watchEffect } from "vue";
 import { SeventhPanelForm } from "./index";
 import { reportPartTwoService } from "@services/ReportService.ts";
 
@@ -42,7 +42,7 @@ const props = defineProps({
 });
 let el_id = ref(null);
 
-const swal = inject('$swal');
+// const swal = inject('$swal');
 const disabled = ref(false);
 const panel = ref(false);
 const emit = defineEmits(['getData'])
@@ -63,10 +63,6 @@ const setError = (err) => {
   link_err.value = err;
 }
 const isFirstSent = ref(null);
-// const sent = (sentVal) => {
-//   console.log('is sent: ', sentVal, isFirstSent.value);
-//   isFirstSent.value = sentVal;
-// }
 
 const formData = async (reportData, reportNumber) => {
   try {
@@ -85,20 +81,20 @@ const formData = async (reportData, reportNumber) => {
     }
   } catch (e) {
     console.error('Error while sending data', e);
-    if (e.response.data.links) {
-      e.response.data.links.forEach(item => {
-        console.log('item', item)
-        if (item.link.includes('Введите правильный URL.')) {
-          swal.fire({
-            position: 'center',
-            icon: 'warning',
-            title: `Введите корректный URL`,
-            showConfirmButton: false,
-            timer: 2500,
-          })
-        }
-      })
-    }
+    // if (e.response.data.links) {
+    //   e.response.data.links.forEach(item => {
+    //     console.log('item', item)
+    //     if (item.link.includes('Введите правильный URL.')) {
+    //       swal.fire({
+    //         position: 'center',
+    //         icon: 'warning',
+    //         title: `Введите корректный URL`,
+    //         showConfirmButton: false,
+    //         timer: 2500,
+    //       })
+    //     }
+    //   })
+    // }
   }
 };
 

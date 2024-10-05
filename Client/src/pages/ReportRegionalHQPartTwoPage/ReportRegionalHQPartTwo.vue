@@ -214,7 +214,7 @@
         </v-expansion-panels>
       </div>
     </div>
-    <Button v-if="!preloader" :disabled="blockSendButton" variant="text" label="Отправить отчет" size="large" @click="sendReport" />
+    <Button v-if="!preloader" variant="text" label="Отправить отчет" size="large" @click="sendReport" />
   </div>
 </template>
 <script setup>
@@ -381,6 +381,17 @@ const getMultiplyData = async () => {
       }
     }
   });
+  // const sixDataErrPromises = six_items.value.map(async (item) => {
+  //   try {
+  //     return { id: item.id, data: {err: false} };
+  //   } catch (error) {
+  //     if (error.response && error.response.status === 404) {
+  //       return { id: item.id, data: {} };
+  //     } else {
+  //       throw error;
+  //     }
+  //   }
+  // });
 
   const seventhDataPromises = seventh_items.value.map(async (item) => {
     try {
@@ -408,14 +419,17 @@ const getMultiplyData = async () => {
 
   const [sixDataResults, seventhDataResults, ninthDataResults] = await Promise.all([
     Promise.all(sixDataPromises),
+    // Promise.all(sixDataErrPromises),
     Promise.all(seventhDataPromises),
     Promise.all(ninthDataPromises),
   ]);
 
   sixDataResults.forEach((result) => {
     reportData.value.six[result.id] = result.data;
-
   });
+  // sixDataErr.forEach((result) => {
+  //   isErrorPanel.value.six[result.id] = result.data;
+  // });
 
   seventhDataResults.forEach((result) => {
     reportData.value.seventh[result.id] = result.data;
@@ -745,9 +759,10 @@ const checkEmptyFields = (data) => {
     return false;
   }
 
-  for (let item of filteredSix) {
-    if (!(item.participants_number && item.links.lenght)) {
-      isErrorPanel.value.six = true;
+  for (let item in filteredSix) {
+    if (!(filteredSix[item].links.length)) {
+      isErrorPanel.value.six= true;
+      console.log('errors', isErrorPanel.value.six)
       swal.fire({
         position: 'center',
         icon: 'warning',
@@ -758,8 +773,8 @@ const checkEmptyFields = (data) => {
       return false;
     }
   }
-  for (let item of filteredSeventh) {
-    if (!(item.prize_place && item.links.lenght && item.document && item.comment)) {
+  for (let item in filteredSeventh) {
+    if (!(filteredSeventh[item].links.length && filteredSeventh[item].document && filteredSeventh[item].comment)) {
       isErrorPanel.value.seventh = true;
       swal.fire({
         position: 'center',
@@ -771,8 +786,8 @@ const checkEmptyFields = (data) => {
       return false;
     }
   }
-  for (let item of filteredNinth) {
-    if (!(item.event_happened && item.links.lenght)) {
+  for (let item in filteredNinth) {
+    if (!(filteredNinth[item].links.length)) {
       isErrorPanel.value.ninth = true;
       swal.fire({
         position: 'center',
