@@ -9,7 +9,7 @@
     <input :type="type" :name="name" :style="{
       height: height,
     }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly" :max="max"
-      class="form-input__report"
+      class="form-input__report" :step="step"
       :class="{ 'link__input': isLink, 'form-input__report--error': (isErrorPanel && !value) }" @input="updateValue"
       v-bind="$attrs" :disabled="disabled" />
     <div class="form__counter" v-if="counterVisible">
@@ -26,8 +26,15 @@
       <SvgIcon iconName="add-file" />
     </div>
     <div v-if="isError" class="form-input__error-block">
-      <span class="form-input__error-text">Превышено&nbsp;максимальное&nbsp;значение&nbsp;{{ max }}</span>
+      <span class="form-input__error-text">
+        {{ isErrorMessage }}
+        </span>
     </div>
+    <!-- <div v-if="isErrorDate" class="form-input__error-block">
+      <span class="form-input__error-text">
+        Дата окончания не может быть меньше даты начала
+        </span>
+    </div> -->
     <div v-show="isLinkError && props.isLink && value"> <span class="form-input__error-text">Не верный формат
         url</span></div>
 
@@ -93,6 +100,9 @@ const props = defineProps({
   maxCounter: {
     type: Number,
   },
+  step: {
+    type: Number,
+  },
   isFile: {
     type: Boolean,
     default: false,
@@ -105,16 +115,19 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  isError: {
-    type: Boolean,
-    default: false,
-  },
+  // isError: {
+  //   type: Boolean,
+  //   default: false,
+  // },
+  // isErrorDate: {
+  //   type: Boolean,
+  // },
   isErrorPanel: {
     type: Boolean,
   },
 });
 
-let isError = ref(props.isError);
+// let isError = ref(props.isError);
 let isLinkError = ref(false);
 
 const textInputLength = ref(null);
@@ -132,14 +145,17 @@ const validateLink = (value) => {
   }
 };
 
+let isError = ref(false);
+let isErrorMessage = ref('');
+
 watchEffect(() => {
   textInputLength.value = typeof props.value === 'string' ? props.value.length : 0;
 
-  if (typeof props.max === 'number' && props.value > props.max) {
-    isError.value = true;
-  } else {
-    isError.value = false;
-  }
+  // if (typeof props.max === 'number' && props.value > props.max) {
+  //   isError.value = true;
+  // } else {
+  //   isError.value = false;
+  // }
 });
 
 watchEffect(() => {
@@ -149,6 +165,26 @@ watchEffect(() => {
 const updateValue = (event) => {
   emit('update:value', event.target.value);
   // emit('update:value', event.target.maxLength ? event.target.value = event.target.value.slice(0, event.target.maxLength) : event.target.value);
+
+  // console.log(event.target.validity);//------------------------------------------
+  if (event.target === typeof 'number' && !event.target.validity.valid) {
+    isError.value = true;
+
+    if (event.target.validity.badInput) {
+      isErrorMessage.value = 'Введите правильное число';
+    } else if (event.target.validity.stepMismatch && !props.step) {
+      isErrorMessage.value = 'Введите целое число';
+    } else if (event.target.validity.stepMismatch && props.step) {
+      isErrorMessage.value = 'Введите до 2-х знаков после запятой';
+    } else if (event.target.validity.rangeOverflow) {
+      isErrorMessage.value = `Превышено максимальное значение ${props.max}`;
+    } else {
+      isErrorMessage.value = '';
+    }
+  } else {
+    isError.value = false;
+  }
+   
 };
 </script>
 

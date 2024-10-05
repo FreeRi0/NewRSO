@@ -50,7 +50,7 @@
             :fileSize="project.file_size"
             @click="deleteFile(index)"
             :is-sent="isSent"
-            @error="setError"
+            
             :is-error-file="isErrorFile"
           ></FileBoxComponent>
           <button
@@ -78,7 +78,9 @@
                   type="text"
                   placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
                   style="width: 100%;"
+                  :max-length="200"
                   @focusout="focusOut"
+                  @error="setError"
                   :disabled="isSent"
                   is-link
               />
@@ -240,12 +242,12 @@ const projects = ref([
 
 const uploadFile = async (event, index) => {
   fileValidate(event.target.files[0], 7, isErrorFile);
-  console.log('(4)', 'перед отправкой в uploadFile', isErrorFile.value);
+  // console.log('(4)', 'перед отправкой в uploadFile', isErrorFile.value);
 
   if (isErrorFile.value) {
     scanFile.value = event.target.files[0];
     projects.value[index].file = scanFile.value.name;
-    console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
+    // console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
   } else {
     projects.value[index].file = event.target.files[0];
     let formData = new FormData();
@@ -287,7 +289,7 @@ const deleteFile = async (index) => {
 
   if (projects.value.length) {
     for (let index = 0; index < projects.value.length; index++) {
-      console.log('этот код выполняется');
+      // console.log('этот код выполняется');
       if (projects.value[index].links.length) {
         for (let i = 0; i < projects.value[index].links.length; i++) {
           !projects.value[index].links[i].link 
@@ -416,7 +418,7 @@ const deletePublication = async (index) => {
 
 watchEffect(async () => {
   // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
-  console.log(props.data, props.data.projects);
+  // console.log(props.data, props.data.projects);
   if (props.data) {
     isFirstSent.value = false;
     projects.value = [...props.data.projects];

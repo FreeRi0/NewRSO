@@ -71,7 +71,8 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
-            <v-expansion-panel-title :class="isErrorPanel.six ? 'visible-error' : ''">
+            <v-expansion-panel-title
+              :class="Object.values(isErrorPanel.six).some(item => item.error === true) ? 'visible-error' : ''">
               6. Участие бойцов студенческих отрядов РО&nbsp;РСО во&nbsp;всероссийских (международных)
               мероприятиях и&nbsp;проектах (в&nbsp;том числе и&nbsp;трудовых) &laquo;К&raquo;
             </v-expansion-panel-title>
@@ -82,7 +83,8 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
-            <v-expansion-panel-title :class="isErrorPanel.seventh ? 'visible-error' : ''">
+            <v-expansion-panel-title
+              :class="Object.values(isErrorPanel.seventh).some(item => item.error === true) ? 'visible-error' : ''">
               7. Победители студенческих отрядов РО&nbsp;РСО во&nbsp;всероссийских (международных) проектах
               и&nbsp;конкурсах &laquo;К&raquo;
             </v-expansion-panel-title>
@@ -104,7 +106,8 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
-            <v-expansion-panel-title :class="isErrorPanel.ninth ? 'visible-error' : ''">
+            <v-expansion-panel-title
+              :class="Object.values(isErrorPanel.ninth).some(item => item.error === true) ? 'visible-error' : ''">
               9. Организация обязательных общесистемных мероприятий РСО на&nbsp;региональном уровне &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
@@ -214,8 +217,7 @@
         </v-expansion-panels>
       </div>
     </div>
-    <Button v-if="!preloader" variant="text" label="Отправить отчет" size="large" @click="sendReport"
-      :disabled="blockSendButton" />
+    <Button v-if="!preloader" variant="text" label="Отправить отчет" size="large" @click="sendReport" />
   </div>
 </template>
 <script setup>
@@ -280,9 +282,9 @@ const isErrorPanel = ref({
   first: false,
   fourth: false,
   fifth: false,
-  six: false,
-  seventh: false,
-  ninth: false,
+  six: {},
+  seventh: {},
+  ninth: {},
   tenth: false,
   eleventh: false,
   twelfth: false,
@@ -416,7 +418,6 @@ const getMultiplyData = async () => {
   sixDataResults.forEach((result) => {
     reportData.value.six[result.id] = result.data;
   });
-
   seventhDataResults.forEach((result) => {
     reportData.value.seventh[result.id] = result.data;
   });
@@ -519,6 +520,8 @@ const getReportData = async (reportId) => {
   // console.log('getReportData: ', reportData.value);
 };
 
+
+
 const setData = (data, panel, number = 0) => {
   switch (panel) {
     case 1:
@@ -571,15 +574,61 @@ const setData = (data, panel, number = 0) => {
   // console.log('setData: ', reportData.value)
 };
 
+const filterPanelsData = () => {
+  const filteredSix = {};
+  const filteredSeventh = {};
+  const filteredNinth = {};
+
+  for (let i in reportData.value.six) {
+    if (reportData.value.six[i].number_of_members > 0 && reportData.value.six[i].number_of_members !== null) {
+      filteredSix[i] = reportData.value.six[i];
+    }
+  }
+  for (let i in filteredSix) {
+    isErrorPanel.value.six[i] = {
+      id: i,
+      error: false,
+    }
+  }
+
+  for (let i in reportData.value.seventh) {
+    if (reportData.value.seventh[i].prize_place !== 'Нет') {
+      filteredSeventh[i] = reportData.value.seventh[i];
+    }
+  }
+  for (let i in filteredSeventh) {
+    isErrorPanel.value.seventh[i] = {
+      id: i,
+      error: false,
+    }
+  }
+
+  for (let i in reportData.value.ninth) {
+    if (reportData.value.ninth[i].event_happened !== false) {
+      filteredNinth[i] = reportData.value.ninth[i];
+    }
+  }
+  for (let i in filteredNinth) {
+    isErrorPanel.value.ninth[i] = {
+      id: i,
+      error: false,
+    }
+  }
+
+  return {
+    filteredSix,
+    filteredSeventh,
+    filteredNinth,
+  };
+};
+
+
 const sendReport = async () => {
   // console.log('reportData: ', reportData.value)
   blockSendButton.value = true;
   if (checkEmptyFields(reportData.value)) {
     try {
-      const filteredSix = reportData.value.six.filter(item => (item.number_of_members > 0 && item.number_of_members !== null));
-      const filteredSeventh = reportData.value.seventh.filter(item => item.prize_place !== 'Нет');
-      const filteredNinth = reportData.value.ninth.filter(item => item.event_happened !== false);
-
+      const { filteredSix, filteredSeventh, filteredNinth } = filterPanelsData();
       if (!reportData.value.first.is_sent) {
         await reportPartTwoService.sendReport(reportData.value.first, '1');
       }
@@ -589,18 +638,18 @@ const sendReport = async () => {
       if (!reportData.value.fifth.is_sent) {
         await reportPartTwoService.sendReport(reportData.value.fifth, '5');
       }
-      for (item of filteredSix.value) {
-        if (!item.is_sent) {
+      for (let item in filteredSix) {
+        if (filteredSix[item].is_sent === false) {
           await reportPartTwoService.sendReportWithSlash(filteredSix, '6');
         }
       }
-      for (item of filteredSeventh.value) {
-        if (!item.is_sent) {
+      for (let item in filteredSeventh) {
+        if (filteredSeventh[item].is_sent === false) {
           await reportPartTwoService.sendReportWithSlash(filteredSeventh, '7');
         }
       }
-      for (item of filteredNinth.value) {
-        if (!item.is_sent) {
+      for (let item in filteredNinth) {
+        if (filteredNinth[item].is_sent === false) {
           await reportPartTwoService.sendReportWithSlash(filteredNinth, '9');
         }
       }
@@ -650,10 +699,8 @@ const sendReport = async () => {
 };
 
 const checkEmptyFields = (data) => {
+  const { filteredSix, filteredSeventh, filteredNinth } = filterPanelsData();
   console.log('data', data)
-  const filteredSix = reportData.value.six.filter(item => (item.number_of_members > 0 && item.number_of_members !== null));
-  const filteredSeventh = reportData.value.seventh.filter(item => item.prize_place !== 'Нет');
-  const filteredNinth = reportData.value.ninth.filter(item => item.event_happened !== false);
 
   if (!data.first || !(data.first.amount_of_money && data.first.scan_file)) {
     isErrorPanel.value.first = true;
@@ -717,9 +764,12 @@ const checkEmptyFields = (data) => {
     return false;
   }
 
-  for (let item of filteredSix) {
-    if (!(item.participants_number && item.links.lenght)) {
-      isErrorPanel.value.six = true;
+  for (let item in filteredSix) {
+    if (!(filteredSix[item].links.length)) {
+      isErrorPanel.value.six[item] = {
+        id: item,
+        error: true,
+      };
       swal.fire({
         position: 'center',
         icon: 'warning',
@@ -730,9 +780,12 @@ const checkEmptyFields = (data) => {
       return false;
     }
   }
-  for (let item of filteredSeventh) {
-    if (!(item.prize_place && item.links.lenght && item.document && item.comment)) {
-      isErrorPanel.value.seventh = true;
+  for (let item in filteredSeventh) {
+    if (!(filteredSeventh[item].links.length && filteredSeventh[item].document && filteredSeventh[item].comment)) {
+      isErrorPanel.value.seventh[item] = {
+        id: item,
+        error: true,
+      };
       swal.fire({
         position: 'center',
         icon: 'warning',
@@ -743,9 +796,12 @@ const checkEmptyFields = (data) => {
       return false;
     }
   }
-  for (let item of filteredNinth) {
-    if (!(item.event_happened && item.links.lenght)) {
-      isErrorPanel.value.ninth = true;
+  for (let item in filteredNinth) {
+    if (!(filteredNinth[item].links.length)) {
+      isErrorPanel.value.ninth[item] = {
+        id: item,
+        error: true,
+      };
       swal.fire({
         position: 'center',
         icon: 'warning',
@@ -842,6 +898,7 @@ onMounted(() => {
   getItems(7);
   getItems(9);
   getReportData(route.query.reportId);
+
 });
 
 </script>

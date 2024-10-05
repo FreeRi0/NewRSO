@@ -28,6 +28,7 @@
               class="form__input"
               type="text"
               placeholder="ВВС ПРО"
+              :max-length="300"
               @focusout="focusOut"
               :disabled="isSent"
               style="width: 100%;"

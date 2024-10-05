@@ -15,7 +15,8 @@
                 type="number"
                 placeholder="Введите число"
                 :maxlength="10"
-                :max="32767"
+                :min="0"
+                :max="2147483647"
                 @focusout="focusOut"
                 :disabled="isSent"
                 :is-error-panel="isErrorPanel"
@@ -184,7 +185,6 @@ const isSent = ref(false);
 const emit = defineEmits(["update:value", "getData"]);
 
 const changeValue = (event) => {
-  // console.log(event);
   emit("update:value", event);
 };
 
@@ -219,10 +219,10 @@ const uploadFile = async (event) => {
     thirteenthPanelData.value.file_type = scanFile.value.type.split('/').at(-1);
 
     fileValidate(scanFile.value, 7, isErrorFile);
-  console.log('(4)', 'перед отправкой в uploadFile', isErrorFile.value);
+//   console.log('(4)', 'перед отправкой в uploadFile', isErrorFile.value);
   if (isErrorFile.value) {
     thirteenthPanelData.value.scan_file = scanFile.value.name;
-    console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
+    // console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
   } else {
     try {
         if (isFirstSent.value) {
