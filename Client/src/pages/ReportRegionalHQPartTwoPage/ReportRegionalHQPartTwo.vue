@@ -214,8 +214,7 @@
         </v-expansion-panels>
       </div>
     </div>
-    <Button v-if="!preloader" variant="text" label="Отправить отчет" size="large" @click="sendReport"
-      :disabled="blockSendButton" />
+    <Button v-if="!preloader" :disabled="blockSendButton" variant="text" label="Отправить отчет" size="large" @click="sendReport" />
   </div>
 </template>
 <script setup>
@@ -415,6 +414,7 @@ const getMultiplyData = async () => {
 
   sixDataResults.forEach((result) => {
     reportData.value.six[result.id] = result.data;
+
   });
 
   seventhDataResults.forEach((result) => {
@@ -519,6 +519,8 @@ const getReportData = async (reportId) => {
   // console.log('getReportData: ', reportData.value);
 };
 
+
+
 const setData = (data, panel, number = 0) => {
   switch (panel) {
     case 1:
@@ -571,15 +573,43 @@ const setData = (data, panel, number = 0) => {
   // console.log('setData: ', reportData.value)
 };
 
+const filterPanelsData = () => {
+  const filteredSix = {};
+  const filteredSeventh = {};
+  const filteredNinth = {};
+
+  for (let i in reportData.value.six) {
+    if (reportData.value.six[i].number_of_members > 0 && reportData.value.six[i].number_of_members !== null) {
+      filteredSix[i] = reportData.value.six[i];
+    }
+  }
+
+  for (let i in reportData.value.seventh) {
+    if (reportData.value.seventh[i].prize_place !== 'Нет') {
+      filteredSeventh[i] = reportData.value.seventh[i];
+    }
+  }
+
+  for (let i in reportData.value.ninth) {
+    if (reportData.value.ninth[i].event_happened !== false) {
+      filteredNinth[i] = reportData.value.ninth[i];
+    }
+  }
+
+  return {
+    filteredSix,
+    filteredSeventh,
+    filteredNinth,
+  };
+};
+
+
 const sendReport = async () => {
   // console.log('reportData: ', reportData.value)
   blockSendButton.value = true;
   if (checkEmptyFields(reportData.value)) {
     try {
-      const filteredSix = reportData.value.six.filter(item => (item.number_of_members > 0 && item.number_of_members !== null));
-      const filteredSeventh = reportData.value.seventh.filter(item => item.prize_place !== 'Нет');
-      const filteredNinth = reportData.value.ninth.filter(item => item.event_happened !== false);
-
+      const { filteredSix, filteredSeventh, filteredNinth } = filterPanelsData();
       if (!reportData.value.first.is_sent) {
         await reportPartTwoService.sendReport(reportData.value.first, '1');
       }
@@ -589,18 +619,18 @@ const sendReport = async () => {
       if (!reportData.value.fifth.is_sent) {
         await reportPartTwoService.sendReport(reportData.value.fifth, '5');
       }
-      for (item of filteredSix.value) {
-        if (!item.is_sent) {
+      for (let item in filteredSix) {
+        if (filteredSix[item].is_sent === false) {
           await reportPartTwoService.sendReportWithSlash(filteredSix, '6');
         }
       }
-      for (item of filteredSeventh.value) {
-        if (!item.is_sent) {
+      for (let item in filteredSeventh) {
+        if (filteredSeventh[item].is_sent === false) {
           await reportPartTwoService.sendReportWithSlash(filteredSeventh, '7');
         }
       }
-      for (item of filteredNinth.value) {
-        if (!item.is_sent) {
+      for (let item in filteredNinth) {
+        if (filteredNinth[item].is_sent === false) {
           await reportPartTwoService.sendReportWithSlash(filteredNinth, '9');
         }
       }
@@ -651,9 +681,7 @@ const sendReport = async () => {
 
 const checkEmptyFields = (data) => {
   console.log('data', data)
-  const filteredSix = reportData.value.six.filter(item => (item.number_of_members > 0 && item.number_of_members !== null));
-  const filteredSeventh = reportData.value.seventh.filter(item => item.prize_place !== 'Нет');
-  const filteredNinth = reportData.value.ninth.filter(item => item.event_happened !== false);
+  const { filteredSix, filteredSeventh, filteredNinth } = filterPanelsData();
 
   if (!data.first || !(data.first.amount_of_money && data.first.scan_file)) {
     isErrorPanel.value.first = true;
@@ -842,6 +870,7 @@ onMounted(() => {
   getItems(7);
   getItems(9);
   getReportData(route.query.reportId);
+
 });
 
 </script>
