@@ -583,22 +583,42 @@ const sendReport = async () => {
   blockSendButton.value = true;
   if (checkEmptyFields(reportData.value)) {
     try {
-
       const filteredSix = reportData.value.six.filter(item => (item.number_of_members > 0 && item.number_of_members !== null));
-      const filteredSeventh = reportData.value.seventh.filter(item => item.prize_lace !== 'Нет');
+      const filteredSeventh = reportData.value.seventh.filter(item => item.prize_lace !== 'Нет');//TODO: prize_lace опечатка?
       const filteredNinth = reportData.value.ninth.filter(item => item.event_happened !== false);
-      await reportPartTwoService.sendReport(reportData.value.first, '1');
-      await reportPartTwoService.sendReport(reportData.value.fourth, '4');
-      await reportPartTwoService.sendReport(reportData.value.fifth, '5');
+
+      if (!reportData.value.first.is_sent) {
+        await reportPartTwoService.sendReport(reportData.value.first, '1');
+      }
+      if (!reportData.value.fourth.is_sent) {
+        await reportPartTwoService.sendReport(reportData.value.fourth, '4');
+      }
+      if (!reportData.value.fifth.is_sent) {
+        await reportPartTwoService.sendReport(reportData.value.fifth, '5');
+      }
+
       await reportPartTwoService.sendReportWithSlash(filteredSix, '6');
       await reportPartTwoService.sendReportWithSlash(filteredSeventh, '7');
       await reportPartTwoService.sendReportWithSlash(filteredNinth.ninth, '9');
-      await reportPartTwoService.sendReport(reportData.value.eleventh, '11');
-      await reportPartTwoService.sendReport(reportData.value.twelfth, '12');
-      await reportPartTwoService.sendReport(reportData.value.thыirteenth, '13');
-      await reportPartTwoService.sendReport(reportData.value.sixteenth, '16');
-      await reportPartTwoService.sendMultipleReport(reportData.value.tenth.first, '10', '1');
-      await reportPartTwoService.sendMultipleReport(reportData.value.tenth.second, '10', '2');
+
+      if (!reportData.value.tenth.first.is_sent) {
+        await reportPartTwoService.sendMultipleReport(reportData.value.tenth.first, '10', '1');
+      }
+      if (!reportData.value.tenth.second.is_sent) {
+        await reportPartTwoService.sendMultipleReport(reportData.value.tenth.second, '10', '2');
+      }
+      if (!reportData.value.eleventh.is_sent) {
+        await reportPartTwoService.sendReport(reportData.value.eleventh, '11');
+      }
+      if (!reportData.value.twelfth.is_sent) {
+        await reportPartTwoService.sendReport(reportData.value.twelfth, '12');
+      }
+      if (!reportData.value.thirteenth.is_sent) {
+        await reportPartTwoService.sendReport(reportData.value.thirteenth, '13');
+      }
+      if (!reportData.value.sixteenth.is_sent) {
+        await reportPartTwoService.sendReport(reportData.value.sixteenth, '16');
+      }
 
       swal.fire({
         position: 'center',
@@ -631,6 +651,7 @@ const checkEmptyFields = (data) => {
   const filteredSix = reportData.value.six.filter(item => (item.number_of_members > 0 && item.number_of_members !== null));
   const filteredSeventh = reportData.value.seventh.filter(item => item.prize_lace !== 'Нет');
   const filteredNinth = reportData.value.ninth.filter(item => item.event_happened !== false);
+
   if (!data.first || !(data.first.amount_of_money && data.first.scan_file)) {
     isErrorPanel.value.first = true;
     swal.fire({
