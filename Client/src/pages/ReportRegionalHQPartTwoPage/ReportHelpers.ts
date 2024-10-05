@@ -18,7 +18,9 @@ export const fileValidate = (value: { size: number; type: string; }, maxSizeFile
 }
 
 export const dateValidate = (events: Ref, isErrorDate: Ref, noDateError: Ref) => {
+ 
   events.value.forEach(() => {
+
     if (events.value) {
       for (let i = 0; i < events.value.length; i++) {
         isErrorDate.value[i] = {
@@ -37,10 +39,8 @@ export const dateValidate = (events: Ref, isErrorDate: Ref, noDateError: Ref) =>
               error: false,
             };
           }
-          // console.log(isErrorDate.value);
         }
-
-        if (Object.values(isErrorDate.value).some(item => item.error === true)) {
+        if (Object.values(isErrorDate.value).some((item: any) => item.error === true)) {
           noDateError.value = true;
         } else {
           noDateError.value = false;
