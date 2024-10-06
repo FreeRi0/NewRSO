@@ -45,12 +45,12 @@ app.use(vuetify)
 
 
 app.config.errorHandler = (err: any, _instance, info) => {
-    if (window.location.hostname === 'localhost' || window.location.hostname === 'rso.sprint.1t' || window.location.hostname === '213.129.208.147') {
-        HTTP.post('/services/front_errors/', {
-            url: window.location.href,
-            error_code: 0,
-            error_description: 'Where: ' + JSON.stringify(info) + '. Error: ' + err.toString(),
-            method: 'Vue Error',
-        }).then().catch()
-    }
+    //if (window.location.hostname === 'localhost' || window.location.hostname === 'rso.sprint.1t' || window.location.hostname === '213.129.208.147') {
+    HTTP.post('/services/front_errors/', {
+        url: window.location.href,
+        error_code: 0,
+        error_description: 'Where: ' + JSON.stringify(info) + '. Error: ' + err.toString(),
+        method: 'Vue Error',
+    }).then().catch()
+    //}
 }
