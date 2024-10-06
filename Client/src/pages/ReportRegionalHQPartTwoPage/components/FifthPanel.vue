@@ -71,6 +71,8 @@
               type="date"
               @focusout="focusOut"
               :disabled="isSent"
+              :min-date="event.start_date"
+              :is-error-date="Object.values(isErrorDate).some(item => item.error === true && item.id === index)"
           />
         </div>
       </div>
@@ -383,6 +385,7 @@ import { reportPartTwoService } from "@services/ReportService.ts";
 import { ReportTabs } from './index';
 import { SvgIcon } from '@shared/index';
 import { FileBoxComponent } from "@entities/RatingRoComponents/components";
+import { dateValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 
 const swal = inject('$swal');
 
@@ -420,33 +423,66 @@ const events = ref([
 ]);
 const isSent = ref(false);
 
+const isErrorDate = ref({});
+const noErrorDate = ref(false);
+
 const focusOut = async () => {
-  try {
-    if (isFirstSent.value) {
-      const {data} = await reportPartTwoService.createReport(setFormData(), '5', true);
-      emit('getData', data, 5);
-    } else {
-      const {data} = await reportPartTwoService.createReportDraft(setFormData(), '5', true);
-      emit('getData', data, 5);
-    }
-  } catch (e) {
-    console.log('focusOut error:', e);
-    e.response.data.events.forEach(event => {
-      if (event.links) {
-        for (let i in event.links) {
-          if (Object.keys(event.links[i]).length !== 0 && event.links[i].link.includes('Введите правильный URL.')) {
-            swal.fire({
-              position: 'center',
-              icon: 'warning',
-              title: `Введите корректный URL`,
-              showConfirmButton: false,
-              timer: 2500,
-            })
+  dateValidate(events, isErrorDate, noErrorDate);
+
+  if (!noErrorDate.value) {
+    try {
+      if (isFirstSent.value) {
+        const {data} = await reportPartTwoService.createReport(setFormData(), '5', true);
+        emit('getData', data, 5);
+      } else {
+        const {data} = await reportPartTwoService.createReportDraft(setFormData(), '5', true);
+        emit('getData', data, 5);
+      }
+    } catch (e) {
+      console.log('focusOut error:', e);
+      e.response.data.events.forEach(event => {
+        if (event.links) {
+          for (let i in event.links) {
+            if (Object.keys(event.links[i]).length !== 0 && event.links[i].link.includes('Введите правильный URL.')) {
+              swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: `Введите корректный URL`,
+                showConfirmButton: false,
+                timer: 2500,
+              })
+            }
           }
         }
-      }
-    })
+      })
+    }
   }
+  // try {
+  //   if (isFirstSent.value) {
+  //     const {data} = await reportPartTwoService.createReport(setFormData(), '5', true);
+  //     emit('getData', data, 5);
+  //   } else {
+  //     const {data} = await reportPartTwoService.createReportDraft(setFormData(), '5', true);
+  //     emit('getData', data, 5);
+  //   }
+  // } catch (e) {
+  //   console.log('focusOut error:', e);
+  //   e.response.data.events.forEach(event => {
+  //     if (event.links) {
+  //       for (let i in event.links) {
+  //         if (Object.keys(event.links[i]).length !== 0 && event.links[i].link.includes('Введите правильный URL.')) {
+  //           swal.fire({
+  //             position: 'center',
+  //             icon: 'warning',
+  //             title: `Введите корректный URL`,
+  //             showConfirmButton: false,
+  //             timer: 2500,
+  //           })
+  //         }
+  //       }
+  //     }
+  //   })
+  // }
 }
 
 const addLink = (index) => {
@@ -542,6 +578,7 @@ watchEffect(() => {
     fifthPanelData.value.comment = props.data.comment;
     isSent.value = props.data.is_sent;
   }
+  dateValidate(events, isErrorDate, noErrorDate);
 });
 watchPostEffect(() => {
   events.value.forEach((event) => {

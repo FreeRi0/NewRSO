@@ -3,7 +3,8 @@
     <v-expansion-panels v-model="panel" class="mb-2">
       <v-progress-circular v-show="!items.length" class="circleLoader" indeterminate></v-progress-circular>
       <v-expansion-panel :disabled="disabled" v-show="items.length" v-for="item in items"
-        :key="item.id"><v-expansion-panel-title :class="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id) ? 'visible-error' : ''">
+        :key="item.id"><v-expansion-panel-title
+          :class="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id) ? 'visible-error' : ''">
           <div class="title_wrap">
             <p class="form__title">{{ item.name }}</p>
             <div class="title_wrap__items">
@@ -15,7 +16,8 @@
           <SeventhPanelForm :id="item.id" :panel_number="7" @collapse-form="collapsed()"
             @formData="formData($event, item.id)" @error="setError" @uploadFile="uploadFile($event, item.id)"
             @deleteFile="deleteFile($event, item.id)" @getPanelNumber="getPanelNumber($event)"
-            :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)" @getId="getId($event)" :data="seventhPanelData"
+            :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)"
+            @getId="getId($event)" :data="seventhPanelData"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
@@ -70,12 +72,12 @@ const formData = async (reportData, reportNumber) => {
     if (!link_err.value) {
       if (isFirstSent.value) {
         console.log('First time sending data');
-        const { data } = await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber);
+        const { data } = await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber, true);
         isFirstSent.value = false;
         emit('getData', data, 7, reportNumber);
       } else {
         console.log('Second time sending data');
-        const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber);
+        const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber, true);
         emit('getData', data, 7, reportNumber);
       }
     }
@@ -87,17 +89,15 @@ const formData = async (reportData, reportNumber) => {
 
 const uploadFile = async (reportData, reportNumber) => {
   if (isFirstSent.value) {
-    let { document } = await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber, true);
-    seventhPanelData.value.document = document.split('/').at(-1);
+    let {data} = await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber, true)
+    emit('getData', data, 7, reportNumber);
   } else {
-    let { data: { document } } = await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber, true);
-
-    seventhPanelData.value.document = document.split('/').at(-1);
+    let { data}  = await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber, true);
+    emit('getData', data, 7, reportNumber);
   }
 };
 
 const deleteFile = async (reportData, reportNumber) => {
-
   if (isFirstSent.value) {
     await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber, true);
   } else {
@@ -127,6 +127,7 @@ watchEffect(() => {
     isFirstSent.value = false;
     seventhPanelData.value = { ...props.data[el_id.value] }
   } else {
+    console.log('data received', props.data);
     isFirstSent.value = true;
     seventhPanelData.value = {
       prize_place: 'Нет',

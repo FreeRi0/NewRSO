@@ -52,6 +52,8 @@
               type="date"
               @focusout="focusOut"
               :disabled="isSent"
+              :min-date="event.start_date"
+              :is-error-date="Object.values(isErrorDate).some(item => item.error === true && item.id === index)"
           />
         </div>
       </div>
@@ -441,6 +443,7 @@ import { Button } from '@shared/components/buttons';
 import { ReportTabs } from './index';
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { FileBoxComponent } from "@entities/RatingRoComponents/components";
+import { dateValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 
 const swal = inject('$swal');
 
@@ -479,33 +482,69 @@ const isSent = ref(false);
 
 const emit = defineEmits(['getData']);
 
+const isErrorDate = ref({});
+const noErrorDate = ref(false);
+
 const focusOut = async () => {
   fourthPanelData.value.events = [...events.value];
-  try {
-    if (isFirstSent.value) {
-      const {data} = await reportPartTwoService.createReport(setFormData(), '4', true);
-      emit('getData', data, 4);
-    } else {
-      const {data} = await reportPartTwoService.createReportDraft(setFormData(), '4', true);
-      emit('getData', data, 4);
-    }
-  } catch (e) {
-    e.response.data.events.forEach(event => {
-      if (event.links) {
-        for (let i in event.links) {
-          if (Object.keys(event.links[i]).length !== 0 && event.links[i].link.includes('Введите правильный URL.')) {
-            swal.fire({
-              position: 'center',
-              icon: 'warning',
-              title: `Введите корректный URL`,
-              showConfirmButton: false,
-              timer: 2500,
-            })
+
+  // console.log('дата до', noErrorDate.value);
+  dateValidate(events, isErrorDate, noErrorDate);
+
+  // console.log('дата после', noErrorDate.value);
+  if (!noErrorDate.value) {
+    try {
+      if (isFirstSent.value) {
+        const {data} = await reportPartTwoService.createReport(setFormData(), '4', true);
+        emit('getData', data, 4);
+      } else {
+        const {data} = await reportPartTwoService.createReportDraft(setFormData(), '4', true);
+        emit('getData', data, 4);
+      }
+    } catch (e) {
+      e.response.data.events.forEach(event => {
+        if (event.links) {
+          for (let i in event.links) {
+            if (Object.keys(event.links[i]).length !== 0 && event.links[i].link.includes('Введите правильный URL.')) {
+              swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: `Введите корректный URL`,
+                showConfirmButton: false,
+                timer: 2500,
+              })
+            }
           }
         }
-      }
-    })
+      })
+    }
   }
+
+  // try {
+  //   if (isFirstSent.value) {
+  //     const {data} = await reportPartTwoService.createReport(setFormData(), '4', true);
+  //     emit('getData', data, 4);
+  //   } else {
+  //     const {data} = await reportPartTwoService.createReportDraft(setFormData(), '4', true);
+  //     emit('getData', data, 4);
+  //   }
+  // } catch (e) {
+  //   e.response.data.events.forEach(event => {
+  //     if (event.links) {
+  //       for (let i in event.links) {
+  //         if (Object.keys(event.links[i]).length !== 0 && event.links[i].link.includes('Введите правильный URL.')) {
+  //           swal.fire({
+  //             position: 'center',
+  //             icon: 'warning',
+  //             title: `Введите корректный URL`,
+  //             showConfirmButton: false,
+  //             timer: 2500,
+  //           })
+  //         }
+  //       }
+  //     }
+  //   })
+  // }
 };
 
 const addLink = (index) => {
@@ -601,6 +640,7 @@ watchEffect(() => {
     fourthPanelData.value.comment = props.data.comment;
     isSent.value = props.data.is_sent;
   }
+  dateValidate(events, isErrorDate, noErrorDate);
 });
 watchPostEffect(() => {
   events.value.forEach((event) => {
