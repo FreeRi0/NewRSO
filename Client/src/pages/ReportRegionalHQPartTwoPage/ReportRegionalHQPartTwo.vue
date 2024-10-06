@@ -217,7 +217,8 @@
         </v-expansion-panels>
       </div>
     </div>
-    <Button v-if="!preloader" variant="text" label="Отправить отчет" size="large" @click="sendReport" />
+    <Button v-if="!preloader" variant="text" :disabled="blockSendButton" label="Отправить отчет" size="large"
+      @click="sendReport" />
   </div>
 </template>
 <script setup>
@@ -580,10 +581,13 @@ const filterPanelsData = () => {
   const filteredNinth = {};
 
   for (let i in reportData.value.six) {
-    if (reportData.value.six[i].number_of_members > 0 && reportData.value.six[i].number_of_members !== null) {
+    if ( (reportData.value.six[i].number_of_members > 0 && reportData.value.six[i].number_of_members !== null) && Object.keys(reportData.value.six[i]).length !== 0) {
       filteredSix[i] = reportData.value.six[i];
+      
     }
+
   }
+  console.log('setData6: ', filteredSix)
   for (let i in filteredSix) {
     isErrorPanel.value.six[i] = {
       id: i,
@@ -592,10 +596,12 @@ const filterPanelsData = () => {
   }
 
   for (let i in reportData.value.seventh) {
-    if (reportData.value.seventh[i].prize_place !== 'Нет') {
+    if (reportData.value.seventh[i].prize_place !== 'Нет' && Object.keys(reportData.value.seventh[i]).length !== 0) {
       filteredSeventh[i] = reportData.value.seventh[i];
     }
+    
   }
+  console.log('setData7: ', filteredSeventh)
   for (let i in filteredSeventh) {
     isErrorPanel.value.seventh[i] = {
       id: i,
@@ -604,10 +610,11 @@ const filterPanelsData = () => {
   }
 
   for (let i in reportData.value.ninth) {
-    if (reportData.value.ninth[i].event_happened !== false) {
+    if (reportData.value.ninth[i].event_happened !== false && Object.keys(reportData.value.ninth[i]).length !== 0) {
       filteredNinth[i] = reportData.value.ninth[i];
     }
   }
+  console.log('setData9: ', filteredNinth)
   for (let i in filteredNinth) {
     isErrorPanel.value.ninth[i] = {
       id: i,
@@ -765,7 +772,7 @@ const checkEmptyFields = (data) => {
   }
 
   for (let item in filteredSix) {
-    if (!(filteredSix[item].links.length)) {
+    if (!(filteredSix[item]?.links?.length)) {
       isErrorPanel.value.six[item] = {
         id: item,
         error: true,
@@ -781,7 +788,7 @@ const checkEmptyFields = (data) => {
     }
   }
   for (let item in filteredSeventh) {
-    if (!(filteredSeventh[item].links.length && filteredSeventh[item].document && filteredSeventh[item].comment)) {
+    if (!(filteredSeventh[item]?.links?.length && filteredSeventh[item].document && filteredSeventh[item].comment)) {
       isErrorPanel.value.seventh[item] = {
         id: item,
         error: true,
@@ -797,7 +804,7 @@ const checkEmptyFields = (data) => {
     }
   }
   for (let item in filteredNinth) {
-    if (!(filteredNinth[item].links.length)) {
+    if (!(filteredNinth[item]?.links?.length)) {
       isErrorPanel.value.ninth[item] = {
         id: item,
         error: true,
