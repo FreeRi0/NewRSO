@@ -44,7 +44,7 @@
                     </div>
                     <FileBoxComponent
                         v-else-if="seventhPanelData.document && typeof seventhPanelData.document === 'string'"
-                        :file="seventhPanelData.document" :fileType="seventhPanelData.file_type"
+                        :file="seventhPanelData.document" :fileType="seventhPanelData.file_type" :isSent="isSent"
                         :fileSize="seventhPanelData.file_size" @click="deleteFile(7)" :is-error-file="isErrorFile">
                     </FileBoxComponent>
                 </div>
@@ -197,6 +197,7 @@
                     </div>
                     <FileBoxComponent v-else-if="ninthPanelData.document && typeof ninthPanelData.document === 'string'"
                         :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
+                        :isSent="isSent"
                         :is-error-file="isErrorFile" :fileSize="ninthPanelData.file_size" @click="deleteFile(9)">
                     </FileBoxComponent>
                 </div>
