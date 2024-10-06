@@ -26,7 +26,7 @@
                                 type="radio" @focusout="focusOut" v-model="seventhPanelData.prize_place" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                            }}</label>
+                                }}</label>
                         </div>
                     </div>
                 </div>
@@ -36,8 +36,15 @@
                     </label>
                     <InputReport v-if="!seventhPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
                         id="scan_file" :is-error-panel="isErrorPanel" name="scan_file" width="100%" height="auto"
-                        @change="uploadFile($event, 7)" :disabled="isSent || seventhPanelData.prize_place === 'Нет'" />
-                    <FileBoxComponent v-else :file="seventhPanelData.document" :fileType="seventhPanelData.file_type"
+                        v-model:value="seventhPanelData.document" @change="uploadFile($event, 7)"
+                        :disabled="isSent || seventhPanelData.prize_place === 'Нет'" />
+                    <div v-else-if="seventhPanelData.document && (typeof seventhPanelData.document !== 'string')"
+                        class="text-center">
+                        <v-progress-circular color="primary" indeterminate></v-progress-circular>
+                    </div>
+                    <FileBoxComponent
+                        v-else-if="seventhPanelData.document && typeof seventhPanelData.document === 'string'"
+                        :file="seventhPanelData.document" :fileType="seventhPanelData.file_type"
                         :fileSize="seventhPanelData.file_size" @click="deleteFile(7)" :is-error-file="isErrorFile">
                     </FileBoxComponent>
                 </div>
@@ -172,7 +179,7 @@
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                            }}</label>
+                                }}</label>
                         </div>
                     </div>
                 </div>
@@ -181,10 +188,15 @@
                         Скан документа, подтверждающего проведение акции
                     </label>
                     <InputReport v-if="!ninthPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
-                        id="scan_file" :is-error-panel="isErrorPanel" name="scan_file" width="100%"
-                        :disabled="isSentNine || ninthPanelData.event_happened === false" height="auto"
-                        @change="uploadFile($event, 9)" />
-                    <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
+                        id="scan_file" :is-error-panel="isErrorPanel" v-model:value="ninthPanelData.document"
+                        name="scan_file" width="100%" :disabled="isSentNine || ninthPanelData.event_happened === false"
+                        height="auto" @change="uploadFile($event, 9)" />
+                    <div v-else-if="ninthPanelData.document && (typeof ninthPanelData.document !== 'string')"
+                        class="text-center">
+                        <v-progress-circular color="primary" indeterminate></v-progress-circular>
+                    </div>
+                    <FileBoxComponent v-else-if="ninthPanelData.document && typeof ninthPanelData.document === 'string'"
+                        :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
                         :is-error-file="isErrorFile" :fileSize="ninthPanelData.file_size" @click="deleteFile(9)">
                     </FileBoxComponent>
                 </div>
@@ -256,7 +268,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -396,7 +408,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -476,7 +488,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -570,7 +582,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -657,7 +669,7 @@
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -755,7 +767,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -865,56 +877,48 @@ const isSentSix = ref(false);
 const isSentNine = ref(false);
 
 const uploadFile = (event, number) => {
-
-    let formData = new FormData();
     console.log('num', number);
     if (number === 7) {
-        scanFile.value = event.target.files[0];
-        formData.append('prize_place', seventhPanelData.value.prize_place);
-        if (!seventhPanelData.value.document) {
-            formData.append('document', scanFile.value);
-        }
-        if (seventhPanelData.value.links.length) {
-            for (let i = 0; i < seventhPanelData.value.links.length; i++) {
-                !seventhPanelData.value.links[i].link
-                    ? formData.append(`[links][${i}][link]`, '')
-                    : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
-            }
-        }
-        formData.append('comment', seventhPanelData.value.comment);
-
-        fileValidate(scanFile.value, 7, isErrorFile);
+        fileValidate(event.target.files[0], 7, isErrorFile);
         if (isErrorFile.value) {
+            console.log('error');
+            scanFile.value = event.target.files[0];
             seventhPanelData.value.document = scanFile.value.name;
-            console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
-            return false;
-        } else {
-            emit('uploadFile', formData);
-            emit('formData', formData);
         }
-
-    } else if (number === 9) {
-        scanFile.value = event.target.files[0];
-        formData.append('event_happened', ninthPanelData.value.event_happened);
-        if (!ninthPanelData.value.document) {
-            formData.append('document', scanFile.value);
-        }
-        if (ninthPanelData.value.links.length) {
-            for (let i = 0; i < ninthPanelData.value.links.length; i++) {
-                !ninthPanelData.value.links[i].link
-                    ? formData.append(`[links][${i}][link]`, '')
-                    : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+        else {
+            let formData = new FormData();
+            formData.append('prize_place', seventhPanelData.value.prize_place);
+            formData.append('document', event.target.files[0]);
+            if (seventhPanelData.value.links.length) {
+                for (let i = 0; i < seventhPanelData.value.links.length; i++) {
+                    !seventhPanelData.value.links[i].link
+                        ? formData.append(`[links][${i}][link]`, '')
+                        : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
+                }
             }
-        }
-        formData.append('comment', ninthPanelData.value.comment);
-        fileValidate(scanFile.value, 7, isErrorFile);
-        if (isErrorFile.value) {
-            ninthPanelData.value.document = scanFile.value.name;
-            console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
-            return false;
-        } else {
+            formData.append('comment', seventhPanelData.value.comment);
+            console.log('comment', formData);
             emit('uploadFile', formData);
-            emit('formData', formData);
+        }
+    } else if (number === 9) {
+        fileValidate(event.target.files[0], 9, isErrorFile);
+        if (isErrorFile.value) {
+            console.log('error');
+            scanFile.value = event.target.files[0];
+            ninthPanelData.value.document = scanFile.value.name;
+        } else {
+            let formData = new FormData();
+            formData.append('event_happened', ninthPanelData.value.event_happened);
+            formData.append('document', event.target.files[0]);
+            if (ninthPanelData.value.links.length) {
+                for (let i = 0; i < ninthPanelData.value.links.length; i++) {
+                    !ninthPanelData.value.links[i].link
+                        ? formData.append(`[links][${i}][link]`, '')
+                        : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                }
+            }
+            formData.append('comment', ninthPanelData.value.comment);
+            emit('uploadFile', formData);
         }
     }
 
@@ -938,7 +942,7 @@ const deleteFile = (number) => {
         formData.append('file_type', seventhPanelData.value.file_type);
 
         emit('deleteFile', formData);
-        emit('formData', formData)
+        // emit('formData', formData)
     } else if (number === 9) {
         ninthPanelData.value.document = '';
         formData.append('event_happened', ninthPanelData.value.event_happened);
@@ -954,7 +958,7 @@ const deleteFile = (number) => {
         formData.append('file_size', ninthPanelData.value.file_size);
         formData.append('file_type', ninthPanelData.value.file_type);
         emit('deleteFile', formData);
-        emit('formData', formData)
+        // emit('formData', formData)
     }
 
 }
@@ -974,7 +978,6 @@ const focusOut = () => {
         try {
             if (isFirstSentSeventh.value) {
                 console.log('7', '1')
-
                 emit('formData', seventhPanelData.value)
             } else {
                 let formData = new FormData();
