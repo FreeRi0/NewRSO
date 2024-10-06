@@ -580,7 +580,7 @@
         font-size: 20px;
         font-weight: 500;
     }
-
+    
     a.competition__documents-button {
         display: flex;
         align-items: center;
@@ -597,14 +597,9 @@
         @media screen and (min-width: 320px) and (max-width:480px) {
             display: flex;
             align-items: center;
-            transform: translateX(30px) translateY(10px);
             max-width: 220px; //---------------------
-            height: 72px;
-            margin-left: 76px;
-            padding-right: 30px;
+            padding-right: 7.5%;
             font-family: 'Akrobat';
-            font-weight: 600;
-            line-height: 16px;
             color: #1f7cc0;
             cursor: pointer;
         }
@@ -750,5 +745,15 @@
 .subtitle {
     &--link {
         margin-top: 60px;
+    }
+}
+
+@media screen and (min-width: 320px) and (max-width:480px) {
+    .competition-button-optimiz{
+        display: flex; /* Устанавливаем Flexbox */
+        justify-content: center; /* Центрируем по горизонтали */
+        align-items: center; /* Центрируем по вертикали */
+        height: 40px; /* Устанавливаем высоту блока */
+        transform: translateY(10px);
     }
 }

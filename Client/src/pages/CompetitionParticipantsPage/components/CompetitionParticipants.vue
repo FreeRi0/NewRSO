@@ -404,5 +404,4 @@ onMounted(() => {
         width: 83%;
     }
 }
-
 </style>

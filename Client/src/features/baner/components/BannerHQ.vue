@@ -815,7 +815,7 @@
                             "
                             @click="showModalW()"
                             label="Вступить в штаб"
-                            class="AddApplication"
+                            class="AddApplication AddApplication-but-join"
                         ></Button>
                         <div
                             v-else-if="Object.keys(applications).length !== 0"
@@ -841,7 +841,7 @@
                                 roleStore.myPositions
                                     .usercentralheadquarterposition !== null
                             "
-                            class="AddApplication"
+                            class="AddApplication AddApplication-but-yp"
                         >
                             Вы участник
                         </div>
@@ -1475,7 +1475,16 @@ const copyL = () => {
         transform: translateX(-105px);
         margin-bottom: 20px;
         }
+
+    &-but-join{
+        margin: 0px;
+        padding: 16px 32px;
     }
+    &-but-yp{
+        margin: 0px;
+        padding: 16px 32px;
+    }
+}
 
 
    

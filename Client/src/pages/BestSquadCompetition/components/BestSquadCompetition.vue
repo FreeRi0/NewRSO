@@ -116,10 +116,11 @@
 
         <div class="competition__documents">
             <p id="file-chosen-statement" class="text competition__documents-description competition__text-column">
-                Положение о проведении<a class="a-spacing"/> конкурса и формировании рейтинга линейных
-                студенческих отрядов Молодёжной<a class="a-spacing1"/> общероссийской общественной
-                <a class="a-spacing2"/>организации «Российский<a class="a-spacing3" /> Студенческие Отряды»
+                Положение о проведении конкурса и формировании рейтинга линейных
+                студенческих отрядов Молодёжной общероссийской общественной
+                организации «Российский Студенческие Отряды»
             </p>
+            <div class="competition-button-optimiz">
             <a target="_blank" class="competition__documents-button" @click.prevent="downloadDocument">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="30" viewBox="0 0 24 30" fill="none">
                     <path
@@ -127,6 +128,7 @@
                         fill="#1F7CC0" />
                 </svg>
                 Скачать документ</a>
+            </div>
         </div>
 
 
@@ -372,20 +374,4 @@ onUnmounted(() => {
 });
 </script>
 <style lang="scss">
-@media screen and (min-width: 320px) and (max-width:480px) {
-
-.a-spacing{
-     margin-left: 1px;
-}
-.a-spacing1{
-     margin-left: -4px;
-}
-.a-spacing2{
-     margin-right: -57px;
-}
-.a-spacing3{
-     margin-left: -17px;
-    
-}
-}
 </style>
