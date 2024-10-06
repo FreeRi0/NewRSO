@@ -640,7 +640,7 @@ watchEffect(() => {
     fourthPanelData.value.comment = props.data.comment;
     isSent.value = props.data.is_sent;
   }
-  dateValidate(events, isErrorDate, noErrorDate);
+  // dateValidate(events, isErrorDate, noErrorDate);
 });
 watchPostEffect(() => {
   events.value.forEach((event) => {

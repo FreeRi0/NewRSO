@@ -58,18 +58,27 @@
                 @change="uploadFile($event, index)"
                 :disabled="isSent"
             />
-            <div v-else class="form__file-box">
-            <span class="form__file-name">
-              <SvgIcon v-if="project.file_type === 'jpg'" icon-name="file-jpg"/>
-              <SvgIcon v-if="project.file_type === 'pdf'" icon-name="file-pdf"/>
-              <SvgIcon v-if="project.file_type === 'png'" icon-name="file-png"/>
-              {{ project.regulations.split('/').at(-1) }}
-            </span>
-              <span class="form__file-size">{{ project.file_size }} Мб</span>
-              <button v-if="!isSent" @click="deleteFile(index)" class="form__button-delete-file">
-                Удалить
-              </button>
-            </div>
+<!--            <div v-else class="form__file-box">-->
+<!--            <span class="form__file-name">-->
+<!--              <SvgIcon v-if="project.file_type === 'jpg'" icon-name="file-jpg"/>-->
+<!--              <SvgIcon v-if="project.file_type === 'pdf'" icon-name="file-pdf"/>-->
+<!--              <SvgIcon v-if="project.file_type === 'png'" icon-name="file-png"/>-->
+<!--              {{ project.regulations.split('/').at(-1) }}-->
+<!--            </span>-->
+<!--              <span class="form__file-size">{{ project.file_size }} Мб</span>-->
+<!--              <button v-if="!isSent" @click="deleteFile(index)" class="form__button-delete-file">-->
+<!--                Удалить-->
+<!--              </button>-->
+<!--            </div>-->
+            <FileBoxComponent
+                v-else
+                :file="project.regulations"
+                :fileType="project.file_type"
+                :fileSize="project.file_size"
+                :isSent="isSent"
+                :is-error-file="isErrorFile && !project.file_size"
+                @click="deleteFile(index)"
+            />
           </div>
           <div class="project-scope">
             <p class="form__label form__field-label-project">Масштаб проекта <sup class="valid-red">*</sup></p>
@@ -404,6 +413,8 @@ import { Button } from '@shared/components/buttons';
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { SvgIcon } from '@shared/index';
 import { ReportTabs } from './index';
+import { FileBoxComponent } from '@entities/RatingRoComponents/components';
+import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 
 const swal = inject('$swal');
 
@@ -423,6 +434,7 @@ const props = defineProps({
 
 const emit = defineEmits(['getData']);
 
+let isErrorFile = ref(false);
 const sixteenthPanelData = ref({
   is_project: false,
   projects: [],
@@ -506,7 +518,7 @@ const deleteProject = async (index) => {
   projects.value.forEach((project, i) => {
     if (project.name) formData.append(`projects[${i}][name]`, project.name);
     if (project.project_scale) formData.append(`projects[${i}][project_scale]`, project.project_scale);
-    if (project.regulations) formData.append(`projects[${i}][regulations]`, '');
+    if (project.regulations) formData.append(`projects[${i}][regulations]`, project.regulations);
     if (project.links.length) {
       for (let j = 0; j < project.links.length; j++) {
         if (project.links[j].link) formData.append(`projects[${i}][links][${j}][link]`, project.links[j].link);
@@ -522,8 +534,13 @@ const deleteProject = async (index) => {
 };
 
 const uploadFile = async (event, index) => {
-  const {data} = await reportPartTwoService.createReportDraft(setFormData(event.target.files[0], index), '16', true);
-  emit('getData', data, 16);
+  fileValidate(event.target.files[0], 7, isErrorFile);
+  if (isErrorFile.value) {
+    projects.value[index].regulations = event.target.files[0].name
+  } else {
+    const {data} = await reportPartTwoService.createReportDraft(setFormData(event.target.files[0], index), '16', true);
+    emit('getData', data, 16);
+  }
 };
 const deleteFile = async (index) => {
   setFormData(null, index, false, true)
@@ -561,7 +578,8 @@ const setFormData = (file = null, index = null, isDeleteEvent = false, isDeleteF
   return formData;
 };
 
-watchEffect(async () => {
+watchEffect(() => {
+  console.log('props.data: ', props.data)
   if (props.data) {
     isFirstSent.value = false;
     projects.value = [...props.data.projects];
