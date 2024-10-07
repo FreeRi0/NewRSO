@@ -36,7 +36,7 @@
         Дата окончания не может быть меньше даты начала
       </span>
     </div>
-    <div v-show="isLinkError && props.isLink && value"> <span class="form-input__error-text">Не верный формат
+    <div v-show="isLinkError && props.isLink && (value || value === null) "> <span class="form-input__error-text">Не верный формат
         url</span></div>
 
   </div>
@@ -162,7 +162,9 @@ watchEffect(() => {
 });
 
 watchEffect(() => {
+  console.log('ffff', props.value);
   validateLink(props.value)
+  console.log('ffff', props.value);
 });
 
 const updateValue = (event) => {

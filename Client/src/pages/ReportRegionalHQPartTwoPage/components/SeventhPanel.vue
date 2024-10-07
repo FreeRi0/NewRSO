@@ -17,8 +17,7 @@
             @formData="formData($event, item.id)" @error="setError" @uploadFile="uploadFile($event, item.id)"
             @deleteFile="deleteFile($event, item.id)" @getPanelNumber="getPanelNumber($event)"
             :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)"
-            @getId="getId($event)" :data="seventhPanelData"
-            :is-sent="isSent"
+            @getId="getId($event)" :data="seventhPanelData" :is-sent="isSent"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
@@ -91,10 +90,10 @@ const formData = async (reportData, reportNumber) => {
 
 const uploadFile = async (reportData, reportNumber) => {
   if (isFirstSent.value) {
-    let {data} = await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber, true)
+    let { data } = await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber, true)
     emit('getData', data, 7, reportNumber);
   } else {
-    let { data}  = await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber, true);
+    let { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber, true);
     emit('getData', data, 7, reportNumber);
   }
 };
@@ -127,8 +126,21 @@ watchEffect(() => {
   if (Object.keys(props.data[el_id.value]).length > 0) {
     console.log('data received', props.data);
     isFirstSent.value = false;
+
     seventhPanelData.value = { ...props.data[el_id.value] }
     isSent.value = props.data[el_id.value].is_sent;
+    if (props.data[el_id.value].prize_place == 'Нет') {
+      seventhPanelData.value = {
+        prize_place: 'Нет',
+        links: [{
+          link: '',
+        }],
+        document: '',
+        file_size: null,
+        file_type: '',
+        comment: '',
+      };
+    }
   } else {
     console.log('data received', props.data);
     isFirstSent.value = true;
