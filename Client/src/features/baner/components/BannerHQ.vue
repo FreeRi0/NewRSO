@@ -133,7 +133,7 @@
                         "
                         @click="showModalW()"
                         label="Вступить в штаб"
-                        class="AddApplication"
+                        class="AddApplication AddApplication-but-join"
                     ></Button>
                     <div
                         v-else-if="Object.keys(applications).length !== 0"
@@ -150,7 +150,7 @@
                                 )
                             "
                             label="Удалить заявку"
-                            class="AddApplication"
+                            class="AddApplication AddApplication-but-bidel"
                         ></Button>
                     </div>
 
@@ -159,7 +159,7 @@
                             userStore.currentUser.educational_headquarter_id ===
                             props.headquarter.id
                         "
-                        class="AddApplication"
+                        class="AddApplication AddApplication-but-yp"
                     >
                         Вы участник
                     </div>
@@ -299,7 +299,7 @@
                         "
                         @click="showModalW()"
                         label="Вступить в штаб"
-                        class="AddApplication"
+                        class="AddApplication AddApplication-but-join"
                     ></Button>
                     <div
                         v-else-if="Object.keys(applications).length !== 0"
@@ -316,7 +316,7 @@
                                 )
                             "
                             label="Удалить заявку"
-                            class="AddApplication"
+                            class="AddApplication AddApplication-but-bidel"
                         ></Button>
                     </div>
 
@@ -325,7 +325,7 @@
                             userStore.currentUser.local_headquarter_id ===
                             props.localHeadquarter.id
                         "
-                        class="AddApplication"
+                        class="AddApplication AddApplication-but-yp"
                     >
                         Вы участник
                     </div>
@@ -469,7 +469,7 @@
                         "
                         @click="showModalW()"
                         label="Вступить в штаб"
-                        class="AddApplication"
+                        class="AddApplication AddApplication-but-join"
                     ></Button>
                     <div
                         v-else-if="Object.keys(applications).length !== 0"
@@ -486,7 +486,7 @@
                                 )
                             "
                             label="Удалить заявку"
-                            class="AddApplication"
+                            class="AddApplication AddApplication-but-bidel"
                         ></Button>
                     </div>
                     <div
@@ -494,7 +494,7 @@
                             userStore.currentUser.district_headquarter_id ===
                             props.districtHeadquarter.id
                         "
-                        class="AddApplication"
+                        class="AddApplication AddApplication-but-yp"
                     >
                         Вы участник
                     </div>
@@ -639,7 +639,7 @@
                         "
                         @click="showModalW()"
                         label="Вступить в штаб"
-                        class="AddApplication"
+                        class="AddApplication AddApplication-but-join"
                     ></Button>
                     <div
                         v-else-if="Object.keys(applications).length !== 0"
@@ -656,7 +656,7 @@
                                 )
                             "
                             label="Удалить заявку"
-                            class="AddApplication"
+                            class="AddApplication AddApplication-but-bidel"
                         ></Button>
                     </div>
 
@@ -665,7 +665,7 @@
                             userStore.currentUser.regional_headquarter_id ==
                             props.regionalHeadquarter.id
                         "
-                        class="AddApplication"
+                        class="AddApplication AddApplication-but-yp"
                     >
                         Вы участник
                     </div>
