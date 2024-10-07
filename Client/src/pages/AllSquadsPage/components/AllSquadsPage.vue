@@ -513,6 +513,7 @@ watch(
 .form__select {
     margin-bottom: 0px;
     border: 1px solid #35383f;
+    height: 32px;
 }
 
 .squads-sorts {
@@ -561,10 +562,13 @@ watch(
 }
 
 .v-field__input {
+    display: flex;
     font-family: 'Bert Sans';
     font-weight: 500;
     font-size: 16px;
     line-height: 20px;
+    padding: 4px 0 !important;
+    max-height: 32px !important;
 }
 
 .v-field__field .v-field__input {
