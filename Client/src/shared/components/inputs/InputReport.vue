@@ -162,9 +162,7 @@ watchEffect(() => {
 });
 
 watchEffect(() => {
-  console.log('ffff', props.value);
   validateLink(props.value)
-  console.log('ffff', props.value);
 });
 
 const updateValue = (event) => {

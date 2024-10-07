@@ -47,18 +47,27 @@
             @change="uploadFile"
             :disabled="isSent || !tenthPanelData.event_happened"
         />
-        <div v-else class="form__file-box">
-          <span class="form__file-name">
-            <SvgIcon v-if="tenthPanelData.file_type === 'jpg'" icon-name="file-jpg"/>
-            <SvgIcon v-if="tenthPanelData.file_type === 'pdf'" icon-name="file-pdf"/>
-            <SvgIcon v-if="tenthPanelData.file_type === 'png'" icon-name="file-png"/>
-            {{ tenthPanelData.document.split('/').at(-1) }}
-          </span>
-          <span class="form__file-size">{{ tenthPanelData.file_size }} Мб</span>
-          <button v-if="!isSent" @click="deleteFile" class="form__button-delete-file">
-            Удалить
-          </button>
-        </div>
+<!--        <div v-else class="form__file-box">-->
+<!--          <span class="form__file-name">-->
+<!--            <SvgIcon v-if="tenthPanelData.file_type === 'jpg'" icon-name="file-jpg"/>-->
+<!--            <SvgIcon v-if="tenthPanelData.file_type === 'pdf'" icon-name="file-pdf"/>-->
+<!--            <SvgIcon v-if="tenthPanelData.file_type === 'png'" icon-name="file-png"/>-->
+<!--            {{ tenthPanelData.document.split('/').at(-1) }}-->
+<!--          </span>-->
+<!--          <span class="form__file-size">{{ tenthPanelData.file_size }} Мб</span>-->
+<!--          <button v-if="!isSent" @click="deleteFile" class="form__button-delete-file">-->
+<!--            Удалить-->
+<!--          </button>-->
+<!--        </div>-->
+        <FileBoxComponent
+            v-else
+            :file="tenthPanelData.document"
+            :fileType="tenthPanelData.file_type"
+            :fileSize="tenthPanelData.file_size"
+            :isSent="isSent"
+            :is-error-file="isErrorFile && !tenthPanelData.file_size"
+            @click="deleteFile"
+        />
       </div>
       <div>
         <p class="form__label">Ссылка на социальные сети/ электронные <br>
@@ -75,8 +84,10 @@
               :disabled="isSent || !tenthPanelData.event_happened"
               is-link
           />
-          <Button v-if="tenthPanelData.links.length === i + 1" class="form__add-link-button" label="+ Добавить ссылку" @click="addLink"/>
-          <Button class="form__add-link-button" v-else label="Удалить" @click="onDeleteLink(i)"/>
+          <div v-if="!isSent && tenthPanelData.event_happened">
+            <Button v-if="tenthPanelData.links.length === i + 1" class="form__add-link-button" label="+ Добавить ссылку" @click="addLink"/>
+            <Button class="form__add-link-button" v-else label="Удалить" @click="onDeleteLink(i)"/>
+          </div>
         </div>
       </div>
       <div class="form__field-comment">
@@ -183,11 +194,12 @@
   </report-tabs>
 </template>
 <script setup>
-import {ref, watchEffect, watchPostEffect} from "vue";
+import {ref, watch, watchEffect, watchPostEffect} from "vue";
 import {InputReport, TextareaReport} from '@shared/components/inputs';
 import {Button} from '@shared/components/buttons';
 import {ReportTabs} from './index';
 import {SvgIcon} from '@shared/index';
+import { FileBoxComponent } from '@entities/RatingRoComponents/components';
 
 const props = defineProps({
   data: Object,
@@ -197,6 +209,7 @@ const props = defineProps({
   centralExpert: {
     type: Boolean
   },
+  isErrorFileProp: Boolean,
 });
 
 const tenthPanelData = ref({
@@ -212,8 +225,9 @@ const tenthPanelData = ref({
   ],
 });
 const isSent = ref(false);
+let isErrorFile = ref(false);
 
-const emit = defineEmits(['collapse-form','formData', 'uploadFile', 'deleteFile', 'deleteLink']);
+const emit = defineEmits(['collapse-form','formData', 'uploadFile', 'deleteFile', 'deleteLink', 'clearForm']);
 
 const collapseForm = () => {
   emit('collapse-form');
@@ -242,9 +256,15 @@ const deleteFile = () => {
 watchEffect(() => {
   tenthPanelData.value = {...props.data};
   isSent.value = props.data.is_sent;
+  isErrorFile.value = props.isErrorFileProp;
 })
 watchPostEffect(() => {
   if (!tenthPanelData.value.links.length) tenthPanelData.value.links.push({link: ''})
+})
+watch(() => tenthPanelData.value.event_happened, (isEventHappened) => {
+  if (!isEventHappened) {
+    emit('clearForm')
+  }
 })
 </script>
 <style lang="scss" scoped>

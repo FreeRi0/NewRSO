@@ -584,7 +584,7 @@ watchEffect(() => {
     isFirstSent.value = false;
     projects.value = [...props.data.projects];
     sixteenthPanelData.value.is_project = props.data.is_project;
-    sixteenthPanelData.value.comment = props.data.comment;
+    sixteenthPanelData.value.comment = props.data.comment || '';
     isSent.value = props.data.is_sent;
   }
 });
