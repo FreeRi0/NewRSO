@@ -375,7 +375,7 @@ watch(
     margin: 0 !important;
     padding: 7px 0 !important;
     width: 40px;
-    height: 40px;
+    height: 32px;
 }
 
 .v-select__selection {
@@ -559,21 +559,6 @@ watch(
             min-width: 180px;
         }
     }
-}
-
-.v-field__input {
-    display: flex;
-    font-family: 'Bert Sans';
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 20px;
-    padding: 4px 0 !important;
-    max-height: 32px !important;
-}
-
-.v-field__field .v-field__input {
-    padding-left: 16px;
-    padding-right: 16px;
 }
 
 .v-field__clearable {
