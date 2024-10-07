@@ -174,7 +174,7 @@
 
                     <div class="places_wrap">
                         <div class="places_item" v-for="item in events" :key="item.id">
-                            <input :id="item.id" :value="item.value" :name="item.name" :disabled="isSentNine"
+                            <input :id="item.id" :value="item.value" :name="item.name" :disabled="isSentNinth"
                                 :checked="ninthPanelData.event_happened == item.value" class="form__input places_input"
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
@@ -189,7 +189,7 @@
                     </label>
                     <InputReport v-if="!ninthPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
                         id="scan_file" :is-error-panel="isErrorPanel" v-model:value="ninthPanelData.document"
-                        name="scan_file" width="100%" :disabled="isSentNine || ninthPanelData.event_happened === false"
+                        name="scan_file" width="100%" :disabled="isSentNinth || ninthPanelData.event_happened === false"
                         height="auto" @change="uploadFile($event, 9)" />
                     <div v-else-if="ninthPanelData.document && (typeof ninthPanelData.document !== 'string')"
                         class="text-center">
@@ -197,7 +197,7 @@
                     </div>
                     <FileBoxComponent v-else-if="ninthPanelData.document && typeof ninthPanelData.document === 'string'"
                         :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
-                        :isSent="isSent"
+                        :isSent="isSentNinth"
                         :is-error-file="isErrorFile" :fileSize="ninthPanelData.file_size" @click="deleteFile(9)">
                     </FileBoxComponent>
                 </div>
@@ -209,11 +209,11 @@
 
                     <div class="form__wrapper" v-for="(item, index) in ninthPanelData.links" :key="index">
                         <InputReport @focusout="focusOut" @error="setError"
-                            :disabled="isSentNine || ninthPanelData.event_happened === false" name="14" :maxlength="200"
+                            :disabled="isSentNinth || ninthPanelData.event_happened === false" name="14" :maxlength="200"
                             :is-error-panel="isErrorPanel" :is-link="true"
                             placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
                             class="mb-2" />
-                        <div v-if="!isSentNine">
+                        <div v-if="!isSentNinth">
                             <div class="add_link" @click="addLink(9)" v-if="ninthPanelData.links.length === index + 1">
                                 + Добавить ссылку
                             </div>
@@ -230,7 +230,7 @@
                     <TextareaReport v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1"
                         autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
                         :max-length-text="3000" counter-visible
-                        :disabled="isSentNine || ninthPanelData.event_happened === false" />
+                        :disabled="isSentNinth || ninthPanelData.event_happened === false" />
                 </div>
                 <div class="form__field-result" style="display: flex; align-items: center;">
                     <v-checkbox class="result-checkbox" id="v-checkbox" />
