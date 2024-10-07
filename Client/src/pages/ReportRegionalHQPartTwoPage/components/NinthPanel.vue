@@ -13,6 +13,7 @@
             @formData="formData($event, item.id)" @error="setError" @uploadFile="uploadFile($event, item.id)"
             :data="ninthPanelData" @getPanelNumber="getPanelNumber($event)" @getId="getId($event)"
             @deleteFile="deleteFile($event, item.id)"
+            :is-sent-ninth="isSentNinth"
             :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
@@ -39,7 +40,7 @@ const props = defineProps({
 });
 
 const link_err = ref(false);
-// const swal = inject('$swal');
+const isSentNinth = ref(false);
 
 const setError = (err) => {
   link_err.value = err;
@@ -125,6 +126,7 @@ watchEffect(() => {
     console.log('data yes')
     isFirstSent.value = false;
     ninthPanelData.value = { ...props.data[el_id.value] }
+    isSentNinth.value = props.data[el_id.value].is_sent;
   } else {
     console.log('data no')
     isFirstSent.value = true;
@@ -138,6 +140,12 @@ watchEffect(() => {
       file_type: '',
       comment: '',
     };
+    for (let i in props.data) {
+      if (props.data[i].is_sent) {
+        isSentNinth.value = true;
+        break;
+      }
+    }
   }
 
   if (panel.value || panel.value === 0) {

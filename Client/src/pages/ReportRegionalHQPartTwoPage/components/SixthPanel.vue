@@ -3,7 +3,8 @@
     <v-expansion-panels v-model="panel" class="mb-2">
       <v-progress-circular v-show="!items.length" class="circleLoader" indeterminate></v-progress-circular>
       <v-expansion-panel :disabled="disabled" v-show="items.length" v-for="item in items"
-        :key="item.id"><v-expansion-panel-title :class="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id) ? 'visible-error' : ''">
+        :key="item.id"><v-expansion-panel-title
+          :class="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id) ? 'visible-error' : ''">
           <div class="title_wrap">
             <p class="form__title">{{ item.name }}</p>
             <div class="title_wrap__items">
@@ -14,8 +15,9 @@
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()"
             @formData="formData($event, item.id)" @error="setError" @getPanelNumber="getPanelNumber($event)"
-            @getId="getId($event)" :data="sixPanelData"
-            :isCentralHeadquarterCommander="props.centralHeadquarterCommander" :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)"
+            @getId="getId($event)" :data="sixPanelData" :is-sent-six="isSentSix"
+            :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
+            :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item">
           </SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
@@ -23,7 +25,7 @@
   </v-card>
 </template>
 <script setup>
-import { ref, watchEffect} from "vue";
+import { ref, watchEffect } from "vue";
 import { SeventhPanelForm } from "./index";
 import { reportPartTwoService } from "@services/ReportService.ts";
 
@@ -36,11 +38,12 @@ const props = defineProps({
     type: Boolean
   },
   isErrorPanel: Object,
+  // isSentSix: Boolean,
   items: Array,
   data: Object,
 });
 
-console.log('error66', props.isErrorPanel)
+// console.log('error66', props.isErrorPanel)
 
 const disabled = ref(false);
 const link_err = ref(false);
@@ -50,6 +53,7 @@ const setError = (err) => {
 }
 
 const isFirstSent = ref(null);
+const isSentSix = ref(false);
 const emit = defineEmits(['getData', 'getId', 'getPanelNumber']);
 
 const sixPanelData = ref({
@@ -99,14 +103,16 @@ const getPanelNumber = (number) => {
   emit('getPanelNumber', number);
 }
 watchEffect(() => {
-
   if (Object.keys(props.data[el_id.value]).length > 0) {
+
     console.log('data received', props.data);
     isFirstSent.value = false;
     sixPanelData.value = { ...props.data[el_id.value] }
+    isSentSix.value = props.data[el_id.value].is_sent;
   }
   else {
     console.log('data not received');
+
     isFirstSent.value = true;
     sixPanelData.value = {
       number_of_members: 0,
@@ -115,6 +121,12 @@ watchEffect(() => {
       }],
       comment: '',
     };
+    for (let i in props.data) {
+      if (props.data[i].is_sent) {
+        isSentSix.value = true;
+        break;
+      }
+    }
   }
 
   if (panel.value || panel.value === 0) {
@@ -287,5 +299,4 @@ watchEffect(() => {
   padding-left: 40px;
 
 }
-
 </style>

@@ -18,6 +18,7 @@
             @deleteFile="deleteFile($event, item.id)" @getPanelNumber="getPanelNumber($event)"
             :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)"
             @getId="getId($event)" :data="seventhPanelData"
+            :is-sent="isSent"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
@@ -44,6 +45,7 @@ const props = defineProps({
 });
 let el_id = ref(null);
 
+const isSent = ref(false);
 // const swal = inject('$swal');
 const disabled = ref(false);
 const panel = ref(false);
@@ -126,6 +128,7 @@ watchEffect(() => {
     console.log('data received', props.data);
     isFirstSent.value = false;
     seventhPanelData.value = { ...props.data[el_id.value] }
+    isSent.value = props.data[el_id.value].is_sent;
   } else {
     console.log('data received', props.data);
     isFirstSent.value = true;
@@ -139,6 +142,12 @@ watchEffect(() => {
       file_type: '',
       comment: '',
     };
+    for (let i in props.data) {
+      if (props.data[i].is_sent) {
+        isSent.value = true;
+        break;
+      }
+    }
   }
 
   if (panel.value || panel.value === 0) {

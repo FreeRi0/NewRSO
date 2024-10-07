@@ -805,6 +805,9 @@ const props = defineProps({
     isCentralHeadquarterCommander: Boolean,
     isDistrictHeadquarterCommander: Boolean,
     id: String,
+    isSentSix: Boolean,
+    isSent: Boolean,
+    isSentNinth: Boolean,
     isErrorPanel: Boolean,
     data: Object,
 });
@@ -821,8 +824,6 @@ const isFirstSentSix = ref(true);
 const isFirstSentSeventh = ref(true);
 const isFirstSentNinth = ref(true);
 const isLinkError = ref(false);
-// const isLinkError_Seventh = ref(false);
-// const isLinkError_Nine = ref(false);
 
 const scanFile = ref([]);
 
@@ -873,9 +874,6 @@ const events = ref([
     { name: 'Нет', value: false, id: 'pp2' },
 ])
 
-const isSent = ref(false);
-const isSentSix = ref(false);
-const isSentNine = ref(false);
 
 const uploadFile = (event, number) => {
     console.log('num', number);
@@ -1059,7 +1057,6 @@ watchEffect(() => {
         if (Object.keys(props.data).length > 0) {
             isFirstSentSix.value = false
             sixPanelData.value = { ...props.data }
-            isSentSix.value = props.data.is_sent;
             if (isLinkError.value) {
                 console.log('gg');
                 emit('error', isLinkError.value)
@@ -1073,6 +1070,7 @@ watchEffect(() => {
         }
         else {
             console.log('data not received');
+            // isSentSix.value = true;
             // isFirstSentSix.value = true;
             // sixPanelData.value = {
             //     number_of_members: 0,
@@ -1088,9 +1086,7 @@ watchEffect(() => {
         if (Object.keys(props.data).length > 0) {
             console.log('7')
             isFirstSentSeventh.value = false;
-            // emit('isSent', isFirstSentSeventh.value)
             seventhPanelData.value = { ...props.data }
-            isSent.value = props.data.is_sent;
             if (isLinkError.value) {
                 console.log('gg');
                 emit('error', isLinkError.value)
@@ -1120,7 +1116,6 @@ watchEffect(() => {
         if (Object.keys(props.data).length > 0) {
             isFirstSentNinth.value = false;
             ninthPanelData.value = { ...props.data }
-            isSentNine.value = props.data.is_sent;
             if (isLinkError.value) {
                 console.log('gg');
                 emit('error', isLinkError.value)
