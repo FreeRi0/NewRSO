@@ -72,12 +72,13 @@
               :disabled="isSent"
           />
           <FileBoxComponent
-            v-if="event.regulations && typeof event.regulations === 'string'"
-            :file="event.regulations"
-            :fileType="event.file_type"
-            :fileSize="event.file_size"
-            @click="deleteFile(index)"
-            :is-sent="isSent"
+              v-else
+              :file="event.regulations"
+              :fileType="event.file_type"
+              :fileSize="event.file_size"
+              :is-sent="isSent"
+              :is-error-file="isErrorFile && !event.file_size"
+              @click="deleteFile(index)"
           ></FileBoxComponent>
         </div>
         <div class="form__field-event-interregion">
@@ -444,6 +445,7 @@ import { ReportTabs } from './index';
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { FileBoxComponent } from "@entities/RatingRoComponents/components";
 import { dateValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
+import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 
 const swal = inject('$swal');
 
@@ -484,6 +486,7 @@ const emit = defineEmits(['getData']);
 
 const isErrorDate = ref({});
 const noErrorDate = ref(false);
+let isErrorFile = ref(false);
 
 const focusOut = async () => {
   fourthPanelData.value.events = [...events.value];
@@ -578,6 +581,7 @@ const deleteEvent = async (index) => {
     if (event.participants_number) formData.append(`events[${i}][participants_number]`, event.participants_number);
     if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
     if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
+    if (event.regulations) formData.append(`events[${i}][regulations]`, event.regulations);
     formData.append(`events[${i}][is_interregional]`, event.is_interregional);
     if (event.links.length) {
       for (let j = 0; j < event.links.length; j++) {
@@ -594,8 +598,13 @@ const deleteEvent = async (index) => {
 };
 
 const uploadFile = async (event, index) => {
-  const {data} = await reportPartTwoService.createReportDraft(setFormData(event.target.files[0], index), '4', true);
-  emit('getData', data, 4);
+  fileValidate(event.target.files[0], 7, isErrorFile);
+  if (isErrorFile.value){
+    events.value[index].regulations = event.target.files[0].name
+  } else {
+    const {data} = await reportPartTwoService.createReportDraft(setFormData(event.target.files[0], index), '4', true);
+    emit('getData', data, 4);
+  }
 };
 const deleteFile = async (index) => {
   const {data} = await reportPartTwoService.createReportDraft(setFormData(null, index, false, true), '4', true);

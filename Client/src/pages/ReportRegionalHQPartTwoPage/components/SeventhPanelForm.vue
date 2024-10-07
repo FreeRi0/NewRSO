@@ -38,14 +38,10 @@
                         id="scan_file" :is-error-panel="isErrorPanel" name="scan_file" width="100%" height="auto"
                         v-model:value="seventhPanelData.document" @change="uploadFile($event, 7)"
                         :disabled="isSent || seventhPanelData.prize_place === 'Нет'" />
-                    <div v-else-if="seventhPanelData.document && (typeof seventhPanelData.document !== 'string')"
-                        class="text-center">
-                        <v-progress-circular color="primary" indeterminate></v-progress-circular>
-                    </div>
-                    <FileBoxComponent
-                        v-else-if="seventhPanelData.document && typeof seventhPanelData.document === 'string'"
-                        :file="seventhPanelData.document" :fileType="seventhPanelData.file_type" :isSent="isSent"
-                        :fileSize="seventhPanelData.file_size" @click="deleteFile(7)" :is-error-file="isErrorFile">
+
+                    <FileBoxComponent v-else :file="seventhPanelData.document" :fileType="seventhPanelData.file_type"
+                        :isSent="isSent" :fileSize="seventhPanelData.file_size" @click="deleteFile(7)"
+                        :is-error-file="isErrorFile">
                     </FileBoxComponent>
                 </div>
 
@@ -174,7 +170,7 @@
 
                     <div class="places_wrap">
                         <div class="places_item" v-for="item in events" :key="item.id">
-                            <input :id="item.id" :value="item.value" :name="item.name" :disabled="isSentNine"
+                            <input :id="item.id" :value="item.value" :name="item.name" :disabled="isSentNinth"
                                 :checked="ninthPanelData.event_happened == item.value" class="form__input places_input"
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
@@ -189,16 +185,11 @@
                     </label>
                     <InputReport v-if="!ninthPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
                         id="scan_file" :is-error-panel="isErrorPanel" v-model:value="ninthPanelData.document"
-                        name="scan_file" width="100%" :disabled="isSentNine || ninthPanelData.event_happened === false"
+                        name="scan_file" width="100%" :disabled="isSentNinth || ninthPanelData.event_happened === false"
                         height="auto" @change="uploadFile($event, 9)" />
-                    <div v-else-if="ninthPanelData.document && (typeof ninthPanelData.document !== 'string')"
-                        class="text-center">
-                        <v-progress-circular color="primary" indeterminate></v-progress-circular>
-                    </div>
-                    <FileBoxComponent v-else-if="ninthPanelData.document && typeof ninthPanelData.document === 'string'"
-                        :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
-                        :isSent="isSent"
-                        :is-error-file="isErrorFile" :fileSize="ninthPanelData.file_size" @click="deleteFile(9)">
+                    <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
+                        :isSent="isSentNinth" :is-error-file="isErrorFile" :fileSize="ninthPanelData.file_size"
+                        @click="deleteFile(9)">
                     </FileBoxComponent>
                 </div>
 
@@ -209,11 +200,11 @@
 
                     <div class="form__wrapper" v-for="(item, index) in ninthPanelData.links" :key="index">
                         <InputReport @focusout="focusOut" @error="setError"
-                            :disabled="isSentNine || ninthPanelData.event_happened === false" name="14" :maxlength="200"
-                            :is-error-panel="isErrorPanel" :is-link="true"
+                            :disabled="isSentNinth || ninthPanelData.event_happened === false" name="14"
+                            :maxlength="200" :is-error-panel="isErrorPanel" :is-link="true"
                             placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
                             class="mb-2" />
-                        <div v-if="!isSentNine">
+                        <div v-if="!isSentNinth">
                             <div class="add_link" @click="addLink(9)" v-if="ninthPanelData.links.length === index + 1">
                                 + Добавить ссылку
                             </div>
@@ -230,7 +221,7 @@
                     <TextareaReport v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1"
                         autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
                         :max-length-text="3000" counter-visible
-                        :disabled="isSentNine || ninthPanelData.event_happened === false" />
+                        :disabled="isSentNinth || ninthPanelData.event_happened === false" />
                 </div>
                 <div class="form__field-result" style="display: flex; align-items: center;">
                     <v-checkbox class="result-checkbox" id="v-checkbox" />
@@ -979,6 +970,28 @@ const focusOut = () => {
                 console.log('7', '1')
                 emit('formData', seventhPanelData.value)
             } else {
+                if (seventhPanelData.value.prize_place == 'Нет') {
+                    let formData = new FormData();
+                    seventhPanelData.value.document = '';
+                    seventhPanelData.value.links = [];
+                    seventhPanelData.value.file_size = null;
+                    seventhPanelData.value.file_type = '';
+                    seventhPanelData.value.comment = '';
+                    formData.append('prize_place', seventhPanelData.value.prize_place);
+                    formData.append('document', '');
+                    if (seventhPanelData.value.links.length) {
+                        for (let i = 0; i < seventhPanelData.value.links.length; i++) {
+                            !seventhPanelData.value.links[i].link
+                                ? formData.append(`[links][${i}][link]`, '')
+                                : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
+                        }
+                    }
+                    formData.append('comment', seventhPanelData.value.comment);
+                    formData.append('file_size', seventhPanelData.value.file_size);
+                    formData.append('file_type', seventhPanelData.value.file_type);
+                    emit('formData', formData);
+                }
+
                 let formData = new FormData();
                 formData.append('comment', seventhPanelData.value.comment);
                 formData.append('prize_place', seventhPanelData.value.prize_place);
@@ -992,6 +1005,7 @@ const focusOut = () => {
                 // emit('isSent', isFirstSent.value)
                 emit('formData', formData)
                 console.log('7', '2')
+
             }
         } catch (e) {
             console.log('data', e.response.data);
@@ -1005,6 +1019,27 @@ const focusOut = () => {
                 console.log('9', '1')
                 emit('formData', ninthPanelData.value)
             } else {
+                if (ninthPanelData.value.event_happened === false) {
+                    let formData = new FormData();
+                    ninthPanelData.value.document = '';
+                    ninthPanelData.value.links = [];
+                    ninthPanelData.value.file_size = null;
+                    ninthPanelData.value.file_type = '';
+                    ninthPanelData.value.comment = '';
+                    formData.append('event_happened', ninthPanelData.value.event_happened);
+                    formData.append('document', '');
+                    if (ninthPanelData.value.links.length) {
+                        for (let i = 0; i < ninthPanelData.value.links.length; i++) {
+                            !ninthPanelData.value.links[i].link
+                                ? formData.append(`[links][${i}][link]`, '')
+                                : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                        }
+                    }
+                    formData.append('comment', ninthPanelData.value.comment);
+                    formData.append('file_size', ninthPanelData.value.file_size);
+                    formData.append('file_type', ninthPanelData.value.file_type);
+                    emit('formData', formData);
+                }
                 let formData = new FormData();
                 formData.append('comment', ninthPanelData.value.comment);
                 formData.append('event_happened', ninthPanelData.value.event_happened);
@@ -1067,6 +1102,7 @@ watchEffect(() => {
 
             if (!sixPanelData.value.links.length) sixPanelData.value.links.push({ link: '' })
 
+
         }
         else {
             console.log('data not received');
@@ -1088,10 +1124,8 @@ watchEffect(() => {
             isFirstSentSeventh.value = false;
             seventhPanelData.value = { ...props.data }
             if (isLinkError.value) {
-                console.log('gg');
                 emit('error', isLinkError.value)
             } else {
-                console.log('hh')
                 emit('error', false)
             }
 
@@ -1103,6 +1137,7 @@ watchEffect(() => {
             isFirstSentSeventh.value = true;
             seventhPanelData.value = {
                 prize_place: 'Нет',
+                document: '',
                 links: [{
                     link: '',
                 }],
