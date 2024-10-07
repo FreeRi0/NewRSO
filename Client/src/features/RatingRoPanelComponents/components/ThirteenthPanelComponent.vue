@@ -171,7 +171,6 @@ const props = defineProps({
 
 const ID_PANEL = '13';
 const isFirstSent = ref(true);
-const scanFile = ref([]);
 let isErrorFile = ref(false);
 const thirteenthPanelData = ref({
     number_of_members: null,
@@ -191,7 +190,6 @@ const changeValue = (event) => {
 const focusOut = async () => {
     let formData = new FormData();
 
-    // formData.append('number_of_members', thirteenthPanelData.value.number_of_members);
     thirteenthPanelData.value.number_of_members ? formData.append('number_of_members', thirteenthPanelData.value.number_of_members) : formData.append('number_of_members', "");
     formData.append('comment', thirteenthPanelData.value.comment);
 
@@ -209,35 +207,32 @@ const focusOut = async () => {
 };
 
 const uploadFile = async (event) => {
-    scanFile.value = event.target.files[0];
-    let formData = new FormData();
-    // formData.append('number_of_members', thirteenthPanelData.value.number_of_members);
-    // formData.append('comment', thirteenthPanelData.value.comment);
+    thirteenthPanelData.value.file_size = (event.target.files[0].size / Math.pow(1024, 2));
+    thirteenthPanelData.value.file_type = event.target.files[0].type.split('/').at(-1);
 
-    formData.append('scan_file', scanFile.value);
-    thirteenthPanelData.value.file_size = (scanFile.value.size / Math.pow(1024, 2));
-    thirteenthPanelData.value.file_type = scanFile.value.type.split('/').at(-1);
-
-    fileValidate(scanFile.value, 7, isErrorFile);
+    fileValidate(event.target.files[0], 7, isErrorFile);
 //   console.log('(4)', 'перед отправкой в uploadFile', isErrorFile.value);
-  if (isErrorFile.value) {
-    thirteenthPanelData.value.scan_file = scanFile.value.name;
-    // console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
-  } else {
-    try {
-        if (isFirstSent.value) {
-            let { scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-            thirteenthPanelData.value.scan_file = scan_file;
-            emit('getData', scan_file, Number(ID_PANEL));
-        } else {
-            let { data : scan_file } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-            thirteenthPanelData.value.scan_file = scan_file;
-            emit('getData', scan_file, Number(ID_PANEL));
+    if (isErrorFile.value) {
+        thirteenthPanelData.value.scan_file = event.target.files[0].name;
+        // console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
+    } else {
+        let formData = new FormData();
+        formData.append('scan_file', event.target.files[0]);
+
+        try {
+            if (isFirstSent.value) {
+                let { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+                thirteenthPanelData.value.scan_file = data.scan_file.split('/').at(-1);
+                emit('getData', data, Number(ID_PANEL));
+            } else {
+                let { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+                thirteenthPanelData.value.scan_file = data.scan_file.split('/').at(-1);
+                emit('getData', data, Number(ID_PANEL));
+            }
+        } catch (e) {
+            console.log('focusOut error:', e)
         }
-    } catch (e) {
-        console.log('focusOut error:', e)
     }
-  }
 };
 
 const deleteFile = async () => {
@@ -271,7 +266,7 @@ watchEffect(async () => {
         // console.log(props.data);
         isFirstSent.value = false;
         thirteenthPanelData.value.number_of_members = props.data.number_of_members;
-        thirteenthPanelData.value.comment = props.data.comment;
+        thirteenthPanelData.value.comment = props.data.comment || '';
         thirteenthPanelData.value.scan_file = props.data.scan_file;
         thirteenthPanelData.value.file_size = props.data.file_size;
         thirteenthPanelData.value.file_type = props.data.file_type;
