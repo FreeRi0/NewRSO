@@ -375,12 +375,9 @@ const deleteAvatar = async () => {
         margin-right: 25px;
         transform: translateX(5px) translateY(-70px);
         &.banner{
-            margin-right: 15px;
-            transform: translateY(20px) translateX(75vw);
-            position: absolute;
-            @media screen and (max-width: 340px) {
-                transform: translateY(20px) translateX(73vw);
-            }
+            margin-right: 10px;
+            position: relative;
+            transform: translateY(-90px);
         }
     }
 }
