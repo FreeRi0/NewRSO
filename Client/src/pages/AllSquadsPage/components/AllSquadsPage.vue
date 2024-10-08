@@ -375,7 +375,7 @@ watch(
     margin: 0 !important;
     padding: 7px 0 !important;
     width: 40px;
-    height: 40px;
+    height: 32px;
 }
 
 .v-select__selection {
@@ -513,6 +513,7 @@ watch(
 .form__select {
     margin-bottom: 0px;
     border: 1px solid #35383f;
+    height: 32px;
 }
 
 .squads-sorts {
@@ -558,18 +559,6 @@ watch(
             min-width: 180px;
         }
     }
-}
-
-.v-field__input {
-    font-family: 'Bert Sans';
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 20px;
-}
-
-.v-field__field .v-field__input {
-    padding-left: 16px;
-    padding-right: 16px;
 }
 
 .v-field__clearable {

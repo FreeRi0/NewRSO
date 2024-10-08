@@ -819,30 +819,58 @@ const checkEmptyFields = (data) => {
       return false;
     }
   }
-  if (data.tenth.first && data.tenth.second) {
-    if (!(data.tenth.first.comment && data.tenth.second.comment)) {
+  if (data.tenth.first.event_happened) {
+    if (data.tenth.first) {
+      if (!data.tenth.first.comment) {
+        isErrorPanel.value.tenth = true;
+        swal.fire({
+          position: 'center',
+          icon: 'warning',
+          title: `Заполните обязательные поля в показателе 10-1`,
+          showConfirmButton: false,
+          timer: 2500,
+        })
+        return false;
+      }
+    } else {
       isErrorPanel.value.tenth = true;
       swal.fire({
         position: 'center',
         icon: 'warning',
-        title: `Заполните обязательные поля в 10 показателе`,
+        title: `Заполните обязательные поля в показателе 10-1`,
         showConfirmButton: false,
         timer: 2500,
       })
       return false;
     }
-
-  } else {
-    isErrorPanel.value.tenth = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      title: `Заполните обязательные поля в 10 показателе`,
-      showConfirmButton: false,
-      timer: 2500,
-    })
-    return false;
   }
+
+  if (data.tenth.second.event_happened){
+    if (data.tenth.second) {
+      if (!data.tenth.second.comment) {
+        isErrorPanel.value.tenth = true;
+        swal.fire({
+          position: 'center',
+          icon: 'warning',
+          title: `Заполните обязательные поля в показателе 10-2`,
+          showConfirmButton: false,
+          timer: 2500,
+        })
+        return false;
+      }
+    } else {
+      isErrorPanel.value.tenth = true;
+      swal.fire({
+        position: 'center',
+        icon: 'warning',
+        title: `Заполните обязательные поля в показателе 10-2`,
+        showConfirmButton: false,
+        timer: 2500,
+      })
+      return false;
+    }
+  }
+
   if (!data.eleventh || !(data.eleventh.participants_number && data.eleventh.scan_file)) {
     isErrorPanel.value.eleventh = true;
     swal.fire({

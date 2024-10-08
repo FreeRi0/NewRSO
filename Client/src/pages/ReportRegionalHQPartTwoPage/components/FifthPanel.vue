@@ -91,12 +91,13 @@
               :disabled="isSent"
           />
           <FileBoxComponent
-            v-if="event.regulations && typeof event.regulations === 'string'"
-            :file="event.regulations"
-            :fileType="event.file_type"
-            :fileSize="event.file_size"
-            @click="deleteFile(index)"
-            :is-sent="isSent"
+              v-else
+              :file="event.regulations"
+              :fileType="event.file_type"
+              :fileSize="event.file_size"
+              :is-sent="isSent"
+              :is-error-file="isErrorFile && !event.file_size"
+              @click="deleteFile(index)"
           ></FileBoxComponent>
         </div>
       </div>
@@ -386,6 +387,7 @@ import { ReportTabs } from './index';
 import { SvgIcon } from '@shared/index';
 import { FileBoxComponent } from "@entities/RatingRoComponents/components";
 import { dateValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
+import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 
 const swal = inject('$swal');
 
@@ -422,9 +424,9 @@ const events = ref([
   }
 ]);
 const isSent = ref(false);
-
 const isErrorDate = ref({});
 const noErrorDate = ref(false);
+let isErrorFile = ref(false);
 
 const focusOut = async () => {
   dateValidate(events, isErrorDate, noErrorDate);
@@ -516,6 +518,7 @@ const deleteProject = async (index) => {
     if (event.ro_participants_number) formData.append(`events[${i}][ro_participants_number]`, event.ro_participants_number);
     if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
     if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
+    if (event.regulations) formData.append(`events[${i}][regulations]`, event.regulations);
     if (event.links.length) {
       for (let j = 0; j < event.links.length; j++) {
         if (event.links[j].link) formData.append(`events[${i}][links][${j}][link]`, event.links[j].link);
@@ -531,8 +534,13 @@ const deleteProject = async (index) => {
 };
 
 const uploadFile = async (event, index) => {
-  const {data} = await reportPartTwoService.createReportDraft(setFormData(event.target.files[0], index), '5', true);
-  emit('getData', data, 5);
+  fileValidate(event.target.files[0], 7, isErrorFile);
+  if (isErrorFile.value){
+    events.value[index].regulations = event.target.files[0].name
+  } else {
+    const {data} = await reportPartTwoService.createReportDraft(setFormData(event.target.files[0], index), '5', true);
+    emit('getData', data, 5);
+  }
 };
 const deleteFile = async (index) => {
   setFormData(null, index, false, true)
@@ -578,7 +586,7 @@ watchEffect(() => {
     fifthPanelData.value.comment = props.data.comment;
     isSent.value = props.data.is_sent;
   }
-  dateValidate(events, isErrorDate, noErrorDate);
+  // dateValidate(events, isErrorDate, noErrorDate);
 });
 watchPostEffect(() => {
   events.value.forEach((event) => {

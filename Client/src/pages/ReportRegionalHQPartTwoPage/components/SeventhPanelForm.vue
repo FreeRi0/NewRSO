@@ -38,14 +38,10 @@
                         id="scan_file" :is-error-panel="isErrorPanel" name="scan_file" width="100%" height="auto"
                         v-model:value="seventhPanelData.document" @change="uploadFile($event, 7)"
                         :disabled="isSent || seventhPanelData.prize_place === 'Нет'" />
-                    <div v-else-if="seventhPanelData.document && (typeof seventhPanelData.document !== 'string')"
-                        class="text-center">
-                        <v-progress-circular color="primary" indeterminate></v-progress-circular>
-                    </div>
-                    <FileBoxComponent
-                        v-else-if="seventhPanelData.document && typeof seventhPanelData.document === 'string'"
-                        :file="seventhPanelData.document" :fileType="seventhPanelData.file_type" :isSent="isSent"
-                        :fileSize="seventhPanelData.file_size" @click="deleteFile(7)" :is-error-file="isErrorFile">
+
+                    <FileBoxComponent v-else :file="seventhPanelData.document" :fileType="seventhPanelData.file_type"
+                        :isSent="isSent" :fileSize="seventhPanelData.file_size" @click="deleteFile(7)"
+                        :is-error-file="isErrorFile">
                     </FileBoxComponent>
                 </div>
 
@@ -979,6 +975,28 @@ const focusOut = () => {
                 console.log('7', '1')
                 emit('formData', seventhPanelData.value)
             } else {
+                if (seventhPanelData.value.prize_place == 'Нет') {
+                    let formData = new FormData();
+                    seventhPanelData.value.document = '';
+                    seventhPanelData.value.links = [];
+                    seventhPanelData.value.file_size = null;
+                    seventhPanelData.value.file_type = '';
+                    seventhPanelData.value.comment = '';
+                    formData.append('prize_place', seventhPanelData.value.prize_place);
+                    formData.append('document', '');
+                    if (seventhPanelData.value.links.length) {
+                        for (let i = 0; i < seventhPanelData.value.links.length; i++) {
+                            !seventhPanelData.value.links[i].link
+                                ? formData.append(`[links][${i}][link]`, '')
+                                : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
+                        }
+                    }
+                    formData.append('comment', seventhPanelData.value.comment);
+                    formData.append('file_size', seventhPanelData.value.file_size);
+                    formData.append('file_type', seventhPanelData.value.file_type);
+                    emit('formData', formData);
+                }
+
                 let formData = new FormData();
                 formData.append('comment', seventhPanelData.value.comment);
                 formData.append('prize_place', seventhPanelData.value.prize_place);
@@ -992,6 +1010,7 @@ const focusOut = () => {
                 // emit('isSent', isFirstSent.value)
                 emit('formData', formData)
                 console.log('7', '2')
+
             }
         } catch (e) {
             console.log('data', e.response.data);
@@ -1005,6 +1024,27 @@ const focusOut = () => {
                 console.log('9', '1')
                 emit('formData', ninthPanelData.value)
             } else {
+                if (ninthPanelData.value.event_happened === false) {
+                    let formData = new FormData();
+                    ninthPanelData.value.document = '';
+                    ninthPanelData.value.links = [];
+                    ninthPanelData.value.file_size = null;
+                    ninthPanelData.value.file_type = '';
+                    ninthPanelData.value.comment = '';
+                    formData.append('event_happened', ninthPanelData.value.event_happened);
+                    formData.append('document', '');
+                    if (ninthPanelData.value.links.length) {
+                        for (let i = 0; i < ninthPanelData.value.links.length; i++) {
+                            !ninthPanelData.value.links[i].link
+                                ? formData.append(`[links][${i}][link]`, '')
+                                : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                        }
+                    }
+                    formData.append('comment', ninthPanelData.value.comment);
+                    formData.append('file_size', ninthPanelData.value.file_size);
+                    formData.append('file_type', ninthPanelData.value.file_type);
+                    emit('formData', formData);
+                }
                 let formData = new FormData();
                 formData.append('comment', ninthPanelData.value.comment);
                 formData.append('event_happened', ninthPanelData.value.event_happened);
@@ -1067,6 +1107,7 @@ watchEffect(() => {
 
             if (!sixPanelData.value.links.length) sixPanelData.value.links.push({ link: '' })
 
+
         }
         else {
             console.log('data not received');
@@ -1088,10 +1129,8 @@ watchEffect(() => {
             isFirstSentSeventh.value = false;
             seventhPanelData.value = { ...props.data }
             if (isLinkError.value) {
-                console.log('gg');
                 emit('error', isLinkError.value)
             } else {
-                console.log('hh')
                 emit('error', false)
             }
 
@@ -1103,6 +1142,7 @@ watchEffect(() => {
             isFirstSentSeventh.value = true;
             seventhPanelData.value = {
                 prize_place: 'Нет',
+                document: '',
                 links: [{
                     link: '',
                 }],

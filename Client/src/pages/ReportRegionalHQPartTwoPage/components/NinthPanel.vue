@@ -12,8 +12,7 @@
           <SeventhPanelForm :id="item.id" :panel_number="9" @collapse-form="collapsed()"
             @formData="formData($event, item.id)" @error="setError" @uploadFile="uploadFile($event, item.id)"
             :data="ninthPanelData" @getPanelNumber="getPanelNumber($event)" @getId="getId($event)"
-            @deleteFile="deleteFile($event, item.id)"
-            :is-sent-ninth="isSentNinth"
+            @deleteFile="deleteFile($event, item.id)" :is-sent-ninth="isSentNinth"
             :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>

@@ -34,11 +34,7 @@
                                     <tr>
                                         <td>
                                             Количество участников ЛСО на
-                                            {{
-                                                new Date(
-                                                    Date.now(),
-                                                ).toLocaleDateString()
-                                            }}
+                                            30.09.2024
                                         </td>
                                         <td>
                                             <p v-if="
@@ -55,11 +51,7 @@
                                     <tr>
                                         <td>
                                             Количество оплаченных ЧВ на
-                                            {{
-                                                new Date(
-                                                    Date.now(),
-                                                ).toLocaleDateString()
-                                            }}
+                                            30.09.2024
                                         </td>
                                         <td>
                                             <p v-if="

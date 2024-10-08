@@ -171,7 +171,6 @@ const props = defineProps({
 
 const ID_PANEL = '12';
 const isFirstSent = ref(true);
-const scanFile = ref([]);
 let isErrorFile = ref(false);
 const twelfthPanelData = ref({
     amount_of_money: null,
@@ -192,7 +191,6 @@ const focusOut = async () => {
     // console.log(twelfthPanelData.value);
     let formData = new FormData();
     
-    // formData.append('amount_of_money', twelfthPanelData.value.amount_of_money);
     twelfthPanelData.value.amount_of_money ? formData.append('amount_of_money', twelfthPanelData.value.amount_of_money) : formData.append('amount_of_money', "");
     formData.append('comment', twelfthPanelData.value.comment);
 
@@ -209,28 +207,27 @@ const focusOut = async () => {
     }
 };
 
-const uploadFile = async (event) => {
-    scanFile.value = event.target.files[0];
-    let formData = new FormData();
+const uploadFile = async (event) => {    
+    twelfthPanelData.value.file_size = (event.target.files[0].size / Math.pow(1024, 2));
+    twelfthPanelData.value.file_type = event.target.files[0].type.split('/').at(-1);
 
-    formData.append('scan_file', scanFile.value);
-    twelfthPanelData.value.file_size = (scanFile.value.size / Math.pow(1024, 2));
-    twelfthPanelData.value.file_type = scanFile.value.type.split('/').at(-1);
-
-    fileValidate(scanFile.value, 7, isErrorFile);
+    fileValidate(event.target.files[0], 7, isErrorFile);
     if (isErrorFile.value) {
-    twelfthPanelData.value.scan_file = scanFile.value.name;
-    // console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
-  } else {
+        twelfthPanelData.value.scan_file = event.target.files[0].name;
+        // console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
+    } else {
+    let formData = new FormData();
+    formData.append('scan_file', event.target.files[0]);
+
     try {
         if (isFirstSent.value) {
-            let { scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-            twelfthPanelData.value.scan_file = scan_file;
-            emit('getData', scan_file, Number(ID_PANEL));
+            let { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+            twelfthPanelData.value.scan_file = data.scan_file.split('/').at(-1);
+            emit('getData', data, Number(ID_PANEL));
         } else {
-            let { data : scan_file } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-            twelfthPanelData.value.scan_file = scan_file;
-            emit('getData', scan_file, Number(ID_PANEL));
+            let { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+            twelfthPanelData.value.scan_file = data.scan_file.split('/').at(-1);
+            emit('getData', data, Number(ID_PANEL));
         }
     } catch (e) {
         console.log('focusOut error:', e);
@@ -267,7 +264,7 @@ watchEffect(async () => {
         // console.log(props.data);
         isFirstSent.value = false;
         twelfthPanelData.value.amount_of_money = props.data.amount_of_money;
-        twelfthPanelData.value.comment = props.data.comment;
+        twelfthPanelData.value.comment = props.data.comment || '';
         twelfthPanelData.value.scan_file = props.data.scan_file;
         twelfthPanelData.value.file_size = props.data.file_size;
         twelfthPanelData.value.file_type = props.data.file_type;

@@ -42,7 +42,6 @@
           >
             <v-progress-circular color="primary" indeterminate></v-progress-circular>
           </div>
-
           <FileBoxComponent
             v-if="project.file && typeof project.file === 'string'"
             :file="project.file"
@@ -50,8 +49,7 @@
             :fileSize="project.file_size"
             @click="deleteFile(index)"
             :is-sent="isSent"
-            
-            :is-error-file="isErrorFile"
+            :is-error-file="isErrorsFiles[index]"
           ></FileBoxComponent>
           <button
             v-if="!isSent && (index > 0)"
@@ -190,6 +188,7 @@ const ID_PANEL = '18';
 const isFirstSent = ref(true);
 const scanFile = ref([]);
 let isErrorFile = ref(false);
+const isErrorsFiles= ref([]);
 const eighteenthPanelData = ref({
   comment: '',
   projects: []
@@ -244,10 +243,14 @@ const uploadFile = async (event, index) => {
   fileValidate(event.target.files[0], 7, isErrorFile);
   // console.log('(4)', 'перед отправкой в uploadFile', isErrorFile.value);
 
+  for (let i = 0; i < projects.value.length; i++) {
+    isErrorsFiles.value[i] = false;
+  }
   if (isErrorFile.value) {
+    isErrorsFiles.value[index] = true;
     scanFile.value = event.target.files[0];
     projects.value[index].file = scanFile.value.name;
-    // console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
+    // console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ', isErrorsFiles.value);
   } else {
     projects.value[index].file = event.target.files[0];
     let formData = new FormData();
@@ -281,7 +284,6 @@ const uploadFile = async (event, index) => {
 };
 
 const deleteFile = async (index) => {
-  // projects.value[index].file = '';
   let formData = new FormData();
   formData.append('comment', eighteenthPanelData.value.comment);
 
@@ -300,8 +302,13 @@ const deleteFile = async (index) => {
     }
   }
 
-  const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-  emit('getData', data, Number(ID_PANEL));
+  if (isErrorsFiles.value[index]) {
+    projects.value[index].file = '';
+    isErrorsFiles.value[index] = false;
+  } else {
+    const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+    emit('getData', data, Number(ID_PANEL));
+  }
 };
 
 const addLink = (index) => {
@@ -409,6 +416,7 @@ const deletePublication = async (index) => {
           : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
         }
       }
+      if (projects.value[index].file) formData.append(`projects[${index}][file]`,  projects.value[index].file);
     }
   }
 
@@ -425,6 +433,11 @@ watchEffect(async () => {
     eighteenthPanelData.value.comment = props.data.comment;
     // if (!projects.value[0].links.length) projects.value[0].links.push({link: ''});
   }
+  // for (let i = 0; i < projects.value.length; i++) {
+  //   if (!projects.value[i].file_size) {
+  //   projects.value[i].file = '';
+  //   }
+  // }
 }, {
   flush: 'post'
 });

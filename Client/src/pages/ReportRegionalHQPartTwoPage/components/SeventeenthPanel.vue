@@ -92,7 +92,6 @@ const emit = defineEmits(['getData']);
 
 const ID_PANEL = '17';
 const isFirstSent = ref(true);
-const scanFile = ref([]);
 let isErrorFile = ref(false);
 const seventeenthPanelData = ref({
   scan_file: '',
@@ -119,30 +118,29 @@ const focusOut = async () => {
 };
 
 const uploadFile = async (event) => {
-  scanFile.value = event.target.files[0];
-  let formData = new FormData();
-  // formData.append('comment', seventeenthPanelData.value.comment);
+  fileValidate(event.target.files[0], 7, isErrorFile);
 
-  formData.append('scan_file', scanFile.value);
-  seventeenthPanelData.value.file_size = (scanFile.value.size / Math.pow(1024, 2));
-  seventeenthPanelData.value.file_type = scanFile.value.type.split('/').at(-1);
-
-  fileValidate(scanFile.value, 7, isErrorFile);
+  seventeenthPanelData.value.file_size = (event.target.files[0].size / Math.pow(1024, 2));
+  seventeenthPanelData.value.file_type = event.target.files[0].type.split('/').at(-1);
+  
   // console.log('(4)', 'перед отправкой в uploadFile', isErrorFile.value);
   if (isErrorFile.value) {
-    seventeenthPanelData.value.scan_file = scanFile.value.name;
+    seventeenthPanelData.value.scan_file = event.target.files[0].name;
     // console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
   } else {
+    let formData = new FormData();
+      formData.append('scan_file', event.target.files[0]);
+
     try {
       if (isFirstSent.value) {
-        let { data :  scan_file  } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-        seventeenthPanelData.value.scan_file = scan_file;
-        emit('getData', scan_file, Number(ID_PANEL));
+        let { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+        emit('getData', data, Number(ID_PANEL));
+        seventeenthPanelData.value.scan_file = data.scan_file.split('/').at(-1);
         // console.log('ФАЙЛ ОТПРАВЛЯЕТСЯ ПЕРВЫЙ РАЗ', isErrorFile.value);
       } else {
-        let { data :  scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-        seventeenthPanelData.value.scan_file = scan_file;
-        emit('getData', scan_file, Number(ID_PANEL));
+        let { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+        emit('getData', data, Number(ID_PANEL));
+        seventeenthPanelData.value.scan_file = data.scan_file.split('/').at(-1);
         // console.log('ФАЙЛ ОТПРАВЛЯЕТСЯ ПОВТОРНО', isErrorFile.value);
       }
     } catch (e) {
@@ -180,7 +178,7 @@ watchEffect(() => {
   if (props.data) {
     // console.log(props.data);
     isFirstSent.value = false;
-    seventeenthPanelData.value.comment = props.data.comment;
+    seventeenthPanelData.value.comment = props.data.comment || '';
     seventeenthPanelData.value.scan_file = props.data.scan_file;
     seventeenthPanelData.value.file_size = props.data.file_size;
     seventeenthPanelData.value.file_type = props.data.file_type;

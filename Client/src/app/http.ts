@@ -5,7 +5,7 @@ import { ref } from 'vue';
 
 export const HTTP = axios.create({
 
-    baseURL: 'https://xn--j1ab.xn--d1amqcgedd.xn--p1ai/api/v1/',   //http://213.139.208.147:30000/api/v1/
+    baseURL: 'http://213.139.208.147:30000/api/v1/',  //https://xn--j1ab.xn--d1amqcgedd.xn--p1ai/api/v1/  //http://213.139.208.147:30000/api/v1/
     headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -148,7 +148,13 @@ HTTP.interceptors.response.use(
                 originalRequest.url !== '/services/front_errors/') {
                 let matches_1 = originalRequest.url.match(/regional_competitions\/me\/reports\/\d{1,}\/\d{1,}\//gm)
                 let matches_2 = originalRequest.url.match(/regional_competitions\/me\/reports\/\d{1,}\//gm)
-                let matches = (matches_1 || []).length + (matches_2 || []).length;
+                let matches_3 = originalRequest.url.match(/competitions\/1\/reports\/q\d{1,}\/get-place\//gm)
+                let matches_4 = originalRequest.url.match(/detachments\/\d{1,}\/competitions\/1\/place\//gm)
+                let matches_5 = originalRequest.url.match(/competitions\/1\/get-place\//gm)
+
+
+                let matches = (matches_1 || []).length + (matches_2 || []).length + (matches_3 || []).length + (matches_4 || []).length +
+                    (matches_5 || []).length;
 
                 if (/*(window.location.hostname === 'localhost' ||
                     window.location.hostname === 'rso.sprint.1t' ||
