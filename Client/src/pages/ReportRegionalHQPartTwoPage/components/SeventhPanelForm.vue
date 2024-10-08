@@ -53,7 +53,7 @@
                             :disabled="isSent || seventhPanelData.prize_place === 'Нет'"
                             placeholder="Введите ссылку, например,  https://vk.com/cco_monolit" :maxlength="200"
                             v-model:value="item.link" :is-error-panel="isErrorPanel" class="mb-2" />
-                        <div v-if="!isSent">
+                        <div v-if="!isSent && seventhPanelData.prize_place !== 'Нет'">
                             <div class="add_link" @click="addLink(7)"
                                 v-if="seventhPanelData.links.length === index + 1">
                                 + Добавить ссылку
@@ -122,6 +122,7 @@
                     <label class="form__label" for="14">Ссылка на социальные сети/ электронные<br>
                         СМИ, подтверждающая участие в мероприятии
                         <sup class="valid-red">*</sup></label>
+                        <!-- <p>{{ !isSentSix && sixPanelData.number_of_members > 0 }}</p> -->
 
                     <div class="form__wrapper" v-for="(item, index) in sixPanelData.links" :key="index">
                         <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
@@ -129,7 +130,7 @@
                             :disabled="isSentSix || (sixPanelData.number_of_members == 0 || sixPanelData.number_of_members === null)"
                             :maxlength="200" name="link" v-model:value="item.link" :is-link="true" class="mb-2" />
 
-                        <div v-if="!isSentSix">
+                        <div v-if="!isSentSix && sixPanelData.number_of_members > 0">
                             <div class="add_link" @click="addLink(6)" v-if="sixPanelData.links.length === index + 1">
                                 + Добавить ссылку
                             </div>
@@ -204,7 +205,7 @@
                             :maxlength="200" :is-error-panel="isErrorPanel" :is-link="true"
                             placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
                             class="mb-2" />
-                        <div v-if="!isSentNinth">
+                        <div v-if="!isSentNinth && ninthPanelData.event_happened === true">
                             <div class="add_link" @click="addLink(9)" v-if="ninthPanelData.links.length === index + 1">
                                 + Добавить ссылку
                             </div>

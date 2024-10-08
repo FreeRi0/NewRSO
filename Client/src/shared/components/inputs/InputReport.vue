@@ -36,7 +36,7 @@
         Дата окончания не может быть меньше даты начала
       </span>
     </div>
-    <div v-show="isLinkError && props.isLink && (value || value === null) "> <span class="form-input__error-text">Не верный формат
+    <div v-show="isLinkError && props.isLink && (value || value === null)"> <span class="form-input__error-text">Не верный формат
         url</span></div>
 
   </div>
@@ -140,7 +140,7 @@ function isValidURL(url) {
 }
 
 const validateLink = (value) => {
-  if (value !== '' && props.isLink == true) {
+  if (value && props.isLink == true) {
     const isValid = isValidURL(value);
     isLinkError.value = !isValid;
     emit('error', isLinkError.value);
