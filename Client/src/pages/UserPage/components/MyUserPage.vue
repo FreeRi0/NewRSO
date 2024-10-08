@@ -82,15 +82,18 @@ const TokenData = ref({
 })
 
 const getAccessToken = async () => {
-
-    try {
-            const resp = await HTTP.post('/jwt/vk-login/', TokenData.value)
-            localStorage.setItem('jwt_token', resp.data.access);
-            router.replace({ query: null })
-    } catch (e) {
-        console.log('error:', e)
+    if (!TokenData.value.silent_token && !TokenData.value.uuid) {
+        console.log('TokenData values are null, undefined, or empty');
+        return;
     }
-}
+    try {
+        const resp = await HTTP.post('/jwt/vk-login/', TokenData.value);
+        localStorage.setItem('jwt_token', resp.data.access);
+        router.replace({ query: null });
+    } catch (e) {
+        console.log('Error:', e);
+    }
+};
 const uploadAva = (imageAva) => {
 
     currentUser.currentUser.value.media.photo = imageAva;

@@ -495,6 +495,12 @@ const SendReference = async () => {
             link.setAttribute('download', 'external.zip');
             document.body.appendChild(link);
             link.click();
+            refData.value = ({
+                cert_start_date: '',
+                ids: [],
+                cert_end_date: '',
+                recipient: '',
+            });
         })
         .catch(({ response }) => {
             isError.value = response.data;
@@ -504,8 +510,17 @@ const SendReference = async () => {
                 icon: 'error',
                 title: 'ошибка',
                 showConfirmButton: false,
-                timer: 1500,
+                timer: 1000,
             });
+            refData.value = ({
+                cert_start_date: '',
+                cert_end_date: '',
+                ids: [],
+                recipient: '',
+            });
+            setTimeout(() => {
+                isError.value = {};
+            }, 5000)
         });
 };
 
