@@ -271,7 +271,7 @@ const uploadFile = async (event, index) => {
     }
     try {
       if (isFirstSent.value) {
-        const { data } = await reportPartTwoService.createReport(eighteenthPanelData.value, ID_PANEL);
+        const { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
         emit('getData', data, Number(ID_PANEL));
       } else {
         const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
@@ -430,7 +430,7 @@ watchEffect(async () => {
   if (props.data) {
     isFirstSent.value = false;
     projects.value = [...props.data.projects];
-    eighteenthPanelData.value.comment = props.data.comment;
+    eighteenthPanelData.value.comment = props.data.comment || '';
     // if (!projects.value[0].links.length) projects.value[0].links.push({link: ''});
   }
   // for (let i = 0; i < projects.value.length; i++) {
