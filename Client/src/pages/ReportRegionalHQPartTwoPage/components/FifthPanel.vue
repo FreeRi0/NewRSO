@@ -113,6 +113,8 @@
               placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
               @focusout="focusOut"
               :disabled="isSent"
+              :is-link="true"
+              @error="setError"
           />
           <div v-if="!isSent">
             <div
@@ -386,7 +388,7 @@ import { reportPartTwoService } from "@services/ReportService.ts";
 import { ReportTabs } from './index';
 import { SvgIcon } from '@shared/index';
 import { FileBoxComponent } from "@entities/RatingRoComponents/components";
-import { dateValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
+// import { dateValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 
 const swal = inject('$swal');
@@ -425,13 +427,14 @@ const events = ref([
 ]);
 const isSent = ref(false);
 const isErrorDate = ref({});
-const noErrorDate = ref(false);
+// const noErrorDate = ref(false);
 let isErrorFile = ref(false);
+const isLinkError = ref(false);
 
 const focusOut = async () => {
-  dateValidate(events, isErrorDate, noErrorDate);
+  // dateValidate(events, isErrorDate, noErrorDate);
 
-  if (!noErrorDate.value) {
+  if (!isLinkError.value) {
     try {
       if (isFirstSent.value) {
         const {data} = await reportPartTwoService.createReport(setFormData(), '5', true);
@@ -577,6 +580,10 @@ const setFormData = (file = null, index = null, isDeleteEvent = false, isDeleteF
     }
   })
   return formData;
+};
+
+const setError = (err) => {
+  isLinkError.value = err;
 };
 
 watchEffect(() => {

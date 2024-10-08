@@ -819,8 +819,8 @@ const checkEmptyFields = (data) => {
       return false;
     }
   }
-  if (data.tenth.first.event_happened) {
-    if (data.tenth.first) {
+  if (data.tenth.first) {
+    if (data.tenth.first.event_happened) {
       if (!data.tenth.first.comment) {
         isErrorPanel.value.tenth = true;
         swal.fire({
@@ -832,21 +832,11 @@ const checkEmptyFields = (data) => {
         })
         return false;
       }
-    } else {
-      isErrorPanel.value.tenth = true;
-      swal.fire({
-        position: 'center',
-        icon: 'warning',
-        title: `Заполните обязательные поля в показателе 10-1`,
-        showConfirmButton: false,
-        timer: 2500,
-      })
-      return false;
     }
   }
 
-  if (data.tenth.second.event_happened){
-    if (data.tenth.second) {
+  if (data.tenth.second){
+    if (data.tenth.second.event_happened) {
       if (!data.tenth.second.comment) {
         isErrorPanel.value.tenth = true;
         swal.fire({
@@ -858,16 +848,6 @@ const checkEmptyFields = (data) => {
         })
         return false;
       }
-    } else {
-      isErrorPanel.value.tenth = true;
-      swal.fire({
-        position: 'center',
-        icon: 'warning',
-        title: `Заполните обязательные поля в показателе 10-2`,
-        showConfirmButton: false,
-        timer: 2500,
-      })
-      return false;
     }
   }
 
