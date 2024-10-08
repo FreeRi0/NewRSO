@@ -39,7 +39,8 @@
         "src/**/*.d.ts",
         "src/**/*.tsx",
         "src/**/*.vue",
-        "src/features/EndingWord/EndingWord.js"
+        "src/features/EndingWord/EndingWord.js",
+        "env.d.ts"
     ],
     "exclude": ["src/**/*.spec.ts", "node_modules", ".vscode"],
     "references": [{ "path": "./tsconfig.node.json" }]

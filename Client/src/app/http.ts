@@ -3,14 +3,16 @@ import { useUserStore } from '@features/store';
 import router from './router';
 import { ref } from 'vue';
 
+let url = import.meta.env.VITE_SOME_KEY
 export const HTTP = axios.create({
 
-    baseURL: 'http://213.139.208.147:30000/api/v1/',  //https://xn--j1ab.xn--d1amqcgedd.xn--p1ai/api/v1/  //http://213.139.208.147:30000/api/v1/
+    baseURL: url, 
     headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
     },
 });
+console.log('url', url)
 
 const refreshTokenPromise = ref({});
 
