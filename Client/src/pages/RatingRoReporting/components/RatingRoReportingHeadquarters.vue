@@ -101,7 +101,7 @@ const sortOptions = ref(
     name: 'По алфавиту',
   });
 
-
+  const isAuth = ref(!!localStorage.getItem('jwt_token'));
 const clearItem = () => {
   SelectedSortItem.value = null;
 }
