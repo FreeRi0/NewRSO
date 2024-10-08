@@ -150,7 +150,7 @@
   </report-tabs>
 </template>
 <script setup>
-import {ref, watchEffect} from "vue";
+import {ref, watchEffect, watchPostEffect} from "vue";
 import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { FileBoxComponent } from "@entities/RatingRoComponents/components";
 import { ReportRegionalForm } from '../../ReportRegionalHQPartOnePage/components/index'
@@ -217,8 +217,8 @@ const uploadFile = async (event) => {
   let formData = new FormData();
 
   formData.append('scan_file', event.target.files[0]);
-  formData.append('comment', firstPanelData.value.comment);
-  formData.append('amount_of_money', firstPanelData.value.amount_of_money);
+  formData.append('comment', firstPanelData.value.comment || '');
+  formData.append('amount_of_money', firstPanelData.value.amount_of_money || '');
 
   firstPanelData.value.file_size = (event.target.files[0].size / Math.pow(1024, 2));
   firstPanelData.value.file_type = event.target.files[0].type.split('/').at(-1);
@@ -247,8 +247,8 @@ const deleteFile = async () => {
   firstPanelData.value.file_type = '';
   let formData = new FormData();
   formData.append('scan_file', '');
-  formData.append('comment', firstPanelData.value.comment);
-  formData.append('amount_of_money', firstPanelData.value.amount_of_money);
+  formData.append('comment', firstPanelData.value.comment || '');
+  formData.append('amount_of_money', firstPanelData.value.amount_of_money || '');
 
   if (isErrorFile.value) {
     firstPanelData.value.scan_file = "";
@@ -271,15 +271,20 @@ watchEffect(async () => {
   } catch (e) {
     console.log(e)
   }
+  console.log('props', props.data)
   if (props.data) {
     isFirstSent.value = false;
     firstPanelData.value.comment = props.data.comment;
     firstPanelData.value.amount_of_money = props.data.amount_of_money;
-    firstPanelData.value.scan_file = props.data.scan_file ? props.data.scan_file.split('/').at(-1) : '';
+    firstPanelData.value.scan_file = props.data.scan_file;
     firstPanelData.value.file_type = props.data.file_type;
     firstPanelData.value.file_size = props.data.file_size;
     isSent.value = props.data.is_sent;
   }
+});
+
+watchPostEffect(() => {
+  firstPanelData.value.scan_file = props.data.scan_file;
 });
 </script>
 <style lang="scss" scoped>
