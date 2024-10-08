@@ -62,7 +62,7 @@ const regionsStore = useRegionalsStore();
 const positionsStore = usePositionsStore();
 const isVerify = ref(false);
 const competition_pk = 1;
-let urlVite = import.meta.env.VITE_SOME_KEY;
+let urlVite = import.meta.env.VITE_API;
 console.log('viteurl', urlVite);
 
 const verifyToken = async () => {

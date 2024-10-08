@@ -3,7 +3,7 @@ import { useUserStore } from '@features/store';
 import router from './router';
 import { ref } from 'vue';
 
-let url = import.meta.env.VITE_SOME_KEY
+let url = import.meta.env.VITE_API
 export const HTTP = axios.create({
 
     baseURL: url, 
