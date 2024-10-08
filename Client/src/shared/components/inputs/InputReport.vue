@@ -12,7 +12,7 @@
            class="form-input__report" :step="step"
            :class="{ 'link__input': isLink, 'form-input__report--error': (isErrorPanel && !value), 'form__input--error': isErrorDate, }"
            @input="updateValue"
-           v-bind="$attrs" :disabled="disabled" :min="props.minDate"/>
+           v-bind="$attrs" :disabled="disabled" :min="props.type === 'date' ? props.minDate : props.type === 'number' ? 0 : null"/>
     <div class="form__counter" v-if="counterVisible">
       {{ textInputLength }} / {{ maxCounter }}
     </div>
