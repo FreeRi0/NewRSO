@@ -103,8 +103,7 @@ const getPanelNumber = (number) => {
   emit('getPanelNumber', number);
 }
 watchEffect(() => {
-  if (Object.keys(props.data[el_id.value]).length > 0) {
-
+  if (props.data[el_id.value] && Object.keys(props.data[el_id.value]).length > 0) {
     console.log('data received', props.data);
     isFirstSent.value = false;
     sixPanelData.value = { ...props.data[el_id.value] }

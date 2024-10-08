@@ -165,7 +165,7 @@ const uploadFile = async (event, reportNumber) => {
       tenthPanelDataFirst.value.document = event.target.files[0].name;
     } else {
       formData.append('document', event.target.files[0]);
-      formData.append('event_happened', tenthPanelDataFirst.value.event_happened);
+      formData.append('event_happened', true);
       if (tenthPanelDataFirst.value.links.length) {
         for (let j = 0; j < tenthPanelDataFirst.value.links.length; j++) {
           if (tenthPanelDataFirst.value.links[j].link) formData.append(`[links][${j}][link]`, tenthPanelDataFirst.value.links[j].link);
@@ -185,7 +185,7 @@ const uploadFile = async (event, reportNumber) => {
       tenthPanelDataSecond.value.document = event.target.files[0].name;
     } else {
       formData.append('document', event.target.files[0]);
-      formData.append('event_happened', tenthPanelDataSecond.value.event_happened);
+      formData.append('event_happened', true);
       if (tenthPanelDataSecond.value.links.length) {
         for (let j = 0; j < tenthPanelDataSecond.value.links.length; j++) {
           if (tenthPanelDataSecond.value.links[j].link) formData.append(`[links][${j}][link]`, tenthPanelDataSecond.value.links[j].link);

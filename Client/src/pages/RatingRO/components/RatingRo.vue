@@ -2,16 +2,20 @@
   <div class="container">
     <h2 class="ratingRO__title">Рейтинг РО</h2>
     <div class="ratingRO__wrapper">
-      <router-link :to="{ name: 'rating-ro-reporting' }" class="ratingRO__item">
+      <router-link v-if="roleStore.experts.is_central_expert === true" :to="{ name: 'rating-ro-reporting' }"
+        class="ratingRO__item">
         <p>Отчеты РО</p>
       </router-link>
-      <router-link :to="{name: 'places'}" class="ratingRO__item">
+      <router-link :to="{ name: 'places' }" class="ratingRO__item">
         <p>Места РО по показателям</p>
       </router-link>
     </div>
   </div>
 </template>
 <script setup>
+import { useRoleStore } from '@layouts/store/role';
+
+const roleStore = useRoleStore();
 
 </script>
 <style lang="scss" scoped>
