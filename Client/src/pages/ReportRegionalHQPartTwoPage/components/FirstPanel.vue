@@ -192,14 +192,14 @@ const firstPanelData = ref({
   amount_of_money: '',
   scan_file: '',
   file_type: '',
-  file_size: null,
+  file_size: '',
 });
 const isSent = ref(false);
 
 const focusOut = async () => {
   let formData = new FormData();
   formData.append('comment', firstPanelData.value.comment || '');
-  formData.append('amount_of_money', firstPanelData.value.amount_of_money);
+  formData.append('amount_of_money', firstPanelData.value.amount_of_money || '');
   try {
     if (isFirstSent.value) {
       const {data} = await reportPartTwoService.createReport(formData, '1', true);
@@ -271,7 +271,7 @@ watchEffect(async () => {
   } catch (e) {
     console.log(e)
   }
-  console.log('props', props.data)
+
   if (props.data) {
     isFirstSent.value = false;
     firstPanelData.value.comment = props.data.comment;
@@ -284,7 +284,15 @@ watchEffect(async () => {
 });
 
 watchPostEffect(() => {
-  firstPanelData.value.scan_file = props.data.scan_file;
+  if (props.data) {
+    isFirstSent.value = false;
+    firstPanelData.value.comment = props.data.comment;
+    firstPanelData.value.amount_of_money = props.data.amount_of_money;
+    firstPanelData.value.scan_file = props.data.scan_file || '';
+    firstPanelData.value.file_type = props.data.file_type || '';
+    firstPanelData.value.file_size = props.data.file_size || '';
+    isSent.value = props.data.is_sent;
+  }
 });
 </script>
 <style lang="scss" scoped>
