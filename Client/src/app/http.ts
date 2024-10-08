@@ -4,7 +4,8 @@ import router from './router';
 import { ref } from 'vue';
 
 export const HTTP = axios.create({
-    baseURL: 'http://213.139.208.147:30000/api/v1/',
+
+    baseURL: 'http://213.139.208.147:30000/api/v1/',  //https://xn--j1ab.xn--d1amqcgedd.xn--p1ai/api/v1/  //http://213.139.208.147:30000/api/v1/
     headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -42,7 +43,10 @@ const urls_get = [
 HTTP.interceptors.request.use(
     (config) => {
         const configUrl = config.url?.split('?').shift();
-        if (urls.some((item) => item === configUrl) || urls_get.some((item) => item === configUrl) && config.method === 'get') {
+        if (urls.some((item) => item === configUrl) ||
+            urls_get.some((item) => item === configUrl) && config.method === 'get' ||
+            configUrl === '/services/front_errors/' && !localStorage.getItem('jwt_token')
+        ) {
             delete config.headers.Authorization;
         } else {
             config.headers.Authorization =
@@ -62,8 +66,8 @@ HTTP.interceptors.response.use(
     async (err) => {
         if (err.response) {
             // Access Token was expired
+            const originalRequest = err.config;
             if (err.response.status === 401) {
-                const originalRequest = err.config;
                 const userStore = useUserStore();
                 try {
                     console.log('here');
@@ -139,6 +143,30 @@ HTTP.interceptors.response.use(
                 } catch (error) {
                     console.log('here 8');
                     return Promise.reject(error);
+                }
+            } else if (err.response.status !== 401 &&
+                originalRequest.url !== '/services/front_errors/') {
+                let matches_1 = originalRequest.url.match(/regional_competitions\/me\/reports\/\d{1,}\/\d{1,}\//gm)
+                let matches_2 = originalRequest.url.match(/regional_competitions\/me\/reports\/\d{1,}\//gm)
+                let matches_3 = originalRequest.url.match(/competitions\/1\/reports\/q\d{1,}\/get-place\//gm)
+                let matches_4 = originalRequest.url.match(/detachments\/\d{1,}\/competitions\/1\/place\//gm)
+                let matches_5 = originalRequest.url.match(/competitions\/1\/get-place\//gm)
+
+
+                let matches = (matches_1 || []).length + (matches_2 || []).length + (matches_3 || []).length + (matches_4 || []).length +
+                    (matches_5 || []).length;
+
+                if (/*(window.location.hostname === 'localhost' ||
+                    window.location.hostname === 'rso.sprint.1t' ||
+                    window.location.hostname === '213.129.208.147') && */
+                    !(err.response.status === 404 && matches > 0)
+                ) {
+                    HTTP.post('/services/front_errors/', {
+                        url: err.config.baseURL.substring(0, err.config.baseURL.length - 1) + err.config.url,
+                        error_code: err.response.status,
+                        error_description: 'Error: ' + JSON.stringify(err.response.data),
+                        method: err.config.method
+                    }).then().catch()
                 }
             }
 

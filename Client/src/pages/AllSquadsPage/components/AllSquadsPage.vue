@@ -3,91 +3,38 @@
         <div class="squads">
             <bannerCreate
                 desc="Студенческие отряды — это больше, чем работа. Километры впечатлений, тысячи друзей и лето с пользой!"
-                label="Создать отряд"
-                name="CreateLSO"
-                :button="true"
-            ></bannerCreate>
+                label="Создать отряд" name="CreateLSO" :button="true"></bannerCreate>
             <h2 class="squads-title">Студенческие отряды</h2>
             <div class="squads-tabs">
-                <v-btn
-                    class="squads-tabs__item"
-                    :class="{ active: picked === '' }"
-                    @click="picked = ''"
-                    >Все
+                <v-btn class="squads-tabs__item" :class="{ active: picked === '' }" @click="picked = ''">Все
                 </v-btn>
-                <v-btn
-                    class="squads-tabs__item"
-                    :class="{ active: picked === area.name }"
-                    v-for="area in squadsStore.areas"
-                    :key="area"
-                    @click="picked = area.name"
-                    >{{ area.name }}
+                <v-btn class="squads-tabs__item" :class="{ active: picked === area.name }"
+                    v-for="area in squadsStore.areas" :key="area" @click="picked = area.name">{{ area.name }}
                 </v-btn>
             </div>
             <div class="squads-search">
-                <input
-                    type="text"
-                    id="search"
-                    class="squads-search__input"
-                    v-model="name"
-                    @keyup="searchDetachments"
-                    placeholder="Поищем отряд?"
-                />
-                <svg
-                    width="28"
-                    height="28"
-                    viewBox="0 0 28 28"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
+                <input type="text" id="search" class="squads-search__input" v-model="name" @keyup="searchDetachments"
+                    placeholder="Поищем отряд?" />
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M18.511 19.0914L24 24.8M21 12.84C21 14.5884 20.5015 16.2975 19.5675 17.7512C18.6335 19.205 17.306 20.338 15.7528 21.0071C14.1997 21.6762 12.4906 21.8512 10.8417 21.5101C9.1929 21.169 7.67835 20.3271 6.4896 19.0908C5.30085 17.8545 4.4913 16.2794 4.16333 14.5646C3.83535 12.8498 4.00368 11.0724 4.64703 9.45708C5.29037 7.84178 6.37984 6.46116 7.77766 5.48981C9.17548 4.51846 10.8189 4 12.5 4C14.7544 4 16.9164 4.93135 18.5104 6.58918C20.1045 8.247 21 10.4955 21 12.84Z"
-                        stroke="#898989"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    />
+                        stroke="#898989" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </div>
             <div class="squads-sorts">
                 <div class="sort-layout">
                     <div>
-                        <Button
-                            v-if="vertical"
-                            type="button"
-                            class="dashboard"
-                            icon="icon"
-                            color="white"
-                            @click="showVertical"
-                        >
+                        <Button v-if="vertical" label="" type="button" class="dashboard" color="white"
+                            @click="showVertical">
                         </Button>
-                        <Button
-                            v-else
-                            type="button"
-                            class="dashboardD"
-                            icon="icon"
-                            color="white"
-                            @click="showVertical"
-                        >
+                        <Button v-else type="button" label="" class="dashboardD" color="white" @click="showVertical">
                         </Button>
                     </div>
                     <div>
-                        <Button
-                            v-if="!vertical"
-                            type="button"
-                            class="menuuA"
-                            icon="icon"
-                            color="white"
-                            @click="showVertical"
-                        ></Button>
-                        <Button
-                            v-else
-                            type="button"
-                            class="menuu"
-                            icon="icon"
-                            color="white"
-                            @click="showVertical"
-                        ></Button>
+                        <Button v-if="!vertical" type="button" label="" class="menuuA" color="white"
+                            @click="showVertical"></Button>
+                        <Button v-else type="button" class="menuu" label="" color="white"
+                            @click="showVertical"></Button>
                     </div>
                 </div>
 
@@ -95,115 +42,60 @@
                     <div class="squads-sort">
                         <div class="sort-filters">
                             <div class="sort-select sort-select--width-district">
-                                <v-select
-                                    class="form__select filter-district"
-                                    :items="districtsStore.districts"
-                                    clearable
-                                    variant="outlined"
-                                    name="select_district"
-                                    id="select-district"
-                                    v-model="SelectedSortDistrict"
-                                    item-title="name"
-                                    placeholder="Окружной штаб"
-                                >
+                                <v-select class="form__select filter-district" :items="districtsStore.districts"
+                                    clearable variant="outlined" name="select_district" id="select-district"
+                                    v-model="SelectedSortDistrict" item-title="name" placeholder="Окружной штаб">
                                     <template #selection="{ item }">
                                         <pre v-if="!districtsStore.isLoading">{{
                                             item.title
                                         }}</pre>
-                                        <v-progress-circular
-                                            class="circleLoader"
-                                            v-else
-                                            indeterminate
-                                            color="blue"
-                                        ></v-progress-circular>
+                                        <v-progress-circular class="circleLoader" v-else indeterminate
+                                            color="blue"></v-progress-circular>
                                     </template>
                                 </v-select>
                             </div>
                             <div class="sort-select sort-select--width-regional">
-                                <v-select
-                                    class="form__select filter-district"
-                                    :items="regionalsStore.regionals"
-                                    clearable
-                                    variant="outlined"
-                                    name="select_region"
-                                    id="select-region"
-                                    v-model="SelectedSortRegional"
-                                    item-title="name"
-                                    placeholder="Региональные штабы"
-                                >
+                                <v-select class="form__select filter-district" :items="regionalsStore.regionals"
+                                    clearable variant="outlined" name="select_region" id="select-region"
+                                    v-model="SelectedSortRegional" item-title="name" placeholder="Региональные штабы">
                                     <template #selection="{ item }">
                                         <pre v-if="!regionalsStore.isLoading">{{
                                             item.title
                                         }}</pre>
-                                        <v-progress-circular
-                                            class="circleLoader"
-                                            v-else
-                                            indeterminate
-                                            color="blue"
-                                        ></v-progress-circular>
+                                        <v-progress-circular class="circleLoader" v-else indeterminate
+                                            color="blue"></v-progress-circular>
                                     </template>
                                 </v-select>
                             </div>
 
-                            <div
-                                class="sort-select sort-select--width-local"
-                                v-if="SelectedSortRegional || SelectedSortLocal"
-                            >
-                                <v-select
-                                    class="form__select filter-district"
-                                    :items="locals"
-                                    clearable
-                                    variant="outlined"
-                                    name="select_local"
-                                    id="select-local"
-                                    v-model="SelectedSortLocal"
-                                    item-title="name"
-                                    placeholder="Местные штабы"
-                                >
+                            <div class="sort-select sort-select--width-local"
+                                v-if="SelectedSortRegional || SelectedSortLocal">
+                                <v-select class="form__select filter-district" :items="locals" clearable
+                                    variant="outlined" name="select_local" id="select-local" v-model="SelectedSortLocal"
+                                    item-title="name" placeholder="Местные штабы">
                                     <template #selection="{ item }">
                                         <pre>{{ item.title }}</pre>
                                     </template>
                                 </v-select>
                             </div>
-                            <div
-                                class="sort-select sort-select--width-education"
-                                v-if="SelectedSortRegional || SelectedSortLocal"
-                            >
-                                <v-select
-                                    class="form__select filter-district sortedEducation"
-                                    :items="educationals"
-                                    clearable
-                                    variant="outlined"
-                                    name="select_local"
-                                    id="select-local"
-                                    v-model="education"
-                                    item-title="name"
-                                    placeholder="Образовательная организация"
-                                >
+                            <div class="sort-select sort-select--width-education"
+                                v-if="SelectedSortRegional || SelectedSortLocal">
+                                <v-select class="form__select filter-district sortedEducation" :items="educationals"
+                                    clearable variant="outlined" name="select_local" id="select-local"
+                                    v-model="education" item-title="name" placeholder="Образовательная организация">
                                     <template #selection="{ item }">
                                         <pre>{{ item.title }}</pre>
                                     </template>
                                 </v-select>
                             </div>
                             <div class="sort-select sort-select--width-sort">
-                                <sortByEducation
-                                    variant="outlined"
-                                    clearable
-                                    v-model="sortBy"
-                                    :options="sortOptionss"
-                                    :sorts-boolean="false"
-                                    class="sort-alphabet"
-                                    placeholder="Выберите фильтр"
-                                ></sortByEducation>
+                                <sortByEducation variant="outlined" clearable v-model="sortBy" :options="sortOptionss"
+                                    :sorts-boolean="false" class="sort-alphabet" placeholder="Выберите фильтр">
+                                </sortByEducation>
                             </div>
 
-                            <Button
-                                type="button"
-                                class="ascend"
-                                iconn="iconn"
-                                @click="ascending = !ascending"
-                                color="white"
-                            ></Button>
+                            <Button type="button" label="" class="ascend" @click="ascending = !ascending"
+                                color="white"></Button>
                         </div>
                     </div>
                 </div>
@@ -211,12 +103,8 @@
 
             <div v-show="vertical">
                 <squadsList :squads="sortedSquads"></squadsList>
-                <v-progress-circular
-                    class="circleLoader"
-                    v-if="isLoading"
-                    indeterminate
-                    color="blue"
-                ></v-progress-circular>
+                <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
+                    color="blue"></v-progress-circular>
                 <p v-else-if="!isLoading && !sortedSquads.length">
                     Ничего не найдено
                 </p>
@@ -228,11 +116,7 @@
             </div>
 
             <template v-if="detachments.count && detachments.count > limit">
-                <Button
-                    @click="next"
-                    v-if="sortedSquads.length < detachments.count"
-                    label="Показать еще"
-                ></Button>
+                <Button @click="next" v-if="sortedSquads.length < detachments.count" label="Показать еще"></Button>
                 <Button @click="prev" v-else label="Свернуть все"></Button>
             </template>
         </div>
@@ -310,9 +194,9 @@ const getLocalsHeadquartersForFilters = async () => {
     try {
         const { data } = await HTTP.get(
             '/locals/?ordering=' +
-                sortBy.value +
-                '&regional_headquarter__name=' +
-                SelectedSortRegional.value,
+            sortBy.value +
+            '&regional_headquarter__name=' +
+            SelectedSortRegional.value,
         );
         locals.value = data.results;
     } catch (e) {
@@ -349,7 +233,7 @@ const getDetachments = async (pagination, orderLimit) => {
         else if (pagination == 'next' && !detachments.value.next.includes('213.139.208.147:30000'))
             url = detachments.value.next.replace('http', 'https');
         if (name.value) data.push('search=' + name.value);
-        if (pagination != 'next'){
+        if (pagination != 'next') {
             if (SelectedSortDistrict.value)
                 data.push(
                     'district_headquarter__name=' + SelectedSortDistrict.value,
@@ -451,33 +335,51 @@ watch(
 .dashboard {
     background-image: url('@app/assets/icon/darhboard-active.svg');
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: 100% 100%;
+    margin: 0 !important;
+    width: 40px;
+    height: 40px;
 }
 
 .dashboardD {
     background-image: url('@app/assets/icon/darhboard-disable.svg');
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: 100% 100%;
+    margin: 0 !important;
+    width: 40px;
+    height: 40px;
 }
 
 .menuuA {
     background-image: url('@app/assets/icon/MenuA.svg');
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: 100% 100%;
+    margin: 0 !important;
+    width: 40px;
+    height: 40px;
 }
 
 .menuu {
     background-image: url('@app/assets/icon/Menu.svg');
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: 100% 100%;
+    margin: 0 !important;
+    width: 40px;
+    height: 40px;
 }
 
 .ascend {
     background-image: url('@app/assets/icon/switch.svg');
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: 50%;
+    margin: 0 !important;
+    padding: 7px 0 !important;
+    width: 40px;
+    height: 32px;
 }
+
 .v-select__selection {
+
     span,
     pre {
         overflow: hidden;
@@ -496,18 +398,22 @@ watch(
 
     &-title {
         font-size: 52px;
+
         @media screen and (max-width: 575px) {
             font-size: 32px;
         }
     }
+
     &-wrapper {
         padding: 60px 0px;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-row-gap: 40px;
+
         @media screen and (max-width: 1024px) {
             grid-template-columns: 1fr 1fr 1fr;
         }
+
         @media screen and (max-width: 575px) {
             grid-template-columns: 1fr 1fr;
         }
@@ -537,6 +443,7 @@ watch(
             cursor: pointer;
             text-transform: none;
             box-shadow: none;
+
             @media screen and (max-width: 768px) {
                 font-size: 14px;
                 padding: 8px 8px;
@@ -597,6 +504,7 @@ watch(
 
 .education {
     width: 305px;
+
     @media screen and (max-width: 768px) {
         width: 100%;
     }
@@ -605,6 +513,7 @@ watch(
 .form__select {
     margin-bottom: 0px;
     border: 1px solid #35383f;
+    height: 32px;
 }
 
 .squads-sorts {
@@ -629,7 +538,7 @@ watch(
 }
 
 .sort-select {
-    &--width{
+    &--width {
         &-district {
             min-width: 193px;
         }
@@ -652,18 +561,6 @@ watch(
     }
 }
 
-.v-field__input {
-    font-family: 'Bert Sans';
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 20px;
-}
-
-.v-field__field .v-field__input {
-    padding-left: 16px;
-    padding-right: 16px;
-}
-
 .v-field__clearable {
     margin: 0;
 }
@@ -678,6 +575,7 @@ watch(
 .v-field--variant-outlined .v-field__outline__start {
     border: none;
 }
+
 .Sort-alphabet {
     margin-right: 8px;
 }

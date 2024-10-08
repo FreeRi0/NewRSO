@@ -17,6 +17,7 @@ import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 import * as icons from 'vuetify/iconsets/mdi';
 import router from './router';
+import { HTTP } from '@app/http';
 
 const vuetify = createVuetify({
     components,
@@ -24,8 +25,10 @@ const vuetify = createVuetify({
     icons,
 });
 
-createApp(App)
-    .use(vuetify)
+
+const app = createApp(App)
+
+app.use(vuetify)
     .use(createPinia())
     .use(VueSweetalert2)
     .use(MaskInput)
@@ -39,3 +42,15 @@ createApp(App)
     .component('MaskInput', MaskInput)
     .component('DatePicker', DatePicker)
     .mount('#app');
+
+
+app.config.errorHandler = (err: any, _instance, info) => {
+    //if (window.location.hostname === 'localhost' || window.location.hostname === 'rso.sprint.1t' || window.location.hostname === '213.129.208.147') {
+    HTTP.post('/services/front_errors/', {
+        url: window.location.href,
+        error_code: 0,
+        error_description: 'Where: ' + JSON.stringify(info) + '. Error: ' + err.toString(),
+        method: 'Vue Error',
+    }).then().catch()
+    //}
+}

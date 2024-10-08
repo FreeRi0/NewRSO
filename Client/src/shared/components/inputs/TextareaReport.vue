@@ -1,13 +1,16 @@
 <template>
     <div
         :style="{ width: width }"
-        class="report__textarea-block"
     >
-        <Textarea 
+        <div class="report__textarea-block">
+            <Textarea 
             :id="name"
             :name="name"
             :value="value" 
-            class="report__textarea" 
+            :class="[
+                'report__textarea',
+                (isErrorPanel && !value) ? 'report__textarea--error' : '',
+            ]"
             :rows="rows"
             :maxlength="maxLength"
             :placeholder="placeholder"
@@ -18,7 +21,8 @@
             v-bind="$attrs"
         >
         </Textarea>
-    
+        </div>
+
         <div class="report__counter" v-if="counterVisible">
           {{ textLength }} / {{ maxLengthText }}
         </div>
@@ -76,11 +80,17 @@
         maxLengthText: {
             type: Number,
         },
+        isSent: {
+            type: Boolean,
+        },
+        isErrorPanel: {
+            type: Boolean,
+        },
     });
     
     const textLength = ref(null);
   
-    watchEffect(() => textLength.value = typeof props.value === 'string' ? props.value.length : 0)
+    watchEffect(() => textLength.value = typeof props.value === 'string' ? props.value.length : 0);
   
     const updateValue = (event) => {
         emit('update:value', event.target.value);
@@ -89,11 +99,17 @@
   
 <style lang="scss" scoped>  
 .report {
+    &__textarea-block {
+        max-height: 229px;
+        overflow-y: auto;
+        padding: 2px 1px 1px;
+    }
+
     &__textarea {
         padding: 9.5px 16px;
         width: 100%;
         min-height: 40px;
-        max-height: 229px;
+        // max-height: 229px;
         overflow: auto !important;
         background-color: #ffffff;
         color: #35383F;
@@ -104,13 +120,22 @@
         line-height: 21px;
         resize: none;
 
+        &::placeholder {
+            color: #6d6d6d;
+        }
+
+        &--error {
+            outline: 1px solid #db0000;
+            color: #db0000;
+
+            &::placeholder {
+                color: #db0000;
+            }
+        }
+
         @media (max-width: 360px) {
             font-size: 14px;
             line-height: 18.5px;
-        }
-
-        &::placeholder {
-            color: #6d6d6d;
         }
 
         &:disabled {
@@ -134,7 +159,7 @@
     }
     
     &__counter {
-        margin-top: -6px;
+        //margin-top: -6px;
         margin-left: auto;
         width: fit-content;
         font-family: "Bert Sans";

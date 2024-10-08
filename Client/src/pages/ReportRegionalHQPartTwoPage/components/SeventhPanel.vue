@@ -1,80 +1,232 @@
 <template>
   <v-card class="panel-card">
-    <!-- <v-tabs
-        v-model="tab"
-    >
-      <v-tab value="one" class="panel-tab-btn">Отчет РО</v-tab>
-      <v-tab value="two" class="panel-tab-btn">Корректировка ОШ</v-tab>
-      <v-tab value="three" class="panel-tab-btn">Корректировка ЦШ</v-tab>
-    </v-tabs> -->
-
-
     <v-expansion-panels v-model="panel" class="mb-2">
       <v-progress-circular v-show="!items.length" class="circleLoader" indeterminate></v-progress-circular>
-      <v-expansion-panel v-show="items.length" v-for="item in items" :key="item.id"><v-expansion-panel-title>
+      <v-expansion-panel :disabled="disabled" v-show="items.length" v-for="item in items"
+        :key="item.id"><v-expansion-panel-title
+          :class="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id) ? 'visible-error' : ''">
           <div class="title_wrap">
             <p class="form__title">{{ item.name }}</p>
-            <div class="d-flex gc-8">
-              <p class="form__title">{{ item.month }}</p>
-              <p class="form__title">{{ item.city }}</p>
+            <div class="title_wrap__items">
+              <p class="form__title month" v-if="item.month">{{ item.month }}</p>
+              <p class="form__title city" v-if="item.city">{{ item.city }}</p>
             </div>
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
-          <SeventhPanelForm :id="item.id" :panel_number="7" @collapse-form="collapsed()" :title="item"></SeventhPanelForm>
+          <SeventhPanelForm :id="item.id" :panel_number="7" @collapse-form="collapsed()"
+            @formData="formData($event, item.id)" @error="setError" @uploadFile="uploadFile($event, item.id)"
+            @deleteFile="deleteFile($event, item.id)" @getPanelNumber="getPanelNumber($event)"
+            :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)"
+            @getId="getId($event)" :data="seventhPanelData" :is-sent="isSent"
+            :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
+            :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
     </v-expansion-panels>
 
   </v-card>
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, watchEffect } from "vue";
 import { SeventhPanelForm } from "./index";
-import { InputReport } from '@shared/components/inputs';
-import { Button } from '@shared/components/buttons';
-import { HTTP } from "@app/http";
+import { reportPartTwoService } from "@services/ReportService.ts";
 
-// const tab = ref('one')
+// @is-sent="sent($event)"
+const props = defineProps({
+  districtHeadquarterCommander: {
+    type: Boolean
+  },
+  centralHeadquarterCommander: {
+    type: Boolean
+  },
+  isErrorPanel: Object,
+  items: Array,
+  data: Object
+});
+let el_id = ref(null);
 
-const panel = ref(null);
+const isSent = ref(false);
+// const swal = inject('$swal');
+const disabled = ref(false);
+const panel = ref(false);
+const emit = defineEmits(['getData'])
+const seventhPanelData = ref({
+  prize_place: 'Нет',
+  links: [{
+    link: '',
+  }],
+  document: '',
+  file_size: null,
+  file_type: '',
+  comment: '',
+});
 
-const items = ref([]);
+const link_err = ref(false);
+
+const setError = (err) => {
+  link_err.value = err;
+}
+const isFirstSent = ref(null);
+
+const formData = async (reportData, reportNumber) => {
+  try {
+    console.log('is_link_err_3_7', link_err.value)
+    if (!link_err.value) {
+      if (isFirstSent.value) {
+        console.log('First time sending data');
+        const { data } = await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber, true);
+        isFirstSent.value = false;
+        emit('getData', data, 7, reportNumber);
+      } else {
+        console.log('Second time sending data');
+        const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber, true);
+        emit('getData', data, 7, reportNumber);
+      }
+    }
+  } catch (e) {
+    console.error('Error while sending data', e);
+  }
+};
+
+
+const uploadFile = async (reportData, reportNumber) => {
+  if (isFirstSent.value) {
+    let { data } = await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber, true)
+    emit('getData', data, 7, reportNumber);
+  } else {
+    let { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber, true);
+    emit('getData', data, 7, reportNumber);
+  }
+};
+
+const deleteFile = async (reportData, reportNumber) => {
+  if (isFirstSent.value) {
+    await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber, true);
+  } else {
+    await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber, true);
+  }
+};
 
 const collapsed = () => {
-  panel.value = !panel.value;
+  panel.value = false;
 }
 
-const getItems = async () => {
-  try {
-    const response = await HTTP.get('regional_competitions/reports/event_names/r7-event-names/');
-    items.value = response.data;
-  } catch (err) {
-    console.error(err);
+const getId = (id) => {
+  console.log('id', id);
+  el_id.value = id;
+  emit('getId', id);
+}
+
+const getPanelNumber = (number) => {
+  console.log('num', number);
+  emit('getPanelNumber', number);
+}
+
+
+watchEffect(() => {
+  if (Object.keys(props.data[el_id.value]).length > 0) {
+    console.log('data received', props.data);
+    isFirstSent.value = false;
+
+    seventhPanelData.value = { ...props.data[el_id.value] }
+    isSent.value = props.data[el_id.value].is_sent;
+    if (props.data[el_id.value].prize_place == 'Нет') {
+      seventhPanelData.value = {
+        prize_place: 'Нет',
+        links: [{
+          link: '',
+        }],
+        document: '',
+        file_size: null,
+        file_type: '',
+        comment: '',
+      };
+    }
+  } else {
+    console.log('data received', props.data);
+    isFirstSent.value = true;
+    seventhPanelData.value = {
+      prize_place: 'Нет',
+      links: [{
+        link: '',
+      }],
+      document: '',
+      file_size: null,
+      file_type: '',
+      comment: '',
+    };
+    for (let i in props.data) {
+      if (props.data[i].is_sent) {
+        isSent.value = true;
+        break;
+      }
+    }
   }
-}
 
-onMounted(async () => {
-  await getItems();
-})
+  if (panel.value || panel.value === 0) {
+    disabled.value = true;
+  } else {
+    disabled.value = false;
+  }
+
+});
 </script>
 <style lang="scss" scoped>
 .panel-card {
   box-shadow: none;
 }
 
-.title_wrap {
-  display: flex;
-  width: 100%;
-  max-width: 700px;
-  justify-content: space-between;
+.v-expansion-panel-title[aria-expanded="true"] {
+  display: none;
 }
 
-.form__field-group {
-  background: #F3F4F5;
-  border: none;
-  border-radius: 0 0 10px 10px;
-  margin-bottom: 8px;
-  margin-top: 8px;
+.month {
+  width: 100%;
+  max-width: 70px;
+
 }
+
+.city {
+  width: 100%;
+  max-width: 200px;
+}
+
+.title_wrap {
+  display: grid;
+  grid-template-columns: 600px 300px;
+  column-gap: 40px;
+  width: 100%;
+  max-width: 900px;
+
+  &__items {
+    display: flex;
+    width: 100%;
+    column-gap: 20px;
+    max-width: 290px;
+
+    @media screen and (max-width: 578px) {
+      flex-direction: column;
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 6px;
+    max-width: 828px;
+    width: auto;
+  }
+
+  @media screen and (max-width: 768px) {
+    max-width: 636px;
+  }
+
+  @media screen and (max-width: 578px) {
+    max-width: 360px;
+  }
+
+}
+
+
 
 .valid-red {
   color: #db0000;
@@ -163,7 +315,7 @@ onMounted(async () => {
   font-weight: 600;
   line-height: 21.6px;
   text-align: left;
-  border: none;
-
+  border-left: 6px solid #F3F4F5;
+  padding-left: 40px;
 }
 </style>
