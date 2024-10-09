@@ -1,6 +1,6 @@
 <template>
-  <div class="user-metric__avatar-wrapper">
-      <div class="user-metric__avatar">
+  <div class="user-metric__avatar-sp-wrapper">
+      <div class="user-metric__avatar-sp">
           <!-- Аватар отряда  -->
 
           <img :src="emblem" alt="Эмблема" v-if="emblem" />
@@ -46,41 +46,47 @@ const props = defineProps({
 </script>
 
 <style lang="scss">
-.user-metric__avatar {
-  /*    display: grid;*/
-  grid-column-start: 1;
-  grid-column-end: 3;
-  grid-row-start: 1;
-  grid-row-end: 3;
-  width: 80%;
-  height: 100%;
-  border-radius: 50%;
-  &-wrapper {
-      display: grid;
-      grid-template-columns: 160px 90px;
-      grid-template-rows: 130px 80px;
-      align-content: center;
-      justify-content: center;
-      grid-column-start: 2;
-      grid-column-end: 4;
-      grid-row-start: 2;
-      grid-row-end: 4;
-  }
-  &-add {
-      display: grid;
-      grid-column-start: 2;
-      grid-column-end: 3;
-      grid-row-start: 2;
-      grid-row-end: 3;
-  }
+.user-metric__avatar-sp {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    width: 80%;
+    height: 100%;
+    border-radius: 50%;
+    
+    &-wrapper {
+            display: grid;
+            grid-template-columns: 160px 90px;
+            grid-template-rows: 130px 80px;
+            align-content: center;
+            justify-content: center;
+            grid-column-start: 2;
+            grid-column-end: 4;
+            grid-row-start: 2;
+            grid-row-end: 4;
+            @media screen and (min-width: 320px) and (max-width: 480px) {
+              transform: translateX(35px);
+              margin-top: -100px;
+          }
+        }
+        &-add {
+            display: grid;
+            grid-column-start: 2;
+            grid-column-end: 3;
+            grid-row-start: 2;
+            grid-row-end: 3;
+            
+        }
 }
 
-.user-metric__avatar img {
+.user-metric__avatar-sp img {
   width: 90%;
   height: 90%;
-  clip-path: circle(50%);
+  clip-path: circle(48.5%);
   object-fit: cover;
   border-radius: 50%;
+  align-items: center;
 }
 
 .vue-image-crop-upload .vicp-wrap .vicp-operate a {

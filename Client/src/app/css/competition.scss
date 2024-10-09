@@ -1,4 +1,10 @@
 .competition {
+    @media screen and (min-width: 320px) and (max-width:480px) {
+        &__text-column{
+            margin: -5px;
+            word-spacing: 0px;
+        }
+    }
     &__promo {
         position: relative;
         margin-bottom: 40px;
@@ -100,6 +106,12 @@
                 font-size: 10px !important;
                 padding: 13px !important;
             }
+
+            @media screen and (min-width: 320px) and (max-width:480px) {
+                font-size: 15px !important;
+                padding: 3px !important;
+                font-weight: 600;
+            }
         }
     }
 
@@ -120,7 +132,6 @@
                 font-family: 'Akrobat', sans-serif;
                 font-weight: 500;
                 margin-bottom: 28px;
-
                 width: 100%;
 
                 @media (max-width: 1024px) {
@@ -152,6 +163,11 @@
                 @media (max-width: 768px) {
                     font-size: 10px !important;
                     padding: 13px !important;
+                }
+                @media screen and (min-width: 320px) and (max-width:480px) {
+                    font-size: 15px !important;
+                    font-weight: 600;
+                    padding: 3px !important;
                 }
             }
         }
@@ -546,6 +562,16 @@
         padding: 20px;
         border: 1px solid #b6b6b6;
         border-radius: 10px;
+        @media screen and (min-width: 320px) and (max-width:480px) {
+            display: block;
+            padding: 30px 20px 20px;
+            border: 1px solid #b6b6b6;
+            border-radius: 10px;
+            text-align: justify;
+            word-break: break-word;
+            hyphens:auto;
+
+        }
     }
 
     &__documents-description {
@@ -554,7 +580,7 @@
         font-size: 20px;
         font-weight: 500;
     }
-
+    
     a.competition__documents-button {
         display: flex;
         align-items: center;
@@ -567,6 +593,16 @@
         line-height: 16px;
         color: #1f7cc0;
         cursor: pointer;
+
+        @media screen and (min-width: 320px) and (max-width:480px) {
+            display: flex;
+            align-items: center;
+            max-width: 220px; //---------------------
+            padding-right: 7.5%;
+            font-family: 'Akrobat';
+            color: #1f7cc0;
+            cursor: pointer;
+        }
 
         @media (max-width: 768px) {
             margin-left: 20px;
@@ -709,5 +745,15 @@
 .subtitle {
     &--link {
         margin-top: 60px;
+    }
+}
+
+@media screen and (min-width: 320px) and (max-width:480px) {
+    .competition-button-optimiz{
+        display: flex; /* Устанавливаем Flexbox */
+        justify-content: center; /* Центрируем по горизонтали */
+        align-items: center; /* Центрируем по вертикали */
+        height: 40px; /* Устанавливаем высоту блока */
+        transform: translateY(10px);
     }
 }

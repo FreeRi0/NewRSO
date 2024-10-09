@@ -1,6 +1,6 @@
 <template>
-    <div class="user-metric__top">
-        <div class="user-metric__top-img-wrapper">
+    <div class="user-metric__top-sp">
+        <div class="user-metric__top-sp-img-wrapper">
             <!-- Заглушка Банер -->
 
             <img
