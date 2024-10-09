@@ -1,7 +1,7 @@
 <template>
   <div class="form__field-group report__field-group report__field-group--column"
-    v-if="(props.centralExpert || props.districtExpert) && 
-          !eighteenthPanelData.projects && 
+    v-if="isSent && 
+          (!eighteenthPanelData.projects || !isLink) && 
           !eighteenthPanelData.comment">
     <p class="report__text-info">
       Информация о&nbsp;показателе региональным отделением не&nbsp;предоставлена.
@@ -10,18 +10,23 @@
 
   <div v-else class="form__field-group report__field">
     <div class="report__field" 
-      v-if="!(props.centralExpert || props.districtExpert) ||
-            (props.districtExpert && eighteenthPanelData.projects) ||
-            (props.centralExpert && eighteenthPanelData.projects)">
+      v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+            (isSent && eighteenthPanelData.projects)">
       <div class="report__field-group" v-for="(project, index) in projects" :key="index">
         <div class="report__fieldset report__file-input"
-          v-if="!(props.centralExpert || props.districtExpert) ||
-                (props.districtExpert && project.file) ||
-                (props.centralExpert && project.file)">
+          v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+                (isSent && project.file)">
           <label
             class="form__label report__label"
             :for="project.file"
-          >Прикрепить документ</label>
+          >
+            <span v-if="!isSent && !(props.centralExpert || props.districtExpert)">
+              Прикрепить документ
+            </span>
+            <span v-if="isSent && project.file">
+              Документ
+            </span>
+          </label>
           <InputReport
             v-if="!project.file"
             isFile
@@ -59,11 +64,8 @@
             Удалить публикацию
           </button>
         </div>
-
-        <div class="report__links"
-          v-if="!(props.centralExpert || props.districtExpert) ||
-                (props.districtExpert && project.links) ||
-                (props.centralExpert && project.links)">
+        <div class="report__links" v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+        (isSent && projects[index].links.some((item) => item.link))">
           <p
             class="form__label report__label"
             >Ссылка на&nbsp;публикацию
@@ -72,6 +74,8 @@
             <div class="report__link-item"
               v-for="(link, i) in projects[index].links" :key="i">
               <InputReport
+                  v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+                        (isSent && link.link)"
                   v-model:value="link.link" :id="i" :name="i"
                   type="text"
                   placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
@@ -123,9 +127,8 @@
     </div>
 
     <div class="report__fieldset report__fieldset--comment"
-      v-if="!(props.centralExpert || props.districtExpert) ||
-            (props.districtExpert && eighteenthPanelData.comment) ||
-            (props.centralExpert && eighteenthPanelData.comment)">
+      v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+            (isSent && eighteenthPanelData.comment)">
       <label
           class="form__label report__label"
           for="comment"
@@ -176,6 +179,7 @@ const props = defineProps({
 });
 
 let isError = ref(props.isError);
+const isLink =ref(false);
 
 const emit = defineEmits(['getData']);
 
@@ -443,8 +447,14 @@ watchEffect(async () => {
 });
 
 watchPostEffect(() => {
-  projects.value.forEach((event) => {
-    if (!event.links.length) event.links.push({link: ''})
+  projects.value.forEach((project) => {
+    if (!project.links.length) project.links.push({link: ''});
+
+    if (project.links.some((item) => item.link)) {
+      isLink.value = true;
+    } else {
+      isLink.value = false;
+    }
   });
 })
 </script>

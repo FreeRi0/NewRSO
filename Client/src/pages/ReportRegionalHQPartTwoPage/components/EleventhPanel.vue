@@ -17,7 +17,8 @@
       <EleventhPanelComponent
         :central-expert="props.centralExpert"
         :district-expert="props.districtExpert"
-        :is-disabled="props.districtExpert || props.centralExpert"
+        :data="data"
+        @get-data="getData"
       ></EleventhPanelComponent>
     </template>
 
@@ -25,6 +26,8 @@
       <EleventhPanelComponent
         :central-expert="props.centralExpert"
         :district-expert="props.districtExpert"
+        :data="data"
+        @get-data="getData"
         is-second-tab
       ></EleventhPanelComponent>
     </template>
@@ -33,6 +36,8 @@
       <EleventhPanelComponent
         :central-expert="props.centralExpert"
         :district-expert="props.districtExpert"
+        :data="data"
+        @get-data="getData"
         is-third-tab
       ></EleventhPanelComponent>
     </template>
@@ -136,7 +141,7 @@ const getData = (event) => {
 // };
 
   watchEffect(async () => {
-    console.log('не эксперт: ', !(props.districtExpert || props.centralExpert));
+    // console.log('эксперт: ', (props.districtExpert || props.centralExpert));
   //   try {
       // const { data } = props.centralExpert || props.districtExpert ? await reportPartTwoService.getReportDH(ID_PANEL) : await reportPartTwoService.getReport(ID_PANEL);
   //     console.log(data);

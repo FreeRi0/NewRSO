@@ -26,7 +26,7 @@
   
         <div class="report__fieldset report__fieldset--right-block">
             <p class="form__label report__label">
-                Скан подтверждающего <br> документа&nbsp;<sup class="valid-red">*</sup>
+                Скан подтверждающего <br> документа
             </p>
             <InputReport
                 v-if="!twelfthPanelData.scan_file"
@@ -39,7 +39,6 @@
                 height="auto"
                 @change="uploadFile"
                 :disabled="isSent"
-                :is-error-panel="isErrorPanel"
             />
             <FileBoxComponent
                 v-else
@@ -104,8 +103,7 @@
         <CommentFileComponent
             v-model:value="twelfthPanelData.comment"
             name="twelfthPanelData.comment"
-            @change="uploadFile"
-            @focusout="focusOut"
+            
             @click="deleteFile"
             :file="twelfthPanelData.scan_file"
             :fileType="twelfthPanelData.file_type"

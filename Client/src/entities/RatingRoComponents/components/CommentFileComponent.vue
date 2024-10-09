@@ -26,11 +26,10 @@
             counter-visible
             :maxlength="3000"
             :max-length-text="3000"
-            @focusout="focusOutField"
+            
             :disabled="isDisabled"
             v-bind="$attrs"
         ></TextareaReport>
-
         <FileBoxComponent
             v-if="file"
             :file="file"
@@ -77,9 +76,9 @@ const onChange = (event) => {
     emit('onChange', event.target.value);
 };
 
-const focusOutField = (event) => {
-    emit('focusOut', event.target.value);
-};
+// const focusOutField = (event) => {
+//     emit('focusOut', event.target.value);
+// };
 
 const clickOnButton = () => {
     emit('click');
