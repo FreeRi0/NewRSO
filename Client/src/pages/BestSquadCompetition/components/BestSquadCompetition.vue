@@ -109,11 +109,12 @@
         </ul>
 
         <div class="competition__documents">
-            <p id="file-chosen-statement" class="text competition__documents-description">
+            <p id="file-chosen-statement" class="text competition__documents-description competition__text-column">
                 Положение о проведении конкурса и формировании рейтинга линейных
                 студенческих отрядов Молодёжной общероссийской общественной
                 организации «Российский Студенческие Отряды»
             </p>
+            <div class="competition-button-optimiz">
             <a target="_blank" class="competition__documents-button" @click.prevent="downloadDocument">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="30" viewBox="0 0 24 30" fill="none">
                     <path
@@ -121,6 +122,7 @@
                         fill="#1F7CC0" />
                 </svg>
                 Скачать документ</a>
+            </div>
         </div>
 
 
@@ -365,4 +367,5 @@ onUnmounted(() => {
     window.removeEventListener('resize', getSizeImage);
 });
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+</style>

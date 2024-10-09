@@ -35,13 +35,15 @@ const props = defineProps({
         border-radius: 100%;
         object-fit: cover;
         overflow: hidden;
-        @media screen and (max-width: 450px) {
-            width: 100px;
-            height: 100px;
+        
+        @media screen and (min-width: 320px) and (max-width:480px) {
+            width: 128px;
+            height: 128px;
         }
     }
 }
 .container-headquarters {
     padding-top: 10px;
+    
 }
 </style>

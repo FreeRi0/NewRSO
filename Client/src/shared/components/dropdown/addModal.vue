@@ -50,6 +50,10 @@ function add() {
   background: #fff;
   z-index: 999;
   transform: none;
+  @media screen and (min-width: 320px) and (max-width: 480px) {
+    transform: translateY(120%) translate(-30%) translateX(9px);
+    
+    }
 
   @media (max-width: 575px) {
     max-width: 320px;
@@ -63,6 +67,10 @@ function add() {
     @media (max-width: 575px) {
       padding: 25px 20px;
     }
+    @media screen and (min-width: 320px) and (max-width: 480px) {
+      padding: 45px 20px 30px;
+    }
+    
 
     &_title {
       font-size: 16px;
@@ -76,6 +84,10 @@ function add() {
       @media (max-width: 575px) {
         font-size: 14px;
       }
+      @media screen and (min-width: 320px) and (max-width: 480px) {
+        font-size: 16px;
+        line-height: 22.1px;
+    }
     }
 
     &_buttons {
