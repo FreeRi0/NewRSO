@@ -29,7 +29,11 @@
       </div>
       <div class="form__field-date">
         <div class="form__field">
-          <label style="max-width: 280px;" class="form__label" for="start_date">Дата начала проведения мероприятия <sup
+          <label
+              style="max-width: 280px;"
+              class="form__label"
+              for="start_date"
+          >Дата начала проведения мероприятия <sup
               class="valid-red">*</sup></label>
           <InputReport
               v-model:value="event.start_date"
@@ -125,6 +129,8 @@
               placeholder="https://vk.com/cco_monolit"
               @focusout="focusOut"
               :disabled="isSent"
+              :is-link="true"
+              @error="setError"
           />
           <div v-if="!isSent">
             <Button v-if="events[index].links.length === i + 1" label="+ Добавить ссылку" @click="addLink(index)"
@@ -444,7 +450,7 @@ import { Button } from '@shared/components/buttons';
 import { ReportTabs } from './index';
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { FileBoxComponent } from "@entities/RatingRoComponents/components";
-import { dateValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
+// import { dateValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 
 const swal = inject('$swal');
@@ -485,17 +491,14 @@ const isSent = ref(false);
 const emit = defineEmits(['getData']);
 
 const isErrorDate = ref({});
-const noErrorDate = ref(false);
+// const noErrorDate = ref(false);
 let isErrorFile = ref(false);
+const isLinkError = ref(false);
 
 const focusOut = async () => {
   fourthPanelData.value.events = [...events.value];
-
-  // console.log('дата до', noErrorDate.value);
-  dateValidate(events, isErrorDate, noErrorDate);
-
-  // console.log('дата после', noErrorDate.value);
-  if (!noErrorDate.value) {
+  // dateValidate(events, isErrorDate, noErrorDate);
+  if (!isLinkError.value) {
     try {
       if (isFirstSent.value) {
         const {data} = await reportPartTwoService.createReport(setFormData(), '4', true);
@@ -599,7 +602,7 @@ const deleteEvent = async (index) => {
 
 const uploadFile = async (event, index) => {
   fileValidate(event.target.files[0], 7, isErrorFile);
-  if (isErrorFile.value){
+  if (isErrorFile.value) {
     events.value[index].regulations = event.target.files[0].name
   } else {
     const {data} = await reportPartTwoService.createReportDraft(setFormData(event.target.files[0], index), '4', true);
@@ -640,6 +643,10 @@ const setFormData = (file = null, index = null, isDeleteEvent = false, isDeleteF
     }
   })
   return formData;
+};
+
+const setError = (err) => {
+  isLinkError.value = err;
 };
 
 watchEffect(() => {
