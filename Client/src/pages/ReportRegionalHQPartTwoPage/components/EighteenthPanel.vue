@@ -11,7 +11,7 @@
   <div v-else class="form__field-group report__field">
     <div class="report__field" 
       v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
-            (isSent && eighteenthPanelData.projects)">
+            (isSent && isLink)">
       <div class="report__field-group" v-for="(project, index) in projects" :key="index">
         <div class="report__fieldset report__file-input"
           v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||

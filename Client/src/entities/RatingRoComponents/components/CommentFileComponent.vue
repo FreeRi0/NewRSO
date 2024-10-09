@@ -36,6 +36,7 @@
             :fileType="fileType"
             :fileSize="fileSize"
             @click="clickOnButton"
+            :is-error-file="isErrorFile"
         ></FileBoxComponent>
         </div>
 </template>
@@ -70,6 +71,10 @@ const props = defineProps({
         type: Number,
         default: null,
     },
+    isErrorFile: {
+        type: Boolean,
+        default: false,
+    }
 });
 
 const onChange = (event) => {
@@ -86,4 +91,7 @@ const clickOnButton = () => {
 </script>
 
 <style lang="scss" scoped>
+.valid-red {
+  color: #db0000;
+}
 </style>
