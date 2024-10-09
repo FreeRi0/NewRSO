@@ -69,7 +69,7 @@
                 <div class="form__field">
                     <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
                     <TextareaReport v-model:value="seventhPanelData.comment" id="comment" name="comment" :rows="1"
-                        autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
+                        autoResize placeholder="Укажите наименования организованных мероприятий" @focusout="focusOut" :maxlength="3000"
                         :disabled="isSent || seventhPanelData.prize_place === 'Нет'" max-length-text="3000"
                         counter-visible />
                 </div>
@@ -132,7 +132,7 @@
                 <div class="form__field">
                     <label class="form__label" for="14">Комментарий </label>
                     <TextareaReport v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1"
-                        autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
+                        autoResize placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000"
                         :disabled="isSentSix || (sixPanelData.number_of_members == 0 || sixPanelData.number_of_members === null)"
                         :max-length-text="3000" counter-visible />
 
@@ -207,7 +207,7 @@
                 <div class="form__field">
                     <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
                     <TextareaReport v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1"
-                        autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
+                        autoResize placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000"
                         :max-length-text="3000" counter-visible
                         :disabled="isSentNinth || ninthPanelData.event_happened === false" />
                 </div>
@@ -287,12 +287,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form__field">
+                    <div class="form__field" v-if="seventhPanelData.comment !== null && seventhPanelData.comment !== ''">
                         <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
                         <TextareaReport
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                             v-model:value="seventhPanelData.comment" id="comment" name="comment" :rows="1" autoResize
-                            placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
+                            placeholder="Укажите наименования организованных мероприятий" @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
                             counter-visible />
                     </div>
                     <div class="form__field-result" style="display: flex; align-items: center;">
@@ -347,12 +347,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form__field">
+                    <div class="form__field" v-if="sixPanelData.comment !== null && sixPanelData.comment !== ''">
                         <label class="form__label" for="14">Комментарий</label>
                         <TextareaReport
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                             v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1" autoResize
-                            placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
+                            placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
                             counter-visible />
                     </div>
                 </div>
@@ -392,7 +392,8 @@
                             v-if="!ninthPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
                             id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile" />
                         <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
-                        :isSent="isSent" :fileSize="ninthPanelData.file_size" @click="deleteFile"></FileBoxComponent>
+                            :isSent="isSent" :fileSize="ninthPanelData.file_size" @click="deleteFile">
+                        </FileBoxComponent>
                     </div>
 
                     <div class="form__field">
@@ -417,12 +418,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form__field">
+                    <div class="form__field" v-if="ninthPanelData.comment !== null && ninthPanelData.comment !== ''">
                         <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
                         <TextareaReport
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                             v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1" autoResize
-                            placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
+                            placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
                             counter-visible />
                     </div>
                     <div class="form__field-result" style="display: flex; align-items: center;">
@@ -468,7 +469,7 @@
                     <div class="form__field">
                         <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
                         <TextareaReport v-model:value="seventhPanelData.comment" id="comment" name="comment" :rows="1"
-                            autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
+                            autoResize placeholder="Примечания, ссылки" @focusout="focusOut" :maxlength="3000"
                             :max-length-text="3000" counter-visible />
                     </div>
                     <div class="form__field-result" style="display: flex; align-items: center;">
@@ -505,7 +506,7 @@
                     <div class="form__field">
                         <label class="form__label" for="14">Комментарий<sup class="valid-red">*</sup></label>
                         <TextareaReport v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1"
-                            autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
+                            autoResize placeholder="Примечания, ссылки" @focusout="focusOut" :maxlength="3000"
                             :max-length-text="3000" counter-visible />
                     </div>
                 </div>
@@ -538,7 +539,7 @@
                     <div class="form__field">
                         <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
                         <TextareaReport v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1"
-                            autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
+                            autoResize placeholder="Примечания, ссылки" @focusout="focusOut" :maxlength="3000"
                             :max-length-text="3000" counter-visible />
                     </div>
                     <div class="form__field-result" style="display: flex; align-items: center;">
@@ -732,7 +733,7 @@ const props = defineProps({
     data: Object,
 });
 
-const emit = defineEmits(['collapse-form', 'formData', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'error']);
+const emit = defineEmits(['collapse-form', 'formData', 'formDataDH', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'error']);
 
 const collapseForm = () => {
     emit('collapse-form');
@@ -781,6 +782,10 @@ const sixPanelData = ref({
     }],
     comment: '',
 });
+const sixPanelDataDH = ref({
+    number_of_members: 0,
+    comment: '',
+})
 
 const prize_places = ref([
     { name: '1', value: 1, id: 'pp1' },
@@ -884,13 +889,20 @@ const deleteFile = (number) => {
 
 const focusOut = () => {
     if (props.panel_number == 6) {
-        try {
-            // if(isLinkError.value && )
-            emit('formData', sixPanelData.value)
+        if (props.isDistrictHeadquarterCommander) {
+            try {
+                emit('formDataDH', sixPanelData.value)
+            }
+            catch (e) {
+                console.log('data', e.response.data)
+            }
+        } else {
+            try {
+                emit('formData', sixPanelData.value)
 
-
-        } catch (e) {
-            console.log('data', e.response.data)
+            } catch (e) {
+                console.log('data', e.response.data)
+            }
         }
     }
     else if (props.panel_number == 7) {
@@ -1030,8 +1042,6 @@ watchEffect(() => {
             }
 
             if (!sixPanelData.value.links.length) sixPanelData.value.links.push({ link: '' })
-
-
         }
         else {
             console.log('data not received');

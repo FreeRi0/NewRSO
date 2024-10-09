@@ -547,6 +547,7 @@ const setData = (data, panel, number = 0) => {
       break;
     case 6:
       reportData.value.six[number] = data
+      console.log('data', data)
       break;
     case 7:
       reportData.value.seventh[number] = data

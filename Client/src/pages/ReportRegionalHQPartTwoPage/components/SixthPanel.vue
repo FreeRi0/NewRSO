@@ -14,9 +14,9 @@
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)" @error="setError" @getPanelNumber="getPanelNumber($event)"
-            @getId="getId($event)" :data="sixPanelData" :is-sent-six="isSentSix"
-            :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
+            @formData="formData($event, item.id)" @formDataDH="formDataDH($event, item.id, route.query.reportId)" @error="setError"
+            @getPanelNumber="getPanelNumber($event)" @getId="getId($event)" :data="sixPanelData"
+            :is-sent-six="isSentSix" :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item">
           </SeventhPanelForm>
@@ -28,7 +28,7 @@
 import { ref, watchEffect } from "vue";
 import { SeventhPanelForm } from "./index";
 import { reportPartTwoService } from "@services/ReportService.ts";
-
+import { useRoute } from "vue-router";
 
 const props = defineProps({
   districtHeadquarterCommander: {
@@ -52,9 +52,11 @@ const setError = (err) => {
   link_err.value = err;
 }
 
+const route = useRoute();
+
 const isFirstSent = ref(null);
 const isSentSix = ref(false);
-const emit = defineEmits(['getData', 'getId', 'getPanelNumber']);
+const emit = defineEmits(['getData',  'getId', 'getPanelNumber']);
 
 const sixPanelData = ref({
   number_of_members: 0,
@@ -74,7 +76,6 @@ let el_id = ref(null);
 const formData = async (reportData, reportNumber) => {
   try {
     console.log('is_link_err_3_6', link_err.value)
-
     if (!link_err.value && reportData.number_of_members > 0) {
       if (isFirstSent.value) {
         console.log('First time sending data');
@@ -94,6 +95,16 @@ const formData = async (reportData, reportNumber) => {
     console.log('six panel error: ', e);
   }
 };
+
+const formDataDH = async (reportData, reportNumber, reportID) => {
+  try {
+    const { data } = await reportPartTwoService.verifyReportDH(reportData, '6', reportNumber, reportID);
+    console.log('datasDH', data);
+    emit('getData', data, 6, reportNumber);
+  } catch (err) {
+    console.log('Six panel DH error: ', err);
+  }
+}
 
 const getId = (id) => {
   // console.log('id', id);
