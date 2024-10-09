@@ -26,7 +26,7 @@
                                 type="radio" @focusout="focusOut" v-model="seventhPanelData.prize_place" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                            }}</label>
+                                }}</label>
                         </div>
                     </div>
                 </div>
@@ -69,9 +69,9 @@
                 <div class="form__field">
                     <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
                     <TextareaReport v-model:value="seventhPanelData.comment" id="comment" name="comment" :rows="1"
-                        autoResize placeholder="Укажите наименования организованных мероприятий" @focusout="focusOut" :maxlength="3000"
-                        :disabled="isSent || seventhPanelData.prize_place === 'Нет'" max-length-text="3000"
-                        counter-visible />
+                        autoResize placeholder="Укажите наименования организованных мероприятий" @focusout="focusOut"
+                        :maxlength="3000" :disabled="isSent || seventhPanelData.prize_place === 'Нет'"
+                        max-length-text="3000" counter-visible />
                 </div>
                 <div class="form__field-result" style="display: flex; align-items: center;">
                     <v-checkbox class="result-checkbox" id="v-checkbox" />
@@ -163,7 +163,7 @@
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                            }}</label>
+                                }}</label>
                         </div>
                     </div>
                 </div>
@@ -240,17 +240,14 @@
                         <p class="form__label">
                             Призовое место в конкурсе <sup class="valid-red">*</sup>
                         </p>
-                        <div class="places_wrap">
-                            <div class="places_item" v-for="item in prize_places" :key="item.id">
-                                <input :id="item.id" :value="item.value" :name="item.name"
-                                    :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
-                                    class="form__input places_input" type="radio"
-                                    :checked="seventhPanelData.prize_place == item.value" @focusout="focusOut"
-                                    v-model="seventhPanelData.prize_place" />
-                                <label class="places_item_label" :for="id">{{
-                                    item.name
-                                }}</label>
-                            </div>
+                        <div class="places_wrap one_place">
+                            <input :id="11" :value="seventhPanelData.prize_place" :name="11"
+                                :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
+                                class="form__input places_input" type="radio" :checked="seventhPanelData.prize_place"
+                                v-model="seventhPanelData.prize_place" />
+                            <label class="places_item_label" :for="id">{{
+                                seventhPanelData.prize_place
+                            }}</label>
                         </div>
                     </div>
                     <div class="report__fieldset report__fieldset--right-block">
@@ -259,11 +256,10 @@
                         </label>
                         <InputReport v-if="!seventhPanelData.document" isFile type="file"
                             accept=".jpg, .jpeg, .png, .pdf" id="scan_file" name="scan_file" width="100%" height="auto"
-                            @change="uploadFile"
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
                         <FileBoxComponent v-else :file="seventhPanelData.document" :isSent="isSent"
-                            :fileType="seventhPanelData.file_type" :fileSize="seventhPanelData.file_size"
-                            @click="deleteFile"></FileBoxComponent>
+                            :fileType="seventhPanelData.file_type" :fileSize="seventhPanelData.file_size">
+                        </FileBoxComponent>
 
                     </div>
 
@@ -272,28 +268,29 @@
                             <sup class="valid-red">*</sup></label>
 
                         <div class="form__wrapper" v-for="(item, index) in seventhPanelData.links" :key="index">
-                            <InputReport @focusout="focusOut" name="14" :is-link="true"
+                            <InputReport name="14" :is-link="true"
                                 placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
                                 v-model:value="item.link" class="mb-2"
                                 :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
                             <div v-if="!(props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)">
-                                <div class="add_link" @click="addLink(7)"
+                                <!-- <div class="add_link"
                                     v-if="seventhPanelData.links.length === index + 1">
                                     + Добавить ссылку
                                 </div>
-                                <div class="add_link" @click="deleteLink(7)" v-else>
+                                <div class="add_link" v-else>
                                     Удалить поле ввода
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
-                    <div class="form__field" v-if="seventhPanelData.comment !== null && seventhPanelData.comment !== ''">
+                    <div class="form__field"
+                        v-if="seventhPanelData.comment !== null && seventhPanelData.comment !== ''">
                         <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
                         <TextareaReport
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                             v-model:value="seventhPanelData.comment" id="comment" name="comment" :rows="1" autoResize
-                            placeholder="Укажите наименования организованных мероприятий" @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
-                            counter-visible />
+                            placeholder="Укажите наименования организованных мероприятий" :maxlength="3000"
+                            :max-length-text="3000" counter-visible />
                     </div>
                     <div class="form__field-result" style="display: flex; align-items: center;">
                         <v-checkbox class="result-checkbox" id="v-checkbox" />
@@ -321,9 +318,8 @@
                         <p class="form__label">
                             Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
                         </p>
-                        <InputReport @focusout="focusOut" v-model:value="sixPanelData.number_of_members"
-                            placeholder="Введите число" id="15" name="14" class="form__input number_input" type="number"
-                            :maxlength="10" :max="32767"
+                        <InputReport v-model:value="sixPanelData.number_of_members" placeholder="Введите число" id="15"
+                            name="14" class="form__input number_input" type="number" :maxlength="10" :max="32767"
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
                     </div>
                     <div class="form__field">
@@ -333,17 +329,17 @@
 
                         <div class="form__wrapper" v-for="(item, index) in sixPanelData.links" :key="index">
                             <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                                @focusout="focusOut" :is-link="true"
+                                :is-link="true"
                                 :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                                 name="14" v-model:value="item.link" class="mb-2" />
                             <div v-if="!(props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)">
-                                <div class="add_link" @click="addLink(6)"
+                                <!-- <div class="add_link" @click="addLink(6)"
                                     v-if="sixPanelData.links.length === index + 1">
                                     + Добавить ссылку
                                 </div>
                                 <div class="add_link" @click="deleteLink(6)" v-else>
                                     Удалить поле ввода
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -352,7 +348,7 @@
                         <TextareaReport
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                             v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1" autoResize
-                            placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
+                            placeholder="Напишите сообщение" :maxlength="3000" :max-length-text="3000"
                             counter-visible />
                     </div>
                 </div>
@@ -370,17 +366,14 @@
                             Проведение мероприятия <sup class="valid-red">*</sup>
                         </p>
 
-                        <div class="places_wrap">
-                            <div class="places_item" v-for="item in events" :key="item.id">
-                                <input :id="item.id" :value="item.value" :name="item.name"
-                                    :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
-                                    :checked="ninthPanelData.event_happened == item.value"
-                                    class="form__input places_input" type="radio" @focusout="focusOut"
-                                    v-model="ninthPanelData.event_happened" />
-                                <label class="places_item_label" :for="id">{{
-                                    item.name
-                                    }}</label>
-                            </div>
+                        <div class="places_wrap one_place">
+                            <input :id="12" :value="ninthPanelData.event_happened" :name="12"
+                                :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
+                                :checked="ninthPanelData.event_happened === true || ninthPanelData.event_happened === false"
+                                class="form__input places_input" type="radio" v-model="ninthPanelData.event_happened" />
+                            <label v-if="ninthPanelData.event_happened === true" class="places_item_label"
+                                :for="id">Да</label>
+                            <label v-else class="places_item_label" :for="id">Нет</label>
                         </div>
                     </div>
                     <div class="report__fieldset report__fieldset--right-block">
@@ -390,9 +383,9 @@
                         <InputReport
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                             v-if="!ninthPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
-                            id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile" />
+                            id="scan_file" name="scan_file" width="100%" height="auto" />
                         <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
-                            :isSent="isSent" :fileSize="ninthPanelData.file_size" @click="deleteFile">
+                            :isSent="isSent" :fileSize="ninthPanelData.file_size">
                         </FileBoxComponent>
                     </div>
 
@@ -404,17 +397,17 @@
                         <div class="form__wrapper" v-for="(item, index) in ninthPanelData.links" :key="index">
                             <InputReport
                                 :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
-                                @focusout="focusOut" name="14" :is-link="true"
+                                name="14" :is-link="true"
                                 placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
                                 v-model:value="item.link" class="mb-2" />
                             <div v-if="!(props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)">
-                                <div class="add_link" @click="addLink(7)"
+                                <!-- <div class="add_link" @click="addLink(7)"
                                     v-if="ninthPanelData.links.length === index + 1">
                                     + Добавить ссылку
                                 </div>
                                 <div class="add_link" @click="deleteLink(7)" v-else>
                                     Удалить поле ввода
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -423,7 +416,7 @@
                         <TextareaReport
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                             v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1" autoResize
-                            placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
+                            placeholder="Напишите сообщение" :maxlength="3000" :max-length-text="3000"
                             counter-visible />
                     </div>
                     <div class="form__field-result" style="display: flex; align-items: center;">
@@ -458,19 +451,19 @@
                             <div class="places_item" v-for="item in prize_places" :key="item.id">
                                 <input :id="item.id" :value="item.value" :name="item.name"
                                     class="form__input places_input" type="radio"
-                                    :checked="seventhPanelData.prize_place == item.value" @focusout="focusOut"
+                                    :checked="seventhPanelData.prize_place == item.value"
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
                     <div class="form__field">
                         <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
                         <TextareaReport v-model:value="seventhPanelData.comment" id="comment" name="comment" :rows="1"
-                            autoResize placeholder="Примечания, ссылки" @focusout="focusOut" :maxlength="3000"
-                            :max-length-text="3000" counter-visible />
+                            autoResize placeholder="Примечания, ссылки" :maxlength="3000" :max-length-text="3000"
+                            counter-visible />
                     </div>
                     <div class="form__field-result" style="display: flex; align-items: center;">
                         <v-checkbox class="result-checkbox" id="v-checkbox" />
@@ -498,16 +491,15 @@
                         <p class="form__label">
                             Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
                         </p>
-                        <InputReport @focusout="focusOut" v-model:value="sixPanelData.number_of_members"
-                            placeholder="Введите число" id="15" name="14" class="form__input number_input" type="number"
-                            :maxlength="10" :max="32767" />
+                        <InputReport v-model:value="sixPanelData.number_of_members" placeholder="Введите число" id="15"
+                            name="14" class="form__input number_input" type="number" :maxlength="10" :max="32767" />
                     </div>
 
                     <div class="form__field">
                         <label class="form__label" for="14">Комментарий<sup class="valid-red">*</sup></label>
                         <TextareaReport v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1"
-                            autoResize placeholder="Примечания, ссылки" @focusout="focusOut" :maxlength="3000"
-                            :max-length-text="3000" counter-visible />
+                            autoResize placeholder="Примечания, ссылки" :maxlength="3000" :max-length-text="3000"
+                            counter-visible />
                     </div>
                 </div>
                 <div v-else-if="props.panel_number == 9" class="form__field-group group-seventh">
@@ -528,19 +520,19 @@
                             <div class="places_item" v-for="item in events" :key="item.id">
                                 <input :id="item.id" :value="item.value" :name="item.name"
                                     :checked="ninthPanelData.event_happened == item.value"
-                                    class="form__input places_input" type="radio" @focusout="focusOut"
+                                    class="form__input places_input" type="radio"
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
                     <div class="form__field">
                         <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
                         <TextareaReport v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1"
-                            autoResize placeholder="Примечания, ссылки" @focusout="focusOut" :maxlength="3000"
-                            :max-length-text="3000" counter-visible />
+                            autoResize placeholder="Примечания, ссылки" :maxlength="3000" :max-length-text="3000"
+                            counter-visible />
                     </div>
                     <div class="form__field-result" style="display: flex; align-items: center;">
                         <v-checkbox class="result-checkbox" id="v-checkbox" />
@@ -587,19 +579,19 @@
                         <div class="places_wrap">
                             <div class="places_item" v-for="item in prize_places" :key="item.id">
                                 <input :id="item.id" :value="item.value" :name="item.name"
-                                    class="form__input places_input" type="radio" @focusout="focusOut"
+                                    class="form__input places_input" type="radio"
                                     v-model="seventhPanelData.prize_place" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
                     <div class="form__field">
                         <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
                         <TextareaReport v-model:value="seventhPanelData.comment" id="comment" name="comment" :rows="1"
-                            autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
-                            :max-length-text="3000" counter-visible />
+                            autoResize placeholder="Комментарий" :maxlength="3000" :max-length-text="3000"
+                            counter-visible />
                     </div>
                     <div>
                         <v-checkbox label="Итоговое значение" />
@@ -645,8 +637,8 @@
                     <div class="form__field">
                         <label class="form__label" for="14">Комментарий</label>
                         <TextareaReport v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1"
-                            autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
-                            :max-length-text="3000" counter-visible />
+                            autoResize placeholder="Комментарий" :maxlength="3000" :max-length-text="3000"
+                            counter-visible />
                     </div>
                     <div>
                         <v-checkbox label="Вернуть в РО на доработку" />
@@ -685,11 +677,11 @@
                             <div class="places_item" v-for="item in events" :key="item.id">
                                 <input :id="item.id" :value="item.value" :name="item.name"
                                     :checked="ninthPanelData.event_happened == item.value"
-                                    class="form__input places_input" type="radio" @focusout="focusOut"
+                                    class="form__input places_input" type="radio"
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -697,8 +689,8 @@
                     <div class="form__field">
                         <label class="form__label" for="14">Комментарий</label>
                         <TextareaReport v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1"
-                            autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
-                            :max-length-text="3000" counter-visible />
+                            autoResize placeholder="Комментарий" :maxlength="3000" :max-length-text="3000"
+                            counter-visible />
                     </div>
                     <div>
                         <v-checkbox label="Вернуть в РО на доработку" />
@@ -733,7 +725,7 @@ const props = defineProps({
     data: Object,
 });
 
-const emit = defineEmits(['collapse-form', 'formData', 'formDataDH', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'error']);
+const emit = defineEmits(['collapse-form', 'formData', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'error']);
 
 const collapseForm = () => {
     emit('collapse-form');
@@ -889,20 +881,11 @@ const deleteFile = (number) => {
 
 const focusOut = () => {
     if (props.panel_number == 6) {
-        if (props.isDistrictHeadquarterCommander) {
-            try {
-                emit('formDataDH', sixPanelData.value)
-            }
-            catch (e) {
-                console.log('data', e.response.data)
-            }
-        } else {
-            try {
-                emit('formData', sixPanelData.value)
+        try {
+            emit('formData', sixPanelData.value)
 
-            } catch (e) {
-                console.log('data', e.response.data)
-            }
+        } catch (e) {
+            console.log('data', e.response.data)
         }
     }
     else if (props.panel_number == 7) {
@@ -1204,6 +1187,10 @@ watchEffect(() => {
 
 .valid-red {
     color: #DB0000;
+}
+
+.one_place {
+    column-gap: 8px !important;
 }
 
 .month {

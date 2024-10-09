@@ -14,7 +14,7 @@
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)" @formDataDH="formDataDH($event, item.id, route.query.reportId)" @error="setError"
+            @formData="formData($event, item.id)" @error="setError"
             @getPanelNumber="getPanelNumber($event)" @getId="getId($event)" :data="sixPanelData"
             :is-sent-six="isSentSix" :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)"
@@ -96,15 +96,6 @@ const formData = async (reportData, reportNumber) => {
   }
 };
 
-const formDataDH = async (reportData, reportNumber, reportID) => {
-  try {
-    const { data } = await reportPartTwoService.verifyReportDH(reportData, '6', reportNumber, reportID);
-    console.log('datasDH', data);
-    emit('getData', data, 6, reportNumber);
-  } catch (err) {
-    console.log('Six panel DH error: ', err);
-  }
-}
 
 const getId = (id) => {
   // console.log('id', id);
