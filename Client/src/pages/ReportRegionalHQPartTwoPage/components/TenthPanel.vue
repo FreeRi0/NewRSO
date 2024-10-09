@@ -16,13 +16,14 @@
               @deleteLink="deleteLink($event, 1)"
               @clearForm="onClearForm(1)"
               :isErrorFileProp="isErrorFile"
+              title="Всероссийская патриотическая акция «Снежный Десант РСО»"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
 
       <v-expansion-panel>
         <v-expansion-panel-title>
-          Всероссийская трудовая патриотическая акция «Поклонимся Великим годам»
+          Всероссийская трудовая патриотическая акция «Поклонимся великим тем годам»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <TenthPanelForm
@@ -35,6 +36,7 @@
               @collapse-form="collapseForm"
               @deleteLink="deleteLink($event, 2)"
               @clearForm="onClearForm(2)"
+              title="Всероссийская трудовая патриотическая акция «Поклонимся великим тем годам»"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
