@@ -13,6 +13,9 @@
               @uploadFile="uploadFile($event, 1)"
               @deleteFile="deleteFile(1)"
               @collapse-form="collapseForm"
+              @deleteLink="deleteLink($event, 1)"
+              @clearForm="onClearForm(1)"
+              :isErrorFileProp="isErrorFile"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -30,6 +33,8 @@
               @uploadFile="uploadFile($event, 2)"
               @deleteFile="deleteFile(2)"
               @collapse-form="collapseForm"
+              @deleteLink="deleteLink($event, 2)"
+              @clearForm="onClearForm(2)"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -40,6 +45,7 @@
 import {inject, ref, watchEffect} from "vue";
 import {TenthPanelForm} from './index';
 import {reportPartTwoService} from "@services/ReportService.ts";
+import {fileValidate} from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 
 const swal = inject('$swal');
 
@@ -88,6 +94,7 @@ const tenthPanelDataSecond = ref({
   ],
 });
 const panel = ref(false);
+let isErrorFile = ref(false);
 
 const collapseForm = () => {
   panel.value = false;
@@ -149,38 +156,51 @@ const formData = async (reportData, reportNumber) => {
 };
 
 const uploadFile = async (event, reportNumber) => {
+  fileValidate(event.target.files[0], 7, isErrorFile);
   let formData = new FormData();
 
-  formData.append('document', event.target.files[0]);
   if (reportNumber === 1) {
-    formData.append('event_happened', tenthPanelDataFirst.value.event_happened);
-    if (tenthPanelDataFirst.value.links.length) {
-      for (let j = 0; j < tenthPanelDataFirst.value.links.length; j++) {
-        if (tenthPanelDataFirst.value.links[j].link) formData.append(`[links][${j}][link]`, tenthPanelDataFirst.value.links[j].link);
-      }
-    }
-    if (isFirstSent.value.first) {
-      let {data} = await reportPartTwoService.createMultipleReport(formData, '10', '1', true);
-      emit('getData', data, 10, 1);
+    if (isErrorFile.value) {
+      tenthPanelDataFirst.value.event_happened = true;
+      tenthPanelDataFirst.value.document = event.target.files[0].name;
     } else {
-      let {data} = await reportPartTwoService.createMultipleReportDraft(formData, '10', '1', true);
-      emit('getData', data, 10, 1);
+      formData.append('document', event.target.files[0]);
+      formData.append('event_happened', true);
+      if (tenthPanelDataFirst.value.links.length) {
+        for (let j = 0; j < tenthPanelDataFirst.value.links.length; j++) {
+          if (tenthPanelDataFirst.value.links[j].link) formData.append(`[links][${j}][link]`, tenthPanelDataFirst.value.links[j].link);
+        }
+      }
+      if (isFirstSent.value.first) {
+        let {data} = await reportPartTwoService.createMultipleReport(formData, '10', '1', true);
+        emit('getData', data, 10, 1);
+      } else {
+        let {data} = await reportPartTwoService.createMultipleReportDraft(formData, '10', '1', true);
+        emit('getData', data, 10, 1);
+      }
     }
   } else if (reportNumber === 2) {
-    formData.append('event_happened', tenthPanelDataSecond.value.event_happened);
-    if (tenthPanelDataSecond.value.links.length) {
-      for (let j = 0; j < tenthPanelDataSecond.value.links.length; j++) {
-        if (tenthPanelDataSecond.value.links[j].link) formData.append(`[links][${j}][link]`, tenthPanelDataSecond.value.links[j].link);
+    if (isErrorFile.value) {
+      tenthPanelDataSecond.value.event_happened = true;
+      tenthPanelDataSecond.value.document = event.target.files[0].name;
+    } else {
+      formData.append('document', event.target.files[0]);
+      formData.append('event_happened', true);
+      if (tenthPanelDataSecond.value.links.length) {
+        for (let j = 0; j < tenthPanelDataSecond.value.links.length; j++) {
+          if (tenthPanelDataSecond.value.links[j].link) formData.append(`[links][${j}][link]`, tenthPanelDataSecond.value.links[j].link);
+        }
+      }
+      if (isFirstSent.value.second) {
+        let {data} = await reportPartTwoService.createMultipleReport(formData, '10', '2', true);
+        emit('getData', data, 10, 2);
+      } else {
+        let {data} = await reportPartTwoService.createMultipleReportDraft(formData, '10', '2', true);
+        emit('getData', data, 10, 2);
       }
     }
-    if (isFirstSent.value.second) {
-      let {data} = await reportPartTwoService.createMultipleReport(formData, '10', '2', true);
-      emit('getData', data, 10, 2);
-    } else {
-      let {data} = await reportPartTwoService.createMultipleReportDraft(formData, '10', '2', true);
-      emit('getData', data, 10, 2);
-    }
   }
+
 };
 const deleteFile = async (reportNumber) => {
   let formData = new FormData();
@@ -221,6 +241,33 @@ const deleteFile = async (reportNumber) => {
     }
   }
 };
+
+const deleteLink = (linkIndex, reportNumber) => {
+  if (reportNumber === 1) {
+    tenthPanelDataFirst.value.links.splice(linkIndex, 1)
+    formData(tenthPanelDataFirst.value, 1)
+  }
+  if (reportNumber === 2) {
+    tenthPanelDataSecond.value.links.splice(linkIndex, 1)
+    formData(tenthPanelDataSecond.value, 2)
+  }
+};
+
+const onClearForm = async (reportNumber) => {
+  let formData = new FormData();
+  formData.append('event_happened', false);
+  formData.append('document', '');
+  formData.append('[links][0][link]', '');
+  formData.append('comment', '');
+  if (reportNumber === 1) {
+    let {data} = await reportPartTwoService.createMultipleReportDraft(formData, '10', '1', true);
+    emit('getData', data, 10, 1);
+  }
+  if (reportNumber === 2) {
+    let {data} = await reportPartTwoService.createMultipleReportDraft(formData, '10', '2', true);
+    emit('getData', data, 10, 2);
+  }
+}
 
 watchEffect(() => {
   if (props.data.first) {

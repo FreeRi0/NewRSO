@@ -12,6 +12,9 @@
                 class="form__input form__field-people-count-field"
                 type="number"
                 placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="2147483647"
                 @focusout="focusOut"
                 :disabled="isSent"
             />
@@ -26,6 +29,9 @@
                 class="form__input form__field-people-count-field"
                 type="number"
                 placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="2147483647"
                 @focusout="focusOut"
                 :disabled="isSent"
             />
@@ -65,6 +71,8 @@
               type="date"
               @focusout="focusOut"
               :disabled="isSent"
+              :min-date="event.start_date"
+              :is-error-date="Object.values(isErrorDate).some(item => item.error === true && item.id === index)"
           />
         </div>
       </div>
@@ -82,15 +90,15 @@
               @change="uploadFile($event, index)"
               :disabled="isSent"
           />
-          <div v-else class="form__file-box">
-            <span class="form__file-name">
-              {{ event.regulations.split('/').at(-1) }}
-            </span>
-            <span class="form__file-size">{{ '123' }} Мб</span>
-            <button v-if="!isSent" @click="deleteFile(index)" class="form__button-delete-file">
-              Удалить
-            </button>
-          </div>
+          <FileBoxComponent
+              v-else
+              :file="event.regulations"
+              :fileType="event.file_type"
+              :fileSize="event.file_size"
+              :is-sent="isSent"
+              :is-error-file="isErrorFile && !event.file_size"
+              @click="deleteFile(index)"
+          ></FileBoxComponent>
         </div>
       </div>
       <div style="width: 100%;">
@@ -105,6 +113,8 @@
               placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
               @focusout="focusOut"
               :disabled="isSent"
+              :is-link="true"
+              @error="setError"
           />
           <div v-if="!isSent">
             <div
@@ -377,6 +387,9 @@ import { Button } from '@shared/components/buttons';
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { ReportTabs } from './index';
 import { SvgIcon } from '@shared/index';
+import { FileBoxComponent } from "@entities/RatingRoComponents/components";
+// import { dateValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
+import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 
 const swal = inject('$swal');
 
@@ -403,6 +416,8 @@ const events = ref([
     start_date: null,
     end_date: null,
     regulations: '',
+    file_size: null,
+    file_type: '',
     links: [
       {
         link: '',
@@ -411,34 +426,68 @@ const events = ref([
   }
 ]);
 const isSent = ref(false);
+const isErrorDate = ref({});
+// const noErrorDate = ref(false);
+let isErrorFile = ref(false);
+const isLinkError = ref(false);
 
 const focusOut = async () => {
-  try {
-    if (isFirstSent.value) {
-      const {data} = await reportPartTwoService.createReport(setFormData(), '5', true);
-      emit('getData', data, 5);
-    } else {
-      const {data} = await reportPartTwoService.createReportDraft(setFormData(), '5', true);
-      emit('getData', data, 5);
-    }
-  } catch (e) {
-    console.log('focusOut error:', e);
-    e.response.data.events.forEach(event => {
-      if (event.links) {
-        for (let i in event.links) {
-          if (Object.keys(event.links[i]).length !== 0 && event.links[i].link.includes('Введите правильный URL.')) {
-            swal.fire({
-              position: 'center',
-              icon: 'warning',
-              title: `Введите корректный URL`,
-              showConfirmButton: false,
-              timer: 2500,
-            })
+  // dateValidate(events, isErrorDate, noErrorDate);
+
+  if (!isLinkError.value) {
+    try {
+      if (isFirstSent.value) {
+        const {data} = await reportPartTwoService.createReport(setFormData(), '5', true);
+        emit('getData', data, 5);
+      } else {
+        const {data} = await reportPartTwoService.createReportDraft(setFormData(), '5', true);
+        emit('getData', data, 5);
+      }
+    } catch (e) {
+      console.log('focusOut error:', e);
+      e.response.data.events.forEach(event => {
+        if (event.links) {
+          for (let i in event.links) {
+            if (Object.keys(event.links[i]).length !== 0 && event.links[i].link.includes('Введите правильный URL.')) {
+              swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: `Введите корректный URL`,
+                showConfirmButton: false,
+                timer: 2500,
+              })
+            }
           }
         }
-      }
-    })
+      })
+    }
   }
+  // try {
+  //   if (isFirstSent.value) {
+  //     const {data} = await reportPartTwoService.createReport(setFormData(), '5', true);
+  //     emit('getData', data, 5);
+  //   } else {
+  //     const {data} = await reportPartTwoService.createReportDraft(setFormData(), '5', true);
+  //     emit('getData', data, 5);
+  //   }
+  // } catch (e) {
+  //   console.log('focusOut error:', e);
+  //   e.response.data.events.forEach(event => {
+  //     if (event.links) {
+  //       for (let i in event.links) {
+  //         if (Object.keys(event.links[i]).length !== 0 && event.links[i].link.includes('Введите правильный URL.')) {
+  //           swal.fire({
+  //             position: 'center',
+  //             icon: 'warning',
+  //             title: `Введите корректный URL`,
+  //             showConfirmButton: false,
+  //             timer: 2500,
+  //           })
+  //         }
+  //       }
+  //     }
+  //   })
+  // }
 }
 
 const addLink = (index) => {
@@ -466,12 +515,13 @@ const deleteProject = async (index) => {
   let formData = new FormData();
   events.value = events.value.filter((el, i) => index !== i);
   // fifthPanelData.value.events = [...events.value];
-  formData.append('comment', fifthPanelData.value.comment);
+  formData.append('comment', fifthPanelData.value.comment || '');
   events.value.forEach((event, i) => {
     if (event.participants_number) formData.append(`events[${i}][participants_number]`, event.participants_number);
     if (event.ro_participants_number) formData.append(`events[${i}][ro_participants_number]`, event.ro_participants_number);
     if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
     if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
+    if (event.regulations) formData.append(`events[${i}][regulations]`, event.regulations);
     if (event.links.length) {
       for (let j = 0; j < event.links.length; j++) {
         if (event.links[j].link) formData.append(`events[${i}][links][${j}][link]`, event.links[j].link);
@@ -487,8 +537,13 @@ const deleteProject = async (index) => {
 };
 
 const uploadFile = async (event, index) => {
-  const {data} = await reportPartTwoService.createReportDraft(setFormData(event.target.files[0], index), '5', true);
-  emit('getData', data, 5);
+  fileValidate(event.target.files[0], 7, isErrorFile);
+  if (isErrorFile.value){
+    events.value[index].regulations = event.target.files[0].name
+  } else {
+    const {data} = await reportPartTwoService.createReportDraft(setFormData(event.target.files[0], index), '5', true);
+    emit('getData', data, 5);
+  }
 };
 const deleteFile = async (index) => {
   setFormData(null, index, false, true)
@@ -527,6 +582,10 @@ const setFormData = (file = null, index = null, isDeleteEvent = false, isDeleteF
   return formData;
 };
 
+const setError = (err) => {
+  isLinkError.value = err;
+};
+
 watchEffect(() => {
   if (props.data) {
     isFirstSent.value = false;
@@ -534,11 +593,15 @@ watchEffect(() => {
     fifthPanelData.value.comment = props.data.comment;
     isSent.value = props.data.is_sent;
   }
+  // dateValidate(events, isErrorDate, noErrorDate);
 });
 watchPostEffect(() => {
   events.value.forEach((event) => {
     if (!event.links.length) event.links.push({link: ''})
   });
+  if (!events.value.length) {
+    addProject()
+  }
 })
 </script>
 <style lang="scss" scoped>

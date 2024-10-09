@@ -94,6 +94,9 @@ const clickOnButton = () => {
     font-size: 16px;
     transition: 0.2s;
     text-transform: none;
+    @media screen and (min-width: 320px) and (max-width: 480px) {
+        width: 100%;
+    }
 
     &_primary {
         background: var(--primary);
@@ -181,4 +184,5 @@ const clickOnButton = () => {
         margin: 0px auto;
     }
 }
+
 </style>

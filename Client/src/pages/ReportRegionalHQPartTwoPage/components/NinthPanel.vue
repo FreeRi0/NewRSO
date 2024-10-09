@@ -3,7 +3,8 @@
     <v-expansion-panels v-model="panel" class="mb-2">
       <v-progress-circular v-show="!items.length" class="circleLoader" indeterminate></v-progress-circular>
       <v-expansion-panel :disabled="disabled" v-show="items.length" v-for="item in items"
-        :key="item.id"><v-expansion-panel-title :class="isErrorPanel ? 'visible-error' : ''">
+        :key="item.id"><v-expansion-panel-title
+          :class="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id) ? 'visible-error' : ''">
           <div class="title_wrap">
             <p class="form__title">{{ item.name }}</p>
           </div>
@@ -11,7 +12,8 @@
           <SeventhPanelForm :id="item.id" :panel_number="9" @collapse-form="collapsed()"
             @formData="formData($event, item.id)" @error="setError" @uploadFile="uploadFile($event, item.id)"
             :data="ninthPanelData" @getPanelNumber="getPanelNumber($event)" @getId="getId($event)"
-            @deleteFile="deleteFile($event, item.id)" :is-error-panel="isErrorPanel"
+            @deleteFile="deleteFile($event, item.id)" :is-sent-ninth="isSentNinth"
+            :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
@@ -20,7 +22,7 @@
   </v-card>
 </template>
 <script setup>
-import { ref, watchEffect, inject } from "vue";
+import { ref, watchEffect } from "vue";
 import { SeventhPanelForm } from "./index";
 import { reportPartTwoService } from "@services/ReportService.ts";
 
@@ -31,13 +33,13 @@ const props = defineProps({
   centralHeadquarterCommander: {
     type: Boolean
   },
-  isErrorPanel: Boolean,
+  isErrorPanel: Object,
   items: Array,
   data: Object
 });
 
 const link_err = ref(false);
-const swal = inject('$swal');
+const isSentNinth = ref(false);
 
 const setError = (err) => {
   link_err.value = err;
@@ -59,42 +61,23 @@ const ninthPanelData = ref({
 const isFirstSent = ref(null);
 let el_id = ref(null);
 
-// const sent = (sentVal) => {
-//   console.log('is sent: ', sentVal, isFirstSent.value);
-//   isFirstSent.value = sentVal;
-// }
-
 const formData = async (reportData, reportNumber) => {
   try {
     console.log('send2', isFirstSent.value)
     if (!link_err.value) {
       if (isFirstSent.value) {
         console.log('First time sending data');
-        const { data } = await reportPartTwoService.createMultipleReportAll(reportData, '9', reportNumber);
+        const { data } = await reportPartTwoService.createMultipleReportAll(reportData, '9', reportNumber, true);
         isFirstSent.value = false;
         emit('getData', data, 9, reportNumber);
       } else {
         console.log('Second time sending data');
-        const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber);
+        const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
         emit('getData', data, 9, reportNumber);
       }
     }
   } catch (e) {
     console.log('ninth panel error: ', e);
-    if (e.response.data.links) {
-      e.response.data.links.forEach(item => {
-        console.log('item', item)
-        if (item.link.includes('Введите правильный URL.')) {
-          swal.fire({
-            position: 'center',
-            icon: 'warning',
-            title: `Введите корректный URL`,
-            showConfirmButton: false,
-            timer: 2500,
-          })
-        }
-      })
-    }
   }
 };
 
@@ -118,12 +101,12 @@ const getPanelNumber = (number) => {
 
 const uploadFile = async (reportData, reportNumber) => {
   if (isFirstSent.value) {
-    let { document } = await reportPartTwoService.createMultipleReportAll(reportData, '9', reportNumber, true);
-    ninthPanelData.value.document = document.split('/').at(-1);
+    let { data } = await reportPartTwoService.createMultipleReportAll(reportData, '9', reportNumber, true);
+    emit('getData', data, 9, reportNumber);
   } else {
-    let { data: { document } } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
+    let { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
+    emit('getData', data, 9, reportNumber);
 
-    ninthPanelData.value.document = document.split('/').at(-1);
   }
 };
 
@@ -138,10 +121,11 @@ const deleteFile = async (reportData, reportNumber) => {
 
 watchEffect(() => {
   console.log(isFirstSent, props.data)
-  if (Object.keys(props.data[el_id.value]).length > 0) {
+  if (props.data[el_id.value] && Object.keys(props.data[el_id.value]).length > 0) {
     console.log('data yes')
     isFirstSent.value = false;
     ninthPanelData.value = { ...props.data[el_id.value] }
+    isSentNinth.value = props.data[el_id.value].is_sent;
   } else {
     console.log('data no')
     isFirstSent.value = true;
@@ -155,6 +139,12 @@ watchEffect(() => {
       file_type: '',
       comment: '',
     };
+    for (let i in props.data) {
+      if (props.data[i].is_sent) {
+        isSentNinth.value = true;
+        break;
+      }
+    }
   }
 
   if (panel.value || panel.value === 0) {
@@ -299,7 +289,7 @@ watchEffect(() => {
   font-weight: 600;
   line-height: 21.6px;
   text-align: left;
-  border: none;
+  border-left: 6px solid #F3F4F5;
   padding-left: 40px;
 }
 </style>

@@ -15,7 +15,8 @@
                 type="number"
                 placeholder="Введите число"
                 :maxlength="10"
-                :max="32767"
+                :min="0"
+                :max="2147483647"
                 @focusout="focusOut"
                 :disabled="isSent"
                 :is-error-panel="isErrorPanel"
@@ -46,6 +47,7 @@
                 :fileSize="thirteenthPanelData.file_size"
                 @click="deleteFile"
                 :is-sent="isSent"
+                :is-error-file="isErrorFile"
             ></FileBoxComponent>
         </div>
     
@@ -141,6 +143,7 @@ import {
     ReportTable,
 } from "@entities/RatingRoComponents/components";
 import { reportPartTwoService } from "@services/ReportService.ts";
+import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 
 const props = defineProps({
     districtExpert: {
@@ -168,7 +171,7 @@ const props = defineProps({
 
 const ID_PANEL = '13';
 const isFirstSent = ref(true);
-const scanFile = ref([]);
+let isErrorFile = ref(false);
 const thirteenthPanelData = ref({
     number_of_members: null,
     scan_file: '',
@@ -181,14 +184,12 @@ const isSent = ref(false);
 const emit = defineEmits(["update:value", "getData"]);
 
 const changeValue = (event) => {
-  // console.log(event);
   emit("update:value", event);
 };
 
 const focusOut = async () => {
     let formData = new FormData();
 
-    // formData.append('number_of_members', thirteenthPanelData.value.number_of_members);
     thirteenthPanelData.value.number_of_members ? formData.append('number_of_members', thirteenthPanelData.value.number_of_members) : formData.append('number_of_members', "");
     formData.append('comment', thirteenthPanelData.value.comment);
 
@@ -206,29 +207,31 @@ const focusOut = async () => {
 };
 
 const uploadFile = async (event) => {
-    scanFile.value = event.target.files[0];
-    let formData = new FormData();
-    // formData.append('number_of_members', thirteenthPanelData.value.number_of_members);
-    // formData.append('comment', thirteenthPanelData.value.comment);
+    thirteenthPanelData.value.file_size = (event.target.files[0].size / Math.pow(1024, 2));
+    thirteenthPanelData.value.file_type = event.target.files[0].type.split('/').at(-1);
 
-    formData.append('scan_file', scanFile.value);
-    thirteenthPanelData.value.file_size = (scanFile.value.size / Math.pow(1024, 2));
-    thirteenthPanelData.value.file_type = scanFile.value.type.split('/').at(-1);
-    // console.log(twelfthPanelData.value.file_type);
-    // console.log(scanFile.value);
+    fileValidate(event.target.files[0], 7, isErrorFile);
+//   console.log('(4)', 'перед отправкой в uploadFile', isErrorFile.value);
+    if (isErrorFile.value) {
+        thirteenthPanelData.value.scan_file = event.target.files[0].name;
+        // console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
+    } else {
+        let formData = new FormData();
+        formData.append('scan_file', event.target.files[0]);
 
-    try {
-        if (isFirstSent.value) {
-            let { scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-            thirteenthPanelData.value.scan_file = scan_file;
-            emit('getData', scan_file, Number(ID_PANEL));
-        } else {
-            let { data : scan_file } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-            thirteenthPanelData.value.scan_file = scan_file;
-            emit('getData', scan_file, Number(ID_PANEL));
+        try {
+            if (isFirstSent.value) {
+                let { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+                thirteenthPanelData.value.scan_file = data.scan_file.split('/').at(-1);
+                emit('getData', data, Number(ID_PANEL));
+            } else {
+                let { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+                thirteenthPanelData.value.scan_file = data.scan_file.split('/').at(-1);
+                emit('getData', data, Number(ID_PANEL));
+            }
+        } catch (e) {
+            console.log('focusOut error:', e)
         }
-    } catch (e) {
-        console.log('focusOut error:', e)
     }
 };
 
@@ -238,30 +241,32 @@ const deleteFile = async () => {
     // formData.append('number_of_members', thirteenthPanelData.value.number_of_members);
     // formData.append('comment', thirteenthPanelData.value.comment);
     formData.append('scan_file', '');
-    // formData.append('file_size', thirteenthPanelData.value.file_size);
-    // formData.append('file_type', thirteenthPanelData.value.file_type);
 
-    try {
-        if (isFirstSent.value) {
-            let { data : scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-            emit('getData', scan_file, Number(ID_PANEL));
-        } else {
-            let { data : scan_file } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-            emit('getData', scan_file, Number(ID_PANEL));
+    if (isErrorFile.value) {
+    thirteenthPanelData.value.scan_file = "";
+    } else {
+        try {
+            if (isFirstSent.value) {
+                let { data : scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+                emit('getData', scan_file, Number(ID_PANEL));
+            } else {
+                let { data : scan_file } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+                emit('getData', scan_file, Number(ID_PANEL));
+            }
+        } catch (e) {
+            console.log('focusOut error:', e)
         }
-    } catch (e) {
-        console.log('focusOut error:', e)
-    }    
+    }
 };
 
 watchEffect(async () => {
     // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
 
     if (props.data) {
-        console.log(props.data);
+        // console.log(props.data);
         isFirstSent.value = false;
         thirteenthPanelData.value.number_of_members = props.data.number_of_members;
-        thirteenthPanelData.value.comment = props.data.comment;
+        thirteenthPanelData.value.comment = props.data.comment || '';
         thirteenthPanelData.value.scan_file = props.data.scan_file;
         thirteenthPanelData.value.file_size = props.data.file_size;
         thirteenthPanelData.value.file_type = props.data.file_type;

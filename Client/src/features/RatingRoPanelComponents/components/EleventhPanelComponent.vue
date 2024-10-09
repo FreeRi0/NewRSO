@@ -14,6 +14,7 @@
         type="number"
         placeholder="Введите число"
         :maxlength="10"
+        :min="0"
         :max="2147483647"
         @focusout="focusOut"
         :disabled="isSent"
@@ -169,7 +170,6 @@ const props = defineProps({
 
 const ID_PANEL = "11";
 const isFirstSent = ref(true);
-const scanFile = ref([]);
 let isErrorFile = ref(false);
 const eleventhPanelData = ref({
   participants_number: null,
@@ -208,31 +208,28 @@ const focusOut = async () => {
 };
 
 const uploadFile = async (event) => {
-  scanFile.value = event.target.files[0];
-  let formData = new FormData();
+  eleventhPanelData.value.file_size = (event.target.files[0].size / Math.pow(1024, 2));
+  eleventhPanelData.value.file_type = event.target.files[0].type.split('/').at(-1);
 
-  formData.append("scan_file", scanFile.value);
-  formData.append("comment", eleventhPanelData.value.comment);
-
-  eleventhPanelData.value.file_size = (scanFile.value.size / Math.pow(1024, 2));
-  eleventhPanelData.value.file_type = scanFile.value.type.split('/').at(-1);
-
-  fileValidate(scanFile.value, 3, isErrorFile);
-  console.log('(4)', 'перед отправкой в uploadFile', isErrorFile.value);
+  fileValidate(event.target.files[0], 7, isErrorFile);
+  // console.log('(4)', 'перед отправкой в uploadFile', isErrorFile.value);
   if (isErrorFile.value) {
-    eleventhPanelData.value.scan_file = scanFile.value.name;
-    console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
+    eleventhPanelData.value.scan_file = event.target.files[0].name;
+    // console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
   } else {
+    let formData = new FormData();
+    formData.append("scan_file", event.target.files[0]);
+
     try {
       if (isFirstSent.value) {
-        let { scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-        eleventhPanelData.value.scan_file = scan_file;
-        emit('getData', scan_file, Number(ID_PANEL));
+        let { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+        eleventhPanelData.value.scan_file = data.scan_file.split('/').at(-1);
+        emit('getData', data, Number(ID_PANEL));
       } else {
-        let {  data: scan_file  } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-        eleventhPanelData.value.scan_file = scan_file;
-        emit('getData', scan_file, Number(ID_PANEL));
-        console.log('ФАЙЛ ОТПРАВЛЯЕТСЯ ПОВТОРНО');
+        let { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+        eleventhPanelData.value.scan_file = data.scan_file.split('/').at(-1);
+        emit('getData', data, Number(ID_PANEL));
+        // console.log('ФАЙЛ ОТПРАВЛЯЕТСЯ ПОВТОРНО');
       }
     } catch (e) {
       console.log('focusOut error:', e);
@@ -267,10 +264,10 @@ watchEffect(() => {
   // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
 
   if (props.data) {
-    // console.log(props.data);
+    console.log(props.data);
     isFirstSent.value = false;
     eleventhPanelData.value.participants_number = props.data.participants_number;
-    eleventhPanelData.value.comment = props.data.comment;
+    eleventhPanelData.value.comment = props.data.comment || '';
     eleventhPanelData.value.scan_file = props.data.scan_file;
     eleventhPanelData.value.file_size = props.data.file_size;
     eleventhPanelData.value.file_type = props.data.file_type;

@@ -50,6 +50,7 @@ export const useUserStore = defineStore('user', {
 
         async getCountApp() {
             try {
+                if(localStorage.getItem('jwt_token') == null) return false;
                 const responseCount = await HTTP.get(
                     'rsousers/me_notifications_count/',
                 );

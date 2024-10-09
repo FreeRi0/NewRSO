@@ -11,6 +11,10 @@
               class="form__input"
               type="number"
               placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="9999999999"
+              :step="0.01"
               @focusout="focusOut"
               :disabled="isSent"
           />
@@ -27,7 +31,16 @@
               :disabled="isSent"
               style="width: 100%;"
               @change="uploadFile"/>
-          <div v-else class="form__file-box">
+          <FileBoxComponent
+            v-else
+            :file="firstPanelData.scan_file"
+            :fileType="firstPanelData.file_type"
+            :fileSize="firstPanelData.file_size"
+            @click="deleteFile"
+            :is-sent="isSent"
+            :is-error-file="isErrorFile"
+          ></FileBoxComponent>
+          <!-- <div v-else class="form__file-box">
             <span class="form__file-name">
               <SvgIcon v-if="firstPanelData.file_type === 'jpg'" icon-name="file-jpg"/>
               <SvgIcon v-if="firstPanelData.file_type === 'pdf'" icon-name="file-pdf"/>
@@ -43,7 +56,7 @@
             >
               Удалить
             </button>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="form__field">
@@ -137,12 +150,14 @@
   </report-tabs>
 </template>
 <script setup>
-import {ref, watchEffect} from "vue";
+import {ref, watchEffect, watchPostEffect} from "vue";
 import { InputReport, TextareaReport } from '@shared/components/inputs';
+import { FileBoxComponent } from "@entities/RatingRoComponents/components";
 import { ReportRegionalForm } from '../../ReportRegionalHQPartOnePage/components/index'
 import { getReport, reportPartTwoService } from "@services/ReportService.ts";
 import { SvgIcon } from '@shared/index';
 import { ReportTabs } from './index';
+import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 
 const props = defineProps({
   districtExpert: {
@@ -169,6 +184,7 @@ const defaultReportData = {
   employed_top: '0',
 };
 
+let isErrorFile = ref(false);
 const reportData = ref(defaultReportData);
 const isFirstSent = ref(true);
 const firstPanelData = ref({
@@ -183,7 +199,7 @@ const isSent = ref(false);
 const focusOut = async () => {
   let formData = new FormData();
   formData.append('comment', firstPanelData.value.comment || '');
-  formData.append('amount_of_money', firstPanelData.value.amount_of_money);
+  formData.append('amount_of_money', firstPanelData.value.amount_of_money || '');
   try {
     if (isFirstSent.value) {
       const {data} = await reportPartTwoService.createReport(formData, '1', true);
@@ -201,9 +217,20 @@ const uploadFile = async (event) => {
   let formData = new FormData();
 
   formData.append('scan_file', event.target.files[0]);
-  formData.append('comment', firstPanelData.value.comment);
-  formData.append('amount_of_money', firstPanelData.value.amount_of_money);
-  if (isFirstSent.value) {
+  formData.append('comment', firstPanelData.value.comment || '');
+  formData.append('amount_of_money', firstPanelData.value.amount_of_money || '');
+
+  firstPanelData.value.file_size = (event.target.files[0].size / Math.pow(1024, 2));
+  firstPanelData.value.file_type = event.target.files[0].type.split('/').at(-1);
+
+  fileValidate(event.target.files[0], 7, isErrorFile);
+  // console.log('(4)', 'перед отправкой в uploadFile', isErrorFile.value);
+
+  if (isErrorFile.value) {
+    firstPanelData.value.scan_file = event.target.files[0].name;
+    // console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
+  } else {
+    if (isFirstSent.value) {
     let {data} = await reportPartTwoService.createReport(formData, '1', true);
     emit('getData', data, 1);
     firstPanelData.value.scan_file = data.scan_file.split('/').at(-1);
@@ -212,6 +239,7 @@ const uploadFile = async (event) => {
     emit('getData', data, 1);
     firstPanelData.value.scan_file = data.scan_file.split('/').at(-1);
   }
+  }
 };
 const deleteFile = async () => {
   firstPanelData.value.scan_file = '';
@@ -219,9 +247,12 @@ const deleteFile = async () => {
   firstPanelData.value.file_type = '';
   let formData = new FormData();
   formData.append('scan_file', '');
-  formData.append('comment', firstPanelData.value.comment);
-  formData.append('amount_of_money', firstPanelData.value.amount_of_money);
+  formData.append('comment', firstPanelData.value.comment || '');
+  formData.append('amount_of_money', firstPanelData.value.amount_of_money || '');
 
+  if (isErrorFile.value) {
+    firstPanelData.value.scan_file = "";
+  } else {
   if (isFirstSent.value) {
     const {data} = await reportPartTwoService.createReport(formData, '1', true);
     emit('getData', data, 1);
@@ -229,6 +260,7 @@ const deleteFile = async () => {
     const {data} = await reportPartTwoService.createReportDraft(formData, '1', true);
     emit('getData', data, 1);
   }
+} 
 };
 watchEffect(async () => {
   try {
@@ -239,13 +271,26 @@ watchEffect(async () => {
   } catch (e) {
     console.log(e)
   }
+
   if (props.data) {
     isFirstSent.value = false;
     firstPanelData.value.comment = props.data.comment;
     firstPanelData.value.amount_of_money = props.data.amount_of_money;
-    firstPanelData.value.scan_file = props.data.scan_file ? props.data.scan_file.split('/').at(-1) : '';
+    firstPanelData.value.scan_file = props.data.scan_file;
     firstPanelData.value.file_type = props.data.file_type;
     firstPanelData.value.file_size = props.data.file_size;
+    isSent.value = props.data.is_sent;
+  }
+});
+
+watchPostEffect(() => {
+  if (props.data) {
+    isFirstSent.value = false;
+    firstPanelData.value.comment = props.data.comment;
+    firstPanelData.value.amount_of_money = props.data.amount_of_money;
+    firstPanelData.value.scan_file = props.data.scan_file || '';
+    firstPanelData.value.file_type = props.data.file_type || '';
+    firstPanelData.value.file_size = props.data.file_size || '';
     isSent.value = props.data.is_sent;
   }
 });

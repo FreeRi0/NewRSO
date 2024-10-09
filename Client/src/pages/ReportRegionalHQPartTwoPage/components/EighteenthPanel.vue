@@ -42,7 +42,6 @@
           >
             <v-progress-circular color="primary" indeterminate></v-progress-circular>
           </div>
-
           <FileBoxComponent
             v-if="project.file && typeof project.file === 'string'"
             :file="project.file"
@@ -50,7 +49,7 @@
             :fileSize="project.file_size"
             @click="deleteFile(index)"
             :is-sent="isSent"
-            @error="setError"
+            :is-error-file="isErrorsFiles[index]"
           ></FileBoxComponent>
           <button
             v-if="!isSent && (index > 0)"
@@ -77,7 +76,9 @@
                   type="text"
                   placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
                   style="width: 100%;"
+                  :max-length="200"
                   @focusout="focusOut"
+                  @error="setError"
                   :disabled="isSent"
                   is-link
               />
@@ -152,6 +153,7 @@ import { inject, ref, watchEffect, watchPostEffect } from 'vue';
 import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { FileBoxComponent } from "@entities/RatingRoComponents/components";
 import { reportPartTwoService } from "@services/ReportService.ts";
+import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 import { SvgIcon } from '@shared/index';
 
 const swal = inject('$swal');
@@ -184,6 +186,9 @@ const setError = (err) => {
 
 const ID_PANEL = '18';
 const isFirstSent = ref(true);
+const scanFile = ref([]);
+let isErrorFile = ref(false);
+const isErrorsFiles= ref([]);
 const eighteenthPanelData = ref({
   comment: '',
   projects: []
@@ -202,47 +207,83 @@ const projects = ref([
   }
 ])
 
+// const uploadFile = async (event, index) => {
+//   projects.value[index].file = event.target.files[0];
+//   let formData = new FormData();
+//   formData.append('comment', eighteenthPanelData.value.comment);
+
+//   formData.append(`projects[${index}][file]`, projects.value[index].file);
+
+//   if (projects.value.length) {
+//     for (let index = 0; index < projects.value.length; index++) {
+//       if (projects.value[index].links.length) {
+//         for (let i = 0; i < projects.value[index].links.length; i++) {
+//           !projects.value[index].links[i].link 
+//           ? formData.append(`projects[${index}][links][${i}][link]`, '')
+//           : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+//         }
+//       }
+//     }
+//   }
+
+//   try {
+//     if (isFirstSent.value) {
+//       const { data } = await reportPartTwoService.createReport(eighteenthPanelData.value, ID_PANEL);
+//       emit('getData', data, Number(ID_PANEL));
+//     } else {
+//       const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+//       emit('getData', data, Number(ID_PANEL));
+//     }
+//   } catch (e) {
+//     console.log('focusOut error:', e);
+//   }
+// };
+
 const uploadFile = async (event, index) => {
-  projects.value[index].file = event.target.files[0];
+  fileValidate(event.target.files[0], 7, isErrorFile);
+  // console.log('(4)', 'перед отправкой в uploadFile', isErrorFile.value);
 
-  // console.log('файл - ', projects.value[index].file, 
-  // 'тип данных - ', typeof(projects.value[index].file),
-  // 'имя - ', projects.value[index].file.name, 
-  // 'размер -', projects.value[index].file.size, 
-  // 'тип -', projects.value[index].file.type);
+  for (let i = 0; i < projects.value.length; i++) {
+    isErrorsFiles.value[i] = false;
+  }
+  if (isErrorFile.value) {
+    isErrorsFiles.value[index] = true;
+    scanFile.value = event.target.files[0];
+    projects.value[index].file = scanFile.value.name;
+    // console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ', isErrorsFiles.value);
+  } else {
+    projects.value[index].file = event.target.files[0];
+    let formData = new FormData();
+    formData.append('comment', eighteenthPanelData.value.comment);
 
-  let formData = new FormData();
-  formData.append('comment', eighteenthPanelData.value.comment);
+    formData.append(`projects[${index}][file]`, projects.value[index].file);
 
-  formData.append(`projects[${index}][file]`, projects.value[index].file);
-
-  if (projects.value.length) {
-    for (let index = 0; index < projects.value.length; index++) {
-      if (projects.value[index].links.length) {
-        for (let i = 0; i < projects.value[index].links.length; i++) {
-          !projects.value[index].links[i].link 
-          ? formData.append(`projects[${index}][links][${i}][link]`, '')
-          : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+    if (projects.value.length) {
+      for (let index = 0; index < projects.value.length; index++) {
+        if (projects.value[index].links.length) {
+          for (let i = 0; i < projects.value[index].links.length; i++) {
+            !projects.value[index].links[i].link 
+            ? formData.append(`projects[${index}][links][${i}][link]`, '')
+            : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+          }
         }
       }
     }
-  }
-
-  try {
-    if (isFirstSent.value) {
-      const { data } = await reportPartTwoService.createReport(eighteenthPanelData.value, ID_PANEL);
-      emit('getData', data, Number(ID_PANEL));
-    } else {
-      const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-      emit('getData', data, Number(ID_PANEL));
+    try {
+      if (isFirstSent.value) {
+        const { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+        emit('getData', data, Number(ID_PANEL));
+      } else {
+        const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+        emit('getData', data, Number(ID_PANEL));
+      }
+    } catch (e) {
+      console.log('focusOut error:', e);
     }
-  } catch (e) {
-    console.log('focusOut error:', e);
   }
 };
 
 const deleteFile = async (index) => {
-  // projects.value[index].file = '';
   let formData = new FormData();
   formData.append('comment', eighteenthPanelData.value.comment);
 
@@ -250,7 +291,7 @@ const deleteFile = async (index) => {
 
   if (projects.value.length) {
     for (let index = 0; index < projects.value.length; index++) {
-      console.log('этот код выполняется');
+      // console.log('этот код выполняется');
       if (projects.value[index].links.length) {
         for (let i = 0; i < projects.value[index].links.length; i++) {
           !projects.value[index].links[i].link 
@@ -261,8 +302,13 @@ const deleteFile = async (index) => {
     }
   }
 
-  const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-  emit('getData', data, Number(ID_PANEL));
+  if (isErrorsFiles.value[index]) {
+    projects.value[index].file = '';
+    isErrorsFiles.value[index] = false;
+  } else {
+    const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+    emit('getData', data, Number(ID_PANEL));
+  }
 };
 
 const addLink = (index) => {
@@ -370,6 +416,7 @@ const deletePublication = async (index) => {
           : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
         }
       }
+      if (projects.value[index].file) formData.append(`projects[${index}][file]`,  projects.value[index].file);
     }
   }
 
@@ -379,13 +426,18 @@ const deletePublication = async (index) => {
 
 watchEffect(async () => {
   // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
-  console.log(props.data);
+  // console.log(props.data, props.data.projects);
   if (props.data) {
     isFirstSent.value = false;
     projects.value = [...props.data.projects];
-    eighteenthPanelData.value.comment = props.data.comment;
+    eighteenthPanelData.value.comment = props.data.comment || '';
     // if (!projects.value[0].links.length) projects.value[0].links.push({link: ''});
   }
+  // for (let i = 0; i < projects.value.length; i++) {
+  //   if (!projects.value[i].file_size) {
+  //   projects.value[i].file = '';
+  //   }
+  // }
 }, {
   flush: 'post'
 });

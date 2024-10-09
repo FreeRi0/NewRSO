@@ -110,19 +110,15 @@ section.headquarters_squads h3 {
         margin-right: 0;
     }
 }
-@media (max-width: 450px) {
-    .headquarters_squads__container {
-        grid-template-columns: repeat(auto-fill, minmax(156px, 1fr));
-        column-gap: 16px;
-        row-gap: 16px;
-    }
+
+@media screen and (min-width: 320px) and (max-width:480px) {
     .card {
         padding: 16px;
-        width: 156px;
-        height: 165px;
+        width: 256px;
+        height: 125px;
     }
     .card p {
-        font-size: 18px;
+        font-size: 20px;
     }
 }
 </style>

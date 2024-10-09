@@ -32,7 +32,7 @@
             <v-container v-bind="props">
                 <div class="option__content option__content--option">
                     <div class="option__image">
-                        <img :src="item.raw?.avatar?.photo ??
+                        <img :src="item.raw?.media?.photo ??
                             '/assets/foto-leader-squad/foto-leader-squad-stub.png'
                             " alt="Фото бойца" />
                     </div>

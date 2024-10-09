@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from "vue";
+// import { ref, watchEffect } from "vue";
 import { TwelfthPanelComponent } from "@features/RatingRoPanelComponents";
 // import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { ReportTabs } from './index';
@@ -135,8 +135,8 @@ const getData = (event) => {
 //   }
 // };
 
-watchEffect(async () => {
-  console.log('не эксперт: ', !(props.districtExpert || props.centralExpert));
+// watchEffect(async () => {
+//   console.log('не эксперт: ', !(props.districtExpert || props.centralExpert));
   // try {
   //   const { data } = props.centralHeadquarterCommander || props.districtHeadquarterCommander ? await reportPartTwoService.getReportDH(ID_PANEL) : await reportPartTwoService.getReport(ID_PANEL);
   //   console.log(data);
@@ -152,7 +152,7 @@ watchEffect(async () => {
   // } catch (e) {
   //   console.log(e)
   // }
-});
+// });
 </script>
 
 <style lang="scss" scoped>

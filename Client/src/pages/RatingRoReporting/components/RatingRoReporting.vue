@@ -11,14 +11,15 @@
 </template>
 <script setup>
 import { ref, onMounted, watch } from 'vue'
-import { useRoleStore } from '@layouts/store/role';
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
+import { useRoleStore } from "@layouts/store/role";
 import { showByUrl } from '@services/ProdUrlService';
 
+const show = ref(false);
+
+const router = useRouter();
 
 const roleStore = useRoleStore();
-const router = useRouter()
-let show = ref(false);
 
 watch(() => roleStore.roles?.regionalheadquarter_commander, () => {
   if (roleStore.roles?.regionalheadquarter_commander === null) {
@@ -26,11 +27,13 @@ watch(() => roleStore.roles?.regionalheadquarter_commander, () => {
   }
 })
 
-onMounted(() => {
-  const val = showByUrl();
-  show.value = val;
-})
 
+onMounted(() => {
+  // if (window.location.hostname.includes('localhost') || window.location.hostname.includes('rso.sprint.1t.ru') || window.location.hostname.includes('213.139.208.147')) {
+  //   show.value = true;
+  // }
+  show.value = showByUrl();
+});
 </script>
 <style lang="scss" scoped>
 .ratingRo_report_title {

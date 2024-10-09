@@ -80,7 +80,6 @@ import { Button } from '@shared/components/buttons';
 import { ref, watchEffect } from "vue";
 import { useRoleStore } from '@layouts/store/role';
 
-
 const roleStore = useRoleStore();
 
 const emit = defineEmits(['sentReport']);

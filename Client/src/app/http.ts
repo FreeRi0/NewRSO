@@ -4,7 +4,8 @@ import router from './router';
 import { ref } from 'vue';
 
 export const HTTP = axios.create({
-    baseURL: 'http://213.139.208.147:30000/api/v1/',
+
+    baseURL: 'http://213.139.208.147:30000/api/v1/',  //https://xn--j1ab.xn--d1amqcgedd.xn--p1ai/api/v1/  //http://213.139.208.147:30000/api/v1/
     headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -88,32 +89,37 @@ HTTP.interceptors.response.use(
                             JSON.stringify({})
                         ) {
                             console.log('here 2');
-                            refreshTokenPromise.value = HTTP.post(
-                                '/jwt/refresh/',
-                                {
-                                    refresh:
-                                        localStorage.getItem('refresh_token'),
-                                },
-                            )
-                                .then((response) => {
-                                    console.log('here 3');
-                                    localStorage.setItem(
-                                        'jwt_token',
-                                        response.data.access,
-                                    );
-                                    refreshTokenPromise.value = {};
-                                    originalRequest._retry = true;
-                                    return HTTP(originalRequest);
-                                })
-                                .catch(() => {
-                                    console.log('here 4');
-                                    refreshTokenPromise.value = {};
-                                    userStore.logOut();
-                                    localStorage.removeItem('jwt_token');
-                                    localStorage.removeItem('refresh_token');
-                                    localStorage.removeItem('user');
-                                    router.push({ name: 'Login' });
-                                });
+                            if (localStorage.getItem('refresh_token') && localStorage.getItem('refresh_token') !== null) {
+                                refreshTokenPromise.value = HTTP.post(
+                                    '/jwt/refresh/',
+                                    {
+                                        refresh:
+                                            localStorage.getItem('refresh_token'),
+                                    },
+                                )
+                                    .then((response) => {
+                                        console.log('here 3');
+                                        localStorage.setItem(
+                                            'jwt_token',
+                                            response.data.access,
+                                        );
+                                        refreshTokenPromise.value = {};
+                                        originalRequest._retry = true;
+                                        return HTTP(originalRequest);
+                                    })
+                                    .catch(() => {
+                                        console.log('here 4');
+                                        refreshTokenPromise.value = {};
+                                        userStore.logOut();
+                                        localStorage.removeItem('jwt_token');
+                                        localStorage.removeItem('refresh_token');
+                                        localStorage.removeItem('user');
+                                        router.push({ name: 'Login' });
+                                    });
+                            } else {
+                                console.log('no refresh token')
+                            }
+
                         } else {
                             console.log('here 5');
                             console.log(
@@ -147,11 +153,19 @@ HTTP.interceptors.response.use(
                 originalRequest.url !== '/services/front_errors/') {
                 let matches_1 = originalRequest.url.match(/regional_competitions\/me\/reports\/\d{1,}\/\d{1,}\//gm)
                 let matches_2 = originalRequest.url.match(/regional_competitions\/me\/reports\/\d{1,}\//gm)
-                let matches = (matches_1 || []).length + (matches_2 || []).length;
+                let matches_3 = originalRequest.url.match(/competitions\/1\/reports\/q\d{1,}\/get-place\//gm)
+                let matches_4 = originalRequest.url.match(/detachments\/\d{1,}\/competitions\/1\/place\//gm)
+                let matches_5 = originalRequest.url.match(/competitions\/1\/get-place\//gm)
 
-                if ((window.location.hostname === 'localhost' ||
+
+                let matches = (matches_1 || []).length + (matches_2 || []).length + (matches_3 || []).length + (matches_4 || []).length +
+                    (matches_5 || []).length;
+
+                if (/*(window.location.hostname === 'localhost' ||
                     window.location.hostname === 'rso.sprint.1t' ||
-                    window.location.hostname === '213.129.208.147') && !(err.response.status === 404 && matches > 0)) {
+                    window.location.hostname === '213.129.208.147') && */
+                    !(err.response.status === 404 && matches > 0)
+                ) {
                     HTTP.post('/services/front_errors/', {
                         url: err.config.baseURL.substring(0, err.config.baseURL.length - 1) + err.config.url,
                         error_code: err.response.status,

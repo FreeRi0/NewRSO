@@ -13,7 +13,7 @@
 
 <script setup>
 import { inject, onActivated, ref, watch } from "vue";
-import { useRoleStore } from '@layouts/store/role';
+import { useRoleStore } from "@layouts/store/role";
 import ReportRegionalForm from "@pages/ReportRegionalHQPartOnePage/components/ReportRegionalForm.vue";
 import { createReport, getCurrentReport, getReport } from "@services/ReportService.ts";
 import ReportModalSuccess from "@pages/ReportRegionalHQPartOnePage/components/ReportModalSuccess.vue";
@@ -22,8 +22,9 @@ import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
 
 const swal = inject('$swal');
 const route = useRoute();
+const router = useRouter();
+
 const roleStore = useRoleStore();
-const router = useRouter()
 
 const defaultReportData = {
   participants_number: '',
@@ -52,6 +53,13 @@ onActivated(async () => {
     console.log(e)
   }
 });
+
+watch(() => roleStore.roles?.regionalheadquarter_commander, () => {
+  if (roleStore.roles?.regionalheadquarter_commander === null) {
+    router.push({ name: 'mypage' })
+  }
+})
+
 onBeforeRouteLeave(() => {
   reportData.value = defaultReportData;
   isButtonDisabled.value = false;
@@ -107,7 +115,7 @@ watch(() => roleStore.roles?.regionalheadquarter_commander, () => {
 })
 const hasEmptyField = (obj) => {
   for (let item in obj) {
-    if (!obj[item]){
+    if (!obj[item]) {
       return true;
     }
   }

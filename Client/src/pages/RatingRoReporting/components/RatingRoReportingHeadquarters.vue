@@ -2,8 +2,7 @@
   <div class="container">
     <div class="RoReporting">
       <h2 class="RoReporting_title">Отчеты РО</h2>
-      <div class="RoReporting_search"
-        v-if="roleStore.roles.centralheadquarter_commander || roleStore.experts.is_central_expert === true">
+      <div class="RoReporting_search">
         <input type="text" id="search" class="RoReporting_search__input" v-model="name" @keyup="searchHeadquarters"
           placeholder="Начните вводить" />
         <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -12,8 +11,7 @@
             stroke="#898989" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </div>
-      <div class="RoReporting_sort"
-        v-if="roleStore.roles.centralheadquarter_commander || roleStore.experts.is_central_expert === true">
+      <div class="RoReporting_sort">
         <div class="sort-layout">
           <div class="sort-select sort-select--width">
             <v-select class="form__select filter-item" :items="districtsStore.districts" bg-color="#F7F7F7"
@@ -44,29 +42,13 @@
         </div>
       </div>
       <div class="RoReporting_wrapper">
-        <router-link @click="goToReport(reg.id)"
-          v-if="roleStore.roles.regionalheadquarter_commander && Object.keys(reg).length"
-          :to="{ name: 'rating-ro-reporting' }" class="ratingRO__item">
-          <p>{{ reg.regional_headquarter.name }}</p>
-        </router-link>
-
-
-        <RatingRoHeadquartersList
-          v-else-if="roleStore.roles.centralheadquarter_commander || roleStore.experts.is_central_expert === true"
-          :items="sortedRegionalHeadquarters" />
-
+        <RatingRoHeadquartersList :items="sortedRegionalHeadquarters" />
         <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate color="blue"></v-progress-circular>
-        <p v-else-if="!isLoading && !Object.keys(reg).length && roleStore.roles.regionalheadquarter_commander"
-          class="no-found-text">
-          К сожалению, не удалось найти информацию о вашем штабе по вашему запросу.
-        </p>
-        <p v-else-if="!isLoading && !sortedRegionalHeadquarters.length && (roleStore.roles.centralheadquarter_commander || roleStore.experts.is_central_expert === true)"
-          class="no-found-text">
+        <p v-else-if="!isLoading && !sortedRegionalHeadquarters.length" class="no-found-text">
           К сожалению, не удалось найти информацию о штабах по вашему запросу.
         </p>
       </div>
-      <template
-        v-if="regionals.count && regionals.count > limit && (roleStore.roles.centralheadquarter_commander || roleStore.experts.is_central_expert === true)">
+      <template v-if="regionals.count && regionals.count > limit">
         <Button @click="next" v-if="
           sortedRegionalHeadquarters.length <
           regionals.count
@@ -101,15 +83,6 @@ const prev = () => {
   getRegionals();
 };
 
-const goToReport = (id) => {
-  router.push({
-    name: 'ReportRegionalPartOne',
-    query: {
-      id: id,
-    },
-  })
-}
-
 const sortedRegionalHeadquarters = ref([]);
 
 const ascending = ref(true);
@@ -128,7 +101,7 @@ const sortOptions = ref(
     name: 'По алфавиту',
   });
 
-
+  const isAuth = ref(!!localStorage.getItem('jwt_token'));
 const clearItem = () => {
   SelectedSortItem.value = null;
 }
@@ -144,7 +117,7 @@ const getRegionals = async (pagination, orderLimit) => {
   try {
     isLoading.value = true;
     let data = [];
-    let url = '/regional_competitions/statistical_report/?'
+    let url = '/regional_competitions/statistical_report/?';
     if (orderLimit) data.push('limit=' + orderLimit);
     else if (!pagination) data.push('limit=' + limit);
     else if (pagination == 'next') url = regionals.value.next.replace('http', 'https');
@@ -158,15 +131,9 @@ const getRegionals = async (pagination, orderLimit) => {
     if (pagination) {
       response.results = [...regionals.value.results, ...response.results];
     }
-    if (roleStore.roles.centralheadquarter_commander || roleStore.experts.is_central_expert === true) {
-      regionals.value = response;
-    }
-    if (roleStore.roles.regionalheadquarter_commander) {
-      reg.value = response;
-    }
-    if (roleStore.roles.centralheadquarter_commander || roleStore.experts.is_central_expert === true) {
-      sortedRegionalHeadquarters.value = response.results;
-    }
+    regionals.value = response;
+    sortedRegionalHeadquarters.value = response.results;
+
   } catch (error) {
     console.log('an error occured ' + error);
   }
@@ -186,20 +153,19 @@ watch(
   },
 );
 
-watch(() => [roleStore.roles, roleStore.experts],
-  async () => {
-    await getRegionals();
-  },
-  {
-    immediate: true,
-    deep: true,
-  }
-)
+// watch(() => [roleStore.roles, roleStore.experts],
+//   async () => {
+//     await getRegionals();
+//   },
+//   {
+//     immediate: true,
+//     deep: true,
+//   }
+// )
 
 
 onMounted(async () => {
-  await roleStore.getRoles()
-  await roleStore.getExperts()
+  await  getRegionals();
   districtsStore.getDistricts()
 
 

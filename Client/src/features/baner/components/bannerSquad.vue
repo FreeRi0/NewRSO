@@ -362,7 +362,6 @@ const copyL = () => {
 .squad-data__list p,
 .squad-data__list time {
   color: #35383f;
-  /*  */
   font-family: "Bert Sans";
   font-size: 16px;
   font-style: normal;
@@ -448,6 +447,9 @@ const copyL = () => {
 
 .Squad-HQ__date {
   display: flex;
+  @media screen and (min-width: 320px) and (max-width:480px) {
+    justify-content: center;
+  }
 }
 
 .Squad-HQ__date p {
