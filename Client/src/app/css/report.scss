@@ -352,7 +352,7 @@
     }
     &__file-size {
         padding-left: 11px;
-        width: 50px;
+        min-width: 50px;
         color: #6d6d6d;
         opacity: 0.8;
         position: relative;
