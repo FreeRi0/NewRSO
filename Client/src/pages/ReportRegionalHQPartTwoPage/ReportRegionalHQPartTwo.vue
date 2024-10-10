@@ -77,8 +77,8 @@
               мероприятиях и&nbsp;проектах (в&nbsp;том числе и&nbsp;трудовых) &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <sixth-panel @get-data="setData" @get-data-DH="setData" :items="six_items" @getId="setId" @getPanelNumber="setPanelNumber"
-                :district-headquarter-commander="districtExpert" :data="reportData.six" :dataDH="reportData.sixDH"
+              <sixth-panel @get-data="setData" @get-data-DH="setDataDH" @get-data-CH="setDataCH" :items="six_items" @getId="setId" @getPanelNumber="setPanelNumber"
+                :district-headquarter-commander="districtExpert" :data="reportData.six" :dataDH="reportData.sixDH" :dataCH="reportData.sixCH"
                 :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.six" />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -255,6 +255,7 @@ const reportData = ref({
   fifth: null,
   six: {},
   sixDH: {},
+  sixCH: {},
   seventh: {},
   ninth: {},
   tenth: {
@@ -409,22 +410,18 @@ const getMultiplyData = async (isExpert, reportId) => {
     Promise.all(ninthDataPromises),
   ]);
 
-  // const filteredSixItems = sixDataResults.filter(Boolean);
-
-  // filteredSixItems.forEach((result) => {
-  //   reportData.value.six[result.id] = result.data;
-  // });
-
   sixDataResults.filter(Boolean).forEach((result) => {
-    if (districtExpert.value) {
+    if (districtExpert.value || centralExpert.value) {
+      reportData.value.six[result.id] = result.data;
       reportData.value.sixDH[result.id] = result.data;
+      reportData.value.sixCH[result.id] = result.data;
     } else {
       reportData.value.six[result.id] = result.data;
     }
   });
 
 
-  console.log('dataDH', reportData.value.sixDH)
+  // console.log('dataDH', reportData.value.sixDH)
   seventhDataResults.forEach((result) => {
     reportData.value.seventh[result.id] = result.data;
   });
@@ -526,6 +523,20 @@ const getReportData = async (reportId) => {
   // console.log('getReportData: ', reportData.value);
 };
 
+const setDataDH = (data, panel, number) => {
+  switch(panel) {
+    case 6:
+        reportData.value.sixDH[number] = data;
+      break;
+  }
+}
+const setDataCH = (data, panel, number) => {
+  switch(panel) {
+    case 6:
+        reportData.value.sixCH[number] = data;
+      break;
+  }
+}
 
 
 const setData = (data, panel, number = 0) => {
@@ -540,14 +551,7 @@ const setData = (data, panel, number = 0) => {
       reportData.value.fifth = data
       break;
     case 6:
-      if (districtExpert.value) {
-        console.log(data);
-        reportData.value.sixDH[number] = data;
-      } else {
         reportData.value.six[number] = data;
-      }
-      // reportData.value.six[number] = data
-      // console.log('data', data)
       break;
     case 7:
       reportData.value.seventh[number] = data

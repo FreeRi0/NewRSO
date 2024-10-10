@@ -9,7 +9,7 @@
           tab.name === 'Заявки на участие в мероприятии' ||
           tab.name === 'Конкурсы' ||
           tab.name === 'Заявки на вступление в штаб' ||
-          tab.name === 'Рейтинг РО' && showRating && roleStore.experts?.is_district_expert" :key="tab.id"
+          tab.name === 'Рейтинг РО' && showRating && (roleStore.experts?.is_district_expert || roleStore.experts?.is_central_expert)" :key="tab.id"
           @click="picked = tab.name">
           {{ tab.name }}
         </button>

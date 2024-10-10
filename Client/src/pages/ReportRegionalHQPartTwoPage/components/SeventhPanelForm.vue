@@ -318,7 +318,7 @@
                         <p class="form__label">
                             Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
                         </p>
-                        <InputReport v-model:value="sixPanelDataDH.number_of_members" placeholder="Введите число"
+                        <InputReport v-model:value="sixPanelData.number_of_members" placeholder="Введите число"
                             id="15" name="14" class="form__input number_input" type="number" :maxlength="10"
                             :max="32767"
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
@@ -328,7 +328,7 @@
                             СМИ, подтверждающая участие в мероприятии
                             <sup class="valid-red">*</sup></label>
 
-                        <div class="form__wrapper" v-for="(item, index) in sixPanelDataDH.links" :key="index">
+                        <div class="form__wrapper" v-for="(item, index) in sixPanelData.links" :key="index">
                             <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
                                 :is-link="true"
                                 :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
@@ -348,7 +348,7 @@
                         <label class="form__label" for="14">Комментарий</label>
                         <TextareaReport
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
-                            v-model:value="sixPanelDataDH.comment" id="comment" name="comment" :rows="1" autoResize
+                            v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1" autoResize
                             placeholder="Напишите сообщение" :maxlength="3000" :max-length-text="3000"
                             counter-visible />
                     </div>
@@ -615,8 +615,9 @@
                         </div>
                     </div>
                     <ReportTable label="Количество человек, принявших участие в мероприятии"
-                        name="sixPanelData.participants_number" :dataRH="54" :dataDH="178"
-                        v-model:value="sixPanelData.participants_number"></ReportTable>
+                    @focusout="focusOut"
+                        name="sixPanelData.number_of_members" :dataRH="sixPanelData.number_of_members" :dataDH="sixPanelDataDH.number_of_members"
+                        v-model:value="sixPanelDataCH.number_of_members"></ReportTable>
 
                     <CommentFileComponent></CommentFileComponent>
                     <div>
@@ -703,9 +704,10 @@ const props = defineProps({
     isErrorPanel: Boolean,
     data: Object,
     dataDH: Object,
+    dataCH: Object,
 });
 
-const emit = defineEmits(['collapse-form', 'formData', 'formDataDH', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'error']);
+const emit = defineEmits(['collapse-form', 'formData', 'formDataDH', 'formDataCH', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'error']);
 
 const collapseForm = () => {
     emit('collapse-form');
@@ -759,6 +761,10 @@ const sixPanelDataDH = ref({
     comment: '',
 })
 
+const sixPanelDataCH = ref({
+    number_of_members: 0,
+    comment: '',
+})
 const prize_places = ref([
     { name: '1', value: 1, id: 'pp1' },
     { name: '2', value: 2, id: 'pp2' },
@@ -863,10 +869,13 @@ const focusOut = () => {
     if (props.panel_number == 6) {
         try {
             if(props.isDistrictHeadquarterCommander) {
-                console.log(sixPanelDataDH.value)
+                // console.log(sixPanelDataDH.value)
                 emit('formDataDH', sixPanelDataDH.value)
-            }
-            emit('formData', sixPanelData.value)
+                // emit('formDataCH', sixPanelDataCH.value)
+                console.log('dataDH', sixPanelDataDH)
+            }  else {
+            }    emit('formData', sixPanelData.value)
+        
         } catch (e) {
             console.log('data', e.response.data)
         }
@@ -996,8 +1005,9 @@ const deleteLink = async (number) => {
 watchEffect(() => {
     if (props.panel_number == 6) {
         if (props.isDistrictHeadquarterCommander) {
+            sixPanelData.value = { ...props.data }
             sixPanelDataDH.value = { ...props.dataDH };
-            console.log('dataDH', sixPanelDataDH.value, props.dataDH)
+            // sixPanelDataCH.value = { ...props.dataCH };
         } else {
             if (Object.keys(props.data).length > 0) {
                 isFirstSentSix.value = false
@@ -1080,10 +1090,6 @@ watchEffect(() => {
 
     }
 })
-
-// onMounted(() => {
-   
-// })
 </script>
 <style lang="scss" scoped>
 .number_input {
