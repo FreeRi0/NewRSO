@@ -105,9 +105,6 @@ const closeModalSuccess = (value) => {
   showModalSuccess.value = value;
 };
 
-
-
-
 watch(() => roleStore.roles?.regionalheadquarter_commander, () => {
   if (roleStore.roles?.regionalheadquarter_commander === null) {
     router.push({ name: 'mypage' })

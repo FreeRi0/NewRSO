@@ -4,62 +4,138 @@
       отрядов РО за 2024 год на 1 сентября 2024 года</h2>
     <div class="form__field">
       <label class="form__label" for="participants_number">Количество членов РО <sup class="valid-red">*</sup></label>
-      <InputReport v-model:value="reportDataChildren.participants_number" id="participants_number"
-                   name="participants_number" class="form__input" type="number" placeholder="Введите число"
-                   aria-required="true"
-                   :disabled="!isNewReport"/>
+      <InputReport
+          v-model:value="reportDataChildren.participants_number"
+          id="participants_number"
+          name="participants_number"
+          class="form__input"
+          type="number"
+          placeholder="Введите число"
+          aria-required="true"
+          @focusout="focusOut"
+          :disabled="blockEditFirstReport"
+      />
     </div>
     <p>Количество трудоустроенных по направлениям:</p>
     <div class="form-container">
       <div class="form-col">
         <div class="form__field">
           <label class="form__label" for="sso">ССО <sup class="valid-red">*</sup></label>
-          <InputReport v-model:value="reportDataChildren.employed_sso" id="sso" name="sso" class="form__input"
-                       type="number" placeholder="Введите число" :disabled="!isNewReport"/>
+          <InputReport
+              v-model:value="reportDataChildren.employed_sso"
+              id="sso"
+              name="sso"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+              :disabled="blockEditFirstReport"
+          />
         </div>
         <div class="form__field">
           <label class="form__label" for="smo">СМО <sup class="valid-red">*</sup></label>
-          <InputReport v-model:value="reportDataChildren.employed_smo" id="smo" name="smo" class="form__input"
-                       type="number" placeholder="Введите число" :disabled="!isNewReport"/>
+          <InputReport
+              v-model:value="reportDataChildren.employed_smo"
+              id="smo"
+              name="smo"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+              :disabled="blockEditFirstReport"
+          />
         </div>
         <div class="form__field">
           <label class="form__label" for="specialized_detachment">Профильные отряды <sup
               class="valid-red">*</sup></label>
-          <InputReport v-model:value="reportDataChildren.employed_specialized_detachments" id="specialized_detachment"
-                       name="specialized_detachment" class="form__input" type="number" placeholder="Введите число"
-                       :disabled="!isNewReport"/>
+          <InputReport
+              v-model:value="reportDataChildren.employed_specialized_detachments"
+              id="specialized_detachment"
+              name="specialized_detachment"
+              class="form__input" type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+              :disabled="blockEditFirstReport"
+          />
         </div>
         <div class="form__field">
           <label class="form__label" for="spo">СПО <sup class="valid-red">*</sup></label>
-          <InputReport v-model:value="reportDataChildren.employed_spo" id="spo" name="spo" class="form__input"
-                       type="number" placeholder="Введите число" :disabled="!isNewReport"/>
+          <InputReport
+              v-model:value="reportDataChildren.employed_spo"
+              id="spo"
+              name="spo"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+              :disabled="blockEditFirstReport"
+          />
         </div>
         <div class="form__field">
           <label class="form__label" for="sservo">ССервО <sup class="valid-red">*</sup></label>
-          <InputReport v-model:value="reportDataChildren.employed_sservo" id="sservo" name="sservo" class="form__input"
-                       type="number" placeholder="Введите число" :disabled="!isNewReport"/>
+          <InputReport
+              v-model:value="reportDataChildren.employed_sservo"
+              id="sservo"
+              name="sservo"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+              :disabled="blockEditFirstReport"
+          />
         </div>
         <div class="form__field">
           <label class="form__label" for="production_detachments">Производственные отряды <sup
               class="valid-red">*</sup></label>
-          <InputReport v-model:value="reportDataChildren.employed_production_detachments" id="production_detachments"
-                       name="production_detachments" class="form__input" type="number" placeholder="Введите число"
-                       :disabled="!isNewReport"/>
+          <InputReport
+              v-model:value="reportDataChildren.employed_production_detachments"
+              id="production_detachments"
+              name="production_detachments"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+              :disabled="blockEditFirstReport"
+          />
         </div>
         <div class="form__field">
           <label class="form__label" for="sop">СОП <sup class="valid-red">*</sup></label>
-          <InputReport v-model:value="reportDataChildren.employed_sop" id="sop" name="sop" class="form__input"
-                       type="number" placeholder="Введите число" :disabled="!isNewReport"/>
+          <InputReport
+              v-model:value="reportDataChildren.employed_sop"
+              id="sop"
+              name="sop"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+              :disabled="blockEditFirstReport"
+          />
         </div>
         <div class="form__field">
           <label class="form__label" for="ssho">ССхО <sup class="valid-red">*</sup></label>
-          <InputReport v-model:value="reportDataChildren.employed_ssho" id="ssho" name="ssho" class="form__input"
-                       type="number" placeholder="Введите число" :disabled="!isNewReport"/>
+          <InputReport
+              v-model:value="reportDataChildren.employed_ssho"
+              id="ssho"
+              name="ssho"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+              :disabled="blockEditFirstReport"
+          />
         </div>
         <div class="form__field">
           <label class="form__label" for="top">ТОП <sup class="valid-red">*</sup></label>
-          <InputReport v-model:value="reportDataChildren.employed_top" id="top" name="top" class="form__input"
-                       type="number" placeholder="Введите число" :disabled="!isNewReport"/>
+          <InputReport
+              v-model:value="reportDataChildren.employed_top"
+              id="top"
+              name="top"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+              :disabled="blockEditFirstReport"
+          />
         </div>
       </div>
     </div>
@@ -79,8 +155,11 @@ import { InputReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { ref, watchEffect } from "vue";
 import { useRoleStore } from '@layouts/store/role';
+import { useRoute } from "vue-router";
+import { editReport } from "@services/ReportService.ts";
 
 const roleStore = useRoleStore();
+const route = useRoute();
 
 const emit = defineEmits(['sentReport']);
 const props = defineProps({
@@ -94,8 +173,13 @@ const props = defineProps({
   isButtonDisabled: {
     type: Boolean,
     default: false,
+  },
+  blockEditFirstReport: {
+    type: Boolean,
+    default: false
   }
 });
+const isSecondReport = ref(false);
 
 const reportDataChildren = ref(
     {
@@ -112,12 +196,22 @@ const reportDataChildren = ref(
     }
 );
 watchEffect(() => {
+  if (route.fullPath === '/reporting-ro/report-regional-two') {
+    isSecondReport.value = true;
+  }
   reportDataChildren.value = {...props.reportData};
 })
 
 const sentReport = () => {
   emit('sentReport', reportDataChildren.value)
 };
+
+const focusOut = async () => {
+  if (isSecondReport.value) {
+    const {data} = await editReport(reportDataChildren.value);
+    emit('sentReport', data);
+  }
+}
 </script>
 <style lang="scss" scoped>
 .valid-red {
