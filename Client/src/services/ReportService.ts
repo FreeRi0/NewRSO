@@ -59,6 +59,9 @@ export const reportPartTwoService = {
     getReportDH(panel: string, reportId: string) {
         return HTTP.get(`regional_competitions/reports/${panel}/${reportId}/`)
     },
+    // verifyReportDH(data: object, panel: string, reportNumber: string, reportId: string) {
+    //     return HTTP.put(`regional_competitions/reports/${panel}/${reportNumber}/${reportId}/district_review/`, data)
+    // },
 
     createMultipleReport(data: object, panel: string, reportNumber: string, withFile = false) {
         return HTTP.post(`regional_competitions/reports/${panel}/${reportNumber}/`, data, {

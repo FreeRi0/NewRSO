@@ -77,8 +77,8 @@
               мероприятиях и&nbsp;проектах (в&nbsp;том числе и&nbsp;трудовых) &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <sixth-panel @get-data="setData" :items="six_items" @getId="setId" @getPanelNumber="setPanelNumber"
-                :district-headquarter-commander="districtExpert" :data="reportData.six"
+              <sixth-panel @get-data="setData" @get-data-DH="setDataDH" @get-data-CH="setDataCH" :items="six_items" @getId="setId" @getPanelNumber="setPanelNumber"
+                :district-headquarter-commander="districtExpert" :data="reportData.six" :dataDH="reportData.sixDH" :dataCH="reportData.sixCH"
                 :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.six" />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -254,6 +254,8 @@ const reportData = ref({
   fourth: null,
   fifth: null,
   six: {},
+  sixDH: {},
+  sixCH: {},
   seventh: {},
   ninth: {},
   tenth: {
@@ -268,6 +270,8 @@ const reportData = ref({
   eighteenth: null,
   nineteenth: null,
 });
+
+
 const preloader = ref(true);
 const panel_id = ref(1);
 const panel_num = ref(null);
@@ -345,46 +349,23 @@ const getItems = async (number) => {
   }
 }
 
-// const errorHandler = async (error, id) => {
-//   if (error.response && error.response.status === 404) {
-//     console.log('An error occurred: ', error);
-
-//     const url = 'http://213.139.208.147:30000/api/v1/regional_competitions/me/reports';
-
-//     if (error.response.request.responseURL.includes(url + '/6/')) {
-//       reportData.value.six = {};
-//       console.log('Data not found for panel 6', reportData.value.six);
-//     } else if (error.response.request.responseURL.includes(url + '/7/')) {
-//       console.log('Data not found for panel 7');
-//       reportData.value.seventh = {};
-//     } else if (error.response.request.responseURL.includes(url + '/9/')) {
-//       console.log('Data not found for panel 9');
-//       reportData.value.ninth = {};
-//     } else {
-//       console.log('Data found for panel 6');
-//       reportData.value.six = (await reportPartTwoService.getMultipleReport('6', id)).data;
-//       console.log('Data found for panel 7');
-//       reportData.value.seventh = (await reportPartTwoService.getMultipleReport('7', id)).data;
-//       console.log('Data found for panel 9');
-//       reportData.value.ninth = (await reportPartTwoService.getMultipleReport('9', id)).data;
-//     }
-//   } else {
-//     console.log('An unexpected error occurred: ', error);
-//   }
-// };
-
 const getMultiplyData = async (isExpert, reportId) => {
   const sixDataPromises = six_items.value.map(async (item) => {
     try {
       if (!isExpert) {
         return { id: item.id, data: (await reportPartTwoService.getMultipleReport('6', item.id)).data };
       } else {
-        return { id: item.id, data: (await reportPartTwoService.getMultipleReportDH('6', item.id, reportId)).data };
+        const reportData = (await reportPartTwoService.getMultipleReportDH('6', item.id, reportId)).data;
+        return reportData.is_sent ? { id: item.id, data: reportData } : null;
       }
-
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        return { id: item.id, data: {} };
+        if (!isExpert) {
+          return { id: item.id, data: {} };
+        } else {
+          return null
+        }
+
       } else {
         throw error;
       }
@@ -429,12 +410,22 @@ const getMultiplyData = async (isExpert, reportId) => {
     Promise.all(ninthDataPromises),
   ]);
 
-  sixDataResults.forEach((result) => {
-    reportData.value.six[result.id] = result.data;
+  sixDataResults.filter(Boolean).forEach((result) => {
+    if (districtExpert.value || centralExpert.value) {
+      reportData.value.six[result.id] = result.data;
+      reportData.value.sixDH[result.id] = result.data;
+      reportData.value.sixCH[result.id] = result.data;
+    } else {
+      reportData.value.six[result.id] = result.data;
+    }
   });
+
+
+  // console.log('dataDH', reportData.value.sixDH)
   seventhDataResults.forEach((result) => {
     reportData.value.seventh[result.id] = result.data;
   });
+
 
   ninthDataResults.forEach((result) => {
     reportData.value.ninth[result.id] = result.data;
@@ -532,6 +523,20 @@ const getReportData = async (reportId) => {
   // console.log('getReportData: ', reportData.value);
 };
 
+const setDataDH = (data, panel, number) => {
+  switch(panel) {
+    case 6:
+        reportData.value.sixDH[number] = data;
+      break;
+  }
+}
+const setDataCH = (data, panel, number) => {
+  switch(panel) {
+    case 6:
+        reportData.value.sixCH[number] = data;
+      break;
+  }
+}
 
 
 const setData = (data, panel, number = 0) => {
@@ -546,7 +551,7 @@ const setData = (data, panel, number = 0) => {
       reportData.value.fifth = data
       break;
     case 6:
-      reportData.value.six[number] = data
+        reportData.value.six[number] = data;
       break;
     case 7:
       reportData.value.seventh[number] = data
