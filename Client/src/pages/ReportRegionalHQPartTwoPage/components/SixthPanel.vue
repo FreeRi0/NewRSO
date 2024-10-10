@@ -14,9 +14,9 @@
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)" @error="setError"
-            @getPanelNumber="getPanelNumber($event)" @getId="getId($event)" :data="sixPanelData"
-            :is-sent-six="isSentSix" :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
+            @formData="formData($event, item.id)" @formDataDH="formDataDH($event, item.id)" @error="setError" @getPanelNumber="getPanelNumber($event)"
+            @getId="getId($event)" :data="sixPanelData" :dataDH="sixPanelDataDH" :is-sent-six="isSentSix"
+            :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item">
           </SeventhPanelForm>
@@ -41,6 +41,7 @@ const props = defineProps({
   // isSentSix: Boolean,
   items: Array,
   data: Object,
+  dataDH: Object,
 });
 
 // console.log('error66', props.isErrorPanel)
@@ -56,13 +57,18 @@ const route = useRoute();
 
 const isFirstSent = ref(null);
 const isSentSix = ref(false);
-const emit = defineEmits(['getData',  'getId', 'getPanelNumber']);
+const emit = defineEmits(['getData', 'getId', 'getDataDH', 'getPanelNumber']);
 
 const sixPanelData = ref({
   number_of_members: 0,
   links: [{
     link: '',
   }],
+  comment: '',
+});
+
+const sixPanelDataDH = ref({
+  number_of_members: 0,
   comment: '',
 });
 
@@ -96,6 +102,11 @@ const formData = async (reportData, reportNumber) => {
   }
 };
 
+const formDataDH = (reportData, reportNumber) => {
+  console.log(reportData);
+  emit('getDataDH', reportData, 6, reportNumber);
+}
+
 
 const getId = (id) => {
   // console.log('id', id);
@@ -107,27 +118,33 @@ const getPanelNumber = (number) => {
   emit('getPanelNumber', number);
 }
 watchEffect(() => {
-  if (props.data[el_id.value] && Object.keys(props.data[el_id.value]).length > 0) {
-    console.log('data received', props.data);
-    isFirstSent.value = false;
-    sixPanelData.value = { ...props.data[el_id.value] }
-    isSentSix.value = props.data[el_id.value].is_sent;
-  }
-  else {
-    console.log('data not received');
-    isFirstSent.value = true;
-    sixPanelData.value = {
-      number_of_members: 0,
-      links: [],
-      comment: '',
-    };
-    for (let i in props.data) {
-      if (props.data[i].is_sent) {
-        isSentSix.value = true;
-        break;
+  if (props.districtHeadquarterCommander) {
+    sixPanelDataDH.value = { ...props.dataDH[el_id.value] }
+    console.log('dataDH', sixPanelDataDH.value, props.dataDH)
+  } else {
+    if (props.data[el_id.value] && Object.keys(props.data[el_id.value]).length > 0) {
+      console.log('data received', props.data);
+      isFirstSent.value = false;
+      sixPanelData.value = { ...props.data[el_id.value] }
+      isSentSix.value = props.data[el_id.value].is_sent;
+    }
+    else {
+      console.log('data not received');
+      isFirstSent.value = true;
+      sixPanelData.value = {
+        number_of_members: 0,
+        links: [],
+        comment: '',
+      };
+      for (let i in props.data) {
+        if (props.data[i].is_sent) {
+          isSentSix.value = true;
+          break;
+        }
       }
     }
   }
+
 
   if (panel.value || panel.value === 0) {
     disabled.value = true;
@@ -162,6 +179,15 @@ watchEffect(() => {
 
 .valid-red {
   color: #db0000;
+}
+
+.v-expansion-panel-title.visible-error,
+.v-expansion-panel--active>.v-expansion-panel-title.visible-error {
+  border: 6px solid #db0000
+}
+
+.v-expansion-panel {
+  margin-bottom: 8px;
 }
 
 .v-tab-item--selected {
@@ -289,13 +315,13 @@ watchEffect(() => {
 .v-expansion-panel-title {
   background: #F3F4F5;
   margin: 0px;
-  border-radius: 0px;
+  border-radius: 10px;
   font-family: Akrobat;
   font-size: 18px;
   font-weight: 600;
   line-height: 21.6px;
   text-align: left;
-  border-left: 6px solid #F3F4F5;
+  border-left: 1px solid #F3F4F5;
   padding-left: 40px;
 
 }

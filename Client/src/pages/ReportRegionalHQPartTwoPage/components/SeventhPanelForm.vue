@@ -223,7 +223,7 @@
         </v-tabs-window>
         <report-tabs v-else>
             <template v-slot:firstTab>
-                <div v-if="props.panel_number == 7" class="form__field-group group-seventh">
+                <div v-if="props.panel_number == 7" class="group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -301,7 +301,7 @@
                         <p>0</p>
                     </div>
                 </div>
-                <div v-else-if="props.panel_number == 6" class="form__field-group group-seventh">
+                <div v-else-if="props.panel_number == 6" class="group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -318,8 +318,9 @@
                         <p class="form__label">
                             Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
                         </p>
-                        <InputReport v-model:value="sixPanelData.number_of_members" placeholder="Введите число" id="15"
-                            name="14" class="form__input number_input" type="number" :maxlength="10" :max="32767"
+                        <InputReport v-model:value="sixPanelDataDH.number_of_members" placeholder="Введите число"
+                            id="15" name="14" class="form__input number_input" type="number" :maxlength="10"
+                            :max="32767"
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
                     </div>
                     <div class="form__field">
@@ -327,7 +328,7 @@
                             СМИ, подтверждающая участие в мероприятии
                             <sup class="valid-red">*</sup></label>
 
-                        <div class="form__wrapper" v-for="(item, index) in sixPanelData.links" :key="index">
+                        <div class="form__wrapper" v-for="(item, index) in sixPanelDataDH.links" :key="index">
                             <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
                                 :is-link="true"
                                 :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
@@ -347,12 +348,12 @@
                         <label class="form__label" for="14">Комментарий</label>
                         <TextareaReport
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
-                            v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1" autoResize
+                            v-model:value="sixPanelDataDH.comment" id="comment" name="comment" :rows="1" autoResize
                             placeholder="Напишите сообщение" :maxlength="3000" :max-length-text="3000"
                             counter-visible />
                     </div>
                 </div>
-                <div v-else-if="props.panel_number == 9" class="form__field-group group-seventh">
+                <div v-else-if="props.panel_number == 9" class="group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -430,7 +431,7 @@
                 </div>
             </template>
             <template v-slot:secondTab>
-                <div v-if="props.panel_number == 7" class="form__field-group group-seventh">
+                <div v-if="props.panel_number == 7" class="group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -459,12 +460,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form__field">
-                        <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
-                        <TextareaReport v-model:value="seventhPanelData.comment" id="comment" name="comment" :rows="1"
-                            autoResize placeholder="Примечания, ссылки" :maxlength="3000" :max-length-text="3000"
-                            counter-visible />
-                    </div>
+                    <CommentFileComponent v-model:value="seventhPanelData.comment" @update:value="changeValue"
+                        name="seventhPanelData.comment" @change="uploadFile" @click="deleteFile" :file="fileName"
+                        :fileType="seventhPanelData.file_type" :fileSize="seventhPanelData.file_size"
+                        :disabled="props.isCentralHeadquarterCommander" :is-error-file="isErrorFile">
+                    </CommentFileComponent>
                     <div class="form__field-result" style="display: flex; align-items: center;">
                         <v-checkbox class="result-checkbox" id="v-checkbox" />
                         <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
@@ -474,7 +474,7 @@
                         <p>0</p>
                     </div>
                 </div>
-                <div v-else-if="props.panel_number == 6" class="form__field-group group-seventh">
+                <div v-else-if="props.panel_number == 6" class="group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -491,18 +491,16 @@
                         <p class="form__label">
                             Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
                         </p>
-                        <InputReport v-model:value="sixPanelData.number_of_members" placeholder="Введите число" id="15"
-                            name="14" class="form__input number_input" type="number" :maxlength="10" :max="32767" />
+                        <InputReport v-model:value="sixPanelDataDH.number_of_members" @focusout="focusOut" placeholder="Введите число"
+                            id="15" name="14" class="form__input number_input" type="number" :maxlength="10"
+                            :max="32767" />
                     </div>
-
-                    <div class="form__field">
-                        <label class="form__label" for="14">Комментарий<sup class="valid-red">*</sup></label>
-                        <TextareaReport v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1"
-                            autoResize placeholder="Примечания, ссылки" :maxlength="3000" :max-length-text="3000"
-                            counter-visible />
-                    </div>
+                    <CommentFileComponent v-model:value="sixPanelDataDH.comment" @update:value="changeValue"
+                        :is-six-panel="true" name="sixPanelDataDH.comment"
+                        :disabled="props.isCentralHeadquarterCommander">
+                    </CommentFileComponent>
                 </div>
-                <div v-else-if="props.panel_number == 9" class="form__field-group group-seventh">
+                <div v-else-if="props.panel_number == 9" class="group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -528,12 +526,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form__field">
-                        <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
-                        <TextareaReport v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1"
-                            autoResize placeholder="Примечания, ссылки" :maxlength="3000" :max-length-text="3000"
-                            counter-visible />
-                    </div>
+                    <CommentFileComponent v-model:value="ninthPanelData.comment" @update:value="changeValue"
+                        name="ninthPanelData.comment" @change="uploadFile" @click="deleteFile" :file="fileName"
+                        :fileType="ninthPanelData.file_type" :fileSize="ninthPanelData.file_size"
+                        :disabled="props.isCentralHeadquarterCommander" :is-error-file="isErrorFile">
+                    </CommentFileComponent>
                     <div class="form__field-result" style="display: flex; align-items: center;">
                         <v-checkbox class="result-checkbox" id="v-checkbox" />
                         <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
@@ -545,7 +542,7 @@
                 </div>
             </template>
             <template v-slot:thirdTab>
-                <div v-if="props.panel_number == 7" class="form__field-group group-seventh">
+                <div v-if="props.panel_number == 7" class="group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -604,7 +601,7 @@
                         <v-checkbox label="Вернуть в РО на доработку" />
                     </div>
                 </div>
-                <div v-else-if="props.panel_number == 6" class="form__field-group group-seventh">
+                <div v-else-if="props.panel_number == 6" class="group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -617,34 +614,16 @@
                             <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
                         </div>
                     </div>
-                    <label class="form__label">Количество человек, принявших участие в мероприятии <sup
-                            class="valid-red">*</sup></label>
-                    <v-table>
-                        <tbody>
-                            <tr class="report-table__tr">
-                                <td class="report-table__th">Данные РО</td>
-                                <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
-                                <td class="report-table__th">Корректировка ЦШ</td>
-                            </tr>
-                            <tr>
-                                <td class="report-table__td">200</td>
-                                <td class="report-table__td report-table__td__center">200</td>
-                                <td class="report-table__td">200</td>
-                            </tr>
-                        </tbody>
-                    </v-table>
+                    <ReportTable label="Количество человек, принявших участие в мероприятии"
+                        name="sixPanelData.participants_number" :dataRH="54" :dataDH="178"
+                        v-model:value="sixPanelData.participants_number"></ReportTable>
 
-                    <div class="form__field">
-                        <label class="form__label" for="14">Комментарий</label>
-                        <TextareaReport v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1"
-                            autoResize placeholder="Комментарий" :maxlength="3000" :max-length-text="3000"
-                            counter-visible />
-                    </div>
+                    <CommentFileComponent></CommentFileComponent>
                     <div>
                         <v-checkbox label="Вернуть в РО на доработку" />
                     </div>
                 </div>
-                <div v-else-if="props.panel_number == 9" class="form__field-group group-seventh">
+                <div v-else-if="props.panel_number == 9" class="group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -701,9 +680,9 @@
     </v-card-text>
 </template>
 <script setup>
-import { ref, watchEffect, watch } from 'vue';
+import { ref, watchEffect, watch, onMounted } from 'vue';
 import { Button } from '@shared/components/buttons';
-import { FileBoxComponent } from '@entities/RatingRoComponents/components';
+import { FileBoxComponent, CommentFileComponent, ReportTable } from '@entities/RatingRoComponents/components';
 import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { SvgIcon } from '@shared/ui';
 import { ReportTabs } from './index';
@@ -723,9 +702,10 @@ const props = defineProps({
     isSentNinth: Boolean,
     isErrorPanel: Boolean,
     data: Object,
+    dataDH: Object,
 });
 
-const emit = defineEmits(['collapse-form', 'formData', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'error']);
+const emit = defineEmits(['collapse-form', 'formData', 'formDataDH', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'error']);
 
 const collapseForm = () => {
     emit('collapse-form');
@@ -882,8 +862,11 @@ const deleteFile = (number) => {
 const focusOut = () => {
     if (props.panel_number == 6) {
         try {
+            if(props.isDistrictHeadquarterCommander) {
+                console.log(sixPanelDataDH.value)
+                emit('formDataDH', sixPanelDataDH.value)
+            }
             emit('formData', sixPanelData.value)
-
         } catch (e) {
             console.log('data', e.response.data)
         }
@@ -1012,34 +995,27 @@ const deleteLink = async (number) => {
 
 watchEffect(() => {
     if (props.panel_number == 6) {
-
-        if (Object.keys(props.data).length > 0) {
-            isFirstSentSix.value = false
-            sixPanelData.value = { ...props.data }
-            if (isLinkError.value) {
-                console.log('gg');
-                emit('error', isLinkError.value)
-            } else {
-                console.log('hh')
-                emit('error', false)
+        if (props.isDistrictHeadquarterCommander) {
+            sixPanelDataDH.value = { ...props.dataDH };
+            console.log('dataDH', sixPanelDataDH.value, props.dataDH)
+        } else {
+            if (Object.keys(props.data).length > 0) {
+                isFirstSentSix.value = false
+                sixPanelData.value = { ...props.data }
+                if (isLinkError.value) {
+                    emit('error', isLinkError.value)
+                } else {
+                    emit('error', false)
+                }
+                if (!sixPanelData.value.links.length) sixPanelData.value.links.push({ link: '' })
             }
-
-            if (!sixPanelData.value.links.length) sixPanelData.value.links.push({ link: '' })
-        }
-        else {
-            console.log('data not received');
-            // isSentSix.value = true;
-            // isFirstSentSix.value = true;
-            // sixPanelData.value = {
-            //     number_of_members: 0,
-            //     links: [{
-            //         link: '',
-            //     }],
-            //     comment: ''
-            // }
+            else {
+                console.log('data not received');
+            }
         }
         emit('getId', props.id)
         emit('getPanelNumber', props.panel_number)
+
     } else if (props.panel_number == 7) {
         if (Object.keys(props.data).length > 0) {
             console.log('7')
@@ -1104,6 +1080,10 @@ watchEffect(() => {
 
     }
 })
+
+// onMounted(() => {
+   
+// })
 </script>
 <style lang="scss" scoped>
 .number_input {
@@ -1148,6 +1128,15 @@ watchEffect(() => {
     }
 }
 
+// input[type="radio"]:disabled + label {
+//   color: #E67E22;
+// }
+
+input[type="radio"]:disabled {
+    background-color: #1F7CC0;
+    border: 2px solid #000000; // Add border to the input element
+    border-radius: 50%; // Make the border round
+}
 
 .title_wrap {
     display: grid;
