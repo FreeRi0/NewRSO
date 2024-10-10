@@ -58,8 +58,8 @@
 
             .form-input__add-file {
                 position: absolute;
-                top: 38px;
-                left: 12px;
+                top: 32px;
+                left: 14px;
                 z-index: 1;
 
                 svg {
@@ -79,9 +79,9 @@
                     content: "";
                     width: 1.5px;
                     background-color: #6D6D6D;
-                    top: 9.5px;
+                    top: 12px;
                     left: 43px;
-                    bottom: 24.5px;
+                    bottom: 16px;
                 }
             }
         }
@@ -352,7 +352,7 @@
     }
     &__file-size {
         padding-left: 11px;
-        width: 50px;
+        min-width: 50px;
         color: #6d6d6d;
         opacity: 0.8;
         position: relative;

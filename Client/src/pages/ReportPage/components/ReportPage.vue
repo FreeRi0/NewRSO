@@ -2723,7 +2723,7 @@ const getParameters = async (id) => {
         try {
             const response = await HTTP.get(
                 `/competitions/${route.params.competition_pk}/reports/q${id}/` +
-                (id == 1 ? 'info/' : 'me/'),
+                    (id == 1 ? 'info-static/' : 'me/'),
             );
             if (id == 1 || id == 3 || id == 4) report.value[id] = response.data;
             else if (response.data.results.length) {

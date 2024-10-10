@@ -190,35 +190,31 @@ section.headquarters-management h3 {
     }
 }
 
-@media (max-width: 450px) {
-    .headquarters-management__container {
-        grid-template-columns: repeat(auto-fill, minmax(156px, 1fr));
-        column-gap: 16px;
-        row-gap: 16px;
-    }
 
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
     .manager-card {
-        width: 156px;
-        height: 173px;
-    }
-
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.08);
+    padding: 24px 20px;
+    width: 100%;
+    height: 100%;
+}
     .manager-card__box {
-        width: 114px;
-    }
-
-    .manager-card__box #name_length {
-        font-size: 12px;
-        margin-bottom: 8px;
-    }
-
-    .manager-card__box p {
-        font-size: 12px;
-    }
-
-    .manager-card__avatar img {
-        width: 60px;
-        height: 60px;
-        margin-bottom: 0;
+    width: 216px;
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+    .manager-card__box p{
+    color: #676767;
+    font-family: 'Akrobat';
+    text-align: center;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 22.4px;
     }
 }
 </style>

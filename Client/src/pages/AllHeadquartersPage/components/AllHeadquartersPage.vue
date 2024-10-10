@@ -364,6 +364,7 @@ watch(
 </script>
 
 <style lang="scss">
+
 .headquarters {
     padding-bottom: 60px;
     &-title {
@@ -391,12 +392,34 @@ watch(
     &-search {
         position: relative;
         box-sizing: border-box;
+        @media screen and (max-width:480px) {
+            width: 410px; /* фиксированная ширина */
+            max-width: 410px; /* предотвращает увеличение */
+        }
+        @media screen and (min-width: 320px) and (max-width:439px) {
+            width: 290px; /* фиксированная ширина */
+            max-width: 290px; /* предотвращает увеличение */
+       
+        } 
         svg {
             position: absolute;
             top: 10px;
             left: 16px;
+            @media screen and (min-width: 320px) and (max-width:480px) {
+                position: absolute;
+                top: 10px;
+                left: 14px;
+        }
         }
         &__input {
+            @media screen and (max-width:480px) {
+            padding: 12px 135px 10px 50px;
+            font-size: 17.5px; 
+        }
+            @media screen and (min-width: 320px) and (max-width:439px) {
+            padding: 12px 15px 10px 50px;
+            font-size: 17.5px; 
+        }
             width: 100%;
             padding: 13px 0px 10px 60px;
             border-radius: 10px;
@@ -405,6 +428,10 @@ watch(
     }
 
     &-wrapper {
+        @media screen and (min-width: 320px) and (max-width:480px) {
+            padding: 10px 0px;
+            justify-content: center;
+        }
         padding: 60px 0px;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -465,6 +492,11 @@ pre {
         }
     }
     &-title {
+        @media screen and (min-width: 320px) and (max-width:480px) {
+        padding: 5px 10px 0px 10px;
+        font-size: 15.5px;
+        transform: translateX(center);
+        }
         text-align: center;
         font-size: 20px;
         font-family: 'Akrobat';
@@ -571,6 +603,7 @@ pre {
 .form__select .v-field__input input::placeholder {
     color: #35383f;
     opacity: revert;
+    
 }
 
 .v-field--variant-outlined .v-field__outline__end,

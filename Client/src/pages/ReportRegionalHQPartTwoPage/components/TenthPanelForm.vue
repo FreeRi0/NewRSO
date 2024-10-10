@@ -2,7 +2,7 @@
   <div v-if="!(props.centralExpert || props.districtExpert)" class="form__field-group">
     <div style="display: flex; justify-content: space-between;">
       <div>
-        <p class="form__title">Всероссийская патриотическая акция «Снежный Десант РСО»</p>
+        <p class="form__title">{{ props.title }}</p>
       </div>
       <div>
         <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть"/>
@@ -210,6 +210,7 @@ const props = defineProps({
     type: Boolean
   },
   isErrorFileProp: Boolean,
+  title: String,
 });
 
 const tenthPanelData = ref({

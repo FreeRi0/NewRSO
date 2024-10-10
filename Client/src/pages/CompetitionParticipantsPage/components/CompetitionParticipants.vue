@@ -89,7 +89,7 @@ const isLoading = ref(false);
 const detachments = ref({});
 const isTandem = ref(true);
 const limit = 24;
-const sortBy = ref('detachment__overalltandemranking_main_detachment__place');
+const sortBy = ref('detachment__copy_ranking_main_detachment__place');
 // if (isTandem.value) {
 //     sortBy.value = 'detachment__overalltandemranking_main_detachment__place';
 // } else {
@@ -121,7 +121,7 @@ sortOptionss.value = [
     },
     { value: 'created_at', name: 'Дате создания отряда' },
     {
-        value: 'detachment__overalltandemranking_main_detachment__place',
+        value: 'detachment__copy_ranking_main_detachment__place',
         name: 'Рейтингу',
     },
 ];
@@ -146,10 +146,10 @@ const getCompetitons = async (pagination, orderLimit) => {
             let sort = sortBy.value;
             if (
                 sort ==
-                'detachment__overalltandemranking_main_detachment__place' &&
+                'detachment__copy_ranking_main_detachment__place' &&
                 !isTandem.value
             ) {
-                sort = 'junior_detachment__overallranking__place';
+                sort = 'junior_detachment__copy_ranking_detachment__place';
             }
             data.push('ordering=' + (ascending.value ? '' : '-') + sort);
         }
@@ -241,6 +241,7 @@ onMounted(() => {
     background-image: url('@app/assets/icon/switch.svg');
     background-repeat: no-repeat;
     background-position: center;
+    
 }
 
 .v-select__selection {
@@ -281,6 +282,11 @@ onMounted(() => {
         display: flex;
         justify-content: flex-end;
         align-items: flex-end;
+        @media screen and (min-width: 320px) and (max-width:480px) {
+            display: block;
+            justify-content: start;
+            align-items: start;
+        }
     }
 
     &-tabs {
@@ -378,6 +384,24 @@ onMounted(() => {
 
     .sort-select {
         margin-top: 12px;
+    }
+}
+@media screen and (min-width: 320px) and (max-width:480px) {
+    .squads-sort {
+        flex-direction:column-reverse;
+        align-items: start;        
+    }
+
+    .sort-filters {
+        flex-wrap: wrap;
+        margin-bottom: 40px;
+        align-items: end;
+    }
+
+    .sort-select {
+        margin-top: 12px;
+        right: 8px;
+        width: 83%;
     }
 }
 </style>

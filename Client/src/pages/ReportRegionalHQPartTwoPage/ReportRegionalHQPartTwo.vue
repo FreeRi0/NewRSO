@@ -193,7 +193,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <seventeenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.seventeenth" :is-sent="blockSendButton" />
+                :data="reportData.seventeenth" :is-sent="reportData.sixteenth.is_sent" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -202,7 +202,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <eighteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.eighteenth" :is-sent="blockSendButton" />
+                :data="reportData.eighteenth" :is-sent="reportData.sixteenth.is_sent" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -211,7 +211,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <nineteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.nineteenth" :is-sent="blockSendButton" />
+                :data="reportData.nineteenth" :is-sent="reportData.sixteenth.is_sent" />
             </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -373,10 +373,15 @@ const getItems = async (number) => {
 //   }
 // };
 
-const getMultiplyData = async () => {
+const getMultiplyData = async (isExpert, reportId) => {
   const sixDataPromises = six_items.value.map(async (item) => {
     try {
-      return { id: item.id, data: (await reportPartTwoService.getMultipleReport('6', item.id)).data };
+      if (!isExpert) {
+        return { id: item.id, data: (await reportPartTwoService.getMultipleReport('6', item.id)).data };
+      } else {
+        return { id: item.id, data: (await reportPartTwoService.getMultipleReportDH('6', item.id, reportId)).data };
+      }
+
     } catch (error) {
       if (error.response && error.response.status === 404) {
         return { id: item.id, data: {} };
@@ -388,7 +393,11 @@ const getMultiplyData = async () => {
 
   const seventhDataPromises = seventh_items.value.map(async (item) => {
     try {
-      return { id: item.id, data: (await reportPartTwoService.getMultipleReport('7', item.id)).data };
+      if (!isExpert) {
+        return { id: item.id, data: (await reportPartTwoService.getMultipleReport('7', item.id)).data };
+      } else {
+        return { id: item.id, data: (await reportPartTwoService.getMultipleReportDH('7', item.id, reportId)).data };
+      }
     } catch (error) {
       if (error.response && error.response.status === 404) {
         return { id: item.id, data: {} };
@@ -400,7 +409,11 @@ const getMultiplyData = async () => {
 
   const ninthDataPromises = ninth_items.value.map(async (item) => {
     try {
-      return { id: item.id, data: (await reportPartTwoService.getMultipleReport('9', item.id)).data };
+      if (!isExpert) {
+        return { id: item.id, data: (await reportPartTwoService.getMultipleReport('9', item.id)).data };
+      } else {
+        return { id: item.id, data: (await reportPartTwoService.getMultipleReportDH('9', item.id, reportId)).data };
+      }
     } catch (error) {
       if (error.response && error.response.status === 404) {
         return { id: item.id, data: {} };
@@ -433,9 +446,7 @@ const getReportData = async (reportId) => {
       reportData.value.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
       reportData.value.fourth = (await reportPartTwoService.getReportDH('4', reportId)).data;
       reportData.value.fifth = (await reportPartTwoService.getReportDH('5', reportId)).data;
-      // reportData.value.six = (await reportPartTwoService.getMultipleReportDH('6', id)).data;
-      // reportData.value.seventh = (await reportPartTwoService.getMultipleReportDH('7', id)).data;
-      // reportData.value.ninth = (await reportPartTwoService.getMultipleReportDH('9', id)).data;
+      await getMultiplyData(true, reportId);
       reportData.value.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
       reportData.value.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', reportId)).data;
       reportData.value.eleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
@@ -461,7 +472,7 @@ const getReportData = async (reportId) => {
       } catch (e) {
         console.log(e.message)
       }
-      await getMultiplyData();
+      await getMultiplyData(false);
       try {
         reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
       } catch (e) {
@@ -581,9 +592,9 @@ const filterPanelsData = () => {
   const filteredNinth = {};
 
   for (let i in reportData.value.six) {
-    if ( (reportData.value.six[i].number_of_members > 0 && reportData.value.six[i].number_of_members !== null) && Object.keys(reportData.value.six[i]).length !== 0) {
+    if ((reportData.value.six[i].number_of_members > 0 && reportData.value.six[i].number_of_members !== null) && Object.keys(reportData.value.six[i]).length !== 0) {
       filteredSix[i] = reportData.value.six[i];
-      
+
     }
 
   }
@@ -599,7 +610,7 @@ const filterPanelsData = () => {
     if (reportData.value.seventh[i].prize_place !== 'Нет' && Object.keys(reportData.value.seventh[i]).length !== 0) {
       filteredSeventh[i] = reportData.value.seventh[i];
     }
-    
+
   }
   console.log('setData7: ', filteredSeventh)
   for (let i in filteredSeventh) {
@@ -835,7 +846,7 @@ const checkEmptyFields = (data) => {
     }
   }
 
-  if (data.tenth.second){
+  if (data.tenth.second) {
     if (data.tenth.second.event_happened) {
       if (!data.tenth.second.comment) {
         isErrorPanel.value.tenth = true;
@@ -905,9 +916,11 @@ const checkEmptyFields = (data) => {
 onMounted(() => {
   if (roleStore.experts?.is_district_expert) {
     districtExpert.value = true;
+    console.log('окружной эксперт', districtExpert.value);
   }
   if (roleStore.experts?.is_central_expert) {
     centralExpert.value = true;
+    console.log('центральный эксперт', centralExpert.value);
   }
   getItems(6);
   getItems(7);
