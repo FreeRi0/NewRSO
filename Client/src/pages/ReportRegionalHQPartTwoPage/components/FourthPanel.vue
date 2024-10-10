@@ -163,12 +163,12 @@
       />
     </div>
     <div class="form__field-result" style="display: flex; align-items: center;">
-      <v-checkbox class="result-checkbox" id="v-checkbox"/>
+      <v-checkbox class="result-checkbox" id="v-checkbox" @change="calculateResult($event)"/>
       <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
     </div>
     <div class="hr"></div>
     <div class="form__field-result result-count">
-      <p>0</p>
+      <p>{{ finalResult.toFixed(1) }}</p>
     </div>
   </div>
 
@@ -530,6 +530,7 @@ const emit = defineEmits(['getData']);
 const isErrorDate = ref({});
 let isErrorFile = ref(false);
 const isLinkError = ref(false);
+const finalResult = ref(0);
 
 const focusOut = async () => {
   fourthPanelData.value.events = [...events.value];
@@ -656,6 +657,23 @@ const setFormData = (file = null, index = null, isDeleteEvent = false, isDeleteF
 
 const setError = (err) => {
   isLinkError.value = err;
+};
+
+const calculateResult = (event) => {
+  if (event.target.checked) {
+    events.value.forEach(e => {
+      const startDate = new Date(e.start_date);
+      const endDate = new Date(e.end_date);
+      const days = (endDate - startDate) / (1000 * 60 * 60 * 24);
+      if (e.is_interregional) {
+        finalResult.value += e.participants_number * days * 0.8;
+      } else {
+        finalResult.value += e.participants_number * days;
+      }
+    })
+  } else {
+    finalResult.value = 0;
+  }
 };
 
 watchEffect(() => {
