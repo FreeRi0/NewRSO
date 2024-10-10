@@ -133,7 +133,7 @@
                         "
                         @click="showModalW()"
                         label="Вступить в штаб"
-                        class="AddApplication"
+                        class="AddApplication AddApplication-but-join"
                     ></Button>
                     <div
                         v-else-if="Object.keys(applications).length !== 0"
@@ -150,7 +150,7 @@
                                 )
                             "
                             label="Удалить заявку"
-                            class="AddApplication"
+                            class="AddApplication AddApplication-but-bidel"
                         ></Button>
                     </div>
 
@@ -159,7 +159,7 @@
                             userStore.currentUser.educational_headquarter_id ===
                             props.headquarter.id
                         "
-                        class="AddApplication"
+                        class="AddApplication AddApplication-but-yp"
                     >
                         Вы участник
                     </div>
@@ -299,7 +299,7 @@
                         "
                         @click="showModalW()"
                         label="Вступить в штаб"
-                        class="AddApplication"
+                        class="AddApplication AddApplication-but-join"
                     ></Button>
                     <div
                         v-else-if="Object.keys(applications).length !== 0"
@@ -316,7 +316,7 @@
                                 )
                             "
                             label="Удалить заявку"
-                            class="AddApplication"
+                            class="AddApplication AddApplication-but-bidel"
                         ></Button>
                     </div>
 
@@ -325,7 +325,7 @@
                             userStore.currentUser.local_headquarter_id ===
                             props.localHeadquarter.id
                         "
-                        class="AddApplication"
+                        class="AddApplication AddApplication-but-yp"
                     >
                         Вы участник
                     </div>
@@ -469,7 +469,7 @@
                         "
                         @click="showModalW()"
                         label="Вступить в штаб"
-                        class="AddApplication"
+                        class="AddApplication AddApplication-but-join"
                     ></Button>
                     <div
                         v-else-if="Object.keys(applications).length !== 0"
@@ -486,7 +486,7 @@
                                 )
                             "
                             label="Удалить заявку"
-                            class="AddApplication"
+                            class="AddApplication AddApplication-but-bidel"
                         ></Button>
                     </div>
                     <div
@@ -494,7 +494,7 @@
                             userStore.currentUser.district_headquarter_id ===
                             props.districtHeadquarter.id
                         "
-                        class="AddApplication"
+                        class="AddApplication AddApplication-but-yp"
                     >
                         Вы участник
                     </div>
@@ -639,7 +639,7 @@
                         "
                         @click="showModalW()"
                         label="Вступить в штаб"
-                        class="AddApplication"
+                        class="AddApplication AddApplication-but-join"
                     ></Button>
                     <div
                         v-else-if="Object.keys(applications).length !== 0"
@@ -656,7 +656,7 @@
                                 )
                             "
                             label="Удалить заявку"
-                            class="AddApplication"
+                            class="AddApplication AddApplication-but-bidel"
                         ></Button>
                     </div>
 
@@ -665,7 +665,7 @@
                             userStore.currentUser.regional_headquarter_id ==
                             props.regionalHeadquarter.id
                         "
-                        class="AddApplication"
+                        class="AddApplication AddApplication-but-yp"
                     >
                         Вы участник
                     </div>
@@ -815,13 +815,13 @@
                             "
                             @click="showModalW()"
                             label="Вступить в штаб"
-                            class="AddApplication"
+                            class="AddApplication AddApplication-but-join"
                         ></Button>
                         <div
                             v-else-if="Object.keys(applications).length !== 0"
                             class="d-flex"
                         >
-                            <div class="AddApplication mr-2">
+                            <div class="AddApplication mr-2 ">
                                 Заявка на рассмотрении
                             </div>
                             <Button
@@ -832,7 +832,7 @@
                                     )
                                 "
                                 label="Удалить заявку"
-                                class="AddApplication"
+                                class="AddApplication AddApplication-but-bidel"
                             ></Button>
                         </div>
 
@@ -841,7 +841,7 @@
                                 roleStore.myPositions
                                     .usercentralheadquarterposition !== null
                             "
-                            class="AddApplication"
+                            class="AddApplication AddApplication-but-yp"
                         >
                             Вы участник
                         </div>
@@ -1120,7 +1120,6 @@ const copyL = () => {
     grid-template-columns: 30px 135px 135px 2fr 16px;
     grid-template-rows: 100px 100px 112px auto;
     margin-bottom: 40px;
-    /*  */
     border-radius: 10px 10px;
     border-right: 1px solid rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -1336,6 +1335,7 @@ const copyL = () => {
 .hq-data__contacts {
     display: flex;
     flex-direction: column;
+    
 }
 
 .hq-data__social-network {
@@ -1448,5 +1448,74 @@ const copyL = () => {
     .Squad-HQ__name {
         text-align: center;
     }
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+    .AddApplication {
+    display: block;
+    width: 100%;
+    border-radius: 10px;
+    background: #39bfbf;
+    text-align: center;
+    align-items: center;
+    font-family: 'Bert Sans';
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    color: white;
+    padding: 16px 57px;
+    margin-bottom: 90px;
+    margin-right: -165px;
+
+    &-but-bidel{
+        text-align: center;
+        align-items: center;
+        margin-block: 10px;
+        margin-inline-start: -140px;
+        transform: translateX(-105px);
+        margin-bottom: 20px;
+        }
+
+    &-but-join{
+        margin: 0px;
+        padding: 16px 32px;
+    }
+    &-but-yp{
+        margin: 0px;
+        padding: 16px 32px;
+    }
+}
+
+
+   
+
+
+    .hq-data__social-network-central {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 12px 0 0;
+        block-size: 20px;
+        column-gap: 12px;
+    }
+    .hq-data__contacts-wrapper {
+        display: grid;
+        row-gap: 20px;
+        
+    }
+
+    .hq-data__wrapper {
+        margin: -100px 0 16px 0;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        
+    }
+
+    .Squad-HQ__date-central time {
+    border-right: 1px solid #35383f;
+    margin-right: 8px;
+    padding-right: 8px;
+}
 }
 </style>

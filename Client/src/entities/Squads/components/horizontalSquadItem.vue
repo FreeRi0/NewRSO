@@ -168,7 +168,7 @@ onMounted(() => {
 
     &_item {
         width: 252px;
-        max-width: 100%;
+        max-width: 90%;
         height: 48px;
         display: grid;
         grid-template-columns: auto 1fr auto auto;
@@ -176,12 +176,10 @@ onMounted(() => {
         font-family: 'Bert Sans';
         align-items: center;
         padding: 4px 20px;
-
         border-radius: 10px;
         border: 1px solid #b6b6b6;
         background: #fff;
         margin-bottom: 12px;
-
         @media screen and (max-width: 820px) {
             width: 100%;
             max-width: 100%;
@@ -193,8 +191,6 @@ onMounted(() => {
     &_wrapper {
         display: flex;
         column-gap: 12px;
-
-
         // @media screen and (max-width: 820px) {
         //     display: grid;
         //     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -212,16 +208,18 @@ onMounted(() => {
         grid-template-columns: auto 1fr auto auto;
         align-items: baseline;
         align-items: center;
-        // width: 100%;
         padding: 4px 20px;
-
         border-radius: 10px;
         border: 1px solid #b6b6b6;
         background: #fff;
         margin-bottom: 12px;
-
+    
         &-title {
             margin-left: 10px;
+            @media screen and (min-width: 320px) and (max-width:480px) {
+                margin-left: -35px;
+                transform: translateX(20px); 
+            }
         }
     }
 
@@ -230,6 +228,10 @@ onMounted(() => {
             width: 40px;
             height: 40px;
             border-radius: 100%;
+            @media screen and (min-width: 320px) and (max-width:480px) {
+                transform: translateX(-10px);
+                margin-left: 0px;
+            }
         }
     }
 }
@@ -263,7 +265,6 @@ onMounted(() => {
         padding: 16px 20px;
         font-size: 12px;
         margin-bottom: 0;
-
     }
 }
 </style>

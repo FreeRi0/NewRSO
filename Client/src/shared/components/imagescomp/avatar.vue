@@ -294,8 +294,8 @@ const deleteAvatar = async () => {
 </script>
 
 <style lang="scss">
+
 .user-metric__avatar {
-    /*    display: grid;*/
     grid-column-start: 1;
     grid-column-end: 3;
     grid-row-start: 1;
@@ -303,7 +303,18 @@ const deleteAvatar = async () => {
     width: 80%;
     height: 100%;
     border-radius: 50%;
-
+    @media screen and (min-width: 320px) and (max-width: 480px) {
+    display: flex;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    width: 80%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    transform: translateX(center);
+}
     &-wrapper {
         display: grid;
         grid-template-columns: 160px 90px;
@@ -315,7 +326,6 @@ const deleteAvatar = async () => {
         grid-row-start: 2;
         grid-row-end: 4;
     }
-
     &-add {
         display: grid;
         grid-column-start: 2;
@@ -323,6 +333,7 @@ const deleteAvatar = async () => {
         grid-row-start: 2;
         grid-row-end: 3;
     }
+
 }
 
 .user-metric__avatar img {
@@ -331,20 +342,58 @@ const deleteAvatar = async () => {
     clip-path: circle(50%);
     object-fit: cover;
     border-radius: 50%;
+    align-items: center;
+    @media screen and (min-width: 320px) and (max-width: 480px) {
+    transform: translateX(25px);
+    margin-bottom: 200px;
+    }
+}
+
+
+.parent{
+
+ .v-btn--icon.v-btn--density-default {
+    background: rgba(0, 0, 0, 0.4);
+    margin-right: 25px;
+
+    @media screen and (min-width: 320px) and (max-width: 480px) {
+        &:nth-of-type(1) { 
+            margin-right: 15px;
+            transform: translateY(120px) translateX(-20px);
+        }
+    }
+}
 }
 
 .v-btn--icon.v-btn--density-default {
     background: rgba(0, 0, 0, 0.4);
-    margin-right: 15px;
+    margin-right: 25px;
+    transform: translateY(0px) translateX(0px);
+
+
+    @media screen and (min-width: 320px) and (max-width: 480px) {
+        margin-right: 25px;
+        transform: translateX(5px) translateY(-70px);
+        &.banner{
+            margin-right: 10px;
+            position: relative;
+            transform: translateY(-90px);
+        }
+    }
 }
 
 .v-btn--icon {
     border-radius: 50%;
     border: 2px solid white;
     color: white;
+    
+    
+    
 }
 
 .v-avatar i {
     color: white;
 }
+
+
 </style>

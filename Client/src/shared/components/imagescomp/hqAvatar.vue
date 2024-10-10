@@ -1,6 +1,6 @@
 <template>
-    <div class="user-metric__avatar-wrapper">
-        <div class="user-metric__avatar">
+    <div class="user-metric-hq__avatar-wrapper">
+        <div class="user-metric-hq__avatar">
             <!-- Аватар штаба  -->
 
             <img :src="emblem" alt="Эмблема" v-if="emblem" />
@@ -28,8 +28,8 @@ const props = defineProps({
 </script>
 
 <style lang="scss">
-.user-metric__avatar {
-    /*    display: grid;*/
+
+.user-metric-hq__avatar {
     grid-column-start: 1;
     grid-column-end: 3;
     grid-row-start: 1;
@@ -57,12 +57,13 @@ const props = defineProps({
     }
 }
 
-.user-metric__avatar img {
+.user-metric-hq__avatar img {
     width: 90%;
     height: 90%;
     clip-path: circle(50%);
     object-fit: cover;
     border-radius: 50%;
+    align-items: center;
 }
 
 .vue-image-crop-upload .vicp-wrap .vicp-operate a {
@@ -76,5 +77,21 @@ const props = defineProps({
         color: white;
         background: var(--primary);
     }
+}
+@media screen and (min-width: 320px) and (max-width: 480px) {
+    .user-metric-hq__avatar {
+        transform: translateX(20px) translateY(-100px);
+    }
+
+    .user-metric-hq__avatar img {
+        width: 90%;
+        height: 90%;
+        clip-path: circle(50%);
+        object-fit: cover;
+        border-radius: 50%;
+        align-items: center;
+        transform: translateX(15px);
+    }
+
 }
 </style>

@@ -193,7 +193,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <seventeenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.seventeenth" :is-sent="blockSendButton" />
+                :data="reportData.seventeenth" :is-sent="reportData.sixteenth.is_sent" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -202,7 +202,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <eighteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.eighteenth" :is-sent="blockSendButton" />
+                :data="reportData.eighteenth" :is-sent="reportData.sixteenth.is_sent" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -211,7 +211,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <nineteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.nineteenth" :is-sent="blockSendButton" />
+                :data="reportData.nineteenth" :is-sent="reportData.sixteenth.is_sent" />
             </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -917,9 +917,11 @@ const checkEmptyFields = (data) => {
 onMounted(() => {
   if (roleStore.experts?.is_district_expert) {
     districtExpert.value = true;
+    console.log('окружной эксперт', districtExpert.value);
   }
   if (roleStore.experts?.is_central_expert) {
     centralExpert.value = true;
+    console.log('центральный эксперт', centralExpert.value);
   }
   getItems(6);
   getItems(7);
