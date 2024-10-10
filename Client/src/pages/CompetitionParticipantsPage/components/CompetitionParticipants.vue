@@ -89,7 +89,7 @@ const isLoading = ref(false);
 const detachments = ref({});
 const isTandem = ref(true);
 const limit = 24;
-const sortBy = ref('detachment__overalltandemranking_main_detachment__place');
+const sortBy = ref('detachment__copy_ranking_main_detachment__place');
 // if (isTandem.value) {
 //     sortBy.value = 'detachment__overalltandemranking_main_detachment__place';
 // } else {
@@ -121,7 +121,7 @@ sortOptionss.value = [
     },
     { value: 'created_at', name: 'Дате создания отряда' },
     {
-        value: 'detachment__overalltandemranking_main_detachment__place',
+        value: 'detachment__copy_ranking_main_detachment__place',
         name: 'Рейтингу',
     },
 ];
@@ -146,10 +146,10 @@ const getCompetitons = async (pagination, orderLimit) => {
             let sort = sortBy.value;
             if (
                 sort ==
-                'detachment__overalltandemranking_main_detachment__place' &&
+                'detachment__copy_ranking_main_detachment__place' &&
                 !isTandem.value
             ) {
-                sort = 'junior_detachment__overallranking__place';
+                sort = 'junior_detachment__copy_ranking_detachment__place';
             }
             data.push('ordering=' + (ascending.value ? '' : '-') + sort);
         }
