@@ -3,19 +3,19 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "explicit"
+    "source.fixAll.eslint": "explicit"
   },
   "[vue]": {
-      "editor.defaultFormatter": "Vue.volar"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[javascript]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[typescript]": {
-      "editor.defaultFormatter": "vscode.typescript-language-features"
-},
-"[scss]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[scss]": {
     "editor.defaultFormatter": "vscode.css-language-features"
-}
+  }
   // "eslint.validate": ["javascript", "javascriptreact", "vue"]
 }
