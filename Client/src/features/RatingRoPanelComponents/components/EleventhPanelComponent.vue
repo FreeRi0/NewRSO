@@ -299,8 +299,6 @@ const deleteFile = async () => {
 };
 
 watchEffect(() => {
-  // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
-
   if (props.districtExpert) {
     eleventhPanelData.value = { ...props.data }
     eleventhPanelDataDH.value = { ...props.dataDH };
