@@ -532,8 +532,6 @@ const getReportData = async (reportId) => {
   // console.log('getReportData: ', reportData.value);
 };
 
-
-
 const setData = (data, panel, number = 0) => {
   switch (panel) {
     case 1:
@@ -637,7 +635,6 @@ const filterPanelsData = () => {
   };
 };
 
-
 const sendReport = async () => {
   // console.log('reportData: ', reportData.value)
   blockSendButton.value = true;
@@ -648,7 +645,10 @@ const sendReport = async () => {
         await reportPartTwoService.sendReport(reportData.value.first, '1');
       }
       if (!reportData.value.fourth.is_sent) {
-        await reportPartTwoService.sendReport(reportData.value.fourth, '4');
+        if (reportData.value.fourth) {
+          reportData.value.fourth.events = reportData.value.fourth.events.filter(event => event.participants_number)
+          await reportPartTwoService.sendReport(reportData.value.fourth, '4');
+        }
       }
       if (!reportData.value.fifth.is_sent) {
         await reportPartTwoService.sendReport(reportData.value.fifth, '5');
@@ -728,9 +728,10 @@ const checkEmptyFields = (data) => {
     })
     return false;
   }
+
   if (data.fourth) {
     for (let event of data.fourth.events) {
-      if (!(event.participants_number && event.end_date && event.start_date && event.regulations && data.fourth.comment)) {
+      if (event.participants_number && !(event.name && event.end_date && event.start_date && data.fourth.comment)) {
         isErrorPanel.value.fourth = true;
         swal.fire({
           position: 'center',
@@ -742,17 +743,8 @@ const checkEmptyFields = (data) => {
         return false;
       }
     }
-  } else {
-    isErrorPanel.value.fourth = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      title: `Заполните обязательные поля в 4 показателе`,
-      showConfirmButton: false,
-      timer: 2500,
-    })
-    return false;
   }
+
   if (data.fifth) {
     for (let event of data.fifth.events) {
       if (!(event.participants_number && event.ro_participants_number && event.end_date && event.start_date && event.regulations && data.fifth.comment)) {
@@ -827,6 +819,7 @@ const checkEmptyFields = (data) => {
       return false;
     }
   }
+
   if (data.tenth.first) {
     if (data.tenth.first.event_happened) {
       if (!data.tenth.first.comment) {
@@ -841,6 +834,16 @@ const checkEmptyFields = (data) => {
         return false;
       }
     }
+  } else {
+    isErrorPanel.value.tenth = true;
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      title: `Заполните обязательные поля в показателе 10-1`,
+      showConfirmButton: false,
+      timer: 2500,
+    })
+    return false;
   }
 
   if (data.tenth.second) {
@@ -857,6 +860,16 @@ const checkEmptyFields = (data) => {
         return false;
       }
     }
+  } else {
+    isErrorPanel.value.tenth = true;
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      title: `Заполните обязательные поля в показателе 10-2`,
+      showConfirmButton: false,
+      timer: 2500,
+    })
+    return false;
   }
 
   if (!data.eleventh || !(data.eleventh.participants_number && data.eleventh.scan_file)) {
@@ -870,6 +883,7 @@ const checkEmptyFields = (data) => {
     })
     return false;
   }
+
   if (!data.twelfth || !(data.twelfth.amount_of_money)) {
     isErrorPanel.value.twelfth = true;
     swal.fire({
@@ -881,6 +895,7 @@ const checkEmptyFields = (data) => {
     })
     return false;
   }
+
   if (!data.thirteenth || !(data.thirteenth.number_of_members)) {
     isErrorPanel.value.thirteenth = true;
     swal.fire({
@@ -892,6 +907,7 @@ const checkEmptyFields = (data) => {
     })
     return false;
   }
+
   if (data.sixteenth) {
     for (let project of data.sixteenth.projects) {
       if (!(project.name && project.regulations && data.sixteenth.comment)) {
@@ -906,7 +922,18 @@ const checkEmptyFields = (data) => {
         return false;
       }
     }
+  } else {
+    isErrorPanel.value.sixteenth = true;
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      title: `Заполните обязательные поля в 16 показателе`,
+      showConfirmButton: false,
+      timer: 2500,
+    })
+    return false;
   }
+
   return true;
 }
 

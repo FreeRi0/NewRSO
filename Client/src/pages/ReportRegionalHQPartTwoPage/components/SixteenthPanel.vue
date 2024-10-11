@@ -579,7 +579,7 @@ const setFormData = (file = null, index = null, isDeleteEvent = false, isDeleteF
 };
 
 watchEffect(() => {
-  console.log('props.data: ', props.data)
+  // console.log('props.data: ', props.data)
   if (props.data) {
     isFirstSent.value = false;
     projects.value = [...props.data.projects];
