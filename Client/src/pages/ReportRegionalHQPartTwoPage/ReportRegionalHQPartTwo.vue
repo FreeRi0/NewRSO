@@ -193,7 +193,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <seventeenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.seventeenth" :is-sent="reportData.sixteenth.is_sent" />
+                :data="reportData.seventeenth" :is-sent="blockSendButton" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -202,7 +202,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <eighteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.eighteenth" :is-sent="reportData.sixteenth.is_sent" />
+                :data="reportData.eighteenth" :is-sent="blockSendButton" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -211,7 +211,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <nineteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.nineteenth" :is-sent="reportData.sixteenth.is_sent" />
+                :data="reportData.nineteenth" :is-sent="blockSendButton" />
             </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
