@@ -875,7 +875,7 @@ const checkEmptyFields = (data) => {
     })
     return false;
   }
-  if (!data.twelfth || !(data.twelfth.amount_of_money && data.twelfth.scan_file)) {
+  if (!data.twelfth || !(data.twelfth.amount_of_money)) {
     isErrorPanel.value.twelfth = true;
     swal.fire({
       position: 'center',
@@ -886,7 +886,7 @@ const checkEmptyFields = (data) => {
     })
     return false;
   }
-  if (!data.thirteenth || !(data.thirteenth.number_of_members && data.thirteenth.scan_file)) {
+  if (!data.thirteenth || !(data.thirteenth.number_of_members)) {
     isErrorPanel.value.thirteenth = true;
     swal.fire({
       position: 'center',
