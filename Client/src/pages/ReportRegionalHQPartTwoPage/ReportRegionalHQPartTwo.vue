@@ -77,8 +77,17 @@
               мероприятиях и&nbsp;проектах (в&nbsp;том числе и&nbsp;трудовых) &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <sixth-panel @get-data="setData" @get-data-DH="setDataDH" @get-data-CH="setDataCH" :items="six_items" @getId="setId" @getPanelNumber="setPanelNumber"
-                :district-headquarter-commander="districtExpert" :data="reportData.six" :dataDH="reportData.sixDH" :dataCH="reportData.sixCH"
+              <sixth-panel 
+                @get-data="setData" 
+                @get-data-DH="setDataDH" 
+                @get-data-CH="setDataCH" 
+                :items="six_items" 
+                @getId="setId" 
+                @getPanelNumber="setPanelNumber"
+                :district-headquarter-commander="districtExpert" 
+                :data="reportData.six" 
+                :dataDH="reportData.sixDH" 
+                :dataCH="reportData.sixCH"
                 :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.six" />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -131,8 +140,16 @@
               11. Активность РО&nbsp;РСО в&nbsp;социальных сетях &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.eleventh" :is-error-panel="isErrorPanel.eleventh" />
+              <eleventh-panel 
+              :districtExpert="districtExpert" 
+              :centralExpert="centralExpert" 
+              @get-data="setData"
+              @get-data-DH="setDataDH"
+              @get-data-CH="setDataCH"
+              :data="reportData.eleventh"
+              :data-DH="reportData.eleventhDH"
+              :data-CH="reportData.eleventhCH"
+              :is-error-panel="isErrorPanel.eleventh" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -263,6 +280,8 @@ const reportData = ref({
     second: null,
   },
   eleventh: null,
+  eleventhDH: null,
+  eleventhCH: null,
   twelfth: null,
   thirteenth: null,
   sixteenth: null,
@@ -440,7 +459,8 @@ const getReportData = async (reportId) => {
       await getMultiplyData(true, reportId);
       reportData.value.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
       reportData.value.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', reportId)).data;
-      reportData.value.eleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
+      reportData.value.eleventhDH = (await reportPartTwoService.getReportDH('11', reportId)).data;
+      reportData.value.eleventh = reportData.value.eleventhDH;
       reportData.value.twelfth = (await reportPartTwoService.getReportDH('12', reportId)).data;
       reportData.value.thirteenth = (await reportPartTwoService.getReportDH('13', reportId)).data;
       reportData.value.sixteenth = (await reportPartTwoService.getReportDH('16', reportId)).data;
@@ -528,6 +548,10 @@ const setDataDH = (data, panel, number) => {
     case 6:
         reportData.value.sixDH[number] = data;
       break;
+    case 11:
+      reportData.value.eleventhDH = data;
+      console.log(data);
+      break;
   }
 }
 const setDataCH = (data, panel, number) => {
@@ -535,9 +559,12 @@ const setDataCH = (data, panel, number) => {
     case 6:
         reportData.value.sixCH[number] = data;
       break;
+    case 11:
+      reportData.value.eleventhCH = data;
+      console.log(data);
+      break;
   }
 }
-
 
 const setData = (data, panel, number = 0) => {
   switch (panel) {
@@ -567,7 +594,8 @@ const setData = (data, panel, number = 0) => {
       }
       break;
     case 11:
-      reportData.value.eleventh = data
+      reportData.value.eleventh = data;
+      console.log(data);
       break;
     case 12:
       reportData.value.twelfth = data
@@ -927,9 +955,9 @@ onMounted(() => {
     centralExpert.value = true;
     console.log('центральный эксперт', centralExpert.value);
   }
-  getItems(6);
-  getItems(7);
-  getItems(9);
+  // getItems(6);
+  // getItems(7);
+  // getItems(9);
   getReportData(route.query.reportId);
 
 });
