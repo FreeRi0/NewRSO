@@ -32,11 +32,13 @@
                         @formDataDH="formDataDH($event, item.id)"
                         @error="setError"
                         @uploadFile="uploadFile($event, item.id)"
+                        @uploadFileDH="uploadFileDH($event, item.id)"
                         :data="ninthPanelData"
                         :dataDH="ninthPanelDataDH"
                         @getPanelNumber="getPanelNumber($event)"
                         @getId="getId($event)"
                         @deleteFile="deleteFile($event, item.id)"
+                        @deleteFileDH="deleteFileDH($event, item.id)"
                         :is-sent-ninth="isSentNinth"
                         :is-error-panel="
                             Object.values(isErrorPanel).some(
@@ -171,23 +173,34 @@ const getPanelNumber = (number) => {
 };
 
 const uploadFile = async (reportData, reportNumber) => {
-    if (isFirstSent.value) {
-        let { data } = await reportPartTwoService.createMultipleReportAll(
-            reportData,
-            '9',
-            reportNumber,
-            true,
-        );
-        emit('getData', data, 9, reportNumber);
-    } else {
-        let { data } = await reportPartTwoService.createMultipleReportDraft(
-            reportData,
-            '9',
-            reportNumber,
-            true,
-        );
-        emit('getData', data, 9, reportNumber);
+    if (
+        !(
+            props.districtHeadquarterCommander ||
+            props.centralHeadquarterCommander
+        )
+    ) {
+        if (isFirstSent.value) {
+            let { data } = await reportPartTwoService.createMultipleReportAll(
+                reportData,
+                '9',
+                reportNumber,
+                true,
+            );
+            emit('getData', data, 9, reportNumber);
+        } else {
+            let { data } = await reportPartTwoService.createMultipleReportDraft(
+                reportData,
+                '9',
+                reportNumber,
+                true,
+            );
+            emit('getData', data, 9, reportNumber);
+        }
     }
+};
+
+const uploadFileDH = (reportData, reportNumber) => {
+    emit('getDataDH', reportData, 9, reportNumber);
 };
 
 const deleteFile = async (reportData, reportNumber) => {
@@ -208,12 +221,16 @@ const deleteFile = async (reportData, reportNumber) => {
     }
 };
 
+const deleteFileDH = (reportData, reportNumber) => {
+    emit('getDataDH', reportData, 9, reportNumber);
+};
+
 watchEffect(() => {
     // console.log(isFirstSent, props.data);
     if (props.districtHeadquarterCommander) {
         ninthPanelData.value = { ...props.data[el_id.value] };
-        isSentNinth.value = props.data[el_id.value].is_sent;
         ninthPanelDataDH.value = { ...props.dataDH[el_id.value] };
+        isSentNinth.value = props.data[el_id.value].is_sent;
     } else {
         if (
             props.data[el_id.value] &&

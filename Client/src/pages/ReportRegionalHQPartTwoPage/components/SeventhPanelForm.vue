@@ -1081,7 +1081,7 @@
                         name="ninthPanelDataDH.comment"
                         @change="uploadFile"
                         @click="deleteFile"
-                        :file="fileName"
+                        :file="ninthPanelDataDH.document"
                         :fileType="ninthPanelDataDH.file_type"
                         :fileSize="ninthPanelDataDH.file_size"
                         :disabled="props.isCentralHeadquarterCommander"
@@ -1502,35 +1502,10 @@ const uploadFile = (event, number) => {
         }
     } else if (number === 9) {
         if (props.isDistrictHeadquarterCommander) {
-            fileValidate(event.target.files[0], 9, isErrorFile);
-            if (isErrorFile.value) {
-                console.log('error');
-                scanFile.value = event.target.files[0];
-                ninthPanelDataDH.value.document = scanFile.value.name;
-            } else {
                 let formData = new FormData();
-                formData.append(
-                    'event_happened',
-                    ninthPanelDataDH.value.event_happened,
-                );
                 formData.append('document', event.target.files[0]);
-                if (ninthPanelDataDH.value.links.length) {
-                    for (
-                        let i = 0;
-                        i < ninthPanelDataDH.value.links.length;
-                        i++
-                    ) {
-                        !ninthPanelDataDH.value.links[i].link
-                            ? formData.append(`[links][${i}][link]`, '')
-                            : formData.append(
-                                  `[links][${i}][link]`,
-                                  ninthPanelDataDH.value.links[i].link,
-                              );
-                    }
-                }
-                formData.append('comment', ninthPanelDataDH.value.comment);
+                console.log('dhfile', formData)
                 emit('uploadFileDH', formData);
-            }
         } else {
             fileValidate(event.target.files[0], 9, isErrorFile);
             if (isErrorFile.value) {
@@ -1589,22 +1564,7 @@ const deleteFile = (number) => {
     } else if (number === 9) {
         if (props.isDistrictHeadquarterCommander) {
             ninthPanelDataDH.value.document = '';
-            formData.append(
-                'event_happened',
-                ninthPanelDataDH.value.event_happened,
-            );
             formData.append('document', '');
-            if (ninthPanelDataDH.value.links.length) {
-                for (let i = 0; i < ninthPanelDataDH.value.links.length; i++) {
-                    !ninthPanelDataDH.value.links[i].link
-                        ? formData.append(`[links][${i}][link]`, '')
-                        : formData.append(
-                              `[links][${i}][link]`,
-                              ninthPanelDataDH.value.links[i].link,
-                          );
-                }
-            }
-            formData.append('comment', ninthPanelDataDH.value.comment);
             formData.append('file_size', ninthPanelDataDH.value.file_size);
             formData.append('file_type', ninthPanelDataDH.value.file_type);
             emit('deleteFileDH', formData);
