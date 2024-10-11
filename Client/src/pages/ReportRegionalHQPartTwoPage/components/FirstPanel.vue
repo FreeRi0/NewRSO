@@ -62,7 +62,7 @@
         />
       </div>
     </div>
-    <ReportRegionalForm :reportData="reportData"/>
+    <ReportRegionalForm :reportData="reportData" :blockEditFirstReport="blockEditFirstReport"/>
   </div>
 
   <report-tabs v-else>
@@ -164,7 +164,7 @@ import {ref, watchEffect, watchPostEffect} from "vue";
 import {InputReport, TextareaReport} from '@shared/components/inputs';
 import {FileBoxComponent} from "@entities/RatingRoComponents/components";
 import {ReportRegionalForm} from '../../ReportRegionalHQPartOnePage/components/index'
-import {getReport, reportPartTwoService} from "@services/ReportService.ts";
+import {getReportForSecond, reportPartTwoService} from "@services/ReportService.ts";
 import {ReportTabs} from './index';
 import {fileValidate} from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 
@@ -176,6 +176,7 @@ const props = defineProps({
     type: Boolean
   },
   data: Object,
+  blockEditFirstReport: Boolean,
 });
 
 const emit = defineEmits(['getData']);
@@ -274,7 +275,7 @@ const deleteFile = async () => {
 watchEffect(async () => {
   try {
     if (!(props.centralExpert || props.districtExpert)) {
-      const res = await getReport();
+      const res = await getReportForSecond();
       reportData.value = res.data;
     }
   } catch (e) {
