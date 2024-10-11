@@ -1,17 +1,39 @@
 <template>
     <v-card-text class="panel-card-text">
-        <v-tabs-window v-if="!(props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)">
-            <div v-if="props.panel_number == 7" class="form__field-group group-seventh">
+        <v-tabs-window
+            v-if="
+                !(
+                    props.isCentralHeadquarterCommander ||
+                    props.isDistrictHeadquarterCommander
+                )
+            "
+        >
+            <div
+                v-if="props.panel_number == 7"
+                class="form__field-group group-seventh"
+            >
                 <div class="d-flex justify-space-between">
                     <div class="title_wrap">
                         <p class="form__title">{{ props.title.name }}</p>
                         <div class="title_wrap__items">
-                            <p class="form__title month" v-if="props.title.month">{{ props.title.month }}</p>
-                            <p class="form__title city" v-if="props.title.city">{{ props.title.city }}</p>
+                            <p
+                                class="form__title month"
+                                v-if="props.title.month"
+                            >
+                                {{ props.title.month }}
+                            </p>
+                            <p class="form__title city" v-if="props.title.city">
+                                {{ props.title.city }}
+                            </p>
                         </div>
                     </div>
                     <div>
-                        <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
+                        <Button
+                            @click="collapseForm"
+                            class="form__btn"
+                            style="margin: 0"
+                            label="Свернуть"
+                        />
                     </div>
                 </div>
                 <div class="form__field places mt-4">
@@ -20,105 +42,232 @@
                     </p>
 
                     <div class="places_wrap">
-                        <div class="places_item" v-for="item in prize_places" :key="item.id">
-                            <input :id="item.id" :value="item.value" :disabled="isSent" :name="item.name"
-                                :checked="seventhPanelData.prize_place == item.value" class="form__input places_input"
-                                type="radio" @focusout="focusOut" v-model="seventhPanelData.prize_place" />
+                        <div
+                            class="places_item"
+                            v-for="item in prize_places"
+                            :key="item.id"
+                        >
+                            <input
+                                :id="item.id"
+                                :value="item.value"
+                                :disabled="isSent"
+                                :name="item.name"
+                                :checked="
+                                    seventhPanelData.prize_place == item.value
+                                "
+                                class="form__input places_input"
+                                type="radio"
+                                @focusout="focusOut"
+                                v-model="seventhPanelData.prize_place"
+                            />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                                }}</label>
+                            }}</label>
                         </div>
                     </div>
                 </div>
                 <div class="report__fieldset report__fieldset--right-block">
-                    <label class="form__label report__label mb-2" for="scan_file">
-                        Скан подтверждающего документа<sup class="valid-red">*</sup>
+                    <label
+                        class="form__label report__label mb-2"
+                        for="scan_file"
+                    >
+                        Скан подтверждающего документа<sup class="valid-red"
+                            >*</sup
+                        >
                     </label>
-                    <InputReport v-if="!seventhPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
-                        id="scan_file" :is-error-panel="isErrorPanel" name="scan_file" width="100%" height="auto"
-                        v-model:value="seventhPanelData.document" @change="uploadFile($event, 7)"
-                        :disabled="isSent || seventhPanelData.prize_place === 'Нет'" />
+                    <InputReport
+                        v-if="!seventhPanelData.document"
+                        isFile
+                        type="file"
+                        accept=".jpg, .jpeg, .png, .pdf"
+                        id="scan_file"
+                        :is-error-panel="isErrorPanel"
+                        name="scan_file"
+                        width="100%"
+                        height="auto"
+                        v-model:value="seventhPanelData.document"
+                        @change="uploadFile($event, 7)"
+                        :disabled="
+                            isSent || seventhPanelData.prize_place === 'Нет'
+                        "
+                    />
 
-                    <FileBoxComponent v-else :file="seventhPanelData.document" :fileType="seventhPanelData.file_type"
-                        :isSent="isSent" :fileSize="seventhPanelData.file_size" @click="deleteFile(7)"
-                        :is-error-file="isErrorFile">
+                    <FileBoxComponent
+                        v-else
+                        :file="seventhPanelData.document"
+                        :fileType="seventhPanelData.file_type"
+                        :isSent="isSent"
+                        :fileSize="seventhPanelData.file_size"
+                        @click="deleteFile(7)"
+                        :is-error-file="isErrorFile"
+                    >
                     </FileBoxComponent>
                 </div>
 
                 <div class="form__field">
-                    <label class="form__label mt-4" for="14">Ссылка на публикацию о победе
-                        <sup class="valid-red">*</sup></label>
-                    <div class="form__wrapper" v-for="(item, index) in seventhPanelData.links" :key="index">
-                        <InputReport @focusout="focusOut" @error="setError" name="14" :is-link="true"
-                            :disabled="isSent || seventhPanelData.prize_place === 'Нет'"
-                            placeholder="Введите ссылку, например,  https://vk.com/cco_monolit" :maxlength="200"
-                            v-model:value="item.link" :is-error-panel="isErrorPanel" class="mb-2" />
-                        <div v-if="!isSent && seventhPanelData.prize_place !== 'Нет'">
-                            <div class="add_link" @click="addLink(7)"
-                                v-if="seventhPanelData.links.length === index + 1">
+                    <label class="form__label mt-4" for="14"
+                        >Ссылка на публикацию о победе
+                        <sup class="valid-red">*</sup></label
+                    >
+                    <div
+                        class="form__wrapper"
+                        v-for="(item, index) in seventhPanelData.links"
+                        :key="index"
+                    >
+                        <InputReport
+                            @focusout="focusOut"
+                            @error="setError"
+                            name="14"
+                            :is-link="true"
+                            :disabled="
+                                isSent || seventhPanelData.prize_place === 'Нет'
+                            "
+                            placeholder="Введите ссылку, например,  https://vk.com/cco_monolit"
+                            :maxlength="200"
+                            v-model:value="item.link"
+                            :is-error-panel="isErrorPanel"
+                            class="mb-2"
+                        />
+                        <div
+                            v-if="
+                                !isSent &&
+                                seventhPanelData.prize_place !== 'Нет'
+                            "
+                        >
+                            <div
+                                class="add_link"
+                                @click="addLink(7)"
+                                v-if="
+                                    seventhPanelData.links.length === index + 1
+                                "
+                            >
                                 + Добавить ссылку
                             </div>
                             <div class="add_link" @click="deleteLink(7)" v-else>
                                 Удалить поле ввода
                             </div>
                         </div>
-
-
                     </div>
                 </div>
                 <div class="form__field">
-                    <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
-                    <TextareaReport v-model:value="seventhPanelData.comment" id="comment" name="comment" :rows="1"
-                        autoResize placeholder="Укажите наименования организованных мероприятий" @focusout="focusOut"
-                        :maxlength="3000" :disabled="isSent || seventhPanelData.prize_place === 'Нет'"
-                        max-length-text="3000" counter-visible />
+                    <label class="form__label" for="14"
+                        >Комментарий <sup class="valid-red">*</sup></label
+                    >
+                    <TextareaReport
+                        v-model:value="seventhPanelData.comment"
+                        id="comment"
+                        name="comment"
+                        :rows="1"
+                        autoResize
+                        placeholder="Укажите наименования организованных мероприятий"
+                        @focusout="focusOut"
+                        :maxlength="3000"
+                        :disabled="
+                            isSent || seventhPanelData.prize_place === 'Нет'
+                        "
+                        max-length-text="3000"
+                        counter-visible
+                    />
                 </div>
-                <div class="form__field-result" style="display: flex; align-items: center;">
+                <div
+                    class="form__field-result"
+                    style="display: flex; align-items: center"
+                >
                     <v-checkbox class="result-checkbox" id="v-checkbox" />
 
-                    <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
+                    <label class="result-checkbox-text" for="v-checkbox"
+                        >Итоговое значение</label
+                    >
                 </div>
                 <div class="hr"></div>
                 <div class="form__field-result result-count">
                     <p>0</p>
                 </div>
             </div>
-            <div v-else-if="props.panel_number == 6" class="form__field-group group-seventh">
+            <div
+                v-else-if="props.panel_number == 6"
+                class="form__field-group group-seventh"
+            >
                 <div class="d-flex justify-space-between">
                     <div class="title_wrap">
                         <p class="form__title">{{ props.title.name }}</p>
                         <div class="title_wrap__items">
-                            <p class="form__title month">{{ props.title.month }}</p>
-                            <p class="form__title city">{{ props.title.city }}</p>
+                            <p class="form__title month">
+                                {{ props.title.month }}
+                            </p>
+                            <p class="form__title city">
+                                {{ props.title.city }}
+                            </p>
                         </div>
                     </div>
                     <div>
-                        <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
+                        <Button
+                            @click="collapseForm"
+                            class="form__btn"
+                            style="margin: 0"
+                            label="Свернуть"
+                        />
                     </div>
                 </div>
                 <div class="form__field places">
                     <p class="form__label">
-                        Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
+                        Количество человек, принимавших участие в мероприятии
+                        <sup class="valid-red">*</sup>
                     </p>
-                    <InputReport @focusout="focusOut" v-model:value="sixPanelData.number_of_members"
-                        :disabled="isSentSix" :is-error-panel="isErrorPanel" :is-link="false"
-                        placeholder="Введите число" id="15" name="14" class="form__input number_input" type="number"
-                        :max="32767" />
+                    <InputReport
+                        @focusout="focusOut"
+                        v-model:value="sixPanelData.number_of_members"
+                        :disabled="isSentSix"
+                        :is-error-panel="isErrorPanel"
+                        :is-link="false"
+                        placeholder="Введите число"
+                        id="15"
+                        name="14"
+                        class="form__input number_input"
+                        type="number"
+                        :max="32767"
+                    />
                 </div>
                 <div class="form__field">
-                    <label class="form__label" for="14">Ссылка на социальные сети/ электронные<br>
+                    <label class="form__label" for="14"
+                        >Ссылка на социальные сети/ электронные<br />
                         СМИ, подтверждающая участие в мероприятии
-                        <sup class="valid-red">*</sup></label>
+                        <sup class="valid-red">*</sup></label
+                    >
                     <!-- <p>{{ !isSentSix && sixPanelData.number_of_members > 0 }}</p> -->
 
-                    <div class="form__wrapper" v-for="(item, index) in sixPanelData.links" :key="index">
-                        <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                            @focusout="focusOut" :is-error-panel="isErrorPanel" @error="setError"
-                            :disabled="isSentSix || (sixPanelData.number_of_members == 0 || sixPanelData.number_of_members === null)"
-                            :maxlength="200" name="link" v-model:value="item.link" :is-link="true" class="mb-2" />
+                    <div
+                        class="form__wrapper"
+                        v-for="(item, index) in sixPanelData.links"
+                        :key="index"
+                    >
+                        <InputReport
+                            placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
+                            @focusout="focusOut"
+                            :is-error-panel="isErrorPanel"
+                            @error="setError"
+                            :disabled="
+                                isSentSix ||
+                                sixPanelData.number_of_members == 0 ||
+                                sixPanelData.number_of_members === null
+                            "
+                            :maxlength="200"
+                            name="link"
+                            v-model:value="item.link"
+                            :is-link="true"
+                            class="mb-2"
+                        />
 
-                        <div v-if="!isSentSix && sixPanelData.number_of_members > 0">
-                            <div class="add_link" @click="addLink(6)" v-if="sixPanelData.links.length === index + 1">
+                        <div
+                            v-if="
+                                !isSentSix && sixPanelData.number_of_members > 0
+                            "
+                        >
+                            <div
+                                class="add_link"
+                                @click="addLink(6)"
+                                v-if="sixPanelData.links.length === index + 1"
+                            >
                                 + Добавить ссылку
                             </div>
                             <div class="add_link" @click="deleteLink(6)" v-else>
@@ -126,29 +275,54 @@
                             </div>
                         </div>
                     </div>
-
-
                 </div>
                 <div class="form__field">
                     <label class="form__label" for="14">Комментарий </label>
-                    <TextareaReport v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1"
-                        autoResize placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000"
-                        :disabled="isSentSix || (sixPanelData.number_of_members == 0 || sixPanelData.number_of_members === null)"
-                        :max-length-text="3000" counter-visible />
-
+                    <TextareaReport
+                        v-model:value="sixPanelData.comment"
+                        id="comment"
+                        name="comment"
+                        :rows="1"
+                        autoResize
+                        placeholder="Напишите сообщение"
+                        @focusout="focusOut"
+                        :maxlength="3000"
+                        :disabled="
+                            isSentSix ||
+                            sixPanelData.number_of_members == 0 ||
+                            sixPanelData.number_of_members === null
+                        "
+                        :max-length-text="3000"
+                        counter-visible
+                    />
                 </div>
             </div>
-            <div v-else-if="props.panel_number == 9" class="form__field-group group-seventh">
+            <div
+                v-else-if="props.panel_number == 9"
+                class="form__field-group group-seventh"
+            >
                 <div class="d-flex justify-space-between">
                     <div class="title_wrap">
                         <p class="form__title">{{ props.title.name }}</p>
                         <div class="title_wrap__items">
-                            <p class="form__title month" v-if="props.title.month">{{ props.title.month }}</p>
-                            <p class="form__title city" v-if="props.title.city">{{ props.title.city }}</p>
+                            <p
+                                class="form__title month"
+                                v-if="props.title.month"
+                            >
+                                {{ props.title.month }}
+                            </p>
+                            <p class="form__title city" v-if="props.title.city">
+                                {{ props.title.city }}
+                            </p>
                         </div>
                     </div>
                     <div>
-                        <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
+                        <Button
+                            @click="collapseForm"
+                            class="form__btn"
+                            style="margin: 0"
+                            label="Свернуть"
+                        />
                     </div>
                 </div>
                 <div class="form__field places mt-4">
@@ -157,63 +331,141 @@
                     </p>
 
                     <div class="places_wrap">
-                        <div class="places_item" v-for="item in events" :key="item.id">
-                            <input :id="item.id" :value="item.value" :name="item.name" :disabled="isSentNinth"
-                                :checked="ninthPanelData.event_happened == item.value" class="form__input places_input"
-                                type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
+                        <div
+                            class="places_item"
+                            v-for="item in events"
+                            :key="item.id"
+                        >
+                            <input
+                                :id="item.id"
+                                :value="item.value"
+                                :name="item.name"
+                                :disabled="isSentNinth"
+                                :checked="
+                                    ninthPanelData.event_happened == item.value
+                                "
+                                class="form__input places_input"
+                                type="radio"
+                                @focusout="focusOut"
+                                v-model="ninthPanelData.event_happened"
+                            />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                                }}</label>
+                            }}</label>
                         </div>
                     </div>
                 </div>
                 <div class="report__fieldset report__fieldset--right-block">
-                    <label class="form__label report__label mb-2" for="scan_file">
+                    <label
+                        class="form__label report__label mb-2"
+                        for="scan_file"
+                    >
                         Скан документа, подтверждающего проведение акции
                     </label>
-                    <InputReport v-if="!ninthPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
-                        id="scan_file" :is-error-panel="isErrorPanel" v-model:value="ninthPanelData.document"
-                        name="scan_file" width="100%" :disabled="isSentNinth || ninthPanelData.event_happened === false"
-                        height="auto" @change="uploadFile($event, 9)" />
-                    <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
-                        :isSent="isSentNinth" :is-error-file="isErrorFile" :fileSize="ninthPanelData.file_size"
-                        @click="deleteFile(9)">
+                    <InputReport
+                        v-if="!ninthPanelData.document"
+                        isFile
+                        type="file"
+                        accept=".jpg, .jpeg, .png, .pdf"
+                        id="scan_file"
+                        :is-error-panel="isErrorPanel"
+                        v-model:value="ninthPanelData.document"
+                        name="scan_file"
+                        width="100%"
+                        :disabled="
+                            isSentNinth ||
+                            ninthPanelData.event_happened === false
+                        "
+                        height="auto"
+                        @change="uploadFile($event, 9)"
+                    />
+                    <FileBoxComponent
+                        v-else
+                        :file="ninthPanelData.document"
+                        :fileType="ninthPanelData.file_type"
+                        :isSent="isSentNinth"
+                        :is-error-file="isErrorFile"
+                        :fileSize="ninthPanelData.file_size"
+                        @click="deleteFile(9)"
+                    >
                     </FileBoxComponent>
                 </div>
 
                 <div class="form__field">
-                    <label class="form__label mt-4" for="14">Ссылка на социальные сети/ электронные
-                        СМИ, подтверждающая проведение акции
-                        <sup class="valid-red">*</sup></label>
+                    <label class="form__label mt-4" for="14"
+                        >Ссылка на социальные сети/ электронные СМИ,
+                        подтверждающая проведение акции
+                        <sup class="valid-red">*</sup></label
+                    >
 
-                    <div class="form__wrapper" v-for="(item, index) in ninthPanelData.links" :key="index">
-                        <InputReport @focusout="focusOut" @error="setError"
-                            :disabled="isSentNinth || ninthPanelData.event_happened === false" name="14"
-                            :maxlength="200" :is-error-panel="isErrorPanel" :is-link="true"
-                            placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
-                            class="mb-2" />
-                        <div v-if="!isSentNinth && ninthPanelData.event_happened === true">
-                            <div class="add_link" @click="addLink(9)" v-if="ninthPanelData.links.length === index + 1">
+                    <div
+                        class="form__wrapper"
+                        v-for="(item, index) in ninthPanelData.links"
+                        :key="index"
+                    >
+                        <InputReport
+                            @focusout="focusOut"
+                            @error="setError"
+                            :disabled="
+                                isSentNinth ||
+                                ninthPanelData.event_happened === false
+                            "
+                            name="14"
+                            :maxlength="200"
+                            :is-error-panel="isErrorPanel"
+                            :is-link="true"
+                            placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
+                            v-model:value="item.link"
+                            class="mb-2"
+                        />
+                        <div
+                            v-if="
+                                !isSentNinth &&
+                                ninthPanelData.event_happened === true
+                            "
+                        >
+                            <div
+                                class="add_link"
+                                @click="addLink(9)"
+                                v-if="ninthPanelData.links.length === index + 1"
+                            >
                                 + Добавить ссылку
                             </div>
                             <div class="add_link" @click="deleteLink(9)" v-else>
                                 Удалить поле ввода
                             </div>
                         </div>
-
-
                     </div>
                 </div>
                 <div class="form__field">
-                    <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
-                    <TextareaReport v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1"
-                        autoResize placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000"
-                        :max-length-text="3000" counter-visible
-                        :disabled="isSentNinth || ninthPanelData.event_happened === false" />
+                    <label class="form__label" for="14"
+                        >Комментарий <sup class="valid-red">*</sup></label
+                    >
+                    <TextareaReport
+                        v-model:value="ninthPanelData.comment"
+                        id="comment"
+                        name="comment"
+                        :rows="1"
+                        autoResize
+                        placeholder="Напишите сообщение"
+                        @focusout="focusOut"
+                        :maxlength="3000"
+                        :max-length-text="3000"
+                        counter-visible
+                        :disabled="
+                            isSentNinth ||
+                            ninthPanelData.event_happened === false
+                        "
+                    />
                 </div>
-                <div class="form__field-result" style="display: flex; align-items: center;">
+                <div
+                    class="form__field-result"
+                    style="display: flex; align-items: center"
+                >
                     <v-checkbox class="result-checkbox" id="v-checkbox" />
-                    <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
+                    <label class="result-checkbox-text" for="v-checkbox"
+                        >Итоговое значение</label
+                    >
                 </div>
                 <div class="hr"></div>
                 <div class="form__field-result result-count">
@@ -228,51 +480,110 @@
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
                             <div class="title_wrap__items">
-                                <p class="form__title month">{{ props.title.month }}</p>
-                                <p class="form__title city">{{ props.title.city }}</p>
+                                <p class="form__title month">
+                                    {{ props.title.month }}
+                                </p>
+                                <p class="form__title city">
+                                    {{ props.title.city }}
+                                </p>
                             </div>
                         </div>
                         <div>
-                            <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
+                            <Button
+                                @click="collapseForm"
+                                class="form__btn"
+                                style="margin: 0"
+                                label="Свернуть"
+                            />
                         </div>
                     </div>
                     <div class="form__field places">
                         <p class="form__label">
-                            Призовое место в конкурсе <sup class="valid-red">*</sup>
+                            Призовое место в конкурсе
+                            <sup class="valid-red">*</sup>
                         </p>
                         <div class="places_wrap one_place">
-                            <input :id="11" :value="seventhPanelData.prize_place" :name="11"
-                                :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
-                                class="form__input places_input" type="radio" :checked="seventhPanelData.prize_place"
-                                v-model="seventhPanelData.prize_place" />
+                            <input
+                                :id="11"
+                                :value="seventhPanelData.prize_place"
+                                :name="11"
+                                :disabled="
+                                    props.isCentralHeadquarterCommander ||
+                                    props.isDistrictHeadquarterCommander
+                                "
+                                class="form__input places_input"
+                                type="radio"
+                                :checked="seventhPanelData.prize_place"
+                                v-model="seventhPanelData.prize_place"
+                            />
                             <label class="places_item_label" :for="id">{{
                                 seventhPanelData.prize_place
                             }}</label>
                         </div>
                     </div>
                     <div class="report__fieldset report__fieldset--right-block">
-                        <label class="form__label report__label" for="scan_file">
-                            Скан подтверждающего документа<sup class="valid-red">*</sup>
+                        <label
+                            class="form__label report__label"
+                            for="scan_file"
+                        >
+                            Скан подтверждающего документа<sup class="valid-red"
+                                >*</sup
+                            >
                         </label>
-                        <InputReport v-if="!seventhPanelData.document" isFile type="file"
-                            accept=".jpg, .jpeg, .png, .pdf" id="scan_file" name="scan_file" width="100%" height="auto"
-                            :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
-                        <FileBoxComponent v-else :file="seventhPanelData.document" :isSent="isSent"
-                            :fileType="seventhPanelData.file_type" :fileSize="seventhPanelData.file_size">
+                        <InputReport
+                            v-if="!seventhPanelData.document"
+                            isFile
+                            type="file"
+                            accept=".jpg, .jpeg, .png, .pdf"
+                            id="scan_file"
+                            name="scan_file"
+                            width="100%"
+                            height="auto"
+                            :disabled="
+                                props.isCentralHeadquarterCommander ||
+                                props.isDistrictHeadquarterCommander
+                            "
+                        />
+                        <FileBoxComponent
+                            v-else
+                            :file="seventhPanelData.document"
+                            :isSent="isSent"
+                            :fileType="seventhPanelData.file_type"
+                            :fileSize="seventhPanelData.file_size"
+                        >
                         </FileBoxComponent>
-
                     </div>
 
                     <div class="form__field">
-                        <label class="form__label" for="14">Ссылка на публикацию о победе
-                            <sup class="valid-red">*</sup></label>
+                        <label class="form__label" for="14"
+                            >Ссылка на публикацию о победе
+                            <sup class="valid-red">*</sup></label
+                        >
 
-                        <div class="form__wrapper" v-for="(item, index) in seventhPanelData.links" :key="index">
-                            <InputReport name="14" :is-link="true"
+                        <div
+                            class="form__wrapper"
+                            v-for="(item, index) in seventhPanelData.links"
+                            :key="index"
+                        >
+                            <InputReport
+                                name="14"
+                                :is-link="true"
                                 placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                                v-model:value="item.link" class="mb-2"
-                                :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
-                            <div v-if="!(props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)">
+                                v-model:value="item.link"
+                                class="mb-2"
+                                :disabled="
+                                    props.isCentralHeadquarterCommander ||
+                                    props.isDistrictHeadquarterCommander
+                                "
+                            />
+                            <div
+                                v-if="
+                                    !(
+                                        props.isCentralHeadquarterCommander ||
+                                        props.isDistrictHeadquarterCommander
+                                    )
+                                "
+                            >
                                 <!-- <div class="add_link"
                                     v-if="seventhPanelData.links.length === index + 1">
                                     + Добавить ссылку
@@ -283,18 +594,40 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form__field"
-                        v-if="seventhPanelData.comment !== null && seventhPanelData.comment !== ''">
-                        <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
+                    <div
+                        class="form__field"
+                        v-if="
+                            seventhPanelData.comment !== null &&
+                            seventhPanelData.comment !== ''
+                        "
+                    >
+                        <label class="form__label" for="14"
+                            >Комментарий <sup class="valid-red">*</sup></label
+                        >
                         <TextareaReport
-                            :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
-                            v-model:value="seventhPanelData.comment" id="comment" name="comment" :rows="1" autoResize
-                            placeholder="Укажите наименования организованных мероприятий" :maxlength="3000"
-                            :max-length-text="3000" counter-visible />
+                            :disabled="
+                                props.isCentralHeadquarterCommander ||
+                                props.isDistrictHeadquarterCommander
+                            "
+                            v-model:value="seventhPanelData.comment"
+                            id="comment"
+                            name="comment"
+                            :rows="1"
+                            autoResize
+                            placeholder="Укажите наименования организованных мероприятий"
+                            :maxlength="3000"
+                            :max-length-text="3000"
+                            counter-visible
+                        />
                     </div>
-                    <div class="form__field-result" style="display: flex; align-items: center;">
+                    <div
+                        class="form__field-result"
+                        style="display: flex; align-items: center"
+                    >
                         <v-checkbox class="result-checkbox" id="v-checkbox" />
-                        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
+                        <label class="result-checkbox-text" for="v-checkbox"
+                            >Итоговое значение</label
+                        >
                     </div>
                     <div class="hr"></div>
                     <div class="form__field-result result-count">
@@ -306,34 +639,74 @@
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
                             <div class="title_wrap__items">
-                                <p class="form__title month">{{ props.title.month }}</p>
-                                <p class="form__title city">{{ props.title.city }}</p>
+                                <p class="form__title month">
+                                    {{ props.title.month }}
+                                </p>
+                                <p class="form__title city">
+                                    {{ props.title.city }}
+                                </p>
                             </div>
                         </div>
                         <div>
-                            <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
+                            <Button
+                                @click="collapseForm"
+                                class="form__btn"
+                                style="margin: 0"
+                                label="Свернуть"
+                            />
                         </div>
                     </div>
                     <div class="form__field places">
                         <p class="form__label">
-                            Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
+                            Количество человек, принимавших участие
+                            в мероприятии <sup class="valid-red">*</sup>
                         </p>
-                        <InputReport v-model:value="sixPanelData.number_of_members" placeholder="Введите число"
-                            id="15" name="14" class="form__input number_input" type="number" :maxlength="10"
+                        <InputReport
+                            v-model:value="sixPanelData.number_of_members"
+                            placeholder="Введите число"
+                            id="15"
+                            name="14"
+                            class="form__input number_input"
+                            type="number"
+                            :maxlength="10"
                             :max="32767"
-                            :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
+                            :disabled="
+                                props.isCentralHeadquarterCommander ||
+                                props.isDistrictHeadquarterCommander
+                            "
+                        />
                     </div>
                     <div class="form__field">
-                        <label class="form__label" for="14">Ссылка на социальные сети/ электронные
-                            СМИ, подтверждающая участие в мероприятии
-                            <sup class="valid-red">*</sup></label>
+                        <label class="form__label" for="14"
+                            >Ссылка на социальные сети/ электронные СМИ,
+                            подтверждающая участие в мероприятии
+                            <sup class="valid-red">*</sup></label
+                        >
 
-                        <div class="form__wrapper" v-for="(item, index) in sixPanelData.links" :key="index">
-                            <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
+                        <div
+                            class="form__wrapper"
+                            v-for="(item, index) in sixPanelData.links"
+                            :key="index"
+                        >
+                            <InputReport
+                                placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
                                 :is-link="true"
-                                :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
-                                name="14" v-model:value="item.link" class="mb-2" />
-                            <div v-if="!(props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)">
+                                :disabled="
+                                    props.isCentralHeadquarterCommander ||
+                                    props.isDistrictHeadquarterCommander
+                                "
+                                name="14"
+                                v-model:value="item.link"
+                                class="mb-2"
+                            />
+                            <div
+                                v-if="
+                                    !(
+                                        props.isCentralHeadquarterCommander ||
+                                        props.isDistrictHeadquarterCommander
+                                    )
+                                "
+                            >
                                 <!-- <div class="add_link" @click="addLink(6)"
                                     v-if="sixPanelData.links.length === index + 1">
                                     + Добавить ссылку
@@ -344,13 +717,29 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form__field" v-if="sixPanelData.comment !== null && sixPanelData.comment !== ''">
+                    <div
+                        class="form__field"
+                        v-if="
+                            sixPanelData.comment !== null &&
+                            sixPanelData.comment !== ''
+                        "
+                    >
                         <label class="form__label" for="14">Комментарий</label>
                         <TextareaReport
-                            :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
-                            v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1" autoResize
-                            placeholder="Напишите сообщение" :maxlength="3000" :max-length-text="3000"
-                            counter-visible />
+                            :disabled="
+                                props.isCentralHeadquarterCommander ||
+                                props.isDistrictHeadquarterCommander
+                            "
+                            v-model:value="sixPanelData.comment"
+                            id="comment"
+                            name="comment"
+                            :rows="1"
+                            autoResize
+                            placeholder="Напишите сообщение"
+                            :maxlength="3000"
+                            :max-length-text="3000"
+                            counter-visible
+                        />
                     </div>
                 </div>
                 <div v-else-if="props.panel_number == 9" class="group-seventh">
@@ -359,49 +748,110 @@
                             <p class="form__title">{{ props.title.name }}</p>
                         </div>
                         <div>
-                            <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
+                            <Button
+                                @click="collapseForm"
+                                class="form__btn"
+                                style="margin: 0"
+                                label="Свернуть"
+                            />
                         </div>
                     </div>
                     <div class="form__field places mt-4">
                         <p class="form__label">
-                            Проведение мероприятия <sup class="valid-red">*</sup>
+                            Проведение мероприятия
+                            <sup class="valid-red">*</sup>
                         </p>
 
                         <div class="places_wrap one_place">
-                            <input :id="12" :value="ninthPanelData.event_happened" :name="12"
-                                :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
-                                :checked="ninthPanelData.event_happened === true || ninthPanelData.event_happened === false"
-                                class="form__input places_input" type="radio" v-model="ninthPanelData.event_happened" />
-                            <label v-if="ninthPanelData.event_happened === true" class="places_item_label"
-                                :for="id">Да</label>
-                            <label v-else class="places_item_label" :for="id">Нет</label>
+                            <input
+                                :id="12"
+                                :value="ninthPanelData.event_happened"
+                                :name="12"
+                                :disabled="
+                                    props.isCentralHeadquarterCommander ||
+                                    props.isDistrictHeadquarterCommander
+                                "
+                                :checked="
+                                    ninthPanelData.event_happened === true ||
+                                    ninthPanelData.event_happened === false
+                                "
+                                class="form__input places_input"
+                                type="radio"
+                                v-model="ninthPanelData.event_happened"
+                            />
+                            <label
+                                v-if="ninthPanelData.event_happened === true"
+                                class="places_item_label"
+                                :for="id"
+                                >Да</label
+                            >
+                            <label v-else class="places_item_label" :for="id"
+                                >Нет</label
+                            >
                         </div>
                     </div>
                     <div class="report__fieldset report__fieldset--right-block">
-                        <label class="form__label report__label mb-2" for="scan_file">
+                        <label
+                            class="form__label report__label mb-2"
+                            for="scan_file"
+                        >
                             Скан документа, подтверждающего проведение акции
                         </label>
                         <InputReport
-                            :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
-                            v-if="!ninthPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
-                            id="scan_file" name="scan_file" width="100%" height="auto" />
-                        <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
-                            :isSent="isSent" :fileSize="ninthPanelData.file_size">
+                            :disabled="
+                                props.isCentralHeadquarterCommander ||
+                                props.isDistrictHeadquarterCommander
+                            "
+                            v-if="!ninthPanelData.document"
+                            isFile
+                            type="file"
+                            accept=".jpg, .jpeg, .png, .pdf"
+                            id="scan_file"
+                            name="scan_file"
+                            width="100%"
+                            height="auto"
+                        />
+                        <FileBoxComponent
+                            v-else
+                            :file="ninthPanelData.document"
+                            :fileType="ninthPanelData.file_type"
+                            :isSent="isSentNinth"
+                            :fileSize="ninthPanelData.file_size"
+                        >
                         </FileBoxComponent>
                     </div>
 
                     <div class="form__field">
-                        <label class="form__label mt-4" for="14">Ссылка на социальные сети/ электронные
-                            СМИ, подтверждающая проведение акции
-                            <sup class="valid-red">*</sup></label>
+                        <label class="form__label mt-4" for="14"
+                            >Ссылка на социальные сети/ электронные СМИ,
+                            подтверждающая проведение акции
+                            <sup class="valid-red">*</sup></label
+                        >
 
-                        <div class="form__wrapper" v-for="(item, index) in ninthPanelData.links" :key="index">
+                        <div
+                            class="form__wrapper"
+                            v-for="(item, index) in ninthPanelData.links"
+                            :key="index"
+                        >
                             <InputReport
-                                :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
-                                name="14" :is-link="true"
+                                :disabled="
+                                    props.isCentralHeadquarterCommander ||
+                                    props.isDistrictHeadquarterCommander
+                                "
+                                name="14"
+                                :is-link="true"
                                 placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                                v-model:value="item.link" class="mb-2" />
-                            <div v-if="!(props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)">
+                                v-model:value="item.link"
+                                class="mb-2"
+                            />
+                            <div
+                                v-if="
+                                    !(
+                                        props.isCentralHeadquarterCommander ||
+                                        props.isDistrictHeadquarterCommander
+                                    )
+                                "
+                            >
                                 <!-- <div class="add_link" @click="addLink(7)"
                                     v-if="ninthPanelData.links.length === index + 1">
                                     + Добавить ссылку
@@ -412,17 +862,40 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form__field" v-if="ninthPanelData.comment !== null && ninthPanelData.comment !== ''">
-                        <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
+                    <div
+                        class="form__field"
+                        v-if="
+                            ninthPanelData.comment !== null &&
+                            ninthPanelData.comment !== ''
+                        "
+                    >
+                        <label class="form__label" for="14"
+                            >Комментарий <sup class="valid-red">*</sup></label
+                        >
                         <TextareaReport
-                            :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
-                            v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1" autoResize
-                            placeholder="Напишите сообщение" :maxlength="3000" :max-length-text="3000"
-                            counter-visible />
+                            :disabled="
+                                props.isCentralHeadquarterCommander ||
+                                props.isDistrictHeadquarterCommander
+                            "
+                            v-model:value="ninthPanelData.comment"
+                            id="comment"
+                            name="comment"
+                            :rows="1"
+                            autoResize
+                            placeholder="Напишите сообщение"
+                            :maxlength="3000"
+                            :max-length-text="3000"
+                            counter-visible
+                        />
                     </div>
-                    <div class="form__field-result" style="display: flex; align-items: center;">
+                    <div
+                        class="form__field-result"
+                        style="display: flex; align-items: center"
+                    >
                         <v-checkbox class="result-checkbox" id="v-checkbox" />
-                        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
+                        <label class="result-checkbox-text" for="v-checkbox"
+                            >Итоговое значение</label
+                        >
                     </div>
                     <div class="hr"></div>
                     <div class="form__field-result result-count">
@@ -436,38 +909,73 @@
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
                             <div class="title_wrap__items">
-                                <p class="form__title month">{{ props.title.month }}</p>
-                                <p class="form__title city">{{ props.title.city }}</p>
+                                <p class="form__title month">
+                                    {{ props.title.month }}
+                                </p>
+                                <p class="form__title city">
+                                    {{ props.title.city }}
+                                </p>
                             </div>
                         </div>
                         <div>
-                            <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
+                            <Button
+                                @click="collapseForm"
+                                class="form__btn"
+                                style="margin: 0"
+                                label="Свернуть"
+                            />
                         </div>
                     </div>
                     <div class="form__field places">
                         <p class="form__label">
-                            Призовое место в конкурсе <sup class="valid-red">*</sup>
+                            Призовое место в конкурсе
+                            <sup class="valid-red">*</sup>
                         </p>
                         <div class="places_wrap">
-                            <div class="places_item" v-for="item in prize_places" :key="item.id">
-                                <input :id="item.id" :value="item.value" :name="item.name"
-                                    class="form__input places_input" type="radio"
-                                    :checked="seventhPanelData.prize_place == item.value"
-                                    v-model="seventhPanelData.prize_place" />
+                            <div
+                                class="places_item"
+                                v-for="item in prize_places"
+                                :key="item.id"
+                            >
+                                <input
+                                    :id="item.id"
+                                    :value="item.value"
+                                    :name="item.name"
+                                    class="form__input places_input"
+                                    type="radio"
+                                    :checked="
+                                        seventhPanelData.prize_place ==
+                                        item.value
+                                    "
+                                    v-model="seventhPanelData.prize_place"
+                                />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
-                    <CommentFileComponent v-model:value="seventhPanelData.comment" @update:value="changeValue"
-                        name="seventhPanelData.comment" @change="uploadFile" @click="deleteFile" :file="fileName"
-                        :fileType="seventhPanelData.file_type" :fileSize="seventhPanelData.file_size"
-                        :disabled="props.isCentralHeadquarterCommander" :is-error-file="isErrorFile">
+                    <CommentFileComponent
+                        v-model:value="seventhPanelData.comment"
+                        @update:value="changeValue"
+                        name="seventhPanelData.comment"
+                        @change="uploadFile"
+                        @click="deleteFile"
+                        :file="fileName"
+                        :fileType="seventhPanelData.file_type"
+                        :fileSize="seventhPanelData.file_size"
+                        :disabled="props.isCentralHeadquarterCommander"
+                        :is-error-file="isErrorFile"
+                    >
                     </CommentFileComponent>
-                    <div class="form__field-result" style="display: flex; align-items: center;">
+                    <div
+                        class="form__field-result"
+                        style="display: flex; align-items: center"
+                    >
                         <v-checkbox class="result-checkbox" id="v-checkbox" />
-                        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
+                        <label class="result-checkbox-text" for="v-checkbox"
+                            >Итоговое значение</label
+                        >
                     </div>
                     <div class="hr"></div>
                     <div class="form__field-result result-count">
@@ -479,25 +987,47 @@
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
                             <div class="title_wrap__items">
-                                <p class="form__title month">{{ props.title.month }}</p>
-                                <p class="form__title city">{{ props.title.city }}</p>
+                                <p class="form__title month">
+                                    {{ props.title.month }}
+                                </p>
+                                <p class="form__title city">
+                                    {{ props.title.city }}
+                                </p>
                             </div>
                         </div>
                         <div>
-                            <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
+                            <Button
+                                @click="collapseForm"
+                                class="form__btn"
+                                style="margin: 0"
+                                label="Свернуть"
+                            />
                         </div>
                     </div>
                     <div class="form__field places">
                         <p class="form__label">
-                            Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
+                            Количество человек, принимавших участие
+                            в мероприятии <sup class="valid-red">*</sup>
                         </p>
-                        <InputReport v-model:value="sixPanelDataDH.number_of_members" @focusout="focusOut" placeholder="Введите число"
-                            id="15" name="14" class="form__input number_input" type="number" :maxlength="10"
-                            :max="32767" />
+                        <InputReport
+                            v-model:value="sixPanelDataDH.number_of_members"
+                            @focusout="focusOut"
+                            placeholder="Введите число"
+                            id="15"
+                            name="14"
+                            class="form__input number_input"
+                            type="number"
+                            :maxlength="10"
+                            :max="32767"
+                        />
                     </div>
-                    <CommentFileComponent v-model:value="sixPanelDataDH.comment" @update:value="changeValue"
-                        :is-six-panel="true" name="sixPanelDataDH.comment"
-                        :disabled="props.isCentralHeadquarterCommander">
+                    <CommentFileComponent
+                        v-model:value="sixPanelDataDH.comment"
+                        @update:value="changeValue"
+                        :is-six-panel="true"
+                        name="sixPanelDataDH.comment"
+                        :disabled="props.isCentralHeadquarterCommander"
+                    >
                     </CommentFileComponent>
                 </div>
                 <div v-else-if="props.panel_number == 9" class="group-seventh">
@@ -506,34 +1036,66 @@
                             <p class="form__title">{{ props.title.name }}</p>
                         </div>
                         <div>
-                            <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
+                            <Button
+                                @click="collapseForm"
+                                class="form__btn"
+                                style="margin: 0"
+                                label="Свернуть"
+                            />
                         </div>
                     </div>
                     <div class="form__field places mt-4">
                         <p class="form__label">
-                            Проведение мероприятия <sup class="valid-red">*</sup>
+                            Проведение мероприятия
+                            <sup class="valid-red">*</sup>
                         </p>
 
                         <div class="places_wrap">
-                            <div class="places_item" v-for="item in events" :key="item.id">
-                                <input :id="item.id" :value="item.value" :name="item.name"
-                                    :checked="ninthPanelData.event_happened == item.value"
-                                    class="form__input places_input" type="radio"
-                                    v-model="ninthPanelData.event_happened" />
+                            <div
+                                class="places_item"
+                                v-for="item in events"
+                                :key="item.id"
+                            >
+                                <input
+                                    :id="item.id"
+                                    :value="item.value"
+                                    :name="item.name"
+                                    :checked="
+                                        ninthPanelDataDH.event_happened ==
+                                        item.value
+                                    "
+                                    class="form__input places_input"
+                                    type="radio"
+                                    @focusout="focusOut"
+                                    v-model="ninthPanelDataDH.event_happened"
+                                />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
-                    <CommentFileComponent v-model:value="ninthPanelData.comment" @update:value="changeValue"
-                        name="ninthPanelData.comment" @change="uploadFile" @click="deleteFile" :file="fileName"
-                        :fileType="ninthPanelData.file_type" :fileSize="ninthPanelData.file_size"
-                        :disabled="props.isCentralHeadquarterCommander" :is-error-file="isErrorFile">
+                    <CommentFileComponent
+                        v-model:value="ninthPanelDataDH.comment"
+                        @update:value="changeValue"
+                        name="ninthPanelDataDH.comment"
+                        @change="uploadFile"
+                        @click="deleteFile"
+                        :file="fileName"
+                        :fileType="ninthPanelDataDH.file_type"
+                        :fileSize="ninthPanelDataDH.file_size"
+                        :disabled="props.isCentralHeadquarterCommander"
+                        :is-error-file="isErrorFile"
+                    >
                     </CommentFileComponent>
-                    <div class="form__field-result" style="display: flex; align-items: center;">
+                    <div
+                        class="form__field-result"
+                        style="display: flex; align-items: center"
+                    >
                         <v-checkbox class="result-checkbox" id="v-checkbox" />
-                        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
+                        <label class="result-checkbox-text" for="v-checkbox"
+                            >Итоговое значение</label
+                        >
                     </div>
                     <div class="hr"></div>
                     <div class="form__field-result result-count">
@@ -547,48 +1109,87 @@
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
                             <div class="title_wrap__items">
-                                <p class="form__title month">{{ props.title.month }}</p>
-                                <p class="form__title city">{{ props.title.city }}</p>
+                                <p class="form__title month">
+                                    {{ props.title.month }}
+                                </p>
+                                <p class="form__title city">
+                                    {{ props.title.city }}
+                                </p>
                             </div>
                         </div>
                         <div>
-                            <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
+                            <Button
+                                @click="collapseForm"
+                                class="form__btn"
+                                style="margin: 0"
+                                label="Свернуть"
+                            />
                         </div>
                     </div>
                     <div class="form__field places">
                         <p class="form__label">
-                            Призовое место в конкурсе <sup class="valid-red">*</sup>
+                            Призовое место в конкурсе
+                            <sup class="valid-red">*</sup>
                         </p>
                         <v-table>
                             <tbody>
                                 <tr class="report-table__tr">
                                     <td class="report-table__th">Данные РО</td>
-                                    <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
-                                    <td class="report-table__th">Корректировка ЦШ</td>
+                                    <td
+                                        class="report-table__th report-table__th__br-center"
+                                    >
+                                        Корректировка ОШ
+                                    </td>
+                                    <td class="report-table__th">
+                                        Корректировка ЦШ
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="report-table__td">200</td>
-                                    <td class="report-table__td report-table__td__center">200</td>
+                                    <td
+                                        class="report-table__td report-table__td__center"
+                                    >
+                                        200
+                                    </td>
                                     <td class="report-table__td">200</td>
                                 </tr>
                             </tbody>
                         </v-table>
                         <div class="places_wrap">
-                            <div class="places_item" v-for="item in prize_places" :key="item.id">
-                                <input :id="item.id" :value="item.value" :name="item.name"
-                                    class="form__input places_input" type="radio"
-                                    v-model="seventhPanelData.prize_place" />
+                            <div
+                                class="places_item"
+                                v-for="item in prize_places"
+                                :key="item.id"
+                            >
+                                <input
+                                    :id="item.id"
+                                    :value="item.value"
+                                    :name="item.name"
+                                    class="form__input places_input"
+                                    type="radio"
+                                    v-model="seventhPanelData.prize_place"
+                                />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
                     <div class="form__field">
-                        <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
-                        <TextareaReport v-model:value="seventhPanelData.comment" id="comment" name="comment" :rows="1"
-                            autoResize placeholder="Комментарий" :maxlength="3000" :max-length-text="3000"
-                            counter-visible />
+                        <label class="form__label" for="14"
+                            >Комментарий <sup class="valid-red">*</sup></label
+                        >
+                        <TextareaReport
+                            v-model:value="seventhPanelData.comment"
+                            id="comment"
+                            name="comment"
+                            :rows="1"
+                            autoResize
+                            placeholder="Комментарий"
+                            :maxlength="3000"
+                            :max-length-text="3000"
+                            counter-visible
+                        />
                     </div>
                     <div>
                         <v-checkbox label="Итоговое значение" />
@@ -606,18 +1207,31 @@
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
                             <div class="title_wrap__items">
-                                <p class="form__title month">{{ props.title.month }}</p>
-                                <p class="form__title city">{{ props.title.city }}</p>
+                                <p class="form__title month">
+                                    {{ props.title.month }}
+                                </p>
+                                <p class="form__title city">
+                                    {{ props.title.city }}
+                                </p>
                             </div>
                         </div>
                         <div>
-                            <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
+                            <Button
+                                @click="collapseForm"
+                                class="form__btn"
+                                style="margin: 0"
+                                label="Свернуть"
+                            />
                         </div>
                     </div>
-                    <ReportTable label="Количество человек, принявших участие в мероприятии"
-                    @focusout="focusOut"
-                        name="sixPanelData.number_of_members" :dataRH="sixPanelData.number_of_members" :dataDH="sixPanelDataDH.number_of_members"
-                        v-model:value="sixPanelDataCH.number_of_members"></ReportTable>
+                    <ReportTable
+                        label="Количество человек, принявших участие в мероприятии"
+                        @focusout="focusOut"
+                        name="sixPanelData.number_of_members"
+                        :dataRH="sixPanelData.number_of_members"
+                        :dataDH="sixPanelDataDH.number_of_members"
+                        v-model:value="sixPanelDataCH.number_of_members"
+                    ></ReportTable>
 
                     <CommentFileComponent></CommentFileComponent>
                     <div>
@@ -630,47 +1244,86 @@
                             <p class="form__title">{{ props.title.name }}</p>
                         </div>
                         <div>
-                            <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
+                            <Button
+                                @click="collapseForm"
+                                class="form__btn"
+                                style="margin: 0"
+                                label="Свернуть"
+                            />
                         </div>
                     </div>
-                    <label class="form__label">Проведение мероприятия <sup class="valid-red">*</sup></label>
+                    <label class="form__label"
+                        >Проведение мероприятия
+                        <sup class="valid-red">*</sup></label
+                    >
                     <v-table>
                         <tbody>
                             <tr class="report-table__tr">
                                 <td class="report-table__th">Данные РО</td>
-                                <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
-                                <td class="report-table__th">Корректировка ЦШ</td>
+                                <td
+                                    class="report-table__th report-table__th__br-center"
+                                >
+                                    Корректировка ОШ
+                                </td>
+                                <td class="report-table__th">
+                                    Корректировка ЦШ
+                                </td>
                             </tr>
                             <tr>
                                 <td class="report-table__td">Да</td>
-                                <td class="report-table__td report-table__td__center">Да</td>
+                                <td
+                                    class="report-table__td report-table__td__center"
+                                >
+                                    Да
+                                </td>
                                 <td class="report-table__td">Да</td>
                             </tr>
                         </tbody>
                     </v-table>
                     <div class="form__field places mt-4">
                         <p class="form__label">
-                            Проведение мероприятия <sup class="valid-red">*</sup>
+                            Проведение мероприятия
+                            <sup class="valid-red">*</sup>
                         </p>
 
                         <div class="places_wrap">
-                            <div class="places_item" v-for="item in events" :key="item.id">
-                                <input :id="item.id" :value="item.value" :name="item.name"
-                                    :checked="ninthPanelData.event_happened == item.value"
-                                    class="form__input places_input" type="radio"
-                                    v-model="ninthPanelData.event_happened" />
+                            <div
+                                class="places_item"
+                                v-for="item in events"
+                                :key="item.id"
+                            >
+                                <input
+                                    :id="item.id"
+                                    :value="item.value"
+                                    :name="item.name"
+                                    :checked="
+                                        ninthPanelData.event_happened ==
+                                        item.value
+                                    "
+                                    class="form__input places_input"
+                                    type="radio"
+                                    v-model="ninthPanelData.event_happened"
+                                />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
 
                     <div class="form__field">
                         <label class="form__label" for="14">Комментарий</label>
-                        <TextareaReport v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1"
-                            autoResize placeholder="Комментарий" :maxlength="3000" :max-length-text="3000"
-                            counter-visible />
+                        <TextareaReport
+                            v-model:value="ninthPanelData.comment"
+                            id="comment"
+                            name="comment"
+                            :rows="1"
+                            autoResize
+                            placeholder="Комментарий"
+                            :maxlength="3000"
+                            :max-length-text="3000"
+                            counter-visible
+                        />
                     </div>
                     <div>
                         <v-checkbox label="Вернуть в РО на доработку" />
@@ -683,12 +1336,16 @@
 <script setup>
 import { ref, watchEffect, watch, onMounted } from 'vue';
 import { Button } from '@shared/components/buttons';
-import { FileBoxComponent, CommentFileComponent, ReportTable } from '@entities/RatingRoComponents/components';
+import {
+    FileBoxComponent,
+    CommentFileComponent,
+    ReportTable,
+} from '@entities/RatingRoComponents/components';
 import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { SvgIcon } from '@shared/ui';
 import { ReportTabs } from './index';
 import { reportPartTwoService } from '@services/ReportService.ts';
-import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
+import { fileValidate } from '@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts';
 const props = defineProps({
     title: Object,
     panel_number: String,
@@ -707,12 +1364,23 @@ const props = defineProps({
     dataCH: Object,
 });
 
-const emit = defineEmits(['collapse-form', 'formData', 'formDataDH', 'formDataCH', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'error']);
+const emit = defineEmits([
+    'collapse-form',
+    'formData',
+    'formDataDH',
+    'formDataCH',
+    'uploadFile',
+    'uploadFileDH',
+    'getId',
+    'getPanelNumber',
+    'deleteFile',
+    'deleteFileDH',
+    'error',
+]);
 
 const collapseForm = () => {
     emit('collapse-form');
 };
-
 
 let isErrorFile = ref(false);
 const isFirstSentSix = ref(true);
@@ -725,13 +1393,15 @@ const scanFile = ref([]);
 const setError = (err) => {
     isLinkError.value = err;
     console.log('errorr', err);
-}
+};
 
 const seventhPanelData = ref({
     prize_place: 'Нет',
-    links: [{
-        link: '',
-    }],
+    links: [
+        {
+            link: '',
+        },
+    ],
     document: '',
     file_size: null,
     file_type: '',
@@ -740,31 +1410,58 @@ const seventhPanelData = ref({
 
 const ninthPanelData = ref({
     event_happened: false,
-    links: [{
-        link: '',
-    }],
+    links: [
+        {
+            link: '',
+        },
+    ],
     document: '',
     file_size: null,
     file_type: '',
     comment: '',
-})
+});
+
+const ninthPanelDataDH = ref({
+    event_happened: false,
+    links: [
+        {
+            link: '',
+        },
+    ],
+    document: '',
+    file_size: null,
+    file_type: '',
+    comment: '',
+});
 
 const sixPanelData = ref({
     number_of_members: 0,
-    links: [{
-        link: '',
-    }],
+    links: [
+        {
+            link: '',
+        },
+    ],
     comment: '',
 });
 const sixPanelDataDH = ref({
     number_of_members: 0,
+    links: [
+        {
+            link: '',
+        },
+    ],
     comment: '',
-})
+});
 
 const sixPanelDataCH = ref({
     number_of_members: 0,
+    links: [
+        {
+            link: '',
+        },
+    ],
     comment: '',
-})
+});
 const prize_places = ref([
     { name: '1', value: 1, id: 'pp1' },
     { name: '2', value: 2, id: 'pp2' },
@@ -775,8 +1472,7 @@ const prize_places = ref([
 const events = ref([
     { name: 'Да', value: true, id: 'pp1' },
     { name: 'Нет', value: false, id: 'pp2' },
-])
-
+]);
 
 const uploadFile = (event, number) => {
     console.log('num', number);
@@ -786,8 +1482,7 @@ const uploadFile = (event, number) => {
             console.log('error');
             scanFile.value = event.target.files[0];
             seventhPanelData.value.document = scanFile.value.name;
-        }
-        else {
+        } else {
             let formData = new FormData();
             formData.append('prize_place', seventhPanelData.value.prize_place);
             formData.append('document', event.target.files[0]);
@@ -795,7 +1490,10 @@ const uploadFile = (event, number) => {
                 for (let i = 0; i < seventhPanelData.value.links.length; i++) {
                     !seventhPanelData.value.links[i].link
                         ? formData.append(`[links][${i}][link]`, '')
-                        : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
+                        : formData.append(
+                              `[links][${i}][link]`,
+                              seventhPanelData.value.links[i].link,
+                          );
                 }
             }
             formData.append('comment', seventhPanelData.value.comment);
@@ -803,28 +1501,69 @@ const uploadFile = (event, number) => {
             emit('uploadFile', formData);
         }
     } else if (number === 9) {
-        fileValidate(event.target.files[0], 9, isErrorFile);
-        if (isErrorFile.value) {
-            console.log('error');
-            scanFile.value = event.target.files[0];
-            ninthPanelData.value.document = scanFile.value.name;
-        } else {
-            let formData = new FormData();
-            formData.append('event_happened', ninthPanelData.value.event_happened);
-            formData.append('document', event.target.files[0]);
-            if (ninthPanelData.value.links.length) {
-                for (let i = 0; i < ninthPanelData.value.links.length; i++) {
-                    !ninthPanelData.value.links[i].link
-                        ? formData.append(`[links][${i}][link]`, '')
-                        : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+        if (props.isDistrictHeadquarterCommander) {
+            fileValidate(event.target.files[0], 9, isErrorFile);
+            if (isErrorFile.value) {
+                console.log('error');
+                scanFile.value = event.target.files[0];
+                ninthPanelDataDH.value.document = scanFile.value.name;
+            } else {
+                let formData = new FormData();
+                formData.append(
+                    'event_happened',
+                    ninthPanelDataDH.value.event_happened,
+                );
+                formData.append('document', event.target.files[0]);
+                if (ninthPanelDataDH.value.links.length) {
+                    for (
+                        let i = 0;
+                        i < ninthPanelDataDH.value.links.length;
+                        i++
+                    ) {
+                        !ninthPanelDataDH.value.links[i].link
+                            ? formData.append(`[links][${i}][link]`, '')
+                            : formData.append(
+                                  `[links][${i}][link]`,
+                                  ninthPanelDataDH.value.links[i].link,
+                              );
+                    }
                 }
+                formData.append('comment', ninthPanelDataDH.value.comment);
+                emit('uploadFileDH', formData);
             }
-            formData.append('comment', ninthPanelData.value.comment);
-            emit('uploadFile', formData);
+        } else {
+            fileValidate(event.target.files[0], 9, isErrorFile);
+            if (isErrorFile.value) {
+                console.log('error');
+                scanFile.value = event.target.files[0];
+                ninthPanelData.value.document = scanFile.value.name;
+            } else {
+                let formData = new FormData();
+                formData.append(
+                    'event_happened',
+                    ninthPanelData.value.event_happened,
+                );
+                formData.append('document', event.target.files[0]);
+                if (ninthPanelData.value.links.length) {
+                    for (
+                        let i = 0;
+                        i < ninthPanelData.value.links.length;
+                        i++
+                    ) {
+                        !ninthPanelData.value.links[i].link
+                            ? formData.append(`[links][${i}][link]`, '')
+                            : formData.append(
+                                  `[links][${i}][link]`,
+                                  ninthPanelData.value.links[i].link,
+                              );
+                    }
+                }
+                formData.append('comment', ninthPanelData.value.comment);
+                emit('uploadFile', formData);
+            }
         }
     }
-
-}
+};
 
 const deleteFile = (number) => {
     let formData = new FormData();
@@ -836,7 +1575,10 @@ const deleteFile = (number) => {
             for (let i = 0; i < seventhPanelData.value.links.length; i++) {
                 !seventhPanelData.value.links[i].link
                     ? formData.append(`[links][${i}][link]`, '')
-                    : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
+                    : formData.append(
+                          `[links][${i}][link]`,
+                          seventhPanelData.value.links[i].link,
+                      );
             }
         }
         formData.append('comment', seventhPanelData.value.comment);
@@ -844,47 +1586,72 @@ const deleteFile = (number) => {
         formData.append('file_type', seventhPanelData.value.file_type);
 
         emit('deleteFile', formData);
-        // emit('formData', formData)
     } else if (number === 9) {
-        ninthPanelData.value.document = '';
-        formData.append('event_happened', ninthPanelData.value.event_happened);
-        formData.append('document', '');
-        if (ninthPanelData.value.links.length) {
-            for (let i = 0; i < ninthPanelData.value.links.length; i++) {
-                !ninthPanelData.value.links[i].link
-                    ? formData.append(`[links][${i}][link]`, '')
-                    : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+        if (props.isDistrictHeadquarterCommander) {
+            ninthPanelDataDH.value.document = '';
+            formData.append(
+                'event_happened',
+                ninthPanelDataDH.value.event_happened,
+            );
+            formData.append('document', '');
+            if (ninthPanelDataDH.value.links.length) {
+                for (let i = 0; i < ninthPanelDataDH.value.links.length; i++) {
+                    !ninthPanelDataDH.value.links[i].link
+                        ? formData.append(`[links][${i}][link]`, '')
+                        : formData.append(
+                              `[links][${i}][link]`,
+                              ninthPanelDataDH.value.links[i].link,
+                          );
+                }
             }
+            formData.append('comment', ninthPanelDataDH.value.comment);
+            formData.append('file_size', ninthPanelDataDH.value.file_size);
+            formData.append('file_type', ninthPanelDataDH.value.file_type);
+            emit('deleteFileDH', formData);
+        } else {
+            ninthPanelData.value.document = '';
+            formData.append(
+                'event_happened',
+                ninthPanelData.value.event_happened,
+            );
+            formData.append('document', '');
+            if (ninthPanelData.value.links.length) {
+                for (let i = 0; i < ninthPanelData.value.links.length; i++) {
+                    !ninthPanelData.value.links[i].link
+                        ? formData.append(`[links][${i}][link]`, '')
+                        : formData.append(
+                              `[links][${i}][link]`,
+                              ninthPanelData.value.links[i].link,
+                          );
+                }
+            }
+            formData.append('comment', ninthPanelData.value.comment);
+            formData.append('file_size', ninthPanelData.value.file_size);
+            formData.append('file_type', ninthPanelData.value.file_type);
+            emit('deleteFile', formData);
         }
-        formData.append('comment', ninthPanelData.value.comment);
-        formData.append('file_size', ninthPanelData.value.file_size);
-        formData.append('file_type', ninthPanelData.value.file_type);
-        emit('deleteFile', formData);
+
         // emit('formData', formData)
     }
-
-}
+};
 
 const focusOut = () => {
     if (props.panel_number == 6) {
         try {
-            if(props.isDistrictHeadquarterCommander) {
-                // console.log(sixPanelDataDH.value)
-                emit('formDataDH', sixPanelDataDH.value)
-                // emit('formDataCH', sixPanelDataCH.value)
-                console.log('dataDH', sixPanelDataDH)
-            }  else {
-            }    emit('formData', sixPanelData.value)
-        
+            if (props.isDistrictHeadquarterCommander) {
+                emit('formDataDH', sixPanelDataDH.value);
+                console.log('dataDH', sixPanelDataDH);
+            } else {
+            }
+            emit('formData', sixPanelData.value);
         } catch (e) {
-            console.log('data', e.response.data)
+            console.log('data', e.response.data);
         }
-    }
-    else if (props.panel_number == 7) {
+    } else if (props.panel_number == 7) {
         try {
             if (isFirstSentSeventh.value) {
-                console.log('7', '1')
-                emit('formData', seventhPanelData.value)
+                console.log('7', '1');
+                emit('formData', seventhPanelData.value);
             } else {
                 if (seventhPanelData.value.prize_place == 'Нет') {
                     let formData = new FormData();
@@ -893,203 +1660,267 @@ const focusOut = () => {
                     seventhPanelData.value.file_size = null;
                     seventhPanelData.value.file_type = '';
                     seventhPanelData.value.comment = '';
-                    formData.append('prize_place', seventhPanelData.value.prize_place);
+                    formData.append(
+                        'prize_place',
+                        seventhPanelData.value.prize_place,
+                    );
                     formData.append('document', '');
                     if (seventhPanelData.value.links.length) {
-                        for (let i = 0; i < seventhPanelData.value.links.length; i++) {
+                        for (
+                            let i = 0;
+                            i < seventhPanelData.value.links.length;
+                            i++
+                        ) {
                             !seventhPanelData.value.links[i].link
                                 ? formData.append(`[links][${i}][link]`, '')
-                                : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
+                                : formData.append(
+                                      `[links][${i}][link]`,
+                                      seventhPanelData.value.links[i].link,
+                                  );
                         }
                     }
                     formData.append('comment', seventhPanelData.value.comment);
-                    formData.append('file_size', seventhPanelData.value.file_size);
-                    formData.append('file_type', seventhPanelData.value.file_type);
+                    formData.append(
+                        'file_size',
+                        seventhPanelData.value.file_size,
+                    );
+                    formData.append(
+                        'file_type',
+                        seventhPanelData.value.file_type,
+                    );
                     emit('formData', formData);
                 }
 
                 let formData = new FormData();
                 formData.append('comment', seventhPanelData.value.comment);
-                formData.append('prize_place', seventhPanelData.value.prize_place);
+                formData.append(
+                    'prize_place',
+                    seventhPanelData.value.prize_place,
+                );
 
                 for (let i = 0; i < seventhPanelData.value.links.length; i++) {
                     !seventhPanelData.value.links[i].link
                         ? formData.append(`[links][${i}][link]`, '')
-                        : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
+                        : formData.append(
+                              `[links][${i}][link]`,
+                              seventhPanelData.value.links[i].link,
+                          );
                 }
 
                 // emit('isSent', isFirstSent.value)
-                emit('formData', formData)
-                console.log('7', '2')
-
+                emit('formData', formData);
+                console.log('7', '2');
             }
         } catch (e) {
             console.log('data', e.response.data);
-
         }
-
-    }
-    else if (props.panel_number == 9) {
+    } else if (props.panel_number == 9) {
         try {
-            if (isFirstSentNinth.value === true) {
-                console.log('9', '1')
-                emit('formData', ninthPanelData.value)
+            if (props.isDistrictHeadquarterCommander) {
+                emit('formDataDH', ninthPanelDataDH.value);
+                console.log('dataDH', ninthPanelDataDH);
             } else {
-                if (ninthPanelData.value.event_happened === false) {
+                if (isFirstSentNinth.value === true) {
+                    console.log('9', '1');
+                    emit('formData', ninthPanelData.value);
+                } else {
+                    if (ninthPanelData.value.event_happened === false) {
+                        let formData = new FormData();
+                        ninthPanelData.value.document = '';
+                        ninthPanelData.value.links = [];
+                        ninthPanelData.value.file_size = null;
+                        ninthPanelData.value.file_type = '';
+                        ninthPanelData.value.comment = '';
+                        formData.append(
+                            'event_happened',
+                            ninthPanelData.value.event_happened,
+                        );
+                        formData.append('document', '');
+                        if (ninthPanelData.value.links.length) {
+                            for (
+                                let i = 0;
+                                i < ninthPanelData.value.links.length;
+                                i++
+                            ) {
+                                !ninthPanelData.value.links[i].link
+                                    ? formData.append(`[links][${i}][link]`, '')
+                                    : formData.append(
+                                          `[links][${i}][link]`,
+                                          ninthPanelData.value.links[i].link,
+                                      );
+                            }
+                        }
+                        formData.append(
+                            'comment',
+                            ninthPanelData.value.comment,
+                        );
+                        formData.append(
+                            'file_size',
+                            ninthPanelData.value.file_size,
+                        );
+                        formData.append(
+                            'file_type',
+                            ninthPanelData.value.file_type,
+                        );
+                        emit('formData', formData);
+                    }
                     let formData = new FormData();
-                    ninthPanelData.value.document = '';
-                    ninthPanelData.value.links = [];
-                    ninthPanelData.value.file_size = null;
-                    ninthPanelData.value.file_type = '';
-                    ninthPanelData.value.comment = '';
-                    formData.append('event_happened', ninthPanelData.value.event_happened);
-                    formData.append('document', '');
+                    formData.append('comment', ninthPanelData.value.comment);
+                    formData.append(
+                        'event_happened',
+                        ninthPanelData.value.event_happened,
+                    );
                     if (ninthPanelData.value.links.length) {
-                        for (let i = 0; i < ninthPanelData.value.links.length; i++) {
+                        for (
+                            let i = 0;
+                            i < ninthPanelData.value.links.length;
+                            i++
+                        ) {
                             !ninthPanelData.value.links[i].link
                                 ? formData.append(`[links][${i}][link]`, '')
-                                : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                                : formData.append(
+                                      `[links][${i}][link]`,
+                                      ninthPanelData.value.links[i].link,
+                                  );
                         }
                     }
-                    formData.append('comment', ninthPanelData.value.comment);
-                    formData.append('file_size', ninthPanelData.value.file_size);
-                    formData.append('file_type', ninthPanelData.value.file_type);
-                    emit('formData', formData);
-                }
-                let formData = new FormData();
-                formData.append('comment', ninthPanelData.value.comment);
-                formData.append('event_happened', ninthPanelData.value.event_happened);
-                if (ninthPanelData.value.links.length) {
-                    for (let i = 0; i < ninthPanelData.value.links.length; i++) {
-                        !ninthPanelData.value.links[i].link
-                            ? formData.append(`[links][${i}][link]`, '')
-                            : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
-                    }
-                }
 
-                emit('formData', formData)
-                console.log('9', '2')
+                    emit('formData', formData);
+                    console.log('9', '2');
+                }
             }
         } catch (e) {
             console.log('data', e.response.data);
         }
-
     }
-
-}
+};
 const addLink = (number) => {
     if (number == 6) {
         sixPanelData.value.links.push({ link: '' });
     } else if (number == 7) {
         seventhPanelData.value.links.push({ link: '' });
-    }
-    else if (number == 9) {
+    } else if (number == 9) {
         ninthPanelData.value.links.push({ link: '' });
     }
 };
 
 const deleteLink = async (number) => {
     if (number == 6) {
-        sixPanelData.value.links.pop()
-        await reportPartTwoService.createMultipleReportDraft(sixPanelData.value, '6', props.id);
+        sixPanelData.value.links.pop();
+        await reportPartTwoService.createMultipleReportDraft(
+            sixPanelData.value,
+            '6',
+            props.id,
+        );
     } else if (number == 7) {
-        seventhPanelData.value.links.pop()
-        await reportPartTwoService.createMultipleReportDraft(seventhPanelData.value, '7', props.id, true);
+        seventhPanelData.value.links.pop();
+        await reportPartTwoService.createMultipleReportDraft(
+            seventhPanelData.value,
+            '7',
+            props.id,
+            true,
+        );
     } else if (number == 9) {
-        ninthPanelData.value.links.pop()
-        await reportPartTwoService.createMultipleReportDraft(ninthPanelData.value, '9', props.id, true);
+        ninthPanelData.value.links.pop();
+        await reportPartTwoService.createMultipleReportDraft(
+            ninthPanelData.value,
+            '9',
+            props.id,
+            true,
+        );
     }
-
 };
 
 watchEffect(() => {
     if (props.panel_number == 6) {
         if (props.isDistrictHeadquarterCommander) {
-            sixPanelData.value = { ...props.data }
+            sixPanelData.value = { ...props.data };
             sixPanelDataDH.value = { ...props.dataDH };
             // sixPanelDataCH.value = { ...props.dataCH };
         } else {
             if (Object.keys(props.data).length > 0) {
-                isFirstSentSix.value = false
-                sixPanelData.value = { ...props.data }
+                isFirstSentSix.value = false;
+                sixPanelData.value = { ...props.data };
                 if (isLinkError.value) {
-                    emit('error', isLinkError.value)
+                    emit('error', isLinkError.value);
                 } else {
-                    emit('error', false)
+                    emit('error', false);
                 }
-                if (!sixPanelData.value.links.length) sixPanelData.value.links.push({ link: '' })
-            }
-            else {
+                if (!sixPanelData.value.links.length)
+                    sixPanelData.value.links.push({ link: '' });
+            } else {
                 console.log('data not received');
             }
         }
-        emit('getId', props.id)
-        emit('getPanelNumber', props.panel_number)
-
+        emit('getId', props.id);
+        emit('getPanelNumber', props.panel_number);
     } else if (props.panel_number == 7) {
         if (Object.keys(props.data).length > 0) {
-            console.log('7')
+            console.log('7');
             isFirstSentSeventh.value = false;
-            seventhPanelData.value = { ...props.data }
+            seventhPanelData.value = { ...props.data };
             if (isLinkError.value) {
-                emit('error', isLinkError.value)
+                emit('error', isLinkError.value);
             } else {
-                emit('error', false)
+                emit('error', false);
             }
 
-            if (!seventhPanelData.value.links.length) seventhPanelData.value.links.push({ link: '' })
-
-        }
-        else {
+            if (!seventhPanelData.value.links.length)
+                seventhPanelData.value.links.push({ link: '' });
+        } else {
             console.log('data not received');
             isFirstSentSeventh.value = true;
             seventhPanelData.value = {
                 prize_place: 'Нет',
                 document: '',
-                links: [{
-                    link: '',
-                }],
+                links: [
+                    {
+                        link: '',
+                    },
+                ],
                 comment: '',
             };
         }
-        emit('getId', props.id)
-        emit('getPanelNumber', props.panel_number)
-
+        emit('getId', props.id);
+        emit('getPanelNumber', props.panel_number);
     } else if (props.panel_number == 9) {
-        if (Object.keys(props.data).length > 0) {
-            isFirstSentNinth.value = false;
-            ninthPanelData.value = { ...props.data }
-            if (isLinkError.value) {
-                console.log('gg');
-                emit('error', isLinkError.value)
+        if (props.isDistrictHeadquarterCommander) {
+            ninthPanelData.value = { ...props.data };
+            ninthPanelDataDH.value = { ...props.dataDH };
+        } else {
+            if (Object.keys(props.data).length > 0) {
+                isFirstSentNinth.value = false;
+                ninthPanelData.value = { ...props.data };
+                if (isLinkError.value) {
+                    console.log('gg');
+                    emit('error', isLinkError.value);
+                } else {
+                    console.log('hh');
+                    emit('error', false);
+                }
+                if (!ninthPanelData.value.links.length) {
+                    ninthPanelData.value.links.push({ link: '' });
+                }
             } else {
-                console.log('hh')
-                emit('error', false)
+                console.log('data not received');
+                isFirstSentNinth.value = true;
+                ninthPanelData.value = {
+                    event_happened: false,
+                    links: [
+                        {
+                            link: '',
+                        },
+                    ],
+                    comment: '',
+                    file_size: '',
+                    file_type: '',
+                };
             }
-            if (!ninthPanelData.value.links.length) {
-                ninthPanelData.value.links.push({ link: '' })
-            }
-
         }
-
-        else {
-            console.log('data not received');
-            isFirstSentNinth.value = true;
-            ninthPanelData.value = {
-                event_happened: false,
-                links: [{
-                    link: '',
-                }],
-                comment: '',
-                file_size: '',
-                file_type: '',
-            };
-        }
-        emit('getId', props.id)
-        emit('getPanelNumber', props.panel_number)
-
+        emit('getId', props.id);
+        emit('getPanelNumber', props.panel_number);
     }
-})
+});
 </script>
 <style lang="scss" scoped>
 .number_input {
@@ -1106,7 +1937,7 @@ watchEffect(() => {
 }
 
 .result-checkbox {
-    color: #39BF39;
+    color: #39bf39;
     margin-right: 12px;
 }
 
@@ -1116,13 +1947,13 @@ watchEffect(() => {
 }
 
 .result-count {
-    color: #6D6D6D;
+    color: #6d6d6d;
 }
 
 .hr {
     margin-bottom: 16px;
     width: 100%;
-    border-top: 1px solid #B6B6B6;
+    border-top: 1px solid #b6b6b6;
 
     @media (max-width: 568px) {
         width: 340px;
@@ -1138,8 +1969,8 @@ watchEffect(() => {
 //   color: #E67E22;
 // }
 
-input[type="radio"]:disabled {
-    background-color: #1F7CC0;
+input[type='radio']:disabled {
+    background-color: #1f7cc0;
     border: 2px solid #000000; // Add border to the input element
     border-radius: 50%; // Make the border round
 }
@@ -1177,11 +2008,10 @@ input[type="radio"]:disabled {
     @media screen and (max-width: 578px) {
         max-width: 360px;
     }
-
 }
 
 .valid-red {
-    color: #DB0000;
+    color: #db0000;
 }
 
 .one_place {
@@ -1191,14 +2021,12 @@ input[type="radio"]:disabled {
 .month {
     width: 100%;
     max-width: 70px;
-
 }
 
 .city {
     width: 100%;
     max-width: 200px;
 }
-
 
 .places {
     margin-bottom: 16px;

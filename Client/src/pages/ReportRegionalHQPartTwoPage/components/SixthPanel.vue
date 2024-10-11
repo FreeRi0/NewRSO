@@ -118,6 +118,11 @@ const sixPanelData = ref({
 
 const sixPanelDataDH = ref({
     number_of_members: 0,
+    links: [
+        {
+            link: '',
+        },
+    ],
     comment: '',
 });
 
