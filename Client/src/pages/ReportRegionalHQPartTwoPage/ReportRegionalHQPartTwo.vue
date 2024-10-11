@@ -483,10 +483,15 @@ const getReportData = async (reportId) => {
 
       reportData.value.eleventhDH = (await reportPartTwoService.getReportDH('11', reportId)).data;
       reportData.value.eleventh = reportData.value.eleventhDH;
+      // console.log('11', reportData.value.eleventhDH);
+
       reportData.value.twelfthDH = (await reportPartTwoService.getReportDH('12', reportId)).data;
       reportData.value.twelfth = reportData.value.twelfthDH;
+      // console.log('12', reportData.value.twelfthDH);
+      
       reportData.value.thirteenthDH = (await reportPartTwoService.getReportDH('13', reportId)).data;
       reportData.value.thirteenth = reportData.value.thirteenthDH;
+      // console.log('13', reportData.value.thirteenthDH);
 
       reportData.value.sixteenth = (await reportPartTwoService.getReportDH('16', reportId)).data;
       reportData.value.seventeenth = (await reportPartTwoService.getReportDH('17', reportId)).data;

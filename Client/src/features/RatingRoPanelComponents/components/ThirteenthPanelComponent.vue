@@ -18,7 +18,7 @@
                 :min="0"
                 :max="2147483647"
                 @focusout="focusOut"
-                :disabled="isSent"
+                :disabled="isSent || (props.centralExpert || props.districtExpert)"
                 :is-error-panel="isErrorPanel"
             />
         </div>
@@ -26,7 +26,8 @@
         <div 
             class="report__fieldset report__fieldset--comment"
             v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
-                  (isSent && thirteenthPanelData.comment)"
+                  (isSent && thirteenthPanelData.comment) ||
+                  ((props.centralExpert || props.districtExpert) && thirteenthPanelData.comment)"
         >
             <label class="form__label report__label" for="comment">
                 Комментарий
@@ -42,7 +43,7 @@
                 :maxlength="3000"
                 :max-length-text="3000"
                 @focusout="focusOut"
-                :disabled="isSent"
+                :disabled="isSent || (props.centralExpert || props.districtExpert)"
             >
             </TextareaReport>
         </div>
@@ -92,9 +93,9 @@
         <ReportTable
             label="Количество членов РО&nbsp;РСО, принявших участие во&nbsp;Всероссийском дне ударного труда"
             name="thirteenthPanelData.number_of_members"
-            :dataRH="200"
-            :dataDH="210"
-            v-model:value="thirteenthPanelData.number_of_members"
+            :dataRH="thirteenthPanelData.number_of_members"
+            :dataDH="thirteenthPanelDataDH.number_of_members"
+            v-model:value="thirteenthPanelDataCH.number_of_members"
         ></ReportTable>
 
         <CommentFileComponent></CommentFileComponent>
@@ -118,12 +119,9 @@ import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.t
 
 const props = defineProps({
     districtExpert: {
-    type: Boolean,
-    },
-    centralExpert: {
         type: Boolean,
     },
-    isDisabled: {
+    centralExpert: {
         type: Boolean,
     },
     isSecondTab: {
@@ -195,11 +193,9 @@ const focusOut = async () => {
     
     if (props.districtExpert) {
     emit('getDataDH', thirteenthPanelDataDH.value, Number(ID_PANEL));
-    // console.log(eleventhPanelDataDH.value)
+    // console.log(thirteenthPanelDataDH.value)
   }
 };
-
-// const fileName = ref('');
 
 // В показателе удалено прикрепление/удаление файла для РШ
 const uploadFile = async (event) => {
@@ -226,9 +222,8 @@ const deleteFile = async () => {
 
 watchEffect(async () => {
     if (props.districtExpert) {
-        thirteenthPanelDataDH.value = { ...props.data }
+        thirteenthPanelData.value = { ...props.data }
         thirteenthPanelDataDH.value = { ...props.dataDH };
-        console.log(props.dataDH)
     } else {
         if (props.data) {
             // console.log(props.data);

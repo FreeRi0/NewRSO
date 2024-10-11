@@ -20,7 +20,7 @@
             class="report__button-delete-file"
             v-bind="$attrs"
             aria-label="Удалить файл"
-            v-if="!isSent"
+            v-if="!isSent && !isDisabled"
         >
             <span>Удалить</span>
         </button>
@@ -60,6 +60,10 @@ const props = defineProps({
     // },
     isSent: {
         type: Boolean,
+    },
+    isDisabled: {
+        type: Boolean,
+        default: false,
     },
     isErrorFile: {
         type: Boolean,
