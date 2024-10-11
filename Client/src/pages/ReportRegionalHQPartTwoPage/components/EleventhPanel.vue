@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from "vue";
+// import { ref, watchEffect } from "vue";
 import { EleventhPanelComponent } from "@features/RatingRoPanelComponents";
 // import { InputReport, TextareaReport } from '@shared/components/inputs';
 // import { CommentFileComponent } from '@entities/RatingRoComponents/components';
@@ -149,7 +149,7 @@ const getDataCH = (event) => {
 //   }
 // };
 
-  watchEffect(async () => {
+  // watchEffect(async () => {
     // console.log('эксперт: ', (props.districtExpert || props.centralExpert));
   //   try {
       // const { data } = props.centralExpert || props.districtExpert ? await reportPartTwoService.getReportDH(ID_PANEL) : await reportPartTwoService.getReport(ID_PANEL);
@@ -165,7 +165,7 @@ const getDataCH = (event) => {
   //   } catch (e) {
   //     console.log(e)
   //   }
-  });
+  // });
 
 </script>
 

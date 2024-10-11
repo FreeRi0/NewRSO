@@ -17,7 +17,7 @@
         :min="0"
         :max="2147483647"
         @focusout="focusOut"
-        :disabled="isSent"
+        :disabled="isSent || (props.centralExpert || props.districtExpert)"
         :is-error-panel="isErrorPanel"
       />
     </div>
@@ -37,7 +37,7 @@
         width="100%"
         height="auto"
         @change="uploadFile"
-        :disabled="isSent"
+        :disabled="isSent || (props.centralExpert || props.districtExpert)"
         :is-error-panel="isErrorPanel"
       />
       <FileBoxComponent
@@ -48,16 +48,14 @@
         @click="deleteFile"
         :is-sent="isSent"
         :is-error-file="isErrorFile"
+        :is-disabled="(props.centralExpert || props.districtExpert)"
       ></FileBoxComponent>
     </div>
-
     <div
       class="report__fieldset report__fieldset--comment"
-      v-if="
-        !(districtExpert || centralExpert) ||
-        (districtExpert && eleventhPanelData.comment) ||
-        (centralExpert && eleventhPanelData.comment)
-      "
+      v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+            (isSent && eleventhPanelData.comment) ||
+            ((props.centralExpert || props.districtExpert) && eleventhPanelData.comment)"
     >
       <label class="form__label report__label" for="comment"> Комментарий </label>
       <TextareaReport
@@ -71,7 +69,7 @@
         :maxlength="3000"
         :max-length-text="3000"
         @focusout="focusOut"
-        :disabled="isSent"
+        :disabled="isSent || (props.centralExpert || props.districtExpert)"
       >
       </TextareaReport>
     </div>
@@ -148,9 +146,6 @@ const props = defineProps({
     type: Boolean,
   },
   centralExpert: {
-    type: Boolean,
-  },
-  isDisabled: {
     type: Boolean,
   },
   isSecondTab: {
@@ -274,37 +269,36 @@ const deleteFile = async () => {
   if (isErrorFile.value) {
     eleventhPanelData.value.scan_file = "";
     eleventhPanelDataDH.value.scan_file = '';
-  } else if (props.districtExpert) { 
-    eleventhPanelDataDH.value.scan_file = '';
-    eleventhPanelDataDH.value.file_size = null;
-    eleventhPanelDataDH.value.file_type = '';
-    emit('getDataDH', eleventhPanelDataDH.value, Number(ID_PANEL));
   } else {
-    let formData = new FormData();
-    formData.append("scan_file", "");
+    if (props.districtExpert) { 
+      eleventhPanelDataDH.value.scan_file = '';
+      eleventhPanelDataDH.value.file_size = null;
+      eleventhPanelDataDH.value.file_type = '';
+      emit('getDataDH', eleventhPanelDataDH.value, Number(ID_PANEL));
+    } else {
+      let formData = new FormData();
+      formData.append("scan_file", "");
 
-    try {
-      if (isFirstSent.value) {
-        let { data : scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-        emit('getData', scan_file, Number(ID_PANEL));
-      } else {
-        
-        let { data : scan_file } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-        emit('getData', scan_file, Number(ID_PANEL));
-      }
-    } catch (e) {
-      console.log('focusOut error:', e);
-    }  
+      try {
+        if (isFirstSent.value) {
+          let { data : scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+          emit('getData', scan_file, Number(ID_PANEL));
+        } else {
+          let { data : scan_file } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+          emit('getData', scan_file, Number(ID_PANEL));
+        }
+      } catch (e) {
+        console.log('focusOut error:', e);
+      }  
+    }
   }
 };
 
 watchEffect(() => {
-  // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
-
   if (props.districtExpert) {
     eleventhPanelData.value = { ...props.data }
     eleventhPanelDataDH.value = { ...props.dataDH };
-    console.log(props.dataDH)
+    //console.log(eleventhPanelDataDH.value)
   } else {
     if (props.data) {
       console.log(props.data);

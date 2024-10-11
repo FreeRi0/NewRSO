@@ -157,8 +157,16 @@
               12. Объем средств, собранных бойцами РО&nbsp;РСО во&nbsp;Всероссийском дне ударного труда
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <twelfth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.twelfth" :is-error-panel="isErrorPanel.twelfth" />
+              <twelfth-panel 
+                :districtExpert="districtExpert" 
+                :centralExpert="centralExpert" 
+                @get-data="setData"
+                @get-data-DH="setDataDH"
+                @get-data-CH="setDataCH"
+                :data="reportData.twelfth"
+                :data-DH="reportData.twelfthDH"
+                :data-CH="reportData.twelfthCH"
+                :is-error-panel="isErrorPanel.twelfth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -166,8 +174,16 @@
               13. Охват членов РО&nbsp;РСО, принявших участие во&nbsp;Всероссийском дне ударного труда &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <thirteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.thirteenth" :is-error-panel="isErrorPanel.thirteenth" />
+              <thirteenth-panel 
+                :districtExpert="districtExpert" 
+                :centralExpert="centralExpert" 
+                @get-data="setData"
+                @get-data-DH="setDataDH"
+                @get-data-CH="setDataCH"
+                :data="reportData.thirteenth"
+                :data-DH="reportData.thirteenthDH"
+                :data-CH="reportData.thirteenthCH"
+                :is-error-panel="isErrorPanel.thirteenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -283,7 +299,11 @@ const reportData = ref({
   eleventhDH: null,
   eleventhCH: null,
   twelfth: null,
+  twelfthDH: null,
+  twelfthCH: null,
   thirteenth: null,
+  thirteenthDH: null,
+  thirteenthCH: null,
   sixteenth: null,
   seventeenth: null,
   eighteenth: null,
@@ -460,10 +480,19 @@ const getReportData = async (reportId) => {
       await getMultiplyData(true, reportId);
       reportData.value.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
       reportData.value.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', reportId)).data;
+
       reportData.value.eleventhDH = (await reportPartTwoService.getReportDH('11', reportId)).data;
       reportData.value.eleventh = reportData.value.eleventhDH;
-      reportData.value.twelfth = (await reportPartTwoService.getReportDH('12', reportId)).data;
-      reportData.value.thirteenth = (await reportPartTwoService.getReportDH('13', reportId)).data;
+      // console.log('11', reportData.value.eleventhDH);
+
+      reportData.value.twelfthDH = (await reportPartTwoService.getReportDH('12', reportId)).data;
+      reportData.value.twelfth = reportData.value.twelfthDH;
+      // console.log('12', reportData.value.twelfthDH);
+      
+      reportData.value.thirteenthDH = (await reportPartTwoService.getReportDH('13', reportId)).data;
+      reportData.value.thirteenth = reportData.value.thirteenthDH;
+      // console.log('13', reportData.value.thirteenthDH);
+
       reportData.value.sixteenth = (await reportPartTwoService.getReportDH('16', reportId)).data;
       reportData.value.seventeenth = (await reportPartTwoService.getReportDH('17', reportId)).data;
       reportData.value.eighteenth = (await reportPartTwoService.getReportDH('18', reportId)).data;
@@ -554,6 +583,14 @@ const setDataDH = (data, panel, number) => {
       reportData.value.eleventhDH = data;
       console.log(data);
       break;
+    case 12:
+      reportData.value.twelfthDH = data;
+      console.log(data);
+      break;
+    case 13:
+      reportData.value.thirteenthDH = data;
+      console.log(data);
+      break;
   }
 }
 const setDataCH = (data, panel, number) => {
@@ -563,6 +600,14 @@ const setDataCH = (data, panel, number) => {
       break;
     case 11:
       reportData.value.eleventhCH = data;
+      console.log(data);
+      break;
+    case 12:
+      reportData.value.twelfthCH = data;
+      console.log(data);
+      break;
+    case 13:
+      reportData.value.thirteenthCH = data;
       console.log(data);
       break;
   }
@@ -908,7 +953,7 @@ const checkEmptyFields = (data) => {
     })
     return false;
   }
-  if (!data.twelfth || !(data.twelfth.amount_of_money && data.twelfth.scan_file)) {
+  if (!data.twelfth || !(data.twelfth.amount_of_money)) {
     isErrorPanel.value.twelfth = true;
     swal.fire({
       position: 'center',
@@ -919,7 +964,7 @@ const checkEmptyFields = (data) => {
     })
     return false;
   }
-  if (!data.thirteenth || !(data.thirteenth.number_of_members && data.thirteenth.scan_file)) {
+  if (!data.thirteenth || !(data.thirteenth.number_of_members)) {
     isErrorPanel.value.thirteenth = true;
     swal.fire({
       position: 'center',
