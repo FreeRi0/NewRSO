@@ -5,6 +5,10 @@ export function createReport(data: object) {
 }
 
 export function getReport() {
+    return HTTP.get('regional_competitions/statistical_report/me_first/')
+}
+
+export function getReportForSecond() {
     return HTTP.get('regional_competitions/statistical_report/me/')
 }
 
@@ -14,6 +18,10 @@ export function getCurrentReport(id: string) {
 
 export function patchReport(data: object) {
     return HTTP.patch('regional_competitions/statistical_report/me/', data)
+}
+
+export function editReport(data: object) {
+    return HTTP.put('/regional_competitions/statistical_report/me/', data)
 }
 
 export const reportPartTwoService = {

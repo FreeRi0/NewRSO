@@ -21,7 +21,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <first-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.first" :is-error-panel="isErrorPanel.first" />
+                :data="reportData.first" :is-error-panel="isErrorPanel.first" :blockEditFirstReport="blockEditFirstReport"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -210,7 +210,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <seventeenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.seventeenth" :is-sent="reportData.sixteenth.is_sent" />
+                :data="reportData.seventeenth" :is-sent="blockSendButton" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -219,7 +219,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <eighteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.eighteenth" :is-sent="reportData.sixteenth.is_sent" />
+                :data="reportData.eighteenth" :is-sent="blockSendButton" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -228,7 +228,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <nineteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.nineteenth" :is-sent="reportData.sixteenth.is_sent" />
+                :data="reportData.nineteenth" :is-sent="blockSendButton" />
             </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -298,6 +298,7 @@ const six_items = ref([])
 const seventh_items = ref([]);
 const ninth_items = ref([]);
 const blockSendButton = ref(false);
+const blockEditFirstReport = ref(false);
 
 const swal = inject('$swal');
 const router = useRouter();
@@ -514,6 +515,7 @@ const getReportData = async (reportId) => {
         // TODO: продумать логику блокировки кнопки, когда все отчеты отправлены
         if (reportData.value.sixteenth.is_sent) {
           blockSendButton.value = true;
+          blockEditFirstReport.value = true;
         }
       } catch (e) {
         console.log(e.message)
