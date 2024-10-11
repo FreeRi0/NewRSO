@@ -957,9 +957,9 @@ onMounted(() => {
     centralExpert.value = true;
     console.log('центральный эксперт', centralExpert.value);
   }
-  // getItems(6);
-  // getItems(7);
-  // getItems(9);
+  getItems(6);
+  getItems(7);
+  getItems(9);
   getReportData(route.query.reportId);
 
 });
