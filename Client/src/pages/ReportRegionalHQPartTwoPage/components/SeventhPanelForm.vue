@@ -1,7 +1,7 @@
 <template>
     <v-card-text class="panel-card-text">
         <v-tabs-window v-if="!(props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)">
-            <div v-if="props.panel_number == 7" class="form__field-group group-seventh">
+            <!-- <div v-if="props.panel_number == 7" class="form__field-group group-seventh">
                 <div class="d-flex justify-space-between">
                     <div class="title_wrap">
                         <p class="form__title">{{ props.title.name }}</p>
@@ -82,8 +82,8 @@
                 <div class="form__field-result result-count">
                     <p>0</p>
                 </div>
-            </div>
-            <div v-else-if="props.panel_number == 6" class="form__field-group group-seventh">
+            </div> -->
+            <div v-if="props.panel_number == 6" class="form__field-group group-seventh">
                 <div class="d-flex justify-space-between">
                     <div class="title_wrap">
                         <p class="form__title">{{ props.title.name }}</p>
@@ -163,7 +163,7 @@
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                            }}</label>
+                                }}</label>
                         </div>
                     </div>
                 </div>
@@ -223,7 +223,7 @@
         </v-tabs-window>
         <report-tabs v-else>
             <template v-slot:firstTab>
-                <div v-if="props.panel_number == 7" class="form__field-group group-seventh">
+                <!-- <div v-if="props.panel_number == 7" class="form__field-group group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -303,8 +303,8 @@
                     <div class="form__field-result result-count">
                         <p>0</p>
                     </div>
-                </div>
-                <div v-else-if="props.panel_number == 6" class="form__field-group group-seventh">
+                </div> -->
+                <div v-if="props.panel_number == 6" class="form__field-group group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -379,7 +379,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -392,7 +392,8 @@
                             v-if="!ninthPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
                             id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile" />
                         <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
-                        :isSent="isSent" :fileSize="ninthPanelData.file_size" @click="deleteFile"></FileBoxComponent>
+                            :isSent="isSent" :fileSize="ninthPanelData.file_size" @click="deleteFile">
+                        </FileBoxComponent>
                     </div>
 
                     <div class="form__field">
@@ -436,7 +437,7 @@
                 </div>
             </template>
             <template v-slot:secondTab>
-                <div v-if="props.panel_number == 7" class="form__field-group group-seventh">
+                <!-- <div v-if="props.panel_number == 7" class="form__field-group group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -479,8 +480,8 @@
                     <div class="form__field-result result-count">
                         <p>0</p>
                     </div>
-                </div>
-                <div v-else-if="props.panel_number == 6" class="form__field-group group-seventh">
+                </div> -->
+                <div v-if="props.panel_number == 6" class="form__field-group group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -531,7 +532,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -552,7 +553,7 @@
                 </div>
             </template>
             <template v-slot:thirdTab>
-                <div v-if="props.panel_number == 7" class="form__field-group group-seventh">
+                <!-- <div v-if="props.panel_number == 7" class="form__field-group group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -610,8 +611,8 @@
                     <div>
                         <v-checkbox label="Вернуть в РО на доработку" />
                     </div>
-                </div>
-                <div v-else-if="props.panel_number == 6" class="form__field-group group-seventh">
+                </div> -->
+                <div v-if="props.panel_number == 6" class="form__field-group group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -688,7 +689,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -726,7 +727,7 @@ const props = defineProps({
     isDistrictHeadquarterCommander: Boolean,
     id: String,
     isSentSix: Boolean,
-    isSent: Boolean,
+    // isSent: Boolean,
     isSentNinth: Boolean,
     isErrorPanel: Boolean,
     data: Object,
@@ -741,7 +742,7 @@ const collapseForm = () => {
 
 let isErrorFile = ref(false);
 const isFirstSentSix = ref(true);
-const isFirstSentSeventh = ref(true);
+// const isFirstSentSeventh = ref(true);
 const isFirstSentNinth = ref(true);
 const isLinkError = ref(false);
 
@@ -752,16 +753,16 @@ const setError = (err) => {
     console.log('errorr', err);
 }
 
-const seventhPanelData = ref({
-    prize_place: 'Нет',
-    links: [{
-        link: '',
-    }],
-    document: '',
-    file_size: null,
-    file_type: '',
-    comment: '',
-});
+// const seventhPanelData = ref({
+//     prize_place: 'Нет',
+//     links: [{
+//         link: '',
+//     }],
+//     document: '',
+//     file_size: null,
+//     file_type: '',
+//     comment: '',
+// });
 
 const ninthPanelData = ref({
     event_happened: false,
@@ -782,12 +783,12 @@ const sixPanelData = ref({
     comment: '',
 });
 
-const prize_places = ref([
-    { name: '1', value: 1, id: 'pp1' },
-    { name: '2', value: 2, id: 'pp2' },
-    { name: '3', value: 3, id: 'pp3' },
-    { name: 'Нет', value: 'Нет', id: 'pp4' },
-]);
+// const prize_places = ref([
+//     { name: '1', value: 1, id: 'pp1' },
+//     { name: '2', value: 2, id: 'pp2' },
+//     { name: '3', value: 3, id: 'pp3' },
+//     { name: 'Нет', value: 'Нет', id: 'pp4' },
+// ]);
 
 const events = ref([
     { name: 'Да', value: true, id: 'pp1' },
@@ -796,30 +797,29 @@ const events = ref([
 
 
 const uploadFile = (event, number) => {
-    console.log('num', number);
-    if (number === 7) {
-        fileValidate(event.target.files[0], 7, isErrorFile);
-        if (isErrorFile.value) {
-            console.log('error');
-            scanFile.value = event.target.files[0];
-            seventhPanelData.value.document = scanFile.value.name;
-        }
-        else {
-            let formData = new FormData();
-            formData.append('prize_place', seventhPanelData.value.prize_place);
-            formData.append('document', event.target.files[0]);
-            if (seventhPanelData.value.links.length) {
-                for (let i = 0; i < seventhPanelData.value.links.length; i++) {
-                    !seventhPanelData.value.links[i].link
-                        ? formData.append(`[links][${i}][link]`, '')
-                        : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
-                }
-            }
-            formData.append('comment', seventhPanelData.value.comment);
-            console.log('comment', formData);
-            emit('uploadFile', formData);
-        }
-    } else if (number === 9) {
+    // if (number === 7) {
+    //     fileValidate(event.target.files[0], 7, isErrorFile);
+    //     if (isErrorFile.value) {
+    //         console.log('error');
+    //         scanFile.value = event.target.files[0];
+    //         seventhPanelData.value.document = scanFile.value.name;
+    //     }
+    //     else {
+    //         let formData = new FormData();
+    //         formData.append('prize_place', seventhPanelData.value.prize_place);
+    //         formData.append('document', event.target.files[0]);
+    //         if (seventhPanelData.value.links.length) {
+    //             for (let i = 0; i < seventhPanelData.value.links.length; i++) {
+    //                 !seventhPanelData.value.links[i].link
+    //                     ? formData.append(`[links][${i}][link]`, '')
+    //                     : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
+    //             }
+    //         }
+    //         formData.append('comment', seventhPanelData.value.comment);
+    //         console.log('comment', formData);
+    //         emit('uploadFile', formData);
+    //     }
+    if (number === 9) {
         fileValidate(event.target.files[0], 9, isErrorFile);
         if (isErrorFile.value) {
             console.log('error');
@@ -845,24 +845,25 @@ const uploadFile = (event, number) => {
 
 const deleteFile = (number) => {
     let formData = new FormData();
-    if (number === 7) {
-        seventhPanelData.value.document = '';
-        formData.append('prize_place', seventhPanelData.value.prize_place);
-        formData.append('document', '');
-        if (seventhPanelData.value.links.length) {
-            for (let i = 0; i < seventhPanelData.value.links.length; i++) {
-                !seventhPanelData.value.links[i].link
-                    ? formData.append(`[links][${i}][link]`, '')
-                    : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
-            }
-        }
-        formData.append('comment', seventhPanelData.value.comment);
-        formData.append('file_size', seventhPanelData.value.file_size);
-        formData.append('file_type', seventhPanelData.value.file_type);
+    // if (number === 7) {
+    //     seventhPanelData.value.document = '';
+    //     formData.append('prize_place', seventhPanelData.value.prize_place);
+    //     formData.append('document', '');
+    //     if (seventhPanelData.value.links.length) {
+    //         for (let i = 0; i < seventhPanelData.value.links.length; i++) {
+    //             !seventhPanelData.value.links[i].link
+    //                 ? formData.append(`[links][${i}][link]`, '')
+    //                 : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
+    //         }
+    //     }
+    //     formData.append('comment', seventhPanelData.value.comment);
+    //     formData.append('file_size', seventhPanelData.value.file_size);
+    //     formData.append('file_type', seventhPanelData.value.file_type);
 
-        emit('deleteFile', formData);
-        // emit('formData', formData)
-    } else if (number === 9) {
+    //     emit('deleteFile', formData);
+    //     // emit('formData', formData)
+    // } 
+    if (number === 9) {
         ninthPanelData.value.document = '';
         formData.append('event_happened', ninthPanelData.value.event_happened);
         formData.append('document', '');
@@ -893,55 +894,55 @@ const focusOut = () => {
             console.log('data', e.response.data)
         }
     }
-    else if (props.panel_number == 7) {
-        try {
-            if (isFirstSentSeventh.value) {
-                console.log('7', '1')
-                emit('formData', seventhPanelData.value)
-            } else {
-                if (seventhPanelData.value.prize_place == 'Нет') {
-                    let formData = new FormData();
-                    seventhPanelData.value.document = '';
-                    seventhPanelData.value.links = [];
-                    seventhPanelData.value.file_size = null;
-                    seventhPanelData.value.file_type = '';
-                    seventhPanelData.value.comment = '';
-                    formData.append('prize_place', seventhPanelData.value.prize_place);
-                    formData.append('document', '');
-                    if (seventhPanelData.value.links.length) {
-                        for (let i = 0; i < seventhPanelData.value.links.length; i++) {
-                            !seventhPanelData.value.links[i].link
-                                ? formData.append(`[links][${i}][link]`, '')
-                                : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
-                        }
-                    }
-                    formData.append('comment', seventhPanelData.value.comment);
-                    formData.append('file_size', seventhPanelData.value.file_size);
-                    formData.append('file_type', seventhPanelData.value.file_type);
-                    emit('formData', formData);
-                }
+    // else if (props.panel_number == 7) {
+    //     try {
+    //         if (isFirstSentSeventh.value) {
+    //             console.log('7', '1')
+    //             emit('formData', seventhPanelData.value)
+    //         } else {
+    //             if (seventhPanelData.value.prize_place == 'Нет') {
+    //                 let formData = new FormData();
+    //                 seventhPanelData.value.document = '';
+    //                 seventhPanelData.value.links = [];
+    //                 seventhPanelData.value.file_size = null;
+    //                 seventhPanelData.value.file_type = '';
+    //                 seventhPanelData.value.comment = '';
+    //                 formData.append('prize_place', seventhPanelData.value.prize_place);
+    //                 formData.append('document', '');
+    //                 if (seventhPanelData.value.links.length) {
+    //                     for (let i = 0; i < seventhPanelData.value.links.length; i++) {
+    //                         !seventhPanelData.value.links[i].link
+    //                             ? formData.append(`[links][${i}][link]`, '')
+    //                             : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
+    //                     }
+    //                 }
+    //                 formData.append('comment', seventhPanelData.value.comment);
+    //                 formData.append('file_size', seventhPanelData.value.file_size);
+    //                 formData.append('file_type', seventhPanelData.value.file_type);
+    //                 emit('formData', formData);
+    //             }
 
-                let formData = new FormData();
-                formData.append('comment', seventhPanelData.value.comment);
-                formData.append('prize_place', seventhPanelData.value.prize_place);
+    //             let formData = new FormData();
+    //             formData.append('comment', seventhPanelData.value.comment);
+    //             formData.append('prize_place', seventhPanelData.value.prize_place);
 
-                for (let i = 0; i < seventhPanelData.value.links.length; i++) {
-                    !seventhPanelData.value.links[i].link
-                        ? formData.append(`[links][${i}][link]`, '')
-                        : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
-                }
+    //             for (let i = 0; i < seventhPanelData.value.links.length; i++) {
+    //                 !seventhPanelData.value.links[i].link
+    //                     ? formData.append(`[links][${i}][link]`, '')
+    //                     : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
+    //             }
 
-                // emit('isSent', isFirstSent.value)
-                emit('formData', formData)
-                console.log('7', '2')
+    //             // emit('isSent', isFirstSent.value)
+    //             emit('formData', formData)
+    //             console.log('7', '2')
 
-            }
-        } catch (e) {
-            console.log('data', e.response.data);
+    //         }
+    //     } catch (e) {
+    //         console.log('data', e.response.data);
 
-        }
+    //     }
 
-    }
+    // }
     else if (props.panel_number == 9) {
         try {
             if (isFirstSentNinth.value === true) {
@@ -993,8 +994,9 @@ const focusOut = () => {
 const addLink = (number) => {
     if (number == 6) {
         sixPanelData.value.links.push({ link: '' });
-    } else if (number == 7) {
-        seventhPanelData.value.links.push({ link: '' });
+    // } else if (number == 7) {
+    //     seventhPanelData.value.links.push({ link: '' });
+    // }
     }
     else if (number == 9) {
         ninthPanelData.value.links.push({ link: '' });
@@ -1005,9 +1007,9 @@ const deleteLink = async (number) => {
     if (number == 6) {
         sixPanelData.value.links.pop()
         await reportPartTwoService.createMultipleReportDraft(sixPanelData.value, '6', props.id);
-    } else if (number == 7) {
-        seventhPanelData.value.links.pop()
-        await reportPartTwoService.createMultipleReportDraft(seventhPanelData.value, '7', props.id, true);
+    // } else if (number == 7) {
+    //     seventhPanelData.value.links.pop()
+    //     await reportPartTwoService.createMultipleReportDraft(seventhPanelData.value, '7', props.id, true);
     } else if (number == 9) {
         ninthPanelData.value.links.pop()
         await reportPartTwoService.createMultipleReportDraft(ninthPanelData.value, '9', props.id, true);
@@ -1047,34 +1049,34 @@ watchEffect(() => {
         }
         emit('getId', props.id)
         emit('getPanelNumber', props.panel_number)
-    } else if (props.panel_number == 7) {
-        if (Object.keys(props.data).length > 0) {
-            console.log('7')
-            isFirstSentSeventh.value = false;
-            seventhPanelData.value = { ...props.data }
-            if (isLinkError.value) {
-                emit('error', isLinkError.value)
-            } else {
-                emit('error', false)
-            }
+    // } else if (props.panel_number == 7) {
+    //     if (Object.keys(props.data).length > 0) {
+    //         console.log('7')
+    //         isFirstSentSeventh.value = false;
+    //         seventhPanelData.value = { ...props.data }
+    //         if (isLinkError.value) {
+    //             emit('error', isLinkError.value)
+    //         } else {
+    //             emit('error', false)
+    //         }
 
-            if (!seventhPanelData.value.links.length) seventhPanelData.value.links.push({ link: '' })
+    //         if (!seventhPanelData.value.links.length) seventhPanelData.value.links.push({ link: '' })
 
-        }
-        else {
-            console.log('data not received');
-            isFirstSentSeventh.value = true;
-            seventhPanelData.value = {
-                prize_place: 'Нет',
-                document: '',
-                links: [{
-                    link: '',
-                }],
-                comment: '',
-            };
-        }
-        emit('getId', props.id)
-        emit('getPanelNumber', props.panel_number)
+    //     }
+    //     else {
+    //         console.log('data not received');
+    //         isFirstSentSeventh.value = true;
+    //         seventhPanelData.value = {
+    //             prize_place: 'Нет',
+    //             document: '',
+    //             links: [{
+    //                 link: '',
+    //             }],
+    //             comment: '',
+    //         };
+    //     }
+    //     emit('getId', props.id)
+    //     emit('getPanelNumber', props.panel_number)
 
     } else if (props.panel_number == 9) {
         if (Object.keys(props.data).length > 0) {
