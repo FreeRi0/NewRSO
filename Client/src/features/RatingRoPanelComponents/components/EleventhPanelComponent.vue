@@ -53,11 +53,8 @@
 
     <div
       class="report__fieldset report__fieldset--comment"
-      v-if="
-        !(districtExpert || centralExpert) ||
-        (districtExpert && eleventhPanelData.comment) ||
-        (centralExpert && eleventhPanelData.comment)
-      "
+      v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+            (isSent && eleventhPanelData.comment)"
     >
       <label class="form__label report__label" for="comment"> Комментарий </label>
       <TextareaReport

@@ -25,11 +25,8 @@
     
         <div 
             class="report__fieldset report__fieldset--comment"
-            v-if="
-                !(districtExpert || centralExpert) ||
-                (districtExpert && thirteenthPanelData.comment) ||
-                (centralExpert && thirteenthPanelData.comment)
-            "
+            v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+                  (isSent && thirteenthPanelData.comment)"
         >
             <label class="form__label report__label" for="comment">
                 Комментарий
