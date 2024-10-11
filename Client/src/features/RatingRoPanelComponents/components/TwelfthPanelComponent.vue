@@ -24,7 +24,11 @@
             />
         </div>
   
-        <div class="report__fieldset report__fieldset--right-block">
+        <div 
+            class="report__fieldset report__fieldset--right-block"
+            v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+                  (isSent && twelfthPanelData.scan_file)"
+        >
             <p class="form__label report__label">
                 Скан подтверждающего <br> документа
             </p>
@@ -53,11 +57,9 @@
   
         <div 
             class="report__fieldset report__fieldset--comment"
-            v-if="
-                !(districtExpert || centralExpert) ||
-                (districtExpert && twelfthPanelData.comment) ||
-                (centralExpert && twelfthPanelData.comment)
-            ">
+            v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+                  (isSent && twelfthPanelData.comment)"
+            >
             <label class="form__label report__label" for="comment">
                 Комментарий
             </label>
