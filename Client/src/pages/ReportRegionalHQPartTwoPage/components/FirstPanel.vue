@@ -3,11 +3,12 @@
     <div class="form__field-group">
       <div class="form__field-report">
         <div class="form__field">
-          <label class="form__label" for="amount_of_money">Общая сумма уплаченных членских взносов РО  <sup
+          <label class="form__label" for="amount_of_money">Общая сумма уплаченных членских взносов РО&nbsp; <sup
               class="valid-red">*</sup></label>
           <InputReport
               v-model:value="firstPanelData.amount_of_money"
-              id="amount_of_money" name="amount_of_money"
+              id="amount_of_money"
+              name="amount_of_money"
               class="form__input"
               type="number"
               placeholder="Введите число"
@@ -32,31 +33,14 @@
               style="width: 100%;"
               @change="uploadFile"/>
           <FileBoxComponent
-            v-else
-            :file="firstPanelData.scan_file"
-            :fileType="firstPanelData.file_type"
-            :fileSize="firstPanelData.file_size"
-            @click="deleteFile"
-            :is-sent="isSent"
-            :is-error-file="isErrorFile"
+              v-else
+              :file="firstPanelData.scan_file"
+              :fileType="firstPanelData.file_type"
+              :fileSize="firstPanelData.file_size"
+              @click="deleteFile"
+              :is-sent="isSent"
+              :is-error-file="isErrorFile"
           ></FileBoxComponent>
-          <!-- <div v-else class="form__file-box">
-            <span class="form__file-name">
-              <SvgIcon v-if="firstPanelData.file_type === 'jpg'" icon-name="file-jpg"/>
-              <SvgIcon v-if="firstPanelData.file_type === 'pdf'" icon-name="file-pdf"/>
-              <SvgIcon v-if="firstPanelData.file_type === 'png'" icon-name="file-png"/>
-              {{ firstPanelData.scan_file }}
-            </span>
-
-            <span class="form__file-size">{{ firstPanelData.file_size }} Мб</span>
-            <button
-                v-if="!isSent"
-                @click="deleteFile"
-                class="form__button-delete-file"
-            >
-              Удалить
-            </button>
-          </div> -->
         </div>
       </div>
       <div class="form__field">
@@ -74,54 +58,80 @@
             counter-visible
             class="form__input"
             :disabled="isSent"
-            style="margin-bottom: 4px;"/>
+            style="margin-bottom: 4px;"
+        />
       </div>
     </div>
-    <ReportRegionalForm :reportData="reportData"/>
+    <ReportRegionalForm :reportData="reportData" :blockEditFirstReport="blockEditFirstReport"/>
   </div>
 
   <report-tabs v-else>
     <template v-slot:firstTab>
       <div class="form__field-report">
         <div class="form__field">
-          <label class="form__label" for="amount_of_money">Общая сумма уплаченных членских взносов РО  <sup
+          <label class="form__label" for="amount_of_money">Общая сумма уплаченных членских взносов РО&nbsp; <sup
               class="valid-red">*</sup></label>
-          <InputReport v-model:value="firstPanelData.amount_of_money" id="amount_of_money" name="amount_of_money"
-                       class="form__input" type="number" placeholder="Введите число" @focusout="focusOut"
-                       :disabled="props.centralExpert || props.districtExpert"/>
+          <InputReport
+              v-model:value="firstPanelData.amount_of_money"
+              id="amount_of_money"
+              name="amount_of_money"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :disabled="props.centralExpert || props.districtExpert"
+          />
         </div>
         <div class="report__add-file">
           <label class="form__label" for="scan_file">Скан платежного поручения об уплате ЧВ <sup
               class="valid-red">*</sup></label>
           <div class="form__file-box">
-            <span class="form__file-name">
-              <SvgIcon v-if="firstPanelData.file_type === 'jpg'" icon-name="file-jpg"/>
-              <SvgIcon v-if="firstPanelData.file_type === 'pdf'" icon-name="file-pdf"/>
-              <SvgIcon v-if="firstPanelData.file_type === 'png'" icon-name="file-png"/>
-              {{ firstPanelData.scan_file || 'Тестовое название' }}
-            </span>
-            <span class="form__file-size">{{ firstPanelData.file_size || '123' }} Мб</span>
+            <FileBoxComponent
+                :file="firstPanelData.scan_file"
+                :fileType="firstPanelData.file_type"
+                :fileSize="firstPanelData.file_size"
+                :is-sent="isSent"
+            ></FileBoxComponent>
           </div>
         </div>
       </div>
     </template>
+
     <template v-slot:secondTab>
       <div class="form__field-report">
         <div class="form__field">
-          <label class="form__label" for="amount_of_money">Общая сумма уплаченных членских взносов РО  <sup
+          <label class="form__label" for="amount_of_money">Общая сумма уплаченных членских взносов РО&nbsp; <sup
               class="valid-red">*</sup></label>
-          <InputReport v-model:value="firstPanelData.amount_of_money" id="amount_of_money" name="amount_of_money"
-                       class="form__input" type="number" placeholder="Введите число" @focusout="focusOut"/>
+          <InputReport
+              v-model:value="firstPanelData.amount_of_money"
+              id="amount_of_money"
+              name="amount_of_money"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="9999999999"
+              :step="0.01"
+          />
         </div>
       </div>
       <div class="form__field">
-        <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
-        <TextareaReport placeholder="Напишите сообщение" v-model:value="firstPanelData.comment" id="comment"
-                        name="comment" :rows="1" autoResize @focusout="focusOut" :maxlength="3000"
-                        :max-length-text="3000"
-                        counter-visible class="form__input"/>
+        <label class="form__label" for="comment">Комментарий<sup class="valid-red">*</sup></label>
+        <TextareaReport
+            v-model:value="firstPanelData.comment"
+            class="form__input"
+            id="comment"
+            name="comment"
+            :rows="1"
+            autoResize
+            :maxlength="3000"
+            :max-length-text="3000"
+            counter-visible
+            placeholder="Напишите сообщение"
+        />
       </div>
     </template>
+
     <template v-slot:thirdTab>
       <div class="form__field-group report-table">
         <v-table>
@@ -150,14 +160,13 @@
   </report-tabs>
 </template>
 <script setup>
-import {ref, watchEffect} from "vue";
-import { InputReport, TextareaReport } from '@shared/components/inputs';
-import { FileBoxComponent } from "@entities/RatingRoComponents/components";
-import { ReportRegionalForm } from '../../ReportRegionalHQPartOnePage/components/index'
-import { getReport, reportPartTwoService } from "@services/ReportService.ts";
-import { SvgIcon } from '@shared/index';
-import { ReportTabs } from './index';
-import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
+import {ref, watchEffect, watchPostEffect} from "vue";
+import {InputReport, TextareaReport} from '@shared/components/inputs';
+import {FileBoxComponent} from "@entities/RatingRoComponents/components";
+import {ReportRegionalForm} from '../../ReportRegionalHQPartOnePage/components/index'
+import {getReportForSecond, reportPartTwoService} from "@services/ReportService.ts";
+import {ReportTabs} from './index';
+import {fileValidate} from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 
 const props = defineProps({
   districtExpert: {
@@ -167,6 +176,7 @@ const props = defineProps({
     type: Boolean
   },
   data: Object,
+  blockEditFirstReport: Boolean,
 });
 
 const emit = defineEmits(['getData']);
@@ -192,14 +202,14 @@ const firstPanelData = ref({
   amount_of_money: '',
   scan_file: '',
   file_type: '',
-  file_size: null,
+  file_size: '',
 });
 const isSent = ref(false);
 
 const focusOut = async () => {
   let formData = new FormData();
   formData.append('comment', firstPanelData.value.comment || '');
-  formData.append('amount_of_money', firstPanelData.value.amount_of_money);
+  formData.append('amount_of_money', firstPanelData.value.amount_of_money || '');
   try {
     if (isFirstSent.value) {
       const {data} = await reportPartTwoService.createReport(formData, '1', true);
@@ -217,8 +227,8 @@ const uploadFile = async (event) => {
   let formData = new FormData();
 
   formData.append('scan_file', event.target.files[0]);
-  formData.append('comment', firstPanelData.value.comment);
-  formData.append('amount_of_money', firstPanelData.value.amount_of_money);
+  formData.append('comment', firstPanelData.value.comment || '');
+  formData.append('amount_of_money', firstPanelData.value.amount_of_money || '');
 
   firstPanelData.value.file_size = (event.target.files[0].size / Math.pow(1024, 2));
   firstPanelData.value.file_type = event.target.files[0].type.split('/').at(-1);
@@ -231,14 +241,14 @@ const uploadFile = async (event) => {
     // console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
   } else {
     if (isFirstSent.value) {
-    let {data} = await reportPartTwoService.createReport(formData, '1', true);
-    emit('getData', data, 1);
-    firstPanelData.value.scan_file = data.scan_file.split('/').at(-1);
-  } else {
-    let {data} = await reportPartTwoService.createReportDraft(formData, '1', true);
-    emit('getData', data, 1);
-    firstPanelData.value.scan_file = data.scan_file.split('/').at(-1);
-  }
+      let {data} = await reportPartTwoService.createReport(formData, '1', true);
+      emit('getData', data, 1);
+      firstPanelData.value.scan_file = data.scan_file.split('/').at(-1);
+    } else {
+      let {data} = await reportPartTwoService.createReportDraft(formData, '1', true);
+      emit('getData', data, 1);
+      firstPanelData.value.scan_file = data.scan_file.split('/').at(-1);
+    }
   }
 };
 const deleteFile = async () => {
@@ -247,37 +257,50 @@ const deleteFile = async () => {
   firstPanelData.value.file_type = '';
   let formData = new FormData();
   formData.append('scan_file', '');
-  formData.append('comment', firstPanelData.value.comment);
-  formData.append('amount_of_money', firstPanelData.value.amount_of_money);
+  formData.append('comment', firstPanelData.value.comment || '');
+  formData.append('amount_of_money', firstPanelData.value.amount_of_money || '');
 
   if (isErrorFile.value) {
     firstPanelData.value.scan_file = "";
   } else {
-  if (isFirstSent.value) {
-    const {data} = await reportPartTwoService.createReport(formData, '1', true);
-    emit('getData', data, 1);
-  } else {
-    const {data} = await reportPartTwoService.createReportDraft(formData, '1', true);
-    emit('getData', data, 1);
+    if (isFirstSent.value) {
+      const {data} = await reportPartTwoService.createReport(formData, '1', true);
+      emit('getData', data, 1);
+    } else {
+      const {data} = await reportPartTwoService.createReportDraft(formData, '1', true);
+      emit('getData', data, 1);
+    }
   }
-} 
 };
 watchEffect(async () => {
   try {
     if (!(props.centralExpert || props.districtExpert)) {
-      const res = await getReport();
+      const res = await getReportForSecond();
       reportData.value = res.data;
     }
   } catch (e) {
     console.log(e)
   }
+
   if (props.data) {
     isFirstSent.value = false;
     firstPanelData.value.comment = props.data.comment;
     firstPanelData.value.amount_of_money = props.data.amount_of_money;
-    firstPanelData.value.scan_file = props.data.scan_file ? props.data.scan_file.split('/').at(-1) : '';
+    firstPanelData.value.scan_file = props.data.scan_file;
     firstPanelData.value.file_type = props.data.file_type;
     firstPanelData.value.file_size = props.data.file_size;
+    isSent.value = props.data.is_sent;
+  }
+});
+
+watchPostEffect(() => {
+  if (props.data) {
+    isFirstSent.value = false;
+    firstPanelData.value.comment = props.data.comment;
+    firstPanelData.value.amount_of_money = props.data.amount_of_money;
+    firstPanelData.value.scan_file = props.data.scan_file || '';
+    firstPanelData.value.file_type = props.data.file_type || '';
+    firstPanelData.value.file_size = props.data.file_size || '';
     isSent.value = props.data.is_sent;
   }
 });

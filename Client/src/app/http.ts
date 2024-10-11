@@ -89,32 +89,37 @@ HTTP.interceptors.response.use(
                             JSON.stringify({})
                         ) {
                             console.log('here 2');
-                            refreshTokenPromise.value = HTTP.post(
-                                '/jwt/refresh/',
-                                {
-                                    refresh:
-                                        localStorage.getItem('refresh_token'),
-                                },
-                            )
-                                .then((response) => {
-                                    console.log('here 3');
-                                    localStorage.setItem(
-                                        'jwt_token',
-                                        response.data.access,
-                                    );
-                                    refreshTokenPromise.value = {};
-                                    originalRequest._retry = true;
-                                    return HTTP(originalRequest);
-                                })
-                                .catch(() => {
-                                    console.log('here 4');
-                                    refreshTokenPromise.value = {};
-                                    userStore.logOut();
-                                    localStorage.removeItem('jwt_token');
-                                    localStorage.removeItem('refresh_token');
-                                    localStorage.removeItem('user');
-                                    router.push({ name: 'Login' });
-                                });
+                            if (localStorage.getItem('refresh_token') && localStorage.getItem('refresh_token') !== null) {
+                                refreshTokenPromise.value = HTTP.post(
+                                    '/jwt/refresh/',
+                                    {
+                                        refresh:
+                                            localStorage.getItem('refresh_token'),
+                                    },
+                                )
+                                    .then((response) => {
+                                        console.log('here 3');
+                                        localStorage.setItem(
+                                            'jwt_token',
+                                            response.data.access,
+                                        );
+                                        refreshTokenPromise.value = {};
+                                        originalRequest._retry = true;
+                                        return HTTP(originalRequest);
+                                    })
+                                    .catch(() => {
+                                        console.log('here 4');
+                                        refreshTokenPromise.value = {};
+                                        userStore.logOut();
+                                        localStorage.removeItem('jwt_token');
+                                        localStorage.removeItem('refresh_token');
+                                        localStorage.removeItem('user');
+                                        router.push({ name: 'Login' });
+                                    });
+                            } else {
+                                console.log('no refresh token')
+                            }
+
                         } else {
                             console.log('here 5');
                             console.log(

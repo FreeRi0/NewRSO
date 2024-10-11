@@ -26,17 +26,17 @@
             counter-visible
             :maxlength="3000"
             :max-length-text="3000"
-            @focusout="focusOutField"
+            
             :disabled="isDisabled"
             v-bind="$attrs"
         ></TextareaReport>
-
         <FileBoxComponent
             v-if="file"
             :file="file"
             :fileType="fileType"
             :fileSize="fileSize"
             @click="clickOnButton"
+            :is-error-file="isErrorFile"
         ></FileBoxComponent>
         </div>
 </template>
@@ -71,15 +71,19 @@ const props = defineProps({
         type: Number,
         default: null,
     },
+    isErrorFile: {
+        type: Boolean,
+        default: false,
+    }
 });
 
 const onChange = (event) => {
     emit('onChange', event.target.value);
 };
 
-const focusOutField = (event) => {
-    emit('focusOut', event.target.value);
-};
+// const focusOutField = (event) => {
+//     emit('focusOut', event.target.value);
+// };
 
 const clickOnButton = () => {
     emit('click');
@@ -87,4 +91,7 @@ const clickOnButton = () => {
 </script>
 
 <style lang="scss" scoped>
+.valid-red {
+  color: #db0000;
+}
 </style>

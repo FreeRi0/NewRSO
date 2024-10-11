@@ -4,47 +4,45 @@
       <h2 class="profile-title">Активные заявки</h2>
 
       <div class="d-flex mt-9 mb-9 active-tabs">
-        <button class="contributorBtn" :class="{ active: picked === tab.name }" v-for="tab in tabs"
-                v-show="tab.name === 'Верификация аккаунтов' && (roleStore.roles.detachment_commander || roleStore.roles.regionalheadquarter_commander) ||
-                    tab.name === 'Заявки на вступление в отряд' && (roleStore.roles.detachment_commander) || 
-                    tab.name === 'Заявки на участие в мероприятии' || 
-                    tab.name === 'Конкурсы' || 
-                    tab.name === 'Заявки на вступление в штаб' || 
-                    tab.name === 'Рейтинг РО' && showRating && roleStore.experts?.is_district_expert"
-                :key="tab.id" @click="picked = tab.name">
+        <button class="contributorBtn" :class="{ active: picked === tab.name }" v-for="tab in tabs" v-show="tab.name === 'Верификация аккаунтов' && (roleStore.roles.detachment_commander || roleStore.roles.regionalheadquarter_commander) ||
+          tab.name === 'Заявки на вступление в отряд' && (roleStore.roles.detachment_commander) ||
+          tab.name === 'Заявки на участие в мероприятии' ||
+          tab.name === 'Конкурсы' ||
+          tab.name === 'Заявки на вступление в штаб' ||
+          tab.name === 'Рейтинг РО' && showRating && roleStore.experts?.is_district_expert" :key="tab.id"
+          @click="picked = tab.name">
           {{ tab.name }}
         </button>
       </div>
 
       <div
-          v-if="(picked == 'Верификация аккаунтов') && (roleStore.roles?.regionalheadquarter_commander?.id || roleStore.roles.detachment_commander?.id)">
+        v-if="(picked == 'Верификация аккаунтов') && (roleStore.roles?.regionalheadquarter_commander?.id || roleStore.roles.detachment_commander?.id)">
 
-        <activeApplications/>
+        <activeApplications />
       </div>
       <div
-          v-else-if="picked == 'Заявки на вступление в отряд' && (roleStore.roles?.regionalheadquarter_commander?.id || roleStore.roles?.detachment_commander?.id)">
-        <ActiveSquads/>
+        v-else-if="picked == 'Заявки на вступление в отряд' && (roleStore.roles?.regionalheadquarter_commander?.id || roleStore.roles?.detachment_commander?.id)">
+        <ActiveSquads />
       </div>
-      <div
-          v-else-if="picked == 'Заявки на вступление в штаб' && (
-                        roleStore.roles?.regionalheadquarter_commander?.id || 
-                        roleStore.roles?.centralheadquarter_commander ||
-                        roleStore.roles?.districtheadquarter_commander?.id ||
-                        roleStore.roles?.localheadquarter_commander?.id ||
-                        roleStore.roles?.educationalheadquarter_commander?.id
-                    )">
-        <active-headquarters/>
+      <div v-else-if="picked == 'Заявки на вступление в штаб' && (
+        roleStore.roles?.regionalheadquarter_commander?.id ||
+        roleStore.roles?.centralheadquarter_commander ||
+        roleStore.roles?.districtheadquarter_commander?.id ||
+        roleStore.roles?.localheadquarter_commander?.id ||
+        roleStore.roles?.educationalheadquarter_commander?.id
+      )">
+        <active-headquarters />
       </div>
       <div v-else-if="picked == 'Заявки на участие в мероприятии'">
-        <ActiveEventsApp/>
+        <ActiveEventsApp />
       </div>
 
       <div v-else-if="picked == 'Конкурсы'">
-        <active-competitions/>
+        <active-competitions />
       </div>
 
       <div v-else-if="picked == 'Рейтинг РО'">
-        <ActiveRatingRO/>
+        <ActiveRatingRO />
       </div>
     </div>
   </div>
@@ -59,20 +57,15 @@ import { ActiveCompetitions } from '@features/ActiveCompetitions';
 import { ActiveEventsApp } from '@features/ActiveApplications/components';
 import { ActiveHeadquarters } from '@features/ActiveApplicationsHeadquarters/';
 import { ActiveRatingRO } from '@features/ActiveApplicationRatingRO';
+import { showByUrl } from '@services/ProdUrlService';
 
 // E:\RSO\NewRSO\Client\src\features\ActiveApplicationHeadquarters\index.ts
 const roleStore = useRoleStore();
 
 const picked = ref('Верификация аккаунтов');
 const showRating = ref(false);
+showRating.value = showByUrl();
 
-if (
-    window.location.hostname.includes('localhost') ||
-    window.location.hostname.includes('rso.sprint.1t' ||
-        window.location.hostname.includes('213.139.208.147')
-    )) {
-  showRating.value = true;
-}
 const tabs = ref([
   {
     id: '1',

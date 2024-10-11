@@ -19,12 +19,6 @@
             </div>
 
             <div class="competition__status-application">
-                <!-- <router-link
-                    v-if="!isAuth"
-                    to="/Login"
-                    class="btn competition__status-application-button"
-                    >Участвовать</router-link
-                > -->
                 <div>
                     <!-- <Button
                         v-if="!userCommander.detachment_commander"
@@ -115,11 +109,12 @@
         </ul>
 
         <div class="competition__documents">
-            <p id="file-chosen-statement" class="text competition__documents-description">
+            <p id="file-chosen-statement" class="text competition__documents-description competition__text-column">
                 Положение о проведении конкурса и формировании рейтинга линейных
                 студенческих отрядов Молодёжной общероссийской общественной
                 организации «Российский Студенческие Отряды»
             </p>
+            <div class="competition-button-optimiz">
             <a target="_blank" class="competition__documents-button" @click.prevent="downloadDocument">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="30" viewBox="0 0 24 30" fill="none">
                     <path
@@ -127,6 +122,7 @@
                         fill="#1F7CC0" />
                 </svg>
                 Скачать документ</a>
+            </div>
         </div>
 
 
@@ -226,7 +222,6 @@ const getUserCommander = async () => {
         const response = await HTTP.get(`rsousers/me_commander/`,);
 
         userCommander.value = response.data;
-        // console.log('конкурс', response);
     } catch (error) {
         console.log('an error occured ' + error);
     }
@@ -234,17 +229,20 @@ const getUserCommander = async () => {
 
 const squad = ref({});
 const getMeSquad = async () => {
-    try {
-        const response = await HTTP.get(
-            `detachments/${userCommander.value.detachment_commander.id}/`,
+    if (isAuth && userCommander.value.detachment_commander) {
+        try {
+            const response = await HTTP.get(
+                `detachments/${userCommander.value.detachment_commander.id}/`,
 
-        );
-
-        squad.value = response.data;
-        // console.log('конкурс', response);
-    } catch (error) {
-        console.log('an error occured ' + error);
+            );
+            squad.value = response.data;
+        } catch (error) {
+            console.log('an error occured ' + error);
+        }
+    } else {
+        console.log('User is not a commander of the squad. Request blocked.');
     }
+
 };
 
 const downloadDocument = async () => {
@@ -301,10 +299,6 @@ const errorIsNoCommander = ref(false);
 const getCompetition = async () => {
     try {
         const response = await HTTP.get(`competitions/${id}/`, {
-            // headers: {
-            //     'Content-Type': 'application/json',
-            //      Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
-            // },
         });
 
         competition.value = response.data;
@@ -315,16 +309,18 @@ const getCompetition = async () => {
 };
 
 const getSquadStatus = async () => {
-    try {
-        const response = await HTTP.get(
-            `competitions/${id}/check_detachment_status/`,
 
-        );
-
-        currentStatus.value = response.data;
-        // console.log('конкурс', response);
-    } catch (error) {
-        console.log('an error occured ' + error);
+    if (isAuth.value && userCommander.value.detachment_commander) {
+        try {
+            const response = await HTTP.get(
+                `competitions/${id}/check_detachment_status/`,
+            );
+            currentStatus.value = response.data;
+        } catch (error) {
+            console.log('An error occurred: ' + error);
+        }
+    } else {
+        console.log('User is not a commander of the squad. Request blocked.');
     }
 };
 
@@ -362,7 +358,7 @@ onMounted(async () => {
     if (isAuth.value) {
         await getMeSquad();
     }
-    
+
     getSizeImage();
     window.addEventListener('resize', getSizeImage);
 });
@@ -371,4 +367,5 @@ onUnmounted(() => {
     window.removeEventListener('resize', getSizeImage);
 });
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+</style>

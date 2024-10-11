@@ -66,8 +66,13 @@ const competition_pk = 1;
 
 const verifyToken = async () => {
     try {
+        const token = localStorage.getItem('jwt_token');
+        if (!token) {
+            console.log('Token is empty');
+            return;
+        }
         const resp = await HTTP.post('/jwt/verify/', {
-            token: localStorage.getItem('jwt_token'),
+            token,
         });
         if (resp.status == 200) {
             userStore.getUser(currentUser);
@@ -75,9 +80,11 @@ const verifyToken = async () => {
             positionsStore.getPositions();
             squadsStore.getAreas();
             roleStore.getUserParticipantsStatus(competition_pk);
+        } else {
+            console.log('API request failed');
         }
     } catch (error) {
-        console.log(error);
+        console.log('error', error);
     }
 };
 

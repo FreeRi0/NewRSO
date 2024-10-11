@@ -75,16 +75,18 @@ const formData = async (reportData, reportNumber) => {
   try {
     console.log('is_link_err_3_6', link_err.value)
 
-    if (!link_err.value) {
+    if (!link_err.value && reportData.number_of_members > 0) {
       if (isFirstSent.value) {
         console.log('First time sending data');
         const { data } = await reportPartTwoService.createMultipleReportAll(reportData, '6', reportNumber);
+        console.log('datas1', data);
         emit('getData', data, 6, reportNumber);
         isFirstSent.value = false;
 
       } else {
         console.log('Second time sending data');
         const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '6', reportNumber);
+        console.log('datas2', data);
         emit('getData', data, 6, reportNumber);
       }
     }
@@ -103,8 +105,7 @@ const getPanelNumber = (number) => {
   emit('getPanelNumber', number);
 }
 watchEffect(() => {
-  if (Object.keys(props.data[el_id.value]).length > 0) {
-
+  if (props.data[el_id.value] && Object.keys(props.data[el_id.value]).length > 0) {
     console.log('data received', props.data);
     isFirstSent.value = false;
     sixPanelData.value = { ...props.data[el_id.value] }
@@ -112,13 +113,10 @@ watchEffect(() => {
   }
   else {
     console.log('data not received');
-
     isFirstSent.value = true;
     sixPanelData.value = {
       number_of_members: 0,
-      links: [{
-        link: '',
-      }],
+      links: [],
       comment: '',
     };
     for (let i in props.data) {

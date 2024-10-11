@@ -280,12 +280,15 @@ const copyL = () => {
     grid-template-columns: 30px 135px 135px 2fr 16px;
     grid-template-rows: 100px 100px 112px auto;
     margin-bottom: 40px;
-    /*  */
     border-radius: 10px 10px;
     border-right: 1px solid rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     border-left: 1px solid rgba(0, 0, 0, 0.1);
     background: rgba(244, 244, 244, 0);
+
+    @media screen and (min-width: 320px) and (max-width: 480px) {
+        display: block;
+    }
 }
 
 .user-metric__bottom {
@@ -302,6 +305,16 @@ const copyL = () => {
     @media screen and (max-width: 575px) {
         padding: 116px 14px 32px 14px;
     }
+    @media screen and (min-width: 320px) and  (max-width: 480px) {
+        padding: 0px 0px 0px 0px;
+        margin-top:-90px;
+        align-items: center;
+        justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
+        transform: translateX(-10px)
+    }
+    
 }
 
 /* Данные пользователя */
@@ -309,6 +322,12 @@ const copyL = () => {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
+    @media screen and (min-width: 320px) and  (max-width: 480px) {
+        display: block;
+        transform: translateX(10px);
+        align-items: center;
+    }
+    
 }
 
 .user-data__name {
@@ -324,6 +343,7 @@ const copyL = () => {
         align-items: center;
         justify-content: center;
     }
+    
 }
 
 .user-data__social-network {

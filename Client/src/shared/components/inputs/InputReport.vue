@@ -12,7 +12,7 @@
            class="form-input__report" :step="step"
            :class="{ 'link__input': isLink, 'form-input__report--error': (isErrorPanel && !value), 'form__input--error': isErrorDate, }"
            @input="updateValue"
-           v-bind="$attrs" :disabled="disabled" :min="props.minDate"/>
+           v-bind="$attrs" :disabled="disabled" :min="props.type === 'date' ? props.minDate : props.type === 'number' ? 0 : null"/>
     <div class="form__counter" v-if="counterVisible">
       {{ textInputLength }} / {{ maxCounter }}
     </div>
@@ -36,7 +36,7 @@
         Дата окончания не может быть меньше даты начала
       </span>
     </div>
-    <div v-show="isLinkError && props.isLink && (value || value === null) "> <span class="form-input__error-text">Не верный формат
+    <div v-show="isLinkError && props.isLink && (value || value === null)"> <span class="form-input__error-text">Не верный формат
         url</span></div>
 
   </div>
@@ -140,7 +140,7 @@ function isValidURL(url) {
 }
 
 const validateLink = (value) => {
-  if (value !== '' && props.isLink == true) {
+  if (value && props.isLink == true) {
     const isValid = isValidURL(value);
     isLinkError.value = !isValid;
     emit('error', isLinkError.value);

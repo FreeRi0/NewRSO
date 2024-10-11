@@ -17,7 +17,8 @@
       <TwelfthPanelComponent
         :central-expert="props.centralExpert"
         :district-expert="props.districtExpert"
-        :is-disabled="props.districtExpert || props.centralExpert"
+        :data="data"
+        @get-data="getData"
       ></TwelfthPanelComponent>
     </template>
 
@@ -25,6 +26,8 @@
       <TwelfthPanelComponent
         :central-expert="props.centralExpert"
         :district-expert="props.districtExpert"
+        :data="data"
+        @get-data="getData"
         is-second-tab
       ></TwelfthPanelComponent>
     </template>
@@ -33,6 +36,8 @@
       <TwelfthPanelComponent
         :central-expert="props.centralExpert"
         :district-expert="props.districtExpert"
+        :data="data"
+        @get-data="getData"
         is-third-tab
       ></TwelfthPanelComponent>
     </template>

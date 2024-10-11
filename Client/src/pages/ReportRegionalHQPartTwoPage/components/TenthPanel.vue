@@ -16,13 +16,14 @@
               @deleteLink="deleteLink($event, 1)"
               @clearForm="onClearForm(1)"
               :isErrorFileProp="isErrorFile"
+              title="Всероссийская патриотическая акция «Снежный Десант РСО»"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
 
       <v-expansion-panel>
         <v-expansion-panel-title>
-          Всероссийская трудовая патриотическая акция «Поклонимся Великим годам»
+          Всероссийская трудовая патриотическая акция «Поклонимся великим тем годам»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <TenthPanelForm
@@ -35,6 +36,7 @@
               @collapse-form="collapseForm"
               @deleteLink="deleteLink($event, 2)"
               @clearForm="onClearForm(2)"
+              title="Всероссийская трудовая патриотическая акция «Поклонимся великим тем годам»"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -165,7 +167,7 @@ const uploadFile = async (event, reportNumber) => {
       tenthPanelDataFirst.value.document = event.target.files[0].name;
     } else {
       formData.append('document', event.target.files[0]);
-      formData.append('event_happened', tenthPanelDataFirst.value.event_happened);
+      formData.append('event_happened', true);
       if (tenthPanelDataFirst.value.links.length) {
         for (let j = 0; j < tenthPanelDataFirst.value.links.length; j++) {
           if (tenthPanelDataFirst.value.links[j].link) formData.append(`[links][${j}][link]`, tenthPanelDataFirst.value.links[j].link);
@@ -185,7 +187,7 @@ const uploadFile = async (event, reportNumber) => {
       tenthPanelDataSecond.value.document = event.target.files[0].name;
     } else {
       formData.append('document', event.target.files[0]);
-      formData.append('event_happened', tenthPanelDataSecond.value.event_happened);
+      formData.append('event_happened', true);
       if (tenthPanelDataSecond.value.links.length) {
         for (let j = 0; j < tenthPanelDataSecond.value.links.length; j++) {
           if (tenthPanelDataSecond.value.links[j].link) formData.append(`[links][${j}][link]`, tenthPanelDataSecond.value.links[j].link);

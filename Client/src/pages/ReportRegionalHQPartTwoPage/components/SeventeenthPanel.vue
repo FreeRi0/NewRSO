@@ -1,6 +1,6 @@
 <template>
   <div class="form__field-group report__field-group report__field-group--column"
-    v-if="(props.centralExpert || props.districtExpert) && 
+    v-if="isSent && 
           !seventeenthPanelData.scan_file && 
           !seventeenthPanelData.comment">
     <p class="report__text-info">
@@ -10,12 +10,16 @@
 
   <div v-else class="form__field-group report__field-group">
     <div class="report__fieldset report__file-input"
-      v-if="!(props.centralExpert || props.districtExpert) ||
-            (props.districtExpert && seventeenthPanelData.scan_file) ||
-            (props.centralExpert && seventeenthPanelData.scan_file)"
+      v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+            (isSent && seventeenthPanelData.scan_file)"
     >
       <label class="form__label report__label" for="scan_file">
-        Прикрепить документ
+        <span v-if="!isSent && !(props.centralExpert || props.districtExpert)">
+          Прикрепить документ
+        </span>
+        <span v-if="isSent && seventeenthPanelData.scan_file">
+          Документ
+        </span>
       </label>
       <InputReport
         v-if="!seventeenthPanelData.scan_file"
@@ -40,9 +44,8 @@
       ></FileBoxComponent>
     </div>
     <div class="report__fieldset report__fieldset--comment"
-      v-if="!(props.centralExpert || props.districtExpert) ||
-            (props.districtExpert && seventeenthPanelData.comment) ||
-            (props.centralExpert && seventeenthPanelData.comment)">
+      v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+            (isSent && seventeenthPanelData.comment)">
       <label class="form__label report__label" for="comment">
         Комментарий
       </label>

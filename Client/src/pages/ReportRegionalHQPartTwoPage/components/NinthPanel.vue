@@ -121,7 +121,7 @@ const deleteFile = async (reportData, reportNumber) => {
 
 watchEffect(() => {
   console.log(isFirstSent, props.data)
-  if (Object.keys(props.data[el_id.value]).length > 0) {
+  if (props.data[el_id.value] && Object.keys(props.data[el_id.value]).length > 0) {
     console.log('data yes')
     isFirstSent.value = false;
     ninthPanelData.value = { ...props.data[el_id.value] }

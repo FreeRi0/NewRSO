@@ -1,6 +1,6 @@
 <template>
   <div class="form__field-group report__field-group report__field-group--column"
-    v-if="(props.centralExpert || props.districtExpert) &&
+    v-if="isSent && 
           !nineteenthPanelData.employed_student_start &&
           !nineteenthPanelData.employed_student_end &&
           !nineteenthPanelData.comment">
@@ -11,9 +11,8 @@
 
   <div v-else class="form__field-group report__field-group">
     <div class="report__fieldset report__fieldset--left-block"
-      v-if="!(props.centralExpert || props.districtExpert) ||
-            (props.districtExpert && nineteenthPanelData.employed_student_start) ||
-            (props.centralExpert && nineteenthPanelData.employed_student_start)">
+      v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+            (isSent && nineteenthPanelData.employed_student_start)">
       <label
         class="form__label report__label"
         for="employed-student-start"
@@ -37,9 +36,8 @@
     </div>
 
     <div class="report__fieldset report__fieldset--right-block"
-      v-if="!(props.centralExpert || props.districtExpert) ||
-            (props.districtExpert && nineteenthPanelData.employed_student_end) ||
-            (props.centralExpert && nineteenthPanelData.employed_student_end)">
+      v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+            (isSent && nineteenthPanelData.employed_student_end)">
       <label
         class="form__label report__label"
         for="employed-student-end"
@@ -63,9 +61,8 @@
     </div>
   
     <div class="report__fieldset report__fieldset--comment"
-      v-if="!(props.centralExpert || props.districtExpert) ||
-            (props.districtExpert && nineteenthPanelData.comment) ||
-            (props.centralExpert && nineteenthPanelData.comment)">
+      v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+            (isSent && nineteenthPanelData.comment)">
       <label
         class="form__label report__label"
         for="comment"
