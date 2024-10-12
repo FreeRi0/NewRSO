@@ -101,7 +101,7 @@ const getPanelNumber = (number) => {
 
 const uploadFile = async (reportData, reportNumber) => {
   if (isFirstSent.value) {
-    let { data } = await reportPartTwoService.createMultipleReportAll(reportData, '9', reportNumber, true);
+    let { data } = await reportPartTwoService.createMultipleReport(reportData, '9', reportNumber, true);
     emit('getData', data, 9, reportNumber);
   } else {
     let { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
@@ -113,7 +113,7 @@ const uploadFile = async (reportData, reportNumber) => {
 const deleteFile = async (reportData, reportNumber) => {
 
   if (isFirstSent.value) {
-    await reportPartTwoService.createMultipleReportAll(reportData, '9', reportNumber, true);
+    await reportPartTwoService.createMultipleReport(reportData, '9', reportNumber, true);
   } else {
     await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
   }
