@@ -693,7 +693,7 @@ const sendReport = async () => {
       swal.fire({
         position: 'center',
         icon: 'success',
-        title: 'успешно',
+        title: 'Отчет успешно отправлен',
         showConfirmButton: false,
         timer: 1500,
       });
@@ -845,7 +845,7 @@ const checkEmptyFields = (data) => {
     swal.fire({
       position: 'center',
       icon: 'warning',
-      title: `Заполните обязательные поля в показателе 10-1`,
+      title: `Укажите информацию о проведении акции в показателе 10-1`,
       showConfirmButton: false,
       timer: 2500,
     })
@@ -871,7 +871,7 @@ const checkEmptyFields = (data) => {
     swal.fire({
       position: 'center',
       icon: 'warning',
-      title: `Заполните обязательные поля в показателе 10-2`,
+      title: `Укажите информацию о проведении акции в показателе 10-2`,
       showConfirmButton: false,
       timer: 2500,
     })
