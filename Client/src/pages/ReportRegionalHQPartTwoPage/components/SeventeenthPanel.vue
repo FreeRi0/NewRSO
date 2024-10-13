@@ -105,7 +105,7 @@ const seventeenthPanelData = ref({
 
 const focusOut = async () => {
   let formData = new FormData();
-  formData.append('comment', seventeenthPanelData.value.comment);
+  formData.append('comment', seventeenthPanelData.value.comment || '');
 
   try {
     if (isFirstSent.value) {
@@ -181,7 +181,7 @@ watchEffect(() => {
   if (props.data) {
     // console.log(props.data);
     isFirstSent.value = false;
-    seventeenthPanelData.value.comment = props.data.comment || '';
+    seventeenthPanelData.value.comment = props.data.comment;
     seventeenthPanelData.value.scan_file = props.data.scan_file;
     seventeenthPanelData.value.file_size = props.data.file_size;
     seventeenthPanelData.value.file_type = props.data.file_type;

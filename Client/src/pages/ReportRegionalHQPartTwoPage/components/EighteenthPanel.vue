@@ -258,7 +258,7 @@ const uploadFile = async (event, index) => {
   } else {
     projects.value[index].file = event.target.files[0];
     let formData = new FormData();
-    formData.append('comment', eighteenthPanelData.value.comment);
+    formData.append('comment', eighteenthPanelData.value.comment || '');
 
     formData.append(`projects[${index}][file]`, projects.value[index].file);
 
@@ -289,7 +289,7 @@ const uploadFile = async (event, index) => {
 
 const deleteFile = async (index) => {
   let formData = new FormData();
-  formData.append('comment', eighteenthPanelData.value.comment);
+  formData.append('comment', eighteenthPanelData.value.comment || '');
 
   formData.append(`projects[${index}][file]`, '');
 
@@ -323,7 +323,7 @@ const deleteLink = async (projectIndex, linkIndex) => {
   projects.value[projectIndex].links.splice(linkIndex, 1);
 
   let formData = new FormData();
-  formData.append('comment', eighteenthPanelData.value.comment);
+  formData.append('comment', eighteenthPanelData.value.comment || '');
 
   if (projects.value.length) {
     for (let index = 0; index < projects.value.length; index++) {
@@ -364,7 +364,7 @@ const focusOut = async () => {
       emit('getData', data, Number(ID_PANEL));
     } else {
       let formData = new FormData();
-      formData.append('comment', eighteenthPanelData.value.comment);
+      formData.append('comment', eighteenthPanelData.value.comment || '');
 
       if (projects.value.length) {
         for (let index = 0; index < projects.value.length; index++) {
@@ -409,7 +409,7 @@ const deletePublication = async (index) => {
   projects.value = projects.value.filter((el, i) => index !== i);
 
   let formData = new FormData();
-  formData.append('comment', eighteenthPanelData.value.comment);
+  formData.append('comment', eighteenthPanelData.value.comment || '');
 
   if (projects.value.length) {
     for (let index = 0; index < projects.value.length; index++) {
@@ -434,7 +434,7 @@ watchEffect(async () => {
   if (props.data) {
     isFirstSent.value = false;
     projects.value = [...props.data.projects];
-    eighteenthPanelData.value.comment = props.data.comment || '';
+    eighteenthPanelData.value.comment = props.data.comment;
     // if (!projects.value[0].links.length) projects.value[0].links.push({link: ''});
   }
   // for (let i = 0; i < projects.value.length; i++) {
