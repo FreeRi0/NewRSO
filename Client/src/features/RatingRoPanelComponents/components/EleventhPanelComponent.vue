@@ -189,7 +189,7 @@ const focusOut = async () => {
   let formData = new FormData();
 
   eleventhPanelData.value.participants_number ? formData.append("participants_number", eleventhPanelData.value.participants_number) : formData.append("participants_number", "");
-  formData.append("comment", eleventhPanelData.value.comment);
+  formData.append("comment", eleventhPanelData.value.comment || '');
 
   try {
     if (isFirstSent.value) {
@@ -271,7 +271,7 @@ watchEffect(() => {
     console.log(props.data);
     isFirstSent.value = false;
     eleventhPanelData.value.participants_number = props.data.participants_number;
-    eleventhPanelData.value.comment = props.data.comment || '';
+    eleventhPanelData.value.comment = props.data.comment;
     eleventhPanelData.value.scan_file = props.data.scan_file;
     eleventhPanelData.value.file_size = props.data.file_size;
     eleventhPanelData.value.file_type = props.data.file_type;
