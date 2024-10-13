@@ -596,7 +596,7 @@ const filterPanelsData = () => {
     }
 
   }
-  console.log('setData6: ', filteredSix)
+  // console.log('setData6: ', filteredSix)
   for (let i in filteredSix) {
     isErrorPanel.value.six[i] = {
       id: i,
@@ -621,7 +621,7 @@ const filterPanelsData = () => {
       filteredNinth[i] = reportData.value.ninth[i];
     }
   }
-  console.log('setData9: ', filteredNinth)
+  // console.log('setData9: ', filteredNinth)
   for (let i in filteredNinth) {
     isErrorPanel.value.ninth[i] = {
       id: i,
@@ -639,6 +639,7 @@ const sendReport = async () => {
   // console.log('reportData: ', reportData.value)
   blockSendButton.value = true;
   if (checkEmptyFields(reportData.value)) {
+    preloader.value = true;
     try {
       const { filteredSix, filteredNinth } = filterPanelsData();
       if (!reportData.value.first.is_sent) {
@@ -687,6 +688,8 @@ const sendReport = async () => {
         await reportPartTwoService.sendReport(reportData.value.sixteenth, '16');
       }
 
+      await getReportData(route.query.reportId);
+
       swal.fire({
         position: 'center',
         icon: 'success',
@@ -694,6 +697,7 @@ const sendReport = async () => {
         showConfirmButton: false,
         timer: 1500,
       });
+
       await router.push({
         name: 'reportingRo',
       });
@@ -707,6 +711,8 @@ const sendReport = async () => {
         timer: 2500,
       })
       console.log('sendReport error: ', e)
+    } finally {
+      preloader.value = false;
     }
   } else {
     blockSendButton.value = false;
@@ -910,7 +916,7 @@ const checkEmptyFields = (data) => {
 
   if (data.sixteenth) {
     for (let project of data.sixteenth.projects) {
-      if (!(project.name && project.regulations && data.sixteenth.comment)) {
+      if (data.sixteenth.is_project && !(data.sixteenth.comment && project.name && project.project_scale )) {
         isErrorPanel.value.sixteenth = true;
         swal.fire({
           position: 'center',
@@ -927,7 +933,7 @@ const checkEmptyFields = (data) => {
     swal.fire({
       position: 'center',
       icon: 'warning',
-      title: `Заполните обязательные поля в 16 показателе`,
+      title: `Укажите наличие трудового проекта в 16 показателе`,
       showConfirmButton: false,
       timer: 2500,
     })
