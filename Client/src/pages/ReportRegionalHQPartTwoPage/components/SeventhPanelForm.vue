@@ -836,7 +836,9 @@ const uploadFile = (event, number) => {
                         : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
                 }
             }
-            formData.append('comment', ninthPanelData.value.comment);
+            if (ninthPanelData.value.comment !== null) {
+                formData.append('comment', ninthPanelData.value.comment);
+            }
             emit('uploadFile', formData);
         }
     }
@@ -874,7 +876,9 @@ const deleteFile = (number) => {
                     : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
             }
         }
-        formData.append('comment', ninthPanelData.value.comment);
+        if (ninthPanelData.value.comment !== null) {
+            formData.append('comment', ninthPanelData.value.comment);
+        }
         formData.append('file_size', ninthPanelData.value.file_size);
         formData.append('file_type', ninthPanelData.value.file_type);
         emit('deleteFile', formData);
@@ -971,7 +975,9 @@ const focusOut = () => {
                     emit('formData', formData);
                 }
                 let formData = new FormData();
-                formData.append('comment', ninthPanelData.value.comment);
+                if (ninthPanelData.value.comment !== null) {
+                    formData.append('comment', ninthPanelData.value.comment);
+                }
                 formData.append('event_happened', ninthPanelData.value.event_happened);
                 if (ninthPanelData.value.links.length) {
                     for (let i = 0; i < ninthPanelData.value.links.length; i++) {
@@ -994,9 +1000,9 @@ const focusOut = () => {
 const addLink = (number) => {
     if (number == 6) {
         sixPanelData.value.links.push({ link: '' });
-    // } else if (number == 7) {
-    //     seventhPanelData.value.links.push({ link: '' });
-    // }
+        // } else if (number == 7) {
+        //     seventhPanelData.value.links.push({ link: '' });
+        // }
     }
     else if (number == 9) {
         ninthPanelData.value.links.push({ link: '' });
@@ -1007,9 +1013,9 @@ const deleteLink = async (number) => {
     if (number == 6) {
         sixPanelData.value.links.pop()
         await reportPartTwoService.createMultipleReportDraft(sixPanelData.value, '6', props.id);
-    // } else if (number == 7) {
-    //     seventhPanelData.value.links.pop()
-    //     await reportPartTwoService.createMultipleReportDraft(seventhPanelData.value, '7', props.id, true);
+        // } else if (number == 7) {
+        //     seventhPanelData.value.links.pop()
+        //     await reportPartTwoService.createMultipleReportDraft(seventhPanelData.value, '7', props.id, true);
     } else if (number == 9) {
         ninthPanelData.value.links.pop()
         await reportPartTwoService.createMultipleReportDraft(ninthPanelData.value, '9', props.id, true);
@@ -1049,34 +1055,34 @@ watchEffect(() => {
         }
         emit('getId', props.id)
         emit('getPanelNumber', props.panel_number)
-    // } else if (props.panel_number == 7) {
-    //     if (Object.keys(props.data).length > 0) {
-    //         console.log('7')
-    //         isFirstSentSeventh.value = false;
-    //         seventhPanelData.value = { ...props.data }
-    //         if (isLinkError.value) {
-    //             emit('error', isLinkError.value)
-    //         } else {
-    //             emit('error', false)
-    //         }
+        // } else if (props.panel_number == 7) {
+        //     if (Object.keys(props.data).length > 0) {
+        //         console.log('7')
+        //         isFirstSentSeventh.value = false;
+        //         seventhPanelData.value = { ...props.data }
+        //         if (isLinkError.value) {
+        //             emit('error', isLinkError.value)
+        //         } else {
+        //             emit('error', false)
+        //         }
 
-    //         if (!seventhPanelData.value.links.length) seventhPanelData.value.links.push({ link: '' })
+        //         if (!seventhPanelData.value.links.length) seventhPanelData.value.links.push({ link: '' })
 
-    //     }
-    //     else {
-    //         console.log('data not received');
-    //         isFirstSentSeventh.value = true;
-    //         seventhPanelData.value = {
-    //             prize_place: 'Нет',
-    //             document: '',
-    //             links: [{
-    //                 link: '',
-    //             }],
-    //             comment: '',
-    //         };
-    //     }
-    //     emit('getId', props.id)
-    //     emit('getPanelNumber', props.panel_number)
+        //     }
+        //     else {
+        //         console.log('data not received');
+        //         isFirstSentSeventh.value = true;
+        //         seventhPanelData.value = {
+        //             prize_place: 'Нет',
+        //             document: '',
+        //             links: [{
+        //                 link: '',
+        //             }],
+        //             comment: '',
+        //         };
+        //     }
+        //     emit('getId', props.id)
+        //     emit('getPanelNumber', props.panel_number)
 
     } else if (props.panel_number == 9) {
         if (Object.keys(props.data).length > 0) {
