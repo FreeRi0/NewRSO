@@ -2,23 +2,40 @@
   <div v-if="!(props.centralExpert || props.districtExpert)" class="form__field-group">
     <div v-for="(event, index) in events" :key="index" class="form__field-fourth-panel">
       <div class="form__field-members-event">
-        <div class="form__field-members">
-          <label class="form__label" for="participants_number">Количество человек, принявших участие в мероприятии <sup
-              class="valid-red">*</sup></label>
-          <div style="display: flex; justify-content: space-between;">
-            <InputReport
-                v-model:value="event.participants_number"
-                :id="event.participants_number"
-                name="participants_number"
-                class="form__input"
-                type="number"
-                placeholder="Введите число"
-                :maxlength="10"
-                :min="0"
-                :max="2147483647"
-                @focusout="focusOut"
-                :disabled="isSent"
-            />
+        <div style="display: flex; gap: 40px">
+          <div class="form__field-members">
+            <label class="form__label" for="participants_number">Количество человек, принявших участие в мероприятии <sup
+                class="valid-red">*</sup></label>
+            <div style="display: flex; justify-content: space-between;">
+              <InputReport
+                  v-model:value="event.participants_number"
+                  :id="event.participants_number"
+                  name="participants_number"
+                  class="form__input"
+                  type="number"
+                  placeholder="Введите число"
+                  :maxlength="10"
+                  :min="0"
+                  :max="2147483647"
+                  @focusout="focusOut"
+                  :disabled="isSent"
+              />
+            </div>
+          </div>
+          <div class="form__field-members">
+            <label class="form__label" for="eventName">Название мероприятия<sup
+                class="valid-red">*</sup></label>
+            <div style="display: flex; justify-content: space-between;">
+              <InputReport
+                  v-model:value="event.name"
+                  :id="event.name"
+                  name="eventName"
+                  class="form__input"
+                  placeholder="Введите название мероприятия"
+                  @focusout="focusOut"
+                  :disabled="isSent || !event.participants_number"
+              />
+            </div>
           </div>
         </div>
         <Button
@@ -43,7 +60,7 @@
               class="form__input"
               type="date"
               @focusout="focusOut"
-              :disabled="isSent"
+              :disabled="isSent || !event.participants_number"
           />
         </div>
         <div class="form__field">
@@ -56,7 +73,7 @@
               class="form__input"
               type="date"
               @focusout="focusOut"
-              :disabled="isSent"
+              :disabled="isSent || !event.participants_number"
               :min-date="event.start_date"
               :is-error-date="Object.values(isErrorDate).some(item => item.error === true && item.id === index)"
           />
@@ -64,7 +81,7 @@
       </div>
       <div class="form__field-event">
         <div class="form__field-event-file">
-          <label class="form__label" for="4">Положение о мероприятии <sup class="valid-red">*</sup></label>
+          <label class="form__label" for="4">Положение о мероприятии</label>
           <InputReport
               class="form-input__file-input"
               v-if="!event.regulations"
@@ -74,7 +91,7 @@
               name="scan_file"
               width="100%"
               @change="uploadFile($event, index)"
-              :disabled="isSent"
+              :disabled="isSent || !event.participants_number"
           />
           <FileBoxComponent
               v-else
@@ -96,7 +113,7 @@
                   :id="`is_interregional-true_${index}`"
                   :value="true"
                   class="custom-radio"
-                  :disabled="isSent"
+                  :disabled="isSent || !event.participants_number"
               />
               <label :for="`is_interregional-true_${index}`">
                 Да
@@ -119,7 +136,7 @@
         </div>
       </div>
       <div class="form__field-link">
-        <p class="form__label">Ссылка на группу мероприятия в социальных сетях <sup class="valid-red">*</sup></p>
+        <p class="form__label">Ссылка на группу мероприятия в социальных сетях</p>
         <div class="form__add-link" v-for="(link, i) in events[index].links" :key="i">
           <InputReport
               v-model:value="link.link"
@@ -129,11 +146,11 @@
               type="text"
               placeholder="https://vk.com/cco_monolit"
               @focusout="focusOut"
-              :disabled="isSent"
+              :disabled="isSent || !event.participants_number"
               :is-link="true"
               @error="setError"
           />
-          <div v-if="!isSent">
+          <div v-if="!isSent && event.participants_number">
             <Button v-if="events[index].links.length === i + 1" label="+ Добавить ссылку" @click="addLink(index)"
                     class="form__add-link-button"/>
             <Button class="form__add-link-button" v-else label="Удалить" @click="deleteLink(index, i)"/>
@@ -573,6 +590,7 @@ const deleteLink = async (eventIndex, linkIndex) => {
 
 const addEvent = () => {
   events.value.push({
+    name: '',
     participants_number: '',
     start_date: null,
     end_date: null,
@@ -629,10 +647,20 @@ const setFormData = (file = null, index = null, isDeleteEvent = false, isDeleteF
 
   formData.append('comment', fourthPanelData.value.comment || '');
   events.value.forEach((event, i) => {
+    // Логика обнуления мероприятия при нулевом количестве участников
+    if(!(+event.participants_number)) {
+      event.name = null;
+      event.is_interregional = false;
+      event.end_date = null;
+      event.start_date = null;
+      event.links = [];
+      formData.append(`events[${i}][regulations]`, '');
+    }
     if (isDeleteEvent && index === i) {
       return;
     } else {
       if (event.participants_number) formData.append(`events[${i}][participants_number]`, event.participants_number);
+      if (event.name) formData.append(`events[${i}][name]`, event.name);
       if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
       if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
       formData.append(`events[${i}][is_interregional]`, event.is_interregional);
@@ -680,7 +708,7 @@ watchEffect(() => {
   if (props.data) {
     isFirstSent.value = false;
     events.value = [...props.data.events];
-    fourthPanelData.value.comment = props.data.comment;
+    fourthPanelData.value.comment = props.data.comment || '';
     isSent.value = props.data.is_sent;
   }
   // dateValidate(events, isErrorDate, noErrorDate);
