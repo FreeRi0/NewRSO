@@ -794,7 +794,7 @@ const checkEmptyFields = (data) => {
 
   if (data.fifth) {
     for (let event of data.fifth.events) {
-      if (event.participants_number && !(event.ro_participants_number && event.end_date && event.start_date && event.name && data.fifth.comment)) {
+      if (event.participants_number && !(event.end_date && event.start_date && event.name && data.fifth.comment)) {
         isErrorPanel.value.fifth = true;
         swal.fire({
           position: 'center',
