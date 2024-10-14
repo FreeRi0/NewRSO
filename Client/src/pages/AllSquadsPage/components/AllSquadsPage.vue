@@ -383,6 +383,7 @@ watch(
 }
 
 .v-select__selection {
+    padding-bottom: 4px;
 
     span,
     pre {
