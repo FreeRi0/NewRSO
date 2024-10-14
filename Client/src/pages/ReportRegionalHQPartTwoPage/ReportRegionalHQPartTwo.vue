@@ -655,7 +655,7 @@ const sendReport = async () => {
         await reportPartTwoService.sendReport(reportData.value.fifth, '5');
       }
       for (let item in reportData.value.six) {
-        if (reportData.value.six[item].number_of_members == 0 || reportData.value.six[item].number_of_members === null) {
+        if (reportData.value.six[item].number_of_members == 0 || reportData.value.six[item].number_of_members === null || !Object.keys(reportData.value.six[item]).length) {
           reportData.value.six[item].event_happened = false;
         }
         if (reportData.value.six[item].is_sent === false) {
@@ -668,7 +668,7 @@ const sendReport = async () => {
       //   }
       // }
       for (let item in reportData.value.ninth) {
-        if (reportData.value.ninth[item].event_happened == false || reportData.value.ninth[item].event_happened === null) {
+        if (reportData.value.ninth[item].event_happened == false || reportData.value.ninth[item].event_happened === null || !Object.keys(reportData.value.ninth[item]).length) {
           reportData.value.ninth[item].event_happened = false;
         }
         if (reportData.value.ninth[item].is_sent === false) {
@@ -726,7 +726,7 @@ const sendReport = async () => {
 };
 
 const checkEmptyFields = (data) => {
-  //  const { filteredSix, filteredNinth } = filterPanelsData();
+    const { filteredSix, filteredNinth } = filterPanelsData();
   console.log('data', data)
 
   if (!data.first || !(data.first.amount_of_money && data.first.scan_file)) {
@@ -783,8 +783,8 @@ const checkEmptyFields = (data) => {
     return false;
   }
 
-  for (let item in reportData.value.six) {
-    if (!(reportData.value.six[item]?.links?.length)) {
+  for (let item in filteredSix) {
+    if (!(filteredSix[item]?.links?.length)) {
       isErrorPanel.value.six[item] = {
         id: item,
         error: true,
@@ -815,8 +815,8 @@ const checkEmptyFields = (data) => {
   //     return false;
   //   }
   // }
-  for (let item in reportData.value.ninth) {
-    if (!(reportData.value.ninth[item]?.links?.length)) {
+  for (let item in filteredNinth) {
+    if (!(filteredNinth[item]?.links?.length)) {
       isErrorPanel.value.ninth[item] = {
         id: item,
         error: true,
