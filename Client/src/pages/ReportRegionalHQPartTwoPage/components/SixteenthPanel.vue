@@ -5,13 +5,25 @@
       </p>
       <div class="form__label-radio">
         <div style="display: flex; align-items: center">
-          <input class="custom-radio" v-model="sixteenthPanelData.is_project" id="is_project-true" type="radio"
-                 :value="true" :disabled="isSent"/>
+          <input
+              class="custom-radio"
+              v-model="sixteenthPanelData.is_project"
+              id="is_project-true"
+              type="radio"
+              :value="true"
+              :disabled="isSent"
+          />
           <label for="is_project-true">Да</label>
         </div>
         <div style="display: flex; align-items: center">
-          <input class="custom-radio" v-model="sixteenthPanelData.is_project" id="is_project-false" type="radio"
-                 :value="false" :disabled="isSent"/>
+          <input
+              class="custom-radio"
+              v-model="sixteenthPanelData.is_project"
+              id="is_project-false"
+              type="radio"
+              :value="false"
+              :disabled="isSent"
+          />
           <label for="is_project-false">Нет</label>
         </div>
       </div>
@@ -30,7 +42,7 @@
               placeholder="ВВС ПРО"
               :max-length="300"
               @focusout="focusOut"
-              :disabled="isSent"
+              :disabled="isSent || !sixteenthPanelData.is_project"
               style="width: 100%;"
           />
         </div>
@@ -45,63 +57,49 @@
       </div>
       <div>
         <div class="project-regulations">
-          <div class="project-regulations-input-file">
-            <label class="form__label" for="4">Положение о проекте <sup class="valid-red">*</sup></label>
-            <InputReport
-                v-if="!project.regulations"
-                class="form-input__file-input"
-                isFile
-                type="file"
-                id="scan_file"
-                name="scan_file"
-                width="100%"
-                @change="uploadFile($event, index)"
-                :disabled="isSent"
-            />
-<!--            <div v-else class="form__file-box">-->
-<!--            <span class="form__file-name">-->
-<!--              <SvgIcon v-if="project.file_type === 'jpg'" icon-name="file-jpg"/>-->
-<!--              <SvgIcon v-if="project.file_type === 'pdf'" icon-name="file-pdf"/>-->
-<!--              <SvgIcon v-if="project.file_type === 'png'" icon-name="file-png"/>-->
-<!--              {{ project.regulations.split('/').at(-1) }}-->
-<!--            </span>-->
-<!--              <span class="form__file-size">{{ project.file_size }} Мб</span>-->
-<!--              <button v-if="!isSent" @click="deleteFile(index)" class="form__button-delete-file">-->
-<!--                Удалить-->
-<!--              </button>-->
-<!--            </div>-->
-            <FileBoxComponent
-                v-else
-                :file="project.regulations"
-                :fileType="project.file_type"
-                :fileSize="project.file_size"
-                :isSent="isSent"
-                :is-error-file="isErrorFile && !project.file_size"
-                @click="deleteFile(index)"
-            />
-          </div>
           <div class="project-scope">
             <p class="form__label form__field-label-project">Масштаб проекта <sup class="valid-red">*</sup></p>
-            <div style="display: flex;">
-              <input class="custom-radio" v-model="project.project_scale" type="radio" :id="`All-${index}`"
-                     value="Всероссийский"/>
+            <div>
+              <input
+                  class="custom-radio"
+                  v-model="project.project_scale"
+                  type="radio"
+                  :id="`All-${index}`"
+                  value="Всероссийский"
+                  :disabled="isSent || !sixteenthPanelData.is_project"
+                  @change="focusOut"
+              />
               <label :for="`All-${index}`">Всероссийский</label>
             </div>
-            <div style="display: flex;">
-              <input class="custom-radio" v-model="project.project_scale" type="radio" :id="`District-${index}`"
-                     value="Окружной"/>
+            <div>
+              <input
+                  class="custom-radio"
+                  v-model="project.project_scale"
+                  type="radio"
+                  :id="`District-${index}`"
+                  value="Окружной"
+                  :disabled="isSent || !sixteenthPanelData.is_project"
+                  @change="focusOut"
+              />
               <label :for="`District-${index}`">Окружной</label>
             </div>
-            <div style="display: flex;">
-              <input class="custom-radio" v-model="project.project_scale" type="radio" :id="`Interregional-${index}`"
-                     value="Межрегиональный"/>
+            <div>
+              <input
+                  class="custom-radio"
+                  v-model="project.project_scale"
+                  type="radio"
+                  :id="`Interregional-${index}`"
+                  value="Межрегиональный"
+                  :disabled="isSent || !sixteenthPanelData.is_project"
+                  @change="focusOut"
+              />
               <label :for="`Interregional-${index}`">Межрегиональный</label>
             </div>
           </div>
         </div>
       </div>
       <div>
-        <p class="form__label">Ссылка на&nbsp;группу проекта в социальных сетях <sup class="valid-red">*</sup></p>
+        <p class="form__label">Ссылка на&nbsp;группу проекта в социальных сетях</p>
         <div class="form__field-link " v-for="(link, i) in projects[index].links" :key="i">
           <div class="form__field-link-wrap">
             <InputReport
@@ -112,12 +110,12 @@
                 type="text"
                 placeholder="https://vk.com/cco_monolit"
                 @focusout="focusOut"
-                :disabled="isSent"
+                :disabled="isSent || !sixteenthPanelData.is_project"
                 isLink
                 style="width: 100%;"
             />
           </div>
-          <div v-if="!isSent">
+          <div v-if="!isSent && sixteenthPanelData.is_project">
             <div
                 v-if="projects[index].links.length === i + 1"
                 class="add_link"
@@ -135,7 +133,7 @@
         </div>
       </div>
     </div>
-    <div v-if="!isSent">
+    <div v-if="!isSent && sixteenthPanelData.is_project">
       <Button class="add_eventBtn" label="Добавить проект" @click="addProject"/>
     </div>
     <div>
@@ -152,17 +150,16 @@
             :maxlength="3000"
             :max-length-text="3000"
             counter-visible
-            :disabled="isSent"
-            style="margin-bottom: 4px ;"
+            :disabled="isSent || !sixteenthPanelData.is_project"
         />
       </div>
       <div class="form__field-result">
-        <v-checkbox class="result-checkbox" id="v-checkbox"/>
+        <v-checkbox class="result-checkbox" id="v-checkbox" @change="calculateResult($event)"/>
         <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
       </div>
       <div class="hr"></div>
       <div>
-        <p class="result-count">0</p>
+        <p class="result-count">{{ finalResult.toFixed(1) }}</p>
       </div>
     </div>
   </div>
@@ -407,16 +404,14 @@
   </report-tabs>
 </template>
 <script setup>
-import {inject, ref, watchEffect, watchPostEffect} from "vue";
+import { ref, watch, watchEffect, watchPostEffect } from "vue";
 import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { SvgIcon } from '@shared/index';
 import { ReportTabs } from './index';
-import { FileBoxComponent } from '@entities/RatingRoComponents/components';
-import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 
-const swal = inject('$swal');
+// const swal = inject('$swal');
 
 const props = defineProps({
   districtExpert: {
@@ -434,16 +429,15 @@ const props = defineProps({
 
 const emit = defineEmits(['getData']);
 
-let isErrorFile = ref(false);
 const sixteenthPanelData = ref({
-  is_project: false,
+  is_project: null,
   projects: [],
   comment: ''
 })
 const projects = ref([
   {
     name: '',
-    project_scale: 'Всероссийский',
+    project_scale: null,
     regulations: '',
     file_size: '',
     file_type: '',
@@ -456,6 +450,7 @@ const projects = ref([
 ]);
 const isFirstSent = ref(true);
 const isSent = ref(false);
+const finalResult = ref(0);
 
 const focusOut = async () => {
   sixteenthPanelData.value.projects = [...projects.value];
@@ -469,21 +464,21 @@ const focusOut = async () => {
     }
   } catch (e) {
     console.log('focusOut error:', e);
-    e.response.data.projects.forEach(project => {
-      if (project.links) {
-        for (let i in project.links) {
-          if (Object.keys(project.links[i]).length !== 0 && project.links[i].link.includes('Введите правильный URL.')) {
-            swal.fire({
-              position: 'center',
-              icon: 'warning',
-              title: `Введите корректный URL`,
-              showConfirmButton: false,
-              timer: 2500,
-            })
-          }
-        }
-      }
-    })
+    // e.response.data.projects.forEach(project => {
+    //   if (project.links) {
+    //     for (let i in project.links) {
+    //       if (Object.keys(project.links[i]).length !== 0 && project.links[i].link.includes('Введите правильный URL.')) {
+    //         swal.fire({
+    //           position: 'center',
+    //           icon: 'warning',
+    //           title: `Введите корректный URL`,
+    //           showConfirmButton: false,
+    //           timer: 2500,
+    //         })
+    //       }
+    //     }
+    //   }
+    // })
   }
 };
 
@@ -498,10 +493,7 @@ const deleteLink = async (projectIndex, linkIndex) => {
 const addProject = () => {
   projects.value.push({
     name: '',
-    project_scale: 'Всероссийский',
-    regulations: '',
-    file_size: '',
-    file_type: '',
+    project_scale: null,
     links: [
       {
         link: '',
@@ -533,22 +525,7 @@ const deleteProject = async (index) => {
   }
 };
 
-const uploadFile = async (event, index) => {
-  fileValidate(event.target.files[0], 7, isErrorFile);
-  if (isErrorFile.value) {
-    projects.value[index].regulations = event.target.files[0].name
-  } else {
-    const {data} = await reportPartTwoService.createReportDraft(setFormData(event.target.files[0], index), '16', true);
-    emit('getData', data, 16);
-  }
-};
-const deleteFile = async (index) => {
-  setFormData(null, index, false, true)
-  const {data} = await reportPartTwoService.createReportDraft(setFormData(null, index, false, true), '16', true);
-  emit('getData', data, 16);
-};
-
-const setFormData = (file = null, index = null, isDeleteEvent = false, isDeleteFile = false, isLinkDelete = false, linkIndex = null) => {
+const setFormData = (index = null, isDeleteEvent = false, isLinkDelete = false, linkIndex = null) => {
   let formData = new FormData();
 
   formData.append('comment', sixteenthPanelData.value.comment);
@@ -562,12 +539,6 @@ const setFormData = (file = null, index = null, isDeleteEvent = false, isDeleteF
       if (isLinkDelete && index === i) {
         project.links.splice(linkIndex, 1);
       }
-      if (file && index === i) {
-        formData.append(`projects[${i}][regulations]`, file);
-      }
-      if (isDeleteFile && index === i) {
-        formData.append(`projects[${i}][regulations]`, '');
-      }
       if (project.links.length) {
         for (let j = 0; j < project.links.length; j++) {
           if (project.links[j].link) formData.append(`projects[${i}][links][${j}][link]`, project.links[j].link);
@@ -578,8 +549,24 @@ const setFormData = (file = null, index = null, isDeleteEvent = false, isDeleteF
   return formData;
 };
 
+const calculateResult = (event) => {
+  if (event.target.checked) {
+    projects.value.forEach(e => {
+      console.log('e', e.project_scale)
+      if (e.project_scale === 'Всероссийский') {
+        finalResult.value += 2
+      } else if (e.project_scale === 'Окружной') {
+        finalResult.value += 1.5
+      } else if (e.project_scale === 'Межрегиональный') {
+        finalResult.value += 1
+      }
+    })
+  } else {
+    finalResult.value = 0
+  }
+};
+
 watchEffect(() => {
-  console.log('props.data: ', props.data)
   if (props.data) {
     isFirstSent.value = false;
     projects.value = [...props.data.projects];
@@ -592,7 +579,42 @@ watchPostEffect(() => {
   projects.value.forEach((project) => {
     if (!project.links.length) project.links.push({link: ''})
   });
-})
+  if (!projects.value.length) {
+    addProject()
+  }
+});
+
+watch(() => sixteenthPanelData.value.is_project, async (isProject) => {
+  if (!isProject) {
+    let formData = new FormData();
+    formData.append('comment', '');
+    formData.append('is_project', false);
+    formData.append(`projects[0][name]`, '');
+    formData.append(`projects[0][project_scale]`, '');
+
+    if (isFirstSent.value) {
+      const {data} = await reportPartTwoService.createReport(formData, '16');
+      emit('getData', data, 16);
+    } else {
+      const {data} = await reportPartTwoService.createReportDraft(formData, '16', true);
+      emit('getData', data, 16);
+    }
+  } else {
+    let formData = new FormData();
+    formData.append('comment', '');
+    formData.append('is_project', true);
+    formData.append(`projects[0][name]`, '');
+    formData.append(`projects[0][project_scale]`, '');
+
+    if (isFirstSent.value) {
+      const {data} = await reportPartTwoService.createReport(formData, '16');
+      emit('getData', data, 16);
+    } else {
+      const {data} = await reportPartTwoService.createReportDraft(formData, '16', true);
+      emit('getData', data, 16);
+    }
+  }
+});
 </script>
 <style lang="scss" scoped>
 .form__field-project-existence {

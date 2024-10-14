@@ -24,9 +24,13 @@
             />
         </div>
   
-        <div class="report__fieldset report__fieldset--right-block">
+        <div 
+            class="report__fieldset report__fieldset--right-block"
+            v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+                  (isSent && twelfthPanelData.scan_file)"
+        >
             <p class="form__label report__label">
-                Скан подтверждающего <br> документа&nbsp;<sup class="valid-red">*</sup>
+                Скан подтверждающего <br> документа
             </p>
             <InputReport
                 v-if="!twelfthPanelData.scan_file"
@@ -39,7 +43,6 @@
                 height="auto"
                 @change="uploadFile"
                 :disabled="isSent"
-                :is-error-panel="isErrorPanel"
             />
             <FileBoxComponent
                 v-else
@@ -54,11 +57,9 @@
   
         <div 
             class="report__fieldset report__fieldset--comment"
-            v-if="
-                !(districtExpert || centralExpert) ||
-                (districtExpert && twelfthPanelData.comment) ||
-                (centralExpert && twelfthPanelData.comment)
-            ">
+            v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+                  (isSent && twelfthPanelData.comment)"
+            >
             <label class="form__label report__label" for="comment">
                 Комментарий
             </label>
@@ -95,7 +96,9 @@
                 type="number"
                 placeholder="Введите число"
                 :maxlength="10"
-                :max="32767"
+                :min="0"
+                :max="9999999999"
+                :step="0.01"
                 @update:value="changeValue"
                 :disabled="centralExpert"
             />
@@ -103,14 +106,15 @@
 
         <CommentFileComponent
             v-model:value="twelfthPanelData.comment"
+            @update:value="changeValue"
             name="twelfthPanelData.comment"
             @change="uploadFile"
-            @focusout="focusOut"
             @click="deleteFile"
-            :file="twelfthPanelData.scan_file"
+            :file="fileName"
             :fileType="twelfthPanelData.file_type"
             :fileSize="twelfthPanelData.file_size"
             :disabled="centralExpert"
+            :is-error-file="isErrorFile"
         ></CommentFileComponent>
     </div>
 
@@ -192,7 +196,7 @@ const focusOut = async () => {
     let formData = new FormData();
     
     twelfthPanelData.value.amount_of_money ? formData.append('amount_of_money', twelfthPanelData.value.amount_of_money) : formData.append('amount_of_money', "");
-    formData.append('comment', twelfthPanelData.value.comment);
+    formData.append('comment', twelfthPanelData.value.comment || '');
 
     try {
         if (isFirstSent.value) {
@@ -207,6 +211,8 @@ const focusOut = async () => {
     }
 };
 
+const fileName = ref('');
+
 const uploadFile = async (event) => {    
     twelfthPanelData.value.file_size = (event.target.files[0].size / Math.pow(1024, 2));
     twelfthPanelData.value.file_type = event.target.files[0].type.split('/').at(-1);
@@ -214,7 +220,10 @@ const uploadFile = async (event) => {
     fileValidate(event.target.files[0], 7, isErrorFile);
     if (isErrorFile.value) {
         twelfthPanelData.value.scan_file = event.target.files[0].name;
+        fileName.value = event.target.files[0].name;
         // console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
+    } else if (props.districtExpert) {
+        fileName.value = event.target.files[0].name;
     } else {
     let formData = new FormData();
     formData.append('scan_file', event.target.files[0]);
@@ -236,13 +245,14 @@ const uploadFile = async (event) => {
 };
 
 const deleteFile = async () => {
-    twelfthPanelData.value.scan_file = '';
-    let formData = new FormData();
-    formData.append('scan_file', '');
-
     if (isErrorFile.value) {
         twelfthPanelData.value.scan_file = "";
+        fileName.value = '';
+    } else if (props.districtExpert) { 
+        fileName.value = '';
     } else {
+        let formData = new FormData();
+        formData.append('scan_file', '');
         try {
             if (isFirstSent.value) {
                 let { data :  scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
@@ -264,7 +274,7 @@ watchEffect(async () => {
         // console.log(props.data);
         isFirstSent.value = false;
         twelfthPanelData.value.amount_of_money = props.data.amount_of_money;
-        twelfthPanelData.value.comment = props.data.comment || '';
+        twelfthPanelData.value.comment = props.data.comment;
         twelfthPanelData.value.scan_file = props.data.scan_file;
         twelfthPanelData.value.file_size = props.data.file_size;
         twelfthPanelData.value.file_type = props.data.file_type;
