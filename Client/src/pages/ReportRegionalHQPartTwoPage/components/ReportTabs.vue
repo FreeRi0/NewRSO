@@ -90,17 +90,6 @@ watchEffect(() => {
   padding: 0;
 }
 
-.form__field-group {
-  background: #F3F4F5;
-  border: none;
-  border-radius: 10px;
-  margin-bottom: 8px;
-
-  @media (min-width: 768px) {
-    padding: 40px;
-  }
-}
-
 //.report-table {
 //  &__tr {
 //    background-color: #FFFFFF;

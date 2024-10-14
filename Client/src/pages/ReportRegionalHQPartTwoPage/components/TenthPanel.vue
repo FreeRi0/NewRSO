@@ -15,14 +15,15 @@
               @collapse-form="collapseForm"
               @deleteLink="deleteLink($event, 1)"
               @clearForm="onClearForm(1)"
-              :isErrorFileProp="isErrorFile"
+              :isErrorFileProp="isErrorFileFirst"
+              title="Всероссийская патриотическая акция «Снежный Десант РСО»"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
 
       <v-expansion-panel>
         <v-expansion-panel-title>
-          Всероссийская трудовая патриотическая акция «Поклонимся Великим годам»
+          Всероссийская трудовая патриотическая акция «Поклонимся великим тем годам»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <TenthPanelForm
@@ -35,6 +36,8 @@
               @collapse-form="collapseForm"
               @deleteLink="deleteLink($event, 2)"
               @clearForm="onClearForm(2)"
+              :isErrorFileProp="isErrorFileSecond"
+              title="Всероссийская трудовая патриотическая акция «Поклонимся великим тем годам»"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -70,7 +73,7 @@ const isFirstSent = ref({
   second: true,
 });
 const tenthPanelDataFirst = ref({
-  event_happened: false,
+  event_happened: null,
   document: '',
   file_size: '',
   file_type: '',
@@ -82,7 +85,7 @@ const tenthPanelDataFirst = ref({
   ],
 });
 const tenthPanelDataSecond = ref({
-  event_happened: false,
+  event_happened: null,
   document: '',
   file_size: '',
   file_type: '',
@@ -94,7 +97,8 @@ const tenthPanelDataSecond = ref({
   ],
 });
 const panel = ref(false);
-let isErrorFile = ref(false);
+let isErrorFileFirst = ref(false);
+let isErrorFileSecond = ref(false);
 
 const collapseForm = () => {
   panel.value = false;
@@ -156,11 +160,11 @@ const formData = async (reportData, reportNumber) => {
 };
 
 const uploadFile = async (event, reportNumber) => {
-  fileValidate(event.target.files[0], 7, isErrorFile);
   let formData = new FormData();
 
   if (reportNumber === 1) {
-    if (isErrorFile.value) {
+    fileValidate(event.target.files[0], 7, isErrorFileFirst);
+    if (isErrorFileFirst.value) {
       tenthPanelDataFirst.value.event_happened = true;
       tenthPanelDataFirst.value.document = event.target.files[0].name;
     } else {
@@ -180,7 +184,8 @@ const uploadFile = async (event, reportNumber) => {
       }
     }
   } else if (reportNumber === 2) {
-    if (isErrorFile.value) {
+    fileValidate(event.target.files[0], 7, isErrorFileSecond);
+    if (isErrorFileSecond.value) {
       tenthPanelDataSecond.value.event_happened = true;
       tenthPanelDataSecond.value.document = event.target.files[0].name;
     } else {
@@ -260,12 +265,22 @@ const onClearForm = async (reportNumber) => {
   formData.append('[links][0][link]', '');
   formData.append('comment', '');
   if (reportNumber === 1) {
-    let {data} = await reportPartTwoService.createMultipleReportDraft(formData, '10', '1', true);
-    emit('getData', data, 10, 1);
+    if (isFirstSent.value.first) {
+      const {data} = await reportPartTwoService.createMultipleReport(formData, '10', '1', true);
+      emit('getData', data, 10, 1);
+    } else {
+      const {data} = await reportPartTwoService.createMultipleReportDraft(formData, '10', '1', true);
+      emit('getData', data, 10, 1);
+    }
   }
   if (reportNumber === 2) {
-    let {data} = await reportPartTwoService.createMultipleReportDraft(formData, '10', '2', true);
-    emit('getData', data, 10, 2);
+    if (isFirstSent.value.second) {
+      const {data} = await reportPartTwoService.createMultipleReport(formData, '10', '2', true);
+      emit('getData', data, 10, 2);
+    } else {
+      const {data} = await reportPartTwoService.createMultipleReportDraft(formData, '10', '2', true);
+      emit('getData', data, 10, 2);
+    }
   }
 }
 

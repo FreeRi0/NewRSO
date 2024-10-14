@@ -2,7 +2,7 @@
   <div v-if="!(props.centralExpert || props.districtExpert)" class="form__field-group">
     <div style="display: flex; justify-content: space-between;">
       <div>
-        <p class="form__title">Всероссийская патриотическая акция «Снежный Десант РСО»</p>
+        <p class="form__title">{{ props.title }}</p>
       </div>
       <div>
         <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть"/>
@@ -71,7 +71,7 @@
       </div>
       <div>
         <p class="form__label">Ссылка на социальные сети/ электронные <br>
-          СМИ, подтверждающая проведение акции <sup class="valid-red">*</sup></p>
+          СМИ, подтверждающая проведение акции</p>
         <div class="input-link" v-for="(link, i) in tenthPanelData.links" :key="i">
           <InputReport
               v-model:value="link.link"
@@ -210,10 +210,11 @@ const props = defineProps({
     type: Boolean
   },
   isErrorFileProp: Boolean,
+  title: String,
 });
 
 const tenthPanelData = ref({
-  event_happened: false,
+  event_happened: null,
   document: '',
   file_size: '',
   file_type: '',
@@ -264,6 +265,8 @@ watchPostEffect(() => {
 watch(() => tenthPanelData.value.event_happened, (isEventHappened) => {
   if (!isEventHappened) {
     emit('clearForm')
+  } else {
+    emit('formData', tenthPanelData.value);
   }
 })
 </script>

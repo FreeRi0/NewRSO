@@ -21,7 +21,8 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <first-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.first" :is-error-panel="isErrorPanel.first" />
+                :data="reportData.first" :is-error-panel="isErrorPanel.first"
+                :blockEditFirstReport="blockEditFirstReport" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -83,15 +84,13 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
-            <v-expansion-panel-title
-              :class="Object.values(isErrorPanel.seventh).some(item => item.error === true) ? 'visible-error' : ''">
+            <v-expansion-panel-title>
               7. Победители студенческих отрядов РО&nbsp;РСО во&nbsp;всероссийских (международных) проектах
               и&nbsp;конкурсах &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <seventh-panel @get-data="setData" @getId="setId" @getPanelNumber="setPanelNumber" :items="seventh_items"
-                :district-headquarter-commander="districtExpert" :data="reportData.seventh"
-                :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.seventh" />
+              <calculated-panel
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -228,7 +227,6 @@ import {
   FourthPanel,
   FifthPanel,
   SixthPanel,
-  SeventhPanel,
   NinthPanel,
   TenthPanel,
   EleventhPanel,
@@ -254,7 +252,7 @@ const reportData = ref({
   fourth: null,
   fifth: null,
   six: {},
-  seventh: {},
+  // seventh: {},
   ninth: {},
   tenth: {
     first: null,
@@ -272,9 +270,10 @@ const preloader = ref(true);
 const panel_id = ref(1);
 const panel_num = ref(null);
 const six_items = ref([])
-const seventh_items = ref([]);
+// const seventh_items = ref([]);
 const ninth_items = ref([]);
 const blockSendButton = ref(false);
+const blockEditFirstReport = ref(false);
 
 const swal = inject('$swal');
 const router = useRouter();
@@ -284,7 +283,7 @@ const isErrorPanel = ref({
   fourth: false,
   fifth: false,
   six: {},
-  seventh: {},
+  // seventh: {},
   ninth: {},
   tenth: false,
   eleventh: false,
@@ -331,9 +330,9 @@ const getItems = async (number) => {
       case 6:
         six_items.value = response.data;
         break;
-      case 7:
-        seventh_items.value = response.data;
-        break;
+      // case 7:
+      //   seventh_items.value = response.data;
+      //   break;
       case 9:
         ninth_items.value = response.data;
         break;
@@ -391,21 +390,21 @@ const getMultiplyData = async (isExpert, reportId) => {
     }
   });
 
-  const seventhDataPromises = seventh_items.value.map(async (item) => {
-    try {
-      if (!isExpert) {
-        return { id: item.id, data: (await reportPartTwoService.getMultipleReport('7', item.id)).data };
-      } else {
-        return { id: item.id, data: (await reportPartTwoService.getMultipleReportDH('7', item.id, reportId)).data };
-      }
-    } catch (error) {
-      if (error.response && error.response.status === 404) {
-        return { id: item.id, data: {} };
-      } else {
-        throw error;
-      }
-    }
-  });
+  // const seventhDataPromises = seventh_items.value.map(async (item) => {
+  //   try {
+  //     if (!isExpert) {
+  //       return { id: item.id, data: (await reportPartTwoService.getMultipleReport('7', item.id)).data };
+  //     } else {
+  //       return { id: item.id, data: (await reportPartTwoService.getMultipleReportDH('7', item.id, reportId)).data };
+  //     }
+  //   } catch (error) {
+  //     if (error.response && error.response.status === 404) {
+  //       return { id: item.id, data: {} };
+  //     } else {
+  //       throw error;
+  //     }
+  //   }
+  // });
 
   const ninthDataPromises = ninth_items.value.map(async (item) => {
     try {
@@ -423,21 +422,28 @@ const getMultiplyData = async (isExpert, reportId) => {
     }
   });
 
-  const [sixDataResults, seventhDataResults, ninthDataResults] = await Promise.all([
+  const [sixDataResults, ninthDataResults] = await Promise.all([
     Promise.all(sixDataPromises),
-    Promise.all(seventhDataPromises),
+    // Promise.all(seventhDataPromises),
     Promise.all(ninthDataPromises),
   ]);
 
   sixDataResults.forEach((result) => {
     reportData.value.six[result.id] = result.data;
+    if (reportData.value.six[result.id].is_sent === false) {
+      blockSendButton.value = false;
+    }
   });
-  seventhDataResults.forEach((result) => {
-    reportData.value.seventh[result.id] = result.data;
-  });
+  console.log('data66', reportData.value.six)
+  // seventhDataResults.forEach((result) => {
+  //   reportData.value.seventh[result.id] = result.data;
+  // });
 
   ninthDataResults.forEach((result) => {
     reportData.value.ninth[result.id] = result.data;
+    if (reportData.value.ninth[result.id].is_sent === false) {
+      blockSendButton.value = false;
+    }
   });
 }
 const getReportData = async (reportId) => {
@@ -503,6 +509,7 @@ const getReportData = async (reportId) => {
         // TODO: продумать логику блокировки кнопки, когда все отчеты отправлены
         if (reportData.value.sixteenth.is_sent) {
           blockSendButton.value = true;
+          blockEditFirstReport.value = true;
         }
       } catch (e) {
         console.log(e.message)
@@ -532,8 +539,6 @@ const getReportData = async (reportId) => {
   // console.log('getReportData: ', reportData.value);
 };
 
-
-
 const setData = (data, panel, number = 0) => {
   switch (panel) {
     case 1:
@@ -548,9 +553,9 @@ const setData = (data, panel, number = 0) => {
     case 6:
       reportData.value.six[number] = data
       break;
-    case 7:
-      reportData.value.seventh[number] = data
-      break;
+    // case 7:
+    //   reportData.value.seventh[number] = data
+    //   break;
     case 9:
       reportData.value.ninth[number] = data
       break;
@@ -588,7 +593,7 @@ const setData = (data, panel, number = 0) => {
 
 const filterPanelsData = () => {
   const filteredSix = {};
-  const filteredSeventh = {};
+  // const filteredSeventh = {};
   const filteredNinth = {};
 
   for (let i in reportData.value.six) {
@@ -598,7 +603,7 @@ const filterPanelsData = () => {
     }
 
   }
-  console.log('setData6: ', filteredSix)
+  // console.log('setData6: ', filteredSix)
   for (let i in filteredSix) {
     isErrorPanel.value.six[i] = {
       id: i,
@@ -606,26 +611,24 @@ const filterPanelsData = () => {
     }
   }
 
-  for (let i in reportData.value.seventh) {
-    if (reportData.value.seventh[i].prize_place !== 'Нет' && Object.keys(reportData.value.seventh[i]).length !== 0) {
-      filteredSeventh[i] = reportData.value.seventh[i];
-    }
-
-  }
-  console.log('setData7: ', filteredSeventh)
-  for (let i in filteredSeventh) {
-    isErrorPanel.value.seventh[i] = {
-      id: i,
-      error: false,
-    }
-  }
+  // for (let i in reportData.value.seventh) {
+  //   if (reportData.value.seventh[i].prize_place !== 'Нет' && Object.keys(reportData.value.seventh[i]).length !== 0) {
+  //     filteredSeventh[i] = reportData.value.seventh[i];
+  //   }
+  // }
+  // for (let i in filteredSeventh) {
+  //   isErrorPanel.value.seventh[i] = {
+  //     id: i,
+  //     error: false,
+  //   }
+  // }
 
   for (let i in reportData.value.ninth) {
     if (reportData.value.ninth[i].event_happened !== false && Object.keys(reportData.value.ninth[i]).length !== 0) {
       filteredNinth[i] = reportData.value.ninth[i];
     }
   }
-  console.log('setData9: ', filteredNinth)
+  // console.log('setData9: ', filteredNinth)
   for (let i in filteredNinth) {
     isErrorPanel.value.ninth[i] = {
       id: i,
@@ -635,42 +638,66 @@ const filterPanelsData = () => {
 
   return {
     filteredSix,
-    filteredSeventh,
     filteredNinth,
   };
 };
-
 
 const sendReport = async () => {
   // console.log('reportData: ', reportData.value)
   blockSendButton.value = true;
   if (checkEmptyFields(reportData.value)) {
+    preloader.value = true;
     try {
-      const { filteredSix, filteredSeventh, filteredNinth } = filterPanelsData();
+      // const { filteredSix, filteredNinth } = filterPanelsData();
       if (!reportData.value.first.is_sent) {
         await reportPartTwoService.sendReport(reportData.value.first, '1');
       }
       if (!reportData.value.fourth.is_sent) {
-        await reportPartTwoService.sendReport(reportData.value.fourth, '4');
+        if (reportData.value.fourth) {
+          reportData.value.fourth.events = reportData.value.fourth.events.filter(event => event.participants_number)
+          await reportPartTwoService.sendReport(reportData.value.fourth, '4');
+        }
       }
       if (!reportData.value.fifth.is_sent) {
         await reportPartTwoService.sendReport(reportData.value.fifth, '5');
       }
-      for (let item in filteredSix) {
-        if (filteredSix[item].is_sent === false) {
-          await reportPartTwoService.sendReportWithSlash(filteredSix, '6');
+      for (let item in reportData.value.six) {
+        if (!Object.keys(reportData.value.six[item]).length) {
+          await reportPartTwoService.createMultipleReport({
+            number_of_members: 0,
+            links: [],
+            comment: '',
+          }, '6', item)
+          reportData.value.six[item].event_happened = false;
+        }
+        if (reportData.value.six[item].number_of_members == 0 || reportData.value.six[item].number_of_members === null) {
+          reportData.value.six[item].event_happened = false;
         }
       }
-      for (let item in filteredSeventh) {
-        if (filteredSeventh[item].is_sent === false) {
-          await reportPartTwoService.sendReportWithSlash(filteredSeventh, '7');
+      await reportPartTwoService.sendReportWithSlash(reportData.value.six, '6');
+      // for (let item in filteredSeventh) {
+      //   if (filteredSeventh[item].is_sent === false) {
+      //     await reportPartTwoService.sendReportWithSlash(filteredSeventh, '7');
+      //   }
+      // }
+      for (let item in reportData.value.ninth) {
+        if (!Object.keys(reportData.value.ninth[item]).length) {
+          await reportPartTwoService.createMultipleReport({
+            event_happened: false,
+            links: [],
+            document: '',
+            file_size: null,
+            file_type: '',
+            comment: '',
+          }, '9', item)
+          reportData.value.ninth[item].event_happened = false;
         }
-      }
-      for (let item in filteredNinth) {
-        if (filteredNinth[item].is_sent === false) {
-          await reportPartTwoService.sendReportWithSlash(filteredNinth, '9');
+        if (reportData.value.ninth[item].event_happened == false || reportData.value.ninth[item].event_happened === null) {
+          reportData.value.ninth[item].event_happened = false;
         }
+
       }
+      await reportPartTwoService.sendReportWithSlash(reportData.value.ninth, '9');
       if (!reportData.value.tenth.first.is_sent) {
         await reportPartTwoService.sendMultipleReport(reportData.value.tenth.first, '10', '1');
       }
@@ -690,13 +717,16 @@ const sendReport = async () => {
         await reportPartTwoService.sendReport(reportData.value.sixteenth, '16');
       }
 
+      await getReportData(route.query.reportId);
+
       swal.fire({
         position: 'center',
         icon: 'success',
-        title: 'успешно',
+        title: 'Отчет успешно отправлен',
         showConfirmButton: false,
         timer: 1500,
       });
+
       await router.push({
         name: 'reportingRo',
       });
@@ -710,6 +740,8 @@ const sendReport = async () => {
         timer: 2500,
       })
       console.log('sendReport error: ', e)
+    } finally {
+      preloader.value = false;
     }
   } else {
     blockSendButton.value = false;
@@ -717,7 +749,7 @@ const sendReport = async () => {
 };
 
 const checkEmptyFields = (data) => {
-  const { filteredSix, filteredSeventh, filteredNinth } = filterPanelsData();
+  const { filteredSix, filteredNinth } = filterPanelsData();
   console.log('data', data)
 
   if (!data.first || !(data.first.amount_of_money && data.first.scan_file)) {
@@ -731,9 +763,10 @@ const checkEmptyFields = (data) => {
     })
     return false;
   }
+
   if (data.fourth) {
     for (let event of data.fourth.events) {
-      if (!(event.participants_number && event.end_date && event.start_date && event.regulations && data.fourth.comment)) {
+      if (event.participants_number && !(event.name && event.end_date && event.start_date && data.fourth.comment)) {
         isErrorPanel.value.fourth = true;
         swal.fire({
           position: 'center',
@@ -750,15 +783,18 @@ const checkEmptyFields = (data) => {
     swal.fire({
       position: 'center',
       icon: 'warning',
-      title: `Заполните обязательные поля в 4 показателе`,
-      showConfirmButton: false,
-      timer: 2500,
+      showConfirmButton: true,
+      text: 'Заполните обязательные поля в 4 показателе. В случае отсутствия мероприятия, укажите 0 в количестве участников',
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: 'Понятно',
+      timer: 5000,
     })
     return false;
   }
+
   if (data.fifth) {
     for (let event of data.fifth.events) {
-      if (!(event.participants_number && event.ro_participants_number && event.end_date && event.start_date && event.regulations && data.fifth.comment)) {
+      if (event.participants_number && !(event.end_date && event.start_date && event.name && data.fifth.comment)) {
         isErrorPanel.value.fifth = true;
         swal.fire({
           position: 'center',
@@ -775,9 +811,11 @@ const checkEmptyFields = (data) => {
     swal.fire({
       position: 'center',
       icon: 'warning',
-      title: `Заполните обязательные поля в 5 показателе`,
-      showConfirmButton: false,
-      timer: 2500,
+      text: `Заполните обязательные поля в 5 показателе. В случае отсутствия трудового проекта, укажите 0 в количестве участников`,
+      showConfirmButton: true,
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: 'Понятно',
+      timer: 5000,
     })
     return false;
   }
@@ -798,22 +836,22 @@ const checkEmptyFields = (data) => {
       return false;
     }
   }
-  for (let item in filteredSeventh) {
-    if (!(filteredSeventh[item]?.links?.length && filteredSeventh[item].document && filteredSeventh[item].comment)) {
-      isErrorPanel.value.seventh[item] = {
-        id: item,
-        error: true,
-      };
-      swal.fire({
-        position: 'center',
-        icon: 'warning',
-        title: `Заполните обязательные поля в 7 показателе`,
-        showConfirmButton: false,
-        timer: 2500,
-      })
-      return false;
-    }
-  }
+  // for (let item in filteredSeventh) {
+  //   if (!(filteredSeventh[item]?.links?.length && filteredSeventh[item].document && filteredSeventh[item].comment)) {
+  //     isErrorPanel.value.seventh[item] = {
+  //       id: item,
+  //       error: true,
+  //     };
+  //     swal.fire({
+  //       position: 'center',
+  //       icon: 'warning',
+  //       title: `Заполните обязательные поля в 7 показателе`,
+  //       showConfirmButton: false,
+  //       timer: 2500,
+  //     })
+  //     return false;
+  //   }
+  // }
   for (let item in filteredNinth) {
     if (!(filteredNinth[item]?.links?.length)) {
       isErrorPanel.value.ninth[item] = {
@@ -830,6 +868,7 @@ const checkEmptyFields = (data) => {
       return false;
     }
   }
+
   if (data.tenth.first) {
     if (data.tenth.first.event_happened) {
       if (!data.tenth.first.comment) {
@@ -844,6 +883,16 @@ const checkEmptyFields = (data) => {
         return false;
       }
     }
+  } else {
+    isErrorPanel.value.tenth = true;
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      title: `Укажите информацию о проведении акции в показателе 10-1`,
+      showConfirmButton: false,
+      timer: 3500,
+    })
+    return false;
   }
 
   if (data.tenth.second) {
@@ -860,6 +909,16 @@ const checkEmptyFields = (data) => {
         return false;
       }
     }
+  } else {
+    isErrorPanel.value.tenth = true;
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      title: `Укажите информацию о проведении акции в показателе 10-2`,
+      showConfirmButton: false,
+      timer: 3500,
+    })
+    return false;
   }
 
   if (!data.eleventh || !(data.eleventh.participants_number && data.eleventh.scan_file)) {
@@ -873,7 +932,8 @@ const checkEmptyFields = (data) => {
     })
     return false;
   }
-  if (!data.twelfth || !(data.twelfth.amount_of_money && data.twelfth.scan_file)) {
+
+  if (!data.twelfth || !(data.twelfth.amount_of_money)) {
     isErrorPanel.value.twelfth = true;
     swal.fire({
       position: 'center',
@@ -884,7 +944,8 @@ const checkEmptyFields = (data) => {
     })
     return false;
   }
-  if (!data.thirteenth || !(data.thirteenth.number_of_members && data.thirteenth.scan_file)) {
+
+  if (!data.thirteenth || !(data.thirteenth.number_of_members)) {
     isErrorPanel.value.thirteenth = true;
     swal.fire({
       position: 'center',
@@ -895,9 +956,10 @@ const checkEmptyFields = (data) => {
     })
     return false;
   }
+
   if (data.sixteenth) {
     for (let project of data.sixteenth.projects) {
-      if (!(project.name && project.regulations && data.sixteenth.comment)) {
+      if (data.sixteenth.is_project && !(data.sixteenth.comment && project.name && project.project_scale)) {
         isErrorPanel.value.sixteenth = true;
         swal.fire({
           position: 'center',
@@ -909,19 +971,31 @@ const checkEmptyFields = (data) => {
         return false;
       }
     }
+  } else {
+    isErrorPanel.value.sixteenth = true;
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      title: `Укажите информацию о наличии трудового проекта в 16 показателе`,
+      showConfirmButton: false,
+      timer: 3500,
+    })
+    return false;
   }
+
   return true;
 }
 
 onMounted(() => {
   if (roleStore.experts?.is_district_expert) {
     districtExpert.value = true;
+    console.log('окружной эксперт', districtExpert.value);
   }
   if (roleStore.experts?.is_central_expert) {
     centralExpert.value = true;
+    console.log('центральный эксперт', centralExpert.value);
   }
   getItems(6);
-  getItems(7);
   getItems(9);
   getReportData(route.query.reportId);
 

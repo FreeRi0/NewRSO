@@ -53,11 +53,8 @@
 
     <div
       class="report__fieldset report__fieldset--comment"
-      v-if="
-        !(districtExpert || centralExpert) ||
-        (districtExpert && eleventhPanelData.comment) ||
-        (centralExpert && eleventhPanelData.comment)
-      "
+      v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+            (isSent && eleventhPanelData.comment)"
     >
       <label class="form__label report__label" for="comment"> Комментарий </label>
       <TextareaReport
@@ -92,7 +89,8 @@
         type="number"
         placeholder="Введите число"
         :maxlength="10"
-        :max="32767"
+        :min="0"
+        :max="2147483647"
         @update:value="changeValue"
         :disabled="centralExpert"
       />
@@ -100,14 +98,15 @@
 
     <CommentFileComponent
       v-model:value="eleventhPanelData.comment"
+      @update:value="changeValue"
       name="eleventhPanelData.comment"
       @change="uploadFile"
-      @focusout="focusOut"
       @click="deleteFile"
-      :file="eleventhPanelData.scan_file"
+      :file="fileName"
       :fileType="eleventhPanelData.file_type"
       :fileSize="eleventhPanelData.file_size"
       :disabled="centralExpert"
+      :is-error-file="isErrorFile"
     ></CommentFileComponent>
   </div>
 
@@ -141,8 +140,6 @@ import {
 } from "@entities/RatingRoComponents/components";
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
-
-// import { HTTP } from '@app/http';
 
 const props = defineProps({
   districtExpert: {
@@ -192,7 +189,7 @@ const focusOut = async () => {
   let formData = new FormData();
 
   eleventhPanelData.value.participants_number ? formData.append("participants_number", eleventhPanelData.value.participants_number) : formData.append("participants_number", "");
-  formData.append("comment", eleventhPanelData.value.comment);
+  formData.append("comment", eleventhPanelData.value.comment || '');
 
   try {
     if (isFirstSent.value) {
@@ -207,6 +204,8 @@ const focusOut = async () => {
   }
 };
 
+const fileName = ref('');
+
 const uploadFile = async (event) => {
   eleventhPanelData.value.file_size = (event.target.files[0].size / Math.pow(1024, 2));
   eleventhPanelData.value.file_type = event.target.files[0].type.split('/').at(-1);
@@ -215,7 +214,10 @@ const uploadFile = async (event) => {
   // console.log('(4)', 'перед отправкой в uploadFile', isErrorFile.value);
   if (isErrorFile.value) {
     eleventhPanelData.value.scan_file = event.target.files[0].name;
+    fileName.value = event.target.files[0].name;
     // console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
+  } else if (props.districtExpert) {
+    fileName.value = event.target.files[0].name;
   } else {
     let formData = new FormData();
     formData.append("scan_file", event.target.files[0]);
@@ -238,13 +240,15 @@ const uploadFile = async (event) => {
 };
 
 const deleteFile = async () => {
-  eleventhPanelData.value.scan_file = "";
-  let formData = new FormData();
-  formData.append("scan_file", "");
-
   if (isErrorFile.value) {
     eleventhPanelData.value.scan_file = "";
+    fileName.value = '';
+  } else if (props.districtExpert) { 
+    fileName.value = '';
   } else {
+    let formData = new FormData();
+    formData.append("scan_file", "");
+
     try {
       if (isFirstSent.value) {
         let { data : scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
@@ -267,7 +271,7 @@ watchEffect(() => {
     console.log(props.data);
     isFirstSent.value = false;
     eleventhPanelData.value.participants_number = props.data.participants_number;
-    eleventhPanelData.value.comment = props.data.comment || '';
+    eleventhPanelData.value.comment = props.data.comment;
     eleventhPanelData.value.scan_file = props.data.scan_file;
     eleventhPanelData.value.file_size = props.data.file_size;
     eleventhPanelData.value.file_type = props.data.file_type;
