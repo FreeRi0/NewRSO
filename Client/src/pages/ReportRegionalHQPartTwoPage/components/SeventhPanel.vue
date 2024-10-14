@@ -1,6 +1,6 @@
 <template>
   <v-card class="panel-card">
-    <v-expansion-panels v-model="panel" class="mb-2">
+    <!-- <v-expansion-panels v-model="panel" class="mb-2">
       <v-progress-circular v-show="!items.length" class="circleLoader" indeterminate></v-progress-circular>
       <v-expansion-panel :disabled="disabled" v-show="items.length" v-for="item in items"
         :key="item.id"><v-expansion-panel-title
@@ -21,154 +21,153 @@
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
         </v-expansion-panel-text></v-expansion-panel>
-    </v-expansion-panels>
+    </v-expansion-panels> -->
 
   </v-card>
 </template>
 <script setup>
-import { ref, watchEffect } from "vue";
-import { SeventhPanelForm } from "./index";
-import { reportPartTwoService } from "@services/ReportService.ts";
+// import { ref, watchEffect } from "vue";
+// import { SeventhPanelForm } from "./index";
+// import { reportPartTwoService } from "@services/ReportService.ts";
 
 // @is-sent="sent($event)"
-const props = defineProps({
-  districtHeadquarterCommander: {
-    type: Boolean
-  },
-  centralHeadquarterCommander: {
-    type: Boolean
-  },
-  isErrorPanel: Object,
-  items: Array,
-  data: Object
-});
-let el_id = ref(null);
+// const props = defineProps({
+//   districtHeadquarterCommander: {
+//     type: Boolean
+//   },
+//   centralHeadquarterCommander: {
+//     type: Boolean
+//   },
+//   isErrorPanel: Object,
+//   items: Array,
+//   data: Object
+// });
+// let el_id = ref(null);
 
-const isSent = ref(false);
-// const swal = inject('$swal');
-const disabled = ref(false);
-const panel = ref(false);
-const emit = defineEmits(['getData'])
-const seventhPanelData = ref({
-  prize_place: 'Нет',
-  links: [{
-    link: '',
-  }],
-  document: '',
-  file_size: null,
-  file_type: '',
-  comment: '',
-});
+// const isSent = ref(false);
+// const disabled = ref(false);
+// const panel = ref(false);
+// const emit = defineEmits(['getData'])
+// const seventhPanelData = ref({
+//   prize_place: 'Нет',
+//   links: [{
+//     link: '',
+//   }],
+//   document: '',
+//   file_size: null,
+//   file_type: '',
+//   comment: '',
+// });
 
-const link_err = ref(false);
+// const link_err = ref(false);
 
-const setError = (err) => {
-  link_err.value = err;
-}
-const isFirstSent = ref(null);
+// const setError = (err) => {
+//   link_err.value = err;
+// }
+// const isFirstSent = ref(null);
 
-const formData = async (reportData, reportNumber) => {
-  try {
-    console.log('is_link_err_3_7', link_err.value)
-    if (!link_err.value) {
-      if (isFirstSent.value) {
-        console.log('First time sending data');
-        const { data } = await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber, true);
-        isFirstSent.value = false;
-        emit('getData', data, 7, reportNumber);
-      } else {
-        console.log('Second time sending data');
-        const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber, true);
-        emit('getData', data, 7, reportNumber);
-      }
-    }
-  } catch (e) {
-    console.error('Error while sending data', e);
-  }
-};
-
-
-const uploadFile = async (reportData, reportNumber) => {
-  if (isFirstSent.value) {
-    let { data } = await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber, true)
-    emit('getData', data, 7, reportNumber);
-  } else {
-    let { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber, true);
-    emit('getData', data, 7, reportNumber);
-  }
-};
-
-const deleteFile = async (reportData, reportNumber) => {
-  if (isFirstSent.value) {
-    await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber, true);
-  } else {
-    await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber, true);
-  }
-};
-
-const collapsed = () => {
-  panel.value = false;
-}
-
-const getId = (id) => {
-  console.log('id', id);
-  el_id.value = id;
-  emit('getId', id);
-}
-
-const getPanelNumber = (number) => {
-  console.log('num', number);
-  emit('getPanelNumber', number);
-}
+// const formData = async (reportData, reportNumber) => {
+//   try {
+//     console.log('is_link_err_3_7', link_err.value)
+//     if (!link_err.value) {
+//       if (isFirstSent.value) {
+//         console.log('First time sending data');
+//         const { data } = await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber, true);
+//         isFirstSent.value = false;
+//         emit('getData', data, 7, reportNumber);
+//       } else {
+//         console.log('Second time sending data');
+//         const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber, true);
+//         emit('getData', data, 7, reportNumber);
+//       }
+//     }
+//   } catch (e) {
+//     console.error('Error while sending data', e);
+//   }
+// };
 
 
-watchEffect(() => {
-  if (props.data[el_id.value] && Object.keys(props.data[el_id.value]).length > 0) {
-    console.log('data received', props.data);
-    isFirstSent.value = false;
+// const uploadFile = async (reportData, reportNumber) => {
+//   if (isFirstSent.value) {
+//     let { data } = await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber, true)
+//     emit('getData', data, 7, reportNumber);
+//   } else {
+//     let { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber, true);
+//     emit('getData', data, 7, reportNumber);
+//   }
+// };
 
-    seventhPanelData.value = { ...props.data[el_id.value] }
-    isSent.value = props.data[el_id.value].is_sent;
-    if (props.data[el_id.value].prize_place == 'Нет') {
-      seventhPanelData.value = {
-        prize_place: 'Нет',
-        links: [{
-          link: '',
-        }],
-        document: '',
-        file_size: null,
-        file_type: '',
-        comment: '',
-      };
-    }
-  } else {
-    console.log('data received', props.data);
-    isFirstSent.value = true;
-    seventhPanelData.value = {
-      prize_place: 'Нет',
-      links: [{
-        link: '',
-      }],
-      document: '',
-      file_size: null,
-      file_type: '',
-      comment: '',
-    };
-    for (let i in props.data) {
-      if (props.data[i].is_sent) {
-        isSent.value = true;
-        break;
-      }
-    }
-  }
+// const deleteFile = async (reportData, reportNumber) => {
+//   if (isFirstSent.value) {
+//     await reportPartTwoService.createMultipleReportAll(reportData, '7', reportNumber, true);
+//   } else {
+//     await reportPartTwoService.createMultipleReportDraft(reportData, '7', reportNumber, true);
+//   }
+// };
 
-  if (panel.value || panel.value === 0) {
-    disabled.value = true;
-  } else {
-    disabled.value = false;
-  }
+// const collapsed = () => {
+//   panel.value = false;
+// }
 
-});
+// const getId = (id) => {
+//   console.log('id', id);
+//   el_id.value = id;
+//   emit('getId', id);
+// }
+
+// const getPanelNumber = (number) => {
+//   console.log('num', number);
+//   emit('getPanelNumber', number);
+// }
+
+
+// watchEffect(() => {
+//   if (props.data[el_id.value] && Object.keys(props.data[el_id.value]).length > 0) {
+//     console.log('data received', props.data);
+//     isFirstSent.value = false;
+
+//     seventhPanelData.value = { ...props.data[el_id.value] }
+//     isSent.value = props.data[el_id.value].is_sent;
+//     if (props.data[el_id.value].prize_place == 'Нет') {
+//       seventhPanelData.value = {
+//         prize_place: 'Нет',
+//         links: [{
+//           link: '',
+//         }],
+//         document: '',
+//         file_size: null,
+//         file_type: '',
+//         comment: '',
+//       };
+//     }
+//   } else {
+//     console.log('data received', props.data);
+//     isFirstSent.value = true;
+//     seventhPanelData.value = {
+//       prize_place: 'Нет',
+//       links: [{
+//         link: '',
+//       }],
+//       document: '',
+//       file_size: null,
+//       file_type: '',
+//       comment: '',
+//     };
+//     for (let i in props.data) {
+//       if (props.data[i].is_sent) {
+//         isSent.value = true;
+//         break;
+//       }
+//     }
+//   }
+
+//   if (panel.value || panel.value === 0) {
+//     disabled.value = true;
+//   } else {
+//     disabled.value = false;
+//   }
+
+// });
 </script>
 <style lang="scss" scoped>
 .panel-card {

@@ -5,7 +5,7 @@
       на 1 сентября 2024 года</h2>
 
     <report-regional-form :reportData="reportData" @sentReport="sentReport" isNewReport
-      :isButtonDisabled="isButtonDisabled" />
+      :isButtonDisabled="isButtonDisabled" :key="route.path"/>
   </div>
   <ReportModalSuccess v-if="showModalSuccess" @closeModal="closeModalSuccess" />
   <ReportModalWarning v-if="showModalWarning" @reportConfirmation="reportConfirmation" />

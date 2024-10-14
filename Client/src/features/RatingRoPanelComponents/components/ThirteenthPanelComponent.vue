@@ -176,7 +176,7 @@ const focusOut = async () => {
     if (!(props.districtExpert || props.centralExpert)) {
         let formData = new FormData();
         thirteenthPanelData.value.number_of_members ? formData.append('number_of_members', thirteenthPanelData.value.number_of_members) : formData.append('number_of_members', "");
-        formData.append('comment', thirteenthPanelData.value.comment);
+        formData.append('comment', thirteenthPanelData.value.comment || '');
 
         try {
             if (isFirstSent.value) {
@@ -229,7 +229,7 @@ watchEffect(async () => {
             // console.log(props.data);
             isFirstSent.value = false;
             thirteenthPanelData.value.number_of_members = props.data.number_of_members;
-            thirteenthPanelData.value.comment = props.data.comment || '';
+            thirteenthPanelData.value.comment = props.data.comment;
             // thirteenthPanelData.value.scan_file = props.data.scan_file;
             // thirteenthPanelData.value.file_size = props.data.file_size;
             // thirteenthPanelData.value.file_type = props.data.file_type;
