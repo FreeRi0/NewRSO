@@ -46,7 +46,7 @@
           />
         </div>
       </div>
-      <div class="form__field-date" style="display: flex;">
+      <div class="form__field-date">
         <div class="form__field-date-wrap">
           <label class="form__label" for="start_date">Дата начала проведения проекта <sup
               class="valid-red">*</sup></label>
@@ -78,27 +78,38 @@
       </div>
       <div class="report__add-file">
         <div class="form__field-event-file">
-          <label class="form__label" for="4">Положение о проекте <sup class="valid-red">*</sup></label>
+          <label class="form__label" for="eventName">Название трудового проекта <sup
+              class="valid-red">*</sup></label>
           <InputReport
-              class="form-input__file-input"
-              v-if="!event.regulations"
-              isFile
-              type="file"
-              id="scan_file"
-              name="scan_file"
-              width="100%"
-              @change="uploadFile($event, index)"
+              v-model:value="event.name"
+              id="eventName"
+              name="eventName"
+              class="form__input form__field-people-count-field"
+              placeholder="Введите название"
+              @focusout="focusOut"
               :disabled="isSent"
           />
-          <FileBoxComponent
-              v-else
-              :file="event.regulations"
-              :fileType="event.file_type"
-              :fileSize="event.file_size"
-              :is-sent="isSent"
-              :is-error-file="isErrorFile && !event.file_size"
-              @click="deleteFile(index)"
-          ></FileBoxComponent>
+          <!--          <label class="form__label" for="4">Положение о проекте <sup class="valid-red">*</sup></label>-->
+          <!--          <InputReport-->
+          <!--              class="form-input__file-input"-->
+          <!--              v-if="!event.regulations"-->
+          <!--              isFile-->
+          <!--              type="file"-->
+          <!--              id="scan_file"-->
+          <!--              name="scan_file"-->
+          <!--              width="100%"-->
+          <!--              @change="uploadFile($event, index)"-->
+          <!--              :disabled="isSent"-->
+          <!--          />-->
+          <!--          <FileBoxComponent-->
+          <!--              v-else-->
+          <!--              :file="event.regulations"-->
+          <!--              :fileType="event.file_type"-->
+          <!--              :fileSize="event.file_size"-->
+          <!--              :is-sent="isSent"-->
+          <!--              :is-error-file="isErrorFile && !event.file_size"-->
+          <!--              @click="deleteFile(index)"-->
+          <!--          ></FileBoxComponent>-->
         </div>
       </div>
       <div style="width: 100%;">
@@ -123,7 +134,11 @@
                 class="add_link"
             >+ Добавить ссылку
             </div>
-            <div v-else class="add_link" @click="deleteLink(index, i)">Удалить</div>
+            <div
+                v-else
+                class="add_link"
+                @click="deleteLink(index, i)"
+            >Удалить</div>
           </div>
         </div>
       </div>
@@ -148,12 +163,12 @@
       />
     </div>
     <div class="form__field-result">
-      <v-checkbox class="result-checkbox" id="v-checkbox"/>
+      <v-checkbox class="result-checkbox" id="v-checkbox" @change="calculateResult($event)"/>
       <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
     </div>
     <div class="hr"></div>
     <div>
-      <p>0</p>
+      <p>{{ finalResult.toFixed(1) }}</p>
     </div>
   </div>
 
@@ -171,8 +186,8 @@
                            @focusout="focusOut" :disabled="props.centralExpert || props.districtExpert"/>
             </div>
             <div class="form__field-people-count-wrap">
-              <label class="form__label" for="ro_participants_number">Количество человек из своего региона, принявших
-                участие в трудовом проекте <sup class="valid-red">*</sup></label>
+              <label class="form__label" for="ro_participants_number">Количество человек из&nbsp;своего региона, принявших
+                участие в&nbsp;трудовом проекте <sup class="valid-red">*</sup></label>
               <InputReport v-model:value="event.ro_participants_number" id="ro_participants_number"
                            name="ro_participants_number" class="form__input form__field-people-count-field"
                            type="number"
@@ -249,8 +264,8 @@
                            @focusout="focusOut"/>
             </div>
             <div class="form__field-people-count-wrap">
-              <label class="form__label" for="ro_participants_number">Количество человек из своего региона, принявших
-                участие в трудовом проекте <sup class="valid-red">*</sup></label>
+              <label class="form__label" for="ro_participants_number">Количество человек из&nbsp;своего региона, принявших
+                участие в&nbsp;трудовом проекте <sup class="valid-red">*</sup></label>
               <InputReport v-model:value="event.ro_participants_number" id="ro_participants_number"
                            name="ro_participants_number" class="form__input form__field-people-count-field"
                            type="number"
@@ -314,7 +329,7 @@
         </tr>
         </tbody>
       </v-table>
-      <label class="form__label">Количество человек из своего региона, принявших участие в трудовом проекте <sup
+      <label class="form__label">Количество человек из&nbsp;своего региона, принявших участие в&nbsp;трудовом проекте <sup
           class="valid-red">*</sup></label>
       <v-table>
         <tbody>
@@ -387,9 +402,9 @@ import { Button } from '@shared/components/buttons';
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { ReportTabs } from './index';
 import { SvgIcon } from '@shared/index';
-import { FileBoxComponent } from "@entities/RatingRoComponents/components";
+// import { FileBoxComponent } from "@entities/RatingRoComponents/components";
 // import { dateValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
-import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
+// import {fileValidate} from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 
 const swal = inject('$swal');
 
@@ -415,9 +430,10 @@ const events = ref([
     ro_participants_number: '',
     start_date: null,
     end_date: null,
-    regulations: '',
-    file_size: null,
-    file_type: '',
+    name: '',
+    // regulations: '',
+    // file_size: null,
+    // file_type: '',
     links: [
       {
         link: '',
@@ -428,12 +444,11 @@ const events = ref([
 const isSent = ref(false);
 const isErrorDate = ref({});
 // const noErrorDate = ref(false);
-let isErrorFile = ref(false);
+// let isErrorFile = ref(false);
 const isLinkError = ref(false);
+const finalResult = ref(0);
 
 const focusOut = async () => {
-  // dateValidate(events, isErrorDate, noErrorDate);
-
   if (!isLinkError.value) {
     try {
       if (isFirstSent.value) {
@@ -462,32 +477,6 @@ const focusOut = async () => {
       })
     }
   }
-  // try {
-  //   if (isFirstSent.value) {
-  //     const {data} = await reportPartTwoService.createReport(setFormData(), '5', true);
-  //     emit('getData', data, 5);
-  //   } else {
-  //     const {data} = await reportPartTwoService.createReportDraft(setFormData(), '5', true);
-  //     emit('getData', data, 5);
-  //   }
-  // } catch (e) {
-  //   console.log('focusOut error:', e);
-  //   e.response.data.events.forEach(event => {
-  //     if (event.links) {
-  //       for (let i in event.links) {
-  //         if (Object.keys(event.links[i]).length !== 0 && event.links[i].link.includes('Введите правильный URL.')) {
-  //           swal.fire({
-  //             position: 'center',
-  //             icon: 'warning',
-  //             title: `Введите корректный URL`,
-  //             showConfirmButton: false,
-  //             timer: 2500,
-  //           })
-  //         }
-  //       }
-  //     }
-  //   })
-  // }
 }
 
 const addLink = (index) => {
@@ -504,6 +493,7 @@ const addProject = () => {
     ro_participants_number: '',
     start_date: null,
     end_date: null,
+    name: '',
     links: [
       {
         link: '',
@@ -521,7 +511,8 @@ const deleteProject = async (index) => {
     if (event.ro_participants_number) formData.append(`events[${i}][ro_participants_number]`, event.ro_participants_number);
     if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
     if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
-    if (event.regulations) formData.append(`events[${i}][regulations]`, event.regulations);
+    // if (event.regulations) formData.append(`events[${i}][regulations]`, event.regulations);
+    if (event.name) formData.append(`events[${i}][name]`, event.name);
     if (event.links.length) {
       for (let j = 0; j < event.links.length; j++) {
         if (event.links[j].link) formData.append(`events[${i}][links][${j}][link]`, event.links[j].link);
@@ -536,20 +527,20 @@ const deleteProject = async (index) => {
   }
 };
 
-const uploadFile = async (event, index) => {
-  fileValidate(event.target.files[0], 7, isErrorFile);
-  if (isErrorFile.value){
-    events.value[index].regulations = event.target.files[0].name
-  } else {
-    const {data} = await reportPartTwoService.createReportDraft(setFormData(event.target.files[0], index), '5', true);
-    emit('getData', data, 5);
-  }
-};
-const deleteFile = async (index) => {
-  setFormData(null, index, false, true)
-  const {data} = await reportPartTwoService.createReportDraft(setFormData(null, index, false, true), '5', true);
-  emit('getData', data, 5);
-};
+// const uploadFile = async (event, index) => {
+//   fileValidate(event.target.files[0], 7, isErrorFile);
+//   if (isErrorFile.value) {
+//     events.value[index].regulations = event.target.files[0].name
+//   } else {
+//     const {data} = await reportPartTwoService.createReportDraft(setFormData(event.target.files[0], index), '5', true);
+//     emit('getData', data, 5);
+//   }
+// };
+// const deleteFile = async (index) => {
+//   setFormData(null, index, false, true)
+//   const {data} = await reportPartTwoService.createReportDraft(setFormData(null, index, false, true), '5', true);
+//   emit('getData', data, 5);
+// };
 
 const setFormData = (file = null, index = null, isDeleteEvent = false, isDeleteFile = false, isLinkDelete = false, linkIndex = null) => {
   let formData = new FormData();
@@ -563,6 +554,7 @@ const setFormData = (file = null, index = null, isDeleteEvent = false, isDeleteF
       if (event.ro_participants_number) formData.append(`events[${i}][ro_participants_number]`, event.ro_participants_number);
       if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
       if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
+      if (event.name) formData.append(`events[${i}][name]`, event.name);
       if (isLinkDelete && index === i) {
         event.links.splice(linkIndex, 1);
       }
@@ -586,11 +578,24 @@ const setError = (err) => {
   isLinkError.value = err;
 };
 
+const calculateResult = (event) => {
+  if (event.target.checked) {
+    events.value.forEach(e => {
+      const startDate = new Date(e.start_date);
+      const endDate = new Date(e.end_date);
+      const days = (endDate - startDate) / (1000 * 60 * 60 * 24);
+      finalResult.value += Math.abs((e.participants_number - e.ro_participants_number) * days)
+    })
+  } else {
+    finalResult.value = 0;
+  }
+}
+
 watchEffect(() => {
   if (props.data) {
     isFirstSent.value = false;
     events.value = [...props.data.events];
-    fifthPanelData.value.comment = props.data.comment;
+    fifthPanelData.value.comment = props.data.comment || '';
     isSent.value = props.data.is_sent;
   }
   // dateValidate(events, isErrorDate, noErrorDate);

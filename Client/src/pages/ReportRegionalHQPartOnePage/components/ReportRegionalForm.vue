@@ -1,7 +1,11 @@
 <template>
   <form class="form__field-group Report-Regional-Form__style" @submit.prevent="sentReport">
-    <h2 v-if="!isNewReport" class="report_title-h3">Свод статистических данных по трудоустройству бойцов студенческих
-      отрядов РО за 2024 год на 1 сентября 2024 года</h2>
+    <h2 v-if="isSecondReport" class="report_title-h3">Свод статистических данных по&nbsp;трудоустройству бойцов
+      студенческих
+      отрядов РО&nbsp;за&nbsp;2024 год на&nbsp;15&nbsp;октября 2024 года</h2>
+    <h2 v-else-if="!isNewReport" class="report_title-h3">Свод статистических данных по&nbsp;трудоустройству бойцов
+      студенческих
+      отрядов РО&nbsp;за&nbsp;2024 год на&nbsp;1&nbsp;сентября 2024 года</h2>
     <div class="form__field">
       <label class="form__label" for="participants_number">Количество членов РО <sup class="valid-red">*</sup></label>
       <InputReport
@@ -139,6 +143,105 @@
         </div>
       </div>
     </div>
+
+    <div v-if="isSecondReport">
+      <p>Количество работников:</p>
+      <div class="form-container">
+        <div class="form-col">
+          <div class="form__field">
+            <label class="form__label" for="employed_so_poo">Штабы СО ПОО <sup class="valid-red">*</sup></label>
+            <InputReport
+                v-model:value="reportDataChildren.employed_so_poo"
+                id="employed_so_poo"
+                name="employed_so_poo"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                @focusout="focusOut"
+                :disabled="blockEditFirstReport"
+            />
+          </div>
+          <div class="form__field">
+            <label class="form__label" for="employed_so_oovo">Штабы СО ООВО <sup class="valid-red">*</sup></label>
+            <InputReport
+                v-model:value="reportDataChildren.employed_so_oovo"
+                id="employed_so_oovo"
+                name="employed_so_oovo"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                @focusout="focusOut"
+                :disabled="blockEditFirstReport"
+            />
+          </div>
+          <div class="form__field">
+            <label class="form__label" for="employed_ro_rso">Штабы РО РСО <sup class="valid-red">*</sup></label>
+            <InputReport
+                v-model:value="reportDataChildren.employed_ro_rso"
+                id="employed_ro_rso"
+                name="employed_ro_rso"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                @focusout="focusOut"
+                :disabled="blockEditFirstReport"
+            />
+          </div>
+        </div>
+      </div>
+
+      <p>Свой вариант:</p>
+      <Button
+          v-if="!blockEditFirstReport"
+          class="form__add-link-button"
+          label="+ Добавить свой вариант"
+          @click="addAdditionalStatistics"
+      />
+      <div class="form-container" v-for="(statistic, i) in reportDataChildren.additional_statistics" :key="i"
+           style="align-items: end">
+        <div class="form-col">
+          <div class="form__field">
+            <label class="form__label" for="statisticName">Название подразделения: <sup
+                class="valid-red">*</sup></label>
+            <InputReport
+                v-model:value="statistic.name"
+                id="statisticName"
+                name="statisticName"
+                class="form__input"
+                placeholder="название подразделения"
+                @focusout="focusOut"
+                :disabled="blockEditFirstReport"
+            />
+          </div>
+        </div>
+        <div class="form-col">
+          <div class="form__field">
+            <label class="form__label" for="statisticName">Количество: <sup class="valid-red">*</sup></label>
+            <InputReport
+                v-model:value="statistic.value"
+                id="statisticQuantity"
+                name="statisticQuantity"
+                class="form__input"
+                type="number"
+                placeholder="количество"
+                @focusout="focusOut"
+                :disabled="blockEditFirstReport"
+            />
+          </div>
+        </div>
+        <div class="form-col">
+          <div class="form__field">
+            <Button
+                v-if="!blockEditFirstReport"
+                class="form__add-link-button"
+                label="Удалить свой вариант"
+                @click="deleteAdditionalStatistics(i)"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
   </form>
   <Button
       v-if="isNewReport && (roleStore.experts.is_central_expert === false && roleStore.experts.is_district_expert === false)"
@@ -193,6 +296,10 @@ const reportDataChildren = ref(
       employed_sop: '',
       employed_ssho: '',
       employed_top: '',
+      employed_so_poo: '',
+      employed_so_oovo: '',
+      employed_ro_rso: '',
+      additional_statistics: []
     }
 );
 watchEffect(() => {
@@ -207,6 +314,21 @@ const sentReport = () => {
 };
 
 const focusOut = async () => {
+  if (isSecondReport.value) {
+    const {data} = await editReport(reportDataChildren.value);
+    emit('sentReport', data);
+  }
+};
+
+const addAdditionalStatistics = () => {
+  reportDataChildren.value.additional_statistics.push({
+    name: '',
+    value: ''
+  })
+};
+const deleteAdditionalStatistics = async (index) => {
+  reportDataChildren.value.additional_statistics.splice(index, 1)
+
   if (isSecondReport.value) {
     const {data} = await editReport(reportDataChildren.value);
     emit('sentReport', data);
@@ -273,5 +395,15 @@ const focusOut = async () => {
   line-height: 21.6px;
   text-align: left;
   padding-bottom: 32px;
+}
+
+.form__add-link-button {
+  //width: 141px;
+  margin: 8px 0;
+  border: none;
+  background-color: transparent;
+  color: #1F7CC0;
+  padding: 0;
+  text-align: left;
 }
 </style>
