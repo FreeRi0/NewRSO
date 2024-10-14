@@ -778,11 +778,23 @@ const checkEmptyFields = (data) => {
         return false;
       }
     }
+  } else {
+    isErrorPanel.value.fourth = true;
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      showConfirmButton: true,
+      text: 'Заполните обязательные поля в 4 показателе. В случае отсутствия мероприятия, укажите 0 в количестве участников',
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: 'Понятно',
+      timer: 5000,
+    })
+    return false;
   }
 
   if (data.fifth) {
     for (let event of data.fifth.events) {
-      if (!(event.participants_number && event.ro_participants_number && event.end_date && event.start_date && event.name && data.fifth.comment)) {
+      if (event.participants_number && !(event.ro_participants_number && event.end_date && event.start_date && event.name && data.fifth.comment)) {
         isErrorPanel.value.fifth = true;
         swal.fire({
           position: 'center',
@@ -799,9 +811,11 @@ const checkEmptyFields = (data) => {
     swal.fire({
       position: 'center',
       icon: 'warning',
-      title: `Заполните обязательные поля в 5 показателе`,
-      showConfirmButton: false,
-      timer: 2500,
+      text: `Заполните обязательные поля в 5 показателе. В случае отсутствия трудового проекта, укажите 0 в количестве участников`,
+      showConfirmButton: true,
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: 'Понятно',
+      timer: 5000,
     })
     return false;
   }
@@ -876,7 +890,7 @@ const checkEmptyFields = (data) => {
       icon: 'warning',
       title: `Укажите информацию о проведении акции в показателе 10-1`,
       showConfirmButton: false,
-      timer: 2500,
+      timer: 3500,
     })
     return false;
   }
@@ -902,7 +916,7 @@ const checkEmptyFields = (data) => {
       icon: 'warning',
       title: `Укажите информацию о проведении акции в показателе 10-2`,
       showConfirmButton: false,
-      timer: 2500,
+      timer: 3500,
     })
     return false;
   }
@@ -962,9 +976,9 @@ const checkEmptyFields = (data) => {
     swal.fire({
       position: 'center',
       icon: 'warning',
-      title: `Укажите наличие трудового проекта в 16 показателе`,
+      title: `Укажите информацию о наличии трудового проекта в 16 показателе`,
       showConfirmButton: false,
-      timer: 2500,
+      timer: 3500,
     })
     return false;
   }
