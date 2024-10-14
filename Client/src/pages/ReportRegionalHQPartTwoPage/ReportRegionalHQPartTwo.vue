@@ -596,7 +596,7 @@ const filterPanelsData = () => {
     }
 
   }
-  console.log('setData6: ', filteredSix)
+  // console.log('setData6: ', filteredSix)
   for (let i in filteredSix) {
     isErrorPanel.value.six[i] = {
       id: i,
@@ -621,7 +621,7 @@ const filterPanelsData = () => {
       filteredNinth[i] = reportData.value.ninth[i];
     }
   }
-  console.log('setData9: ', filteredNinth)
+  // console.log('setData9: ', filteredNinth)
   for (let i in filteredNinth) {
     isErrorPanel.value.ninth[i] = {
       id: i,
@@ -639,8 +639,9 @@ const sendReport = async () => {
   // console.log('reportData: ', reportData.value)
   blockSendButton.value = true;
   if (checkEmptyFields(reportData.value)) {
+    preloader.value = true;
     try {
-      const { filteredSix, filteredNinth } = filterPanelsData();
+      // const { filteredSix, filteredNinth } = filterPanelsData();
       if (!reportData.value.first.is_sent) {
         await reportPartTwoService.sendReport(reportData.value.first, '1');
       }
@@ -653,9 +654,12 @@ const sendReport = async () => {
       if (!reportData.value.fifth.is_sent) {
         await reportPartTwoService.sendReport(reportData.value.fifth, '5');
       }
-      for (let item in filteredSix) {
-        if (filteredSix[item].is_sent === false) {
-          await reportPartTwoService.sendReportWithSlash(filteredSix, '6');
+      for (let item in reportData.value.six) {
+        if (reportData.value.six[item].number_of_members == 0 || reportData.value.six[item].number_of_members === null || !Object.keys(reportData.value.six[item]).length) {
+          reportData.value.six[item].event_happened = false;
+        }
+        if (reportData.value.six[item].is_sent === false) {
+          await reportPartTwoService.sendReportWithSlash(reportData.value.six, '6');
         }
       }
       // for (let item in filteredSeventh) {
@@ -663,9 +667,12 @@ const sendReport = async () => {
       //     await reportPartTwoService.sendReportWithSlash(filteredSeventh, '7');
       //   }
       // }
-      for (let item in filteredNinth) {
-        if (filteredNinth[item].is_sent === false) {
-          await reportPartTwoService.sendReportWithSlash(filteredNinth, '9');
+      for (let item in reportData.value.ninth) {
+        if (reportData.value.ninth[item].event_happened == false || reportData.value.ninth[item].event_happened === null || !Object.keys(reportData.value.ninth[item]).length) {
+          reportData.value.ninth[item].event_happened = false;
+        }
+        if (reportData.value.ninth[item].is_sent === false) {
+          await reportPartTwoService.sendReportWithSlash(reportData.value.ninth, '9');
         }
       }
       if (!reportData.value.tenth.first.is_sent) {
@@ -687,13 +694,16 @@ const sendReport = async () => {
         await reportPartTwoService.sendReport(reportData.value.sixteenth, '16');
       }
 
+      await getReportData(route.query.reportId);
+
       swal.fire({
         position: 'center',
         icon: 'success',
-        title: 'успешно',
+        title: 'Отчет успешно отправлен',
         showConfirmButton: false,
         timer: 1500,
       });
+
       await router.push({
         name: 'reportingRo',
       });
@@ -707,6 +717,8 @@ const sendReport = async () => {
         timer: 2500,
       })
       console.log('sendReport error: ', e)
+    } finally {
+      preloader.value = false;
     }
   } else {
     blockSendButton.value = false;
@@ -714,7 +726,7 @@ const sendReport = async () => {
 };
 
 const checkEmptyFields = (data) => {
-  const { filteredSix, filteredNinth } = filterPanelsData();
+    const { filteredSix, filteredNinth } = filterPanelsData();
   console.log('data', data)
 
   if (!data.first || !(data.first.amount_of_money && data.first.scan_file)) {
@@ -839,7 +851,7 @@ const checkEmptyFields = (data) => {
     swal.fire({
       position: 'center',
       icon: 'warning',
-      title: `Заполните обязательные поля в показателе 10-1`,
+      title: `Укажите информацию о проведении акции в показателе 10-1`,
       showConfirmButton: false,
       timer: 2500,
     })
@@ -865,7 +877,7 @@ const checkEmptyFields = (data) => {
     swal.fire({
       position: 'center',
       icon: 'warning',
-      title: `Заполните обязательные поля в показателе 10-2`,
+      title: `Укажите информацию о проведении акции в показателе 10-2`,
       showConfirmButton: false,
       timer: 2500,
     })
@@ -910,7 +922,7 @@ const checkEmptyFields = (data) => {
 
   if (data.sixteenth) {
     for (let project of data.sixteenth.projects) {
-      if (!(project.name && project.regulations && data.sixteenth.comment)) {
+      if (data.sixteenth.is_project && !(data.sixteenth.comment && project.name && project.project_scale)) {
         isErrorPanel.value.sixteenth = true;
         swal.fire({
           position: 'center',
@@ -927,7 +939,7 @@ const checkEmptyFields = (data) => {
     swal.fire({
       position: 'center',
       icon: 'warning',
-      title: `Заполните обязательные поля в 16 показателе`,
+      title: `Укажите наличие трудового проекта в 16 показателе`,
       showConfirmButton: false,
       timer: 2500,
     })

@@ -71,7 +71,7 @@
       </div>
       <div>
         <p class="form__label">Ссылка на социальные сети/ электронные <br>
-          СМИ, подтверждающая проведение акции <sup class="valid-red">*</sup></p>
+          СМИ, подтверждающая проведение акции</p>
         <div class="input-link" v-for="(link, i) in tenthPanelData.links" :key="i">
           <InputReport
               v-model:value="link.link"
@@ -214,7 +214,7 @@ const props = defineProps({
 });
 
 const tenthPanelData = ref({
-  event_happened: false,
+  event_happened: null,
   document: '',
   file_size: '',
   file_type: '',
@@ -265,6 +265,8 @@ watchPostEffect(() => {
 watch(() => tenthPanelData.value.event_happened, (isEventHappened) => {
   if (!isEventHappened) {
     emit('clearForm')
+  } else {
+    emit('formData', tenthPanelData.value);
   }
 })
 </script>
