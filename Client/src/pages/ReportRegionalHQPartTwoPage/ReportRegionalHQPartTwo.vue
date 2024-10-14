@@ -90,7 +90,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                text="Показатель рассчитывается автоматически на&nbsp;основе данных сервиса &laquo;Медиалогия&raquo;, предоставленных Аппаратом РСО." />
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
