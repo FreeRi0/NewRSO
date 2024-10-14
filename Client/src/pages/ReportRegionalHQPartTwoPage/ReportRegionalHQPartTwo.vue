@@ -90,7 +90,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-              text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -430,13 +430,20 @@ const getMultiplyData = async (isExpert, reportId) => {
 
   sixDataResults.forEach((result) => {
     reportData.value.six[result.id] = result.data;
+    if (reportData.value.six[result.id].is_sent === false) {
+      blockSendButton.value = false;
+    }
   });
+  console.log('data66', reportData.value.six)
   // seventhDataResults.forEach((result) => {
   //   reportData.value.seventh[result.id] = result.data;
   // });
 
   ninthDataResults.forEach((result) => {
     reportData.value.ninth[result.id] = result.data;
+    if (reportData.value.ninth[result.id].is_sent === false) {
+      blockSendButton.value = false;
+    }
   });
 }
 const getReportData = async (reportId) => {
@@ -655,26 +662,42 @@ const sendReport = async () => {
         await reportPartTwoService.sendReport(reportData.value.fifth, '5');
       }
       for (let item in reportData.value.six) {
-        if (reportData.value.six[item].number_of_members == 0 || reportData.value.six[item].number_of_members === null || !Object.keys(reportData.value.six[item]).length) {
+        if (!Object.keys(reportData.value.six[item]).length) {
+          await reportPartTwoService.createMultipleReport({
+            number_of_members: 0,
+            links: [],
+            comment: '',
+          }, '6', item)
           reportData.value.six[item].event_happened = false;
         }
-        if (reportData.value.six[item].is_sent === false) {
-          await reportPartTwoService.sendReportWithSlash(reportData.value.six, '6');
+        if (reportData.value.six[item].number_of_members == 0 || reportData.value.six[item].number_of_members === null) {
+          reportData.value.six[item].event_happened = false;
         }
       }
+      await reportPartTwoService.sendReportWithSlash(reportData.value.six, '6');
       // for (let item in filteredSeventh) {
       //   if (filteredSeventh[item].is_sent === false) {
       //     await reportPartTwoService.sendReportWithSlash(filteredSeventh, '7');
       //   }
       // }
       for (let item in reportData.value.ninth) {
-        if (reportData.value.ninth[item].event_happened == false || reportData.value.ninth[item].event_happened === null || !Object.keys(reportData.value.ninth[item]).length) {
+        if (!Object.keys(reportData.value.ninth[item]).length) {
+          await reportPartTwoService.createMultipleReport({
+            event_happened: false,
+            links: [],
+            document: '',
+            file_size: null,
+            file_type: '',
+            comment: '',
+          }, '9', item)
           reportData.value.ninth[item].event_happened = false;
         }
-        if (reportData.value.ninth[item].is_sent === false) {
-          await reportPartTwoService.sendReportWithSlash(reportData.value.ninth, '9');
+        if (reportData.value.ninth[item].event_happened == false || reportData.value.ninth[item].event_happened === null) {
+          reportData.value.ninth[item].event_happened = false;
         }
+
       }
+      await reportPartTwoService.sendReportWithSlash(reportData.value.ninth, '9');
       if (!reportData.value.tenth.first.is_sent) {
         await reportPartTwoService.sendMultipleReport(reportData.value.tenth.first, '10', '1');
       }
@@ -726,7 +749,7 @@ const sendReport = async () => {
 };
 
 const checkEmptyFields = (data) => {
-    const { filteredSix, filteredNinth } = filterPanelsData();
+  const { filteredSix, filteredNinth } = filterPanelsData();
   console.log('data', data)
 
   if (!data.first || !(data.first.amount_of_money && data.first.scan_file)) {
