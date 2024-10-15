@@ -430,20 +430,23 @@ const getMultiplyData = async (isExpert, reportId) => {
 
   sixDataResults.forEach((result) => {
     reportData.value.six[result.id] = result.data;
-    if (reportData.value.six[result.id].is_sent === false) {
-      blockSendButton.value = false;
-    }
+    // if (reportData.value.six[result.id].is_sent === false || !Object.keys(reportData.value.six[result.id]).length) {
+    //   console.log('yah6')
+    //   blockSendButton.value = false;
+    // }
   });
-  console.log('data66', reportData.value.six)
+  // console.log('data66', reportData.value.six)
   // seventhDataResults.forEach((result) => {
   //   reportData.value.seventh[result.id] = result.data;
   // });
 
   ninthDataResults.forEach((result) => {
     reportData.value.ninth[result.id] = result.data;
-    if (reportData.value.ninth[result.id].is_sent === false) {
-      blockSendButton.value = false;
-    }
+    // if (reportData.value.ninth[result.id].is_sent === false || !Object.keys(reportData.value.ninth[result.id]).length) {
+    //   console.log('yah9')
+    //   blockSendButton.value = false;
+    //   blockEditFirstReport.value = false;
+    // }
   });
 }
 const getReportData = async (reportId) => {
@@ -510,6 +513,22 @@ const getReportData = async (reportId) => {
         if (reportData.value.sixteenth.is_sent) {
           blockSendButton.value = true;
           blockEditFirstReport.value = true;
+          for (let item in reportData.value.six) {
+            if (reportData.value.six[item].is_sent === false || !Object.keys(reportData.value.six[item]).length) {
+              blockSendButton.value = false;
+              break
+              // blockEditFirstReport.value = false;
+            }
+          }
+          for (let item in reportData.value.ninth) {
+            if (reportData.value.ninth[item].is_sent === false || !Object.keys(reportData.value.ninth[item]).length) {
+              blockSendButton.value = false;
+              break
+              // blockEditFirstReport.value = false;
+            }
+          }
+
+
         }
       } catch (e) {
         console.log(e.message)
@@ -987,11 +1006,15 @@ const checkEmptyFields = (data) => {
 }
 
 onMounted(() => {
+  if (!roleStore.roles?.regionalheadquarter_commander && (!roleStore.experts?.is_district_expert || !roleStore.experts?.is_central_expert)) {
+    router.push({ name: 'mypage' });
+  }
   if (roleStore.experts?.is_district_expert) {
     districtExpert.value = true;
     console.log('окружной эксперт', districtExpert.value);
   }
   if (roleStore.experts?.is_central_expert) {
+
     centralExpert.value = true;
     console.log('центральный эксперт', centralExpert.value);
   }
@@ -1019,6 +1042,7 @@ onMounted(() => {
 .mdi-chevron-up::before {
   content: "";
 }
+
 
 .download-item {
   display: flex;
