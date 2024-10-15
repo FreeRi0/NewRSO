@@ -167,7 +167,7 @@
                                                     " />
                                         <label :for="id">{{
                                             passP.name
-                                            }}</label>
+                                        }}</label>
                                     </div>
                                 </div>
                                 <div class="addres" id="pass-no-addr" v-if="props.user.parent.russian_passport">
@@ -938,7 +938,7 @@
                                                         class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                         <span class="font-semibold">{{
                                                             statement.name
-                                                        }}</span>
+                                                            }}</span>
                                                         <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -994,7 +994,7 @@
                                                         class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                         <span class="font-semibold">{{
                                                             consent_personal_data.name
-                                                        }}</span>
+                                                            }}</span>
                                                         <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1054,7 +1054,7 @@
                                                         class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                         <span class="font-semibold">{{
                                                             consent_personal_data_representative.name
-                                                        }}</span>
+                                                            }}</span>
                                                         <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1116,7 +1116,7 @@
                                                         class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                         <span class="font-semibold">{{
                                                             passportUpload.name
-                                                        }}</span>
+                                                            }}</span>
                                                         <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1168,7 +1168,7 @@
                                                         class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                         <span class="font-semibold">{{
                                                             passport_representative.name
-                                                        }}</span>
+                                                            }}</span>
                                                         <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1223,7 +1223,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         snils_file.name
-                                                    }}</span>
+                                                        }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1263,7 +1263,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         military_document.name
-                                                    }}</span>
+                                                        }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1307,7 +1307,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         inn_file.name
-                                                    }}</span>
+                                                        }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1347,7 +1347,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         international_passport.name
-                                                    }}</span>
+                                                        }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1391,7 +1391,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         employment_document.name
-                                                    }}</span>
+                                                        }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1480,7 +1480,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         passportUpload.name
-                                                    }}</span>
+                                                        }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1524,7 +1524,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         passport_representative.name
-                                                    }}</span>
+                                                        }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1575,7 +1575,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         snils_file.name
-                                                    }}</span>
+                                                        }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1615,7 +1615,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         military_document.name
-                                                    }}</span>
+                                                        }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1659,7 +1659,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         inn_file.name
-                                                    }}</span>
+                                                        }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1699,7 +1699,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         international_passport.name
-                                                    }}</span>
+                                                        }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1744,7 +1744,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         employment_document.name
-                                                    }}</span>
+                                                        }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1835,7 +1835,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         statement.name
-                                                    }}</span>
+                                                        }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1883,7 +1883,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         consent_personal_data.name
-                                                    }}</span>
+                                                        }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1943,7 +1943,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         passportUpload.name
-                                                    }}</span>
+                                                        }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -1990,7 +1990,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         snils_file.name
-                                                    }}</span>
+                                                        }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2030,7 +2030,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         inn_file.name
-                                                    }}</span>
+                                                        }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2070,7 +2070,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         employment_document.name
-                                                    }}</span>
+                                                        }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2161,7 +2161,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         passportUpload.name
-                                                    }}</span>
+                                                        }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2204,7 +2204,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         passport_representative.name
-                                                    }}</span>
+                                                        }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2255,7 +2255,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         snils_file.name
-                                                    }}</span>
+                                                        }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2295,7 +2295,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         inn_file.name
-                                                    }}</span>
+                                                        }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2336,7 +2336,7 @@
                                                     class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3">
                                                     <span class="font-semibold">{{
                                                         employment_document.name
-                                                    }}</span>
+                                                        }}</span>
                                                     <!-- <div>
                                                                 {{
                                                                     formatSize(
@@ -2696,24 +2696,7 @@ const counterKnow = computed(() => {
 
 
 
-const checkAllFieldsBeforeSubmit = (event) => {
-    event.preventDefault();
 
-    const isLastNameValid = checkFieldBeforeSubmit(props.user.last_name, 25, 'Фамилия', 'last_name', '[а-яА-ЯЁё\\s]');
-    const isLastNameLatValid = checkFieldBeforeSubmit(props.user.last_name_lat, 25, 'Фамилия (Латиницей)', 'last_name_lat', '[a-zA-Z\\s]');
-    const isFirstNameValid = checkFieldBeforeSubmit(props.user.first_name, 20, 'Имя', 'first_name', '[а-яА-ЯЁё\\s]');
-    const isFirstNameLatValid = checkFieldBeforeSubmit(props.user.first_name_lat, 20, 'Имя (Латиницей)', 'first_name_lat', '[a-zA-Z\\s]');
-    const isPatronymicNameValid = checkFieldBeforeSubmit(props.user.patronymic_name, 23, 'Отчество', 'patronymic_name', '[а-яА-ЯЁё\\s]');
-    const isPatronymicLatValid = checkFieldBeforeSubmit(props.user.patronymic_lat, 23, 'Отчество (Латиницей)', 'patronymic_lat', '[a-zA-Z\\s]');
-
-    if (isLastNameValid && isLastNameLatValid && isFirstNameValid && isFirstNameLatValid && isPatronymicNameValid && isPatronymicLatValid) {
-        // Если все поля корректны, выполняем отправку данных
-        submitForm();
-    } else {
-        // Если хотя бы одно поле некорректно, блокируем отправку данных
-        console.log('Некорректные данные, отправка заблокирована');
-    }
-};
 
 
 
@@ -2818,6 +2801,24 @@ const downloadAll = async () => {
         });
 };
 
+// Универсальная функция для проверки поля
+const validateField = (fieldValue, maxLength, pattern, isRequired, fieldDisplayName) => {
+    if (isRequired && !fieldValue) {
+        return `${fieldDisplayName} является обязательным полем!`;
+    }
+
+    if (fieldValue && !pattern.test(fieldValue)) {
+        return `${fieldDisplayName} содержит некорректные символы!`;
+    }
+
+    if (fieldValue && fieldValue.length > maxLength) {
+        return `${fieldDisplayName} не может превышать ${maxLength} символов!`;
+    }
+
+    return null; // Нет ошибок
+};
+
+
 const updateData = async () => {
     try {
         // Очищаем все ошибки динамически
@@ -2829,8 +2830,8 @@ const updateData = async () => {
         let hasError = false; // Флаг, указывающий на наличие ошибок
 
         // Регулярные выражения для кириллицы и латиницы
-        const cyrillicPattern = /^[а-яА-ЯЁё\s]+$/;
-        const latinPattern = /^[a-zA-Z\s]*$/; // Изменено на * для допуска пустой строки
+        const kyrillicPattern = /^[а-яА-ЯЁё\s]+$/;
+        const latinPattern = /^[a-zA-Z\s]+$/;
 
         // Персональная длина символов для каждого поля
         const maxLength = {
@@ -2839,58 +2840,25 @@ const updateData = async () => {
             patronymic_name: 23
         };
 
-        // Проверка Фамилии (кириллица)
-        if (!cyrillicPattern.test(props.user.last_name)) {
-            isError.value.last_name = 'Фамилия должна содержать только кириллические символы!';
-            hasError = true;
-        } else if (props.user.last_name.length > maxLength.last_name) {
-            isError.value.last_name = `Фамилия не может превышать ${maxLength.last_name} символов!`;
-            hasError = true;
-        }
-        // Проверка Фамилии (латиница)
-        if (props.user.last_name_lat && !latinPattern.test(props.user.last_name_lat)) { // Проверяем только если поле заполнено
-            isError.value.last_name_lat = 'Фамилия (латиницей) должна содержать только латинские символы!';
-            hasError = true;
-        } else if (props.user.last_name_lat && props.user.last_name_lat.length > maxLength.last_name) {
-            isError.value.last_name_lat = `Фамилия (латиницей) не может превышать ${maxLength.last_name} символов!`;
-            hasError = true;
-        }
+        // Проверка каждого поля с использованием универсальной функции
+        const fieldsToValidate = [
+            { fieldName: 'last_name', fieldValue: props.user.last_name, maxLength: maxLength.last_name, pattern: kyrillicPattern, isRequired: true, displayName: 'Фамилия' },
+            { fieldName: 'last_name_lat', fieldValue: props.user.last_name_lat, maxLength: maxLength.last_name, pattern: latinPattern, isRequired: false, displayName: 'Фамилия (латиницей)' },
+            { fieldName: 'first_name', fieldValue: props.user.first_name, maxLength: maxLength.first_name, pattern: kyrillicPattern, isRequired: true, displayName: 'Имя' },
+            { fieldName: 'first_name_lat', fieldValue: props.user.first_name_lat, maxLength: maxLength.first_name, pattern: latinPattern, isRequired: false, displayName: 'Имя (латиницей)' },
+            { fieldName: 'patronymic_name', fieldValue: props.user.patronymic_name, maxLength: maxLength.patronymic_name, pattern: kyrillicPattern, isRequired: false, displayName: 'Отчество' },
+            { fieldName: 'patronymic_lat', fieldValue: props.user.patronymic_lat, maxLength: maxLength.patronymic_name, pattern: latinPattern, isRequired: false, displayName: 'Отчество (латиницей)' }
+        ];
 
-        // Проверка Имени (кириллица)
-        if (!cyrillicPattern.test(props.user.first_name)) {
-            isError.value.first_name = 'Имя должно содержать только кириллические символы!';
-            hasError = true;
-        } else if (props.user.first_name.length > maxLength.first_name) {
-            isError.value.first_name = `Имя не может превышать ${maxLength.first_name} символов!`;
-            hasError = true;
-        }
+        // Цикл для проверки всех полей
+        fieldsToValidate.forEach(field => {
+            const error = validateField(field.fieldValue, field.maxLength, field.pattern, field.isRequired, field.displayName);
+            if (error) {
+                isError.value[field.fieldName] = error;
+                hasError = true;
+            }
+        });
 
-        // Проверка Имени (латиница)
-        if (props.user.first_name_lat && !latinPattern.test(props.user.first_name_lat)) { // Проверяем только если поле заполнено
-            isError.value.first_name_lat = 'Имя (латиницей) должно содержать только латинские символы!';
-            hasError = true;
-        } else if (props.user.first_name_lat && props.user.first_name_lat.length > maxLength.first_name) {
-            isError.value.first_name_lat = `Имя (латиницей) не может превышать ${maxLength.first_name} символов!`;
-            hasError = true;
-        }
-
-        // Проверка Отчества (кириллица) - необязательное поле
-        if (props.user.patronymic_name && !cyrillicPattern.test(props.user.patronymic_name)) { // Проверяем только если поле заполнено
-            isError.value.patronymic_name = 'Отчество должно содержать только кириллические символы!';
-            hasError = true;
-        } else if (props.user.patronymic_name && props.user.patronymic_name.length > maxLength.patronymic_name) {
-            isError.value.patronymic_name = `Отчество не может превышать ${maxLength.patronymic_name} символов!`;
-            hasError = true;
-        }
-
-        // Проверка Отчества (латиница) - необязательное поле
-        if (props.user.patronymic_lat && !latinPattern.test(props.user.patronymic_lat)) { // Проверяем только если поле заполнено
-            isError.value.patronymic_lat = 'Отчество (латиницей) должно содержать только латинские символы!';
-            hasError = true;
-        } else if (props.user.patronymic_lat && props.user.patronymic_lat.length > maxLength.patronymic_name) {
-            isError.value.patronymic_lat = `Отчество (латиницей) не может превышать ${maxLength.patronymic_name} символов!`;
-            hasError = true;
-        }
         // Если есть ошибки, остановить выполнение
         if (hasError) {
             isLoading.value = false; // Останавливаем индикатор загрузки
