@@ -2820,6 +2820,11 @@ const downloadAll = async () => {
 
 const updateData = async () => {
     try {
+        // Очищаем все ошибки динамически
+        Object.keys(isError.value).forEach(key => {
+            isError.value[key] = null;
+        });
+
         isLoading.value = true; // Устанавливаем индикатор загрузки
         let hasError = false; // Флаг, указывающий на наличие ошибок
 
@@ -2841,10 +2846,7 @@ const updateData = async () => {
         } else if (props.user.last_name.length > maxLength.last_name) {
             isError.value.last_name = `Фамилия не может превышать ${maxLength.last_name} символов!`;
             hasError = true;
-        } else {
-            isError.value.last_name = null; // Ошибки нет
         }
-
         // Проверка Фамилии (латиница)
         if (props.user.last_name_lat && !latinPattern.test(props.user.last_name_lat)) { // Проверяем только если поле заполнено
             isError.value.last_name_lat = 'Фамилия (латиницей) должна содержать только латинские символы!';
@@ -2852,8 +2854,6 @@ const updateData = async () => {
         } else if (props.user.last_name_lat && props.user.last_name_lat.length > maxLength.last_name) {
             isError.value.last_name_lat = `Фамилия (латиницей) не может превышать ${maxLength.last_name} символов!`;
             hasError = true;
-        } else {
-            isError.value.last_name_lat = null;
         }
 
         // Проверка Имени (кириллица)
@@ -2863,8 +2863,6 @@ const updateData = async () => {
         } else if (props.user.first_name.length > maxLength.first_name) {
             isError.value.first_name = `Имя не может превышать ${maxLength.first_name} символов!`;
             hasError = true;
-        } else {
-            isError.value.first_name = null;
         }
 
         // Проверка Имени (латиница)
@@ -2874,8 +2872,6 @@ const updateData = async () => {
         } else if (props.user.first_name_lat && props.user.first_name_lat.length > maxLength.first_name) {
             isError.value.first_name_lat = `Имя (латиницей) не может превышать ${maxLength.first_name} символов!`;
             hasError = true;
-        } else {
-            isError.value.first_name_lat = null;
         }
 
         // Проверка Отчества (кириллица) - необязательное поле
@@ -2885,8 +2881,6 @@ const updateData = async () => {
         } else if (props.user.patronymic_name && props.user.patronymic_name.length > maxLength.patronymic_name) {
             isError.value.patronymic_name = `Отчество не может превышать ${maxLength.patronymic_name} символов!`;
             hasError = true;
-        } else {
-            isError.value.patronymic_name = null;
         }
 
         // Проверка Отчества (латиница) - необязательное поле
@@ -2896,10 +2890,7 @@ const updateData = async () => {
         } else if (props.user.patronymic_lat && props.user.patronymic_lat.length > maxLength.patronymic_name) {
             isError.value.patronymic_lat = `Отчество (латиницей) не может превышать ${maxLength.patronymic_name} символов!`;
             hasError = true;
-        } else {
-            isError.value.patronymic_lat = null;
         }
-
         // Если есть ошибки, остановить выполнение
         if (hasError) {
             isLoading.value = false; // Останавливаем индикатор загрузки
