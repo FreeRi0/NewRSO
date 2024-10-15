@@ -34,18 +34,16 @@
                                 <span class="valid-red">&nbsp;*</span>
                             </label>
                             <Input class="input-big" clearable placeholder="Введите фамилию" name="surname"
-                                v-model:value="props.user.last_name" pattern="[а-яА-ЯЁё\s]+"
-                                @keydown.enter="(event) => checkFieldBeforeSubmit(props.user.last_name, 25, 'Фамилия', 'last_name', event)" />
-                            <p class="error" v-if="isError.last_name">
+                                v-model:value="props.user.last_name" />
+                            <p class="error-form" v-if="isError.last_name">
                                 {{ isError.last_name }}
                             </p>
                         </div>
                         <div class="form-field">
                             <label for="surname-lat">Фамилия (Латиницей)</label>
                             <Input class="input-big" clearable placeholder="Familia" name="surname-lat"
-                                v-model:value="props.user.last_name_lat" pattern="[a-zA-Z\s]+"
-                                @keydown.enter="(event) => checkFieldBeforeSubmit(props.user.last_name_lat, 25, 'Фамилия (Латиницей)', 'last_name_lat', event)" />
-                            <p class="error" v-if="isError.last_name_lat">
+                                v-model:value="props.user.last_name_lat" />
+                            <p class="error-form" v-if="isError.last_name_lat">
                                 {{ isError.last_name_lat }}
                             </p>
                         </div>
@@ -55,36 +53,32 @@
                                 <span class="valid-red">&nbsp;*</span>
                             </label>
                             <Input class="input-big" clearable placeholder="Введите имя" name="name"
-                                v-model:value="props.user.first_name" pattern="[а-яА-ЯЁё\s]+"
-                                @keydown.enter="(event) => checkFieldBeforeSubmit(props.user.first_name, 20, 'Имя', 'first_name', event)" />
-                            <p class="error" v-if="isError.first_name">
+                                v-model:value="props.user.first_name" />
+                            <p class="error-form" v-if="isError.first_name">
                                 {{ isError.first_name }}
                             </p>
                         </div>
                         <div class="form-field">
                             <label for="name-lat">Имя (Латиницей)</label>
                             <Input class="input-big" clearable placeholder="Imia" name="name-lat"
-                                v-model:value="props.user.first_name_lat" pattern="[a-zA-Z\s]+"
-                                @keydown.enter="(event) => checkFieldBeforeSubmit(props.user.first_name_lat, 20, 'Имя (Латиницей)', 'first_name_lat', event)" />
-                            <p class="error" v-if="isError.first_name_lat">
+                                v-model:value="props.user.first_name_lat" />
+                            <p class="error-form" v-if="isError.first_name_lat">
                                 {{ isError.first_name_lat }}
                             </p>
                         </div>
                         <div class="form-field">
                             <label for="patronomyc">Отчество</label>
                             <Input class="input-big" clearable placeholder="Введите отчество" name="patronomyc"
-                                v-model:value="props.user.patronymic_name" pattern="[а-яА-ЯЁё\s]+"
-                                @keydown.enter="(event) => checkFieldBeforeSubmit(props.user.patronymic_name, 23, 'Отчество', 'patronymic_name', event)" />
-                            <p class="error" v-if="isError.patronymic_name">
+                                v-model:value="props.user.patronymic_name" />
+                            <p class="error-form" v-if="isError.patronymic_name">
                                 {{ isError.patronymic_name }}
                             </p>
                         </div>
                         <div class="form-field">
                             <label for="patronomyc-lat">Отчество (Латиницей)</label>
                             <Input class="input-big" clearable placeholder="Otchestvo" name="patronomyc-lat"
-                                v-model:value="props.user.patronymic_lat" pattern="[a-zA-Z\s]+"
-                                @keydown.enter="(event) => checkFieldBeforeSubmit(props.user.patronymic_lat, 23, 'Отчество (Латиницей)', 'patronymic_lat', event)" />
-                            <p class="error" v-if="isError.patronymic_lat">
+                                v-model:value="props.user.patronymic_lat" />
+                            <p class="error-form" v-if="isError.patronymic_lat">
                                 {{ isError.patronymic_lat }}
                             </p>
                         </div>
@@ -2702,19 +2696,24 @@ const counterKnow = computed(() => {
 
 
 
-const checkFieldBeforeSubmit = (fieldValue, maxLength, fieldName, propsKey, event) => {
-    // Проверяем длину поля
-    if (fieldValue.length > maxLength) {
-        event.preventDefault(); // Блокируем отправку данных
-        isError.value[propsKey] = `${fieldName} может содержать не более ${maxLength} символов!`;
-    }
-    else {
-        isError.value[propsKey] = null; // Убираем ошибку, если всё корректно
+const checkAllFieldsBeforeSubmit = (event) => {
+    event.preventDefault();
 
+    const isLastNameValid = checkFieldBeforeSubmit(props.user.last_name, 25, 'Фамилия', 'last_name', '[а-яА-ЯЁё\\s]');
+    const isLastNameLatValid = checkFieldBeforeSubmit(props.user.last_name_lat, 25, 'Фамилия (Латиницей)', 'last_name_lat', '[a-zA-Z\\s]');
+    const isFirstNameValid = checkFieldBeforeSubmit(props.user.first_name, 20, 'Имя', 'first_name', '[а-яА-ЯЁё\\s]');
+    const isFirstNameLatValid = checkFieldBeforeSubmit(props.user.first_name_lat, 20, 'Имя (Латиницей)', 'first_name_lat', '[a-zA-Z\\s]');
+    const isPatronymicNameValid = checkFieldBeforeSubmit(props.user.patronymic_name, 23, 'Отчество', 'patronymic_name', '[а-яА-ЯЁё\\s]');
+    const isPatronymicLatValid = checkFieldBeforeSubmit(props.user.patronymic_lat, 23, 'Отчество (Латиницей)', 'patronymic_lat', '[a-zA-Z\\s]');
+
+    if (isLastNameValid && isLastNameLatValid && isFirstNameValid && isFirstNameLatValid && isPatronymicNameValid && isPatronymicLatValid) {
+        // Если все поля корректны, выполняем отправку данных
+        submitForm();
+    } else {
+        // Если хотя бы одно поле некорректно, блокируем отправку данных
+        console.log('Некорректные данные, отправка заблокирована');
     }
 };
-
-
 
 
 
@@ -2821,20 +2820,82 @@ const downloadAll = async () => {
 
 const updateData = async () => {
     try {
-        isLoading.value = true;
+        isLoading.value = true; // Устанавливаем индикатор загрузки
+        let hasError = false; // Флаг, указывающий на наличие ошибок
+
+        // Регулярные выражения для кириллицы и латиницы
+        const cyrillicPattern = /^[а-яА-ЯЁё\s]+$/;
+        const latinPattern = /^[a-zA-Z\s]*$/; // Изменено на * для допуска пустой строки
+
+        // Проверка Фамилии (кириллица)
+        if (!cyrillicPattern.test(props.user.last_name)) {
+            isError.value.last_name = 'Фамилия должна содержать только кириллические символы!';
+            hasError = true;
+        } else {
+            isError.value.last_name = null; // Ошибки нет
+        }
+
+        // Проверка Фамилии (латиница)
+        if (props.user.last_name_lat && !latinPattern.test(props.user.last_name_lat)) { // Проверяем только если поле заполнено
+            isError.value.last_name_lat = 'Фамилия (Латиницей) должна содержать только латинские символы!';
+            hasError = true;
+        } else {
+            isError.value.last_name_lat = null;
+        }
+
+        // Проверка Имени (кириллица)
+        if (!cyrillicPattern.test(props.user.first_name)) {
+            isError.value.first_name = 'Имя должно содержать только кириллические символы!';
+            hasError = true;
+        } else {
+            isError.value.first_name = null;
+        }
+
+        // Проверка Имени (латиница)
+        if (props.user.first_name_lat && !latinPattern.test(props.user.first_name_lat)) { // Проверяем только если поле заполнено
+            isError.value.first_name_lat = 'Имя (Латиницей) должно содержать только латинские символы!';
+            hasError = true;
+        } else {
+            isError.value.first_name_lat = null;
+        }
+
+        // Проверка Отчества (кириллица) - необязательное поле
+        if (props.user.patronymic_name && !cyrillicPattern.test(props.user.patronymic_name)) { // Проверяем только если поле заполнено
+            isError.value.patronymic_name = 'Отчество должно содержать только кириллические символы!';
+            hasError = true;
+        } else {
+            isError.value.patronymic_name = null;
+        }
+
+        // Проверка Отчества (латиница) - необязательное поле
+        if (props.user.patronymic_lat && !latinPattern.test(props.user.patronymic_lat)) { // Проверяем только если поле заполнено
+            isError.value.patronymic_lat = 'Отчество (Латиницей) должно содержать только латинские символы!';
+            hasError = true;
+        } else {
+            isError.value.patronymic_lat = null;
+        }
+
+        // Если есть ошибки, остановить выполнение
+        if (hasError) {
+            isLoading.value = false; // Останавливаем индикатор загрузки
+            return; // Прерываем выполнение, если есть ошибки
+        }
+
+        // Если ошибок нет, продолжаем отправку данных
         let fd = new FormData();
         fd.append('rso_info_from', props.user.statement.rso_info_from);
+
+        // Логика добавления файлов
         if (isStatementChange.value)
             statement.value
                 ? fd.append('statement', statement.value)
                 : fd.append('statement', '');
+
         if (isConsent_personal_dataChange.value)
             consent_personal_data.value
-                ? fd.append(
-                    'consent_personal_data',
-                    consent_personal_data.value,
-                )
+                ? fd.append('consent_personal_data', consent_personal_data.value)
                 : fd.append('consent_personal_data', '');
+
         if (isConsent_personal_data_representativeChange.value)
             consent_personal_data_representative.value
                 ? fd.append(
@@ -2842,40 +2903,43 @@ const updateData = async () => {
                     consent_personal_data_representative.value,
                 )
                 : fd.append('consent_personal_data_representative', '');
+
         if (isPassChange.value)
             passportUpload.value
                 ? fd.append(' passport', passportUpload.value)
                 : fd.append(' passport', '');
+
         if (isParentPassChange.value)
             passport_representative.value
-                ? fd.append(
-                    'passport_representative',
-                    passport_representative.value,
-                )
+                ? fd.append('passport_representative', passport_representative.value)
                 : fd.append('passport_representative', '');
+
         if (isInnChange.value)
             inn_file.value
-                ? fd.append(' inn_file', inn_file.value)
-                : fd.append(' inn_file', '');
+                ? fd.append('inn_file', inn_file.value)
+                : fd.append('inn_file', '');
+
         if (isSnilsChange.value)
             snils_file.value
                 ? fd.append('snils_file', snils_file.value)
                 : fd.append('snils_file', '');
+
         if (isEmployeChange.value)
             employment_document.value
                 ? fd.append('employment_document', employment_document.value)
                 : fd.append('employment_document', '');
+
         if (isMilitaryChange.value)
             military_document.value
                 ? fd.append('military_document', military_document.value)
                 : fd.append('military_document', '');
+
         if (isForeignChange.value)
             international_passport.value
-                ? fd.append(
-                    'international_passport',
-                    international_passport.value,
-                )
+                ? fd.append('international_passport', international_passport.value)
                 : fd.append('international_passport', '');
+
+        // Отправляем основной запрос на сервер
         const axiosrequest1 = await HTTP.patch('/rsousers/me/', {
             first_name: props.user.first_name,
             last_name: props.user.last_name,
@@ -2891,6 +2955,7 @@ const updateData = async () => {
             social_tg: props.user.social_tg,
             is_rso_member: props.user.is_rso_member,
         });
+
 
         const axiosrequestParent = ref({
             parent_last_name: '',
@@ -3151,6 +3216,16 @@ const passport = ref([
     font-family: 'Acrobat';
     margin-top: 10px;
     text-align: center;
+}
+
+
+.error-form {
+    color: #db0000;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Acrobat';
+    margin-top: 10px;
+    text-align: start;
 }
 
 .v-select__selection {
