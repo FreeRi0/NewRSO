@@ -430,13 +430,20 @@ const getMultiplyData = async (isExpert, reportId) => {
 
   sixDataResults.forEach((result) => {
     reportData.value.six[result.id] = result.data;
+    if (reportData.value.six[result.id].is_sent === false) {
+      blockSendButton.value = false;
+    }
   });
+  console.log('data66', reportData.value.six)
   // seventhDataResults.forEach((result) => {
   //   reportData.value.seventh[result.id] = result.data;
   // });
 
   ninthDataResults.forEach((result) => {
     reportData.value.ninth[result.id] = result.data;
+    if (reportData.value.ninth[result.id].is_sent === false) {
+      blockSendButton.value = false;
+    }
   });
 }
 const getReportData = async (reportId) => {
@@ -655,26 +662,42 @@ const sendReport = async () => {
         await reportPartTwoService.sendReport(reportData.value.fifth, '5');
       }
       for (let item in reportData.value.six) {
-        if (reportData.value.six[item].number_of_members == 0 || reportData.value.six[item].number_of_members === null || !Object.keys(reportData.value.six[item]).length) {
+        if (!Object.keys(reportData.value.six[item]).length) {
+          await reportPartTwoService.createMultipleReport({
+            number_of_members: 0,
+            links: [],
+            comment: '',
+          }, '6', item)
           reportData.value.six[item].event_happened = false;
         }
-        if (reportData.value.six[item].is_sent === false) {
-          await reportPartTwoService.sendReportWithSlash(reportData.value.six, '6');
+        if (reportData.value.six[item].number_of_members == 0 || reportData.value.six[item].number_of_members === null) {
+          reportData.value.six[item].event_happened = false;
         }
       }
+      await reportPartTwoService.sendReportWithSlash(reportData.value.six, '6');
       // for (let item in filteredSeventh) {
       //   if (filteredSeventh[item].is_sent === false) {
       //     await reportPartTwoService.sendReportWithSlash(filteredSeventh, '7');
       //   }
       // }
       for (let item in reportData.value.ninth) {
-        if (reportData.value.ninth[item].event_happened == false || reportData.value.ninth[item].event_happened === null || !Object.keys(reportData.value.ninth[item]).length) {
+        if (!Object.keys(reportData.value.ninth[item]).length) {
+          await reportPartTwoService.createMultipleReport({
+            event_happened: false,
+            links: [],
+            document: '',
+            file_size: null,
+            file_type: '',
+            comment: '',
+          }, '9', item)
           reportData.value.ninth[item].event_happened = false;
         }
-        if (reportData.value.ninth[item].is_sent === false) {
-          await reportPartTwoService.sendReportWithSlash(reportData.value.ninth, '9');
+        if (reportData.value.ninth[item].event_happened == false || reportData.value.ninth[item].event_happened === null) {
+          reportData.value.ninth[item].event_happened = false;
         }
+
       }
+      await reportPartTwoService.sendReportWithSlash(reportData.value.ninth, '9');
       if (!reportData.value.tenth.first.is_sent) {
         await reportPartTwoService.sendMultipleReport(reportData.value.tenth.first, '10', '1');
       }
@@ -726,7 +749,7 @@ const sendReport = async () => {
 };
 
 const checkEmptyFields = (data) => {
-    const { filteredSix, filteredNinth } = filterPanelsData();
+  const { filteredSix, filteredNinth } = filterPanelsData();
   console.log('data', data)
 
   if (!data.first || !(data.first.amount_of_money && data.first.scan_file)) {
@@ -755,11 +778,23 @@ const checkEmptyFields = (data) => {
         return false;
       }
     }
+  } else {
+    isErrorPanel.value.fourth = true;
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      showConfirmButton: true,
+      text: 'Заполните обязательные поля в 4 показателе. В случае отсутствия мероприятия, укажите 0 в количестве участников',
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: 'Понятно',
+      timer: 5000,
+    })
+    return false;
   }
 
   if (data.fifth) {
     for (let event of data.fifth.events) {
-      if (!(event.participants_number && event.ro_participants_number && event.end_date && event.start_date && event.name && data.fifth.comment)) {
+      if (event.participants_number && !(event.end_date && event.start_date && event.name && data.fifth.comment)) {
         isErrorPanel.value.fifth = true;
         swal.fire({
           position: 'center',
@@ -776,9 +811,11 @@ const checkEmptyFields = (data) => {
     swal.fire({
       position: 'center',
       icon: 'warning',
-      title: `Заполните обязательные поля в 5 показателе`,
-      showConfirmButton: false,
-      timer: 2500,
+      text: `Заполните обязательные поля в 5 показателе. В случае отсутствия трудового проекта, укажите 0 в количестве участников`,
+      showConfirmButton: true,
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: 'Понятно',
+      timer: 5000,
     })
     return false;
   }
@@ -853,7 +890,7 @@ const checkEmptyFields = (data) => {
       icon: 'warning',
       title: `Укажите информацию о проведении акции в показателе 10-1`,
       showConfirmButton: false,
-      timer: 2500,
+      timer: 3500,
     })
     return false;
   }
@@ -879,7 +916,7 @@ const checkEmptyFields = (data) => {
       icon: 'warning',
       title: `Укажите информацию о проведении акции в показателе 10-2`,
       showConfirmButton: false,
-      timer: 2500,
+      timer: 3500,
     })
     return false;
   }
@@ -939,9 +976,9 @@ const checkEmptyFields = (data) => {
     swal.fire({
       position: 'center',
       icon: 'warning',
-      title: `Укажите наличие трудового проекта в 16 показателе`,
+      title: `Укажите информацию о наличии трудового проекта в 16 показателе`,
       showConfirmButton: false,
-      timer: 2500,
+      timer: 3500,
     })
     return false;
   }

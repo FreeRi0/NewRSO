@@ -8,15 +8,17 @@
               проекте <sup class="valid-red">*</sup></label>
             <InputReport
                 v-model:value="event.participants_number"
-                id="participants_number" name="participants_number"
+                id="participants_number"
+                name="participants_number"
                 class="form__input form__field-people-count-field"
                 type="number"
                 placeholder="Введите число"
                 :maxlength="10"
                 :min="0"
                 :max="2147483647"
-                @focusout="focusOut"
+                @focusout="focusOut($event)"
                 :disabled="isSent"
+
             />
           </div>
           <div class="form__field-people-count-wrap">
@@ -33,7 +35,7 @@
                 :min="0"
                 :max="2147483647"
                 @focusout="focusOut"
-                :disabled="isSent"
+                :disabled="isSent || !event.participants_number"
             />
           </div>
         </div>
@@ -57,7 +59,7 @@
               class="form__input form__field-date-wrap-field"
               type="date"
               @focusout="focusOut"
-              :disabled="isSent"
+              :disabled="isSent || !event.participants_number"
           />
         </div>
         <div class="form__field-date-wrap">
@@ -70,7 +72,7 @@
               class="form__input form__field-date-wrap-field"
               type="date"
               @focusout="focusOut"
-              :disabled="isSent"
+              :disabled="isSent || !event.participants_number"
               :min-date="event.start_date"
               :is-error-date="Object.values(isErrorDate).some(item => item.error === true && item.id === index)"
           />
@@ -87,29 +89,8 @@
               class="form__input form__field-people-count-field"
               placeholder="Введите название"
               @focusout="focusOut"
-              :disabled="isSent"
+              :disabled="isSent || !event.participants_number"
           />
-          <!--          <label class="form__label" for="4">Положение о проекте <sup class="valid-red">*</sup></label>-->
-          <!--          <InputReport-->
-          <!--              class="form-input__file-input"-->
-          <!--              v-if="!event.regulations"-->
-          <!--              isFile-->
-          <!--              type="file"-->
-          <!--              id="scan_file"-->
-          <!--              name="scan_file"-->
-          <!--              width="100%"-->
-          <!--              @change="uploadFile($event, index)"-->
-          <!--              :disabled="isSent"-->
-          <!--          />-->
-          <!--          <FileBoxComponent-->
-          <!--              v-else-->
-          <!--              :file="event.regulations"-->
-          <!--              :fileType="event.file_type"-->
-          <!--              :fileSize="event.file_size"-->
-          <!--              :is-sent="isSent"-->
-          <!--              :is-error-file="isErrorFile && !event.file_size"-->
-          <!--              @click="deleteFile(index)"-->
-          <!--          ></FileBoxComponent>-->
         </div>
       </div>
       <div style="width: 100%;">
@@ -123,11 +104,11 @@
               type="text"
               placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
               @focusout="focusOut"
-              :disabled="isSent"
+              :disabled="isSent || !event.participants_number"
               :is-link="true"
               @error="setError"
           />
-          <div v-if="!isSent">
+          <div v-if="!isSent && event.participants_number">
             <div
                 v-if="events[index].links.length === i + 1"
                 @click="addLink(index)"
@@ -449,6 +430,19 @@ const isLinkError = ref(false);
 const finalResult = ref(0);
 
 const focusOut = async () => {
+  // if (event.target.value === '0') {
+  //   let formData = new FormData();
+  //   formData.append(`events[0][links][0][link]`, '');
+  //
+  //   if (isFirstSent.value) {
+  //     const {data} = await reportPartTwoService.createReport(formData, '5', true);
+  //     emit('getData', data, 5);
+  //   } else {
+  //     const {data} = await reportPartTwoService.createReportDraft(formData, '5', true);
+  //     emit('getData', data, 5);
+  //   }
+  //   return;
+  // }
   if (!isLinkError.value) {
     try {
       if (isFirstSent.value) {
@@ -589,7 +583,8 @@ const calculateResult = (event) => {
   } else {
     finalResult.value = 0;
   }
-}
+};
+
 
 watchEffect(() => {
   if (props.data) {
@@ -607,7 +602,7 @@ watchPostEffect(() => {
   if (!events.value.length) {
     addProject()
   }
-})
+});
 </script>
 <style lang="scss" scoped>
 .panel-card {

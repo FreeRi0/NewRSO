@@ -337,8 +337,9 @@ watch(
     background-repeat: no-repeat;
     background-size: 100% 100%;
     margin: 0 !important;
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
+    padding: 12px 20px !important;
 }
 
 .dashboardD {
@@ -346,8 +347,9 @@ watch(
     background-repeat: no-repeat;
     background-size: 100% 100%;
     margin: 0 !important;
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
+    padding: 12px 20px !important;
 }
 
 .menuuA {
@@ -355,8 +357,9 @@ watch(
     background-repeat: no-repeat;
     background-size: 100% 100%;
     margin: 0 !important;
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
+    padding: 12px 20px !important;
 }
 
 .menuu {
@@ -364,8 +367,9 @@ watch(
     background-repeat: no-repeat;
     background-size: 100% 100%;
     margin: 0 !important;
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
+    padding: 12px 20px !important;
 }
 
 .ascend {
@@ -379,6 +383,7 @@ watch(
 }
 
 .v-select__selection {
+    padding-bottom: 4px;
 
     span,
     pre {
@@ -409,6 +414,9 @@ watch(
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-row-gap: 40px;
+        box-shadow: 0px 4px 30px 0px #0000000D;
+        margin-top: 20px;
+        border-radius: 10px;
 
         @media screen and (max-width: 1024px) {
             grid-template-columns: 1fr 1fr 1fr;
