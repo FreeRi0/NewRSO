@@ -210,7 +210,7 @@
                     </div>
                 </div>
                 <div class="form__field">
-                    <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
+                    <label class="form__label" for="14">Комментарий</label>
                     <TextareaReport v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1"
                         autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
                         :max-length-text="3000" counter-visible
@@ -424,7 +424,7 @@
                         </div>
                     </div>
                     <div class="form__field">
-                        <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
+                        <label class="form__label" for="14">Комментарий</label>
                         <TextareaReport
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                             v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1" autoResize
