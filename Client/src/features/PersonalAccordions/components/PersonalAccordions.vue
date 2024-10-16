@@ -375,9 +375,7 @@
                 <p class="error" v-if="isError.first_name">
                     Фамилия пользователя
                 </p>
-                <p class="error" v-if="isError.email">
-                    {{ '' + isError.email }}
-                </p>
+
             </v-expansion-panel>
 
             <v-expansion-panel value="panelTwo">
@@ -414,8 +412,10 @@
                         </div>
                         <div class="form-field">
                             <label for="email-contact">Электронная почта<span class="valid-red">&nbsp;*</span></label>
-                            <Input type="email" name="email-сontact" class="input-big mask-email"
-                                placeholder="mail@mail.com" v-model:value="props.user.email" />
+                            <Input name="email-сontact" class="input-big mask-email" placeholder="mail@mail.com"
+                                v-model:value="props.user.email" />
+
+                            <p class="error-form" v-if="isError.email">{{ isError.email }}</p>
                         </div>
                         <div class="form-field">
                             <label for="locality-contact">Населенный пункт<span class="valid-red">&nbsp;*</span></label>
@@ -474,6 +474,8 @@
                                 <label :for="id">{{ addr.name }}</label>
                             </div>
                         </div>
+
+
                         <!-- <p>value: {{ regionData.reg_fact_same_address}}</p> -->
                         <div class="addr-fact__wrapper" id="addr-fact"
                             v-if="!props.user.user_region.reg_fact_same_address">
@@ -517,13 +519,16 @@
                             Далее
                         </button>
                     </v-card-actions>
+
                 </v-expansion-panel-text>
                 <p class="error" v-if="isError.detail">
                     <!-- {{ isError.detail }} -->Данные региона пользователя уже
                     существуют
                 </p>
             </v-expansion-panel>
-
+            <p class="error" v-if="isError.email">
+                {{ '' + isError.email }}
+            </p>
             <v-expansion-panel value="panelThree">
                 <v-expansion-panel-title>
                     <v-row no-gutters>
@@ -2801,347 +2806,373 @@ const downloadAll = async () => {
         });
 };
 
+
+const kyrillicPattern = /^[а-яА-ЯЁё\s]+$/;
+const latinPattern = /^[a-zA-Z\s]+$/;
+const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+
 // Универсальная функция для проверки поля
 const validateField = (fieldValue, maxLength, pattern, isRequired, fieldDisplayName) => {
+    // Проверка на обязательное поле
     if (isRequired && !fieldValue) {
         return `${fieldDisplayName} является обязательным полем!`;
     }
 
-    if (fieldValue && !pattern.test(fieldValue)) {
-        return `${fieldDisplayName} содержит некорректные символы!`;
+    // Специальная проверка для email
+
+    if (fieldDisplayName === 'Электронная почта') {
+        const containsCyrillic = /[а-яА-ЯЁё]/.test(fieldValue);
+        if (containsCyrillic) {
+            return `Адрес электронной почты не должен содержать кириллические символы!`;
+        }
+        // Проверка на корректный формат email
+        if (fieldValue && !emailPattern.test(fieldValue)) {
+            return `Пожалуйста, введите корректный адрес электронной почты!`;
+        }
+        // Проверка на максимальную длину
+        if (fieldValue && fieldValue.length > maxLength) {
+            return `Адрес электронной почты не может превышать ${maxLength} символов!`;
+        }
     }
 
-    if (fieldValue && fieldValue.length > maxLength) {
-        return `${fieldDisplayName} не может превышать ${maxLength} символов!`;
-    }
+        // Общая проверка для других полей (кириллица/латиница)
+        if (fieldValue && !pattern.test(fieldValue)) {
+            return `${fieldDisplayName} содержит некорректные символы!`;
+        }
 
-    return null; // Нет ошибок
-};
+        // Проверка на максимальную длину для всех полей
+        if (fieldValue && fieldValue.length > maxLength) {
+            return `${fieldDisplayName} не может превышать ${maxLength} символов!`;
+        }
+
+        return null; // Нет ошибок
+    };
 
 
-const updateData = async () => {
-    try {
-        // Очищаем все ошибки динамически
-        Object.keys(isError.value).forEach(key => {
-            isError.value[key] = null;
-        });
+    const updateData = async () => {
+        try {
+            // Очищаем все ошибки динамически
+            Object.keys(isError.value).forEach(key => {
+                isError.value[key] = null;
+            });
 
-        isLoading.value = true; // Устанавливаем индикатор загрузки
-        let hasError = false; // Флаг, указывающий на наличие ошибок
+            isLoading.value = true; // Устанавливаем индикатор загрузки
+            let hasError = false; // Флаг, указывающий на наличие ошибок
 
-        // Регулярные выражения для кириллицы и латиницы
-        const kyrillicPattern = /^[а-яА-ЯЁё\s]+$/;
-        const latinPattern = /^[a-zA-Z\s]+$/;
+            // Регулярные выражения для кириллицы и латиницы
+            // Персональная длина символов для каждого поля
+            const maxLength = {
+                last_name: 25,
+                first_name: 20,
+                patronymic_name: 23,
+                email: 256
+            };
 
-        // Персональная длина символов для каждого поля
-        const maxLength = {
-            last_name: 25,
-            first_name: 20,
-            patronymic_name: 23
-        };
+            // Проверка каждого поля с использованием универсальной функции
+            const fieldsToValidate = [
+                { fieldName: 'last_name', fieldValue: props.user.last_name, maxLength: maxLength.last_name, pattern: kyrillicPattern, isRequired: true, displayName: 'Фамилия' },
+                { fieldName: 'last_name_lat', fieldValue: props.user.last_name_lat, maxLength: maxLength.last_name, pattern: latinPattern, isRequired: false, displayName: 'Фамилия (латиницей)' },
+                { fieldName: 'first_name', fieldValue: props.user.first_name, maxLength: maxLength.first_name, pattern: kyrillicPattern, isRequired: true, displayName: 'Имя' },
+                { fieldName: 'first_name_lat', fieldValue: props.user.first_name_lat, maxLength: maxLength.first_name, pattern: latinPattern, isRequired: false, displayName: 'Имя (латиницей)' },
+                { fieldName: 'patronymic_name', fieldValue: props.user.patronymic_name, maxLength: maxLength.patronymic_name, pattern: kyrillicPattern, isRequired: false, displayName: 'Отчество' },
+                { fieldName: 'patronymic_lat', fieldValue: props.user.patronymic_lat, maxLength: maxLength.patronymic_name, pattern: latinPattern, isRequired: false, displayName: 'Отчество (латиницей)' },
+                { fieldName: 'email', fieldValue: props.user.email, maxLength: maxLength.email, pattern: emailPattern, isRequired: true, displayName: 'Электронная почта' }
+            ];
 
-        // Проверка каждого поля с использованием универсальной функции
-        const fieldsToValidate = [
-            { fieldName: 'last_name', fieldValue: props.user.last_name, maxLength: maxLength.last_name, pattern: kyrillicPattern, isRequired: true, displayName: 'Фамилия' },
-            { fieldName: 'last_name_lat', fieldValue: props.user.last_name_lat, maxLength: maxLength.last_name, pattern: latinPattern, isRequired: false, displayName: 'Фамилия (латиницей)' },
-            { fieldName: 'first_name', fieldValue: props.user.first_name, maxLength: maxLength.first_name, pattern: kyrillicPattern, isRequired: true, displayName: 'Имя' },
-            { fieldName: 'first_name_lat', fieldValue: props.user.first_name_lat, maxLength: maxLength.first_name, pattern: latinPattern, isRequired: false, displayName: 'Имя (латиницей)' },
-            { fieldName: 'patronymic_name', fieldValue: props.user.patronymic_name, maxLength: maxLength.patronymic_name, pattern: kyrillicPattern, isRequired: false, displayName: 'Отчество' },
-            { fieldName: 'patronymic_lat', fieldValue: props.user.patronymic_lat, maxLength: maxLength.patronymic_name, pattern: latinPattern, isRequired: false, displayName: 'Отчество (латиницей)' }
-        ];
+            // Цикл для проверки всех полей
+            fieldsToValidate.forEach(field => {
+                const error = validateField(field.fieldValue, field.maxLength, field.pattern, field.isRequired, field.displayName);
+                if (error) {
+                    isError.value[field.fieldName] = error;
+                    hasError = true;
+                }
+            });
 
-        // Цикл для проверки всех полей
-        fieldsToValidate.forEach(field => {
-            const error = validateField(field.fieldValue, field.maxLength, field.pattern, field.isRequired, field.displayName);
-            if (error) {
-                isError.value[field.fieldName] = error;
-                hasError = true;
+
+            // Если есть ошибки, остановить выполнение
+            if (hasError) {
+                isLoading.value = false; // Останавливаем индикатор загрузки
+                return; // Прерываем выполнение, если есть ошибки
             }
-        });
 
-        // Если есть ошибки, остановить выполнение
-        if (hasError) {
-            isLoading.value = false; // Останавливаем индикатор загрузки
-            return; // Прерываем выполнение, если есть ошибки
-        }
-
-        // Если ошибок нет, продолжаем отправку данных
-        let fd = new FormData();
-        fd.append('rso_info_from', props.user.statement.rso_info_from);
+            // Если ошибок нет, продолжаем отправку данных
+            let fd = new FormData();
+            fd.append('rso_info_from', props.user.statement.rso_info_from);
 
 
-        // Логика добавления файлов
-        if (isStatementChange.value)
-            statement.value
-                ? fd.append('statement', statement.value)
-                : fd.append('statement', '');
+            // Логика добавления файлов
+            if (isStatementChange.value)
+                statement.value
+                    ? fd.append('statement', statement.value)
+                    : fd.append('statement', '');
 
-        if (isConsent_personal_dataChange.value)
-            consent_personal_data.value
-                ? fd.append('consent_personal_data', consent_personal_data.value)
-                : fd.append('consent_personal_data', '');
+            if (isConsent_personal_dataChange.value)
+                consent_personal_data.value
+                    ? fd.append('consent_personal_data', consent_personal_data.value)
+                    : fd.append('consent_personal_data', '');
 
-        if (isConsent_personal_data_representativeChange.value)
-            consent_personal_data_representative.value
-                ? fd.append(
-                    'consent_personal_data_representative',
-                    consent_personal_data_representative.value,
-                )
-                : fd.append('consent_personal_data_representative', '');
+            if (isConsent_personal_data_representativeChange.value)
+                consent_personal_data_representative.value
+                    ? fd.append(
+                        'consent_personal_data_representative',
+                        consent_personal_data_representative.value,
+                    )
+                    : fd.append('consent_personal_data_representative', '');
 
-        if (isPassChange.value)
-            passportUpload.value
-                ? fd.append(' passport', passportUpload.value)
-                : fd.append(' passport', '');
+            if (isPassChange.value)
+                passportUpload.value
+                    ? fd.append(' passport', passportUpload.value)
+                    : fd.append(' passport', '');
 
-        if (isParentPassChange.value)
-            passport_representative.value
-                ? fd.append('passport_representative', passport_representative.value)
-                : fd.append('passport_representative', '');
+            if (isParentPassChange.value)
+                passport_representative.value
+                    ? fd.append('passport_representative', passport_representative.value)
+                    : fd.append('passport_representative', '');
 
-        if (isInnChange.value)
-            inn_file.value
-                ? fd.append('inn_file', inn_file.value)
-                : fd.append('inn_file', '');
+            if (isInnChange.value)
+                inn_file.value
+                    ? fd.append('inn_file', inn_file.value)
+                    : fd.append('inn_file', '');
 
-        if (isSnilsChange.value)
-            snils_file.value
-                ? fd.append('snils_file', snils_file.value)
-                : fd.append('snils_file', '');
+            if (isSnilsChange.value)
+                snils_file.value
+                    ? fd.append('snils_file', snils_file.value)
+                    : fd.append('snils_file', '');
 
-        if (isEmployeChange.value)
-            employment_document.value
-                ? fd.append('employment_document', employment_document.value)
-                : fd.append('employment_document', '');
+            if (isEmployeChange.value)
+                employment_document.value
+                    ? fd.append('employment_document', employment_document.value)
+                    : fd.append('employment_document', '');
 
-        if (isMilitaryChange.value)
-            military_document.value
-                ? fd.append('military_document', military_document.value)
-                : fd.append('military_document', '');
+            if (isMilitaryChange.value)
+                military_document.value
+                    ? fd.append('military_document', military_document.value)
+                    : fd.append('military_document', '');
 
-        if (isForeignChange.value)
-            international_passport.value
-                ? fd.append('international_passport', international_passport.value)
-                : fd.append('international_passport', '');
+            if (isForeignChange.value)
+                international_passport.value
+                    ? fd.append('international_passport', international_passport.value)
+                    : fd.append('international_passport', '');
 
-        // Отправляем основной запрос на сервер
-        const axiosrequest1 = await HTTP.patch('/rsousers/me/', {
-            first_name: props.user.first_name,
-            last_name: props.user.last_name,
-            patronymic_name: props.user.patronymic_name,
-            last_name_lat: props.user.last_name_lat,
-            first_name_lat: props.user.first_name_lat,
-            patronymic_name_lat: props.user.patronymic_name_lat,
-            date_of_birth: props.user.date_of_birth,
-            gender: props.user.gender,
-            email: props.user.email,
-            phone_number: props.user.phone_number,
-            social_vk: props.user.social_vk,
-            social_tg: props.user.social_tg,
-            is_rso_member: props.user.is_rso_member,
-        });
-
-
-        const axiosrequestParent = ref({
-            parent_last_name: '',
-            parent_first_name: '',
-            parent_patronymic_name: '',
-            parent_date_of_birth: '',
-            relationship: '',
-            parent_phone_number: '',
-            russian_passport: null,
-            passport_number: '',
-            passport_date: '',
-            passport_authority: '',
-            region: '',
-            city: '',
-            address: '',
-        });
-        if (
-            !props.user.is_adult &&
-            (props.user.parent.russian_passport ||
-                !props.user.parent.russian_passport)
-        ) {
-            const parentRequest = await HTTP.patch('/rsousers/me/parent/', {
-                parent_last_name: props.user.parent.parent_last_name,
-                parent_first_name: props.user.parent.parent_first_name,
-                parent_patronymic_name:
-                    props.user.parent.parent_patronymic_name,
-                parent_date_of_birth: props.user.parent.parent_date_of_birth,
-                relationship: props.user.parent.relationship,
-                parent_phone_number: props.user.parent.parent_phone_number,
-                russian_passport: props.user.parent.russian_passport,
-                passport_number: props.user.parent.passport_number,
-                passport_date: props.user.parent.passport_date,
-                passport_authority: props.user.parent.passport_authority,
-                region: props.user.parent.region,
-                city: props.user.parent.city,
-                address: props.user.parent.address,
+            // Отправляем основной запрос на сервер
+            const axiosrequest1 = await HTTP.patch('/rsousers/me/', {
+                first_name: props.user.first_name,
+                last_name: props.user.last_name,
+                patronymic_name: props.user.patronymic_name,
+                last_name_lat: props.user.last_name_lat,
+                first_name_lat: props.user.first_name_lat,
+                patronymic_name_lat: props.user.patronymic_name_lat,
+                date_of_birth: props.user.date_of_birth,
+                gender: props.user.gender,
+                email: props.user.email,
+                phone_number: props.user.phone_number,
+                social_vk: props.user.social_vk,
+                social_tg: props.user.social_tg,
+                is_rso_member: props.user.is_rso_member,
             });
-            axiosrequestParent.value = parentRequest.data;
-        }
 
-        const axiosrequestForeignDocsParent = ref(null);
-        if (!props.user.is_adult && !props.user.parent.russian_passport) {
-            const axiosrequestForeignDocsParent = await HTTP.post(
-                '/rsousers/me/foreign_parent_documents/',
-                {
-                    name: props.foreignParent.name,
-                    foreign_pass_num: props.foreignParent.foreign_pass_num,
-                    foreign_pass_whom: props.foreignParent.foreign_pass_whom,
-                    foreign_pass_date: props.foreignParent.foreign_pass_date,
-                    snils: props.foreignParent.snils,
-                    inn: props.foreignParent.inn,
-                    work_book_num: props.foreignParent.work_book_num,
+
+            const axiosrequestParent = ref({
+                parent_last_name: '',
+                parent_first_name: '',
+                parent_patronymic_name: '',
+                parent_date_of_birth: '',
+                relationship: '',
+                parent_phone_number: '',
+                russian_passport: null,
+                passport_number: '',
+                passport_date: '',
+                passport_authority: '',
+                region: '',
+                city: '',
+                address: '',
+            });
+            if (
+                !props.user.is_adult &&
+                (props.user.parent.russian_passport ||
+                    !props.user.parent.russian_passport)
+            ) {
+                const parentRequest = await HTTP.patch('/rsousers/me/parent/', {
+                    parent_last_name: props.user.parent.parent_last_name,
+                    parent_first_name: props.user.parent.parent_first_name,
+                    parent_patronymic_name:
+                        props.user.parent.parent_patronymic_name,
+                    parent_date_of_birth: props.user.parent.parent_date_of_birth,
+                    relationship: props.user.parent.relationship,
+                    parent_phone_number: props.user.parent.parent_phone_number,
+                    russian_passport: props.user.parent.russian_passport,
+                    passport_number: props.user.parent.passport_number,
+                    passport_date: props.user.parent.passport_date,
+                    passport_authority: props.user.parent.passport_authority,
+                    region: props.user.parent.region,
+                    city: props.user.parent.city,
+                    address: props.user.parent.address,
+                });
+                axiosrequestParent.value = parentRequest.data;
+            }
+
+            const axiosrequestForeignDocsParent = ref(null);
+            if (!props.user.is_adult && !props.user.parent.russian_passport) {
+                const axiosrequestForeignDocsParent = await HTTP.post(
+                    '/rsousers/me/foreign_parent_documents/',
+                    {
+                        name: props.foreignParent.name,
+                        foreign_pass_num: props.foreignParent.foreign_pass_num,
+                        foreign_pass_whom: props.foreignParent.foreign_pass_whom,
+                        foreign_pass_date: props.foreignParent.foreign_pass_date,
+                        snils: props.foreignParent.snils,
+                        inn: props.foreignParent.inn,
+                        work_book_num: props.foreignParent.work_book_num,
+                    },
+                );
+            }
+
+            const axiosrequest2 = await HTTP.patch('/rsousers/me/region/', {
+                reg_region_id: props.user.user_region.reg_region_id,
+                reg_town: props.user.user_region.reg_town,
+                reg_house: props.user.user_region.reg_house,
+                reg_fact_same_address: props.user.user_region.reg_fact_same_address,
+                fact_region_id: props.user.user_region.fact_region_id,
+                fact_town: props.user.user_region.fact_town,
+                fact_house: props.user.user_region.fact_house,
+            });
+            const axiosrequest3 = await HTTP.patch('/rsousers/me/documents/', {
+                snils: props.user.documents.snils,
+                russian_passport: props.user.documents.russian_passport,
+                inn: props.user.documents.inn,
+                pass_ser_num: props.user.documents.pass_ser_num,
+                pass_town: props.user.documents.pass_town,
+                pass_whom: props.user.documents.pass_whom,
+                pass_date: props.user.documents.pass_date,
+                pass_code: props.user.documents.pass_code,
+                pass_address: props.user.documents.pass_address,
+                work_book_num: props.user.documents.work_book_num,
+                international_pass: props.user.documents.international_pass,
+                mil_reg_doc_type: props.user.documents.mil_reg_doc_type,
+                mil_reg_doc_ser_num: props.user.documents.mil_reg_doc_ser_num,
+            });
+
+            const axiosrequestForeignDocs = ref(null);
+            if (!props.user.documents.russian_passport) {
+                const axiosrequestForeignDocs = await HTTP.patch(
+                    '/rsousers/me/foreign_documents/',
+                    {
+                        name: props.foreignUserDocs.name,
+                        foreign_pass_num: props.foreignUserDocs.foreign_pass_num,
+                        foreign_pass_whom: props.foreignUserDocs.foreign_pass_whom,
+                        foreign_pass_date: props.foreignUserDocs.foreign_pass_date,
+                        snils: props.foreignUserDocs.snils,
+                        inn: props.foreignUserDocs.inn,
+                        work_book_num: props.foreignUserDocs.work_book_num,
+                    },
+                );
+            }
+
+            let studyEducationId = Number.isInteger(
+                props.user.education.study_institution,
+            )
+                ? props.user.education.study_institution
+                : props.user.education.study_institution?.id;
+            const axiosrequest4 = await HTTP.patch('/rsousers/me/education/', {
+                study_institution: studyEducationId,
+                study_faculty: props.user.education.study_faculty,
+                study_year: props.user.education.study_year,
+                study_specialty: props.user.education.study_specialty,
+            });
+
+            const axiosrequest5 = await HTTP.patch('/rsousers/me/statement/', fd, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
                 },
-            );
-        }
+            });
+            const axiosrequest6 = ref(null);
 
-        const axiosrequest2 = await HTTP.patch('/rsousers/me/region/', {
-            reg_region_id: props.user.user_region.reg_region_id,
-            reg_town: props.user.user_region.reg_town,
-            reg_house: props.user.user_region.reg_house,
-            reg_fact_same_address: props.user.user_region.reg_fact_same_address,
-            fact_region_id: props.user.user_region.fact_region_id,
-            fact_town: props.user.user_region.fact_town,
-            fact_house: props.user.user_region.fact_house,
-        });
-        const axiosrequest3 = await HTTP.patch('/rsousers/me/documents/', {
-            snils: props.user.documents.snils,
-            russian_passport: props.user.documents.russian_passport,
-            inn: props.user.documents.inn,
-            pass_ser_num: props.user.documents.pass_ser_num,
-            pass_town: props.user.documents.pass_town,
-            pass_whom: props.user.documents.pass_whom,
-            pass_date: props.user.documents.pass_date,
-            pass_code: props.user.documents.pass_code,
-            pass_address: props.user.documents.pass_address,
-            work_book_num: props.user.documents.work_book_num,
-            international_pass: props.user.documents.international_pass,
-            mil_reg_doc_type: props.user.documents.mil_reg_doc_type,
-            mil_reg_doc_ser_num: props.user.documents.mil_reg_doc_ser_num,
-        });
+            if (
+                props.user.sent_verification === false &&
+                props.user.is_verified === false
+            ) {
+                const axiosrequest6 = await HTTP.post(
+                    '/rsousers/me/apply_for_verification/',
+                    data.value,
+                );
+            }
 
-        const axiosrequestForeignDocs = ref(null);
-        if (!props.user.documents.russian_passport) {
-            const axiosrequestForeignDocs = await HTTP.patch(
-                '/rsousers/me/foreign_documents/',
-                {
-                    name: props.foreignUserDocs.name,
-                    foreign_pass_num: props.foreignUserDocs.foreign_pass_num,
-                    foreign_pass_whom: props.foreignUserDocs.foreign_pass_whom,
-                    foreign_pass_date: props.foreignUserDocs.foreign_pass_date,
-                    snils: props.foreignUserDocs.snils,
-                    inn: props.foreignUserDocs.inn,
-                    work_book_num: props.foreignUserDocs.work_book_num,
-                },
-            );
-        }
-
-        let studyEducationId = Number.isInteger(
-            props.user.education.study_institution,
-        )
-            ? props.user.education.study_institution
-            : props.user.education.study_institution?.id;
-        const axiosrequest4 = await HTTP.patch('/rsousers/me/education/', {
-            study_institution: studyEducationId,
-            study_faculty: props.user.education.study_faculty,
-            study_year: props.user.education.study_year,
-            study_specialty: props.user.education.study_specialty,
-        });
-
-        const axiosrequest5 = await HTTP.patch('/rsousers/me/statement/', fd, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
-            },
-        });
-        const axiosrequest6 = ref(null);
-
-        if (
-            props.user.sent_verification === false &&
-            props.user.is_verified === false
-        ) {
-            const axiosrequest6 = await HTTP.post(
-                '/rsousers/me/apply_for_verification/',
-                data.value,
-            );
-        }
-
-        props.foreignUserDocs = axiosrequestForeignDocs.value?.data;
-        fd = axiosrequest5.data;
-        data.value = axiosrequest6.value?.data;
-        swal.fire({
-            position: 'top-center',
-            icon: 'success',
-            title: 'успешно',
-            showConfirmButton: false,
-            timer: 1000,
-        });
-        isLoading.value = false;
-        emit('updateUserData', axiosrequest1.data);
-        emit('updateRegionData', axiosrequest2.data);
-        emit('updateDocData', axiosrequest3.data);
-        emit('updateEducData', axiosrequest4.data);
-        emit('updateFileData', axiosrequest5.data);
-        emit('updateParentData', axiosrequestParent.value);
-        emit('updateStatus', axiosrequest6.value?.data);
-    } catch (error) {
-        console.log('errr', error);
-        isError.value = error.response.data;
-        console.error('There was an error!', error);
-        isLoading.value = false;
-        if (isError.value) {
+            props.foreignUserDocs = axiosrequestForeignDocs.value?.data;
+            fd = axiosrequest5.data;
+            data.value = axiosrequest6.value?.data;
             swal.fire({
-                position: 'center',
-                icon: 'error',
-                title: `ошибка`,
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
                 showConfirmButton: false,
-                timer: 2500,
+                timer: 1000,
             });
+            isLoading.value = false;
+            emit('updateUserData', axiosrequest1.data);
+            emit('updateRegionData', axiosrequest2.data);
+            emit('updateDocData', axiosrequest3.data);
+            emit('updateEducData', axiosrequest4.data);
+            emit('updateFileData', axiosrequest5.data);
+            emit('updateParentData', axiosrequestParent.value);
+            emit('updateStatus', axiosrequest6.value?.data);
+        } catch (error) {
+            console.log('errr', error);
+            isError.value = error.response.data;
+            console.error('There was an error!', error);
+            isLoading.value = false;
+            if (isError.value) {
+                swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: `ошибка`,
+                    showConfirmButton: false,
+                    timer: 2500,
+                });
+            }
         }
-    }
-};
+    };
 
-const answers = ref([
-    { name: 'Да', value: true, id: 'f1' },
-    { name: 'Нет', value: false, id: 'f2' },
-]);
+    const answers = ref([
+        { name: 'Да', value: true, id: 'f1' },
+        { name: 'Нет', value: false, id: 'f2' },
+    ]);
 
-const gender = ref([
-    { name: 'Мужской', value: 'male', id: 'm1' },
-    { name: 'Женский', value: 'female', id: 'f1' },
-]);
+    const gender = ref([
+        { name: 'Мужской', value: 'male', id: 'm1' },
+        { name: 'Женский', value: 'female', id: 'f1' },
+    ]);
 
-const passportParent = ref([
-    { name: 'Да', value: true, id: 'pp1' },
-    { name: 'Нет', value: false, id: 'pp2' },
-]);
-const parents = ref([
-    {
-        value: 'father',
-        name: 'Отец',
-    },
-    { value: 'mother', name: 'Мать' },
-]);
+    const passportParent = ref([
+        { name: 'Да', value: true, id: 'pp1' },
+        { name: 'Нет', value: false, id: 'pp2' },
+    ]);
+    const parents = ref([
+        {
+            value: 'father',
+            name: 'Отец',
+        },
+        { value: 'mother', name: 'Мать' },
+    ]);
 
-const militaryDocs = ref([
-    {
-        value: 'military_ticket',
-        name: 'Удостоверение гражданина подлежащего вызову на срочную военную службу',
-    },
-    { value: 'military_certificate', name: 'Военный билет' },
-]);
+    const militaryDocs = ref([
+        {
+            value: 'military_ticket',
+            name: 'Удостоверение гражданина подлежащего вызову на срочную военную службу',
+        },
+        { value: 'military_certificate', name: 'Военный билет' },
+    ]);
 
-const address = ref([
-    { name: 'Да', value: true, id: 'Да' },
-    { name: 'Нет', value: false, id: 'Нет' },
-]);
+    const address = ref([
+        { name: 'Да', value: true, id: 'Да' },
+        { name: 'Нет', value: false, id: 'Нет' },
+    ]);
 
-const passport = ref([
-    { name: 'Да', value: true, id: 'Да' },
-    { name: 'Нет', value: false, id: 'Нет' },
-]);
+    const passport = ref([
+        { name: 'Да', value: true, id: 'Да' },
+        { name: 'Нет', value: false, id: 'Нет' },
+    ]);
 </script>
 <style lang="scss">
 .expanded {
