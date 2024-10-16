@@ -26,8 +26,8 @@
       <EleventhPanelComponent
         :central-expert="props.centralExpert"
         :district-expert="props.districtExpert"
-        :data="data"
-        @get-data="getData"
+        :dataDH="dataDH"
+        @get-dataDH="getDataDH"
         is-second-tab
       ></EleventhPanelComponent>
     </template>
@@ -36,8 +36,8 @@
       <EleventhPanelComponent
         :central-expert="props.centralExpert"
         :district-expert="props.districtExpert"
-        :data="data"
-        @get-data="getData"
+        :dataCH="dataCH"
+        @get-dataCH="getDataCH"
         is-third-tab
       ></EleventhPanelComponent>
     </template>
@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from "vue";
+// import { ref, watchEffect } from "vue";
 import { EleventhPanelComponent } from "@features/RatingRoPanelComponents";
 // import { InputReport, TextareaReport } from '@shared/components/inputs';
 // import { CommentFileComponent } from '@entities/RatingRoComponents/components';
@@ -64,6 +64,8 @@ const props = defineProps({
     default: '',
   },
   data: Object,
+  dataDH: Object,
+  dataCH: Object,
   isErrorPanel: {
     type: Boolean,
   },
@@ -71,10 +73,18 @@ const props = defineProps({
 
 const ID_PANEL = "11";
 
-const emit = defineEmits(['getData']);
+const emit = defineEmits(['getData', 'getDataDH', 'getDataCH']);
 
 const getData = (event) => {
   emit("getData", event, Number(ID_PANEL));
+};
+
+const getDataDH = (event) => {
+  emit("getDataDH", event, Number(ID_PANEL));
+};
+
+const getDataCH = (event) => {
+  emit("getDataCH", event, Number(ID_PANEL));
 };
 
 // const ID_PANEL = '11';
@@ -140,7 +150,7 @@ const getData = (event) => {
 //   }
 // };
 
-  watchEffect(async () => {
+  // watchEffect(async () => {
     // console.log('эксперт: ', (props.districtExpert || props.centralExpert));
   //   try {
       // const { data } = props.centralExpert || props.districtExpert ? await reportPartTwoService.getReportDH(ID_PANEL) : await reportPartTwoService.getReport(ID_PANEL);
@@ -156,12 +166,9 @@ const getData = (event) => {
   //   } catch (e) {
   //     console.log(e)
   //   }
-  });
+  // });
 
 </script>
 
 <style lang="scss" scoped>
-// .valid-red {
-//   color: #db0000;
-// }
 </style>
