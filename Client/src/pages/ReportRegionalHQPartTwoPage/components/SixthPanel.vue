@@ -127,6 +127,7 @@ watchEffect(() => {
       links: [],
       comment: '',
     };
+    isSentSix.value = false;
     // for (let i in props.data) {
     //   if (props.data[i].is_sent) {
     //     isSentSix.value = true;
