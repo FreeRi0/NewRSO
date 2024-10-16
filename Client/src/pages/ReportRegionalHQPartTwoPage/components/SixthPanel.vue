@@ -14,8 +14,9 @@
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)" @error="setError" @getPanelNumber="getPanelNumber($event)"
-            @getId="getId($event)" :data="sixPanelData" :is-sent-six="isSentSix"
+            @formData="formData($event, item.id)" @formDataDH="formDataDH($event, item.id)" @error="setError"
+            @getPanelNumber="getPanelNumber($event)" @getId="getId($event)" :data="sixPanelData"
+            :dataDH="sixPanelDataDH" :is-sent-six="isSentSix"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item">
@@ -41,6 +42,7 @@ const props = defineProps({
   // isSentSix: Boolean,
   items: Array,
   data: Object,
+  dataDH: Object,
 });
 
 // console.log('error66', props.isErrorPanel)
@@ -54,13 +56,18 @@ const setError = (err) => {
 
 const isFirstSent = ref(null);
 const isSentSix = ref(false);
-const emit = defineEmits(['getData', 'getId', 'getPanelNumber']);
+const emit = defineEmits(['getData', 'getDataDH', 'getId', 'getPanelNumber']);
 
 const sixPanelData = ref({
   number_of_members: 0,
   links: [{
     link: '',
   }],
+  comment: '',
+});
+
+const sixPanelDataDH = ref({
+  number_of_members: 0,
   comment: '',
 });
 
@@ -73,28 +80,36 @@ let el_id = ref(null);
 
 const formData = async (reportData, reportNumber) => {
   try {
-    console.log('is_link_err_3_6', link_err.value)
-
-    if (!link_err.value) {
-      if (isFirstSent.value) {
-        if (reportData.number_of_members > 0) {
-          console.log('First time sending data');
-          const { data } = await reportPartTwoService.createMultipleReport(reportData, '6', reportNumber);
-          console.log('datas1', data);
+    if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
+      if (!link_err.value) {
+        if (isFirstSent.value) {
+          if (reportData.number_of_members > 0) {
+            console.log('First time sending data');
+            const { data } = await reportPartTwoService.createMultipleReport(reportData, '6', reportNumber);
+            console.log('datas1', data);
+            emit('getData', data, 6, reportNumber);
+            isFirstSent.value = false;
+          }
+        } else {
+          console.log('Second time sending data');
+          const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '6', reportNumber);
+          console.log('datas2', data);
           emit('getData', data, 6, reportNumber);
-          isFirstSent.value = false;
         }
-      } else {
-        console.log('Second time sending data');
-        const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '6', reportNumber);
-        console.log('datas2', data);
-        emit('getData', data, 6, reportNumber);
       }
     }
   } catch (e) {
     console.log('six panel error: ', e);
   }
 };
+
+const formDataDH = (reportData, reportNumber) => {
+  if (props.districtHeadquarterCommander) {
+    emit('getDataDH', reportData, 6, reportNumber);
+    console.log('dh', reportData);
+  }
+};
+
 
 const getId = (id) => {
   // console.log('id', id);
@@ -106,31 +121,36 @@ const getPanelNumber = (number) => {
   emit('getPanelNumber', number);
 }
 watchEffect(() => {
-  if (props.data[el_id.value] && Object.keys(props.data[el_id.value]).length > 0) {
-    console.log('data received', props.data);
-    isFirstSent.value = false;
-    sixPanelData.value = { ...props.data[el_id.value] }
-    isSentSix.value = props.data[el_id.value].is_sent;
-    if (props.data[el_id.value].number_of_members == 0 || props.data[el_id.value].number_of_members == null) {
+  if (props.districtHeadquarterCommander) {
+    sixPanelData.value = { ...props.data[el_id.value] };
+    sixPanelDataDH.value = { ...props.dataDH[el_id.value] };
+  } else {
+    if (props.data[el_id.value] && Object.keys(props.data[el_id.value]).length > 0) {
+      console.log('data received', props.data);
+      isFirstSent.value = false;
+      sixPanelData.value = { ...props.data[el_id.value] }
+      isSentSix.value = props.data[el_id.value].is_sent;
+      if (props.data[el_id.value].number_of_members == 0 || props.data[el_id.value].number_of_members == null) {
+        sixPanelData.value = {
+          number_of_members: 0,
+          links: [],
+          comment: '',
+        };
+      }
+    }
+    else {
+      console.log('data not received');
+      isFirstSent.value = true;
       sixPanelData.value = {
         number_of_members: 0,
         links: [],
         comment: '',
       };
-    }
-  }
-  else {
-    console.log('data not received');
-    isFirstSent.value = true;
-    sixPanelData.value = {
-      number_of_members: 0,
-      links: [],
-      comment: '',
-    };
-    for (let i in props.data) {
-      if (props.data[i].is_sent) {
-        isSentSix.value = true;
-        break;
+      for (let i in props.data) {
+        if (props.data[i].is_sent) {
+          isSentSix.value = true;
+          break;
+        }
       }
     }
   }

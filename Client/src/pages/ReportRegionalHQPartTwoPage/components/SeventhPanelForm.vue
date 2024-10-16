@@ -321,9 +321,8 @@
                         <p class="form__label">
                             Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
                         </p>
-                        <InputReport @focusout="focusOut" v-model:value="sixPanelData.number_of_members"
-                            placeholder="Введите число" id="15" name="14" class="form__input number_input" type="number"
-                            :maxlength="10" :max="32767"
+                        <InputReport v-model:value="sixPanelData.number_of_members" placeholder="Введите число" id="15"
+                            name="14" class="form__input number_input" type="number" :maxlength="10" :max="32767"
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
                     </div>
                     <div class="form__field">
@@ -333,18 +332,9 @@
 
                         <div class="form__wrapper" v-for="(item, index) in sixPanelData.links" :key="index">
                             <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                                @focusout="focusOut" :is-link="true"
+                                :is-link="true"
                                 :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                                 name="14" v-model:value="item.link" class="mb-2" />
-                            <div v-if="!(props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)">
-                                <div class="add_link" @click="addLink(6)"
-                                    v-if="sixPanelData.links.length === index + 1">
-                                    + Добавить ссылку
-                                </div>
-                                <div class="add_link" @click="deleteLink(6)" v-else>
-                                    Удалить поле ввода
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="form__field">
@@ -367,20 +357,20 @@
                     </div>
                     <div class="form__field places mt-4">
                         <p class="form__label">
-                            Проведение мероприятия <sup class="valid-red">*</sup>
+                            Проведение мероприятия
+                            <sup class="valid-red">*</sup>
                         </p>
 
-                        <div class="places_wrap">
-                            <div class="places_item" v-for="item in events" :key="item.id">
-                                <input :id="item.id" :value="item.value" :name="item.name"
-                                    :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
-                                    :checked="ninthPanelData.event_happened == item.value"
-                                    class="form__input places_input" type="radio" @focusout="focusOut"
-                                    v-model="ninthPanelData.event_happened" />
-                                <label class="places_item_label" :for="id">{{
-                                    item.name
-                                }}</label>
-                            </div>
+                        <div class="places_wrap one_place">
+                            <input :id="12" :value="ninthPanelData.event_happened" :name="12" :disabled="props.isCentralHeadquarterCommander ||
+                                props.isDistrictHeadquarterCommander
+                                " :checked="ninthPanelData.event_happened === true ||
+                                    ninthPanelData.event_happened === false
+                                    " class="form__input places_input" type="radio"
+                                v-model="ninthPanelData.event_happened" />
+                            <label v-if="ninthPanelData.event_happened === true" class="places_item_label"
+                                :for="id">Да</label>
+                            <label v-else class="places_item_label" :for="id">Нет</label>
                         </div>
                     </div>
                     <div class="report__fieldset report__fieldset--right-block">
@@ -390,9 +380,9 @@
                         <InputReport
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                             v-if="!ninthPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
-                            id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile" />
+                            id="scan_file" name="scan_file" width="100%" height="auto" />
                         <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
-                            :isSent="isSent" :fileSize="ninthPanelData.file_size" @click="deleteFile">
+                            :isSent="isSent" :fileSize="ninthPanelData.file_size">
                         </FileBoxComponent>
                     </div>
 
@@ -404,18 +394,9 @@
                         <div class="form__wrapper" v-for="(item, index) in ninthPanelData.links" :key="index">
                             <InputReport
                                 :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
-                                @focusout="focusOut" name="14" :is-link="true"
+                                name="14" :is-link="true"
                                 placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
                                 v-model:value="item.link" class="mb-2" />
-                            <div v-if="!(props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)">
-                                <div class="add_link" @click="addLink(7)"
-                                    v-if="ninthPanelData.links.length === index + 1">
-                                    + Добавить ссылку
-                                </div>
-                                <div class="add_link" @click="deleteLink(7)" v-else>
-                                    Удалить поле ввода
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="form__field">
@@ -423,8 +404,7 @@
                         <TextareaReport
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                             v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1" autoResize
-                            placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
-                            counter-visible />
+                            placeholder="Комментарий" :maxlength="3000" :max-length-text="3000" counter-visible />
                     </div>
                     <div class="form__field-result" style="display: flex; align-items: center;">
                         <v-checkbox class="result-checkbox" id="v-checkbox" />
@@ -498,17 +478,15 @@
                         <p class="form__label">
                             Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
                         </p>
-                        <InputReport @focusout="focusOut" v-model:value="sixPanelData.number_of_members"
+                        <InputReport @focusout="focusOut" v-model:value="sixPanelDataDH.number_of_members"
                             placeholder="Введите число" id="15" name="14" class="form__input number_input" type="number"
                             :maxlength="10" :max="32767" />
                     </div>
 
-                    <div class="form__field">
-                        <label class="form__label" for="14">Комментарий<sup class="valid-red">*</sup></label>
-                        <TextareaReport v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1"
-                            autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
-                            :max-length-text="3000" counter-visible />
-                    </div>
+                    <CommentFileComponent @focusout="focusOut" v-model:value="sixPanelDataDH.comment"
+                        @update:value="changeValue" :is-six="true" name="sixPanelDataDH.comment"
+                        :disabled="props.isCentralHeadquarterCommander">
+                    </CommentFileComponent>
                 </div>
                 <div v-else-if="props.panel_number == 9" class="form__field-group group-seventh">
                     <div class="d-flex justify-space-between">
@@ -527,21 +505,21 @@
                         <div class="places_wrap">
                             <div class="places_item" v-for="item in events" :key="item.id">
                                 <input :id="item.id" :value="item.value" :name="item.name"
-                                    :checked="ninthPanelData.event_happened == item.value"
+                                    :checked="ninthPanelDataDH.event_happened == item.value"
                                     class="form__input places_input" type="radio" @focusout="focusOut"
-                                    v-model="ninthPanelData.event_happened" />
+                                    v-model="ninthPanelDataDH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
                                     }}</label>
                             </div>
                         </div>
                     </div>
-                    <div class="form__field">
-                        <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
-                        <TextareaReport v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1"
-                            autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
-                            :max-length-text="3000" counter-visible />
-                    </div>
+                    <CommentFileComponent v-model:value="ninthPanelDataDH.comment" @focusout="focusOut"
+                        @update:value="changeValue" name="ninthPanelDataDH.comment" @change="uploadFile"
+                        @click="deleteFile" :file="ninthPanelDataDH.document" :fileType="ninthPanelDataDH.file_type"
+                        :fileSize="ninthPanelDataDH.file_size" :disabled="props.isCentralHeadquarterCommander"
+                        :is-error-file="isErrorFile">
+                    </CommentFileComponent>
                     <div class="form__field-result" style="display: flex; align-items: center;">
                         <v-checkbox class="result-checkbox" id="v-checkbox" />
                         <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
@@ -711,7 +689,11 @@
 <script setup>
 import { ref, watchEffect, watch } from 'vue';
 import { Button } from '@shared/components/buttons';
-import { FileBoxComponent } from '@entities/RatingRoComponents/components';
+import {
+    FileBoxComponent,
+    CommentFileComponent,
+    ReportTable,
+} from '@entities/RatingRoComponents/components';
 import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { SvgIcon } from '@shared/ui';
 import { ReportTabs } from './index';
@@ -731,9 +713,11 @@ const props = defineProps({
     isSentNinth: Boolean,
     isErrorPanel: Boolean,
     data: Object,
+    dataDH: Object,
+    dataCH: Object,
 });
 
-const emit = defineEmits(['collapse-form', 'formData', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'error']);
+const emit = defineEmits(['collapse-form', 'formData', 'formDataDH', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'error']);
 
 const collapseForm = () => {
     emit('collapse-form');
@@ -774,12 +758,28 @@ const ninthPanelData = ref({
     file_type: '',
     comment: '',
 })
+const ninthPanelDataDH = ref({
+    event_happened: false,
+    document: '',
+    file_size: null,
+    file_type: '',
+    comment: '',
+})
 
 const sixPanelData = ref({
     number_of_members: 0,
     links: [{
         link: '',
     }],
+    comment: '',
+});
+const sixPanelDataDH = ref({
+    number_of_members: 0,
+    comment: '',
+});
+
+const sixPanelDataCH = ref({
+    number_of_members: 0,
     comment: '',
 });
 
@@ -890,12 +890,15 @@ const deleteFile = (number) => {
 const focusOut = () => {
     if (props.panel_number == 6) {
         try {
-            // if(isLinkError.value && )
-            emit('formData', sixPanelData.value)
-
+            if (props.isDistrictHeadquarterCommander) {
+                emit('formDataDH', sixPanelDataDH.value);
+                console.log('dataDH', sixPanelDataDH);
+            } else {
+                emit('formData', sixPanelData.value);
+            }
 
         } catch (e) {
-            console.log('data', e.response.data)
+            console.log('data', e.response.data);
         }
     }
     // else if (props.panel_number == 7) {
@@ -949,7 +952,11 @@ const focusOut = () => {
     // }
     else if (props.panel_number == 9) {
         try {
-            if (isFirstSentNinth.value === true) {
+            if (props.isDistrictHeadquarterCommander) {
+                emit('formDataDH', ninthPanelDataDH.value);
+                console.log('dataDH9', ninthPanelDataDH);
+            } else {
+                if (isFirstSentNinth.value === true) {
                 console.log('9', '1')
                 emit('formData', ninthPanelData.value)
             } else {
@@ -990,6 +997,8 @@ const focusOut = () => {
                 emit('formData', formData)
                 console.log('9', '2')
             }
+            }
+           
         } catch (e) {
             console.log('data', e.response.data);
         }
@@ -1026,35 +1035,27 @@ const deleteLink = async (number) => {
 watchEffect(() => {
     if (props.panel_number == 6) {
 
-        if (Object.keys(props.data).length > 0) {
-            isFirstSentSix.value = false
-            sixPanelData.value = { ...props.data }
-            if (isLinkError.value) {
-                console.log('gg');
-                emit('error', isLinkError.value)
+        if (props.isDistrictHeadquarterCommander) {
+            sixPanelData.value = { ...props.data };
+            sixPanelDataDH.value = { ...props.dataDH };
+            // sixPanelDataCH.value = { ...props.dataCH };
+        } else {
+            if (Object.keys(props.data).length > 0) {
+                isFirstSentSix.value = false;
+                sixPanelData.value = { ...props.data };
+                if (isLinkError.value) {
+                    emit('error', isLinkError.value);
+                } else {
+                    emit('error', false);
+                }
+                if (!sixPanelData.value.links.length)
+                    sixPanelData.value.links.push({ link: '' });
             } else {
-                console.log('hh')
-                emit('error', false)
+                console.log('data not received');
             }
-
-            if (!sixPanelData.value.links.length) sixPanelData.value.links.push({ link: '' })
-
-
         }
-        else {
-            console.log('data not received');
-            // isSentSix.value = true;
-            // isFirstSentSix.value = true;
-            // sixPanelData.value = {
-            //     number_of_members: 0,
-            //     links: [{
-            //         link: '',
-            //     }],
-            //     comment: ''
-            // }
-        }
-        emit('getId', props.id)
-        emit('getPanelNumber', props.panel_number)
+        emit('getId', props.id);
+        emit('getPanelNumber', props.panel_number);
         // } else if (props.panel_number == 7) {
         //     if (Object.keys(props.data).length > 0) {
         //         console.log('7')
@@ -1085,34 +1086,40 @@ watchEffect(() => {
         //     emit('getPanelNumber', props.panel_number)
 
     } else if (props.panel_number == 9) {
-        if (Object.keys(props.data).length > 0) {
-            isFirstSentNinth.value = false;
-            ninthPanelData.value = { ...props.data }
-            if (isLinkError.value) {
-                console.log('gg');
-                emit('error', isLinkError.value)
-            } else {
-                console.log('hh')
-                emit('error', false)
-            }
-            if (!ninthPanelData.value.links.length) {
-                ninthPanelData.value.links.push({ link: '' })
+        if (props.isDistrictHeadquarterCommander) {
+            ninthPanelData.value = { ...props.data };
+            ninthPanelDataDH.value = { ...props.dataDH };
+        } else {
+            if (Object.keys(props.data).length > 0) {
+                isFirstSentNinth.value = false;
+                ninthPanelData.value = { ...props.data }
+                if (isLinkError.value) {
+                    console.log('gg');
+                    emit('error', isLinkError.value)
+                } else {
+                    console.log('hh')
+                    emit('error', false)
+                }
+                if (!ninthPanelData.value.links.length) {
+                    ninthPanelData.value.links.push({ link: '' })
+                }
+
             }
 
-        }
-
-        else {
-            console.log('data not received');
-            isFirstSentNinth.value = true;
-            ninthPanelData.value = {
-                event_happened: false,
-                links: [{
-                    link: '',
-                }],
-                comment: '',
-                file_size: '',
-                file_type: '',
-            };
+            else {
+                console.log('data not received');
+                isFirstSentNinth.value = true;
+                ninthPanelData.value = {
+                    event_happened: false,
+                    links: [{
+                        link: '',
+                    }],
+                    comment: '',
+                    file_size: '',
+                    file_type: '',
+                };
+            }
+           
         }
         emit('getId', props.id)
         emit('getPanelNumber', props.panel_number)
@@ -1163,6 +1170,12 @@ watchEffect(() => {
     }
 }
 
+input[type='radio']:disabled {
+    background-color: #1f7cc0;
+    border: 2px solid #000000; // Add border to the input element
+    border-radius: 50%; // Make the border round
+}
+
 
 .title_wrap {
     display: grid;
@@ -1209,6 +1222,11 @@ watchEffect(() => {
     max-width: 70px;
 
 }
+
+.one_place {
+    column-gap: 8px !important;
+}
+
 
 .city {
     width: 100%;

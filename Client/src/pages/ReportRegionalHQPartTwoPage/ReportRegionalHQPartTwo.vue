@@ -78,9 +78,10 @@
               мероприятиях и&nbsp;проектах (в&nbsp;том числе и&nbsp;трудовых) &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <sixth-panel @get-data="setData" :items="six_items" @getId="setId" @getPanelNumber="setPanelNumber"
-                :district-headquarter-commander="districtExpert" :data="reportData.six"
-                :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.six" />
+              <sixth-panel @get-data="setData" @get-data-DH="setDataDH" :items="six_items" @getId="setId"
+                @getPanelNumber="setPanelNumber" :district-headquarter-commander="districtExpert" :data="reportData.six"
+                :dataDH="reportDataDH.six" :central-headquarter-commander="centralExpert"
+                :is-error-panel="isErrorPanel.six" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -110,9 +111,10 @@
               9. Организация обязательных общесистемных мероприятий РСО на&nbsp;региональном уровне &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <ninth-panel @get-data="setData" @getId="setId" @getPanelNumber="setPanelNumber" :items="ninth_items"
-                :district-headquarter-commander="districtExpert" :data="reportData.ninth"
-                :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.ninth" />
+              <ninth-panel @get-data="setData" @get-data-DH="setDataDH" @getId="setId" @getPanelNumber="setPanelNumber"
+                :items="ninth_items" :district-headquarter-commander="districtExpert" :data="reportData.ninth"
+                :dataDH="reportDataDH.ninth" :central-headquarter-commander="centralExpert"
+                :is-error-panel="isErrorPanel.ninth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -130,18 +132,10 @@
               11. Активность РО&nbsp;РСО в&nbsp;социальных сетях &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <eleventh-panel 
-                :districtExpert="districtExpert" 
-                :centralExpert="centralExpert" 
-                @get-data="setData"
-                @get-data-DH="setDataDH"
-                @get-data-CH="setDataCH"
-                :data="reportData.eleventh"
-                :data-DH="reportDataDH.eleventh"
-                :data-CH="reportDataCH.eleventh"
-
-                :is-error-panel="isErrorPanel.eleventh"
-              />
+              <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.eleventh"
+                :data-DH="reportDataDH.eleventh" :data-CH="reportDataCH.eleventh"
+                :is-error-panel="isErrorPanel.eleventh" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -149,17 +143,10 @@
               12. Объем средств, собранных бойцами РО&nbsp;РСО во&nbsp;Всероссийском дне ударного труда
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <twelfth-panel 
-                :districtExpert="districtExpert" 
-                :centralExpert="centralExpert" 
-                @get-data="setData"
-                @get-data-DH="setDataDH"
-                @get-data-CH="setDataCH"
-                :data="reportData.twelfth"
-                :data-DH="reportDataDH.twelfth"
-                :data-CH="reportDataCH.twelfth"
-                :is-error-panel="isErrorPanel.twelfth"
-              />
+              <twelfth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.twelfth"
+                :data-DH="reportDataDH.twelfth" :data-CH="reportDataCH.twelfth"
+                :is-error-panel="isErrorPanel.twelfth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -167,17 +154,10 @@
               13. Охват членов РО&nbsp;РСО, принявших участие во&nbsp;Всероссийском дне ударного труда &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <thirteenth-panel
-                :districtExpert="districtExpert" 
-                :centralExpert="centralExpert" 
-                @get-data="setData"
-                @get-data-DH="setDataDH"
-                @get-data-CH="setDataCH"
-                :data="reportData.thirteenth"
-                :data-DH="reportDataDH.thirteenth"
-                :data-CH="reportDataCH.thirteenth"
-                :is-error-panel="isErrorPanel.thirteenth"
-              />
+              <thirteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.thirteenth"
+                :data-DH="reportDataDH.thirteenth" :data-CH="reportDataCH.thirteenth"
+                :is-error-panel="isErrorPanel.thirteenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -297,6 +277,7 @@ const reportData = ref({
 
 const reportDataDH = ref({
   six: {},
+  ninth: {},
   eleventh: null,
   twelfth: null,
   thirteenth: null,
@@ -304,6 +285,7 @@ const reportDataDH = ref({
 
 const reportDataCH = ref({
   six: {},
+  ninth: {},
   eleventh: null,
   twelfth: null,
   thirteenth: null,
@@ -474,6 +456,10 @@ const getMultiplyData = async (isExpert, reportId) => {
   ]);
 
   sixDataResults.forEach((result) => {
+    if (isExpert) {
+      reportData.value.six[result.id] = result.data;
+      reportDataDH.value.six[result.id] = result.data;
+    }
     reportData.value.six[result.id] = result.data;
     // if (reportData.value.six[result.id].is_sent === false || !Object.keys(reportData.value.six[result.id]).length) {
     //   console.log('yah6')
@@ -486,6 +472,10 @@ const getMultiplyData = async (isExpert, reportId) => {
   // });
 
   ninthDataResults.forEach((result) => {
+    if (isExpert) {
+      reportData.value.ninth[result.id] = result.data;
+      reportDataDH.value.ninth[result.id] = result.data;
+    }
     reportData.value.ninth[result.id] = result.data;
     // if (reportData.value.ninth[result.id].is_sent === false || !Object.keys(reportData.value.ninth[result.id]).length) {
     //   console.log('yah9')
@@ -697,9 +687,12 @@ const setData = (data, panel, number = 0) => {
 };
 
 const setDataDH = (data, panel, number) => {
-  switch(panel) {
+  switch (panel) {
     case 6:
-        reportDataDH.value.six[number] = data;
+      reportDataDH.value.six[number] = data;
+      break;
+    case 9:
+      reportDataDH.value.ninth[number] = data;
       break;
     case 11:
       reportDataDH.value.eleventh = data;
@@ -727,9 +720,9 @@ const setDataDH = (data, panel, number) => {
 // console.log('файл2', fileDH.value);
 
 const setDataCH = (data, panel, number) => {
-  switch(panel) {
+  switch (panel) {
     case 6:
-        reportDataCH.value.six[number] = data;
+      reportDataCH.value.six[number] = data;
       break;
     case 11:
       reportDataCH.value.eleventh = data;
@@ -895,13 +888,13 @@ const sendReport = async () => {
     try {
       if (!reportDataDH.value.eleventh.verified_by_dhq) {
         // await reportPartTwoService.sendReport(reportDataDH.value.eleventh, '11');
-        
+
         // console.log('файл', fileDH.value);
         let formData = new FormData();
         formData.append("participants_number", reportDataDH.value.eleventh.participants_number || '');
         formData.append("comment", reportDataDH.value.eleventh.comment || '');
         // formData.append("scan_file", fileDH.value);
-        
+
         await HTTP.put(`regional_competitions/reports/11/${route.query.reportId}/district_review/`, formData)
       }
 
