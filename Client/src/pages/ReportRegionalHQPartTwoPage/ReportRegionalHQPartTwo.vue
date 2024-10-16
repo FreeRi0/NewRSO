@@ -90,7 +90,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-              text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -475,13 +475,23 @@ const getMultiplyData = async (isExpert, reportId) => {
 
   sixDataResults.forEach((result) => {
     reportData.value.six[result.id] = result.data;
+    // if (reportData.value.six[result.id].is_sent === false || !Object.keys(reportData.value.six[result.id]).length) {
+    //   console.log('yah6')
+    //   blockSendButton.value = false;
+    // }
   });
+  // console.log('data66', reportData.value.six)
   // seventhDataResults.forEach((result) => {
   //   reportData.value.seventh[result.id] = result.data;
   // });
 
   ninthDataResults.forEach((result) => {
     reportData.value.ninth[result.id] = result.data;
+    // if (reportData.value.ninth[result.id].is_sent === false || !Object.keys(reportData.value.ninth[result.id]).length) {
+    //   console.log('yah9')
+    //   blockSendButton.value = false;
+    //   blockEditFirstReport.value = false;
+    // }
   });
 }
 const getReportData = async (reportId) => {
@@ -589,6 +599,22 @@ const getReportData = async (reportId) => {
         if (reportData.value.sixteenth.is_sent) {
           blockSendButton.value = true;
           blockEditFirstReport.value = true;
+          for (let item in reportData.value.six) {
+            if (reportData.value.six[item].is_sent === false || !Object.keys(reportData.value.six[item]).length) {
+              blockSendButton.value = false;
+              break
+              // blockEditFirstReport.value = false;
+            }
+          }
+          for (let item in reportData.value.ninth) {
+            if (reportData.value.ninth[item].is_sent === false || !Object.keys(reportData.value.ninth[item]).length) {
+              blockSendButton.value = false;
+              break
+              // blockEditFirstReport.value = false;
+            }
+          }
+
+
         }
       } catch (e) {
         console.log(e.message)
@@ -869,7 +895,7 @@ const sendReport = async () => {
     try {
       if (!reportDataDH.value.eleventh.verified_by_dhq) {
         // await reportPartTwoService.sendReport(reportDataDH.value.eleventh, '11');
-
+        
         // console.log('файл', fileDH.value);
         let formData = new FormData();
         formData.append("participants_number", reportDataDH.value.eleventh.participants_number || '');
@@ -909,7 +935,7 @@ const sendReport = async () => {
 };
 
 const checkEmptyFields = (data) => {
-    const { filteredSix, filteredNinth } = filterPanelsData();
+  const { filteredSix, filteredNinth } = filterPanelsData();
   console.log('data', data)
 
   if (!data.first || !(data.first.amount_of_money && data.first.scan_file)) {
@@ -938,11 +964,23 @@ const checkEmptyFields = (data) => {
         return false;
       }
     }
+  } else {
+    isErrorPanel.value.fourth = true;
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      showConfirmButton: true,
+      text: 'Заполните обязательные поля в 4 показателе. В случае отсутствия мероприятия, укажите 0 в количестве участников',
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: 'Понятно',
+      timer: 5000,
+    })
+    return false;
   }
 
   if (data.fifth) {
     for (let event of data.fifth.events) {
-      if (!(event.participants_number && event.ro_participants_number && event.end_date && event.start_date && event.name && data.fifth.comment)) {
+      if (event.participants_number && !(event.end_date && event.start_date && event.name && data.fifth.comment)) {
         isErrorPanel.value.fifth = true;
         swal.fire({
           position: 'center',
@@ -959,9 +997,11 @@ const checkEmptyFields = (data) => {
     swal.fire({
       position: 'center',
       icon: 'warning',
-      title: `Заполните обязательные поля в 5 показателе`,
-      showConfirmButton: false,
-      timer: 2500,
+      text: `Заполните обязательные поля в 5 показателе. В случае отсутствия трудового проекта, укажите 0 в количестве участников`,
+      showConfirmButton: true,
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: 'Понятно',
+      timer: 5000,
     })
     return false;
   }
@@ -1036,7 +1076,7 @@ const checkEmptyFields = (data) => {
       icon: 'warning',
       title: `Укажите информацию о проведении акции в показателе 10-1`,
       showConfirmButton: false,
-      timer: 2500,
+      timer: 3500,
     })
     return false;
   }
@@ -1062,7 +1102,7 @@ const checkEmptyFields = (data) => {
       icon: 'warning',
       title: `Укажите информацию о проведении акции в показателе 10-2`,
       showConfirmButton: false,
-      timer: 2500,
+      timer: 3500,
     })
     return false;
   }
@@ -1122,9 +1162,9 @@ const checkEmptyFields = (data) => {
     swal.fire({
       position: 'center',
       icon: 'warning',
-      title: `Укажите наличие трудового проекта в 16 показателе`,
+      title: `Укажите информацию о наличии трудового проекта в 16 показателе`,
       showConfirmButton: false,
-      timer: 2500,
+      timer: 3500,
     })
     return false;
   }
@@ -1133,11 +1173,15 @@ const checkEmptyFields = (data) => {
 }
 
 onMounted(() => {
+  if (!roleStore.roles?.regionalheadquarter_commander && (!roleStore.experts?.is_district_expert || !roleStore.experts?.is_central_expert)) {
+    router.push({ name: 'mypage' });
+  }
   if (roleStore.experts?.is_district_expert) {
     districtExpert.value = true;
     console.log('окружной эксперт', districtExpert.value);
   }
   if (roleStore.experts?.is_central_expert) {
+
     centralExpert.value = true;
     console.log('центральный эксперт', centralExpert.value);
   }
@@ -1165,6 +1209,7 @@ onMounted(() => {
 .mdi-chevron-up::before {
   content: "";
 }
+
 
 .download-item {
   display: flex;
