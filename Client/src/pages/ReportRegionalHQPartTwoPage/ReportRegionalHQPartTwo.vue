@@ -1173,9 +1173,9 @@ const checkEmptyFields = (data) => {
 }
 
 onMounted(() => {
-  if (!roleStore.roles?.regionalheadquarter_commander && (!roleStore.experts?.is_district_expert || !roleStore.experts?.is_central_expert)) {
-    router.push({ name: 'mypage' });
-  }
+  // if (!roleStore.roles?.regionalheadquarter_commander && (!roleStore.experts?.is_district_expert || !roleStore.experts?.is_central_expert)) {
+  //   router.push({ name: 'mypage' });
+  // }
   if (roleStore.experts?.is_district_expert) {
     districtExpert.value = true;
     console.log('окружной эксперт', districtExpert.value);
