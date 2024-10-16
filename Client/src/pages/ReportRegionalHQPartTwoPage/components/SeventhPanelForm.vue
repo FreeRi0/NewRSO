@@ -163,7 +163,7 @@
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                                }}</label>
+                            }}</label>
                         </div>
                     </div>
                 </div>
@@ -510,12 +510,12 @@
                                     v-model="ninthPanelDataDH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
                     <CommentFileComponent v-model:value="ninthPanelDataDH.comment" @focusout="focusOut"
-                        @update:value="changeValue" name="ninthPanelDataDH.comment" @change="uploadFile"
+                        name="ninthPanelDataDH.comment" @change="uploadFile"
                         @click="deleteFile" :file="ninthPanelDataDH.document" :fileType="ninthPanelDataDH.file_type"
                         :fileSize="ninthPanelDataDH.file_size" :disabled="props.isCentralHeadquarterCommander"
                         :is-error-file="isErrorFile">
@@ -667,7 +667,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -717,7 +717,7 @@ const props = defineProps({
     dataCH: Object,
 });
 
-const emit = defineEmits(['collapse-form', 'formData', 'formDataDH', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'error']);
+const emit = defineEmits(['collapse-form', 'formData', 'formDataDH', 'uploadFile', 'uploadFileDH', 'getId', 'getPanelNumber', 'deleteFile', 'deleteFileDH', 'error']);
 
 const collapseForm = () => {
     emit('collapse-form');
@@ -820,27 +820,29 @@ const uploadFile = (event, number) => {
     //         emit('uploadFile', formData);
     //     }
     if (number === 9) {
-        fileValidate(event.target.files[0], 9, isErrorFile);
-        if (isErrorFile.value) {
-            console.log('error');
-            scanFile.value = event.target.files[0];
-            ninthPanelData.value.document = scanFile.value.name;
-        } else {
-            let formData = new FormData();
-            formData.append('event_happened', ninthPanelData.value.event_happened);
-            formData.append('document', event.target.files[0]);
-            if (ninthPanelData.value.links.length) {
-                for (let i = 0; i < ninthPanelData.value.links.length; i++) {
-                    !ninthPanelData.value.links[i].link
-                        ? formData.append(`[links][${i}][link]`, '')
-                        : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+            fileValidate(event.target.files[0], 9, isErrorFile);
+            if (isErrorFile.value) {
+                console.log('error');
+                scanFile.value = event.target.files[0];
+                ninthPanelData.value.document = scanFile.value.name;
+            } else {
+                let formData = new FormData();
+                formData.append('event_happened', ninthPanelData.value.event_happened);
+                formData.append('document', event.target.files[0]);
+                if (ninthPanelData.value.links.length) {
+                    for (let i = 0; i < ninthPanelData.value.links.length; i++) {
+                        !ninthPanelData.value.links[i].link
+                            ? formData.append(`[links][${i}][link]`, '')
+                            : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                    }
                 }
+                if (ninthPanelData.value.comment !== null) {
+                    formData.append('comment', ninthPanelData.value.comment);
+                }
+                emit('uploadFile', formData);
             }
-            if (ninthPanelData.value.comment !== null) {
-                formData.append('comment', ninthPanelData.value.comment);
-            }
-            emit('uploadFile', formData);
         }
+
     }
 
 }
@@ -866,22 +868,33 @@ const deleteFile = (number) => {
     //     // emit('formData', formData)
     // } 
     if (number === 9) {
-        ninthPanelData.value.document = '';
-        formData.append('event_happened', ninthPanelData.value.event_happened);
-        formData.append('document', '');
-        if (ninthPanelData.value.links.length) {
-            for (let i = 0; i < ninthPanelData.value.links.length; i++) {
-                !ninthPanelData.value.links[i].link
-                    ? formData.append(`[links][${i}][link]`, '')
-                    : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+        if (props.isDistrictHeadquarterCommander) {
+            ninthPanelDataDH.value = {
+                document: '',
+                file_size: null,
+                file_type: null,
             }
+            emit('deleteFileDH', ninthPanelDataDH.value);
+            console.log('delete9', ninthPanelDataDH.value)
+        } else {
+            ninthPanelData.value.document = '';
+            formData.append('event_happened', ninthPanelData.value.event_happened);
+            formData.append('document', '');
+            if (ninthPanelData.value.links.length) {
+                for (let i = 0; i < ninthPanelData.value.links.length; i++) {
+                    !ninthPanelData.value.links[i].link
+                        ? formData.append(`[links][${i}][link]`, '')
+                        : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                }
+            }
+            if (ninthPanelData.value.comment !== null) {
+                formData.append('comment', ninthPanelData.value.comment);
+            }
+            formData.append('file_size', ninthPanelData.value.file_size);
+            formData.append('file_type', ninthPanelData.value.file_type);
+            emit('deleteFile', formData);
         }
-        if (ninthPanelData.value.comment !== null) {
-            formData.append('comment', ninthPanelData.value.comment);
-        }
-        formData.append('file_size', ninthPanelData.value.file_size);
-        formData.append('file_type', ninthPanelData.value.file_type);
-        emit('deleteFile', formData);
+
         // emit('formData', formData)
     }
 
@@ -957,18 +970,35 @@ const focusOut = () => {
                 console.log('dataDH9', ninthPanelDataDH);
             } else {
                 if (isFirstSentNinth.value === true) {
-                console.log('9', '1')
-                emit('formData', ninthPanelData.value)
-            } else {
-                if (ninthPanelData.value.event_happened === false) {
+                    console.log('9', '1')
+                    emit('formData', ninthPanelData.value)
+                } else {
+                    if (ninthPanelData.value.event_happened === false) {
+                        let formData = new FormData();
+                        ninthPanelData.value.document = '';
+                        ninthPanelData.value.links = [];
+                        ninthPanelData.value.file_size = null;
+                        ninthPanelData.value.file_type = '';
+                        ninthPanelData.value.comment = '';
+                        formData.append('event_happened', ninthPanelData.value.event_happened);
+                        formData.append('document', '');
+                        if (ninthPanelData.value.links.length) {
+                            for (let i = 0; i < ninthPanelData.value.links.length; i++) {
+                                !ninthPanelData.value.links[i].link
+                                    ? formData.append(`[links][${i}][link]`, '')
+                                    : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                            }
+                        }
+                        formData.append('comment', ninthPanelData.value.comment);
+                        formData.append('file_size', ninthPanelData.value.file_size);
+                        formData.append('file_type', ninthPanelData.value.file_type);
+                        emit('formData', formData);
+                    }
                     let formData = new FormData();
-                    ninthPanelData.value.document = '';
-                    ninthPanelData.value.links = [];
-                    ninthPanelData.value.file_size = null;
-                    ninthPanelData.value.file_type = '';
-                    ninthPanelData.value.comment = '';
+                    if (ninthPanelData.value.comment !== null) {
+                        formData.append('comment', ninthPanelData.value.comment);
+                    }
                     formData.append('event_happened', ninthPanelData.value.event_happened);
-                    formData.append('document', '');
                     if (ninthPanelData.value.links.length) {
                         for (let i = 0; i < ninthPanelData.value.links.length; i++) {
                             !ninthPanelData.value.links[i].link
@@ -976,29 +1006,12 @@ const focusOut = () => {
                                 : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
                         }
                     }
-                    formData.append('comment', ninthPanelData.value.comment);
-                    formData.append('file_size', ninthPanelData.value.file_size);
-                    formData.append('file_type', ninthPanelData.value.file_type);
-                    emit('formData', formData);
-                }
-                let formData = new FormData();
-                if (ninthPanelData.value.comment !== null) {
-                    formData.append('comment', ninthPanelData.value.comment);
-                }
-                formData.append('event_happened', ninthPanelData.value.event_happened);
-                if (ninthPanelData.value.links.length) {
-                    for (let i = 0; i < ninthPanelData.value.links.length; i++) {
-                        !ninthPanelData.value.links[i].link
-                            ? formData.append(`[links][${i}][link]`, '')
-                            : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
-                    }
-                }
 
-                emit('formData', formData)
-                console.log('9', '2')
+                    emit('formData', formData)
+                    console.log('9', '2')
+                }
             }
-            }
-           
+
         } catch (e) {
             console.log('data', e.response.data);
         }
@@ -1119,7 +1132,7 @@ watchEffect(() => {
                     file_type: '',
                 };
             }
-           
+
         }
         emit('getId', props.id)
         emit('getPanelNumber', props.panel_number)

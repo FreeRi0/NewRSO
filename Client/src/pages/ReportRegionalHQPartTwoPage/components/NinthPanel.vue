@@ -11,9 +11,10 @@
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="9" @collapse-form="collapsed()"
             @formData="formData($event, item.id)" @formDataDH="formDataDH($event, item.id)" @error="setError"
-            @uploadFile="uploadFile($event, item.id)" :data="ninthPanelData" :dataDH="ninthPanelDataDH"
-            @getPanelNumber="getPanelNumber($event)" @getId="getId($event)" @deleteFile="deleteFile($event, item.id)"
-            :is-sent-ninth="isSentNinth"
+            @uploadFile="uploadFile($event, item.id)" @uploadFileDH="uploadFileDH($event, item.id)"
+            :data="ninthPanelData" :dataDH="ninthPanelDataDH" @getPanelNumber="getPanelNumber($event)"
+            @getId="getId($event)" @deleteFile="deleteFile($event, item.id)"
+            @deleteFileDH="deleteFileDH($event, item.id)" :is-sent-ninth="isSentNinth"
             :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
@@ -49,7 +50,7 @@ const setError = (err) => {
 
 const disabled = ref(false);
 const panel = ref(null);
-const emit = defineEmits(['getData',  'getDataDH', 'getId', 'getPanelNumber'])
+const emit = defineEmits(['getData', 'getDataDH', 'getId', 'getPanelNumber'])
 const ninthPanelData = ref({
   event_happened: false,
   links: [{
@@ -117,24 +118,40 @@ const getPanelNumber = (number) => {
 }
 
 const uploadFile = async (reportData, reportNumber) => {
-  if (isFirstSent.value) {
-    let { data } = await reportPartTwoService.createMultipleReport(reportData, '9', reportNumber, true);
-    emit('getData', data, 9, reportNumber);
-  } else {
-    let { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
-    emit('getData', data, 9, reportNumber);
+  if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
+    if (isFirstSent.value) {
+      let { data } = await reportPartTwoService.createMultipleReport(reportData, '9', reportNumber, true);
+      emit('getData', data, 9, reportNumber);
+    } else {
+      let { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
+      emit('getData', data, 9, reportNumber);
+    }
+  }
+};
 
+const uploadFileDH = (reportData, reportNumber) => {
+  if (props.districtHeadquarterCommander) {
+    emit('getDataDH', reportData, 9, reportNumber);
+    console.log('dh9', reportData);
   }
 };
 
 const deleteFile = async (reportData, reportNumber) => {
-
-  if (isFirstSent.value) {
-    await reportPartTwoService.createMultipleReport(reportData, '9', reportNumber, true);
-  } else {
-    await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
+  if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
+    if (isFirstSent.value) {
+      await reportPartTwoService.createMultipleReport(reportData, '9', reportNumber, true);
+    } else {
+      await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
+    }
   }
 };
+
+const deleteFileDH = (reportData, reportNumber) => {
+  if (props.districtHeadquarterCommander) {
+    emit('getDataDH', reportData, 9, reportNumber);
+    console.log('dh9', reportData);
+  }
+}
 
 watchEffect(() => {
   console.log(isFirstSent, props.data)
