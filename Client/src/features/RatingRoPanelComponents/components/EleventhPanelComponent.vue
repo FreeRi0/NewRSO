@@ -219,7 +219,6 @@ const focusOut = async () => {
   }
   
   if (props.districtExpert) {
-
     emit('getDataDH', eleventhPanelDataDH.value, Number(ID_PANEL));
   }
 };
