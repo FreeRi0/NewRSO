@@ -28,6 +28,7 @@
         :district-expert="props.districtExpert"
         :dataDH="dataDH"
         @get-dataDH="getDataDH"
+        @get-fileDH="getFileDH"
         is-second-tab
       ></EleventhPanelComponent>
     </template>
@@ -73,7 +74,7 @@ const props = defineProps({
 
 const ID_PANEL = "11";
 
-const emit = defineEmits(['getData', 'getDataDH', 'getDataCH']);
+const emit = defineEmits(['getData', 'getDataDH', 'getDataCH', 'getFileDH']);
 
 const getData = (event) => {
   emit("getData", event, Number(ID_PANEL));
@@ -81,6 +82,10 @@ const getData = (event) => {
 
 const getDataDH = (event) => {
   emit("getDataDH", event, Number(ID_PANEL));
+};
+
+const getFileDH = (event) => {
+  emit("getFileDH", event, Number(ID_PANEL));
 };
 
 const getDataCH = (event) => {

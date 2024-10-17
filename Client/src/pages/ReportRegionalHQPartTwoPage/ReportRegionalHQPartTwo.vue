@@ -130,10 +130,18 @@
               11. Активность РО&nbsp;РСО в&nbsp;социальных сетях &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.eleventh"
-                :data-DH="reportDataDH.eleventh" :data-CH="reportDataCH.eleventh"
-                :is-error-panel="isErrorPanel.eleventh" />
+              <eleventh-panel 
+                :districtExpert="districtExpert" 
+                :centralExpert="centralExpert" 
+                @get-data="setData"
+                @get-data-DH="setDataDH"
+                @get-data-CH="setDataCH"
+                :data="reportData.eleventh"
+                :data-DH="reportDataDH.eleventh"
+                :data-CH="reportDataCH.eleventh"
+                @get-fileDH="setFileDH"
+                :is-error-panel="isErrorPanel.eleventh"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -291,7 +299,7 @@ const reportDataCH = ref({
   thirteenth: null,
 });
 
-// const fileDH = ref(null);//------------------------------------
+const fileDH = ref(null);//------------------------------------
 
 const preloader = ref(true);
 const panel_id = ref(1);
@@ -707,15 +715,14 @@ const setDataDH = (data, panel, number) => {
   }
 }
 
-// const setFileDH = (data, panel) => {
-//   switch(panel) {
-//     case 11:
-//       fileDH.value = data;
-//       console.log('файл1', data, fileDH.value);
-//       break;
-//   }
-// }
-// console.log('файл2', fileDH.value);
+const setFileDH = (data, panel) => {
+  switch(panel) {
+    case 11:
+      fileDH.value = data;
+      console.log('файл1', data, fileDH.value);
+      break;
+  }
+}
 
 const setDataCH = (data, panel, number) => {
   switch (panel) {
@@ -906,13 +913,14 @@ const sendReport = async () => {
       if (!reportDataDH.value.eleventh.verified_by_dhq) {
         // await reportPartTwoService.sendReport(reportDataDH.value.eleventh, '11');
 
-        // console.log('файл', fileDH.value);
+        console.log('файл', fileDH.value);
         let formData = new FormData();
         formData.append("participants_number", reportDataDH.value.eleventh.participants_number || '');
         formData.append("comment", reportDataDH.value.eleventh.comment || '');
-        // formData.append("scan_file", fileDH.value);
-
-        await HTTP.put(`regional_competitions/reports/11/${route.query.reportId}/district_review/`, formData)
+        formData.append("scan_file", fileDH.value);
+        
+        // await HTTP.put(`regional_competitions/reports/11/${route.query.reportId}/district_review/`, formData)
+        // await reportPartTwoService.sendReportDH(reportDataDH.value.eleventh, '11');
       }
 
       swal.fire({
