@@ -20,9 +20,15 @@
               1. Численность членов РО&nbsp;РСО в&nbsp;соответствии с&nbsp;объемом уплаченных членских взносов
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <first-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.first" :is-error-panel="isErrorPanel.first"
-                :blockEditFirstReport="blockEditFirstReport" />
+              <first-panel
+                  :districtExpert="districtExpert"
+                  :centralExpert="centralExpert"
+                  @get-data="setData"
+                  @get-data-DH="setDataDH"
+                  :data="reportData.first"
+                  :is-error-panel="isErrorPanel.first"
+                  :blockEditFirstReport="blockEditFirstReport"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -250,6 +256,9 @@ import { useRoleStore } from "@layouts/store/role.ts";
 import { HTTP } from '@app/http';
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { useRoute, useRouter } from "vue-router";
+import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
+
+const reportStore = useReportPartTwoStore();
 
 const districtExpert = ref(false);
 const centralExpert = ref(false);
@@ -274,6 +283,7 @@ const reportData = ref({
 });
 
 const reportDataDH = ref({
+  first: null,
   six: {},
   eleventh: null,
   twelfth: null,
@@ -475,7 +485,10 @@ const getMultiplyData = async (isExpert, reportId) => {
 const getReportData = async (reportId) => {
   try {
     if (centralExpert.value || districtExpert.value) {
+
       reportData.value.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
+      reportStore.reportDataDH.first = Object.assign({}, reportData.value.first);
+
       reportData.value.fourth = (await reportPartTwoService.getReportDH('4', reportId)).data;
       reportData.value.fifth = (await reportPartTwoService.getReportDH('5', reportId)).data;
       await getMultiplyData(true, reportId);
@@ -675,7 +688,11 @@ const setData = (data, panel, number = 0) => {
 };
 
 const setDataDH = (data, panel, number) => {
-  switch (panel) {
+  switch(panel) {
+    case 1:
+      reportDataDH.value.first = data;
+      console.log('reportDataDH.value', ...reportDataDH.value.first)
+      break;
     case 6:
       reportDataDH.value.six[number] = data;
       break;
