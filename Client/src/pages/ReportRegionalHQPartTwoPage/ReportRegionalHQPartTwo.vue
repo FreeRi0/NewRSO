@@ -588,24 +588,26 @@ const getReportData = async (reportId) => {
       } catch (e) {
         console.log(e.message)
       }
+
       for (let item in reportData.value.six) {
         if (reportData.value.six[item].is_sent == false || !Object.keys(reportData.value.six[item]).length) {
           blockSendButton.value = false;
           break
-          // blockEditFirstReport.value = false;
         } else {
           blockSendButton.value = true;
         }
       }
-      for (let item in reportData.value.ninth) {
-        if (reportData.value.ninth[item].is_sent == false || !Object.keys(reportData.value.ninth[item]).length) {
-          blockSendButton.value = false;
-          break
-          // blockEditFirstReport.value = false;
-        } else {
-          blockSendButton.value = true;
-        }
-      }
+    
+      // for (let item in reportData.value.ninth) {
+      //   console.log('9', reportData.value.ninth[item].is_sent == false || !Object.keys(reportData.value.ninth[item]).length)
+      //   if (reportData.value.ninth[item].is_sent == false || !Object.keys(reportData.value.ninth[item]).length) {
+      //     blockSendButton.value = false;
+      //     break
+      //     // blockEditFirstReport.value = false;
+      //   } else {
+      //     blockSendButton.value = true;
+      //   }
+      // }
       try {
         reportData.value.seventeenth = (await reportPartTwoService.getReport('17')).data;
       } catch (e) {
@@ -940,7 +942,7 @@ const sendReport = async () => {
       preloader.value = false;
     }
   } else {
-    blockSendButton.value = false;
+    // blockSendButton.value = false;
   }
 };
 
@@ -1181,28 +1183,29 @@ const checkEmptyFields = (data) => {
 
   return true;
 }
-// onBeforeRouteUpdate(async() => {
-//   console.log('update')
-//   await getReportData(route.query.reportId);
-// })
+// watch(
+//     () => blockSendButton.value,
 
-watch(
-    () => blockSendButton.value,
-
-    async (newButton) => {
-      console.log('btn', newButton)
-        if (!newButton) return;
-        // getReportData(route.query.reportId);
-        blockSendButton.value = newButton;
-    },
-    {
-        immediate: true,
-    },
-);
-
+//     async (newButton) => {
+//       console.log('btn', newButton)
+//         if (!newButton) return;
+//         // getReportData(route.query.reportId);
+//         blockSendButton.value = newButton;
+//     },
+//     {
+//         immediate: true,
+//     },
+// );
+// watch(
+//   () => reportData.value.ninth,
+//   async (newNinth) => {
+//     await getReportData(route.query.reportId);
+//     console.log('ninth changed:', newNinth);
+//   },
+//   { immediate: false }
+// );
 
 onMounted(() => {
-  console.log('button', blockSendButton.value);
   // if (!roleStore.roles?.regionalheadquarter_commander && (!roleStore.experts?.is_district_expert || !roleStore.experts?.is_central_expert)) {
   //   router.push({ name: 'mypage' });
   // }
