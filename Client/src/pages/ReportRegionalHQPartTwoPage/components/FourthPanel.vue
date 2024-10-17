@@ -298,7 +298,7 @@
     </template>
 
     <template v-slot:secondTab>
-      <div v-for="(event, index) in events" :key="index" class="form__field-fourth-panel">
+      <div v-for="(event, index) in fourthPanelDataDH.events" :key="index" class="form__field-fourth-panel">
         <div class="form__field-members-event">
           <div style="display: flex; gap: 40px">
             <div class="form__field-members">
@@ -352,7 +352,7 @@
               class="form__field-delete-button"
               v-if="index > 0"
               label="Удалить мероприятие"
-              @click="deleteEvent(index)"
+              @click="deleteEventDH(index)"
           />
         </div>
         <div class="form__field-date">
@@ -383,12 +383,12 @@
       </div>
 
       <div>
-        <Button class="form__add-event" label="Добавить мероприятие" @click="addEvent"/>
+        <Button class="form__add-event" label="Добавить мероприятие" @click="addEventDH"/>
       </div>
       <div class="form__field-comment">
         <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
         <InputReport
-            v-model:value="fourthPanelData.comment"
+            v-model:value="fourthPanelDataDH.comment"
             id="comment"
             name="comment"
             class="form__input"
@@ -499,15 +499,17 @@
   </report-tabs>
 </template>
 <script setup>
-import { inject, ref, watchEffect, watchPostEffect } from "vue";
+import {inject, ref, watch, watchEffect, watchPostEffect} from "vue";
 import { InputReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { ReportTabs } from './index';
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { FileBoxComponent } from "@entities/RatingRoComponents/components";
 import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
+import {useReportPartTwoStore} from "@pages/ReportRegionalHQPartTwoPage/store.ts";
 
 const swal = inject('$swal');
+const reportStore = useReportPartTwoStore();
 
 const props = defineProps({
   districtExpert: {
@@ -523,6 +525,15 @@ const isFirstSent = ref(true);
 const fourthPanelData = ref({
   comment: '',
   events: [],
+});
+const fourthPanelDataDH = ref({
+  comment: '',
+  events: [{
+    participants_number: '',
+    start_date: null,
+    end_date: null,
+    is_interregional: false,
+  }],
 });
 const events = ref([
   {
@@ -540,9 +551,10 @@ const events = ref([
     is_interregional: false,
   }
 ]);
+// const eventsDH = ref([]);
 const isSent = ref(false);
 
-const emit = defineEmits(['getData']);
+const emit = defineEmits(['getData', 'getDataDH']);
 
 const isErrorDate = ref({});
 let isErrorFile = ref(false);
@@ -603,6 +615,14 @@ const addEvent = () => {
     is_interregional: false,
   })
 };
+const addEventDH = () => {
+  fourthPanelDataDH.value.events.push({
+    participants_number: '',
+    start_date: null,
+    end_date: null,
+    is_interregional: false,
+  })
+}
 const deleteEvent = async (index) => {
   let formData = new FormData();
   events.value = events.value.filter((el, i) => index !== i);
@@ -627,6 +647,9 @@ const deleteEvent = async (index) => {
     console.log('deleteEvent error: ', e);
   }
 };
+const deleteEventDH = (index) => {
+  fourthPanelDataDH.value.events = fourthPanelDataDH.value.events.filter((el, i) => index !== i);
+}
 
 const uploadFile = async (event, index) => {
   fileValidate(event.target.files[0], 7, isErrorFile);
@@ -711,12 +734,32 @@ watchEffect(() => {
     fourthPanelData.value.comment = props.data.comment || '';
     isSent.value = props.data.is_sent;
   }
-  // dateValidate(events, isErrorDate, noErrorDate);
+
+  fourthPanelDataDH.value.comment = reportStore.reportDataDH.fourth.comment || '';
+  fourthPanelDataDH.value.events = [...reportStore.reportDataDH.fourth.events];
+  // eventsDH.value = [...reportStore.reportDataDH.fourth.events];
 });
 watchPostEffect(() => {
   events.value.forEach((event) => {
     if (!event.links.length) event.links.push({link: ''})
   });
+})
+watch(fourthPanelDataDH.value, () => {
+  let formData = new FormData();
+  reportStore.reportDataDH.fourth = fourthPanelDataDH.value;
+
+  formData.append('comment', fourthPanelDataDH.value.comment || '');
+  fourthPanelDataDH.value.events.forEach((event, i) => {
+    if (event.participants_number) formData.append(`events[${i}][participants_number]`, event.participants_number);
+    if (event.name) formData.append(`events[${i}][name]`, event.name);
+    if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
+    if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
+    formData.append(`events[${i}][is_interregional]`, event.is_interregional);
+  });
+
+  emit('getDataDH', formData, 4);
+}, {
+  deep: true
 })
 </script>
 <style lang="scss" scoped>

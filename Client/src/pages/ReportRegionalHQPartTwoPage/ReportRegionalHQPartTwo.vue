@@ -20,9 +20,15 @@
               1. Численность членов РО&nbsp;РСО в&nbsp;соответствии с&nbsp;объемом уплаченных членских взносов
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <first-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                @get-data-DH="setDataDH" :data="reportData.first" :is-error-panel="isErrorPanel.first"
-                :blockEditFirstReport="blockEditFirstReport" />
+              <first-panel
+                  :districtExpert="districtExpert"
+                  :centralExpert="centralExpert"
+                  @get-data="setData"
+                  @get-data-DH="setDataDH"
+                  :data="reportData.first"
+                  :is-error-panel="isErrorPanel.first"
+                  :blockEditFirstReport="blockEditFirstReport"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -55,8 +61,14 @@
               (слеты, школы, фестивали, турниры и&nbsp;прочие)
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <fourth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.fourth" :is-error-panel="isErrorPanel.fourth" />
+              <fourth-panel
+                :districtExpert="districtExpert"
+                :centralExpert="centralExpert"
+                @get-data="setData"
+                @get-data-DH="setDataDH"
+                :data="reportData.fourth"
+                :is-error-panel="isErrorPanel.fourth"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -300,6 +312,7 @@ const reportData = ref({
 
 const reportDataDH = ref({
   first: null,
+  fourth: null,
   six: {},
   eleventh: null,
   twelfth: null,
@@ -510,6 +523,8 @@ const getReportData = async (reportId) => {
       reportStore.reportDataDH.first = Object.assign({}, reportData.value.first);
 
       reportData.value.fourth = (await reportPartTwoService.getReportDH('4', reportId)).data;
+      reportStore.reportDataDH.fourth = reportData.value.fourth;
+
       reportData.value.fifth = (await reportPartTwoService.getReportDH('5', reportId)).data;
       await getMultiplyData(true, reportId);
       reportData.value.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
@@ -708,7 +723,10 @@ const setDataDH = (data, panel, number) => {
   switch (panel) {
     case 1:
       reportDataDH.value.first = data;
-      console.log('reportDataDH.value', ...reportDataDH.value.first)
+      break;
+    case 4:
+      reportDataDH.value.fourth = data;
+      console.log('reportDataDH.value', ...reportDataDH.value.fourth)
       break;
     case 6:
       reportDataDH.value.six[number] = data;
