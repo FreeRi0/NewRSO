@@ -24,6 +24,7 @@
                         <div class="d-flex align-center">
                             <div class="references-sort__all">
                                 <input type="checkbox" @click="select" v-model="checkboxAll" />
+
                             </div>
                             <div class="ml-3">Выбрать всё</div>
                         </div>
@@ -814,7 +815,7 @@ p {
 }
 
 .references-sort__all {
-    padding: 11px 12px;
+    padding: 11px 11.5px;
     border: 1px solid #b6b6b6;
     border-radius: 10px;
     height: 48px;
@@ -920,10 +921,15 @@ p {
 .Sort-alphabet {
     margin-right: 8px;
     height: 32px;
+    border: 1px solid #35383F;
 }
 
 .ascend {
     width: 32px !important;
     height: 32px !important;
+}
+
+.Sort-alphabet .v-field__input {
+    padding-top: 0 !important;
 }
 </style>
