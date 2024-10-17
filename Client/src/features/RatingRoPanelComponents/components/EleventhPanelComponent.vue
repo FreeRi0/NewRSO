@@ -46,7 +46,7 @@
         :fileType="eleventhPanelData.file_type"
         :fileSize="eleventhPanelData.file_size"
         @click="deleteFile"
-        :is-sent="isSent"
+        :is-sent="isSent || (props.centralExpert || props.districtExpert)"
         :is-error-file="isErrorFile"
       ></FileBoxComponent>
     </div>
@@ -165,11 +165,10 @@ const props = defineProps({
   },
 });
 
-//const file = ref(null);//--------------------------------
-
 const ID_PANEL = "11";
 const isFirstSent = ref(true);
 let isErrorFile = ref(false);
+let fileName = ref(null);
 const eleventhPanelData = ref({
   participants_number: null,
   scan_file: "",
@@ -197,11 +196,7 @@ const eleventhPanelDataCH = ref({
 const isSent = ref(false);
 //const isVerifiedDH = ref(false);
 
-const emit = defineEmits(["update:value", 'getData', 'getDataDH', 'getDataCH', 'getFileDH']);
-
-// const changeValue = (event) => {
-//   emit("update:value", event);
-// };
+const emit = defineEmits(['getData', 'getDataDH', 'getDataCH', 'getFileDH']);
 
 const focusOut = async () => {
   if (!(props.districtExpert || props.centralExpert)) {
@@ -224,51 +219,23 @@ const focusOut = async () => {
   }
   
   if (props.districtExpert) {
-    // let formData = new FormData();
-
-    // eleventhPanelDataDH.value.participants_number ? formData.append("participants_number", eleventhPanelDataDH.value.participants_number) : formData.append("participants_number", "");
-    // formData.append("comment", eleventhPanelDataDH.value.comment || '');
-
-    // emit('getDataDH', formData, Number(ID_PANEL));
 
     emit('getDataDH', eleventhPanelDataDH.value, Number(ID_PANEL));
-    // console.log(eleventhPanelDataDH.value)
   }
 };
 
 const uploadFile = async (event) => {
-  eleventhPanelData.value.file_size = (event.target.files[0].size / Math.pow(1024, 2));
-  eleventhPanelData.value.file_type = event.target.files[0].type.split('/').at(-1);
-
   fileValidate(event.target.files[0], 7, isErrorFile);
-  // console.log('(4)', 'перед отправкой в uploadFile', isErrorFile.value);
-  if (isErrorFile.value) {
+  
+  if (!(props.districtExpert || props.centralExpert)) {
     eleventhPanelData.value.scan_file = event.target.files[0].name;
-    eleventhPanelDataDH.value.scan_file = event.target.files[0].name;
-    eleventhPanelDataDH.value.file_size = (event.target.files[0].size / Math.pow(1024, 2));
-    eleventhPanelDataDH.value.file_type = event.target.files[0].type.split('/').at(-1);
-    // console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
-  } else {
-    if (props.districtExpert) {
-      eleventhPanelDataDH.value.scan_file = event.target.files[0].name;
-      eleventhPanelDataDH.value.file_size = (event.target.files[0].size / Math.pow(1024, 2));
-      eleventhPanelDataDH.value.file_type = event.target.files[0].type.split('/').at(-1);
+    eleventhPanelData.value.file_size = (event.target.files[0].size / Math.pow(1024, 2));
+    eleventhPanelData.value.file_type = event.target.files[0].type.split('/').at(-1);
 
-      // let formData = new FormData();
-      // formData.append("scan_file", event.target.files[0]);
-      // emit('getDataDH', formData, Number(ID_PANEL));
-
-      // file.value = event.target.files[0];
-      // console.log('файл в компоненте', file.value)
-
-       emit('getFileDH', event.target.files[0], Number(ID_PANEL));
-       console.log('файл в компоненте', event.target.files[0]);
-
-    } else {
+    if(!isErrorFile.value) {
       let formData = new FormData();
       formData.append("scan_file", event.target.files[0]);
 
-      eleventhPanelData.value.scan_file = event.target.files[0].name;
       try {
         if (isFirstSent.value) {
           let { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
@@ -278,30 +245,34 @@ const uploadFile = async (event) => {
           let { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
           eleventhPanelData.value.scan_file = data.scan_file.split('/').at(-1);
           emit('getData', data, Number(ID_PANEL));
-          // console.log('ФАЙЛ ОТПРАВЛЯЕТСЯ ПОВТОРНО');
         }
       } catch (e) {
         console.log('uploadFile error:', e);
       }
     }
-  } 
+  }
+
+  if (props.districtExpert) {
+    fileName.value = '';
+    emit('getFileDH', fileName.value, Number(ID_PANEL));
+
+    eleventhPanelDataDH.value.scan_file = event.target.files[0].name;
+    eleventhPanelDataDH.value.file_size = (event.target.files[0].size / Math.pow(1024, 2));
+    eleventhPanelDataDH.value.file_type = event.target.files[0].type.split('/').at(-1);
+
+    if (!isErrorFile.value) {
+      fileName.value = event.target.files[0];
+      emit('getFileDH', fileName.value, Number(ID_PANEL));
+      console.log('файл в компоненте', fileName.value);
+    }
+  }
 };
 
 const deleteFile = async () => {
-  if (isErrorFile.value) {
+  if (!(props.districtExpert || props.centralExpert)) {
     eleventhPanelData.value.scan_file = '';
-    eleventhPanelDataDH.value.scan_file = '';
-  } else {
-    if (props.districtExpert) { 
-      eleventhPanelDataDH.value.scan_file = '';
-      eleventhPanelDataDH.value.file_size = null;
-      eleventhPanelDataDH.value.file_type = '';
 
-      // let formData = new FormData();
-      // formData.append("scan_file", "");
-
-      // emit('getDataDH', formData, Number(ID_PANEL));
-    } else {
+    if(!isErrorFile.value) {
       let formData = new FormData();
       formData.append("scan_file", "");
 
@@ -317,14 +288,23 @@ const deleteFile = async () => {
         console.log('deleteFile error:', e);
       }  
     }
-  } 
+  }
+
+  if (props.districtExpert) { 
+      eleventhPanelDataDH.value.scan_file = '';
+
+       if (!isErrorFile.value) {
+        fileName.value = '';
+        emit('getFileDH', fileName.value, Number(ID_PANEL));
+        console.log('файл в компоненте', fileName.value);
+       }
+    }
 };
 
 watchEffect(() => {
   if (props.districtExpert) {
     eleventhPanelData.value = { ...props.data }
     eleventhPanelDataDH.value = { ...props.dataDH };
-    isSent.value = props.data.is_sent;
     
     // isVerifiedDH.value = eleventhPanelDataDH.value.verified_by_dhq;
     // console.log(isVerifiedDH.value);
