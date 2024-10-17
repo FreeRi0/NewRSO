@@ -160,7 +160,6 @@ const props = defineProps({
   data: Object,
   dataDH: Object,
   dataCH: Object,
-  fileDH: null,
   isErrorPanel: {
     type: Boolean,
   },
@@ -261,7 +260,9 @@ const uploadFile = async (event) => {
 
       // file.value = event.target.files[0];
       // console.log('файл в компоненте', file.value)
-      // emit('getFileDH', file.value, Number(ID_PANEL));
+
+       emit('getFileDH', event.target.files[0], Number(ID_PANEL));
+       console.log('файл в компоненте', event.target.files[0]);
 
     } else {
       let formData = new FormData();
@@ -325,8 +326,7 @@ watchEffect(() => {
     eleventhPanelDataDH.value = { ...props.dataDH };
     isSent.value = props.data.is_sent;
     
-    // file.value = props.fileDH;
-    // isVerifiedDH.value = props.dataDH.verified_by_dhq;
+    // isVerifiedDH.value = eleventhPanelDataDH.value.verified_by_dhq;
     // console.log(isVerifiedDH.value);
 
   } else {

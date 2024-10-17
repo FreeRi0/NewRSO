@@ -102,7 +102,7 @@
           <label class="form__label" for="amount_of_money">Общая сумма уплаченных членских взносов РО&nbsp; <sup
               class="valid-red">*</sup></label>
           <InputReport
-              v-model:value="firstPanelData.amount_of_money"
+              v-model:value="firstPanelDataDH.amount_of_money"
               id="amount_of_money"
               name="amount_of_money"
               class="form__input"
@@ -116,18 +116,29 @@
         </div>
       </div>
       <div class="form__field">
-        <label class="form__label" for="comment">Комментарий<sup class="valid-red">*</sup></label>
-        <TextareaReport
-            v-model:value="firstPanelData.comment"
-            class="form__input"
-            id="comment"
-            name="comment"
-            :rows="1"
-            autoResize
-            :maxlength="3000"
-            :max-length-text="3000"
-            counter-visible
-            placeholder="Напишите сообщение"
+        <!--        <label class="form__label" for="comment">Комментарий<sup class="valid-red">*</sup></label>-->
+        <!--        <TextareaReport-->
+        <!--            v-model:value="firstPanelDataDH.comment"-->
+        <!--            class="form__input"-->
+        <!--            id="comment"-->
+        <!--            name="comment"-->
+        <!--            :rows="1"-->
+        <!--            autoResize-->
+        <!--            :maxlength="3000"-->
+        <!--            :max-length-text="3000"-->
+        <!--            counter-visible-->
+        <!--            placeholder="Напишите сообщение"-->
+        <!--        />-->
+        <CommentFileComponent
+            v-model:value="firstPanelDataDH.comment"
+            name="firstPanelDataDH.comment"
+            :file="reportStore.reportDataDHFile.first ? reportStore.reportDataDHFile.first.name : null"
+            :fileType="reportStore.reportDataDHFile.first ? reportStore.reportDataDHFile.first.type.split('/').at(-1) : null"
+            :fileSize="reportStore.reportDataDHFile.first ? reportStore.reportDataDHFile.first.size / Math.pow(1024, 2) : null"
+            :disabled="centralExpert"
+            :is-error-file="isErrorFile"
+            @change="uploadFileDH"
+            @click="deleteFileDH"
         />
       </div>
     </template>
@@ -160,13 +171,16 @@
   </report-tabs>
 </template>
 <script setup>
-import {ref, watchEffect, watchPostEffect} from "vue";
+import {ref, watch, watchEffect, watchPostEffect} from "vue";
 import {InputReport, TextareaReport} from '@shared/components/inputs';
-import {FileBoxComponent} from "@entities/RatingRoComponents/components";
+import {FileBoxComponent, CommentFileComponent} from "@entities/RatingRoComponents/components";
 import {ReportRegionalForm} from '../../ReportRegionalHQPartOnePage/components/index'
 import {getReportForSecond, reportPartTwoService} from "@services/ReportService.ts";
 import {ReportTabs} from './index';
 import {fileValidate} from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
+import {useReportPartTwoStore} from "@pages/ReportRegionalHQPartTwoPage/store.ts";
+
+const reportStore = useReportPartTwoStore();
 
 const props = defineProps({
   districtExpert: {
@@ -179,7 +193,7 @@ const props = defineProps({
   blockEditFirstReport: Boolean,
 });
 
-const emit = defineEmits(['getData']);
+const emit = defineEmits(['getData', 'getDataDH']);
 
 const defaultReportData = {
   participants_number: '0',
@@ -204,6 +218,11 @@ const firstPanelData = ref({
   file_type: '',
   file_size: '',
 });
+const firstPanelDataDH = ref({
+  comment: '',
+  amount_of_money: '',
+  scan_file: '',
+})
 const isSent = ref(false);
 
 const focusOut = async () => {
@@ -251,6 +270,10 @@ const uploadFile = async (event) => {
     }
   }
 };
+const uploadFileDH = (event) => {
+  reportStore.reportDataDHFile.first = event.target.files[0];
+  firstPanelDataDH.value.scan_file = event.target.files[0];
+}
 const deleteFile = async () => {
   firstPanelData.value.scan_file = '';
   firstPanelData.value.file_size = '';
@@ -272,6 +295,14 @@ const deleteFile = async () => {
     }
   }
 };
+const deleteFileDH = () => {
+  reportStore.reportDataDHFile.first = null;
+
+  let formData = new FormData();
+  formData.append('comment', firstPanelDataDH.value.comment);
+  formData.append('amount_of_money', firstPanelDataDH.value.amount_of_money);
+  emit('getDataDH', formData, 1);
+}
 watchEffect(async () => {
   try {
     if (!(props.centralExpert || props.districtExpert)) {
@@ -291,6 +322,11 @@ watchEffect(async () => {
     firstPanelData.value.file_size = props.data.file_size;
     isSent.value = props.data.is_sent;
   }
+
+  if (reportStore.reportDataDH.first) {
+    firstPanelDataDH.value.comment = reportStore.reportDataDH.first.comment;
+    firstPanelDataDH.value.amount_of_money = reportStore.reportDataDH.first.amount_of_money;
+  }
 });
 
 watchPostEffect(() => {
@@ -303,6 +339,17 @@ watchPostEffect(() => {
     firstPanelData.value.file_size = props.data.file_size || '';
     isSent.value = props.data.is_sent;
   }
+});
+
+watch(firstPanelDataDH.value, () => {
+  reportStore.reportDataDH.first = firstPanelDataDH.value;
+
+  let formData = new FormData();
+  formData.append('comment', firstPanelDataDH.value.comment);
+  formData.append('amount_of_money', firstPanelDataDH.value.amount_of_money);
+  if (reportStore.reportDataDHFile.first) formData.append('scan_file', reportStore.reportDataDHFile.first);
+
+  emit('getDataDH', formData, 1);
 });
 </script>
 <style lang="scss" scoped>

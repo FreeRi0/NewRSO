@@ -21,7 +21,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <first-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.first" :is-error-panel="isErrorPanel.first"
+                @get-data-DH="setDataDH" :data="reportData.first" :is-error-panel="isErrorPanel.first"
                 :blockEditFirstReport="blockEditFirstReport" />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -132,10 +132,16 @@
               11. Активность РО&nbsp;РСО в&nbsp;социальных сетях &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.eleventh"
+              <<<<<<< HEAD <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert"
+                @get-data="setData" @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.eleventh"
                 :data-DH="reportDataDH.eleventh" :data-CH="reportDataCH.eleventh"
                 :is-error-panel="isErrorPanel.eleventh" />
+              =======
+              <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.eleventh"
+                :data-DH="reportDataDH.eleventh" :data-CH="reportDataCH.eleventh" @get-fileDH="setFileDH"
+                :is-error-panel="isErrorPanel.eleventh" />
+              >>>>>>> de63104b2536b2045c70cddb8bd26b850eaab4d2
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -252,6 +258,9 @@ import { useRoleStore } from "@layouts/store/role.ts";
 import { HTTP } from '@app/http';
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { useRoute, useRouter } from "vue-router";
+import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
+
+const reportStore = useReportPartTwoStore();
 
 const districtExpert = ref(false);
 const centralExpert = ref(false);
@@ -276,6 +285,7 @@ const reportData = ref({
 });
 
 const reportDataDH = ref({
+  first: null,
   six: {},
   ninth: {},
   eleventh: null,
@@ -291,7 +301,7 @@ const reportDataCH = ref({
   thirteenth: null,
 });
 
-// const fileDH = ref(null);//------------------------------------
+const fileDH = ref(null);//------------------------------------
 
 const preloader = ref(true);
 const panel_id = ref(1);
@@ -487,7 +497,10 @@ const getMultiplyData = async (isExpert, reportId) => {
 const getReportData = async (reportId) => {
   try {
     if (centralExpert.value || districtExpert.value) {
+
       reportData.value.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
+      reportStore.reportDataDH.first = Object.assign({}, reportData.value.first);
+
       reportData.value.fourth = (await reportPartTwoService.getReportDH('4', reportId)).data;
       reportData.value.fifth = (await reportPartTwoService.getReportDH('5', reportId)).data;
       await getMultiplyData(true, reportId);
@@ -589,26 +602,30 @@ const getReportData = async (reportId) => {
         if (reportData.value.sixteenth.is_sent) {
           blockSendButton.value = true;
           blockEditFirstReport.value = true;
-          for (let item in reportData.value.six) {
-            if (reportData.value.six[item].is_sent === false || !Object.keys(reportData.value.six[item]).length) {
-              blockSendButton.value = false;
-              break
-              // blockEditFirstReport.value = false;
-            }
-          }
-          for (let item in reportData.value.ninth) {
-            if (reportData.value.ninth[item].is_sent === false || !Object.keys(reportData.value.ninth[item]).length) {
-              blockSendButton.value = false;
-              break
-              // blockEditFirstReport.value = false;
-            }
-          }
-
-
         }
       } catch (e) {
         console.log(e.message)
       }
+
+      for (let item in reportData.value.six) {
+        if (reportData.value.six[item].is_sent == false || !Object.keys(reportData.value.six[item]).length) {
+          blockSendButton.value = false;
+          break
+        } else {
+          blockSendButton.value = true;
+        }
+      }
+
+      // for (let item in reportData.value.ninth) {
+      //   console.log('9', reportData.value.ninth[item].is_sent == false || !Object.keys(reportData.value.ninth[item]).length)
+      //   if (reportData.value.ninth[item].is_sent == false || !Object.keys(reportData.value.ninth[item]).length) {
+      //     blockSendButton.value = false;
+      //     break
+      //     // blockEditFirstReport.value = false;
+      //   } else {
+      //     blockSendButton.value = true;
+      //   }
+      // }
       try {
         reportData.value.seventeenth = (await reportPartTwoService.getReport('17')).data;
       } catch (e) {
@@ -688,6 +705,10 @@ const setData = (data, panel, number = 0) => {
 
 const setDataDH = (data, panel, number) => {
   switch (panel) {
+    case 1:
+      reportDataDH.value.first = data;
+      console.log('reportDataDH.value', ...reportDataDH.value.first)
+      break;
     case 6:
       reportDataDH.value.six[number] = data;
       break;
@@ -709,15 +730,14 @@ const setDataDH = (data, panel, number) => {
   }
 }
 
-// const setFileDH = (data, panel) => {
-//   switch(panel) {
-//     case 11:
-//       fileDH.value = data;
-//       console.log('файл1', data, fileDH.value);
-//       break;
-//   }
-// }
-// console.log('файл2', fileDH.value);
+const setFileDH = (data, panel) => {
+  switch (panel) {
+    case 11:
+      fileDH.value = data;
+      console.log('файл1', data, fileDH.value);
+      break;
+  }
+}
 
 const setDataCH = (data, panel, number) => {
   switch (panel) {
@@ -811,26 +831,42 @@ const sendReport = async () => {
           await reportPartTwoService.sendReport(reportData.value.fifth, '5');
         }
         for (let item in reportData.value.six) {
-          if (reportData.value.six[item].number_of_members == 0 || reportData.value.six[item].number_of_members === null || !Object.keys(reportData.value.six[item]).length) {
+          if (!Object.keys(reportData.value.six[item]).length) {
+            await reportPartTwoService.createMultipleReport({
+              number_of_members: 0,
+              links: [],
+              comment: '',
+            }, '6', item)
             reportData.value.six[item].event_happened = false;
           }
-          if (reportData.value.six[item].is_sent === false) {
-            await reportPartTwoService.sendReportWithSlash(reportData.value.six, '6');
+          if (reportData.value.six[item].number_of_members == 0 || reportData.value.six[item].number_of_members === null) {
+            reportData.value.six[item].event_happened = false;
           }
         }
+
+        await reportPartTwoService.sendReportWithSlash(reportData.value.six, '6');
         // for (let item in filteredSeventh) {
         //   if (filteredSeventh[item].is_sent === false) {
         //     await reportPartTwoService.sendReportWithSlash(filteredSeventh, '7');
         //   }
         // }
         for (let item in reportData.value.ninth) {
-          if (reportData.value.ninth[item].event_happened == false || reportData.value.ninth[item].event_happened === null || !Object.keys(reportData.value.ninth[item]).length) {
+          if (!Object.keys(reportData.value.ninth[item]).length) {
+            await reportPartTwoService.createMultipleReport({
+              event_happened: false,
+              links: [],
+              document: '',
+              file_size: null,
+              file_type: '',
+              comment: '',
+            }, '9', item)
             reportData.value.ninth[item].event_happened = false;
           }
-          if (reportData.value.ninth[item].is_sent === false) {
-            await reportPartTwoService.sendReportWithSlash(reportData.value.ninth, '9');
+          if (reportData.value.ninth[item].event_happened == false || reportData.value.ninth[item].event_happened === null) {
+            reportData.value.ninth[item].event_happened = false;
           }
         }
+        await reportPartTwoService.sendReportWithSlash(reportData.value.ninth, '9');
         if (!reportData.value.tenth.first.is_sent) {
           await reportPartTwoService.sendMultipleReport(reportData.value.tenth.first, '10', '1');
         }
@@ -850,7 +886,10 @@ const sendReport = async () => {
           await reportPartTwoService.sendReport(reportData.value.sixteenth, '16');
         }
 
+
+
         await getReportData(route.query.reportId);
+        blockSendButton.value = true;
 
         swal.fire({
           position: 'center',
@@ -888,14 +927,13 @@ const sendReport = async () => {
     try {
       if (!reportDataDH.value.eleventh.verified_by_dhq) {
         // await reportPartTwoService.sendReport(reportDataDH.value.eleventh, '11');
-
-        // console.log('файл', fileDH.value);
+        console.log('файл', fileDH.value);
         let formData = new FormData();
         formData.append("participants_number", reportDataDH.value.eleventh.participants_number || '');
         formData.append("comment", reportDataDH.value.eleventh.comment || '');
-        // formData.append("scan_file", fileDH.value);
+        formData.append("scan_file", fileDH.value);
 
-        await HTTP.put(`regional_competitions/reports/11/${route.query.reportId}/district_review/`, formData)
+        await reportPartTwoService.sendReportDH(formData, '11', route.query.reportId, true);
       }
 
       swal.fire({
@@ -923,7 +961,7 @@ const sendReport = async () => {
       preloader.value = false;
     }
   } else {
-    blockSendButton.value = false;
+    // blockSendButton.value = false;
   }
 };
 
@@ -1015,22 +1053,22 @@ const checkEmptyFields = (data) => {
       return false;
     }
   }
-  // for (let item in filteredSeventh) {
-  //   if (!(filteredSeventh[item]?.links?.length && filteredSeventh[item].document && filteredSeventh[item].comment)) {
-  //     isErrorPanel.value.seventh[item] = {
-  //       id: item,
-  //       error: true,
-  //     };
-  //     swal.fire({
-  //       position: 'center',
-  //       icon: 'warning',
-  //       title: `Заполните обязательные поля в 7 показателе`,
-  //       showConfirmButton: false,
-  //       timer: 2500,
-  //     })
-  //     return false;
-  //   }
-  // }
+  // // for (let item in filteredSeventh) {
+  // //   if (!(filteredSeventh[item]?.links?.length && filteredSeventh[item].document && filteredSeventh[item].comment)) {
+  // //     isErrorPanel.value.seventh[item] = {
+  // //       id: item,
+  // //       error: true,
+  // //     };
+  // //     swal.fire({
+  // //       position: 'center',
+  // //       icon: 'warning',
+  // //       title: `Заполните обязательные поля в 7 показателе`,
+  // //       showConfirmButton: false,
+  // //       timer: 2500,
+  // //     })
+  // //     return false;
+  // //   }
+  // // }
   for (let item in filteredNinth) {
     if (!(filteredNinth[item]?.links?.length)) {
       isErrorPanel.value.ninth[item] = {
@@ -1166,9 +1204,9 @@ const checkEmptyFields = (data) => {
 }
 
 onMounted(() => {
-  if (!roleStore.roles?.regionalheadquarter_commander && (!roleStore.experts?.is_district_expert || !roleStore.experts?.is_central_expert)) {
-    router.push({ name: 'mypage' });
-  }
+  // if (!roleStore.roles?.regionalheadquarter_commander && (!roleStore.experts?.is_district_expert || !roleStore.experts?.is_central_expert)) {
+  //   router.push({ name: 'mypage' });
+  // }
   if (roleStore.experts?.is_district_expert) {
     districtExpert.value = true;
     console.log('окружной эксперт', districtExpert.value);

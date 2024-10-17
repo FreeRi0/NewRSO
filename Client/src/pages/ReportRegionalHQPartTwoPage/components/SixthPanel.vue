@@ -146,12 +146,13 @@ watchEffect(() => {
         links: [],
         comment: '',
       };
-      for (let i in props.data) {
-        if (props.data[i].is_sent) {
-          isSentSix.value = true;
-          break;
-        }
-      }
+      // for (let i in props.data) {
+      //   if (props.data[i].is_sent) {
+      //     isSentSix.value = true;
+      //     break;
+      //   }
+      // }
+      isSentSix.value = false;
     }
   }
 
