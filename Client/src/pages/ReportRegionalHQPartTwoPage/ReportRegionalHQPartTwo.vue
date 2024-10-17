@@ -920,9 +920,8 @@ const sendReport = async () => {
         formData.append("participants_number", reportDataDH.value.eleventh.participants_number || '');
         formData.append("comment", reportDataDH.value.eleventh.comment || '');
         formData.append("scan_file", fileDH.value);
-        
-        // await HTTP.put(`regional_competitions/reports/11/${route.query.reportId}/district_review/`, formData)
-        // await reportPartTwoService.sendReportDH(reportDataDH.value.eleventh, '11');
+
+        await reportPartTwoService.sendReportDH(formData, '11', route.query.reportId, true);
       }
 
       swal.fire({

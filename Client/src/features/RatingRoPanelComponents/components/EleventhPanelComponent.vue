@@ -326,8 +326,7 @@ watchEffect(() => {
     eleventhPanelDataDH.value = { ...props.dataDH };
     isSent.value = props.data.is_sent;
     
-    // file.value = props.fileDH;
-    // isVerifiedDH.value = props.dataDH.verified_by_dhq;
+    // isVerifiedDH.value = eleventhPanelDataDH.value.verified_by_dhq;
     // console.log(isVerifiedDH.value);
 
   } else {
