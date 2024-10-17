@@ -158,6 +158,7 @@
                 :data="reportData.twelfth"
                 :data-DH="reportDataDH.twelfth" 
                 :data-CH="reportDataCH.twelfth"
+                @get-fileDH="setFileDH"
                 :is-error-panel="isErrorPanel.twelfth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -316,7 +317,7 @@ const fileDH = ref({
   eleventh: null,
   twelfth: null,
   thirteenth: null,
-});//------------------------------------
+});
 
 const preloader = ref(true);
 const panel_id = ref(1);
@@ -567,40 +568,31 @@ const getReportData = async (reportId) => {
         console.log(e.message)
       }
       try {
-        // reportData.value.eleventh = (await reportPartTwoService.getReport('11')).data;
         const dataEleventh = (await reportPartTwoService.getReport('11')).data;
         if (!dataEleventh.regional_version) {
           reportData.value.eleventh = dataEleventh;
         } else {
-          // console.log("рег версия 11", dataEleventh.regional_version);
           reportData.value.eleventh = JSON.parse(dataEleventh.regional_version);
-          // console.log("данные РШ 11", reportData.value.eleventh);
         }
       } catch (e) {
         console.log(e.message)
       }
       try {
-        // reportData.value.twelfth = (await reportPartTwoService.getReport('12')).data;
         const dataTwelfth = (await reportPartTwoService.getReport('12')).data;
         if (!dataTwelfth.regional_version) {
           reportData.value.twelfth = dataTwelfth;
         } else {
-          // console.log("рег версия 12", dataTwelfth.regional_version);
           reportData.value.twelfth = JSON.parse(dataTwelfth.regional_version);
-          // console.log("данные РШ 12", reportData.value.twelfth);
         }
       } catch (e) {
         console.log(e.message)
       }
       try {
-        // reportData.value.thirteenth = (await reportPartTwoService.getReport('13')).data;
         const dataThirteenth = (await reportPartTwoService.getReport('13')).data;
         if (!dataThirteenth.regional_version) {
           reportData.value.thirteenth = dataThirteenth;
         } else {
-          // console.log("рег версия 13", dataThirteenth.regional_version);
           reportData.value.thirteenth = JSON.parse(dataThirteenth.regional_version);
-          // console.log("данные РШ 13", reportData.value.thirteenth);
         }
       } catch (e) {
         console.log(e.message)
@@ -951,9 +943,9 @@ const sendReport = async () => {
         if (!reportDataDH.value.twelfth.verified_by_dhq) {
           console.log('файл', fileDH.value.twelfth);
           let formData = new FormData();
-          // formData.append("participants_number", reportDataDH.value.eleventh.participants_number || '');
+          formData.append("amount_of_money", reportDataDH.value.twelfth.amount_of_money || '');
           formData.append("comment", reportDataDH.value.twelfth.comment || '');
-          // formData.append("scan_file", fileDH.value.twelfth || '');
+          formData.append("scan_file", fileDH.value.twelfth || '');
 
           await reportPartTwoService.sendReportDH(formData, '12', route.query.reportId, true);
         }
