@@ -21,7 +21,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <first-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.first" :is-error-panel="isErrorPanel.first"
+                @get-data-DH="setDataDH" :data="reportData.first" :is-error-panel="isErrorPanel.first"
                 :blockEditFirstReport="blockEditFirstReport" />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -149,17 +149,10 @@
               12. Объем средств, собранных бойцами РО&nbsp;РСО во&nbsp;Всероссийском дне ударного труда
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <twelfth-panel 
-                :districtExpert="districtExpert" 
-                :centralExpert="centralExpert" 
-                @get-data="setData"
-                @get-data-DH="setDataDH"
-                @get-data-CH="setDataCH"
-                :data="reportData.twelfth"
-                :data-DH="reportDataDH.twelfth"
-                :data-CH="reportDataCH.twelfth"
-                :is-error-panel="isErrorPanel.twelfth"
-              />
+              <twelfth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.twelfth"
+                :data-DH="reportDataDH.twelfth" :data-CH="reportDataCH.twelfth"
+                :is-error-panel="isErrorPanel.twelfth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -167,17 +160,10 @@
               13. Охват членов РО&nbsp;РСО, принявших участие во&nbsp;Всероссийском дне ударного труда &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <thirteenth-panel
-                :districtExpert="districtExpert" 
-                :centralExpert="centralExpert" 
-                @get-data="setData"
-                @get-data-DH="setDataDH"
-                @get-data-CH="setDataCH"
-                :data="reportData.thirteenth"
-                :data-DH="reportDataDH.thirteenth"
-                :data-CH="reportDataCH.thirteenth"
-                :is-error-panel="isErrorPanel.thirteenth"
-              />
+              <thirteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.thirteenth"
+                :data-DH="reportDataDH.thirteenth" :data-CH="reportDataCH.thirteenth"
+                :is-error-panel="isErrorPanel.thirteenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -266,12 +252,15 @@ import {
   NineteenthPanel
 } from './components/index'
 import { Button } from '@shared/components/buttons';
-import { inject, onMounted, ref } from "vue";
+import { inject, onMounted, ref, watch } from "vue";
 import { SvgIcon } from '@shared/ui/SvgIcon';
 import { useRoleStore } from "@layouts/store/role.ts";
 import { HTTP } from '@app/http';
 import { reportPartTwoService } from "@services/ReportService.ts";
-import { useRoute, useRouter } from "vue-router";
+import { onBeforeRouteUpdate, useRoute, useRouter } from "vue-router";
+import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
+
+const reportStore = useReportPartTwoStore();
 
 const districtExpert = ref(false);
 const centralExpert = ref(false);
@@ -296,6 +285,7 @@ const reportData = ref({
 });
 
 const reportDataDH = ref({
+  first: null,
   six: {},
   eleventh: null,
   twelfth: null,
@@ -497,7 +487,10 @@ const getMultiplyData = async (isExpert, reportId) => {
 const getReportData = async (reportId) => {
   try {
     if (centralExpert.value || districtExpert.value) {
+
       reportData.value.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
+      reportStore.reportDataDH.first = Object.assign({}, reportData.value.first);
+
       reportData.value.fourth = (await reportPartTwoService.getReportDH('4', reportId)).data;
       reportData.value.fifth = (await reportPartTwoService.getReportDH('5', reportId)).data;
       await getMultiplyData(true, reportId);
@@ -599,25 +592,27 @@ const getReportData = async (reportId) => {
         if (reportData.value.sixteenth.is_sent) {
           blockSendButton.value = true;
           blockEditFirstReport.value = true;
-          for (let item in reportData.value.six) {
-            if (reportData.value.six[item].is_sent === false || !Object.keys(reportData.value.six[item]).length) {
-              blockSendButton.value = false;
-              break
-              // blockEditFirstReport.value = false;
-            }
-          }
-          for (let item in reportData.value.ninth) {
-            if (reportData.value.ninth[item].is_sent === false || !Object.keys(reportData.value.ninth[item]).length) {
-              blockSendButton.value = false;
-              break
-              // blockEditFirstReport.value = false;
-            }
-          }
-
-
         }
       } catch (e) {
         console.log(e.message)
+      }
+      for (let item in reportData.value.six) {
+        if (reportData.value.six[item].is_sent == false || !Object.keys(reportData.value.six[item]).length) {
+          blockSendButton.value = false;
+          break
+          // blockEditFirstReport.value = false;
+        } else {
+          blockSendButton.value = true;
+        }
+      }
+      for (let item in reportData.value.ninth) {
+        if (reportData.value.ninth[item].is_sent == false || !Object.keys(reportData.value.ninth[item]).length) {
+          blockSendButton.value = false;
+          break
+          // blockEditFirstReport.value = false;
+        } else {
+          blockSendButton.value = true;
+        }
       }
       try {
         reportData.value.seventeenth = (await reportPartTwoService.getReport('17')).data;
@@ -697,9 +692,13 @@ const setData = (data, panel, number = 0) => {
 };
 
 const setDataDH = (data, panel, number) => {
-  switch(panel) {
+  switch (panel) {
+    case 1:
+      reportDataDH.value.first = data;
+      console.log('reportDataDH.value', ...reportDataDH.value.first)
+      break;
     case 6:
-        reportDataDH.value.six[number] = data;
+      reportDataDH.value.six[number] = data;
       break;
     case 11:
       reportDataDH.value.eleventh = data;
@@ -726,9 +725,9 @@ const setFileDH = (data, panel) => {
 }
 
 const setDataCH = (data, panel, number) => {
-  switch(panel) {
+  switch (panel) {
     case 6:
-        reportDataCH.value.six[number] = data;
+      reportDataCH.value.six[number] = data;
       break;
     case 11:
       reportDataCH.value.eleventh = data;
@@ -817,32 +816,48 @@ const sendReport = async () => {
           await reportPartTwoService.sendReport(reportData.value.fifth, '5');
         }
         for (let item in reportData.value.six) {
-          if (reportData.value.six[item].number_of_members == 0 || reportData.value.six[item].number_of_members === null || !Object.keys(reportData.value.six[item]).length) {
+          if (!Object.keys(reportData.value.six[item]).length) {
+            await reportPartTwoService.createMultipleReport({
+              number_of_members: 0,
+              links: [],
+              comment: '',
+            }, '6', item)
             reportData.value.six[item].event_happened = false;
           }
-          if (reportData.value.six[item].is_sent === false) {
-            await reportPartTwoService.sendReportWithSlash(reportData.value.six, '6');
+          if (reportData.value.six[item].number_of_members == 0 || reportData.value.six[item].number_of_members === null) {
+            reportData.value.six[item].event_happened = false;
           }
         }
+
+        await reportPartTwoService.sendReportWithSlash(reportData.value.six, '6');
         // for (let item in filteredSeventh) {
         //   if (filteredSeventh[item].is_sent === false) {
         //     await reportPartTwoService.sendReportWithSlash(filteredSeventh, '7');
         //   }
         // }
         for (let item in reportData.value.ninth) {
-          if (reportData.value.ninth[item].event_happened == false || reportData.value.ninth[item].event_happened === null || !Object.keys(reportData.value.ninth[item]).length) {
+          if (!Object.keys(reportData.value.ninth[item]).length) {
+            await reportPartTwoService.createMultipleReport({
+              event_happened: false,
+              links: [],
+              document: '',
+              file_size: null,
+              file_type: '',
+              comment: '',
+            }, '9', item)
             reportData.value.ninth[item].event_happened = false;
           }
-          if (reportData.value.ninth[item].is_sent === false) {
-            await reportPartTwoService.sendReportWithSlash(reportData.value.ninth, '9');
+          if (reportData.value.ninth[item].event_happened == false || reportData.value.ninth[item].event_happened === null) {
+            reportData.value.ninth[item].event_happened = false;
           }
         }
-        if (!reportData.value.tenth.first.is_sent) {
-          await reportPartTwoService.sendMultipleReport(reportData.value.tenth.first, '10', '1');
-        }
-        if (!reportData.value.tenth.second.is_sent) {
-          await reportPartTwoService.sendMultipleReport(reportData.value.tenth.second, '10', '2');
-        }
+        await reportPartTwoService.sendReportWithSlash(reportData.value.ninth, '9');
+        // if (!reportData.value.tenth.first.is_sent) {
+        //   await reportPartTwoService.sendMultipleReport(reportData.value.tenth.first, '10', '1');
+        // }
+        // if (!reportData.value.tenth.second.is_sent) {
+        //   await reportPartTwoService.sendMultipleReport(reportData.value.tenth.second, '10', '2');
+        // }
         if (!reportData.value.eleventh.is_sent) {
           await reportPartTwoService.sendReport(reportData.value.eleventh, '11');
         }
@@ -856,7 +871,10 @@ const sendReport = async () => {
           await reportPartTwoService.sendReport(reportData.value.sixteenth, '16');
         }
 
+
+
         await getReportData(route.query.reportId);
+        blockSendButton.value = true;
 
         swal.fire({
           position: 'center',
@@ -894,7 +912,7 @@ const sendReport = async () => {
     try {
       if (!reportDataDH.value.eleventh.verified_by_dhq) {
         // await reportPartTwoService.sendReport(reportDataDH.value.eleventh, '11');
-        
+
         console.log('файл', fileDH.value);
         let formData = new FormData();
         formData.append("participants_number", reportDataDH.value.eleventh.participants_number || '');
@@ -938,244 +956,264 @@ const checkEmptyFields = (data) => {
   const { filteredSix, filteredNinth } = filterPanelsData();
   console.log('data', data)
 
-  if (!data.first || !(data.first.amount_of_money && data.first.scan_file)) {
-    isErrorPanel.value.first = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      title: `Заполните обязательные поля в 1 показателе`,
-      showConfirmButton: false,
-      timer: 2500,
-    })
-    return false;
-  }
+  // if (!data.first || !(data.first.amount_of_money && data.first.scan_file)) {
+  //   isErrorPanel.value.first = true;
+  //   swal.fire({
+  //     position: 'center',
+  //     icon: 'warning',
+  //     title: `Заполните обязательные поля в 1 показателе`,
+  //     showConfirmButton: false,
+  //     timer: 2500,
+  //   })
+  //   return false;
+  // }
 
-  if (data.fourth) {
-    for (let event of data.fourth.events) {
-      if (event.participants_number && !(event.name && event.end_date && event.start_date && data.fourth.comment)) {
-        isErrorPanel.value.fourth = true;
-        swal.fire({
-          position: 'center',
-          icon: 'warning',
-          title: `Заполните обязательные поля в 4 показателе`,
-          showConfirmButton: false,
-          timer: 2500,
-        })
-        return false;
-      }
-    }
-  } else {
-    isErrorPanel.value.fourth = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      showConfirmButton: true,
-      text: 'Заполните обязательные поля в 4 показателе. В случае отсутствия мероприятия, укажите 0 в количестве участников',
-      confirmButtonColor: "#3085d6",
-      confirmButtonText: 'Понятно',
-      timer: 5000,
-    })
-    return false;
-  }
+  // if (data.fourth) {
+  //   for (let event of data.fourth.events) {
+  //     if (event.participants_number && !(event.name && event.end_date && event.start_date && data.fourth.comment)) {
+  //       isErrorPanel.value.fourth = true;
+  //       swal.fire({
+  //         position: 'center',
+  //         icon: 'warning',
+  //         title: `Заполните обязательные поля в 4 показателе`,
+  //         showConfirmButton: false,
+  //         timer: 2500,
+  //       })
+  //       return false;
+  //     }
+  //   }
+  // } else {
+  //   isErrorPanel.value.fourth = true;
+  //   swal.fire({
+  //     position: 'center',
+  //     icon: 'warning',
+  //     showConfirmButton: true,
+  //     text: 'Заполните обязательные поля в 4 показателе. В случае отсутствия мероприятия, укажите 0 в количестве участников',
+  //     confirmButtonColor: "#3085d6",
+  //     confirmButtonText: 'Понятно',
+  //     timer: 5000,
+  //   })
+  //   return false;
+  // }
 
-  if (data.fifth) {
-    for (let event of data.fifth.events) {
-      if (event.participants_number && !(event.end_date && event.start_date && event.name && data.fifth.comment)) {
-        isErrorPanel.value.fifth = true;
-        swal.fire({
-          position: 'center',
-          icon: 'warning',
-          title: `Заполните обязательные поля в 5 показателе`,
-          showConfirmButton: false,
-          timer: 2500,
-        })
-        return false;
-      }
-    }
-  } else {
-    isErrorPanel.value.fifth = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      text: `Заполните обязательные поля в 5 показателе. В случае отсутствия трудового проекта, укажите 0 в количестве участников`,
-      showConfirmButton: true,
-      confirmButtonColor: "#3085d6",
-      confirmButtonText: 'Понятно',
-      timer: 5000,
-    })
-    return false;
-  }
+  // if (data.fifth) {
+  //   for (let event of data.fifth.events) {
+  //     if (event.participants_number && !(event.end_date && event.start_date && event.name && data.fifth.comment)) {
+  //       isErrorPanel.value.fifth = true;
+  //       swal.fire({
+  //         position: 'center',
+  //         icon: 'warning',
+  //         title: `Заполните обязательные поля в 5 показателе`,
+  //         showConfirmButton: false,
+  //         timer: 2500,
+  //       })
+  //       return false;
+  //     }
+  //   }
+  // } else {
+  //   isErrorPanel.value.fifth = true;
+  //   swal.fire({
+  //     position: 'center',
+  //     icon: 'warning',
+  //     text: `Заполните обязательные поля в 5 показателе. В случае отсутствия трудового проекта, укажите 0 в количестве участников`,
+  //     showConfirmButton: true,
+  //     confirmButtonColor: "#3085d6",
+  //     confirmButtonText: 'Понятно',
+  //     timer: 5000,
+  //   })
+  //   return false;
+  // }
 
-  for (let item in filteredSix) {
-    if (!(filteredSix[item]?.links?.length)) {
-      isErrorPanel.value.six[item] = {
-        id: item,
-        error: true,
-      };
-      swal.fire({
-        position: 'center',
-        icon: 'warning',
-        title: `Заполните обязательные поля в 6 показателе`,
-        showConfirmButton: false,
-        timer: 2500,
-      })
-      return false;
-    }
-  }
-  // for (let item in filteredSeventh) {
-  //   if (!(filteredSeventh[item]?.links?.length && filteredSeventh[item].document && filteredSeventh[item].comment)) {
-  //     isErrorPanel.value.seventh[item] = {
+  // for (let item in filteredSix) {
+  //   if (!(filteredSix[item]?.links?.length)) {
+  //     isErrorPanel.value.six[item] = {
   //       id: item,
   //       error: true,
   //     };
   //     swal.fire({
   //       position: 'center',
   //       icon: 'warning',
-  //       title: `Заполните обязательные поля в 7 показателе`,
+  //       title: `Заполните обязательные поля в 6 показателе`,
   //       showConfirmButton: false,
   //       timer: 2500,
   //     })
   //     return false;
   //   }
   // }
-  for (let item in filteredNinth) {
-    if (!(filteredNinth[item]?.links?.length)) {
-      isErrorPanel.value.ninth[item] = {
-        id: item,
-        error: true,
-      };
-      swal.fire({
-        position: 'center',
-        icon: 'warning',
-        title: `Заполните обязательные поля в 9 показателе`,
-        showConfirmButton: false,
-        timer: 2500,
-      })
-      return false;
-    }
-  }
+  // // for (let item in filteredSeventh) {
+  // //   if (!(filteredSeventh[item]?.links?.length && filteredSeventh[item].document && filteredSeventh[item].comment)) {
+  // //     isErrorPanel.value.seventh[item] = {
+  // //       id: item,
+  // //       error: true,
+  // //     };
+  // //     swal.fire({
+  // //       position: 'center',
+  // //       icon: 'warning',
+  // //       title: `Заполните обязательные поля в 7 показателе`,
+  // //       showConfirmButton: false,
+  // //       timer: 2500,
+  // //     })
+  // //     return false;
+  // //   }
+  // // }
+  // for (let item in filteredNinth) {
+  //   if (!(filteredNinth[item]?.links?.length)) {
+  //     isErrorPanel.value.ninth[item] = {
+  //       id: item,
+  //       error: true,
+  //     };
+  //     swal.fire({
+  //       position: 'center',
+  //       icon: 'warning',
+  //       title: `Заполните обязательные поля в 9 показателе`,
+  //       showConfirmButton: false,
+  //       timer: 2500,
+  //     })
+  //     return false;
+  //   }
+  // }
 
-  if (data.tenth.first) {
-    if (data.tenth.first.event_happened) {
-      if (!data.tenth.first.comment) {
-        isErrorPanel.value.tenth = true;
-        swal.fire({
-          position: 'center',
-          icon: 'warning',
-          title: `Заполните обязательные поля в показателе 10-1`,
-          showConfirmButton: false,
-          timer: 2500,
-        })
-        return false;
-      }
-    }
-  } else {
-    isErrorPanel.value.tenth = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      title: `Укажите информацию о проведении акции в показателе 10-1`,
-      showConfirmButton: false,
-      timer: 3500,
-    })
-    return false;
-  }
+  // if (data.tenth.first) {
+  //   if (data.tenth.first.event_happened) {
+  //     if (!data.tenth.first.comment) {
+  //       isErrorPanel.value.tenth = true;
+  //       swal.fire({
+  //         position: 'center',
+  //         icon: 'warning',
+  //         title: `Заполните обязательные поля в показателе 10-1`,
+  //         showConfirmButton: false,
+  //         timer: 2500,
+  //       })
+  //       return false;
+  //     }
+  //   }
+  // } else {
+  //   isErrorPanel.value.tenth = true;
+  //   swal.fire({
+  //     position: 'center',
+  //     icon: 'warning',
+  //     title: `Укажите информацию о проведении акции в показателе 10-1`,
+  //     showConfirmButton: false,
+  //     timer: 3500,
+  //   })
+  //   return false;
+  // }
 
-  if (data.tenth.second) {
-    if (data.tenth.second.event_happened) {
-      if (!data.tenth.second.comment) {
-        isErrorPanel.value.tenth = true;
-        swal.fire({
-          position: 'center',
-          icon: 'warning',
-          title: `Заполните обязательные поля в показателе 10-2`,
-          showConfirmButton: false,
-          timer: 2500,
-        })
-        return false;
-      }
-    }
-  } else {
-    isErrorPanel.value.tenth = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      title: `Укажите информацию о проведении акции в показателе 10-2`,
-      showConfirmButton: false,
-      timer: 3500,
-    })
-    return false;
-  }
+  // if (data.tenth.second) {
+  //   if (data.tenth.second.event_happened) {
+  //     if (!data.tenth.second.comment) {
+  //       isErrorPanel.value.tenth = true;
+  //       swal.fire({
+  //         position: 'center',
+  //         icon: 'warning',
+  //         title: `Заполните обязательные поля в показателе 10-2`,
+  //         showConfirmButton: false,
+  //         timer: 2500,
+  //       })
+  //       return false;
+  //     }
+  //   }
+  // } else {
+  //   isErrorPanel.value.tenth = true;
+  //   swal.fire({
+  //     position: 'center',
+  //     icon: 'warning',
+  //     title: `Укажите информацию о проведении акции в показателе 10-2`,
+  //     showConfirmButton: false,
+  //     timer: 3500,
+  //   })
+  //   return false;
+  // }
 
-  if (!data.eleventh || !(data.eleventh.participants_number && data.eleventh.scan_file)) {
-    isErrorPanel.value.eleventh = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      title: `Заполните обязательные поля в 11 показателе`,
-      showConfirmButton: false,
-      timer: 2500,
-    })
-    return false;
-  }
+  // if (!data.eleventh || !(data.eleventh.participants_number && data.eleventh.scan_file)) {
+  //   isErrorPanel.value.eleventh = true;
+  //   swal.fire({
+  //     position: 'center',
+  //     icon: 'warning',
+  //     title: `Заполните обязательные поля в 11 показателе`,
+  //     showConfirmButton: false,
+  //     timer: 2500,
+  //   })
+  //   return false;
+  // }
 
-  if (!data.twelfth || !(data.twelfth.amount_of_money)) {
-    isErrorPanel.value.twelfth = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      title: `Заполните обязательные поля в 12 показателе`,
-      showConfirmButton: false,
-      timer: 2500,
-    })
-    return false;
-  }
+  // if (!data.twelfth || !(data.twelfth.amount_of_money)) {
+  //   isErrorPanel.value.twelfth = true;
+  //   swal.fire({
+  //     position: 'center',
+  //     icon: 'warning',
+  //     title: `Заполните обязательные поля в 12 показателе`,
+  //     showConfirmButton: false,
+  //     timer: 2500,
+  //   })
+  //   return false;
+  // }
 
-  if (!data.thirteenth || !(data.thirteenth.number_of_members)) {
-    isErrorPanel.value.thirteenth = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      title: `Заполните обязательные поля в 13 показателе`,
-      showConfirmButton: false,
-      timer: 2500,
-    })
-    return false;
-  }
+  // if (!data.thirteenth || !(data.thirteenth.number_of_members)) {
+  //   isErrorPanel.value.thirteenth = true;
+  //   swal.fire({
+  //     position: 'center',
+  //     icon: 'warning',
+  //     title: `Заполните обязательные поля в 13 показателе`,
+  //     showConfirmButton: false,
+  //     timer: 2500,
+  //   })
+  //   return false;
+  // }
 
-  if (data.sixteenth) {
-    for (let project of data.sixteenth.projects) {
-      if (data.sixteenth.is_project && !(data.sixteenth.comment && project.name && project.project_scale)) {
-        isErrorPanel.value.sixteenth = true;
-        swal.fire({
-          position: 'center',
-          icon: 'warning',
-          title: `Заполните обязательные поля в 16 показателе`,
-          showConfirmButton: false,
-          timer: 2500,
-        })
-        return false;
-      }
-    }
-  } else {
-    isErrorPanel.value.sixteenth = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      title: `Укажите информацию о наличии трудового проекта в 16 показателе`,
-      showConfirmButton: false,
-      timer: 3500,
-    })
-    return false;
-  }
+  // if (data.sixteenth) {
+  //   for (let project of data.sixteenth.projects) {
+  //     if (data.sixteenth.is_project && !(data.sixteenth.comment && project.name && project.project_scale)) {
+  //       isErrorPanel.value.sixteenth = true;
+  //       swal.fire({
+  //         position: 'center',
+  //         icon: 'warning',
+  //         title: `Заполните обязательные поля в 16 показателе`,
+  //         showConfirmButton: false,
+  //         timer: 2500,
+  //       })
+  //       return false;
+  //     }
+  //   }
+  // } else {
+  //   isErrorPanel.value.sixteenth = true;
+  //   swal.fire({
+  //     position: 'center',
+  //     icon: 'warning',
+  //     title: `Укажите информацию о наличии трудового проекта в 16 показателе`,
+  //     showConfirmButton: false,
+  //     timer: 3500,
+  //   })
+  //   return false;
+  // }
 
   return true;
 }
+// onBeforeRouteUpdate(async() => {
+//   console.log('update')
+//   await getReportData(route.query.reportId);
+// })
+
+watch(
+    () => blockSendButton.value,
+
+    async (newButton) => {
+      console.log('btn', newButton)
+        if (!newButton) return;
+        // getReportData(route.query.reportId);
+        blockSendButton.value = newButton;
+    },
+    {
+        immediate: true,
+    },
+);
+
 
 onMounted(() => {
-  if (!roleStore.roles?.regionalheadquarter_commander && (!roleStore.experts?.is_district_expert || !roleStore.experts?.is_central_expert)) {
-    router.push({ name: 'mypage' });
-  }
+  console.log('button', blockSendButton.value);
+  // if (!roleStore.roles?.regionalheadquarter_commander && (!roleStore.experts?.is_district_expert || !roleStore.experts?.is_central_expert)) {
+  //   router.push({ name: 'mypage' });
+  // }
   if (roleStore.experts?.is_district_expert) {
     districtExpert.value = true;
     console.log('окружной эксперт', districtExpert.value);
