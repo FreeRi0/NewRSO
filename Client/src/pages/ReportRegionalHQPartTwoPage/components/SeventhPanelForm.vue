@@ -304,7 +304,7 @@
                         <p>0</p>
                     </div>
                 </div> -->
-                <div v-if="props.panel_number == 6" class="form__field-group group-seventh">
+                <div v-if="props.panel_number == 6" class="group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -346,7 +346,7 @@
                             counter-visible />
                     </div>
                 </div>
-                <div v-else-if="props.panel_number == 9" class="form__field-group group-seventh">
+                <div v-else-if="props.panel_number == 9" class="group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -373,7 +373,7 @@
                             <label v-else class="places_item_label" :for="id">Нет</label>
                         </div>
                     </div>
-                    <div class="report__fieldset report__fieldset--right-block">
+                    <div class="report__fieldset report__fieldset--right-block"  v-if="ninthPanelData.document !== null">
                         <label class="form__label report__label mb-2" for="scan_file">
                             Скан документа, подтверждающего проведение акции
                         </label>
@@ -386,7 +386,7 @@
                         </FileBoxComponent>
                     </div>
 
-                    <div class="form__field">
+                    <div class="form__field" v-if="ninthPanelData.links.length > 0">
                         <label class="form__label mt-4" for="14">Ссылка на социальные сети/ электронные
                             СМИ, подтверждающая проведение акции
                             <sup class="valid-red">*</sup></label>
@@ -461,7 +461,7 @@
                         <p>0</p>
                     </div>
                 </div> -->
-                <div v-if="props.panel_number == 6" class="form__field-group group-seventh">
+                <div v-if="props.panel_number == 6" class="group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -488,7 +488,7 @@
                         :disabled="props.isCentralHeadquarterCommander">
                     </CommentFileComponent>
                 </div>
-                <div v-else-if="props.panel_number == 9" class="form__field-group group-seventh">
+                <div v-else-if="props.panel_number == 9" class="group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -515,8 +515,8 @@
                         </div>
                     </div>
                     <CommentFileComponent v-model:value="ninthPanelDataDH.comment" @focusout="focusOut"
-                        name="ninthPanelDataDH.comment" @change="uploadFile"
-                        @click="deleteFile" :file="ninthPanelDataDH.document" :fileType="ninthPanelDataDH.file_type"
+                        name="ninthPanelDataDH.comment" @change="uploadFile($event, 9)" @click="deleteFile(9)"
+                        :file="ninthPanelDataDH.document" :fileType="ninthPanelDataDH.file_type"
                         :fileSize="ninthPanelDataDH.file_size" :disabled="props.isCentralHeadquarterCommander"
                         :is-error-file="isErrorFile">
                     </CommentFileComponent>
@@ -820,11 +820,20 @@ const uploadFile = (event, number) => {
     //         emit('uploadFile', formData);
     //     }
     if (number === 9) {
-            fileValidate(event.target.files[0], 9, isErrorFile);
-            if (isErrorFile.value) {
-                console.log('error');
-                scanFile.value = event.target.files[0];
-                ninthPanelData.value.document = scanFile.value.name;
+        console.log('wooh9');
+        fileValidate(event.target.files[0], 9, isErrorFile);
+        if (isErrorFile.value) {
+            console.log('error');
+            scanFile.value = event.target.files[0];
+            ninthPanelData.value.document = scanFile.value.name;
+        } else {
+            if (props.isDistrictHeadquarterCommander) {
+                console.log('wooh');
+                ninthPanelDataDH.value.document = event.target.files[0].name;
+                ninthPanelDataDH.value.file_size = (event.target.files[0].size / Math.pow(1024, 2));
+                ninthPanelDataDH.value.file_type = event.target.files[0].type.split('/').at(-1);
+                emit('uploadFileDH', event.target.files[0]);
+                console.log('файл в компоненте', event.target.files[0]);
             } else {
                 let formData = new FormData();
                 formData.append('event_happened', ninthPanelData.value.event_happened);
@@ -841,8 +850,8 @@ const uploadFile = (event, number) => {
                 }
                 emit('uploadFile', formData);
             }
-        }
 
+        }
     }
 
 }
@@ -869,12 +878,10 @@ const deleteFile = (number) => {
     // } 
     if (number === 9) {
         if (props.isDistrictHeadquarterCommander) {
-            ninthPanelDataDH.value = {
-                document: '',
-                file_size: null,
-                file_type: null,
-            }
-            emit('deleteFileDH', ninthPanelDataDH.value);
+
+            ninthPanelDataDH.value.document = '';
+            ninthPanelDataDH.value.file_size = null;
+            ninthPanelDataDH.value.file_type = '';
             console.log('delete9', ninthPanelDataDH.value)
         } else {
             ninthPanelData.value.document = '';
@@ -894,8 +901,6 @@ const deleteFile = (number) => {
             formData.append('file_type', ninthPanelData.value.file_type);
             emit('deleteFile', formData);
         }
-
-        // emit('formData', formData)
     }
 
 }

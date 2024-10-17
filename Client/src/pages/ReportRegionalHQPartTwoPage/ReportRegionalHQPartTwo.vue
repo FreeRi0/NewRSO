@@ -111,9 +111,9 @@
               9. Организация обязательных общесистемных мероприятий РСО на&nbsp;региональном уровне &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <ninth-panel @get-data="setData" @get-data-DH="setDataDH" @getId="setId" @getPanelNumber="setPanelNumber"
-                :items="ninth_items" :district-headquarter-commander="districtExpert" :data="reportData.ninth"
-                :dataDH="reportDataDH.ninth" :central-headquarter-commander="centralExpert"
+              <ninth-panel @get-data="setData" @get-data-DH="setDataDH" @get-fileDH="setFileDH" @getId="setId"
+                @getPanelNumber="setPanelNumber" :items="ninth_items" :district-headquarter-commander="districtExpert"
+                :data="reportData.ninth" :dataDH="reportDataDH.ninth" :central-headquarter-commander="centralExpert"
                 :is-error-panel="isErrorPanel.ninth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -132,16 +132,10 @@
               11. Активность РО&nbsp;РСО в&nbsp;социальных сетях &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <<<<<<< HEAD <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert"
-                @get-data="setData" @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.eleventh"
-                :data-DH="reportDataDH.eleventh" :data-CH="reportDataCH.eleventh"
-                :is-error-panel="isErrorPanel.eleventh" />
-              =======
               <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
                 @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.eleventh"
                 :data-DH="reportDataDH.eleventh" :data-CH="reportDataCH.eleventh" @get-fileDH="setFileDH"
                 :is-error-panel="isErrorPanel.eleventh" />
-              >>>>>>> de63104b2536b2045c70cddb8bd26b850eaab4d2
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -302,7 +296,7 @@ const reportDataCH = ref({
 });
 
 const fileDH = ref(null);//------------------------------------
-
+const fileDHNinth = ref(null);
 const preloader = ref(true);
 const panel_id = ref(1);
 const panel_num = ref(null);
@@ -730,8 +724,12 @@ const setDataDH = (data, panel, number) => {
   }
 }
 
-const setFileDH = (data, panel) => {
+const setFileDH = (data, panel, number) => {
   switch (panel) {
+    case 9:
+      fileDHNinth.value[number] = data;
+      console.log('файл9', data, fileDHNinth.value, number);
+      break;
     case 11:
       fileDH.value = data;
       console.log('файл1', data, fileDH.value);
@@ -925,6 +923,22 @@ const sendReport = async () => {
     //сюда добавить валидацию полей ОШ
     preloader.value = true;
     try {
+      for (let i in reportDataDH.value.six) {
+        if (!reportDataDH.value.six[i].verified_by_dhq) {
+          await reportPartTwoService.sendReportDHMultiply(reportDataDH.value.six[i], '6', i, route.query.reportId);
+        }
+      }
+
+      for (let i in reportDataDH.value.ninth) {
+        if (!reportDataDH.value.ninth[i].verified_by_dhq) {
+          console.log('файл',  fileDHNinth.value[i]);
+          let formData = new FormData();
+          formData.append("event_happened", reportDataDH.value.ninth[i].event_happened || false);
+          formData.append("comment", reportDataDH.value.ninth[i].comment || '');
+          formData.append("document", fileDHNinth.value[i]);
+          await reportPartTwoService.sendReportDHMultiply(formData, '9', i, route.query.reportId, true);
+        }
+      }
       if (!reportDataDH.value.eleventh.verified_by_dhq) {
         // await reportPartTwoService.sendReport(reportDataDH.value.eleventh, '11');
         console.log('файл', fileDH.value);

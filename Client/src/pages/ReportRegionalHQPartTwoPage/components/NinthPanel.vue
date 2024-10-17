@@ -14,7 +14,7 @@
             @uploadFile="uploadFile($event, item.id)" @uploadFileDH="uploadFileDH($event, item.id)"
             :data="ninthPanelData" :dataDH="ninthPanelDataDH" @getPanelNumber="getPanelNumber($event)"
             @getId="getId($event)" @deleteFile="deleteFile($event, item.id)"
-            @deleteFileDH="deleteFileDH($event, item.id)" :is-sent-ninth="isSentNinth"
+            :is-sent-ninth="isSentNinth"
             :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
@@ -50,7 +50,7 @@ const setError = (err) => {
 
 const disabled = ref(false);
 const panel = ref(null);
-const emit = defineEmits(['getData', 'getDataDH', 'getId', 'getPanelNumber'])
+const emit = defineEmits(['getData', 'getDataDH', 'getFileDH', 'getId', 'getPanelNumber'])
 const ninthPanelData = ref({
   event_happened: false,
   links: [{
@@ -131,7 +131,7 @@ const uploadFile = async (reportData, reportNumber) => {
 
 const uploadFileDH = (reportData, reportNumber) => {
   if (props.districtHeadquarterCommander) {
-    emit('getDataDH', reportData, 9, reportNumber);
+    emit('getFileDH', reportData, 9, reportNumber);
     console.log('dh9', reportData);
   }
 };
@@ -146,12 +146,6 @@ const deleteFile = async (reportData, reportNumber) => {
   }
 };
 
-const deleteFileDH = (reportData, reportNumber) => {
-  if (props.districtHeadquarterCommander) {
-    emit('getDataDH', reportData, 9, reportNumber);
-    console.log('dh9', reportData);
-  }
-}
 
 watchEffect(() => {
   console.log(isFirstSent, props.data)
