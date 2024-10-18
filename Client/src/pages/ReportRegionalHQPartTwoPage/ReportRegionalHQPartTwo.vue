@@ -80,7 +80,7 @@
             <v-expansion-panel-text>
               <sixth-panel @get-data="setData" @get-data-DH="setDataDH" :items="six_items" @getId="setId"
                 @getPanelNumber="setPanelNumber" :district-headquarter-commander="districtExpert" :data="reportData.six"
-                :dataDH="reportDataDH.six" :central-headquarter-commander="centralExpert"
+                :central-headquarter-commander="centralExpert"
                 :is-error-panel="isErrorPanel.six" />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -466,9 +466,10 @@ const getMultiplyData = async (isExpert, reportId) => {
   sixDataResults.forEach((result) => {
     if (isExpert) {
       reportData.value.six[result.id] = result.data;
-      reportDataDH.value.six[result.id] = result.data;
+      reportStore.reportDataDH.six[result.id] = result.data;
     }
     reportData.value.six[result.id] = result.data;
+  
     // if (reportData.value.six[result.id].is_sent === false || !Object.keys(reportData.value.six[result.id]).length) {
     //   console.log('yah6')
     //   blockSendButton.value = false;

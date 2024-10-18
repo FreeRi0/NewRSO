@@ -163,7 +163,7 @@
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                            }}</label>
+                                }}</label>
                         </div>
                     </div>
                 </div>
@@ -373,7 +373,7 @@
                             <label v-else class="places_item_label" :for="id">Нет</label>
                         </div>
                     </div>
-                    <div class="report__fieldset report__fieldset--right-block"  v-if="ninthPanelData.document !== null">
+                    <div class="report__fieldset report__fieldset--right-block" v-if="ninthPanelData.document !== null">
                         <label class="form__label report__label mb-2" for="scan_file">
                             Скан документа, подтверждающего проведение акции
                         </label>
@@ -478,14 +478,13 @@
                         <p class="form__label">
                             Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
                         </p>
-                        <InputReport @focusout="focusOut" v-model:value="sixPanelDataDH.number_of_members"
-                            placeholder="Введите число" id="15" name="14" class="form__input number_input" type="number"
-                            :maxlength="10" :max="32767" />
+                        <InputReport v-model:value="sixPanelDataDH.number_of_members" placeholder="Введите число"
+                            id="15" name="14" class="form__input number_input" type="number" :maxlength="10"
+                            :max="32767" />
                     </div>
 
-                    <CommentFileComponent @focusout="focusOut" v-model:value="sixPanelDataDH.comment"
-                        @update:value="changeValue" :is-six="true" name="sixPanelDataDH.comment"
-                        :disabled="props.isCentralHeadquarterCommander">
+                    <CommentFileComponent v-model:value="sixPanelDataDH.comment" @update:value="changeValue"
+                        :is-six="true" name="sixPanelDataDH.comment" :disabled="props.isCentralHeadquarterCommander">
                     </CommentFileComponent>
                 </div>
                 <div v-else-if="props.panel_number == 9" class="group-seventh">
@@ -510,7 +509,7 @@
                                     v-model="ninthPanelDataDH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -667,7 +666,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -699,7 +698,7 @@ import { SvgIcon } from '@shared/ui';
 import { ReportTabs } from './index';
 import { reportPartTwoService } from '@services/ReportService.ts';
 import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
-import {useReportPartTwoStore} from "@pages/ReportRegionalHQPartTwoPage/store.ts";
+import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
 const props = defineProps({
     title: Object,
     panel_number: String,
@@ -709,6 +708,7 @@ const props = defineProps({
     isCentralHeadquarterCommander: Boolean,
     isDistrictHeadquarterCommander: Boolean,
     id: String,
+    sixId: String,
     isSentSix: Boolean,
     // isSent: Boolean,
     isSentNinth: Boolean,
@@ -724,7 +724,7 @@ const collapseForm = () => {
     emit('collapse-form');
 };
 
-
+const reportStore = useReportPartTwoStore();
 let isErrorFile = ref(false);
 const isFirstSentSix = ref(true);
 // const isFirstSentSeventh = ref(true);
@@ -909,12 +909,13 @@ const deleteFile = (number) => {
 const focusOut = () => {
     if (props.panel_number == 6) {
         try {
-            if (props.isDistrictHeadquarterCommander) {
-                emit('formDataDH', sixPanelDataDH.value);
-                console.log('dataDH', sixPanelDataDH);
-            } else {
-                emit('formData', sixPanelData.value);
-            }
+            // if (props.isDistrictHeadquarterCommander) {
+            //     emit('formDataDH', sixPanelDataDH.value);
+            //     console.log('dataDH', sixPanelDataDH);
+            // } else {
+            //     emit('formData', sixPanelData.value);
+            // }
+            emit('formData', sixPanelData.value);
 
         } catch (e) {
             console.log('data', e.response.data);
@@ -1056,7 +1057,10 @@ watchEffect(() => {
 
         if (props.isDistrictHeadquarterCommander) {
             sixPanelData.value = { ...props.data };
-            sixPanelDataDH.value = { ...props.dataDH };
+            if (reportStore.reportDataDH.six[props.sixId]) {
+                sixPanelDataDH.value.comment = reportStore.reportDataDH.six[props.sixId].comment;
+                sixPanelDataDH.value.number_of_members = reportStore.reportDataDH.six[props.sixId].number_of_members;
+            }
             // sixPanelDataCH.value = { ...props.dataCH };
         } else {
             if (Object.keys(props.data).length > 0) {
@@ -1145,6 +1149,11 @@ watchEffect(() => {
 
     }
 })
+
+watch(sixPanelDataDH.value, () => {
+  reportStore.reportDataDH.six = sixPanelDataDH.value;
+  emit('getDataDH', sixPanelDataDH, 6);
+});
 </script>
 <style lang="scss" scoped>
 .number_input {

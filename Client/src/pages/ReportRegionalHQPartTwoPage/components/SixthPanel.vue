@@ -15,9 +15,8 @@
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()"
             @formData="formData($event, item.id)" @formDataDH="formDataDH($event, item.id)" @error="setError"
-            @getPanelNumber="getPanelNumber($event)" @getId="getId($event)" :data="sixPanelData"
-            :dataDH="sixPanelDataDH" :is-sent-six="isSentSix"
-            :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
+            @getPanelNumber="getPanelNumber($event)" @getId="getId($event)" :data="sixPanelData" :six-id="item.id"
+            :is-sent-six="isSentSix" :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item">
           </SeventhPanelForm>
@@ -29,7 +28,6 @@
 import { ref, watchEffect } from "vue";
 import { SeventhPanelForm } from "./index";
 import { reportPartTwoService } from "@services/ReportService.ts";
-
 const props = defineProps({
   districtHeadquarterCommander: {
     type: Boolean
@@ -38,14 +36,12 @@ const props = defineProps({
     type: Boolean
   },
   isErrorPanel: Object,
-  // isSentSix: Boolean,
   items: Array,
   data: Object,
   dataDH: Object,
 });
 
 // console.log('error66', props.isErrorPanel)
-
 const disabled = ref(false);
 const link_err = ref(false);
 // const swal = inject('$swal');
@@ -65,10 +61,10 @@ const sixPanelData = ref({
   comment: '',
 });
 
-const sixPanelDataDH = ref({
-  number_of_members: 0,
-  comment: '',
-});
+// const sixPanelDataDH = ref({
+//   number_of_members: 0,
+//   comment: '',
+// });
 
 const panel = ref(false);
 
@@ -122,7 +118,6 @@ const getPanelNumber = (number) => {
 watchEffect(() => {
   if (props.districtHeadquarterCommander) {
     sixPanelData.value = { ...props.data[el_id.value] };
-    sixPanelDataDH.value = { ...props.dataDH[el_id.value] };
   } else {
     if (props.data[el_id.value] && Object.keys(props.data[el_id.value]).length > 0) {
       console.log('data received', props.data);
