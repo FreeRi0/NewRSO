@@ -151,15 +151,20 @@ HTTP.interceptors.response.use(
                 }
             } else if (err.response.status !== 401 &&
                 originalRequest.url !== '/services/front_errors/') {
-                let matches_1 = originalRequest.url.match(/regional_competitions\/me\/reports\/\d{1,}\/\d{1,}\//gm)
-                let matches_2 = originalRequest.url.match(/regional_competitions\/me\/reports\/\d{1,}\//gm)
-                let matches_3 = originalRequest.url.match(/competitions\/1\/reports\/q\d{1,}\/get-place\//gm)
-                let matches_4 = originalRequest.url.match(/detachments\/\d{1,}\/competitions\/1\/place\//gm)
-                let matches_5 = originalRequest.url.match(/competitions\/1\/get-place\//gm)
-
+                let matches_1 = originalRequest.url.match(/regional_competitions\/me\/reports\/\d{1,}\/\d{1,}\//gm);
+                let matches_2 = originalRequest.url.match(/regional_competitions\/me\/reports\/\d{1,}\//gm);
+                let matches_3 = originalRequest.url.match(/competitions\/1\/reports\/q\d{1,}\/get-place\//gm);
+                let matches_4 = originalRequest.url.match(/detachments\/\d{1,}\/competitions\/1\/place\//gm);
+                let matches_5 = originalRequest.url.match(/competitions\/1\/get-place\//gm);
+                let matches_6 = originalRequest.url.match(/regional_competitions\/reports\/\d{1,}\/\d{1,}\/(\d{1,})?\/(district_review)?\//gm);
+                let matches_7 = originalRequest.url.match(/rsousers\/me\/foreign_parent_documents\//gm);
+                let matches_8 = originalRequest.url.match(/statistical_report\/me\//gm);
+                let matches_9 = originalRequest.url.match(/competitions\/\d{1,}\/applications\/me/gm);
+                let matches_10 = originalRequest.url.match(/regional_competitions\/statistical_report\/me\//gm);
 
                 let matches = (matches_1 || []).length + (matches_2 || []).length + (matches_3 || []).length + (matches_4 || []).length +
-                    (matches_5 || []).length;
+                    (matches_5 || []).length + (matches_6 || []).length + (matches_7 || []).length + (matches_8 || []).length +
+                    (matches_9 || []).length + (matches_10 || []).length;
 
                 if (/*(window.location.hostname === 'localhost' ||
                     window.location.hostname === 'rso.sprint.1t' ||
