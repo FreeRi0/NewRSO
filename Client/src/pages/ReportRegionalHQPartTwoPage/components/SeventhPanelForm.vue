@@ -699,6 +699,7 @@ import { SvgIcon } from '@shared/ui';
 import { ReportTabs } from './index';
 import { reportPartTwoService } from '@services/ReportService.ts';
 import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
+import {useReportPartTwoStore} from "@pages/ReportRegionalHQPartTwoPage/store.ts";
 const props = defineProps({
     title: Object,
     panel_number: String,

@@ -30,7 +30,6 @@ import { ref, watchEffect } from "vue";
 import { SeventhPanelForm } from "./index";
 import { reportPartTwoService } from "@services/ReportService.ts";
 
-
 const props = defineProps({
   districtHeadquarterCommander: {
     type: Boolean

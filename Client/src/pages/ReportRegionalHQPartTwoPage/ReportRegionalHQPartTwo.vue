@@ -143,16 +143,9 @@
               12. Объем средств, собранных бойцами РО&nbsp;РСО во&nbsp;Всероссийском дне ударного труда
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <twelfth-panel 
-                :districtExpert="districtExpert" 
-                :centralExpert="centralExpert" 
-                @get-data="setData"                
-                @get-data-DH="setDataDH" 
-                @get-data-CH="setDataCH" 
-                :data="reportData.twelfth"
-                :data-DH="reportDataDH.twelfth" 
-                :data-CH="reportDataCH.twelfth"
-                @get-fileDH="setFileDH"
+              <twelfth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.twelfth"
+                :data-DH="reportDataDH.twelfth" :data-CH="reportDataCH.twelfth" @get-fileDH="setFileDH"
                 :is-error-panel="isErrorPanel.twelfth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -161,16 +154,9 @@
               13. Охват членов РО&nbsp;РСО, принявших участие во&nbsp;Всероссийском дне ударного труда &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <thirteenth-panel 
-                :districtExpert="districtExpert" 
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                @get-data-DH="setDataDH" 
-                @get-data-CH="setDataCH" 
-                :data="reportData.thirteenth"
-                :data-DH="reportDataDH.thirteenth" 
-                :data-CH="reportDataCH.thirteenth"
-                @get-fileDH="setFileDH"
+              <thirteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.thirteenth"
+                :data-DH="reportDataDH.thirteenth" :data-CH="reportDataCH.thirteenth" @get-fileDH="setFileDH"
                 :is-error-panel="isErrorPanel.thirteenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -238,8 +224,7 @@
         </v-expansion-panels>
       </div>
     </div>
-    <Button v-if="!preloader" variant="text" :disabled="blockSendButton" label="Отправить отчет" size="large"
-      @click="sendReport" />
+    <Button v-if="!preloader" variant="text" label="Отправить отчет" size="large" @click="sendReport" />
   </div>
 </template>
 <script setup>
@@ -310,7 +295,7 @@ const reportDataCH = ref({
 });
 
 const fileDH = ref({
-  ninth: null,
+  ninth: {},
   eleventh: null,
   twelfth: null,
   thirteenth: null,
@@ -740,7 +725,7 @@ const setFileDH = (data, panel, number) => {
   switch (panel) {
     case 9:
       fileDH.value.ninth[number] = data;
-      console.log('файл9', data, fileDHNinth.value, number);
+      console.log('файл9', data, fileDH.value.ninth, number);
       break;
     case 11:
       fileDH.value.eleventh = data;
@@ -783,13 +768,12 @@ const filterPanelsData = () => {
   const filteredNinth = {};
 
   for (let i in reportData.value.six) {
-    if ((reportData.value.six[i].number_of_members > 0 && reportData.value.six[i].number_of_members !== null) && Object.keys(reportData.value.six[i]).length !== 0) {
+    if ((reportData.value.six[i].number_of_members > 0 && reportData.value.six[i].number_of_members !== null && reportData.value.six[i].is_sent === false) && Object.keys(reportData.value.six[i]).length !== 0) {
       filteredSix[i] = reportData.value.six[i];
-
     }
 
   }
-  // console.log('setData6: ', filteredSix)
+  console.log('setData6: ', filteredSix)
   for (let i in filteredSix) {
     isErrorPanel.value.six[i] = {
       id: i,
@@ -810,11 +794,11 @@ const filterPanelsData = () => {
   // }
 
   for (let i in reportData.value.ninth) {
-    if (reportData.value.ninth[i].event_happened !== false && Object.keys(reportData.value.ninth[i]).length !== 0) {
+    if (reportData.value.ninth[i].event_happened !== false && reportData.value.ninth[i].is_sent === false && Object.keys(reportData.value.ninth[i]).length !== 0) {
       filteredNinth[i] = reportData.value.ninth[i];
     }
   }
-  // console.log('setData9: ', filteredNinth)
+  console.log('setData9: ', filteredNinth)
   for (let i in filteredNinth) {
     isErrorPanel.value.ninth[i] = {
       id: i,
@@ -948,14 +932,17 @@ const sendReport = async () => {
           await reportPartTwoService.sendReportDHMultiply(reportDataDH.value.six[i], '6', i, route.query.reportId);
         }
       }
-
+      console.log('файлkkkk', fileDH.value.ninth);
       for (let i in reportDataDH.value.ninth) {
+
         if (!reportDataDH.value.ninth[i].verified_by_dhq) {
-          console.log('файл', fileDH.value.ninth[i]);
+
           let formData = new FormData();
           formData.append("event_happened", reportDataDH.value.ninth[i].event_happened || false);
           formData.append("comment", reportDataDH.value.ninth[i].comment || '');
-          formData.append("document", fileDH.value.ninth[i]);
+          for (let i in fileDH.value.ninth) {
+            formData.append("document", fileDH.value.ninth[i]);
+          }
           await reportPartTwoService.sendReportDHMultiply(formData, '9', i, route.query.reportId, true);
         }
       }
@@ -965,54 +952,54 @@ const sendReport = async () => {
         let formData = new FormData();
         formData.append("participants_number", reportDataDH.value.eleventh.participants_number || '');
         formData.append("comment", reportDataDH.value.eleventh.comment || '');
-        formData.append("scan_file", fileDH.value.eleven);
+        formData.append("scan_file", fileDH.value.eleventh);
 
-          await reportPartTwoService.sendReportDH(formData, '11', route.query.reportId, true);
-        }
-        if (!reportDataDH.value.twelfth.verified_by_dhq) {
-          console.log('файл', fileDH.value.twelfth);
-          let formData = new FormData();
-          formData.append("amount_of_money", reportDataDH.value.twelfth.amount_of_money || '');
-          formData.append("comment", reportDataDH.value.twelfth.comment || '');
-          formData.append("scan_file", fileDH.value.twelfth || '');
-          await reportPartTwoService.sendReportDH(formData, '12', route.query.reportId, true);
-        }
-        if (!reportDataDH.value.thirteenth.verified_by_dhq) {
-          console.log('файл', fileDH.value.thirteenth);
-          let formData = new FormData();
-          formData.append("number_of_members", reportDataDH.value.thirteenth.number_of_members || '');
-          formData.append("comment", reportDataDH.value.thirteenth.comment || '');
-          formData.append("scan_file", fileDH.value.thirteenth || '');
-
-          await reportPartTwoService.sendReportDH(formData, '13', route.query.reportId, true);
-        }
-
-        swal.fire({
-          position: 'center',
-          icon: 'success',
-          title: 'Отчет успешно верифицирован',
-          showConfirmButton: false,
-          timer: 1500,
-        });
-
-        // await router.push({
-        //   name: 'reportingRo',
-        // });
-      } catch (e) {
-        blockSendButton.value = false;
-        swal.fire({
-          position: 'center',
-          icon: 'error',
-          title: `ошибка`,
-          showConfirmButton: false,
-          timer: 2500,
-        })
-        console.log('sendReport error: ', e)
-      } finally {
-        preloader.value = false;
+        await reportPartTwoService.sendReportDH(formData, '11', route.query.reportId, true);
       }
+      if (!reportDataDH.value.twelfth.verified_by_dhq) {
+        console.log('файл', fileDH.value.twelfth);
+        let formData = new FormData();
+        formData.append("amount_of_money", reportDataDH.value.twelfth.amount_of_money || '');
+        formData.append("comment", reportDataDH.value.twelfth.comment || '');
+        formData.append("scan_file", fileDH.value.twelfth || '');
+        await reportPartTwoService.sendReportDH(formData, '12', route.query.reportId, true);
+      }
+      if (!reportDataDH.value.thirteenth.verified_by_dhq) {
+        console.log('файл', fileDH.value.thirteenth);
+        let formData = new FormData();
+        formData.append("number_of_members", reportDataDH.value.thirteenth.number_of_members || '');
+        formData.append("comment", reportDataDH.value.thirteenth.comment || '');
+        formData.append("scan_file", fileDH.value.thirteenth || '');
+
+        await reportPartTwoService.sendReportDH(formData, '13', route.query.reportId, true);
+      }
+
+      swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Отчет успешно верифицирован',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+
+      // await router.push({
+      //   name: 'reportingRo',
+      // });
+    } catch (e) {
+      blockSendButton.value = false;
+      swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: `ошибка`,
+        showConfirmButton: false,
+        timer: 2500,
+      })
+      console.log('sendReport error: ', e)
+    } finally {
+      preloader.value = false;
+    }
     // } else {
-      // blockSendButton.value = false;
+    // blockSendButton.value = false;
     // } 
   }
 };
@@ -1021,78 +1008,78 @@ const checkEmptyFields = (data) => {
   const { filteredSix, filteredNinth } = filterPanelsData();
   console.log('data', data)
 
-  if (!data.first || !(data.first.amount_of_money && data.first.scan_file)) {
-    isErrorPanel.value.first = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      title: `Заполните обязательные поля в 1 показателе`,
-      showConfirmButton: false,
-      timer: 2500,
-    })
-    return false;
-  } else {
-    isErrorPanel.value.first = false;
-  }
+  // if (!data.first || !(data.first.amount_of_money && data.first.scan_file)) {
+  //   isErrorPanel.value.first = true;
+  //   swal.fire({
+  //     position: 'center',
+  //     icon: 'warning',
+  //     title: `Заполните обязательные поля в 1 показателе`,
+  //     showConfirmButton: false,
+  //     timer: 2500,
+  //   })
+  //   return false;
+  // } else {
+  //   isErrorPanel.value.first = false;
+  // }
 
-  if (data.fourth) {
-    for (let event of data.fourth.events) {
-      if (event.participants_number && !(event.name && event.end_date && event.start_date && data.fourth.comment)) {
-        isErrorPanel.value.fourth = true;
-        swal.fire({
-          position: 'center',
-          icon: 'warning',
-          title: `Заполните обязательные поля в 4 показателе`,
-          showConfirmButton: false,
-          timer: 2500,
-        })
-        return false;
-      }
-    }
-  } else {
-    isErrorPanel.value.fourth = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      showConfirmButton: true,
-      text: 'Заполните обязательные поля в 4 показателе. В случае отсутствия мероприятия, укажите 0 в количестве участников',
-      confirmButtonColor: "#3085d6",
-      confirmButtonText: 'Понятно',
-      timer: 5000,
-    })
-    return false;
-  }
+  // if (data.fourth) {
+  //   for (let event of data.fourth.events) {
+  //     if (event.participants_number && !(event.name && event.end_date && event.start_date && data.fourth.comment)) {
+  //       isErrorPanel.value.fourth = true;
+  //       swal.fire({
+  //         position: 'center',
+  //         icon: 'warning',
+  //         title: `Заполните обязательные поля в 4 показателе`,
+  //         showConfirmButton: false,
+  //         timer: 2500,
+  //       })
+  //       return false;
+  //     }
+  //   }
+  // } else {
+  //   isErrorPanel.value.fourth = true;
+  //   swal.fire({
+  //     position: 'center',
+  //     icon: 'warning',
+  //     showConfirmButton: true,
+  //     text: 'Заполните обязательные поля в 4 показателе. В случае отсутствия мероприятия, укажите 0 в количестве участников',
+  //     confirmButtonColor: "#3085d6",
+  //     confirmButtonText: 'Понятно',
+  //     timer: 5000,
+  //   })
+  //   return false;
+  // }
 
-  if (data.fifth) {
-    for (let event of data.fifth.events) {
-      if (event.participants_number && !(event.end_date && event.start_date && event.name && data.fifth.comment)) {
-        isErrorPanel.value.fifth = true;
-        swal.fire({
-          position: 'center',
-          icon: 'warning',
-          title: `Заполните обязательные поля в 5 показателе`,
-          showConfirmButton: false,
-          timer: 2500,
-        })
-        return false;
-      }
-    }
-  } else {
-    isErrorPanel.value.fifth = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      text: `Заполните обязательные поля в 5 показателе. В случае отсутствия трудового проекта, укажите 0 в количестве участников`,
-      showConfirmButton: true,
-      confirmButtonColor: "#3085d6",
-      confirmButtonText: 'Понятно',
-      timer: 5000,
-    })
-    return false;
-  }
+  // if (data.fifth) {
+  //   for (let event of data.fifth.events) {
+  //     if (event.participants_number && !(event.end_date && event.start_date && event.name && data.fifth.comment)) {
+  //       isErrorPanel.value.fifth = true;
+  //       swal.fire({
+  //         position: 'center',
+  //         icon: 'warning',
+  //         title: `Заполните обязательные поля в 5 показателе`,
+  //         showConfirmButton: false,
+  //         timer: 2500,
+  //       })
+  //       return false;
+  //     }
+  //   }
+  // } else {
+  //   isErrorPanel.value.fifth = true;
+  //   swal.fire({
+  //     position: 'center',
+  //     icon: 'warning',
+  //     text: `Заполните обязательные поля в 5 показателе. В случае отсутствия трудового проекта, укажите 0 в количестве участников`,
+  //     showConfirmButton: true,
+  //     confirmButtonColor: "#3085d6",
+  //     confirmButtonText: 'Понятно',
+  //     timer: 5000,
+  //   })
+  //   return false;
+  // }
 
   for (let item in filteredSix) {
-    if (!(filteredSix[item]?.links?.length)) {
+    if (!filteredSix[item]?.links?.length) {
       isErrorPanel.value.six[item] = {
         id: item,
         error: true,
@@ -1105,6 +1092,22 @@ const checkEmptyFields = (data) => {
         timer: 2500,
       })
       return false;
+    }
+    for (let link in filteredSix[item]?.links) {
+      if (filteredSix[item]?.links[link]?.link === null || filteredSix[item]?.links[link]?.link === '') {
+        isErrorPanel.value.six[item] = {
+          id: item,
+          error: true,
+        };
+        swal.fire({
+          position: 'center',
+          icon: 'warning',
+          title: `Заполните ссылки в 6 показателе`,
+          showConfirmButton: false,
+          timer: 2500,
+        })
+        return false;
+      }
     }
   }
   // // for (let item in filteredSeventh) {
@@ -1124,7 +1127,7 @@ const checkEmptyFields = (data) => {
   // //   }
   // // }
   for (let item in filteredNinth) {
-    if (!(filteredNinth[item]?.links?.length)) {
+    if (!filteredNinth[item]?.links?.length) {
       isErrorPanel.value.ninth[item] = {
         id: item,
         error: true,
@@ -1138,127 +1141,143 @@ const checkEmptyFields = (data) => {
       })
       return false;
     }
-  }
-
-  if (data.tenth.first) {
-    if (data.tenth.first.event_happened) {
-      if (!data.tenth.first.comment) {
-        isErrorPanel.value.tenth = true;
+    for (let link in filteredNinth[item]?.links) {
+      if (filteredNinth[item]?.links[link]?.link === null || filteredNinth[item]?.links[link]?.link === '') {
+        isErrorPanel.value.ninth[item] = {
+          id: item,
+          error: true,
+        };
         swal.fire({
           position: 'center',
           icon: 'warning',
-          title: `Заполните обязательные поля в показателе 10-1`,
+          title: `Заполните ссылки в 9 показателе`,
           showConfirmButton: false,
           timer: 2500,
         })
         return false;
       }
     }
-  } else {
-    isErrorPanel.value.tenth = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      title: `Укажите информацию о проведении акции в показателе 10-1`,
-      showConfirmButton: false,
-      timer: 3500,
-    })
-    return false;
   }
 
-  if (data.tenth.second) {
-    if (data.tenth.second.event_happened) {
-      if (!data.tenth.second.comment) {
-        isErrorPanel.value.tenth = true;
-        swal.fire({
-          position: 'center',
-          icon: 'warning',
-          title: `Заполните обязательные поля в показателе 10-2`,
-          showConfirmButton: false,
-          timer: 2500,
-        })
-        return false;
-      }
-    }
-  } else {
-    isErrorPanel.value.tenth = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      title: `Укажите информацию о проведении акции в показателе 10-2`,
-      showConfirmButton: false,
-      timer: 3500,
-    })
-    return false;
-  }
+  // if (data.tenth.first) {
+  //   if (data.tenth.first.event_happened) {
+  //     if (!data.tenth.first.comment) {
+  //       isErrorPanel.value.tenth = true;
+  //       swal.fire({
+  //         position: 'center',
+  //         icon: 'warning',
+  //         title: `Заполните обязательные поля в показателе 10-1`,
+  //         showConfirmButton: false,
+  //         timer: 2500,
+  //       })
+  //       return false;
+  //     }
+  //   }
+  // } else {
+  //   isErrorPanel.value.tenth = true;
+  //   swal.fire({
+  //     position: 'center',
+  //     icon: 'warning',
+  //     title: `Укажите информацию о проведении акции в показателе 10-1`,
+  //     showConfirmButton: false,
+  //     timer: 3500,
+  //   })
+  //   return false;
+  // }
 
-  if (!data.eleventh || !(data.eleventh.participants_number && data.eleventh.scan_file)) {
-    isErrorPanel.value.eleventh = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      title: `Заполните обязательные поля в 11 показателе`,
-      showConfirmButton: false,
-      timer: 2500,
-    })
-    return false;
-  } else {
-    isErrorPanel.value.eleventh = false;
-  }
+  // if (data.tenth.second) {
+  //   if (data.tenth.second.event_happened) {
+  //     if (!data.tenth.second.comment) {
+  //       isErrorPanel.value.tenth = true;
+  //       swal.fire({
+  //         position: 'center',
+  //         icon: 'warning',
+  //         title: `Заполните обязательные поля в показателе 10-2`,
+  //         showConfirmButton: false,
+  //         timer: 2500,
+  //       })
+  //       return false;
+  //     }
+  //   }
+  // } else {
+  //   isErrorPanel.value.tenth = true;
+  //   swal.fire({
+  //     position: 'center',
+  //     icon: 'warning',
+  //     title: `Укажите информацию о проведении акции в показателе 10-2`,
+  //     showConfirmButton: false,
+  //     timer: 3500,
+  //   })
+  //   return false;
+  // }
 
-  if (!data.twelfth || !(data.twelfth.amount_of_money)) {
-    isErrorPanel.value.twelfth = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      title: `Заполните обязательные поля в 12 показателе`,
-      showConfirmButton: false,
-      timer: 2500,
-    })
-    return false;
-  } else {
-    isErrorPanel.value.twelfth = false;
-  }
+  // if (!data.eleventh || !(data.eleventh.participants_number && data.eleventh.scan_file)) {
+  //   isErrorPanel.value.eleventh = true;
+  //   swal.fire({
+  //     position: 'center',
+  //     icon: 'warning',
+  //     title: `Заполните обязательные поля в 11 показателе`,
+  //     showConfirmButton: false,
+  //     timer: 2500,
+  //   })
+  //   return false;
+  // } else {
+  //   isErrorPanel.value.eleventh = false;
+  // }
 
-  if (!data.thirteenth || !(data.thirteenth.number_of_members)) {
-    isErrorPanel.value.thirteenth = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      title: `Заполните обязательные поля в 13 показателе`,
-      showConfirmButton: false,
-      timer: 2500,
-    })
-    return false;
-  } else {
-    isErrorPanel.value.thirteenth = false;
-  }
+  // if (!data.twelfth || !(data.twelfth.amount_of_money)) {
+  //   isErrorPanel.value.twelfth = true;
+  //   swal.fire({
+  //     position: 'center',
+  //     icon: 'warning',
+  //     title: `Заполните обязательные поля в 12 показателе`,
+  //     showConfirmButton: false,
+  //     timer: 2500,
+  //   })
+  //   return false;
+  // } else {
+  //   isErrorPanel.value.twelfth = false;
+  // }
 
-  if (data.sixteenth) {
-    for (let project of data.sixteenth.projects) {
-      if (data.sixteenth.is_project && !(data.sixteenth.comment && project.name && project.project_scale)) {
-        isErrorPanel.value.sixteenth = true;
-        swal.fire({
-          position: 'center',
-          icon: 'warning',
-          title: `Заполните обязательные поля в 16 показателе`,
-          showConfirmButton: false,
-          timer: 2500,
-        })
-        return false;
-      }
-    }
-  } else {
-    isErrorPanel.value.sixteenth = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      title: `Укажите информацию о наличии трудового проекта в 16 показателе`,
-      showConfirmButton: false,
-      timer: 3500,
-    })
-    return false;
-  }
+  // if (!data.thirteenth || !(data.thirteenth.number_of_members)) {
+  //   isErrorPanel.value.thirteenth = true;
+  //   swal.fire({
+  //     position: 'center',
+  //     icon: 'warning',
+  //     title: `Заполните обязательные поля в 13 показателе`,
+  //     showConfirmButton: false,
+  //     timer: 2500,
+  //   })
+  //   return false;
+  // } else {
+  //   isErrorPanel.value.thirteenth = false;
+  // }
+
+  // if (data.sixteenth) {
+  //   for (let project of data.sixteenth.projects) {
+  //     if (data.sixteenth.is_project && !(data.sixteenth.comment && project.name && project.project_scale)) {
+  //       isErrorPanel.value.sixteenth = true;
+  //       swal.fire({
+  //         position: 'center',
+  //         icon: 'warning',
+  //         title: `Заполните обязательные поля в 16 показателе`,
+  //         showConfirmButton: false,
+  //         timer: 2500,
+  //       })
+  //       return false;
+  //     }
+  //   }
+  // } else {
+  //   isErrorPanel.value.sixteenth = true;
+  //   swal.fire({
+  //     position: 'center',
+  //     icon: 'warning',
+  //     title: `Укажите информацию о наличии трудового проекта в 16 показателе`,
+  //     showConfirmButton: false,
+  //     timer: 3500,
+  //   })
+  //   return false;
+  // }
 
   return true;
 }

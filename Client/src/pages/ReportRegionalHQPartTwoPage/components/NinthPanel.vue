@@ -161,6 +161,7 @@ watchEffect(() => {
     } else {
       console.log('data no')
       isFirstSent.value = true;
+      isSentNinth.value = false;
       ninthPanelData.value = {
         event_happened: false,
         links: [{
@@ -171,12 +172,14 @@ watchEffect(() => {
         file_type: '',
         comment: '',
       };
-      for (let i in props.data) {
-        if (props.data[i].is_sent) {
-          isSentNinth.value = true;
-          break;
-        }
-      }
+      // for (let i in props.data) {
+      //   if (props.data[i].is_sent) {
+      //     isSentNinth.value = true;
+      //     break;
+      //   }
+      // }
+
+
     }
   }
   if (panel.value || panel.value === 0) {
