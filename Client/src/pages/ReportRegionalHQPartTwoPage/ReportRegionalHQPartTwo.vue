@@ -1096,6 +1096,22 @@ const checkEmptyFields = (data) => {
       })
       return false;
     }
+    for (let link in filteredSix[item]?.links) {
+      if (filteredSix[item]?.links[link]?.link === null || filteredSix[item]?.links[link]?.link === '') {
+        isErrorPanel.value.six[item] = {
+          id: item,
+          error: true,
+        };
+        swal.fire({
+          position: 'center',
+          icon: 'warning',
+          title: `Заполните ссылки в 6 показателе`,
+          showConfirmButton: false,
+          timer: 2500,
+        })
+        return false;
+      }
+    }
   }
   // // for (let item in filteredSeventh) {
   // //   if (!(filteredSeventh[item]?.links?.length && filteredSeventh[item].document && filteredSeventh[item].comment)) {
@@ -1127,6 +1143,22 @@ const checkEmptyFields = (data) => {
         timer: 2500,
       })
       return false;
+    }
+    for (let link in filteredNinth[item]?.links) {
+      if (filteredNinth[item]?.links[link]?.link === null || filteredNinth[item]?.links[link]?.link === '') {
+        isErrorPanel.value.ninth[item] = {
+          id: item,
+          error: true,
+        };
+        swal.fire({
+          position: 'center',
+          icon: 'warning',
+          title: `Заполните ссылки в 9 показателе`,
+          showConfirmButton: false,
+          timer: 2500,
+        })
+        return false;
+      }
     }
   }
 
