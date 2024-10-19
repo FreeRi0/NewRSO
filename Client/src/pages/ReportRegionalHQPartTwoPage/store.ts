@@ -5,6 +5,7 @@ export const useReportPartTwoStore = defineStore('report-two', {
         reportDataDH: {
             first: {},
             fourth: {},
+            fifth: {},
             eleventh: {},
             twelfth: {},
             thirteenth: {},

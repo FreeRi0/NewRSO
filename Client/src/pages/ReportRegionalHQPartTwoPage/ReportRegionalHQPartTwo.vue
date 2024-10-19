@@ -79,8 +79,14 @@
               трудовых проектов РСО
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <fifth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.fifth" :is-error-panel="isErrorPanel.fifth" />
+              <fifth-panel
+                :districtExpert="districtExpert"
+                :centralExpert="centralExpert"
+                @get-data="setData"
+                @get-data-DH="setDataDH"
+                :data="reportData.fifth"
+                :is-error-panel="isErrorPanel.fifth"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -305,6 +311,7 @@ const reportData = ref({
 const reportDataDH = ref({
   first: null,
   fourth: null,
+  fifth: null,
   six: {},
   eleventh: null,
   twelfth: null,
@@ -509,9 +516,11 @@ const getReportData = async (reportId) => {
       reportStore.reportDataDH.first = Object.assign({}, reportData.value.first);
 
       reportData.value.fourth = (await reportPartTwoService.getReportDH('4', reportId)).data;
-      reportStore.reportDataDH.fourth = reportData.value.fourth;
+      reportStore.reportDataDH.fourth = (await reportPartTwoService.getReportDH('4', reportId)).data;
 
       reportData.value.fifth = (await reportPartTwoService.getReportDH('5', reportId)).data;
+      reportStore.reportDataDH.fifth = (await reportPartTwoService.getReportDH('5', reportId)).data;
+
       await getMultiplyData(true, reportId);
       reportData.value.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
       reportData.value.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', reportId)).data;
@@ -700,7 +709,10 @@ const setDataDH = (data, panel, number) => {
       break;
     case 4:
       reportDataDH.value.fourth = data;
-      console.log('reportDataDH.value', ...reportDataDH.value.fourth)
+      break;
+    case 5:
+      reportDataDH.value.fifth = data;
+      console.log('reportDataDH.value', ...reportDataDH.value.fifth)
       break;
     case 6:
       reportDataDH.value.six[number] = data;

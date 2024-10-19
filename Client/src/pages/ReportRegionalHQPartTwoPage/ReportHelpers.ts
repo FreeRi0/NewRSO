@@ -1,4 +1,4 @@
-import { Ref } from "vue";
+import {Ref} from "vue";
 import * as swal from 'sweetalert2';
 
 type error = {
@@ -14,6 +14,10 @@ interface ReportDHType {
         events: FourthPanelEventType[];
         comment: string;
     };
+    fifth: {
+        events: FifthPanelEventType[];
+        comment: string;
+    }
     eleventh: {
         participants_number: string;
         comment: string;
@@ -33,6 +37,14 @@ interface FourthPanelEventType {
     name: string;
     end_date: string;
     start_date: string;
+}
+
+interface FifthPanelEventType {
+    participants_number: string,
+    ro_participants_number: string,
+    start_date: string,
+    end_date: string,
+    name: string,
 }
 
 export const fileValidate = (value: { size: number; type: string; }, maxSizeFile: number, isErrorFile: Ref,) => {
@@ -99,7 +111,7 @@ export function checkEmptyFieldsDH(data: ReportDHType) {
 
     if (data.fourth) {
         for (const event of data.fourth.events) {
-            if (!(event.participants_number && event.name && event.end_date && event.start_date && data.fourth.comment)) {
+            if ((event.participants_number != 0 || !event.participants_number) && !(event.name && event.end_date && event.start_date && data.fourth.comment)) {
                 swal.default.fire({
                     position: 'center',
                     icon: 'warning',
@@ -111,7 +123,20 @@ export function checkEmptyFieldsDH(data: ReportDHType) {
             }
         }
     }
-
+    if (data.fifth) {
+        for (const event of data.fifth.events) {
+            if ((event.participants_number != 0 || !event.participants_number) && !(event.end_date && event.start_date && event.name && data.fifth.comment)) {
+                swal.default.fire({
+                    position: 'center',
+                    icon: 'warning',
+                    title: `Заполните обязательные поля в 5 показателе`,
+                    showConfirmButton: false,
+                    timer: 2500,
+                })
+                return false;
+            }
+        }
+    }
     if (!data.eleventh || !data.eleventh.participants_number || !data.eleventh.comment) {
         swal.default.fire({
             position: 'center',

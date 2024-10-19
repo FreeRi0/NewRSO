@@ -658,7 +658,7 @@ const addEventDH = () => {
     end_date: null,
     is_interregional: false,
   })
-}
+};
 const deleteEvent = async (index) => {
   let formData = new FormData();
   events.value = events.value.filter((el, i) => index !== i);
@@ -685,7 +685,7 @@ const deleteEvent = async (index) => {
 };
 const deleteEventDH = (index) => {
   fourthPanelDataDH.value.events = fourthPanelDataDH.value.events.filter((el, i) => index !== i);
-}
+};
 
 const uploadFile = async (event, index) => {
   fileValidate(event.target.files[0], 7, isErrorFile);
@@ -764,7 +764,6 @@ const calculateResult = (event) => {
 };
 onMounted(() => {
   if (reportStore.reportDataDH.fourth) {
-    fourthPanelDataDH.value.comment = reportStore.reportDataDH.fourth.comment || '';
     fourthPanelDataDH.value.events = [...reportStore.reportDataDH.fourth.events];
   }
 })
@@ -798,7 +797,7 @@ watch(fourthPanelDataDH.value, () => {
   emit('getDataDH', formData, 4);
 }, {
   deep: true
-})
+});
 </script>
 <style lang="scss" scoped>
 .form-input__file-input {
