@@ -40,7 +40,6 @@ const props = defineProps({
   data: Object,
   dataDH: Object,
 });
-
 // console.log('error66', props.isErrorPanel)
 const disabled = ref(false);
 const link_err = ref(false);
@@ -61,10 +60,10 @@ const sixPanelData = ref({
   comment: '',
 });
 
-// const sixPanelDataDH = ref({
-//   number_of_members: 0,
-//   comment: '',
-// });
+const sixPanelDataDH = ref({
+  number_of_members: 0,
+  comment: '',
+});
 
 const panel = ref(false);
 

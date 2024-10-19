@@ -80,8 +80,7 @@
             <v-expansion-panel-text>
               <sixth-panel @get-data="setData" @get-data-DH="setDataDH" :items="six_items" @getId="setId"
                 @getPanelNumber="setPanelNumber" :district-headquarter-commander="districtExpert" :data="reportData.six"
-                :central-headquarter-commander="centralExpert"
-                :is-error-panel="isErrorPanel.six" />
+                :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.six" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -113,7 +112,7 @@
             <v-expansion-panel-text>
               <ninth-panel @get-data="setData" @get-data-DH="setDataDH" @get-fileDH="setFileDH" @getId="setId"
                 @getPanelNumber="setPanelNumber" :items="ninth_items" :district-headquarter-commander="districtExpert"
-                :data="reportData.ninth" :dataDH="reportDataDH.ninth" :central-headquarter-commander="centralExpert"
+                :data="reportData.ninth" :central-headquarter-commander="centralExpert"
                 :is-error-panel="isErrorPanel.ninth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -466,10 +465,12 @@ const getMultiplyData = async (isExpert, reportId) => {
   sixDataResults.forEach((result) => {
     if (isExpert) {
       reportData.value.six[result.id] = result.data;
-      reportStore.reportDataDH.six[result.id] = result.data;
+      // reportDataDH.value.six[result.id] = result.data;
+      // reportStore.reportDataDH.six[result.id] = reportDataDH.value.six[result.id]
+      reportStore.reportDataDH.six[result.id] = Object.assign({}, reportData.value.six[result.id]);
     }
     reportData.value.six[result.id] = result.data;
-  
+
     // if (reportData.value.six[result.id].is_sent === false || !Object.keys(reportData.value.six[result.id]).length) {
     //   console.log('yah6')
     //   blockSendButton.value = false;
@@ -483,7 +484,8 @@ const getMultiplyData = async (isExpert, reportId) => {
   ninthDataResults.forEach((result) => {
     if (isExpert) {
       reportData.value.ninth[result.id] = result.data;
-      reportDataDH.value.ninth[result.id] = result.data;
+      // reportDataDH.value.ninth[result.id] = result.data;
+      reportStore.reportDataDH.ninth[result.id] = Object.assign({}, reportData.value.ninth[result.id]);
     }
     reportData.value.ninth[result.id] = result.data;
     // if (reportData.value.ninth[result.id].is_sent === false || !Object.keys(reportData.value.ninth[result.id]).length) {
@@ -702,10 +704,10 @@ const setDataDH = (data, panel, number) => {
       console.log('reportDataDH.value', ...reportDataDH.value.first)
       break;
     case 6:
-      reportDataDH.value.six[number] = data;
+    reportDataDH.value.six[number] = data;
       break;
     case 9:
-      reportDataDH.value.ninth[number] = data;
+    reportDataDH.value.ninth[number] = data;
       break;
     case 11:
       reportDataDH.value.eleventh = data;
@@ -722,26 +724,26 @@ const setDataDH = (data, panel, number) => {
   }
 }
 
-const setFileDH = (data, panel, number) => {
-  switch (panel) {
-    case 9:
-      fileDH.value.ninth[number] = data;
-      console.log('файл9', data, fileDH.value.ninth, number);
-      break;
-    case 11:
-      fileDH.value.eleventh = data;
-      console.log('файл11', fileDH.value.eleventh);
-      break;
-    case 12:
-      fileDH.value.twelfth = data;
-      console.log('файл12', fileDH.value.twelfth);
-      break;
-    case 13:
-      fileDH.value.thirteenth = data;
-      console.log('файл13', fileDH.value.thirteenth);
-      break;
-  }
-}
+// const setFileDH = (data, panel, number) => {
+//   switch (panel) {
+//     case 9:
+//       reportStore.reportDataDHFile.ninth[number] = data;
+//       console.log('файл9', data, reportStore.reportDataDHFile.ninth, number);
+//       break;
+//     case 11:
+//       fileDH.value.eleventh = data;
+//       console.log('файл11', fileDH.value.eleventh);
+//       break;
+//     case 12:
+//       fileDH.value.twelfth = data;
+//       console.log('файл12', fileDH.value.twelfth);
+//       break;
+//     case 13:
+//       fileDH.value.thirteenth = data;
+//       console.log('файл13', fileDH.value.thirteenth);
+//       break;
+//   }
+// }
 
 const setDataCH = (data, panel, number) => {
   switch (panel) {
@@ -812,6 +814,8 @@ const filterPanelsData = () => {
     filteredNinth,
   };
 };
+
+
 
 const sendReport = async () => {
   // console.log('reportData: ', reportData.value)
@@ -929,22 +933,15 @@ const sendReport = async () => {
     preloader.value = true;
     try {
       for (let i in reportDataDH.value.six) {
-        if (!reportDataDH.value.six[i].verified_by_dhq) {
-          await reportPartTwoService.sendReportDHMultiply(reportDataDH.value.six[i], '6', i, route.query.reportId);
+        if ((! reportDataDH.value.six[i].verified_by_dhq &&  reportDataDH.value.six[i].hasOwnProperty('verified_by_dhq'))) {
+          await reportPartTwoService.sendReportDHMultiply( reportDataDH.six[i], '6', i, route.query.reportId);
         }
       }
-      console.log('файлkkkk', fileDH.value.ninth);
+
       for (let i in reportDataDH.value.ninth) {
 
-        if (!reportDataDH.value.ninth[i].verified_by_dhq) {
-
-          let formData = new FormData();
-          formData.append("event_happened", reportDataDH.value.ninth[i].event_happened || false);
-          formData.append("comment", reportDataDH.value.ninth[i].comment || '');
-          for (let i in fileDH.value.ninth) {
-            formData.append("document", fileDH.value.ninth[i]);
-          }
-          await reportPartTwoService.sendReportDHMultiply(formData, '9', i, route.query.reportId, true);
+        if ((!reportDataDH.value.ninth[i].verified_by_dhq &&  reportDataDH.value.ninth[i].hasOwnProperty('verified_by_dhq'))) {
+          await reportPartTwoService.sendReportDHMultiply(reportDataDH.value.ninth, '9', i, route.query.reportId, true);
         }
       }
       if (!reportDataDH.value.eleventh.verified_by_dhq) {
