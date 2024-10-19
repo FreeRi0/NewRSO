@@ -4,8 +4,8 @@
       <div class="form__field-members-event">
         <div style="display: flex; gap: 40px">
           <div class="form__field-members">
-            <label class="form__label" for="participants_number">Количество человек, принявших участие в мероприятии <sup
-                class="valid-red">*</sup></label>
+            <label class="form__label" for="participants_number">Количество человек, принявших участие в мероприятии
+              <sup class="valid-red">*</sup></label>
             <div style="display: flex; justify-content: space-between;">
               <InputReport
                   v-model:value="event.participants_number"
@@ -193,21 +193,39 @@
     <template v-slot:firstTab>
       <div v-for="(event, index) in events" :key="index" class="form__field-fourth-panel">
         <div class="form__field-members-event">
-          <div class="form__field-members">
-            <label class="form__label" for="participants_number">Количество человек, принявших участие в мероприятии
-              <sup class="valid-red">*</sup></label>
-            <div style="display: flex; justify-content: space-between;">
-              <InputReport
-                  v-model:value="event.participants_number"
-                  :id="event.participants_number"
-                  name="participants_number"
-                  class="form__input"
-                  type="number"
-                  placeholder="Введите число"
-                  :disabled="props.centralExpert || props.districtExpert"
-              />
+          <div style="display: flex; gap: 40px">
+            <div class="form__field-members">
+              <label class="form__label" for="participants_number">Количество человек, принявших участие в мероприятии
+                <sup class="valid-red">*</sup></label>
+              <div style="display: flex; justify-content: space-between;">
+                <InputReport
+                    v-model:value="event.participants_number"
+                    :id="event.participants_number"
+                    name="participants_number"
+                    class="form__input"
+                    type="number"
+                    placeholder="Введите число"
+                    :disabled="props.centralExpert || props.districtExpert"
+                />
+              </div>
+            </div>
+            <div class="form__field-members">
+              <label class="form__label" for="eventName">Название мероприятия<sup
+                  class="valid-red">*</sup></label>
+              <div style="display: flex; justify-content: space-between;">
+                <InputReport
+                    v-model:value="event.name"
+                    :id="event.name"
+                    name="eventName"
+                    class="form__input"
+                    placeholder="Введите название мероприятия"
+                    @focusout="focusOut"
+                    :disabled="isSent || !event.participants_number"
+                />
+              </div>
             </div>
           </div>
+
         </div>
         <div class="form__field-date">
           <div class="form__field">
@@ -235,7 +253,7 @@
             />
           </div>
         </div>
-        <div class="form__field-event" style="margin-bottom: 20px; margin-top: 10px;">
+        <div class="form__field-event">
           <div class="form__field-event-file">
             <label class="form__label" for="4">Положение о мероприятии <sup class="valid-red">*</sup></label>
             <FileBoxComponent
@@ -298,7 +316,7 @@
     </template>
 
     <template v-slot:secondTab>
-      <div v-for="(event, index) in fourthPanelDataDH.events" :key="index" class="form__field-fourth-panel">
+      <div v-for="(eventDH, index) in fourthPanelDataDH.events" :key="index" class="form__field-fourth-panel">
         <div class="form__field-members-event">
           <div style="display: flex; gap: 40px">
             <div class="form__field-members">
@@ -306,8 +324,8 @@
                 <sup class="valid-red">*</sup></label>
               <div style="display: flex; justify-content: space-between;">
                 <InputReport
-                    v-model:value="event.participants_number"
-                    :id="event.participants_number"
+                    v-model:value="eventDH.participants_number"
+                    :id="eventDH.participants_number"
                     name="participants_number"
                     class="form__input"
                     type="number"
@@ -318,33 +336,17 @@
                 />
               </div>
             </div>
-            <div class="form__field-event-interregion">
-              <p class="form__label">Межрегиональное <sup class="valid-red">*</sup></p>
-              <div class="form__label-radio">
-                <div style="display: flex;">
-                  <input
-                      v-model="event.is_interregional"
-                      type="radio"
-                      :id="`is_interregional-true_${index}`"
-                      :value="true"
-                      class="custom-radio"
-                  />
-                  <label :for="`is_interregional-true_${index}`">
-                    Да
-                  </label>
-                </div>
-                <div style="display: flex">
-                  <input
-                      v-model="event.is_interregional"
-                      type="radio"
-                      :id="`is_interregional-false_${index}`"
-                      :value="false"
-                      class="custom-radio"
-                  />
-                  <label :for="`is_interregional-false_${index}`">
-                    Нет
-                  </label>
-                </div>
+            <div class="form__field-members">
+              <label class="form__label" for="eventName">Название мероприятия<sup
+                  class="valid-red">*</sup></label>
+              <div style="display: flex; justify-content: space-between;">
+                <InputReport
+                    v-model:value="eventDH.name"
+                    :id="eventDH.name"
+                    name="eventName"
+                    class="form__input"
+                    placeholder="Введите название мероприятия"
+                />
               </div>
             </div>
           </div>
@@ -360,8 +362,8 @@
             <label style="max-width: 280px;" class="form__label" for="start_date">Дата начала проведения мероприятия
               <sup class="valid-red">*</sup></label>
             <InputReport
-                v-model:value="event.start_date"
-                :id="event.start_date"
+                v-model:value="eventDH.start_date"
+                :id="eventDH.start_date"
                 name="start_date"
                 class="form__input"
                 type="date"
@@ -371,17 +373,48 @@
             <label style="max-width: 300px;" class="form__label" for="end_date">Дата окончания проведения мероприятия
               <sup class="valid-red">*</sup></label>
             <InputReport
-                v-model:value="event.end_date"
-                :id="event.end_date"
+                v-model:value="eventDH.end_date"
+                :id="eventDH.end_date"
                 name="end_date"
                 class="form__input"
                 type="date"
-                :min-date="event.start_date"
+                :min-date="eventDH.start_date"
             />
           </div>
         </div>
-      </div>
+        <div class="form__field-event">
+          <div class="form__field-event-interregion">
+            <p class="form__label">Межрегиональное <sup class="valid-red">*</sup></p>
+            <div class="form__label-radio">
+              <div style="display: flex;">
+                <input
+                    v-model="eventDH.is_interregional"
+                    type="radio"
+                    :id="`is_interregional-true_${index}`"
+                    :value="true"
+                    class="custom-radio"
+                />
+                <label :for="`is_interregional-true_${index}`">
+                  Да
+                </label>
+              </div>
+              <div style="display: flex">
+                <input
+                    v-model="eventDH.is_interregional"
+                    type="radio"
+                    :id="`is_interregional-false_${index}`"
+                    :value="false"
+                    class="custom-radio"
+                />
+                <label :for="`is_interregional-false_${index}`">
+                  Нет
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
 
+      </div>
       <div>
         <Button class="form__add-event" label="Добавить мероприятие" @click="addEventDH"/>
       </div>
@@ -499,7 +532,7 @@
   </report-tabs>
 </template>
 <script setup>
-import {inject, ref, watch, watchEffect, watchPostEffect} from "vue";
+import { inject, onMounted, ref, watch, watchEffect, watchPostEffect } from "vue";
 import { InputReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { ReportTabs } from './index';
@@ -530,6 +563,7 @@ const fourthPanelDataDH = ref({
   comment: '',
   events: [{
     participants_number: '',
+    name: null,
     start_date: null,
     end_date: null,
     is_interregional: false,
@@ -537,6 +571,7 @@ const fourthPanelDataDH = ref({
 });
 const events = ref([
   {
+    name: null,
     participants_number: '',
     start_date: null,
     end_date: null,
@@ -617,6 +652,7 @@ const addEvent = () => {
 };
 const addEventDH = () => {
   fourthPanelDataDH.value.events.push({
+    name: '',
     participants_number: '',
     start_date: null,
     end_date: null,
@@ -671,7 +707,7 @@ const setFormData = (file = null, index = null, isDeleteEvent = false, isDeleteF
   formData.append('comment', fourthPanelData.value.comment || '');
   events.value.forEach((event, i) => {
     // Логика обнуления мероприятия при нулевом количестве участников
-    if(!(+event.participants_number)) {
+    if (!(+event.participants_number)) {
       event.name = null;
       event.is_interregional = false;
       event.end_date = null;
@@ -726,6 +762,12 @@ const calculateResult = (event) => {
     finalResult.value = 0;
   }
 };
+onMounted(() => {
+  if (reportStore.reportDataDH.fourth) {
+    fourthPanelDataDH.value.comment = reportStore.reportDataDH.fourth.comment || '';
+    fourthPanelDataDH.value.events = [...reportStore.reportDataDH.fourth.events];
+  }
+})
 
 watchEffect(() => {
   if (props.data) {
@@ -734,10 +776,6 @@ watchEffect(() => {
     fourthPanelData.value.comment = props.data.comment || '';
     isSent.value = props.data.is_sent;
   }
-
-  fourthPanelDataDH.value.comment = reportStore.reportDataDH.fourth.comment || '';
-  fourthPanelDataDH.value.events = [...reportStore.reportDataDH.fourth.events];
-  // eventsDH.value = [...reportStore.reportDataDH.fourth.events];
 });
 watchPostEffect(() => {
   events.value.forEach((event) => {

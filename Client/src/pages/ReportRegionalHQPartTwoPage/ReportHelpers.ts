@@ -1,4 +1,5 @@
-import { Ref } from "vue";
+import { Ref} from "vue";
+import * as swal from 'sweetalert2';
 
 type error = {
   id: number;
@@ -52,4 +53,32 @@ export const dateValidate = (events: Ref, isErrorDate: Ref<error[]>, noDateError
       }
     }
   })
+}
+
+export function checkEmptyFieldsDH(data) {
+  if (!data.first.amount_of_money) {
+    swal.default.fire({
+      position: 'center',
+      icon: 'warning',
+      title: `Заполните обязательные поля в 1 показателе`,
+      showConfirmButton: false,
+      timer: 2500,
+    })
+    return false
+  }
+
+  for (const event of data.fourth.events) {
+    if (!(event.participants_number && event.name && event.end_date && event.start_date && data.fourth.comment)) {
+      swal.default.fire({
+        position: 'center',
+        icon: 'warning',
+        title: `Заполните обязательные поля в 4 показателе`,
+        showConfirmButton: false,
+        timer: 2500,
+      })
+      return false;
+    }
+  }
+
+  return true;
 }

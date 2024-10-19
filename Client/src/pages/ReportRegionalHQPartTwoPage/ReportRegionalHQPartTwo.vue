@@ -285,6 +285,7 @@ import { HTTP } from '@app/http';
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { useRoute, useRouter } from "vue-router";
 import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
+import {checkEmptyFieldsDH} from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 
 const reportStore = useReportPartTwoStore();
 
@@ -944,7 +945,7 @@ const sendReport = async () => {
     }
   }
 
-  if (districtExpert.value) {
+  if (districtExpert.value && checkEmptyFieldsDH(reportStore.reportDataDH)) {
     blockSendButton.value = true;
     // if (checkEmptyFields(reportDataDH.value)) {
       preloader.value = true;
