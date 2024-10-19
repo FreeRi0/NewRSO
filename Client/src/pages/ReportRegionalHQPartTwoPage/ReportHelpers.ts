@@ -1,4 +1,4 @@
-import {Ref} from "vue";
+import { Ref } from "vue";
 import * as swal from 'sweetalert2';
 
 type error = {
@@ -17,6 +17,18 @@ interface ReportDHType {
     fifth: {
         events: FifthPanelEventType[];
         comment: string;
+    }
+    six: {
+        [key: string]: {
+            number_of_members: string | number;
+            comment: string;
+        }
+    }
+    ninth: {
+        [key: string]: {
+            event_happened: boolean;
+            comment: string;
+        }
     }
     eleventh: {
         participants_number: string;
@@ -137,6 +149,30 @@ export function checkEmptyFieldsDH(data: ReportDHType) {
             }
         }
     }
+    for (let item in data.six) {
+        if (!data.six[item as keyof typeof data.six].comment) {
+            swal.default.fire({
+                position: 'center',
+                icon: 'warning',
+                title: `Заполните обязательные поля в 6 показателе`,
+                showConfirmButton: false,
+                timer: 2500,
+            })
+            return false;
+        }
+    }
+    for (let item in data.ninth) {
+        if (!data.ninth[item as keyof typeof data.ninth].comment) {
+            swal.default.fire({
+                position: 'center',
+                icon: 'warning',
+                title: `Заполните обязательные поля в 9 показателе`,
+                showConfirmButton: false,
+                timer: 2500,
+            })
+            return false;
+        }
+    }
     if (!data.eleventh || !data.eleventh.participants_number || !data.eleventh.comment) {
         swal.default.fire({
             position: 'center',
@@ -147,7 +183,7 @@ export function checkEmptyFieldsDH(data: ReportDHType) {
         })
         return false;
     }
-    
+
     if (!data.twelfth || !data.twelfth.amount_of_money || !data.twelfth.comment) {
         swal.default.fire({
             position: 'center',
@@ -158,7 +194,7 @@ export function checkEmptyFieldsDH(data: ReportDHType) {
         })
         return false;
     }
-    
+
     if (!data.thirteenth || !data.thirteenth.number_of_members || !data.thirteenth.comment) {
         swal.default.fire({
             position: 'center',

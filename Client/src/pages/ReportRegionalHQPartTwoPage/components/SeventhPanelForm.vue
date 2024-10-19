@@ -515,9 +515,9 @@
                     </div>
                     <CommentFileComponent v-model:value="ninthPanelDataDH.comment" name="ninthPanelDataDH.comment"
                         @change="uploadFile($event, 9)" @click="deleteFile(9)"
-                        :file="reportStore.reportDataDHFile.ninth ? reportStore.reportDataDHFile.ninth.name : null"
-                        :fileType="reportStore.reportDataDHFile.ninth ? reportStore.reportDataDHFile.ninth.type.split('/').at(-1) : null"
-                        :fileSize="reportStore.reportDataDHFile.ninth ? reportStore.reportDataDHFile.ninth.size / Math.pow(1024, 2) : null"
+                        :file="reportStore.reportDataDHFile.ninth[props.ninthId] ? reportStore.reportDataDHFile.ninth[props.ninthId]?.name : null"
+                        :fileType="reportStore.reportDataDHFile.ninth[props.ninthId] ? reportStore.reportDataDHFile.ninth[props.ninthId]?.type.split('/').at(-1) : null"
+                        :fileSize="reportStore.reportDataDHFile.ninth[props.ninthId] ? reportStore.reportDataDHFile.ninth[props.ninthId]?.size / Math.pow(1024, 2) : null"
                         :disabled="props.isCentralHeadquarterCommander" :is-error-file="isErrorFile">
                     </CommentFileComponent>
                     <div class="form__field-result" style="display: flex; align-items: center;">
@@ -830,8 +830,10 @@ const uploadFile = (event, number) => {
             ninthPanelData.value.document = scanFile.value.name;
         } else {
             if (props.isDistrictHeadquarterCommander) {
+            
                 ninthPanelDataDH.value.document = event.target.files[0];
-                reportStore.reportDataDHFile.ninth = event.target.files[0];
+                reportStore.reportDataDHFile.ninth[props.ninthId] = event.target.files[0];
+                console.log('file',   reportStore.reportDataDHFile.ninth[props.ninthId])
             } else {
                 let formData = new FormData();
                 formData.append('event_happened', ninthPanelData.value.event_happened);
@@ -876,7 +878,7 @@ const deleteFile = (number) => {
     // } 
     if (number === 9) {
         if (props.isDistrictHeadquarterCommander) {
-            reportStore.reportDataDHFile.ninth = null;
+            reportStore.reportDataDHFile.ninth[props.ninthId] = null;
             ninthPanelDataDH.value.document = '';
 
         } else {
