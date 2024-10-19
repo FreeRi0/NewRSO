@@ -33,14 +33,14 @@ interface ReportDHType {
 }
 
 interface FourthPanelEventType {
-    participants_number: string;
+    participants_number: string | number;
     name: string;
     end_date: string;
     start_date: string;
 }
 
 interface FifthPanelEventType {
-    participants_number: string,
+    participants_number: string | number,
     ro_participants_number: string,
     start_date: string,
     end_date: string,
