@@ -378,7 +378,7 @@ watch(
     background-position: 50%;
     margin: 0 !important;
     padding: 7px 0 !important;
-    width: 40px;
+    width: 32px;
     height: 32px;
 }
 
@@ -586,5 +586,9 @@ watch(
 
 .Sort-alphabet {
     margin-right: 8px;
+}
+
+.sort-alphabet {
+    min-width: 200px;
 }
 </style>

@@ -6,7 +6,7 @@
                     fileType === 'JPG' ||
                     fileType === 'JPEG'"
                     icon-name="file-jpg" />
-            <SvgIcon v-if="fileType === 'pdf'" icon-name="file-pdf" />
+            <SvgIcon v-if="fileType === 'pdf' || fileType === 'PDF'" icon-name="file-pdf" />
             <SvgIcon v-if="fileType === 'png'" icon-name="file-png" />
             <a target="_blank" :href=file>{{ decodeURI(file.split('/').at(-1)) }}</a>
         </div>

@@ -4,12 +4,21 @@ export const useReportPartTwoStore = defineStore('report-two', {
     state: () => ({
         reportDataDH: {
             first: {},
+            fourth: {},
+            fifth: {},
             six: {},
-            ninth: {}
+            ninth: {},
+            eleventh: {},
+            twelfth: {},
+            thirteenth: {},
         },
         reportDataDHFile: {
             first: null,
-            ninth: {}
+            fourth: null,
+            ninth: {},
+            eleventh: null,
+            twelfth: null,
+            thirteenth: null,
         }
     })
 })

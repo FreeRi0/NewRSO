@@ -26,9 +26,7 @@
       <EleventhPanelComponent
         :central-expert="props.centralExpert"
         :district-expert="props.districtExpert"
-        :dataDH="dataDH"
         @get-dataDH="getDataDH"
-        @get-fileDH="getFileDH"
         is-second-tab
       ></EleventhPanelComponent>
     </template>
@@ -37,7 +35,6 @@
       <EleventhPanelComponent
         :central-expert="props.centralExpert"
         :district-expert="props.districtExpert"
-        :dataCH="dataCH"
         @get-dataCH="getDataCH"
         is-third-tab
       ></EleventhPanelComponent>
@@ -57,8 +54,8 @@ const props = defineProps({
     type: Boolean
   },
   data: Object,
-  dataDH: Object,
-  dataCH: Object,
+  // dataDH: Object,
+  // dataCH: Object,
   isErrorPanel: {
     type: Boolean,
   },
@@ -66,7 +63,12 @@ const props = defineProps({
 
 const ID_PANEL = "11";
 
-const emit = defineEmits(['getData', 'getDataDH', 'getDataCH', 'getFileDH']);
+const emit = defineEmits([
+  'getData', 
+  'getDataDH', 
+  'getDataCH', 
+  // 'getFileDH'
+]);
 
 const getData = (event) => {
   emit("getData", event, Number(ID_PANEL));
@@ -76,9 +78,9 @@ const getDataDH = (event) => {
   emit("getDataDH", event, Number(ID_PANEL));
 };
 
-const getFileDH = (event) => {
-  emit("getFileDH", event, Number(ID_PANEL));
-};
+// const getFileDH = (event) => {
+//   emit("getFileDH", event, Number(ID_PANEL));
+// };
 
 const getDataCH = (event) => {
   emit("getDataCH", event, Number(ID_PANEL));
