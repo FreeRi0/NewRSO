@@ -149,9 +149,6 @@
                 @get-data-DH="setDataDH"
                 @get-data-CH="setDataCH"
                 :data="reportData.eleventh"
-                :data-DH="reportDataDH.eleventh"
-                :data-CH="reportDataCH.eleventh"
-                @get-fileDH="setFileDH"
                 :is-error-panel="isErrorPanel.eleventh"
               />
             </v-expansion-panel-text>
@@ -168,9 +165,6 @@
                 @get-data-DH="setDataDH" 
                 @get-data-CH="setDataCH" 
                 :data="reportData.twelfth"
-                :data-DH="reportDataDH.twelfth" 
-                :data-CH="reportDataCH.twelfth"
-                @get-fileDH="setFileDH"
                 :is-error-panel="isErrorPanel.twelfth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -186,9 +180,6 @@
                 @get-data-DH="setDataDH" 
                 @get-data-CH="setDataCH" 
                 :data="reportData.thirteenth"
-                :data-DH="reportDataDH.thirteenth" 
-                :data-CH="reportDataCH.thirteenth"
-                @get-fileDH="setFileDH"
                 :is-error-panel="isErrorPanel.thirteenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -321,12 +312,6 @@ const reportDataDH = ref({
 
 const reportDataCH = ref({
   six: {},
-  eleventh: null,
-  twelfth: null,
-  thirteenth: null,
-});
-
-const fileDH = ref({
   eleventh: null,
   twelfth: null,
   thirteenth: null,
@@ -530,27 +515,15 @@ const getReportData = async (reportId) => {
       reportData.value.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
       reportData.value.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', reportId)).data;
 
-      reportDataDH.value.eleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
-      if (!reportDataDH.value.eleventh.regional_version) {
-        reportData.value.eleventh = reportDataDH.value.eleventh;
-      } else {
-        reportData.value.eleventh = JSON.parse(reportDataDH.value.eleventh.regional_version);
-      }
+      reportData.value.eleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
+      reportStore.reportDataDH.eleventh = Object.assign({}, reportData.value.eleventh);
 
-      reportDataDH.value.twelfth = (await reportPartTwoService.getReportDH('12', reportId)).data;
-      if (!reportDataDH.value.twelfth.regional_version) {
-        reportData.value.twelfth = reportDataDH.value.twelfth;
-      } else {
-        reportData.value.twelfth = JSON.parse(reportDataDH.value.twelfth.regional_version);
-      }
-
-      reportDataDH.value.thirteenth = (await reportPartTwoService.getReportDH('13', reportId)).data;
-      if (!reportDataDH.value.thirteenth.regional_version) {
-        reportData.value.thirteenth = reportDataDH.value.thirteenth;
-      } else {
-        reportData.value.thirteenth = JSON.parse(reportDataDH.value.thirteenth.regional_version);
-      }
-
+      reportData.value.twelfth = (await reportPartTwoService.getReportDH('12', reportId)).data;
+      reportStore.reportDataDH.twelfth = Object.assign({}, reportData.value.twelfth);
+    
+      reportData.value.thirteenth = (await reportPartTwoService.getReportDH('13', reportId)).data;
+      reportStore.reportDataDH.thirteenth = Object.assign({}, reportData.value.thirteenth);
+      
       reportData.value.sixteenth = (await reportPartTwoService.getReportDH('16', reportId)).data;
       reportData.value.seventeenth = (await reportPartTwoService.getReportDH('17', reportId)).data;
       reportData.value.eighteenth = (await reportPartTwoService.getReportDH('18', reportId)).data;
@@ -733,32 +706,15 @@ const setDataDH = (data, panel, number) => {
       break;
     case 11:
       reportDataDH.value.eleventh = data;
-      console.log(data);
+      // console.log('11', ...reportDataDH.value.eleventh);
       break;
     case 12:
       reportDataDH.value.twelfth = data;
-      console.log(data);
+      // console.log('12', ...reportDataDH.value.twelfth);
       break;
     case 13:
       reportDataDH.value.thirteenth = data;
-      console.log(data);
-      break;
-  }
-}
-
-const setFileDH = (data, panel) => {
-  switch(panel) {
-    case 11:
-      fileDH.value.eleventh = data;
-      console.log('файл11', fileDH.value.eleventh);
-      break;
-    case 12:
-      fileDH.value.twelfth = data;
-      console.log('файл12', fileDH.value.twelfth);
-      break;
-    case 13:
-      fileDH.value.thirteenth = data;
-      console.log('файл13', fileDH.value.thirteenth);
+      // console.log('13', ...reportDataDH.value.thirteenth);
       break;
   }
 }
@@ -949,33 +905,10 @@ const sendReport = async () => {
     // if (checkEmptyFields(reportDataDH.value)) {
       preloader.value = true;
       try {
-        if (!reportDataDH.value.eleventh.verified_by_dhq) {
-          console.log('файл', fileDH.value.eleventh);
-          let formData = new FormData();
-          formData.append("participants_number", reportDataDH.value.eleventh.participants_number || '');
-          formData.append("comment", reportDataDH.value.eleventh.comment || '');
-          formData.append("scan_file", fileDH.value.eleventh || '');
-
-          await reportPartTwoService.sendReportDH(formData, '11', route.query.reportId, true);
-        }
-        if (!reportDataDH.value.twelfth.verified_by_dhq) {
-          console.log('файл', fileDH.value.twelfth);
-          let formData = new FormData();
-          formData.append("amount_of_money", reportDataDH.value.twelfth.amount_of_money || '');
-          formData.append("comment", reportDataDH.value.twelfth.comment || '');
-          formData.append("scan_file", fileDH.value.twelfth || '');
-
-          await reportPartTwoService.sendReportDH(formData, '12', route.query.reportId, true);
-        }
-        if (!reportDataDH.value.thirteenth.verified_by_dhq) {
-          console.log('файл', fileDH.value.thirteenth);
-          let formData = new FormData();
-          formData.append("number_of_members", reportDataDH.value.thirteenth.number_of_members || '');
-          formData.append("comment", reportDataDH.value.thirteenth.comment || '');
-          formData.append("scan_file", fileDH.value.thirteenth || '');
-
-          await reportPartTwoService.sendReportDH(formData, '13', route.query.reportId, true);
-        }
+      
+        await reportPartTwoService.sendReportDH(reportDataDH.value.eleventh, '11', route.query.reportId, true);
+        await reportPartTwoService.sendReportDH(reportDataDH.value.twelfth, '12', route.query.reportId, true);
+        await reportPartTwoService.sendReportDH(reportDataDH.value.thirteenth, '13', route.query.reportId, true);
 
         swal.fire({
           position: 'center',
@@ -993,7 +926,8 @@ const sendReport = async () => {
         swal.fire({
           position: 'center',
           icon: 'error',
-          title: `ошибка`,
+          // title: `ошибка`,
+          title: `ошибка ${e.request.response}`,
           showConfirmButton: false,
           timer: 2500,
         })
