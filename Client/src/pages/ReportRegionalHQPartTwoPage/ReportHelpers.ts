@@ -14,6 +14,18 @@ interface ReportDHType {
         events: FourthPanelEventType[];
         comment: string;
     };
+    eleventh: {
+        participants_number: string;
+        comment: string;
+    };
+    twelfth: {
+        amount_of_money: string;
+        comment: string;
+    };
+    thirteenth: {
+        number_of_members: string;
+        comment: string;
+    };
 }
 
 interface FourthPanelEventType {
@@ -100,6 +112,38 @@ export function checkEmptyFieldsDH(data: ReportDHType) {
         }
     }
 
+    if (!data.eleventh || !data.eleventh.participants_number || !data.eleventh.comment) {
+        swal.default.fire({
+            position: 'center',
+            icon: 'warning',
+            title: `Заполните обязательные поля в 11 показателе`,
+            showConfirmButton: false,
+            timer: 2500,
+        })
+        return false;
+    }
+    
+    if (!data.twelfth || !data.twelfth.amount_of_money || !data.twelfth.comment) {
+        swal.default.fire({
+            position: 'center',
+            icon: 'warning',
+            title: `Заполните обязательные поля в 12 показателе`,
+            showConfirmButton: false,
+            timer: 2500,
+        })
+        return false;
+    }
+    
+    if (!data.thirteenth || !data.thirteenth.number_of_members || !data.thirteenth.comment) {
+        swal.default.fire({
+            position: 'center',
+            icon: 'warning',
+            title: `Заполните обязательные поля в 13 показателе`,
+            showConfirmButton: false,
+            timer: 2500,
+        })
+        return false;
+    }
 
     return true;
 }

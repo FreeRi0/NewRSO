@@ -906,10 +906,18 @@ const sendReport = async () => {
     // if (checkEmptyFields(reportDataDH.value)) {
       preloader.value = true;
       try {
-      
-        await reportPartTwoService.sendReportDH(reportDataDH.value.eleventh, '11', route.query.reportId, true);
-        await reportPartTwoService.sendReportDH(reportDataDH.value.twelfth, '12', route.query.reportId, true);
-        await reportPartTwoService.sendReportDH(reportDataDH.value.thirteenth, '13', route.query.reportId, true);
+
+        if (!reportData.value.eleventh.verified_by_dhq) {
+          await reportPartTwoService.sendReportDH(reportDataDH.value.eleventh, '11', route.query.reportId, true);
+        }
+
+        if (!reportData.value.twelfth.verified_by_dhq) {
+          await reportPartTwoService.sendReportDH(reportDataDH.value.twelfth, '12', route.query.reportId, true);
+        }
+
+        if (!reportData.value.thirteenth.verified_by_dhq) {
+          await reportPartTwoService.sendReportDH(reportDataDH.value.thirteenth, '13', route.query.reportId, true);
+        }
 
         swal.fire({
           position: 'center',
