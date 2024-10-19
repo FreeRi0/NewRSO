@@ -104,6 +104,7 @@ export const useRegionalsStore = defineStore('regionals', {
                 );
                 this.members = responseMembers.data.results;
 
+
             } catch (error) {
                 console.log('an error occured ' + error);
             }

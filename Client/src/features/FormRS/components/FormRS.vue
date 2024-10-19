@@ -1,9 +1,5 @@
 <template>
-    <form
-        class="form"
-        enctype="multipart/form-data"
-        @submit.prevent="changeHeadquarter"
-    >
+    <form class="form" enctype="multipart/form-data" @submit.prevent="changeHeadquarter">
         <v-expansion-panels v-model="panel">
             <v-expansion-panel value="panelOne">
                 <v-expansion-panel-title>
@@ -11,15 +7,12 @@
                         <v-col cols="4" class="d-flex justify-start">
                             Основная информация
                         </v-col>
-                        <p
-                            class="form__error form__error--title"
-                            v-if="
-                                isError.name ||
-                                isError.district_headquarter ||
-                                isError.region ||
-                                isError.commander
-                            "
-                        >
+                        <p class="form__error form__error--title" v-if="
+                            isError.name ||
+                            isError.district_headquarter ||
+                            isError.region ||
+                            isError.commander
+                        ">
                             Заполните обязательные поля!
                         </p>
                     </v-row>
@@ -32,56 +25,33 @@
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
                         <div class="form__field">
-                            <label for="name-hq" class="form__label"
-                                >Наименование штаба
+                            <label for="name-hq" class="form__label">Наименование штаба
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Input
-                                id="name-hq"
-                                class="form__input"
+                            <Input id="name-hq" class="form__input"
                                 placeholder="Например, Штаб СО Алтайского государственного медицинского университета (Штаб СО АГМУ)"
-                                name="name_hq"
-                                v-model:value="headquarter.name"
-                                :maxlength="100"
-                                :clearable="true"
-                            />
-                            <p
-                                class="form__error form__error--name"
-                                v-if="isError.name"
-                            >
-                                * {{ isError.name[0] }}
+                                name="name_hq" v-model:value="headquarter.name" :maxlength="100" :clearable="true" />
+                            <p class="form__error form__error--name" v-if="isError.name">
+                                * {{ isError }}
                             </p>
                             <div class="form__counter">
                                 {{ counterName }} / 100
                             </div>
                         </div>
                         <div class="form__field">
-                            <label
-                                for="district_headquarter"
-                                class="form__label"
-                                >Выберите окружной штаб
+                            <label for="district_headquarter" class="form__label">Выберите окружной штаб
                                 <sup class="valid-red">*</sup>
                             </label>
-                            <Select
-                                clearable
-                                variant="outlined"
-                                name="district_headquarter"
-                                id="district_headquarter"
-                                v-model="headquarter.district_headquarter"
-                                address="/districts/"
-                            ></Select>
-                            <p
-                                class="form__error"
-                                v-if="isError.district_headquarter"
-                            >
+                            <Select clearable variant="outlined" name="district_headquarter" id="district_headquarter"
+                                v-model="headquarter.district_headquarter" address="/districts/"></Select>
+                            <p class="form__error" v-if="isError.district_headquarter">
                                 <!-- здесь поменяла -->
                                 <!-- * Это поле не может быть пустым. -->
                                 * {{ getErrorField('district_headquarter') }}
                             </p>
                         </div>
                         <div class="form__field">
-                            <label for="select-region" class="form__label"
-                                >Выберите регион
+                            <label for="select-region" class="form__label">Выберите регион
                                 <sup class="valid-red">*</sup>
                             </label>
                             <!-- <SearchSelect
@@ -93,15 +63,9 @@
                                 v-model="headquarter.region"
                                 @update:value="changeValue"
                             ></SearchSelect> -->
-                            <regionsDropdown
-                                open-on-clear
-                                id="select-region"
-                                name="select_region"
-                                placeholder="Например, Алтайский край"
-                                v-model="headquarter.region"
-                                @update:value="changeValue"
-                                address="/regions/"
-                            >
+                            <regionsDropdown open-on-clear id="select-region" name="select_region"
+                                placeholder="Например, Алтайский край" v-model="headquarter.region"
+                                @update:value="changeValue" address="/regions/">
                             </regionsDropdown>
                             <p class="form__error" v-if="isError.region">
                                 <!-- здесь поменяла -->
@@ -112,77 +76,47 @@
 
                         <div class="form__field">
                             <label for="city" class="form__label">Город</label>
-                            <Input
-                                class="form__input"
-                                id="city"
-                                placeholder="Например, Москва"
-                                name="edit_city"
-                                v-model:value="headquarter.city"
-                            />
+                            <Input class="form__input" id="city" placeholder="Например, Москва" name="edit_city"
+                                v-model:value="headquarter.city" />
                         </div>
                         <!-- здесь поменяла -->
-                        <div
-                            v-if="
-                                roles.roles.value
-                                    .educationalheadquarter_commander ||
-                                roles.roles.value
-                                    .regionalheadquarter_commander ||
-                                roles.roles.value
-                                    .districtheadquarter_commander ||
-                                roles.roles.value
-                                    .centralheadquarter_commander ||
-                                roles.roles.value.localheadquarter_commander ||
-                                roles.roles.value.detachment_commander
-                            "
-                            class="form__field form__field--commander"
-                        >
-                            <label class="form__label" for="beast"
-                                >Командир штаба
+                        <div v-if="
+                            roles.roles.value
+                                .educationalheadquarter_commander ||
+                            roles.roles.value
+                                .regionalheadquarter_commander ||
+                            roles.roles.value
+                                .districtheadquarter_commander ||
+                            roles.roles.value
+                                .centralheadquarter_commander ||
+                            roles.roles.value.localheadquarter_commander ||
+                            roles.roles.value.detachment_commander
+                        " class="form__field form__field--commander">
+                            <label class="form__label" for="beast">Командир штаба
                                 <sup class="valid-red">*</sup>
                             </label>
                             <!-- здесь поменяла, добавила div -->
                             <div v-if="!isCommanderLoading">
-                                <Dropdown
-                                    open-on-clear
-                                    id="beast"
-                                    name="edit_beast"
-                                    placeholder="Поиск по ФИО"
-                                    v-model="headquarter.commander"
-                                    @update:value="changeValue"
-                                    :is-reg="true"
-                                    :head-val="
-                                        regionalsStore.regions.find(
-                                            (item) =>
-                                                item.id == headquarter?.region,
-                                        )?.name
-                                    "
-                                ></Dropdown>
+                                <Dropdown open-on-clear id="beast" name="edit_beast" placeholder="Поиск по ФИО"
+                                    v-model="headquarter.commander" @update:value="changeValue" :is-reg="true"
+                                    :head-val="regionalsStore.regions.find(
+                                        (item) =>
+                                            item.id == headquarter?.region,
+                                    )?.name
+                                        "></Dropdown>
                             </div>
                             <!-- здесь поменяла -->
-                            <v-progress-circular
-                                class="circleLoader"
-                                v-else
-                                indeterminate
-                                color="blue"
-                            ></v-progress-circular>
-                            <p
-                                class="form__error form__error--commander"
-                                v-if="isError.commander"
-                            >
+                            <v-progress-circular class="circleLoader" v-else indeterminate
+                                color="blue"></v-progress-circular>
+                            <p class="form__error form__error--commander" v-if="isError.commander">
                                 <!-- * Это поле не может быть пустым. -->
                                 * {{ getErrorField('commander') }}
                             </p>
                         </div>
                     </div>
                     <v-card-actions class="form__button-group">
-                        <Button
-                            type="button"
-                            variant="text"
-                            class="form-button form-button--next"
-                            label="Далее"
-                            size="large"
-                            @click="openPanelTwo"
-                        ></Button>
+                        <Button type="button" variant="text" class="form-button form-button--next" label="Далее"
+                            size="large" @click="openPanelTwo"></Button>
                     </v-card-actions>
                 </v-expansion-panel-text>
             </v-expansion-panel>
@@ -193,10 +127,7 @@
                         <v-col cols="4" class="d-flex justify-start">
                             Контакты
                         </v-col>
-                        <p
-                            class="form__error form__error--title"
-                            v-if="isErrorMembers.position"
-                        >
+                        <p class="form__error form__error--title" v-if="isErrorMembers.position">
                             Заполните обязательные поля!
                         </p>
                     </v-row>
@@ -209,110 +140,58 @@
                 <v-expansion-panel-text class="form__inner-content">
                     <div class="form__field-group">
                         <div class="form__field">
-                            <label for="social-media-vk" class="form__label"
-                                >Группа штаба ВКонтакте
+                            <label for="social-media-vk" class="form__label">Группа штаба ВКонтакте
                             </label>
-                            <TextareaAbout
-                                maxlength="50"
-                                class="form__textarea form__textarea--mobile"
-                                id="social-media-vk"
-                                placeholder="Например, https://vk.com/cco_monolit"
-                                name="social_media_vk"
-                                v-model:value="headquarter.social_vk"
-                            ></TextareaAbout>
+                            <TextareaAbout maxlength="50" class="form__textarea form__textarea--mobile"
+                                id="social-media-vk" placeholder="Например, https://vk.com/cco_monolit"
+                                name="social_media_vk" v-model:value="headquarter.social_vk"></TextareaAbout>
                         </div>
 
                         <div class="form__field">
-                            <label for="social-media-te" class="form__label"
-                                >Группа штаба в Телеграм
+                            <label for="social-media-te" class="form__label">Группа штаба в Телеграм
                             </label>
-                            <TextareaAbout
-                                maxlength="50"
-                                class="form__textarea form__textarea--mobile"
-                                id="social-media-te"
-                                placeholder="Например, https://t.me/+7pe98d2PqoJ"
-                                name="social_media_te"
-                                v-model:value="headquarter.social_tg"
-                            ></TextareaAbout>
+                            <TextareaAbout maxlength="50" class="form__textarea form__textarea--mobile"
+                                id="social-media-te" placeholder="Например, https://t.me/+7pe98d2PqoJ"
+                                name="social_media_te" v-model:value="headquarter.social_tg"></TextareaAbout>
                         </div>
                         <div class="form__field" v-if="participants">
                             <p class="form__label">
                                 Назначить на должность
                                 <sup class="valid-red">*</sup>
                             </p>
-                            <p
-                                class="form__error form__error--members"
-                                v-if="isErrorMembers.position"
-                            >
+                            <p class="form__error form__error--members" v-if="isErrorMembers.position">
                                 * Заполните должность у каждого участника
                             </p>
-                            <v-text-field
-                                class="form__field-search"
-                                variant="outlined"
-                                type="text"
-                                @keyup="searchMemberEd"
-                                placeholder="Поиск по ФИО"
-                                v-model="searchMembers"
-                            >
+                            <v-text-field class="form__field-search" variant="outlined" type="text"
+                                @keyup="searchMemberEd" placeholder="Поиск по ФИО" v-model="searchMembers">
                                 <template #prepend-inner>
-                                    <Icon
-                                        icon="clarity-search-line"
-                                        color="#222222"
-                                        width="24"
-                                        height="24"
-                                    >
+                                    <Icon icon="clarity-search-line" color="#222222" width="24" height="24">
                                     </Icon>
                                 </template>
                             </v-text-field>
                             <div class="overlay" v-if="showModal"></div>
-                            <DeleteModal
-                                v-show="showModal === true"
-                                :is-squad="false"
-                                @close="close"
-                                @delete="
-                                    deleteMember(
-                                        props.headquarter.id,
-                                        deletedId,
-                                    )
-                                "
-                            >
+                            <DeleteModal v-show="showModal === true" :is-squad="false" @close="close" @delete="
+                                deleteMember(
+                                    props.headquarter.id,
+                                    deletedId,
+                                )
+                                ">
                             </DeleteModal>
                             <!-- здесь поменяла -->
-                            <MembersList
-                                :items="props.members"
-                                :functions="positions.positions.value"
-                                :submited="submited"
-                                :is-error-members="isErrorMembers"
-                                v-if="props.members && !isMembersLoading"
-                                @update-member="onUpdateMember"
-                                @delete-member="onDeleteMember"
-                            ></MembersList>
+                            <MembersList :items="props.members" :functions="positions.positions.value"
+                                :submited="submited" :is-error-members="isErrorMembers"
+                                v-if="props.members && !isMembersLoading" @update-member="onUpdateMember"
+                                @delete-member="onDeleteMember"></MembersList>
 
-                            <v-progress-circular
-                                class="circleLoader"
-                                v-else
-                                indeterminate
-                                color="blue"
-                            ></v-progress-circular>
+                            <v-progress-circular class="circleLoader" v-else indeterminate
+                                color="blue"></v-progress-circular>
                         </div>
                     </div>
                     <v-card-actions class="form__button-group">
-                        <Button
-                            type="button"
-                            class="form-button form-button--prev"
-                            variant="text"
-                            label="Назад"
-                            size="large"
-                            @click="openPanelOne"
-                        ></Button>
-                        <Button
-                            type="button"
-                            class="form-button form-button--next"
-                            variant="text"
-                            label="Далее"
-                            size="large"
-                            @click="openPanelThree"
-                        ></Button>
+                        <Button type="button" class="form-button form-button--prev" variant="text" label="Назад"
+                            size="large" @click="openPanelOne"></Button>
+                        <Button type="button" class="form-button form-button--next" variant="text" label="Далее"
+                            size="large" @click="openPanelThree"></Button>
                     </v-card-actions>
                 </v-expansion-panel-text>
             </v-expansion-panel>
@@ -323,12 +202,9 @@
                         <v-col cols="4" class="d-flex justify-start">
                             Дополнительная информация
                         </v-col>
-                        <p
-                            class="form__error form__error--title"
-                            v-if="
-                                isError.founding_date || isError.conference_date
-                            "
-                        >
+                        <p class="form__error form__error--title" v-if="
+                            isError.founding_date || isError.conference_date
+                        ">
                             Заполните обязательные поля!
                         </p>
                     </v-row>
@@ -336,12 +212,9 @@
                         <v-col cols="4" class="d-flex justify-start">
                             Оформление
                         </v-col>
-                        <p
-                            class="form__error form__error--title"
-                            v-if="
-                                isError.founding_date || isError.conference_date
-                            "
-                        >
+                        <p class="form__error form__error--title" v-if="
+                            isError.founding_date || isError.conference_date
+                        ">
                             Заполните обязательные поля!
                         </p>
                     </v-row>
@@ -356,187 +229,112 @@
                     <div class="form__field-group">
                         <div class="number_wrap">
                             <div class="form__field form_width">
-                                <label for="founding_date" class="form__label"
-                                    >Официальная дата (год) появления
+                                <label for="founding_date" class="form__label">Официальная дата (год) появления
                                     студенческих отрядов в регионе
                                     <sup class="valid-red">*</sup>
                                 </label>
-                                <Input
-                                    class="form__input"
-                                    type="number"
-                                    id="founding_date"
-                                    placeholder="1971"
-                                    name="founding_date"
-                                    v-model:value="headquarter.founding_date"
-                                    :minlength="4"
-                                    :maxlength="4"
-                                />
-                                <p
-                                    class="form__error form__error--date"
-                                    v-if="isError.founding_date"
-                                >
+                                <Input class="form__input" type="number" id="founding_date" placeholder="1971"
+                                    name="founding_date" v-model:value="headquarter.founding_date" :minlength="4"
+                                    :maxlength="4" />
+                                <p class="form__error form__error--date" v-if="isError.founding_date">
                                     <!-- * Это поле не может быть пустым. -->
                                     * {{ getErrorField('founding_date') }}
                                 </p>
                             </div>
 
                             <di v class="form__field form_width">
-                                <label for="conference_date" class="form__label"
-                                    >Дата учредительной конференции
+                                <label for="conference_date" class="form__label">Дата учредительной конференции
                                     регионального штаба
                                     <sup class="valid-red">*</sup>
                                 </label>
-                                <Input
-                                    class="form__input"
-                                    type="date"
-                                    id="conference_date"
-                                    name="conference_date"
-                                    v-model:value="headquarter.conference_date"
-                                />
-                                <p
-                                    class="form__error form__error--date"
-                                    v-if="isError.conference_date"
-                                >
+                                <Input class="form__input" type="date" id="conference_date" name="conference_date"
+                                    v-model:value="headquarter.conference_date" />
+                                <p class="form__error form__error--date" v-if="isError.conference_date">
                                     * Это поле не может быть пустым.
                                 </p>
                             </di>
                             <div class="form__field form_width">
-                                <label for="registry_number" class="form__label"
-                                    >Регистрационный номер в реестре молодежных
+                                <label for="registry_number" class="form__label">Регистрационный номер в реестре
+                                    молодежных
                                     и детских общественных объединений,
                                     пользующихся государственной поддержкой
                                 </label>
-                                <Input
-                                    class="form__input"
-                                    type="number"
-                                    placeholder="б/н"
-                                    id="registry_number"
-                                    name="registry_number"
-                                    v-model:value="headquarter.registry_number"
-                                />
+                                <Input class="form__input" type="number" placeholder="б/н" id="registry_number"
+                                    name="registry_number" v-model:value="headquarter.registry_number" />
                             </div>
                             <div class="form__field form_width">
-                                <label for="registry_date" class="form__label"
-                                    >Дата регистрации в реестре молодежных и
+                                <label for="registry_date" class="form__label">Дата регистрации в реестре молодежных и
                                     детских общественных объединений,
                                     пользующихся государственной поддержкой
                                 </label>
-                                <Input
-                                    class="form__input"
-                                    type="date"
-                                    id="registry_date"
-                                    name="registry_date"
-                                    v-model:value="headquarter.registry_date"
-                                />
+                                <Input class="form__input" type="date" id="registry_date" name="registry_date"
+                                    v-model:value="headquarter.registry_date" />
                             </div>
                         </div>
                         <div class="form__field">
-                            <label
-                                for="name_for_certificates"
-                                class="form__label"
-                                >Наименование регионального отделения в
+                            <label for="name_for_certificates" class="form__label">Наименование регионального отделения
+                                в
                                 Именительном падеже (для справок)
                             </label>
-                            <Input
-                                class="form__input"
-                                type="text"
-                                id="name_for_certificates"
+                            <Input class="form__input" type="text" id="name_for_certificates"
                                 placeholder="Например, Новосибирское региональное отделение"
-                                name="name_for_certificates"
-                                v-model:value="
-                                    headquarter.name_for_certificates
-                                "
-                                :maxlength="100"
-                            />
+                                name="name_for_certificates" v-model:value="headquarter.name_for_certificates
+                                    " :maxlength="100" />
                             <div class="form__counter">
                                 {{ counterNameForCertificates }} / 100
                             </div>
                         </div>
                         <div class="form__field">
-                            <label for="case_name" class="form__label"
-                                >Наименование регионального отделения в
+                            <label for="case_name" class="form__label">Наименование регионального отделения в
                                 Предложном падеже (для справок)
                             </label>
-                            <Input
-                                class="form__input"
-                                type="text"
-                                id="case_name"
-                                placeholder="Например, Новосибирское региональное отделение"
-                                name="case_name"
-                                v-model:value="headquarter.case_name"
-                                :maxlength="100"
-                            />
+                            <Input class="form__input" type="text" id="case_name"
+                                placeholder="Например, Новосибирское региональное отделение" name="case_name"
+                                v-model:value="headquarter.case_name" :maxlength="100" />
                             <div class="form__counter">
                                 {{ counterCaseName }} / 100
                             </div>
                         </div>
                         <div class="form__field">
-                            <label for="legal_address" class="form__label"
-                                >Юридический адрес регионального отделения (для
+                            <label for="legal_address" class="form__label">Юридический адрес регионального отделения
+                                (для
                                 справок)
                             </label>
-                            <Input
-                                class="form__input"
-                                type="text"
-                                id="legal_address"
+                            <Input class="form__input" type="text" id="legal_address"
                                 placeholder="Например, 630005, г. Новосибирск, ул. Некрасова, д. 48, тел/факс (383)-210-38-71, электронная почта studnso@mail.ru."
-                                name="legal_address"
-                                v-model:value="headquarter.legal_address"
-                                :maxlength="200"
-                            />
+                                name="legal_address" v-model:value="headquarter.legal_address" :maxlength="200" />
                             <div class="form__counter">
                                 {{ counterLegalAddress }} / 200
                             </div>
                         </div>
                         <div class="form__field">
-                            <label for="rs-requisites" class="form__label"
-                                >Реквизиты регионального отделения (для
-                                справок)</label
-                            >
-                            <TextareaAbout
-                                :rows="2"
-                                maxlength="500"
-                                class="form__textarea"
-                                id="requisites"
+                            <label for="rs-requisites" class="form__label">Реквизиты регионального отделения (для
+                                справок)</label>
+                            <TextareaAbout :rows="2" maxlength="500" class="form__textarea" id="requisites"
                                 placeholder="Например, Расчетный счет 40703810695240700029 в филиале Сибирский ПАО Банк «ФК Открытие» г. Новосибирск, к/с 30101810250040000867, БИК 045004867, ИНН/КПП 5406970383/540601001, ОГРН 1115400003201."
-                                name="requisites"
-                                v-model:value="headquarter.requisites"
-                            ></TextareaAbout>
+                                name="requisites" v-model:value="headquarter.requisites"></TextareaAbout>
                             <div class="form__counter">
                                 {{ counterRequisites }} / 500
                             </div>
                         </div>
 
                         <div class="form__field">
-                            <label for="slogan" class="form__label"
-                                >Девиз штаба</label
-                            >
-                            <TextareaAbout
-                                maxlength="100"
-                                class="form__textarea form__textarea--mobile"
-                                id="hq-slogan"
-                                placeholder="Например, через тернии к звездам"
-                                name="hq_slogan"
-                                v-model:value="headquarter.slogan"
-                            ></TextareaAbout>
+                            <label for="slogan" class="form__label">Девиз штаба</label>
+                            <TextareaAbout maxlength="100" class="form__textarea form__textarea--mobile" id="hq-slogan"
+                                placeholder="Например, через тернии к звездам" name="hq_slogan"
+                                v-model:value="headquarter.slogan">
+                            </TextareaAbout>
                             <div class="form__counter">
                                 {{ counterSlogan }} / 100
                             </div>
                         </div>
 
                         <div class="form__field">
-                            <label for="about-hq" class="form__label"
-                                >О штабе</label
-                            >
-                            <TextareaAbout
-                                :rows="6"
-                                maxlength="500"
-                                class="form__textarea"
-                                id="about-hq"
-                                placeholder="Описание регионального штаба"
-                                name="about_hq"
-                                v-model:value="headquarter.about"
-                            ></TextareaAbout>
+                            <label for="about-hq" class="form__label">О штабе</label>
+                            <TextareaAbout :rows="6" maxlength="500" class="form__textarea" id="about-hq"
+                                placeholder="Описание регионального штаба" name="about_hq"
+                                v-model:value="headquarter.about">
+                            </TextareaAbout>
                             <div class="form__counter">
                                 {{ counterAbout }} / 1000
                             </div>
@@ -544,124 +342,49 @@
                         <div class="form__field photo-add">
                             <p class="form__label">Добавьте логотип</p>
                             <div class="photo-add__box photo-add__box--logo">
-                                <div
-                                    class="photo-add__img photo-add__img--logo"
-                                >
-                                    <img
-                                        class="photo-add__image"
-                                        :src="headquarter.emblem ?? urlEmblem"
-                                    />
+                                <div class="photo-add__img photo-add__img--logo">
+                                    <img class="photo-add__image" :src="headquarter.emblem ?? urlEmblem" />
                                 </div>
 
                                 <div class="photo-add__input">
-                                    <label
-                                        @click="dialogLogo = true"
-                                        class="photo-add__label photo-add__label--logo"
-                                        for="upload-logo"
-                                        v-if="!headquarter.emblem && !urlEmblem"
-                                    >
-                                        <svg
-                                            class="logo-add__svg"
-                                            aria-hidden="true"
-                                            focusable="false"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="48"
-                                            height="48"
-                                            viewBox="0 0 48 48"
-                                            fill="none"
-                                        >
-                                            <g
-                                                filter="url(#filter0_b_2686_15482)"
-                                            >
-                                                <circle
-                                                    cx="24"
-                                                    cy="24"
-                                                    r="24"
-                                                    fill="black"
-                                                    fill-opacity="0.4"
-                                                />
-                                                <circle
-                                                    cx="24"
-                                                    cy="24"
-                                                    r="23"
-                                                    stroke="white"
-                                                    stroke-width="2"
-                                                />
+                                    <label @click="dialogLogo = true" class="photo-add__label photo-add__label--logo"
+                                        for="upload-logo" v-if="!headquarter.emblem && !urlEmblem">
+                                        <svg class="logo-add__svg" aria-hidden="true" focusable="false"
+                                            xmlns="http://www.w3.org/2000/svg" width="48" height="48"
+                                            viewBox="0 0 48 48" fill="none">
+                                            <g filter="url(#filter0_b_2686_15482)">
+                                                <circle cx="24" cy="24" r="24" fill="black" fill-opacity="0.4" />
+                                                <circle cx="24" cy="24" r="23" stroke="white" stroke-width="2" />
                                             </g>
-                                            <path
-                                                d="M24.1328 15.1328L24.1328 33.1328"
-                                                stroke="white"
-                                                stroke-width="2"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M15.1328 24.1328H33.1328"
-                                                stroke="white"
-                                                stroke-width="2"
-                                                stroke-linecap="round"
-                                            />
+                                            <path d="M24.1328 15.1328L24.1328 33.1328" stroke="white" stroke-width="2"
+                                                stroke-linecap="round" />
+                                            <path d="M15.1328 24.1328H33.1328" stroke="white" stroke-width="2"
+                                                stroke-linecap="round" />
                                             <defs>
-                                                <filter
-                                                    id="filter0_b_2686_15482"
-                                                    x="-36.9643"
-                                                    y="-36.9643"
-                                                    width="121.929"
-                                                    height="121.929"
-                                                    filterUnits="userSpaceOnUse"
-                                                    color-interpolation-filters="sRGB"
-                                                >
-                                                    <feFlood
-                                                        flood-opacity="0"
-                                                        result="BackgroundImageFix"
-                                                    />
-                                                    <feGaussianBlur
-                                                        in="BackgroundImageFix"
-                                                        stdDeviation="18.4821"
-                                                    />
-                                                    <feComposite
-                                                        in2="SourceAlpha"
-                                                        operator="in"
-                                                        result="effect1_backgroundBlur_2686_15482"
-                                                    />
-                                                    <feBlend
-                                                        mode="normal"
-                                                        in="SourceGraphic"
-                                                        in2="effect1_backgroundBlur_2686_15482"
-                                                        result="shape"
-                                                    />
+                                                <filter id="filter0_b_2686_15482" x="-36.9643" y="-36.9643"
+                                                    width="121.929" height="121.929" filterUnits="userSpaceOnUse"
+                                                    color-interpolation-filters="sRGB">
+                                                    <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                                    <feGaussianBlur in="BackgroundImageFix" stdDeviation="18.4821" />
+                                                    <feComposite in2="SourceAlpha" operator="in"
+                                                        result="effect1_backgroundBlur_2686_15482" />
+                                                    <feBlend mode="normal" in="SourceGraphic"
+                                                        in2="effect1_backgroundBlur_2686_15482" result="shape" />
                                                 </filter>
                                             </defs>
                                         </svg>
                                     </label>
-                                    <div
-                                        class="photo-add__edit-group photo-add__edit-group--position"
-                                        v-else
-                                    >
-                                        <label
-                                            @click="dialogLogo = true"
-                                            class="photo-add__label-edit"
-                                            for="upload-logo"
-                                        >
-                                            <span class="photo-add__label-text"
-                                                >Изменить фото</span
-                                            >
+                                    <div class="photo-add__edit-group photo-add__edit-group--position" v-else>
+                                        <label @click="dialogLogo = true" class="photo-add__label-edit"
+                                            for="upload-logo">
+                                            <span class="photo-add__label-text">Изменить фото</span>
                                         </label>
-                                        <button
-                                            class="photo-add__button-clear"
-                                            type="button"
-                                            @click="deleteEmblem"
-                                        >
+                                        <button class="photo-add__button-clear" type="button" @click="deleteEmblem">
                                             Удалить фото
                                         </button>
                                     </div>
-                                    <input
-                                        type="file"
-                                        id="upload-logo"
-                                        name="squad-logo"
-                                        hidden
-                                        @change="selectEmblem"
-                                        @click.prevent
-                                    />
+                                    <input type="file" id="upload-logo" name="squad-logo" hidden @change="selectEmblem"
+                                        @click.prevent />
                                     <v-dialog v-model="dialogLogo" width="1024">
                                         <v-card>
                                             <v-card-title>
@@ -672,203 +395,92 @@
                                             <v-card-text>
                                                 <v-container>
                                                     <v-row>
-                                                        <v-file-input
-                                                            @change="
-                                                                selectEmblem
-                                                            "
-                                                            type="file"
-                                                            show-size
-                                                            prepend-icon="mdi-camera"
-                                                            counter
-                                                        />
+                                                        <v-file-input @change="selectEmblem
+                                                            " type="file" show-size prepend-icon="mdi-camera"
+                                                            counter />
                                                     </v-row>
-                                                    <v-row
-                                                        class="align-center justify-end"
-                                                    >
-                                                        <v-btn
-                                                            v-if="logoPreview"
-                                                            class="button-wrapper mt-5"
-                                                            @click="
-                                                                cropImage(
-                                                                    'logo',
-                                                                )
-                                                            "
-                                                            prepend-icon="crop"
-                                                            variant="plain"
-                                                            >Обрезать
-                                                            фото</v-btn
-                                                        >
+                                                    <v-row class="align-center justify-end">
+                                                        <v-btn v-if="logoPreview" class="button-wrapper mt-5" @click="
+                                                            cropImage(
+                                                                'logo',
+                                                            )
+                                                            " prepend-icon="crop" variant="plain">Обрезать
+                                                            фото</v-btn>
                                                     </v-row>
                                                     <v-row>
-                                                        <Cropper
-                                                            ref="cropper"
-                                                            class="cropper mt-5 mx-auto"
-                                                            :src="logoPreview"
-                                                        />
+                                                        <Cropper ref="cropper" class="cropper mt-5 mx-auto"
+                                                            :src="logoPreview" />
                                                     </v-row>
                                                 </v-container>
                                             </v-card-text>
                                             <v-card-actions>
                                                 <v-spacer></v-spacer>
-                                                <v-btn
-                                                    color="blue-darken-1"
-                                                    variant="text"
-                                                    @click="dialogLogo = false"
-                                                >
+                                                <v-btn color="blue-darken-1" variant="text" @click="dialogLogo = false">
                                                     Закрыть
                                                 </v-btn>
-                                                <v-btn
-                                                    :disabled="!fileEmblem"
-                                                    color="blue-darken-1"
-                                                    variant="text"
-                                                    type="submit"
-                                                    @click="uploadPhoto('logo')"
-                                                >
+                                                <v-btn :disabled="!fileEmblem" color="blue-darken-1" variant="text"
+                                                    type="submit" @click="uploadPhoto('logo')">
                                                     Загрузить
                                                 </v-btn>
                                             </v-card-actions>
-                                            <p
-                                                class="error"
-                                                v-if="isError.detail"
-                                            >
+                                            <p class="error" v-if="isError.detail">
                                                 {{ isError.detail }}
                                             </p>
                                         </v-card>
                                     </v-dialog>
                                 </div>
                             </div>
-                            <span class="form__footnote"
-                                >Рекомендуемый размер 80х80</span
-                            >
+                            <span class="form__footnote">Рекомендуемый размер 80х80</span>
                         </div>
                         <div class="form__field photo-add">
                             <p class="form__label">Добавьте баннер</p>
                             <div class="photo-add__box photo-add__box--banner">
-                                <div
-                                    class="photo-add__img photo-add__img--banner"
-                                >
-                                    <img
-                                        v-if="headquarter.banner ?? urlBanner"
-                                        class="photo-add__image"
-                                        :src="headquarter.banner ?? urlBanner"
-                                    />
-                                    <img
-                                        v-else
-                                        src="@app/assets/banner-stub.png"
-                                        alt="Баннер отряда(пусто)"
-                                    />
+                                <div class="photo-add__img photo-add__img--banner">
+                                    <img v-if="headquarter.banner ?? urlBanner" class="photo-add__image"
+                                        :src="headquarter.banner ?? urlBanner" />
+                                    <img v-else src="@app/assets/banner-stub.png" alt="Баннер отряда(пусто)" />
                                 </div>
 
                                 <div class="photo-add__input">
-                                    <label
-                                        @click="dialogBanner = true"
-                                        class="photo-add__label"
-                                        for="upload-banner"
-                                        v-if="!headquarter.banner && !urlBanner"
-                                    >
-                                        <svg
-                                            class=""
-                                            aria-hidden="true"
-                                            focusable="false"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="48"
-                                            height="48"
-                                            viewBox="0 0 48 48"
-                                            fill="none"
-                                        >
-                                            <g
-                                                filter="url(#filter0_b_2686_15482)"
-                                            >
-                                                <circle
-                                                    cx="24"
-                                                    cy="24"
-                                                    r="24"
-                                                    fill="black"
-                                                    fill-opacity="0.4"
-                                                />
-                                                <circle
-                                                    cx="24"
-                                                    cy="24"
-                                                    r="23"
-                                                    stroke="white"
-                                                    stroke-width="2"
-                                                />
+                                    <label @click="dialogBanner = true" class="photo-add__label" for="upload-banner"
+                                        v-if="!headquarter.banner && !urlBanner">
+                                        <svg class="" aria-hidden="true" focusable="false"
+                                            xmlns="http://www.w3.org/2000/svg" width="48" height="48"
+                                            viewBox="0 0 48 48" fill="none">
+                                            <g filter="url(#filter0_b_2686_15482)">
+                                                <circle cx="24" cy="24" r="24" fill="black" fill-opacity="0.4" />
+                                                <circle cx="24" cy="24" r="23" stroke="white" stroke-width="2" />
                                             </g>
-                                            <path
-                                                d="M24.1328 15.1328L24.1328 33.1328"
-                                                stroke="white"
-                                                stroke-width="2"
-                                                stroke-linecap="round"
-                                            />
-                                            <path
-                                                d="M15.1328 24.1328H33.1328"
-                                                stroke="white"
-                                                stroke-width="2"
-                                                stroke-linecap="round"
-                                            />
+                                            <path d="M24.1328 15.1328L24.1328 33.1328" stroke="white" stroke-width="2"
+                                                stroke-linecap="round" />
+                                            <path d="M15.1328 24.1328H33.1328" stroke="white" stroke-width="2"
+                                                stroke-linecap="round" />
                                             <defs>
-                                                <filter
-                                                    id="filter0_b_2686_15482"
-                                                    x="-36.9643"
-                                                    y="-36.9643"
-                                                    width="121.929"
-                                                    height="121.929"
-                                                    filterUnits="userSpaceOnUse"
-                                                    color-interpolation-filters="sRGB"
-                                                >
-                                                    <feFlood
-                                                        flood-opacity="0"
-                                                        result="BackgroundImageFix"
-                                                    />
-                                                    <feGaussianBlur
-                                                        in="BackgroundImageFix"
-                                                        stdDeviation="18.4821"
-                                                    />
-                                                    <feComposite
-                                                        in2="SourceAlpha"
-                                                        operator="in"
-                                                        result="effect1_backgroundBlur_2686_15482"
-                                                    />
-                                                    <feBlend
-                                                        mode="normal"
-                                                        in="SourceGraphic"
-                                                        in2="effect1_backgroundBlur_2686_15482"
-                                                        result="shape"
-                                                    />
+                                                <filter id="filter0_b_2686_15482" x="-36.9643" y="-36.9643"
+                                                    width="121.929" height="121.929" filterUnits="userSpaceOnUse"
+                                                    color-interpolation-filters="sRGB">
+                                                    <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                                    <feGaussianBlur in="BackgroundImageFix" stdDeviation="18.4821" />
+                                                    <feComposite in2="SourceAlpha" operator="in"
+                                                        result="effect1_backgroundBlur_2686_15482" />
+                                                    <feBlend mode="normal" in="SourceGraphic"
+                                                        in2="effect1_backgroundBlur_2686_15482" result="shape" />
                                                 </filter>
                                             </defs>
                                         </svg>
                                     </label>
                                     <div class="photo-add__edit-group" v-else>
-                                        <label
-                                            @click="dialogBanner = true"
-                                            class="photo-add__label-edit"
-                                            for="upload-banner"
-                                        >
-                                            <span class="photo-add__label-text"
-                                                >Изменить фото</span
-                                            >
+                                        <label @click="dialogBanner = true" class="photo-add__label-edit"
+                                            for="upload-banner">
+                                            <span class="photo-add__label-text">Изменить фото</span>
                                         </label>
-                                        <button
-                                            class="photo-add__button-clear"
-                                            type="reset"
-                                            @click="deleteBanner"
-                                        >
+                                        <button class="photo-add__button-clear" type="reset" @click="deleteBanner">
                                             Удалить фото
                                         </button>
                                     </div>
-                                    <input
-                                        type="file"
-                                        id="upload-banner"
-                                        name="squad-banner"
-                                        hidden
-                                        @change="selectBanner"
-                                        @click.prevent
-                                    />
-                                    <v-dialog
-                                        v-model="dialogBanner"
-                                        width="1024"
-                                    >
+                                    <input type="file" id="upload-banner" name="squad-banner" hidden
+                                        @change="selectBanner" @click.prevent />
+                                    <v-dialog v-model="dialogBanner" width="1024">
                                         <v-card>
                                             <v-card-title>
                                                 <span class="text-h5">
@@ -878,99 +490,54 @@
                                             <v-card-text>
                                                 <v-container>
                                                     <v-row>
-                                                        <v-file-input
-                                                            @change="
-                                                                selectBanner
-                                                            "
-                                                            type="file"
-                                                            show-size
-                                                            prepend-icon="mdi-camera"
-                                                            counter
-                                                        />
+                                                        <v-file-input @change="selectBanner
+                                                            " type="file" show-size prepend-icon="mdi-camera"
+                                                            counter />
                                                     </v-row>
-                                                    <v-row
-                                                        class="align-center justify-end"
-                                                    >
-                                                        <v-btn
-                                                            v-if="bannerPreview"
-                                                            class="button-wrapper mt-5"
-                                                            @click="
-                                                                cropImage(
-                                                                    'banner',
-                                                                )
-                                                            "
-                                                            prepend-icon="crop"
-                                                            variant="plain"
-                                                            >Обрезать
-                                                            фото</v-btn
-                                                        >
+                                                    <v-row class="align-center justify-end">
+                                                        <v-btn v-if="bannerPreview" class="button-wrapper mt-5" @click="
+                                                            cropImage(
+                                                                'banner',
+                                                            )
+                                                            " prepend-icon="crop" variant="plain">Обрезать
+                                                            фото</v-btn>
                                                     </v-row>
                                                     <v-row>
-                                                        <Cropper
-                                                            ref="cropper"
-                                                            class="cropper mt-5 mx-auto"
-                                                            :src="bannerPreview"
-                                                        />
+                                                        <Cropper ref="cropper" class="cropper mt-5 mx-auto"
+                                                            :src="bannerPreview" />
                                                     </v-row>
                                                 </v-container>
                                             </v-card-text>
                                             <v-card-actions>
                                                 <v-spacer></v-spacer>
-                                                <v-btn
-                                                    color="blue-darken-1"
-                                                    variant="text"
-                                                    @click="
-                                                        dialogBanner = false
-                                                    "
-                                                >
+                                                <v-btn color="blue-darken-1" variant="text" @click="
+                                                    dialogBanner = false
+                                                    ">
                                                     Закрыть
                                                 </v-btn>
-                                                <v-btn
-                                                    :disabled="!fileBanner"
-                                                    color="blue-darken-1"
-                                                    variant="text"
-                                                    type="submit"
-                                                    @click="
+                                                <v-btn :disabled="!fileBanner" color="blue-darken-1" variant="text"
+                                                    type="submit" @click="
                                                         uploadPhoto('banner')
-                                                    "
-                                                >
+                                                        ">
                                                     Загрузить
                                                 </v-btn>
                                             </v-card-actions>
-                                            <p
-                                                class="error"
-                                                v-if="isError.detail"
-                                            >
+                                            <p class="error" v-if="isError.detail">
                                                 {{ isError.detail }}
                                             </p>
                                         </v-card>
                                     </v-dialog>
                                 </div>
                             </div>
-                            <span class="form__footnote"
-                                >Рекомендуемый размер 1920х768</span
-                            >
+                            <span class="form__footnote">Рекомендуемый размер 1920х768</span>
                         </div>
                     </div>
                 </v-expansion-panel-text>
             </v-expansion-panel>
             <v-card-actions class="form__button-group">
-                <Button
-                    type="button"
-                    v-show="showButtonPrev"
-                    class="form-button form-button--prev"
-                    variant="text"
-                    label="Назад"
-                    size="large"
-                    @click="openPanelTwo"
-                ></Button>
-                <Button
-                    type="submit"
-                    class="form-button"
-                    variant="text"
-                    label="Сохранить"
-                    size="large"
-                ></Button>
+                <Button type="button" v-show="showButtonPrev" class="form-button form-button--prev" variant="text"
+                    label="Назад" size="large" @click="openPanelTwo"></Button>
+                <Button type="submit" class="form-button" variant="text" label="Сохранить" size="large"></Button>
             </v-card-actions>
         </v-expansion-panels>
     </form>
@@ -1249,6 +816,10 @@ onBeforeMount(async () => {
     roleStore.getRoles();
     positionsStore.getPositions();
 });
+// setInterval(() => {
+//     console.log(props);
+// }, 5000);
+
 </script>
 
 <style lang="scss" scoped>

@@ -6,12 +6,13 @@
             :is-commander-loading="isCommanderLoading" :is-members-loading="isMembersLoading" :is-error="isError"
             :is-error-members="isErrorMembers" v-if="headquarter && isError && isErrorMembers && !loading"
             @submit.prevent="changeHeadquarter" @select-emblem="onSelectEmblem" @select-banner="onSelectBanner"
-            @delete-emblem="onDeleteEmblem" @delete-banner="onDeleteBanner" @update-member="onUpdateMember" @delete-member="onDeleteMember"></FormRS>
+            @delete-emblem="onDeleteEmblem" @delete-banner="onDeleteBanner" @update-member="onUpdateMember"
+            @delete-member="onDeleteMember"></FormRS>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, inject } from 'vue';
+import { ref, onMounted, inject, toRaw } from 'vue';
 import { FormRS } from '@features/FormRS';
 import { HTTP } from '@app/http';
 import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router';
@@ -109,7 +110,7 @@ const isMembersLoading = ref(false);
 //     }
 // };
 
-onMounted(async() => {
+onMounted(async () => {
     // getRegions();
     // getPositions();
     await regionalsStore.getRegionalsMembers(id)
@@ -123,23 +124,23 @@ const onUpdateMember = (event, id) => {
     if (firstkey == 'position')
         regionalsStore.members[memberIndex].position.id = event[firstkey];
     else regionalsStore.members[memberIndex][firstkey] = event[firstkey];
-    if (firstkey == 'is_trusted'){
+    if (firstkey == 'is_trusted') {
         const payload = {
             id_trusted: event[firstkey],
         }
-        try{
+        try {
             HTTP.patch(
                 `/detachments/${route.params.id}/members/${id}/`,
                 payload
             )
-        } catch(e){
+        } catch (e) {
             console.log(e);
         }
     }
 };
 
 const onDeleteMember = (id) => {
-    const memberIndex =   regionalsStore.members.findIndex((member) => member.id === id);
+    const memberIndex = regionalsStore.members.findIndex((member) => member.id === id);
     regionalsStore.members.splice(memberIndex, 1);
     // members.value[memberIndex].change = true;
 }
@@ -181,7 +182,9 @@ const getErrors = () => {
     else return 'Заполните обязательные поля';
 };
 
+
 const changeHeadquarter = async () => {
+    console.log(toRaw(regionalsStore.members))
     try {
         const formData = new FormData();
 
@@ -218,8 +221,7 @@ const changeHeadquarter = async () => {
         formData.append('requisites', headquarter.value.requisites);
         formData.append('slogan', headquarter.value.slogan);
         formData.append('about', headquarter.value.about);
-
-        for (let member of regionalsStore.members) {
+        for (let member in regionalsStore.members) {
             if (member.change) {
                 await HTTP.patch(
                     `/regionals/${id}/members/${member.id}/`,
@@ -262,7 +264,7 @@ const changeHeadquarter = async () => {
         await HTTP.patch(`/regionals/${id}/`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                 Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
+                Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
             },
         });
         swal.fire({

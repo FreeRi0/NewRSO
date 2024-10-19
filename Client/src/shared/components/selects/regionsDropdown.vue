@@ -1,29 +1,9 @@
 <template>
-    <v-autocomplete
-        v-model="selected"
-        :items="items"
-        chips
-        clearable
-        v-model:search.trim="name"
-        variant="outlined"
-        item-title="name"
-        item-value="id"
-        v-bind="$attrs"
-        @keyup="searchRegion"
-        @update:value="changeValue"
-        :address="address"
-        v-if="props.valueChange === false"
-        :no-data-text="noDataText"
-        class="option-select"
-    >
+    <v-autocomplete v-model="selected" :items="items" chips clearable v-model:search.trim="name" variant="outlined"
+        item-title="name" item-value="id" v-bind="$attrs" @keyup="searchRegion" @update:value="changeValue"
+        :address="address" v-if="props.valueChange === false" :no-data-text="noDataText" class="option-select">
         <template #prepend-inner v-if="changeUser">
-            <Icon
-                icon="clarity-search-line"
-                color="#222222"
-                width="24"
-                height="24"
-                class="option-select__icon mr-3"
-            >
+            <Icon icon="clarity-search-line" color="#222222" width="24" height="24" class="option-select__icon mr-3">
             </Icon>
         </template>
         <template v-slot:chip="{ props, item }">
@@ -34,19 +14,12 @@
                     </p>
                 </div>
             </div>
-            <v-progress-circular
-                class="circleLoader"
-                v-else
-                indeterminate
-                color="blue"
-            ></v-progress-circular>
+            <v-progress-circular class="circleLoader" v-else indeterminate color="blue"></v-progress-circular>
         </template>
 
         <template v-slot:item="{ props, item }">
             <v-container v-bind="props">
-                <div
-                    class="option-select__content option-select__content--option"
-                >
+                <div class="option-select__content option-select__content--option">
                     <div class="option-select__wrapper">
                         <p class="option-select__title">
                             {{ item.raw.name }}
@@ -56,31 +29,12 @@
             </v-container>
         </template>
     </v-autocomplete>
-    <v-autocomplete
-        v-model="selected"
-        :items="items"
-        chips
-        clearable
-        v-else-if="props.valueChange === true"
-        v-model:search.trim="name"
-        variant="outlined"
-        item-title="name"
-        item-value="value"
-        v-bind="$attrs"
-        @keyup="searchRegion"
-        @update:value="changeValue"
-        :address="address"
-        :no-data-text="noDataText"
-        class="option-select"
-    >
+    <v-autocomplete v-model="selected" :items="items" chips clearable v-else-if="props.valueChange === true"
+        v-model:search.trim="name" variant="outlined" item-title="name" item-value="value" v-bind="$attrs"
+        @keyup="searchRegion" @update:value="changeValue" :address="address" :no-data-text="noDataText"
+        class="option-select">
         <template #prepend-inner v-if="changeUser">
-            <Icon
-                icon="clarity-search-line"
-                color="#222222"
-                width="24"
-                height="24"
-                class="option-select__icon mr-3"
-            >
+            <Icon icon="clarity-search-line" color="#222222" width="24" height="24" class="option-select__icon mr-3">
             </Icon>
         </template>
         <template v-slot:chip="{ props, item }">
@@ -91,19 +45,12 @@
                     </p>
                 </div>
             </div>
-            <v-progress-circular
-                class="circleLoader"
-                v-else
-                indeterminate
-                color="blue"
-            ></v-progress-circular>
+            <v-progress-circular class="circleLoader" v-else indeterminate color="blue"></v-progress-circular>
         </template>
 
         <template v-slot:item="{ props, item }">
             <v-container v-bind="props">
-                <div
-                    class="option-select__content option-select__content--option"
-                >
+                <div class="option-select__content option-select__content--option">
                     <div class="option-select__wrapper">
                         <p class="option-select__title">
                             {{ item.raw.name }}
@@ -201,6 +148,7 @@ onMounted(() => {
 .error-wrapper {
     position: relative;
 }
+
 .form-error__message {
     position: absolute;
     right: 0;
