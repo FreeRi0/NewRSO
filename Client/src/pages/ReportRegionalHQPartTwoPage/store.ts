@@ -5,10 +5,16 @@ export const useReportPartTwoStore = defineStore('report-two', {
         reportDataDH: {
             first: {},
             fourth: {},
+            eleventh: {},
+            twelfth: {},
+            thirteenth: {},
         },
         reportDataDHFile: {
             first: null,
             fourth: null,
+            eleventh: null,
+            twelfth: null,
+            thirteenth: null,
         }
     })
 })
