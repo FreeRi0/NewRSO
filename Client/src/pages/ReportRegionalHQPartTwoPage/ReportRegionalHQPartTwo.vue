@@ -521,12 +521,15 @@ const getReportData = async (reportId) => {
 
       reportData.value.eleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
       reportStore.reportDataDH.eleventh = Object.assign({}, reportData.value.eleventh);
+      reportStore.reportDataDH.eleventh.comment = '';
 
       reportData.value.twelfth = (await reportPartTwoService.getReportDH('12', reportId)).data;
       reportStore.reportDataDH.twelfth = Object.assign({}, reportData.value.twelfth);
+      reportStore.reportDataDH.twelfth.comment = '';
 
       reportData.value.thirteenth = (await reportPartTwoService.getReportDH('13', reportId)).data;
       reportStore.reportDataDH.thirteenth = Object.assign({}, reportData.value.thirteenth);
+      reportStore.reportDataDH.thirteenth.comment = '';
 
       reportData.value.sixteenth = (await reportPartTwoService.getReportDH('16', reportId)).data;
       reportData.value.seventeenth = (await reportPartTwoService.getReportDH('17', reportId)).data;
