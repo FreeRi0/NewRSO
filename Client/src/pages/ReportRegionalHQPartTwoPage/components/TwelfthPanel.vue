@@ -28,6 +28,7 @@
         :district-expert="props.districtExpert"
         @get-dataDH="getDataDH"
         is-second-tab
+        :is-error-panel="isErrorPanel"
       ></TwelfthPanelComponent>
     </template>
 

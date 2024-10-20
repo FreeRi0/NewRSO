@@ -109,8 +109,9 @@ export const dateValidate = (events: Ref, isErrorDate: Ref<error[]>, noDateError
     })
 }
 
-export function checkEmptyFieldsDH(data: ReportDHType) {
+export function checkEmptyFieldsDH(data: ReportDHType, isErrorPanel: Ref) {
     if (data.first && !data.first.amount_of_money) {
+        isErrorPanel.value.first = true;
         swal.default.fire({
             position: 'center',
             icon: 'warning',
@@ -119,11 +120,14 @@ export function checkEmptyFieldsDH(data: ReportDHType) {
             timer: 2500,
         })
         return false
+    } else {
+        isErrorPanel.value.first = false;
     }
 
     if (data.fourth) {
         for (const event of data.fourth.events) {
             if ((event.participants_number != 0 || !event.participants_number) && !(event.name && event.end_date && event.start_date && data.fourth.comment)) {
+                isErrorPanel.value.fourth = true;
                 swal.default.fire({
                     position: 'center',
                     icon: 'warning',
@@ -138,6 +142,7 @@ export function checkEmptyFieldsDH(data: ReportDHType) {
     if (data.fifth) {
         for (const event of data.fifth.events) {
             if ((event.participants_number != 0 || !event.participants_number) && !(event.end_date && event.start_date && event.name && data.fifth.comment)) {
+                isErrorPanel.value.fifth = true;
                 swal.default.fire({
                     position: 'center',
                     icon: 'warning',
@@ -174,6 +179,7 @@ export function checkEmptyFieldsDH(data: ReportDHType) {
         }
     }
     if (!data.eleventh || !data.eleventh.participants_number || !data.eleventh.comment) {
+        isErrorPanel.value.eleventh = true;
         swal.default.fire({
             position: 'center',
             icon: 'warning',
@@ -182,9 +188,12 @@ export function checkEmptyFieldsDH(data: ReportDHType) {
             timer: 2500,
         })
         return false;
+    } else {
+        isErrorPanel.value.eleventh = false;
     }
 
     if (!data.twelfth || !data.twelfth.amount_of_money || !data.twelfth.comment) {
+        isErrorPanel.value.twelfth = true;
         swal.default.fire({
             position: 'center',
             icon: 'warning',
@@ -193,9 +202,12 @@ export function checkEmptyFieldsDH(data: ReportDHType) {
             timer: 2500,
         })
         return false;
+    } else {
+        isErrorPanel.value.twelfth = false;
     }
 
     if (!data.thirteenth || !data.thirteenth.number_of_members || !data.thirteenth.comment) {
+        isErrorPanel.value.thirteenth = true;
         swal.default.fire({
             position: 'center',
             icon: 'warning',
@@ -204,6 +216,8 @@ export function checkEmptyFieldsDH(data: ReportDHType) {
             timer: 2500,
         })
         return false;
+    } else {
+        isErrorPanel.value.thirteenth = false;
     }
 
     return true;
