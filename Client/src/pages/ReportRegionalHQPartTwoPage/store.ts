@@ -15,6 +15,7 @@ export const useReportPartTwoStore = defineStore('report-two', {
             eleventh: {},
             twelfth: {},
             thirteenth: {},
+            sixteenth: {},
         },
         reportDataDHFile: {
             first: null,

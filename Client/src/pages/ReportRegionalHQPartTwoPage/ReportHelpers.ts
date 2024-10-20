@@ -9,6 +9,7 @@ type error = {
 interface ReportDHType {
     first: {
         amount_of_money: string;
+        comment: string;
     };
     fourth: {
         events: FourthPanelEventType[];
@@ -30,6 +31,14 @@ interface ReportDHType {
             comment: string;
         }
     }
+    tenth: {
+        first: {
+            comment: string;
+        },
+        second: {
+            comment: string;
+        }
+    },
     eleventh: {
         participants_number: string;
         comment: string;
@@ -42,6 +51,11 @@ interface ReportDHType {
         number_of_members: string;
         comment: string;
     };
+    sixteenth: {
+        is_project: boolean;
+        projects: SixteenthPanelEventType[];
+        comment: string;
+    }
 }
 
 interface FourthPanelEventType {
@@ -57,6 +71,11 @@ interface FifthPanelEventType {
     start_date: string,
     end_date: string,
     name: string,
+}
+
+interface SixteenthPanelEventType {
+    name: string,
+    project_scale: string;
 }
 
 export const fileValidate = (value: { size: number; type: string; }, maxSizeFile: number, isErrorFile: Ref,) => {
@@ -110,7 +129,7 @@ export const dateValidate = (events: Ref, isErrorDate: Ref<error[]>, noDateError
 }
 
 export function checkEmptyFieldsDH(data: ReportDHType, isErrorPanel: Ref) {
-    if (data.first && !data.first.amount_of_money) {
+    if (data.first && !(data.first.amount_of_money && data.first.comment)) {
         isErrorPanel.value.first = true;
         swal.default.fire({
             position: 'center',
@@ -154,7 +173,7 @@ export function checkEmptyFieldsDH(data: ReportDHType, isErrorPanel: Ref) {
             }
         }
     }
-    for (let item in data.six) {
+    for (const item in data.six) {
         if (data.six[item as keyof typeof data.six].number_of_members === null && !data.six[item as keyof typeof data.six].comment) {
             isErrorPanel.value.six[item] = {
                 id: item,
@@ -168,15 +187,14 @@ export function checkEmptyFieldsDH(data: ReportDHType, isErrorPanel: Ref) {
                 timer: 2500,
             })
             return false;
-        }
-        else {
+        } else {
             isErrorPanel.value.six[item] = {
                 id: item,
                 error: false,
             };
         }
     }
-    for (let item in data.ninth) {
+    for (const item in data.ninth) {
         if (!data.ninth[item as keyof typeof data.ninth].comment) {
             isErrorPanel.value.ninth[item] = {
                 id: item,
@@ -190,12 +208,37 @@ export function checkEmptyFieldsDH(data: ReportDHType, isErrorPanel: Ref) {
                 timer: 2500,
             })
             return false;
-        }
-        else {
+        } else {
             isErrorPanel.value.ninth[item] = {
                 id: item,
                 error: false,
             };
+        }
+    }
+    if (data.tenth.first) {
+        if (!data.tenth.first.comment) {
+            isErrorPanel.value.tenth = true;
+            swal.default.fire({
+                position: 'center',
+                icon: 'warning',
+                title: `Заполните обязательные поля в показателе 10-1`,
+                showConfirmButton: false,
+                timer: 2500,
+            })
+            return false;
+        }
+    }
+    if (data.tenth.second) {
+        if (!data.tenth.second.comment) {
+            isErrorPanel.value.tenth = true;
+            swal.default.fire({
+                position: 'center',
+                icon: 'warning',
+                title: `Заполните обязательные поля в показателе 10-2`,
+                showConfirmButton: false,
+                timer: 2500,
+            })
+            return false;
         }
     }
     if (!data.eleventh || !data.eleventh.participants_number || !data.eleventh.comment) {
@@ -238,6 +281,21 @@ export function checkEmptyFieldsDH(data: ReportDHType, isErrorPanel: Ref) {
         return false;
     } else {
         isErrorPanel.value.thirteenth = false;
+    }
+    if (data.sixteenth) {
+        for (const project of data.sixteenth.projects) {
+            if (data.sixteenth.is_project && !(data.sixteenth.comment && project.name && project.project_scale)) {
+                isErrorPanel.value.sixteenth = true;
+                swal.default.fire({
+                    position: 'center',
+                    icon: 'warning',
+                    title: `Заполните обязательные поля в 16 показателе`,
+                    showConfirmButton: false,
+                    timer: 2500,
+                })
+                return false;
+            }
+        }
     }
 
     return true;

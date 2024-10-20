@@ -637,6 +637,7 @@ const calculateResult = (event) => {
 onMounted(() => {
   if (reportStore.reportDataDH.fifth) {
     fifthPanelDataDH.value.events = [...reportStore.reportDataDH.fifth.events];
+    fifthPanelDataDH.value.comment = reportStore.reportDataDH.fifth.comment;
   }
 });
 

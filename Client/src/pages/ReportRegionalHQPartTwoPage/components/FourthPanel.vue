@@ -608,21 +608,22 @@ const focusOut = async () => {
         emit('getData', data, 4);
       }
     } catch (e) {
-      e.response.data.events.forEach(event => {
-        if (event.links) {
-          for (let i in event.links) {
-            if (Object.keys(event.links[i]).length !== 0 && event.links[i].link.includes('Введите правильный URL.')) {
-              swal.fire({
-                position: 'center',
-                icon: 'warning',
-                title: `Введите корректный URL`,
-                showConfirmButton: false,
-                timer: 2500,
-              })
-            }
-          }
-        }
-      })
+      console.log(e)
+      // e.response.data.events.forEach(event => {
+      //   if (event.links) {
+      //     for (let i in event.links) {
+      //       if (Object.keys(event.links[i]).length !== 0 && event.links[i].link.includes('Введите правильный URL.')) {
+      //         swal.fire({
+      //           position: 'center',
+      //           icon: 'warning',
+      //           title: `Введите корректный URL`,
+      //           showConfirmButton: false,
+      //           timer: 2500,
+      //         })
+      //       }
+      //     }
+      //   }
+      // })
     }
   }
 };
@@ -765,6 +766,7 @@ const calculateResult = (event) => {
 onMounted(() => {
   if (reportStore.reportDataDH.fourth) {
     fourthPanelDataDH.value.events = [...reportStore.reportDataDH.fourth.events];
+    fourthPanelDataDH.value.comment = reportStore.reportDataDH.fourth.comment;
   }
 })
 

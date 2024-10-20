@@ -186,7 +186,7 @@
               по&nbsp;комиссарской деятельности &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <sixteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+              <sixteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data-DH="setDataDH" @get-data="setData"
                 :data="reportData.sixteenth" :is-error-panel="isErrorPanel.sixteenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -287,6 +287,7 @@ const reportDataDH = ref({
   eleventh: null,
   twelfth: null,
   thirteenth: null,
+  sixteenth: null,
 });
 
 const reportDataCH = ref({
@@ -506,20 +507,25 @@ const getReportData = async (reportId) => {
 
       reportData.value.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
       reportStore.reportDataDH.first = Object.assign({}, reportData.value.first);
+      reportStore.reportDataDH.first.comment = '';
 
       reportData.value.fourth = (await reportPartTwoService.getReportDH('4', reportId)).data;
       reportStore.reportDataDH.fourth = (await reportPartTwoService.getReportDH('4', reportId)).data;
+      reportStore.reportDataDH.fourth.comment = '';
 
       reportData.value.fifth = (await reportPartTwoService.getReportDH('5', reportId)).data;
       reportStore.reportDataDH.fifth = (await reportPartTwoService.getReportDH('5', reportId)).data;
+      reportStore.reportDataDH.fifth.comment = '';
 
       await getMultiplyData(true, reportId);
 
       reportData.value.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
       reportStore.reportDataDH.tenth.first = Object.assign({}, reportData.value.tenth.first);
+      reportStore.reportDataDH.tenth.first.comment = '';
 
       reportData.value.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', reportId)).data;
       reportStore.reportDataDH.tenth.second = Object.assign({}, reportData.value.tenth.second);
+      reportStore.reportDataDH.tenth.second.comment = '';
 
       reportData.value.eleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
       reportStore.reportDataDH.eleventh = Object.assign({}, reportData.value.eleventh);
@@ -534,6 +540,9 @@ const getReportData = async (reportId) => {
       reportStore.reportDataDH.thirteenth.comment = '';
 
       reportData.value.sixteenth = (await reportPartTwoService.getReportDH('16', reportId)).data;
+      reportStore.reportDataDH.sixteenth = (await reportPartTwoService.getReportDH('16', reportId)).data;
+      reportStore.reportDataDH.sixteenth.comment = '';
+
       reportData.value.seventeenth = (await reportPartTwoService.getReportDH('17', reportId)).data;
       reportData.value.eighteenth = (await reportPartTwoService.getReportDH('18', reportId)).data;
       reportData.value.nineteenth = (await reportPartTwoService.getReportDH('19', reportId)).data;
@@ -738,6 +747,9 @@ const setDataDH = (data, panel, number) => {
     case 13:
       reportDataDH.value.thirteenth = data;
       // console.log('13', ...reportDataDH.value.thirteenth);
+      break;
+    case 16:
+      reportDataDH.value.sixteenth = data;
       break;
   }
 }
@@ -972,6 +984,10 @@ const sendReport = async () => {
 
       if (!reportData.value.thirteenth.verified_by_dhq) {
         await reportPartTwoService.sendReportDH(reportDataDH.value.thirteenth, '13', route.query.reportId, true);
+      }
+
+      if (!reportData.value.sixteenth.verified_by_dhq) {
+        await reportPartTwoService.sendReportDH(reportDataDH.value.sixteenth, '16', route.query.reportId, true);
       }
 
       swal.fire({
