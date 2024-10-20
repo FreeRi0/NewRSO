@@ -102,6 +102,7 @@
                 :max="9999999999"
                 :step="0.01"
                 :disabled="centralExpert"
+                :is-error-panel="isErrorPanel"
             />
         </div>
 
@@ -115,6 +116,7 @@
             :fileSize="reportStore.reportDataDHFile.twelfth ? reportStore.reportDataDHFile.twelfth.size / Math.pow(1024, 2) : null"
             :disabled="centralExpert"
             :is-error-file="isErrorFile"
+            :is-error-panel="isErrorPanel"
         ></CommentFileComponent>
     </div>
 
