@@ -155,7 +155,11 @@ export function checkEmptyFieldsDH(data: ReportDHType, isErrorPanel: Ref) {
         }
     }
     for (let item in data.six) {
-        if (!data.six[item as keyof typeof data.six].comment) {
+        if (data.six[item as keyof typeof data.six].number_of_members === null && !data.six[item as keyof typeof data.six].comment) {
+            isErrorPanel.value.six[item] = {
+                id: item,
+                error: true,
+            };
             swal.default.fire({
                 position: 'center',
                 icon: 'warning',
@@ -165,9 +169,19 @@ export function checkEmptyFieldsDH(data: ReportDHType, isErrorPanel: Ref) {
             })
             return false;
         }
+        else {
+            isErrorPanel.value.six[item] = {
+                id: item,
+                error: false,
+            };
+        }
     }
     for (let item in data.ninth) {
         if (!data.ninth[item as keyof typeof data.ninth].comment) {
+            isErrorPanel.value.ninth[item] = {
+                id: item,
+                error: true,
+            };
             swal.default.fire({
                 position: 'center',
                 icon: 'warning',
@@ -176,6 +190,12 @@ export function checkEmptyFieldsDH(data: ReportDHType, isErrorPanel: Ref) {
                 timer: 2500,
             })
             return false;
+        }
+        else {
+            isErrorPanel.value.ninth[item] = {
+                id: item,
+                error: false,
+            };
         }
     }
     if (!data.eleventh || !data.eleventh.participants_number || !data.eleventh.comment) {
