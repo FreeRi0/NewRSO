@@ -463,6 +463,7 @@ const getMultiplyData = async (isExpert, reportId) => {
     if (isExpert) {
       reportData.value.six[result.id] = result.data;
       reportStore.reportDataDH.six[result.id] = Object.assign({}, reportData.value.six[result.id]);
+      reportStore.reportDataDH.six[result.id].comment = '';
       isErrorPanel.value.six[result.id] = {
         id: result.id,
         error: false,
@@ -485,6 +486,7 @@ const getMultiplyData = async (isExpert, reportId) => {
     if (isExpert) {
       reportData.value.ninth[result.id] = result.data;
       reportStore.reportDataDH.ninth[result.id] = Object.assign({}, reportData.value.ninth[result.id]);
+      reportStore.reportDataDH.ninth[result.id].comment = '';
       isErrorPanel.value.ninth[result.id] = {
         id: result.id,
         error: false,

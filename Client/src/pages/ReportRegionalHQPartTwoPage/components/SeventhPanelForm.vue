@@ -406,14 +406,6 @@
                             v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1" autoResize
                             placeholder="Комментарий" :maxlength="3000" :max-length-text="3000" counter-visible />
                     </div>
-                    <div class="form__field-result" style="display: flex; align-items: center;">
-                        <v-checkbox class="result-checkbox" id="v-checkbox" />
-                        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
-                    </div>
-                    <div class="hr"></div>
-                    <div class="form__field-result result-count">
-                        <p>0</p>
-                    </div>
                 </div>
             </template>
             <template v-slot:secondTab>
@@ -521,14 +513,6 @@
                         :disabled="props.isCentralHeadquarterCommander" :is-error-file="isErrorFile"
                         :is-error-panel="isErrorPanel">
                     </CommentFileComponent>
-                    <div class="form__field-result" style="display: flex; align-items: center;">
-                        <v-checkbox class="result-checkbox" id="v-checkbox" />
-                        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
-                    </div>
-                    <div class="hr"></div>
-                    <div class="form__field-result result-count">
-                        <p>0</p>
-                    </div>
                 </div>
             </template>
             <template v-slot:thirdTab>
