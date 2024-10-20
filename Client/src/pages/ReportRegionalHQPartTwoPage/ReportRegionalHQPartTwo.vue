@@ -110,10 +110,9 @@
               9. Организация обязательных общесистемных мероприятий РСО на&nbsp;региональном уровне &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <ninth-panel @get-data="setData" @get-data-DH="setDataDH" @getId="setId"
-                @getPanelNumber="setPanelNumber" :items="ninth_items" :district-headquarter-commander="districtExpert"
-                :data="reportData.ninth" :central-headquarter-commander="centralExpert"
-                :is-error-panel="isErrorPanel.ninth" />
+              <ninth-panel @get-data="setData" @get-data-DH="setDataDH" @getId="setId" @getPanelNumber="setPanelNumber"
+                :items="ninth_items" :district-headquarter-commander="districtExpert" :data="reportData.ninth"
+                :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.ninth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -122,13 +121,8 @@
               &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <tenth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                @getDataDHFirst="setDataDH"
-                @getDataDHSecond="setDataDH"
-                :data="reportData.tenth"
+              <tenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                @getDataDHFirst="setDataDH" @getDataDHSecond="setDataDH" :data="reportData.tenth"
                 :is-error-panel="isErrorPanel.tenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -468,9 +462,12 @@ const getMultiplyData = async (isExpert, reportId) => {
   sixDataResults.forEach((result) => {
     if (isExpert) {
       reportData.value.six[result.id] = result.data;
-      // reportDataDH.value.six[result.id] = result.data;
-      // reportStore.reportDataDH.six[result.id] = reportDataDH.value.six[result.id]
       reportStore.reportDataDH.six[result.id] = Object.assign({}, reportData.value.six[result.id]);
+      isErrorPanel.value.six[result.id] = {
+        id: result.id,
+        error: false,
+      }
+
     }
     reportData.value.six[result.id] = result.data;
 
@@ -487,8 +484,11 @@ const getMultiplyData = async (isExpert, reportId) => {
   ninthDataResults.forEach((result) => {
     if (isExpert) {
       reportData.value.ninth[result.id] = result.data;
-      // reportDataDH.value.ninth[result.id] = result.data;
       reportStore.reportDataDH.ninth[result.id] = Object.assign({}, reportData.value.ninth[result.id]);
+      isErrorPanel.value.ninth[result.id] = {
+        id: result.id,
+        error: false,
+      }
     }
     reportData.value.ninth[result.id] = result.data;
     // if (reportData.value.ninth[result.id].is_sent === false || !Object.keys(reportData.value.ninth[result.id]).length) {
@@ -712,10 +712,11 @@ const setDataDH = (data, panel, number) => {
       break;
     case 6:
       reportDataDH.value.six[number] = data;
+      console.log('reportDataDH.value6', reportDataDH.value.six[number])
       break;
     case 9:
       reportDataDH.value.ninth[number] = data;
-      console.log('reportDataDH.value555', ...reportDataDH.value.ninth[number])
+      console.log('reportDataDH.value9', reportDataDH.value.ninth[number])
       break;
     case 10:
       if (number === 1) {
@@ -944,7 +945,7 @@ const sendReport = async () => {
         }
       }
       for (let i in reportDataDH.value.ninth) {
-        
+
         if (!reportDataDH.value.ninth[i].verified_by_dhq) {
           console.log('send9')
           await reportPartTwoService.sendReportDHMultiply(reportDataDH.value.ninth[i], '9', i, route.query.reportId, true);

@@ -325,12 +325,12 @@
                             name="14" class="form__input number_input" type="number" :maxlength="10" :max="32767"
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
                     </div>
-                    <div class="form__field">
+                    <div class="form__field" v-if="sixPanelData?.links?.length > 0">
                         <label class="form__label" for="14">Ссылка на социальные сети/ электронные
                             СМИ, подтверждающая участие в мероприятии
                             <sup class="valid-red">*</sup></label>
 
-                        <div class="form__wrapper" v-for="(item, index) in sixPanelData.links" :key="index">
+                        <div class="form__wrapper" v-for="(item, index) in sixPanelData?.links" :key="index">
                             <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
                                 :is-link="true"
                                 :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
@@ -386,12 +386,12 @@
                         </FileBoxComponent>
                     </div>
 
-                    <div class="form__field" v-if="ninthPanelData.links.length > 0">
+                    <div class="form__field" v-if="ninthPanelData?.links?.length > 0">
                         <label class="form__label mt-4" for="14">Ссылка на социальные сети/ электронные
                             СМИ, подтверждающая проведение акции
                             <sup class="valid-red">*</sup></label>
 
-                        <div class="form__wrapper" v-for="(item, index) in ninthPanelData.links" :key="index">
+                        <div class="form__wrapper" v-for="(item, index) in ninthPanelData?.links" :key="index">
                             <InputReport
                                 :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                                 name="14" :is-link="true"
@@ -479,11 +479,11 @@
                             Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
                         </p>
                         <InputReport v-model:value="sixPanelDataDH.number_of_members" placeholder="Введите число"
-                            id="15" name="14" class="form__input number_input" type="number" :maxlength="10"
-                            :max="32767" />
+                            id="15" name="14" class="form__input number_input" :is-error-panel="isErrorPanel"
+                            type="number" :maxlength="10" :max="32767" />
                     </div>
 
-                    <CommentFileComponent v-model:value="sixPanelDataDH.comment" @update:value="changeValue"
+                    <CommentFileComponent v-model:value="sixPanelDataDH.comment" :is-error-panel="isErrorPanel"
                         :is-six="true" name="sixPanelDataDH.comment" :disabled="props.isCentralHeadquarterCommander">
                     </CommentFileComponent>
                 </div>
@@ -518,7 +518,8 @@
                         :file="reportStore.reportDataDHFile.ninth[props.ninthId] ? reportStore.reportDataDHFile.ninth[props.ninthId]?.name : null"
                         :fileType="reportStore.reportDataDHFile.ninth[props.ninthId] ? reportStore.reportDataDHFile.ninth[props.ninthId]?.type.split('/').at(-1) : null"
                         :fileSize="reportStore.reportDataDHFile.ninth[props.ninthId] ? reportStore.reportDataDHFile.ninth[props.ninthId]?.size / Math.pow(1024, 2) : null"
-                        :disabled="props.isCentralHeadquarterCommander" :is-error-file="isErrorFile">
+                        :disabled="props.isCentralHeadquarterCommander" :is-error-file="isErrorFile"
+                        :is-error-panel="isErrorPanel">
                     </CommentFileComponent>
                     <div class="form__field-result" style="display: flex; align-items: center;">
                         <v-checkbox class="result-checkbox" id="v-checkbox" />
@@ -830,10 +831,10 @@ const uploadFile = (event, number) => {
             ninthPanelData.value.document = scanFile.value.name;
         } else {
             if (props.isDistrictHeadquarterCommander) {
-            
+
                 ninthPanelDataDH.value.document = event.target.files[0];
                 reportStore.reportDataDHFile.ninth[props.ninthId] = event.target.files[0];
-                console.log('file',   reportStore.reportDataDHFile.ninth[props.ninthId])
+                console.log('file', reportStore.reportDataDHFile.ninth[props.ninthId])
             } else {
                 let formData = new FormData();
                 formData.append('event_happened', ninthPanelData.value.event_happened);
@@ -1147,6 +1148,8 @@ watchEffect(() => {
         emit('getPanelNumber', props.panel_number)
 
     }
+}, {
+    flush: 'post'
 })
 
 watch(sixPanelDataDH.value, () => {
