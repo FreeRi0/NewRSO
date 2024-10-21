@@ -1,13 +1,4 @@
 <template>
-  <!--<div style="color:white;">
-    is sent {{ isSent }};
-    term 2.1 {{ (!projects) }};
-    term 2.2 {{ ((projects && !isLink && !isFile)) }};
-    isLink {{ (isLink) }};
-    isFile {{ (isFile) }};
-    term 2 {{ (!projects || (projects && !isLink && !isFile)) }};
-    term 3 {{ (!eighteenthPanelData.comment) }};
-  </div>-->
   <div class="form__field-group report__field-group report__field-group--column" v-if="isSent
     && (!projects || (projects && !isLink && !isFile))
     && !eighteenthPanelData.comment">
@@ -392,25 +383,15 @@ watchEffect(async () => {
 });
 
 watchPostEffect(() => {
-  console.log('18 watchPostEffect');
+  isLink.value = false;
+  isFile.value = false;
   projects.value.forEach((project) => {
     if (!project.links.length) project.links.push({ link: '' });
-
     if (project.links.some((item) => item.link)) {
       isLink.value = true;
-      console.log('18 isLink = true');
-    } else {
-      isLink.value = false;
-      console.log('18 isLink = false');
-
     }
     if (project.file) {
       isFile.value = true;
-      console.log('18 isFile = true');
-
-    } else {
-      isFile.value = false;
-      console.log('18 isFile = false');
     }
   });
 })
