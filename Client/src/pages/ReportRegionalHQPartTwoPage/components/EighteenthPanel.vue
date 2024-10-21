@@ -1,5 +1,5 @@
 <template>
-  <div style="color:white;">
+  <!--<div style="color:white;">
     is sent {{ isSent }};
     term 2.1 {{ (!projects) }};
     term 2.2 {{ ((projects && !isLink && !isFile)) }};
@@ -7,7 +7,7 @@
     isFile {{ (isFile) }};
     term 2 {{ (!projects || (projects && !isLink && !isFile)) }};
     term 3 {{ (!eighteenthPanelData.comment) }};
-  </div>
+  </div>-->
   <div class="form__field-group report__field-group report__field-group--column" v-if="isSent
     && (!projects || (projects && !isLink && !isFile))
     && !eighteenthPanelData.comment">
