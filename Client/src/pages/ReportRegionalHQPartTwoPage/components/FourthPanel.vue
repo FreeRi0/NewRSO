@@ -219,7 +219,6 @@
                     name="eventName"
                     class="form__input"
                     placeholder="Введите название мероприятия"
-                    @focusout="focusOut"
                     :disabled="isSent || !event.participants_number"
                 />
               </div>
@@ -254,7 +253,7 @@
           </div>
         </div>
         <div class="form__field-event">
-          <div class="form__field-event-file">
+          <div v-if="event.regulations" class="form__field-event-file">
             <label class="form__label" for="4">Положение о мероприятии <sup class="valid-red">*</sup></label>
             <FileBoxComponent
                 :file="event.regulations"
@@ -266,16 +265,28 @@
           <div class="form__field-event-interregion">
             <p class="form__label">Межрегиональное <sup class="valid-red">*</sup></p>
             <div class="form__label-radio">
-              <div v-if="event.is_interregional" style="display: flex;">
-                <input v-model="event.is_interregional" type="radio" :id="`is_interregional-true_${index}`"
-                       :value="true" class="custom-radio"/>
+              <div style="display: flex;">
+                <input
+                    v-model="event.is_interregional"
+                    type="radio"
+                    :id="`is_interregional-true_${index}`"
+                    :value="true"
+                    class="custom-radio"
+                    :disabled="props.centralExpert || props.districtExpert"
+                />
                 <label :for="`is_interregional-true_${index}`">
                   Да
                 </label>
               </div>
-              <div v-else style="display: flex">
-                <input v-model="event.is_interregional" type="radio" :id="`is_interregional-false_${index}`"
-                       :value="false" class="custom-radio"/>
+              <div style="display: flex">
+                <input
+                    v-model="event.is_interregional"
+                    type="radio"
+                    :id="`is_interregional-false_${index}`"
+                    :value="false"
+                    class="custom-radio"
+                    :disabled="props.centralExpert || props.districtExpert"
+                />
                 <label :for="`is_interregional-false_${index}`">
                   Нет
                 </label>
@@ -294,7 +305,7 @@
       </div>
       <div class="form__field-comment">
         <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
-        <InputReport
+        <TextareaReport
             v-model:value="fourthPanelData.comment"
             id="comment"
             name="comment"
@@ -302,16 +313,21 @@
             type="textarea"
             placeholder="Укажите наименования организованных мероприятий"
             style="width: 100%;"
-            @focusout="focusOut"
+            :rows="1"
+            autoResize
+            :maxlength="3000"
+            :max-length-text="3000"
+            counter-visible
             :disabled="props.centralExpert || props.districtExpert"
         />
       </div>
-      <div class="form__field-result">
-        <v-checkbox label="Итоговое значение"/>
+      <div class="form__field-result" style="display: flex; align-items: center;">
+        <v-checkbox class="result-checkbox" id="v-checkbox" @change="calculateResult($event)"/>
+        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
       </div>
       <div class="hr"></div>
-      <div class="form__field-result">
-        <p>0</p>
+      <div class="form__field-result result-count">
+        <p>{{ finalResult.toFixed(1) }}</p>
       </div>
     </template>
 
@@ -390,11 +406,11 @@
                 <input
                     v-model="eventDH.is_interregional"
                     type="radio"
-                    :id="`is_interregional-true_${index}`"
+                    :id="`is_interregional-true_${index}DH`"
                     :value="true"
                     class="custom-radio"
                 />
-                <label :for="`is_interregional-true_${index}`">
+                <label :for="`is_interregional-true_${index}DH`">
                   Да
                 </label>
               </div>
@@ -402,11 +418,11 @@
                 <input
                     v-model="eventDH.is_interregional"
                     type="radio"
-                    :id="`is_interregional-false_${index}`"
+                    :id="`is_interregional-false_${index}DH`"
                     :value="false"
                     class="custom-radio"
                 />
-                <label :for="`is_interregional-false_${index}`">
+                <label :for="`is_interregional-false_${index}DH`">
                   Нет
                 </label>
               </div>
@@ -420,22 +436,28 @@
       </div>
       <div class="form__field-comment">
         <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
-        <InputReport
+        <TextareaReport
             v-model:value="fourthPanelDataDH.comment"
             id="comment"
             name="comment"
             class="form__input"
             type="textarea"
-            placeholder="Укажите наименования организованных мероприятий"
+            placeholder="Примечания, ссылки"
+            :rows="1"
+            autoResize
+            :maxlength="3000"
+            :max-length-text="3000"
+            counter-visible
             style="width: 100%;"
         />
       </div>
-      <div class="form__field-result">
-        <v-checkbox label="Итоговое значение"/>
+      <div class="form__field-result" style="display: flex; align-items: center;">
+        <v-checkbox class="result-checkbox" id="v-checkboxDH" @change="calculateResultDH($event)"/>
+        <label class="result-checkbox-text" for="v-checkboxDH">Итоговое значение</label>
       </div>
       <div class="hr"></div>
-      <div class="form__field-result">
-        <p>0</p>
+      <div class="form__field-result result-count">
+        <p>{{ finalResultDH.toFixed(1) }}</p>
       </div>
     </template>
 
@@ -532,16 +554,16 @@
   </report-tabs>
 </template>
 <script setup>
-import { inject, onMounted, ref, watch, watchEffect, watchPostEffect } from "vue";
-import { InputReport } from '@shared/components/inputs';
-import { Button } from '@shared/components/buttons';
-import { ReportTabs } from './index';
-import { reportPartTwoService } from "@services/ReportService.ts";
-import { FileBoxComponent } from "@entities/RatingRoComponents/components";
-import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
+import {onMounted, ref, watch, watchEffect, watchPostEffect} from "vue";
+import {InputReport, TextareaReport} from '@shared/components/inputs';
+import {Button} from '@shared/components/buttons';
+import {ReportTabs} from './index';
+import {reportPartTwoService} from "@services/ReportService.ts";
+import {FileBoxComponent} from "@entities/RatingRoComponents/components";
+import {fileValidate} from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 import {useReportPartTwoStore} from "@pages/ReportRegionalHQPartTwoPage/store.ts";
 
-const swal = inject('$swal');
+// const swal = inject('$swal');
 const reportStore = useReportPartTwoStore();
 
 const props = defineProps({
@@ -595,6 +617,7 @@ const isErrorDate = ref({});
 let isErrorFile = ref(false);
 const isLinkError = ref(false);
 const finalResult = ref(0);
+const finalResultDH = ref(0);
 
 const focusOut = async () => {
   fourthPanelData.value.events = [...events.value];
@@ -609,21 +632,6 @@ const focusOut = async () => {
       }
     } catch (e) {
       console.log(e)
-      // e.response.data.events.forEach(event => {
-      //   if (event.links) {
-      //     for (let i in event.links) {
-      //       if (Object.keys(event.links[i]).length !== 0 && event.links[i].link.includes('Введите правильный URL.')) {
-      //         swal.fire({
-      //           position: 'center',
-      //           icon: 'warning',
-      //           title: `Введите корректный URL`,
-      //           showConfirmButton: false,
-      //           timer: 2500,
-      //         })
-      //       }
-      //     }
-      //   }
-      // })
     }
   }
 };
@@ -761,6 +769,23 @@ const calculateResult = (event) => {
     })
   } else {
     finalResult.value = 0;
+  }
+};
+
+const calculateResultDH = (event) => {
+  if (event.target.checked) {
+    fourthPanelDataDH.value.events.forEach(e => {
+      const startDate = new Date(e.start_date);
+      const endDate = new Date(e.end_date);
+      const days = (endDate - startDate) / (1000 * 60 * 60 * 24);
+      if (e.is_interregional) {
+        finalResultDH.value += e.participants_number * days * 0.8;
+      } else {
+        finalResultDH.value += e.participants_number * days;
+      }
+    })
+  } else {
+    finalResultDH.value = 0;
   }
 };
 onMounted(() => {

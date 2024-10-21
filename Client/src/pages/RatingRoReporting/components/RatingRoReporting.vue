@@ -4,7 +4,7 @@
     <div class="ratingRo_report_wrapper">
       <router-link class="ratingRo_report_item" :to="{ name: 'ReportRegionalPartOne' }">Отчет о деятельности
         регионального отделения РСО за 2024 год. Часть 1</router-link>
-      <router-link v-if="show" class="ratingRo_report_item" :to="{ name: 'ReportRegionalPartTwo' }">Отчет о деятельности
+      <router-link class="ratingRo_report_item" :to="{ name: 'ReportRegionalPartTwo' }">Отчет о деятельности
         регионального отделения РСО за 2024 год. Часть 2</router-link>
     </div>
   </div>
@@ -15,7 +15,7 @@ import { useRouter } from "vue-router";
 import { useRoleStore } from "@layouts/store/role";
 import { showByUrl } from '@services/ProdUrlService';
 
-const show = ref(false);
+// const show = ref(false);
 
 const router = useRouter();
 
@@ -29,10 +29,7 @@ watch(() => roleStore.roles?.regionalheadquarter_commander, () => {
 
 
 onMounted(() => {
-  // if (window.location.hostname.includes('localhost') || window.location.hostname.includes('rso.sprint.1t.ru') || window.location.hostname.includes('213.139.208.147')) {
-  //   show.value = true;
-  // }
-  show.value = showByUrl();
+  // show.value = showByUrl();
 });
 </script>
 <style lang="scss" scoped>

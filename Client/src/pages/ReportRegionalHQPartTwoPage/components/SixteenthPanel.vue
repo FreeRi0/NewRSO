@@ -171,14 +171,14 @@
           Наличие трудового проекта, в котором ЛСО РО одержал победу <sup class="valid-red">*</sup>
         </p>
         <div class="form__label-radio">
-          <div v-if="sixteenthPanelData.is_project" style="display: flex; align-items: center">
+          <div style="display: flex; align-items: center">
             <input class="custom-radio" v-model="sixteenthPanelData.is_project" id="is_project-true" type="radio"
-                   :value="true"/>
+                   :value="true" disabled/>
             <label for="is_project-true">Да</label>
           </div>
-          <div v-else style="display: flex; align-items: center">
+          <div style="display: flex; align-items: center">
             <input class="custom-radio" v-model="sixteenthPanelData.is_project" id="is_project-false" type="radio"
-                   :value="false"/>
+                   :value="false" disabled/>
             <label for="is_project-false">Нет</label>
           </div>
         </div>
@@ -208,39 +208,36 @@
           <div class="project-regulations">
             <div class="project-scope">
               <p class="form__label form__field-label-project">Масштаб проекта <sup class="valid-red">*</sup></p>
-              <div v-if="project.project_scale === 'Всероссийский'">
+              <div>
                 <input
                     class="custom-radio"
                     v-model="project.project_scale"
                     type="radio"
                     :id="`All-${index}`"
                     value="Всероссийский"
-                    :disabled="isSent || !sixteenthPanelData.is_project"
-                    @change="focusOut"
+                    disabled
                 />
                 <label :for="`All-${index}`">Всероссийский</label>
               </div>
-              <div v-if="project.project_scale === 'Окружной'">
+              <div>
                 <input
                     class="custom-radio"
                     v-model="project.project_scale"
                     type="radio"
                     :id="`District-${index}`"
                     value="Окружной"
-                    :disabled="isSent || !sixteenthPanelData.is_project"
-                    @change="focusOut"
+                    disabled
                 />
                 <label :for="`District-${index}`">Окружной</label>
               </div>
-              <div v-if="project.project_scale === 'Межрегиональный'">
+              <div>
                 <input
                     class="custom-radio"
                     v-model="project.project_scale"
                     type="radio"
                     :id="`Interregional-${index}`"
                     value="Межрегиональный"
-                    :disabled="isSent || !sixteenthPanelData.is_project"
-                    @change="focusOut"
+                    disabled
                 />
                 <label :for="`Interregional-${index}`">Межрегиональный</label>
               </div>
@@ -284,12 +281,12 @@
         />
       </div>
       <div class="form__field-result">
-        <v-checkbox class="result-checkbox"/>
-        <label class="result-checkbox-text">Итоговое значение</label>
+        <v-checkbox class="result-checkbox" id="v-checkbox" @change="calculateResult($event)"/>
+        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
       </div>
       <div class="hr"></div>
       <div class="form__field-result">
-        <p>0</p>
+        <p class="result-count">{{ finalResult.toFixed(1) }}</p>
       </div>
     </template>
 
@@ -407,12 +404,12 @@
           />
         </div>
         <div class="form__field-result">
-          <v-checkbox class="result-checkbox" id="v-checkbox" @change="calculateResult($event)"/>
-          <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
+          <v-checkbox class="result-checkbox" id="v-checkboxDH" @change="calculateResultDH($event)"/>
+          <label class="result-checkbox-text" for="v-checkboxDH">Итоговое значение</label>
         </div>
         <div class="hr"></div>
         <div>
-          <p class="result-count">{{ finalResult.toFixed(1) }}</p>
+          <p class="result-count">{{ finalResultDH.toFixed(1) }}</p>
         </div>
       </div>
     </template>
@@ -584,6 +581,7 @@ const projects = ref([
 const isFirstSent = ref(true);
 const isSent = ref(false);
 const finalResult = ref(0);
+const finalResultDH = ref(0);
 
 const focusOut = async () => {
   sixteenthPanelData.value.projects = [...projects.value];
@@ -679,7 +677,6 @@ const setFormData = (index = null, isDeleteEvent = false, isLinkDelete = false, 
 const calculateResult = (event) => {
   if (event.target.checked) {
     projects.value.forEach(e => {
-      console.log('e', e.project_scale)
       if (e.project_scale === 'Всероссийский') {
         finalResult.value += 2
       } else if (e.project_scale === 'Окружной') {
@@ -690,6 +687,22 @@ const calculateResult = (event) => {
     })
   } else {
     finalResult.value = 0
+  }
+};
+
+const calculateResultDH = (event) => {
+  if (event.target.checked) {
+    sixteenthPanelDataDH.value.projects.forEach(e => {
+      if (e.project_scale === 'Всероссийский') {
+        finalResultDH.value += 2
+      } else if (e.project_scale === 'Окружной') {
+        finalResultDH.value += 1.5
+      } else if (e.project_scale === 'Межрегиональный') {
+        finalResultDH.value += 1
+      }
+    })
+  } else {
+    finalResultDH.value = 0
   }
 };
 

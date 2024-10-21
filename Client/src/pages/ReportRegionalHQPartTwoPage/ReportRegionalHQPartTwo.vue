@@ -1320,6 +1320,8 @@ const checkEmptyFields = (data) => {
 }
 
 onMounted(() => {
+  console.log('roleStore.experts', roleStore.experts)
+  console.log('roleStore.roles', roleStore.roles)
   // if (!roleStore.roles?.regionalheadquarter_commander && (!roleStore.experts?.is_district_expert || !roleStore.experts?.is_central_expert)) {
   //   router.push({ name: 'mypage' });
   // }
