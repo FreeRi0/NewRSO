@@ -121,9 +121,24 @@
       :dataRH="eleventhPanelData.participants_number"
       :dataDH="eleventhPanelDataDH.participants_number"
       v-model:value="eleventhPanelDataCH.participants_number"
+      :maxlength="10"
+      :min="0"
+      :max="2147483647"
+      
+      :is-error-panel="isErrorPanel"
     ></ReportTable>
 
-    <CommentFileComponent></CommentFileComponent>
+    <CommentFileComponent
+      v-model:value="eleventhPanelDataCH.comment"
+      name="eleventhPanelDataCH.comment"
+      @change="uploadFileCH"
+      @click="deleteFileCH"
+      :file="reportStore.reportDataCHFile.eleventh ? reportStore.reportDataCHFile.eleventh.name : null"
+      :fileType="reportStore.reportDataCHFile.eleventh ? reportStore.reportDataCHFile.eleventh.type.split('/').at(-1) : null"
+      :fileSize="reportStore.reportDataCHFile.eleventh ? reportStore.reportDataCHFile.eleventh.size / Math.pow(1024, 2) : null"
+      
+      :is-error-panel="isErrorPanel"
+    ></CommentFileComponent>
 
     <div>
       <v-checkbox label="Вернуть в&nbsp;РО на&nbsp;доработку" />
@@ -268,6 +283,11 @@ const uploadFileDH = async (event) => {
   // }
 }
 
+const uploadFileCH = async (event) => {
+  eleventhPanelDataCH.value.scan_file = event.target.files[0];
+  reportStore.reportDataCHFile.eleventh = event.target.files[0];
+}
+
 const deleteFile = async () => {
   eleventhPanelData.value.scan_file = '';
 
@@ -297,13 +317,21 @@ const deleteFileDH = async () => {
   // }
 }
 
+const deleteFileCH = async () => {
+  eleventhPanelDataCH.value.scan_file = '';
+  reportStore.reportDataCHFile.eleventh = null;
+}
+
 watchEffect(() => {
-  if (props.districtExpert) {
+  if (props.centralExpert || props.districtExpert) {
+    if (reportStore.reportDataCH.eleventh) {
+      eleventhPanelDataCH.value.comment = reportStore.reportDataCH.eleventh.comment;
+      eleventhPanelDataCH.value.participants_number = reportStore.reportDataCH.eleventh.participants_number;
+    }
     if (reportStore.reportDataDH.eleventh) {
       eleventhPanelDataDH.value.comment = reportStore.reportDataDH.eleventh.comment;
       eleventhPanelDataDH.value.participants_number = reportStore.reportDataDH.eleventh.participants_number;
     }
-
   } else {
     if (props.data) {
       // console.log(props.data);
@@ -348,6 +376,24 @@ watch(eleventhPanelDataDH.value, () => {
   : formData.append('scan_file', '');
 
   emit('getDataDH', formData, Number(ID_PANEL));
+});
+
+watch(eleventhPanelDataCH.value, () => {
+  reportStore.reportDataCH.eleventh = eleventhPanelDataCH.value;
+
+  let formData = new FormData();
+
+  eleventhPanelDataCH.value.participants_number 
+  ? formData.append('participants_number', eleventhPanelDataCH.value.participants_number) 
+  : formData.append('participants_number', '');
+
+  formData.append('comment', eleventhPanelDataCH.value.comment || '');
+
+  reportStore.reportDataCHFile.eleventh 
+  ? formData.append('scan_file', reportStore.reportDataCHFile.eleventh) 
+  : formData.append('scan_file', '');
+
+  emit('getDataCH', formData, Number(ID_PANEL));
 });
 </script>
 

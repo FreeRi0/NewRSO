@@ -38,6 +38,7 @@
         :district-expert="props.districtExpert"
         @get-dataCH="getDataCH"
         is-third-tab
+        :is-error-panel="isErrorPanel"
       ></ThirteenthPanelComponent>
     </template>
   </report-tabs>

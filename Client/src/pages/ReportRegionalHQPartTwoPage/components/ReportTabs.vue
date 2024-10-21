@@ -2,26 +2,26 @@
   <v-card class="panel-card">
 
     <v-tabs v-model="tab">
-      <v-tab value="one" class="panel-tab-btn" v-if="districtHeadquarterCommander || centralHeadquarterCommander">Отчет
+      <v-tab value="one" class="panel-tab-btn" v-if="districtExpert || centralExpert">Отчет
         РО</v-tab>
       <v-tab value="two" class="panel-tab-btn"
-        v-if="districtHeadquarterCommander || centralHeadquarterCommander">Корректировка ОШ</v-tab>
-      <v-tab value="three" class="panel-tab-btn" v-if="centralHeadquarterCommander">Корректировка ЦШ</v-tab>
+        v-if="districtExpert || centralExpert">Корректировка ОШ</v-tab>
+      <v-tab value="three" class="panel-tab-btn" v-if="centralExpert">Корректировка ЦШ</v-tab>
     </v-tabs>
 
     <v-card-text class="panel-card-text">
       <v-tabs-window v-model="tab">
-        <v-tabs-window-item value="one" v-if="districtHeadquarterCommander || centralHeadquarterCommander">
+        <v-tabs-window-item value="one" v-if="districtExpert || centralExpert">
           <div class="form__field-group">
             <slot name="firstTab"></slot>
           </div>
         </v-tabs-window-item>
-        <v-tabs-window-item value="two" v-if="districtHeadquarterCommander || centralHeadquarterCommander">
+        <v-tabs-window-item value="two" v-if="districtExpert || centralExpert">
           <div class="form__field-group">
             <slot name="secondTab"></slot>
           </div>
         </v-tabs-window-item>
-        <v-tabs-window-item value="three" v-if="centralHeadquarterCommander">
+        <v-tabs-window-item value="three" v-if="centralExpert">
           <div class="form__field-group report-table">
             <slot name="thirdTab"></slot>
           </div>
@@ -35,16 +35,29 @@ import { ref, watchEffect } from "vue";
 import { useRoleStore } from "@layouts/store/role.ts";
 
 const tab = ref(null);
-const districtHeadquarterCommander = ref(false);
-const centralHeadquarterCommander = ref(false);
+// const districtHeadquarterCommander = ref(false);
+// const centralHeadquarterCommander = ref(false);
 const roleStore = useRoleStore();
 
+const districtExpert = ref(false);
+const centralExpert = ref(false);
+
 watchEffect(() => {
-  if (roleStore.roles?.districtheadquarter_commander) {
-    districtHeadquarterCommander.value = true;
+  // if (roleStore.roles?.districtheadquarter_commander) {
+  //   districtHeadquarterCommander.value = true;
+  // }
+  // if (roleStore.roles.centralheadquarter_commander) {
+  //   centralHeadquarterCommander.value = true;
+  // }
+
+  if (roleStore.experts?.is_district_expert) {
+    districtExpert.value = true;
+    console.log('окружной эксперт', districtExpert.value);
   }
-  if (roleStore.roles.centralheadquarter_commander) {
-    centralHeadquarterCommander.value = true;
+  if (roleStore.experts?.is_central_expert) {
+
+    centralExpert.value = true;
+    console.log('центральный эксперт', centralExpert.value);
   }
 })
 </script>

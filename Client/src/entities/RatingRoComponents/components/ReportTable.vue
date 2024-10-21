@@ -23,9 +23,12 @@
                             style="width: 100%;"
                             type="number"
                             placeholder="0"
-                            :maxlength="10"
-                            :max="32767"
-                            @focusout="focusOutField"
+                            :maxlength="maxlength"
+                            :min="min"
+                            :max="max"
+                            :step="step"
+
+                            :is-error-panel="isErrorPanel"
                         />
                 </td>
                 </tr>
@@ -37,7 +40,6 @@
 <script setup>
 import { InputReport } from '@shared/components/inputs';
 
-const emit = defineEmits(['focusOut']);
 const props = defineProps({
     label: {
         type: String,
@@ -52,10 +54,23 @@ const props = defineProps({
     value: {
         type: Number,
     },
+    name: {
+        type: String
+    },
+    maxlength: {
+        type: Number,
+    },
+    max: {
+        type: Number,
+    },
+    min: {
+        type: Number,
+    },
+    step: {
+        type: Number,
+    },
+    isErrorPanel: {
+        type: Boolean,
+    },
 });
-
-const focusOutField = (event) => {
-    emit('focusOut', event.target.value);
-};
-
 </script>
