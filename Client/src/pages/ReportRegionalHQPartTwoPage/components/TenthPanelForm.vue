@@ -139,7 +139,7 @@
             <label for="event_happened-false">Нет</label>
           </div>
         </div>
-        <div style="margin-bottom: 8px;">
+        <div v-if="tenthPanelData.document" style="margin-bottom: 8px;">
           <label class="form__label" for="4">Скан документа, подтверждающего проведение акции</label>
           <FileBoxComponent
               :file="tenthPanelData.document"
