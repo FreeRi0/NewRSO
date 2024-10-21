@@ -116,32 +116,46 @@
       </div>
 
       <div class="form__field">
-        <p class="form__label">Проведение акции <sup class="valid-red">*</sup></p>
-        <div class="form__field-radio">
-          <div v-if="tenthPanelData.event_happened" style="display: flex; align-items: center">
+        <p class="form__label" id="form__label-radio">Проведение акции <sup class="valid-red">*</sup></p>
+        <div class="form__field-radio" style="display: flex">
+          <div style="display: flex; align-items: center">
             <input
                 v-model="tenthPanelData.event_happened"
                 id="event_happened-true"
                 class="custom-radio"
                 type="radio"
                 :value="true"
+                disabled
             />
             <label for="event_happened-true">Да</label>
           </div>
-          <div v-else style="display: flex; align-items: center">
+          <div style="display: flex; align-items: center">
             <input
                 v-model="tenthPanelData.event_happened"
                 id="event_happened-false"
                 class="custom-radio"
                 type="radio"
                 :value="false"
+                disabled
             />
             <label for="event_happened-false">Нет</label>
           </div>
         </div>
-        <div v-if="tenthPanelData.document" style="margin-bottom: 8px;">
-          <label class="form__label" for="4">Скан документа, подтверждающего проведение акции</label>
+        <div style="margin-bottom: 8px;">
+          <label style="display: flex; " class="form__label" for="4">Скан документа, подтверждающего проведение
+            акции</label>
+          <InputReport
+              class="form-input__file-input"
+              v-if="!tenthPanelData.document"
+              isFile
+              type="file"
+              id="scan_file"
+              name="scan_file"
+              @change="uploadFile"
+              :disabled="isSent || !tenthPanelData.event_happened"
+          />
           <FileBoxComponent
+              v-else
               :file="tenthPanelData.document"
               :fileType="tenthPanelData.file_type"
               :fileSize="tenthPanelData.file_size"
@@ -151,8 +165,8 @@
           />
         </div>
         <div>
-          <p class="form__label">Ссылка на&nbsp;социальные сети/электронные
-            СМИ, подтверждающая проведение акции <sup class="valid-red">*</sup></p>
+          <p class="form__label">Ссылка на социальные сети/ электронные <br>
+            СМИ, подтверждающая проведение акции</p>
           <div class="input-link" v-for="(link, i) in tenthPanelData.links" :key="i">
             <InputReport
                 v-model:value="link.link"
@@ -160,10 +174,35 @@
                 :name="i"
                 class="form__input form__input-add-link"
                 type="text"
-                placeholder="https://vk.com/cco_monolit"
-                :disabled="props.centralExpert || props.districtExpert"
+                placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
+                @focusout="formData"
+                :disabled="isSent || !tenthPanelData.event_happened"
+                is-link
             />
+            <div v-if="!isSent && tenthPanelData.event_happened">
+              <Button v-if="tenthPanelData.links.length === i + 1" class="form__add-link-button" label="+ Добавить ссылку"
+                      @click="addLink"/>
+              <Button class="form__add-link-button" v-else label="Удалить" @click="onDeleteLink(i)"/>
+            </div>
           </div>
+        </div>
+        <div class="form__field-comment">
+          <label style="display: flex; align-items: center;" class="form__label" for="comment">Комментарий <sup
+              class="valid-red">*</sup></label>
+          <TextareaReport
+              placeholder="Напишите сообщение"
+              v-model:value="tenthPanelData.comment"
+              id="comment"
+              name="comment"
+              :rows="1"
+              autoResize
+              :maxlength="3000"
+              :max-length-text="3000"
+              counter-visible
+              class="form__input form__input-comment"
+              style="margin-bottom: 4px;"
+              disabled
+          />
         </div>
       </div>
 
@@ -204,19 +243,6 @@
       </div>
 
       <div class="form__field">
-        <!--        <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>-->
-        <!--        <TextareaReport-->
-        <!--            placeholder="Напишите сообщение"-->
-        <!--            v-model:value="tenthPanelDataDH.comment"-->
-        <!--            id="comment"-->
-        <!--            name="comment"-->
-        <!--            :rows="1"-->
-        <!--            autoResize-->
-        <!--            :maxlength="3000"-->
-        <!--            :max-length-text="3000"-->
-        <!--            counter-visible-->
-        <!--            class="form__input"-->
-        <!--        />-->
         <CommentFileComponent
             v-model:value="tenthPanelDataDH.comment"
             name="firstPanelDataDH.comment"
