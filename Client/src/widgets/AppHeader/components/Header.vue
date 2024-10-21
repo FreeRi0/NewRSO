@@ -331,8 +331,9 @@ const userPages = computed(() => [
         title: 'Рейтинг РО',
         name: nameUrl,
         show:
+            (roleStore.roles?.regionalheadquarter_commander && roleStore.experts.is_district_expert) ||
             roleStore.experts.is_central_expert === true ||
-            roleStore.experts.is_district_expert === true ||
+            // roleStore.experts.is_district_expert === true ||
             roleStore.roles?.regionalheadquarter_commander ||
             roleStore.roles?.centralheadquarter_commander,
     },
@@ -429,6 +430,9 @@ watch(
 
     if (roleStore.roles.centralheadquarter_commander !== null) {
       nameUrl = 'rating-ro'
+
+    } else if (roleStore.roles?.regionalheadquarter_commander && roleStore.experts.is_district_expert) {
+      nameUrl = 'reportingRo'
 
     } else if (roleStore.experts.is_central_expert === true || roleStore.experts.is_district_expert === true) {
       nameUrl = 'rating-ro'

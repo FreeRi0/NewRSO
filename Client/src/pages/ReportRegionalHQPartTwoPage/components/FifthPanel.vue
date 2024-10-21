@@ -223,18 +223,26 @@
       </div>
       <div class="form__field-comment">
         <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
-        <TextareaReport v-model:value="fifthPanelData.comment" id="comment" name="comment" :rows="1" autoResize
-                        placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
-                        counter-visible
-                        :disabled="props.centralExpert || props.districtExpert"/>
+        <TextareaReport
+            v-model:value="fifthPanelData.comment"
+            id="comment"
+            name="comment"
+            :rows="1"
+            autoResize
+            placeholder="Комментарий"
+            :maxlength="3000"
+            :max-length-text="3000"
+            counter-visible
+            :disabled="props.centralExpert || props.districtExpert"
+        />
       </div>
-      <div style="display: flex; align-items: center;">
-        <v-checkbox class="result-checkbox" id="v-checkbox"/>
+      <div class="form__field-result">
+        <v-checkbox class="result-checkbox" id="v-checkbox" @change="calculateResult($event)"/>
         <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
       </div>
       <div class="hr"></div>
       <div>
-        <p>0</p>
+        <p>{{ finalResult.toFixed(1) }}</p>
       </div>
     </template>
 
@@ -322,19 +330,19 @@
             name="comment"
             :rows="1"
             autoResize
-            placeholder="Комментарий"
+            placeholder="Примечания, ссылки"
             :maxlength="3000"
             :max-length-text="3000"
             counter-visible
         />
       </div>
-      <div style="display: flex; align-items: center;">
-        <v-checkbox class="result-checkbox" id="v-checkbox"/>
-        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
+      <div class="form__field-result">
+        <v-checkbox class="result-checkbox" id="v-checkboxDH" @change="calculateResultDH($event)"/>
+        <label class="result-checkbox-text" for="v-checkboxDH">Итоговое значение</label>
       </div>
       <div class="hr"></div>
       <div>
-        <p>0</p>
+        <p>{{ finalResultDH.toFixed(1) }}</p>
       </div>
     </template>
 
@@ -480,6 +488,7 @@ const isSent = ref(false);
 const isErrorDate = ref({});
 const isLinkError = ref(false);
 const finalResult = ref(0);
+const finalResultDH = ref(0);
 
 const focusOut = async () => {
   // if (event.target.value === '0') {
@@ -631,6 +640,19 @@ const calculateResult = (event) => {
     })
   } else {
     finalResult.value = 0;
+  }
+};
+
+const calculateResultDH = (event) => {
+  if (event.target.checked) {
+    fifthPanelDataDH.value.events.forEach(e => {
+      const startDate = new Date(e.start_date);
+      const endDate = new Date(e.end_date);
+      const days = (endDate - startDate) / (1000 * 60 * 60 * 24);
+      finalResultDH.value += Math.abs((e.participants_number - e.ro_participants_number) * days)
+    })
+  } else {
+    finalResultDH.value = 0;
   }
 };
 
