@@ -129,50 +129,50 @@ export const dateValidate = (events: Ref, isErrorDate: Ref<error[]>, noDateError
 }
 
 export function checkEmptyFieldsDH(data: ReportDHType, isErrorPanel: Ref) {
-    // if (data.first && !(data.first.amount_of_money && data.first.comment)) {
-    //     isErrorPanel.value.first = true;
-    //     swal.default.fire({
-    //         position: 'center',
-    //         icon: 'warning',
-    //         title: `Заполните обязательные поля в 1 показателе`,
-    //         showConfirmButton: false,
-    //         timer: 2500,
-    //     })
-    //     return false
-    // } else {
-    //     isErrorPanel.value.first = false;
-    // }
+    if (data.first && !(data.first.amount_of_money && data.first.comment)) {
+        isErrorPanel.value.first = true;
+        swal.default.fire({
+            position: 'center',
+            icon: 'warning',
+            title: `Заполните обязательные поля в 1 показателе`,
+            showConfirmButton: false,
+            timer: 2500,
+        })
+        return false
+    } else {
+        isErrorPanel.value.first = false;
+    }
 
-    // if (data.fourth) {
-    //     for (const event of data.fourth.events) {
-    //         if ((event.participants_number != 0 || !event.participants_number) && !(event.name && event.end_date && event.start_date && data.fourth.comment)) {
-    //             isErrorPanel.value.fourth = true;
-    //             swal.default.fire({
-    //                 position: 'center',
-    //                 icon: 'warning',
-    //                 title: `Заполните обязательные поля в 4 показателе`,
-    //                 showConfirmButton: false,
-    //                 timer: 2500,
-    //             })
-    //             return false;
-    //         }
-    //     }
-    // }
-    // if (data.fifth) {
-    //     for (const event of data.fifth.events) {
-    //         if ((event.participants_number != 0 || !event.participants_number) && !(event.end_date && event.start_date && event.name && data.fifth.comment)) {
-    //             isErrorPanel.value.fifth = true;
-    //             swal.default.fire({
-    //                 position: 'center',
-    //                 icon: 'warning',
-    //                 title: `Заполните обязательные поля в 5 показателе`,
-    //                 showConfirmButton: false,
-    //                 timer: 2500,
-    //             })
-    //             return false;
-    //         }
-    //     }
-    // }
+    if (data.fourth) {
+        for (const event of data.fourth.events) {
+            if ((event.participants_number != 0 || !event.participants_number) && !(event.name && event.end_date && event.start_date && data.fourth.comment)) {
+                isErrorPanel.value.fourth = true;
+                swal.default.fire({
+                    position: 'center',
+                    icon: 'warning',
+                    title: `Заполните обязательные поля в 4 показателе`,
+                    showConfirmButton: false,
+                    timer: 2500,
+                })
+                return false;
+            }
+        }
+    }
+    if (data.fifth) {
+        for (const event of data.fifth.events) {
+            if ((event.participants_number != 0 || !event.participants_number) && !(event.end_date && event.start_date && event.name && data.fifth.comment)) {
+                isErrorPanel.value.fifth = true;
+                swal.default.fire({
+                    position: 'center',
+                    icon: 'warning',
+                    title: `Заполните обязательные поля в 5 показателе`,
+                    showConfirmButton: false,
+                    timer: 2500,
+                })
+                return false;
+            }
+        }
+    }
     for (const item in data.six) {
         if (data.six[item as keyof typeof data.six].number_of_members !== null && data.six[item as keyof typeof data.six].number_of_members != 0) {
             if (!data.six[item as keyof typeof data.six].comment) {
