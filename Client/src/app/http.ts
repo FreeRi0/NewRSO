@@ -153,7 +153,7 @@ HTTP.interceptors.response.use(
                 originalRequest.url !== '/services/front_errors/') {
                 let matches_1 = originalRequest.url.match(/regional_competitions\/me\/reports\/\d{1,}\/\d{1,}\//gm);
                 let matches_2 = originalRequest.url.match(/regional_competitions\/me\/reports\/\d{1,}\//gm);
-                let matches_3 = originalRequest.url.match(/competitions\/1\/reports\/q\d{1,}\/get-place\//gm);
+                let matches_3 = originalRequest.url.match(/competitions\/\d{1,}\/reports\/q\d{1,}\/(get-place)||(info-static)\//gm);
                 let matches_4 = originalRequest.url.match(/detachments\/\d{1,}\/competitions\/1\/place\//gm);
                 let matches_5 = originalRequest.url.match(/competitions\/1\/get-place\//gm);
                 let matches_6 = originalRequest.url.match(/regional_competitions\/reports\/\d{1,}\/\d{1,}\/(\d{1,})?\/(district_review)?\//gm);
@@ -161,10 +161,21 @@ HTTP.interceptors.response.use(
                 let matches_8 = originalRequest.url.match(/statistical_report\/me\//gm);
                 let matches_9 = originalRequest.url.match(/competitions\/\d{1,}\/applications\/me/gm);
                 let matches_10 = originalRequest.url.match(/regional_competitions\/statistical_report\/me\//gm);
-
+                let matches_11 = originalRequest.url.match(/detachments\/\d{1,}\/members\/\d{1,}\//gm);
+                //
+                let matches_12 = originalRequest.url.match(/centrals\/\d{1,}\/(leadership)?\//gm);
+                let matches_13 = originalRequest.url.match(/rsousers\/\d{1,}\/(commander)||(positions)\//gm);
+                let matches_14 = originalRequest.url.match(/save_users\/(\d{1,})||(creation-rs)\//gm);
+                let matches_15 = originalRequest.url.match(/regionals\/creation-rs\/(leadership)?\//gm);
+                let matches_16 = originalRequest.url.match(/locals\/d{1,}\/(leadership)?\//gm);
+                let matches_17 = originalRequest.url.match(/districts\/d{1,}\/(leadership)?\//gm);
+                let matches_18 = originalRequest.url.match(/rsousers\/\d{1,}\/positions\//gm);
+                //
                 let matches = (matches_1 || []).length + (matches_2 || []).length + (matches_3 || []).length + (matches_4 || []).length +
                     (matches_5 || []).length + (matches_6 || []).length + (matches_7 || []).length + (matches_8 || []).length +
-                    (matches_9 || []).length + (matches_10 || []).length;
+                    (matches_9 || []).length + (matches_10 || []).length + (matches_11 || []).length + (matches_12 || []).length +
+                    (matches_13 || []).length + (matches_14 || []).length + (matches_15 || []).length + (matches_16 || []).length +
+                    (matches_17 || []).length + (matches_18 || []).length;
 
                 if (/*(window.location.hostname === 'localhost' ||
                     window.location.hostname === 'rso.sprint.1t' ||
