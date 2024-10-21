@@ -1,8 +1,8 @@
 <template>
   <div class="form__field-group report__field-group report__field-group--column"
-    v-if="isSent && 
-          (!eighteenthPanelData.projects || !isLink) && 
-          !eighteenthPanelData.comment">
+    v-if="isSent 
+          && (!projects || (projects && !isLink && !isFile))
+          && !eighteenthPanelData.comment">
     <p class="report__text-info">
       Информация о&nbsp;показателе региональным отделением не&nbsp;предоставлена.
     </p>
@@ -11,7 +11,7 @@
   <div v-else class="form__field-group report__field">
     <div class="report__field" 
       v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
-            (isSent && isLink)">
+            (isSent && projects)">
       <div class="report__field-group" v-for="(project, index) in projects" :key="index">
         <div class="report__fieldset report__file-input"
           v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
@@ -179,7 +179,8 @@ const props = defineProps({
 });
 
 let isError = ref(props.isError);
-const isLink =ref(false);
+const isLink = ref(false);
+const isFile = ref(false);
 
 const emit = defineEmits(['getData']);
 
@@ -454,6 +455,12 @@ watchPostEffect(() => {
       isLink.value = true;
     } else {
       isLink.value = false;
+    }
+
+    if (project.file) {
+      isFile.value = true;
+    } else {
+      isFile.value = false;
     }
   });
 })
