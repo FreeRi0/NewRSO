@@ -19,7 +19,7 @@
                 :max="9999999999"
                 :step="0.01"
                 @focusout="focusOut"
-                :disabled="isSent"
+                :disabled="isSent || (props.centralExpert || props.districtExpert)"
                 :is-error-panel="isErrorPanel"
             />
         </div>
@@ -27,7 +27,8 @@
         <div 
             class="report__fieldset report__fieldset--right-block"
             v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
-                  (isSent && twelfthPanelData.scan_file)"
+                  (isSent && twelfthPanelData.scan_file) ||
+                  ((props.centralExpert || props.districtExpert) && twelfthPanelData.scan_file)"
         >
             <p class="form__label report__label">
                 Скан подтверждающего <br> документа
@@ -42,7 +43,7 @@
                 width="100%"
                 height="auto"
                 @change="uploadFile"
-                :disabled="isSent"
+                :disabled="isSent || (props.centralExpert || props.districtExpert)"
             />
             <FileBoxComponent
                 v-else
@@ -50,7 +51,7 @@
                 :fileType="twelfthPanelData.file_type"
                 :fileSize="twelfthPanelData.file_size"
                 @click="deleteFile"
-                :is-sent="isSent"
+                :is-sent="isSent || (props.centralExpert || props.districtExpert)"
                 :is-error-file="isErrorFile"
             ></FileBoxComponent>
         </div>
@@ -58,7 +59,8 @@
         <div 
             class="report__fieldset report__fieldset--comment"
             v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
-                  (isSent && twelfthPanelData.comment)"
+                  (isSent && twelfthPanelData.comment) ||
+                  ((props.centralExpert || props.districtExpert) && twelfthPanelData.comment)"
             >
             <label class="form__label report__label" for="comment">
                 Комментарий
@@ -74,7 +76,7 @@
                 :maxlength="3000"
                 :max-length-text="3000"
                 @focusout="focusOut"
-                :disabled="isSent"
+                :disabled="isSent || (props.centralExpert || props.districtExpert)"
             >
             </TextareaReport>
         </div>
@@ -88,7 +90,7 @@
                 Объем средств, собранных бойцами РО&nbsp;РСО&nbsp;<sup class="valid-red">*</sup>
             </label>
             <InputReport
-                v-model:value="twelfthPanelData.amount_of_money"
+                v-model:value="twelfthPanelDataDH.amount_of_money"
                 id="amount-of-money"
                 name="amount-of-money"
                 style="width: 100%;"
@@ -99,22 +101,22 @@
                 :min="0"
                 :max="9999999999"
                 :step="0.01"
-                @update:value="changeValue"
                 :disabled="centralExpert"
+                :is-error-panel="isErrorPanel"
             />
         </div>
 
         <CommentFileComponent
-            v-model:value="twelfthPanelData.comment"
-            @update:value="changeValue"
+            v-model:value="twelfthPanelDataDH.comment"
             name="twelfthPanelData.comment"
-            @change="uploadFile"
-            @click="deleteFile"
-            :file="fileName"
-            :fileType="twelfthPanelData.file_type"
-            :fileSize="twelfthPanelData.file_size"
+            @change="uploadFileDH"
+            @click="deleteFileDH"
+            :file="reportStore.reportDataDHFile.twelfth ? reportStore.reportDataDHFile.twelfth.name : null"
+            :fileType="reportStore.reportDataDHFile.twelfth ? reportStore.reportDataDHFile.twelfth.type.split('/').at(-1) : null"
+            :fileSize="reportStore.reportDataDHFile.twelfth ? reportStore.reportDataDHFile.twelfth.size / Math.pow(1024, 2) : null"
             :disabled="centralExpert"
             :is-error-file="isErrorFile"
+            :is-error-panel="isErrorPanel"
         ></CommentFileComponent>
     </div>
 
@@ -125,9 +127,9 @@
         <ReportTable
             label="Объем средств, собранных бойцами РО&nbsp;РСО"
             name="twelfthPanelData.amount_of_money"
-            :dataRH="54"
-            :dataDH="178"
-            v-model:value="twelfthPanelData.amount_of_money"
+            :dataRH="twelfthPanelData.amount_of_money"
+            :dataDH="twelfthPanelDataDH.amount_of_money"
+            v-model:value="twelfthPanelDataCH.amount_of_money"
         ></ReportTable>
 
         <CommentFileComponent></CommentFileComponent>
@@ -139,7 +141,7 @@
 </template>
   
 <script setup>
-import { ref, watchEffect } from "vue";
+import { ref, watchEffect, watchPostEffect, watch } from "vue";
 import { InputReport, TextareaReport } from '@shared/components/inputs';
 import {
     CommentFileComponent,
@@ -148,15 +150,15 @@ import {
 } from "@entities/RatingRoComponents/components";
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
+import {useReportPartTwoStore} from "@pages/ReportRegionalHQPartTwoPage/store.ts";
+
+const reportStore = useReportPartTwoStore();
 
 const props = defineProps({
     districtExpert: {
-    type: Boolean,
-    },
-    centralExpert: {
         type: Boolean,
     },
-    isDisabled: {
+    centralExpert: {
         type: Boolean,
     },
     isSecondTab: {
@@ -168,6 +170,8 @@ const props = defineProps({
         default: false,
     },
     data: Object,
+    // dataDH: Object,
+    // dataCH: Object,
     isErrorPanel: {
         type: Boolean,
     },
@@ -176,6 +180,7 @@ const props = defineProps({
 const ID_PANEL = '12';
 const isFirstSent = ref(true);
 let isErrorFile = ref(false);
+// let fileName = ref(null);
 const twelfthPanelData = ref({
     amount_of_money: null,
     scan_file: '',
@@ -183,18 +188,37 @@ const twelfthPanelData = ref({
     file_type: '',
     comment: '',
 });
+
+const twelfthPanelDataDH = ref({
+    amount_of_money: null,
+    scan_file: '',
+    file_size: null,
+    file_type: '',
+    comment: '',
+});
+
+const twelfthPanelDataCH = ref({
+    amount_of_money: null,
+    scan_file: '',
+    file_size: null,
+    file_type: '',
+    comment: '',
+});
+
 const isSent = ref(false);
+//const isVerifiedDH = ref(false);
 
-const emit = defineEmits(["update:value", "getData"]);
-
-const changeValue = (event) => {
-  emit("update:value", event);
-};
+const emit = defineEmits([
+    'getData', 
+    'getDataDH', 
+    'getDataCH', 
+    // 'getFileDH'
+]);
 
 const focusOut = async () => {
-    // console.log(twelfthPanelData.value);
+    // if (!(props.districtExpert || props.centralExpert)) {
     let formData = new FormData();
-    
+
     twelfthPanelData.value.amount_of_money ? formData.append('amount_of_money', twelfthPanelData.value.amount_of_money) : formData.append('amount_of_money', "");
     formData.append('comment', twelfthPanelData.value.comment || '');
 
@@ -209,48 +233,54 @@ const focusOut = async () => {
     } catch (e) {
     console.log('focusOut error:', e)
     }
+    // }
+
+    // if (props.districtExpert) {
+    //     emit('getDataDH', twelfthPanelDataDH.value, Number(ID_PANEL));
+    // }    
 };
 
-const fileName = ref('');
-
 const uploadFile = async (event) => {    
+    fileValidate(event.target.files[0], 7, isErrorFile);
+
+    twelfthPanelData.value.scan_file = event.target.files[0].name;
     twelfthPanelData.value.file_size = (event.target.files[0].size / Math.pow(1024, 2));
     twelfthPanelData.value.file_type = event.target.files[0].type.split('/').at(-1);
 
-    fileValidate(event.target.files[0], 7, isErrorFile);
-    if (isErrorFile.value) {
-        twelfthPanelData.value.scan_file = event.target.files[0].name;
-        fileName.value = event.target.files[0].name;
-        // console.log('ФАЙЛ НЕ ОТПРАВЛЯЕТСЯ');
-    } else if (props.districtExpert) {
-        fileName.value = event.target.files[0].name;
-    } else {
-    let formData = new FormData();
-    formData.append('scan_file', event.target.files[0]);
+    if (!isErrorFile.value) {
+        let formData = new FormData();
+        formData.append('scan_file', event.target.files[0]);
 
-    try {
-        if (isFirstSent.value) {
-            let { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-            twelfthPanelData.value.scan_file = data.scan_file.split('/').at(-1);
-            emit('getData', data, Number(ID_PANEL));
-        } else {
-            let { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-            twelfthPanelData.value.scan_file = data.scan_file.split('/').at(-1);
-            emit('getData', data, Number(ID_PANEL));
+        try {
+            if (isFirstSent.value) {
+                let { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+                twelfthPanelData.value.scan_file = data.scan_file.split('/').at(-1);
+                emit('getData', data, Number(ID_PANEL));
+            } else {
+                let { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+                twelfthPanelData.value.scan_file = data.scan_file.split('/').at(-1);
+                emit('getData', data, Number(ID_PANEL));
+            }
+        } catch (e) {
+            console.log('uploadFile error:', e);
         }
-    } catch (e) {
-        console.log('focusOut error:', e);
     }
-  }
 };
 
+const uploadFileDH = async (event) => {
+    twelfthPanelDataDH.value.scan_file = event.target.files[0];
+
+    // fileValidate(event.target.files[0], 7, isErrorFile);
+
+    // if (!isErrorFile.value) {
+        reportStore.reportDataDHFile.twelfth = event.target.files[0];
+    // }
+}
+
 const deleteFile = async () => {
-    if (isErrorFile.value) {
-        twelfthPanelData.value.scan_file = "";
-        fileName.value = '';
-    } else if (props.districtExpert) { 
-        fileName.value = '';
-    } else {
+    twelfthPanelData.value.scan_file = "";
+
+    if(!isErrorFile.value) {
         let formData = new FormData();
         formData.append('scan_file', '');
         try {
@@ -262,14 +292,27 @@ const deleteFile = async () => {
                 emit('getData', scan_file, Number(ID_PANEL));
             }
         } catch (e) {
-            console.log('focusOut error:', e);
+            console.log('deleteFile error:', e);
         } 
     }
 };
 
-watchEffect(async () => {
-    // console.log("не эксперт: ", !(props.districtExpert || props.centralExpert));
+const deleteFileDH = async () => {
+    twelfthPanelDataDH.value.scan_file = "";
 
+    // if (!isErrorFile.value) {
+        reportStore.reportDataDHFile.twelfth = null;
+    // }
+}
+
+watchEffect(async () => {
+    if (props.districtExpert) {
+        if (reportStore.reportDataDH.twelfth) {
+            twelfthPanelDataDH.value.comment = reportStore.reportDataDH.twelfth.comment;
+            twelfthPanelDataDH.value.amount_of_money = reportStore.reportDataDH.twelfth.amount_of_money;
+        }
+
+  } else {
     if (props.data) {
         // console.log(props.data);
         isFirstSent.value = false;
@@ -280,8 +323,39 @@ watchEffect(async () => {
         twelfthPanelData.value.file_type = props.data.file_type;
         isSent.value = props.data.is_sent;
     }
+  }
 }, {
     flush: 'post'
+});
+
+watchPostEffect(() => {
+  if (props.data) {
+    isFirstSent.value = false;
+    twelfthPanelData.value.amount_of_money = props.data.amount_of_money;
+    twelfthPanelData.value.comment = props.data.comment;
+    twelfthPanelData.value.scan_file = props.data.scan_file;
+    twelfthPanelData.value.file_size = props.data.file_size;
+    twelfthPanelData.value.file_type = props.data.file_type;
+    isSent.value = props.data.is_sent;
+  }
+});
+
+watch(twelfthPanelDataDH.value, () => {
+  reportStore.reportDataDH.twelfth = twelfthPanelDataDH.value;
+
+  let formData = new FormData();
+
+  twelfthPanelDataDH.value.amount_of_money 
+  ? formData.append('amount_of_money', twelfthPanelDataDH.value.amount_of_money) 
+  : formData.append('amount_of_money', '');
+
+  formData.append('comment', twelfthPanelDataDH.value.comment || '');
+
+  reportStore.reportDataDHFile.twelfth 
+  ? formData.append('scan_file', reportStore.reportDataDHFile.twelfth) 
+  : formData.append('scan_file', '');
+
+  emit('getDataDH', formData, Number(ID_PANEL));
 });
 </script>
   

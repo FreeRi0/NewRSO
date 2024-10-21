@@ -111,6 +111,21 @@ export const reportPartTwoService = {
         return HTTP.post(`regional_competitions/me/reports/${panel}/${reportNumber}/send`, data)
     },
 
+    sendReportDH(data: object, panel: string, reportNumber: string, withFile = false) {
+        return HTTP.put(`regional_competitions/reports/${panel}/${reportNumber}/district_review/`, data, {
+            headers: {
+                'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
+            },
+        })
+    },
+    sendReportDHMultiply(data: object, panel: string, reportId: string,  reportNumber: string, withFile = false) {
+        return HTTP.put(`regional_competitions/reports/${panel}/${reportId}/${reportNumber}/district_review/`, data, {
+            headers: {
+                'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
+            },
+        })
+    },
+
     getSentReports() {
         return HTTP.get('/regional_competitions/get_sent_reports/')
     }

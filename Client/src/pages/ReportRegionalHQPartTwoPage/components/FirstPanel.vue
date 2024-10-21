@@ -324,7 +324,7 @@ watchEffect(async () => {
   }
 
   if (reportStore.reportDataDH.first) {
-    firstPanelDataDH.value.comment = reportStore.reportDataDH.first.comment;
+    firstPanelDataDH.value.comment = reportStore.reportDataDH.first.comment || '';
     firstPanelDataDH.value.amount_of_money = reportStore.reportDataDH.first.amount_of_money;
   }
 });
@@ -345,7 +345,7 @@ watch(firstPanelDataDH.value, () => {
   reportStore.reportDataDH.first = firstPanelDataDH.value;
 
   let formData = new FormData();
-  formData.append('comment', firstPanelDataDH.value.comment);
+  formData.append('comment', firstPanelDataDH.value.comment || '');
   formData.append('amount_of_money', firstPanelDataDH.value.amount_of_money);
   if (reportStore.reportDataDHFile.first) formData.append('scan_file', reportStore.reportDataDHFile.first);
 

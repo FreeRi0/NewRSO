@@ -10,9 +10,12 @@
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="9" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)" @error="setError" @uploadFile="uploadFile($event, item.id)"
-            :data="ninthPanelData" @getPanelNumber="getPanelNumber($event)" @getId="getId($event)"
-            @deleteFile="deleteFile($event, item.id)" :is-sent-ninth="isSentNinth"
+            @formData="formData($event, item.id)" @formDataDH="formDataDH($event, item.id)" @error="setError"
+            @uploadFile="uploadFile($event, item.id)"
+            :data="ninthPanelData"  @getPanelNumber="getPanelNumber($event)"
+            @getId="getId($event)" @deleteFile="deleteFile($event, item.id)"
+            :is-sent-ninth="isSentNinth"
+            :ninth-id="item.id"
             :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
@@ -35,7 +38,8 @@ const props = defineProps({
   },
   isErrorPanel: Object,
   items: Array,
-  data: Object
+  data: Object,
+  dataDH: Object,
 });
 
 const link_err = ref(false);
@@ -47,7 +51,7 @@ const setError = (err) => {
 
 const disabled = ref(false);
 const panel = ref(null);
-const emit = defineEmits(['getData'])
+const emit = defineEmits(['getData', 'getDataDH', 'getFileDH', 'getId', 'getPanelNumber'])
 const ninthPanelData = ref({
   event_happened: false,
   links: [{
@@ -58,26 +62,41 @@ const ninthPanelData = ref({
   file_type: '',
   comment: '',
 });
+// const ninthPanelDataDH = ref({
+//   event_happened: false,
+//   document: '',
+//   file_size: null,
+//   file_type: '',
+//   comment: '',
+// });
 const isFirstSent = ref(null);
 let el_id = ref(null);
 
 const formData = async (reportData, reportNumber) => {
   try {
-    console.log('send2', isFirstSent.value)
-    if (!link_err.value) {
-      if (isFirstSent.value) {
-        console.log('First time sending data');
-        const { data } = await reportPartTwoService.createMultipleReport(reportData, '9', reportNumber, true);
-        isFirstSent.value = false;
-        emit('getData', data, 9, reportNumber);
-      } else {
-        console.log('Second time sending data');
-        const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
-        emit('getData', data, 9, reportNumber);
+    if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
+      if (!link_err.value) {
+        if (isFirstSent.value) {
+          console.log('First time sending data');
+          const { data } = await reportPartTwoService.createMultipleReport(reportData, '9', reportNumber, true);
+          isFirstSent.value = false;
+          emit('getData', data, 9, reportNumber);
+        } else {
+          console.log('Second time sending data');
+          const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
+          emit('getData', data, 9, reportNumber);
+        }
       }
     }
   } catch (e) {
     console.log('ninth panel error: ', e);
+  }
+};
+
+const formDataDH = (reportData, reportNumber) => {
+  if (props.districtHeadquarterCommander) {
+    emit('getDataDH', reportData, 9, reportNumber);
+    console.log('dh9', reportData);
   }
 };
 
@@ -100,53 +119,68 @@ const getPanelNumber = (number) => {
 }
 
 const uploadFile = async (reportData, reportNumber) => {
-  if (isFirstSent.value) {
-    let { data } = await reportPartTwoService.createMultipleReport(reportData, '9', reportNumber, true);
-    emit('getData', data, 9, reportNumber);
-  } else {
-    let { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
-    emit('getData', data, 9, reportNumber);
-
-  }
-};
-
-const deleteFile = async (reportData, reportNumber) => {
-
-  if (isFirstSent.value) {
-    await reportPartTwoService.createMultipleReport(reportData, '9', reportNumber, true);
-  } else {
-    await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
-  }
-};
-
-watchEffect(() => {
-  console.log(isFirstSent, props.data)
-  if (props.data[el_id.value] && Object.keys(props.data[el_id.value]).length > 0) {
-    console.log('data yes')
-    isFirstSent.value = false;
-    ninthPanelData.value = { ...props.data[el_id.value] }
-    isSentNinth.value = props.data[el_id.value].is_sent;
-  } else {
-    console.log('data no')
-    isFirstSent.value = true;
-    ninthPanelData.value = {
-      event_happened: false,
-      links: [{
-        link: '',
-      }],
-      document: '',
-      file_size: null,
-      file_type: '',
-      comment: '',
-    };
-    for (let i in props.data) {
-      if (props.data[i].is_sent) {
-        isSentNinth.value = true;
-        break;
-      }
+  if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
+    if (isFirstSent.value) {
+      let { data } = await reportPartTwoService.createMultipleReport(reportData, '9', reportNumber, true);
+      emit('getData', data, 9, reportNumber);
+    } else {
+      let { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
+      emit('getData', data, 9, reportNumber);
     }
   }
+};
 
+// const uploadFileDH = (reportData, reportNumber) => {
+//   if (props.districtHeadquarterCommander) {
+//     emit('getFileDH', reportData, 9, reportNumber);
+//     console.log('dh9', reportData);
+//   }
+// };
+
+const deleteFile = async (reportData, reportNumber) => {
+  if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
+    if (isFirstSent.value) {
+      await reportPartTwoService.createMultipleReport(reportData, '9', reportNumber, true);
+    } else {
+      await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
+    }
+  }
+};
+
+
+watchEffect(() => {
+  if (props.districtHeadquarterCommander) {
+    ninthPanelData.value = { ...props.data[el_id.value] };
+  } else {
+    if (props.data[el_id.value] && Object.keys(props.data[el_id.value]).length > 0) {
+      console.log('data yes')
+      isFirstSent.value = false;
+      ninthPanelData.value = { ...props.data[el_id.value] }
+      isSentNinth.value = props.data[el_id.value].is_sent;
+    } else {
+      console.log('data no')
+      isFirstSent.value = true;
+      isSentNinth.value = false;
+      ninthPanelData.value = {
+        event_happened: false,
+        links: [{
+          link: '',
+        }],
+        document: '',
+        file_size: null,
+        file_type: '',
+        comment: '',
+      };
+      for (let i in props.data) {
+        if (props.data[i].is_sent) {
+          isSentNinth.value = true;
+          break;
+        }
+      }
+
+
+    }
+  }
   if (panel.value || panel.value === 0) {
     disabled.value = true;
   } else {
