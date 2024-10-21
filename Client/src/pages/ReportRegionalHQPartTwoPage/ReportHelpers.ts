@@ -174,19 +174,21 @@ export function checkEmptyFieldsDH(data: ReportDHType, isErrorPanel: Ref) {
         }
     }
     for (const item in data.six) {
-        if (data.six[item as keyof typeof data.six].number_of_members === null && !data.six[item as keyof typeof data.six].comment) {
-            isErrorPanel.value.six[item] = {
-                id: item,
-                error: true,
-            };
-            swal.default.fire({
-                position: 'center',
-                icon: 'warning',
-                title: `Заполните обязательные поля в 6 показателе`,
-                showConfirmButton: false,
-                timer: 2500,
-            })
-            return false;
+        if (data.six[item as keyof typeof data.six].number_of_members !== null && data.six[item as keyof typeof data.six].number_of_members != 0) {
+            if (!data.six[item as keyof typeof data.six].comment) {
+                isErrorPanel.value.six[item] = {
+                    id: item,
+                    error: true,
+                };
+                swal.default.fire({
+                    position: 'center',
+                    icon: 'warning',
+                    title: `Заполните обязательные поля в 6 показателе`,
+                    showConfirmButton: false,
+                    timer: 2500,
+                })
+                return false;
+            }
         } else {
             isErrorPanel.value.six[item] = {
                 id: item,
@@ -195,19 +197,22 @@ export function checkEmptyFieldsDH(data: ReportDHType, isErrorPanel: Ref) {
         }
     }
     for (const item in data.ninth) {
-        if (!data.ninth[item as keyof typeof data.ninth].comment) {
-            isErrorPanel.value.ninth[item] = {
-                id: item,
-                error: true,
-            };
-            swal.default.fire({
-                position: 'center',
-                icon: 'warning',
-                title: `Заполните обязательные поля в 9 показателе`,
-                showConfirmButton: false,
-                timer: 2500,
-            })
-            return false;
+        if (data.ninth[item as keyof typeof data.ninth].event_happened !== false) {
+            if (!data.ninth[item as keyof typeof data.ninth].comment) {
+                isErrorPanel.value.ninth[item] = {
+                    id: item,
+                    error: true,
+                };
+                swal.default.fire({
+                    position: 'center',
+                    icon: 'warning',
+                    title: `Заполните обязательные поля в 9 показателе`,
+                    showConfirmButton: false,
+                    timer: 2500,
+                })
+                return false;
+            }
+
         } else {
             isErrorPanel.value.ninth[item] = {
                 id: item,

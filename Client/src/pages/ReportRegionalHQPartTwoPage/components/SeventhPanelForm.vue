@@ -163,7 +163,7 @@
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                            }}</label>
+                                }}</label>
                         </div>
                     </div>
                 </div>
@@ -481,7 +481,8 @@
                     </div>
 
                     <CommentFileComponent v-model:value="sixPanelDataDH.comment" :is-error-panel="isErrorPanel"
-                        :is-six="true" name="sixPanelDataDH.comment" :disabled="props.isCentralHeadquarterCommander">
+                        :is-six="true" name="sixPanelDataDH.comment"
+                        :disabled="props.isCentralHeadquarterCommander || ((sixPanelDataDH.number_of_members == 0 || sixPanelDataDH.number_of_members === null) && (sixPanelData.number_of_members == 0 || sixPanelData.number_of_members === null))">
                     </CommentFileComponent>
                 </div>
                 <div v-else-if="props.panel_number == 9" class="group-seventh">
@@ -506,7 +507,7 @@
                                     v-model="ninthPanelDataDH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -515,8 +516,8 @@
                         :file="reportStore.reportDataDHFile.ninth[props.ninthId] ? reportStore.reportDataDHFile.ninth[props.ninthId]?.name : null"
                         :fileType="reportStore.reportDataDHFile.ninth[props.ninthId] ? reportStore.reportDataDHFile.ninth[props.ninthId]?.type.split('/').at(-1) : null"
                         :fileSize="reportStore.reportDataDHFile.ninth[props.ninthId] ? reportStore.reportDataDHFile.ninth[props.ninthId]?.size / Math.pow(1024, 2) : null"
-                        :disabled="props.isCentralHeadquarterCommander" :is-error-file="isErrorFile"
-                        :is-error-panel="isErrorPanel">
+                        :disabled="props.isCentralHeadquarterCommander || (ninthPanelDataDH.event_happened === false && ninthPanelData.event_happened === false)"
+                        :is-error-file="isErrorFile" :is-error-panel="isErrorPanel">
                     </CommentFileComponent>
                 </div>
             </template>
@@ -657,7 +658,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -1143,7 +1144,6 @@ watchEffect(() => {
 
 watch(sixPanelDataDH.value, () => {
     reportStore.reportDataDH.six[props.sixId] = sixPanelDataDH.value;
-    console.log('yeah')
     emit('formDataDH', sixPanelDataDH.value);
     console.log(sixPanelDataDH.value)
 });
