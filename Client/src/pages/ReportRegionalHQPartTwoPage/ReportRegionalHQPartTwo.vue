@@ -1293,19 +1293,21 @@ const checkEmptyFields = (data) => {
 
   return true;
 }
-// watch(roleStore.experts, () => {
-//   if (roleStore.experts?.is_district_expert) {
-//     districtExpert.value = true;
-//     console.log('окружной эксперт', districtExpert.value);
-//   }
-//   if (roleStore.experts?.is_central_expert) {
-//     centralExpert.value = true;
-//     console.log('центральный эксперт', centralExpert.value);
-//   }
-// }, {
-//   immediate: true,
-//   deep: true,
-// });
+
+watch(
+  () => route.query.reportId,
+
+  async (newId) => {
+    if (!newId) return;
+    preloader.value = true;
+    await getReportData(newId);
+  },
+  {
+    immediate: true,
+    deep: true,
+  },
+);
+
 
 onMounted(() => {
   // console.log('roleStore.experts', roleStore.experts)
@@ -1324,8 +1326,8 @@ onMounted(() => {
   }
   getItems(6);
   getItems(9);
-  getReportData(route.query.reportId);
-  console.log(route.query.reportId);
+
+
 });
 
 </script>

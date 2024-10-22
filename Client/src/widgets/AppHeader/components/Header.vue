@@ -334,7 +334,6 @@ const userPages = computed(() => [
         show:
             (roleStore.roles?.regionalheadquarter_commander && roleStore.experts.is_district_expert) ||
             roleStore.experts.is_central_expert === true ||
-            roleStore.experts.is_district_expert === true ||
             roleStore.roles?.regionalheadquarter_commander ||
             roleStore.roles?.centralheadquarter_commander,
     },

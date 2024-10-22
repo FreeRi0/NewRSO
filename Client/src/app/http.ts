@@ -157,12 +157,12 @@ HTTP.interceptors.response.use(
                 let matches_4 = originalRequest.url.match(/detachments\/\d{1,}\/competitions\/1\/place\//gm)
                 let matches_5 = originalRequest.url.match(/competitions\/1\/get-place\//gm)
                 let matches_6 = originalRequest.url.match(/regional_competitions\/reports\/\d{1,}\/\d{1,}\/\d{1,}\//gm)
-
+                let matches_7 = originalRequest.url.match(/regional_competitions\/reports\/\d{1,}\/\d{1,}\//gm)
                 // let matches = (matches_1 || []).length + (matches_2 || []).length + (matches_3 || []).length + (matches_4 || []).length +
                 //     (matches_5 || []).length;
                 //     let matches_6 = originalRequest.url.match(/regional_competitions\/reports\/\d{1,}\/\d{1,}\/\d{1,}\//gm)
 
-                let matches = (matches_1 || []).length + (matches_2 || []).length + (matches_3 || []).length + (matches_4 || []).length + (matches_5  || []).length + (matches_6 || []).length;
+                let matches = (matches_1 || []).length + (matches_2 || []).length + (matches_3 || []).length + (matches_4 || []).length + (matches_5  || []).length + (matches_6 || []).length + (matches_7 || []).length;
 
 
                 if (/*(window.location.hostname === 'localhost' ||
