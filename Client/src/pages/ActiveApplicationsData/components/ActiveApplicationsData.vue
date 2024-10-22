@@ -9,8 +9,7 @@
           tab.name === 'Заявки на участие в мероприятии' && !roleStore.experts?.is_district_expert ||
           tab.name === 'Конкурсы' && !roleStore.experts?.is_district_expert ||
           tab.name === 'Заявки на вступление в штаб' && !roleStore.experts?.is_district_expert ||
-          tab.name === 'Рейтинг РО' && roleStore.experts?.is_district_expert" :key="tab.id"
-          @click="picked = tab.name">
+          tab.name === 'Рейтинг РО' && roleStore.experts?.is_district_expert" :key="tab.id" @click="picked = tab.name">
           {{ tab.name }}
         </button>
       </div>
@@ -57,8 +56,6 @@ import { ActiveCompetitions } from '@features/ActiveCompetitions';
 import { ActiveEventsApp } from '@features/ActiveApplications/components';
 import { ActiveHeadquarters } from '@features/ActiveApplicationsHeadquarters/';
 import { ActiveRatingRO } from '@features/ActiveApplicationRatingRO';
-// import { showByUrl } from '@services/ProdUrlService';
-
 // E:\RSO\NewRSO\Client\src\features\ActiveApplicationHeadquarters\index.ts
 const roleStore = useRoleStore();
 

@@ -292,6 +292,7 @@ const userPages = computed(() => [
             roleStore.roles?.regionalheadquarter_commander ||
             roleStore.roles?.detachment_commander || roleStore.experts?.is_district_expert ||
             roleStore.roles?.localheadquarter_commander ||
+            roleStore.experts?.is_district_expert || 
             roleStore.roles?.districtheadquarter_commander ||
             roleStore.roles?.educationalheadquarter_commander ||
             roleStore.myPositions.usercentralheadquarterposition?.position ===
@@ -333,7 +334,6 @@ const userPages = computed(() => [
         show:
             (roleStore.roles?.regionalheadquarter_commander && roleStore.experts.is_district_expert) ||
             roleStore.experts.is_central_expert === true ||
-            // roleStore.experts.is_district_expert === true ||
             roleStore.roles?.regionalheadquarter_commander ||
             roleStore.roles?.centralheadquarter_commander,
     },
@@ -422,30 +422,30 @@ watch(
 
 
 watch(
-  () => [roleStore.roles, roleStore.experts],
-  (newRoles, newExperts) => {
-    if (Object.keys(newRoles).length === 0) {
-      return;
-    }
+    () => [roleStore.roles, roleStore.experts],
+    (newRoles, newExperts) => {
+        if (Object.keys(newRoles).length === 0) {
+            return;
+        }
 
-    if (roleStore.roles.centralheadquarter_commander !== null) {
-      nameUrl = 'rating-ro'
+        if (roleStore.roles.centralheadquarter_commander !== null) {
+            nameUrl = 'rating-ro'
 
-    } else if (roleStore.roles?.regionalheadquarter_commander && roleStore.experts.is_district_expert) {
-      nameUrl = 'reportingRo'
+        } /*else if (roleStore.roles?.regionalheadquarter_commander && roleStore.experts.is_district_expert) {
+            nameUrl = 'reportingRo'
 
-    } else if (roleStore.experts.is_central_expert === true || roleStore.experts.is_district_expert === true) {
-      nameUrl = 'rating-ro'
+        } */else if (roleStore.experts.is_central_expert === true || roleStore.experts.is_district_expert === true) {
+            nameUrl = 'rating-ro'
 
-    } else {
-      nameUrl = 'reportingRo'
-    }
+        } else {
+            nameUrl = 'reportingRo'
+        }
 
-    if (localStorage.getItem('jwt_token') !== null) {
-      userStore.getCountApp();
-    }
-  },
-  { immediate: true }
+        if (localStorage.getItem('jwt_token') !== null) {
+            userStore.getCountApp();
+        }
+    },
+    { immediate: true }
 );
 
 onMounted(() => {

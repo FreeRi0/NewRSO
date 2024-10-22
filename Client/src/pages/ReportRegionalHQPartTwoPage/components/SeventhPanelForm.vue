@@ -175,9 +175,14 @@
                         id="scan_file" :is-error-panel="isErrorPanel" v-model:value="ninthPanelData.document"
                         name="scan_file" width="100%" :disabled="isSentNinth || ninthPanelData.event_happened === false"
                         height="auto" @change="uploadFile($event, 9)" />
-                    <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
-                        :isSent="isSentNinth" :is-error-file="isErrorFile" :fileSize="ninthPanelData.file_size"
-                        @click="deleteFile(9)">
+                    <div v-else-if="ninthPanelData.document && (typeof ninthPanelData.document !== 'string')"
+                        class="text-center">
+                        <v-progress-circular color="primary" indeterminate></v-progress-circular>
+                    </div>
+                    <FileBoxComponent v-else-if="ninthPanelData.document && typeof ninthPanelData.document === 'string'"
+                        :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
+                        :isSent="isSentNinth"
+                        :is-error-file="isErrorFile" :fileSize="ninthPanelData.file_size" @click="deleteFile(9)">
                     </FileBoxComponent>
                 </div>
 
@@ -188,8 +193,8 @@
 
                     <div class="form__wrapper" v-for="(item, index) in ninthPanelData.links" :key="index">
                         <InputReport @focusout="focusOut" @error="setError"
-                            :disabled="isSentNinth || ninthPanelData.event_happened === false" name="14"
-                            :maxlength="200" :is-error-panel="isErrorPanel" :is-link="true"
+                            :disabled="isSentNinth || ninthPanelData.event_happened === false" name="14" :maxlength="200"
+                            :is-error-panel="isErrorPanel" :is-link="true"
                             placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
                             class="mb-2" />
                         <div v-if="!isSentNinth && ninthPanelData.event_happened === true">

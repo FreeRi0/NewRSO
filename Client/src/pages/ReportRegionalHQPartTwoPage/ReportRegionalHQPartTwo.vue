@@ -241,7 +241,7 @@ import {
   NineteenthPanel
 } from './components/index'
 import { Button } from '@shared/components/buttons';
-import { inject, onMounted, ref } from "vue";
+import { inject, onMounted, ref, watch } from "vue";
 import { SvgIcon } from '@shared/ui/SvgIcon';
 import { useRoleStore } from "@layouts/store/role.ts";
 import { HTTP } from '@app/http';
@@ -1312,9 +1312,24 @@ const checkEmptyFields = (data) => {
   return true;
 }
 
+watch(
+  () => route.query.reportId,
+
+  async (newId) => {
+    if (!newId) return;
+    preloader.value = true;
+    await getReportData(newId);
+  },
+  {
+    immediate: true,
+    deep: true,
+  },
+);
+
+
 onMounted(() => {
-  console.log('roleStore.experts', roleStore.experts)
-  console.log('roleStore.roles', roleStore.roles)
+  // console.log('roleStore.experts', roleStore.experts)
+  // console.log('roleStore.roles', roleStore.roles)
   // if (!roleStore.roles?.regionalheadquarter_commander && (!roleStore.experts?.is_district_expert || !roleStore.experts?.is_central_expert)) {
   //   router.push({ name: 'mypage' });
   // }
@@ -1329,8 +1344,8 @@ onMounted(() => {
   }
   getItems(6);
   getItems(9);
-  getReportData(route.query.reportId);
-  console.log(route.query.reportId);
+
+
 });
 
 </script>
