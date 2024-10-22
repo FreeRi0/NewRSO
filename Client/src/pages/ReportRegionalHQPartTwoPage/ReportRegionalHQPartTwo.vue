@@ -1318,7 +1318,9 @@ watch(
   () => route.query.reportId,
 
   async (newId) => {
-    if (!newId) return;
+    if (!newId && !(districtExpert.value || centralExpert.value)) {
+      await getReportData();
+    };
     preloader.value = true;
     await getReportData(newId);
   },
