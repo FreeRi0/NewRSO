@@ -40,10 +40,10 @@ const centralHeadquarterCommander = ref(false);
 const roleStore = useRoleStore();
 
 watchEffect(() => {
-  if (roleStore.roles?.districtheadquarter_commander) {
+  if (roleStore.roles?.districtheadquarter_commander || (roleStore.experts?.is_district_expert || roleStore.experts?.is_central_expert )) {
     districtHeadquarterCommander.value = true;
   }
-  if (roleStore.roles.centralheadquarter_commander) {
+  if (roleStore.roles.centralheadquarter_commander || roleStore.experts?.is_central_expert) {
     centralHeadquarterCommander.value = true;
   }
 })

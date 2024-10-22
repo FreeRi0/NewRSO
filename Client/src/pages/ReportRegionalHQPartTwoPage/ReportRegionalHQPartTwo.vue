@@ -186,8 +186,8 @@
               по&nbsp;комиссарской деятельности &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <sixteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data-DH="setDataDH" @get-data="setData"
-                :data="reportData.sixteenth" :is-error-panel="isErrorPanel.sixteenth" />
+              <sixteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data-DH="setDataDH"
+                @get-data="setData" :data="reportData.sixteenth" :is-error-panel="isErrorPanel.sixteenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -469,9 +469,20 @@ const getMultiplyData = async (isExpert, reportId) => {
         id: result.id,
         error: false,
       }
-
+    } else {
+      if (reportData.value.six[result.id]?.regional_version === null) {
+        console.log('1')
+        reportData.value.six[result.id] = result.data;
+      } else {
+        console.log('2')
+        reportData.value.six[result.id] = result.data;
+        reportData.value.six[result.id] = JSON.parse(reportData.value.six[result.id].regional_version);
+      }
     }
-    reportData.value.six[result.id] = result.data;
+
+
+
+    // reportData.value.six[result.id] = result.data;
 
     // if (reportData.value.six[result.id].is_sent === false || !Object.keys(reportData.value.six[result.id]).length) {
     //   console.log('yah6')
@@ -493,7 +504,14 @@ const getMultiplyData = async (isExpert, reportId) => {
         error: false,
       }
     }
-    reportData.value.ninth[result.id] = result.data;
+    else {
+      if (reportData.value.ninth[result.id]?.regional_version === null) {
+        reportData.value.ninth[result.id] = result.data;
+      } else {
+        reportData.value.ninth[result.id] = result.data;
+        reportData.value.ninth[result.id] = JSON.parse(reportData.value.ninth[result.id].regional_version);
+      }
+    }
     // if (reportData.value.ninth[result.id].is_sent === false || !Object.keys(reportData.value.ninth[result.id]).length) {
     //   console.log('yah9')
     //   blockSendButton.value = false;

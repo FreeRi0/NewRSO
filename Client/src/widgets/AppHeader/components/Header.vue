@@ -290,7 +290,7 @@ const userPages = computed(() => [
         name: 'active',
         show:
             roleStore.roles?.regionalheadquarter_commander ||
-            roleStore.roles?.detachment_commander ||
+            roleStore.roles?.detachment_commander || roleStore.experts?.is_district_expert ||
             roleStore.roles?.localheadquarter_commander ||
             roleStore.roles?.districtheadquarter_commander ||
             roleStore.roles?.educationalheadquarter_commander ||
