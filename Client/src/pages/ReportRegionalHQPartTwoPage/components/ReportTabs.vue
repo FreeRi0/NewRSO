@@ -1,6 +1,8 @@
 <template>
   <v-card class="panel-card">
-
+    <div style="color: white">
+      {{ districtHeadquarterCommander }} {{ centralHeadquarterCommander }}
+    </div>
     <v-tabs v-model="tab">
       <v-tab value="one" class="panel-tab-btn" v-if="districtHeadquarterCommander || centralHeadquarterCommander">Отчет
         РО</v-tab>
@@ -40,7 +42,7 @@ const centralHeadquarterCommander = ref(false);
 const roleStore = useRoleStore();
 
 watchEffect(() => {
-  if (roleStore.roles?.districtheadquarter_commander || (roleStore.experts?.is_district_expert || roleStore.experts?.is_central_expert )) {
+  if (roleStore.roles?.districtheadquarter_commander || (roleStore.experts?.is_district_expert || roleStore.experts?.is_central_expert)) {
     districtHeadquarterCommander.value = true;
   }
   if (roleStore.roles.centralheadquarter_commander || roleStore.experts?.is_central_expert) {
@@ -52,9 +54,11 @@ watchEffect(() => {
 .v-slide-group {
   margin-bottom: -10px;
 }
+
 .v-tabs--density-default {
   --v-tabs-height: 54px;
 }
+
 .panel-card {
   box-shadow: none;
 }
@@ -82,6 +86,7 @@ watchEffect(() => {
   border-bottom: none;
   padding-bottom: 10px;
 }
+
 .v-tab.v-tab.v-btn.v-tab-item--selected {
   border-color: #F3F4F5;
 }
