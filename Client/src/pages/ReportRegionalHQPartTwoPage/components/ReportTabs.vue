@@ -1,8 +1,5 @@
 <template>
   <v-card class="panel-card">
-    <div style="color: white">
-      {{ districtHeadquarterCommander }} {{ centralHeadquarterCommander }}
-    </div>
     <v-tabs v-model="tab">
       <v-tab value="one" class="panel-tab-btn" v-if="districtHeadquarterCommander || centralHeadquarterCommander">Отчет
         РО</v-tab>
