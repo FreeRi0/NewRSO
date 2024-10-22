@@ -292,7 +292,7 @@ const userPages = computed(() => [
             roleStore.roles?.regionalheadquarter_commander ||
             roleStore.roles?.detachment_commander || roleStore.experts?.is_district_expert ||
             roleStore.roles?.localheadquarter_commander ||
-            roleStore.experts?.is_district_expert || 
+            roleStore.experts?.is_district_expert ||
             roleStore.roles?.districtheadquarter_commander ||
             roleStore.roles?.educationalheadquarter_commander ||
             roleStore.myPositions.usercentralheadquarterposition?.position ===
@@ -431,16 +431,15 @@ watch(
         if (roleStore.roles.centralheadquarter_commander !== null) {
             nameUrl = 'rating-ro'
 
-        } /*else if (roleStore.roles?.regionalheadquarter_commander && roleStore.experts.is_district_expert) {
+        } else if (roleStore.roles.regionalheadquarter_commander && roleStore.experts.is_district_expert) {
+            console
             nameUrl = 'reportingRo'
-
-        } */else if (roleStore.experts.is_central_expert === true || roleStore.experts.is_district_expert === true) {
+        } else if (roleStore.experts.is_central_expert || roleStore.experts.is_district_expert) {
             nameUrl = 'rating-ro'
-
-        } else {
+        }
+        else {
             nameUrl = 'reportingRo'
         }
-
         if (localStorage.getItem('jwt_token') !== null) {
             userStore.getCountApp();
         }

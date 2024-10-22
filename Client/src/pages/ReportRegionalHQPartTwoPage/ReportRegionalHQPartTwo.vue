@@ -5,6 +5,7 @@
         Часть&nbsp;2</h1>
       <div v-if="preloader" class="text-center">
         <v-progress-circular color="primary" indeterminate></v-progress-circular>
+        <p class="preloader_info">Загрузка отчета может занять до 1 минуты.</p>
       </div>
       <div v-else>
         <div class="download-item">
@@ -246,7 +247,7 @@ import { SvgIcon } from '@shared/ui/SvgIcon';
 import { useRoleStore } from "@layouts/store/role.ts";
 import { HTTP } from '@app/http';
 import { reportPartTwoService } from "@services/ReportService.ts";
-import { useRoute, useRouter } from "vue-router";
+import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
 import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
 import { checkEmptyFieldsDH } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 
@@ -521,7 +522,7 @@ const getMultiplyData = async (isExpert, reportId) => {
 }
 const getReportData = async (reportId) => {
   try {
-    if (centralExpert.value || districtExpert.value) {
+    if ((centralExpert.value || districtExpert.value) && typeof reportId != "undefined") {
 
       reportData.value.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
       reportStore.reportDataDH.first = Object.assign({}, reportData.value.first);
@@ -1336,9 +1337,26 @@ watch(
   () => route.query.reportId,
 
   async (newId) => {
-    if (!newId) return;
+    if (!newId) return
     preloader.value = true;
     await getReportData(newId);
+  },
+
+  {
+    immediate: true,
+    deep: true,
+  },
+);
+
+watch(
+  () => route.path,
+
+  async (newUrl) => {
+    if (newUrl.includes('reporting-ro/report-regional-two')) {
+      preloader.value = true;
+      console.log(1);
+      await getReportData();
+    }
   },
   {
     immediate: true,
@@ -1347,13 +1365,15 @@ watch(
 );
 
 
+
+
 onMounted(() => {
   // console.log('roleStore.experts', roleStore.experts)
   // console.log('roleStore.roles', roleStore.roles)
   // if (!roleStore.roles?.regionalheadquarter_commander && (!roleStore.experts?.is_district_expert || !roleStore.experts?.is_central_expert)) {
   //   router.push({ name: 'mypage' });
   // }
-  
+  console.log('ddd', route.query.reportId)
   getItems(6);
   getItems(9);
 
@@ -1379,6 +1399,13 @@ onMounted(() => {
   content: "";
 }
 
+.preloader_info {
+  color: #1F7CC0;
+  font-family: Akrobat;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 16.8px;
+}
 
 .download-item {
   display: flex;
