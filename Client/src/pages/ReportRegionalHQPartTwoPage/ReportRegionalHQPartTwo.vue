@@ -186,8 +186,8 @@
               по&nbsp;комиссарской деятельности &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <sixteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data-DH="setDataDH" @get-data="setData"
-                :data="reportData.sixteenth" :is-error-panel="isErrorPanel.sixteenth" />
+              <sixteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data-DH="setDataDH"
+                @get-data="setData" :data="reportData.sixteenth" :is-error-panel="isErrorPanel.sixteenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -241,7 +241,7 @@ import {
   NineteenthPanel
 } from './components/index'
 import { Button } from '@shared/components/buttons';
-import { inject, onMounted, ref } from "vue";
+import { inject, onMounted, ref, watch } from "vue";
 import { SvgIcon } from '@shared/ui/SvgIcon';
 import { useRoleStore } from "@layouts/store/role.ts";
 import { HTTP } from '@app/http';
@@ -1293,10 +1293,23 @@ const checkEmptyFields = (data) => {
 
   return true;
 }
+// watch(roleStore.experts, () => {
+//   if (roleStore.experts?.is_district_expert) {
+//     districtExpert.value = true;
+//     console.log('окружной эксперт', districtExpert.value);
+//   }
+//   if (roleStore.experts?.is_central_expert) {
+//     centralExpert.value = true;
+//     console.log('центральный эксперт', centralExpert.value);
+//   }
+// }, {
+//   immediate: true,
+//   deep: true,
+// });
 
 onMounted(() => {
-  console.log('roleStore.experts', roleStore.experts)
-  console.log('roleStore.roles', roleStore.roles)
+  // console.log('roleStore.experts', roleStore.experts)
+  // console.log('roleStore.roles', roleStore.roles)
   // if (!roleStore.roles?.regionalheadquarter_commander && (!roleStore.experts?.is_district_expert || !roleStore.experts?.is_central_expert)) {
   //   router.push({ name: 'mypage' });
   // }
