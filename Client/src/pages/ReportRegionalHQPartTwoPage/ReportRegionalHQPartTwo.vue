@@ -5,6 +5,7 @@
         Часть&nbsp;2</h1>
       <div v-if="preloader" class="text-center">
         <v-progress-circular color="primary" indeterminate></v-progress-circular>
+        <p class="preloader_info">Загрузка отчета может занять до 1 минуты.</p>
       </div>
       <div v-else>
         <div class="download-item">
@@ -191,8 +192,8 @@
               по&nbsp;комиссарской деятельности &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <sixteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data-DH="setDataDH" @get-data="setData"
-                :data="reportData.sixteenth" :is-error-panel="isErrorPanel.sixteenth" />
+              <sixteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data-DH="setDataDH"
+                @get-data="setData" :data="reportData.sixteenth" :is-error-panel="isErrorPanel.sixteenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -246,12 +247,12 @@ import {
   NineteenthPanel
 } from './components/index'
 import { Button } from '@shared/components/buttons';
-import { inject, onMounted, ref } from "vue";
+import { inject, onMounted, ref, watch } from "vue";
 import { SvgIcon } from '@shared/ui/SvgIcon';
 import { useRoleStore } from "@layouts/store/role.ts";
 import { HTTP } from '@app/http';
 import { reportPartTwoService } from "@services/ReportService.ts";
-import { useRoute, useRouter } from "vue-router";
+import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
 import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
 import { checkEmptyFieldsDH } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 
@@ -474,9 +475,20 @@ const getMultiplyData = async (isExpert, reportId) => {
         id: result.id,
         error: false,
       }
-
+    } else {
+      if (reportData.value.six[result.id]?.regional_version === null) {
+        console.log('1')
+        reportData.value.six[result.id] = result.data;
+      } else {
+        console.log('2')
+        reportData.value.six[result.id] = result.data;
+        reportData.value.six[result.id] = JSON.parse(reportData.value.six[result.id].regional_version);
+      }
     }
-    reportData.value.six[result.id] = result.data;
+
+
+
+    // reportData.value.six[result.id] = result.data;
 
     // if (reportData.value.six[result.id].is_sent === false || !Object.keys(reportData.value.six[result.id]).length) {
     //   console.log('yah6')
@@ -498,7 +510,14 @@ const getMultiplyData = async (isExpert, reportId) => {
         error: false,
       }
     }
-    reportData.value.ninth[result.id] = result.data;
+    else {
+      if (reportData.value.ninth[result.id]?.regional_version === null) {
+        reportData.value.ninth[result.id] = result.data;
+      } else {
+        reportData.value.ninth[result.id] = result.data;
+        reportData.value.ninth[result.id] = JSON.parse(reportData.value.ninth[result.id].regional_version);
+      }
+    }
     // if (reportData.value.ninth[result.id].is_sent === false || !Object.keys(reportData.value.ninth[result.id]).length) {
     //   console.log('yah9')
     //   blockSendButton.value = false;
@@ -509,7 +528,6 @@ const getMultiplyData = async (isExpert, reportId) => {
 const getReportData = async (reportId) => {
   try {
     if (centralExpert.value) {
-
       // Критерий 11
       const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
       console.log('данные ОШ для ЦШ', dataEleventh);//----------------------------------------------
@@ -530,8 +548,9 @@ const getReportData = async (reportId) => {
       reportStore.reportDataDH.thirteenth = dataThirteenth;
       reportStore.reportDataCH.thirteenth = Object.assign({}, dataThirteenth);
       reportStore.reportDataCH.thirteenth.comment = '';
+    }
 
-    } else if (districtExpert.value) {
+    if (districtExpert.value && typeof reportId != "undefined") {
       reportData.value.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
       reportStore.reportDataDH.first = Object.assign({}, reportData.value.first);
       reportStore.reportDataDH.first.comment = '';
@@ -1319,25 +1338,71 @@ const checkEmptyFields = (data) => {
   return true;
 }
 
+watch(
+  () => roleStore.experts,
+
+  () => {
+    if (roleStore.experts?.is_district_expert) {
+      districtExpert.value = true;
+      console.log('окружной эксперт', districtExpert.value);
+    }
+    if (roleStore.experts?.is_central_expert) {
+
+      centralExpert.value = true;
+      console.log('центральный эксперт', centralExpert.value);
+    }
+  },
+  {
+    immediate: true,
+    deep: true,
+  },
+)
+
+watch(
+  () => route.query.reportId,
+
+  async (newId) => {
+    if (!newId) return
+    preloader.value = true;
+    await getReportData(newId);
+  },
+
+  {
+    immediate: true,
+    deep: true,
+  },
+);
+
+watch(
+  () => route.path,
+
+  async (newUrl) => {
+    if (newUrl.includes('reporting-ro/report-regional-two')) {
+      preloader.value = true;
+      console.log(1);
+      await getReportData();
+    }
+  },
+  {
+    immediate: true,
+    deep: true,
+  },
+);
+
+
+
+
 onMounted(() => {
-  console.log('roleStore.experts', roleStore.experts)
-  console.log('roleStore.roles', roleStore.roles)
+  // console.log('roleStore.experts', roleStore.experts)
+  // console.log('roleStore.roles', roleStore.roles)
   // if (!roleStore.roles?.regionalheadquarter_commander && (!roleStore.experts?.is_district_expert || !roleStore.experts?.is_central_expert)) {
   //   router.push({ name: 'mypage' });
   // }
-  if (roleStore.experts?.is_district_expert) {
-    districtExpert.value = true;
-    console.log('окружной эксперт', districtExpert.value);
-  }
-  if (roleStore.experts?.is_central_expert) {
-
-    centralExpert.value = true;
-    console.log('центральный эксперт', centralExpert.value);
-  }
+  console.log('ddd', route.query.reportId)
   getItems(6);
   getItems(9);
-  getReportData(route.query.reportId);
-  console.log(route.query.reportId);
+
+
 });
 
 </script>
@@ -1359,6 +1424,13 @@ onMounted(() => {
   content: "";
 }
 
+.preloader_info {
+  color: #1F7CC0;
+  font-family: Akrobat;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 16.8px;
+}
 
 .download-item {
   display: flex;

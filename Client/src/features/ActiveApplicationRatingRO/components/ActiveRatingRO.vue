@@ -29,6 +29,7 @@ import { onMounted, ref } from 'vue'
 import { reportPartTwoService } from "@services/ReportService.ts";
 
 const reports = ref([]);
+const isActive = 
 
 onMounted(async () => {
   reports.value = (await reportPartTwoService.getSentReports()).data;

@@ -1,27 +1,26 @@
 <template>
   <v-card class="panel-card">
-
     <v-tabs v-model="tab">
-      <v-tab value="one" class="panel-tab-btn" v-if="districtExpert || centralExpert">Отчет
+      <v-tab value="one" class="panel-tab-btn" v-if="districtHeadquarterCommander || centralHeadquarterCommander">Отчет
         РО</v-tab>
       <v-tab value="two" class="panel-tab-btn"
-        v-if="districtExpert || centralExpert">Корректировка ОШ</v-tab>
-      <v-tab value="three" class="panel-tab-btn" v-if="centralExpert">Корректировка ЦШ</v-tab>
+        v-if="districtHeadquarterCommander || centralHeadquarterCommander">Корректировка ОШ</v-tab>
+      <v-tab value="three" class="panel-tab-btn" v-if="centralHeadquarterCommander">Корректировка ЦШ</v-tab>
     </v-tabs>
 
     <v-card-text class="panel-card-text">
       <v-tabs-window v-model="tab">
-        <v-tabs-window-item value="one" v-if="districtExpert || centralExpert">
+        <v-tabs-window-item value="one" v-if="districtHeadquarterCommander || centralHeadquarterCommander">
           <div class="form__field-group">
             <slot name="firstTab"></slot>
           </div>
         </v-tabs-window-item>
-        <v-tabs-window-item value="two" v-if="districtExpert || centralExpert">
+        <v-tabs-window-item value="two" v-if="districtHeadquarterCommander || centralHeadquarterCommander">
           <div class="form__field-group">
             <slot name="secondTab"></slot>
           </div>
         </v-tabs-window-item>
-        <v-tabs-window-item value="three" v-if="centralExpert">
+        <v-tabs-window-item value="three" v-if="centralHeadquarterCommander">
           <div class="form__field-group report-table">
             <slot name="thirdTab"></slot>
           </div>
@@ -35,29 +34,16 @@ import { ref, watchEffect } from "vue";
 import { useRoleStore } from "@layouts/store/role.ts";
 
 const tab = ref(null);
-// const districtHeadquarterCommander = ref(false);
-// const centralHeadquarterCommander = ref(false);
+const districtHeadquarterCommander = ref(false);
+const centralHeadquarterCommander = ref(false);
 const roleStore = useRoleStore();
 
-const districtExpert = ref(false);
-const centralExpert = ref(false);
-
 watchEffect(() => {
-  // if (roleStore.roles?.districtheadquarter_commander) {
-  //   districtHeadquarterCommander.value = true;
-  // }
-  // if (roleStore.roles.centralheadquarter_commander) {
-  //   centralHeadquarterCommander.value = true;
-  // }
-
-  if (roleStore.experts?.is_district_expert) {
-    districtExpert.value = true;
-    console.log('окружной эксперт', districtExpert.value);
+  if (roleStore.roles?.districtheadquarter_commander || (roleStore.experts?.is_district_expert || roleStore.experts?.is_central_expert)) {
+    districtHeadquarterCommander.value = true;
   }
-  if (roleStore.experts?.is_central_expert) {
-
-    centralExpert.value = true;
-    console.log('центральный эксперт', centralExpert.value);
+  if (roleStore.roles.centralheadquarter_commander || roleStore.experts?.is_central_expert) {
+    centralHeadquarterCommander.value = true;
   }
 })
 </script>
@@ -65,9 +51,11 @@ watchEffect(() => {
 .v-slide-group {
   margin-bottom: -10px;
 }
+
 .v-tabs--density-default {
   --v-tabs-height: 54px;
 }
+
 .panel-card {
   box-shadow: none;
 }
@@ -95,6 +83,7 @@ watchEffect(() => {
   border-bottom: none;
   padding-bottom: 10px;
 }
+
 .v-tab.v-tab.v-btn.v-tab-item--selected {
   border-color: #F3F4F5;
 }
@@ -103,7 +92,7 @@ watchEffect(() => {
   padding: 0;
 }
 
-//.report-table {
+// .report-table {
 //  &__tr {
 //    background-color: #FFFFFF;
 //    text-align: center;
@@ -142,4 +131,5 @@ watchEffect(() => {
 //  margin-bottom: 16px;
 //  border-radius: 10px;
 //  border: 1px solid #B6B6B6;
-//}</style>
+// }
+</style>
