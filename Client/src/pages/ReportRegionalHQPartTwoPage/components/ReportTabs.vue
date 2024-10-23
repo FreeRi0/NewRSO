@@ -1,6 +1,5 @@
 <template>
   <v-card class="panel-card">
-
     <v-tabs v-model="tab">
       <v-tab value="one" class="panel-tab-btn" v-if="districtHeadquarterCommander || centralHeadquarterCommander">Отчет
         РО</v-tab>
@@ -40,10 +39,10 @@ const centralHeadquarterCommander = ref(false);
 const roleStore = useRoleStore();
 
 watchEffect(() => {
-  if (roleStore.roles?.districtheadquarter_commander) {
+  if (roleStore.roles?.districtheadquarter_commander || (roleStore.experts?.is_district_expert || roleStore.experts?.is_central_expert)) {
     districtHeadquarterCommander.value = true;
   }
-  if (roleStore.roles.centralheadquarter_commander) {
+  if (roleStore.roles.centralheadquarter_commander || roleStore.experts?.is_central_expert) {
     centralHeadquarterCommander.value = true;
   }
 })
@@ -52,9 +51,11 @@ watchEffect(() => {
 .v-slide-group {
   margin-bottom: -10px;
 }
+
 .v-tabs--density-default {
   --v-tabs-height: 54px;
 }
+
 .panel-card {
   box-shadow: none;
 }
@@ -82,6 +83,7 @@ watchEffect(() => {
   border-bottom: none;
   padding-bottom: 10px;
 }
+
 .v-tab.v-tab.v-btn.v-tab-item--selected {
   border-color: #F3F4F5;
 }
@@ -90,7 +92,7 @@ watchEffect(() => {
   padding: 0;
 }
 
-//.report-table {
+// .report-table {
 //  &__tr {
 //    background-color: #FFFFFF;
 //    text-align: center;
@@ -129,4 +131,5 @@ watchEffect(() => {
 //  margin-bottom: 16px;
 //  border-radius: 10px;
 //  border: 1px solid #B6B6B6;
-//}</style>
+// }
+</style>

@@ -175,9 +175,14 @@
                         id="scan_file" :is-error-panel="isErrorPanel" v-model:value="ninthPanelData.document"
                         name="scan_file" width="100%" :disabled="isSentNinth || ninthPanelData.event_happened === false"
                         height="auto" @change="uploadFile($event, 9)" />
-                    <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
-                        :isSent="isSentNinth" :is-error-file="isErrorFile" :fileSize="ninthPanelData.file_size"
-                        @click="deleteFile(9)">
+                    <div v-else-if="ninthPanelData.document && (typeof ninthPanelData.document !== 'string')"
+                        class="text-center">
+                        <v-progress-circular color="primary" indeterminate></v-progress-circular>
+                    </div>
+                    <FileBoxComponent v-else-if="ninthPanelData.document && typeof ninthPanelData.document === 'string'"
+                        :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
+                        :isSent="isSentNinth"
+                        :is-error-file="isErrorFile" :fileSize="ninthPanelData.file_size" @click="deleteFile(9)">
                     </FileBoxComponent>
                 </div>
 
@@ -188,8 +193,8 @@
 
                     <div class="form__wrapper" v-for="(item, index) in ninthPanelData.links" :key="index">
                         <InputReport @focusout="focusOut" @error="setError"
-                            :disabled="isSentNinth || ninthPanelData.event_happened === false" name="14"
-                            :maxlength="200" :is-error-panel="isErrorPanel" :is-link="true"
+                            :disabled="isSentNinth || ninthPanelData.event_happened === false" name="14" :maxlength="200"
+                            :is-error-panel="isErrorPanel" :is-link="true"
                             placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
                             class="mb-2" />
                         <div v-if="!isSentNinth && ninthPanelData.event_happened === true">
@@ -304,7 +309,7 @@
                         <p>0</p>
                     </div>
                 </div> -->
-                <div v-if="props.panel_number == 6" class="form__field-group group-seventh">
+                <div v-if="props.panel_number == 6" class="group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -321,30 +326,20 @@
                         <p class="form__label">
                             Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
                         </p>
-                        <InputReport @focusout="focusOut" v-model:value="sixPanelData.number_of_members"
-                            placeholder="Введите число" id="15" name="14" class="form__input number_input" type="number"
-                            :maxlength="10" :max="32767"
+                        <InputReport v-model:value="sixPanelData.number_of_members" placeholder="Введите число" id="15"
+                            name="14" class="form__input number_input" type="number" :maxlength="10" :max="32767"
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
                     </div>
-                    <div class="form__field">
+                    <div class="form__field" v-if="sixPanelData?.links?.length > 0">
                         <label class="form__label" for="14">Ссылка на социальные сети/ электронные
                             СМИ, подтверждающая участие в мероприятии
                             <sup class="valid-red">*</sup></label>
 
-                        <div class="form__wrapper" v-for="(item, index) in sixPanelData.links" :key="index">
+                        <div class="form__wrapper" v-for="(item, index) in sixPanelData?.links" :key="index">
                             <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                                @focusout="focusOut" :is-link="true"
+                                :is-link="true"
                                 :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                                 name="14" v-model:value="item.link" class="mb-2" />
-                            <div v-if="!(props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)">
-                                <div class="add_link" @click="addLink(6)"
-                                    v-if="sixPanelData.links.length === index + 1">
-                                    + Добавить ссылку
-                                </div>
-                                <div class="add_link" @click="deleteLink(6)" v-else>
-                                    Удалить поле ввода
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="form__field">
@@ -356,7 +351,7 @@
                             counter-visible />
                     </div>
                 </div>
-                <div v-else-if="props.panel_number == 9" class="form__field-group group-seventh">
+                <div v-else-if="props.panel_number == 9" class="group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -367,55 +362,46 @@
                     </div>
                     <div class="form__field places mt-4">
                         <p class="form__label">
-                            Проведение мероприятия <sup class="valid-red">*</sup>
+                            Проведение мероприятия
+                            <sup class="valid-red">*</sup>
                         </p>
 
-                        <div class="places_wrap">
-                            <div class="places_item" v-for="item in events" :key="item.id">
-                                <input :id="item.id" :value="item.value" :name="item.name"
-                                    :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
-                                    :checked="ninthPanelData.event_happened == item.value"
-                                    class="form__input places_input" type="radio" @focusout="focusOut"
-                                    v-model="ninthPanelData.event_happened" />
-                                <label class="places_item_label" :for="id">{{
-                                    item.name
-                                }}</label>
-                            </div>
+                        <div class="places_wrap one_place">
+                            <input :id="12" :value="ninthPanelData.event_happened" :name="12" :disabled="props.isCentralHeadquarterCommander ||
+                                props.isDistrictHeadquarterCommander
+                                " :checked="ninthPanelData.event_happened === true ||
+                                    ninthPanelData.event_happened === false
+                                    " class="form__input places_input" type="radio"
+                                v-model="ninthPanelData.event_happened" />
+                            <label v-if="ninthPanelData.event_happened === true" class="places_item_label"
+                                :for="id">Да</label>
+                            <label v-else class="places_item_label" :for="id">Нет</label>
                         </div>
                     </div>
-                    <div class="report__fieldset report__fieldset--right-block">
+                    <div class="report__fieldset report__fieldset--right-block" v-if="ninthPanelData.document !== null">
                         <label class="form__label report__label mb-2" for="scan_file">
                             Скан документа, подтверждающего проведение акции
                         </label>
                         <InputReport
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                             v-if="!ninthPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
-                            id="scan_file" name="scan_file" width="100%" height="auto" @change="uploadFile" />
+                            id="scan_file" name="scan_file" width="100%" height="auto" />
                         <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
-                            :isSent="isSent" :fileSize="ninthPanelData.file_size" @click="deleteFile">
+                            :isSent="isSent" :fileSize="ninthPanelData.file_size">
                         </FileBoxComponent>
                     </div>
 
-                    <div class="form__field">
+                    <div class="form__field" v-if="ninthPanelData?.links?.length > 0">
                         <label class="form__label mt-4" for="14">Ссылка на социальные сети/ электронные
                             СМИ, подтверждающая проведение акции
                             <sup class="valid-red">*</sup></label>
 
-                        <div class="form__wrapper" v-for="(item, index) in ninthPanelData.links" :key="index">
+                        <div class="form__wrapper" v-for="(item, index) in ninthPanelData?.links" :key="index">
                             <InputReport
                                 :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
-                                @focusout="focusOut" name="14" :is-link="true"
+                                name="14" :is-link="true"
                                 placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
                                 v-model:value="item.link" class="mb-2" />
-                            <div v-if="!(props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)">
-                                <div class="add_link" @click="addLink(7)"
-                                    v-if="ninthPanelData.links.length === index + 1">
-                                    + Добавить ссылку
-                                </div>
-                                <div class="add_link" @click="deleteLink(7)" v-else>
-                                    Удалить поле ввода
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="form__field">
@@ -423,16 +409,7 @@
                         <TextareaReport
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                             v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1" autoResize
-                            placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
-                            counter-visible />
-                    </div>
-                    <div class="form__field-result" style="display: flex; align-items: center;">
-                        <v-checkbox class="result-checkbox" id="v-checkbox" />
-                        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
-                    </div>
-                    <div class="hr"></div>
-                    <div class="form__field-result result-count">
-                        <p>0</p>
+                            placeholder="Комментарий" :maxlength="3000" :max-length-text="3000" counter-visible />
                     </div>
                 </div>
             </template>
@@ -481,7 +458,7 @@
                         <p>0</p>
                     </div>
                 </div> -->
-                <div v-if="props.panel_number == 6" class="form__field-group group-seventh">
+                <div v-if="props.panel_number == 6" class="group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -498,19 +475,17 @@
                         <p class="form__label">
                             Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
                         </p>
-                        <InputReport @focusout="focusOut" v-model:value="sixPanelData.number_of_members"
-                            placeholder="Введите число" id="15" name="14" class="form__input number_input" type="number"
-                            :maxlength="10" :max="32767" />
+                        <InputReport v-model:value="sixPanelDataDH.number_of_members" placeholder="Введите число"
+                            id="15" name="14" class="form__input number_input" :is-error-panel="isErrorPanel"
+                            type="number" :maxlength="10" :max="32767" />
                     </div>
 
-                    <div class="form__field">
-                        <label class="form__label" for="14">Комментарий<sup class="valid-red">*</sup></label>
-                        <TextareaReport v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1"
-                            autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
-                            :max-length-text="3000" counter-visible />
-                    </div>
+                    <CommentFileComponent v-model:value="sixPanelDataDH.comment" :is-error-panel="isErrorPanel"
+                        :is-six="true" name="sixPanelDataDH.comment"
+                        :disabled="props.isCentralHeadquarterCommander || ((sixPanelDataDH.number_of_members == 0 || sixPanelDataDH.number_of_members === null) && (sixPanelData.number_of_members == 0 || sixPanelData.number_of_members === null))">
+                    </CommentFileComponent>
                 </div>
-                <div v-else-if="props.panel_number == 9" class="form__field-group group-seventh">
+                <div v-else-if="props.panel_number == 9" class="group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -527,29 +502,23 @@
                         <div class="places_wrap">
                             <div class="places_item" v-for="item in events" :key="item.id">
                                 <input :id="item.id" :value="item.value" :name="item.name"
-                                    :checked="ninthPanelData.event_happened == item.value"
-                                    class="form__input places_input" type="radio" @focusout="focusOut"
-                                    v-model="ninthPanelData.event_happened" />
+                                    :checked="ninthPanelDataDH.event_happened == item.value"
+                                    class="form__input places_input" type="radio"
+                                    v-model="ninthPanelDataDH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
                                     }}</label>
                             </div>
                         </div>
                     </div>
-                    <div class="form__field">
-                        <label class="form__label" for="14">Комментарий <sup class="valid-red">*</sup></label>
-                        <TextareaReport v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1"
-                            autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
-                            :max-length-text="3000" counter-visible />
-                    </div>
-                    <div class="form__field-result" style="display: flex; align-items: center;">
-                        <v-checkbox class="result-checkbox" id="v-checkbox" />
-                        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
-                    </div>
-                    <div class="hr"></div>
-                    <div class="form__field-result result-count">
-                        <p>0</p>
-                    </div>
+                    <CommentFileComponent v-model:value="ninthPanelDataDH.comment" name="ninthPanelDataDH.comment"
+                        @change="uploadFile($event, 9)" @click="deleteFile(9)"
+                        :file="reportStore.reportDataDHFile.ninth[props.ninthId] ? reportStore.reportDataDHFile.ninth[props.ninthId]?.name : null"
+                        :fileType="reportStore.reportDataDHFile.ninth[props.ninthId] ? reportStore.reportDataDHFile.ninth[props.ninthId]?.type.split('/').at(-1) : null"
+                        :fileSize="reportStore.reportDataDHFile.ninth[props.ninthId] ? reportStore.reportDataDHFile.ninth[props.ninthId]?.size / Math.pow(1024, 2) : null"
+                        :disabled="props.isCentralHeadquarterCommander || (ninthPanelDataDH.event_happened === false && ninthPanelData.event_happened === false)"
+                        :is-error-file="isErrorFile" :is-error-panel="isErrorPanel">
+                    </CommentFileComponent>
                 </div>
             </template>
             <template v-slot:thirdTab>
@@ -711,12 +680,17 @@
 <script setup>
 import { ref, watchEffect, watch } from 'vue';
 import { Button } from '@shared/components/buttons';
-import { FileBoxComponent } from '@entities/RatingRoComponents/components';
+import {
+    FileBoxComponent,
+    CommentFileComponent,
+    ReportTable,
+} from '@entities/RatingRoComponents/components';
 import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { SvgIcon } from '@shared/ui';
 import { ReportTabs } from './index';
 import { reportPartTwoService } from '@services/ReportService.ts';
 import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
+import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
 const props = defineProps({
     title: Object,
     panel_number: String,
@@ -726,20 +700,24 @@ const props = defineProps({
     isCentralHeadquarterCommander: Boolean,
     isDistrictHeadquarterCommander: Boolean,
     id: String,
+    sixId: String,
+    ninthId: String,
     isSentSix: Boolean,
     // isSent: Boolean,
     isSentNinth: Boolean,
     isErrorPanel: Boolean,
     data: Object,
+    dataDH: Object,
+    dataCH: Object,
 });
 
-const emit = defineEmits(['collapse-form', 'formData', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'error']);
+const emit = defineEmits(['collapse-form', 'formData', 'formDataDH', 'uploadFile', 'uploadFileDH', 'getId', 'getPanelNumber', 'deleteFile', 'deleteFileDH', 'error']);
 
 const collapseForm = () => {
     emit('collapse-form');
 };
 
-
+const reportStore = useReportPartTwoStore();
 let isErrorFile = ref(false);
 const isFirstSentSix = ref(true);
 // const isFirstSentSeventh = ref(true);
@@ -774,12 +752,28 @@ const ninthPanelData = ref({
     file_type: '',
     comment: '',
 })
+const ninthPanelDataDH = ref({
+    event_happened: false,
+    document: '',
+    file_size: null,
+    file_type: '',
+    comment: '',
+})
 
 const sixPanelData = ref({
     number_of_members: 0,
     links: [{
         link: '',
     }],
+    comment: '',
+});
+const sixPanelDataDH = ref({
+    number_of_members: 0,
+    comment: '',
+});
+
+const sixPanelDataCH = ref({
+    number_of_members: 0,
     comment: '',
 });
 
@@ -826,20 +820,28 @@ const uploadFile = (event, number) => {
             scanFile.value = event.target.files[0];
             ninthPanelData.value.document = scanFile.value.name;
         } else {
-            let formData = new FormData();
-            formData.append('event_happened', ninthPanelData.value.event_happened);
-            formData.append('document', event.target.files[0]);
-            if (ninthPanelData.value.links.length) {
-                for (let i = 0; i < ninthPanelData.value.links.length; i++) {
-                    !ninthPanelData.value.links[i].link
-                        ? formData.append(`[links][${i}][link]`, '')
-                        : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+            if (props.isDistrictHeadquarterCommander) {
+
+                ninthPanelDataDH.value.document = event.target.files[0];
+                reportStore.reportDataDHFile.ninth[props.ninthId] = event.target.files[0];
+                console.log('file', reportStore.reportDataDHFile.ninth[props.ninthId])
+            } else {
+                let formData = new FormData();
+                formData.append('event_happened', ninthPanelData.value.event_happened);
+                formData.append('document', event.target.files[0]);
+                if (ninthPanelData.value.links.length) {
+                    for (let i = 0; i < ninthPanelData.value.links.length; i++) {
+                        !ninthPanelData.value.links[i].link
+                            ? formData.append(`[links][${i}][link]`, '')
+                            : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                    }
                 }
+                if (ninthPanelData.value.comment !== null) {
+                    formData.append('comment', ninthPanelData.value.comment);
+                }
+                emit('uploadFile', formData);
             }
-            if (ninthPanelData.value.comment !== null) {
-                formData.append('comment', ninthPanelData.value.comment);
-            }
-            emit('uploadFile', formData);
+
         }
     }
 
@@ -866,23 +868,28 @@ const deleteFile = (number) => {
     //     // emit('formData', formData)
     // } 
     if (number === 9) {
-        ninthPanelData.value.document = '';
-        formData.append('event_happened', ninthPanelData.value.event_happened);
-        formData.append('document', '');
-        if (ninthPanelData.value.links.length) {
-            for (let i = 0; i < ninthPanelData.value.links.length; i++) {
-                !ninthPanelData.value.links[i].link
-                    ? formData.append(`[links][${i}][link]`, '')
-                    : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+        if (props.isDistrictHeadquarterCommander) {
+            reportStore.reportDataDHFile.ninth[props.ninthId] = null;
+            ninthPanelDataDH.value.document = '';
+
+        } else {
+            ninthPanelData.value.document = '';
+            formData.append('event_happened', ninthPanelData.value.event_happened);
+            formData.append('document', '');
+            if (ninthPanelData.value.links.length) {
+                for (let i = 0; i < ninthPanelData.value.links.length; i++) {
+                    !ninthPanelData.value.links[i].link
+                        ? formData.append(`[links][${i}][link]`, '')
+                        : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                }
             }
+            if (ninthPanelData.value.comment !== null) {
+                formData.append('comment', ninthPanelData.value.comment);
+            }
+            formData.append('file_size', ninthPanelData.value.file_size);
+            formData.append('file_type', ninthPanelData.value.file_type);
+            emit('deleteFile', formData);
         }
-        if (ninthPanelData.value.comment !== null) {
-            formData.append('comment', ninthPanelData.value.comment);
-        }
-        formData.append('file_size', ninthPanelData.value.file_size);
-        formData.append('file_type', ninthPanelData.value.file_type);
-        emit('deleteFile', formData);
-        // emit('formData', formData)
     }
 
 }
@@ -890,12 +897,16 @@ const deleteFile = (number) => {
 const focusOut = () => {
     if (props.panel_number == 6) {
         try {
-            // if(isLinkError.value && )
-            emit('formData', sixPanelData.value)
-
+            // if (props.isDistrictHeadquarterCommander) {
+            //     emit('formDataDH', sixPanelDataDH.value);
+            //     console.log('dataDH', sixPanelDataDH);
+            // } else {
+            //     emit('formData', sixPanelData.value);
+            // }
+            emit('formData', sixPanelData.value);
 
         } catch (e) {
-            console.log('data', e.response.data)
+            console.log('data', e.response.data);
         }
     }
     // else if (props.panel_number == 7) {
@@ -949,6 +960,10 @@ const focusOut = () => {
     // }
     else if (props.panel_number == 9) {
         try {
+            // if (props.isDistrictHeadquarterCommander) {
+            //     emit('formDataDH', ninthPanelDataDH.value);
+            //     console.log('dataDH9', ninthPanelDataDH);
+            // } else {
             if (isFirstSentNinth.value === true) {
                 console.log('9', '1')
                 emit('formData', ninthPanelData.value)
@@ -990,6 +1005,7 @@ const focusOut = () => {
                 emit('formData', formData)
                 console.log('9', '2')
             }
+
         } catch (e) {
             console.log('data', e.response.data);
         }
@@ -1026,35 +1042,30 @@ const deleteLink = async (number) => {
 watchEffect(() => {
     if (props.panel_number == 6) {
 
-        if (Object.keys(props.data).length > 0) {
-            isFirstSentSix.value = false
-            sixPanelData.value = { ...props.data }
-            if (isLinkError.value) {
-                console.log('gg');
-                emit('error', isLinkError.value)
-            } else {
-                console.log('hh')
-                emit('error', false)
+        if (props.isDistrictHeadquarterCommander) {
+            sixPanelData.value = { ...props.data };
+            if (reportStore.reportDataDH.six[props.sixId]) {
+                sixPanelDataDH.value.comment = reportStore.reportDataDH.six[props.sixId].comment;
+                sixPanelDataDH.value.number_of_members = reportStore.reportDataDH.six[props.sixId].number_of_members;
             }
-
-            if (!sixPanelData.value.links.length) sixPanelData.value.links.push({ link: '' })
-
-
+            // sixPanelDataCH.value = { ...props.dataCH };
+        } else {
+            if (Object.keys(props.data).length > 0) {
+                isFirstSentSix.value = false;
+                sixPanelData.value = { ...props.data };
+                if (isLinkError.value) {
+                    emit('error', isLinkError.value);
+                } else {
+                    emit('error', false);
+                }
+                if (!sixPanelData.value.links.length)
+                    sixPanelData.value.links.push({ link: '' });
+            } else {
+                console.log('data not received');
+            }
         }
-        else {
-            console.log('data not received');
-            // isSentSix.value = true;
-            // isFirstSentSix.value = true;
-            // sixPanelData.value = {
-            //     number_of_members: 0,
-            //     links: [{
-            //         link: '',
-            //     }],
-            //     comment: ''
-            // }
-        }
-        emit('getId', props.id)
-        emit('getPanelNumber', props.panel_number)
+        emit('getId', props.id);
+        emit('getPanelNumber', props.panel_number);
         // } else if (props.panel_number == 7) {
         //     if (Object.keys(props.data).length > 0) {
         //         console.log('7')
@@ -1085,40 +1096,77 @@ watchEffect(() => {
         //     emit('getPanelNumber', props.panel_number)
 
     } else if (props.panel_number == 9) {
-        if (Object.keys(props.data).length > 0) {
-            isFirstSentNinth.value = false;
-            ninthPanelData.value = { ...props.data }
-            if (isLinkError.value) {
-                console.log('gg');
-                emit('error', isLinkError.value)
-            } else {
-                console.log('hh')
-                emit('error', false)
+        if (props.isDistrictHeadquarterCommander) {
+            ninthPanelData.value = { ...props.data };
+            if (reportStore.reportDataDH.ninth[props.ninthId]) {
+                ninthPanelDataDH.value.comment = reportStore.reportDataDH.ninth[props.ninthId].comment;
+                ninthPanelDataDH.value.event_happened = reportStore.reportDataDH.ninth[props.ninthId].event_happened;
             }
-            if (!ninthPanelData.value.links.length) {
-                ninthPanelData.value.links.push({ link: '' })
+        } else {
+            if (Object.keys(props.data).length > 0) {
+                isFirstSentNinth.value = false;
+                ninthPanelData.value = { ...props.data }
+                if (isLinkError.value) {
+                    console.log('gg');
+                    emit('error', isLinkError.value)
+                } else {
+                    console.log('hh')
+                    emit('error', false)
+                }
+                if (!ninthPanelData.value.links.length) {
+                    ninthPanelData.value.links.push({ link: '' })
+                }
+
             }
 
-        }
+            else {
+                console.log('data not received');
+                isFirstSentNinth.value = true;
+                ninthPanelData.value = {
+                    event_happened: false,
+                    links: [{
+                        link: '',
+                    }],
+                    comment: '',
+                    file_size: '',
+                    file_type: '',
+                };
+            }
 
-        else {
-            console.log('data not received');
-            isFirstSentNinth.value = true;
-            ninthPanelData.value = {
-                event_happened: false,
-                links: [{
-                    link: '',
-                }],
-                comment: '',
-                file_size: '',
-                file_type: '',
-            };
         }
         emit('getId', props.id)
         emit('getPanelNumber', props.panel_number)
 
     }
+}, {
+    flush: 'post'
 })
+
+watch(sixPanelDataDH.value, () => {
+    reportStore.reportDataDH.six[props.sixId] = sixPanelDataDH.value;
+    emit('formDataDH', sixPanelDataDH.value);
+    console.log(sixPanelDataDH.value)
+});
+watch(ninthPanelDataDH.value, () => {
+    reportStore.reportDataDH.ninth[props.ninthId] = ninthPanelDataDH.value;
+
+    let formData = new FormData();
+
+    ninthPanelDataDH.value.event_happened
+        ? formData.append('event_happened', ninthPanelDataDH.value.event_happened)
+        : formData.append('event_happened', false);
+
+    formData.append('comment', ninthPanelDataDH.value.comment || '');
+
+    reportStore.reportDataDHFile.ninth[props.ninthId]
+        ? formData.append('document', reportStore.reportDataDHFile.ninth[props.ninthId])
+        : formData.append('document', '');
+
+    emit('formDataDH', formData);
+    // reportStore.reportDataDH.ninth = ninthPanelDataDH.value;
+    // emit('formDataDH', ninthPanelDataDH.value);
+});
+
 </script>
 <style lang="scss" scoped>
 .number_input {
@@ -1161,6 +1209,12 @@ watchEffect(() => {
     @media (max-width: 400px) {
         width: 296px;
     }
+}
+
+input[type='radio']:disabled {
+    background-color: #1f7cc0;
+    border: 2px solid #000000; // Add border to the input element
+    border-radius: 50%; // Make the border round
 }
 
 
@@ -1209,6 +1263,11 @@ watchEffect(() => {
     max-width: 70px;
 
 }
+
+.one_place {
+    column-gap: 8px !important;
+}
+
 
 .city {
     width: 100%;

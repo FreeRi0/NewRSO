@@ -1,44 +1,16 @@
 <template>
     <div class="report__fieldset report__fieldset--comment-expert">
-        <label
-            class="form__label report__label"
-            :for="name"
-        >Комментарий&nbsp;<sup class="valid-red">*</sup></label>
+        <label class="form__label report__label" :for="name">Комментарий&nbsp;<sup class="valid-red">*</sup></label>
 
-        <InputReport
-            is-file-district
-            type="file"
-            accept=".jpg, .jpeg, .png, .pdf"
-            id="scan_file"
-            name="scan_file"
-            width="20px"
-            height="20px"
-            @change="onChange"
-        />
+        <InputReport v-show="!props.isSix" is-file-district type="file" accept=".jpg, .jpeg, .png, .pdf" id="scan_file"
+            name="scan_file" width="20px" height="20px" :disabled="isDisabled" change="onChange" />
 
-        <TextareaReport
-            :value="value"
-            :id="name"
-            :name="name"
-            placeholder="Примечания, ссылки"
-            :rows="1" 
-            autoResize
-            counter-visible
-            :maxlength="3000"
-            :max-length-text="3000"
-            
-            :disabled="isDisabled"
-            v-bind="$attrs"
-        ></TextareaReport>
-        <FileBoxComponent
-            v-if="file"
-            :file="file"
-            :fileType="fileType"
-            :fileSize="fileSize"
-            @click="clickOnButton"
-            :is-error-file="isErrorFile"
-        ></FileBoxComponent>
-        </div>
+        <TextareaReport :value="value" :id="name" :name="name" placeholder="Примечания, ссылки" :rows="1" autoResize
+            counter-visible :maxlength="3000" :max-length-text="3000" :disabled="isDisabled" v-bind="$attrs">
+        </TextareaReport>
+        <FileBoxComponent v-if="file" :file="file" :fileType="fileType" :fileSize="fileSize" @click="clickOnButton"
+            :is-error-file="isErrorFile"></FileBoxComponent>
+    </div>
 </template>
 
 <script setup>
@@ -67,6 +39,10 @@ const props = defineProps({
         type: String,
         default: null,
     },
+    isSix: {
+        type: Boolean,
+        default: false,
+    },
     fileSize: {
         type: Number,
         default: null,
@@ -92,6 +68,6 @@ const clickOnButton = () => {
 
 <style lang="scss" scoped>
 .valid-red {
-  color: #db0000;
+    color: #db0000;
 }
 </style>

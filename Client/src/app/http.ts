@@ -185,7 +185,7 @@ HTTP.interceptors.response.use(
                     HTTP.post('/services/front_errors/', {
                         url: err.config.baseURL.substring(0, err.config.baseURL.length - 1) + err.config.url,
                         error_code: err.response.status,
-                        error_description: 'Error: ' + JSON.stringify(err.response.data),
+                        error_description: 'Error: ' + JSON.stringify(err.response.data).slice(0, 90),
                         method: err.config.method
                     }).then().catch()
                 }

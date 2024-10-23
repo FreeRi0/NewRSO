@@ -7,8 +7,10 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <TenthPanelForm
+              :key="1"
               :districtExpert="districtExpert"
-              :centralExpert="centralExpert" :data="tenthPanelDataFirst"
+              :centralExpert="centralExpert"
+              :data="tenthPanelDataFirst"
               @formData="formData($event, 1)"
               @uploadFile="uploadFile($event, 1)"
               @deleteFile="deleteFile(1)"
@@ -17,6 +19,9 @@
               @clearForm="onClearForm(1)"
               :isErrorFileProp="isErrorFileFirst"
               title="Всероссийская патриотическая акция «Снежный Десант РСО»"
+              :dataDH="tenthPanelDataFirstDH"
+              :document="documentFirst"
+              @getDataDH="getDataDH($event, 1)"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -27,6 +32,7 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <TenthPanelForm
+              :key="2"
               :districtExpert="districtExpert"
               :centralExpert="centralExpert"
               :data="tenthPanelDataSecond"
@@ -38,6 +44,9 @@
               @clearForm="onClearForm(2)"
               :isErrorFileProp="isErrorFileSecond"
               title="Всероссийская трудовая патриотическая акция «Поклонимся великим тем годам»"
+              :dataDH="tenthPanelDataSecondDH"
+              :document="documentSecond"
+              @getDataDH="getDataDH($event, 2)"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -45,12 +54,14 @@
   </div>
 </template>
 <script setup>
-import {inject, ref, watchEffect} from "vue";
+import {inject, onMounted, ref, watchEffect} from "vue";
 import {TenthPanelForm} from './index';
 import {reportPartTwoService} from "@services/ReportService.ts";
 import {fileValidate} from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
+import {useReportPartTwoStore} from "@pages/ReportRegionalHQPartTwoPage/store.ts";
 
 const swal = inject('$swal');
+const reportStore = useReportPartTwoStore();
 
 const props = defineProps({
   districtExpert: {
@@ -66,7 +77,7 @@ const props = defineProps({
   data: Object,
 });
 
-const emit = defineEmits(['getData']);
+const emit = defineEmits(['getData', 'getDataDHFirst', 'getDataDHSecond']);
 
 const isFirstSent = ref({
   first: true,
@@ -84,6 +95,11 @@ const tenthPanelDataFirst = ref({
     },
   ],
 });
+const tenthPanelDataFirstDH = ref({
+  event_happened: null,
+  comment: '',
+  document: null,
+});
 const tenthPanelDataSecond = ref({
   event_happened: null,
   document: '',
@@ -96,9 +112,16 @@ const tenthPanelDataSecond = ref({
     },
   ],
 });
+const tenthPanelDataSecondDH = ref({
+  event_happened: null,
+  comment: '',
+  document: null,
+});
 const panel = ref(false);
 let isErrorFileFirst = ref(false);
 let isErrorFileSecond = ref(false);
+const documentFirst = ref(null);
+const documentSecond = ref(null);
 
 const collapseForm = () => {
   panel.value = false;
@@ -282,7 +305,54 @@ const onClearForm = async (reportNumber) => {
       emit('getData', data, 10, 2);
     }
   }
-}
+};
+
+const getDataDH = (data, reportNumber) => {
+  let formData = new FormData();
+  if (reportNumber === 1) {
+    reportStore.reportDataDH.tenth.first.event_happened = data.event_happened;
+    reportStore.reportDataDH.tenth.first.comment = data.comment;
+
+    formData.append('event_happened', data.event_happened);
+    formData.append('comment', data.comment || '');
+
+    if (data.document) {
+      reportStore.reportDataDHFile.tenth.first = data.document;
+      formData.append('document', data.document);
+    } else {
+      reportStore.reportDataDHFile.tenth.first = null;
+      documentFirst.value = null
+    }
+
+    emit('getDataDHFirst', formData, 10, 1);
+  }
+  if (reportNumber === 2) {
+    reportStore.reportDataDH.tenth.second.event_happened = data.event_happened;
+    reportStore.reportDataDH.tenth.second.comment = data.comment;
+
+    formData.append('event_happened', data.event_happened);
+    formData.append('comment', data.comment || '');
+
+    if (data.document) {
+      reportStore.reportDataDHFile.tenth.second = data.document;
+      formData.append('document', data.document);
+    } else {
+      reportStore.reportDataDHFile.tenth.second = null;
+      documentSecond.value = null;
+    }
+
+    emit('getDataDHSecond', formData, 10, 2);
+  }
+};
+
+onMounted(() => {
+  if (reportStore.reportDataDH.tenth.first) {
+    tenthPanelDataFirstDH.value = reportStore.reportDataDH.tenth.first;
+  }
+  if (reportStore.reportDataDH.tenth.second) {
+    tenthPanelDataSecondDH.value = reportStore.reportDataDH.tenth.second;
+  }
+})
 
 watchEffect(() => {
   if (props.data.first) {
@@ -292,6 +362,14 @@ watchEffect(() => {
   if (props.data.second) {
     isFirstSent.value.second = false;
     tenthPanelDataSecond.value = {...props.data.second}
+  }
+
+  if (reportStore.reportDataDHFile.tenth.first) {
+    documentFirst.value = reportStore.reportDataDHFile.tenth.first
+  }
+
+  if (reportStore.reportDataDHFile.tenth.second) {
+    documentSecond.value = reportStore.reportDataDHFile.tenth.second;
   }
 });
 </script>

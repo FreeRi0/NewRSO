@@ -23,9 +23,13 @@
                             style="width: 100%;"
                             type="number"
                             placeholder="0"
-                            :maxlength="10"
-                            :max="32767"
-                            @focusout="focusOutField"
+                            :maxlength="maxlength"
+                            :min="min"
+                            :max="max"
+                            :step="step"
+
+                            :is-error-panel="isErrorPanel"
+                            @input="updateValue"
                         />
                 </td>
                 </tr>
@@ -37,7 +41,8 @@
 <script setup>
 import { InputReport } from '@shared/components/inputs';
 
-const emit = defineEmits(['focusOut']);
+const emit = defineEmits(['update:value']);
+
 const props = defineProps({
     label: {
         type: String,
@@ -50,12 +55,35 @@ const props = defineProps({
         type: Number,
     },
     value: {
+        type: [String, Number],
+    },
+    name: {
+        type: String
+    },
+    maxlength: {
         type: Number,
+    },
+    max: {
+        type: Number,
+    },
+    min: {
+        type: Number,
+    },
+    step: {
+        type: Number,
+    },
+    isErrorPanel: {
+        type: Boolean,
     },
 });
 
-const focusOutField = (event) => {
-    emit('focusOut', event.target.value);
-};
-
+const updateValue = (event) => {
+    emit('update:value', event.target.value);
+}
 </script>
+
+<style lang="scss" scoped>
+.valid-red {
+  color: #db0000;
+}
+</style>

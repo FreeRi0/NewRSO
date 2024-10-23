@@ -8,6 +8,7 @@
         <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть"/>
       </div>
     </div>
+
     <div class="form__field">
       <p class="form__label" id="form__label-radio">Проведение акции <sup class="valid-red">*</sup></p>
       <div class="form__field-radio" style="display: flex">
@@ -47,18 +48,6 @@
             @change="uploadFile"
             :disabled="isSent || !tenthPanelData.event_happened"
         />
-<!--        <div v-else class="form__file-box">-->
-<!--          <span class="form__file-name">-->
-<!--            <SvgIcon v-if="tenthPanelData.file_type === 'jpg'" icon-name="file-jpg"/>-->
-<!--            <SvgIcon v-if="tenthPanelData.file_type === 'pdf'" icon-name="file-pdf"/>-->
-<!--            <SvgIcon v-if="tenthPanelData.file_type === 'png'" icon-name="file-png"/>-->
-<!--            {{ tenthPanelData.document.split('/').at(-1) }}-->
-<!--          </span>-->
-<!--          <span class="form__file-size">{{ tenthPanelData.file_size }} Мб</span>-->
-<!--          <button v-if="!isSent" @click="deleteFile" class="form__button-delete-file">-->
-<!--            Удалить-->
-<!--          </button>-->
-<!--        </div>-->
         <FileBoxComponent
             v-else
             :file="tenthPanelData.document"
@@ -85,7 +74,8 @@
               is-link
           />
           <div v-if="!isSent && tenthPanelData.event_happened">
-            <Button v-if="tenthPanelData.links.length === i + 1" class="form__add-link-button" label="+ Добавить ссылку" @click="addLink"/>
+            <Button v-if="tenthPanelData.links.length === i + 1" class="form__add-link-button" label="+ Добавить ссылку"
+                    @click="addLink"/>
             <Button class="form__add-link-button" v-else label="Удалить" @click="onDeleteLink(i)"/>
           </div>
         </div>
@@ -110,96 +100,171 @@
         />
       </div>
     </div>
+
   </div>
 
   <report-tabs v-else>
     <template v-slot:firstTab>
+
       <div style="display: flex; justify-content: space-between;">
         <div>
-          <p class="form__title">Всероссийская патриотическая акция «Снежный Десант РСО»</p>
+          <p class="form__title">{{ props.title }}</p>
         </div>
         <div>
           <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть"/>
         </div>
       </div>
+
       <div class="form__field">
-        <p class="form__label">Проведение акции <sup class="valid-red">*</sup></p>
-        <div style="display: flex">
-          <div v-if="tenthPanelData.event_happened" style="display: flex; align-items: center">
-            <input v-model="tenthPanelData.event_happened" id="event_happened-true" class="form__input" type="radio"
-                   :value="true"/>
+        <p class="form__label" id="form__label-radio">Проведение акции <sup class="valid-red">*</sup></p>
+        <div class="form__field-radio" style="display: flex">
+          <div style="display: flex; align-items: center">
+            <input
+                v-model="tenthPanelData.event_happened"
+                id="event_happened-true"
+                class="custom-radio"
+                type="radio"
+                :value="true"
+                disabled
+            />
             <label for="event_happened-true">Да</label>
           </div>
-          <div v-else style="display: flex; align-items: center">
-            <input v-model="tenthPanelData.event_happened" id="event_happened-false" class="form__input" type="radio"
-                   :value="false"/>
+          <div style="display: flex; align-items: center">
+            <input
+                v-model="tenthPanelData.event_happened"
+                id="event_happened-false"
+                class="custom-radio"
+                type="radio"
+                :value="false"
+                disabled
+            />
             <label for="event_happened-false">Нет</label>
           </div>
         </div>
-        <div>
-          <label class="form__label" for="4">Скан документа, подтверждающего проведение акции</label>
-          <div class="form__file-box">
-            <span class="form__file-name">
-              <SvgIcon v-if="tenthPanelData.file_type === 'jpg'" icon-name="file-jpg"/>
-              <SvgIcon v-if="tenthPanelData.file_type === 'pdf'" icon-name="file-pdf"/>
-              <SvgIcon v-if="tenthPanelData.file_type === 'png'" icon-name="file-png"/>
-              {{ tenthPanelData.document.split('/').at(-1) || 'Тестовое название' }}
-            </span>
-            <span class="form__file-size">{{ tenthPanelData.file_size || '123' }} Мб</span>
-          </div>
+        <div style="margin-bottom: 8px;">
+          <label style="display: flex; " class="form__label" for="4">Скан документа, подтверждающего проведение
+            акции</label>
+          <InputReport
+              class="form-input__file-input"
+              v-if="!tenthPanelData.document"
+              isFile
+              type="file"
+              id="scan_file"
+              name="scan_file"
+              @change="uploadFile"
+              :disabled="isSent || !tenthPanelData.event_happened"
+          />
+          <FileBoxComponent
+              v-else
+              :file="tenthPanelData.document"
+              :fileType="tenthPanelData.file_type"
+              :fileSize="tenthPanelData.file_size"
+              :isSent="isSent"
+              :is-error-file="isErrorFile && !tenthPanelData.file_size"
+              @click="deleteFile"
+          />
         </div>
         <div>
-          <p class="form__label">Ссылка на социальные сети/электронные
-            СМИ, подтверждающая проведение акции <sup class="valid-red">*</sup></p>
-          <div style="display: flex;" v-for="(link, i) in tenthPanelData.links" :key="i">
-            <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input" type="text"
-                         placeholder="https://vk.com/cco_monolit" @focusout="formData"
-                         :disabled="props.centralHeadquarterCommander || props.districtHeadquarterCommander"/>
+          <p class="form__label">Ссылка на социальные сети/ электронные <br>
+            СМИ, подтверждающая проведение акции</p>
+          <div class="input-link" v-for="(link, i) in tenthPanelData.links" :key="i">
+            <InputReport
+                v-model:value="link.link"
+                :id="i"
+                :name="i"
+                class="form__input form__input-add-link"
+                type="text"
+                placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
+                @focusout="formData"
+                :disabled="isSent || !tenthPanelData.event_happened"
+                is-link
+            />
+            <div v-if="!isSent && tenthPanelData.event_happened">
+              <Button v-if="tenthPanelData.links.length === i + 1" class="form__add-link-button" label="+ Добавить ссылку"
+                      @click="addLink"/>
+              <Button class="form__add-link-button" v-else label="Удалить" @click="onDeleteLink(i)"/>
+            </div>
           </div>
+        </div>
+        <div class="form__field-comment">
+          <label style="display: flex; align-items: center;" class="form__label" for="comment">Комментарий <sup
+              class="valid-red">*</sup></label>
+          <TextareaReport
+              placeholder="Напишите сообщение"
+              v-model:value="tenthPanelData.comment"
+              id="comment"
+              name="comment"
+              :rows="1"
+              autoResize
+              :maxlength="3000"
+              :max-length-text="3000"
+              counter-visible
+              class="form__input form__input-comment"
+              style="margin-bottom: 4px;"
+              disabled
+          />
         </div>
       </div>
+
     </template>
+
     <template v-slot:secondTab>
+
       <div style="display: flex; justify-content: space-between;">
         <div>
-          <p class="form__title">Всероссийская патриотическая акция «Снежный Десант РСО»</p>
+          <p class="form__title">{{ props.title }}</p>
         </div>
         <div>
           <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть"/>
         </div>
       </div>
-      <div class="form__field">
-        <p class="form__label">Проведение акции <sup class="valid-red">*</sup></p>
-        <div style="display: flex">
-          <div style="display: flex; align-items: center">
-            <input v-model="tenthPanelData.event_happened" id="event_happened-true" class="form__input" type="radio"
-                   :value="true"/>
-            <label for="event_happened-true">Да</label>
-          </div>
-          <div style="display: flex; align-items: center">
-            <input v-model="tenthPanelData.event_happened" id="event_happened-false" class="form__input" type="radio"
-                   :value="false"/>
-            <label for="event_happened-false">Нет</label>
-          </div>
+
+      <div class="form__field-radio" style="display: flex">
+        <div style="display: flex; align-items: center">
+          <input
+              v-model="tenthPanelDataDH.event_happened"
+              id="event_happenedDH-true"
+              class="custom-radio"
+              type="radio"
+              :value="true"
+          />
+          <label for="event_happenedDH-true">Да</label>
         </div>
-        <div class="form__field">
-          <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
-          <TextareaReport placeholder="Напишите сообщение" v-model:value="tenthPanelData.comment" id="comment"
-                          name="comment" :rows="1" autoResize @focusout="formData" :maxlength="3000"
-                          :max-length-text="3000"
-                          counter-visible class="form__input"/>
+        <div style="display: flex; align-items: center">
+          <input
+              v-model="tenthPanelDataDH.event_happened"
+              id="event_happenedDH-false"
+              class="custom-radio"
+              type="radio"
+              :value="false"
+          />
+          <label for="event_happenedDH-false">Нет</label>
         </div>
       </div>
+
+      <div class="form__field">
+        <CommentFileComponent
+            v-model:value="tenthPanelDataDH.comment"
+            name="firstPanelDataDH.comment"
+            :file="tenthPanelDataDH.document ? tenthPanelDataDH.document.name : null"
+            :fileType="tenthPanelDataDH.document ? tenthPanelDataDH.document.type.split('/').at(-1) : null"
+            :fileSize="tenthPanelDataDH.document ? tenthPanelDataDH.document.size / Math.pow(1024, 2) : null"
+            :disabled="centralExpert"
+            :is-error-file="isErrorFile"
+            @change="uploadFileDH"
+            @click="deleteFileDH"
+        />
+      </div>
+
     </template>
   </report-tabs>
 </template>
 <script setup>
-import {ref, watch, watchEffect, watchPostEffect} from "vue";
+import {onMounted, ref, watch, watchEffect, watchPostEffect} from "vue";
 import {InputReport, TextareaReport} from '@shared/components/inputs';
 import {Button} from '@shared/components/buttons';
 import {ReportTabs} from './index';
-import {SvgIcon} from '@shared/index';
-import { FileBoxComponent } from '@entities/RatingRoComponents/components';
+import {FileBoxComponent, CommentFileComponent} from '@entities/RatingRoComponents/components';
 
 const props = defineProps({
   data: Object,
@@ -211,6 +276,8 @@ const props = defineProps({
   },
   isErrorFileProp: Boolean,
   title: String,
+  dataDH: Object,
+  document: undefined,
 });
 
 const tenthPanelData = ref({
@@ -225,10 +292,17 @@ const tenthPanelData = ref({
     },
   ],
 });
+const tenthPanelDataDH = ref({
+  event_happened: null,
+  comment: '',
+  document: '',
+  file_size: '',
+  file_type: '',
+});
 const isSent = ref(false);
 let isErrorFile = ref(false);
 
-const emit = defineEmits(['collapse-form','formData', 'uploadFile', 'deleteFile', 'deleteLink', 'clearForm']);
+const emit = defineEmits(['collapse-form', 'formData', 'uploadFile', 'deleteFile', 'deleteLink', 'clearForm', 'getDataDH']);
 
 const collapseForm = () => {
   emit('collapse-form');
@@ -252,23 +326,45 @@ const uploadFile = async (event) => {
 
 const deleteFile = () => {
   emit('deleteFile')
-}
+};
+
+const uploadFileDH = (event) => {
+  tenthPanelDataDH.value.document = event.target.files[0];
+};
+
+const deleteFileDH = () => {
+  tenthPanelDataDH.value.document = null;
+};
+
+onMounted(() => {
+  tenthPanelDataDH.value.event_happened = props.dataDH.event_happened;
+  tenthPanelDataDH.value.comment = props.dataDH.comment;
+  if (props.document) {
+    tenthPanelDataDH.value.document = props.document;
+  }
+});
 
 watchEffect(() => {
   tenthPanelData.value = {...props.data};
   isSent.value = props.data.is_sent;
   isErrorFile.value = props.isErrorFileProp;
-})
+});
+
 watchPostEffect(() => {
   if (!tenthPanelData.value.links.length) tenthPanelData.value.links.push({link: ''})
-})
+});
+
 watch(() => tenthPanelData.value.event_happened, (isEventHappened) => {
   if (!isEventHappened) {
     emit('clearForm')
   } else {
     emit('formData', tenthPanelData.value);
   }
-})
+});
+
+watch(tenthPanelDataDH.value, () => {
+  emit('getDataDH', tenthPanelDataDH.value);
+});
 </script>
 <style lang="scss" scoped>
 .form__add-link-button {
@@ -280,6 +376,7 @@ watch(() => tenthPanelData.value.event_happened, (isEventHappened) => {
   padding: 0;
   text-align: left;
 }
+
 .form-input__file-input {
   display: flex;
   justify-content: center;

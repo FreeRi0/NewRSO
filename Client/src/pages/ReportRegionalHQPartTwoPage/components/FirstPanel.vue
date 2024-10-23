@@ -94,6 +94,23 @@
           </div>
         </div>
       </div>
+      <div class="form__field">
+        <label class="form__label" for="comment">Комментарий</label>
+        <TextareaReport
+            placeholder="Напишите сообщение"
+            v-model:value="firstPanelData.comment"
+            id="comment"
+            name="comment"
+            :rows="1"
+            autoResize
+            :maxlength="3000"
+            :max-length-text="3000"
+            counter-visible
+            class="form__input"
+            :disabled="props.centralExpert || props.districtExpert"
+            style="margin-bottom: 4px;"
+        />
+      </div>
     </template>
 
     <template v-slot:secondTab>
@@ -116,19 +133,6 @@
         </div>
       </div>
       <div class="form__field">
-        <!--        <label class="form__label" for="comment">Комментарий<sup class="valid-red">*</sup></label>-->
-        <!--        <TextareaReport-->
-        <!--            v-model:value="firstPanelDataDH.comment"-->
-        <!--            class="form__input"-->
-        <!--            id="comment"-->
-        <!--            name="comment"-->
-        <!--            :rows="1"-->
-        <!--            autoResize-->
-        <!--            :maxlength="3000"-->
-        <!--            :max-length-text="3000"-->
-        <!--            counter-visible-->
-        <!--            placeholder="Напишите сообщение"-->
-        <!--        />-->
         <CommentFileComponent
             v-model:value="firstPanelDataDH.comment"
             name="firstPanelDataDH.comment"
@@ -160,7 +164,7 @@
           </tbody>
         </v-table>
         <div>
-          <label class="form__label" for="6">Комментарий  <sup class="valid-red">*</sup></label>
+          <label class="form__label" for="6">Комментарий&nbsp; <sup class="valid-red">*</sup></label>
           <InputReport type="file" id="6" name="6"/>
         </div>
         <div>
@@ -324,7 +328,7 @@ watchEffect(async () => {
   }
 
   if (reportStore.reportDataDH.first) {
-    firstPanelDataDH.value.comment = reportStore.reportDataDH.first.comment;
+    firstPanelDataDH.value.comment = reportStore.reportDataDH.first.comment || '';
     firstPanelDataDH.value.amount_of_money = reportStore.reportDataDH.first.amount_of_money;
   }
 });
@@ -345,7 +349,7 @@ watch(firstPanelDataDH.value, () => {
   reportStore.reportDataDH.first = firstPanelDataDH.value;
 
   let formData = new FormData();
-  formData.append('comment', firstPanelDataDH.value.comment);
+  formData.append('comment', firstPanelDataDH.value.comment || '');
   formData.append('amount_of_money', firstPanelDataDH.value.amount_of_money);
   if (reportStore.reportDataDHFile.first) formData.append('scan_file', reportStore.reportDataDHFile.first);
 

@@ -1,25 +1,19 @@
 <template>
-  <div class="form__field-group report__field-group report__field-group--column"
-    v-if="isSent && 
-          (!eighteenthPanelData.projects || !isLink) && 
-          !eighteenthPanelData.comment">
+  <div class="form__field-group report__field-group report__field-group--column" v-if="isSent
+    && (!projects || (projects && !isLink && !isFile))
+    && !eighteenthPanelData.comment">
     <p class="report__text-info">
       Информация о&nbsp;показателе региональным отделением не&nbsp;предоставлена.
     </p>
   </div>
 
   <div v-else class="form__field-group report__field">
-    <div class="report__field" 
-      v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
-            (isSent && isLink)">
+    <div class="report__field" v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+      (isSent && projects)">
       <div class="report__field-group" v-for="(project, index) in projects" :key="index">
-        <div class="report__fieldset report__file-input"
-          v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
-                (isSent && project.file)">
-          <label
-            class="form__label report__label"
-            :for="project.file"
-          >
+        <div class="report__fieldset report__file-input" v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+          (isSent && project.file)">
+          <label class="form__label report__label" :for="project.file">
             <span v-if="!isSent && !(props.centralExpert || props.districtExpert)">
               Прикрепить документ
             </span>
@@ -27,125 +21,66 @@
               Документ
             </span>
           </label>
-          <InputReport
-            v-if="!project.file"
-            isFile
-            type="file"
-            accept=".jpg, .jpeg, .png, .pdf"
-            v-model:value="project.file"
-            :id="project.file"
-            :name="index"
-            width="100%"
-            height="86px"
-            @change="uploadFile($event, index)"
-            :disabled="isSent"
-          />
+          <InputReport v-if="!project.file" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
+            v-model:value="project.file" :id="project.file" :name="index" width="100%" height="86px"
+            @change="uploadFile($event, index)" :disabled="isSent" />
 
-          <div 
-            v-if="project.file && (typeof project.file !== 'string')"
-            class="text-center"
-          >
+          <div v-if="project.file && (typeof project.file !== 'string')" class="text-center">
             <v-progress-circular color="primary" indeterminate></v-progress-circular>
           </div>
-          <FileBoxComponent
-            v-if="project.file && typeof project.file === 'string'"
-            :file="project.file"
-            :fileType="project.file_type"
-            :fileSize="project.file_size"
-            @click="deleteFile(index)"
-            :is-sent="isSent"
-            :is-error-file="isErrorsFiles[index]"
-          ></FileBoxComponent>
-          <button
-            v-if="!isSent && (index > 0)"
-            class="report__delete-button"
-            @click="deletePublication(index)"
-          >
+          <FileBoxComponent v-if="project.file && typeof project.file === 'string'" :file="project.file"
+            :fileType="project.file_type" :fileSize="project.file_size" @click="deleteFile(index)" :is-sent="isSent"
+            :is-error-file="isErrorsFiles[index]"></FileBoxComponent>
+          <button v-if="!isSent && (index > 0)" class="report__delete-button" @click="deletePublication(index)">
             Удалить публикацию
           </button>
         </div>
         <div class="report__links" v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
-        (isSent && projects[index].links.some((item) => item.link))">
-          <p
-            class="form__label report__label"
-            >Ссылка на&nbsp;публикацию
+          (isSent && projects[index].links.some((item) => item.link))">
+          <p class="form__label report__label">Ссылка на&nbsp;публикацию
           </p>
           <div class="report__link-list">
-            <div class="report__link-item"
-              v-for="(link, i) in projects[index].links" :key="i">
-              <InputReport
-                  v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
-                        (isSent && link.link)"
-                  v-model:value="link.link" :id="i" :name="i"
-                  type="text"
-                  placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                  style="width: 100%;"
-                  :max-length="200"
-                  @focusout="focusOut"
-                  @error="setError"
-                  :disabled="isSent"
-                  is-link
-              />
+            <div class="report__link-item" v-for="(link, i) in projects[index].links" :key="i">
+              <InputReport v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+                (isSent && link.link)" v-model:value="link.link" :id="i" :name="i" type="text"
+                placeholder="Введите ссылку, например, https://vk.com/cco_monolit" style="width: 100%;"
+                :max-length="200" @focusout="focusOut" @error="setError" :disabled="isSent" is-link />
               <div v-if="isError && (i > 0)" class="report__error-block">
                 <span class="report__error-text">Укажите ссылку публикации</span>
               </div>
 
               <!-- <div class="report__btn-block"> -->
-                <button
-                  v-if="!isSent && (projects[index].links.length === i + 1)"
-                  class="report__btn-link report__btn-link--add-link"
-                  @click="addLink(index)"
-                >
-                  + Добавить ссылку
-                </button>
+              <button v-if="!isSent && (projects[index].links.length === i + 1)"
+                class="report__btn-link report__btn-link--add-link" @click="addLink(index)">
+                + Добавить ссылку
+              </button>
 
-                <button
-                  v-if="!isSent && (i > 0)"
-                  @click="deleteLink(index, i)"
-                  class="report__btn-link report__btn-link--delete-field"
-                  aria-label="Удалить поле ввода"
-                >
-                  <span>Удалить
-                    <span>поле ввода</span>
-                  </span>
-                </button>
+              <button v-if="!isSent && (i > 0)" @click="deleteLink(index, i)"
+                class="report__btn-link report__btn-link--delete-field" aria-label="Удалить поле ввода">
+                <span>Удалить
+                  <span>поле ввода</span>
+                </span>
+              </button>
               <!-- </div> -->
             </div>
           </div>
         </div>
       </div>
-      
+
       <div v-if="!isSent">
-        <button
-          class="report__add-button"
-          @click="addPublication"
-        >
+        <button class="report__add-button" @click="addPublication">
           <SvgIcon icon-name="add-icon" />
           Добавить публикацию
         </button>
       </div>
     </div>
 
-    <div class="report__fieldset report__fieldset--comment"
-      v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
-            (isSent && eighteenthPanelData.comment)">
-      <label
-          class="form__label report__label"
-          for="comment"
-      >Комментарий</label>
-      <TextareaReport
-        v-model:value="eighteenthPanelData.comment"
-        id="comment"
-        name="comment"
-        placeholder="Напишите сообщение"
-        :rows="1" 
-        autoResize
-        counter-visible
-        :maxlength="3000"
-        :max-length-text="3000"
-        @focusout="focusOut"
-        :disabled="isSent"
-      >
+    <div class="report__fieldset report__fieldset--comment" v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+      (isSent && eighteenthPanelData.comment)">
+      <label class="form__label report__label" for="comment">Комментарий</label>
+      <TextareaReport v-model:value="eighteenthPanelData.comment" id="comment" name="comment"
+        placeholder="Напишите сообщение" :rows="1" autoResize counter-visible :maxlength="3000" :max-length-text="3000"
+        @focusout="focusOut" :disabled="isSent">
       </TextareaReport>
     </div>
   </div>
@@ -179,7 +114,8 @@ const props = defineProps({
 });
 
 let isError = ref(props.isError);
-const isLink =ref(false);
+const isLink = ref(false);
+const isFile = ref(false);
 
 const emit = defineEmits(['getData']);
 
@@ -192,7 +128,7 @@ const ID_PANEL = '18';
 const isFirstSent = ref(true);
 const scanFile = ref([]);
 let isErrorFile = ref(false);
-const isErrorsFiles= ref([]);
+const isErrorsFiles = ref([]);
 const eighteenthPanelData = ref({
   comment: '',
   projects: []
@@ -266,9 +202,9 @@ const uploadFile = async (event, index) => {
       for (let index = 0; index < projects.value.length; index++) {
         if (projects.value[index].links.length) {
           for (let i = 0; i < projects.value[index].links.length; i++) {
-            !projects.value[index].links[i].link 
-            ? formData.append(`projects[${index}][links][${i}][link]`, '')
-            : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+            !projects.value[index].links[i].link
+              ? formData.append(`projects[${index}][links][${i}][link]`, '')
+              : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
           }
         }
       }
@@ -298,9 +234,9 @@ const deleteFile = async (index) => {
       // console.log('этот код выполняется');
       if (projects.value[index].links.length) {
         for (let i = 0; i < projects.value[index].links.length; i++) {
-          !projects.value[index].links[i].link 
-          ? formData.append(`projects[${index}][links][${i}][link]`, '')
-          : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+          !projects.value[index].links[i].link
+            ? formData.append(`projects[${index}][links][${i}][link]`, '')
+            : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
         }
       }
     }
@@ -329,9 +265,9 @@ const deleteLink = async (projectIndex, linkIndex) => {
     for (let index = 0; index < projects.value.length; index++) {
       if (projects.value[index].links.length) {
         for (let i = 0; i < projects.value[index].links.length; i++) {
-          !projects.value[index].links[i].link 
-          ? formData.append(`projects[${index}][links][${i}][link]`, '')
-          : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+          !projects.value[index].links[i].link
+            ? formData.append(`projects[${index}][links][${i}][link]`, '')
+            : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
         }
       }
     }
@@ -354,9 +290,9 @@ const addPublication = () => {
   })
 };
 
-const focusOut = async () => { 
+const focusOut = async () => {
   // console.log(eighteenthPanelData.value.comment);
-  eighteenthPanelData.value.projects = [ ...projects.value ];
+  eighteenthPanelData.value.projects = [...projects.value];
   // console.log(eighteenthPanelData.value.projects);
   try {
     if (isFirstSent.value) {
@@ -371,9 +307,9 @@ const focusOut = async () => {
           if (projects.value[index].links.length) {
             // const links = [...projects.value[index].links];
             for (let i = 0; i < projects.value[index].links.length; i++) {
-              !projects.value[index].links[i].link 
-              ? formData.append(`projects[${index}][links][${i}][link]`, '')
-              : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+              !projects.value[index].links[i].link
+                ? formData.append(`projects[${index}][links][${i}][link]`, '')
+                : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
               // if (projects.value[index].links[i].link && projects.value[index].links[i].link !== '') {
               //   formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
               // }
@@ -415,12 +351,12 @@ const deletePublication = async (index) => {
     for (let index = 0; index < projects.value.length; index++) {
       if (projects.value[index].links.length) {
         for (let i = 0; i < projects.value[index].links.length; i++) {
-          !projects.value[index].links[i].link 
-          ? formData.append(`projects[${index}][links][${i}][link]`, '')
-          : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
+          !projects.value[index].links[i].link
+            ? formData.append(`projects[${index}][links][${i}][link]`, '')
+            : formData.append(`projects[${index}][links][${i}][link]`, projects.value[index].links[i].link);
         }
       }
-      if (projects.value[index].file) formData.append(`projects[${index}][file]`,  projects.value[index].file);
+      if (projects.value[index].file) formData.append(`projects[${index}][file]`, projects.value[index].file);
     }
   }
 
@@ -447,13 +383,15 @@ watchEffect(async () => {
 });
 
 watchPostEffect(() => {
+  isLink.value = false;
+  isFile.value = false;
   projects.value.forEach((project) => {
-    if (!project.links.length) project.links.push({link: ''});
-
+    if (!project.links.length) project.links.push({ link: '' });
     if (project.links.some((item) => item.link)) {
       isLink.value = true;
-    } else {
-      isLink.value = false;
+    }
+    if (project.file) {
+      isFile.value = true;
     }
   });
 })
@@ -463,6 +401,7 @@ watchPostEffect(() => {
 .form__label {
   display: block;
 }
+
 .report {
   &__field-group {
     grid-template-columns: 1fr;

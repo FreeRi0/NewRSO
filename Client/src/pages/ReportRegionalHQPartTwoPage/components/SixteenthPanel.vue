@@ -163,136 +163,258 @@
       </div>
     </div>
   </div>
-
+  <!------------------------------------------------------------------------------------------------>
   <report-tabs v-else>
     <template v-slot:firstTab>
-      <div>
-        <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу <sup class="valid-red">*</sup>
+      <div class="form__field-project-existence">
+        <p class="form__label">
+          Наличие трудового проекта, в котором ЛСО РО одержал победу <sup class="valid-red">*</sup>
         </p>
         <div class="form__label-radio">
-          <div v-if="sixteenthPanelData.is_project" style="display: flex; align-items: center">
+          <div style="display: flex; align-items: center">
             <input class="custom-radio" v-model="sixteenthPanelData.is_project" id="is_project-true" type="radio"
-                   :value="true"/>
+                   :value="true" disabled/>
             <label for="is_project-true">Да</label>
           </div>
-          <div v-else style="display: flex; align-items: center">
+          <div style="display: flex; align-items: center">
             <input class="custom-radio" v-model="sixteenthPanelData.is_project" id="is_project-false" type="radio"
-                   :value="false"/>
+                   :value="false" disabled/>
             <label for="is_project-false">Нет</label>
           </div>
         </div>
       </div>
-      <div v-for="(project, index) in projects" :key="index">
-        <div style="display: flex; justify-content: space-between; margin-top: 40px;">
-          <div>
+      <div class="form__field-info" v-for="(project, index) in projects" :key="index">
+        <div class="form__field-info-project">
+          <div class="form__field-info-win">
             <label class="form__label" for="9">Наименование трудового проекта, в котором ЛСО РО одержал победу <sup
                 class="valid-red">*</sup></label>
-            <InputReport v-model:value="project.name" id="9" name="name" class="form__input" type="text"
-                         placeholder="ВВС ПРО" @focusout="focusOut" counter-visible :max-counter="300" :max-length="300"
-                         :disabled="props.centralExpert || props.districtExpert"/>
+            <InputReport
+                v-model:value="project.name"
+                id="9"
+                name="name"
+                class="form__input"
+                type="text"
+                placeholder="ВВС ПРО"
+                counter-visible
+                :max-counter="300"
+                :max-length="300"
+                :disabled="props.centralExpert || props.districtExpert"
+                style="width: 100%;"
+            />
+          </div>
+        </div>
+
+        <div>
+          <div class="project-regulations">
+            <div class="project-scope">
+              <p class="form__label form__field-label-project">Масштаб проекта <sup class="valid-red">*</sup></p>
+              <div>
+                <input
+                    class="custom-radio"
+                    v-model="project.project_scale"
+                    type="radio"
+                    :id="`All-${index}`"
+                    value="Всероссийский"
+                    disabled
+                />
+                <label :for="`All-${index}`">Всероссийский</label>
+              </div>
+              <div>
+                <input
+                    class="custom-radio"
+                    v-model="project.project_scale"
+                    type="radio"
+                    :id="`District-${index}`"
+                    value="Окружной"
+                    disabled
+                />
+                <label :for="`District-${index}`">Окружной</label>
+              </div>
+              <div>
+                <input
+                    class="custom-radio"
+                    v-model="project.project_scale"
+                    type="radio"
+                    :id="`Interregional-${index}`"
+                    value="Межрегиональный"
+                    disabled
+                />
+                <label :for="`Interregional-${index}`">Межрегиональный</label>
+              </div>
+            </div>
           </div>
         </div>
         <div>
-          <v-tabs-window-item>
-            <div style="display: flex;">
-              <div>
-                <label class="form__label" for="4">Положение о проекте <sup class="valid-red">*</sup></label>
-                <div class="form__file-box">
-                  <span class="form__file-name">
-                    <SvgIcon v-if="sixteenthPanelData.file_type === 'jpg'" icon-name="file-jpg"/>
-                    <SvgIcon v-if="sixteenthPanelData.file_type === 'pdf'" icon-name="file-pdf"/>
-                    <SvgIcon v-if="sixteenthPanelData.file_type === 'png'" icon-name="file-png"/>
-                    {{ sixteenthPanelData.scan_file || 'Тестовое название' }}
-                  </span>
-                  <span class="form__file-size">{{ sixteenthPanelData.file_size || '123' }} Мб</span>
-                </div>
-              </div>
-              <div style="margin-left: 40px;">
-                <p class="form__label">Масштаб проекта <sup class="valid-red">*</sup></p>
-                <div v-if="project.project_scale === 'Всероссийский'" style="display: flex;">
-                  <input v-model="project.project_scale" type="radio" :id="`All-${index}`" value="Всероссийский"/>
-                  <label>Всероссийский</label>
-                </div>
-                <div v-else-if="project.project_scale === 'Окружной'" style="display: flex;">
-                  <input v-model="project.project_scale" type="radio" :id="`District-${index}`" value="Окружной"/>
-                  <label>Окружной</label>
-                </div>
-                <div v-else style="display: flex;">
-                  <input v-model="project.project_scale" type="radio" :id="`Interregional-${index}`"
-                         value="Межрегиональный"/>
-                  <label>Межрегиональный</label>
-                </div>
-              </div>
+          <p class="form__label">Ссылка на&nbsp;группу проекта в социальных сетях</p>
+          <div class="form__field-link " v-for="(link, i) in projects[index].links" :key="i">
+            <div class="form__field-link-wrap">
+              <InputReport
+                  v-model:value="link.link"
+                  :id="i"
+                  :name="i"
+                  class="form__input"
+                  type="text"
+                  placeholder="https://vk.com/cco_monolit"
+                  @focusout="focusOut"
+                  :disabled="isSent || !sixteenthPanelData.is_project"
+                  isLink
+                  style="width: 100%;"
+              />
             </div>
-          </v-tabs-window-item>
-
-          <v-tabs-window-item value="two">
-            <div class="form__field-group">
-              <div class="form__field">
-                <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу <sup
-                    class="valid-red">*</sup></p>
-                <div style="display: flex;">
-                  <div style="display: flex; align-items: center">
-                    <InputReport id="2" name="2" class="form__input" type="radio"/>
-                    <label for="2">Да</label>
-                  </div>
-                  <div style="display: flex; align-items: center">
-                    <InputReport id="2" name="2" class="form__input" type="radio"/>
-                    <label for="2">Нет</label>
-                  </div>
-                </div>
-              </div>
-              <div style="display: flex; justify-content: space-between;">
-                <div>
-                  <label class="form__label" for="9">Наименование трудового проекта, в котором ЛСО РО одержал победу
-                    <sup class="valid-red">*</sup></label>
-                  <InputReport id="9" name="9" class="form__input" type="text" placeholder="ВВС ПРО"/>
-                </div>
-                <div>
-                  <Button class="form__btn" label="Удалить проект"/>
-                </div>
-              </div>
-              <div class="form__field">
-                <p class="form__label">Масштаб проекта <sup class="valid-red">*</sup>
-                </p>
-                <div>
-                  <div style="display: flex">
-                    <InputReport id="2" name="2" class="form__input" type="radio"/>
-                    <label>Всероссийский</label>
-                  </div>
-                  <div style="display: flex;">
-                    <input v-model="project.project_scale" type="radio" :id="`District-${index}`" value="Окружной"/>
-                    <label>Окружной</label>
-                  </div>
-                  <div style="display: flex;">
-                    <input v-model="project.project_scale" type="radio" :id="`Interregional-${index}`"
-                           value="Межрегиональный"/>
-                    <label>Межрегиональный</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </v-tabs-window-item>
+          </div>
         </div>
       </div>
-      <!--      <div>-->
-      <!--        <Button class="add_eventBtn" label="+ Добавить проект" @click="addProject"/>-->
-      <!--      </div>-->
-      <div>
+
+      <div class="form__field-comment">
         <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
-        <TextareaReport id="comment" name="comment" :rows="1" autoResize placeholder="Напишите сообщение"
-                        @focusout="focusOut" :maxlength="3000" :max-length-text="3000" counter-visible
-                        :disabled="props.centralExpert || props.districtExpert"
+        <TextareaReport
+            v-model:value="sixteenthPanelData.comment"
+            id="comment"
+            name="comment"
+            :rows="1"
+            autoResize
+            placeholder="Напишите сообщение"
+            :maxlength="3000"
+            :max-length-text="3000"
+            counter-visible
+            :disabled="props.centralExpert || props.districtExpert"
         />
       </div>
-      <div>
-        <v-checkbox label="Итоговое значение"/>
+      <div class="form__field-result">
+        <v-checkbox class="result-checkbox" id="v-checkbox" @change="calculateResult($event)"/>
+        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
       </div>
       <div class="hr"></div>
-      <div>
-        <p>(4-1)*2+(4-2)+(4-3)=9</p>
+      <div class="form__field-result">
+        <p class="result-count">{{ finalResult.toFixed(1) }}</p>
       </div>
     </template>
+
+    <!------------------------------------------------------------------------------------------------>
+    <template v-slot:secondTab>
+      <div class="form__field-project-existence">
+        <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу <sup class="valid-red">*</sup>
+        </p>
+        <div class="form__label-radio">
+          <div style="display: flex; align-items: center">
+            <input
+                class="custom-radio"
+                v-model="sixteenthPanelDataDH.is_project"
+                id="is_projectDH-true"
+                type="radio"
+                :value="true"
+            />
+            <label for="is_projectDH-true">Да</label>
+          </div>
+          <div style="display: flex; align-items: center">
+            <input
+                class="custom-radio"
+                v-model="sixteenthPanelDataDH.is_project"
+                id="is_projectDH-false"
+                type="radio"
+                :value="false"
+            />
+            <label for="is_projectDH-false">Нет</label>
+          </div>
+        </div>
+      </div>
+      <div class="form__field-info" v-for="(project, index) in sixteenthPanelDataDH.projects" :key="index">
+        <div class="form__field-info-project">
+          <div class="form__field-info-win">
+            <label class="form__label" for="9">Наименование трудового проекта, в котором ЛСО РО одержал победу <sup
+                class="valid-red">*</sup></label>
+            <InputReport
+                v-model:value="project.name"
+                id="9"
+                name="name"
+                class="form__input"
+                type="text"
+                placeholder="ВВС ПРО"
+                :max-length="300"
+                style="width: 100%;"
+                :disabled="!sixteenthPanelDataDH.is_project"
+            />
+          </div>
+          <div class="deleteBtn">
+            <Button
+                v-if="index > 0"
+                label="Удалить проект"
+                class="deleteProjectBtn"
+                @click="deleteProjectDH(index)"
+            />
+          </div>
+        </div>
+        <div>
+          <div class="project-regulations">
+            <div class="project-scope">
+              <p class="form__label form__field-label-project">Масштаб проекта <sup class="valid-red">*</sup></p>
+              <div>
+                <input
+                    class="custom-radio"
+                    v-model="project.project_scale"
+                    type="radio"
+                    :id="`All-${index}DH`"
+                    value="Всероссийский"
+                    :disabled="!sixteenthPanelDataDH.is_project"
+                />
+                <label :for="`All-${index}DH`">Всероссийский</label>
+              </div>
+              <div>
+                <input
+                    class="custom-radio"
+                    v-model="project.project_scale"
+                    type="radio"
+                    :id="`District-${index}DH`"
+                    value="Окружной"
+                    :disabled="!sixteenthPanelDataDH.is_project"
+                />
+                <label :for="`District-${index}DH`">Окружной</label>
+              </div>
+              <div>
+                <input
+                    class="custom-radio"
+                    v-model="project.project_scale"
+                    type="radio"
+                    :id="`Interregional-${index}DH`"
+                    value="Межрегиональный"
+                    :disabled="!sixteenthPanelDataDH.is_project"
+                />
+                <label :for="`Interregional-${index}DH`">Межрегиональный</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-if="sixteenthPanelDataDH.is_project">
+        <Button class="add_eventBtn" label="Добавить проект" @click="addProjectDH"/>
+      </div>
+      <div>
+        <div class="form__field-comment">
+          <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
+          <TextareaReport
+              v-model:value="sixteenthPanelDataDH.comment"
+              id="comment"
+              name="comment"
+              :rows="1"
+              autoResize
+              placeholder="Напишите сообщение"
+              :maxlength="3000"
+              :max-length-text="3000"
+              counter-visible
+          />
+        </div>
+        <div class="form__field-result">
+          <v-checkbox class="result-checkbox" id="v-checkboxDH" @change="calculateResultDH($event)"/>
+          <label class="result-checkbox-text" for="v-checkboxDH">Итоговое значение</label>
+        </div>
+        <div class="hr"></div>
+        <div>
+          <p class="result-count">{{ finalResultDH.toFixed(1) }}</p>
+        </div>
+      </div>
+    </template>
+    <!------------------------------------------------------------------------------------------------>
+
     <template v-slot:thirdTab>
       <div class="form__field-group report-table">
         <div class="form__field">
@@ -401,17 +523,16 @@
         </div>
       </div>
     </template>
+
   </report-tabs>
 </template>
 <script setup>
-import { ref, watch, watchEffect, watchPostEffect } from "vue";
-import { InputReport, TextareaReport } from '@shared/components/inputs';
-import { Button } from '@shared/components/buttons';
-import { reportPartTwoService } from "@services/ReportService.ts";
-import { SvgIcon } from '@shared/index';
-import { ReportTabs } from './index';
-
-// const swal = inject('$swal');
+import {onMounted, ref, watch, watchEffect, watchPostEffect} from "vue";
+import {InputReport, TextareaReport} from '@shared/components/inputs';
+import {Button} from '@shared/components/buttons';
+import {reportPartTwoService} from "@services/ReportService.ts";
+import {ReportTabs} from './index';
+import {useReportPartTwoStore} from "@pages/ReportRegionalHQPartTwoPage/store.ts";
 
 const props = defineProps({
   districtExpert: {
@@ -427,11 +548,20 @@ const props = defineProps({
   data: Object,
 });
 
-const emit = defineEmits(['getData']);
+const emit = defineEmits(['getData', 'getDataDH']);
+const reportStore = useReportPartTwoStore();
 
 const sixteenthPanelData = ref({
   is_project: null,
   projects: [],
+  comment: ''
+});
+const sixteenthPanelDataDH = ref({
+  is_project: null,
+  projects: [{
+    name: '',
+    project_scale: null,
+  }],
   comment: ''
 })
 const projects = ref([
@@ -451,6 +581,7 @@ const projects = ref([
 const isFirstSent = ref(true);
 const isSent = ref(false);
 const finalResult = ref(0);
+const finalResultDH = ref(0);
 
 const focusOut = async () => {
   sixteenthPanelData.value.projects = [...projects.value];
@@ -464,21 +595,6 @@ const focusOut = async () => {
     }
   } catch (e) {
     console.log('focusOut error:', e);
-    // e.response.data.projects.forEach(project => {
-    //   if (project.links) {
-    //     for (let i in project.links) {
-    //       if (Object.keys(project.links[i]).length !== 0 && project.links[i].link.includes('Введите правильный URL.')) {
-    //         swal.fire({
-    //           position: 'center',
-    //           icon: 'warning',
-    //           title: `Введите корректный URL`,
-    //           showConfirmButton: false,
-    //           timer: 2500,
-    //         })
-    //       }
-    //     }
-    //   }
-    // })
   }
 };
 
@@ -501,6 +617,12 @@ const addProject = () => {
     ],
   })
 };
+const addProjectDH = () => {
+  sixteenthPanelDataDH.value.projects.push({
+    name: '',
+    project_scale: null,
+  })
+}
 const deleteProject = async (index) => {
   let formData = new FormData();
   projects.value = projects.value.filter((el, i) => index !== i);
@@ -524,6 +646,9 @@ const deleteProject = async (index) => {
     console.log('deleteEvent error: ', e);
   }
 };
+const deleteProjectDH = (index) => {
+  sixteenthPanelDataDH.value.projects = sixteenthPanelDataDH.value.projects.filter((el, i) => index !== i);
+}
 
 const setFormData = (index = null, isDeleteEvent = false, isLinkDelete = false, linkIndex = null) => {
   let formData = new FormData();
@@ -552,7 +677,6 @@ const setFormData = (index = null, isDeleteEvent = false, isLinkDelete = false, 
 const calculateResult = (event) => {
   if (event.target.checked) {
     projects.value.forEach(e => {
-      console.log('e', e.project_scale)
       if (e.project_scale === 'Всероссийский') {
         finalResult.value += 2
       } else if (e.project_scale === 'Окружной') {
@@ -566,6 +690,44 @@ const calculateResult = (event) => {
   }
 };
 
+const calculateResultDH = (event) => {
+  if (event.target.checked) {
+    sixteenthPanelDataDH.value.projects.forEach(e => {
+      if (e.project_scale === 'Всероссийский') {
+        finalResultDH.value += 2
+      } else if (e.project_scale === 'Окружной') {
+        finalResultDH.value += 1.5
+      } else if (e.project_scale === 'Межрегиональный') {
+        finalResultDH.value += 1
+      }
+    })
+  } else {
+    finalResultDH.value = 0
+  }
+};
+
+onMounted(() => {
+  if (reportStore.reportDataDH.sixteenth) {
+    sixteenthPanelDataDH.value.is_project = reportStore.reportDataDH.sixteenth.is_project;
+    sixteenthPanelDataDH.value.comment = reportStore.reportDataDH.sixteenth.comment;
+    sixteenthPanelDataDH.value.projects = [...reportStore.reportDataDH.sixteenth.projects];
+  }
+});
+
+watch(sixteenthPanelDataDH.value, () => {
+  let formData = new FormData();
+  reportStore.reportDataDH.sixteenth = sixteenthPanelDataDH.value;
+
+  formData.append('comment', sixteenthPanelDataDH.value.comment || '');
+  formData.append('is_project', sixteenthPanelDataDH.value.is_project);
+  sixteenthPanelDataDH.value.projects.forEach((project, i) => {
+    if (project.project_scale) formData.append(`projects[${i}][project_scale]`, project.project_scale);
+    if (project.name) formData.append(`projects[${i}][name]`, project.name);
+  });
+
+  emit('getDataDH', formData, 16);
+});
+
 watchEffect(() => {
   if (props.data) {
     isFirstSent.value = false;
@@ -575,6 +737,7 @@ watchEffect(() => {
     isSent.value = props.data.is_sent;
   }
 });
+
 watchPostEffect(() => {
   projects.value.forEach((project) => {
     if (!project.links.length) project.links.push({link: ''})
@@ -744,7 +907,8 @@ watch(() => sixteenthPanelData.value.is_project, async (isProject) => {
 .form__field-info {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 20px;
+  margin: 20px 0 20px 0;
 }
 
 .form__field-info-project {
@@ -980,6 +1144,7 @@ watch(() => sixteenthPanelData.value.is_project, async (isProject) => {
 .form__field-comment {
   display: flex;
   flex-direction: column;
+  margin-top: 20px;
 }
 
 .form__field-result {

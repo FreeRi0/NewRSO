@@ -26,10 +26,9 @@
       <ThirteenthPanelComponent
         :central-expert="props.centralExpert"
         :district-expert="props.districtExpert"
-        :dataDH="dataDH"
         @get-dataDH="getDataDH"
-        @get-fileDH="getFileDH"
         is-second-tab
+        :is-error-panel="isErrorPanel"
       ></ThirteenthPanelComponent>
     </template>
 
@@ -37,9 +36,10 @@
       <ThirteenthPanelComponent
         :central-expert="props.centralExpert"
         :district-expert="props.districtExpert"
-        :dataCH="dataCH"
+        :data="data"
         @get-dataCH="getDataCH"
         is-third-tab
+        :is-error-panel="isErrorPanel"
       ></ThirteenthPanelComponent>
     </template>
   </report-tabs>
@@ -57,8 +57,8 @@ const props = defineProps({
     type: Boolean
   },
   data: Object,
-  dataDH: Object,
-  dataCH: Object,
+  // dataDH: Object,
+  // dataCH: Object,
   isErrorPanel: {
     type: Boolean,
   },
@@ -66,7 +66,12 @@ const props = defineProps({
 
 const ID_PANEL = '13';
 
-const emit = defineEmits(['getData', 'getDataDH', 'getDataCH', "getFileDH"]);
+const emit = defineEmits([
+  'getData', 
+  'getDataDH', 
+  'getDataCH', 
+  // "getFileDH"
+]);
 
 const getData = (event) => {
   emit("getData", event, Number(ID_PANEL));
@@ -76,9 +81,9 @@ const getDataDH = (event) => {
   emit("getDataDH", event, Number(ID_PANEL));
 };
 
-const getFileDH = (event) => {
-  emit("getFileDH", event, Number(ID_PANEL));
-};
+// const getFileDH = (event) => {
+//   emit("getFileDH", event, Number(ID_PANEL));
+// };
 
 const getDataCH = (event) => {
   emit("getDataCH", event, Number(ID_PANEL));
