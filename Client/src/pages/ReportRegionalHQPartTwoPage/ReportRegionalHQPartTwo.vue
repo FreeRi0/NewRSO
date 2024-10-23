@@ -1000,15 +1000,15 @@ const sendReport = async () => {
 
    
 
-      for (let i in reportDataDH.value.six) {
-        if (!reportDataDH.value.six[i].verified_by_dhq) {
+      for (let i in reportData.value.six) {
+        if (!reportData.value.six[i].verified_by_dhq) {
           console.log('send6')
           await reportPartTwoService.sendReportDHMultiply(reportDataDH.value.six[i], '6', i, route.query.reportId);
         }
       }
-      for (let i in reportDataDH.value.ninth) {
+      for (let i in reportData.value.ninth) {
 
-        if (!reportDataDH.value.ninth[i].verified_by_dhq) {
+        if (!reportData.value.ninth[i].verified_by_dhq) {
           console.log('send9')
           await reportPartTwoService.sendReportDHMultiply(reportDataDH.value.ninth[i], '9', i, route.query.reportId, true);
         }
