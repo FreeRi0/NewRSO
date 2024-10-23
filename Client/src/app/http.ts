@@ -162,7 +162,7 @@ HTTP.interceptors.response.use(
                 //     (matches_5 || []).length;
                 //     let matches_6 = originalRequest.url.match(/regional_competitions\/reports\/\d{1,}\/\d{1,}\/\d{1,}\//gm)
 
-                let matches = (matches_1 || []).length + (matches_2 || []).length + (matches_3 || []).length + (matches_4 || []).length + (matches_5  || []).length + (matches_6 || []).length + (matches_7 || []).length;
+                let matches = (matches_1 || []).length + (matches_2 || []).length + (matches_3 || []).length + (matches_4 || []).length + (matches_5 || []).length + (matches_6 || []).length + (matches_7 || []).length;
 
 
                 if (/*(window.location.hostname === 'localhost' ||
