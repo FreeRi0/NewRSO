@@ -92,7 +92,7 @@ watchEffect(() => {
   padding: 0;
 }
 
-//.report-table {
+// .report-table {
 //  &__tr {
 //    background-color: #FFFFFF;
 //    text-align: center;
@@ -131,4 +131,5 @@ watchEffect(() => {
 //  margin-bottom: 16px;
 //  border-radius: 10px;
 //  border: 1px solid #B6B6B6;
-//}</style>
+// }
+</style>

@@ -130,9 +130,25 @@
             :dataRH="twelfthPanelData.amount_of_money"
             :dataDH="twelfthPanelDataDH.amount_of_money"
             v-model:value="twelfthPanelDataCH.amount_of_money"
+            :maxlength="10"
+            :min="0"
+            :max="9999999999"
+            :step="0.01"
+            
+            :is-error-panel="isErrorPanel"
         ></ReportTable>
 
-        <CommentFileComponent></CommentFileComponent>
+        <CommentFileComponent
+            v-model:value="twelfthPanelDataCH.comment"
+            name="twelfthPanelDataCH.comment"
+            @change="uploadFileCH"
+            @click="deleteFileCH"
+            :file="reportStore.reportDataCHFile.twelfth ? reportStore.reportDataCHFile.twelfth.name : null"
+            :fileType="reportStore.reportDataCHFile.twelfth ? reportStore.reportDataCHFile.twelfth.type.split('/').at(-1) : null"
+            :fileSize="reportStore.reportDataCHFile.twelfth ? reportStore.reportDataCHFile.twelfth.size / Math.pow(1024, 2) : null"
+            
+            :is-error-panel="isErrorPanel"
+        ></CommentFileComponent>
 
         <div>
             <v-checkbox label="Вернуть в&nbsp;РО на&nbsp;доработку" />
@@ -277,6 +293,11 @@ const uploadFileDH = async (event) => {
     // }
 }
 
+const uploadFileCH = async (event) => {
+  twelfthPanelDataCH.value.scan_file = event.target.files[0];
+  reportStore.reportDataCHFile.twelfth = event.target.files[0];
+}
+
 const deleteFile = async () => {
     twelfthPanelData.value.scan_file = "";
 
@@ -305,25 +326,34 @@ const deleteFileDH = async () => {
     // }
 }
 
+const deleteFileCH = async () => {
+  twelfthPanelDataCH.value.scan_file = '';
+  reportStore.reportDataCHFile.twelfth = null;
+}
+
 watchEffect(async () => {
-    if (props.districtExpert) {
+    if (props.centralExpert || props.districtExpert) {
+        if (reportStore.reportDataCH.twelfth) {
+            twelfthPanelDataCH.value.comment = reportStore.reportDataCH.twelfth.comment;
+            twelfthPanelDataCH.value.amount_of_money = reportStore.reportDataCH.twelfth.amount_of_money;
+        }
         if (reportStore.reportDataDH.twelfth) {
             twelfthPanelDataDH.value.comment = reportStore.reportDataDH.twelfth.comment;
             twelfthPanelDataDH.value.amount_of_money = reportStore.reportDataDH.twelfth.amount_of_money;
         }
 
-  } else {
-    if (props.data) {
-        // console.log(props.data);
-        isFirstSent.value = false;
-        twelfthPanelData.value.amount_of_money = props.data.amount_of_money;
-        twelfthPanelData.value.comment = props.data.comment;
-        twelfthPanelData.value.scan_file = props.data.scan_file;
-        twelfthPanelData.value.file_size = props.data.file_size;
-        twelfthPanelData.value.file_type = props.data.file_type;
-        isSent.value = props.data.is_sent;
+    } else {
+        if (props.data) {
+            // console.log(props.data);
+            isFirstSent.value = false;
+            twelfthPanelData.value.amount_of_money = props.data.amount_of_money;
+            twelfthPanelData.value.comment = props.data.comment;
+            twelfthPanelData.value.scan_file = props.data.scan_file;
+            twelfthPanelData.value.file_size = props.data.file_size;
+            twelfthPanelData.value.file_type = props.data.file_type;
+            isSent.value = props.data.is_sent;
+        }
     }
-  }
 }, {
     flush: 'post'
 });
@@ -356,6 +386,24 @@ watch(twelfthPanelDataDH.value, () => {
   : formData.append('scan_file', '');
 
   emit('getDataDH', formData, Number(ID_PANEL));
+});
+
+watch(twelfthPanelDataCH.value, () => {
+  reportStore.reportDataCH.twelfth = twelfthPanelDataCH.value;
+
+  let formData = new FormData();
+
+  twelfthPanelDataCH.value.amount_of_money 
+  ? formData.append('amount_of_money', twelfthPanelDataCH.value.amount_of_money) 
+  : formData.append('amount_of_money', '');
+
+  formData.append('comment', twelfthPanelDataCH.value.comment || '');
+
+  reportStore.reportDataCHFile.twelfth 
+  ? formData.append('scan_file', reportStore.reportDataCHFile.twelfth) 
+  : formData.append('scan_file', '');
+
+  emit('getDataCH', formData, Number(ID_PANEL));
 });
 </script>
   
