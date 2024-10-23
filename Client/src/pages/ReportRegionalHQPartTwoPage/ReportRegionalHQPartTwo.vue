@@ -465,6 +465,7 @@ const getMultiplyData = async (isExpert, reportId) => {
     if (isExpert) {
       reportData.value.six[result.id] = result.data;
       reportStore.reportDataDH.six[result.id] = Object.assign({}, reportData.value.six[result.id]);
+     
       reportStore.reportDataDH.six[result.id].comment = '';
       isErrorPanel.value.six[result.id] = {
         id: result.id,
@@ -955,10 +956,11 @@ const sendReport = async () => {
     }
   }
 
-  if (districtExpert.value && checkEmptyFieldsDH(reportStore.reportDataDH, isErrorPanel)) {
+  if (districtExpert.value) {
     blockSendButton.value = true;
     preloader.value = true;
     try {
+      console.log('dataSiDh', reportDataDH.value.six, reportDataDH.value.first)
       if (!reportData.value.first.verified_by_dhq) {
         await reportPartTwoService.sendReportDH(reportDataDH.value.first, '1', route.query.reportId, true)
       }
@@ -970,6 +972,8 @@ const sendReport = async () => {
       if (!reportData.value.fifth.verified_by_dhq) {
         await reportPartTwoService.sendReportDH(reportDataDH.value.fifth, '5', route.query.reportId, true)
       }
+
+   
 
       for (let i in reportDataDH.value.six) {
         if (!reportDataDH.value.six[i].verified_by_dhq) {
@@ -1352,10 +1356,12 @@ watch(
   () => route.path,
 
   async (newUrl) => {
-    if (newUrl.includes('reporting-ro/report-regional-two')) {
-      preloader.value = true;
-      console.log(1);
-      await getReportData();
+    if (roleStore.roles.regionalheadquarter_commander && typeof (route.query.reportId) === 'undefined') {
+      if (newUrl.includes('reporting-ro/report-regional-two')) {
+        preloader.value = true;
+        console.log(1);
+        await getReportData();
+      }
     }
   },
   {
