@@ -132,8 +132,13 @@
               11. Активность РО&nbsp;РСО в&nbsp;социальных сетях &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.eleventh"
+              <eleventh-panel 
+                :districtExpert="districtExpert" 
+                :centralExpert="centralExpert" 
+                @get-data="setData"
+                @get-data-DH="setDataDH" 
+                @get-data-CH="setDataCH" 
+                :data="reportData.eleventh"
                 :is-error-panel="isErrorPanel.eleventh" />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -523,8 +528,30 @@ const getMultiplyData = async (isExpert, reportId) => {
 }
 const getReportData = async (reportId) => {
   try {
-    if ((centralExpert.value || districtExpert.value) && typeof reportId != "undefined") {
+    if (centralExpert.value) {
+      // Критерий 11
+      const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
+      console.log('данные ОШ для ЦШ', dataEleventh);//----------------------------------------------
+      reportData.value.eleventh = JSON.parse(dataEleventh.regional_version);
+      console.log('данные РШ для ЦШ', reportData.value.eleventh);//---------------------------------
+      reportStore.reportDataDH.eleventh = dataEleventh;
+      reportStore.reportDataCH.eleventh = Object.assign({}, dataEleventh);
+      reportStore.reportDataCH.eleventh.comment = '';
+      // Критерий 12
+      const dataTwelfth = (await reportPartTwoService.getReportDH('12', reportId)).data;
+      reportData.value.twelfth = JSON.parse(dataTwelfth.regional_version);
+      reportStore.reportDataDH.twelfth = dataTwelfth;
+      reportStore.reportDataCH.twelfth = Object.assign({}, dataTwelfth);
+      reportStore.reportDataCH.twelfth.comment = '';
+      // Критерий 13
+      const dataThirteenth = (await reportPartTwoService.getReportDH('13', reportId)).data;
+      reportData.value.thirteenth = JSON.parse(dataThirteenth.regional_version);
+      reportStore.reportDataDH.thirteenth = dataThirteenth;
+      reportStore.reportDataCH.thirteenth = Object.assign({}, dataThirteenth);
+      reportStore.reportDataCH.thirteenth.comment = '';
+    }
 
+    if (districtExpert.value && typeof reportId != "undefined") {
       reportData.value.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
       reportStore.reportDataDH.first = Object.assign({}, reportData.value.first);
       reportStore.reportDataDH.first.comment = '';
@@ -781,15 +808,15 @@ const setDataCH = (data, panel, number) => {
       break;
     case 11:
       reportDataCH.value.eleventh = data;
-      console.log(data);
+      // console.log('11', ...reportDataCH.value.eleventh);
       break;
     case 12:
       reportDataCH.value.twelfth = data;
-      console.log(data);
+      console.log('12', ...reportDataCH.value.twelfth);
       break;
     case 13:
       reportDataCH.value.thirteenth = data;
-      console.log(data);
+      console.log('13', ...reportDataCH.value.thirteenth);
       break;
   }
 }
@@ -843,8 +870,6 @@ const filterPanelsData = () => {
     filteredNinth,
   };
 };
-
-
 
 const sendReport = async () => {
   // console.log('reportData: ', reportData.value)
