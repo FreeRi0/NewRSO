@@ -36,6 +36,7 @@
       <TwelfthPanelComponent
         :central-expert="props.centralExpert"
         :district-expert="props.districtExpert"
+        :data="data"
         @get-dataCH="getDataCH"
         is-third-tab
         :is-error-panel="isErrorPanel"

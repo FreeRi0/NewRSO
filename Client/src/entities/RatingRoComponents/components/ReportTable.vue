@@ -29,6 +29,7 @@
                             :step="step"
 
                             :is-error-panel="isErrorPanel"
+                            @input="updateValue"
                         />
                 </td>
                 </tr>
@@ -39,6 +40,8 @@
 
 <script setup>
 import { InputReport } from '@shared/components/inputs';
+
+const emit = defineEmits(['update:value']);
 
 const props = defineProps({
     label: {
@@ -52,7 +55,7 @@ const props = defineProps({
         type: Number,
     },
     value: {
-        type: Number,
+        type: [String, Number],
     },
     name: {
         type: String
@@ -73,4 +76,14 @@ const props = defineProps({
         type: Boolean,
     },
 });
+
+const updateValue = (event) => {
+    emit('update:value', event.target.value);
+}
 </script>
+
+<style lang="scss" scoped>
+.valid-red {
+  color: #db0000;
+}
+</style>
