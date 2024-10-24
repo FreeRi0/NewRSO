@@ -10,7 +10,7 @@
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="9" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)" @formDataDH="formDataDH($event, item.id)" @error="setError"
+            @formData="formData($event, item.id)" @formDataDH="formDataDH($event, item.id)" @formDataCH="formDataCH($event, item.id)" @error="setError"
             @uploadFile="uploadFile($event, item.id)"
             :data="ninthPanelData"  @getPanelNumber="getPanelNumber($event)"
             @getId="getId($event)" @deleteFile="deleteFile($event, item.id)"
@@ -51,7 +51,7 @@ const setError = (err) => {
 
 const disabled = ref(false);
 const panel = ref(null);
-const emit = defineEmits(['getData', 'getDataDH', 'getFileDH', 'getId', 'getPanelNumber'])
+const emit = defineEmits(['getData', 'getDataDH', 'getDataCH', 'getId', 'getPanelNumber'])
 const ninthPanelData = ref({
   event_happened: false,
   links: [{
@@ -100,6 +100,13 @@ const formDataDH = (reportData, reportNumber) => {
   }
 };
 
+const formDataCH = (reportData, reportNumber) => {
+  if (props.centralHeadquarterCommander) {
+    emit('getDataCH', reportData, 9, reportNumber);
+    console.log('ch9', reportData);
+  }
+};
+
 
 const collapsed = () => {
   panel.value = false;
@@ -129,13 +136,6 @@ const uploadFile = async (reportData, reportNumber) => {
     }
   }
 };
-
-// const uploadFileDH = (reportData, reportNumber) => {
-//   if (props.districtHeadquarterCommander) {
-//     emit('getFileDH', reportData, 9, reportNumber);
-//     console.log('dh9', reportData);
-//   }
-// };
 
 const deleteFile = async (reportData, reportNumber) => {
   if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {

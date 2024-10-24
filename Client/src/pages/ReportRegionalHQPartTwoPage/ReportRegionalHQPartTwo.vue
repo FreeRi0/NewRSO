@@ -79,9 +79,10 @@
               мероприятиях и&nbsp;проектах (в&nbsp;том числе и&nbsp;трудовых) &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <sixth-panel @get-data="setData" @get-data-DH="setDataDH" :items="six_items" @getId="setId"
-                @getPanelNumber="setPanelNumber" :district-headquarter-commander="districtExpert" :data="reportData.six"
-                :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.six" />
+              <sixth-panel @get-data="setData" @get-data-DH="setDataDH" @get-data-CH="setDataCH" :items="six_items"
+                @getId="setId" @getPanelNumber="setPanelNumber" :district-headquarter-commander="districtExpert"
+                :data="reportData.six" :central-headquarter-commander="centralExpert"
+                :is-error-panel="isErrorPanel.six" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -111,9 +112,10 @@
               9. Организация обязательных общесистемных мероприятий РСО на&nbsp;региональном уровне &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <ninth-panel @get-data="setData" @get-data-DH="setDataDH" @getId="setId" @getPanelNumber="setPanelNumber"
-                :items="ninth_items" :district-headquarter-commander="districtExpert" :data="reportData.ninth"
-                :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.ninth" />
+              <ninth-panel @get-data="setData" @get-data-DH="setDataDH" @get-data-CH="setDataCH" @getId="setId"
+                @getPanelNumber="setPanelNumber" :items="ninth_items" :district-headquarter-commander="districtExpert"
+                :data="reportData.ninth" :central-headquarter-commander="centralExpert"
+                :is-error-panel="isErrorPanel.ninth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -132,13 +134,8 @@
               11. Активность РО&nbsp;РСО в&nbsp;социальных сетях &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <eleventh-panel 
-                :districtExpert="districtExpert" 
-                :centralExpert="centralExpert" 
-                @get-data="setData"
-                @get-data-DH="setDataDH" 
-                @get-data-CH="setDataCH" 
-                :data="reportData.eleventh"
+              <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.eleventh"
                 :is-error-panel="isErrorPanel.eleventh" />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -410,12 +407,14 @@ const getItems = async (number) => {
 //   }
 // };
 
-const getMultiplyData = async (isExpert, reportId) => {
+const getMultiplyData = async (reportId) => {
   const sixDataPromises = six_items.value.map(async (item) => {
     try {
-      if (!isExpert) {
+      if (!districtExpert.value || !centralExpert.value) {
+        console.log('1')
         return { id: item.id, data: (await reportPartTwoService.getMultipleReport('6', item.id)).data };
       } else {
+        console.log('2')
         return { id: item.id, data: (await reportPartTwoService.getMultipleReportDH('6', item.id, reportId)).data };
       }
 
@@ -446,9 +445,11 @@ const getMultiplyData = async (isExpert, reportId) => {
 
   const ninthDataPromises = ninth_items.value.map(async (item) => {
     try {
-      if (!isExpert) {
+      if (!districtExpert.value || !centralExpert.value) {
+        console.log('1')
         return { id: item.id, data: (await reportPartTwoService.getMultipleReport('9', item.id)).data };
       } else {
+        console.log('2')
         return { id: item.id, data: (await reportPartTwoService.getMultipleReportDH('9', item.id, reportId)).data };
       }
     } catch (error) {
@@ -467,15 +468,23 @@ const getMultiplyData = async (isExpert, reportId) => {
   ]);
 
   sixDataResults.forEach((result) => {
-    if (isExpert) {
+    if (districtExpert.value) {
+      console.log('dh')
       reportData.value.six[result.id] = result.data;
       reportStore.reportDataDH.six[result.id] = Object.assign({}, reportData.value.six[result.id]);
-     
       reportStore.reportDataDH.six[result.id].comment = '';
+
       isErrorPanel.value.six[result.id] = {
         id: result.id,
         error: false,
       }
+    } else if (centralExpert.value) {
+      console.log('ch')
+      reportData.value.six[result.id] = JSON.parse(result.data?.regional_version);
+      console.log('данные РШ для ЦШ', reportData.value.six[result.id]);//---------------------------------
+      reportStore.reportDataDH.six[result.id] = result.data;
+      reportStore.reportDataCH.six[result.id] = Object.assign({}, result.data);
+      reportStore.reportDataCH.six[result.id].comment = '';
     } else {
       if (reportData.value.six[result.id]?.regional_version === null) {
         console.log('1')
@@ -502,7 +511,7 @@ const getMultiplyData = async (isExpert, reportId) => {
   // });
 
   ninthDataResults.forEach((result) => {
-    if (isExpert) {
+    if (districtExpert.value) {
       reportData.value.ninth[result.id] = result.data;
       reportStore.reportDataDH.ninth[result.id] = Object.assign({}, reportData.value.ninth[result.id]);
       reportStore.reportDataDH.ninth[result.id].comment = '';
@@ -510,6 +519,12 @@ const getMultiplyData = async (isExpert, reportId) => {
         id: result.id,
         error: false,
       }
+    } else if (centralExpert.value) {
+      reportData.value.ninth[result.id] = JSON.parse(result.data?.regional_version);
+      console.log('данные РШ для ЦШ', reportData.value.ninth[result.id]);
+      reportStore.reportDataDH.ninth[result.id] = result.data;
+      reportStore.reportDataCH.ninth[result.id] = Object.assign({}, result.data);
+      reportStore.reportDataCH.ninth[result.id].comment = '';
     }
     else {
       if (reportData.value.ninth[result.id]?.regional_version === null) {
@@ -528,7 +543,9 @@ const getMultiplyData = async (isExpert, reportId) => {
 }
 const getReportData = async (reportId) => {
   try {
-    if (centralExpert.value) {
+    if (centralExpert.value && typeof reportId !== "undefined") {
+      // console.log('true ch', centralExpert.value)
+      await getMultiplyData(reportId);
       // Критерий 11
       const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
       console.log('данные ОШ для ЦШ', dataEleventh);//----------------------------------------------
@@ -551,7 +568,8 @@ const getReportData = async (reportId) => {
       reportStore.reportDataCH.thirteenth.comment = '';
     }
 
-    if (districtExpert.value && typeof reportId != "undefined") {
+    else if (districtExpert.value && typeof reportId !== "undefined") {
+      console.log('true dh')
       reportData.value.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
       reportStore.reportDataDH.first = Object.assign({}, reportData.value.first);
       reportStore.reportDataDH.first.comment = '';
@@ -564,7 +582,7 @@ const getReportData = async (reportId) => {
       reportStore.reportDataDH.fifth = (await reportPartTwoService.getReportDH('5', reportId)).data;
       reportStore.reportDataDH.fifth.comment = '';
 
-      await getMultiplyData(true, reportId);
+      await getMultiplyData(reportId);
 
       reportData.value.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
       reportStore.reportDataDH.tenth.first = Object.assign({}, reportData.value.tenth.first);
@@ -594,6 +612,7 @@ const getReportData = async (reportId) => {
       reportData.value.eighteenth = (await reportPartTwoService.getReportDH('18', reportId)).data;
       reportData.value.nineteenth = (await reportPartTwoService.getReportDH('19', reportId)).data;
     } else {
+      console.log('true rh')
       try {
         reportData.value.first = (await reportPartTwoService.getReport('1')).data;
       } catch (e) {
@@ -609,7 +628,7 @@ const getReportData = async (reportId) => {
       } catch (e) {
         console.log(e.message)
       }
-      await getMultiplyData(false);
+      await getMultiplyData();
       try {
         reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
       } catch (e) {
@@ -806,6 +825,9 @@ const setDataCH = (data, panel, number) => {
     case 6:
       reportDataCH.value.six[number] = data;
       break;
+    case 9:
+      reportDataCH.value.six[number] = data;
+      break;
     case 11:
       reportDataCH.value.eleventh = data;
       // console.log('11', ...reportDataCH.value.eleventh);
@@ -981,7 +1003,7 @@ const sendReport = async () => {
     }
   }
 
-  if (districtExpert.value  && checkEmptyFieldsDH(reportStore.reportDataDH, isErrorPanel)) {
+  if (districtExpert.value && checkEmptyFieldsDH(reportStore.reportDataDH, isErrorPanel)) {
     blockSendButton.value = true;
     preloader.value = true;
     try {
@@ -998,7 +1020,7 @@ const sendReport = async () => {
         await reportPartTwoService.sendReportDH(reportDataDH.value.fifth, '5', route.query.reportId, true)
       }
 
-   
+
 
       for (let i in reportData.value.six) {
         if (!reportData.value.six[i].verified_by_dhq) {

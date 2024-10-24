@@ -30,11 +30,14 @@ export const useReportPartTwoStore = defineStore('report-two', {
             thirteenth: null,
         },
         reportDataCH: {
+            six: {},
+            ninth: {},
             eleventh: {},
             twelfth: {},
             thirteenth: {},
         },
         reportDataCHFile: {
+            ninth: {},
             eleventh: null,
             twelfth: null,
             thirteenth: null,
