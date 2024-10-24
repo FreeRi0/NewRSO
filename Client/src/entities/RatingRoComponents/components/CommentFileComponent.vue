@@ -9,7 +9,7 @@
             counter-visible :maxlength="3000" :max-length-text="3000" :disabled="isDisabled" v-bind="$attrs">
         </TextareaReport>
         <FileBoxComponent v-if="file" :file="file" :fileType="fileType" :fileSize="fileSize" @click="clickOnButton"
-            :is-error-file="isErrorFile"></FileBoxComponent>
+            :is-error-file="isErrorFile" :is-sent="isSent"></FileBoxComponent>
     </div>
 </template>
 
@@ -54,7 +54,10 @@ const props = defineProps({
     CH: {
         type: Boolean,
         default: false,
-    }
+    },
+    isSent: {
+        type: Boolean,
+    },
 });
 
 const onChange = (event) => {

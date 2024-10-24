@@ -12,7 +12,7 @@
            class="form-input__report" :step="step"
            :class="{ 'link__input': isLink, 'form-input__report--error': (isErrorPanel && !value), 'form__input--error': isErrorDate, }"
            @input="updateValue"
-           v-bind="$attrs" :disabled="disabled" :min="props.type === 'date' ? props.minDate : props.type === 'number' ? 0 : null"/>
+           v-bind="$attrs" :disabled="disabled" :min="props.type === 'date' ? props.minDate : props.type === 'number' ? props.min : null"/>
     <div class="form__counter" v-if="counterVisible">
       {{ textInputLength }} / {{ maxCounter }}
     </div>
@@ -79,6 +79,9 @@ const props = defineProps({
   max: {
     type: [String, Number],
     default: "9999-12-31",
+  },
+  min: {
+    type: Number,
   },
   value: {
     type: [String, Number],
@@ -181,6 +184,8 @@ const updateValue = (event) => {
       isErrorMessage.value = 'Введите до 2-х знаков после запятой';
     } else if (event.target.validity.rangeOverflow) {
       isErrorMessage.value = `Превышено максимальное значение ${props.max}`;
+    } else if (event.target.validity.rangeUnderflow) {
+      isErrorMessage.value = `Введите значение не ниже ${props.min}`;
     } else {
       isErrorMessage.value = '';
     }

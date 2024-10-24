@@ -486,7 +486,7 @@ const getMultiplyData = async (reportId) => {
       reportStore.reportDataCH.six[result.id] = Object.assign({}, result.data);
       reportStore.reportDataCH.six[result.id].comment = '';
     } else {
-      if (reportData.value.six[result.id]?.regional_version === null) {
+      if (reportData.value.six[result.id]?.regional_version === null && Object.keys(reportData.value.six[result.id]).length) {
         console.log('1')
         reportData.value.six[result.id] = result.data;
       } else {
@@ -527,7 +527,7 @@ const getMultiplyData = async (reportId) => {
       reportStore.reportDataCH.ninth[result.id].comment = '';
     }
     else {
-      if (reportData.value.ninth[result.id]?.regional_version === null) {
+      if (reportData.value.ninth[result.id]?.regional_version === null && Object.keys(reportData.value.ninth[result.id]).length) {
         reportData.value.ninth[result.id] = result.data;
       } else {
         reportData.value.ninth[result.id] = result.data;
@@ -548,22 +548,28 @@ const getReportData = async (reportId) => {
       await getMultiplyData(reportId);
       // Критерий 11
       const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
-      console.log('данные ОШ для ЦШ', dataEleventh);//----------------------------------------------
       reportData.value.eleventh = JSON.parse(dataEleventh.regional_version);
-      console.log('данные РШ для ЦШ', reportData.value.eleventh);//---------------------------------
+      console.log('данные РШ для ЦШ 11', reportData.value.eleventh);//---------------------------------
+      // dataEleventh.district_version 
+      // ? reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version) :
       reportStore.reportDataDH.eleventh = dataEleventh;
+      console.log('данные ОШ для ЦШ 11', reportStore.reportDataDH.eleventh);//----------------
       reportStore.reportDataCH.eleventh = Object.assign({}, dataEleventh);
       reportStore.reportDataCH.eleventh.comment = '';
       // Критерий 12
       const dataTwelfth = (await reportPartTwoService.getReportDH('12', reportId)).data;
       reportData.value.twelfth = JSON.parse(dataTwelfth.regional_version);
+      console.log('данные РШ для ЦШ 12', reportData.value.twelfth);//---------------------------------
       reportStore.reportDataDH.twelfth = dataTwelfth;
+      console.log('данные ОШ для ЦШ 12', reportStore.reportDataDH.twelfth);//-------------------------
       reportStore.reportDataCH.twelfth = Object.assign({}, dataTwelfth);
       reportStore.reportDataCH.twelfth.comment = '';
       // Критерий 13
       const dataThirteenth = (await reportPartTwoService.getReportDH('13', reportId)).data;
       reportData.value.thirteenth = JSON.parse(dataThirteenth.regional_version);
+      // console.log('данные РШ для ЦШ 13', reportData.value.thirteenth);//---------------------------------
       reportStore.reportDataDH.thirteenth = dataThirteenth;
+      // console.log('данные ОШ для ЦШ 13', reportStore.reportDataDH.thirteenth);//---------------------------
       reportStore.reportDataCH.thirteenth = Object.assign({}, dataThirteenth);
       reportStore.reportDataCH.thirteenth.comment = '';
     }
@@ -1083,6 +1089,42 @@ const sendReport = async () => {
     // } else {
     // blockSendButton.value = false;
     // } 
+  }
+
+  if (centralExpert.value) {
+    blockSendButton.value = true;
+    // if (checkEmptyFieldsDH(reportStore.reportDataCH, isErrorPanel)) {
+      preloader.value = true;
+      try {
+
+        if (!reportData.value.eleventh.verified_by_chq) {
+          await reportPartTwoService.sendReportCH(reportDataCH.value.eleventh, '11', route.query.reportId, true);
+
+          swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Отчет успешно верифицирован',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+      } catch (e) {
+        blockSendButton.value = false;
+        swal.fire({
+          position: 'center',
+          icon: 'error',
+          // title: `ошибка`,
+          title: `ошибка ${e.request.response}`,
+          showConfirmButton: false,
+          timer: 2500,
+        })
+        console.log('sendReportCH error: ', e)
+      } finally {
+        preloader.value = false;
+      }
+    // } else {
+    //   blockSendButton.value = false;
+    // }
   }
 };
 
