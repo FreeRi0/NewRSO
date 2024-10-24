@@ -174,7 +174,7 @@ export function checkEmptyFieldsDH(data: ReportDHType, isErrorPanel: Ref) {
         }
     }
     for (const item in data.six) {
-        if (data.six[item as keyof typeof data.six].number_of_members !== null && data.six[item as keyof typeof data.six].number_of_members != 0) {
+        if (data.six[item as keyof typeof data.six].number_of_members != 0) {
             if (!data.six[item as keyof typeof data.six].comment) {
                 isErrorPanel.value.six[item] = {
                     id: item,

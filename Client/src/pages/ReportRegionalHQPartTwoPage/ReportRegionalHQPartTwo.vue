@@ -470,6 +470,7 @@ const getMultiplyData = async (isExpert, reportId) => {
     if (isExpert) {
       reportData.value.six[result.id] = result.data;
       reportStore.reportDataDH.six[result.id] = Object.assign({}, reportData.value.six[result.id]);
+     
       reportStore.reportDataDH.six[result.id].comment = '';
       isErrorPanel.value.six[result.id] = {
         id: result.id,
@@ -984,10 +985,11 @@ const sendReport = async () => {
     }
   }
 
-  if (districtExpert.value && checkEmptyFieldsDH(reportStore.reportDataDH, isErrorPanel)) {
+  if (districtExpert.value  && checkEmptyFieldsDH(reportStore.reportDataDH, isErrorPanel)) {
     blockSendButton.value = true;
     preloader.value = true;
     try {
+      console.log('dataSiDh', reportDataDH.value.six, reportDataDH.value.first)
       if (!reportData.value.first.verified_by_dhq) {
         await reportPartTwoService.sendReportDH(reportDataDH.value.first, '1', route.query.reportId, true)
       }
@@ -1000,15 +1002,17 @@ const sendReport = async () => {
         await reportPartTwoService.sendReportDH(reportDataDH.value.fifth, '5', route.query.reportId, true)
       }
 
-      for (let i in reportDataDH.value.six) {
-        if (!reportDataDH.value.six[i].verified_by_dhq) {
+   
+
+      for (let i in reportData.value.six) {
+        if (!reportData.value.six[i].verified_by_dhq) {
           console.log('send6')
           await reportPartTwoService.sendReportDHMultiply(reportDataDH.value.six[i], '6', i, route.query.reportId);
         }
       }
-      for (let i in reportDataDH.value.ninth) {
+      for (let i in reportData.value.ninth) {
 
-        if (!reportDataDH.value.ninth[i].verified_by_dhq) {
+        if (!reportData.value.ninth[i].verified_by_dhq) {
           console.log('send9')
           await reportPartTwoService.sendReportDHMultiply(reportDataDH.value.ninth[i], '9', i, route.query.reportId, true);
         }
@@ -1381,10 +1385,12 @@ watch(
   () => route.path,
 
   async (newUrl) => {
-    if (newUrl.includes('reporting-ro/report-regional-two')) {
-      preloader.value = true;
-      console.log(1);
-      await getReportData();
+    if (roleStore.roles.regionalheadquarter_commander && typeof (route.query.reportId) === 'undefined') {
+      if (newUrl.includes('reporting-ro/report-regional-two')) {
+        preloader.value = true;
+        console.log(1);
+        await getReportData();
+      }
     }
   },
   {
