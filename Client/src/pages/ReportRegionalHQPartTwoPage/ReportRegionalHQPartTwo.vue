@@ -533,6 +533,8 @@ const getReportData = async (reportId) => {
       const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
       reportData.value.eleventh = JSON.parse(dataEleventh.regional_version);
       console.log('данные РШ для ЦШ 11', reportData.value.eleventh);//---------------------------------
+      // dataEleventh.district_version 
+      // ? reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version) :
       reportStore.reportDataDH.eleventh = dataEleventh;
       console.log('данные ОШ для ЦШ 11', reportStore.reportDataDH.eleventh);//----------------
       reportStore.reportDataCH.eleventh = Object.assign({}, dataEleventh);
@@ -1065,6 +1067,42 @@ const sendReport = async () => {
     // } else {
     // blockSendButton.value = false;
     // } 
+  }
+
+  if (centralExpert.value) {
+    blockSendButton.value = true;
+    // if (checkEmptyFieldsDH(reportStore.reportDataCH, isErrorPanel)) {
+      preloader.value = true;
+      try {
+
+        if (!reportData.value.eleventh.verified_by_chq) {
+          await reportPartTwoService.sendReportCH(reportDataCH.value.eleventh, '11', route.query.reportId, true);
+
+          swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Отчет успешно верифицирован',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+      } catch (e) {
+        blockSendButton.value = false;
+        swal.fire({
+          position: 'center',
+          icon: 'error',
+          // title: `ошибка`,
+          title: `ошибка ${e.request.response}`,
+          showConfirmButton: false,
+          timer: 2500,
+        })
+        console.log('sendReportCH error: ', e)
+      } finally {
+        preloader.value = false;
+      }
+    // } else {
+    //   blockSendButton.value = false;
+    // }
   }
 };
 

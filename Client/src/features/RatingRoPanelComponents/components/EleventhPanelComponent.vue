@@ -122,7 +122,7 @@
       :disabled="centralExpert"
       :is-error-file="isErrorFile"
       :is-error-panel="isErrorPanel"
-      :is-sent="isSent"
+      :is-sent="centralExpert"
     ></CommentFileComponent>
   </div>
 
@@ -156,7 +156,7 @@
     ></CommentFileComponent>
 
     <div>
-      <v-checkbox label="Вернуть в&nbsp;РО на&nbsp;доработку" />
+      <v-checkbox label="Вернуть в&nbsp;РО на&nbsp;доработку" @change="returnForReview"/>
     </div>
   </div>
 </template>
@@ -328,6 +328,7 @@ const deleteFileDH = async () => {
   eleventhPanelDataDH.value.scan_file = '';
   
   // if (!isErrorFile.value) {
+    fileNameDH.value = null;
     reportStore.reportDataDHFile.eleventh = null;
   // }
 }
@@ -340,6 +341,16 @@ const deleteFileCH = async () => {
 let fileNameDH = ref(null);
 let fileTypeDH = ref(null);
 let fileSizeDH = ref(null);
+
+let isReturn = ref(false);
+
+const returnForReview = (event) => {
+  if (event.target.checked) {
+    isReturn.value = true;
+  } else {
+    isReturn.value = false;
+  }
+}
 
 watchEffect(() => {
   if (props.centralExpert || props.districtExpert) {
