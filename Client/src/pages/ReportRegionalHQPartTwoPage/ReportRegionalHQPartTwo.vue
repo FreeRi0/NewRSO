@@ -477,7 +477,7 @@ const getMultiplyData = async (isExpert, reportId) => {
         error: false,
       }
     } else {
-      if (reportData.value.six[result.id]?.regional_version === null) {
+      if (reportData.value.six[result.id]?.regional_version === null && Object.keys(reportData.value.six[result.id]).length) {
         console.log('1')
         reportData.value.six[result.id] = result.data;
       } else {
@@ -512,7 +512,7 @@ const getMultiplyData = async (isExpert, reportId) => {
       }
     }
     else {
-      if (reportData.value.ninth[result.id]?.regional_version === null) {
+      if (reportData.value.ninth[result.id]?.regional_version === null && Object.keys(reportData.value.ninth[result.id]).length) {
         reportData.value.ninth[result.id] = result.data;
       } else {
         reportData.value.ninth[result.id] = result.data;
