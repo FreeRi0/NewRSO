@@ -132,13 +132,8 @@
               11. Активность РО&nbsp;РСО в&nbsp;социальных сетях &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <eleventh-panel 
-                :districtExpert="districtExpert" 
-                :centralExpert="centralExpert" 
-                @get-data="setData"
-                @get-data-DH="setDataDH" 
-                @get-data-CH="setDataCH" 
-                :data="reportData.eleventh"
+              <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.eleventh"
                 :is-error-panel="isErrorPanel.eleventh" />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -467,17 +462,18 @@ const getMultiplyData = async (isExpert, reportId) => {
   ]);
 
   sixDataResults.forEach((result) => {
-    if (isExpert) {
+    if (isExpert && typeof(reportId) !== 'undefined') {
+      console.log('goo')
       reportData.value.six[result.id] = result.data;
       reportStore.reportDataDH.six[result.id] = Object.assign({}, reportData.value.six[result.id]);
-     
+
       reportStore.reportDataDH.six[result.id].comment = '';
       isErrorPanel.value.six[result.id] = {
         id: result.id,
         error: false,
       }
     } else {
-      if (reportData.value.six[result.id]?.regional_version === null) {
+      if (reportData.value.six[result.id]?.regional_version === null && Object.keys(reportData.value.six[result.id]).length) {
         console.log('1')
         reportData.value.six[result.id] = result.data;
       } else {
@@ -512,7 +508,7 @@ const getMultiplyData = async (isExpert, reportId) => {
       }
     }
     else {
-      if (reportData.value.ninth[result.id]?.regional_version === null) {
+      if (reportData.value.ninth[result.id]?.regional_version === null && Object.keys(reportData.value.ninth[result.id]).length) {
         reportData.value.ninth[result.id] = result.data;
       } else {
         reportData.value.ninth[result.id] = result.data;
@@ -662,12 +658,15 @@ const getReportData = async (reportId) => {
       }
 
       for (let item in reportData.value.six) {
-        if (reportData.value.six[item].is_sent == false || !Object.keys(reportData.value.six[item]).length) {
-          blockSendButton.value = false;
-          break
-        } else {
-          blockSendButton.value = true;
+        if (reportData.value.six[item] !== null) {
+          if (reportData.value.six[item]?.is_sent == false || !Object.keys(reportData.value.six[item]).length) {
+            blockSendButton.value = false;
+            break
+          } else {
+            blockSendButton.value = true;
+          }
         }
+
       }
 
       // for (let item in reportData.value.ninth) {
@@ -981,7 +980,7 @@ const sendReport = async () => {
     }
   }
 
-  if (districtExpert.value  && checkEmptyFieldsDH(reportStore.reportDataDH, isErrorPanel)) {
+  if (districtExpert.value && checkEmptyFieldsDH(reportStore.reportDataDH, isErrorPanel)) {
     blockSendButton.value = true;
     preloader.value = true;
     try {
@@ -998,7 +997,7 @@ const sendReport = async () => {
         await reportPartTwoService.sendReportDH(reportDataDH.value.fifth, '5', route.query.reportId, true)
       }
 
-   
+
 
       for (let i in reportData.value.six) {
         if (!reportData.value.six[i].verified_by_dhq) {
