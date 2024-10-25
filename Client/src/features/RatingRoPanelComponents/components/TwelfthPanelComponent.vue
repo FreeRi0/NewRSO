@@ -284,18 +284,22 @@ const uploadFile = async (event) => {
 };
 
 const uploadFileDH = async (event) => {
-    twelfthPanelDataDH.value.scan_file = event.target.files[0];
+    if (event.target.files) {
+        twelfthPanelDataDH.value.scan_file = event.target.files[0];
 
     // fileValidate(event.target.files[0], 7, isErrorFile);
 
     // if (!isErrorFile.value) {
         reportStore.reportDataDHFile.twelfth = event.target.files[0];
     // }
+    }
 }
 
 const uploadFileCH = async (event) => {
-  twelfthPanelDataCH.value.scan_file = event.target.files[0];
-  reportStore.reportDataCHFile.twelfth = event.target.files[0];
+    if (event.target.files) {
+        twelfthPanelDataCH.value.scan_file = event.target.files[0];
+        reportStore.reportDataCHFile.twelfth = event.target.files[0];
+    }
 }
 
 const deleteFile = async () => {

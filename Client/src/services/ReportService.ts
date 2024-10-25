@@ -126,15 +126,22 @@ export const reportPartTwoService = {
         })
     },
 
-    sendReportCH(data: object, panel: string, reportNumber: string, withFile = false, isReturn = false, dataRejectingReasons: object) {
+    sendReportCH(data: object, panel: string, reportNumber: string, withFile = false, isReturn = false) {
         if (!isReturn) {
             return HTTP.put(`regional_competitions/reports/${panel}/${reportNumber}/central_review/`, data, {
                 headers: {
                     'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
                 },
-            })
+            });
+            // console.log('ВЕРИФИЦИРОВАН ЦШ');
         } else {
-            return HTTP.delete(`regional_competitions/reports/${panel}/${reportNumber}/central_review/`, dataRejectingReasons)
+            return HTTP.delete(`regional_competitions/reports/${panel}/${reportNumber}/central_review/`, {
+                headers: {
+                    'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
+                },
+                data,
+            });
+            // console.log('НА ДОРАБОТКУ');
         }
     },
 

@@ -156,7 +156,11 @@
     ></CommentFileComponent>
 
     <div>
-      <v-checkbox label="Вернуть в&nbsp;РО на&nbsp;доработку" @change="returnForReview"/>
+      <v-checkbox 
+        v-model="isReturn"
+        type="checkbox"
+        label="Вернуть в&nbsp;РО на&nbsp;доработку" 
+        @change="returnForReview"/>
     </div>
   </div>
 </template>
@@ -233,6 +237,7 @@ const emit = defineEmits([
   'getData', 
   'getDataDH', 
   'getDataCH', 
+  'getReturnReport',
   // 'getFileDH'
 ]);
 
@@ -289,18 +294,22 @@ const uploadFile = async (event) => {
 };
 
 const uploadFileDH = async (event) => {
-  eleventhPanelDataDH.value.scan_file = event.target.files[0];
+  if (event.target.files) {
+    eleventhPanelDataDH.value.scan_file = event.target.files[0];
 
   // fileValidate(event.target.files[0], 7, isErrorFile);
 
   // if (!isErrorFile.value) {
     reportStore.reportDataDHFile.eleventh = event.target.files[0];
   // }
+  }
 }
 
 const uploadFileCH = async (event) => {
-  eleventhPanelDataCH.value.scan_file = event.target.files[0];
-  reportStore.reportDataCHFile.eleventh = event.target.files[0];
+  if (event.target.files) {
+    eleventhPanelDataCH.value.scan_file = event.target.files[0];
+    reportStore.reportDataCHFile.eleventh = event.target.files[0];
+  }
 }
 
 const deleteFile = async () => {
@@ -342,7 +351,7 @@ let fileNameDH = ref(null);
 let fileTypeDH = ref(null);
 let fileSizeDH = ref(null);
 
-let isReturn = ref(false);
+const isReturn = ref(false);
 
 const returnForReview = (event) => {
   if (event.target.checked) {
@@ -350,6 +359,8 @@ const returnForReview = (event) => {
   } else {
     isReturn.value = false;
   }
+  console.log('return чекбокс', isReturn.value);//-------------------------
+  emit('getReturnReport', isReturn.value, Number(ID_PANEL));
 }
 
 watchEffect(() => {
@@ -357,6 +368,7 @@ watchEffect(() => {
     if (reportStore.reportDataCH.eleventh) {
       eleventhPanelDataCH.value.comment = reportStore.reportDataCH.eleventh.comment;
       eleventhPanelDataCH.value.participants_number = reportStore.reportDataCH.eleventh.participants_number;
+      isReturn.value = reportStore.returnReport.eleventh;
     }
     if (reportStore.reportDataDH.eleventh) {
       eleventhPanelDataDH.value.comment = reportStore.reportDataDH.eleventh.comment;
@@ -422,22 +434,32 @@ watch(eleventhPanelDataDH.value, () => {
 });
 
 watch(eleventhPanelDataCH.value, () => {
-  reportStore.reportDataCH.eleventh = eleventhPanelDataCH.value;
-
-  let formData = new FormData();
-
-  eleventhPanelDataCH.value.participants_number 
-  ? formData.append('participants_number', eleventhPanelDataCH.value.participants_number) 
-  : formData.append('participants_number', '');
-
-  formData.append('comment', eleventhPanelDataCH.value.comment || '');
-
-  reportStore.reportDataCHFile.eleventh 
-  ? formData.append('scan_file', reportStore.reportDataCHFile.eleventh) 
-  : formData.append('scan_file', '');
-
-  emit('getDataCH', formData, Number(ID_PANEL));
+  if (props.centralExpert) {
+    reportStore.reportDataCH.eleventh = eleventhPanelDataCH.value; 
+  }
 });
+
+watch(isReturn, (newIsReturn) => {
+    reportStore.returnReport.eleventh = newIsReturn;
+    console.log('return 👀', reportStore.returnReport.eleventh);
+
+    if (reportStore.returnReport.eleventh) {
+      // скорректировать формдату после ответа Давида
+      let formData = new FormData();
+      console.log('отклонение отчета фд', isReturn.value);
+      formData.append('reasons[participants_number]', eleventhPanelDataCH.value.participants_number || '');
+      formData.append('reasons[comment]', eleventhPanelDataCH.value.comment || '');
+      formData.append('scan_file', reportStore.reportDataCHFile.eleventh || '');
+      emit('getDataCH', formData, Number(ID_PANEL));
+    } else {
+      let formData = new FormData();
+      console.log('вериф отчета фд', isReturn.value);
+      formData.append('participants_number', eleventhPanelDataCH.value.participants_number || '');
+      formData.append('comment', eleventhPanelDataCH.value.comment || '');
+      formData.append('scan_file', reportStore.reportDataCHFile.eleventh || '');
+      emit('getDataCH', formData, Number(ID_PANEL));
+    }
+})
 </script>
 
 <style lang="scss" scoped>
