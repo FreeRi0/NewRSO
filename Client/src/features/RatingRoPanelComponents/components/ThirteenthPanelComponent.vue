@@ -222,18 +222,22 @@ const focusOut = async () => {
 };
 
 const uploadFileDH = async (event) => {
-    thirteenthPanelDataDH.value.scan_file = event.target.files[0];
+    if (event.target.files) {
+        thirteenthPanelDataDH.value.scan_file = event.target.files[0];
 
     // fileValidate(event.target.files[0], 7, isErrorFile);
         
     // if (!isErrorFile.value) {
         reportStore.reportDataDHFile.thirteenth = event.target.files[0];
     // }
+    }
 };
 
 const uploadFileCH = async (event) => {
-  thirteenthPanelDataCH.value.scan_file = event.target.files[0];
-  reportStore.reportDataCHFile.thirteenth = event.target.files[0];
+    if (event.target.files) {
+        thirteenthPanelDataCH.value.scan_file = event.target.files[0];
+        reportStore.reportDataCHFile.thirteenth = event.target.files[0];
+    }
 }
 
 const deleteFileDH = async () => {

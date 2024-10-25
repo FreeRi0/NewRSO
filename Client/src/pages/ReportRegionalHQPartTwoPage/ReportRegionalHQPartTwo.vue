@@ -134,8 +134,14 @@
               11. Активность РО&nbsp;РСО в&nbsp;социальных сетях &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.eleventh"
+              <eleventh-panel 
+                :districtExpert="districtExpert" 
+                :centralExpert="centralExpert" 
+                @get-data="setData"
+                @get-data-DH="setDataDH" 
+                @get-data-CH="setDataCH" 
+                @get-return-report="setReturnReport"
+                :data="reportData.eleventh"
                 :is-error-panel="isErrorPanel.eleventh" />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -300,6 +306,10 @@ const reportDataCH = ref({
   twelfth: null,
   thirteenth: null,
 });
+
+const returnReport = ref({
+  eleventh: null,
+})
 
 const preloader = ref(true);
 const panel_id = ref(1);
@@ -874,6 +884,15 @@ const setDataCH = (data, panel, number) => {
   }
 }
 
+const setReturnReport = (data, panel) => {
+  switch (panel) {
+    case 11:
+      returnReport.value.eleventh = data;
+      console.log('return в род комп', returnReport.value.eleventh);//-------
+      break;
+  }
+}
+
 const filterPanelsData = () => {
   const filteredSix = {};
   // const filteredSeventh = {};
@@ -1126,7 +1145,6 @@ const sendReport = async () => {
           await reportPartTwoService.sendReportCH(reportDataCH.value.six[i], '6', route.query.reportId);
         }
       }
-
       for (let i in reportData.value.ninth) {
         if (!reportData.value.ninth[i].verified_by_chq) {
           await reportPartTwoService.sendReportCH(reportDataCH.value.ninth[i], '9', route.query.reportId, true);
