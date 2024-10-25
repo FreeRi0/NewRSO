@@ -116,8 +116,10 @@ const getPanelNumber = (number) => {
 }
 watchEffect(() => {
   if (props.districtHeadquarterCommander) {
+    console.log('11')
     sixPanelData.value = { ...props.data[el_id.value] };
   } else {
+    console.log('12')
     if (props.data[el_id.value] && Object.keys(props.data[el_id.value]).length > 0) {
       console.log('data received', props.data);
       isFirstSent.value = false;

@@ -163,7 +163,7 @@
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                                }}</label>
+                            }}</label>
                         </div>
                     </div>
                 </div>
@@ -180,8 +180,7 @@
                         <v-progress-circular color="primary" indeterminate></v-progress-circular>
                     </div>
                     <FileBoxComponent v-else-if="ninthPanelData.document && typeof ninthPanelData.document === 'string'"
-                        :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
-                        :isSent="isSentNinth"
+                        :file="ninthPanelData.document" :fileType="ninthPanelData.file_type" :isSent="isSentNinth"
                         :is-error-file="isErrorFile" :fileSize="ninthPanelData.file_size" @click="deleteFile(9)">
                     </FileBoxComponent>
                 </div>
@@ -193,8 +192,8 @@
 
                     <div class="form__wrapper" v-for="(item, index) in ninthPanelData.links" :key="index">
                         <InputReport @focusout="focusOut" @error="setError"
-                            :disabled="isSentNinth || ninthPanelData.event_happened === false" name="14" :maxlength="200"
-                            :is-error-panel="isErrorPanel" :is-link="true"
+                            :disabled="isSentNinth || ninthPanelData.event_happened === false" name="14"
+                            :maxlength="200" :is-error-panel="isErrorPanel" :is-link="true"
                             placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
                             class="mb-2" />
                         <div v-if="!isSentNinth && ninthPanelData.event_happened === true">
@@ -507,7 +506,7 @@
                                     v-model="ninthPanelDataDH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -658,7 +657,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -821,10 +820,11 @@ const uploadFile = (event, number) => {
             ninthPanelData.value.document = scanFile.value.name;
         } else {
             if (props.isDistrictHeadquarterCommander) {
-
-                ninthPanelDataDH.value.document = event.target.files[0];
-                reportStore.reportDataDHFile.ninth[props.ninthId] = event.target.files[0];
-                console.log('file', reportStore.reportDataDHFile.ninth[props.ninthId])
+                if (event.target.files) {
+                    ninthPanelDataDH.value.document = event.target.files[0];
+                    reportStore.reportDataDHFile.ninth[props.ninthId] = event.target.files[0];
+                    console.log('file', reportStore.reportDataDHFile.ninth[props.ninthId])
+                }
             } else {
                 let formData = new FormData();
                 formData.append('event_happened', ninthPanelData.value.event_happened);
