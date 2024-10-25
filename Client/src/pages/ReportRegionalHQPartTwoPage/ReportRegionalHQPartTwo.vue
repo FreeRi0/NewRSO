@@ -420,7 +420,12 @@ const getMultiplyData = async (reportId) => {
 
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        return { id: item.id, data: {} };
+        return {
+          id: item.id, data: {
+            is_sent: false, verified_by_chq: null, verified_by_dhq: false, score: 0.0, regional_version: null, district_version: null, central_version: null, rejecting_reasons: null, number_of_members: 0,
+            links: [], comment: ""
+          }
+        };
       } else {
         throw error;
       }
@@ -454,7 +459,12 @@ const getMultiplyData = async (reportId) => {
       }
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        return { id: item.id, data: {} };
+        return {
+          id: item.id, data: {
+            is_sent: false, verified_by_chq: null, verified_by_dhq: false, score: 0.0, regional_version: null, district_version: null, central_version: null, rejecting_reasons: null, event_happened: false, document: '',
+            links: [], comment: ""
+          }
+        };
       } else {
         throw error;
       }
@@ -486,16 +496,11 @@ const getMultiplyData = async (reportId) => {
       reportStore.reportDataCH.six[result.id] = Object.assign({}, result.data);
       reportStore.reportDataCH.six[result.id].comment = '';
     } else {
-      if (reportData.value.six[result.id]?.regional_version === null && Object.keys(reportData.value.six[result.id]).length) {
-        console.log('1')
-        reportData.value.six[result.id] = result.data;
-      } else {
-        console.log('2')
-        reportData.value.six[result.id] = result.data;
+      reportData.value.six[result.id] = result.data;
+      if (reportData.value.six[result.id]?.regional_version !== null && Object.keys(reportData.value.six[result.id]).length) {
         reportData.value.six[result.id] = JSON.parse(reportData.value.six[result.id].regional_version);
       }
     }
-
 
 
     // reportData.value.six[result.id] = result.data;
@@ -526,11 +531,9 @@ const getMultiplyData = async (reportId) => {
       reportStore.reportDataCH.ninth[result.id] = Object.assign({}, result.data);
       reportStore.reportDataCH.ninth[result.id].comment = '';
     }
-    else {
-      if (reportData.value.ninth[result.id]?.regional_version === null && Object.keys(reportData.value.ninth[result.id]).length) {
-        reportData.value.ninth[result.id] = result.data;
-      } else {
-        reportData.value.ninth[result.id] = result.data;
+    else { 
+      reportData.value.ninth[result.id] = result.data;
+      if (reportData.value.ninth[result.id]?.regional_version !== null && Object.keys(reportData.value.ninth[result.id]).length) {
         reportData.value.ninth[result.id] = JSON.parse(reportData.value.ninth[result.id].regional_version);
       }
     }
@@ -687,12 +690,15 @@ const getReportData = async (reportId) => {
       }
 
       for (let item in reportData.value.six) {
-        if (reportData.value.six[item].is_sent == false || !Object.keys(reportData.value.six[item]).length) {
-          blockSendButton.value = false;
-          break
-        } else {
-          blockSendButton.value = true;
+        if (reportData.value.six[item] !== null) {
+          if (reportData.value.six[item]?.is_sent == false || !Object.keys(reportData.value.six[item]).length) {
+            blockSendButton.value = false;
+            break
+          } else {
+            blockSendButton.value = true;
+          }
         }
+
       }
 
       // for (let item in reportData.value.ninth) {

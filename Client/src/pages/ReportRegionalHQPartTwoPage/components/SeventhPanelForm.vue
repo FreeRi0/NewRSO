@@ -820,7 +820,6 @@ const uploadFile = (event, number) => {
             ninthPanelData.value.document = scanFile.value.name;
         } else {
             if (props.isDistrictHeadquarterCommander) {
-
                 ninthPanelDataDH.value.document = event.target.files[0];
                 reportStore.reportDataDHFile.ninth[props.ninthId] = event.target.files[0];
                 console.log('fileDH', reportStore.reportDataDHFile.ninth[props.ninthId])
