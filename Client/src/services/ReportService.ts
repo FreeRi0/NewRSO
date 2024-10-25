@@ -126,13 +126,24 @@ export const reportPartTwoService = {
         })
     },
 
-    // sendReportCH(data: object, panel: string, reportNumber: string, withFile = false) {
-    //     return HTTP.put(`regional_competitions/reports/${panel}/${reportNumber}/central_review/`, data, {
-    //         headers: {
-    //             'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
-    //         },
-    //     })
-    // },
+    sendReportCH(data: object, panel: string, reportNumber: string, withFile = false, isReturn = false) {
+        if (!isReturn) {
+            return HTTP.put(`regional_competitions/reports/${panel}/${reportNumber}/central_review/`, data, {
+                headers: {
+                    'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
+                },
+            });
+            // console.log('ВЕРИФИЦИРОВАН ЦШ');
+        } else {
+            return HTTP.delete(`regional_competitions/reports/${panel}/${reportNumber}/central_review/`, {
+                headers: {
+                    'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
+                },
+                data,
+            });
+            // console.log('НА ДОРАБОТКУ');
+        }
+    },
 
     getSentReports() {
         return HTTP.get('/regional_competitions/get_sent_reports/')
