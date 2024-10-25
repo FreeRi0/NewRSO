@@ -475,8 +475,9 @@
                             Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
                         </p>
                         <InputReport v-model:value="sixPanelDataDH.number_of_members" placeholder="Введите число"
-                            id="15" name="14" class="form__input number_input" :is-error-panel="isErrorPanel" :disabled="props.isCentralHeadquarterCommander"
-                            type="number" :maxlength="10" :max="32767" />
+                            id="15" name="14" class="form__input number_input" :is-error-panel="isErrorPanel"
+                            :disabled="props.isCentralHeadquarterCommander" type="number" :maxlength="10"
+                            :max="32767" />
                     </div>
 
                     <CommentFileComponent v-model:value="sixPanelDataDH.comment" :is-error-panel="isErrorPanel"
@@ -502,9 +503,8 @@
                             <div class="places_item" v-for="item in events" :key="item.id">
                                 <input :id="item.id" :value="item.value" :name="item.name"
                                     :checked="ninthPanelDataDH.event_happened == item.value"
-                                     :disabled="props.isCentralHeadquarterCommander"
-                                    class="form__input places_input" type="radio"
-                                    v-model="ninthPanelDataDH.event_happened" />
+                                    :disabled="props.isCentralHeadquarterCommander" class="form__input places_input"
+                                    type="radio" v-model="ninthPanelDataDH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
                                 }}</label>
@@ -594,8 +594,7 @@
                             <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
                         </div>
                     </div>
-                    <ReportTable label="Количество человек, принявших участие в мероприятии"
-                    class="mb-4"
+                    <ReportTable label="Количество человек, принявших участие в мероприятии" class="mb-4"
                         name="sixPanelData.number_of_members" :dataRH="sixPanelData.number_of_members"
                         :dataDH="sixPanelDataDH.number_of_members" v-model:value="sixPanelDataCH.number_of_members"
                         :maxlength="10" :min="0" :max="2147483647" :is-error-panel="isErrorPanel"></ReportTable>
@@ -603,7 +602,7 @@
                     <CommentFileComponent v-model:value="sixPanelDataCH.comment" name="sixPanelDataCH.comment"
                         :is-six="true" :CH="true" :is-error-panel="isErrorPanel"></CommentFileComponent>
                     <div>
-                        <v-checkbox label="Вернуть в РО на доработку" />
+                        <v-checkbox v-model="is_return_six" @change="handleReturnToRoSix" label="Вернуть в РО на доработку" />
                     </div>
                 </div>
                 <div v-else-if="props.panel_number == 9" class="form__field-group group-seventh">
@@ -653,15 +652,14 @@
                         </div>
                     </div>
                     <CommentFileComponent v-model:value="ninthPanelDataCH.comment" name="ninthPanelDataCH.comment"
-                        @change="uploadFile($event, 9)" @click="deleteFile(9)"
-                        :CH="true"
+                        @change="uploadFile($event, 9)" @click="deleteFile(9)" :CH="true"
                         :file="reportStore.reportDataCHFile.ninth[props.ninthId] ? reportStore.reportDataCHFile.ninth[props.ninthId]?.name : null"
                         :fileType="reportStore.reportDataCHFile.ninth[props.ninthId] ? reportStore.reportDataCHFile.ninth[props.ninthId]?.type.split('/').at(-1) : null"
                         :fileSize="reportStore.reportDataCHFile.ninth[props.ninthId] ? reportStore.reportDataCHFile.ninth[props.ninthId]?.size / Math.pow(1024, 2) : null"
                         :is-error-file="isErrorFile" :is-error-panel="isErrorPanel">
                     </CommentFileComponent>
                     <div>
-                        <v-checkbox label="Вернуть в РО на доработку" />
+                        <v-checkbox v-model="is_return_ninth" @change="handleReturnToRoNinth" label="Вернуть в РО на доработку" />
                     </div>
                 </div>
             </template>
@@ -669,7 +667,7 @@
     </v-card-text>
 </template>
 <script setup>
-import { ref, watchEffect, watch } from 'vue';
+import { ref, watchEffect, watch, handleError } from 'vue';
 import { Button } from '@shared/components/buttons';
 import {
     FileBoxComponent,
@@ -702,11 +700,14 @@ const props = defineProps({
     dataCH: Object,
 });
 
-const emit = defineEmits(['collapse-form', 'formData', 'formDataDH','formDataCH', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'deleteFileDH', 'error']);
+const emit = defineEmits(['collapse-form', 'formData', 'returnToRo', 'formDataDH', 'formDataCH', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'deleteFileDH', 'error']);
 
 const collapseForm = () => {
     emit('collapse-form');
 };
+
+const is_return_six = ref(false);
+const is_return_ninth = ref(false);
 
 const reportStore = useReportPartTwoStore();
 let isErrorFile = ref(false);
@@ -820,13 +821,19 @@ const uploadFile = (event, number) => {
             ninthPanelData.value.document = scanFile.value.name;
         } else {
             if (props.isDistrictHeadquarterCommander) {
-                ninthPanelDataDH.value.document = event.target.files[0];
-                reportStore.reportDataDHFile.ninth[props.ninthId] = event.target.files[0];
-                console.log('fileDH', reportStore.reportDataDHFile.ninth[props.ninthId])
-            } else if(props.isCentralHeadquarterCommander) {
-                ninthPanelDataCH.value.document = event.target.files[0];
-                reportStore.reportDataCHFile.ninth[props.ninthId] = event.target.files[0];
-                console.log('fileCH', reportStore.reportDataCHFile.ninth[props.ninthId])
+                if (event.target.files) {
+                    ninthPanelDataDH.value.document = event.target.files[0];
+                    reportStore.reportDataDHFile.ninth[props.ninthId] = event.target.files[0];
+                    console.log('fileDH', reportStore.reportDataDHFile.ninth[props.ninthId])
+                }
+
+            } else if (props.isCentralHeadquarterCommander) {
+                if (event.target.files) {
+                    ninthPanelDataCH.value.document = event.target.files[0];
+                    reportStore.reportDataCHFile.ninth[props.ninthId] = event.target.files[0];
+                    console.log('fileCH', reportStore.reportDataCHFile.ninth[props.ninthId])
+                }
+
             } else {
                 let formData = new FormData();
                 formData.append('event_happened', ninthPanelData.value.event_happened);
@@ -874,7 +881,7 @@ const deleteFile = (number) => {
             reportStore.reportDataDHFile.ninth[props.ninthId] = null;
             ninthPanelDataDH.value.document = '';
 
-        } else if(props.isCentralHeadquarterCommander) {
+        } else if (props.isCentralHeadquarterCommander) {
             reportStore.reportDataCHFile.ninth[props.ninthId] = null;
             ninthPanelDataCH.value.document = '';
         } else {
@@ -898,6 +905,18 @@ const deleteFile = (number) => {
     }
 
 }
+
+const handleReturnToRoSix = () => {
+    
+    emit('returnToRo', is_return_six.value);
+    console.log('returnToRo6', is_return_six.value);
+};
+
+const handleReturnToRoNinth = () => {
+    emit('returnToRo', is_return_ninth.value);
+    console.log('returnToRo9',  is_return_ninth.value);
+};
+
 
 const focusOut = () => {
     if (props.panel_number == 6) {

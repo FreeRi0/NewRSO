@@ -80,9 +80,9 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <sixth-panel @get-data="setData" @get-data-DH="setDataDH" @get-data-CH="setDataCH" :items="six_items"
-                @getId="setId" @getPanelNumber="setPanelNumber" :district-headquarter-commander="districtExpert"
-                :data="reportData.six" :central-headquarter-commander="centralExpert"
-                :is-error-panel="isErrorPanel.six" />
+                @getId="setId" @getPanelNumber="setPanelNumber" @returnToRo="handleReturnToRoSix($event)"
+                :district-headquarter-commander="districtExpert" :data="reportData.six"
+                :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.six" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -113,7 +113,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <ninth-panel @get-data="setData" @get-data-DH="setDataDH" @get-data-CH="setDataCH" @getId="setId"
-                @getPanelNumber="setPanelNumber" :items="ninth_items" :district-headquarter-commander="districtExpert"
+                @getPanelNumber="setPanelNumber" @returnToRo="handleReturnToRoNinth($event)" :items="ninth_items" :district-headquarter-commander="districtExpert"
                 :data="reportData.ninth" :central-headquarter-commander="centralExpert"
                 :is-error-panel="isErrorPanel.ninth" />
             </v-expansion-panel-text>
@@ -307,6 +307,8 @@ const panel_num = ref(null);
 const six_items = ref([])
 // const seventh_items = ref([]);
 const ninth_items = ref([]);
+const is_return_six = ref(false);
+const is_return_ninth = ref(false);
 const blockSendButton = ref(false);
 const blockEditFirstReport = ref(false);
 
@@ -330,6 +332,16 @@ const isErrorPanel = ref({
 const setId = (id) => {
   panel_id.value = id;
   console.log('panel_id', panel_id.value, id);
+}
+
+const handleReturnToRoSix = (checked) => {
+  is_return_six.value = checked;
+  console.log('checked6', is_return_six.value)
+}
+
+const handleReturnToRoNinth = (checked) => {
+  is_return_ninth.value = checked;
+  console.log('checked9', is_return_ninth.value)
 }
 
 const setPanelNumber = (number) => {
@@ -378,6 +390,13 @@ const getItems = async (number) => {
     console.error(err);
   }
 }
+
+const handleReturnToRo = (checked) => {
+  is_return_six.value = checked;
+  console.log('returnToRo6-2', checked, is_return_six.value);
+};
+
+
 
 // const errorHandler = async (error, id) => {
 //   if (error.response && error.response.status === 404) {
@@ -531,7 +550,7 @@ const getMultiplyData = async (reportId) => {
       reportStore.reportDataCH.ninth[result.id] = Object.assign({}, result.data);
       reportStore.reportDataCH.ninth[result.id].comment = '';
     }
-    else { 
+    else {
       reportData.value.ninth[result.id] = result.data;
       if (reportData.value.ninth[result.id]?.regional_version !== null && Object.keys(reportData.value.ninth[result.id]).length) {
         reportData.value.ninth[result.id] = JSON.parse(reportData.value.ninth[result.id].regional_version);
@@ -1100,34 +1119,44 @@ const sendReport = async () => {
   if (centralExpert.value) {
     blockSendButton.value = true;
     // if (checkEmptyFieldsDH(reportStore.reportDataCH, isErrorPanel)) {
-      preloader.value = true;
-      try {
-
-        if (!reportData.value.eleventh.verified_by_chq) {
-          await reportPartTwoService.sendReportCH(reportDataCH.value.eleventh, '11', route.query.reportId, true);
-
-          swal.fire({
-          position: 'center',
-          icon: 'success',
-          title: 'Отчет успешно верифицирован',
-          showConfirmButton: false,
-          timer: 1500,
-        });
+    preloader.value = true;
+    try {
+      for (let i in reportData.value.six) {
+        if (!reportData.value.six[i].verified_by_chq) {
+          await reportPartTwoService.sendReportCH(reportDataCH.value.six[i], '6', route.query.reportId);
+        }
       }
-      } catch (e) {
-        blockSendButton.value = false;
-        swal.fire({
-          position: 'center',
-          icon: 'error',
-          // title: `ошибка`,
-          title: `ошибка ${e.request.response}`,
-          showConfirmButton: false,
-          timer: 2500,
-        })
-        console.log('sendReportCH error: ', e)
-      } finally {
-        preloader.value = false;
+
+      for (let i in reportData.value.ninth) {
+        if (!reportData.value.ninth[i].verified_by_chq) {
+          await reportPartTwoService.sendReportCH(reportDataCH.value.ninth[i], '9', route.query.reportId, true);
+        }
       }
+
+      if (!reportData.value.eleventh.verified_by_chq) {
+        await reportPartTwoService.sendReportCH(reportDataCH.value.eleventh, '11', route.query.reportId, true);
+      }
+      swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Отчет успешно верифицирован',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (e) {
+      blockSendButton.value = false;
+      swal.fire({
+        position: 'center',
+        icon: 'error',
+        // title: `ошибка`,
+        title: `ошибка ${e.request.response}`,
+        showConfirmButton: false,
+        timer: 2500,
+      })
+      console.log('sendReportCH error: ', e)
+    } finally {
+      preloader.value = false;
+    }
     // } else {
     //   blockSendButton.value = false;
     // }
