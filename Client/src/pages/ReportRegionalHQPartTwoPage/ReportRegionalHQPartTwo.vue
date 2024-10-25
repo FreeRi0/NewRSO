@@ -132,8 +132,14 @@
               11. Активность РО&nbsp;РСО в&nbsp;социальных сетях &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.eleventh"
+              <eleventh-panel 
+                :districtExpert="districtExpert" 
+                :centralExpert="centralExpert" 
+                @get-data="setData"
+                @get-data-DH="setDataDH" 
+                @get-data-CH="setDataCH" 
+                @get-return-report="setReturnReport"
+                :data="reportData.eleventh"
                 :is-error-panel="isErrorPanel.eleventh" />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -298,6 +304,10 @@ const reportDataCH = ref({
   twelfth: null,
   thirteenth: null,
 });
+
+const returnReport = ref({
+  eleventh: null,
+})
 
 const preloader = ref(true);
 const panel_id = ref(1);
@@ -828,6 +838,15 @@ const setDataCH = (data, panel, number) => {
   }
 }
 
+const setReturnReport = (data, panel) => {
+  switch (panel) {
+    case 11:
+      returnReport.value.eleventh = data;
+      console.log('return в род комп', returnReport.value.eleventh);//-------
+      break;
+  }
+}
+
 const filterPanelsData = () => {
   const filteredSix = {};
   // const filteredSeventh = {};
@@ -1077,11 +1096,13 @@ const sendReport = async () => {
       try {
 
         if (!reportData.value.eleventh.verified_by_chq) {
-          await reportPartTwoService.sendReportCH(reportDataCH.value.eleventh, '11', route.query.reportId, true);
+          console.log('return при отпр', returnReport.value.eleventh);//---------------
+          await reportPartTwoService.sendReportCH(reportDataCH.value.eleventh, '11', route.query.reportId, true, returnReport.value.eleventh);
 
           swal.fire({
           position: 'center',
           icon: 'success',
+          // Скорректировать сообщение
           title: 'Отчет успешно верифицирован',
           showConfirmButton: false,
           timer: 1500,
