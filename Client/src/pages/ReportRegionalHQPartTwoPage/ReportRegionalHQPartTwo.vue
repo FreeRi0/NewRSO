@@ -27,7 +27,6 @@
                   @get-data="setData"
                   @get-data-DH="setDataDH"
                   @get-data-CH="setDataCH"
-                  @get-return-report="setReturnReport"
                   :data="reportData.first"
                   :is-error-panel="isErrorPanel.first"
                   :blockEditFirstReport="blockEditFirstReport"
@@ -64,8 +63,15 @@
               (слеты, школы, фестивали, турниры и&nbsp;прочие)
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <fourth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                            @get-data-DH="setDataDH" :data="reportData.fourth" :is-error-panel="isErrorPanel.fourth"/>
+              <fourth-panel
+                  :districtExpert="districtExpert"
+                  :centralExpert="centralExpert"
+                  @get-data="setData"
+                  @get-data-DH="setDataDH"
+                  @get-data-CH="setDataCH"
+                  :data="reportData.fourth"
+                  :is-error-panel="isErrorPanel.fourth"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -312,6 +318,8 @@ const reportDataDH = ref({
 
 const reportDataCH = ref({
   first: {},
+  fourth: null,
+  fifth: null,
   six: {},
   ninth: {},
   eleventh: null,
@@ -569,11 +577,16 @@ const getMultiplyData = async (isExpert, reportId) => {
 }
 const getReportData = async (reportId) => {
   try {
+    // Загрузка данных для отчета эксперта ЦШ
     if (centralExpert.value) {
       /*
       * Критерий 1
       */
       reportStore.reportForCheckCH.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
+      /*
+      * Критерий 4
+      */
+      reportStore.reportForCheckCH.fourth = (await reportPartTwoService.getReportDH('4', reportId)).data;
 
       // Критерий 11
       const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
@@ -604,6 +617,7 @@ const getReportData = async (reportId) => {
       reportStore.reportDataCH.thirteenth = Object.assign({}, dataThirteenth);
       reportStore.reportDataCH.thirteenth.comment = '';
     }
+    // Загрузка данных для отчета эксперта ОШ
     else if (districtExpert.value && typeof reportId != "undefined") {
       reportData.value.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
       reportStore.reportDataDH.first = Object.assign({}, reportData.value.first);
@@ -646,7 +660,9 @@ const getReportData = async (reportId) => {
       reportData.value.seventeenth = (await reportPartTwoService.getReportDH('17', reportId)).data;
       reportData.value.eighteenth = (await reportPartTwoService.getReportDH('18', reportId)).data;
       reportData.value.nineteenth = (await reportPartTwoService.getReportDH('19', reportId)).data;
-    } else {
+    }
+    // Загрузка данных для отчета командира РШ
+    else {
       try {
         // reportData.value.first = (await reportPartTwoService.getReport('1')).data;
         const dataFirst = (await reportPartTwoService.getReport('1')).data;
@@ -903,6 +919,10 @@ const setDataCH = (data, panel, number) => {
     case 1:
       reportDataCH.value.first = data;
       console.log('1', ...reportDataCH.value.first);
+      break;
+    case 4:
+      reportDataCH.value.fourth = data;
+      console.log('4', ...reportDataCH.value.fourth);
       break;
     case 6:
       reportDataCH.value.six[number] = data;
@@ -1176,6 +1196,10 @@ const sendReport = async () => {
     try {
       if (!reportData.value.first.verified_by_chq) {
         await reportPartTwoService.sendReportCH(reportDataCH.value.first, '1', route.query.reportId, true, reportStore.returnReport.first);
+      }
+
+      if (!reportData.value.fourth.verified_by_chq) {
+        await reportPartTwoService.sendReportCH(reportDataCH.value.fourth, '4', route.query.reportId, true, reportStore.returnReport.fourth);
       }
 
       if (!reportData.value.eleventh.verified_by_chq) {
