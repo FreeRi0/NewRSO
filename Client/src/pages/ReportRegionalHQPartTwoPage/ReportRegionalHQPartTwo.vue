@@ -5,7 +5,7 @@
         Часть&nbsp;2</h1>
       <div v-if="preloader" class="text-center">
         <v-progress-circular color="primary" indeterminate></v-progress-circular>
-        <p class="preloader_info">Загрузка отчета может занять до 1 минуты.</p>
+        <p class="preloader_info">{{ preloader_text }}</p>
       </div>
       <div v-else>
         <div class="download-item">
@@ -258,6 +258,7 @@ import { reportPartTwoService } from "@services/ReportService.ts";
 import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
 import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
 import { checkEmptyFieldsDH } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
+import swal from '@/library/sweetalert2/sweetalert2.esm.all.min.js';
 
 const reportStore = useReportPartTwoStore();
 
@@ -321,8 +322,9 @@ const is_return_six = ref(false);
 const is_return_ninth = ref(false);
 const blockSendButton = ref(false);
 const blockEditFirstReport = ref(false);
+const preloader_text = ref('Загрузка отчета может занять до 1 минуты.')
 
-const swal = inject('$swal');
+// const swal = inject('$swal');
 const router = useRouter();
 
 const isErrorPanel = ref({
@@ -652,28 +654,58 @@ const getReportData = async (reportId) => {
     } else {
       console.log('true rh')
       try {
-        reportData.value.first = (await reportPartTwoService.getReport('1')).data;
+        // reportData.value.first = (await reportPartTwoService.getReport('1')).data;
+        const dataFirst = (await reportPartTwoService.getReport('1')).data;
+        if (!dataFirst.regional_version) {
+          reportData.value.first = dataFirst;
+        } else {
+          reportData.value.first = JSON.parse(dataFirst.regional_version);
+        }
       } catch (e) {
         console.log(e.message)
       }
       try {
-        reportData.value.fourth = (await reportPartTwoService.getReport('4')).data;
+        // reportData.value.fourth = (await reportPartTwoService.getReport('4')).data;
+        const dataFourth = (await reportPartTwoService.getReport('4')).data;
+        if (!dataFourth.regional_version) {
+          reportData.value.fourth = dataFourth;
+        } else {
+          reportData.value.fourth = JSON.parse(dataFourth.regional_version);
+        }
       } catch (e) {
         console.log(e.message)
       }
       try {
-        reportData.value.fifth = (await reportPartTwoService.getReport('5')).data;
+        // reportData.value.fifth = (await reportPartTwoService.getReport('5')).data;
+        const dataFifth = (await reportPartTwoService.getReport('5')).data;
+        if (!dataFifth.regional_version) {
+          reportData.value.fifth = dataFifth;
+        } else {
+          reportData.value.fifth = JSON.parse(dataFifth.regional_version);
+        }
       } catch (e) {
         console.log(e.message)
       }
       await getMultiplyData();
       try {
-        reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
+        // reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
+        const dataTenthFirst = (await reportPartTwoService.getMultipleReport('10', '1')).data;
+        if (!dataTenthFirst.regional_version) {
+          reportData.value.tenth.first = dataTenthFirst;
+        } else {
+          reportData.value.tenth.first = JSON.parse(dataTenthFirst.regional_version);
+        }
       } catch (e) {
         console.log(e.message)
       }
       try {
-        reportData.value.tenth.second = (await reportPartTwoService.getMultipleReport('10', '2')).data;
+        // reportData.value.tenth.second = (await reportPartTwoService.getMultipleReport('10', '2')).data;
+        const dataTenthSecond = (await reportPartTwoService.getMultipleReport('10', '2')).data;
+        if (!dataTenthSecond.regional_version) {
+          reportData.value.tenth.second = dataTenthSecond;
+        } else {
+          reportData.value.tenth.second = JSON.parse(dataTenthSecond.regional_version);
+        }
       } catch (e) {
         console.log(e.message)
       }
@@ -708,12 +740,23 @@ const getReportData = async (reportId) => {
         console.log(e.message)
       }
       try {
-        reportData.value.sixteenth = (await reportPartTwoService.getReport('16')).data;
-        // TODO: продумать логику блокировки кнопки, когда все отчеты отправлены
+        // reportData.value.sixteenth = (await reportPartTwoService.getReport('16')).data;
+        // if (reportData.value.sixteenth.is_sent) {
+        //   blockSendButton.value = true;
+        //   blockEditFirstReport.value = true;
+        // }
+
+        const dataSixteenth = (await reportPartTwoService.getReport('16')).data;
+        if (!dataSixteenth.regional_version) {
+          reportData.value.sixteenth = dataSixteenth;
+        } else {
+          reportData.value.sixteenth = JSON.parse(dataSixteenth.regional_version);
+        }
         if (reportData.value.sixteenth.is_sent) {
           blockSendButton.value = true;
           blockEditFirstReport.value = true;
         }
+
       } catch (e) {
         console.log(e.message)
       }
