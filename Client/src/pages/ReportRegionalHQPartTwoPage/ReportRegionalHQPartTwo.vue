@@ -244,7 +244,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <seventeenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                                 :data="reportData.seventeenth" :is-sent="blockSendButton"/>
+                                 :data="reportData.seventeenth" :is-sent="isSentLastIndex"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -253,7 +253,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <eighteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                                :data="reportData.eighteenth" :is-sent="blockSendButton"/>
+                                :data="reportData.eighteenth" :is-sent="isSentLastIndex"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -262,7 +262,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <nineteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                                :data="reportData.nineteenth" :is-sent="blockSendButton"/>
+                                :data="reportData.nineteenth" :is-sent="isSentLastIndex"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -362,6 +362,7 @@ const six_items = ref([])
 // const seventh_items = ref([]);
 const ninth_items = ref([]);
 const blockSendButton = ref(false);
+const isSentLastIndex = ref(false);
 const blockEditFirstReport = ref(false);
 const preloader_text = ref('Загрузка отчета может занять до 1 минуты.')
 
@@ -652,6 +653,13 @@ const getReportData = async (reportId) => {
       // console.log('данные ОШ для ЦШ 13', reportStore.reportDataDH.thirteenth);//---------------------------
       reportStore.reportDataCH.thirteenth = Object.assign({}, dataThirteenth);
       reportStore.reportDataCH.thirteenth.comment = '';
+
+      //Критерии 17-19
+      const dataSeventeenth = (await reportPartTwoService.getReportDH('16', reportId)).data;
+      if (dataSeventeenth.is_sent) isSentLastIndex.value = true;
+      reportData.value.seventeenth = (await reportPartTwoService.getReportDH('17', reportId)).data;
+      reportData.value.eighteenth = (await reportPartTwoService.getReportDH('18', reportId)).data;
+      reportData.value.nineteenth = (await reportPartTwoService.getReportDH('19', reportId)).data;
     }
     // Загрузка данных для отчета эксперта ОШ
     else if (districtExpert.value && typeof reportId != "undefined") {
@@ -693,6 +701,7 @@ const getReportData = async (reportId) => {
       reportStore.reportDataDH.sixteenth = (await reportPartTwoService.getReportDH('16', reportId)).data;
       reportStore.reportDataDH.sixteenth.comment = '';
 
+      if (reportData.value.sixteenth.is_sent) isSentLastIndex.value = true;
       reportData.value.seventeenth = (await reportPartTwoService.getReportDH('17', reportId)).data;
       reportData.value.eighteenth = (await reportPartTwoService.getReportDH('18', reportId)).data;
       reportData.value.nineteenth = (await reportPartTwoService.getReportDH('19', reportId)).data;
@@ -801,6 +810,7 @@ const getReportData = async (reportId) => {
         if (reportData.value.sixteenth.is_sent) {
           blockSendButton.value = true;
           blockEditFirstReport.value = true;
+          isSentLastIndex.value = true;
         }
 
       } catch (e) {
