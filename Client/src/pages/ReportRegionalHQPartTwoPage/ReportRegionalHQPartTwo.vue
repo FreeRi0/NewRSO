@@ -145,9 +145,17 @@
               &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <tenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                           @getDataDHFirst="setDataDH" @getDataDHSecond="setDataDH" :data="reportData.tenth"
-                           :is-error-panel="isErrorPanel.tenth"/>
+              <tenth-panel
+                  :districtExpert="districtExpert"
+                  :centralExpert="centralExpert"
+                  @get-data="setData"
+                  @getDataDHFirst="setDataDH"
+                  @getDataDHSecond="setDataDH"
+                  @getDataCHFirst="setDataCH"
+                  @getDataCHSecond="setDataCH"
+                  :data="reportData.tenth"
+                  :is-error-panel="isErrorPanel.tenth"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -329,6 +337,10 @@ const reportDataCH = ref({
   fifth: null,
   six: {},
   ninth: {},
+  tenth: {
+    first: null,
+    second: null,
+  },
   eleventh: null,
   twelfth: null,
   thirteenth: null,
@@ -589,7 +601,7 @@ const getReportData = async (reportId) => {
       /*
       * Критерий 1
       */
-      reportStore.reportForCheckCH.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
+      // reportStore.reportForCheckCH.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
       /*
       * Критерий 4
       */
@@ -598,6 +610,14 @@ const getReportData = async (reportId) => {
       * Критерий 5
       */
       reportStore.reportForCheckCH.fifth = (await reportPartTwoService.getReportDH('5', reportId)).data;
+      /*
+      * Критерий 10-1
+      */
+      reportStore.reportForCheckCH.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
+      /*
+      * Критерий 10-2
+      */
+      reportStore.reportForCheckCH.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', reportId)).data;
 
       // Критерий 11
       const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
@@ -941,6 +961,15 @@ const setDataCH = (data, panel, number) => {
       break;  
     case 6:
       reportDataCH.value.six[number] = data;
+      break;
+    case 10:
+      if (number === 1) {
+        reportDataCH.value.tenth.first = data;
+        console.log('10-1', ...reportDataCH.value.tenth.first);
+      } else {
+        reportDataCH.value.tenth.second = data;
+        console.log('10-2', ...reportDataCH.value.tenth.second);
+      }
       break;
     case 11:
       reportDataCH.value.eleventh = data;

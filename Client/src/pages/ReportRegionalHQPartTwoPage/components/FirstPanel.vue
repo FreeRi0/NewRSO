@@ -411,12 +411,12 @@ watchEffect(async () => {
   // Мапинг данных для отчета эксперта ЦШ
   if (reportStore.reportForCheckCH.first && props.centralExpert) {
     // Добавление данных панели "отчет РО"
-    const reportDataDH = JSON.parse(reportStore.reportForCheckCH.first.regional_version);
-    firstPanelData.value.comment = reportDataDH.comment || '';
-    firstPanelData.value.amount_of_money = reportDataDH.amount_of_money;
-    firstPanelData.value.scan_file = reportDataDH.scan_file || null;
-    firstPanelData.value.file_type = reportDataDH.file_type || null;
-    firstPanelData.value.file_size = reportDataDH.file_size || null;
+    const reportDataRH = JSON.parse(reportStore.reportForCheckCH.first.regional_version);
+    firstPanelData.value.comment = reportDataRH.comment || '';
+    firstPanelData.value.amount_of_money = reportDataRH.amount_of_money;
+    firstPanelData.value.scan_file = reportDataRH.scan_file || null;
+    firstPanelData.value.file_type = reportDataRH.file_type || null;
+    firstPanelData.value.file_size = reportDataRH.file_size || null;
 
     // Добавление данных панели "корректировка ОШ"
     firstPanelDataDH.value.comment = reportStore.reportForCheckCH.first.comment;
