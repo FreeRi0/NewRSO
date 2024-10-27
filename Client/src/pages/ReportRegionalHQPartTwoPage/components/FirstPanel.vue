@@ -18,6 +18,7 @@
               :step="0.01"
               @focusout="focusOut"
               :disabled="isSent"
+              :is-error-panel="isErrorPanel"
           />
         </div>
         <div class="report__add-file">
@@ -30,6 +31,7 @@
               id="scan_file"
               name="scan_file"
               :disabled="isSent"
+              :is-error-panel="isErrorPanel"
               style="width: 100%;"
               @change="uploadFile"/>
           <FileBoxComponent
@@ -130,6 +132,7 @@
               :max="9999999999"
               :step="0.01"
               :disabled="props.centralExpert"
+              :is-error-panel="isErrorPanel"
           />
         </div>
       </div>
@@ -144,6 +147,7 @@
             :is-error-file="isErrorFile"
             @change="uploadFileDH"
             @click="deleteFileDH"
+            :is-error-panel="isErrorPanel"
         />
       </div>
     </template>
@@ -173,6 +177,7 @@
                 :min="0"
                 :max="9999999999"
                 :step="0.01"
+                :is-error-panel="isErrorPanel"
             />
           </td>
         </tr>
@@ -188,6 +193,7 @@
             :is-error-file="isErrorFile"
             @change="uploadFileCH"
             @click="deleteFileCH"
+            :is-error-panel="isErrorPanel"
         />
       </div>
       <div>
@@ -222,6 +228,9 @@ const props = defineProps({
   },
   data: Object,
   blockEditFirstReport: Boolean,
+  isErrorPanel: {
+    type: Boolean,
+  },
 });
 
 const emit = defineEmits(['getData', 'getDataDH', 'getDataCH']);
