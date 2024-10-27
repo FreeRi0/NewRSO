@@ -256,7 +256,7 @@
                   type="text"
                   placeholder="https://vk.com/cco_monolit"
                   @focusout="focusOut"
-                  :disabled="isSent || !sixteenthPanelData.is_project"
+                  disabled
                   isLink
                   style="width: 100%;"
               />
@@ -303,6 +303,7 @@
                 id="is_projectDH-true"
                 type="radio"
                 :value="true"
+                :disabled="props.centralExpert"
             />
             <label for="is_projectDH-true">Да</label>
           </div>
@@ -313,6 +314,7 @@
                 id="is_projectDH-false"
                 type="radio"
                 :value="false"
+                :disabled="props.centralExpert"
             />
             <label for="is_projectDH-false">Нет</label>
           </div>
@@ -332,17 +334,17 @@
                 placeholder="ВВС ПРО"
                 :max-length="300"
                 style="width: 100%;"
-                :disabled="!sixteenthPanelDataDH.is_project"
+                :disabled="!sixteenthPanelDataDH.is_project || props.centralExpert"
             />
           </div>
-          <div class="deleteBtn">
-            <Button
-                v-if="index > 0"
-                label="Удалить проект"
-                class="deleteProjectBtn"
-                @click="deleteProjectDH(index)"
-            />
-          </div>
+          <!--          <div class="deleteBtn">-->
+          <!--            <Button-->
+          <!--                v-if="index > 0"-->
+          <!--                label="Удалить проект"-->
+          <!--                class="deleteProjectBtn"-->
+          <!--                @click="deleteProjectDH(index)"-->
+          <!--            />-->
+          <!--          </div>-->
         </div>
         <div>
           <div class="project-regulations">
@@ -355,7 +357,7 @@
                     type="radio"
                     :id="`All-${index}DH`"
                     value="Всероссийский"
-                    :disabled="!sixteenthPanelDataDH.is_project"
+                    :disabled="!sixteenthPanelDataDH.is_project || props.centralExpert"
                 />
                 <label :for="`All-${index}DH`">Всероссийский</label>
               </div>
@@ -366,7 +368,7 @@
                     type="radio"
                     :id="`District-${index}DH`"
                     value="Окружной"
-                    :disabled="!sixteenthPanelDataDH.is_project"
+                    :disabled="!sixteenthPanelDataDH.is_project || props.centralExpert"
                 />
                 <label :for="`District-${index}DH`">Окружной</label>
               </div>
@@ -377,7 +379,7 @@
                     type="radio"
                     :id="`Interregional-${index}DH`"
                     value="Межрегиональный"
-                    :disabled="!sixteenthPanelDataDH.is_project"
+                    :disabled="!sixteenthPanelDataDH.is_project || props.centralExpert"
                 />
                 <label :for="`Interregional-${index}DH`">Межрегиональный</label>
               </div>
@@ -385,9 +387,9 @@
           </div>
         </div>
       </div>
-      <div v-if="sixteenthPanelDataDH.is_project">
-        <Button class="add_eventBtn" label="Добавить проект" @click="addProjectDH"/>
-      </div>
+      <!--      <div v-if="sixteenthPanelDataDH.is_project">-->
+      <!--        <Button class="add_eventBtn" label="Добавить проект" @click="addProjectDH"/>-->
+      <!--      </div>-->
       <div>
         <div class="form__field-comment">
           <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
@@ -401,6 +403,7 @@
               :maxlength="3000"
               :max-length-text="3000"
               counter-visible
+              :disabled="props.centralExpert"
           />
         </div>
         <div class="form__field-result">
@@ -416,111 +419,138 @@
     <!------------------------------------------------------------------------------------------------>
 
     <template v-slot:thirdTab>
-      <div class="form__field-group report-table">
-        <div class="form__field">
-          <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу <sup
-              class="valid-red">*</sup></p>
-          <div style="display: flex;">
-            <div style="display: flex; align-items: center">
-              <InputReport id="2" name="2" class="form__input" type="radio"/>
-              <label for="2">Да</label>
-            </div>
-            <div style="display: flex; align-items: center">
-              <InputReport id="2" name="2" class="form__input" type="radio"/>
-              <label for="2">Нет</label>
-            </div>
+      <div class="form__field-project-existence" style="margin-bottom: 10px;">
+        <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу <sup
+            class="valid-red">*</sup>
+        </p>
+        <div class="form__label-radio">
+          <div style="display: flex; align-items: center">
+            <input
+                class="custom-radio"
+                v-model="sixteenthPanelDataDH.is_project"
+                id="is_projectCH-true"
+                type="radio"
+                :value="true"
+                :disabled="props.centralExpert"
+            />
+            <label for="is_projectCH-true">Да</label>
+          </div>
+          <div style="display: flex; align-items: center">
+            <input
+                class="custom-radio"
+                v-model="sixteenthPanelDataDH.is_project"
+                id="is_projectCH-false"
+                type="radio"
+                :value="false"
+                :disabled="props.centralExpert"
+            />
+            <label for="is_projectCH-false">Нет</label>
           </div>
         </div>
-        <div style="display: flex; justify-content: space-between">
-          <div>
-            <label class="form__label">Наименование трудового проекта, в котором ЛСО РО одержал победу <sup
-                class="valid-red">*</sup></label>
-            <v-table>
-              <tbody>
-              <tr class="report-table__tr">
-                <td>Данные РО</td>
-              </tr>
-              <tr class="report-table__tr">
-                <td>ВВС Всеросийская сельскохозяйственная неделя</td>
-              </tr>
-              <tr class="report-table__tr">
-                <td>Корректировка ОШ</td>
-              </tr>
-              <tr class="report-table__tr">
-                <td>ВВС Всеросийская сельскохозяйственная неделя</td>
-              </tr>
-              <tr class="report-table__tr">
-                <td>Корректировка ЦШ</td>
-              </tr>
-              <tr class="report-table__tr">
-                <td>ВВС Всеросийская сельскохозяйственная неделя</td>
-              </tr>
-              </tbody>
-            </v-table>
-          </div>
-          <div>
-            <Button style="margin: 0;" label="Удалить проект"/>
-          </div>
+      </div>
+      <div v-for="(projectCH, index) in commonData" :key="index" style="margin-top: 10px;">
+        <div>
+          <label class="form__label">Наименование трудового проекта, в котором ЛСО РО одержал победу <sup
+              class="valid-red">*</sup></label>
+          <v-table style="margin-top: 10px;">
+            <tbody>
+            <tr class="report-table__tr">
+              <td>Данные РО</td>
+            </tr>
+            <tr class="report-table__td">
+              <td>{{ projectCH.dataRH.name }}</td>
+            </tr>
+            <tr class="report-table__tr">
+              <td>Корректировка ОШ</td>
+            </tr>
+            <tr class="report-table__td">
+              <td>{{ projectCH.dataDH.name }}</td>
+            </tr>
+            <tr class="report-table__tr">
+              <td>Корректировка ЦШ</td>
+            </tr>
+            <tr class="report-table__tr">
+              <td>
+                <InputReport
+                    v-model:value="projectCH.dataCH.name"
+                    :id="'projectCH.dataCH.name'"
+                    :name="'projectCH.dataCH.name'"
+                    style="width: 100%;"
+                />
+              </td>
+            </tr>
+            </tbody>
+          </v-table>
         </div>
         <label class="form__label">Масштаб проекта <sup class="valid-red">*</sup></label>
-        <v-table>
+        <v-table style="margin-top: 10px;">
           <tbody>
           <tr class="report-table__tr">
-            <td class="report-table__th report-table__th__br-left">Данные РО</td>
-            <td class="report-table__th">Корректировка ОШ</td>
-            <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
+            <td class="report-table__th">Данные РО</td>
+            <td class="report-table__th report-table__td__center">Корректировка ОШ</td>
+            <td class="report-table__th">Корректировка ЦШ</td>
           </tr>
           <tr>
-            <td class="report-table__td">Всероссийский</td>
-            <td class="report-table__td report-table__td__center">Всероссийский</td>
-            <td class="report-table__td">Всероссийский</td>
+            <td class="report-table__td">{{ projectCH.dataRH.project_scale }}</td>
+            <td class="report-table__td report-table__td__center">{{ projectCH.dataDH.project_scale }}</td>
+            <td class="report-table__td">{{ projectCH.dataCH.project_scale }}</td>
           </tr>
           </tbody>
         </v-table>
-        <div class="form__field">
-          <p class="form__label">Масштаб проекта <sup class="valid-red">*</sup></p>
-          <div style="display: flex">
-            <div style="display: flex">
-              <InputReport id="2" name="2" class="form__input" type="radio"/>
-              <label>Всероссийский</label>
-            </div>
-            <div style="display: flex">
-              <InputReport id="2" name="2" class="form__input" type="radio"/>
-              <label>Окружной</label>
-            </div>
-            <div class="form__field">
-              <label class="form__label" for="15">Комментарий <sup class="valid-red">*</sup></label>
-              <InputReport id="15" name="15" class="form__input" style="width: 100%;"/>
+        <div class="project-regulations">
+          <div class="project-scope">
+            <p class="form__label form__field-label-project">Масштаб проекта <sup class="valid-red">*</sup></p>
+            <div>
+              <input
+                  class="custom-radio"
+                  v-model="projectCH.dataCH.project_scale"
+                  type="radio"
+                  :id="`All-${index}CH`"
+                  value="Всероссийский"
+              />
+              <label :for="`All-${index}CH`">Всероссийский</label>
             </div>
             <div>
-              <v-checkbox label="Итоговое значение"/>
+              <input
+                  class="custom-radio"
+                  v-model="projectCH.dataCH.project_scale"
+                  type="radio"
+                  :id="`District-${index}CH`"
+                  value="Окружной"
+              />
+              <label :for="`District-${index}CH`">Окружной</label>
             </div>
-            <div class="hr"></div>
             <div>
-              <p>(4-1)*2+(4-2)+(4-3)=9</p>
-            </div>
-            <div>
-              <v-checkbox label="Вернуть в РО на доработку"/>
+              <input
+                  class="custom-radio"
+                  v-model="projectCH.dataCH.project_scale"
+                  type="radio"
+                  :id="`Interregional-${index}CH`"
+                  value="Межрегиональный"
+              />
+              <label :for="`Interregional-${index}CH`">Межрегиональный</label>
             </div>
           </div>
         </div>
-        <div>
-          <Button style="margin: 0;" label="Добавить проект"/>
-        </div>
-        <div class="form__field">
-          <label class="form__label" for="15">Комментарий <sup class="valid-red">*</sup></label>
-          <InputReport id="15" name="15" class="form__input" style="width: 100%"/>
-        </div>
-        <div>
-          <v-checkbox label="Итоговое значение"/>
-        </div>
-        <div class="hr"></div>
-        <div>
-          <p>(4-1)*2+(4-2)+(4-3)=9</p>
-        </div>
-        <div>
-          <v-checkbox label="Вернуть в РО на доработку"/>
-        </div>
+        <div class="hr" style="margin-top: 10px;"></div>
+      </div>
+      <div class="form__field">
+        <label class="form__label" for="15">Комментарий <sup class="valid-red">*</sup></label>
+        <InputReport v-model:value="commentCH" id="15" name="15" class="form__input" style="width: 100%"/>
+      </div>
+<!--      <div>-->
+<!--        <v-checkbox label="Итоговое значение"/>-->
+<!--      </div>-->
+<!--      <div class="hr"></div>-->
+<!--      <div>-->
+<!--        <p>(4-1)*2+(4-2)+(4-3)=9</p>-->
+<!--      </div>-->
+      <div>
+        <v-checkbox
+            v-model="reportStore.returnReport.sixteenth"
+            label="Вернуть в РО на доработку"
+            @change="onReportReturn"
+        />
       </div>
     </template>
 
@@ -548,7 +578,7 @@ const props = defineProps({
   data: Object,
 });
 
-const emit = defineEmits(['getData', 'getDataDH']);
+const emit = defineEmits(['getData', 'getDataDH', 'getDataCH']);
 const reportStore = useReportPartTwoStore();
 
 const sixteenthPanelData = ref({
@@ -582,6 +612,8 @@ const isFirstSent = ref(true);
 const isSent = ref(false);
 const finalResult = ref(0);
 const finalResultDH = ref(0);
+const commonData = ref([]);
+const commentCH = ref();
 
 const focusOut = async () => {
   sixteenthPanelData.value.projects = [...projects.value];
@@ -706,11 +738,81 @@ const calculateResultDH = (event) => {
   }
 };
 
+const onReportReturn = (event) => {
+  let formData = new FormData();
+  if (event.target.checked) {
+    reportStore.returnReport.sixteenth = true;
+    reportStore.reportDataCH.sixteenth.projects = [];
+    commonData.value.forEach(e => {
+      reportStore.reportDataCH.sixteenth.projects.push(e.dataCH)
+    });
+
+    reportStore.reportDataCH.sixteenth.comment = commentCH.value || '';
+    formData.append('comment', commentCH.value || '');
+    formData.append('reasons[comment]', commentCH.value || '');
+
+    reportStore.reportDataCH.sixteenth.projects.forEach((project, i) => {
+      if (project.project_scale) formData.append(`projects[${i}][project_scale]`, project.project_scale);
+      if (project.name) formData.append(`projects[${i}][name]`, project.name);
+    })
+
+    emit('getDataCH', formData, 16);
+  } else {
+    reportStore.returnReport.sixteenth = false;
+    reportStore.reportDataCH.sixteenth.projects = [];
+    commonData.value.forEach(e => {
+      reportStore.reportDataCH.sixteenth.projects.push(e.dataCH)
+    });
+
+    reportStore.reportDataCH.sixteenth.comment = commentCH.value || '';
+    formData.append('comment', commentCH.value || '');
+
+    reportStore.reportDataCH.sixteenth.projects.forEach((project, i) => {
+      if (project.project_scale) formData.append(`projects[${i}][project_scale]`, project.project_scale);
+      if (project.name) formData.append(`projects[${i}][name]`, project.name);
+    })
+
+    emit('getDataCH', formData, 16);
+  }
+}
+
 onMounted(() => {
+  // Мапинг данных для отчета эксперта ОШ
   if (reportStore.reportDataDH.sixteenth) {
     sixteenthPanelDataDH.value.is_project = reportStore.reportDataDH.sixteenth.is_project;
     sixteenthPanelDataDH.value.comment = reportStore.reportDataDH.sixteenth.comment;
     sixteenthPanelDataDH.value.projects = [...reportStore.reportDataDH.sixteenth.projects];
+  }
+
+  // Мапинг данных для отчета эксперта ЦШ
+  if (reportStore.reportForCheckCH.sixteenth && props.centralExpert) {
+    const projectQuantity = reportStore.reportForCheckCH.sixteenth.projects.length;
+
+    // Добавление данных панели "отчет РО"
+    const reportDataRH = JSON.parse(reportStore.reportForCheckCH.sixteenth.regional_version);
+    projects.value = reportDataRH.projects;
+    sixteenthPanelData.value.comment = reportDataRH.comment;
+    sixteenthPanelData.value.is_project = reportDataRH.is_project;
+
+    // Добавление данных панели "корректировка ОШ"
+    sixteenthPanelDataDH.value.is_project = reportStore.reportForCheckCH.sixteenth.is_project;
+    sixteenthPanelDataDH.value.comment = reportStore.reportForCheckCH.sixteenth.comment;
+    sixteenthPanelDataDH.value.projects = reportStore.reportForCheckCH.sixteenth.projects;
+
+    // Добавление данных из стора для панели "корректировка ЦШ"
+    commentCH.value = reportStore.reportDataCH.sixteenth.comment || '';
+    for (let i = 0; i < projectQuantity; i++) {
+      commonData.value[i] = {
+        dataRH: reportDataRH.projects[i],
+        dataDH: reportStore.reportForCheckCH.sixteenth.projects[i],
+        dataCH: reportStore.reportDataCH.sixteenth.projects[i],
+        // dataCH: reportStore.reportDataCH.sixteenth.projects.length ? reportStore.reportDataCH.sixteenth.projects[i] : {
+        //   name: '',
+        //   project_scale: null,
+        // }
+      }
+    }
+    console.log('commonData', commonData.value)
   }
 });
 
@@ -748,36 +850,61 @@ watchPostEffect(() => {
 });
 
 watch(() => sixteenthPanelData.value.is_project, async (isProject) => {
-  if (!isProject) {
-    let formData = new FormData();
-    formData.append('comment', '');
-    formData.append('is_project', false);
-    formData.append(`projects[0][name]`, '');
-    formData.append(`projects[0][project_scale]`, '');
+  if (!props.centralExpert) {
+    if (!isProject) {
+      let formData = new FormData();
+      formData.append('comment', '');
+      formData.append('is_project', false);
+      formData.append(`projects[0][name]`, '');
+      formData.append(`projects[0][project_scale]`, '');
 
-    if (isFirstSent.value) {
-      const {data} = await reportPartTwoService.createReport(formData, '16');
-      emit('getData', data, 16);
+      if (isFirstSent.value) {
+        const {data} = await reportPartTwoService.createReport(formData, '16');
+        emit('getData', data, 16);
+      } else {
+        const {data} = await reportPartTwoService.createReportDraft(formData, '16', true);
+        emit('getData', data, 16);
+      }
     } else {
-      const {data} = await reportPartTwoService.createReportDraft(formData, '16', true);
-      emit('getData', data, 16);
-    }
-  } else {
-    let formData = new FormData();
-    formData.append('comment', '');
-    formData.append('is_project', true);
-    formData.append(`projects[0][name]`, '');
-    formData.append(`projects[0][project_scale]`, '');
+      let formData = new FormData();
+      formData.append('comment', '');
+      formData.append('is_project', true);
+      formData.append(`projects[0][name]`, '');
+      formData.append(`projects[0][project_scale]`, '');
 
-    if (isFirstSent.value) {
-      const {data} = await reportPartTwoService.createReport(formData, '16');
-      emit('getData', data, 16);
-    } else {
-      const {data} = await reportPartTwoService.createReportDraft(formData, '16', true);
-      emit('getData', data, 16);
+      if (isFirstSent.value) {
+        const {data} = await reportPartTwoService.createReport(formData, '16');
+        emit('getData', data, 16);
+      } else {
+        const {data} = await reportPartTwoService.createReportDraft(formData, '16', true);
+        emit('getData', data, 16);
+      }
     }
   }
+
 });
+
+watch([commonData, commentCH], () => {
+  let formData = new FormData();
+
+  reportStore.reportDataCH.sixteenth.projects = [];
+  commonData.value.forEach(e => {
+    reportStore.reportDataCH.sixteenth.projects.push(e.dataCH)
+  });
+
+  reportStore.reportDataCH.sixteenth.comment = commentCH.value || '';
+  formData.append('comment', commentCH.value || '');
+  if (reportStore.returnReport.sixteenth) formData.append('reasons[comment]', commentCH.value || '');
+
+  reportStore.reportDataCH.sixteenth.projects.forEach((project, i) => {
+    if (project.project_scale) formData.append(`projects[${i}][project_scale]`, project.project_scale);
+    if (project.name) formData.append(`projects[${i}][name]`, project.name);
+  })
+
+  emit('getDataCH', formData, 16);
+}, {
+  deep: true
+})
 </script>
 <style lang="scss" scoped>
 .form__field-project-existence {

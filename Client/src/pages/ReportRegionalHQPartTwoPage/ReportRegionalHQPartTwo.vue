@@ -233,9 +233,15 @@
               по&nbsp;комиссарской деятельности &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <sixteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data-DH="setDataDH"
-                               @get-data="setData" :data="reportData.sixteenth"
-                               :is-error-panel="isErrorPanel.sixteenth"/>
+              <sixteenth-panel
+                  :districtExpert="districtExpert"
+                  :centralExpert="centralExpert"
+                  @get-data-DH="setDataDH"
+                  @get-data="setData"
+                  @get-data-CH="setDataCH"
+                  :data="reportData.sixteenth"
+                  :is-error-panel="isErrorPanel.sixteenth"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -353,6 +359,7 @@ const reportDataCH = ref({
   eleventh: null,
   twelfth: null,
   thirteenth: null,
+  sixteenth: null,
 });
 
 const preloader = ref(true);
@@ -624,6 +631,12 @@ const getReportData = async (reportId) => {
       * Критерий 10-2
       */
       reportStore.reportForCheckCH.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', reportId)).data;
+      /*
+      * Критерий 16
+      */
+      reportStore.reportForCheckCH.sixteenth = (await reportPartTwoService.getReportDH('16', reportId)).data;
+      // Добавление данных о проектах от ОШ в стор ЦШ
+      reportStore.reportDataCH.sixteenth.projects = (await reportPartTwoService.getReportDH('16', reportId)).data.projects;
 
       // Критерий 11
       const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
@@ -973,7 +986,7 @@ const setDataCH = (data, panel, number) => {
     case 5:
       reportDataCH.value.fifth = data;
       console.log('5', ...reportDataCH.value.fifth);
-      break;  
+      break;
     case 6:
       reportDataCH.value.six[number] = data;
       break;
@@ -997,6 +1010,10 @@ const setDataCH = (data, panel, number) => {
     case 13:
       reportDataCH.value.thirteenth = data;
       console.log('13', ...reportDataCH.value.thirteenth);
+      break;
+    case 16:
+      reportDataCH.value.sixteenth = data;
+      console.log('16', ...reportDataCH.value.sixteenth);
       break;
   }
 }
@@ -1244,23 +1261,23 @@ const sendReport = async () => {
     // if (checkEmptyFieldsDH(reportStore.reportDataCH, isErrorPanel)) {
     preloader.value = true;
     try {
-      if (reportData.value.first.verified_by_chq === null) {
+      if (reportStore.reportForCheckCH.first.verified_by_chq === null) {
         await reportPartTwoService.sendReportCH(reportDataCH.value.first, '1', route.query.reportId, true, reportStore.returnReport.first);
       }
 
-      if (reportData.value.fourth.verified_by_chq === null) {
+      if (reportStore.reportForCheckCH.fourth.verified_by_chq === null) {
         await reportPartTwoService.sendReportCH(reportDataCH.value.fourth, '4', route.query.reportId, true, reportStore.returnReport.fourth);
       }
 
-      if (reportData.value.fifth.verified_by_chq === null) {
+      if (reportStore.reportForCheckCH.fifth.verified_by_chq === null) {
         await reportPartTwoService.sendReportCH(reportDataCH.value.fifth, '5', route.query.reportId, true, reportStore.returnReport.fifth);
       }
 
-      if (reportData.value.tenth.first.verified_by_chq === null) {
+      if (reportStore.reportForCheckCH.tenth.first.verified_by_chq === null) {
         await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.fifth, '10', '1', route.query.reportId, true, reportStore.returnReport.tenth.first);
       }
 
-      if (reportData.value.tenth.second.verified_by_chq === null) {
+      if (reportStore.reportForCheckCH.tenth.second.verified_by_chq === null) {
         await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.second, '10', '2', route.query.reportId, true, reportStore.returnReport.tenth.second);
       }
 
@@ -1274,6 +1291,10 @@ const sendReport = async () => {
 
       if (reportStore.reportDataDH.thirteenth.verified_by_chq === null) {
         await reportPartTwoService.sendReportCH(reportDataCH.value.thirteenth, '13', route.query.reportId, true, reportStore.returnReport.thirteenth);
+      }
+
+      if (reportStore.reportForCheckCH.sixteenth.verified_by_chq === null) {
+        await reportPartTwoService.sendReportCH(reportDataCH.value.sixteenth, '16', route.query.reportId, true, reportStore.returnReport.sixteenth);
       }
 
       swal.fire({
