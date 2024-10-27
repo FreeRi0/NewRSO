@@ -447,8 +447,9 @@ watch(isReturn, (newIsReturn) => {
       // скорректировать формдату после ответа Давида
       let formData = new FormData();
       console.log('отклонение отчета фд', isReturn.value);
-      formData.append('reasons[participants_number]', eleventhPanelDataCH.value.participants_number || '');
       formData.append('reasons[comment]', eleventhPanelDataCH.value.comment || '');
+      formData.append('participants_number', eleventhPanelDataCH.value.participants_number || '');
+      formData.append('comment', eleventhPanelDataCH.value.comment || '');
       formData.append('scan_file', reportStore.reportDataCHFile.eleventh || '');
       emit('getDataCH', formData, Number(ID_PANEL));
     } else {
