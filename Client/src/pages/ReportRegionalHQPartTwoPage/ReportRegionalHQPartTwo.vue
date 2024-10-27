@@ -5,13 +5,13 @@
         Часть&nbsp;2</h1>
       <div v-if="preloader" class="text-center">
         <v-progress-circular color="primary" indeterminate></v-progress-circular>
-        <p class="preloader_info">Загрузка отчета может занять до 1 минуты.</p>
+        <p class="preloader_info">{{ preloader_text }}</p>
       </div>
       <div v-else>
         <div class="download-item">
-          <SvgIcon iconName="download" />
+          <SvgIcon iconName="download"/>
           <button type="button" id="download" class="download-item__report"
-            @click="downloadReportAll(roleStore.roles.regionalheadquarter_commander?.id)">
+                  @click="downloadReportAll(roleStore.roles.regionalheadquarter_commander?.id)">
             Скачать архив
           </button>
         </div>
@@ -21,9 +21,16 @@
               1. Численность членов РО&nbsp;РСО в&nbsp;соответствии с&nbsp;объемом уплаченных членских взносов
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <first-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                @get-data-DH="setDataDH" :data="reportData.first" :is-error-panel="isErrorPanel.first"
-                :blockEditFirstReport="blockEditFirstReport" />
+              <first-panel
+                  :districtExpert="districtExpert"
+                  :centralExpert="centralExpert"
+                  @get-data="setData"
+                  @get-data-DH="setDataDH"
+                  @get-data-CH="setDataCH"
+                  :data="reportData.first"
+                  :is-error-panel="isErrorPanel.first"
+                  :blockEditFirstReport="blockEditFirstReport"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -37,7 +44,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
+                  text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО."/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -47,7 +54,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
+                  text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО."/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -56,8 +63,15 @@
               (слеты, школы, фестивали, турниры и&nbsp;прочие)
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <fourth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                @get-data-DH="setDataDH" :data="reportData.fourth" :is-error-panel="isErrorPanel.fourth" />
+              <fourth-panel
+                  :districtExpert="districtExpert"
+                  :centralExpert="centralExpert"
+                  @get-data="setData"
+                  @get-data-DH="setDataDH"
+                  @get-data-CH="setDataCH"
+                  :data="reportData.fourth"
+                  :is-error-panel="isErrorPanel.fourth"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -69,19 +83,20 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <fifth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                @get-data-DH="setDataDH" :data="reportData.fifth" :is-error-panel="isErrorPanel.fifth" />
+                           @get-data-DH="setDataDH" :data="reportData.fifth" :is-error-panel="isErrorPanel.fifth"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-title
-              :class="Object.values(isErrorPanel.six).some(item => item.error === true) ? 'visible-error' : ''">
+                :class="Object.values(isErrorPanel.six).some(item => item.error === true) ? 'visible-error' : ''">
               6. Участие бойцов студенческих отрядов РО&nbsp;РСО во&nbsp;всероссийских (международных)
               мероприятиях и&nbsp;проектах (в&nbsp;том числе и&nbsp;трудовых) &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <sixth-panel @get-data="setData" @get-data-DH="setDataDH" :items="six_items" @getId="setId"
-                @getPanelNumber="setPanelNumber" :district-headquarter-commander="districtExpert" :data="reportData.six"
-                :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.six" />
+                           @getPanelNumber="setPanelNumber" :district-headquarter-commander="districtExpert"
+                           :data="reportData.six"
+                           :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.six"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -91,7 +106,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
+                  text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО."/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -102,18 +117,19 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                text="Показатель рассчитывается автоматически на&nbsp;основе данных сервиса &laquo;Медиалогия&raquo;, предоставленных Аппаратом РСО." />
+                  text="Показатель рассчитывается автоматически на&nbsp;основе данных сервиса &laquo;Медиалогия&raquo;, предоставленных Аппаратом РСО."/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-title
-              :class="Object.values(isErrorPanel.ninth).some(item => item.error === true) ? 'visible-error' : ''">
+                :class="Object.values(isErrorPanel.ninth).some(item => item.error === true) ? 'visible-error' : ''">
               9. Организация обязательных общесистемных мероприятий РСО на&nbsp;региональном уровне &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <ninth-panel @get-data="setData" @get-data-DH="setDataDH" @getId="setId" @getPanelNumber="setPanelNumber"
-                :items="ninth_items" :district-headquarter-commander="districtExpert" :data="reportData.ninth"
-                :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.ninth" />
+                           :items="ninth_items" :district-headquarter-commander="districtExpert"
+                           :data="reportData.ninth"
+                           :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.ninth"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -123,8 +139,8 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <tenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                @getDataDHFirst="setDataDH" @getDataDHSecond="setDataDH" :data="reportData.tenth"
-                :is-error-panel="isErrorPanel.tenth" />
+                           @getDataDHFirst="setDataDH" @getDataDHSecond="setDataDH" :data="reportData.tenth"
+                           :is-error-panel="isErrorPanel.tenth"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -132,15 +148,15 @@
               11. Активность РО&nbsp;РСО в&nbsp;социальных сетях &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <eleventh-panel 
-                :districtExpert="districtExpert" 
-                :centralExpert="centralExpert" 
-                @get-data="setData"
-                @get-data-DH="setDataDH" 
-                @get-data-CH="setDataCH" 
-                @get-return-report="setReturnReport"
-                :data="reportData.eleventh"
-                :is-error-panel="isErrorPanel.eleventh" />
+              <eleventh-panel
+                  :districtExpert="districtExpert"
+                  :centralExpert="centralExpert"
+                  @get-data="setData"
+                  @get-data-DH="setDataDH"
+                  @get-data-CH="setDataCH"
+                  @get-return-report="setReturnReport"
+                  :data="reportData.eleventh"
+                  :is-error-panel="isErrorPanel.eleventh"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -149,8 +165,8 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <twelfth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.twelfth"
-                :is-error-panel="isErrorPanel.twelfth" />
+                             @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.twelfth"
+                             :is-error-panel="isErrorPanel.twelfth"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -159,8 +175,8 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <thirteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.thirteenth"
-                :is-error-panel="isErrorPanel.thirteenth" />
+                                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.thirteenth"
+                                :is-error-panel="isErrorPanel.thirteenth"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -171,7 +187,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                text="Показатель рассчитывается автоматически на&nbsp;основе данных из&nbsp;12&nbsp;и&nbsp;13&nbsp;показателей." />
+                  text="Показатель рассчитывается автоматически на&nbsp;основе данных из&nbsp;12&nbsp;и&nbsp;13&nbsp;показателей."/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -184,7 +200,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
+                  text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО."/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -194,7 +210,8 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <sixteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data-DH="setDataDH"
-                @get-data="setData" :data="reportData.sixteenth" :is-error-panel="isErrorPanel.sixteenth" />
+                               @get-data="setData" :data="reportData.sixteenth"
+                               :is-error-panel="isErrorPanel.sixteenth"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -203,7 +220,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <seventeenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.seventeenth" :is-sent="blockSendButton" />
+                                 :data="reportData.seventeenth" :is-sent="blockSendButton"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -212,7 +229,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <eighteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.eighteenth" :is-sent="blockSendButton" />
+                                :data="reportData.eighteenth" :is-sent="blockSendButton"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -221,41 +238,43 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <nineteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.nineteenth" :is-sent="blockSendButton" />
+                                :data="reportData.nineteenth" :is-sent="blockSendButton"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
       </div>
     </div>
-    <Button v-if="!preloader" variant="text" label="Отправить отчет" size="large" @click="sendReport" />
+    <Button v-if="!preloader" variant="text" label="Отправить отчет" size="large" @click="sendReport"/>
   </div>
 </template>
 <script setup>
 import {
   CalculatedPanel,
+  EighteenthPanel,
+  EleventhPanel,
+  FifthPanel,
   FirstPanel,
   FourthPanel,
-  FifthPanel,
-  SixthPanel,
+  NineteenthPanel,
   NinthPanel,
-  TenthPanel,
-  EleventhPanel,
-  TwelfthPanel,
-  ThirteenthPanel,
-  SixteenthPanel,
   SeventeenthPanel,
-  EighteenthPanel,
-  NineteenthPanel
+  SixteenthPanel,
+  SixthPanel,
+  TenthPanel,
+  ThirteenthPanel,
+  TwelfthPanel
 } from './components/index'
-import { Button } from '@shared/components/buttons';
-import { inject, onMounted, ref, watch } from "vue";
-import { SvgIcon } from '@shared/ui/SvgIcon';
-import { useRoleStore } from "@layouts/store/role.ts";
-import { HTTP } from '@app/http';
-import { reportPartTwoService } from "@services/ReportService.ts";
-import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
-import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
-import { checkEmptyFieldsDH } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
+import {Button} from '@shared/components/buttons';
+import {onMounted, ref, watch} from "vue";
+import {SvgIcon} from '@shared/ui/SvgIcon';
+import {useRoleStore} from "@layouts/store/role.ts";
+import {HTTP} from '@app/http';
+import {reportPartTwoService} from "@services/ReportService.ts";
+import {useRoute, useRouter} from "vue-router";
+import {useReportPartTwoStore} from "@pages/ReportRegionalHQPartTwoPage/store.ts";
+// import { checkEmptyFieldsDH } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
+import swal from '@/library/sweetalert2/sweetalert2.esm.all.min.js';
+import {checkEmptyFieldsDH} from "@pages/ReportRegionalHQPartTwoPage/Helpers.js";
 
 const reportStore = useReportPartTwoStore();
 
@@ -298,6 +317,9 @@ const reportDataDH = ref({
 });
 
 const reportDataCH = ref({
+  first: {},
+  fourth: null,
+  fifth: null,
   six: {},
   ninth: {},
   eleventh: null,
@@ -317,8 +339,9 @@ const six_items = ref([])
 const ninth_items = ref([]);
 const blockSendButton = ref(false);
 const blockEditFirstReport = ref(false);
+const preloader_text = ref('Загрузка отчета может занять до 1 минуты.')
 
-const swal = inject('$swal');
+// const swal = inject('$swal');
 const router = useRouter();
 
 const isErrorPanel = ref({
@@ -361,9 +384,9 @@ const downloadReportAll = (id) => {
     document.body.appendChild(link);
     link.click();
   })
-    .catch(function (error) {
-      console.log('an error occured ' + error);
-    });
+      .catch(function (error) {
+        console.log('an error occured ' + error);
+      });
 };
 
 const getItems = async (number) => {
@@ -373,9 +396,9 @@ const getItems = async (number) => {
       case 6:
         six_items.value = response.data;
         break;
-      // case 7:
-      //   seventh_items.value = response.data;
-      //   break;
+        // case 7:
+        //   seventh_items.value = response.data;
+        //   break;
       case 9:
         ninth_items.value = response.data;
         break;
@@ -428,8 +451,17 @@ const getMultiplyData = async (isExpert, reportId) => {
       if (error.response && error.response.status === 404) {
         return {
           id: item.id, data: {
-            is_sent: false, verified_by_chq: null, verified_by_dhq: false, score: 0.0, regional_version: null, district_version: null, central_version: null, rejecting_reasons: null, number_of_members: 0,
-            links: [], comment: ""
+            is_sent: false,
+            verified_by_chq: null,
+            verified_by_dhq: false,
+            score: 0.0,
+            regional_version: null,
+            district_version: null,
+            central_version: null,
+            rejecting_reasons: null,
+            number_of_members: 0,
+            links: [],
+            comment: ""
           }
         };
       } else {
@@ -457,16 +489,26 @@ const getMultiplyData = async (isExpert, reportId) => {
   const ninthDataPromises = ninth_items.value.map(async (item) => {
     try {
       if (!isExpert) {
-        return { id: item.id, data: (await reportPartTwoService.getMultipleReport('9', item.id)).data };
+        return {id: item.id, data: (await reportPartTwoService.getMultipleReport('9', item.id)).data};
       } else {
-        return { id: item.id, data: (await reportPartTwoService.getMultipleReportDH('9', item.id, reportId)).data };
+        return {id: item.id, data: (await reportPartTwoService.getMultipleReportDH('9', item.id, reportId)).data};
       }
     } catch (error) {
       if (error.response && error.response.status === 404) {
         return {
           id: item.id, data: {
-            is_sent: false, verified_by_chq: null, verified_by_dhq: false, score: 0.0, regional_version: null, district_version: null, central_version: null, rejecting_reasons: null, event_happened: false, document: '',
-            links: [], comment: ""
+            is_sent: false,
+            verified_by_chq: null,
+            verified_by_dhq: false,
+            score: 0.0,
+            regional_version: null,
+            district_version: null,
+            central_version: null,
+            rejecting_reasons: null,
+            event_happened: false,
+            document: '',
+            links: [],
+            comment: ""
           }
         };
       } else {
@@ -520,8 +562,7 @@ const getMultiplyData = async (isExpert, reportId) => {
         id: result.id,
         error: false,
       }
-    }
-    else { 
+    } else {
       reportData.value.ninth[result.id] = result.data;
       if (reportData.value.ninth[result.id]?.regional_version !== null && Object.keys(reportData.value.ninth[result.id]).length) {
         reportData.value.ninth[result.id] = JSON.parse(reportData.value.ninth[result.id].regional_version);
@@ -536,25 +577,37 @@ const getMultiplyData = async (isExpert, reportId) => {
 }
 const getReportData = async (reportId) => {
   try {
+    // Загрузка данных для отчета эксперта ЦШ
     if (centralExpert.value) {
+      /*
+      * Критерий 1
+      */
+      reportStore.reportForCheckCH.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
+      /*
+      * Критерий 4
+      */
+      reportStore.reportForCheckCH.fourth = (await reportPartTwoService.getReportDH('4', reportId)).data;
+
       // Критерий 11
       const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
       reportData.value.eleventh = JSON.parse(dataEleventh.regional_version);
-      console.log('данные РШ для ЦШ 11', reportData.value.eleventh);//---------------------------------
+      // console.log('данные РШ для ЦШ 11', reportData.value.eleventh);//---------------------------------
       // dataEleventh.district_version 
       // ? reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version) :
       reportStore.reportDataDH.eleventh = dataEleventh;
-      console.log('данные ОШ для ЦШ 11', reportStore.reportDataDH.eleventh);//----------------
+      // console.log('данные ОШ для ЦШ 11', reportStore.reportDataDH.eleventh);//----------------
       reportStore.reportDataCH.eleventh = Object.assign({}, dataEleventh);
       reportStore.reportDataCH.eleventh.comment = '';
+
       // Критерий 12
       const dataTwelfth = (await reportPartTwoService.getReportDH('12', reportId)).data;
       reportData.value.twelfth = JSON.parse(dataTwelfth.regional_version);
-      console.log('данные РШ для ЦШ 12', reportData.value.twelfth);//---------------------------------
+      // console.log('данные РШ для ЦШ 12', reportData.value.twelfth);//---------------------------------
       reportStore.reportDataDH.twelfth = dataTwelfth;
-      console.log('данные ОШ для ЦШ 12', reportStore.reportDataDH.twelfth);//-------------------------
+      // console.log('данные ОШ для ЦШ 12', reportStore.reportDataDH.twelfth);//-------------------------
       reportStore.reportDataCH.twelfth = Object.assign({}, dataTwelfth);
       reportStore.reportDataCH.twelfth.comment = '';
+
       // Критерий 13
       const dataThirteenth = (await reportPartTwoService.getReportDH('13', reportId)).data;
       reportData.value.thirteenth = JSON.parse(dataThirteenth.regional_version);
@@ -564,7 +617,7 @@ const getReportData = async (reportId) => {
       reportStore.reportDataCH.thirteenth = Object.assign({}, dataThirteenth);
       reportStore.reportDataCH.thirteenth.comment = '';
     }
-
+    // Загрузка данных для отчета эксперта ОШ
     else if (districtExpert.value && typeof reportId != "undefined") {
       reportData.value.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
       reportStore.reportDataDH.first = Object.assign({}, reportData.value.first);
@@ -607,30 +660,62 @@ const getReportData = async (reportId) => {
       reportData.value.seventeenth = (await reportPartTwoService.getReportDH('17', reportId)).data;
       reportData.value.eighteenth = (await reportPartTwoService.getReportDH('18', reportId)).data;
       reportData.value.nineteenth = (await reportPartTwoService.getReportDH('19', reportId)).data;
-    } else {
+    }
+    // Загрузка данных для отчета командира РШ
+    else {
       try {
-        reportData.value.first = (await reportPartTwoService.getReport('1')).data;
+        // reportData.value.first = (await reportPartTwoService.getReport('1')).data;
+        const dataFirst = (await reportPartTwoService.getReport('1')).data;
+        if (!dataFirst.regional_version) {
+          reportData.value.first = dataFirst;
+        } else {
+          reportData.value.first = JSON.parse(dataFirst.regional_version);
+        }
       } catch (e) {
         console.log(e.message)
       }
       try {
-        reportData.value.fourth = (await reportPartTwoService.getReport('4')).data;
+        // reportData.value.fourth = (await reportPartTwoService.getReport('4')).data;
+        const dataFourth = (await reportPartTwoService.getReport('4')).data;
+        if (!dataFourth.regional_version) {
+          reportData.value.fourth = dataFourth;
+        } else {
+          reportData.value.fourth = JSON.parse(dataFourth.regional_version);
+        }
       } catch (e) {
         console.log(e.message)
       }
       try {
-        reportData.value.fifth = (await reportPartTwoService.getReport('5')).data;
+        // reportData.value.fifth = (await reportPartTwoService.getReport('5')).data;
+        const dataFifth = (await reportPartTwoService.getReport('5')).data;
+        if (!dataFifth.regional_version) {
+          reportData.value.fifth = dataFifth;
+        } else {
+          reportData.value.fifth = JSON.parse(dataFifth.regional_version);
+        }
       } catch (e) {
         console.log(e.message)
       }
       await getMultiplyData(false);
       try {
-        reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
+        // reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
+        const dataTenthFirst = (await reportPartTwoService.getMultipleReport('10', '1')).data;
+        if (!dataTenthFirst.regional_version) {
+          reportData.value.tenth.first = dataTenthFirst;
+        } else {
+          reportData.value.tenth.first = JSON.parse(dataTenthFirst.regional_version);
+        }
       } catch (e) {
         console.log(e.message)
       }
       try {
-        reportData.value.tenth.second = (await reportPartTwoService.getMultipleReport('10', '2')).data;
+        // reportData.value.tenth.second = (await reportPartTwoService.getMultipleReport('10', '2')).data;
+        const dataTenthSecond = (await reportPartTwoService.getMultipleReport('10', '2')).data;
+        if (!dataTenthSecond.regional_version) {
+          reportData.value.tenth.second = dataTenthSecond;
+        } else {
+          reportData.value.tenth.second = JSON.parse(dataTenthSecond.regional_version);
+        }
       } catch (e) {
         console.log(e.message)
       }
@@ -665,12 +750,23 @@ const getReportData = async (reportId) => {
         console.log(e.message)
       }
       try {
-        reportData.value.sixteenth = (await reportPartTwoService.getReport('16')).data;
-        // TODO: продумать логику блокировки кнопки, когда все отчеты отправлены
+        // reportData.value.sixteenth = (await reportPartTwoService.getReport('16')).data;
+        // if (reportData.value.sixteenth.is_sent) {
+        //   blockSendButton.value = true;
+        //   blockEditFirstReport.value = true;
+        // }
+
+        const dataSixteenth = (await reportPartTwoService.getReport('16')).data;
+        if (!dataSixteenth.regional_version) {
+          reportData.value.sixteenth = dataSixteenth;
+        } else {
+          reportData.value.sixteenth = JSON.parse(dataSixteenth.regional_version);
+        }
         if (reportData.value.sixteenth.is_sent) {
           blockSendButton.value = true;
           blockEditFirstReport.value = true;
         }
+
       } catch (e) {
         console.log(e.message)
       }
@@ -715,7 +811,7 @@ const getReportData = async (reportId) => {
     }
   } catch (e) {
     // errorHandler(e, id);
-    console.log('getReportData error: ', e)
+    console.log('getReportData error: ', e.message)
   } finally {
     preloader.value = false;
   }
@@ -736,9 +832,9 @@ const setData = (data, panel, number = 0) => {
     case 6:
       reportData.value.six[number] = data
       break;
-    // case 7:
-    //   reportData.value.seventh[number] = data
-    //   break;
+      // case 7:
+      //   reportData.value.seventh[number] = data
+      //   break;
     case 9:
       reportData.value.ninth[number] = data
       break;
@@ -820,6 +916,14 @@ const setDataDH = (data, panel, number) => {
 
 const setDataCH = (data, panel, number) => {
   switch (panel) {
+    case 1:
+      reportDataCH.value.first = data;
+      console.log('1', ...reportDataCH.value.first);
+      break;
+    case 4:
+      reportDataCH.value.fourth = data;
+      console.log('4', ...reportDataCH.value.fourth);
+      break;
     case 6:
       reportDataCH.value.six[number] = data;
       break;
@@ -973,8 +1077,6 @@ const sendReport = async () => {
           await reportPartTwoService.sendReport(reportData.value.sixteenth, '16');
         }
 
-
-
         await getReportData(route.query.reportId);
         blockSendButton.value = true;
 
@@ -1023,8 +1125,6 @@ const sendReport = async () => {
       if (!reportData.value.fifth.verified_by_dhq) {
         await reportPartTwoService.sendReportDH(reportDataDH.value.fifth, '5', route.query.reportId, true)
       }
-
-
 
       for (let i in reportData.value.six) {
         if (!reportData.value.six[i].verified_by_dhq) {
@@ -1086,42 +1186,49 @@ const sendReport = async () => {
     }
     // } else {
     // blockSendButton.value = false;
-    // } 
+    // }
   }
 
   if (centralExpert.value) {
     blockSendButton.value = true;
     // if (checkEmptyFieldsDH(reportStore.reportDataCH, isErrorPanel)) {
-      preloader.value = true;
-      try {
-
-        if (!reportData.value.eleventh.verified_by_chq) {
-          console.log('return при отпр', returnReport.value.eleventh);//---------------
-          await reportPartTwoService.sendReportCH(reportDataCH.value.eleventh, '11', route.query.reportId, true, returnReport.value.eleventh);
-
-          swal.fire({
-          position: 'center',
-          icon: 'success',
-          // Скорректировать сообщение
-          title: 'Отчет успешно верифицирован',
-          showConfirmButton: false,
-          timer: 1500,
-        });
+    preloader.value = true;
+    try {
+      if (!reportData.value.first.verified_by_chq) {
+        await reportPartTwoService.sendReportCH(reportDataCH.value.first, '1', route.query.reportId, true, reportStore.returnReport.first);
       }
-      } catch (e) {
-        blockSendButton.value = false;
-        swal.fire({
-          position: 'center',
-          icon: 'error',
-          // title: `ошибка`,
-          title: `ошибка ${e.request.response}`,
-          showConfirmButton: false,
-          timer: 2500,
-        })
-        console.log('sendReportCH error: ', e)
-      } finally {
-        preloader.value = false;
+
+      if (!reportData.value.fourth.verified_by_chq) {
+        await reportPartTwoService.sendReportCH(reportDataCH.value.fourth, '4', route.query.reportId, true, reportStore.returnReport.fourth);
       }
+
+      if (!reportData.value.eleventh.verified_by_chq) {
+        console.log('return при отпр', returnReport.value.eleventh);//---------------
+        await reportPartTwoService.sendReportCH(reportDataCH.value.eleventh, '11', route.query.reportId, true, returnReport.value.eleventh);
+      }
+
+      swal.fire({
+        position: 'center',
+        icon: 'success',
+        // Скорректировать сообщение
+        title: 'Отчет успешно верифицирован',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (e) {
+      blockSendButton.value = false;
+      swal.fire({
+        position: 'center',
+        icon: 'error',
+        // title: `ошибка`,
+        title: `ошибка ${e.request.response}`,
+        showConfirmButton: false,
+        timer: 2500,
+      })
+      console.log('sendReportCH error: ', e)
+    } finally {
+      preloader.value = false;
+    }
     // } else {
     //   blockSendButton.value = false;
     // }
@@ -1407,60 +1514,57 @@ const checkEmptyFields = (data) => {
 }
 
 watch(
-  () => roleStore.experts,
+    () => roleStore.experts,
 
-  () => {
-    if (roleStore.experts?.is_district_expert) {
-      districtExpert.value = true;
-      console.log('окружной эксперт', districtExpert.value);
-    }
-    if (roleStore.experts?.is_central_expert) {
+    () => {
+      if (roleStore.experts?.is_district_expert) {
+        districtExpert.value = true;
+        console.log('окружной эксперт', districtExpert.value);
+      }
+      if (roleStore.experts?.is_central_expert) {
 
-      centralExpert.value = true;
-      console.log('центральный эксперт', centralExpert.value);
-    }
-  },
-  {
-    immediate: true,
-    deep: true,
-  },
+        centralExpert.value = true;
+        console.log('центральный эксперт', centralExpert.value);
+      }
+    },
+    {
+      immediate: true,
+      deep: true,
+    },
 )
 
 watch(
-  () => route.query.reportId,
+    () => route.query.reportId,
 
-  async (newId) => {
-    if (!newId) return
-    preloader.value = true;
-    await getReportData(newId);
-  },
+    async (newId) => {
+      if (!newId) return
+      preloader.value = true;
+      await getReportData(newId);
+    },
 
-  {
-    immediate: true,
-    deep: true,
-  },
+    {
+      immediate: true,
+      deep: true,
+    },
 );
 
 watch(
-  () => route.path,
+    () => route.path,
 
-  async (newUrl) => {
-    if (roleStore.roles.regionalheadquarter_commander && typeof (route.query.reportId) === 'undefined') {
-      if (newUrl.includes('reporting-ro/report-regional-two')) {
-        preloader.value = true;
-        console.log(1);
-        await getReportData();
+    async (newUrl) => {
+      if (roleStore.roles.regionalheadquarter_commander && typeof (route.query.reportId) === 'undefined') {
+        if (newUrl.includes('reporting-ro/report-regional-two')) {
+          preloader.value = true;
+          console.log(1);
+          await getReportData();
+        }
       }
-    }
-  },
-  {
-    immediate: true,
-    deep: true,
-  },
+    },
+    {
+      immediate: true,
+      deep: true,
+    },
 );
-
-
-
 
 onMounted(() => {
   // console.log('roleStore.experts', roleStore.experts)
@@ -1471,8 +1575,6 @@ onMounted(() => {
   console.log('ddd', route.query.reportId)
   getItems(6);
   getItems(9);
-
-
 });
 
 </script>
@@ -1500,6 +1602,7 @@ onMounted(() => {
   font-size: 14px;
   font-weight: 600;
   line-height: 16.8px;
+  padding: 40px 0 40px 0;
 }
 
 .download-item {
@@ -1528,7 +1631,7 @@ onMounted(() => {
   text-align: left;
 }
 
-.v-expansion-panel--active>.v-expansion-panel-title {
+.v-expansion-panel--active > .v-expansion-panel-title {
   border-radius: 10px;
   min-height: none;
   border-left: none;
@@ -1536,7 +1639,7 @@ onMounted(() => {
 }
 
 .v-expansion-panel-title.visible-error,
-.v-expansion-panel--active>.v-expansion-panel-title.visible-error {
+.v-expansion-panel--active > .v-expansion-panel-title.visible-error {
   border-color: #db0000;
 }
 
@@ -1549,7 +1652,7 @@ onMounted(() => {
 }
 
 .v-expansion-panel--active:not(:first-child),
-.v-expansion-panel--active+.v-expansion-panel {
+.v-expansion-panel--active + .v-expansion-panel {
   margin-top: 0;
   opacity: unset;
 }

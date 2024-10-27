@@ -93,8 +93,9 @@ import { FileBoxComponent } from "@entities/RatingRoComponents/components";
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 import { SvgIcon } from '@shared/index';
+import swal from '@/library/sweetalert2/sweetalert2.esm.all.min.js';
 
-const swal = inject('$swal');
+// const swal = inject('$swal');
 
 const props = defineProps({
   districtExpert: {
