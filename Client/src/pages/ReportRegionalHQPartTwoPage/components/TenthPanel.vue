@@ -60,7 +60,7 @@ import {reportPartTwoService} from "@services/ReportService.ts";
 import {fileValidate} from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 import {useReportPartTwoStore} from "@pages/ReportRegionalHQPartTwoPage/store.ts";
 
-const swal = inject('$swal');
+// const swal = inject('$swal');
 const reportStore = useReportPartTwoStore();
 
 const props = defineProps({
@@ -166,19 +166,19 @@ const formData = async (reportData, reportNumber) => {
     }
   } catch (e) {
     console.log('tenth panel error: ', e);
-    if (e.response.data.links.length) {
-      for (let i of e.response.data.links) {
-        if (Object.keys(i).length !== 0 && i.link.includes('Введите правильный URL.')) {
-          swal.fire({
-            position: 'center',
-            icon: 'warning',
-            title: `Введите корректный URL`,
-            showConfirmButton: false,
-            timer: 2500,
-          })
-        }
-      }
-    }
+    // if (e.response.data.links.length) {
+    //   for (let i of e.response.data.links) {
+    //     if (Object.keys(i).length !== 0 && i.link.includes('Введите правильный URL.')) {
+    //       swal.fire({
+    //         position: 'center',
+    //         icon: 'warning',
+    //         title: `Введите корректный URL`,
+    //         showConfirmButton: false,
+    //         timer: 2500,
+    //       })
+    //     }
+    //   }
+    // }
   }
 };
 

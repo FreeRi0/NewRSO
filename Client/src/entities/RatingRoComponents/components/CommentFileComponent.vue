@@ -44,7 +44,7 @@ const props = defineProps({
         default: false,
     },
     fileSize: {
-        type: Number,
+        type: [Number, String],
         default: null,
     },
     isErrorFile: {
