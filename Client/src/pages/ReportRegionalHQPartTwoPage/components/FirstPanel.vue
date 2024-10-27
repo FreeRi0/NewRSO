@@ -411,19 +411,19 @@ watchEffect(async () => {
   // Мапинг данных для отчета эксперта ЦШ
   if (reportStore.reportForCheckCH.first && props.centralExpert) {
     // Добавление данных панели "отчет РО"
-    firstPanelData.value.comment = reportStore.reportForCheckCH.first.comment;
-    firstPanelData.value.amount_of_money = reportStore.reportForCheckCH.first.amount_of_money;
-    firstPanelData.value.scan_file = reportStore.reportForCheckCH.first.scan_file || '';
-    firstPanelData.value.file_type = reportStore.reportForCheckCH.first.file_type || '';
-    firstPanelData.value.file_size = reportStore.reportForCheckCH.first.file_size || '';
+    const reportDataDH = JSON.parse(reportStore.reportForCheckCH.first.regional_version);
+    firstPanelData.value.comment = reportDataDH.comment || '';
+    firstPanelData.value.amount_of_money = reportDataDH.amount_of_money;
+    firstPanelData.value.scan_file = reportDataDH.scan_file || null;
+    firstPanelData.value.file_type = reportDataDH.file_type || null;
+    firstPanelData.value.file_size = reportDataDH.file_size || null;
 
     // Добавление данных панели "корректировка ОШ"
-    const reportDataDH = JSON.parse(reportStore.reportForCheckCH.first.regional_version);
-    firstPanelDataDH.value.comment = reportDataDH.comment || '';
-    firstPanelDataDH.value.amount_of_money = reportDataDH.amount_of_money;
-    fileNameDH.value = reportDataDH.scan_file || null;
-    fileTypeDH.value = reportDataDH.file_type || null;
-    fileSizeDH.value = reportDataDH.file_size || null;
+    firstPanelDataDH.value.comment = reportStore.reportForCheckCH.first.comment;
+    firstPanelDataDH.value.amount_of_money = reportStore.reportForCheckCH.first.amount_of_money;
+    fileNameDH.value = reportStore.reportForCheckCH.first.scan_file || '';
+    fileTypeDH.value = reportStore.reportForCheckCH.first.file_type || '';
+    fileSizeDH.value = reportStore.reportForCheckCH.first.file_size || '';
 
     // Добавление данных из стора для панели "корректировка ЦШ"
     firstPanelDataCH.value.amount_of_money = reportStore.reportDataCH.first.amount_of_money;

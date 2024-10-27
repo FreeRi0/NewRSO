@@ -82,8 +82,15 @@
               трудовых проектов РСО
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <fifth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                           @get-data-DH="setDataDH" :data="reportData.fifth" :is-error-panel="isErrorPanel.fifth"/>
+              <fifth-panel 
+                :districtExpert="districtExpert"
+                :centralExpert="centralExpert" 
+                @get-data="setData"
+                @get-data-DH="setDataDH"
+                @get-data-CH="setDataCH"
+                :data="reportData.fifth"
+                :is-error-panel="isErrorPanel.fifth"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -587,6 +594,10 @@ const getReportData = async (reportId) => {
       * Критерий 4
       */
       reportStore.reportForCheckCH.fourth = (await reportPartTwoService.getReportDH('4', reportId)).data;
+      /*
+      * Критерий 5
+      */
+      reportStore.reportForCheckCH.fifth = (await reportPartTwoService.getReportDH('5', reportId)).data;
 
       // Критерий 11
       const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
@@ -924,6 +935,10 @@ const setDataCH = (data, panel, number) => {
       reportDataCH.value.fourth = data;
       console.log('4', ...reportDataCH.value.fourth);
       break;
+    case 5:
+      reportDataCH.value.fifth = data;
+      console.log('5', ...reportDataCH.value.fifth);
+      break;  
     case 6:
       reportDataCH.value.six[number] = data;
       break;
@@ -1200,6 +1215,10 @@ const sendReport = async () => {
 
       if (!reportData.value.fourth.verified_by_chq) {
         await reportPartTwoService.sendReportCH(reportDataCH.value.fourth, '4', route.query.reportId, true, reportStore.returnReport.fourth);
+      }
+
+      if (!reportData.value.fifth.verified_by_chq) {
+        await reportPartTwoService.sendReportCH(reportDataCH.value.fifth, '5', route.query.reportId, true, reportStore.returnReport.fifth);
       }
 
       if (!reportData.value.eleventh.verified_by_chq) {

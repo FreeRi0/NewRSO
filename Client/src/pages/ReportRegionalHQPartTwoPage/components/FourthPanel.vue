@@ -372,8 +372,8 @@
               class="form__field-delete-button"
               v-if="index > 0 && !props.centralExpert"
               label="Удалить мероприятие"
-              @click="deleteEventDH(index)"
           />
+          <!--@click="deleteEventDH(index)"-->
         </div>
         <div class="form__field-date">
           <div class="form__field">
@@ -469,9 +469,6 @@
     </template>
 
     <template v-slot:thirdTab>
-      <!--      <div>-->
-      <!--        <Button style="margin-right: 0" label="Удалить мероприятие" size="large"/>-->
-      <!--      </div>-->
       <div v-for="(eventCH, index) in commonData" :key="index" class="form__field-fourth-panel">
         <label class="form__label">Количество человек, принявших участие в мероприятии <sup
             class="valid-red">*</sup></label>
@@ -594,9 +591,6 @@
           </tr>
           </tbody>
         </v-table>
-        <!--      <div>-->
-        <!--        <Button style="margin: 0" label="Добавить мероприятие" size="large"/>-->
-        <!--      </div>-->
       </div>
 
       <div class="form__field">
@@ -879,7 +873,7 @@ const onReportReturn = (event) => {
 
     emit('getDataCH', formData, 4);
   } else {
-    reportStore.returnReport.first = false;
+    reportStore.returnReport.fourth = false;
     reportStore.reportDataCH.fourth.events = [];
     commonData.value.forEach(e => {
       reportStore.reportDataCH.fourth.events.push(e.dataCH)
@@ -907,21 +901,23 @@ onMounted(() => {
 
   // Мапинг данных для отчета эксперта ЦШ
   if (reportStore.reportForCheckCH.fourth && props.centralExpert) {
-    // Добавление данных панели "отчет РО"
-    events.value = reportStore.reportForCheckCH.fourth.events;
     const eventQuantity = reportStore.reportForCheckCH.fourth.events.length;
 
+    // Добавление данных панели "отчет РО"
+    const reportDataRH = JSON.parse(reportStore.reportForCheckCH.fourth.regional_version);
+    events.value = reportDataRH.events;
+    fourthPanelData.value.comment = reportDataRH.comment || '';
+
     // Добавление данных панели "корректировка ОШ"
-    const reportDataDH = JSON.parse(reportStore.reportForCheckCH.fourth.regional_version);
-    fourthPanelDataDH.value.events = reportDataDH.events;
-    fourthPanelDataDH.value.comment = reportDataDH.comment || '';
+    fourthPanelDataDH.value.events = reportStore.reportForCheckCH.fourth.events;
+    fourthPanelDataDH.value.comment = reportStore.reportForCheckCH.fourth.comment;
 
     // Добавление данных из стора для панели "корректировка ЦШ"
-    commentCH.value = reportStore.reportDataCH.fourth.comment;
+    commentCH.value = reportStore.reportDataCH.fourth.comment || '';
     for (let i = 0; i < eventQuantity; i++) {
       commonData.value[i] = {
-        dataRH: reportStore.reportForCheckCH.fourth.events[i],
-        dataDH: reportDataDH.events[i],
+        dataRH: reportDataRH.events[i],
+        dataDH: reportStore.reportForCheckCH.fourth.events[i],
         dataCH: reportStore.reportDataCH.fourth.events ? reportStore.reportDataCH.fourth.events[i] : {
           participants_number: '',
           start_date: null,
