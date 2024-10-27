@@ -15,7 +15,7 @@
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()"
             @formData="formData($event, item.id)" @formDataDH="formDataDH($event, item.id)" @formDataCH="formDataCH($event, item.id)" @error="setError"
-            @getPanelNumber="getPanelNumber($event)" @getId="getId($event)" @returnToRo="returnToRo($event)" :data="sixPanelData" :six-id="item.id"
+            @getPanelNumber="getPanelNumber($event)" @getId="getId($event)"  @get-return-report="getReturnReport" :data="sixPanelData" :six-id="item.id"
             :is-sent-six="isSentSix" :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item">
@@ -50,7 +50,7 @@ const setError = (err) => {
 
 const isFirstSent = ref(null);
 const isSentSix = ref(false);
-const emit = defineEmits(['getData', 'getDataDH', 'returnToRo', 'getDataCH', 'getId', 'getPanelNumber']);
+const emit = defineEmits(['getData', 'getDataDH', 'getDataCH',   'getReturnReport',  'getId', 'getPanelNumber']);
 
 const sixPanelData = ref({
   number_of_members: 0,
@@ -65,9 +65,8 @@ const sixPanelData = ref({
 //   comment: '',
 // });
 
-const returnToRo = (checked) => {
-    emit('returnToRo', checked);
-    console.log('returnToRo6-2', checked);
+const getReturnReport = (event) => {
+  emit("getReturnReport", event);
 };
 
 
