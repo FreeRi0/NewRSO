@@ -77,12 +77,13 @@
             name="thirteenthPanelData.comment"
             @change="uploadFileDH"
             @click="deleteFileDH"
-            :file="reportStore.reportDataDHFile.thirteenth ? reportStore.reportDataDHFile.thirteenth.name : null"
-            :fileType="reportStore.reportDataDHFile.thirteenth ? reportStore.reportDataDHFile.thirteenth.type.split('/').at(-1) : null"
-            :fileSize="reportStore.reportDataDHFile.thirteenth ? reportStore.reportDataDHFile.thirteenth.size / Math.pow(1024, 2) : null"
+            :file="fileNameDH"
+            :fileType="fileTypeDH"
+            :fileSize="fileSizeDH"
             :disabled="centralExpert"
             :is-error-file="isErrorFile"
             :is-error-panel="isErrorPanel"
+            :is-sent="centralExpert"
         ></CommentFileComponent>
     </div>
 
@@ -116,7 +117,10 @@
         ></CommentFileComponent>
 
         <div>
-            <v-checkbox label="Вернуть в&nbsp;РО на&nbsp;доработку" />
+            <v-checkbox 
+                v-model="reportStore.returnReport.thirteenth"
+                label="Вернуть в&nbsp;РО на&nbsp;доработку"
+                @change="onReturnReport" />
         </div>
     </div>
 </template>
@@ -151,8 +155,6 @@ const props = defineProps({
         default: false,
     },
     data: Object,
-    // dataDH: Object,
-    // dataCH: Object,
     isErrorPanel: {
         type: Boolean,
     },
@@ -193,7 +195,6 @@ const emit = defineEmits([
     'getData', 
     'getDataDH', 
     'getDataCH', 
-    // 'getFileDH'
 ]);
 
 const focusOut = async () => {
@@ -244,6 +245,7 @@ const deleteFileDH = async () => {
     thirteenthPanelDataDH.value.scan_file = '';
 
     // if (!isErrorFile.value) {
+        fileNameDH.value = null;
         reportStore.reportDataDHFile.thirteenth = null;
     // }
 };
@@ -251,6 +253,26 @@ const deleteFileDH = async () => {
 const deleteFileCH = async () => {
   thirteenthPanelDataCH.value.scan_file = '';
   reportStore.reportDataCHFile.thirteenth = null;
+}
+
+let fileNameDH = ref(null);
+let fileTypeDH = ref(null);
+let fileSizeDH = ref(null);
+
+const onReturnReport = (event) => {
+  let formData = new FormData();
+  formData.append('number_of_members', thirteenthPanelDataCH.value.number_of_members);
+  formData.append('comment', thirteenthPanelDataCH.value.comment);
+  formData.append('scan_file', reportStore.reportDataCHFile.thirteenth || '');
+  
+  if (event.target.checked) {
+    reportStore.returnReport.thirteenth = true;
+    formData.append('reasons[comment]', thirteenthPanelDataCH.value.comment);
+  } else {
+    reportStore.returnReport.thirteenth = false;
+  }
+
+  emit('getDataCH', formData, Number(ID_PANEL));
 }
 
 watchEffect(async () => {
@@ -272,6 +294,17 @@ watchEffect(async () => {
             isSent.value = props.data.is_sent;
         }
     }
+    if (props.districtExpert) {
+        if (reportStore.reportDataDHFile.thirteenth) {
+            fileNameDH.value = reportStore.reportDataDHFile.thirteenth.name;
+            fileTypeDH.value = reportStore.reportDataDHFile.thirteenth.type.split('/').at(-1);
+            fileSizeDH.value = reportStore.reportDataDHFile.thirteenth.size / Math.pow(1024, 2);
+        }
+    } else if (props.centralExpert) {
+        fileNameDH.value = reportStore.reportDataDH.thirteenth.scan_file;
+        fileTypeDH.value = reportStore.reportDataDH.thirteenth.file_type;
+        fileSizeDH.value = reportStore.reportDataDH.thirteenth.file_size;
+    }
 }, {
     flush: 'post'
 });
@@ -286,39 +319,36 @@ watchPostEffect(() => {
 });
 
 watch(thirteenthPanelDataDH.value, () => {
-  reportStore.reportDataDH.thirteenth = thirteenthPanelDataDH.value;
+    if (props.districtExpert) {
+        reportStore.reportDataDH.thirteenth = thirteenthPanelDataDH.value;
 
-  let formData = new FormData();
+        let formData = new FormData();
 
-  thirteenthPanelDataDH.value.number_of_members 
-  ? formData.append('number_of_members', thirteenthPanelDataDH.value.number_of_members) 
-  : formData.append('number_of_members', '');
+        thirteenthPanelDataDH.value.number_of_members 
+        ? formData.append('number_of_members', thirteenthPanelDataDH.value.number_of_members) 
+        : formData.append('number_of_members', '');
 
-  formData.append('comment', thirteenthPanelDataDH.value.comment || '');
+        formData.append('comment', thirteenthPanelDataDH.value.comment || '');
 
-  reportStore.reportDataDHFile.thirteenth 
-  ? formData.append('scan_file', reportStore.reportDataDHFile.thirteenth) 
-  : formData.append('scan_file', '');
+        reportStore.reportDataDHFile.thirteenth 
+        ? formData.append('scan_file', reportStore.reportDataDHFile.thirteenth) 
+        : formData.append('scan_file', '');
 
-  emit('getDataDH', formData, Number(ID_PANEL));
+        emit('getDataDH', formData, Number(ID_PANEL));
+    }
 });
 
 watch(thirteenthPanelDataCH.value, () => {
-  reportStore.reportDataCH.thirteenth = thirteenthPanelDataCH.value;
+    if (props.centralExpert) {
+        reportStore.reportDataCH.thirteenth = thirteenthPanelDataCH.value;
 
-  let formData = new FormData();
-
-  thirteenthPanelDataCH.value.number_of_members 
-  ? formData.append('number_of_members', thirteenthPanelDataCH.value.number_of_members) 
-  : formData.append('number_of_members', '');
-
-  formData.append('comment', thirteenthPanelDataCH.value.comment || '');
-
-  reportStore.reportDataCHFile.thirteenth 
-  ? formData.append('scan_file', reportStore.reportDataCHFile.thirteenth) 
-  : formData.append('scan_file', '');
-
-  emit('getDataCH', formData, Number(ID_PANEL));
+        let formData = new FormData();
+        formData.append('number_of_members', thirteenthPanelDataCH.value.number_of_members);
+        formData.append('comment', thirteenthPanelDataCH.value.comment);
+        formData.append('scan_file', reportStore.reportDataCHFile.thirteenth || '');
+        if (reportStore.returnReport.thirteenth) formData.append('reasons[comment]', thirteenthPanelDataCH.value.comment);
+        emit('getDataCH', formData, Number(ID_PANEL));
+    }
 });
 </script>
 

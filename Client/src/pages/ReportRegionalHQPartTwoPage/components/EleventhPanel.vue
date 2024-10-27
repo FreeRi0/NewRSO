@@ -38,7 +38,6 @@
         :district-expert="props.districtExpert"
         :data="data"
         @get-dataCH="getDataCH"
-        @get-return-report="getReturnReport"
         is-third-tab
         :is-error-panel="isErrorPanel"
       ></EleventhPanelComponent>
@@ -58,8 +57,6 @@ const props = defineProps({
     type: Boolean
   },
   data: Object,
-  // dataDH: Object,
-  // dataCH: Object,
   isErrorPanel: {
     type: Boolean,
   },
@@ -70,9 +67,7 @@ const ID_PANEL = "11";
 const emit = defineEmits([
   'getData', 
   'getDataDH', 
-  'getDataCH', 
-  'getReturnReport'
-  // 'getFileDH'
+  'getDataCH',
 ]);
 
 const getData = (event) => {
@@ -83,16 +78,8 @@ const getDataDH = (event) => {
   emit("getDataDH", event, Number(ID_PANEL));
 };
 
-// const getFileDH = (event) => {
-//   emit("getFileDH", event, Number(ID_PANEL));
-// };
-
 const getDataCH = (event) => {
   emit("getDataCH", event, Number(ID_PANEL));
-};
-
-const getReturnReport = (event) => {
-  emit("getReturnReport", event, Number(ID_PANEL));
 };
 </script>
 

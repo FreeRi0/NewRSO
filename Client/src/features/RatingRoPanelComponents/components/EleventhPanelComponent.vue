@@ -157,10 +157,9 @@
 
     <div>
       <v-checkbox 
-        v-model="isReturn"
-        type="checkbox"
+        v-model="reportStore.returnReport.eleventh"
         label="Вернуть в&nbsp;РО на&nbsp;доработку" 
-        @change="returnForReview"/>
+        @change="onReturnReport"/>
     </div>
   </div>
 </template>
@@ -195,8 +194,6 @@ const props = defineProps({
     default: false,
   },
   data: Object,
-  // dataDH: Object,
-  // dataCH: Object,
   isErrorPanel: {
     type: Boolean,
   },
@@ -237,8 +234,6 @@ const emit = defineEmits([
   'getData', 
   'getDataDH', 
   'getDataCH', 
-  'getReturnReport',
-  // 'getFileDH'
 ]);
 
 const focusOut = async () => {
@@ -351,16 +346,20 @@ let fileNameDH = ref(null);
 let fileTypeDH = ref(null);
 let fileSizeDH = ref(null);
 
-const isReturn = ref(false);
-
-const returnForReview = (event) => {
+const onReturnReport = (event) => {
+  let formData = new FormData();
+  formData.append('participants_number', eleventhPanelDataCH.value.participants_number);
+  formData.append('comment', eleventhPanelDataCH.value.comment);
+  formData.append('scan_file', reportStore.reportDataCHFile.eleventh || '');
+  
   if (event.target.checked) {
-    isReturn.value = true;
+    reportStore.returnReport.eleventh = true;
+    formData.append('reasons[comment]', eleventhPanelDataCH.value.comment);
   } else {
-    isReturn.value = false;
+    reportStore.returnReport.eleventh = false;
   }
-  console.log('return чекбокс', isReturn.value);//-------------------------
-  emit('getReturnReport', isReturn.value, Number(ID_PANEL));
+
+  emit('getDataCH', formData, Number(ID_PANEL));
 }
 
 watchEffect(() => {
@@ -368,7 +367,6 @@ watchEffect(() => {
     if (reportStore.reportDataCH.eleventh) {
       eleventhPanelDataCH.value.comment = reportStore.reportDataCH.eleventh.comment;
       eleventhPanelDataCH.value.participants_number = reportStore.reportDataCH.eleventh.participants_number;
-      isReturn.value = reportStore.returnReport.eleventh;
     }
     if (reportStore.reportDataDH.eleventh) {
       eleventhPanelDataDH.value.comment = reportStore.reportDataDH.eleventh.comment;
@@ -435,31 +433,16 @@ watch(eleventhPanelDataDH.value, () => {
 
 watch(eleventhPanelDataCH.value, () => {
   if (props.centralExpert) {
-    reportStore.reportDataCH.eleventh = eleventhPanelDataCH.value; 
+    reportStore.reportDataCH.eleventh = eleventhPanelDataCH.value;
+    
+    let formData = new FormData();
+    formData.append('participants_number', eleventhPanelDataCH.value.participants_number);
+    formData.append('comment', eleventhPanelDataCH.value.comment);
+    formData.append('scan_file', reportStore.reportDataCHFile.eleventh || '');
+    if (reportStore.returnReport.eleventh) formData.append('reasons[comment]', eleventhPanelDataCH.value.comment);
+    emit('getDataCH', formData, Number(ID_PANEL));
   }
 });
-
-watch(isReturn, (newIsReturn) => {
-    reportStore.returnReport.eleventh = newIsReturn;
-    console.log('return 👀', reportStore.returnReport.eleventh);
-
-    if (reportStore.returnReport.eleventh) {
-      // скорректировать формдату после ответа Давида
-      let formData = new FormData();
-      console.log('отклонение отчета фд', isReturn.value);
-      formData.append('reasons[participants_number]', eleventhPanelDataCH.value.participants_number || '');
-      formData.append('reasons[comment]', eleventhPanelDataCH.value.comment || '');
-      formData.append('scan_file', reportStore.reportDataCHFile.eleventh || '');
-      emit('getDataCH', formData, Number(ID_PANEL));
-    } else {
-      let formData = new FormData();
-      console.log('вериф отчета фд', isReturn.value);
-      formData.append('participants_number', eleventhPanelDataCH.value.participants_number || '');
-      formData.append('comment', eleventhPanelDataCH.value.comment || '');
-      formData.append('scan_file', reportStore.reportDataCHFile.eleventh || '');
-      emit('getDataCH', formData, Number(ID_PANEL));
-    }
-})
 </script>
 
 <style lang="scss" scoped>

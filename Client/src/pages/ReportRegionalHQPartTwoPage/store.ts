@@ -71,10 +71,13 @@ export const useReportPartTwoStore = defineStore('report-two', {
             fourth: false,
             fifth: false,
             eleventh: false,
+            twelfth: false,
+            thirteenth: false,
             tenth: {
                 first: false,
                 second: false,
             },
+
         },
         /*
         * Объект для хранения полученных данных от РШ и ОШ для отчета эксперта ЦШ

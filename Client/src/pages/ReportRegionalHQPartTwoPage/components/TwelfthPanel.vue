@@ -57,8 +57,6 @@ const props = defineProps({
     type: Boolean
   },
   data: Object,
-  // dataDH: Object,
-  // dataCH: Object,
   isErrorPanel: {
     type: Boolean,
   },
@@ -69,8 +67,7 @@ const ID_PANEL = '12';
 const emit = defineEmits([
   'getData', 
   'getDataDH', 
-  'getDataCH', 
-  // 'getFileDH'
+  'getDataCH',
 ]);
 
 const getData = (event) => {
@@ -80,10 +77,6 @@ const getData = (event) => {
 const getDataDH = (event) => {
   emit("getDataDH", event, Number(ID_PANEL));
 };
-
-// const getFileDH = (event) => {
-//   emit("getFileDH", event, Number(ID_PANEL));
-// };
 
 const getDataCH = (event) => {
   emit("getDataCH", event, Number(ID_PANEL));
