@@ -149,14 +149,13 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <eleventh-panel
-                  :districtExpert="districtExpert"
-                  :centralExpert="centralExpert"
-                  @get-data="setData"
-                  @get-data-DH="setDataDH"
-                  @get-data-CH="setDataCH"
-                  @get-return-report="setReturnReport"
-                  :data="reportData.eleventh"
-                  :is-error-panel="isErrorPanel.eleventh"/>
+                :districtExpert="districtExpert"
+                :centralExpert="centralExpert"
+                @get-data="setData"
+                @get-data-DH="setDataDH"
+                @get-data-CH="setDataCH"
+                :data="reportData.eleventh"
+                :is-error-panel="isErrorPanel.eleventh"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -164,9 +163,14 @@
               12. Объем средств, собранных бойцами РО&nbsp;РСО во&nbsp;Всероссийском дне ударного труда
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <twelfth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                             @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.twelfth"
-                             :is-error-panel="isErrorPanel.twelfth"/>
+              <twelfth-panel 
+                :districtExpert="districtExpert" 
+                :centralExpert="centralExpert" 
+                @get-data="setData"
+                @get-data-DH="setDataDH" 
+                @get-data-CH="setDataCH" 
+                :data="reportData.twelfth"
+                :is-error-panel="isErrorPanel.twelfth"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -174,9 +178,14 @@
               13. Охват членов РО&nbsp;РСО, принявших участие во&nbsp;Всероссийском дне ударного труда &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <thirteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.thirteenth"
-                                :is-error-panel="isErrorPanel.thirteenth"/>
+              <thirteenth-panel 
+                :districtExpert="districtExpert" 
+                :centralExpert="centralExpert" 
+                @get-data="setData"
+                @get-data-DH="setDataDH" 
+                @get-data-CH="setDataCH" 
+                :data="reportData.thirteenth"
+                :is-error-panel="isErrorPanel.thirteenth"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -326,10 +335,6 @@ const reportDataCH = ref({
   twelfth: null,
   thirteenth: null,
 });
-
-const returnReport = ref({
-  eleventh: null,
-})
 
 const preloader = ref(true);
 const panel_id = ref(1);
@@ -929,7 +934,7 @@ const setDataCH = (data, panel, number) => {
       break;
     case 11:
       reportDataCH.value.eleventh = data;
-      // console.log('11', ...reportDataCH.value.eleventh);
+      console.log('11', ...reportDataCH.value.eleventh);
       break;
     case 12:
       reportDataCH.value.twelfth = data;
@@ -938,15 +943,6 @@ const setDataCH = (data, panel, number) => {
     case 13:
       reportDataCH.value.thirteenth = data;
       console.log('13', ...reportDataCH.value.thirteenth);
-      break;
-  }
-}
-
-const setReturnReport = (data, panel) => {
-  switch (panel) {
-    case 11:
-      returnReport.value.eleventh = data;
-      console.log('return в род комп', returnReport.value.eleventh);//-------
       break;
   }
 }
@@ -1202,9 +1198,16 @@ const sendReport = async () => {
         await reportPartTwoService.sendReportCH(reportDataCH.value.fourth, '4', route.query.reportId, true, reportStore.returnReport.fourth);
       }
 
-      if (!reportData.value.eleventh.verified_by_chq) {
-        console.log('return при отпр', returnReport.value.eleventh);//---------------
-        await reportPartTwoService.sendReportCH(reportDataCH.value.eleventh, '11', route.query.reportId, true, returnReport.value.eleventh);
+      if (reportStore.reportDataDH.eleventh.verified_by_chq === null) {
+        await reportPartTwoService.sendReportCH(reportDataCH.value.eleventh, '11', route.query.reportId, true, reportStore.returnReport.eleventh);
+      }
+
+      if (reportStore.reportDataDH.twelfth.verified_by_chq === null) {
+        await reportPartTwoService.sendReportCH(reportDataCH.value.twelfth, '12', route.query.reportId, true, reportStore.returnReport.twelfth);
+      }
+
+      if (reportStore.reportDataDH.thirteenth.verified_by_chq === null) {
+        await reportPartTwoService.sendReportCH(reportDataCH.value.thirteenth, '13', route.query.reportId, true, reportStore.returnReport.thirteenth);
       }
 
       swal.fire({
