@@ -263,6 +263,7 @@
             </div>
           </div>
         </div>
+        <div class="hr" style="margin-top: 10px;"></div>
       </div>
 
       <div class="form__field-comment">
@@ -386,6 +387,7 @@
             </div>
           </div>
         </div>
+        <div class="hr" style="margin-top: 10px;"></div>
       </div>
       <!--      <div v-if="sixteenthPanelDataDH.is_project">-->
       <!--        <Button class="add_eventBtn" label="Добавить проект" @click="addProjectDH"/>-->
@@ -452,7 +454,7 @@
         <div>
           <label class="form__label">Наименование трудового проекта, в котором ЛСО РО одержал победу <sup
               class="valid-red">*</sup></label>
-          <v-table style="margin-top: 10px;">
+          <v-table style="margin-top: 10px; width: 700px;">
             <tbody>
             <tr class="report-table__tr">
               <td>Данные РО</td>
