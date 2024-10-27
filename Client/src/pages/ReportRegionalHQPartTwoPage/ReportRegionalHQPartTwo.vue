@@ -82,8 +82,15 @@
               трудовых проектов РСО
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <fifth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                           @get-data-DH="setDataDH" :data="reportData.fifth" :is-error-panel="isErrorPanel.fifth"/>
+              <fifth-panel 
+                :districtExpert="districtExpert"
+                :centralExpert="centralExpert" 
+                @get-data="setData"
+                @get-data-DH="setDataDH"
+                @get-data-CH="setDataCH"
+                :data="reportData.fifth"
+                :is-error-panel="isErrorPanel.fifth"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -138,9 +145,17 @@
               &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <tenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                           @getDataDHFirst="setDataDH" @getDataDHSecond="setDataDH" :data="reportData.tenth"
-                           :is-error-panel="isErrorPanel.tenth"/>
+              <tenth-panel
+                  :districtExpert="districtExpert"
+                  :centralExpert="centralExpert"
+                  @get-data="setData"
+                  @getDataDHFirst="setDataDH"
+                  @getDataDHSecond="setDataDH"
+                  @getDataCHFirst="setDataCH"
+                  @getDataCHSecond="setDataCH"
+                  :data="reportData.tenth"
+                  :is-error-panel="isErrorPanel.tenth"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -331,6 +346,10 @@ const reportDataCH = ref({
   fifth: null,
   six: {},
   ninth: {},
+  tenth: {
+    first: null,
+    second: null,
+  },
   eleventh: null,
   twelfth: null,
   thirteenth: null,
@@ -592,6 +611,18 @@ const getReportData = async (reportId) => {
       * Критерий 4
       */
       reportStore.reportForCheckCH.fourth = (await reportPartTwoService.getReportDH('4', reportId)).data;
+      /*
+      * Критерий 5
+      */
+      reportStore.reportForCheckCH.fifth = (await reportPartTwoService.getReportDH('5', reportId)).data;
+      /*
+      * Критерий 10-1
+      */
+      reportStore.reportForCheckCH.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
+      /*
+      * Критерий 10-2
+      */
+      reportStore.reportForCheckCH.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', reportId)).data;
 
       // Критерий 11
       const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
@@ -929,8 +960,21 @@ const setDataCH = (data, panel, number) => {
       reportDataCH.value.fourth = data;
       console.log('4', ...reportDataCH.value.fourth);
       break;
+    case 5:
+      reportDataCH.value.fifth = data;
+      console.log('5', ...reportDataCH.value.fifth);
+      break;  
     case 6:
       reportDataCH.value.six[number] = data;
+      break;
+    case 10:
+      if (number === 1) {
+        reportDataCH.value.tenth.first = data;
+        console.log('10-1', ...reportDataCH.value.tenth.first);
+      } else {
+        reportDataCH.value.tenth.second = data;
+        console.log('10-2', ...reportDataCH.value.tenth.second);
+      }
       break;
     case 11:
       reportDataCH.value.eleventh = data;
@@ -1190,12 +1234,24 @@ const sendReport = async () => {
     // if (checkEmptyFieldsDH(reportStore.reportDataCH, isErrorPanel)) {
     preloader.value = true;
     try {
-      if (!reportData.value.first.verified_by_chq) {
+      if (reportData.value.first.verified_by_chq === null) {
         await reportPartTwoService.sendReportCH(reportDataCH.value.first, '1', route.query.reportId, true, reportStore.returnReport.first);
       }
 
-      if (!reportData.value.fourth.verified_by_chq) {
+      if (reportData.value.fourth.verified_by_chq === null) {
         await reportPartTwoService.sendReportCH(reportDataCH.value.fourth, '4', route.query.reportId, true, reportStore.returnReport.fourth);
+      }
+
+      if (reportData.value.fifth.verified_by_chq === null) {
+        await reportPartTwoService.sendReportCH(reportDataCH.value.fifth, '5', route.query.reportId, true, reportStore.returnReport.fifth);
+      }
+
+      if (reportData.value.tenth.first.verified_by_chq === null) {
+        await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.fifth, '10', '1', route.query.reportId, true, reportStore.returnReport.tenth.first);
+      }
+
+      if (reportData.value.tenth.second.verified_by_chq === null) {
+        await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.second, '10', '2', route.query.reportId, true, reportStore.returnReport.tenth.second);
       }
 
       if (reportStore.reportDataDH.eleventh.verified_by_chq === null) {

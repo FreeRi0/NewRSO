@@ -147,7 +147,7 @@ const validateLink = (value) => {
     const isValid = isValidURL(value);
     isLinkError.value = !isValid;
     emit('error', isLinkError.value);
-    console.log('err_link_1', isLinkError.value);
+    // console.log('err_link_1', isLinkError.value);
   }
 };
 

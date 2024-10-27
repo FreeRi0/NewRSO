@@ -45,6 +45,10 @@ export const useReportPartTwoStore = defineStore('report-two', {
             eleventh: {},
             twelfth: {},
             thirteenth: {},
+            tenth: {
+                first: {},
+                second: {},
+            },
         },
         /*
         * Объект для хранения файлов эксперта ЦШ
@@ -54,6 +58,10 @@ export const useReportPartTwoStore = defineStore('report-two', {
             eleventh: null,
             twelfth: null,
             thirteenth: null,
+            tenth: {
+                first: null,
+                second: null,
+            },
         },
         /*
         * Объект для хранения подтверждения об отправке отчета на доработку экспертом ЦШ
@@ -61,9 +69,15 @@ export const useReportPartTwoStore = defineStore('report-two', {
         returnReport: {
             first: false,
             fourth: false,
+            fifth: false,
             eleventh: false,
             twelfth: false,
             thirteenth: false,
+            tenth: {
+                first: false,
+                second: false,
+            },
+
         },
         /*
         * Объект для хранения полученных данных от РШ и ОШ для отчета эксперта ЦШ
@@ -71,6 +85,10 @@ export const useReportPartTwoStore = defineStore('report-two', {
         reportForCheckCH: {
             first: null,
             fourth: null,
+            tenth: {
+                first: null,
+                second: null,
+            },
         }
     })
 })
