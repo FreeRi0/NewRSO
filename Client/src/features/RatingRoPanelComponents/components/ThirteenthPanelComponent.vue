@@ -317,13 +317,15 @@ watchEffect(async () => {
             fileDH.value.size = reportStore.reportDataDHFile.thirteenth.size / Math.pow(1024, 2);
         }
     } else if (props.centralExpert) {
-        fileDH.value.name = reportStore.reportDataDH.thirteenth.scan_file;
-        fileDH.value.type = reportStore.reportDataDH.thirteenth.file_type;
-        fileDH.value.size = reportStore.reportDataDH.thirteenth.file_size;
+        if (reportStore.reportDataDH.thirteenth && reportStore.reportDataCHFile.thirteenth) {
+            fileDH.value.name = reportStore.reportDataDH.thirteenth.scan_file;
+            fileDH.value.type = reportStore.reportDataDH.thirteenth.file_type;
+            fileDH.value.size = reportStore.reportDataDH.thirteenth.file_size;
 
-        fileCH.value.name = reportStore.reportDataCHFile.thirteenth.name;
-        fileCH.value.type = reportStore.reportDataCHFile.thirteenth.type.split('/').at(-1);
-        fileCH.value.size = reportStore.reportDataCHFile.thirteenth.size / Math.pow(1024, 2);
+            fileCH.value.name = reportStore.reportDataCHFile.thirteenth.name;
+            fileCH.value.type = reportStore.reportDataCHFile.thirteenth.type.split('/').at(-1);
+            fileCH.value.size = reportStore.reportDataCHFile.thirteenth.size / Math.pow(1024, 2);
+        }
     }
 }, {
     flush: 'post'

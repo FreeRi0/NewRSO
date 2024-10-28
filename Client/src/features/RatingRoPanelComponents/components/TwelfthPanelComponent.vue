@@ -403,13 +403,15 @@ watchEffect(async () => {
             fileDH.value.size = reportStore.reportDataDHFile.twelfth.size / Math.pow(1024, 2);
         }
     } else if (props.centralExpert) {
-        fileDH.value.name = reportStore.reportDataDH.twelfth.scan_file;
-        fileDH.value.type = reportStore.reportDataDH.twelfth.file_type;
-        fileDH.value.size = reportStore.reportDataDH.twelfth.file_size;
+        if (reportStore.reportDataDH.twelfth && reportStore.reportDataCHFile.twelfth) {
+            fileDH.value.name = reportStore.reportDataDH.twelfth.scan_file;
+            fileDH.value.type = reportStore.reportDataDH.twelfth.file_type;
+            fileDH.value.size = reportStore.reportDataDH.twelfth.file_size;
 
-        fileCH.value.name = reportStore.reportDataCHFile.twelfth.name;
-        fileCH.value.type = reportStore.reportDataCHFile.twelfth.type.split('/').at(-1);
-        fileCH.value.size = reportStore.reportDataCHFile.twelfth.size / Math.pow(1024, 2);
+            fileCH.value.name = reportStore.reportDataCHFile.twelfth.name;
+            fileCH.value.type = reportStore.reportDataCHFile.twelfth.type.split('/').at(-1);
+            fileCH.value.size = reportStore.reportDataCHFile.twelfth.size / Math.pow(1024, 2);
+        }
     }
 }, {
     flush: 'post'
