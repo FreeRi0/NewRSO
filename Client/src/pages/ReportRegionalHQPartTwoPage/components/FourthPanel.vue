@@ -219,7 +219,7 @@
                     name="eventName"
                     class="form__input"
                     placeholder="Введите название мероприятия"
-                    :disabled="isSent || !event.participants_number"
+                    disabled
                 />
               </div>
             </div>
@@ -499,52 +499,52 @@
           </tr>
           </tbody>
         </v-table>
-        <!--        <label class="form__label">Межрегиональное <sup class="valid-red">*</sup></label>-->
-        <!--        <v-table>-->
-        <!--          <tbody>-->
-        <!--          <tr class="report-table__tr">-->
-        <!--            <td class="report-table__th">Данные РО</td>-->
-        <!--            <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>-->
-        <!--            <td class="report-table__th">Корректировка ЦШ</td>-->
-        <!--          </tr>-->
-        <!--          <tr>-->
-        <!--            <td class="report-table__td">{{ (eventCH.dataRH.participants_number * 0.8).toFixed(1) }}</td>-->
-        <!--            <td class="report-table__td report-table__td__center">-->
-        <!--              {{ (eventCH.dataDH.participants_number * 0.8).toFixed(1) }}-->
-        <!--            </td>-->
-        <!--            <td class="report-table__td">{{ (eventCH.dataCH.participants_number * 0.8).toFixed(1) }}</td>-->
-        <!--          </tr>-->
-        <!--          </tbody>-->
-        <!--        </v-table>-->
-        <!--        <div>-->
-        <!--          <label class="form__label" for="11">Межрегиональное <sup class="valid-red">*</sup></label>-->
-        <!--          <div class="form__label-radio">-->
-        <!--            <div style="display: flex;">-->
-        <!--              <input-->
-        <!--                  v-model="eventCH.is_interregional"-->
-        <!--                  type="radio"-->
-        <!--                  :id="`is_interregional-true_${index}CH`"-->
-        <!--                  :value="true"-->
-        <!--                  class="custom-radio"-->
-        <!--              />-->
-        <!--              <label :for="`is_interregional-true_${index}CH`">-->
-        <!--                Да-->
-        <!--              </label>-->
-        <!--            </div>-->
-        <!--            <div style="display: flex">-->
-        <!--              <input-->
-        <!--                  v-model="eventCH.is_interregional"-->
-        <!--                  type="radio"-->
-        <!--                  :id="`is_interregional-false_${index}CH`"-->
-        <!--                  :value="false"-->
-        <!--                  class="custom-radio"-->
-        <!--              />-->
-        <!--              <label :for="`is_interregional-false_${index}CH`">-->
-        <!--                Нет-->
-        <!--              </label>-->
-        <!--            </div>-->
-        <!--          </div>-->
-        <!--        </div>-->
+        <label class="form__label">Межрегиональное <sup class="valid-red">*</sup></label>
+        <v-table>
+          <tbody>
+          <tr class="report-table__tr">
+            <td class="report-table__th">Данные РО</td>
+            <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
+            <td class="report-table__th">Корректировка ЦШ</td>
+          </tr>
+          <tr>
+            <td class="report-table__td">{{ eventCH.dataRH.is_interregional ? 'Да' : 'Нет' }}</td>
+            <td class="report-table__td report-table__td__center">
+              {{ eventCH.dataDH.is_interregional ? 'Да' : 'Нет' }}
+            </td>
+            <td class="report-table__td">{{ eventCH.dataCH.is_interregional ? 'Да' : 'Нет' }}</td>
+          </tr>
+          </tbody>
+        </v-table>
+        <div>
+          <label class="form__label" for="11">Межрегиональное <sup class="valid-red">*</sup></label>
+          <div class="form__label-radio">
+            <div style="display: flex;">
+              <input
+                  v-model="eventCH.dataCH.is_interregional"
+                  type="radio"
+                  :id="`is_interregional-true_${index}CH`"
+                  :value="true"
+                  class="custom-radio"
+              />
+              <label :for="`is_interregional-true_${index}CH`">
+                Да
+              </label>
+            </div>
+            <div style="display: flex">
+              <input
+                  v-model="eventCH.dataCH.is_interregional"
+                  type="radio"
+                  :id="`is_interregional-false_${index}CH`"
+                  :value="false"
+                  class="custom-radio"
+              />
+              <label :for="`is_interregional-false_${index}CH`">
+                Нет
+              </label>
+            </div>
+          </div>
+        </div>
         <label class="form__label">Дата начала проведения мероприятия <sup class="valid-red">*</sup></label>
         <v-table>
           <tbody>
@@ -868,7 +868,7 @@ const onReportReturn = (event) => {
       if (event.participants_number) formData.append(`events[${i}][participants_number]`, event.participants_number);
       if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
       if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
-      // formData.append(`events[${i}][is_interregional]`, event.is_interregional);
+      formData.append(`events[${i}][is_interregional]`, event.is_interregional);
     });
 
     emit('getDataCH', formData, 4);
@@ -886,7 +886,7 @@ const onReportReturn = (event) => {
       if (event.participants_number) formData.append(`events[${i}][participants_number]`, event.participants_number);
       if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
       if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
-      // formData.append(`events[${i}][is_interregional]`, event.is_interregional);
+      formData.append(`events[${i}][is_interregional]`, event.is_interregional);
     });
 
     emit('getDataCH', formData, 4);
@@ -894,6 +894,7 @@ const onReportReturn = (event) => {
 }
 
 onMounted(() => {
+  // Мапинг данных для отчета эксперта ОШ
   if (reportStore.reportDataDH.fourth && props.districtExpert) {
     fourthPanelDataDH.value.events = [...reportStore.reportDataDH.fourth.events];
     fourthPanelDataDH.value.comment = reportStore.reportDataDH.fourth.comment;
@@ -918,15 +919,15 @@ onMounted(() => {
       commonData.value[i] = {
         dataRH: reportDataRH.events[i],
         dataDH: reportStore.reportForCheckCH.fourth.events[i],
-        dataCH: reportStore.reportDataCH.fourth.events ? reportStore.reportDataCH.fourth.events[i] : {
-          participants_number: '',
-          start_date: null,
-          end_date: null,
-        }
+        dataCH: reportStore.reportDataCH.fourth.events[i],
+        //     ? reportStore.reportDataCH.fourth.events[i] : {
+        //   participants_number: '',
+        //   start_date: null,
+        //   end_date: null,
+        // }
       }
     }
-
-    console.log('commonData', commonData.value)
+    // console.log('commonData', commonData.value)
   }
 })
 
@@ -943,6 +944,9 @@ watchPostEffect(() => {
   events.value.forEach((event) => {
     if (!event.links.length) event.links.push({link: ''})
   });
+  if (!events.value.length) {
+    addEvent();
+  }
 });
 
 watch(fourthPanelDataDH.value, () => {
@@ -979,7 +983,7 @@ watch([commonData.value, commentCH], () => {
     if (event.participants_number) formData.append(`events[${i}][participants_number]`, event.participants_number);
     if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
     if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
-    // formData.append(`events[${i}][is_interregional]`, event.is_interregional);
+    formData.append(`events[${i}][is_interregional]`, event.is_interregional);
   });
 
   emit('getDataCH', formData, 4);

@@ -764,12 +764,13 @@ onMounted(() => {
       commonData.value[i] = {
         dataRH: reportDataRH.events[i],
         dataDH: reportStore.reportForCheckCH.fifth.events[i],
-        dataCH: reportStore.reportDataCH.fifth.events ? reportStore.reportDataCH.fifth.events[i] : {
-          participants_number: '',
-          ro_participants_number: '',
-          start_date: null,
-          end_date: null,
-        }
+        dataCH: reportStore.reportDataCH.fifth.events[i],
+        //     ? reportStore.reportDataCH.fifth.events[i] : {
+        //   participants_number: '',
+        //   ro_participants_number: '',
+        //   start_date: null,
+        //   end_date: null,
+        // }
       }
     }
 
