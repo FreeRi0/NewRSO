@@ -224,7 +224,7 @@
         </v-expansion-panels>
       </div>
     </div>
-    <Button v-if="!preloader" variant="text" label="Отправить отчет" size="large" @click="sendReport" />
+    <Button v-if="!preloader" :disabled="blockSendButton" variant="text" label="Отправить отчет" size="large" @click="sendReport" />
   </div>
 </template>
 <script setup>
