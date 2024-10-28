@@ -145,6 +145,23 @@ export const reportPartTwoService = {
         }
     },
 
+    sendMultipleReportCH(data: object, panel: string, reportId: string,  reportNumber: string, withFile = false, isReturn = false) {
+        if (!isReturn) {
+            return HTTP.put(`regional_competitions/reports/${panel}/${reportId}/${reportNumber}/central_review/`, data, {
+                headers: {
+                    'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
+                },
+            });
+        } else {
+            return HTTP.delete(`regional_competitions/reports/${panel}/${reportId}/${reportNumber}/central_review/`, {
+                headers: {
+                    'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
+                },
+                data,
+            });
+        }
+    },
+
     getSentReports() {
         return HTTP.get('/regional_competitions/get_sent_reports/')
     }

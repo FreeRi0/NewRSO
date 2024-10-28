@@ -18,6 +18,7 @@
               :step="0.01"
               @focusout="focusOut"
               :disabled="isSent"
+              :is-error-panel="isErrorPanel"
           />
         </div>
         <div class="report__add-file">
@@ -30,6 +31,7 @@
               id="scan_file"
               name="scan_file"
               :disabled="isSent"
+              :is-error-panel="isErrorPanel"
               style="width: 100%;"
               @change="uploadFile"/>
           <FileBoxComponent
@@ -130,6 +132,7 @@
               :max="9999999999"
               :step="0.01"
               :disabled="props.centralExpert"
+              :is-error-panel="isErrorPanel"
           />
         </div>
       </div>
@@ -144,6 +147,7 @@
             :is-error-file="isErrorFile"
             @change="uploadFileDH"
             @click="deleteFileDH"
+            :is-error-panel="isErrorPanel"
         />
       </div>
     </template>
@@ -173,6 +177,7 @@
                 :min="0"
                 :max="9999999999"
                 :step="0.01"
+                :is-error-panel="isErrorPanel"
             />
           </td>
         </tr>
@@ -188,6 +193,7 @@
             :is-error-file="isErrorFile"
             @change="uploadFileCH"
             @click="deleteFileCH"
+            :is-error-panel="isErrorPanel"
         />
       </div>
       <div>
@@ -222,6 +228,9 @@ const props = defineProps({
   },
   data: Object,
   blockEditFirstReport: Boolean,
+  isErrorPanel: {
+    type: Boolean,
+  },
 });
 
 const emit = defineEmits(['getData', 'getDataDH', 'getDataCH']);
@@ -411,12 +420,12 @@ watchEffect(async () => {
   // Мапинг данных для отчета эксперта ЦШ
   if (reportStore.reportForCheckCH.first && props.centralExpert) {
     // Добавление данных панели "отчет РО"
-    const reportDataDH = JSON.parse(reportStore.reportForCheckCH.first.regional_version);
-    firstPanelData.value.comment = reportDataDH.comment || '';
-    firstPanelData.value.amount_of_money = reportDataDH.amount_of_money;
-    firstPanelData.value.scan_file = reportDataDH.scan_file || null;
-    firstPanelData.value.file_type = reportDataDH.file_type || null;
-    firstPanelData.value.file_size = reportDataDH.file_size || null;
+    const reportDataRH = JSON.parse(reportStore.reportForCheckCH.first.regional_version);
+    firstPanelData.value.comment = reportDataRH.comment || '';
+    firstPanelData.value.amount_of_money = reportDataRH.amount_of_money;
+    firstPanelData.value.scan_file = reportDataRH.scan_file || null;
+    firstPanelData.value.file_type = reportDataRH.file_type || null;
+    firstPanelData.value.file_size = reportDataRH.file_size || null;
 
     // Добавление данных панели "корректировка ОШ"
     firstPanelDataDH.value.comment = reportStore.reportForCheckCH.first.comment;
