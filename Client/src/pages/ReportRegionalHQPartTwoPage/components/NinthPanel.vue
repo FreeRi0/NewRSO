@@ -13,7 +13,7 @@
             @formData="formData($event, item.id)" @formDataDH="formDataDH($event, item.id)" @formDataCH="formDataCH($event, item.id)" @error="setError"
             @uploadFile="uploadFile($event, item.id)"
             :data="ninthPanelData"  @getPanelNumber="getPanelNumber($event)"
-            @getId="getId($event)"   @get-return-report="getReturnReport"  @deleteFile="deleteFile($event, item.id)"
+            @getId="getId($event)"  @deleteFile="deleteFile($event, item.id)"
             :is-sent-ninth="isSentNinth"
             :ninth-id="item.id"
             :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)"
@@ -51,7 +51,7 @@ const setError = (err) => {
 
 const disabled = ref(false);
 const panel = ref(null);
-const emit = defineEmits(['getData', 'getDataDH', 'getDataCH', 'getReturnReport', 'getId', 'getPanelNumber'])
+const emit = defineEmits(['getData', 'getDataDH', 'getDataCH', 'getId', 'getPanelNumber'])
 const ninthPanelData = ref({
   event_happened: false,
   links: [{
@@ -72,10 +72,6 @@ const ninthPanelData = ref({
 
 const isFirstSent = ref(null);
 let el_id = ref(null);
-
-const getReturnReport = (event) => {
-  emit("getReturnReport", event);
-};
 
 const formData = async (reportData, reportNumber) => {
   try {

@@ -442,11 +442,11 @@ const handleReturnToRo = (checked) => {
 const getMultiplyData = async (reportId) => {
   const sixDataPromises = six_items.value.map(async (item) => {
     try {
-      if (!districtExpert.value || !centralExpert.value) {
-        console.log('1')
+      if (!districtExpert.value && !centralExpert.value) {
+        console.log('1.6')
         return { id: item.id, data: (await reportPartTwoService.getMultipleReport('6', item.id)).data };
       } else {
-        console.log('2')
+        console.log('2.6')
         return { id: item.id, data: (await reportPartTwoService.getMultipleReportDH('6', item.id, reportId)).data };
       }
 
@@ -491,11 +491,11 @@ const getMultiplyData = async (reportId) => {
 
   const ninthDataPromises = ninth_items.value.map(async (item) => {
     try {
-      if (!districtExpert.value || !centralExpert.value) {
-        console.log('1')
+      if (!districtExpert.value && !centralExpert.value) {
+        console.log('1.9')
         return { id: item.id, data: (await reportPartTwoService.getMultipleReport('9', item.id)).data };
       } else {
-        console.log('2')
+        console.log('2.9')
         return { id: item.id, data: (await reportPartTwoService.getMultipleReportDH('9', item.id, reportId)).data };
       }
     } catch (error) {
@@ -598,7 +598,7 @@ const getMultiplyData = async (reportId) => {
 const getReportData = async (reportId) => {
   try {
     // Загрузка данных для отчета эксперта ЦШ
-    if (centralExpert.value) {
+    if (centralExpert.value && typeof reportId != "undefined") {
       /*
       * Критерий 1
       */
@@ -1267,14 +1267,14 @@ const sendReport = async () => {
       if (reportStore.reportForCheckCH.fifth.verified_by_chq === null) {
         await reportPartTwoService.sendReportCH(reportDataCH.value.fifth, '5', route.query.reportId, true, reportStore.returnReport.fifth);
       }
-      for (let i in reportData.value.six) {
-        if (!reportData.value.six[i].verified_by_chq) {
-          await reportPartTwoService.sendReportCH(reportDataCH.value.six[i], '6', route.query.reportId, reportStore.returnReport.six[i]);
+      for (let i in reportStore.reportForCheckCH.six) {
+        if (reportStore.reportForCheckCH.six[i].verified_by_chq === null) {
+          await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.six[i], '6', i, route.query.reportId, reportStore.returnReport.six[i]);
         }
       }
-      for (let i in reportData.value.ninth) {
-        if (!reportData.value.ninth[i].verified_by_chq) {
-          await reportPartTwoService.sendReportCH(reportDataCH.value.ninth[i], '9', route.query.reportId, true, reportStore.returnReport.ninth[i]);
+      for (let i in reportStore.reportForCheckCH.ninth) {
+        if (reportStore.reportForCheckCH.ninth[i].verified_by_chq) {
+          await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.ninth[i], '9', i, route.query.reportId, true, reportStore.returnReport.ninth[i]);
         }
       }
       if (reportStore.reportForCheckCH.tenth.first.verified_by_chq === null) {
@@ -1649,7 +1649,7 @@ watch(
     if (roleStore.roles.regionalheadquarter_commander && typeof (route.query.reportId) === 'undefined') {
       if (newUrl.includes('reporting-ro/report-regional-two')) {
         preloader.value = true;
-        console.log(1);
+        console.log(1.1);
         await getReportData();
       }
     }

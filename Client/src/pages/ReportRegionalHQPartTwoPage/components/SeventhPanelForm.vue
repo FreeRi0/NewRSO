@@ -602,8 +602,8 @@
                     <CommentFileComponent v-model:value="sixPanelDataCH.comment" name="sixPanelDataCH.comment"
                         :is-six="true" :CH="true" :is-error-panel="isErrorPanel"></CommentFileComponent>
                     <div>
-                        <v-checkbox v-model="is_return_six" @change="returnForReview(6)"
-                            label="Вернуть в РО на доработку" />
+                        <v-checkbox v-model="reportStore.returnReport.six[props.sixId]"
+                            @change="returnForReview($event, 6)" label="Вернуть в РО на доработку" />
                     </div>
                 </div>
                 <div v-else-if="props.panel_number == 9" class="form__field-group group-seventh">
@@ -660,8 +660,8 @@
                         :is-error-file="isErrorFile" :is-error-panel="isErrorPanel">
                     </CommentFileComponent>
                     <div>
-                        <v-checkbox v-model="is_return_ninth" @change="returnForReview(9)"
-                            label="Вернуть в РО на доработку" />
+                        <v-checkbox v-model="reportStore.returnReport.ninth[props.ninthId]"
+                            @change="returnForReview($event, 9)" label="Вернуть в РО на доработку" />
                     </div>
                 </div>
             </template>
@@ -702,14 +702,11 @@ const props = defineProps({
     dataCH: Object,
 });
 
-const emit = defineEmits(['collapse-form', 'formData', 'getReturnReport', 'formDataDH', 'formDataCH', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'deleteFileDH', 'error']);
+const emit = defineEmits(['collapse-form', 'formData', 'formDataDH', 'formDataCH', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'deleteFileDH', 'error']);
 
 const collapseForm = () => {
     emit('collapse-form');
 };
-
-const is_return_six = ref(false);
-const is_return_ninth = ref(false);
 
 const reportStore = useReportPartTwoStore();
 let isErrorFile = ref(false);
@@ -794,26 +791,31 @@ const events = ref([
 const isReturn = ref(false);
 
 const returnForReview = (event, number) => {
+    let formData = new FormData();
     if (event.target.checked) {
         if (number == 6) {
-            is_return_six.value = true;
+            reportStore.returnReport.six[props.sixId] = true;
+            emit('formDataCH', sixPanelDataCH);
         } else if (number == 9) {
-            is_return_ninth.value = true;
+            reportStore.returnReport.ninth[props.ninthId] = true;
+            formData.append('event_happened', ninthPanelDataCH.value.event_happened);
+            formData.append('comment', ninthPanelDataCH.value.comment);
+            formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId] || '');
+            formData.append('reasons[comment]', ninthPanelDataCH.value.comment);
+            emit('formDataCH', formData);
         }
     } else {
         if (number == 6) {
-            is_return_six.value = false;
+            reportStore.returnReport.six[props.sixId] = false;
+            emit('formDataCH', sixPanelDataCH);
         } else if (number == 9) {
-            is_return_ninth.value = false;
+            reportStore.returnReport.ninth[props.ninthId] = false;
+            formData.append('event_happened', ninthPanelDataCH.value.event_happened);
+            formData.append('comment', ninthPanelDataCH.value.comment);
+            formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId] || '');
+            emit('formDataCH', formData);
         }
     }
-    console.log('return чекбокс', is_return_six.value, is_return_ninth.value);
-    if (number == 6) {
-        emit('getReturnReport', is_return_six.value);
-    } else {
-        emit('getReturnReport', is_return_ninth.value);
-    }
-
 }
 
 
@@ -850,14 +852,12 @@ const uploadFile = (event, number) => {
         } else {
             if (props.isDistrictHeadquarterCommander) {
                 if (event.target.files) {
-                    ninthPanelDataDH.value.document = event.target.files[0];
                     reportStore.reportDataDHFile.ninth[props.ninthId] = event.target.files[0];
                     console.log('fileDH', reportStore.reportDataDHFile.ninth[props.ninthId])
                 }
 
             } else if (props.isCentralHeadquarterCommander) {
                 if (event.target.files) {
-                    ninthPanelDataCH.value.document = event.target.files[0];
                     reportStore.reportDataCHFile.ninth[props.ninthId] = event.target.files[0];
                     console.log('fileCH', reportStore.reportDataCHFile.ninth[props.ninthId])
                 }
@@ -933,18 +933,6 @@ const deleteFile = (number) => {
     }
 
 }
-
-const handleReturnToRoSix = () => {
-
-    emit('returnToRo', is_return_six.value);
-    console.log('returnToRo6', is_return_six.value);
-};
-
-const handleReturnToRoNinth = () => {
-    emit('returnToRo', is_return_ninth.value);
-    console.log('returnToRo9', is_return_ninth.value);
-};
-
 
 const focusOut = () => {
     if (props.panel_number == 6) {
@@ -1093,7 +1081,6 @@ watchEffect(() => {
             if (reportStore.reportDataCH.six[props.sixId]) {
                 sixPanelDataCH.value.comment = reportStore.reportDataCH.six[props.sixId].comment;
                 sixPanelDataCH.value.number_of_members = reportStore.reportDataCH.six[props.sixId].number_of_members;
-                is_return_six.value = reportStore.returnReport.six[props.sixId]
             }
             // sixPanelDataCH.value = { ...props.dataCH };
         } else {
@@ -1152,7 +1139,6 @@ watchEffect(() => {
             if (reportStore.reportDataCH.ninth[props.ninthId]) {
                 ninthPanelDataCH.value.comment = reportStore.reportDataCH.ninth[props.ninthId].comment;
                 ninthPanelDataCH.value.event_happened = reportStore.reportDataCH.ninth[props.ninthId].event_happened;
-                is_return_ninth.value = reportStore.returnReport.ninth[props.sixId]
             }
         } else {
             if (Object.keys(props.data).length > 0) {
@@ -1242,42 +1228,6 @@ watch(ninthPanelDataCH.value, () => {
     // reportStore.reportDataDH.ninth = ninthPanelDataDH.value;
     // emit('formDataDH', ninthPanelDataDH.value);
 });
-
-watch([is_return_six, is_return_ninth], ([newIsReturnSix, newIsReturnNinth]) => {
-    if (newIsReturnSix) {
-        for (let i in reportStore.returnReport.six) {
-            reportStore.returnReport.six[i] = newIsReturnSix[i];
-            console.log('return 👀', reportStore.returnReport.six[i]);
-            if (reportStore.returnReport.six[i]) {
-                emit('formDataCH', sixPanelDataCH.value);
-            } else {
-                console.log('вериф отчета фд', is_return_six.value);
-                emit('formDataCH', sixPanelDataCH.value);
-            }
-        }
-    } else if (newIsReturnNinth) {
-        for (let i in reportStore.returnReport.ninth) {
-            reportStore.returnReport.ninth[i] = newIsReturnNinth[i];
-            console.log('return 👀', reportStore.returnReport.ninth[i]);
-            if (reportStore.returnReport.ninth[i]) {
-                let formData = new FormData();
-                console.log('отклонение отчета фд', is_return_ninth.value);
-                formData.append('reasons[event_happened]', ninthPanelDataCH.value.event_happened || false);
-                formData.append('reasons[comment]', ninthPanelDataCH.value.comment || '');
-                formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId] || '');
-                emit('formDataCH', formData);
-            } else {
-                let formData = new FormData();
-                console.log('вериф отчета фд', is_return_ninth.value);
-                formData.append('reasons[event_happened]', ninthPanelDataCH.value.event_happened || false);
-                formData.append('reasons[comment]', ninthPanelDataCH.value.comment || '');
-                formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId] || '');
-                emit('formDataCH', formData);
-            }
-        }
-    }
-})
-
 </script>
 <style lang="scss" scoped>
 .number_input {
