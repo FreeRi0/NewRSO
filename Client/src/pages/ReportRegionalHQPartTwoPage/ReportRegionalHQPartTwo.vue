@@ -224,7 +224,8 @@
         </v-expansion-panels>
       </div>
     </div>
-    <Button v-if="!preloader" :disabled="blockSendButton" variant="text" label="Отправить отчет" size="large" @click="sendReport" />
+    <Button v-if="!preloader" :disabled="blockSendButton" variant="text" label="Отправить отчет" size="large"
+      @click="sendReport" />
   </div>
 </template>
 <script setup>
@@ -442,12 +443,12 @@ const handleReturnToRo = (checked) => {
 const getMultiplyData = async (reportId) => {
   const sixDataPromises = six_items.value.map(async (item) => {
     try {
-      if (!districtExpert.value && !centralExpert.value) {
+      if (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) {
         console.log('1.6')
-        return { id: item.id, data: (await reportPartTwoService.getMultipleReport('6', item.id)).data };
+        return { id: item.id, data: (await reportPartTwoService.getMultipleReportDH('6', item.id, reportId)).data };
       } else {
         console.log('2.6')
-        return { id: item.id, data: (await reportPartTwoService.getMultipleReportDH('6', item.id, reportId)).data };
+        return { id: item.id, data: (await reportPartTwoService.getMultipleReport('6', item.id)).data };
       }
 
     } catch (error) {
@@ -491,12 +492,13 @@ const getMultiplyData = async (reportId) => {
 
   const ninthDataPromises = ninth_items.value.map(async (item) => {
     try {
-      if (!districtExpert.value && !centralExpert.value) {
+      if (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) {
         console.log('1.9')
-        return { id: item.id, data: (await reportPartTwoService.getMultipleReport('9', item.id)).data };
+        return { id: item.id, data: (await reportPartTwoService.getMultipleReportDH('9', item.id, reportId)).data };
+
       } else {
         console.log('2.9')
-        return { id: item.id, data: (await reportPartTwoService.getMultipleReportDH('9', item.id, reportId)).data };
+        return { id: item.id, data: (await reportPartTwoService.getMultipleReport('9', item.id)).data };
       }
     } catch (error) {
       if (error.response && error.response.status === 404) {
