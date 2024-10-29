@@ -453,21 +453,26 @@ const getMultiplyData = async (reportId) => {
 
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        return {
-          id: item.id, data: {
-            is_sent: false,
-            verified_by_chq: null,
-            verified_by_dhq: false,
-            score: 0.0,
-            regional_version: null,
-            district_version: null,
-            central_version: null,
-            rejecting_reasons: null,
-            number_of_members: 0,
-            links: [],
-            comment: ""
-          }
-        };
+        if (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) {
+          return {
+            id: item.id, data: {
+              is_sent: false,
+              verified_by_chq: null,
+              verified_by_dhq: false,
+              score: 0.0,
+              regional_version: null,
+              district_version: null,
+              central_version: null,
+              rejecting_reasons: null,
+              number_of_members: 0,
+              links: [],
+              comment: ""
+            }
+          };
+        } else {
+          return {}
+        }
+
       } else {
         throw error;
       }
@@ -502,22 +507,25 @@ const getMultiplyData = async (reportId) => {
       }
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        return {
-          id: item.id, data: {
-            is_sent: false,
-            verified_by_chq: null,
-            verified_by_dhq: false,
-            score: 0.0,
-            regional_version: null,
-            district_version: null,
-            central_version: null,
-            rejecting_reasons: null,
-            event_happened: false,
-            document: '',
-            links: [],
-            comment: ""
-          }
-        };
+        if (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) {
+          return {
+            id: item.id, data: {
+              is_sent: false,
+              verified_by_chq: null,
+              verified_by_dhq: false,
+              score: 0.0,
+              regional_version: null,
+              district_version: null,
+              central_version: null,
+              rejecting_reasons: null,
+              number_of_members: 0,
+              links: [],
+              comment: ""
+            }
+          };
+        } else {
+          return {}
+        }
       } else {
         throw error;
       }
