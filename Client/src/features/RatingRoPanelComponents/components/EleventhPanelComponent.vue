@@ -393,11 +393,12 @@ watchEffect(() => {
       fileDH.value.size = reportStore.reportDataDHFile.eleventh.size / Math.pow(1024, 2);
     }
   } else if (props.centralExpert) {
-    if (reportStore.reportDataDH.eleventh && reportStore.reportDataCHFile.eleventh) {
+    if (reportStore.reportDataDH.eleventh) {
       fileDH.value.name = reportStore.reportDataDH.eleventh.scan_file;
       fileDH.value.type = reportStore.reportDataDH.eleventh.file_type;
       fileDH.value.size = reportStore.reportDataDH.eleventh.file_size;
-
+    }
+    if (reportStore.reportDataCHFile.eleventh) {
       fileCH.value.name = reportStore.reportDataCHFile.eleventh.name;
       fileCH.value.type = reportStore.reportDataCHFile.eleventh.type.split('/').at(-1);
       fileCH.value.size = reportStore.reportDataCHFile.eleventh.size / Math.pow(1024, 2);
