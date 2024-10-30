@@ -1,6 +1,6 @@
 <template>
     <div class="report__fieldset report__fieldset--comment-expert">
-        <label class="form__label report__label" :for="name">Комментарий&nbsp;<sup class="valid-red">*</sup></label>
+        <label class="form__label report__label" :for="name">Комментарий&nbsp; <sup v-show="!props.CH" class="valid-red">*</sup></label>
 
         <InputReport v-show="!props.isSix" is-file-district type="file" accept=".jpg, .jpeg, .png, .pdf" id="scan_file"
             name="scan_file" width="20px" height="20px" :disabled="isDisabled" change="onChange" />
@@ -44,10 +44,14 @@ const props = defineProps({
         default: false,
     },
     fileSize: {
-        type: Number,
+        type: [Number, String],
         default: null,
     },
     isErrorFile: {
+        type: Boolean,
+        default: false,
+    },
+    CH: {
         type: Boolean,
         default: false,
     },
