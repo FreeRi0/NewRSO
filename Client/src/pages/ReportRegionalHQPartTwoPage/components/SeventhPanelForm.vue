@@ -377,7 +377,8 @@
                             <label v-else class="places_item_label" :for="id">Нет</label>
                         </div>
                     </div>
-                    <div class="report__fieldset report__fieldset--right-block" v-if="ninthPanelData.document !== null">
+                    <div class="report__fieldset report__fieldset--right-block"
+                        v-if="ninthPanelData.document !== null || ninthPanelData.document !== ''">
                         <label class="form__label report__label mb-2" for="scan_file">
                             Скан документа, подтверждающего проведение акции
                         </label>
@@ -386,7 +387,8 @@
                             v-if="!ninthPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
                             id="scan_file" name="scan_file" width="100%" height="auto" />
                         <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
-                            :isSent="isSent" :fileSize="ninthPanelData.file_size">
+                            :isSent="props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander"
+                            :fileSize="ninthPanelData.file_size">
                         </FileBoxComponent>
                     </div>
 
@@ -403,7 +405,7 @@
                                 v-model:value="item.link" class="mb-2" />
                         </div>
                     </div>
-                    <div class="form__field">
+                    <div class="form__field" v-if="ninthPanelData.comment !== null || ninthPanelData.comment !== ''">
                         <label class="form__label" for="14">Комментарий</label>
                         <TextareaReport
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
