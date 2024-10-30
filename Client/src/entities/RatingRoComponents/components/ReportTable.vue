@@ -1,9 +1,7 @@
 <template>
     <div class="report__fieldset">
-        <label
-            class="form__label report__label"
-        >
-        {{ label }}&nbsp;<sup class="valid-red">*</sup>
+        <label class="form__label report__label">
+            {{ label }}&nbsp;<sup class="valid-red">*</sup>
         </label>
         <v-table>
             <tbody>
@@ -13,29 +11,21 @@
                     <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
                 </tr>
                 <tr class="report-table__tr">
-                    <td class="report-table__td">{{ dataRH }}</td>
-                    <td class="report-table__td report-table__td__center">{{ dataDH }}</td>
+                    <td v-show="typeof (dataRH) === 'number'" class="report-table__td">{{ dataRH }}</td>
+                    <td v-show="typeof (dataRH) === 'boolean'" class="report-table__td"> {{ dataRH ? 'Да' : 'Нет' }}</td>
+                    <td v-show="typeof (dataDH) === 'number'" class="report-table__td report-table__td__center">{{ dataDH
+                        }}</td>
+                    <td v-show="typeof (dataDH) === 'boolean'" class="report-table__td report-table__td__center">{{
+                        dataDH ? 'Да' : 'Нет' }}</td>
                     <td class="report-table__td">
-                        <InputReport
-                            :value="value"
-                            :id="name"
-                            :name="name"
-                            style="width: 100%;"
-                            type="number"
-                            placeholder="0"
-                            :maxlength="maxlength"
-                            :min="min"
-                            :max="max"
-                            :step="step"
-
-                            :is-error-panel="isErrorPanel"
-                            @input="updateValue"
-                        />
-                </td>
+                        <InputReport :value="value" :id="name" :name="name" style="width: 100%;" type="number"
+                            placeholder="0" :maxlength="maxlength" :min="min" :max="max" :step="step"
+                            :is-error-panel="isErrorPanel" @input="updateValue" />
+                    </td>
                 </tr>
             </tbody>
         </v-table>
-        </div>
+    </div>
 </template>
 
 <script setup>
@@ -49,10 +39,10 @@ const props = defineProps({
         default: '',
     },
     dataRH: {
-        type: Number,
+        type: Number || Boolean,
     },
     dataDH: {
-        type: Number,
+        type: Number || Boolean,
     },
     value: {
         type: [String, Number],
@@ -84,6 +74,6 @@ const updateValue = (event) => {
 
 <style lang="scss" scoped>
 .valid-red {
-  color: #db0000;
+    color: #db0000;
 }
 </style>

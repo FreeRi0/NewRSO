@@ -470,9 +470,8 @@ const getMultiplyData = async (reportId) => {
             }
           };
         } else {
-          return {}
+          return { id: item.id, data: {} };
         }
-
       } else {
         throw error;
       }
@@ -500,7 +499,6 @@ const getMultiplyData = async (reportId) => {
       if (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) {
         console.log('1.9')
         return { id: item.id, data: (await reportPartTwoService.getMultipleReportDH('9', item.id, reportId)).data };
-
       } else {
         console.log('2.9')
         return { id: item.id, data: (await reportPartTwoService.getMultipleReport('9', item.id)).data };
@@ -524,7 +522,7 @@ const getMultiplyData = async (reportId) => {
             }
           };
         } else {
-          return {}
+          return { id: item.id, data: {} };
         }
       } else {
         throw error;
@@ -1104,6 +1102,7 @@ const sendReport = async () => {
           await reportPartTwoService.sendReport(reportData.value.fifth, '5');
         }
         for (let item in reportData.value.six) {
+          console.log('dev', reportData.value.six)
           if (!Object.keys(reportData.value.six[item]).length) {
             await reportPartTwoService.createMultipleReport({
               number_of_members: 0,
@@ -1209,14 +1208,14 @@ const sendReport = async () => {
       }
 
       for (let i in reportData.value.six) {
-        if (!reportData.value.six[i].verified_by_dhq) {
+        if (!reportData.value.six[i]?.verified_by_dhq) {
           console.log('send6')
           await reportPartTwoService.sendReportDHMultiply(reportDataDH.value.six[i], '6', i, route.query.reportId);
         }
       }
       for (let i in reportData.value.ninth) {
 
-        if (!reportData.value.ninth[i].verified_by_dhq) {
+        if (!reportData.value.ninth[i]?.verified_by_dhq) {
           console.log('send9')
           await reportPartTwoService.sendReportDHMultiply(reportDataDH.value.ninth[i], '9', i, route.query.reportId, true);
         }

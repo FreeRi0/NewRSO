@@ -634,7 +634,7 @@
                     </v-table> -->
                     <ReportTable label="Проведение мероприятия " name="ninthPanelData.event_happened"
                         :dataRH="ninthPanelData.event_happened" :dataDH="ninthPanelDataDH.event_happened"
-                        v-model:value="ninthPanelDataCH.event_happened" :maxlength="10" :min="0" :max="2147483647"
+                        v-model:value="ninthPanelDataCH.event_happened"
                         :is-error-panel="isErrorPanel"></ReportTable>
 
                     <div class="form__field places mt-4 mb-4">
