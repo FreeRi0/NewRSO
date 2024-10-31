@@ -224,8 +224,8 @@
         </v-expansion-panels>
       </div>
     </div>
-    <Button v-if="!preloader" :disabled="blockSendButton" variant="text" label="Отправить отчет" size="large"
-      @click="sendReport" />
+    <Button class="btn_report" v-if="!preloader" :disabled="blockSendButton" variant="text" label="Отправить отчет"
+      size="large" @click="sendReport" />
   </div>
 </template>
 <script setup>
@@ -1692,6 +1692,14 @@ onMounted(() => {
 
 </script>
 <style>
+.btn_report {
+  padding: 12px 32px !important;
+
+  @media (max-width: 480px) {
+    width: 90% !important;
+  }
+}
+
 .swal2-shown {
   overflow: unset !important;
   padding-right: 0px !important;
