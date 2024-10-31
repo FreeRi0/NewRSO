@@ -163,7 +163,7 @@
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                                }}</label>
+                            }}</label>
                         </div>
                     </div>
                 </div>
@@ -509,7 +509,7 @@
                                     type="radio" v-model="ninthPanelDataDH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -634,8 +634,7 @@
                     </v-table> -->
                     <ReportTable label="Проведение мероприятия " name="ninthPanelData.event_happened"
                         :dataRH="ninthPanelData.event_happened" :dataDH="ninthPanelDataDH.event_happened"
-                        v-model:value="ninthPanelDataCH.event_happened"
-                        :is-error-panel="isErrorPanel"></ReportTable>
+                        v-model:value="ninthPanelDataCH.event_happened" :is-error-panel="isErrorPanel"></ReportTable>
 
                     <div class="form__field places mt-4 mb-4">
                         <p class="form__label">
@@ -650,7 +649,7 @@
                                     v-model="ninthPanelDataCH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -846,42 +845,39 @@ const uploadFile = (event, number) => {
     //         emit('uploadFile', formData);
     //     }
     if (number === 9) {
-        fileValidate(event.target.files[0], 9, isErrorFile);
-        if (isErrorFile.value) {
-            console.log('error');
-            scanFile.value = event.target.files[0];
-            ninthPanelData.value.document = scanFile.value.name;
-        } else {
-            if (props.isDistrictHeadquarterCommander) {
-                if (event.target.files) {
+        if (event.target.files) {
+            fileValidate(event.target.files[0], 9, isErrorFile);
+            if (isErrorFile.value) {
+                console.log('error');
+                scanFile.value = event.target.files[0];
+                ninthPanelData.value.document = scanFile.value.name;
+            } else {
+                if (props.isDistrictHeadquarterCommander) {
                     reportStore.reportDataDHFile.ninth[props.ninthId] = event.target.files[0];
                     console.log('fileDH', reportStore.reportDataDHFile.ninth[props.ninthId])
-                }
-
-            } else if (props.isCentralHeadquarterCommander) {
-                if (event.target.files) {
+                } else if (props.isCentralHeadquarterCommander) {
                     reportStore.reportDataCHFile.ninth[props.ninthId] = event.target.files[0];
                     console.log('fileCH', reportStore.reportDataCHFile.ninth[props.ninthId])
-                }
-
-            } else {
-                let formData = new FormData();
-                formData.append('event_happened', ninthPanelData.value.event_happened);
-                formData.append('document', event.target.files[0]);
-                if (ninthPanelData.value.links.length) {
-                    for (let i = 0; i < ninthPanelData.value.links.length; i++) {
-                        !ninthPanelData.value.links[i].link
-                            ? formData.append(`[links][${i}][link]`, '')
-                            : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                } else {
+                    let formData = new FormData();
+                    formData.append('event_happened', ninthPanelData.value.event_happened);
+                    formData.append('document', event.target.files[0]);
+                    if (ninthPanelData.value.links.length) {
+                        for (let i = 0; i < ninthPanelData.value.links.length; i++) {
+                            !ninthPanelData.value.links[i].link
+                                ? formData.append(`[links][${i}][link]`, '')
+                                : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                        }
                     }
+                    if (ninthPanelData.value.comment !== null) {
+                        formData.append('comment', ninthPanelData.value.comment);
+                    }
+                    emit('uploadFile', formData);
                 }
-                if (ninthPanelData.value.comment !== null) {
-                    formData.append('comment', ninthPanelData.value.comment);
-                }
-                emit('uploadFile', formData);
-            }
 
+            }
         }
+
     }
 
 }
