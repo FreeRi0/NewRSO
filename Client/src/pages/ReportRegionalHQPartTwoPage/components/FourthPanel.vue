@@ -171,7 +171,7 @@
           </div>
         </div>
         <div class="form__field-link">
-          <p class="form__label">Ссылка на группу мероприятия в социальных сетях <sup class="valid-red">*</sup></p>
+          <p class="form__label">Ссылка на группу мероприятия в социальных сетях</p>
           <div class="form__add-link" v-for="(link, i) in events[index].links" :key="i">
             <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__input-add-link"
               type="text" placeholder="https://vk.com/cco_monolit" @focusout="focusOut"
@@ -318,7 +318,7 @@
         </v-table>
         <div>
           <label class="form__label" for="11">Межрегиональное <sup class="valid-red">*</sup></label>
-          <div class="form__label-radio">
+          <div class="form__label-radio" style="margin-top: 10px;">
             <div style="display: flex;">
               <input v-model="eventCH.dataCH.is_interregional" type="radio" :id="`is_interregional-true_${index}CH`"
                 :value="true" class="custom-radio" />
@@ -371,6 +371,7 @@
             </tr>
           </tbody>
         </v-table>
+        <div class="hr" style="margin-bottom: 40px;"></div>
       </div>
 
       <div class="form__field">
@@ -498,15 +499,15 @@ const addEvent = () => {
     is_interregional: false,
   })
 };
-const addEventDH = () => {
-  fourthPanelDataDH.value.events.push({
-    name: '',
-    participants_number: '',
-    start_date: null,
-    end_date: null,
-    is_interregional: false,
-  })
-};
+// const addEventDH = () => {
+//   fourthPanelDataDH.value.events.push({
+//     name: '',
+//     participants_number: '',
+//     start_date: null,
+//     end_date: null,
+//     is_interregional: false,
+//   })
+// };
 const deleteEvent = async (index) => {
   let formData = new FormData();
   events.value = events.value.filter((el, i) => index !== i);
@@ -531,9 +532,9 @@ const deleteEvent = async (index) => {
     console.log('deleteEvent error: ', e);
   }
 };
-const deleteEventDH = (index) => {
-  fourthPanelDataDH.value.events = fourthPanelDataDH.value.events.filter((el, i) => index !== i);
-};
+// const deleteEventDH = (index) => {
+//   fourthPanelDataDH.value.events = fourthPanelDataDH.value.events.filter((el, i) => index !== i);
+// };
 
 const uploadFile = async (event, index) => {
   fileValidate(event.target.files[0], 7, isErrorFile);
