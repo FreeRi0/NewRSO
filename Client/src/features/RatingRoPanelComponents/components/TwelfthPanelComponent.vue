@@ -111,12 +111,13 @@
             name="twelfthPanelData.comment"
             @change="uploadFileDH"
             @click="deleteFileDH"
-            :file="reportStore.reportDataDHFile.twelfth ? reportStore.reportDataDHFile.twelfth.name : null"
-            :fileType="reportStore.reportDataDHFile.twelfth ? reportStore.reportDataDHFile.twelfth.type.split('/').at(-1) : null"
-            :fileSize="reportStore.reportDataDHFile.twelfth ? reportStore.reportDataDHFile.twelfth.size / Math.pow(1024, 2) : null"
+            :file="fileDH.name"
+            :fileType="fileDH.type"
+            :fileSize="fileDH.size"
             :disabled="centralExpert"
             :is-error-file="isErrorFile"
             :is-error-panel="isErrorPanel"
+            :is-sent="centralExpert"
         ></CommentFileComponent>
     </div>
 
@@ -143,15 +144,19 @@
             name="twelfthPanelDataCH.comment"
             @change="uploadFileCH"
             @click="deleteFileCH"
-            :file="reportStore.reportDataCHFile.twelfth ? reportStore.reportDataCHFile.twelfth.name : null"
-            :fileType="reportStore.reportDataCHFile.twelfth ? reportStore.reportDataCHFile.twelfth.type.split('/').at(-1) : null"
-            :fileSize="reportStore.reportDataCHFile.twelfth ? reportStore.reportDataCHFile.twelfth.size / Math.pow(1024, 2) : null"
+            :file="fileCH.name"
+            :fileType="fileCH.type"
+            :fileSize="fileCH.size"
+            :is-error-file="isErrorFile"
             
             :is-error-panel="isErrorPanel"
         ></CommentFileComponent>
 
         <div>
-            <v-checkbox label="Вернуть в&nbsp;РО на&nbsp;доработку" />
+            <v-checkbox
+                v-model="reportStore.returnReport.twelfth"
+                label="Вернуть в&nbsp;РО на&nbsp;доработку"
+                @change="onReturnReport" />
         </div>
     </div> 
 </template>
@@ -186,8 +191,6 @@ const props = defineProps({
         default: false,
     },
     data: Object,
-    // dataDH: Object,
-    // dataCH: Object,
     isErrorPanel: {
         type: Boolean,
     },
@@ -213,6 +216,12 @@ const twelfthPanelDataDH = ref({
     comment: '',
 });
 
+const fileDH = ref({
+  name: '',
+  type: '',
+  size: null,
+})
+
 const twelfthPanelDataCH = ref({
     amount_of_money: null,
     scan_file: '',
@@ -221,6 +230,12 @@ const twelfthPanelDataCH = ref({
     comment: '',
 });
 
+const fileCH = ref({
+  name: '',
+  type: '',
+  size: null,
+})
+
 const isSent = ref(false);
 //const isVerifiedDH = ref(false);
 
@@ -228,7 +243,6 @@ const emit = defineEmits([
     'getData', 
     'getDataDH', 
     'getDataCH', 
-    // 'getFileDH'
 ]);
 
 const focusOut = async () => {
@@ -284,18 +298,33 @@ const uploadFile = async (event) => {
 };
 
 const uploadFileDH = async (event) => {
-    twelfthPanelDataDH.value.scan_file = event.target.files[0];
+    if (event.target.files) {
+        fileValidate(event.target.files[0], 7, isErrorFile);
 
-    // fileValidate(event.target.files[0], 7, isErrorFile);
-
-    // if (!isErrorFile.value) {
-        reportStore.reportDataDHFile.twelfth = event.target.files[0];
-    // }
+        if (isErrorFile.value) {
+            reportStore.reportDataDHFile.twelfth = null;
+            fileDH.value.name = event.target.files[0].name;
+            fileDH.value.type = event.target.files[0].type.split('/').at(-1);
+            fileDH.value.size = event.target.files[0].size / Math.pow(1024, 2);
+        } else {
+            reportStore.reportDataDHFile.twelfth = event.target.files[0];
+        }
+    }
 }
 
 const uploadFileCH = async (event) => {
-  twelfthPanelDataCH.value.scan_file = event.target.files[0];
-  reportStore.reportDataCHFile.twelfth = event.target.files[0];
+    if (event.target.files) {
+        fileValidate(event.target.files[0], 7, isErrorFile);
+
+        if (isErrorFile.value) {
+            reportStore.reportDataCHFile.twelfth = null;
+            fileCH.value.name = event.target.files[0].name;
+            fileCH.value.type = event.target.files[0].type.split('/').at(-1);
+            fileCH.value.size = event.target.files[0].size / Math.pow(1024, 2);
+        } else {
+            reportStore.reportDataCHFile.twelfth = event.target.files[0];
+        }
+    }
 }
 
 const deleteFile = async () => {
@@ -319,16 +348,29 @@ const deleteFile = async () => {
 };
 
 const deleteFileDH = async () => {
-    twelfthPanelDataDH.value.scan_file = "";
-
-    // if (!isErrorFile.value) {
-        reportStore.reportDataDHFile.twelfth = null;
-    // }
+    fileDH.value.name = null;
+    reportStore.reportDataDHFile.twelfth = null;
 }
 
 const deleteFileCH = async () => {
-  twelfthPanelDataCH.value.scan_file = '';
-  reportStore.reportDataCHFile.twelfth = null;
+    fileCH.value.name = null;
+    reportStore.reportDataCHFile.twelfth = null;
+}
+
+const onReturnReport = (event) => {
+  let formData = new FormData();
+  formData.append('amount_of_money', twelfthPanelDataCH.value.amount_of_money);
+  formData.append('comment', twelfthPanelDataCH.value.comment);
+  formData.append('scan_file', reportStore.reportDataCHFile.twelfth || '');
+  
+  if (event.target.checked) {
+    reportStore.returnReport.twelfth = true;
+    formData.append('reasons[comment]', twelfthPanelDataCH.value.comment);
+  } else {
+    reportStore.returnReport.twelfth = false;
+  }
+
+  emit('getDataCH', formData, Number(ID_PANEL));
 }
 
 watchEffect(async () => {
@@ -354,6 +396,24 @@ watchEffect(async () => {
             isSent.value = props.data.is_sent;
         }
     }
+    if (props.districtExpert) {
+        if (reportStore.reportDataDHFile.twelfth) {
+            fileDH.value.name = reportStore.reportDataDHFile.twelfth.name;
+            fileDH.value.type = reportStore.reportDataDHFile.twelfth.type.split('/').at(-1);
+            fileDH.value.size = reportStore.reportDataDHFile.twelfth.size / Math.pow(1024, 2);
+        }
+    } else if (props.centralExpert) {
+        if (reportStore.reportDataDH.twelfth) {
+            fileDH.value.name = reportStore.reportDataDH.twelfth.scan_file;
+            fileDH.value.type = reportStore.reportDataDH.twelfth.file_type;
+            fileDH.value.size = reportStore.reportDataDH.twelfth.file_size;
+        }
+        if (reportStore.reportDataCHFile.twelfth) {
+            fileCH.value.name = reportStore.reportDataCHFile.twelfth.name;
+            fileCH.value.type = reportStore.reportDataCHFile.twelfth.type.split('/').at(-1);
+            fileCH.value.size = reportStore.reportDataCHFile.twelfth.size / Math.pow(1024, 2);
+        }
+    }
 }, {
     flush: 'post'
 });
@@ -371,39 +431,55 @@ watchPostEffect(() => {
 });
 
 watch(twelfthPanelDataDH.value, () => {
-  reportStore.reportDataDH.twelfth = twelfthPanelDataDH.value;
+    if (props.districtExpert) {
+        reportStore.reportDataDH.twelfth = twelfthPanelDataDH.value;
 
-  let formData = new FormData();
+        let formData = new FormData();
 
-  twelfthPanelDataDH.value.amount_of_money 
-  ? formData.append('amount_of_money', twelfthPanelDataDH.value.amount_of_money) 
-  : formData.append('amount_of_money', '');
+        formData.append('amount_of_money', twelfthPanelDataDH.value.amount_of_money);
+        formData.append('comment', twelfthPanelDataDH.value.comment || '');
+        formData.append('scan_file', reportStore.reportDataDHFile.twelfth || '');
+        emit('getDataDH', formData, Number(ID_PANEL));
+    }
+});
 
-  formData.append('comment', twelfthPanelDataDH.value.comment || '');
+watch(fileDH.value, ()=> {
+    if (props.districtExpert) {
+        reportStore.reportDataDH.twelfth = twelfthPanelDataDH.value;
 
-  reportStore.reportDataDHFile.twelfth 
-  ? formData.append('scan_file', reportStore.reportDataDHFile.twelfth) 
-  : formData.append('scan_file', '');
+        let formData = new FormData();
 
-  emit('getDataDH', formData, Number(ID_PANEL));
+        formData.append('amount_of_money', twelfthPanelDataDH.value.amount_of_money);
+        formData.append('comment', twelfthPanelDataDH.value.comment || '');
+        formData.append('scan_file', reportStore.reportDataDHFile.twelfth || '');
+        emit('getDataDH', formData, Number(ID_PANEL));
+    }
 });
 
 watch(twelfthPanelDataCH.value, () => {
-  reportStore.reportDataCH.twelfth = twelfthPanelDataCH.value;
+    if (props.centralExpert) {
+        reportStore.reportDataCH.twelfth = twelfthPanelDataCH.value;
 
-  let formData = new FormData();
+        let formData = new FormData();
+        formData.append('amount_of_money', twelfthPanelDataCH.value.amount_of_money);
+        formData.append('comment', twelfthPanelDataCH.value.comment || '');
+        formData.append('scan_file', reportStore.reportDataCHFile.twelfth || '');
+        if (reportStore.returnReport.twelfth) formData.append('reasons[comment]', twelfthPanelDataCH.value.comment);
+        emit('getDataCH', formData, Number(ID_PANEL));
+    }
+});
 
-  twelfthPanelDataCH.value.amount_of_money 
-  ? formData.append('amount_of_money', twelfthPanelDataCH.value.amount_of_money) 
-  : formData.append('amount_of_money', '');
+watch(fileCH.value, ()=> {
+    if (props.centralExpert) {
+        reportStore.reportDataCH.twelfth = twelfthPanelDataCH.value;
 
-  formData.append('comment', twelfthPanelDataCH.value.comment || '');
-
-  reportStore.reportDataCHFile.twelfth 
-  ? formData.append('scan_file', reportStore.reportDataCHFile.twelfth) 
-  : formData.append('scan_file', '');
-
-  emit('getDataCH', formData, Number(ID_PANEL));
+        let formData = new FormData();
+        formData.append('amount_of_money', twelfthPanelDataCH.value.amount_of_money);
+        formData.append('comment', twelfthPanelDataCH.value.comment || '');
+        formData.append('scan_file', reportStore.reportDataCHFile.twelfth || '');
+        if (reportStore.returnReport.twelfth) formData.append('reasons[comment]', twelfthPanelDataCH.value.comment);
+        emit('getDataCH', formData, Number(ID_PANEL));
+    }
 });
 </script>
   

@@ -163,7 +163,7 @@
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                                }}</label>
+                            }}</label>
                         </div>
                     </div>
                 </div>
@@ -180,8 +180,7 @@
                         <v-progress-circular color="primary" indeterminate></v-progress-circular>
                     </div>
                     <FileBoxComponent v-else-if="ninthPanelData.document && typeof ninthPanelData.document === 'string'"
-                        :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
-                        :isSent="isSentNinth"
+                        :file="ninthPanelData.document" :fileType="ninthPanelData.file_type" :isSent="isSentNinth"
                         :is-error-file="isErrorFile" :fileSize="ninthPanelData.file_size" @click="deleteFile(9)">
                     </FileBoxComponent>
                 </div>
@@ -193,8 +192,8 @@
 
                     <div class="form__wrapper" v-for="(item, index) in ninthPanelData.links" :key="index">
                         <InputReport @focusout="focusOut" @error="setError"
-                            :disabled="isSentNinth || ninthPanelData.event_happened === false" name="14" :maxlength="200"
-                            :is-error-panel="isErrorPanel" :is-link="true"
+                            :disabled="isSentNinth || ninthPanelData.event_happened === false" name="14"
+                            :maxlength="200" :is-error-panel="isErrorPanel" :is-link="true"
                             placeholder="Введите ссылку, например, https://vk.com/cco_monolit" v-model:value="item.link"
                             class="mb-2" />
                         <div v-if="!isSentNinth && ninthPanelData.event_happened === true">
@@ -378,7 +377,8 @@
                             <label v-else class="places_item_label" :for="id">Нет</label>
                         </div>
                     </div>
-                    <div class="report__fieldset report__fieldset--right-block" v-if="ninthPanelData.document !== null">
+                    <div class="report__fieldset report__fieldset--right-block"
+                        v-if="ninthPanelData.document !== null || ninthPanelData.document !== ''">
                         <label class="form__label report__label mb-2" for="scan_file">
                             Скан документа, подтверждающего проведение акции
                         </label>
@@ -387,7 +387,8 @@
                             v-if="!ninthPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
                             id="scan_file" name="scan_file" width="100%" height="auto" />
                         <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
-                            :isSent="isSent" :fileSize="ninthPanelData.file_size">
+                            :isSent="props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander"
+                            :fileSize="ninthPanelData.file_size">
                         </FileBoxComponent>
                     </div>
 
@@ -404,7 +405,7 @@
                                 v-model:value="item.link" class="mb-2" />
                         </div>
                     </div>
-                    <div class="form__field">
+                    <div class="form__field" v-if="ninthPanelData.comment !== null || ninthPanelData.comment !== ''">
                         <label class="form__label" for="14">Комментарий</label>
                         <TextareaReport
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
@@ -477,7 +478,8 @@
                         </p>
                         <InputReport v-model:value="sixPanelDataDH.number_of_members" placeholder="Введите число"
                             id="15" name="14" class="form__input number_input" :is-error-panel="isErrorPanel"
-                            type="number" :maxlength="10" :max="32767" />
+                            :disabled="props.isCentralHeadquarterCommander" type="number" :maxlength="10"
+                            :max="32767" />
                     </div>
 
                     <CommentFileComponent v-model:value="sixPanelDataDH.comment" :is-error-panel="isErrorPanel"
@@ -503,11 +505,11 @@
                             <div class="places_item" v-for="item in events" :key="item.id">
                                 <input :id="item.id" :value="item.value" :name="item.name"
                                     :checked="ninthPanelDataDH.event_happened == item.value"
-                                    class="form__input places_input" type="radio"
-                                    v-model="ninthPanelDataDH.event_happened" />
+                                    :disabled="props.isCentralHeadquarterCommander" class="form__input places_input"
+                                    type="radio" v-model="ninthPanelDataDH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -594,31 +596,16 @@
                             <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
                         </div>
                     </div>
-                    <label class="form__label">Количество человек, принявших участие в мероприятии <sup
-                            class="valid-red">*</sup></label>
-                    <v-table>
-                        <tbody>
-                            <tr class="report-table__tr">
-                                <td class="report-table__th">Данные РО</td>
-                                <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
-                                <td class="report-table__th">Корректировка ЦШ</td>
-                            </tr>
-                            <tr>
-                                <td class="report-table__td">200</td>
-                                <td class="report-table__td report-table__td__center">200</td>
-                                <td class="report-table__td">200</td>
-                            </tr>
-                        </tbody>
-                    </v-table>
+                    <ReportTable label="Количество человек, принявших участие в мероприятии" class="mb-4"
+                        name="sixPanelData.number_of_members" :dataRH="sixPanelData.number_of_members"
+                        :dataDH="sixPanelDataDH.number_of_members" v-model:value="sixPanelDataCH.number_of_members"
+                        :maxlength="10" :min="0" :max="2147483647" :is-error-panel="isErrorPanel"></ReportTable>
 
-                    <div class="form__field">
-                        <label class="form__label" for="14">Комментарий</label>
-                        <TextareaReport v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1"
-                            autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
-                            :max-length-text="3000" counter-visible />
-                    </div>
+                    <CommentFileComponent v-model:value="sixPanelDataCH.comment" name="sixPanelDataCH.comment"
+                        :is-six="true" :CH="true" :is-error-panel="isErrorPanel"></CommentFileComponent>
                     <div>
-                        <v-checkbox label="Вернуть в РО на доработку" />
+                        <v-checkbox v-model="reportStore.returnReport.six[props.sixId]"
+                            @change="returnForReview($event, 6)" label="Вернуть в РО на доработку" />
                     </div>
                 </div>
                 <div v-else-if="props.panel_number == 9" class="form__field-group group-seventh">
@@ -630,8 +617,8 @@
                             <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
                         </div>
                     </div>
-                    <label class="form__label">Проведение мероприятия <sup class="valid-red">*</sup></label>
-                    <v-table>
+                    <!-- <label class="form__label">Проведение мероприятия <sup class="valid-red">*</sup></label> -->
+                    <!-- <v-table>
                         <tbody>
                             <tr class="report-table__tr">
                                 <td class="report-table__th">Данные РО</td>
@@ -644,8 +631,12 @@
                                 <td class="report-table__td">Да</td>
                             </tr>
                         </tbody>
-                    </v-table>
-                    <div class="form__field places mt-4">
+                    </v-table> -->
+                    <ReportTable label="Проведение мероприятия " name="ninthPanelData.event_happened"
+                        :dataRH="ninthPanelData.event_happened" :dataDH="ninthPanelDataDH.event_happened"
+                        v-model:value="ninthPanelDataCH.event_happened" :is-error-panel="isErrorPanel"></ReportTable>
+
+                    <div class="form__field places mt-4 mb-4">
                         <p class="form__label">
                             Проведение мероприятия <sup class="valid-red">*</sup>
                         </p>
@@ -653,24 +644,25 @@
                         <div class="places_wrap">
                             <div class="places_item" v-for="item in events" :key="item.id">
                                 <input :id="item.id" :value="item.value" :name="item.name"
-                                    :checked="ninthPanelData.event_happened == item.value"
-                                    class="form__input places_input" type="radio" @focusout="focusOut"
-                                    v-model="ninthPanelData.event_happened" />
+                                    :checked="ninthPanelDataCH.event_happened == item.value"
+                                    class="form__input places_input" type="radio"
+                                    v-model="ninthPanelDataCH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
-
-                    <div class="form__field">
-                        <label class="form__label" for="14">Комментарий</label>
-                        <TextareaReport v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1"
-                            autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
-                            :max-length-text="3000" counter-visible />
-                    </div>
+                    <CommentFileComponent v-model:value="ninthPanelDataCH.comment" name="ninthPanelDataCH.comment"
+                        @change="uploadFile($event, 9)" @click="deleteFile(9)" :CH="true"
+                        :file="reportStore.reportDataCHFile.ninth[props.ninthId] ? reportStore.reportDataCHFile.ninth[props.ninthId]?.name : null"
+                        :fileType="reportStore.reportDataCHFile.ninth[props.ninthId] ? reportStore.reportDataCHFile.ninth[props.ninthId]?.type.split('/').at(-1) : null"
+                        :fileSize="reportStore.reportDataCHFile.ninth[props.ninthId] ? reportStore.reportDataCHFile.ninth[props.ninthId]?.size / Math.pow(1024, 2) : null"
+                        :is-error-file="isErrorFile" :is-error-panel="isErrorPanel">
+                    </CommentFileComponent>
                     <div>
-                        <v-checkbox label="Вернуть в РО на доработку" />
+                        <v-checkbox v-model="reportStore.returnReport.ninth[props.ninthId]"
+                            @change="returnForReview($event, 9)" label="Вернуть в РО на доработку" />
                     </div>
                 </div>
             </template>
@@ -678,7 +670,7 @@
     </v-card-text>
 </template>
 <script setup>
-import { ref, watchEffect, watch } from 'vue';
+import { ref, watchEffect, watch, handleError } from 'vue';
 import { Button } from '@shared/components/buttons';
 import {
     FileBoxComponent,
@@ -711,7 +703,7 @@ const props = defineProps({
     dataCH: Object,
 });
 
-const emit = defineEmits(['collapse-form', 'formData', 'formDataDH', 'uploadFile', 'uploadFileDH', 'getId', 'getPanelNumber', 'deleteFile', 'deleteFileDH', 'error']);
+const emit = defineEmits(['collapse-form', 'formData', 'formDataDH', 'formDataCH', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'deleteFileDH', 'error']);
 
 const collapseForm = () => {
     emit('collapse-form');
@@ -777,6 +769,14 @@ const sixPanelDataCH = ref({
     comment: '',
 });
 
+const ninthPanelDataCH = ref({
+    event_happened: false,
+    document: '',
+    file_size: null,
+    file_type: '',
+    comment: '',
+});
+
 // const prize_places = ref([
 //     { name: '1', value: 1, id: 'pp1' },
 //     { name: '2', value: 2, id: 'pp2' },
@@ -788,6 +788,37 @@ const events = ref([
     { name: 'Да', value: true, id: 'pp1' },
     { name: 'Нет', value: false, id: 'pp2' },
 ])
+
+const isReturn = ref(false);
+
+const returnForReview = (event, number) => {
+    let formData = new FormData();
+    if (event.target.checked) {
+        if (number == 6) {
+            reportStore.returnReport.six[props.sixId] = true;
+            emit('formDataCH', sixPanelDataCH);
+        } else if (number == 9) {
+            reportStore.returnReport.ninth[props.ninthId] = true;
+            formData.append('event_happened', ninthPanelDataCH.value.event_happened);
+            formData.append('comment', ninthPanelDataCH.value.comment);
+            formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId] || '');
+            formData.append('reasons[comment]', ninthPanelDataCH.value.comment);
+            emit('formDataCH', formData);
+        }
+    } else {
+        if (number == 6) {
+            reportStore.returnReport.six[props.sixId] = false;
+            emit('formDataCH', sixPanelDataCH);
+        } else if (number == 9) {
+            reportStore.returnReport.ninth[props.ninthId] = false;
+            formData.append('event_happened', ninthPanelDataCH.value.event_happened);
+            formData.append('comment', ninthPanelDataCH.value.comment);
+            formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId] || '');
+            emit('formDataCH', formData);
+        }
+    }
+}
+
 
 
 const uploadFile = (event, number) => {
@@ -814,35 +845,39 @@ const uploadFile = (event, number) => {
     //         emit('uploadFile', formData);
     //     }
     if (number === 9) {
-        fileValidate(event.target.files[0], 9, isErrorFile);
-        if (isErrorFile.value) {
-            console.log('error');
-            scanFile.value = event.target.files[0];
-            ninthPanelData.value.document = scanFile.value.name;
-        } else {
-            if (props.isDistrictHeadquarterCommander) {
-
-                ninthPanelDataDH.value.document = event.target.files[0];
-                reportStore.reportDataDHFile.ninth[props.ninthId] = event.target.files[0];
-                console.log('file', reportStore.reportDataDHFile.ninth[props.ninthId])
+        if (event.target.files) {
+            fileValidate(event.target.files[0], 9, isErrorFile);
+            if (isErrorFile.value) {
+                console.log('error');
+                scanFile.value = event.target.files[0];
+                ninthPanelData.value.document = scanFile.value.name;
             } else {
-                let formData = new FormData();
-                formData.append('event_happened', ninthPanelData.value.event_happened);
-                formData.append('document', event.target.files[0]);
-                if (ninthPanelData.value.links.length) {
-                    for (let i = 0; i < ninthPanelData.value.links.length; i++) {
-                        !ninthPanelData.value.links[i].link
-                            ? formData.append(`[links][${i}][link]`, '')
-                            : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                if (props.isDistrictHeadquarterCommander) {
+                    reportStore.reportDataDHFile.ninth[props.ninthId] = event.target.files[0];
+                    console.log('fileDH', reportStore.reportDataDHFile.ninth[props.ninthId])
+                } else if (props.isCentralHeadquarterCommander) {
+                    reportStore.reportDataCHFile.ninth[props.ninthId] = event.target.files[0];
+                    console.log('fileCH', reportStore.reportDataCHFile.ninth[props.ninthId])
+                } else {
+                    let formData = new FormData();
+                    formData.append('event_happened', ninthPanelData.value.event_happened);
+                    formData.append('document', event.target.files[0]);
+                    if (ninthPanelData.value.links.length) {
+                        for (let i = 0; i < ninthPanelData.value.links.length; i++) {
+                            !ninthPanelData.value.links[i].link
+                                ? formData.append(`[links][${i}][link]`, '')
+                                : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                        }
                     }
+                    if (ninthPanelData.value.comment !== null) {
+                        formData.append('comment', ninthPanelData.value.comment);
+                    }
+                    emit('uploadFile', formData);
                 }
-                if (ninthPanelData.value.comment !== null) {
-                    formData.append('comment', ninthPanelData.value.comment);
-                }
-                emit('uploadFile', formData);
-            }
 
+            }
         }
+
     }
 
 }
@@ -872,6 +907,9 @@ const deleteFile = (number) => {
             reportStore.reportDataDHFile.ninth[props.ninthId] = null;
             ninthPanelDataDH.value.document = '';
 
+        } else if (props.isCentralHeadquarterCommander) {
+            reportStore.reportDataCHFile.ninth[props.ninthId] = null;
+            ninthPanelDataCH.value.document = '';
         } else {
             ninthPanelData.value.document = '';
             formData.append('event_happened', ninthPanelData.value.event_happened);
@@ -897,12 +935,6 @@ const deleteFile = (number) => {
 const focusOut = () => {
     if (props.panel_number == 6) {
         try {
-            // if (props.isDistrictHeadquarterCommander) {
-            //     emit('formDataDH', sixPanelDataDH.value);
-            //     console.log('dataDH', sixPanelDataDH);
-            // } else {
-            //     emit('formData', sixPanelData.value);
-            // }
             emit('formData', sixPanelData.value);
 
         } catch (e) {
@@ -960,10 +992,6 @@ const focusOut = () => {
     // }
     else if (props.panel_number == 9) {
         try {
-            // if (props.isDistrictHeadquarterCommander) {
-            //     emit('formDataDH', ninthPanelDataDH.value);
-            //     console.log('dataDH9', ninthPanelDataDH);
-            // } else {
             if (isFirstSentNinth.value === true) {
                 console.log('9', '1')
                 emit('formData', ninthPanelData.value)
@@ -1042,11 +1070,15 @@ const deleteLink = async (number) => {
 watchEffect(() => {
     if (props.panel_number == 6) {
 
-        if (props.isDistrictHeadquarterCommander) {
+        if (props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) {
             sixPanelData.value = { ...props.data };
             if (reportStore.reportDataDH.six[props.sixId]) {
                 sixPanelDataDH.value.comment = reportStore.reportDataDH.six[props.sixId].comment;
                 sixPanelDataDH.value.number_of_members = reportStore.reportDataDH.six[props.sixId].number_of_members;
+            }
+            if (reportStore.reportDataCH.six[props.sixId]) {
+                sixPanelDataCH.value.comment = reportStore.reportDataCH.six[props.sixId].comment;
+                sixPanelDataCH.value.number_of_members = reportStore.reportDataCH.six[props.sixId].number_of_members;
             }
             // sixPanelDataCH.value = { ...props.dataCH };
         } else {
@@ -1096,11 +1128,15 @@ watchEffect(() => {
         //     emit('getPanelNumber', props.panel_number)
 
     } else if (props.panel_number == 9) {
-        if (props.isDistrictHeadquarterCommander) {
+        if (props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) {
             ninthPanelData.value = { ...props.data };
             if (reportStore.reportDataDH.ninth[props.ninthId]) {
                 ninthPanelDataDH.value.comment = reportStore.reportDataDH.ninth[props.ninthId].comment;
                 ninthPanelDataDH.value.event_happened = reportStore.reportDataDH.ninth[props.ninthId].event_happened;
+            }
+            if (reportStore.reportDataCH.ninth[props.ninthId]) {
+                ninthPanelDataCH.value.comment = reportStore.reportDataCH.ninth[props.ninthId].comment;
+                ninthPanelDataCH.value.event_happened = reportStore.reportDataCH.ninth[props.ninthId].event_happened;
             }
         } else {
             if (Object.keys(props.data).length > 0) {
@@ -1147,6 +1183,11 @@ watch(sixPanelDataDH.value, () => {
     emit('formDataDH', sixPanelDataDH.value);
     console.log(sixPanelDataDH.value)
 });
+watch(sixPanelDataCH.value, () => {
+    reportStore.reportDataCH.six[props.sixId] = sixPanelDataCH.value;
+    emit('formDataCH', sixPanelDataCH.value);
+    console.log(sixPanelDataCH.value)
+});
 watch(ninthPanelDataDH.value, () => {
     reportStore.reportDataDH.ninth[props.ninthId] = ninthPanelDataDH.value;
 
@@ -1166,7 +1207,25 @@ watch(ninthPanelDataDH.value, () => {
     // reportStore.reportDataDH.ninth = ninthPanelDataDH.value;
     // emit('formDataDH', ninthPanelDataDH.value);
 });
+watch(ninthPanelDataCH.value, () => {
+    reportStore.reportDataCH.ninth[props.ninthId] = ninthPanelDataCH.value;
 
+    let formData = new FormData();
+
+    ninthPanelDataCH.value.event_happened
+        ? formData.append('event_happened', ninthPanelDataCH.value.event_happened)
+        : formData.append('event_happened', false);
+
+    formData.append('comment', ninthPanelDataCH.value.comment || '');
+
+    reportStore.reportDataCHFile.ninth[props.ninthId]
+        ? formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId])
+        : formData.append('document', '');
+
+    emit('formDataCH', formData);
+    // reportStore.reportDataDH.ninth = ninthPanelDataDH.value;
+    // emit('formDataDH', ninthPanelDataDH.value);
+});
 </script>
 <style lang="scss" scoped>
 .number_input {

@@ -18,6 +18,7 @@
               :step="0.01"
               @focusout="focusOut"
               :disabled="isSent"
+              :is-error-panel="isErrorPanel"
           />
         </div>
         <div class="report__add-file">
@@ -30,6 +31,7 @@
               id="scan_file"
               name="scan_file"
               :disabled="isSent"
+              :is-error-panel="isErrorPanel"
               style="width: 100%;"
               @change="uploadFile"/>
           <FileBoxComponent
@@ -129,6 +131,8 @@
               :min="0"
               :max="9999999999"
               :step="0.01"
+              :disabled="props.centralExpert"
+              :is-error-panel="isErrorPanel"
           />
         </div>
       </div>
@@ -136,41 +140,70 @@
         <CommentFileComponent
             v-model:value="firstPanelDataDH.comment"
             name="firstPanelDataDH.comment"
-            :file="reportStore.reportDataDHFile.first ? reportStore.reportDataDHFile.first.name : null"
-            :fileType="reportStore.reportDataDHFile.first ? reportStore.reportDataDHFile.first.type.split('/').at(-1) : null"
-            :fileSize="reportStore.reportDataDHFile.first ? reportStore.reportDataDHFile.first.size / Math.pow(1024, 2) : null"
-            :disabled="centralExpert"
+            :file="fileNameDH"
+            :fileType="fileTypeDH"
+            :fileSize="fileSizeDH"
+            :disabled="props.centralExpert"
             :is-error-file="isErrorFile"
             @change="uploadFileDH"
             @click="deleteFileDH"
+            :is-error-panel="isErrorPanel"
         />
       </div>
     </template>
 
     <template v-slot:thirdTab>
-      <div class="form__field-group report-table">
-        <v-table>
-          <tbody>
-          <tr class="report-table__tr">
-            <td class="report-table__th report-table__th__br-left">Данные РО</td>
-            <td class="report-table__th">Корректировка ОШ</td>
-            <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
-          </tr>
-          <tr>
-            <td class="report-table__td">200</td>
-            <td class="report-table__td report-table__td__center">200</td>
-            <td class="report-table__td">200</td>
-          </tr>
-          </tbody>
-        </v-table>
-        <div>
-          <label class="form__label" for="6">Комментарий&nbsp; <sup class="valid-red">*</sup></label>
-          <InputReport type="file" id="6" name="6"/>
-        </div>
-        <div>
-          <v-checkbox label="Вернуть в РО на доработку"/>
-        </div>
+      <label class="form__label">Общая сумма уплаченных членских взносов РО <sup
+          class="valid-red">*</sup></label>
+      <v-table>
+        <tbody>
+        <tr class="report-table__tr">
+          <td class="report-table__th">Данные РО</td>
+          <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
+          <td class="report-table__th">Корректировка ЦШ</td>
+        </tr>
+        <tr>
+          <td class="report-table__td">{{ firstPanelData.amount_of_money }}</td>
+          <td class="report-table__td report-table__td__center">{{ firstPanelDataDH.amount_of_money }}</td>
+          <td class="report-table__td">
+            <InputReport
+                v-model:value="firstPanelDataCH.amount_of_money"
+                :id="'amount_of_moneyCH'"
+                :name="'amount_of_moneyCH'"
+                style="width: 100%;"
+                type="number"
+                placeholder="0"
+                :maxlength="10"
+                :min="0"
+                :max="9999999999"
+                :step="0.01"
+                :is-error-panel="isErrorPanel"
+            />
+          </td>
+        </tr>
+        </tbody>
+      </v-table>
+      <div>
+        <CommentFileComponent
+            v-model:value="firstPanelDataCH.comment"
+            name="firstPanelDataDH.comment"
+            :file="reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.name : null"
+            :fileType="reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.type.split('/').at(-1) : null"
+            :fileSize="reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.size / Math.pow(1024, 2) : null"
+            :is-error-file="isErrorFile"
+            @change="uploadFileCH"
+            @click="deleteFileCH"
+            :is-error-panel="isErrorPanel"
+        />
       </div>
+      <div>
+        <v-checkbox
+            v-model="reportStore.returnReport.first"
+            @change="onReportReturn"
+            label="Вернуть в РО на доработку"
+        />
+      </div>
+
     </template>
   </report-tabs>
 </template>
@@ -195,9 +228,12 @@ const props = defineProps({
   },
   data: Object,
   blockEditFirstReport: Boolean,
+  isErrorPanel: {
+    type: Boolean,
+  },
 });
 
-const emit = defineEmits(['getData', 'getDataDH']);
+const emit = defineEmits(['getData', 'getDataDH', 'getDataCH']);
 
 const defaultReportData = {
   participants_number: '0',
@@ -226,8 +262,17 @@ const firstPanelDataDH = ref({
   comment: '',
   amount_of_money: '',
   scan_file: '',
+});
+const firstPanelDataCH = ref({
+  comment: '',
+  amount_of_money: '',
+  scan_file: '',
 })
 const isSent = ref(false);
+const fileNameDH = ref(null);
+const fileSizeDH = ref(null);
+const fileTypeDH = ref(null);
+// const reportReturn = ref(false);
 
 const focusOut = async () => {
   let formData = new FormData();
@@ -275,8 +320,16 @@ const uploadFile = async (event) => {
   }
 };
 const uploadFileDH = (event) => {
-  reportStore.reportDataDHFile.first = event.target.files[0];
-  firstPanelDataDH.value.scan_file = event.target.files[0];
+  if (event.target.files) {
+    reportStore.reportDataDHFile.first = event.target.files[0];
+    firstPanelDataDH.value.scan_file = event.target.files[0];
+  }
+};
+const uploadFileCH = (event) => {
+  if (event.target.files) {
+    reportStore.reportDataCHFile.first = event.target.files[0];
+    firstPanelDataCH.value.scan_file = event.target.files[0];
+  }
 }
 const deleteFile = async () => {
   firstPanelData.value.scan_file = '';
@@ -306,7 +359,38 @@ const deleteFileDH = () => {
   formData.append('comment', firstPanelDataDH.value.comment);
   formData.append('amount_of_money', firstPanelDataDH.value.amount_of_money);
   emit('getDataDH', formData, 1);
+};
+const deleteFileCH = () => {
+  reportStore.reportDataCHFile.first = null;
+
+  let formData = new FormData();
+  formData.append('comment', firstPanelDataCH.value.comment);
+  formData.append('amount_of_money', firstPanelDataCH.value.amount_of_money);
+  if (reportStore.returnReport.first) formData.append('reasons[comment]', firstPanelDataCH.value.comment || '');
+
+  emit('getDataCH', formData, 1);
+};
+
+const onReportReturn = (event) => {
+  let formData = new FormData();
+  if (event.target.checked) {
+    reportStore.returnReport.first = true;
+    formData.append('reasons[comment]', firstPanelDataCH.value.comment);
+    formData.append('comment', firstPanelDataCH.value.comment);
+    formData.append('amount_of_money', firstPanelDataCH.value.amount_of_money);
+    if (reportStore.reportDataCHFile.first) formData.append('scan_file', reportStore.reportDataCHFile.first);
+
+    emit('getDataCH', formData, 1);
+  } else {
+    reportStore.returnReport.first = false;
+    formData.append('comment', firstPanelDataCH.value.comment);
+    formData.append('amount_of_money', firstPanelDataCH.value.amount_of_money);
+    if (reportStore.reportDataCHFile.first) formData.append('scan_file', reportStore.reportDataCHFile.first);
+
+    emit('getDataCH', formData, 1);
+  }
 }
+
 watchEffect(async () => {
   try {
     if (!(props.centralExpert || props.districtExpert)) {
@@ -327,9 +411,36 @@ watchEffect(async () => {
     isSent.value = props.data.is_sent;
   }
 
-  if (reportStore.reportDataDH.first) {
+  // Мапинг данных для отчета эксперта ОШ
+  if (reportStore.reportDataDH.first && props.districtExpert) {
     firstPanelDataDH.value.comment = reportStore.reportDataDH.first.comment || '';
     firstPanelDataDH.value.amount_of_money = reportStore.reportDataDH.first.amount_of_money;
+
+    fileNameDH.value = reportStore.reportDataDHFile.first ? reportStore.reportDataDHFile.first.name : null;
+    fileTypeDH.value = reportStore.reportDataDHFile.first ? reportStore.reportDataDHFile.first.type.split('/').at(-1) : null;
+    fileSizeDH.value = reportStore.reportDataDHFile.first ? reportStore.reportDataDHFile.first.size / Math.pow(1024, 2) : null;
+  }
+
+  // Мапинг данных для отчета эксперта ЦШ
+  if (reportStore.reportForCheckCH.first && props.centralExpert) {
+    // Добавление данных панели "отчет РО"
+    const reportDataRH = JSON.parse(reportStore.reportForCheckCH.first.regional_version);
+    firstPanelData.value.comment = reportDataRH.comment || '';
+    firstPanelData.value.amount_of_money = reportDataRH.amount_of_money;
+    firstPanelData.value.scan_file = reportDataRH.scan_file || null;
+    firstPanelData.value.file_type = reportDataRH.file_type || null;
+    firstPanelData.value.file_size = reportDataRH.file_size || null;
+
+    // Добавление данных панели "корректировка ОШ"
+    firstPanelDataDH.value.comment = reportStore.reportForCheckCH.first.comment;
+    firstPanelDataDH.value.amount_of_money = reportStore.reportForCheckCH.first.amount_of_money;
+    fileNameDH.value = reportStore.reportForCheckCH.first.scan_file || '';
+    fileTypeDH.value = reportStore.reportForCheckCH.first.file_type || '';
+    fileSizeDH.value = reportStore.reportForCheckCH.first.file_size || '';
+
+    // Добавление данных из стора для панели "корректировка ЦШ"
+    firstPanelDataCH.value.amount_of_money = reportStore.reportDataCH.first.amount_of_money;
+    firstPanelDataCH.value.comment = reportStore.reportDataCH.first.comment || '';
   }
 });
 
@@ -354,6 +465,20 @@ watch(firstPanelDataDH.value, () => {
   if (reportStore.reportDataDHFile.first) formData.append('scan_file', reportStore.reportDataDHFile.first);
 
   emit('getDataDH', formData, 1);
+});
+
+watch(firstPanelDataCH.value, () => {
+  reportStore.reportDataCH.first = firstPanelDataCH.value;
+
+  // console.log('reportStore.reportDataCH.first', reportStore.reportDataCH.first)
+
+  let formData = new FormData();
+  formData.append('comment', firstPanelDataCH.value.comment || '');
+  formData.append('amount_of_money', firstPanelDataCH.value.amount_of_money);
+  if (reportStore.reportDataCHFile.first) formData.append('scan_file', reportStore.reportDataCHFile.first);
+  if (reportStore.returnReport.first) formData.append('reasons[comment]', firstPanelDataCH.value.comment || '');
+
+  emit('getDataCH', formData, 1);
 });
 </script>
 <style lang="scss" scoped>
@@ -481,14 +606,19 @@ watch(firstPanelDataDH.value, () => {
     line-height: 19.2px;
     text-align: center;
 
-    &__br-left {
-      border-radius: 10px 0 0 0;
-      border-right: 1px solid #B6B6B6;
-    }
+    //&__br-left {
+    //  border-radius: 10px 0 0 0;
+    //  border-right: 1px solid #B6B6B6;
+    //}
+    //
+    //&__br-right {
+    //  border-radius: 0 10px 0 0;
+    //  border-left: 1px solid #B6B6B6;
+    //}
 
-    &__br-right {
-      border-radius: 0 10px 0 0;
+    &__br-center {
       border-left: 1px solid #B6B6B6;
+      border-right: 1px solid #B6B6B6;
     }
   }
 
