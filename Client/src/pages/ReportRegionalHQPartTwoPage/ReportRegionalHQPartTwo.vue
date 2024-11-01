@@ -1690,11 +1690,10 @@ watch(
 );
 
 onMounted(() => {
-  // console.log('roleStore.experts', roleStore.experts)
-  // console.log('roleStore.roles', roleStore.roles)
-  // if (!roleStore.roles?.regionalheadquarter_commander && (!roleStore.experts?.is_district_expert || !roleStore.experts?.is_central_expert)) {
-  //   router.push({ name: 'mypage' });
-  // }
+  if (roleStore.roles.regionalheadquarter_commander && typeof (route.query.reportId) === 'undefined' && window.performance.navigation.type === 1) {
+      preloader.value = true;
+      getReportData();
+  }
   console.log('ddd', route.query.reportId)
   getItems(6);
   getItems(9);

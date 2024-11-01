@@ -47,7 +47,7 @@ export function checkEmptyFieldsDH(data, isErrorPanel) {
     }
 
     for (const item in data.six) {
-        if (data.six[item].number_of_members != 0) {
+        if (data.six[item].number_of_members !== 0) {
             if (!data.six[item].comment) {
                 isErrorPanel.value.six[item] = {
                     id: item,

@@ -617,23 +617,8 @@
                             <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
                         </div>
                     </div>
-                    <!-- <label class="form__label">Проведение мероприятия <sup class="valid-red">*</sup></label> -->
-                    <!-- <v-table>
-                        <tbody>
-                            <tr class="report-table__tr">
-                                <td class="report-table__th">Данные РО</td>
-                                <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
-                                <td class="report-table__th">Корректировка ЦШ</td>
-                            </tr>
-                            <tr>
-                                <td class="report-table__td">Да</td>
-                                <td class="report-table__td report-table__td__center">Да</td>
-                                <td class="report-table__td">Да</td>
-                            </tr>
-                        </tbody>
-                    </v-table> -->
                     <ReportTable label="Проведение мероприятия " name="ninthPanelData.event_happened"
-                        :dataRH="ninthPanelData.event_happened" :dataDH="ninthPanelDataDH.event_happened"
+                        :dataRH="ninthPanelData.event_happened" :is-ninth-panel="true" :dataDH="ninthPanelDataDH.event_happened"
                         v-model:value="ninthPanelDataCH.event_happened" :is-error-panel="isErrorPanel"></ReportTable>
 
                     <div class="form__field places mt-4 mb-4">
