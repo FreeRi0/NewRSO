@@ -224,8 +224,8 @@
         </v-expansion-panels>
       </div>
     </div>
-    <Button class="btn_report" v-if="!preloader" :disabled="blockSendButton" variant="text" label="Отправить отчет"
-      size="large" @click="sendReport" />
+    <Button v-if="!preloader" :disabled="blockSendButton" variant="text" label="Отправить отчет" size="large"
+      @click="sendReport" />
   </div>
 </template>
 <script setup>
@@ -611,45 +611,36 @@ const getReportData = async (reportId) => {
       * Критерий 1
       */
       reportStore.reportForCheckCH.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
-      // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
       reportStore.reportDataCH.first.comment = '';
-
       /*
       * Критерий 4
       */
       reportStore.reportForCheckCH.fourth = (await reportPartTwoService.getReportDH('4', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.fourth.events = (await reportPartTwoService.getReportDH('4', reportId)).data.events;
-
       /*
       * Критерий 5
       */
       reportStore.reportForCheckCH.fifth = (await reportPartTwoService.getReportDH('5', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.fifth.events = (await reportPartTwoService.getReportDH('5', reportId)).data.events;
-
       /*
       * Критерий 6 и 9  
       */
       await getMultiplyData(reportId);
-
       /*
-      * Критерий 10-1
-      */
+     * Критерий 10-1
+     */
       reportStore.reportForCheckCH.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
-      reportStore.reportDataCH.tenth.first.comment = '';
-
       /*
       * Критерий 10-2
       */
       reportStore.reportForCheckCH.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', reportId)).data;
-      reportStore.reportDataCH.tenth.second.comment = '';
-
       /*
       * Критерий 16
       */
@@ -657,7 +648,6 @@ const getReportData = async (reportId) => {
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.sixteenth.projects = (await reportPartTwoService.getReportDH('16', reportId)).data.projects;
 
-      console.log('sixteenth.projects', reportStore.reportDataCH.sixteenth.projects)
       // Критерий 11
       const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
       reportData.value.eleventh = JSON.parse(dataEleventh.regional_version);
@@ -1702,14 +1692,6 @@ onMounted(() => {
 
 </script>
 <style>
-.btn_report {
-  padding: 12px 32px !important;
-
-  @media (max-width: 480px) {
-    width: 90% !important;
-  }
-}
-
 .swal2-shown {
   overflow: unset !important;
   padding-right: 0px !important;

@@ -320,16 +320,12 @@ const uploadFile = async (event) => {
   }
 };
 const uploadFileDH = (event) => {
-  if (event.target.files) {
-    reportStore.reportDataDHFile.first = event.target.files[0];
-    firstPanelDataDH.value.scan_file = event.target.files[0];
-  }
+  reportStore.reportDataDHFile.first = event.target.files[0];
+  firstPanelDataDH.value.scan_file = event.target.files[0];
 };
 const uploadFileCH = (event) => {
-  if (event.target.files) {
-    reportStore.reportDataCHFile.first = event.target.files[0];
-    firstPanelDataCH.value.scan_file = event.target.files[0];
-  }
+  reportStore.reportDataCHFile.first = event.target.files[0];
+  firstPanelDataCH.value.scan_file = event.target.files[0];
 }
 const deleteFile = async () => {
   firstPanelData.value.scan_file = '';
