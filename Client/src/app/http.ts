@@ -149,6 +149,7 @@ HTTP.interceptors.response.use(
                     console.log('here 8');
                     return Promise.reject(error);
                 }
+
             } else if (err.response.status !== 401 &&
                 originalRequest.url !== '/services/front_errors/') {
                 let matches_1 = originalRequest.url.match(/regional_competitions\/me\/reports\/\d{1,}\/\d{1,}\//gm);
@@ -170,12 +171,14 @@ HTTP.interceptors.response.use(
                 let matches_16 = originalRequest.url.match(/locals\/d{1,}\/(leadership)?\//gm);
                 let matches_17 = originalRequest.url.match(/districts\/d{1,}\/(leadership)?\//gm);
                 let matches_18 = originalRequest.url.match(/rsousers\/\d{1,}\/positions\//gm);
+                let matches_19 = originalRequest.url.match(/regional_competitions\/reports\/\d{1,}\/\d{1,}\//gm)
+
                 //
                 let matches = (matches_1 || []).length + (matches_2 || []).length + (matches_3 || []).length + (matches_4 || []).length +
                     (matches_5 || []).length + (matches_6 || []).length + (matches_7 || []).length + (matches_8 || []).length +
                     (matches_9 || []).length + (matches_10 || []).length + (matches_11 || []).length + (matches_12 || []).length +
                     (matches_13 || []).length + (matches_14 || []).length + (matches_15 || []).length + (matches_16 || []).length +
-                    (matches_17 || []).length + (matches_18 || []).length;
+                    (matches_17 || []).length + (matches_18 || []).length + (matches_19 || []).length;
 
                 if (/*(window.location.hostname === 'localhost' ||
                     window.location.hostname === 'rso.sprint.1t' ||
