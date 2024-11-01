@@ -372,8 +372,7 @@ const getDataCH = (data, reportNumber) => {
     emit('getDataCHFirst', formData, 10, 1);
   }
   if (reportNumber === 2) {
-    reportStore.reportDataCH.tenth.second.event_happened = data.event_happened;
-    reportStore.reportDataCH.tenth.second.comment = data.comment;
+    reportStore.reportDataCH.tenth.second = data;
 
     formData.append('event_happened', data.event_happened);
     formData.append('comment', data.comment || '');
