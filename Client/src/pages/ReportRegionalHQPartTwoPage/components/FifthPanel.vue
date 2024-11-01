@@ -206,18 +206,24 @@
                 class="form__input form__field-people-count-field"
                 placeholder="Введите название"
                 @focusout="focusOut"
-                :disabled="isSent || !event.participants_number"
+                disabled
             />
           </div>
         </div>
         <div style="width: 100%;">
-          <p class="form__label">Ссылка на группу трудового проекта в социальных сетях <sup class="valid-red">*</sup>
+          <p class="form__label">Ссылка на группу трудового проекта в социальных сетях
           </p>
           <div class="form__field-link-wrap" v-for="(link, i) in events[index].links" :key="i">
-            <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__field-link-field"
-                         type="text" placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                         @focusout="focusOut"
-                         :disabled="props.centralExpert || props.districtExpert"/>
+            <InputReport
+                v-model:value="link.link"
+                :id="i"
+                :name="i"
+                class="form__input form__field-link-field"
+                type="text"
+                placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
+                @focusout="focusOut"
+                disabled
+            />
           </div>
         </div>
       </div>
@@ -329,9 +335,9 @@
         </div>
       </div>
 
-<!--      <div v-if="!props.centralExpert">-->
-<!--        <Button class="add_eventBtn" label="Добавить проект" @click="addProjectDH"/>-->
-<!--      </div>-->
+      <!--      <div v-if="!props.centralExpert">-->
+      <!--        <Button class="add_eventBtn" label="Добавить проект" @click="addProjectDH"/>-->
+      <!--      </div>-->
       <div class="form__field-comment" style="margin-top: 10px;">
         <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
         <TextareaReport
@@ -464,6 +470,7 @@
           </tr>
           </tbody>
         </v-table>
+        <div class="hr" style="margin-bottom: 40px;"></div>
       </div>
 
       <div class="form__field">
@@ -597,15 +604,15 @@ const addProject = () => {
     ],
   })
 };
-const addProjectDH = () => {
-  fifthPanelDataDH.value.events.push({
-    participants_number: '',
-    ro_participants_number: '',
-    start_date: null,
-    end_date: null,
-    name: '',
-  })
-};
+// const addProjectDH = () => {
+//   fifthPanelDataDH.value.events.push({
+//     participants_number: '',
+//     ro_participants_number: '',
+//     start_date: null,
+//     end_date: null,
+//     name: '',
+//   })
+// };
 const deleteProject = async (index) => {
   let formData = new FormData();
   events.value = events.value.filter((el, i) => index !== i);
@@ -631,9 +638,9 @@ const deleteProject = async (index) => {
     console.log('deleteEvent error: ', e);
   }
 };
-const deleteProjectDH = (index) => {
-  fifthPanelDataDH.value.events = fifthPanelDataDH.value.events.filter((el, i) => index !== i);
-};
+// const deleteProjectDH = (index) => {
+//   fifthPanelDataDH.value.events = fifthPanelDataDH.value.events.filter((el, i) => index !== i);
+// };
 
 const setFormData = (file = null, index = null, isDeleteEvent = false, isDeleteFile = false, isLinkDelete = false, linkIndex = null) => {
   let formData = new FormData();
