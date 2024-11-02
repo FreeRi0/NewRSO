@@ -29,6 +29,7 @@
 import { ref, watchEffect } from "vue";
 import { SeventhPanelForm } from "./index";
 import { reportPartTwoService } from "@services/ReportService.ts";
+import ActiveCompetitionsItemSelectReport from "@features/ActiveCompetitions/components/ActiveCompetitionsItemSelectReport.vue";
 const props = defineProps({
   districtHeadquarterCommander: {
     type: Boolean
@@ -126,6 +127,7 @@ const getPanelNumber = (number) => {
 }
 watchEffect(() => {
   if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
+    console.log('oh');
     if (props.data[el_id.value] && Object.keys(props.data[el_id.value]).length > 0) {
       console.log('data received', props.data);
       isFirstSent.value = false;
