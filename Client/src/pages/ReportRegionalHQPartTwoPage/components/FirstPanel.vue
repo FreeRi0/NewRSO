@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!(props.centralExpert || props.districtExpert)">
+  <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.first)">
     <div class="form__field-group">
       <div class="form__field-report">
         <div class="form__field">
@@ -67,7 +67,7 @@
     <ReportRegionalForm :reportData="reportData" :blockEditFirstReport="blockEditFirstReport"/>
   </div>
 
-  <report-tabs v-else>
+  <report-tabs v-else :isReject="reportStore.isReportReject.first">
     <template v-slot:firstTab>
       <div class="form__field-report">
         <div class="form__field">
@@ -131,7 +131,7 @@
               :min="0"
               :max="9999999999"
               :step="0.01"
-              :disabled="props.centralExpert"
+              :disabled="props.centralExpert || reportStore.isReportReject?.first"
               :is-error-panel="isErrorPanel"
           />
         </div>
@@ -143,11 +143,13 @@
             :file="fileNameDH"
             :fileType="fileTypeDH"
             :fileSize="fileSizeDH"
-            :disabled="props.centralExpert"
+            :disabled="props.centralExpert || reportStore.isReportReject?.first"
             :is-error-file="isErrorFile"
             @change="uploadFileDH"
             @click="deleteFileDH"
             :is-error-panel="isErrorPanel"
+            :is-sent="reportStore.isReportReject?.first"
+            :rows="row"
         />
       </div>
     </template>
@@ -178,6 +180,8 @@
                 :max="9999999999"
                 :step="0.01"
                 :is-error-panel="isErrorPanel"
+                :disabled="reportStore.isReportReject?.first"
+                :is-sent="reportStore.isReportReject?.first"
             />
           </td>
         </tr>
@@ -194,6 +198,7 @@
             @change="uploadFileCH"
             @click="deleteFileCH"
             :is-error-panel="isErrorPanel"
+            :disabled="reportStore.isReportReject?.first"
         />
       </div>
       <div>
@@ -272,7 +277,7 @@ const isSent = ref(false);
 const fileNameDH = ref(null);
 const fileSizeDH = ref(null);
 const fileTypeDH = ref(null);
-// const reportReturn = ref(false);
+const row = ref(1);
 
 const focusOut = async () => {
   let formData = new FormData();
@@ -442,6 +447,28 @@ watchEffect(async () => {
     firstPanelDataCH.value.amount_of_money = reportStore.reportDataCH.first.amount_of_money;
     firstPanelDataCH.value.comment = reportStore.reportDataCH.first.comment || '';
   }
+
+
+  // Мапинг данных для отчета командира РШ при возвращении на доработку
+  if (reportStore.reportReject.first && reportStore.isReportReject.first) {
+    console.log('reportStore.reportReject.first', reportStore.reportReject.first)
+    // Добавление данных панели "корректировка ОШ"
+    const reportDataDH = JSON.parse(reportStore.reportReject.first.district_version);
+    firstPanelDataDH.value.comment = reportDataDH.comment || '';
+    firstPanelDataDH.value.amount_of_money = reportDataDH.amount_of_money;
+
+    fileNameDH.value = reportDataDH.scan_file;
+    fileTypeDH.value = reportDataDH.file_type;
+    fileSizeDH.value = reportDataDH.file_size;
+
+    // Добавление данных из стора для панели "корректировка ЦШ"
+    firstPanelDataCH.value.amount_of_money = reportStore.reportReject.first.amount_of_money;
+    firstPanelDataCH.value.comment = reportStore.reportReject.first.comment || '';
+    // reportStore.reportDataCHFile.first.name = reportStore.reportReject.first.scan_file;
+    // reportStore.reportDataCHFile.first.type = reportStore.reportReject.first.file_type;
+    // reportStore.reportDataCHFile.first.size = reportStore.reportReject.first.file_size;
+
+  }
 });
 
 watchPostEffect(() => {
@@ -453,6 +480,10 @@ watchPostEffect(() => {
     firstPanelData.value.file_type = props.data.file_type || '';
     firstPanelData.value.file_size = props.data.file_size || '';
     isSent.value = props.data.is_sent;
+  }
+
+  if (reportStore.reportForCheckCH.first && props.centralExpert) {
+    row.value = reportStore.reportForCheckCH.first.comment.split('\n').length || 1;
   }
 });
 

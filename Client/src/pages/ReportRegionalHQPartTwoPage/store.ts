@@ -99,6 +99,16 @@ export const useReportPartTwoStore = defineStore('report-two', {
                 second: null,
             },
             sixteenth: null,
+        },
+
+        isReportReject: {
+            first: false,
+        },
+
+        reportReject: {
+            first: null,
         }
+
+
     })
 })

@@ -657,7 +657,6 @@ const getReportData = async (reportId) => {
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.sixteenth.projects = (await reportPartTwoService.getReportDH('16', reportId)).data.projects;
 
-      console.log('sixteenth.projects', reportStore.reportDataCH.sixteenth.projects)
       // Критерий 11
       const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
       reportData.value.eleventh = JSON.parse(dataEleventh.regional_version);
@@ -747,13 +746,16 @@ const getReportData = async (reportId) => {
         if (!dataFirst.regional_version) {
           reportData.value.first = dataFirst;
         } else {
+          if (dataFirst.rejecting_reasons) {
+            reportStore.isReportReject.first = true;
+            reportStore.reportReject.first = dataFirst;
+          }
           reportData.value.first = JSON.parse(dataFirst.regional_version);
         }
       } catch (e) {
         console.log(e.message)
       }
       try {
-        // reportData.value.fourth = (await reportPartTwoService.getReport('4')).data;
         const dataFourth = (await reportPartTwoService.getReport('4')).data;
         if (!dataFourth.regional_version) {
           reportData.value.fourth = dataFourth;
@@ -764,7 +766,6 @@ const getReportData = async (reportId) => {
         console.log(e.message)
       }
       try {
-        // reportData.value.fifth = (await reportPartTwoService.getReport('5')).data;
         const dataFifth = (await reportPartTwoService.getReport('5')).data;
         if (!dataFifth.regional_version) {
           reportData.value.fifth = dataFifth;
@@ -1307,11 +1308,11 @@ const sendReport = async () => {
         }
       }
       if (reportStore.reportForCheckCH.tenth.first.verified_by_chq === null) {
-        await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.fifth, '10', '1', route.query.reportId, true, reportStore.returnReport.tenth.first);
+        await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.tenth.first, '10', '1', route.query.reportId, true, reportStore.returnReport.tenth.first);
       }
 
       if (reportStore.reportForCheckCH.tenth.second.verified_by_chq === null) {
-        await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.second, '10', '2', route.query.reportId, true, reportStore.returnReport.tenth.second);
+        await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.tenth.second, '10', '2', route.query.reportId, true, reportStore.returnReport.tenth.second);
       }
 
       if (reportStore.reportDataDH.eleventh.verified_by_chq === null) {
