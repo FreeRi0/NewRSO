@@ -1201,7 +1201,7 @@ const sendReport = async () => {
     }
   }
 
-  if (districtExpert.value && checkEmptyFieldsDH(reportStore.reportDataDH, isErrorPanel)) {
+  if (districtExpert.value) {
     blockSendButton.value = true;
     preloader.value = true;
     try {

@@ -512,13 +512,18 @@
                             </div>
                         </div>
                     </div>
-                    <CommentFileComponent v-model:value="ninthPanelDataDH.comment" name="ninthPanelDataDH.comment"
+                    <!-- <CommentFileComponent v-model:value="ninthPanelDataDH.comment" name="ninthPanelDataDH.comment"
                         @change="uploadFile($event, 9)" @click="deleteFile(9)"
                         :file="reportStore.reportDataDHFile.ninth[props.ninthId] ? reportStore.reportDataDHFile.ninth[props.ninthId]?.name : null"
                         :fileType="reportStore.reportDataDHFile.ninth[props.ninthId] ? reportStore.reportDataDHFile.ninth[props.ninthId]?.type.split('/').at(-1) : null"
                         :fileSize="reportStore.reportDataDHFile.ninth[props.ninthId] ? reportStore.reportDataDHFile.ninth[props.ninthId]?.size / Math.pow(1024, 2) : null"
                         :disabled="props.isCentralHeadquarterCommander" :is-error-file="isErrorFile"
                         :is-error-panel="isErrorPanel">
+                    </CommentFileComponent> -->
+                    <CommentFileComponent v-model:value="ninthPanelDataDH.comment" name="ninthPanelDataDH.comment"
+                        @change="uploadFile($event, 9)" @click="deleteFile(9)" :file="fileDH.name"
+                        :fileType="fileDH.type" :fileSize="fileDH.size" :disabled="props.isCentralHeadquarterCommander"
+                        :is-error-file="isErrorFile" :is-error-panel="isErrorPanel">
                     </CommentFileComponent>
                 </div>
             </template>
@@ -762,6 +767,12 @@ const ninthPanelDataCH = ref({
     comment: '',
 });
 
+const fileDH = ref({
+    name: '',
+    type: '',
+    size: null,
+})
+
 // const prize_places = ref([
 //     { name: '1', value: 1, id: 'pp1' },
 //     { name: '2', value: 2, id: 'pp2' },
@@ -889,9 +900,8 @@ const deleteFile = (number) => {
     // } 
     if (number === 9) {
         if (props.isDistrictHeadquarterCommander) {
+            fileDH.value.name = null;
             reportStore.reportDataDHFile.ninth[props.ninthId] = null;
-            ninthPanelDataDH.value.document = '';
-
         } else if (props.isCentralHeadquarterCommander) {
             reportStore.reportDataCHFile.ninth[props.ninthId] = null;
             ninthPanelDataCH.value.document = '';
@@ -1155,9 +1165,17 @@ watchEffect(() => {
             }
 
         }
+
+        if (props.isDistrictHeadquarterCommander) {
+            if (reportStore.reportDataDHFile.ninth[props.ninthId]) {
+                fileDH.value.name = reportStore.reportDataDHFile.ninth[props.ninthId].name;
+                fileDH.value.type = reportStore.reportDataDHFile.ninth[props.ninthId].type.split('/').at(-1);
+                fileDH.value.size = reportStore.reportDataDHFile.ninth[props.ninthId].size / Math.pow(1024, 2);
+            }
+        }
+
         emit('getId', props.id)
         emit('getPanelNumber', props.panel_number)
-
     }
 }, {
     flush: 'post'
@@ -1174,24 +1192,45 @@ watch(sixPanelDataCH.value, () => {
     console.log(sixPanelDataCH.value)
 });
 watch(ninthPanelDataDH.value, () => {
-    reportStore.reportDataDH.ninth[props.ninthId] = ninthPanelDataDH.value;
+    if (props.isDistrictHeadquarterCommander) {
+        // reportStore.reportDataDH.ninth[props.ninthId] = ninthPanelDataDH.value;
 
-    let formData = new FormData();
+        // let formData = new FormData();
 
-    ninthPanelDataDH.value.event_happened
-        ? formData.append('event_happened', ninthPanelDataDH.value.event_happened)
-        : formData.append('event_happened', false);
+        // ninthPanelDataDH.value.event_happened
+        //     ? formData.append('event_happened', ninthPanelDataDH.value.event_happened)
+        //     : formData.append('event_happened', false);
 
-    formData.append('comment', ninthPanelDataDH.value.comment || '');
+        // formData.append('comment', ninthPanelDataDH.value.comment || '');
 
-    reportStore.reportDataDHFile.ninth[props.ninthId]
-        ? formData.append('document', reportStore.reportDataDHFile.ninth[props.ninthId])
-        : formData.append('document', '');
+        // reportStore.reportDataDHFile.ninth[props.ninthId]
+        //     ? formData.append('document', reportStore.reportDataDHFile.ninth[props.ninthId])
+        //     : formData.append('document', '');
 
-    emit('formDataDH', formData);
-    // reportStore.reportDataDH.ninth = ninthPanelDataDH.value;
-    // emit('formDataDH', ninthPanelDataDH.value);
+        // emit('formDataDH', formData);
+        reportStore.reportDataDH.ninth[props.ninthId] = ninthPanelDataDH.value;
+
+        let formData = new FormData();
+        formData.append('event_happened', ninthPanelDataDH.value.event_happened);
+        formData.append('comment', ninthPanelDataDH.value.comment || '');
+        formData.append('document', reportStore.reportDataDHFile.ninth[props.ninthId] || '');
+        emit('formDataDH', formData);
+    }
+
 });
+
+watch(fileDH.value, () => {
+    if (props.isDistrictHeadquarterCommander) {
+        reportStore.reportDataDH.ninth[props.ninthId] = ninthPanelDataDH.value;
+
+        let formData = new FormData();
+        formData.append('event_happened', ninthPanelDataDH.value.event_happened);
+        formData.append('comment', ninthPanelDataDH.value.comment || '');
+        formData.append('document', reportStore.reportDataDHFile.ninth[props.ninthId] || '');
+        emit('formDataDH', formData);
+    }
+});
+
 watch(ninthPanelDataCH.value, () => {
     reportStore.reportDataCH.ninth[props.ninthId] = ninthPanelDataCH.value;
 

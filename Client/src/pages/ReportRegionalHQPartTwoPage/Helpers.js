@@ -89,7 +89,7 @@ export function checkEmptyFieldsDH(data, isErrorPanel) {
     }
 
     for (const item in data.ninth) {
-        if (data.ninth[item].event_happened !== false) {
+        if (data.ninth[item].event_happened) {
             if (!data.ninth[item].comment) {
                 isErrorPanel.value.ninth[item] = {
                     id: item,
