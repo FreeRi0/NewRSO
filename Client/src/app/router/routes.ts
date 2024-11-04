@@ -805,7 +805,7 @@ const routes: RouteRecordRaw[] = [
                 path: '/roster',
                 name: 'Roster',
                 component: () =>
-                    import('@pages/reestrPage/components/rosterPage.vue'),
+                    import('@pages/reestrPage/components/newRosterPage.vue'),
                 meta: {
                     label: 'Реестр участников',
                 },

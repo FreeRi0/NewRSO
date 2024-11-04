@@ -308,6 +308,18 @@ const userPages = computed(() => [
     //         roleStore.roles?.regionalheadquarter_commander ||
     //         roleStore.roles?.detachment_commander,
     // },
+
+
+    {
+        title: 'Реестр участников',
+        link: '/roster',
+        show:
+            roleStore.roles?.centralheadquarter_commander ||
+            roleStore.roles?.districtheadquarter_commander ||
+            roleStore.roles?.regionalheadquarter_commander ||
+            roleStore.roles?.detachment_commander,
+    },
+
     {
         title: 'Членский взнос',
         name: 'contributorPay',
@@ -421,27 +433,27 @@ watch(
 
 
 watch(
-  () => [roleStore.roles, roleStore.experts],
-  (newRoles, newExperts) => {
-    if (Object.keys(newRoles).length === 0) {
-      return;
-    }
+    () => [roleStore.roles, roleStore.experts],
+    (newRoles, newExperts) => {
+        if (Object.keys(newRoles).length === 0) {
+            return;
+        }
 
-    if (roleStore.roles.centralheadquarter_commander !== null) {
-      nameUrl = 'rating-ro'
+        if (roleStore.roles.centralheadquarter_commander !== null) {
+            nameUrl = 'rating-ro'
 
-    } else if (roleStore.experts.is_central_expert === true || roleStore.experts.is_district_expert === true) {
-      nameUrl = 'rating-ro'
+        } else if (roleStore.experts.is_central_expert === true || roleStore.experts.is_district_expert === true) {
+            nameUrl = 'rating-ro'
 
-    } else {
-      nameUrl = 'reportingRo'
-    }
+        } else {
+            nameUrl = 'reportingRo'
+        }
 
-    if (localStorage.getItem('jwt_token') !== null) {
-      userStore.getCountApp();
-    }
-  },
-  { immediate: true }
+        if (localStorage.getItem('jwt_token') !== null) {
+            userStore.getCountApp();
+        }
+    },
+    { immediate: true }
 );
 
 onMounted(() => {
