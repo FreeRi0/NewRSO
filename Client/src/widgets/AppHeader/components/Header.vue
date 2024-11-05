@@ -292,7 +292,7 @@ const userPages = computed(() => [
             roleStore.roles?.regionalheadquarter_commander ||
             roleStore.roles?.detachment_commander || roleStore.experts?.is_district_expert ||
             roleStore.roles?.localheadquarter_commander ||
-            roleStore.experts?.is_district_expert ||
+            roleStore.experts?.is_central_expert ||
             roleStore.roles?.districtheadquarter_commander ||
             roleStore.roles?.educationalheadquarter_commander ||
             roleStore.myPositions.usercentralheadquarterposition?.position ===

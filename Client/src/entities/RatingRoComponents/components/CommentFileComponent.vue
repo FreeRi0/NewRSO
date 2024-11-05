@@ -1,11 +1,11 @@
 <template>
     <div class="report__fieldset report__fieldset--comment-expert">
-        <label class="form__label report__label" :for="name">Комментарий&nbsp;<sup class="valid-red">*</sup></label>
+        <label class="form__label report__label" :for="name">Комментарий&nbsp; <sup v-show="!props.CH" class="valid-red">*</sup></label>
 
         <InputReport v-show="!props.isSix" is-file-district type="file" accept=".jpg, .jpeg, .png, .pdf" id="scan_file"
             name="scan_file" width="20px" height="20px" :disabled="isDisabled" change="onChange" />
 
-        <TextareaReport :value="value" :id="name" :name="name" placeholder="Примечания, ссылки" :rows="1" autoResize
+        <TextareaReport :value="value" :id="name" :name="name" placeholder="Примечания, ссылки" :rows="rows" autoResize
             counter-visible :maxlength="3000" :max-length-text="3000" :disabled="isDisabled" v-bind="$attrs">
         </TextareaReport>
         <FileBoxComponent v-if="file" :file="file" :fileType="fileType" :fileSize="fileSize" @click="clickOnButton"
@@ -44,16 +44,24 @@ const props = defineProps({
         default: false,
     },
     fileSize: {
-        type: Number,
+        type: [Number, String],
         default: null,
     },
     isErrorFile: {
         type: Boolean,
         default: false,
     },
+    CH: {
+        type: Boolean,
+        default: false,
+    },
     isSent: {
         type: Boolean,
     },
+    rows: {
+      type: Number,
+      default: 1
+    }
 });
 
 const onChange = (event) => {
