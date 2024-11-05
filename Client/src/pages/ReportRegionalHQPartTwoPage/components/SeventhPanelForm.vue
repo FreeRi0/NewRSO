@@ -163,7 +163,7 @@
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                                }}</label>
+                            }}</label>
                         </div>
                     </div>
                 </div>
@@ -508,7 +508,7 @@
                                     type="radio" v-model="ninthPanelDataDH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -639,16 +639,14 @@
                                     v-model="ninthPanelDataCH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
                     <CommentFileComponent v-model:value="ninthPanelDataCH.comment" name="ninthPanelDataCH.comment"
-                        @change="uploadFile($event, 9)" @click="deleteFile(9)" :CH="true"
-                        :file="reportStore.reportDataCHFile.ninth[props.ninthId] ? reportStore.reportDataCHFile.ninth[props.ninthId]?.name : null"
-                        :fileType="reportStore.reportDataCHFile.ninth[props.ninthId] ? reportStore.reportDataCHFile.ninth[props.ninthId]?.type.split('/').at(-1) : null"
-                        :fileSize="reportStore.reportDataCHFile.ninth[props.ninthId] ? reportStore.reportDataCHFile.ninth[props.ninthId]?.size / Math.pow(1024, 2) : null"
-                        :is-error-file="isErrorFile" :is-error-panel="isErrorPanel">
+                        @change="uploadFile($event, 9)" @click="deleteFile(9)" :CH="true" :file="fileCH.name"
+                        :fileType="fileCH.type" :fileSize="fileCH.size" :is-error-file="isErrorFile"
+                        :is-error-panel="isErrorPanel">
                     </CommentFileComponent>
                     <div>
                         <v-checkbox v-model="reportStore.returnReport.ninth[props.ninthId]"
@@ -660,7 +658,7 @@
     </v-card-text>
 </template>
 <script setup>
-import { ref, watchEffect, watch, handleError } from 'vue';
+import { ref, watchEffect, watch, handleError, onMounted } from 'vue';
 import { Button } from '@shared/components/buttons';
 import {
     FileBoxComponent,
@@ -684,6 +682,7 @@ const props = defineProps({
     id: String,
     sixId: String,
     ninthId: String,
+
     isSentSix: Boolean,
     // isSent: Boolean,
     isSentNinth: Boolean,
@@ -773,6 +772,13 @@ const fileDH = ref({
     size: null,
 })
 
+const fileCH = ref({
+    name: '',
+    type: '',
+    size: null,
+})
+
+
 // const prize_places = ref([
 //     { name: '1', value: 1, id: 'pp1' },
 //     { name: '2', value: 2, id: 'pp2' },
@@ -847,6 +853,20 @@ const uploadFile = (event, number) => {
                 console.log('error');
                 scanFile.value = event.target.files[0];
                 ninthPanelData.value.document = scanFile.value.name;
+                if (props.isDistrictHeadquarterCommander) {
+                    reportStore.reportDataDHFile.ninth[props.ninthId] = null;
+                    fileDH.value.name = event.target.files[0].name;
+                    fileDH.value.type = event.target.files[0].type.split('/').at(-1);
+                    fileDH.value.size = event.target.files[0].size / Math.pow(1024, 2);
+                }
+                else if (props.isCentralHeadquarterCommander) {
+                    if (props.isDistrictHeadquarterCommander) {
+                        reportStore.reportDataCHFile.ninth[props.ninthId] = null;
+                        fileCH.value.name = event.target.files[0].name;
+                        fileCH.value.type = event.target.files[0].type.split('/').at(-1);
+                        fileCH.value.size = event.target.files[0].size / Math.pow(1024, 2);
+                    }
+                }
             } else {
                 if (props.isDistrictHeadquarterCommander) {
                     reportStore.reportDataDHFile.ninth[props.ninthId] = event.target.files[0];
@@ -903,8 +923,8 @@ const deleteFile = (number) => {
             fileDH.value.name = null;
             reportStore.reportDataDHFile.ninth[props.ninthId] = null;
         } else if (props.isCentralHeadquarterCommander) {
+            fileCH.value.name = null;
             reportStore.reportDataCHFile.ninth[props.ninthId] = null;
-            ninthPanelDataCH.value.document = '';
         } else {
             ninthPanelData.value.document = '';
             formData.append('event_happened', ninthPanelData.value.event_happened);
@@ -1070,6 +1090,7 @@ watchEffect(() => {
             if (reportStore.reportDataDH.six[props.sixId]) {
                 sixPanelDataDH.value.comment = reportStore.reportDataDH.six[props.sixId].comment;
                 sixPanelDataDH.value.number_of_members = reportStore.reportDataDH.six[props.sixId].number_of_members;
+
             }
             if (reportStore.reportDataCH.six[props.sixId]) {
                 sixPanelDataCH.value.comment = reportStore.reportDataCH.six[props.sixId].comment;
@@ -1172,6 +1193,17 @@ watchEffect(() => {
                 fileDH.value.type = reportStore.reportDataDHFile.ninth[props.ninthId].type.split('/').at(-1);
                 fileDH.value.size = reportStore.reportDataDHFile.ninth[props.ninthId].size / Math.pow(1024, 2);
             }
+        } else if (props.isCentralHeadquarterCommander) {
+            if (reportStore.reportDataDH.ninth[props.ninthId]) {
+                fileDH.value.name = reportStore.reportDataDH.ninth[props.ninthId].scan_file;
+                fileDH.value.type = reportStore.reportDataDH.ninth[props.ninthId].file_type;
+                fileDH.value.size = reportStore.reportDataDH.ninth[props.ninthId].file_size;
+            }
+            if (reportStore.reportDataCHFile.ninth[props.ninthId]) {
+                fileCH.value.name = reportStore.reportDataCHFile.ninth[props.ninthId].name;
+                fileCH.value.type = reportStore.reportDataCHFile.ninth[props.ninthId].type.split('/').at(-1);
+                fileCH.value.size = reportStore.reportDataCHFile.ninth[props.ninthId].size / Math.pow(1024, 2);
+            }
         }
 
         emit('getId', props.id)
@@ -1181,39 +1213,33 @@ watchEffect(() => {
     flush: 'post'
 })
 
-watch(sixPanelDataDH.value, () => {
-    reportStore.reportDataDH.six[props.sixId] = sixPanelDataDH.value;
-    emit('formDataDH', sixPanelDataDH.value);
-    console.log(sixPanelDataDH.value)
-});
-watch(sixPanelDataCH.value, () => {
-    reportStore.reportDataCH.six[props.sixId] = sixPanelDataCH.value;
-    emit('formDataCH', sixPanelDataCH.value);
-    console.log(sixPanelDataCH.value)
-});
-watch(ninthPanelDataDH.value, () => {
+watch(sixPanelDataDH.value, (newValue) => {
     if (props.isDistrictHeadquarterCommander) {
-        // reportStore.reportDataDH.ninth[props.ninthId] = ninthPanelDataDH.value;
+        reportStore.reportDataDH.six[props.sixId] = newValue;
+        emit('formDataDH', newValue);
+        console.log('6 new', newValue)
+    }
+});
 
-        // let formData = new FormData();
 
-        // ninthPanelDataDH.value.event_happened
-        //     ? formData.append('event_happened', ninthPanelDataDH.value.event_happened)
-        //     : formData.append('event_happened', false);
+watch(sixPanelDataCH.value, () => {
+    if (props.isCentralHeadquarterCommander) {
+        reportStore.reportDataCH.six[props.sixId] = sixPanelDataCH.value;
+        emit('formDataCH', sixPanelDataCH.value);
+        console.log(sixPanelDataCH.value)
+    }
+});
 
-        // formData.append('comment', ninthPanelDataDH.value.comment || '');
 
-        // reportStore.reportDataDHFile.ninth[props.ninthId]
-        //     ? formData.append('document', reportStore.reportDataDHFile.ninth[props.ninthId])
-        //     : formData.append('document', '');
-
-        // emit('formDataDH', formData);
-        reportStore.reportDataDH.ninth[props.ninthId] = ninthPanelDataDH.value;
+watch(ninthPanelDataDH.value, (newValue) => {
+    if (props.isDistrictHeadquarterCommander) {
+        reportStore.reportDataDH.ninth[props.ninthId] = newValue;
 
         let formData = new FormData();
-        formData.append('event_happened', ninthPanelDataDH.value.event_happened);
-        formData.append('comment', ninthPanelDataDH.value.comment || '');
+        formData.append('event_happened', newValue.event_happened);
+        formData.append('comment', newValue.comment || '');
         formData.append('document', reportStore.reportDataDHFile.ninth[props.ninthId] || '');
+        console.log('9 new', formData)
         emit('formDataDH', formData);
     }
 
@@ -1231,25 +1257,34 @@ watch(fileDH.value, () => {
     }
 });
 
-watch(ninthPanelDataCH.value, () => {
-    reportStore.reportDataCH.ninth[props.ninthId] = ninthPanelDataCH.value;
+watch(fileCH.value, () => {
+    if (props.isCentralHeadquarterCommander) {
+        reportStore.reportDataCH.ninth[props.ninthId] = ninthPanelDataCH.value;
 
-    let formData = new FormData();
-
-    ninthPanelDataCH.value.event_happened
-        ? formData.append('event_happened', ninthPanelDataCH.value.event_happened)
-        : formData.append('event_happened', false);
-
-    formData.append('comment', ninthPanelDataCH.value.comment || '');
-
-    reportStore.reportDataCHFile.ninth[props.ninthId]
-        ? formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId])
-        : formData.append('document', '');
-
-    emit('formDataCH', formData);
-    // reportStore.reportDataDH.ninth = ninthPanelDataDH.value;
-    // emit('formDataDH', ninthPanelDataDH.value);
+        let formData = new FormData();
+        formData.append('event_happened', ninthPanelDataCH.value.event_happened);
+        formData.append('comment', ninthPanelDataCH.value.comment || '');
+        formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId] || '');
+        emit('formDataCH', formData);
+        console.log('file9', formData)
+    }
 });
+
+watch(ninthPanelDataCH.value, () => {
+    if (props.isCentralHeadquarterCommander) {
+        reportStore.reportDataCH.ninth[props.ninthId] = ninthPanelDataCH.value;
+        let formData = new FormData();
+        formData.append('event_happened', ninthPanelDataCH.value.event_happened);
+        formData.append('comment', ninthPanelDataCH.value.comment || '');
+        formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId] || '');
+        emit('formDataCH', formData);
+    }
+});
+
+// onMounted(() => {
+//     // emit('formDataDH', sixPanelDataDH);
+//     console.log('mount', sixPanelDataDH.value)
+// })
 </script>
 <style lang="scss" scoped>
 .number_input {
