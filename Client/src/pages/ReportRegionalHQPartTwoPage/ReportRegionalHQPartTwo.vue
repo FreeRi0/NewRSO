@@ -732,24 +732,38 @@ const getReportData = async (reportId) => {
       try {
         // reportData.value.first = (await reportPartTwoService.getReport('1')).data;
         const dataFirst = (await reportPartTwoService.getReport('1')).data;
-        if (!dataFirst.regional_version) {
+        if (!dataFirst.regional_version && !dataFirst.central_version) {
           reportData.value.first = dataFirst;
         } else {
           if (dataFirst.rejecting_reasons) {
             reportStore.isReportReject.first = true;
             reportStore.reportReject.first = dataFirst;
           }
-          reportData.value.first = JSON.parse(dataFirst.regional_version);
+
+          if (dataFirst.central_version) {
+            reportData.value.first = dataFirst;
+          } else {
+            reportData.value.first = JSON.parse(dataFirst.regional_version);
+          }
         }
       } catch (e) {
         console.log(e.message)
       }
       try {
         const dataFourth = (await reportPartTwoService.getReport('4')).data;
-        if (!dataFourth.regional_version) {
+        if (!dataFourth.regional_version && !dataFourth.central_version) {
           reportData.value.fourth = dataFourth;
         } else {
-          reportData.value.fourth = JSON.parse(dataFourth.regional_version);
+          if (dataFourth.rejecting_reasons) {
+            reportStore.isReportReject.fourth = true;
+            reportStore.reportReject.fourth = dataFourth;
+          }
+
+          if (dataFourth.central_version) {
+            reportData.value.fourth = dataFourth;
+          } else {
+            reportData.value.fourth = JSON.parse(dataFourth.regional_version);
+          }
         }
       } catch (e) {
         console.log(e.message)
