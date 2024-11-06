@@ -59,14 +59,14 @@
           <div class="form__label-radio">
             <div style="display: flex;">
               <input v-model="event.is_interregional" type="radio" :id="`is_interregional-true_${index}`" :value="true"
-                     class="custom-radio" :disabled="isSent || !event.participants_number"/>
+                     class="custom-radio" @change="focusOut" :disabled="isSent || !event.participants_number"/>
               <label :for="`is_interregional-true_${index}`">
                 Да
               </label>
             </div>
             <div style="display: flex">
               <input v-model="event.is_interregional" type="radio" :id="`is_interregional-false_${index}`"
-                     :value="false" class="custom-radio" :disabled="isSent"/>
+                     :value="false" class="custom-radio" @change="focusOut" :disabled="isSent"/>
               <label :for="`is_interregional-false_${index}`">
                 Нет
               </label>
@@ -87,6 +87,7 @@
           </div>
         </div>
       </div>
+      <div class="hr"></div>
     </div>
 
     <div v-if="!isSent">
@@ -94,11 +95,20 @@
     </div>
     <div class="form__field-comment">
       <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
-      <InputReport :maxlength="3000" :max-counter="3000" counter-visible v-model:value="fourthPanelData.comment"
-                   id="comment" name="comment" class="form__input" type="textarea"
-                   placeholder="Укажите наименования организованных мероприятий" style="width: 100%;"
-                   @focusout="focusOut"
-                   :disabled="isSent"/>
+      <TextareaReport
+          v-model:value="fourthPanelData.comment"
+          id="comment"
+          name="comment"
+          class="form__input"
+          placeholder="Укажите наименования организованных мероприятий"
+          :rows="1"
+          autoResize
+          :maxlength="3000"
+          :max-length-text="3000"
+          counter-visible
+          @focusout="focusOut"
+          :disabled="isSent"
+      />
     </div>
     <div class="form__field-result" style="display: flex; align-items: center;">
       <v-checkbox class="result-checkbox" id="v-checkbox" @change="calculateResult($event)"/>
@@ -796,7 +806,7 @@ const calculateResult = (event) => {
     events.value.forEach(e => {
       const startDate = new Date(e.start_date);
       const endDate = new Date(e.end_date);
-      const days = (endDate - startDate) / (1000 * 60 * 60 * 24);
+      const days = ((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
       if (e.is_interregional) {
         finalResult.value += e.participants_number * days * 0.8;
       } else {
@@ -813,7 +823,7 @@ const calculateResultDH = (event) => {
     fourthPanelDataDH.value.events.forEach(e => {
       const startDate = new Date(e.start_date);
       const endDate = new Date(e.end_date);
-      const days = (endDate - startDate) / (1000 * 60 * 60 * 24);
+      const days = ((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
       if (e.is_interregional) {
         finalResultDH.value += e.participants_number * days * 0.8;
       } else {
@@ -954,6 +964,8 @@ watchEffect(() => {
       }
     }
   }
+}, {
+  flush: "post"
 });
 
 watchPostEffect(() => {
