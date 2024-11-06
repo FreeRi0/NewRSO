@@ -1161,7 +1161,7 @@ const sendReport = async () => {
   // console.log('reportData: ', reportData.value)
   if (!(districtExpert.value || centralExpert.value)) {
     blockSendButton.value = true;
-    if (checkEmptyFields(reportData.value)) {
+    if (true) {
       preloader.value = true;
       try {
         // const { filteredSix, filteredNinth } = filterPanelsData();
@@ -1266,7 +1266,7 @@ const sendReport = async () => {
     }
   }
 
-  if (districtExpert.value && checkEmptyFieldsDH(reportStore.reportDataDH, isErrorPanel)) {
+  if (districtExpert.value) {
     blockSendButton.value = true;
     preloader.value = true;
     try {
@@ -1283,10 +1283,10 @@ const sendReport = async () => {
         await reportPartTwoService.sendReportDH(reportDataDH.value.fifth, '5', route.query.reportId, true)
       }
 
-      for (let i in reportData.value.six) {
-        if (!reportData.value.six[i]?.verified_by_dhq) {
-          console.log('send6', reportDataDH.value.six[i])
-          await reportPartTwoService.sendReportDHMultiply(reportDataDH.value.six[i], '6', i, route.query.reportId);
+      for (let i in reportStore.reportDataDH.six) {
+        if (!reportStore.reportDataDH.six[i]?.verified_by_dhq) {
+          console.log('send6', reportStore.reportDataDH.six[i])
+          await reportPartTwoService.sendReportDHMultiply(reportStore.reportDataDH.six[i], '6', i, route.query.reportId);
         }
       }
       for (let i in reportData.value.ninth) {
