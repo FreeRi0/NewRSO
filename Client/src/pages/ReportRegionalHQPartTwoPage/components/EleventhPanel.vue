@@ -1,6 +1,7 @@
 <template>
+  <!-- {{ 'в комп EleventhPanel' }} {{ isRevision }} -->
   <div 
-    v-if="!(props.districtExpert || props.centralExpert)"
+    v-if="!(props.districtExpert || props.centralExpert) && !isRevision"
     class="form__field-group"
   >
     <EleventhPanelComponent
@@ -12,13 +13,15 @@
     ></EleventhPanelComponent>
   </div>
 
-  <report-tabs v-else>
+  <report-tabs v-if="(props.districtExpert || props.centralExpert) 
+  || (!(props.districtExpert || props.centralExpert) && isRevision)" >
     <template v-slot:firstTab>
       <EleventhPanelComponent
         :central-expert="props.centralExpert"
         :district-expert="props.districtExpert"
         :data="data"
         @get-data="getData"
+        :is-revision="isRevision"
       ></EleventhPanelComponent>
     </template>
 
@@ -29,6 +32,7 @@
         @get-dataDH="getDataDH"
         is-second-tab
         :is-error-panel="isErrorPanel"
+        :is-revision="isRevision"
       ></EleventhPanelComponent>
     </template>
     
@@ -40,6 +44,7 @@
         @get-dataCH="getDataCH"
         is-third-tab
         :is-error-panel="isErrorPanel"
+        :is-revision="isRevision"
       ></EleventhPanelComponent>
     </template>
   </report-tabs>
@@ -60,6 +65,9 @@ const props = defineProps({
   isErrorPanel: {
     type: Boolean,
   },
+  isRevision: {
+    type: Boolean,
+  }
 });
 
 const ID_PANEL = "11";

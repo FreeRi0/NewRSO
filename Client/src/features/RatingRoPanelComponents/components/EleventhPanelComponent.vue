@@ -17,7 +17,7 @@
         :min="0"
         :max="2147483647"
         @focusout="focusOut"
-        :disabled="isSent || (props.centralExpert || props.districtExpert)"
+        :disabled="!(isSent && isRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
         :is-error-panel="isErrorPanel"
       />
     </div>
@@ -28,7 +28,7 @@
         группы РО&nbsp;РСО&nbsp;<sup class="valid-red">*</sup>
       </p>
       <InputReport
-        v-if="!eleventhPanelData.scan_file"
+        v-if="!eleventhPanelData.scan_file || (isSent && isRevision)"
         isFile
         type="file"
         accept=".jpg, .jpeg, .png, .pdf"
@@ -37,16 +37,16 @@
         width="100%"
         height="auto"
         @change="uploadFile"
-        :disabled="isSent || (props.centralExpert || props.districtExpert)"
+        :disabled="!(isSent && isRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
         :is-error-panel="isErrorPanel"
       />
       <FileBoxComponent
-        v-else
+        v-if="eleventhPanelData.scan_file"
         :file="eleventhPanelData.scan_file"
         :fileType="eleventhPanelData.file_type"
         :fileSize="eleventhPanelData.file_size"
         @click="deleteFile"
-        :is-sent="isSent || (props.centralExpert || props.districtExpert)"
+        :is-sent="!(isSent && isRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
         :is-error-file="isErrorFile"
       ></FileBoxComponent>
     </div>
@@ -55,7 +55,8 @@
       class="report__fieldset report__fieldset--comment"
       v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
             (isSent && eleventhPanelData.comment) ||
-            ((props.centralExpert || props.districtExpert) && eleventhPanelData.comment)"
+            ((props.centralExpert || props.districtExpert) && eleventhPanelData.comment) ||
+            (isSent && isRevision)"
     >
       <label class="form__label report__label" for="comment"> Комментарий </label>
       <TextareaReport
@@ -69,7 +70,7 @@
         :maxlength="3000"
         :max-length-text="3000"
         @focusout="focusOut"
-        :disabled="isSent || (props.centralExpert || props.districtExpert)"
+        :disabled="!(isSent && isRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
       >
       </TextareaReport>
     </div>
@@ -92,7 +93,7 @@
         :maxlength="10"
         :min="0"
         :max="2147483647"
-        :disabled="centralExpert"
+        :disabled="centralExpert || isRevision"
         :is-error-panel="isErrorPanel"
       />
     </div>
@@ -105,15 +106,15 @@
       :file="fileDH.name"
       :fileType="fileDH.type"
       :fileSize="fileDH.size"
-      :disabled="centralExpert"
+      :disabled="centralExpert || isRevision"
       :is-error-file="isErrorFile"
       :is-error-panel="isErrorPanel"
-      :is-sent="centralExpert"
+      :is-sent="centralExpert || isRevision"
     ></CommentFileComponent>
   </div>
 
   <div
-    v-if="isThirdTab && centralExpert"
+    v-if="isThirdTab"
     class="report__field-group report__field-group--column"
   >
     <ReportTable
@@ -125,7 +126,7 @@
       :maxlength="10"
       :min="0"
       :max="2147483647"
-      
+      :disabled="isRevision"
       :is-error-panel="isErrorPanel"
     ></ReportTable>
 
@@ -138,7 +139,8 @@
       :fileType="fileCH.type"
       :fileSize="fileCH.size"
       :is-error-file="isErrorFile"
-      
+      :is-disabled="isRevision"
+      :is-sent="isRevision"
       :is-error-panel="isErrorPanel"
     ></CommentFileComponent>
 
@@ -146,6 +148,7 @@
       <v-checkbox 
         v-model="reportStore.returnReport.eleventh"
         label="Вернуть в&nbsp;РО на&nbsp;доработку" 
+        :disabled="isRevision"
         @change="onReturnReport"/>
     </div>
   </div>
@@ -184,10 +187,14 @@ const props = defineProps({
   isErrorPanel: {
     type: Boolean,
   },
+  isRevision: {
+    type: Boolean,
+  }
 });
 
 const ID_PANEL = "11";
 const isFirstSent = ref(true);
+const isResend = ref(true);
 let isErrorFile = ref(false);
 // let fileName = ref(null);
 const eleventhPanelData = ref({
@@ -242,17 +249,37 @@ const focusOut = async () => {
     eleventhPanelData.value.participants_number ? formData.append("participants_number", eleventhPanelData.value.participants_number) : formData.append("participants_number", "");
     formData.append("comment", eleventhPanelData.value.comment || '');
 
-    try {
-      if (isFirstSent.value) {
-        const { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-        emit('getData', data, Number(ID_PANEL));
-      } else {
-        const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-        emit('getData', data, Number(ID_PANEL));
+    if (!props.isRevision) {
+      try {
+        if (isFirstSent.value) {
+          const { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+          emit('getData', data, Number(ID_PANEL));
+        } else {
+          const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+          emit('getData', data, Number(ID_PANEL));
+        }
+      } catch (e) {
+        console.log('focusOut error:', e)
       }
-    } catch (e) {
-      console.log('focusOut error:', e)
+    } else {
+      try {
+        // if (isResend.value) {
+          const { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+          emit('getData', data, Number(ID_PANEL));
+          console.log('здесь 1')
+        // } else {
+        //   const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+        //   emit('getData', data, Number(ID_PANEL));
+        //   console.log('здесь 2')
+        // }
+      } catch (e) {
+        console.log('focusOut error55:', e)
+      }
     }
+    
+
+    
+
   // }
   
   // if (props.districtExpert) {
@@ -273,6 +300,20 @@ const uploadFile = async (event) => {
 
     try {
       if (isFirstSent.value) {
+        let { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+        eleventhPanelData.value.scan_file = data.scan_file.split('/').at(-1);
+        emit('getData', data, Number(ID_PANEL));
+      } else {
+        let { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+        eleventhPanelData.value.scan_file = data.scan_file.split('/').at(-1);
+        emit('getData', data, Number(ID_PANEL));
+      }
+    } catch (e) {
+      console.log('uploadFile error:', e);
+    }
+
+    try {
+      if (isResend.value && props.isRevision) {
         let { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
         eleventhPanelData.value.scan_file = data.scan_file.split('/').at(-1);
         emit('getData', data, Number(ID_PANEL));
@@ -335,6 +376,18 @@ const deleteFile = async () => {
     } catch (e) {
       console.log('deleteFile error:', e);
     }  
+
+    try {
+      if (isResend.value && props.isRevision) {
+        let { data : scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+        emit('getData', scan_file, Number(ID_PANEL));
+      } else {
+        let { data : scan_file } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+        emit('getData', scan_file, Number(ID_PANEL));
+      }
+    } catch (e) {
+      console.log('deleteFile error:', e);
+    }  
   }
 };
 
@@ -378,6 +431,9 @@ watchEffect(() => {
     if (props.data) {
       // console.log(props.data);
       isFirstSent.value = false;
+      if (props.isRevision) {
+        isResend.value = false;
+      }
       eleventhPanelData.value.participants_number = props.data.participants_number;
       eleventhPanelData.value.comment = props.data.comment;
       eleventhPanelData.value.scan_file = props.data.scan_file;
@@ -411,6 +467,9 @@ watchEffect(() => {
 watchPostEffect(() => {
   if (props.data) {
     isFirstSent.value = false;
+    if (props.isRevision) {
+      isResend.value = false;
+    }
     eleventhPanelData.value.participants_number = props.data.participants_number;
     eleventhPanelData.value.comment = props.data.comment;
     eleventhPanelData.value.scan_file = props.data.scan_file;
@@ -418,6 +477,20 @@ watchPostEffect(() => {
     eleventhPanelData.value.file_type = props.data.file_type;
     isSent.value = props.data.is_sent;
   }
+  if (!(props.centralExpert || props.districtExpert)) {
+    eleventhPanelDataDH.value = reportStore.reportDataDH.eleventh;
+    fileDH.value.name = reportStore.reportDataDH.eleventh.scan_file;
+    fileDH.value.type = reportStore.reportDataDH.eleventh.file_type;
+    fileDH.value.size = reportStore.reportDataDH.eleventh.file_size;
+
+    eleventhPanelDataCH.value = reportStore.reportDataCH.eleventh;
+    fileCH.value.name = reportStore.reportDataCH.eleventh.scan_file;
+    fileCH.value.type = reportStore.reportDataCH.eleventh.file_type;
+    fileCH.value.size = reportStore.reportDataCH.eleventh.file_size;
+
+    reportStore.returnReport.eleventh = true;
+  }
+  
 });
 
 watch(eleventhPanelDataDH.value, () => {
