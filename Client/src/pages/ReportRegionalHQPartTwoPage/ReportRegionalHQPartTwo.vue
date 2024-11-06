@@ -1152,7 +1152,7 @@ const sendReport = async () => {
   // console.log('reportData: ', reportData.value)
   if (!(districtExpert.value || centralExpert.value)) {
     blockSendButton.value = true;
-    if (true) {
+    if (checkEmptyFields(reportData.value)) {
       preloader.value = true;
       try {
         // const { filteredSix, filteredNinth } = filterPanelsData();
@@ -1257,7 +1257,7 @@ const sendReport = async () => {
     }
   }
 
-  if (districtExpert.value) {
+  if (districtExpert.value && checkEmptyFieldsDH(reportStore.reportDataDH, isErrorPanel)) {
     blockSendButton.value = true;
     preloader.value = true;
     try {
