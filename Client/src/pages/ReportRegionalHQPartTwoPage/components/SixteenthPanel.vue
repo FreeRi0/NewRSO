@@ -132,6 +132,7 @@
           </div>
         </div>
       </div>
+      <div class="hr" style="margin-bottom: 0;"></div>
     </div>
     <div v-if="!isSent && sixteenthPanelData.is_project">
       <Button class="add_eventBtn" label="Добавить проект" @click="addProject"/>
@@ -840,6 +841,8 @@ watchEffect(() => {
     sixteenthPanelData.value.comment = props.data.comment || '';
     isSent.value = props.data.is_sent;
   }
+}, {
+  flush: "post"
 });
 
 watchPostEffect(() => {
@@ -1112,7 +1115,7 @@ watch([commonData, commentCH], () => {
   border: none;
   border-radius: 10px;
   margin-bottom: 8px;
-  gap: 40px;
+  gap: 20px;
 }
 
 .valid-red {

@@ -735,6 +735,9 @@ const ninthPanelData = ref({
 })
 const ninthPanelDataDH = ref({
     event_happened: false,
+    links: [{
+        link: '',
+    }],
     document: '',
     file_size: null,
     file_type: '',
@@ -750,16 +753,26 @@ const sixPanelData = ref({
 });
 const sixPanelDataDH = ref({
     number_of_members: 0,
+    links: [{
+        link: '',
+    }],
     comment: '',
+
 });
 
 const sixPanelDataCH = ref({
     number_of_members: 0,
+    links: [{
+        link: '',
+    }],
     comment: '',
 });
 
 const ninthPanelDataCH = ref({
     event_happened: false,
+    links: [{
+        link: '',
+    }],
     document: '',
     file_size: null,
     file_type: '',
@@ -1091,11 +1104,13 @@ watchEffect(() => {
             if (reportStore.reportDataDH.six[props.sixId]) {
                 sixPanelDataDH.value.comment = reportStore.reportDataDH.six[props.sixId].comment;
                 sixPanelDataDH.value.number_of_members = reportStore.reportDataDH.six[props.sixId].number_of_members;
+                sixPanelDataDH.value.links = reportStore.reportDataDH.six[props.sixId].links;
 
             }
             if (reportStore.reportDataCH.six[props.sixId]) {
                 sixPanelDataCH.value.comment = reportStore.reportDataCH.six[props.sixId].comment;
                 sixPanelDataCH.value.number_of_members = reportStore.reportDataCH.six[props.sixId].number_of_members;
+                sixPanelDataCH.value.links = reportStore.reportDataCH.six[props.sixId].links;
             }
             // sixPanelDataCH.value = { ...props.dataCH };
         } else {
@@ -1150,10 +1165,12 @@ watchEffect(() => {
             if (reportStore.reportDataDH.ninth[props.ninthId]) {
                 ninthPanelDataDH.value.comment = reportStore.reportDataDH.ninth[props.ninthId].comment;
                 ninthPanelDataDH.value.event_happened = reportStore.reportDataDH.ninth[props.ninthId].event_happened;
+                ninthPanelDataDH.value.links = reportStore.reportDataDH.ninth[props.ninthId].links;
             }
             if (reportStore.reportDataCH.ninth[props.ninthId]) {
                 ninthPanelDataCH.value.comment = reportStore.reportDataCH.ninth[props.ninthId].comment;
                 ninthPanelDataCH.value.event_happened = reportStore.reportDataCH.ninth[props.ninthId].event_happened;
+                ninthPanelDataCH.value.links = reportStore.reportDataCH.ninth[props.ninthId].links;
             }
         } else {
             if (Object.keys(props.data).length > 0) {
@@ -1222,6 +1239,9 @@ watch(sixPanelDataDH.value, (newValue) => {
     }
 });
 
+// reportStore.reportDataDH.six[props.sixId] = sixPanelDataDH.value;
+// emit('formDataDH', sixPanelDataDH.value);
+
 
 watch(sixPanelDataCH.value, () => {
     if (props.isCentralHeadquarterCommander) {
@@ -1239,6 +1259,11 @@ watch(ninthPanelDataDH.value, (newValue) => {
         let formData = new FormData();
         formData.append('event_happened', newValue.event_happened);
         formData.append('comment', newValue.comment || '');
+        if (ninthPanelDataDH.value.links.length) {
+            for (let i = 0; i < ninthPanelDataDH.value.links.length; i++) {
+                formData.append(`[links][${i}][link]`, ninthPanelDataDH.value.links[i].link);
+            }
+        }
         formData.append('document', reportStore.reportDataDHFile.ninth[props.ninthId] || '');
         console.log('9 new', formData)
         emit('formDataDH', formData);
@@ -1253,6 +1278,11 @@ watch(fileDH.value, () => {
         let formData = new FormData();
         formData.append('event_happened', ninthPanelDataDH.value.event_happened);
         formData.append('comment', ninthPanelDataDH.value.comment || '');
+        if (ninthPanelDataDH.value.links.length) {
+            for (let i = 0; i < ninthPanelDataDH.value.links.length; i++) {
+                formData.append(`[links][${i}][link]`, ninthPanelDataDH.value.links[i].link);
+            }
+        }
         formData.append('document', reportStore.reportDataDHFile.ninth[props.ninthId] || '');
         emit('formDataDH', formData);
     }

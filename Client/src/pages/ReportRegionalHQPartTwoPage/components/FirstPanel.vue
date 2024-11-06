@@ -436,6 +436,7 @@ watchEffect(async () => {
 
     isFirstSent.value = reportStore.isReportReject.first && !props.data.central_version;
   }
+  console.log('isFirstSent:::: FIRST_1', isFirstSent.value)
 
   // Мапинг данных для отчета эксперта ОШ
   if (reportStore.reportDataDH.first && props.districtExpert) {

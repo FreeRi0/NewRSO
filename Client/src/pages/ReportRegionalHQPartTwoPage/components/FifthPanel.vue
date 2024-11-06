@@ -124,6 +124,8 @@
           </div>
         </div>
       </div>
+
+      <div class="hr"></div>
     </div>
     <div v-if="!isSent">
       <Button class="add_eventBtn" label="Добавить проект" @click="addProject"/>
@@ -547,19 +549,6 @@ const commonData = ref([]);
 const commentCH = ref();
 
 const focusOut = async () => {
-  // if (event.target.value === '0') {
-  //   let formData = new FormData();
-  //   formData.append(`events[0][links][0][link]`, '');
-  //
-  //   if (isFirstSent.value) {
-  //     const {data} = await reportPartTwoService.createReport(formData, '5', true);
-  //     emit('getData', data, 5);
-  //   } else {
-  //     const {data} = await reportPartTwoService.createReportDraft(formData, '5', true);
-  //     emit('getData', data, 5);
-  //   }
-  //   return;
-  // }
   if (!isLinkError.value) {
     try {
       if (isFirstSent.value) {
@@ -640,6 +629,15 @@ const setFormData = (file = null, index = null, isDeleteEvent = false, isDeleteF
 
   formData.append('comment', fifthPanelData.value.comment || '');
   events.value.forEach((event, i) => {
+    // Логика обнуления проекта при нулевом количестве участников
+    if (!(+event.participants_number)) {
+      event.name = null;
+      event.ro_participants_number = false;
+      event.end_date = null;
+      event.start_date = null;
+      event.links = [];
+      // formData.append(`events[${i}][regulations]`, '');
+    }
     if (isDeleteEvent && index === i) {
       return;
     } else {
@@ -676,7 +674,7 @@ const calculateResult = (event) => {
     events.value.forEach(e => {
       const startDate = new Date(e.start_date);
       const endDate = new Date(e.end_date);
-      const days = (endDate - startDate) / (1000 * 60 * 60 * 24);
+      const days = ((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
       finalResult.value += Math.abs((e.participants_number - e.ro_participants_number) * days)
     })
   } else {
@@ -689,7 +687,7 @@ const calculateResultDH = (event) => {
     fifthPanelDataDH.value.events.forEach(e => {
       const startDate = new Date(e.start_date);
       const endDate = new Date(e.end_date);
-      const days = (endDate - startDate) / (1000 * 60 * 60 * 24);
+      const days = ((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
       finalResultDH.value += Math.abs((e.participants_number - e.ro_participants_number) * days)
     })
   } else {
@@ -785,8 +783,14 @@ watchEffect(() => {
     events.value = [...props.data.events];
     fifthPanelData.value.comment = props.data.comment || '';
     isSent.value = props.data.is_sent;
+
+    isFirstSent.value = reportStore.isReportReject.fourth && !props.data.central_version;
+    console.log('isFirstSent.value for fifth_1::::::', isFirstSent.value)
   }
+}, {
+  flush: "post"
 });
+
 watchPostEffect(() => {
   events.value.forEach((event) => {
     if (!event.links.length) event.links.push({link: ''})
