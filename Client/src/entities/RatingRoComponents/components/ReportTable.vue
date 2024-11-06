@@ -17,10 +17,10 @@
                         }}</td>
                     <td v-show="typeof (dataDH) === 'boolean'" class="report-table__td report-table__td__center">{{
                         dataDH ? 'Да' : 'Нет' }}</td>
-                    <td class="report-table__td">
+                    <td :class="['report-table__td', props.disabled ? 'report-table__td--bgcolor' : '']">
                         <InputReport :value="value" :id="name" :name="name" style="width: 100%;" type="number"
                             placeholder="0" :maxlength="maxlength" :min="min" :max="max" :step="step"
-                            :is-error-panel="isErrorPanel" @input="updateValue" />
+                            :is-error-panel="isErrorPanel" :disabled="disabled" @input="updateValue" />
                     </td>
                 </tr>
             </tbody>
@@ -65,6 +65,10 @@ const props = defineProps({
     isErrorPanel: {
         type: Boolean,
     },
+    disabled: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const updateValue = (event) => {
@@ -75,5 +79,11 @@ const updateValue = (event) => {
 <style lang="scss" scoped>
 .valid-red {
     color: #db0000;
+}
+
+.report-table__td {
+    &--bgcolor {
+        background-color: #f9fafb;
+    }
 }
 </style>

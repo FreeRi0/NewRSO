@@ -136,7 +136,8 @@
             <v-expansion-panel-text>
               <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
                 @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.eleventh"
-                :is-error-panel="isErrorPanel.eleventh" />
+                :is-error-panel="isErrorPanel.eleventh"
+                :is-revision="isRevision.eleventh" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -341,6 +342,10 @@ const isErrorPanel = ref({
   twelfth: false,
   thirteenth: false,
   sixteenth: false,
+});
+
+const isRevision = ref({
+  eleventh: false,
 });
 
 const setId = (id) => {
@@ -789,10 +794,19 @@ const getReportData = async (reportId) => {
       }
       try {
         const dataEleventh = (await reportPartTwoService.getReport('11')).data;
+        console.log(dataEleventh);
         if (!dataEleventh.regional_version) {
           reportData.value.eleventh = dataEleventh;
         } else {
           reportData.value.eleventh = JSON.parse(dataEleventh.regional_version);
+        }
+        if (dataEleventh.rejecting_reasons && !dataEleventh.verified_by_chq) {
+          reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version);
+          dataEleventh.central_version
+          ? reportStore.reportDataCH.eleventh = dataEleventh.central_version
+          : reportStore.reportDataCH.eleventh = dataEleventh;
+          dataEleventh.rejecting_reasons ? isRevision.value.eleventh = true : false;
+          console.log('isRevision в род комп', isRevision.value );
         }
       } catch (e) {
         console.log(e.message)
@@ -1014,15 +1028,15 @@ const setDataCH = (data, panel, number) => {
       break;
     case 11:
       reportDataCH.value.eleventh = data;
-      console.log('11', ...reportDataCH.value.eleventh);
+      // console.log('11', ...reportDataCH.value.eleventh);
       break;
     case 12:
       reportDataCH.value.twelfth = data;
-      console.log('12', ...reportDataCH.value.twelfth);
+      // console.log('12', ...reportDataCH.value.twelfth);
       break;
     case 13:
       reportDataCH.value.thirteenth = data;
-      console.log('13', ...reportDataCH.value.thirteenth);
+      // console.log('13', ...reportDataCH.value.thirteenth);
       break;
     case 16:
       reportDataCH.value.sixteenth = data;
