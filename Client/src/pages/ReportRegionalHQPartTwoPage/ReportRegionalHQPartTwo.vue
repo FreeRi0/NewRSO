@@ -537,37 +537,29 @@ const getMultiplyData = async (reportId) => {
   ]);
 
   sixDataResults.forEach((result) => {
+
     if (districtExpert.value) {
-      console.log('dh')
       reportData.value.six[result.id] = result.data;
       reportStore.reportDataDH.six[result.id] = Object.assign({}, reportData.value.six[result.id]);
       reportStore.reportDataDH.six[result.id].comment = '';
-
-      isErrorPanel.value.six[result.id] = {
-        id: result.id,
-        error: false,
-      }
+      // isErrorPanel.value.six[result.id] = {
+      //   id: result.id,
+      //   error: false,
+      // }
     } else if (centralExpert.value) {
       console.log('ch')
       reportData.value.six[result.id] = JSON.parse(result.data?.regional_version);
-      console.log('данные РШ для ЦШ', reportData.value.six[result.id]);//---------------------------------
+      // console.log('данные РШ для ЦШ', reportData.value.six[result.id]);//---------------------------------
       reportStore.reportDataDH.six[result.id] = result.data;
       reportStore.reportDataCH.six[result.id] = Object.assign({}, result.data);
       reportStore.reportDataCH.six[result.id].comment = '';
     } else {
       reportData.value.six[result.id] = result.data;
-      if (reportData.value.six[result.id]?.regional_version !== null && Object.keys(reportData.value.six[result.id]).length) {
+      if (reportData.value.six[result.id]?.regional_version) {
         reportData.value.six[result.id] = JSON.parse(reportData.value.six[result.id].regional_version);
       }
     }
 
-
-    // reportData.value.six[result.id] = result.data;
-
-    // if (reportData.value.six[result.id].is_sent === false || !Object.keys(reportData.value.six[result.id]).length) {
-    //   console.log('yah6')
-    //   blockSendButton.value = false;
-    // }
   });
   // console.log('data66', reportData.value.six)
   // seventhDataResults.forEach((result) => {
@@ -579,13 +571,13 @@ const getMultiplyData = async (reportId) => {
       reportData.value.ninth[result.id] = result.data;
       reportStore.reportDataDH.ninth[result.id] = Object.assign({}, reportData.value.ninth[result.id]);
       reportStore.reportDataDH.ninth[result.id].comment = '';
-      isErrorPanel.value.ninth[result.id] = {
-        id: result.id,
-        error: false,
-      }
+      // isErrorPanel.value.ninth[result.id] = {
+      //   id: result.id,
+      //   error: false,
+      // }
     } else if (centralExpert.value) {
       reportData.value.ninth[result.id] = JSON.parse(result.data?.regional_version);
-      console.log('данные РШ для ЦШ', reportData.value.ninth[result.id]);
+      // console.log('данные РШ для ЦШ', reportData.value.ninth[result.id]);
       reportStore.reportDataDH.ninth[result.id] = result.data;
       reportStore.reportDataCH.ninth[result.id] = Object.assign({}, result.data);
       reportStore.reportDataCH.ninth[result.id].comment = '';
@@ -596,11 +588,6 @@ const getMultiplyData = async (reportId) => {
         reportData.value.ninth[result.id] = JSON.parse(reportData.value.ninth[result.id].regional_version);
       }
     }
-    // if (reportData.value.ninth[result.id].is_sent === false || !Object.keys(reportData.value.ninth[result.id]).length) {
-    //   console.log('yah9')
-    //   blockSendButton.value = false;
-    //   blockEditFirstReport.value = false;
-    // }
   });
 }
 const getReportData = async (reportId) => {
@@ -628,6 +615,8 @@ const getReportData = async (reportId) => {
       /*
       * Критерий 6 и 9  
       */
+
+
       await getMultiplyData(reportId);
       /*
      * Критерий 10-1
@@ -734,28 +723,45 @@ const getReportData = async (reportId) => {
       try {
         // reportData.value.first = (await reportPartTwoService.getReport('1')).data;
         const dataFirst = (await reportPartTwoService.getReport('1')).data;
-        if (!dataFirst.regional_version) {
+        if (!dataFirst.regional_version && !dataFirst.central_version) {
           reportData.value.first = dataFirst;
         } else {
-          reportData.value.first = JSON.parse(dataFirst.regional_version);
+          if (dataFirst.rejecting_reasons) {
+            reportStore.isReportReject.first = true;
+            reportStore.reportReject.first = dataFirst;
+          }
+
+          if (dataFirst.central_version) {
+            reportData.value.first = dataFirst;
+          } else {
+            reportData.value.first = JSON.parse(dataFirst.regional_version);
+          }
         }
       } catch (e) {
         console.log(e.message)
       }
       try {
-        // reportData.value.fourth = (await reportPartTwoService.getReport('4')).data;
         const dataFourth = (await reportPartTwoService.getReport('4')).data;
-        if (!dataFourth.regional_version) {
+        if (!dataFourth.regional_version && !dataFourth.central_version) {
           reportData.value.fourth = dataFourth;
         } else {
-          reportData.value.fourth = JSON.parse(dataFourth.regional_version);
+          if (dataFourth.rejecting_reasons) {
+            reportStore.isReportReject.fourth = true;
+            reportStore.reportReject.fourth = dataFourth;
+          }
+
+          if (dataFourth.central_version) {
+            reportData.value.fourth = dataFourth;
+          } else {
+            reportData.value.fourth = JSON.parse(dataFourth.regional_version);
+          }
         }
       } catch (e) {
         console.log(e.message)
       }
       try {
-        // reportData.value.fifth = (await reportPartTwoService.getReport('5')).data;
         const dataFifth = (await reportPartTwoService.getReport('5')).data;
+        console.log('5', dataFifth)
         if (!dataFifth.regional_version) {
           reportData.value.fifth = dataFifth;
         } else {
@@ -764,7 +770,68 @@ const getReportData = async (reportId) => {
       } catch (e) {
         console.log(e.message)
       }
-      await getMultiplyData();
+      // ReportRegionalHQPartTwo.vue
+      // try {
+      //   for (let itemId in six_items) {
+      //     try {
+      //       const dataSix = await reportPartTwoService.getMultipleReport('6', itemId);
+      //       console.log('data for item', itemId, ':', dataSix.data);
+
+      //       if (dataSix.data && typeof dataSix.data === 'object') {
+      //         if (dataSix.data.regional_version) {
+      //           try {
+      //             reportData.value.six[itemId] = JSON.parse(dataSix.data.regional_version);
+      //           } catch (parseError) {
+      //             console.error('Error parsing regional_version for item', itemId, ':', parseError);
+      //             reportData.value.six[itemId] = dataSix.data;
+      //           }
+      //         } else {
+      //           reportData.value.six[itemId] = dataSix.data;
+      //         }
+      //       } else {
+      //         console.warn('Unexpected data structure for item', itemId);
+      //         reportData.value.six[itemId] = {};
+      //       }
+      //     } catch (itemError) {
+      //       console.error('Error processing item', itemId, ':', itemError);
+      //       reportData.value.six[itemId] = {};
+      //     }
+      //   }
+      // } catch (e) {
+      //   console.error('Error in six_items processing:', e);
+      // }
+
+      try {
+        await getMultiplyData();
+        // for (let itemId in ninth_items) {
+        //   try {
+        //     const dataNinth = await reportPartTwoService.getMultipleReport('9', itemId);
+        //     console.log('data for item', itemId, ':', dataNinth.data);
+
+        //     if (dataNinth.data && typeof dataNinth.data === 'object') {
+        //       if (dataNinth.data.regional_version) {
+        //         try {
+        //           reportData.value.ninth[itemId] = JSON.parse(dataNinth.data.regional_version);
+        //         } catch (parseError) {
+        //           console.error('Error parsing regional_version for item', itemId, ':', parseError);
+        //           reportData.value.ninth[itemId] = dataNinth.data;
+        //         }
+        //       } else {
+        //         reportData.value.ninth[itemId] = dataNinth.data;
+        //       }
+        //     } else {
+        //       console.warn('Unexpected data structure for item', itemId);
+        //       // reportData.value.ninth[itemId] = {};
+        //     }
+        //   } catch (itemError) {
+        //     console.error('Error processing item', itemId, ':', itemError);
+        //     // reportData.value.ninth[itemId] = {};
+        //   }
+        // }
+      } catch (e) {
+        console.error('Error in six_items processing:', e);
+      }
+
       try {
         // reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
         const dataTenthFirst = (await reportPartTwoService.getMultipleReport('10', '1')).data;
@@ -1085,7 +1152,7 @@ const sendReport = async () => {
   // console.log('reportData: ', reportData.value)
   if (!(districtExpert.value || centralExpert.value)) {
     blockSendButton.value = true;
-    if (checkEmptyFields(reportData.value)) {
+    if (true) {
       preloader.value = true;
       try {
         // const { filteredSix, filteredNinth } = filterPanelsData();
@@ -1190,7 +1257,7 @@ const sendReport = async () => {
     }
   }
 
-  if (districtExpert.value && checkEmptyFieldsDH(reportStore.reportDataDH, isErrorPanel)) {
+  if (districtExpert.value) {
     blockSendButton.value = true;
     preloader.value = true;
     try {
@@ -1209,14 +1276,14 @@ const sendReport = async () => {
 
       for (let i in reportData.value.six) {
         if (!reportData.value.six[i]?.verified_by_dhq) {
-          console.log('send6')
+          console.log('send6', reportDataDH.value.six[i])
           await reportPartTwoService.sendReportDHMultiply(reportDataDH.value.six[i], '6', i, route.query.reportId);
         }
       }
       for (let i in reportData.value.ninth) {
 
         if (!reportData.value.ninth[i]?.verified_by_dhq) {
-          console.log('send9')
+          console.log('send9', reportDataDH.value.ninth[i])
           await reportPartTwoService.sendReportDHMultiply(reportDataDH.value.ninth[i], '9', i, route.query.reportId, true);
         }
       }
@@ -1292,16 +1359,16 @@ const sendReport = async () => {
         }
       }
       for (let i in reportStore.reportForCheckCH.ninth) {
-        if (reportStore.reportForCheckCH.ninth[i].verified_by_chq) {
+        if (reportStore.reportForCheckCH.ninth[i].verified_by_chq === null) {
           await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.ninth[i], '9', i, route.query.reportId, true, reportStore.returnReport.ninth[i]);
         }
       }
       if (reportStore.reportForCheckCH.tenth.first.verified_by_chq === null) {
-        await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.fifth, '10', '1', route.query.reportId, true, reportStore.returnReport.tenth.first);
+        await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.tenth.first, '10', '1', route.query.reportId, true, reportStore.returnReport.tenth.first);
       }
 
       if (reportStore.reportForCheckCH.tenth.second.verified_by_chq === null) {
-        await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.second, '10', '2', route.query.reportId, true, reportStore.returnReport.tenth.second);
+        await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.tenth.second, '10', '2', route.query.reportId, true, reportStore.returnReport.tenth.second);
       }
 
       if (reportStore.reportDataDH.eleventh.verified_by_chq === null) {
@@ -1680,11 +1747,10 @@ watch(
 );
 
 onMounted(() => {
-  // console.log('roleStore.experts', roleStore.experts)
-  // console.log('roleStore.roles', roleStore.roles)
-  // if (!roleStore.roles?.regionalheadquarter_commander && (!roleStore.experts?.is_district_expert || !roleStore.experts?.is_central_expert)) {
-  //   router.push({ name: 'mypage' });
-  // }
+  if (roleStore.roles.regionalheadquarter_commander && typeof (route.query.reportId) === 'undefined' && window.performance.navigation.type === 1) {
+    preloader.value = true;
+    getReportData();
+  }
   console.log('ddd', route.query.reportId)
   getItems(6);
   getItems(9);

@@ -483,8 +483,7 @@
                     </div>
 
                     <CommentFileComponent v-model:value="sixPanelDataDH.comment" :is-error-panel="isErrorPanel"
-                        :is-six="true" name="sixPanelDataDH.comment"
-                        :disabled="props.isCentralHeadquarterCommander || ((sixPanelDataDH.number_of_members == 0 || sixPanelDataDH.number_of_members === null) && (sixPanelData.number_of_members == 0 || sixPanelData.number_of_members === null))">
+                        :disabled="props.isCentralHeadquarterCommander" :is-six="true" name="sixPanelDataDH.comment">
                     </CommentFileComponent>
                 </div>
                 <div v-else-if="props.panel_number == 9" class="group-seventh">
@@ -513,12 +512,17 @@
                             </div>
                         </div>
                     </div>
-                    <CommentFileComponent v-model:value="ninthPanelDataDH.comment" name="ninthPanelDataDH.comment"
+                    <!-- <CommentFileComponent v-model:value="ninthPanelDataDH.comment" name="ninthPanelDataDH.comment"
                         @change="uploadFile($event, 9)" @click="deleteFile(9)"
                         :file="reportStore.reportDataDHFile.ninth[props.ninthId] ? reportStore.reportDataDHFile.ninth[props.ninthId]?.name : null"
                         :fileType="reportStore.reportDataDHFile.ninth[props.ninthId] ? reportStore.reportDataDHFile.ninth[props.ninthId]?.type.split('/').at(-1) : null"
                         :fileSize="reportStore.reportDataDHFile.ninth[props.ninthId] ? reportStore.reportDataDHFile.ninth[props.ninthId]?.size / Math.pow(1024, 2) : null"
-                        :disabled="props.isCentralHeadquarterCommander || (ninthPanelDataDH.event_happened === false && ninthPanelData.event_happened === false)"
+                        :disabled="props.isCentralHeadquarterCommander" :is-error-file="isErrorFile"
+                        :is-error-panel="isErrorPanel">
+                    </CommentFileComponent> -->
+                    <CommentFileComponent v-model:value="ninthPanelDataDH.comment" name="ninthPanelDataDH.comment"
+                        @change="uploadFile($event, 9)" @click="deleteFile(9)" :file="fileDH.name"
+                        :fileType="fileDH.type" :fileSize="fileDH.size" :disabled="props.isCentralHeadquarterCommander"
                         :is-error-file="isErrorFile" :is-error-panel="isErrorPanel">
                     </CommentFileComponent>
                 </div>
@@ -617,24 +621,9 @@
                             <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
                         </div>
                     </div>
-                    <!-- <label class="form__label">Проведение мероприятия <sup class="valid-red">*</sup></label> -->
-                    <!-- <v-table>
-                        <tbody>
-                            <tr class="report-table__tr">
-                                <td class="report-table__th">Данные РО</td>
-                                <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
-                                <td class="report-table__th">Корректировка ЦШ</td>
-                            </tr>
-                            <tr>
-                                <td class="report-table__td">Да</td>
-                                <td class="report-table__td report-table__td__center">Да</td>
-                                <td class="report-table__td">Да</td>
-                            </tr>
-                        </tbody>
-                    </v-table> -->
                     <ReportTable label="Проведение мероприятия " name="ninthPanelData.event_happened"
-                        :dataRH="ninthPanelData.event_happened" :dataDH="ninthPanelDataDH.event_happened"
-                        v-model:value="ninthPanelDataCH.event_happened"
+                        :dataRH="ninthPanelData.event_happened" :is-ninth-panel="true"
+                        :dataDH="ninthPanelDataDH.event_happened" v-model:value="ninthPanelDataCH.event_happened"
                         :is-error-panel="isErrorPanel"></ReportTable>
 
                     <div class="form__field places mt-4 mb-4">
@@ -655,11 +644,9 @@
                         </div>
                     </div>
                     <CommentFileComponent v-model:value="ninthPanelDataCH.comment" name="ninthPanelDataCH.comment"
-                        @change="uploadFile($event, 9)" @click="deleteFile(9)" :CH="true"
-                        :file="reportStore.reportDataCHFile.ninth[props.ninthId] ? reportStore.reportDataCHFile.ninth[props.ninthId]?.name : null"
-                        :fileType="reportStore.reportDataCHFile.ninth[props.ninthId] ? reportStore.reportDataCHFile.ninth[props.ninthId]?.type.split('/').at(-1) : null"
-                        :fileSize="reportStore.reportDataCHFile.ninth[props.ninthId] ? reportStore.reportDataCHFile.ninth[props.ninthId]?.size / Math.pow(1024, 2) : null"
-                        :is-error-file="isErrorFile" :is-error-panel="isErrorPanel">
+                        @change="uploadFile($event, 9)" @click="deleteFile(9)" :CH="true" :file="fileCH.name"
+                        :fileType="fileCH.type" :fileSize="fileCH.size" :is-error-file="isErrorFile"
+                        :is-error-panel="isErrorPanel">
                     </CommentFileComponent>
                     <div>
                         <v-checkbox v-model="reportStore.returnReport.ninth[props.ninthId]"
@@ -671,7 +658,7 @@
     </v-card-text>
 </template>
 <script setup>
-import { ref, watchEffect, watch, handleError } from 'vue';
+import { ref, watchEffect, watch, handleError, onMounted } from 'vue';
 import { Button } from '@shared/components/buttons';
 import {
     FileBoxComponent,
@@ -695,6 +682,7 @@ const props = defineProps({
     id: String,
     sixId: String,
     ninthId: String,
+
     isSentSix: Boolean,
     // isSent: Boolean,
     isSentNinth: Boolean,
@@ -778,6 +766,19 @@ const ninthPanelDataCH = ref({
     comment: '',
 });
 
+const fileDH = ref({
+    name: '',
+    type: '',
+    size: null,
+})
+
+const fileCH = ref({
+    name: '',
+    type: '',
+    size: null,
+})
+
+
 // const prize_places = ref([
 //     { name: '1', value: 1, id: 'pp1' },
 //     { name: '2', value: 2, id: 'pp2' },
@@ -846,14 +847,28 @@ const uploadFile = (event, number) => {
     //         emit('uploadFile', formData);
     //     }
     if (number === 9) {
-        fileValidate(event.target.files[0], 9, isErrorFile);
-        if (isErrorFile.value) {
-            console.log('error');
-            scanFile.value = event.target.files[0];
-            ninthPanelData.value.document = scanFile.value.name;
-        } else {
-            if (props.isDistrictHeadquarterCommander) {
-                if (event.target.files) {
+        if (event.target.files) {
+            fileValidate(event.target.files[0], 9, isErrorFile);
+            if (isErrorFile.value) {
+                console.log('error');
+                scanFile.value = event.target.files[0];
+                ninthPanelData.value.document = scanFile.value.name;
+                if (props.isDistrictHeadquarterCommander) {
+                    reportStore.reportDataDHFile.ninth[props.ninthId] = null;
+                    fileDH.value.name = event.target.files[0].name;
+                    fileDH.value.type = event.target.files[0].type.split('/').at(-1);
+                    fileDH.value.size = event.target.files[0].size / Math.pow(1024, 2);
+                }
+                else if (props.isCentralHeadquarterCommander) {
+                    if (props.isDistrictHeadquarterCommander) {
+                        reportStore.reportDataCHFile.ninth[props.ninthId] = null;
+                        fileCH.value.name = event.target.files[0].name;
+                        fileCH.value.type = event.target.files[0].type.split('/').at(-1);
+                        fileCH.value.size = event.target.files[0].size / Math.pow(1024, 2);
+                    }
+                }
+            } else {
+                if (props.isDistrictHeadquarterCommander) {
                     reportStore.reportDataDHFile.ninth[props.ninthId] = event.target.files[0];
                     console.log('fileDH', reportStore.reportDataDHFile.ninth[props.ninthId])
                 }
@@ -908,12 +923,11 @@ const deleteFile = (number) => {
     // } 
     if (number === 9) {
         if (props.isDistrictHeadquarterCommander) {
+            fileDH.value.name = null;
             reportStore.reportDataDHFile.ninth[props.ninthId] = null;
-            ninthPanelDataDH.value.document = '';
-
         } else if (props.isCentralHeadquarterCommander) {
+            fileCH.value.name = null;
             reportStore.reportDataCHFile.ninth[props.ninthId] = null;
-            ninthPanelDataCH.value.document = '';
         } else {
             ninthPanelData.value.document = '';
             formData.append('event_happened', ninthPanelData.value.event_happened);
@@ -1079,6 +1093,7 @@ watchEffect(() => {
             if (reportStore.reportDataDH.six[props.sixId]) {
                 sixPanelDataDH.value.comment = reportStore.reportDataDH.six[props.sixId].comment;
                 sixPanelDataDH.value.number_of_members = reportStore.reportDataDH.six[props.sixId].number_of_members;
+
             }
             if (reportStore.reportDataCH.six[props.sixId]) {
                 sixPanelDataCH.value.comment = reportStore.reportDataCH.six[props.sixId].comment;
@@ -1174,62 +1189,105 @@ watchEffect(() => {
             }
 
         }
+
+        if (props.isDistrictHeadquarterCommander) {
+            if (reportStore.reportDataDHFile.ninth[props.ninthId]) {
+                fileDH.value.name = reportStore.reportDataDHFile.ninth[props.ninthId].name;
+                fileDH.value.type = reportStore.reportDataDHFile.ninth[props.ninthId].type.split('/').at(-1);
+                fileDH.value.size = reportStore.reportDataDHFile.ninth[props.ninthId].size / Math.pow(1024, 2);
+            }
+        } else if (props.isCentralHeadquarterCommander) {
+            if (reportStore.reportDataDH.ninth[props.ninthId]) {
+                fileDH.value.name = reportStore.reportDataDH.ninth[props.ninthId].scan_file;
+                fileDH.value.type = reportStore.reportDataDH.ninth[props.ninthId].file_type;
+                fileDH.value.size = reportStore.reportDataDH.ninth[props.ninthId].file_size;
+            }
+            if (reportStore.reportDataCHFile.ninth[props.ninthId]) {
+                fileCH.value.name = reportStore.reportDataCHFile.ninth[props.ninthId].name;
+                fileCH.value.type = reportStore.reportDataCHFile.ninth[props.ninthId].type.split('/').at(-1);
+                fileCH.value.size = reportStore.reportDataCHFile.ninth[props.ninthId].size / Math.pow(1024, 2);
+            }
+        }
+
         emit('getId', props.id)
         emit('getPanelNumber', props.panel_number)
-
     }
 }, {
     flush: 'post'
 })
 
-watch(sixPanelDataDH.value, () => {
-    reportStore.reportDataDH.six[props.sixId] = sixPanelDataDH.value;
-    emit('formDataDH', sixPanelDataDH.value);
-    console.log(sixPanelDataDH.value)
+watch(sixPanelDataDH.value, (newValue) => {
+    if (props.isDistrictHeadquarterCommander) {
+        reportStore.reportDataDH.six[props.sixId] = newValue;
+        emit('formDataDH', newValue);
+        console.log('6 new', newValue)
+    }
 });
+
+
 watch(sixPanelDataCH.value, () => {
-    reportStore.reportDataCH.six[props.sixId] = sixPanelDataCH.value;
-    emit('formDataCH', sixPanelDataCH.value);
-    console.log(sixPanelDataCH.value)
+    if (props.isCentralHeadquarterCommander) {
+        reportStore.reportDataCH.six[props.sixId] = sixPanelDataCH.value;
+        emit('formDataCH', sixPanelDataCH.value);
+        console.log(sixPanelDataCH.value)
+    }
 });
-watch(ninthPanelDataDH.value, () => {
-    reportStore.reportDataDH.ninth[props.ninthId] = ninthPanelDataDH.value;
 
-    let formData = new FormData();
 
-    ninthPanelDataDH.value.event_happened
-        ? formData.append('event_happened', ninthPanelDataDH.value.event_happened)
-        : formData.append('event_happened', false);
+watch(ninthPanelDataDH.value, (newValue) => {
+    if (props.isDistrictHeadquarterCommander) {
+        reportStore.reportDataDH.ninth[props.ninthId] = newValue;
 
-    formData.append('comment', ninthPanelDataDH.value.comment || '');
+        let formData = new FormData();
+        formData.append('event_happened', newValue.event_happened);
+        formData.append('comment', newValue.comment || '');
+        formData.append('document', reportStore.reportDataDHFile.ninth[props.ninthId] || '');
+        console.log('9 new', formData)
+        emit('formDataDH', formData);
+    }
 
-    reportStore.reportDataDHFile.ninth[props.ninthId]
-        ? formData.append('document', reportStore.reportDataDHFile.ninth[props.ninthId])
-        : formData.append('document', '');
-
-    emit('formDataDH', formData);
-    // reportStore.reportDataDH.ninth = ninthPanelDataDH.value;
-    // emit('formDataDH', ninthPanelDataDH.value);
 });
+
+watch(fileDH.value, () => {
+    if (props.isDistrictHeadquarterCommander) {
+        reportStore.reportDataDH.ninth[props.ninthId] = ninthPanelDataDH.value;
+
+        let formData = new FormData();
+        formData.append('event_happened', ninthPanelDataDH.value.event_happened);
+        formData.append('comment', ninthPanelDataDH.value.comment || '');
+        formData.append('document', reportStore.reportDataDHFile.ninth[props.ninthId] || '');
+        emit('formDataDH', formData);
+    }
+});
+
+watch(fileCH.value, () => {
+    if (props.isCentralHeadquarterCommander) {
+        reportStore.reportDataCH.ninth[props.ninthId] = ninthPanelDataCH.value;
+
+        let formData = new FormData();
+        formData.append('event_happened', ninthPanelDataCH.value.event_happened);
+        formData.append('comment', ninthPanelDataCH.value.comment || '');
+        formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId] || '');
+        emit('formDataCH', formData);
+        console.log('file9', formData)
+    }
+});
+
 watch(ninthPanelDataCH.value, () => {
-    reportStore.reportDataCH.ninth[props.ninthId] = ninthPanelDataCH.value;
-
-    let formData = new FormData();
-
-    ninthPanelDataCH.value.event_happened
-        ? formData.append('event_happened', ninthPanelDataCH.value.event_happened)
-        : formData.append('event_happened', false);
-
-    formData.append('comment', ninthPanelDataCH.value.comment || '');
-
-    reportStore.reportDataCHFile.ninth[props.ninthId]
-        ? formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId])
-        : formData.append('document', '');
-
-    emit('formDataCH', formData);
-    // reportStore.reportDataDH.ninth = ninthPanelDataDH.value;
-    // emit('formDataDH', ninthPanelDataDH.value);
+    if (props.isCentralHeadquarterCommander) {
+        reportStore.reportDataCH.ninth[props.ninthId] = ninthPanelDataCH.value;
+        let formData = new FormData();
+        formData.append('event_happened', ninthPanelDataCH.value.event_happened);
+        formData.append('comment', ninthPanelDataCH.value.comment || '');
+        formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId] || '');
+        emit('formDataCH', formData);
+    }
 });
+
+// onMounted(() => {
+//     // emit('formDataDH', sixPanelDataDH);
+//     console.log('mount', sixPanelDataDH.value)
+// })
 </script>
 <style lang="scss" scoped>
 .number_input {

@@ -181,6 +181,8 @@ watchEffect(() => {
 
 
     }
+  } else {
+    ninthPanelData.value = { ...props.data[el_id.value] }
   }
   if (panel.value || panel.value === 0) {
     disabled.value = true;

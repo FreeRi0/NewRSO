@@ -1,26 +1,26 @@
 <template>
   <v-card class="panel-card">
     <v-tabs v-model="tab">
-      <v-tab value="one" class="panel-tab-btn" v-if="districtHeadquarterCommander || centralHeadquarterCommander">Отчет
+      <v-tab value="one" class="panel-tab-btn" v-if="districtHeadquarterCommander || centralHeadquarterCommander || props.isReject">Отчет
         РО</v-tab>
       <v-tab value="two" class="panel-tab-btn"
-        v-if="districtHeadquarterCommander || centralHeadquarterCommander">Корректировка ОШ</v-tab>
-      <v-tab value="three" class="panel-tab-btn" v-if="centralHeadquarterCommander">Корректировка ЦШ</v-tab>
+        v-if="districtHeadquarterCommander || centralHeadquarterCommander || props.isReject">Корректировка ОШ</v-tab>
+      <v-tab value="three" class="panel-tab-btn" v-if="centralHeadquarterCommander || props.isReject">Корректировка ЦШ</v-tab>
     </v-tabs>
 
     <v-card-text class="panel-card-text">
       <v-tabs-window v-model="tab">
-        <v-tabs-window-item value="one" v-if="districtHeadquarterCommander || centralHeadquarterCommander">
+        <v-tabs-window-item value="one" v-if="districtHeadquarterCommander || centralHeadquarterCommander || props.isReject">
           <div class="form__field-group">
             <slot name="firstTab"></slot>
           </div>
         </v-tabs-window-item>
-        <v-tabs-window-item value="two" v-if="districtHeadquarterCommander || centralHeadquarterCommander">
+        <v-tabs-window-item value="two" v-if="districtHeadquarterCommander || centralHeadquarterCommander || props.isReject">
           <div class="form__field-group">
             <slot name="secondTab"></slot>
           </div>
         </v-tabs-window-item>
-        <v-tabs-window-item value="three" v-if="centralHeadquarterCommander">
+        <v-tabs-window-item value="three" v-if="centralHeadquarterCommander || props.isReject">
           <div class="form__field-group report-table">
             <slot name="thirdTab"></slot>
           </div>
@@ -37,6 +37,13 @@ const tab = ref(null);
 const districtHeadquarterCommander = ref(false);
 const centralHeadquarterCommander = ref(false);
 const roleStore = useRoleStore();
+
+const props = defineProps({
+  isReject: {
+    type: Boolean,
+    default: false,
+  }
+})
 
 watchEffect(() => {
   if (roleStore.roles?.districtheadquarter_commander || (roleStore.experts?.is_district_expert || roleStore.experts?.is_central_expert)) {

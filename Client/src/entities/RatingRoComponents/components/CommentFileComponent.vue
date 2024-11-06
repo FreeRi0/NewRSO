@@ -5,7 +5,7 @@
         <InputReport v-show="!props.isSix" is-file-district type="file" accept=".jpg, .jpeg, .png, .pdf" id="scan_file"
             name="scan_file" width="20px" height="20px" :disabled="isDisabled" change="onChange" />
 
-        <TextareaReport :value="value" :id="name" :name="name" placeholder="Примечания, ссылки" :rows="1" autoResize
+        <TextareaReport :value="value" :id="name" :name="name" placeholder="Примечания, ссылки" :rows="rows" autoResize
             counter-visible :maxlength="3000" :max-length-text="3000" :disabled="isDisabled" v-bind="$attrs">
         </TextareaReport>
         <FileBoxComponent v-if="file" :file="file" :fileType="fileType" :fileSize="fileSize" @click="clickOnButton"
@@ -58,6 +58,10 @@ const props = defineProps({
     isSent: {
         type: Boolean,
     },
+    rows: {
+      type: Number,
+      default: 1
+    }
 });
 
 const onChange = (event) => {

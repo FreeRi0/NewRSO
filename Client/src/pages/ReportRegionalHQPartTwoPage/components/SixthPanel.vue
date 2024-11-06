@@ -28,6 +28,7 @@
 import { ref, watchEffect } from "vue";
 import { SeventhPanelForm } from "./index";
 import { reportPartTwoService } from "@services/ReportService.ts";
+import ActiveCompetitionsItemSelectReport from "@features/ActiveCompetitions/components/ActiveCompetitionsItemSelectReport.vue";
 const props = defineProps({
   districtHeadquarterCommander: {
     type: Boolean
@@ -124,16 +125,15 @@ const getPanelNumber = (number) => {
   emit('getPanelNumber', number);
 }
 watchEffect(() => {
-  if (props.districtHeadquarterCommander) {
-    console.log('11')
-    sixPanelData.value = { ...props.data[el_id.value] };
-  } else {
-    console.log('12')
+  // sixPanelData.value = { ...props.data[el_id.value] }
+  if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
+    console.log('oh');
     if (props.data[el_id.value] && Object.keys(props.data[el_id.value]).length > 0) {
-      console.log('data received', props.data);
+      console.log('data received', props.data)
       isFirstSent.value = false;
       sixPanelData.value = { ...props.data[el_id.value] }
       isSentSix.value = props.data[el_id.value].is_sent;
+ 
       if (props.data[el_id.value].number_of_members == 0 || props.data[el_id.value].number_of_members == null) {
         sixPanelData.value = {
           number_of_members: 0,
@@ -158,6 +158,9 @@ watchEffect(() => {
       // }
       isSentSix.value = false;
     }
+  } else {
+    console.log('else');
+    sixPanelData.value = { ...props.data[el_id.value] }
   }
 
   if (panel.value || panel.value === 0) {
