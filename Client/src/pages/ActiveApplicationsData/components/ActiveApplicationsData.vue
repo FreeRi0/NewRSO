@@ -5,11 +5,12 @@
 
       <div class="d-flex mt-9 mb-9 active-tabs">
         <button class="contributorBtn" :class="{ active: picked === tab.name }" v-for="tab in tabs" v-show="tab.name === 'Верификация аккаунтов' && (roleStore.roles.detachment_commander || roleStore.roles.regionalheadquarter_commander || (roleStore.roles.regionalheadquarter_commander && roleStore.experts?.is_district_expert)) ||
-          tab.name === 'Заявки на вступление в отряд' && (roleStore.roles.detachment_commander) && !roleStore.experts?.is_district_expert ||
-          tab.name === 'Заявки на участие в мероприятии' && !roleStore.experts?.is_district_expert ||
-          tab.name === 'Конкурсы' && !roleStore.experts?.is_district_expert ||
-          tab.name === 'Заявки на вступление в штаб' && !roleStore.experts?.is_district_expert || !roleStore.experts?.is_cental_expert ||
-          tab.name === 'Рейтинг РО' && (roleStore.experts?.is_district_expert || roleStore.experts?.is_cental_expert)" :key="tab.id" @click="picked = tab.name">
+          tab.name === 'Заявки на вступление в отряд' && (roleStore.roles.detachment_commander) && !(roleStore.experts?.is_district_expert || roleStore.experts?.is_central_expert) ||
+          tab.name === 'Заявки на участие в мероприятии' && !(roleStore.experts?.is_district_expert || roleStore.experts?.is_central_expert) ||
+          tab.name === 'Конкурсы' && !(roleStore.experts?.is_district_expert || roleStore.experts?.is_central_expert) ||
+          tab.name === 'Заявки на вступление в штаб' && !(roleStore.experts?.is_district_expert || roleStore.experts?.is_central_expert) ||
+          tab.name === 'Рейтинг РО' && (roleStore.experts?.is_district_expert || roleStore.experts?.is_central_expert)"
+          :key="tab.id" @click="picked = tab.name">
           {{ tab.name }}
         </button>
       </div>

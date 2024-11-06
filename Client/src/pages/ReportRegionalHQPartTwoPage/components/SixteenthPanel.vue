@@ -132,6 +132,7 @@
           </div>
         </div>
       </div>
+      <div class="hr" style="margin-bottom: 0;"></div>
     </div>
     <div v-if="!isSent && sixteenthPanelData.is_project">
       <Button class="add_eventBtn" label="Добавить проект" @click="addProject"/>
@@ -651,12 +652,12 @@ const addProject = () => {
     ],
   })
 };
-const addProjectDH = () => {
-  sixteenthPanelDataDH.value.projects.push({
-    name: '',
-    project_scale: null,
-  })
-}
+// const addProjectDH = () => {
+//   sixteenthPanelDataDH.value.projects.push({
+//     name: '',
+//     project_scale: null,
+//   })
+// }
 const deleteProject = async (index) => {
   let formData = new FormData();
   projects.value = projects.value.filter((el, i) => index !== i);
@@ -680,9 +681,9 @@ const deleteProject = async (index) => {
     console.log('deleteEvent error: ', e);
   }
 };
-const deleteProjectDH = (index) => {
-  sixteenthPanelDataDH.value.projects = sixteenthPanelDataDH.value.projects.filter((el, i) => index !== i);
-}
+// const deleteProjectDH = (index) => {
+//   sixteenthPanelDataDH.value.projects = sixteenthPanelDataDH.value.projects.filter((el, i) => index !== i);
+// }
 
 const setFormData = (index = null, isDeleteEvent = false, isLinkDelete = false, linkIndex = null) => {
   let formData = new FormData();
@@ -780,7 +781,7 @@ const onReportReturn = (event) => {
 
 onMounted(() => {
   // Мапинг данных для отчета эксперта ОШ
-  if (reportStore.reportDataDH.sixteenth) {
+  if (reportStore.reportDataDH.sixteenth && props.districtExpert) {
     sixteenthPanelDataDH.value.is_project = reportStore.reportDataDH.sixteenth.is_project;
     sixteenthPanelDataDH.value.comment = reportStore.reportDataDH.sixteenth.comment;
     sixteenthPanelDataDH.value.projects = [...reportStore.reportDataDH.sixteenth.projects];
@@ -814,7 +815,7 @@ onMounted(() => {
         // }
       }
     }
-    console.log('commonData', commonData.value)
+    console.log('sixteenth commonData', commonData.value)
   }
 });
 
@@ -840,6 +841,8 @@ watchEffect(() => {
     sixteenthPanelData.value.comment = props.data.comment || '';
     isSent.value = props.data.is_sent;
   }
+}, {
+  flush: "post"
 });
 
 watchPostEffect(() => {
@@ -1112,7 +1115,7 @@ watch([commonData, commentCH], () => {
   border: none;
   border-radius: 10px;
   margin-bottom: 8px;
-  gap: 40px;
+  gap: 20px;
 }
 
 .valid-red {

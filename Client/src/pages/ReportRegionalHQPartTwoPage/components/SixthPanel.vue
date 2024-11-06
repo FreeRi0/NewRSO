@@ -14,9 +14,10 @@
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="6" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)" @formDataDH="formDataDH($event, item.id)" @formDataCH="formDataCH($event, item.id)" @error="setError"
-            @getPanelNumber="getPanelNumber($event)" @getId="getId($event)" :data="sixPanelData" :six-id="item.id"
-            :is-sent-six="isSentSix" :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
+            @formData="formData($event, item.id)" @formDataDH="formDataDH($event, item.id)"
+            @formDataCH="formDataCH($event, item.id)" @error="setError" @getPanelNumber="getPanelNumber($event)"
+            @getId="getId($event)" :data="sixPanelData" :six-id="item.id" :is-sent-six="isSentSix"
+            :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item">
           </SeventhPanelForm>
@@ -28,6 +29,7 @@
 import { ref, watchEffect } from "vue";
 import { SeventhPanelForm } from "./index";
 import { reportPartTwoService } from "@services/ReportService.ts";
+import ActiveCompetitionsItemSelectReport from "@features/ActiveCompetitions/components/ActiveCompetitionsItemSelectReport.vue";
 const props = defineProps({
   districtHeadquarterCommander: {
     type: Boolean
@@ -50,7 +52,7 @@ const setError = (err) => {
 
 const isFirstSent = ref(null);
 const isSentSix = ref(false);
-const emit = defineEmits(['getData', 'getDataDH', 'getDataCH',  'getId', 'getPanelNumber']);
+const emit = defineEmits(['getData', 'getDataDH', 'getDataCH', 'getId', 'getPanelNumber']);
 
 const sixPanelData = ref({
   number_of_members: 0,
@@ -124,16 +126,15 @@ const getPanelNumber = (number) => {
   emit('getPanelNumber', number);
 }
 watchEffect(() => {
-  if (props.districtHeadquarterCommander) {
-    console.log('11')
-    sixPanelData.value = { ...props.data[el_id.value] };
-  } else {
-    console.log('12')
+  // sixPanelData.value = { ...props.data[el_id.value] }
+  if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
+    console.log('oh');
     if (props.data[el_id.value] && Object.keys(props.data[el_id.value]).length > 0) {
-      console.log('data received', props.data);
+      console.log('data received', props.data)
       isFirstSent.value = false;
       sixPanelData.value = { ...props.data[el_id.value] }
       isSentSix.value = props.data[el_id.value].is_sent;
+ 
       if (props.data[el_id.value].number_of_members == 0 || props.data[el_id.value].number_of_members == null) {
         sixPanelData.value = {
           number_of_members: 0,
@@ -158,8 +159,10 @@ watchEffect(() => {
       // }
       isSentSix.value = false;
     }
+  } else {
+    console.log('else');
+    sixPanelData.value = { ...props.data[el_id.value] }
   }
-
   if (panel.value || panel.value === 0) {
     disabled.value = true;
   } else {

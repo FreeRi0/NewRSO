@@ -124,6 +124,8 @@
           </div>
         </div>
       </div>
+
+      <div class="hr"></div>
     </div>
     <div v-if="!isSent">
       <Button class="add_eventBtn" label="Добавить проект" @click="addProject"/>
@@ -206,18 +208,24 @@
                 class="form__input form__field-people-count-field"
                 placeholder="Введите название"
                 @focusout="focusOut"
-                :disabled="isSent || !event.participants_number"
+                disabled
             />
           </div>
         </div>
         <div style="width: 100%;">
-          <p class="form__label">Ссылка на группу трудового проекта в социальных сетях <sup class="valid-red">*</sup>
+          <p class="form__label">Ссылка на группу трудового проекта в социальных сетях
           </p>
           <div class="form__field-link-wrap" v-for="(link, i) in events[index].links" :key="i">
-            <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__field-link-field"
-                         type="text" placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                         @focusout="focusOut"
-                         :disabled="props.centralExpert || props.districtExpert"/>
+            <InputReport
+                v-model:value="link.link"
+                :id="i"
+                :name="i"
+                class="form__input form__field-link-field"
+                type="text"
+                placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
+                @focusout="focusOut"
+                disabled
+            />
           </div>
         </div>
       </div>
@@ -329,9 +337,9 @@
         </div>
       </div>
 
-<!--      <div v-if="!props.centralExpert">-->
-<!--        <Button class="add_eventBtn" label="Добавить проект" @click="addProjectDH"/>-->
-<!--      </div>-->
+      <!--      <div v-if="!props.centralExpert">-->
+      <!--        <Button class="add_eventBtn" label="Добавить проект" @click="addProjectDH"/>-->
+      <!--      </div>-->
       <div class="form__field-comment" style="margin-top: 10px;">
         <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
         <TextareaReport
@@ -464,6 +472,7 @@
           </tr>
           </tbody>
         </v-table>
+        <div class="hr" style="margin-bottom: 40px;"></div>
       </div>
 
       <div class="form__field">
@@ -547,19 +556,6 @@ const commonData = ref([]);
 const commentCH = ref();
 
 const focusOut = async () => {
-  // if (event.target.value === '0') {
-  //   let formData = new FormData();
-  //   formData.append(`events[0][links][0][link]`, '');
-  //
-  //   if (isFirstSent.value) {
-  //     const {data} = await reportPartTwoService.createReport(formData, '5', true);
-  //     emit('getData', data, 5);
-  //   } else {
-  //     const {data} = await reportPartTwoService.createReportDraft(formData, '5', true);
-  //     emit('getData', data, 5);
-  //   }
-  //   return;
-  // }
   if (!isLinkError.value) {
     try {
       if (isFirstSent.value) {
@@ -597,15 +593,15 @@ const addProject = () => {
     ],
   })
 };
-const addProjectDH = () => {
-  fifthPanelDataDH.value.events.push({
-    participants_number: '',
-    ro_participants_number: '',
-    start_date: null,
-    end_date: null,
-    name: '',
-  })
-};
+// const addProjectDH = () => {
+//   fifthPanelDataDH.value.events.push({
+//     participants_number: '',
+//     ro_participants_number: '',
+//     start_date: null,
+//     end_date: null,
+//     name: '',
+//   })
+// };
 const deleteProject = async (index) => {
   let formData = new FormData();
   events.value = events.value.filter((el, i) => index !== i);
@@ -631,15 +627,24 @@ const deleteProject = async (index) => {
     console.log('deleteEvent error: ', e);
   }
 };
-const deleteProjectDH = (index) => {
-  fifthPanelDataDH.value.events = fifthPanelDataDH.value.events.filter((el, i) => index !== i);
-};
+// const deleteProjectDH = (index) => {
+//   fifthPanelDataDH.value.events = fifthPanelDataDH.value.events.filter((el, i) => index !== i);
+// };
 
 const setFormData = (file = null, index = null, isDeleteEvent = false, isDeleteFile = false, isLinkDelete = false, linkIndex = null) => {
   let formData = new FormData();
 
   formData.append('comment', fifthPanelData.value.comment || '');
   events.value.forEach((event, i) => {
+    // Логика обнуления проекта при нулевом количестве участников
+    if (!(+event.participants_number)) {
+      event.name = null;
+      event.ro_participants_number = false;
+      event.end_date = null;
+      event.start_date = null;
+      event.links = [];
+      // formData.append(`events[${i}][regulations]`, '');
+    }
     if (isDeleteEvent && index === i) {
       return;
     } else {
@@ -676,7 +681,7 @@ const calculateResult = (event) => {
     events.value.forEach(e => {
       const startDate = new Date(e.start_date);
       const endDate = new Date(e.end_date);
-      const days = (endDate - startDate) / (1000 * 60 * 60 * 24);
+      const days = ((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
       finalResult.value += Math.abs((e.participants_number - e.ro_participants_number) * days)
     })
   } else {
@@ -689,7 +694,7 @@ const calculateResultDH = (event) => {
     fifthPanelDataDH.value.events.forEach(e => {
       const startDate = new Date(e.start_date);
       const endDate = new Date(e.end_date);
-      const days = (endDate - startDate) / (1000 * 60 * 60 * 24);
+      const days = ((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
       finalResultDH.value += Math.abs((e.participants_number - e.ro_participants_number) * days)
     })
   } else {
@@ -785,8 +790,14 @@ watchEffect(() => {
     events.value = [...props.data.events];
     fifthPanelData.value.comment = props.data.comment || '';
     isSent.value = props.data.is_sent;
+
+    isFirstSent.value = reportStore.isReportReject.fourth && !props.data.central_version;
+    console.log('isFirstSent.value for fifth_1::::::', isFirstSent.value)
   }
+}, {
+  flush: "post"
 });
+
 watchPostEffect(() => {
   events.value.forEach((event) => {
     if (!event.links.length) event.links.push({link: ''})

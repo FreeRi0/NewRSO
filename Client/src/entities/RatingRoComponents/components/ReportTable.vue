@@ -12,13 +12,18 @@
                 </tr>
                 <tr class="report-table__tr">
                     <td v-show="typeof (dataRH) === 'number'" class="report-table__td">{{ dataRH }}</td>
-                    <td v-show="typeof (dataRH) === 'boolean'" class="report-table__td"> {{ dataRH ? 'Да' : 'Нет' }}</td>
-                    <td v-show="typeof (dataDH) === 'number'" class="report-table__td report-table__td__center">{{ dataDH
+                    <td v-show="typeof (dataRH) === 'boolean'" class="report-table__td"> {{ dataRH ? 'Да' : 'Нет' }}
+                    </td>
+                    <td v-show="typeof (dataDH) === 'number'" class="report-table__td report-table__td__center">{{
+                        dataDH
                         }}</td>
                     <td v-show="typeof (dataDH) === 'boolean'" class="report-table__td report-table__td__center">{{
                         dataDH ? 'Да' : 'Нет' }}</td>
                     <td :class="['report-table__td', props.disabled ? 'report-table__td--bgcolor' : '']">
-                        <InputReport :value="value" :id="name" :name="name" style="width: 100%;" type="number"
+                        <InputReport v-if="isNinthPanel" :value="value ? 'Да' : 'Нет'" :disabled="isNinthPanel"
+                            :id="name" :name="name" style="width: 100%;" type="text" :placeholder="Нет"
+                            :maxlength="maxlength" :is-error-panel="isErrorPanel" @input="updateValue" />
+                        <InputReport v-else :value="value" :id="name" :name="name" style="width: 100%;" type="number"
                             placeholder="0" :maxlength="maxlength" :min="min" :max="max" :step="step"
                             :is-error-panel="isErrorPanel" :disabled="disabled" @input="updateValue" />
                     </td>
@@ -61,6 +66,10 @@ const props = defineProps({
     },
     step: {
         type: Number,
+    },
+    isNinthPanel: {
+        type: Boolean,
+        default: false,
     },
     isErrorPanel: {
         type: Boolean,
