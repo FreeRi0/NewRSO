@@ -6,7 +6,7 @@
                 <div class="filter-category">
                     <h3>Категория</h3>
                     <form class="list">
-                        <div class="list-elem" v-for="category in categories" :key="category.id">
+                        <div class="list-elem" v-for="category in filteredCategories" :key="category.name">
                             <input type="radio" :id="category.name" name="category" :value="category.name"
                                 v-model="selectedCategory" />
                             <label :for="category.name">{{ category.name }}</label>
@@ -15,7 +15,7 @@
                 </div>
 
                 <!-- Индикаторы для выбранной категории -->
-                <div class="filter-indicators">
+                <div class="filter-indicators" v-if="currentIndicators.length > 0">
                     <h3 class="parammetrs">Показатели для {{ selectedCategory }}</h3>
                     <div class="list">
                         <div class="list-elem" v-for="indicator in currentIndicators" :key="indicator.id">
@@ -34,19 +34,18 @@
 </template>
 
 <script setup>
-
-
-// Импорт необходимых модулей и настроек
-import { ref, computed } from 'vue';
+import { ref, computed, watchEffect } from 'vue';
 import axios from 'axios';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
-import { addr_conf } from "@app/http"
+import { useRoleStore } from '@layouts/store/role';
+import { addr_conf } from "@app/http";
 
 const addr = `${addr_conf.proto}://${addr_conf.ip}:${addr_conf.port}`;
+const roleStore = useRoleStore();
 
 // Категории участников
-const categories = ref([
+const allCategories = [
     { name: 'Пользователи' },
     { name: 'Центральный штаб' },
     { name: 'Окружные штабы' },
@@ -55,61 +54,58 @@ const categories = ref([
     { name: 'Штабы СО ОО' },
     { name: 'ЛСО' },
     { name: 'Направления' },
-]);
-
-// Индикаторы для разных категорий
-const commonIndicators = [
-    { name: 'Количество участников', key: 'participants_count', selected: true },
-    { name: 'Верификация участников', key: 'verification_percent', selected: true },
-    { name: 'Оплата членского взноса', key: 'membership_fee_percent', selected: true },
-    { name: 'Прохождение теста по Охране труда', key: 'test_done_percent', selected: true },
-    { name: 'Организация мероприятий', key: 'events_organizations', selected: true },
-    { name: 'Участие в мероприятиях', key: 'event_participants', selected: true },
 ];
-const userSpecificIndicators = [
-    { name: 'Направление', key: 'area', selected: true },
-    { name: 'Статус верификации', key: 'verification', selected: true },
-    { name: 'Статус оплаты членского взноса', key: 'membership_fee', selected: true },
-    { name: 'Прохождение теста по Охране труда', key: 'test_done', selected: true },
-    { name: 'Организация мероприятия', key: 'events_organizations', selected: true },
-    { name: 'Участие в мероприятии', key: 'event_participants', selected: true },
-];
-const directionSpecificIndicators = [
-    { name: 'Количество участников', key: 'participants_count', selected: true },
-    { name: 'Количество ЛСО', key: 'lso_count', selected: true },
-    { name: 'Верификация участников', key: 'verification_percent', selected: true },
-    { name: 'Оплата членского взноса', key: 'membership_fee_percent', selected: true },
-    { name: 'Процент прохождения теста', key: 'test_done_percent', selected: true },
-    { name: 'Организовано мероприятий', key: 'events_organizations', selected: true },
-    { name: 'Участников в мероприятиях', key: 'event_participants', selected: true },
-];
-const detachmentsSpecificIndicators = [
-    { name: 'Направление', key: 'direction', selected: true },
-    { name: 'Количество участников', key: 'participation_count', selected: true },
-    { name: 'Верификация участников', key: 'verification_percent', selected: true },
-    { name: 'Оплата членского взноса', key: 'membership_fee_percent', selected: true },
-    { name: 'Прохождение теста по Охране труда', key: 'test_done_percent', selected: true },
-    { name: 'Организовано мероприятий', key: 'events_organizations', selected: true },
-    { name: 'Участников в мероприятиях', key: 'event_participants', selected: true },
-]
 
+const filteredCategories = ref([]);
 
-// Выбранная категория и индикаторы
-const selectedCategory = ref(categories.value[0].name);
-const currentIndicators = computed(() => {
-    switch (selectedCategory.value) {
-        case 'Пользователи':
-            return userSpecificIndicators;
-        case 'Направления':
-            return directionSpecificIndicators;
-        case 'ЛСО':
-            return detachmentsSpecificIndicators;
-        default:
-            return commonIndicators;
+// Функция для обновления доступных категорий
+const updateFilteredCategories = () => {
+    if (roleStore.roles.centralheadquarter_commander) {
+        filteredCategories.value = allCategories;
+        console.log("Установлены все категории для centralheadquarter_commander");
+    } else if (roleStore.roles.detachment_commander) {
+        filteredCategories.value = allCategories.filter(category => category.name === 'Пользователи');
+        console.log("Установлена только категория 'Пользователи' для detachment_commander");
+    } else {
+        filteredCategories.value = [];
+        console.log("Категории не установлены, роль не определена");
+    }
+};
+
+// Наблюдатель, который следит за изменениями в роли и обновляет категории, как только роли загружены
+watchEffect(() => {
+    // Проверяем, что роли загружены
+    if (Object.keys(roleStore.roles).length > 0) {
+        console.log("Роли загружены:", roleStore.roles);
+        updateFilteredCategories();
+    } else {
+        console.log("Ожидаем загрузки ролей...");
     }
 });
 
-// Карта URL для запросов API
+// Остальная часть кода остается прежней
+const indicatorsByCategory = {
+    'Пользователи': [
+        { name: 'Направление', key: 'area', selected: true },
+        { name: 'Статус верификации', key: 'verification', selected: true },
+        { name: 'Статус оплаты членского взноса', key: 'membership_fee', selected: true },
+        { name: 'Прохождение теста по Охране труда', key: 'test_done', selected: true },
+        { name: 'Организация мероприятия', key: 'events_organizations', selected: true },
+        { name: 'Участие в мероприятии', key: 'event_participants', selected: true },
+    ],
+    'Центральный штаб': [
+        { name: 'Количество участников', key: 'participants_count', selected: true },
+        { name: 'Верификация участников', key: 'verification_percent', selected: true },
+        { name: 'Оплата членского взноса', key: 'membership_fee_percent', selected: true },
+        { name: 'Прохождение теста по Охране труда', key: 'test_done_percent', selected: true },
+        { name: 'Организация мероприятий', key: 'events_organizations', selected: true },
+        { name: 'Участие в мероприятиях', key: 'event_participants', selected: true },
+    ]
+};
+
+const selectedCategory = ref('Пользователи');
+const currentIndicators = computed(() => indicatorsByCategory[selectedCategory.value] || []);
+
 const urlMap = {
     'Пользователи': `${addr}/api/v1/registry/users/`,
     'Центральный штаб': `${addr}/api/v1/registry/centrals/`,
@@ -119,10 +115,8 @@ const urlMap = {
     'Штабы СО ОО': `${addr}/api/v1/registry/educationals/`,
     'ЛСО': `${addr}/api/v1/registry/detachments/`,
     'Направления': `${addr}/api/v1/registry/directions/`,
-
 };
 
-// Колонки отчета по категориям
 const reportColumns = {
     'Пользователи': [
         { key: 'name', title: 'ФИО' },
@@ -152,71 +146,9 @@ const reportColumns = {
         { key: 'test_done_percent', title: 'Прохождение теста по Охране труда' },
         { key: 'events_organizations', title: 'Организовано мероприятий' },
         { key: 'event_participants', title: 'Участников в мероприятиях' },
-    ],
-    'Окружные штабы': [
-        { key: 'name', title: 'Название штаба' },
-        { key: 'regional_headquarters', title: 'Количество РШ' },
-        { key: 'local_headquarters', title: 'Количество МШ' },
-        { key: 'educational_headquarters', title: 'Количество штабов СО ОО' },
-        { key: 'detachments', title: 'Количество ЛСО' },
-        { key: 'participants_count', title: 'Количество участников' },
-        { key: 'verification_percent', title: 'Процент верификации' },
-        { key: 'membership_fee_percent', title: 'Оплата членского взноса' },
-        { key: 'test_done_percent', title: 'Прохождение теста по Охране труда' },
-        { key: 'events_organizations', title: 'Организовано мероприятий' },
-        { key: 'event_participants', title: 'Участников в мероприятиях' },
-    ],
-    'Региональные штабы': [
-        { key: 'name', title: 'Название штаба' },
-        { key: 'local_headquarters', title: 'Количество МШ' },
-        { key: 'educational_headquarters', title: 'Количество штабов СО ОО' },
-        { key: 'detachments', title: 'Количество ЛСО' },
-        { key: 'participants_count', title: 'Количество участников' },
-        { key: 'verification_percent', title: 'Процент верификации' },
-        { key: 'membership_fee_percent', title: 'Оплата членского взноса' },
-        { key: 'test_done_percent', title: 'Прохождение теста по Охране труда' },
-        { key: 'events_organizations', title: 'Организовано мероприятий' },
-        { key: 'event_participants', title: 'Участников в мероприятиях' },
-    ],
-    'Местные штабы': [
-        { key: 'name', title: 'Название штаба' },
-        { key: 'educational_headquarters', title: 'Количество штабов СО ОО' },
-        { key: 'detachments', title: 'Количество ЛСО' },
-        { key: 'participants_count', title: 'Количество участников' },
-        { key: 'verification_percent', title: 'Процент верификации' },
-        { key: 'membership_fee_percent', title: 'Оплата членского взноса' },
-        { key: 'test_done_percent', title: 'Прохождение теста по Охране труда' },
-        { key: 'events_organizations', title: 'Организовано мероприятий' },
-        { key: 'event_participants', title: 'Участников в мероприятиях' },
-    ],
-    'Штабы СО ОО': [
-        { key: 'name', title: 'Название штаба' },
-        { key: 'detachments', title: 'Количество ЛСО' },
-        { key: 'participants_count', title: 'Количество участников' },
-        { key: 'verification_percent', title: 'Процент верификации' },
-        { key: 'membership_fee_percent', title: 'Оплата членского взноса' },
-        { key: 'test_done_percent', title: 'Прохождение теста по Охране труда' },
-        { key: 'events_organizations', title: 'Организовано мероприятий' },
-        { key: 'event_participants', title: 'Участников в мероприятиях' },
-    ],
-
-    'ЛСО': [
-        { key: 'name', title: 'ЛСО' },
-        { key: 'district_headquarter', title: 'Окружной штаб' },
-        { key: 'regional_headquarter', title: 'Региональный штаб' },
-        { key: 'local_headquarter', title: 'Местный штаб' },
-        { key: 'educational_headquarter', title: 'Штаб СО ОО' },
-        { key: 'direction', title: 'Напарвление' },
-        { key: 'participation_count', title: 'Количесвто участников' },
-        { key: 'verification_percent', title: 'Верификация участников' },
-        { key: 'membership_fee_percent', title: 'Оплата членского взноса' },
-        { key: 'test_done_percent', title: 'Прохождение теста по Охране труда' },
-        { key: 'events_organizations', title: 'Организация мероприятия' },
-        { key: 'event_participants', title: 'Участие в мероприятии' },
-    ],
+    ]
 };
 
-// Загрузка отчета
 const downloadReport = async () => {
     try {
         const apiUrl = urlMap[selectedCategory.value];
@@ -256,19 +188,20 @@ const downloadReport = async () => {
             }, {})
         );
 
-        const workbook = XLSX.utils.book_new();
         const worksheet = XLSX.utils.json_to_sheet(excelData);
-        XLSX.utils.book_append_sheet(workbook, worksheet, selectedCategory.value);
-
-        const fileName = `Отчет ${selectedCategory.value}.xlsx`;
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Отчет');
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const fileName = `${selectedCategory.value}_Отчет.xlsx`;
         const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
         saveAs(blob, fileName);
+
     } catch (error) {
-        console.error('Ошибка при загрузке отчета:', error);
+        console.error('Ошибка при скачивании отчета:', error);
     }
 };
 </script>
+
 
 <style lang="scss" scoped>
 h3 {
