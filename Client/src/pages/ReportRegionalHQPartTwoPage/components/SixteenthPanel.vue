@@ -841,8 +841,6 @@ watchEffect(() => {
     sixteenthPanelData.value.comment = props.data.comment || '';
     isSent.value = props.data.is_sent;
   }
-}, {
-  flush: "post"
 });
 
 watchPostEffect(() => {
