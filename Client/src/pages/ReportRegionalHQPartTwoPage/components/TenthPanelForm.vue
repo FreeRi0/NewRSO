@@ -505,6 +505,8 @@ watchEffect(() => {
   tenthPanelData.value = {...props.data};
   isSent.value = props.data.is_sent;
   isErrorFile.value = props.isErrorFileProp;
+}, {
+  flush: "post"
 });
 
 watchPostEffect(() => {
