@@ -7,27 +7,34 @@
                     <h3>Категория</h3>
                     <form class="list">
                         <div class="list-elem" v-for="category in filteredCategories" :key="category.name">
-                            <input type="radio" :id="category.name" name="category" :value="category.name"
-                                v-model="selectedCategory" />
-                            <label :for="category.name">{{ category.name }}</label>
+                            <label class="custom-radio-wrapper">
+                                <input type="radio" :id="category.name" name="category" :value="category.name"
+                                    v-model="selectedCategory" class="custom-radio" />
+                                <span class="custom-radio-style"></span>
+                                {{ category.name }}
+                            </label>
                         </div>
                     </form>
                 </div>
-
-                <!-- Индикаторы для выбранной категории -->
                 <div class="filter-indicators" v-if="currentIndicators.length > 0">
-                    <h3 class="parammetrs">Показатели для {{ selectedCategory }}</h3>
-                    <div class="list">
+                    <h3 class="parammetrs">Показатель</h3>
+                    <form class="list">
                         <div class="list-elem" v-for="indicator in currentIndicators" :key="indicator.id">
-                            <input type="checkbox" v-model="indicator.selected" :id="indicator.id">
-                            <label :for="indicator.id">{{ indicator.name }}</label>
+                            <label class="custom-checkbox-wrapper">
+                                <input type="checkbox" v-model="indicator.selected" :id="indicator.id"
+                                    class="custom-checkbox" />
+                                <span class="custom-checkbox-style"></span>
+                                {{ indicator.name }}
+                            </label>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
             <div class="downloadBtn">
-                <button @click="downloadReport">Скачать отчет</button>
-                <p class="messageForUser">Результаты будут представлены в виде Excel таблицы. </p>
+                <button @click="downloadReport" :disabled="isLoading" :class="{ loading: isLoading }">
+                    {{ isLoading ? "Загрузка..." : "Скачать отчет" }}
+                </button>
+                <p class="messageForUser">Результаты будут представлены в виде Excel таблицы.</p>
             </div>
         </div>
     </div>
@@ -43,8 +50,8 @@ import { addr_conf } from "@app/http";
 
 const addr = `${addr_conf.proto}://${addr_conf.ip}:${addr_conf.port}`;
 const roleStore = useRoleStore();
+const isLoading = ref(false);
 
-// Категории участников
 const allCategories = [
     { name: 'Пользователи' },
     { name: 'Центральный штаб' },
@@ -57,33 +64,22 @@ const allCategories = [
 ];
 
 const filteredCategories = ref([]);
-
-// Функция для обновления доступных категорий
 const updateFilteredCategories = () => {
     if (roleStore.roles.centralheadquarter_commander) {
         filteredCategories.value = allCategories;
-        console.log("Установлены все категории для centralheadquarter_commander");
     } else if (roleStore.roles.detachment_commander) {
         filteredCategories.value = allCategories.filter(category => category.name === 'Пользователи');
-        console.log("Установлена только категория 'Пользователи' для detachment_commander");
     } else {
         filteredCategories.value = [];
-        console.log("Категории не установлены, роль не определена");
     }
 };
 
-// Наблюдатель, который следит за изменениями в роли и обновляет категории, как только роли загружены
 watchEffect(() => {
-    // Проверяем, что роли загружены
     if (Object.keys(roleStore.roles).length > 0) {
-        console.log("Роли загружены:", roleStore.roles);
         updateFilteredCategories();
-    } else {
-        console.log("Ожидаем загрузки ролей...");
     }
 });
 
-// Остальная часть кода остается прежней
 const indicatorsByCategory = {
     'Пользователи': [
         { name: 'Направление', key: 'area', selected: true },
@@ -94,13 +90,76 @@ const indicatorsByCategory = {
         { name: 'Участие в мероприятии', key: 'event_participants', selected: true },
     ],
     'Центральный штаб': [
+        { name: 'Количество региональных штабов', key: 'regional_headquarters', selected: true },
+        { name: 'Количество местных штабов', key: 'local_headquarters', selected: true },
+        { name: 'Количество штабов СО ОО', key: 'educational_headquarters', selected: true },
+        { name: 'Количество ЛСО', key: 'educational_headquarters', selected: true },
         { name: 'Количество участников', key: 'participants_count', selected: true },
         { name: 'Верификация участников', key: 'verification_percent', selected: true },
         { name: 'Оплата членского взноса', key: 'membership_fee_percent', selected: true },
         { name: 'Прохождение теста по Охране труда', key: 'test_done_percent', selected: true },
         { name: 'Организация мероприятий', key: 'events_organizations', selected: true },
         { name: 'Участие в мероприятиях', key: 'event_participants', selected: true },
-    ]
+    ],
+    'Окружные штабы': [
+        { name: 'Количество региональных штабов', key: 'regional_headquarters', selected: true },
+        { name: 'Количество местных штабов', key: 'local_headquarters', selected: true },
+        { name: 'Количество штабов СО ОО', key: 'educational_headquarters', selected: true },
+        { name: 'Количество ЛСО', key: 'detachments', selected: true },
+        { name: 'Количество участников', key: 'participants_count', selected: true },
+        { name: 'Верификация участников', key: 'verification_percent', selected: true },
+        { name: 'Оплата членского взноса', key: 'membership_fee_percent', selected: true },
+        { name: 'Прохождение теста по Охране труда', key: 'test_done_percent', selected: true },
+        { name: 'Организация мероприятий', key: 'events_organizations', selected: true },
+        { name: 'Участие в мероприятиях', key: 'event_participants', selected: true },
+    ],
+    'Региональные штабы': [
+        { name: 'Количество местных штабов', key: 'local_headquarters', selected: true },
+        { name: 'Количество штабов СО ОО', key: 'educational_headquarters', selected: true },
+        { name: 'Количество ЛСО', key: 'detachments', selected: true },
+        { name: 'Количество участников', key: 'participants_count', selected: true },
+        { name: 'Верификация участников', key: 'verification_percent', selected: true },
+        { name: 'Оплата членского взноса', key: 'membership_fee_percent', selected: true },
+        { name: 'Прохождение теста по Охране труда', key: 'test_done_percent', selected: true },
+        { name: 'Организация мероприятий', key: 'events_organizations', selected: true },
+        { name: 'Участие в мероприятиях', key: 'event_participants', selected: true },
+    ],
+    'Местные штабы': [
+        { name: 'Количество штабов СО ОО', key: 'educational_headquarters', selected: true },
+        { name: 'Количество ЛСО', key: 'detachments', selected: true },
+        { name: 'Количество участников', key: 'participants_count', selected: true },
+        { name: 'Верификация участников', key: 'verification_percent', selected: true },
+        { name: 'Оплата членского взноса', key: 'membership_fee_percent', selected: true },
+        { name: 'Прохождение теста по Охране труда', key: 'test_done_percent', selected: true },
+        { name: 'Организация мероприятий', key: 'events_organizations', selected: true },
+        { name: 'Участие в мероприятиях', key: 'event_participants', selected: true },
+    ],
+    'Штабы СО ОО': [
+        { name: 'Количество ЛСО', key: 'detachments', selected: true },
+        { name: 'Количество участников', key: 'participants_count', selected: true },
+        { name: 'Верификация участников', key: 'verification_percent', selected: true },
+        { name: 'Оплата членского взноса', key: 'membership_fee_percent', selected: true },
+        { name: 'Прохождение теста по Охране труда', key: 'test_done_percent', selected: true },
+        { name: 'Организация мероприятий', key: 'events_organizations', selected: true },
+        { name: 'Участие в мероприятиях', key: 'event_participants', selected: true },
+    ],
+    'ЛСО': [
+        { name: 'Направление', key: 'direction', selected: true },
+        { name: 'Количество участников', key: 'participation_count', selected: true },
+        { name: 'Верификация участников', key: 'verification_percent', selected: true },
+        { name: 'Оплата членского взноса', key: 'membership_fee_percent', selected: true },
+        { name: 'Прохождение теста по Охране труда', key: 'test_done_percent', selected: true },
+        { name: 'Организация мероприятия', key: 'events_organizations', selected: true },
+        { name: 'Участие в мероприятии', key: 'event_participants', selected: true },
+    ],
+    'Направления': [
+        { name: 'Количество ЛСО', key: 'lso_count', selected: true },
+        { name: 'Верификация участников', key: 'verification_percent', selected: true },
+        { name: 'Оплата членского взноса', key: 'membership_fee_percent', selected: true },
+        { name: 'Процент прохождения теста', key: 'test_done_percent', selected: true },
+        { name: 'Организация мероприятия', key: 'events_organizations', selected: true },
+        { name: 'Участие в мероприятии', key: 'event_participants', selected: true },
+    ],
 };
 
 const selectedCategory = ref('Пользователи');
@@ -127,6 +186,7 @@ const reportColumns = {
         { key: 'local_headquarter', title: 'Местный штаб' },
         { key: 'educational_headquarter', title: 'Штаб СО ОО' },
         { key: 'detachment', title: 'ЛСО' },
+        { key: 'position', title: 'Должность' },
         { key: 'area', title: 'Направление' },
         { key: 'verification', title: 'Статус верификации' },
         { key: 'membership_fee', title: 'Статус оплаты членского взноса' },
@@ -135,26 +195,103 @@ const reportColumns = {
         { key: 'event_participants', title: 'Участие в мероприятии' },
     ],
     'Центральный штаб': [
-        { key: 'name', title: 'Название штаба' },
+        { key: 'name', title: 'Центральный штаб' },
         { key: 'regional_headquarters', title: 'Количество РШ' },
         { key: 'local_headquarters', title: 'Количество МШ' },
         { key: 'educational_headquarters', title: 'Количество штабов СО ОО' },
         { key: 'detachments', title: 'Количество ЛСО' },
         { key: 'participants_count', title: 'Количество участников' },
-        { key: 'verification_percent', title: 'Процент верификации' },
+        { key: 'verification_percent', title: 'Верификация участников' },
         { key: 'membership_fee_percent', title: 'Оплата членского взноса' },
         { key: 'test_done_percent', title: 'Прохождение теста по Охране труда' },
-        { key: 'events_organizations', title: 'Организовано мероприятий' },
-        { key: 'event_participants', title: 'Участников в мероприятиях' },
+        { key: 'events_organizations', title: 'Организация мероприятия' },
+        { key: 'event_participants', title: 'Участие в мероприятии' },
+    ],
+    'Окружные штабы': [
+        { key: 'name', title: 'Окружной штаб' },
+        { key: 'regional_headquarters', title: 'Количество РШ' },
+        { key: 'local_headquarters', title: 'Количество МШ' },
+        { key: 'educational_headquarters', title: 'Количество штабов СО ОО' },
+        { key: 'detachments', title: 'Количество ЛСО' },
+        { key: 'participants_count', title: 'Количество участников' },
+        { key: 'verification_percent', title: 'Верификация участников' },
+        { key: 'membership_fee_percent', title: 'Оплата членского взноса' },
+        { key: 'test_done_percent', title: 'Прохождение теста по Охране труда' },
+        { key: 'events_organizations', title: 'Организация мероприятия' },
+        { key: 'event_participants', title: 'Участие в мероприятии' },
+    ],
+    'Региональные штабы': [
+        { key: 'name', title: 'Региональный штаб' },
+        { key: 'district_headquarter', title: 'Окружной штаб' },
+        { key: 'local_headquarters', title: 'Количество МШ' },
+        { key: 'educational_headquarters', title: 'Количество штабов СО ОО' },
+        { key: 'detachments', title: 'Количество ЛСО' },
+        { key: 'participants_count', title: 'Количество участников' },
+        { key: 'verification_percent', title: 'Верификация участников' },
+        { key: 'membership_fee_percent', title: 'Оплата членского взноса' },
+        { key: 'test_done_percent', title: 'Прохождение теста по Охране труда' },
+        { key: 'events_organizations', title: 'Организация мероприятия' },
+        { key: 'event_participants', title: 'Участие в мероприятии' },
+    ],
+    'Местные штабы': [
+        { key: 'name', title: 'Местный штаб' },
+        { key: 'district_headquarter', title: 'Окружной штаб' },
+        { key: 'regional_headquarter', title: 'Региональный штаб' },
+        { key: 'educational_headquarters', title: 'Количество штабов СО ОО' },
+        { key: 'detachments', title: 'Количество ЛСО' },
+        { key: 'participants_count', title: 'Количество участников' },
+        { key: 'verification_percent', title: 'Верификация участников' },
+        { key: 'membership_fee_percent', title: 'Оплата членского взноса' },
+        { key: 'test_done_percent', title: 'Прохождение теста по Охране труда' },
+        { key: 'events_organizations', title: 'Организация мероприятия' },
+        { key: 'event_participants', title: 'Участие в мероприятии' },
+    ],
+    'Штабы СО ОО': [
+        { key: 'name', title: 'Штаб СО ОО' },
+        { key: 'district_headquarter', title: 'Окружной штаб' },
+        { key: 'regional_headquarter', title: 'Региональный штаб' },
+        { key: 'local_headquarter', title: 'Местный штаб' },
+        { key: 'detachments', title: 'Количество ЛСО' },
+        { key: 'participants_count', title: 'Количество участников' },
+        { key: 'verification_percent', title: 'Верификация участников' },
+        { key: 'membership_fee_percent', title: 'Оплата членского взноса' },
+        { key: 'test_done_percent', title: 'Прохождение теста по Охране труда' },
+        { key: 'events_organizations', title: 'Организация мероприятия' },
+        { key: 'event_participants', title: 'Участие в мероприятии' },
+    ],
+
+    'ЛСО': [
+        { key: 'name', title: 'ЛСО' },
+        { key: 'district_headquarter', title: 'Окружной штаб' },
+        { key: 'regional_headquarter', title: 'Региональный штаб' },
+        { key: 'local_headquarter', title: 'Местный штаб' },
+        { key: 'educational_headquarter', title: 'Штаб СО ОО' },
+        { key: 'direction', title: 'Напарвление' },
+        { key: 'participation_count', title: 'Количество участников' },
+        { key: 'verification_percent', title: 'Верификация участников' },
+        { key: 'membership_fee_percent', title: 'Оплата членского взноса' },
+        { key: 'test_done_percent', title: 'Прохождение теста по Охране труда' },
+        { key: 'events_organizations', title: 'Организация мероприятия' },
+        { key: 'event_participants', title: 'Участие в мероприятии' },
+    ],
+    'Направления': [
+        { key: 'name', title: 'Направление' },
+        { key: 'participation_count', title: 'Количество участников' },
+        { key: 'lso_count', title: 'Количество ЛСО' },
+        { key: 'verification_percent', title: 'Верификация участников' },
+        { key: 'membership_fee_percent', title: 'Оплата членского взноса' },
+        { key: 'test_done_percent', title: 'Прохождение теста по Охране труда' },
+        { key: 'events_organizations', title: 'Организация мероприятия' },
+        { key: 'event_participants', title: 'Участие в мероприятии' },
+
     ]
 };
 
 const downloadReport = async () => {
+    isLoading.value = true;
     try {
         const apiUrl = urlMap[selectedCategory.value];
-        if (!apiUrl) {
-            throw new Error('Выбрана некорректная категория');
-        }
+        if (!apiUrl) throw new Error('Выбрана некорректная категория');
 
         const response = await axios.get(apiUrl, {
             headers: {
@@ -169,16 +306,11 @@ const downloadReport = async () => {
 
         const reportData = Array.isArray(parsedData) ? parsedData : [parsedData];
         const columns = reportColumns[selectedCategory.value];
-
-        if (!columns) {
-            console.error(`Колонки для категории "${selectedCategory.value}" не найдены.`);
-            return;
-        }
-
         const selectedIndicators = currentIndicators.value.filter(indicator => indicator.selected);
         const filteredColumns = columns.filter(col =>
             selectedIndicators.some(indicator => indicator.key === col.key) ||
-            ['name', 'regional_headquarter', 'district_headquarter', 'local_headquarter', 'educational_headquarter', 'detachments'].includes(col.key)
+            ['name', 'email', 'phone_number', 'district_headquarter', 'regional_headquarter',
+                'local_headquarter', 'educational_headquarter', 'detachment', 'position',].includes(col.key)
         );
 
         const excelData = reportData.map(item =>
@@ -192,26 +324,26 @@ const downloadReport = async () => {
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Отчет');
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-        const fileName = `${selectedCategory.value}_Отчет.xlsx`;
+        const fileName = `${selectedCategory.value} Отчет.xlsx`;
         const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
         saveAs(blob, fileName);
 
     } catch (error) {
         console.error('Ошибка при скачивании отчета:', error);
+    } finally {
+        isLoading.value = false;
     }
 };
 </script>
 
-
 <style lang="scss" scoped>
+/* Заголовки */
 h3 {
-    font-family: var(--font-family);
-    font-size: 20px;
-    line-height: 120%;
+    font-weight: unset;
 }
 
+/* Общий контейнер */
 .contributor {
-
     padding: 0px 0px 160px 0px;
 
     &-container {
@@ -219,19 +351,46 @@ h3 {
     }
 
     &-filters {
-        padding: 60px 0px 0px 0px;
+        padding: 60px 0 0 0;
         display: flex;
         justify-content: space-between;
-        width: 75%;
+        width: 100%;
         height: 500px;
+        /* Отступ между фильтрами */
+        gap: 16px;
 
-
+        .filter-category,
+        .filter-indicators {
+            /* Равномерное распределение ширины */
+            flex: 1 1 0;
+        }
     }
+}
+
+/* Стили для списка и элементов внутри него */
+.list {
+    margin: 20px 4px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 6px;
+
+    &-elem {
+        display: flex;
+        align-items: center;
+        /* Вертикальное выравнивание */
+        column-gap: 8px;
+        /* Расстояние между чекбоксом и текстом */
+    }
+}
+
+/* Стиль для текста в списке */
+.list label {
+    font-size: 16px;
 
 }
 
+/* Кнопка загрузки */
 .downloadBtn {
-
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -239,12 +398,12 @@ h3 {
     width: 100%;
     row-gap: 32px;
 
-    &-messageForUser {
-        font-family: var(--third-family);
+    &.messageForUser {
+
         font-weight: 500;
         font-size: 16px;
         text-align: center;
-        color: var(--tekst-aktivnyy);
+        font-family: var(--third-family);
         margin-top: 12px;
     }
 }
@@ -259,36 +418,22 @@ button {
     font-family: var(--font-family);
     font-weight: 600;
     font-size: 16px;
-    line-height: 125%;
+    line-height: 1.25;
     color: #fff;
-}
 
-.list {
-    margin: 20px 4px;
-    display: flex;
-    flex-direction: column;
-    row-gap: 12px;
-
-    &-elem {
-        display: flex;
-        align-items: center;
-        column-gap: 8px;
+    &.loading {
+        background: #a9a9a9;
+        cursor: not-allowed;
     }
 }
 
-.list label {
-    font-family: var(--font-family);
-    font-size: 16px;
-    line-height: 150%;
-    color: var(--tekst-aktivnyy);
-}
-
-@media (max-width: 790px) {
+/* Медиазапросы для адаптивности */
+@media (max-width: 800px) {
     .contributor {
 
         &-filters {
-
             width: 100%;
+            height: 550px;
 
 
         }
@@ -296,7 +441,7 @@ button {
     }
 }
 
-@media (max-width: 540px) {
+@media (max-width: 560px) {
 
 
     .contributor {
@@ -314,5 +459,122 @@ button {
         }
 
     }
+}
+
+
+/* Основные настройки для оберток */
+.custom-radio-wrapper,
+.custom-checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 4px;
+}
+
+/* Скрытие стандартных input элементов (radio и checkbox) */
+.custom-radio-wrapper input[type="radio"],
+.custom-checkbox-wrapper input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* ====== Стили для радио-кнопок ====== */
+
+/* Кастомная радио-кнопка */
+.custom-radio-style {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #006eff;
+    border-radius: 50%;
+    margin-right: 8px;
+    transition: background-color 0.2s ease;
+    position: relative;
+
+}
+
+/* Внутренний круг при выбранном состоянии */
+.custom-radio-style::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background-color: #006eff;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+/* Малый круг для неактивных радио-кнопок */
+.custom-radio-style::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background-color: #ffffff;
+    /* Белый фон */
+    border: 1px solid #006eff;
+    /* Синяя граница */
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+    /* Отображается по умолчанию */
+    transition: opacity 0.2s ease;
+}
+
+
+/* Отображение внутреннего круга при выборе радио-кнопки */
+.custom-radio-wrapper input[type="radio"]:checked+.custom-radio-style::after {
+    opacity: 1;
+}
+
+
+/* ====== Стили для чекбоксов ====== */
+
+//  Кастомный чекбокс 
+.custom-checkbox-style {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #333;
+    border-radius: 3px;
+    position: relative;
+    margin-right: 8px;
+    transition: background-color 0.2s ease;
+}
+
+// Фон кастомного чекбокса при выборе 
+.custom-checkbox-wrapper input[type="checkbox"]:checked+.custom-checkbox-style {
+    background-color: #ffffff;
+    //  Зеленый фон при выборе 
+}
+
+// Кастомная галочка внутри чекбокса 
+.custom-checkbox-style::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 6px;
+    width: 6px;
+    height: 12px;
+    // Цвет галочки
+    border: solid rgb(0, 0, 0);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    opacity: 0;
+    /* По умолчанию галочка не видна */
+    transition: opacity 0.2s ease;
+}
+
+//  Отображение галочки при выборе чекбокса 
+.custom-checkbox-wrapper input[type="checkbox"]:checked+.custom-checkbox-style::after {
+    // Показываем галочку 
+    opacity: 1;
 }
 </style>
