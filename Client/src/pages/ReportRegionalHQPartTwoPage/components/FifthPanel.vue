@@ -136,7 +136,7 @@
           v-model:value="fifthPanelData.comment"
           id="comment"
           name="comment"
-          :rows="1"
+          :rows="row"
           autoResize
           placeholder="Комментарий"
           @focusout="focusOut"
@@ -228,6 +228,7 @@
             />
           </div>
         </div>
+        <div class="hr"></div>
       </div>
       <div class="form__field-comment">
         <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
@@ -235,7 +236,7 @@
             v-model:value="fifthPanelData.comment"
             id="comment"
             name="comment"
-            :rows="1"
+            :rows="row"
             autoResize
             placeholder="Комментарий"
             :maxlength="3000"
@@ -287,14 +288,14 @@
               />
             </div>
           </div>
-          <div class="form__field-people-deleteBtn">
-            <Button
-                v-if="index > 0 && !props.centralExpert"
-                label="Удалить проект"
-                class="deleteEventBtn"
-            />
-            <!--@click="deleteProjectDH(index)"-->
-          </div>
+<!--          <div class="form__field-people-deleteBtn">-->
+<!--            <Button-->
+<!--                v-if="index > 0 && !props.centralExpert"-->
+<!--                label="Удалить проект"-->
+<!--                class="deleteEventBtn"-->
+<!--            />-->
+<!--            &lt;!&ndash;@click="deleteProjectDH(index)"&ndash;&gt;-->
+<!--          </div>-->
         </div>
         <div class="form__field-date" style="display: flex;">
           <div class="form__field-date-wrap">
@@ -335,6 +336,7 @@
               :disabled="props.centralExpert"
           />
         </div>
+        <div class="hr"></div>
       </div>
 
       <!--      <div v-if="!props.centralExpert">-->
@@ -554,6 +556,7 @@ const finalResult = ref(0);
 const finalResultDH = ref(0);
 const commonData = ref([]);
 const commentCH = ref();
+const row = ref(1);
 
 const focusOut = async () => {
   if (!isLinkError.value) {
@@ -792,10 +795,10 @@ watchEffect(() => {
     isSent.value = props.data.is_sent;
 
     isFirstSent.value = reportStore.isReportReject.fourth && !props.data.central_version;
-    console.log('isFirstSent.value for fifth_1::::::', isFirstSent.value)
+    // console.log('isFirstSent.value for fifth_1::::::', isFirstSent.value)
+
+    // row.value = props.data.comment ? props.data.comment.split('\n').length : 1;
   }
-}, {
-  flush: "post"
 });
 
 watchPostEffect(() => {

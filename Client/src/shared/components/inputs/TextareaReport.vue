@@ -11,7 +11,7 @@
                 'report__textarea',
                 (isErrorPanel && !value) ? 'report__textarea--error' : '',
             ]"
-            :rows="rows"
+            :rows="textRows"
             :maxlength="maxLength"
             :placeholder="placeholder"
             :disabled="disabled"
@@ -89,8 +89,12 @@
     });
     
     const textLength = ref(null);
-  
-    watchEffect(() => textLength.value = typeof props.value === 'string' ? props.value.length : 0);
+    const textRows = ref(1);
+
+    watchEffect(() => {
+      textLength.value = typeof props.value === 'string' ? props.value.length : 0
+      textRows.value = props.value ? props.value.split('\n').length : 1;
+    });
   
     const updateValue = (event) => {
         emit('update:value', event.target.value);

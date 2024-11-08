@@ -88,7 +88,7 @@
             v-model:value="tenthPanelData.comment"
             id="comment"
             name="comment"
-            :rows="1"
+            :rows="row"
             autoResize
             :maxlength="3000"
             :max-length-text="3000"
@@ -394,6 +394,7 @@ const fileTypeDH = ref(null);
 const isSent = ref(false);
 let isErrorFile = ref(false);
 const returnReport = ref(false);
+const row = ref(1);
 
 const emit = defineEmits(['collapse-form', 'formData', 'uploadFile', 'deleteFile', 'deleteLink', 'clearForm', 'getDataDH', 'getDataCH', 'onReturnReport']);
 
@@ -505,6 +506,8 @@ watchEffect(() => {
   tenthPanelData.value = {...props.data};
   isSent.value = props.data.is_sent;
   isErrorFile.value = props.isErrorFileProp;
+
+  // row.value = tenthPanelData.value.comment ? tenthPanelData.value.comment.split('\n').length : 1;
 });
 
 watchPostEffect(() => {
