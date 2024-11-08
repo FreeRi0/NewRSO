@@ -219,3 +219,15 @@ export function checkEmptyFieldsDH(data, isErrorPanel) {
 
     return true;
 }
+
+export function formattedDate(date)  {
+    if (date) {
+        let newDate = new Date(date);
+        let day = newDate.getDate();
+        let month = newDate.getMonth() + 1;
+        let year = newDate.getFullYear();
+        return day + "-" + month + "-" + year;
+    } else {
+        return null;
+    }
+}

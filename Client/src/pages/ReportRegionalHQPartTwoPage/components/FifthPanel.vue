@@ -369,6 +369,17 @@
 
     <template v-slot:thirdTab>
       <div v-for="(eventCH, index) in commonData" :key="index" class="form__field-fourth-panel">
+        <div class="form__field-people-count-wrap" style="margin-bottom: 16px;">
+          <label class="form__label" for="eventName">Название трудового проекта <sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="eventCH.dataRH.name"
+              id="eventCH.dataRH.name"
+              name="eventCH.dataRH.name"
+              class="form__input form__field-people-count-field"
+              disabled
+          />
+        </div>
         <label class="form__label">Общее количество человек, принявших участие в трудовом проекте <sup
             class="valid-red">*</sup></label>
         <v-table>
@@ -437,8 +448,8 @@
             <td class="report-table__th">Корректировка ЦШ</td>
           </tr>
           <tr>
-            <td class="report-table__td">{{ eventCH.dataRH.start_date }}</td>
-            <td class="report-table__td report-table__td__center">{{ eventCH.dataDH.start_date }}</td>
+            <td class="report-table__td">{{ formattedDate(eventCH.dataRH.start_date) }}</td>
+            <td class="report-table__td report-table__td__center">{{ formattedDate(eventCH.dataDH.start_date) }}</td>
             <td class="report-table__td">
               <InputReport
                   v-model:value="eventCH.dataCH.start_date"
@@ -460,8 +471,8 @@
             <td class="report-table__th">Корректировка ЦШ</td>
           </tr>
           <tr>
-            <td class="report-table__td">{{ eventCH.dataRH.end_date }}</td>
-            <td class="report-table__td report-table__td__center">{{ eventCH.dataDH.end_date }}</td>
+            <td class="report-table__td">{{ formattedDate(eventCH.dataRH.end_date) }}</td>
+            <td class="report-table__td report-table__td__center">{{ formattedDate(eventCH.dataDH.end_date) }}</td>
             <td class="report-table__td">
               <InputReport
                   v-model:value="eventCH.dataCH.end_date"
@@ -474,12 +485,22 @@
           </tr>
           </tbody>
         </v-table>
-        <div class="hr" style="margin-bottom: 40px;"></div>
+        <div class="hr" style="margin-bottom: 30px;"></div>
       </div>
 
-      <div class="form__field">
-        <label class="form__label" for="15">Комментарий <sup class="valid-red">*</sup></label>
-        <InputReport v-model:value="commentCH" id="15" name="15" class="form__input" style="width: 100%"/>
+      <div class="form__field" style="margin-bottom: 0;">
+        <label class="form__label" for="commentCH">Комментарий <sup class="valid-red">*</sup></label>
+<!--        <InputReport v-model:value="commentCH" id="15" name="15" class="form__input" style="width: 100%"/>-->
+        <TextareaReport
+            v-model:value="commentCH"
+            id="commentCH"
+            name="commentCH"
+            autoResize
+            placeholder="Комментарий"
+            :maxlength="3000"
+            :max-length-text="3000"
+            counter-visible
+        />
       </div>
       <!-- <div>
         <v-checkbox label="Итоговое значение"/>
@@ -505,6 +526,7 @@ import {Button} from '@shared/components/buttons';
 import {reportPartTwoService} from "@services/ReportService.ts";
 import {ReportTabs} from './index';
 import {useReportPartTwoStore} from "@pages/ReportRegionalHQPartTwoPage/store.ts";
+import {formattedDate} from "@pages/ReportRegionalHQPartTwoPage/Helpers.js";
 
 // const swal = inject('$swal');
 const reportStore = useReportPartTwoStore();
