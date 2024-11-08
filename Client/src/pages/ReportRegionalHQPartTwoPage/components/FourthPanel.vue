@@ -101,7 +101,7 @@
           name="comment"
           class="form__input"
           placeholder="Укажите наименования организованных мероприятий"
-          :rows="1"
+          :rows="row"
           autoResize
           :maxlength="3000"
           :max-length-text="3000"
@@ -658,6 +658,7 @@ const finalResult = ref(0);
 const finalResultDH = ref(0);
 const commonData = ref([]);
 const commentCH = ref();
+const row = ref(1);
 
 const focusOut = async () => {
   fourthPanelData.value.events = [...events.value];
@@ -923,7 +924,9 @@ watchEffect(() => {
     isSent.value = props.data.is_sent;
 
     isFirstSent.value = reportStore.isReportReject.fourth && !props.data.central_version;
-    console.log('isFirstSent.value::::::', isFirstSent.value)
+    // console.log('isFirstSent.value::::::', isFirstSent.value)
+
+    // row.value = props.data.comment ? props.data.comment.split('\n').length : 1;
   }
 
   // Мапинг данных для отчета командира РШ при возвращении на доработку
@@ -964,8 +967,6 @@ watchEffect(() => {
       }
     }
   }
-}, {
-  flush: "post"
 });
 
 watchPostEffect(() => {

@@ -144,7 +144,7 @@
             v-model:value="sixteenthPanelData.comment"
             id="comment"
             name="comment"
-            :rows="1"
+            :rows="row"
             autoResize
             placeholder="Напишите сообщение"
             @focusout="focusOut"
@@ -617,6 +617,7 @@ const finalResult = ref(0);
 const finalResultDH = ref(0);
 const commonData = ref([]);
 const commentCH = ref();
+const row = ref(1);
 
 const focusOut = async () => {
   sixteenthPanelData.value.projects = [...projects.value];
@@ -840,6 +841,8 @@ watchEffect(() => {
     sixteenthPanelData.value.is_project = props.data.is_project;
     sixteenthPanelData.value.comment = props.data.comment || '';
     isSent.value = props.data.is_sent;
+
+    // row.value = props.data.comment ? props.data.comment.split('\n').length : 1;
   }
 });
 
