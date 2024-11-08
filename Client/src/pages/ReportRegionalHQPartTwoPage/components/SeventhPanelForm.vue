@@ -673,14 +673,14 @@ import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.t
 import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
 const props = defineProps({
     title: Object,
-    panel_number: String,
+    panel_number: [String, Number],
     isDisabled: Boolean,
     isSecondTab: Boolean,
     isThirdTab: Boolean,
     isCentralHeadquarterCommander: Boolean,
     isDistrictHeadquarterCommander: Boolean,
-    id: String,
-    sixId: String,
+    id: [String, Number],
+    sixId: [String, Number],
     ninthId: String,
 
     isSentSix: Boolean,

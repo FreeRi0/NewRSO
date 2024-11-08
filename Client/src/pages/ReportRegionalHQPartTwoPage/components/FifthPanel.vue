@@ -222,7 +222,7 @@
                 :name="i"
                 class="form__input form__field-link-field"
                 type="text"
-                placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
+                placeholder="Введите ссылку"
                 @focusout="focusOut"
                 disabled
             />
@@ -642,7 +642,7 @@ const setFormData = (file = null, index = null, isDeleteEvent = false, isDeleteF
     // Логика обнуления проекта при нулевом количестве участников
     if (!(+event.participants_number)) {
       event.name = null;
-      event.ro_participants_number = false;
+      event.ro_participants_number = null;
       event.end_date = null;
       event.start_date = null;
       event.links = [];

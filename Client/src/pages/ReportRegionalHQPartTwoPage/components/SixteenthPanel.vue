@@ -255,7 +255,7 @@
                   :name="i"
                   class="form__input"
                   type="text"
-                  placeholder="https://vk.com/cco_monolit"
+                  placeholder="Введите ссылку"
                   @focusout="focusOut"
                   disabled
                   isLink

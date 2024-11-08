@@ -471,6 +471,9 @@ onMounted(() => {
   tenthPanelDataDH.value.comment = props.dataDH.comment;
   if (props.document) {
     tenthPanelDataDH.value.document = props.document;
+    fileNameDH.value = props.document.name || null;
+    fileSizeDH.value = props.document.size / Math.pow(1024, 2) || null;
+    fileTypeDH.value = props.document.type.split('/').at(-1) || null;
   }
 
   // Мапинг данных для отчета эксперта ЦШ
