@@ -88,7 +88,7 @@
             v-model:value="tenthPanelData.comment"
             id="comment"
             name="comment"
-            :rows="1"
+            :rows="row"
             autoResize
             :maxlength="3000"
             :max-length-text="3000"
@@ -389,6 +389,7 @@ const fileTypeDH = ref(null);
 const isSent = ref(false);
 let isErrorFile = ref(false);
 const returnReport = ref(false);
+const row = ref(1);
 
 const emit = defineEmits(['collapse-form', 'formData', 'uploadFile', 'deleteFile', 'deleteLink', 'clearForm', 'getDataDH', 'getDataCH', 'onReturnReport']);
 
@@ -461,6 +462,9 @@ onMounted(() => {
   tenthPanelDataDH.value.comment = props.dataDH.comment;
   if (props.document) {
     tenthPanelDataDH.value.document = props.document;
+    fileNameDH.value = props.document.name || null;
+    fileSizeDH.value = props.document.size / Math.pow(1024, 2) || null;
+    fileTypeDH.value = props.document.type.split('/').at(-1) || null;
   }
 
   // Мапинг данных для отчета эксперта ЦШ
@@ -496,6 +500,8 @@ watchEffect(() => {
   tenthPanelData.value = {...props.data};
   isSent.value = props.data.is_sent;
   isErrorFile.value = props.isErrorFileProp;
+
+  // row.value = tenthPanelData.value.comment ? tenthPanelData.value.comment.split('\n').length : 1;
 });
 
 watchPostEffect(() => {

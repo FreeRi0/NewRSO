@@ -446,6 +446,8 @@ watchEffect(async () => {
     fileNameDH.value = reportStore.reportDataDHFile.first ? reportStore.reportDataDHFile.first.name : null;
     fileTypeDH.value = reportStore.reportDataDHFile.first ? reportStore.reportDataDHFile.first.type.split('/').at(-1) : null;
     fileSizeDH.value = reportStore.reportDataDHFile.first ? reportStore.reportDataDHFile.first.size / Math.pow(1024, 2) : null;
+
+    // row.value = reportStore.reportDataDH.first.comment ? reportStore.reportDataDH.first.comment.split('\n').length : 1;
   }
 
   // Мапинг данных для отчета эксперта ЦШ
@@ -520,9 +522,9 @@ watchPostEffect(() => {
     isFirstSent.value = reportStore.isReportReject.first && !props.data.central_version;
   }
 
-  if (reportStore.reportForCheckCH.first && props.centralExpert) {
-    row.value = reportStore.reportForCheckCH.first.comment.split('\n').length || 1;
-  }
+  // if (reportStore.reportForCheckCH.first && props.centralExpert) {
+  //   row.value = reportStore.reportForCheckCH.first.comment ? reportStore.reportForCheckCH.first.comment.split('\n').length : 1;
+  // }
 });
 
 watch(firstPanelDataDH.value, () => {

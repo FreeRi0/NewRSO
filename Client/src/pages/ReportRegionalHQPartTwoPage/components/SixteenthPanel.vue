@@ -144,7 +144,7 @@
             v-model:value="sixteenthPanelData.comment"
             id="comment"
             name="comment"
-            :rows="1"
+            :rows="row"
             autoResize
             placeholder="Напишите сообщение"
             @focusout="focusOut"
@@ -255,7 +255,7 @@
                   :name="i"
                   class="form__input"
                   type="text"
-                  placeholder="https://vk.com/cco_monolit"
+                  placeholder="Введите ссылку"
                   @focusout="focusOut"
                   disabled
                   isLink
@@ -422,7 +422,7 @@
     <!------------------------------------------------------------------------------------------------>
 
     <template v-slot:thirdTab>
-      <div class="form__field-project-existence" style="margin-bottom: 10px;">
+      <div class="form__field-project-existence" style="margin-bottom: 30px;">
         <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу <sup
             class="valid-red">*</sup>
         </p>
@@ -451,25 +451,26 @@
           </div>
         </div>
       </div>
+      <div class="hr"></div>
       <div v-for="(projectCH, index) in commonData" :key="index" style="margin-top: 10px;">
         <div>
           <label class="form__label">Наименование трудового проекта, в котором ЛСО РО одержал победу <sup
               class="valid-red">*</sup></label>
           <v-table style="margin-top: 10px; width: 700px;">
             <tbody>
-            <tr class="report-table__tr">
+            <tr class="report-table__tr" style="font-weight: bold">
               <td>Данные РО</td>
             </tr>
             <tr class="report-table__td">
               <td>{{ projectCH.dataRH.name }}</td>
             </tr>
-            <tr class="report-table__tr">
+            <tr class="report-table__tr" style="font-weight: bold">
               <td>Корректировка ОШ</td>
             </tr>
             <tr class="report-table__td">
               <td>{{ projectCH.dataDH.name }}</td>
             </tr>
-            <tr class="report-table__tr">
+            <tr class="report-table__tr" style="font-weight: bold">
               <td>Корректировка ЦШ</td>
             </tr>
             <tr class="report-table__tr">
@@ -537,17 +538,28 @@
         </div>
         <div class="hr" style="margin-top: 10px;"></div>
       </div>
-      <div class="form__field">
+      <div class="form__field" style="margin-bottom: 0;">
         <label class="form__label" for="15">Комментарий <sup class="valid-red">*</sup></label>
-        <InputReport v-model:value="commentCH" id="15" name="15" class="form__input" style="width: 100%"/>
+        <!--        <InputReport v-model:value="commentCH" id="15" name="15" class="form__input" style="width: 100%"/>-->
+        <TextareaReport
+            v-model:value="commentCH"
+            id="commentCH"
+            name="commentCH"
+            :rows="1"
+            autoResize
+            placeholder="Напишите сообщение"
+            :maxlength="3000"
+            :max-length-text="3000"
+            counter-visible
+        />
       </div>
-<!--      <div>-->
-<!--        <v-checkbox label="Итоговое значение"/>-->
-<!--      </div>-->
-<!--      <div class="hr"></div>-->
-<!--      <div>-->
-<!--        <p>(4-1)*2+(4-2)+(4-3)=9</p>-->
-<!--      </div>-->
+      <!--      <div>-->
+      <!--        <v-checkbox label="Итоговое значение"/>-->
+      <!--      </div>-->
+      <!--      <div class="hr"></div>-->
+      <!--      <div>-->
+      <!--        <p>(4-1)*2+(4-2)+(4-3)=9</p>-->
+      <!--      </div>-->
       <div>
         <v-checkbox
             v-model="reportStore.returnReport.sixteenth"
@@ -617,6 +629,7 @@ const finalResult = ref(0);
 const finalResultDH = ref(0);
 const commonData = ref([]);
 const commentCH = ref();
+const row = ref(1);
 
 const focusOut = async () => {
   sixteenthPanelData.value.projects = [...projects.value];
@@ -840,6 +853,8 @@ watchEffect(() => {
     sixteenthPanelData.value.is_project = props.data.is_project;
     sixteenthPanelData.value.comment = props.data.comment || '';
     isSent.value = props.data.is_sent;
+
+    // row.value = props.data.comment ? props.data.comment.split('\n').length : 1;
   }
 });
 
