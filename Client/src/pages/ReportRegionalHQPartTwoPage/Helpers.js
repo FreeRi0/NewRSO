@@ -14,29 +14,38 @@ export function checkEmptyFieldsDH(data, isErrorPanel) {
     } else {
         isErrorPanel.value.first = false;
     }
-    if (data.fourth) {
-        for (const event of data.fourth.events) {
-            if (
-                (event.participants_number != 0 ||
-                    !event.participants_number) &&
-                !(
-                    event.name &&
-                    event.end_date &&
-                    event.start_date &&
-                    data.fourth.comment
-                )
-            ) {
-                isErrorPanel.value.fourth = true;
-                swal.fire({
-                    position: 'center',
-                    icon: 'warning',
-                    title: `Заполните обязательные поля в 4 показателе`,
-                    showConfirmButton: false,
-                    timer: 2500,
-                });
-                return false;
-            }
-        }
+
+    if (data.fourth && !(data.fourth.comment)) {
+        isErrorPanel.value.fourth = true;
+        swal.fire({
+            position: 'center',
+            icon: 'warning',
+            title: `Заполните обязательные поля в 4 показателе`,
+            showConfirmButton: false,
+            timer: 2500,
+        });
+        // for (const event of data.fourth.events) {
+        //     if (
+        //         (event.participants_number != 0 ||
+        //             !event.participants_number) &&
+        //         !(
+        //             event.name &&
+        //             event.end_date &&
+        //             event.start_date &&
+        //             data.fourth.comment
+        //         )
+        //     ) {
+        //         isErrorPanel.value.fourth = true;
+        //         swal.fire({
+        //             position: 'center',
+        //             icon: 'warning',
+        //             title: `Заполните обязательные поля в 4 показателе`,
+        //             showConfirmButton: false,
+        //             timer: 2500,
+        //         });
+        //         return false;
+        //     }
+        // }
     }
 
     if (data.fifth) {

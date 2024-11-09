@@ -837,10 +837,24 @@ const getReportData = async (reportId) => {
       try {
         const dataFifth = (await reportPartTwoService.getReport('5')).data;
         console.log('5', dataFifth)
-        if (!dataFifth.regional_version) {
+        // if (!dataFifth.regional_version) {
+        //   reportData.value.fifth = dataFifth;
+        // } else {
+        //   reportData.value.fifth = JSON.parse(dataFifth.regional_version);
+        // }
+        if (!dataFifth.regional_version && !dataFifth.central_version) {
           reportData.value.fifth = dataFifth;
         } else {
-          reportData.value.fifth = JSON.parse(dataFifth.regional_version);
+          if (dataFifth.rejecting_reasons) {
+            reportStore.isReportReject.fifth = true;
+            reportStore.reportReject.fifth = dataFifth;
+          }
+
+          if (dataFifth.central_version) {
+            reportData.value.fifth = dataFifth;
+          } else {
+            reportData.value.fifth = JSON.parse(dataFifth.regional_version);
+          }
         }
       } catch (e) {
         console.log(e.message)
