@@ -298,7 +298,7 @@ const firstPanelDataCH = ref({
   comment: '',
   amount_of_money: '',
   scan_file: '',
-})
+});
 const isSent = ref(false);
 const fileNameDH = ref(null);
 const fileSizeDH = ref(null);
