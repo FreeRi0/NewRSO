@@ -80,7 +80,7 @@
               class="form__input"
               type="number"
               placeholder="Введите число"
-              :disabled="props.centralExpert || props.districtExpert || isSent"
+              :disabled="(props.centralExpert || props.districtExpert) && isSent"
               @focusout="focusOut"
           />
         </div>
@@ -102,7 +102,7 @@
                   type="file"
                   id="scan_file"
                   name="scan_file"
-                  :disabled="isSent"
+                  :disabled="(props.centralExpert || props.districtExpert) && isSent"
                   :is-error-panel="isErrorPanel"
                   style="width: 100%;"
                   @change="uploadFile"/>
@@ -112,7 +112,7 @@
                   :fileType="firstPanelData.file_type"
                   :fileSize="firstPanelData.file_size"
                   @click="deleteFile"
-                  :is-sent="isSent"
+                  :is-sent="(props.centralExpert || props.districtExpert) && isSent"
                   :is-error-file="isErrorFile"
               ></FileBoxComponent>
             </div>
@@ -132,7 +132,7 @@
             :max-length-text="3000"
             counter-visible
             class="form__input"
-            :disabled="props.centralExpert || props.districtExpert || isSent"
+            :disabled="(props.centralExpert || props.districtExpert) && isSent"
             style="margin-bottom: 4px;"
             @focusout="focusOut"
         />
@@ -215,14 +215,15 @@
         <CommentFileComponent
             v-model:value="firstPanelDataCH.comment"
             name="firstPanelDataDH.comment"
-            :file="reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.name : null"
-            :fileType="reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.type.split('/').at(-1) : null"
-            :fileSize="reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.size / Math.pow(1024, 2) : null"
+            :file="fileNameCH"
+            :fileType="fileTypeCH"
+            :fileSize="fileSizeCH"
             :is-error-file="isErrorFile"
             @change="uploadFileCH"
             @click="deleteFileCH"
             :is-error-panel="isErrorPanel"
             :disabled="reportStore.isReportReject?.first && !props.centralExpert"
+            :is-sent="reportStore.isReportReject?.first && !props.centralExpert"
         />
       </div>
       <div>
@@ -302,6 +303,9 @@ const isSent = ref(false);
 const fileNameDH = ref(null);
 const fileSizeDH = ref(null);
 const fileTypeDH = ref(null);
+const fileNameCH = ref(null);
+const fileSizeCH = ref(null);
+const fileTypeCH = ref(null);
 const row = ref(1);
 
 const focusOut = async () => {
@@ -357,6 +361,10 @@ const uploadFileCH = (event) => {
   if (event.target.files) {
     reportStore.reportDataCHFile.first = event.target.files[0];
     firstPanelDataCH.value.scan_file = event.target.files[0];
+
+    fileNameCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.name : null;
+    fileSizeCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.size / Math.pow(1024, 2) : null;
+    fileTypeCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.type.split('/').at(-1) : null;
   }
 }
 const deleteFile = async () => {
@@ -390,6 +398,9 @@ const deleteFileDH = () => {
 };
 const deleteFileCH = () => {
   reportStore.reportDataCHFile.first = null;
+  fileNameCH.value = null;
+  fileSizeCH.value = null;
+  fileTypeCH.value = null;
 
   let formData = new FormData();
   formData.append('comment', firstPanelDataCH.value.comment);
@@ -439,7 +450,6 @@ watchEffect(async () => {
     isSent.value = props.data.is_sent;
 
     isFirstSent.value = reportStore.isReportReject.first && !props.data.central_version;
-    // console.log('isFirstSent:::: FIRST_1', isFirstSent.value)
   }
 
   // Мапинг данных для отчета эксперта ОШ
@@ -495,20 +505,21 @@ watchEffect(async () => {
     // Добавление данных для панели "корректировка ЦШ"
     if (props.data.central_version) {
       // Отчет создан:
-      const reportDataCH = props.data.central_version;
+      firstPanelDataCH.value.amount_of_money = props.data.central_version.amount_of_money;
+      firstPanelDataCH.value.comment = props.data.central_version.comment || '';
 
-      firstPanelDataCH.value.amount_of_money = reportDataCH.amount_of_money;
-      firstPanelDataCH.value.comment = reportDataCH.comment || '';
+      fileNameCH.value = props.data.central_version.scan_file ? props.data.central_version.scan_file : null;
+      fileSizeCH.value = props.data.central_version.file_size ? props.data.central_version.file_size : null;
+      fileTypeCH.value = props.data.central_version.file_type ? props.data.central_version.file_type : null;
     } else {
       // Отчет не создан:
       firstPanelDataCH.value.amount_of_money = reportStore.reportReject.first.amount_of_money;
       firstPanelDataCH.value.comment = reportStore.reportReject.first.comment || '';
-    }
 
-    // TODO: доработать первое отображение файла на вкладке РШ
-    // reportStore.reportDataCHFile.first.name = reportStore.reportReject.first.scan_file;
-    // reportStore.reportDataCHFile.first.type = reportStore.reportReject.first.file_type;
-    // reportStore.reportDataCHFile.first.size = reportStore.reportReject.first.file_size;
+      fileNameCH.value = reportStore.reportReject.first.scan_file ? reportStore.reportReject.first.scan_file : null;
+      fileSizeCH.value = reportStore.reportReject.first.file_size ? reportStore.reportReject.first.file_size : null;
+      fileTypeCH.value = reportStore.reportReject.first.file_type ? reportStore.reportReject.first.file_type : null;
+    }
 
   }
 });
