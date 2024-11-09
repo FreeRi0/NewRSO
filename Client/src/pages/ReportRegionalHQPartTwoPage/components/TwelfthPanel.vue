@@ -1,6 +1,6 @@
 <template>
   <div 
-    v-if="!(props.districtExpert || props.centralExpert)"
+    v-if="!(props.districtExpert || props.centralExpert || reportStore.isReportReject.twelfth)"
     class="form__field-group"
   >
     <TwelfthPanelComponent
@@ -12,7 +12,7 @@
     ></TwelfthPanelComponent>
   </div>
 
-  <report-tabs v-else>
+  <report-tabs v-else :isReject="reportStore.isReportReject.twelfth" >
     <template v-slot:firstTab>
       <TwelfthPanelComponent
         :central-expert="props.centralExpert"
@@ -48,6 +48,7 @@
 <script setup>
 import { TwelfthPanelComponent } from "@features/RatingRoPanelComponents";
 import { ReportTabs } from './index';
+import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
 
 const props = defineProps({
   districtExpert: {
@@ -61,6 +62,8 @@ const props = defineProps({
     type: Boolean,
   },
 });
+
+const reportStore = useReportPartTwoStore();
 
 const ID_PANEL = '12';
 

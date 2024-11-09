@@ -105,6 +105,9 @@ export const useReportPartTwoStore = defineStore('report-two', {
             first: false,
             fourth: false,
             fifth: false,
+            eleventh: false,
+            twelfth: false,
+            thirteenth: false,
         },
 
         reportReject: {
