@@ -152,16 +152,17 @@
               id="scan_file"
               name="scan_file"
               @change="uploadFile"
-              :disabled="isSent || !tenthPanelData.event_happened"
+              disabled
           />
           <FileBoxComponent
               v-else
               :file="tenthPanelData.document"
               :fileType="tenthPanelData.file_type"
               :fileSize="tenthPanelData.file_size"
-              :isSent="isSent"
+              :isSent="true"
               :is-error-file="isErrorFile && !tenthPanelData.file_size"
               @click="deleteFile"
+              disabled
           />
         </div>
         <div>
@@ -176,10 +177,10 @@
                 type="text"
                 placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
                 @focusout="formData"
-                :disabled="isSent || !tenthPanelData.event_happened"
+                disabled
                 is-link
             />
-            <div v-if="!isSent && tenthPanelData.event_happened">
+            <div v-if="false">
               <Button v-if="tenthPanelData.links.length === i + 1" class="form__add-link-button"
                       label="+ Добавить ссылку"
                       @click="addLink"/>
