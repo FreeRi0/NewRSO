@@ -8,6 +8,15 @@
         <p class="preloader_info">{{ preloader_text }}</p>
       </div>
       <div v-else>
+        <!-- <div class="d-flex mt-9 mb-9 active-tabs" v-if="!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && isRevision">
+          <button class="contributorBtn" 
+            :class="{ active: picked === tab.name }" 
+            v-for="tab in tabs"
+            :key="tab.id" 
+            @click="picked = tab.name">
+            {{ tab.name }}
+          </button>
+        </div> -->
         <div class="download-item">
           <SvgIcon iconName="download" />
           <button type="button" id="download" class="download-item__report"
@@ -130,16 +139,25 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
+          <!-- <v-expansion-panel v-if="
+            (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) || 
+            (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && picked == 'Просмотр отправленного отчета') || 
+            (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && picked == 'Доработка' && revisionPanels.includes('11'))"> -->
             <v-expansion-panel-title :class="isErrorPanel.eleventh ? 'visible-error' : ''">
               11. Активность РО&nbsp;РСО в&nbsp;социальных сетях &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
                 @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.eleventh"
-                :is-error-panel="isErrorPanel.eleventh" :is-revision="isRevision.eleventh" />
+                :is-error-panel="isErrorPanel.eleventh" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
+          <!-- <v-expansion-panel v-if="
+            (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) || 
+            (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && picked == 'Просмотр отправленного отчета') || 
+            (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && picked == 'Доработка' && revisionPanels.includes('12'))
+          "> -->
             <v-expansion-panel-title :class="isErrorPanel.twelfth ? 'visible-error' : ''">
               12. Объем средств, собранных бойцами РО&nbsp;РСО во&nbsp;Всероссийском дне ударного труда
             </v-expansion-panel-title>
@@ -150,6 +168,11 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
+          <!-- <v-expansion-panel v-if="
+            (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) || 
+            (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && picked == 'Просмотр отправленного отчета') || 
+            (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && picked == 'Доработка' && revisionPanels.includes('13'))
+          "> -->
             <v-expansion-panel-title :class="isErrorPanel.thirteenth ? 'visible-error' : ''">
               13. Охват членов РО&nbsp;РСО, принявших участие во&nbsp;Всероссийском дне ударного труда &laquo;К&raquo;
             </v-expansion-panel-title>
@@ -256,6 +279,17 @@ import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.
 // import { checkEmptyFieldsDH } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 import swal from '@/library/sweetalert2/sweetalert2.esm.all.min.js';
 import { checkEmptyFieldsDH } from "@pages/ReportRegionalHQPartTwoPage/Helpers.js";
+// const picked = ref('Просмотр отправленного отчета');
+// const tabs = ref([
+//   {
+//     id: '1',
+//     name: 'Просмотр отправленного отчета',
+//   },
+//   {
+//     id: '2',
+//     name: 'Доработка',
+//   },
+// ]);
 
 const reportStore = useReportPartTwoStore();
 
@@ -341,10 +375,6 @@ const isErrorPanel = ref({
   twelfth: false,
   thirteenth: false,
   sixteenth: false,
-});
-
-const isRevision = ref({
-  eleventh: false,
 });
 
 const setId = (id) => {
@@ -594,6 +624,10 @@ const getMultiplyData = async (reportId) => {
     }
   });
 }
+
+// const revisionPanels = ref([]);
+// const isRevision = ref(false);
+
 const getReportData = async (reportId) => {
   try {
     // Загрузка данных для отчета эксперта ЦШ
@@ -623,8 +657,6 @@ const getReportData = async (reportId) => {
       /*
       * Критерий 6 и 9  
       */
-
-
       await getMultiplyData(reportId);
 
       /*
@@ -650,36 +682,57 @@ const getReportData = async (reportId) => {
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.sixteenth.projects = (await reportPartTwoService.getReportDH('16', reportId)).data.projects;
 
-      // Критерий 11
+      /* 
+      * Критерий 11
+      */
       const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
-      reportData.value.eleventh = JSON.parse(dataEleventh.regional_version);
-      // console.log('данные РШ для ЦШ 11', reportData.value.eleventh);//---------------------------------
-      // dataEleventh.district_version 
-      // ? reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version) :
-      reportStore.reportDataDH.eleventh = dataEleventh;
-      // console.log('данные ОШ для ЦШ 11', reportStore.reportDataDH.eleventh);//----------------
+      // console.log(dataEleventh);
+      dataEleventh.regional_version
+      ? reportData.value.eleventh = JSON.parse(dataEleventh.regional_version)
+      : reportData.value.eleventh = dataEleventh;
+
+      dataEleventh.district_version 
+      ? reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version)
+      : reportStore.reportDataDH.eleventh = dataEleventh;
+
       reportStore.reportDataCH.eleventh = Object.assign({}, dataEleventh);
       reportStore.reportDataCH.eleventh.comment = '';
 
-      // Критерий 12
+      /* 
+      * Критерий 12
+      */
       const dataTwelfth = (await reportPartTwoService.getReportDH('12', reportId)).data;
-      reportData.value.twelfth = JSON.parse(dataTwelfth.regional_version);
-      // console.log('данные РШ для ЦШ 12', reportData.value.twelfth);//---------------------------------
-      reportStore.reportDataDH.twelfth = dataTwelfth;
-      // console.log('данные ОШ для ЦШ 12', reportStore.reportDataDH.twelfth);//-------------------------
+      // console.log(dataTwelfth);
+      dataTwelfth.regional_version
+      ? reportData.value.twelfth = JSON.parse(dataTwelfth.regional_version)
+      : reportData.value.twelfth = dataTwelfth;
+
+      dataTwelfth.district_version
+      ? reportStore.reportDataDH.twelfth = JSON.parse(dataTwelfth.district_version)
+      : reportStore.reportDataDH.twelfth = dataTwelfth;
+
       reportStore.reportDataCH.twelfth = Object.assign({}, dataTwelfth);
       reportStore.reportDataCH.twelfth.comment = '';
 
-      // Критерий 13
+      /* 
+      * Критерий 13
+      */
       const dataThirteenth = (await reportPartTwoService.getReportDH('13', reportId)).data;
-      reportData.value.thirteenth = JSON.parse(dataThirteenth.regional_version);
-      // console.log('данные РШ для ЦШ 13', reportData.value.thirteenth);//---------------------------------
-      reportStore.reportDataDH.thirteenth = dataThirteenth;
-      // console.log('данные ОШ для ЦШ 13', reportStore.reportDataDH.thirteenth);//---------------------------
+      // console.log(dataThirteenth);
+      dataThirteenth.regional_version
+      ? reportData.value.thirteenth = JSON.parse(dataThirteenth.regional_version)
+      : reportData.value.thirteenth = dataThirteenth;
+
+      dataThirteenth.district_version
+      ? reportStore.reportDataDH.thirteenth = JSON.parse(dataThirteenth.district_version)
+      : reportStore.reportDataDH.thirteenth = dataThirteenth;
+
       reportStore.reportDataCH.thirteenth = Object.assign({}, dataThirteenth);
       reportStore.reportDataCH.thirteenth.comment = '';
 
-      //Критерии 17-19
+      /* 
+      * Критерий 17-19
+      */
       const dataSeventeenth = (await reportPartTwoService.getReportDH('16', reportId)).data;
       if (dataSeventeenth.is_sent) isSentLastIndex.value = true;
       reportData.value.seventeenth = (await reportPartTwoService.getReportDH('17', reportId)).data;
@@ -870,38 +923,62 @@ const getReportData = async (reportId) => {
       try {
         const dataEleventh = (await reportPartTwoService.getReport('11')).data;
         console.log(dataEleventh);
-        if (!dataEleventh.regional_version) {
-          reportData.value.eleventh = dataEleventh;
-        } else {
-          reportData.value.eleventh = JSON.parse(dataEleventh.regional_version);
-        }
-        if (dataEleventh.rejecting_reasons && !dataEleventh.verified_by_chq) {
+        dataEleventh.regional_version
+        ? reportData.value.eleventh = JSON.parse(dataEleventh.regional_version)
+        : reportData.value.eleventh = dataEleventh;
+
+        if (dataEleventh.rejecting_reasons) {
+          // revisionPanels.value.push('11');
           reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version);
+
           dataEleventh.central_version
-            ? reportStore.reportDataCH.eleventh = dataEleventh.central_version
-            : reportStore.reportDataCH.eleventh = dataEleventh;
-          dataEleventh.rejecting_reasons ? isRevision.value.eleventh = true : false;
-          console.log('isRevision в род комп', isRevision.value);
+          ? reportStore.reportDataCH.eleventh = dataEleventh.central_version
+          : reportStore.reportDataCH.eleventh = dataEleventh;
+
+          reportStore.isReportReject.eleventh = true
+          // console.log('isReportReject в род комп', reportStore.isReportReject.eleventh);
         }
       } catch (e) {
         console.log(e.message)
       }
       try {
         const dataTwelfth = (await reportPartTwoService.getReport('12')).data;
-        if (!dataTwelfth.regional_version) {
-          reportData.value.twelfth = dataTwelfth;
-        } else {
-          reportData.value.twelfth = JSON.parse(dataTwelfth.regional_version);
+        console.log(dataTwelfth);
+        dataTwelfth.regional_version
+        ? reportData.value.twelfth = JSON.parse(dataTwelfth.regional_version)
+        : reportData.value.twelfth = dataTwelfth;
+
+        if (dataTwelfth.rejecting_reasons) {
+          // revisionPanels.value.push('12');
+          reportStore.reportDataDH.twelfth = JSON.parse(dataTwelfth.district_version);
+
+          dataTwelfth.central_version
+          ? reportStore.reportDataCH.twelfth = dataTwelfth.central_version
+          : reportStore.reportDataCH.twelfth = dataTwelfth;
+
+          reportStore.isReportReject.twelfth = true
+          // console.log('isReportReject в род комп', reportStore.isReportReject.twelfth);
         }
       } catch (e) {
         console.log(e.message)
       }
       try {
         const dataThirteenth = (await reportPartTwoService.getReport('13')).data;
-        if (!dataThirteenth.regional_version) {
-          reportData.value.thirteenth = dataThirteenth;
-        } else {
-          reportData.value.thirteenth = JSON.parse(dataThirteenth.regional_version);
+        console.log(dataThirteenth);
+        dataThirteenth.regional_version
+        ? reportData.value.thirteenth = JSON.parse(dataThirteenth.regional_version)
+        : reportData.value.thirteenth = dataThirteenth;
+
+        if (dataThirteenth.rejecting_reasons) {
+          // revisionPanels.value.push('13');
+          reportStore.reportDataDH.thirteenth = JSON.parse(dataThirteenth.district_version);
+
+          dataThirteenth.central_version
+          ? reportStore.reportDataCH.thirteenth = dataThirteenth.central_version
+          : reportStore.reportDataCH.thirteenth = dataThirteenth;
+
+          reportStore.isReportReject.thirteenth = true
+          // console.log('isReportReject в род комп', reportStore.isReportReject.thirteenth);
         }
       } catch (e) {
         console.log(e.message)
@@ -1405,15 +1482,15 @@ const sendReport = async () => {
         await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.tenth.second, '10', '2', route.query.reportId, true, reportStore.returnReport.tenth.second);
       }
 
-      if (reportStore.reportDataDH.eleventh.verified_by_chq === null) {
+      if (reportStore.reportDataCH.eleventh.verified_by_chq === null) {
         await reportPartTwoService.sendReportCH(reportDataCH.value.eleventh, '11', route.query.reportId, true, reportStore.returnReport.eleventh);
       }
 
-      if (reportStore.reportDataDH.twelfth.verified_by_chq === null) {
+      if (reportStore.reportDataCH.twelfth.verified_by_chq === null) {
         await reportPartTwoService.sendReportCH(reportDataCH.value.twelfth, '12', route.query.reportId, true, reportStore.returnReport.twelfth);
       }
 
-      if (reportStore.reportDataDH.thirteenth.verified_by_chq === null) {
+      if (reportStore.reportDataCH.thirteenth.verified_by_chq === null) {
         await reportPartTwoService.sendReportCH(reportDataCH.value.thirteenth, '13', route.query.reportId, true, reportStore.returnReport.thirteenth);
       }
 
@@ -1780,6 +1857,15 @@ watch(
   },
 );
 
+// watch(revisionPanels.value,
+//   () => {
+//     if (revisionPanels.value.length) {
+//       isRevision.value = true;
+//       console.log(revisionPanels.value, isRevision.value);
+//     }
+//   },
+// )
+
 onMounted(() => {
   if (roleStore.roles.regionalheadquarter_commander && typeof (route.query.reportId) === 'undefined' && window.performance.navigation.type === 1) {
     preloader.value = true;
@@ -1880,5 +1966,37 @@ onMounted(() => {
 
 .v-expansion-panel:not(:first-child)::after {
   border-top-style: none;
+}
+
+.contributorBtn {
+  border-radius: 30px;
+  background-color: white;
+  color: #1c5c94;
+  border: 1px solid #1c5c94;
+  margin: 0px;
+  padding: 10px 24px;
+  margin: 7px;
+
+  @media screen and (max-width: 768px) {
+    font-size: 12px;
+    padding: 8px 16px;
+    margin: 12px 8px 0px 0px;
+  }
+}
+
+.active {
+  background-color: #1c5c94;
+  color: white;
+}
+
+/* .active-app {
+  padding-bottom: 60px;
+} */
+
+.active-tabs {
+  margin-top: 20px;
+  margin-bottom: 40px;
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>
