@@ -17,7 +17,7 @@
         :min="0"
         :max="2147483647"
         @focusout="focusOut"
-        :disabled="(!isRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+        :disabled="(isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
         :is-error-panel="isErrorPanel"
       />
     </div>
@@ -33,7 +33,7 @@
         :fileType="eleventhPanelData.file_type"
         :fileSize="eleventhPanelData.file_size"
         @click="deleteFile"
-        :is-sent="(!isRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+        :is-sent="(isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
         :is-error-file="isErrorFile"
       ></FileBoxComponent>
       <InputReport
@@ -46,7 +46,7 @@
         width="100%"
         height="auto"
         @change="uploadFile"
-        :disabled="(!isRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+        :disabled="(isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
         :is-error-panel="isErrorPanel"
       />
     </div>
@@ -70,7 +70,7 @@
         :maxlength="3000"
         :max-length-text="3000"
         @focusout="focusOut"
-        :disabled="(!isRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+        :disabled="(isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
       >
       </TextareaReport>
     </div>
@@ -126,7 +126,7 @@
       :maxlength="10"
       :min="0"
       :max="2147483647"
-      :disabled="!(districtExpert || centralExpert)"
+      :disabled="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.eleventh.verified_by_chq !== null"
       :is-error-panel="isErrorPanel"
     ></ReportTable>
 
@@ -139,8 +139,8 @@
       :fileType="fileCH.type"
       :fileSize="fileCH.size"
       :is-error-file="isErrorFile"
-      :is-disabled="!(districtExpert || centralExpert)"
-      :is-sent="!(districtExpert || centralExpert)"
+      :is-disabled="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.eleventh.verified_by_chq !== null"
+      :is-sent="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.eleventh.verified_by_chq !== null"
       :is-error-panel="isErrorPanel"
     ></CommentFileComponent>
 
@@ -148,7 +148,7 @@
       <v-checkbox 
         v-model="reportStore.returnReport.eleventh"
         label="Вернуть в&nbsp;РО на&nbsp;доработку" 
-        :disabled="!(districtExpert || centralExpert)"
+        :disabled="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.eleventh.verified_by_chq !== null"
         @change="onReturnReport"/>
     </div>
   </div>
@@ -410,11 +410,21 @@ watchEffect(() => {
       fileDH.value.type = reportStore.reportDataDH.eleventh.file_type;
       fileDH.value.size = reportStore.reportDataDH.eleventh.file_size;
     }
+    if (reportStore.reportForCheckCH.eleventh.verified_by_chq !== null) {
+      fileCH.value.name = reportStore.reportForCheckCH.eleventh.scan_file;
+      fileCH.value.type = reportStore.reportForCheckCH.eleventh.file_type;
+      fileCH.value.size = reportStore.reportForCheckCH.eleventh.file_size;
+    } else
     if (reportStore.reportDataCHFile.eleventh) {
       fileCH.value.name = reportStore.reportDataCHFile.eleventh.name;
       fileCH.value.type = reportStore.reportDataCHFile.eleventh.type.split('/').at(-1);
       fileCH.value.size = reportStore.reportDataCHFile.eleventh.size / Math.pow(1024, 2);
     }
+    if (reportStore.reportForCheckCH.eleventh.rejecting_reasons) {
+      reportStore.returnReport.eleventh = true;
+    } 
+
+    // console.log('чек 11', reportStore.returnReport.eleventh)
   }
 }, {
   flush: 'post'
@@ -441,7 +451,11 @@ watchPostEffect(() => {
     fileCH.value.type = reportStore.reportDataCH.eleventh.file_type;
     fileCH.value.size = reportStore.reportDataCH.eleventh.file_size;
 
-    reportStore.returnReport.eleventh = true;
+    if (props.data?.rejecting_reasons) {
+      reportStore.returnReport.eleventh = true;
+    } else {
+      reportStore.returnReport.eleventh = false;
+    }
   }
   
 });

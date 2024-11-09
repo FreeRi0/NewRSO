@@ -686,6 +686,7 @@ const getReportData = async (reportId) => {
       * Критерий 11
       */
       const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
+      reportStore.reportForCheckCH.eleventh = dataEleventh;
       // console.log(dataEleventh);
       dataEleventh.regional_version
       ? reportData.value.eleventh = JSON.parse(dataEleventh.regional_version)
@@ -696,12 +697,15 @@ const getReportData = async (reportId) => {
       : reportStore.reportDataDH.eleventh = dataEleventh;
 
       reportStore.reportDataCH.eleventh = Object.assign({}, dataEleventh);
-      reportStore.reportDataCH.eleventh.comment = '';
+      dataEleventh.verified_by_chq === null
+      ? reportStore.reportDataCH.eleventh.comment = ''
+      : reportStore.reportDataCH.eleventh.comment = dataEleventh.comment;
 
       /* 
       * Критерий 12
       */
       const dataTwelfth = (await reportPartTwoService.getReportDH('12', reportId)).data;
+      reportStore.reportForCheckCH.twelfth = dataTwelfth;
       // console.log(dataTwelfth);
       dataTwelfth.regional_version
       ? reportData.value.twelfth = JSON.parse(dataTwelfth.regional_version)
@@ -712,12 +716,15 @@ const getReportData = async (reportId) => {
       : reportStore.reportDataDH.twelfth = dataTwelfth;
 
       reportStore.reportDataCH.twelfth = Object.assign({}, dataTwelfth);
-      reportStore.reportDataCH.twelfth.comment = '';
+      dataTwelfth.verified_by_chq === null
+      ? reportStore.reportDataCH.twelfth.comment = ''
+      : reportStore.reportDataCH.twelfth.comment = dataTwelfth.comment;
 
       /* 
       * Критерий 13
       */
       const dataThirteenth = (await reportPartTwoService.getReportDH('13', reportId)).data;
+      reportStore.reportForCheckCH.thirteenth = dataThirteenth;
       // console.log(dataThirteenth);
       dataThirteenth.regional_version
       ? reportData.value.thirteenth = JSON.parse(dataThirteenth.regional_version)
@@ -728,7 +735,9 @@ const getReportData = async (reportId) => {
       : reportStore.reportDataDH.thirteenth = dataThirteenth;
 
       reportStore.reportDataCH.thirteenth = Object.assign({}, dataThirteenth);
-      reportStore.reportDataCH.thirteenth.comment = '';
+      dataThirteenth.verified_by_chq === null
+      ? reportStore.reportDataCH.thirteenth.comment = ''
+      : reportStore.reportDataCH.thirteenth.comment = dataThirteenth.comment;
 
       /* 
       * Критерий 17-19
@@ -927,17 +936,17 @@ const getReportData = async (reportId) => {
         ? reportData.value.eleventh = JSON.parse(dataEleventh.regional_version)
         : reportData.value.eleventh = dataEleventh;
 
-        if (dataEleventh.rejecting_reasons) {
-          // revisionPanels.value.push('11');
-          reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version);
+        // if (dataEleventh.rejecting_reasons) {
+        //   // revisionPanels.value.push('11');
+        //   reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version);
 
-          dataEleventh.central_version
-          ? reportStore.reportDataCH.eleventh = dataEleventh.central_version
-          : reportStore.reportDataCH.eleventh = dataEleventh;
+        //   dataEleventh.central_version
+        //   ? reportStore.reportDataCH.eleventh = dataEleventh.central_version
+        //   : reportStore.reportDataCH.eleventh = dataEleventh;
 
-          reportStore.isReportReject.eleventh = true
-          // console.log('isReportReject в род комп', reportStore.isReportReject.eleventh);
-        }
+        //   reportStore.isReportReject.eleventh = true
+        //   // console.log('isReportReject в род комп', reportStore.isReportReject.eleventh);
+        // }
       } catch (e) {
         console.log(e.message)
       }
@@ -948,17 +957,17 @@ const getReportData = async (reportId) => {
         ? reportData.value.twelfth = JSON.parse(dataTwelfth.regional_version)
         : reportData.value.twelfth = dataTwelfth;
 
-        if (dataTwelfth.rejecting_reasons) {
-          // revisionPanels.value.push('12');
-          reportStore.reportDataDH.twelfth = JSON.parse(dataTwelfth.district_version);
+        // if (dataTwelfth.rejecting_reasons) {
+        //   // revisionPanels.value.push('12');
+        //   reportStore.reportDataDH.twelfth = JSON.parse(dataTwelfth.district_version);
 
-          dataTwelfth.central_version
-          ? reportStore.reportDataCH.twelfth = dataTwelfth.central_version
-          : reportStore.reportDataCH.twelfth = dataTwelfth;
+        //   dataTwelfth.central_version
+        //   ? reportStore.reportDataCH.twelfth = dataTwelfth.central_version
+        //   : reportStore.reportDataCH.twelfth = dataTwelfth;
 
-          reportStore.isReportReject.twelfth = true
-          // console.log('isReportReject в род комп', reportStore.isReportReject.twelfth);
-        }
+        //   reportStore.isReportReject.twelfth = true
+        //   // console.log('isReportReject в род комп', reportStore.isReportReject.twelfth);
+        // }
       } catch (e) {
         console.log(e.message)
       }
@@ -969,17 +978,17 @@ const getReportData = async (reportId) => {
         ? reportData.value.thirteenth = JSON.parse(dataThirteenth.regional_version)
         : reportData.value.thirteenth = dataThirteenth;
 
-        if (dataThirteenth.rejecting_reasons) {
-          // revisionPanels.value.push('13');
-          reportStore.reportDataDH.thirteenth = JSON.parse(dataThirteenth.district_version);
+        // if (dataThirteenth.rejecting_reasons) {
+        //   // revisionPanels.value.push('13');
+        //   reportStore.reportDataDH.thirteenth = JSON.parse(dataThirteenth.district_version);
 
-          dataThirteenth.central_version
-          ? reportStore.reportDataCH.thirteenth = dataThirteenth.central_version
-          : reportStore.reportDataCH.thirteenth = dataThirteenth;
+        //   dataThirteenth.central_version
+        //   ? reportStore.reportDataCH.thirteenth = dataThirteenth.central_version
+        //   : reportStore.reportDataCH.thirteenth = dataThirteenth;
 
-          reportStore.isReportReject.thirteenth = true
-          // console.log('isReportReject в род комп', reportStore.isReportReject.thirteenth);
-        }
+        //   reportStore.isReportReject.thirteenth = true
+        //   // console.log('isReportReject в род комп', reportStore.isReportReject.thirteenth);
+        // }
       } catch (e) {
         console.log(e.message)
       }
@@ -1482,15 +1491,15 @@ const sendReport = async () => {
         await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.tenth.second, '10', '2', route.query.reportId, true, reportStore.returnReport.tenth.second);
       }
 
-      if (reportStore.reportDataCH.eleventh.verified_by_chq === null) {
+      if (reportStore.reportForCheckCH.eleventh.verified_by_chq === null) {
         await reportPartTwoService.sendReportCH(reportDataCH.value.eleventh, '11', route.query.reportId, true, reportStore.returnReport.eleventh);
       }
 
-      if (reportStore.reportDataCH.twelfth.verified_by_chq === null) {
+      if (reportStore.reportForCheckCH.twelfth.verified_by_chq === null) {
         await reportPartTwoService.sendReportCH(reportDataCH.value.twelfth, '12', route.query.reportId, true, reportStore.returnReport.twelfth);
       }
 
-      if (reportStore.reportDataCH.thirteenth.verified_by_chq === null) {
+      if (reportStore.reportForCheckCH.thirteenth.verified_by_chq === null) {
         await reportPartTwoService.sendReportCH(reportDataCH.value.thirteenth, '13', route.query.reportId, true, reportStore.returnReport.thirteenth);
       }
 

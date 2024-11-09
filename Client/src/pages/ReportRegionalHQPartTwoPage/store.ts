@@ -98,6 +98,9 @@ export const useReportPartTwoStore = defineStore('report-two', {
                 first: null,
                 second: null,
             },
+            eleventh: null,
+            twelfth: null,
+            thirteenth: null,
             sixteenth: null,
         },
 
