@@ -439,8 +439,8 @@ watchEffect(async () => {
     isSent.value = props.data.is_sent;
 
     isFirstSent.value = reportStore.isReportReject.first && !props.data.central_version;
+    // console.log('isFirstSent:::: FIRST_1', isFirstSent.value)
   }
-  console.log('isFirstSent:::: FIRST_1', isFirstSent.value)
 
   // Мапинг данных для отчета эксперта ОШ
   if (reportStore.reportDataDH.first && props.districtExpert) {
@@ -450,6 +450,8 @@ watchEffect(async () => {
     fileNameDH.value = reportStore.reportDataDHFile.first ? reportStore.reportDataDHFile.first.name : null;
     fileTypeDH.value = reportStore.reportDataDHFile.first ? reportStore.reportDataDHFile.first.type.split('/').at(-1) : null;
     fileSizeDH.value = reportStore.reportDataDHFile.first ? reportStore.reportDataDHFile.first.size / Math.pow(1024, 2) : null;
+
+    // row.value = reportStore.reportDataDH.first.comment ? reportStore.reportDataDH.first.comment.split('\n').length : 1;
   }
 
   // Мапинг данных для отчета эксперта ЦШ
@@ -513,18 +515,20 @@ watchEffect(async () => {
 
 watchPostEffect(() => {
   if (props.data) {
-    // isFirstSent.value = false;
+    isFirstSent.value = false;
     firstPanelData.value.comment = props.data.comment;
     firstPanelData.value.amount_of_money = props.data.amount_of_money;
     firstPanelData.value.scan_file = props.data.scan_file || '';
     firstPanelData.value.file_type = props.data.file_type || '';
     firstPanelData.value.file_size = props.data.file_size || '';
     isSent.value = props.data.is_sent;
+
+    isFirstSent.value = reportStore.isReportReject.first && !props.data.central_version;
   }
 
-  if (reportStore.reportForCheckCH.first && props.centralExpert) {
-    row.value = reportStore.reportForCheckCH.first.comment.split('\n').length || 1;
-  }
+  // if (reportStore.reportForCheckCH.first && props.centralExpert) {
+  //   row.value = reportStore.reportForCheckCH.first.comment ? reportStore.reportForCheckCH.first.comment.split('\n').length : 1;
+  // }
 });
 
 watch(firstPanelDataDH.value, () => {

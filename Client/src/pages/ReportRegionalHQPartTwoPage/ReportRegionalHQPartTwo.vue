@@ -1356,11 +1356,11 @@ const sendReport = async () => {
     }
   }
 
-  if (districtExpert.value && checkEmptyFieldsDH(reportStore.reportDataDH, isErrorPanel)) {
+  if (districtExpert.value  && checkEmptyFieldsDH(reportStore.reportDataDH, isErrorPanel)) {
     blockSendButton.value = true;
     preloader.value = true;
     try {
-      console.log('dataSiDh', reportDataDH.value.six, reportDataDH.value.first)
+       console.log('dataSiDh', reportDataDH.value.six, reportDataDH.value.first)
       if (!reportData.value.first.verified_by_dhq) {
         await reportPartTwoService.sendReportDH(reportDataDH.value.first, '1', route.query.reportId, true)
       }
@@ -1373,20 +1373,32 @@ const sendReport = async () => {
         await reportPartTwoService.sendReportDH(reportDataDH.value.fifth, '5', route.query.reportId, true)
       }
 
-      for (let i in reportData.value.six) {
-        if (!reportData.value.six[i]?.verified_by_dhq) {
-          console.log('send6', reportDataDH.value.six[i])
-          await reportPartTwoService.sendReportDHMultiply(reportDataDH.value.six[i], '6', i, route.query.reportId);
+      for (const [index, item] of Object.entries(reportData.value.six)) {
+        if (item && item.verified_by_dhq !== true) {
+          console.log(`Sending report for item 6-${index}:`, item);
+          try {
+            const response = await reportPartTwoService.sendReportDHMultiply(reportStore.reportDataDH.six[item], '6', index, route.query.reportId);
+            console.log(`Successfully sent report for item 6-${index}`);
+          } catch (error) {
+            console.error(`Error sending report for item 6-${index}:`, error);
+          }
+        } else {
+          console.log(`Skipping item 6-${index} as it's already verified or doesn't exist`);
         }
       }
-      for (let i in reportData.value.ninth) {
-
-        if (!reportData.value.ninth[i]?.verified_by_dhq) {
-          console.log('send9', reportDataDH.value.ninth[i])
-          await reportPartTwoService.sendReportDHMultiply(reportDataDH.value.ninth[i], '9', i, route.query.reportId, true);
+      for (const [index, item] of Object.entries(reportData.value.ninth)) {
+        if (item && item.verified_by_dhq !== true) {
+          console.log(`Sending report for item 9-${index}:`, item);
+          try {
+            const response = await reportPartTwoService.sendReportDHMultiply(reportStore.reportDataDH.ninth[item], '9', index, route.query.reportId, true);
+            console.log(`Successfully sent report for item 9-${index}`);
+          } catch (error) {
+            console.error(`Error sending report for item 9-${index}:`, error);
+          }
+        } else {
+          console.log(`Skipping item 9-${index} as it's already verified or doesn't exist`);
         }
       }
-
       if (!reportData.value.tenth.first.verified_by_dhq) {
         await reportPartTwoService.sendReportDHMultiply(reportDataDH.value.tenth.first, '10', '1', route.query.reportId, true)
       }
