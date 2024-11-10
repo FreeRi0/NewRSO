@@ -1059,11 +1059,27 @@ const getReportData = async (reportId) => {
         // }
 
         const dataSixteenth = (await reportPartTwoService.getReport('16')).data;
-        if (!dataSixteenth.regional_version) {
+        // if (!dataSixteenth.regional_version) {
+        //   reportData.value.sixteenth = dataSixteenth;
+        // } else {
+        //   reportData.value.sixteenth = JSON.parse(dataSixteenth.regional_version);
+        // }
+
+        if (!dataSixteenth.regional_version && !dataSixteenth.central_version) {
           reportData.value.sixteenth = dataSixteenth;
         } else {
-          reportData.value.sixteenth = JSON.parse(dataSixteenth.regional_version);
+          if (dataSixteenth.rejecting_reasons) {
+            reportStore.isReportReject.sixteenth = true;
+            reportStore.reportReject.sixteenth = dataSixteenth;
+          }
+
+          if (dataSixteenth.central_version) {
+            reportData.value.sixteenth = dataSixteenth;
+          } else {
+            reportData.value.sixteenth = JSON.parse(dataSixteenth.regional_version);
+          }
         }
+
         if (reportData.value.sixteenth.is_sent) {
           blockSendButton.value = true;
           blockEditFirstReport.value = true;
