@@ -133,9 +133,16 @@
               &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <tenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                @getDataDHFirst="setDataDH" @getDataDHSecond="setDataDH" @getDataCHFirst="setDataCH"
-                @getDataCHSecond="setDataCH" :data="reportData.tenth" :is-error-panel="isErrorPanel.tenth" />
+              <tenth-panel
+                :districtExpert="districtExpert"
+                :centralExpert="centralExpert"
+                @get-data="setData"
+                @getDataDHFirst="setDataDH"
+                @getDataDHSecond="setDataDH"
+                @getDataCHFirst="setDataCH"
+                @getDataCHSecond="setDataCH"
+                :data="reportData.tenth"
+                :is-error-panel="isErrorPanel.tenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -924,10 +931,24 @@ const getReportData = async (reportId) => {
       try {
         // reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
         const dataTenthFirst = (await reportPartTwoService.getMultipleReport('10', '1')).data;
-        if (!dataTenthFirst.regional_version) {
+        // if (!dataTenthFirst.regional_version) {
+        //   reportData.value.tenth.first = dataTenthFirst;
+        // } else {
+        //   reportData.value.tenth.first = JSON.parse(dataTenthFirst.regional_version);
+        // }
+        if (!dataTenthFirst.regional_version && !dataTenthFirst.central_version) {
           reportData.value.tenth.first = dataTenthFirst;
         } else {
-          reportData.value.tenth.first = JSON.parse(dataTenthFirst.regional_version);
+          if (dataTenthFirst.rejecting_reasons) {
+            reportStore.isReportReject.tenth.first = true;
+            reportStore.reportReject.tenth.first = dataTenthFirst;
+          }
+
+          if (dataTenthFirst.central_version) {
+            reportData.value.tenth.first = dataTenthFirst;
+          } else {
+            reportData.value.tenth.first = JSON.parse(dataTenthFirst.regional_version);
+          }
         }
       } catch (e) {
         console.log(e.message)
@@ -935,10 +956,24 @@ const getReportData = async (reportId) => {
       try {
         // reportData.value.tenth.second = (await reportPartTwoService.getMultipleReport('10', '2')).data;
         const dataTenthSecond = (await reportPartTwoService.getMultipleReport('10', '2')).data;
-        if (!dataTenthSecond.regional_version) {
+        // if (!dataTenthSecond.regional_version) {
+        //   reportData.value.tenth.second = dataTenthSecond;
+        // } else {
+        //   reportData.value.tenth.second = JSON.parse(dataTenthSecond.regional_version);
+        // }
+        if (!dataTenthSecond.regional_version && !dataTenthSecond.central_version) {
           reportData.value.tenth.second = dataTenthSecond;
         } else {
-          reportData.value.tenth.second = JSON.parse(dataTenthSecond.regional_version);
+          if (dataTenthSecond.rejecting_reasons) {
+            reportStore.isReportReject.tenth.second = true;
+            reportStore.reportReject.tenth.second = dataTenthSecond;
+          }
+
+          if (dataTenthSecond.central_version) {
+            reportData.value.tenth.second = dataTenthSecond;
+          } else {
+            reportData.value.tenth.second = JSON.parse(dataTenthSecond.regional_version);
+          }
         }
       } catch (e) {
         console.log(e.message)
