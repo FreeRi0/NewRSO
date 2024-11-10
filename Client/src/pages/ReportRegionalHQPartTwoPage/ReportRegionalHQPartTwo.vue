@@ -90,9 +90,10 @@
               мероприятиях и&nbsp;проектах (в&nbsp;том числе и&nbsp;трудовых) &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <sixth-panel @get-data="setData" @get-data-DH="setDataDH" :items="six_items" @getId="setId"
-                @getPanelNumber="setPanelNumber" :district-headquarter-commander="districtExpert" :data="reportData.six"
-                :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.six" />
+              <sixth-panel @get-data="setData" @get-data-DH="setDataDH" @get-data-CH="setDataCH" :items="six_items"
+                @getId="setId" @getPanelNumber="setPanelNumber" :district-headquarter-commander="districtExpert"
+                :data="reportData.six" :central-headquarter-commander="centralExpert"
+                :is-error-panel="isErrorPanel.six" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -122,9 +123,10 @@
               9. Организация обязательных общесистемных мероприятий РСО на&nbsp;региональном уровне &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <ninth-panel @get-data="setData" @get-data-DH="setDataDH" @getId="setId" @getPanelNumber="setPanelNumber"
-                :items="ninth_items" :district-headquarter-commander="districtExpert" :data="reportData.ninth"
-                :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.ninth" />
+              <ninth-panel @get-data="setData" @get-data-DH="setDataDH" @getId="setId" @get-data-CH="setDataCH"
+                @getPanelNumber="setPanelNumber" :items="ninth_items" :district-headquarter-commander="districtExpert"
+                :data="reportData.ninth" :central-headquarter-commander="centralExpert"
+                :is-error-panel="isErrorPanel.ninth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -133,20 +135,13 @@
               &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <tenth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                @getDataDHFirst="setDataDH"
-                @getDataDHSecond="setDataDH"
-                @getDataCHFirst="setDataCH"
-                @getDataCHSecond="setDataCH"
-                :data="reportData.tenth"
-                :is-error-panel="isErrorPanel.tenth" />
+              <tenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                @getDataDHFirst="setDataDH" @getDataDHSecond="setDataDH" @getDataCHFirst="setDataCH"
+                @getDataCHSecond="setDataCH" :data="reportData.tenth" :is-error-panel="isErrorPanel.tenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
-          <!-- <v-expansion-panel v-if="
+            <!-- <v-expansion-panel v-if="
             (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) || 
             (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && picked == 'Просмотр отправленного отчета') || 
             (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && picked == 'Доработка' && revisionPanels.includes('11'))"> -->
@@ -160,7 +155,7 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
-          <!-- <v-expansion-panel v-if="
+            <!-- <v-expansion-panel v-if="
             (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) || 
             (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && picked == 'Просмотр отправленного отчета') || 
             (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && picked == 'Доработка' && revisionPanels.includes('12'))
@@ -175,7 +170,7 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
-          <!-- <v-expansion-panel v-if="
+            <!-- <v-expansion-panel v-if="
             (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) || 
             (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && picked == 'Просмотр отправленного отчета') || 
             (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && picked == 'Доработка' && revisionPanels.includes('13'))
@@ -589,11 +584,22 @@ const getMultiplyData = async (reportId) => {
       // }
     } else if (centralExpert.value) {
       console.log('ch')
-      reportData.value.six[result.id] = JSON.parse(result.data?.regional_version);
-      // console.log('данные РШ для ЦШ', reportData.value.six[result.id]);//---------------------------------
-      reportStore.reportDataDH.six[result.id] = result.data;
+      reportStore.reportForCheckCH.six[result.id] = result.data;
+      if (result.data.regional_version) {
+        reportData.value.six[result.id] = JSON.parse(result.data?.regional_version);
+      } else {
+        reportData.value.six[result.id] = result.data;
+      }
+      if (result.data.district_version) {
+        reportStore.reportDataDH.six[result.id] = JSON.patse(result.data.district_version);
+      } else {
+        reportStore.reportDataDH.six[result.id] = result.data
+      }
+
       reportStore.reportDataCH.six[result.id] = Object.assign({}, result.data);
-      reportStore.reportDataCH.six[result.id].comment = '';
+      result.data.verified_by_chq === null
+        ? reportStore.reportDataCH.six[result.id].comment = ''
+        : reportStore.reportDataCH.six[result.id].comment = result.data.comment;
     } else {
       reportData.value.six[result.id] = result.data;
       if (reportData.value.six[result.id]?.regional_version) {
@@ -617,11 +623,22 @@ const getMultiplyData = async (reportId) => {
       //   error: false,
       // }
     } else if (centralExpert.value) {
-      reportData.value.ninth[result.id] = JSON.parse(result.data?.regional_version);
-      // console.log('данные РШ для ЦШ', reportData.value.ninth[result.id]);
-      reportStore.reportDataDH.ninth[result.id] = result.data;
+      reportStore.reportForCheckCH.ninth[result.id] = result.data;
+      if (result.data.regional_version) {
+        reportData.value.ninth[result.id] = JSON.parse(result.data?.regional_version);
+      } else {
+        reportData.value.ninth[result.id] = result.data;
+      }
+      if (result.data.district_version) {
+        reportStore.reportDataDH.ninth[result.id] = JSON.patse(result.data.district_version);
+      } else {
+        reportStore.reportDataDH.ninth[result.id] = result.data
+      }
+
       reportStore.reportDataCH.ninth[result.id] = Object.assign({}, result.data);
-      reportStore.reportDataCH.ninth[result.id].comment = '';
+      result.data.verified_by_chq === null
+        ? reportStore.reportDataCH.ninth[result.id].comment = ''
+        : reportStore.reportDataCH.ninth[result.id].comment = result.data.comment;
     }
     else {
       reportData.value.ninth[result.id] = result.data;
@@ -653,7 +670,6 @@ const getReportData = async (reportId) => {
       reportStore.reportForCheckCH.fourth = (await reportPartTwoService.getReportDH('4', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.fourth.events = (await reportPartTwoService.getReportDH('4', reportId)).data.events;
-
       /*
       * Критерий 5
       */
@@ -696,17 +712,17 @@ const getReportData = async (reportId) => {
       reportStore.reportForCheckCH.eleventh = dataEleventh;
       // console.log(dataEleventh);
       dataEleventh.regional_version
-      ? reportData.value.eleventh = JSON.parse(dataEleventh.regional_version)
-      : reportData.value.eleventh = dataEleventh;
+        ? reportData.value.eleventh = JSON.parse(dataEleventh.regional_version)
+        : reportData.value.eleventh = dataEleventh;
 
-      dataEleventh.district_version 
-      ? reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version)
-      : reportStore.reportDataDH.eleventh = dataEleventh;
+      dataEleventh.district_version
+        ? reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version)
+        : reportStore.reportDataDH.eleventh = dataEleventh;
 
       reportStore.reportDataCH.eleventh = Object.assign({}, dataEleventh);
       dataEleventh.verified_by_chq === null
-      ? reportStore.reportDataCH.eleventh.comment = ''
-      : reportStore.reportDataCH.eleventh.comment = dataEleventh.comment;
+        ? reportStore.reportDataCH.eleventh.comment = ''
+        : reportStore.reportDataCH.eleventh.comment = dataEleventh.comment;
 
       /* 
       * Критерий 12
@@ -715,17 +731,17 @@ const getReportData = async (reportId) => {
       reportStore.reportForCheckCH.twelfth = dataTwelfth;
       // console.log(dataTwelfth);
       dataTwelfth.regional_version
-      ? reportData.value.twelfth = JSON.parse(dataTwelfth.regional_version)
-      : reportData.value.twelfth = dataTwelfth;
+        ? reportData.value.twelfth = JSON.parse(dataTwelfth.regional_version)
+        : reportData.value.twelfth = dataTwelfth;
 
       dataTwelfth.district_version
-      ? reportStore.reportDataDH.twelfth = JSON.parse(dataTwelfth.district_version)
-      : reportStore.reportDataDH.twelfth = dataTwelfth;
+        ? reportStore.reportDataDH.twelfth = JSON.parse(dataTwelfth.district_version)
+        : reportStore.reportDataDH.twelfth = dataTwelfth;
 
       reportStore.reportDataCH.twelfth = Object.assign({}, dataTwelfth);
       dataTwelfth.verified_by_chq === null
-      ? reportStore.reportDataCH.twelfth.comment = ''
-      : reportStore.reportDataCH.twelfth.comment = dataTwelfth.comment;
+        ? reportStore.reportDataCH.twelfth.comment = ''
+        : reportStore.reportDataCH.twelfth.comment = dataTwelfth.comment;
 
       /* 
       * Критерий 13
@@ -734,17 +750,17 @@ const getReportData = async (reportId) => {
       reportStore.reportForCheckCH.thirteenth = dataThirteenth;
       // console.log(dataThirteenth);
       dataThirteenth.regional_version
-      ? reportData.value.thirteenth = JSON.parse(dataThirteenth.regional_version)
-      : reportData.value.thirteenth = dataThirteenth;
+        ? reportData.value.thirteenth = JSON.parse(dataThirteenth.regional_version)
+        : reportData.value.thirteenth = dataThirteenth;
 
       dataThirteenth.district_version
-      ? reportStore.reportDataDH.thirteenth = JSON.parse(dataThirteenth.district_version)
-      : reportStore.reportDataDH.thirteenth = dataThirteenth;
+        ? reportStore.reportDataDH.thirteenth = JSON.parse(dataThirteenth.district_version)
+        : reportStore.reportDataDH.thirteenth = dataThirteenth;
 
       reportStore.reportDataCH.thirteenth = Object.assign({}, dataThirteenth);
       dataThirteenth.verified_by_chq === null
-      ? reportStore.reportDataCH.thirteenth.comment = ''
-      : reportStore.reportDataCH.thirteenth.comment = dataThirteenth.comment;
+        ? reportStore.reportDataCH.thirteenth.comment = ''
+        : reportStore.reportDataCH.thirteenth.comment = dataThirteenth.comment;
 
       /* 
       * Критерий 17-19
@@ -982,16 +998,16 @@ const getReportData = async (reportId) => {
         const dataEleventh = (await reportPartTwoService.getReport('11')).data;
         console.log(dataEleventh);
         dataEleventh.regional_version
-        ? reportData.value.eleventh = JSON.parse(dataEleventh.regional_version)
-        : reportData.value.eleventh = dataEleventh;
+          ? reportData.value.eleventh = JSON.parse(dataEleventh.regional_version)
+          : reportData.value.eleventh = dataEleventh;
 
         // if (dataEleventh.rejecting_reasons) {
         //   // revisionPanels.value.push('11');
         //   reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version);
 
-        //   dataEleventh.central_version
-        //   ? reportStore.reportDataCH.eleventh = dataEleventh.central_version
-        //   : reportStore.reportDataCH.eleventh = dataEleventh;
+        dataEleventh.central_version
+          ? reportStore.reportDataCH.eleventh = dataEleventh.central_version
+          : reportStore.reportDataCH.eleventh = dataEleventh;
 
         //   reportStore.isReportReject.eleventh = true
         //   // console.log('isReportReject в род комп', reportStore.isReportReject.eleventh);
@@ -1003,16 +1019,16 @@ const getReportData = async (reportId) => {
         const dataTwelfth = (await reportPartTwoService.getReport('12')).data;
         console.log(dataTwelfth);
         dataTwelfth.regional_version
-        ? reportData.value.twelfth = JSON.parse(dataTwelfth.regional_version)
-        : reportData.value.twelfth = dataTwelfth;
+          ? reportData.value.twelfth = JSON.parse(dataTwelfth.regional_version)
+          : reportData.value.twelfth = dataTwelfth;
 
         // if (dataTwelfth.rejecting_reasons) {
         //   // revisionPanels.value.push('12');
         //   reportStore.reportDataDH.twelfth = JSON.parse(dataTwelfth.district_version);
 
-        //   dataTwelfth.central_version
-        //   ? reportStore.reportDataCH.twelfth = dataTwelfth.central_version
-        //   : reportStore.reportDataCH.twelfth = dataTwelfth;
+        dataTwelfth.central_version
+          ? reportStore.reportDataCH.twelfth = dataTwelfth.central_version
+          : reportStore.reportDataCH.twelfth = dataTwelfth;
 
         //   reportStore.isReportReject.twelfth = true
         //   // console.log('isReportReject в род комп', reportStore.isReportReject.twelfth);
@@ -1024,16 +1040,16 @@ const getReportData = async (reportId) => {
         const dataThirteenth = (await reportPartTwoService.getReport('13')).data;
         console.log(dataThirteenth);
         dataThirteenth.regional_version
-        ? reportData.value.thirteenth = JSON.parse(dataThirteenth.regional_version)
-        : reportData.value.thirteenth = dataThirteenth;
+          ? reportData.value.thirteenth = JSON.parse(dataThirteenth.regional_version)
+          : reportData.value.thirteenth = dataThirteenth;
 
         // if (dataThirteenth.rejecting_reasons) {
         //   // revisionPanels.value.push('13');
         //   reportStore.reportDataDH.thirteenth = JSON.parse(dataThirteenth.district_version);
 
-        //   dataThirteenth.central_version
-        //   ? reportStore.reportDataCH.thirteenth = dataThirteenth.central_version
-        //   : reportStore.reportDataCH.thirteenth = dataThirteenth;
+        dataThirteenth.central_version
+          ? reportStore.reportDataCH.thirteenth = dataThirteenth.central_version
+          : reportStore.reportDataCH.thirteenth = dataThirteenth;
 
         //   reportStore.isReportReject.thirteenth = true
         //   // console.log('isReportReject в род комп', reportStore.isReportReject.thirteenth);
@@ -1223,6 +1239,7 @@ const setDataCH = (data, panel, number) => {
       break;
     case 6:
       reportDataCH.value.six[number] = data;
+      console.log('6 sss', ...reportDataCH.value.six[number])
       break;
     case 9:
       reportDataCH.value.ninth[number] = data;
@@ -1414,11 +1431,11 @@ const sendReport = async () => {
     }
   }
 
-  if (districtExpert.value  && checkEmptyFieldsDH(reportStore.reportDataDH, isErrorPanel)) {
+  if (districtExpert.value && checkEmptyFieldsDH(reportStore.reportDataDH, isErrorPanel)) {
     blockSendButton.value = true;
     preloader.value = true;
     try {
-       console.log('dataSiDh', reportDataDH.value.six, reportDataDH.value.first)
+      console.log('dataSiDh', reportDataDH.value.six, reportDataDH.value.first)
       if (!reportData.value.first.verified_by_dhq) {
         await reportPartTwoService.sendReportDH(reportDataDH.value.first, '1', route.query.reportId, true)
       }
@@ -1510,6 +1527,9 @@ const sendReport = async () => {
     blockSendButton.value = true;
     // if (checkEmptyFieldsDH(reportStore.reportDataCH, isErrorPanel)) {
     preloader.value = true;
+    console.log('chc6', reportStore.reportDataCH.six, reportStore.returnReport.six)
+    console.log('chc9', reportStore.reportDataCH.ninth, reportStore.returnReport.ninth)
+
     try {
       if (reportStore.reportForCheckCH.first.verified_by_chq === null) {
         await reportPartTwoService.sendReportCH(reportDataCH.value.first, '1', route.query.reportId, true, reportStore.returnReport.first);
@@ -1522,9 +1542,10 @@ const sendReport = async () => {
       if (reportStore.reportForCheckCH.fifth.verified_by_chq === null) {
         await reportPartTwoService.sendReportCH(reportDataCH.value.fifth, '5', route.query.reportId, true, reportStore.returnReport.fifth);
       }
+
       for (let i in reportStore.reportForCheckCH.six) {
         if (reportStore.reportForCheckCH.six[i].verified_by_chq === null) {
-          await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.six[i], '6', i, route.query.reportId, reportStore.returnReport.six[i]);
+          await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.six[i], '6', i, route.query.reportId, false, reportStore.returnReport.six[i]);
         }
       }
       for (let i in reportStore.reportForCheckCH.ninth) {
