@@ -8,7 +8,7 @@
         <p class="preloader_info">{{ preloader_text }}</p>
       </div>
       <div v-else>
-        <!-- <div class="d-flex mt-9 mb-9 active-tabs" v-if="!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && isRevision">
+        <div class="d-flex mt-9 mb-9 active-tabs" v-if="!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && isRevision">
           <button class="contributorBtn" 
             :class="{ active: picked === tab.name }" 
             v-for="tab in tabs"
@@ -16,7 +16,7 @@
             @click="picked = tab.name">
             {{ tab.name }}
           </button>
-        </div> -->
+        </div>
         <div class="download-item">
           <SvgIcon iconName="download" />
           <button type="button" id="download" class="download-item__report"
@@ -35,7 +35,7 @@
                 :is-error-panel="isErrorPanel.first" :blockEditFirstReport="blockEditFirstReport" />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel>
+          <v-expansion-panel v-if="showPanels('2', picked, revisionPanels)">
             <v-expansion-panel-title>
               2. Отношение численности членов РО&nbsp;РСО к&nbsp;численности студентов
               очной формы обучения субъекта Российской Федерации, обучающихся в&nbsp;профессиональных образовательных
@@ -49,7 +49,7 @@
                 text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel>
+          <v-expansion-panel v-if="showPanels('3', picked, revisionPanels)">
             <v-expansion-panel-title>
               3. Прирост численности членов РО&nbsp;РСО относительно количества членов в&nbsp;соответствии
               с&nbsp;отчетом РО&nbsp;РСО за&nbsp;2023&nbsp;г.
@@ -95,7 +95,7 @@
                 :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.six" />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel>
+          <v-expansion-panel v-if="showPanels('7', picked, revisionPanels)">
             <v-expansion-panel-title>
               7. Победители студенческих отрядов РО&nbsp;РСО во&nbsp;всероссийских (международных) проектах
               и&nbsp;конкурсах &laquo;К&raquo;
@@ -105,7 +105,7 @@
                 text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel>
+          <v-expansion-panel v-if="showPanels('8', picked, revisionPanels)">
             <v-expansion-panel-title>
               8. Количество упоминаний в&nbsp;СМИ о&nbsp;прошедших творческих, добровольческих и&nbsp;патриотических
               мероприятиях
@@ -145,11 +145,7 @@
                 :is-error-panel="isErrorPanel.tenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel>
-          <!-- <v-expansion-panel v-if="
-            (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) || 
-            (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && picked == 'Просмотр отправленного отчета') || 
-            (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && picked == 'Доработка' && revisionPanels.includes('11'))"> -->
+          <v-expansion-panel v-if="showPanels('11', picked, revisionPanels)">
             <v-expansion-panel-title :class="isErrorPanel.eleventh ? 'visible-error' : ''">
               11. Активность РО&nbsp;РСО в&nbsp;социальных сетях &laquo;К&raquo;
             </v-expansion-panel-title>
@@ -159,12 +155,7 @@
                 :is-error-panel="isErrorPanel.eleventh" />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel>
-          <!-- <v-expansion-panel v-if="
-            (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) || 
-            (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && picked == 'Просмотр отправленного отчета') || 
-            (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && picked == 'Доработка' && revisionPanels.includes('12'))
-          "> -->
+          <v-expansion-panel v-if="showPanels('12', picked, revisionPanels)">
             <v-expansion-panel-title :class="isErrorPanel.twelfth ? 'visible-error' : ''">
               12. Объем средств, собранных бойцами РО&nbsp;РСО во&nbsp;Всероссийском дне ударного труда
             </v-expansion-panel-title>
@@ -174,12 +165,7 @@
                 :is-error-panel="isErrorPanel.twelfth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel>
-          <!-- <v-expansion-panel v-if="
-            (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) || 
-            (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && picked == 'Просмотр отправленного отчета') || 
-            (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && picked == 'Доработка' && revisionPanels.includes('13'))
-          "> -->
+          <v-expansion-panel v-if="showPanels('13', picked, revisionPanels)">
             <v-expansion-panel-title :class="isErrorPanel.thirteenth ? 'visible-error' : ''">
               13. Охват членов РО&nbsp;РСО, принявших участие во&nbsp;Всероссийском дне ударного труда &laquo;К&raquo;
             </v-expansion-panel-title>
@@ -189,7 +175,7 @@
                 :is-error-panel="isErrorPanel.thirteenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel>
+          <v-expansion-panel v-if="showPanels('14', picked, revisionPanels)">
             <v-expansion-panel-title>
               14. Отношение объема средств, собранных бойцами РО&nbsp;РСО во&nbsp;Всероссийском дне ударного труда
               к&nbsp;количеству членов
@@ -200,7 +186,7 @@
                 text="Показатель рассчитывается автоматически на&nbsp;основе данных из&nbsp;12&nbsp;и&nbsp;13&nbsp;показателей." />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel>
+          <v-expansion-panel v-if="showPanels('15', picked, revisionPanels)">
             <v-expansion-panel-title>
               15. Исполнительская дисциплина РО&nbsp;РСО, соблюдение условий охраны труда на&nbsp;трудовых проектах РСО,
               наличие проблемной неурегулированной задолженности по&nbsp;выплате заработной платы перед бойцами РСО
@@ -224,7 +210,7 @@
                 :is-error-panel="isErrorPanel.sixteenth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel>
+          <v-expansion-panel v-if="showPanels('17', picked, revisionPanels)">
             <v-expansion-panel-title>
               17. Дислокация студенческих отрядов РО&nbsp;РСО
             </v-expansion-panel-title>
@@ -233,7 +219,7 @@
                 :data="reportData.seventeenth" :is-sent="isSentLastIndex" />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel>
+          <v-expansion-panel v-if="showPanels('18', picked, revisionPanels)">
             <v-expansion-panel-title>
               18. Количество научных работ и&nbsp;публикаций по&nbsp;теме&nbsp;СО, выпущенных в&nbsp;текущем году
             </v-expansion-panel-title>
@@ -242,7 +228,7 @@
                 :data="reportData.eighteenth" :is-sent="isSentLastIndex" />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel>
+          <v-expansion-panel v-if="showPanels('19', picked, revisionPanels)">
             <v-expansion-panel-title>
               19. Трудоустройство
             </v-expansion-panel-title>
@@ -285,18 +271,22 @@ import { useRoute, useRouter } from "vue-router";
 import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
 // import { checkEmptyFieldsDH } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 import swal from '@/library/sweetalert2/sweetalert2.esm.all.min.js';
-import { checkEmptyFieldsDH } from "@pages/ReportRegionalHQPartTwoPage/Helpers.js";
-// const picked = ref('Просмотр отправленного отчета');
-// const tabs = ref([
-//   {
-//     id: '1',
-//     name: 'Просмотр отправленного отчета',
-//   },
-//   {
-//     id: '2',
-//     name: 'Доработка',
-//   },
-// ]);
+import { 
+  checkEmptyFieldsDH,
+  showPanels,
+} from "@pages/ReportRegionalHQPartTwoPage/Helpers.js";
+
+const picked = ref('Просмотр отправленного отчета');
+const tabs = ref([
+  {
+    id: '1',
+    name: 'Просмотр отправленного отчета',
+  },
+  {
+    id: '2',
+    name: 'Доработка',
+  },
+]);
 
 const reportStore = useReportPartTwoStore();
 
@@ -632,8 +622,9 @@ const getMultiplyData = async (reportId) => {
   });
 }
 
-// const revisionPanels = ref([]);
-// const isRevision = ref(false);
+const revisionPanels = ref([]);
+const isRevision = ref(false);
+const isTabsForRevision = ref(false);
 
 const getReportData = async (reportId) => {
   try {
@@ -985,17 +976,18 @@ const getReportData = async (reportId) => {
         ? reportData.value.eleventh = JSON.parse(dataEleventh.regional_version)
         : reportData.value.eleventh = dataEleventh;
 
-        // if (dataEleventh.rejecting_reasons) {
-        //   // revisionPanels.value.push('11');
-        //   reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version);
+        // Проверка на причины отклонений отчета и вывод табов для РО
+        if (dataEleventh.rejecting_reasons) {
+          revisionPanels.value.push('11');
+          reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version);
 
-        //   dataEleventh.central_version
-        //   ? reportStore.reportDataCH.eleventh = dataEleventh.central_version
-        //   : reportStore.reportDataCH.eleventh = dataEleventh;
+          dataEleventh.central_version
+          ? reportStore.reportDataCH.eleventh = dataEleventh.central_version
+          : reportStore.reportDataCH.eleventh = dataEleventh;
 
-        //   reportStore.isReportReject.eleventh = true
-        //   // console.log('isReportReject в род комп', reportStore.isReportReject.eleventh);
-        // }
+          reportStore.isReportReject.eleventh = isTabsForRevision.value;
+          // console.log('isReportReject в род комп', reportStore.isReportReject.eleventh);
+        }
       } catch (e) {
         console.log(e.message)
       }
@@ -1006,17 +998,18 @@ const getReportData = async (reportId) => {
         ? reportData.value.twelfth = JSON.parse(dataTwelfth.regional_version)
         : reportData.value.twelfth = dataTwelfth;
 
-        // if (dataTwelfth.rejecting_reasons) {
-        //   // revisionPanels.value.push('12');
-        //   reportStore.reportDataDH.twelfth = JSON.parse(dataTwelfth.district_version);
+        // Проверка на причины отклонений отчета и вывод табов для РО
+        if (dataTwelfth.rejecting_reasons) {
+          revisionPanels.value.push('12');
+          reportStore.reportDataDH.twelfth = JSON.parse(dataTwelfth.district_version);
 
-        //   dataTwelfth.central_version
-        //   ? reportStore.reportDataCH.twelfth = dataTwelfth.central_version
-        //   : reportStore.reportDataCH.twelfth = dataTwelfth;
+          dataTwelfth.central_version
+          ? reportStore.reportDataCH.twelfth = dataTwelfth.central_version
+          : reportStore.reportDataCH.twelfth = dataTwelfth;
 
-        //   reportStore.isReportReject.twelfth = true
-        //   // console.log('isReportReject в род комп', reportStore.isReportReject.twelfth);
-        // }
+          reportStore.isReportReject.twelfth = isTabsForRevision.value;
+          // console.log('isReportReject в род комп', reportStore.isReportReject.twelfth);
+        }
       } catch (e) {
         console.log(e.message)
       }
@@ -1027,17 +1020,18 @@ const getReportData = async (reportId) => {
         ? reportData.value.thirteenth = JSON.parse(dataThirteenth.regional_version)
         : reportData.value.thirteenth = dataThirteenth;
 
-        // if (dataThirteenth.rejecting_reasons) {
-        //   // revisionPanels.value.push('13');
-        //   reportStore.reportDataDH.thirteenth = JSON.parse(dataThirteenth.district_version);
+        // Проверка на причины отклонений отчета и вывод табов для РО
+        if (dataThirteenth.rejecting_reasons) {
+          revisionPanels.value.push('13');
+          reportStore.reportDataDH.thirteenth = JSON.parse(dataThirteenth.district_version);
 
-        //   dataThirteenth.central_version
-        //   ? reportStore.reportDataCH.thirteenth = dataThirteenth.central_version
-        //   : reportStore.reportDataCH.thirteenth = dataThirteenth;
+          dataThirteenth.central_version
+          ? reportStore.reportDataCH.thirteenth = dataThirteenth.central_version
+          : reportStore.reportDataCH.thirteenth = dataThirteenth;
 
-        //   reportStore.isReportReject.thirteenth = true
-        //   // console.log('isReportReject в род комп', reportStore.isReportReject.thirteenth);
-        // }
+          reportStore.isReportReject.thirteenth = isTabsForRevision.value;
+          // console.log('isReportReject в род комп', reportStore.isReportReject.thirteenth);
+        }
       } catch (e) {
         console.log(e.message)
       }
@@ -1915,14 +1909,24 @@ watch(
   },
 );
 
-// watch(revisionPanels.value,
-//   () => {
-//     if (revisionPanels.value.length) {
-//       isRevision.value = true;
-//       console.log(revisionPanels.value, isRevision.value);
-//     }
-//   },
-// )
+watch(revisionPanels.value,
+  () => {
+    if (revisionPanels.value.length) {
+      // Временно скрываем табы Просмотра и Доработки отчета (true на false)-------------------------------
+      
+      // isRevision.value = true;
+      isRevision.value = false;
+
+      // Временно скрываем табы в показателях для РО для доработки отчета (true на false)------------------
+      
+      // isTabsForRevision.value = true;
+      isTabsForRevision.value = false;
+
+      console.log('массив с показателями на дораб', revisionPanels.value);
+      console.log('возврат на дораб', isRevision.value);
+    }
+  },
+)
 
 onMounted(() => {
   if (roleStore.roles.regionalheadquarter_commander && typeof (route.query.reportId) === 'undefined' && window.performance.navigation.type === 1) {

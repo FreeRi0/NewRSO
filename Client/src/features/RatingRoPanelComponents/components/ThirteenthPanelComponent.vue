@@ -310,6 +310,9 @@ watchEffect(async () => {
 
             isFirstSent.value = reportStore.isReportReject.thirteenth && !props.data.central_version;
             console.log('isFirstSent при доработке 13', isFirstSent.value);
+            if (reportStore.isReportReject.thirteenth) {
+                reportStore.returnReport.thirteenth = true;
+            }
         }
     }
     if (props.districtExpert) {
