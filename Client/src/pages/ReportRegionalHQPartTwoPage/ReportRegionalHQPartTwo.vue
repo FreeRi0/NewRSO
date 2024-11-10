@@ -672,7 +672,7 @@ const getReportData = async (reportId) => {
       reportStore.reportForCheckCH.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
-      reportStore.reportDataCH.tenth.first.comment = '';
+      reportStore.reportDataCH.tenth.first.comment = ''
 
       /*
       * Критерий 10-2
@@ -680,7 +680,7 @@ const getReportData = async (reportId) => {
       reportStore.reportForCheckCH.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', reportId)).data;
-      reportStore.reportDataCH.tenth.second.comment = '';
+      reportStore.reportDataCH.tenth.second.comment = ''
 
       /*
       * Критерий 16
