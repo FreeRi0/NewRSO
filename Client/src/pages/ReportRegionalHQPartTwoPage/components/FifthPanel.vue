@@ -241,8 +241,7 @@
           </div>
         </div>
         <div style="width: 100%;">
-          <p class="form__label">Ссылка на группу трудового проекта в социальных сетях <sup class="valid-red">*</sup>
-          </p>
+          <p class="form__label">Ссылка на группу трудового проекта в социальных сетях</p>
           <div class="form__field-link-wrap" v-for="(link, i) in events[index].links" :key="i">
             <InputReport
                 v-model:value="link.link"
@@ -368,9 +367,9 @@
         <div class="hr"></div>
       </div>
 
-<!--      <div v-if="!props.centralExpert">-->
-<!--        <Button class="add_eventBtn" label="Добавить проект" @click="addProjectDH"/>-->
-<!--      </div>-->
+      <!--      <div v-if="!props.centralExpert">-->
+      <!--        <Button class="add_eventBtn" label="Добавить проект" @click="addProjectDH"/>-->
+      <!--      </div>-->
       <div class="form__field-comment" style="margin-top: 10px;">
         <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
         <TextareaReport
@@ -653,15 +652,15 @@ const addProject = () => {
     ],
   })
 };
-const addProjectDH = () => {
-  fifthPanelDataDH.value.events.push({
-    participants_number: '',
-    ro_participants_number: '',
-    start_date: null,
-    end_date: null,
-    name: '',
-  })
-};
+// const addProjectDH = () => {
+//   fifthPanelDataDH.value.events.push({
+//     participants_number: '',
+//     ro_participants_number: '',
+//     start_date: null,
+//     end_date: null,
+//     name: '',
+//   })
+// };
 const deleteProject = async (index) => {
   let formData = new FormData();
   events.value = events.value.filter((el, i) => index !== i);
@@ -687,9 +686,9 @@ const deleteProject = async (index) => {
     console.log('deleteEvent error: ', e);
   }
 };
-const deleteProjectDH = (index) => {
-  fifthPanelDataDH.value.events = fifthPanelDataDH.value.events.filter((el, i) => index !== i);
-};
+// const deleteProjectDH = (index) => {
+//   fifthPanelDataDH.value.events = fifthPanelDataDH.value.events.filter((el, i) => index !== i);
+// };
 
 const setFormData = (file = null, index = null, isDeleteEvent = false, isDeleteFile = false, isLinkDelete = false, linkIndex = null) => {
   let formData = new FormData();

@@ -3,7 +3,7 @@
        class="form__field-group">
     <div v-for="(event, index) in events" :key="index" class="form__field-fourth-panel">
       <div class="form__field-members-event">
-        <div style="display: flex; gap: 40px">
+        <div class="form__field-date" id="form__field-date-first">
           <div class="form__field-members">
             <label class="form__label" for="participants_number">Количество человек, принявших участие в мероприятии
               <sup class="valid-red">*</sup></label>
@@ -14,8 +14,8 @@
                            :min="0" :max="2147483647" @focusout="focusOut" :disabled="isSent"/>
             </div>
           </div>
-          <div class="form__field-members">
-            <label class="form__label" for="eventName">Название мероприятия<sup
+          <div class="form__field-members" id="form__field-members-name">
+            <label style="margin-bottom: 8px;" class="form__label" for="eventName">Название мероприятия<sup
                 class="valid-red">*</sup></label>
             <div style="display: flex; justify-content: space-between;">
               <InputReport v-model:value="event.name" :id="event.name" name="eventName" class="form__input"
@@ -29,11 +29,7 @@
       </div>
       <div class="form__field-date">
         <div class="form__field">
-          <label
-              style="max-width: 280px;"
-              class="form__label"
-              for="start_date"
-          >Дата начала проведения мероприятия <sup
+          <label style="max-width: 280px;" class="form__label" for="start_date">Дата начала проведения мероприятия <sup
               class="valid-red">*</sup></label>
           <InputReport v-model:value="event.start_date" :id="event.start_date" name="start_date" class="form__input"
                        type="date" @focusout="focusOut" :disabled="isSent || !event.participants_number"/>
@@ -147,8 +143,7 @@
               </div>
             </div>
             <div class="form__field-members">
-              <label class="form__label" for="eventName">Название мероприятия<sup
-                  class="valid-red">*</sup></label>
+              <label class="form__label" for="eventName">Название мероприятия<sup class="valid-red">*</sup></label>
               <div style="display: flex; justify-content: space-between;">
                 <InputReport
                     v-model:value="event.name"
@@ -251,7 +246,7 @@
           </div>
         </div>
         <div class="form__field-link">
-          <p class="form__label">Ссылка на группу мероприятия в социальных сетях <sup class="valid-red">*</sup></p>
+          <p class="form__label">Ссылка на группу мероприятия в социальных сетях</p>
           <div class="form__add-link" v-for="(link, i) in events[index].links" :key="i">
             <InputReport
                 v-model:value="link.link"
@@ -324,8 +319,7 @@
               </div>
             </div>
             <div class="form__field-members">
-              <label class="form__label" for="eventName">Название мероприятия<sup
-                  class="valid-red">*</sup></label>
+              <label class="form__label" for="eventName">Название мероприятия<sup class="valid-red">*</sup></label>
               <div style="display: flex; justify-content: space-between;">
                 <InputReport
                     v-model:value="eventDH.name"
@@ -501,7 +495,7 @@
         </v-table>
         <div>
           <label class="form__label" for="11">Межрегиональное <sup class="valid-red">*</sup></label>
-          <div class="form__label-radio">
+          <div class="form__label-radio" style="margin-top: 10px;">
             <div style="display: flex;">
               <input
                   v-model="eventCH.dataCH.is_interregional"
@@ -578,6 +572,7 @@
           </tr>
           </tbody>
         </v-table>
+        <div class="hr" style="margin-bottom: 40px;"></div>
       </div>
 
       <div class="form__field">
@@ -728,15 +723,15 @@ const addEvent = () => {
     is_interregional: false,
   })
 };
-const addEventDH = () => {
-  fourthPanelDataDH.value.events.push({
-    name: '',
-    participants_number: '',
-    start_date: null,
-    end_date: null,
-    is_interregional: false,
-  })
-};
+// const addEventDH = () => {
+//   fourthPanelDataDH.value.events.push({
+//     name: '',
+//     participants_number: '',
+//     start_date: null,
+//     end_date: null,
+//     is_interregional: false,
+//   })
+// };
 const deleteEvent = async (index) => {
   let formData = new FormData();
   events.value = events.value.filter((el, i) => index !== i);
@@ -761,9 +756,9 @@ const deleteEvent = async (index) => {
     console.log('deleteEvent error: ', e);
   }
 };
-const deleteEventDH = (index) => {
-  fourthPanelDataDH.value.events = fourthPanelDataDH.value.events.filter((el, i) => index !== i);
-};
+// const deleteEventDH = (index) => {
+//   fourthPanelDataDH.value.events = fourthPanelDataDH.value.events.filter((el, i) => index !== i);
+// };
 
 const uploadFile = async (event, index) => {
   fileValidate(event.target.files[0], 7, isErrorFile);
@@ -1143,19 +1138,19 @@ watch(() => [commonData.value, commentCH], () => {
   }
 }
 
-.form__field-members-event {
-  display: flex;
-  height: 111px;
-  margin-top: 40px;
-  justify-content: space-between;
-
-  @media (max-width: 568px) {
-    flex-direction: column-reverse;
-    gap: 8px;
-    align-items: flex-end;
-    margin-top: 32px;
-  }
-}
+//.form__field-members-event {
+//  display: flex;
+//  height: 111px;
+//  margin-top: 40px;
+//  justify-content: space-between;
+//
+//  @media (max-width: 568px) {
+//    flex-direction: column-reverse;
+//    gap: 8px;
+//    align-items: flex-end;
+//    margin-top: 32px;
+//  }
+//}
 
 .form__field-members {
   max-width: 340px;
@@ -1165,7 +1160,7 @@ watch(() => [commonData.value, commentCH], () => {
   justify-content: space-between;
   margin-bottom: 10px;
 
-  @media (max-width: 400px) {
+  @media (max-width: 1024px) {
     max-width: 300px;
   }
 }
@@ -1175,17 +1170,19 @@ watch(() => [commonData.value, commentCH], () => {
   justify-content: space-between;
   gap: 16px;
   max-width: 720px;
-  flex-wrap: wrap;
 
   @media (max-width: 768px) {
-    // flex-direction: column;
-    gap: 16px;
+    flex-wrap: wrap;
   }
 
   @media (max-width: 568px) {
     align-items: center;
     justify-content: center;
   }
+}
+
+#form__field-date-first {
+  margin-top: 40px;
 }
 
 .form__add-event {
