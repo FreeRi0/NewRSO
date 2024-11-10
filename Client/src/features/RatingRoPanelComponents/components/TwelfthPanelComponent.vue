@@ -19,7 +19,7 @@
                 :max="9999999999"
                 :step="0.01"
                 @focusout="focusOut"
-                :disabled="(!isRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+                :disabled="(isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
                 :is-error-panel="isErrorPanel"
             />
         </div>
@@ -40,7 +40,7 @@
                 :fileType="twelfthPanelData.file_type"
                 :fileSize="twelfthPanelData.file_size"
                 @click="deleteFile"
-                :is-sent="(!isRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+                :is-sent="(isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
                 :is-error-file="isErrorFile"
             ></FileBoxComponent>
             <InputReport
@@ -53,7 +53,7 @@
                 width="100%"
                 height="auto"
                 @change="uploadFile"
-                :disabled="(!isRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+                :disabled="(isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
             />
         </div>
   
@@ -78,7 +78,7 @@
                 :maxlength="3000"
                 :max-length-text="3000"
                 @focusout="focusOut"
-                :disabled="(!isRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+                :disabled="(isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
             >
             </TextareaReport>
         </div>
@@ -137,7 +137,7 @@
             :min="0"
             :max="9999999999"
             :step="0.01"
-            :disabled="!(districtExpert || centralExpert)"
+            :disabled="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.twelfth.verified_by_chq !== null"
             :is-error-panel="isErrorPanel"
         ></ReportTable>
 
@@ -150,8 +150,8 @@
             :fileType="fileCH.type"
             :fileSize="fileCH.size"
             :is-error-file="isErrorFile"
-            :is-disabled="!(districtExpert || centralExpert)"
-            :is-sent="!(districtExpert || centralExpert)"
+            :is-disabled="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.twelfth.verified_by_chq !== null"
+            :is-sent="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.twelfth.verified_by_chq !== null"
             :is-error-panel="isErrorPanel"
         ></CommentFileComponent>
 
@@ -159,7 +159,7 @@
             <v-checkbox
                 v-model="reportStore.returnReport.twelfth"
                 label="Вернуть в&nbsp;РО на&nbsp;доработку"
-                :disabled="!(districtExpert || centralExpert)"
+                :disabled="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.twelfth.verified_by_chq !== null"
                 @change="onReturnReport" />
         </div>
     </div> 
@@ -407,6 +407,9 @@ watchEffect(async () => {
 
             isFirstSent.value = reportStore.isReportReject.twelfth && !props.data.central_version;
             console.log('isFirstSent при доработке 12', isFirstSent.value);
+            if (reportStore.isReportReject.twelfth) {
+                reportStore.returnReport.twelfth = true;
+            }
         }
     }
     if (props.districtExpert) {
@@ -421,11 +424,21 @@ watchEffect(async () => {
             fileDH.value.type = reportStore.reportDataDH.twelfth.file_type;
             fileDH.value.size = reportStore.reportDataDH.twelfth.file_size;
         }
+        if (reportStore.reportForCheckCH.twelfth.verified_by_chq !== null) {
+            fileCH.value.name = reportStore.reportForCheckCH.twelfth.scan_file;
+            fileCH.value.type = reportStore.reportForCheckCH.twelfth.file_type;
+            fileCH.value.size = reportStore.reportForCheckCH.twelfth.file_size;
+        } else
         if (reportStore.reportDataCHFile.twelfth) {
             fileCH.value.name = reportStore.reportDataCHFile.twelfth.name;
             fileCH.value.type = reportStore.reportDataCHFile.twelfth.type.split('/').at(-1);
             fileCH.value.size = reportStore.reportDataCHFile.twelfth.size / Math.pow(1024, 2);
         }
+        if (reportStore.reportForCheckCH.twelfth.rejecting_reasons) {
+            reportStore.returnReport.twelfth = true;
+        } 
+
+        // console.log('чек 12', reportStore.returnReport.twelfth)
     }
 }, {
     flush: 'post'
@@ -452,7 +465,11 @@ watchPostEffect(() => {
     fileCH.value.type = reportStore.reportDataCH.twelfth.file_type;
     fileCH.value.size = reportStore.reportDataCH.twelfth.file_size;
 
-    reportStore.returnReport.twelfth = true;
+    if (props.data?.rejecting_reasons) {
+      reportStore.returnReport.twelfth = true;
+    } else {
+      reportStore.returnReport.twelfth = false;
+    }
   }
 });
 

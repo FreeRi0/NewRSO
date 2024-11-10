@@ -18,7 +18,7 @@
                 :min="0"
                 :max="2147483647"
                 @focusout="focusOut"
-                :disabled="(!isRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+                :disabled="(isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
                 :is-error-panel="isErrorPanel"
             />
         </div>
@@ -44,7 +44,7 @@
                 :maxlength="3000"
                 :max-length-text="3000"
                 @focusout="focusOut"
-                :disabled="(!isRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+                :disabled="(isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
             >
             </TextareaReport>
         </div>
@@ -101,7 +101,7 @@
             :maxlength="10"
             :min="0"
             :max="2147483647"
-            :disabled="!(districtExpert || centralExpert)"
+            :disabled="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.thirteenth.verified_by_chq !== null"
             :is-error-panel="isErrorPanel"
         ></ReportTable>
 
@@ -114,8 +114,8 @@
             :fileType="fileCH.type"
             :fileSize="fileCH.size"
             :is-error-file="isErrorFile"
-            :is-disabled="!(districtExpert || centralExpert)"
-            :is-sent="!(districtExpert || centralExpert)"
+            :is-disabled="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.thirteenth.verified_by_chq !== null"
+            :is-sent="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.thirteenth.verified_by_chq !== null"
             :is-error-panel="isErrorPanel"
         ></CommentFileComponent>
 
@@ -123,7 +123,7 @@
             <v-checkbox 
                 v-model="reportStore.returnReport.thirteenth"
                 label="Вернуть в&nbsp;РО на&nbsp;доработку"
-                :disabled="!(districtExpert || centralExpert)"
+                :disabled="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.thirteenth.verified_by_chq !== null"
                 @change="onReturnReport" />
         </div>
     </div>
@@ -310,6 +310,9 @@ watchEffect(async () => {
 
             isFirstSent.value = reportStore.isReportReject.thirteenth && !props.data.central_version;
             console.log('isFirstSent при доработке 13', isFirstSent.value);
+            if (reportStore.isReportReject.thirteenth) {
+                reportStore.returnReport.thirteenth = true;
+            }
         }
     }
     if (props.districtExpert) {
@@ -324,11 +327,21 @@ watchEffect(async () => {
             fileDH.value.type = reportStore.reportDataDH.thirteenth.file_type;
             fileDH.value.size = reportStore.reportDataDH.thirteenth.file_size;
         }
+        if (reportStore.reportForCheckCH.thirteenth.verified_by_chq !== null) {
+            fileCH.value.name = reportStore.reportForCheckCH.thirteenth.scan_file;
+            fileCH.value.type = reportStore.reportForCheckCH.thirteenth.file_type;
+            fileCH.value.size = reportStore.reportForCheckCH.thirteenth.file_size;
+        } else
         if (reportStore.reportDataCHFile.thirteenth) {
             fileCH.value.name = reportStore.reportDataCHFile.thirteenth.name;
             fileCH.value.type = reportStore.reportDataCHFile.thirteenth.type.split('/').at(-1);
             fileCH.value.size = reportStore.reportDataCHFile.thirteenth.size / Math.pow(1024, 2);
         }
+        if (reportStore.reportForCheckCH.thirteenth.rejecting_reasons) {
+            reportStore.returnReport.thirteenth = true;
+        } 
+
+        // console.log('чек 13', reportStore.returnReport.thirteenth)
     }
 }, {
     flush: 'post'
@@ -352,7 +365,11 @@ watchPostEffect(() => {
     fileCH.value.type = reportStore.reportDataCH.thirteenth.file_type;
     fileCH.value.size = reportStore.reportDataCH.thirteenth.file_size;
 
-    reportStore.returnReport.thirteenth = true;
+    if (props.data?.rejecting_reasons) {
+      reportStore.returnReport.thirteenth = true;
+    } else {
+      reportStore.returnReport.thirteenth = false;
+    }
   }
 });
 

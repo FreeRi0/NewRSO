@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.first)"
+  <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.fourth)"
        class="form__field-group">
     <div v-for="(event, index) in events" :key="index" class="form__field-fourth-panel">
       <div class="form__field-members-event">
@@ -282,6 +282,7 @@
             :maxlength="3000"
             :max-length-text="3000"
             counter-visible
+            @focusout="focusOut"
             :disabled="props.centralExpert || props.districtExpert"
         />
       </div>
@@ -957,11 +958,11 @@ watchEffect(() => {
     isSent.value = props.data.is_sent;
 
     isFirstSent.value = reportStore.isReportReject.fourth && !props.data.central_version;
-    console.log('isFirstSent.value::::::1', isFirstSent.value)
+    // console.log('isFirstSent.value::::::1', isFirstSent.value)
 
     // row.value = props.data.comment ? props.data.comment.split('\n').length : 1;
   }
-  console.log('isFirstSent.value::::::2', isFirstSent.value)
+  // console.log('isFirstSent.value::::::2', isFirstSent.value)
   // Мапинг данных для отчета командира РШ при возвращении на доработку
   if (reportStore.reportReject.fourth && reportStore.isReportReject.fourth) {
     console.log('reportStore.reportReject.fourth', reportStore.reportReject.fourth)

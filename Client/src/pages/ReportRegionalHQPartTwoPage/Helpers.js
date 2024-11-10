@@ -1,4 +1,5 @@
 import swal from '@/library/sweetalert2/sweetalert2.esm.all.min.js';
+import { useRoleStore } from "@layouts/store/role.ts";
 
 export function checkEmptyFieldsDH(data, isErrorPanel) {
     if (data.first && !(data.first.amount_of_money && data.first.comment)) {
@@ -14,29 +15,38 @@ export function checkEmptyFieldsDH(data, isErrorPanel) {
     } else {
         isErrorPanel.value.first = false;
     }
-    if (data.fourth) {
-        for (const event of data.fourth.events) {
-            if (
-                (event.participants_number != 0 ||
-                    !event.participants_number) &&
-                !(
-                    event.name &&
-                    event.end_date &&
-                    event.start_date &&
-                    data.fourth.comment
-                )
-            ) {
-                isErrorPanel.value.fourth = true;
-                swal.fire({
-                    position: 'center',
-                    icon: 'warning',
-                    title: `Заполните обязательные поля в 4 показателе`,
-                    showConfirmButton: false,
-                    timer: 2500,
-                });
-                return false;
-            }
-        }
+
+    if (data.fourth && !(data.fourth.comment)) {
+        isErrorPanel.value.fourth = true;
+        swal.fire({
+            position: 'center',
+            icon: 'warning',
+            title: `Заполните обязательные поля в 4 показателе`,
+            showConfirmButton: false,
+            timer: 2500,
+        });
+        // for (const event of data.fourth.events) {
+        //     if (
+        //         (event.participants_number != 0 ||
+        //             !event.participants_number) &&
+        //         !(
+        //             event.name &&
+        //             event.end_date &&
+        //             event.start_date &&
+        //             data.fourth.comment
+        //         )
+        //     ) {
+        //         isErrorPanel.value.fourth = true;
+        //         swal.fire({
+        //             position: 'center',
+        //             icon: 'warning',
+        //             title: `Заполните обязательные поля в 4 показателе`,
+        //             showConfirmButton: false,
+        //             timer: 2500,
+        //         });
+        //         return false;
+        //     }
+        // }
     }
 
     if (data.fifth) {
@@ -229,5 +239,18 @@ export function formattedDate(date)  {
         return day + "-" + month + "-" + year;
     } else {
         return null;
+    }
+}
+
+const roleStore = useRoleStore();
+
+export const showPanels = (numberPanel, picked, revisionPanels) => {
+    if (
+        (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) || 
+        (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && !revisionPanels) ||
+        (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && picked == 'Просмотр отправленного отчета') ||
+        (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && picked == 'Доработка' && revisionPanels.includes(numberPanel))
+    ) {
+        return true
     }
 }
