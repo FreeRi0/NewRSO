@@ -9,10 +9,10 @@
       </div>
       <div v-else>
         <div class="d-flex mt-9 mb-9 active-tabs" v-if="!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && isRevision">
-          <button class="contributorBtn" 
-            :class="{ active: picked === tab.name }" 
+          <button class="contributorBtn"
+            :class="{ active: picked === tab.name }"
             v-for="tab in tabs"
-            :key="tab.id" 
+            :key="tab.id"
             @click="picked = tab.name">
             {{ tab.name }}
           </button>
@@ -235,8 +235,15 @@
         </v-expansion-panels>
       </div>
     </div>
-    <Button v-if="!preloader" :disabled="blockSendButton" variant="text" label="Отправить отчет" size="large"
-      @click="sendReport" />
+    <Button
+        class="btn_report"
+        v-if="!preloader"
+        :disabled="blockSendButton"
+        variant="text"
+        label="Отправить отчет"
+        size="large"
+        @click="sendReport"
+    />
   </div>
 </template>
 <script setup>
@@ -266,7 +273,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
 // import { checkEmptyFieldsDH } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 import swal from '@/library/sweetalert2/sweetalert2.esm.all.min.js';
-import { 
+import {
   checkEmptyFieldsDH,
   showPanels,
 } from "@pages/ReportRegionalHQPartTwoPage/Helpers.js";
@@ -651,27 +658,31 @@ const getReportData = async (reportId) => {
       * Критерий 1
       */
       reportStore.reportForCheckCH.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
+      // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
       reportStore.reportDataCH.first.comment = '';
+
       /*
       * Критерий 4
       */
       reportStore.reportForCheckCH.fourth = (await reportPartTwoService.getReportDH('4', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.fourth.events = (await reportPartTwoService.getReportDH('4', reportId)).data.events;
+
       /*
       * Критерий 5
       */
       reportStore.reportForCheckCH.fifth = (await reportPartTwoService.getReportDH('5', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.fifth.events = (await reportPartTwoService.getReportDH('5', reportId)).data.events;
+
       /*
       * Критерий 6 и 9  
       */
       await getMultiplyData(reportId);
       /*
-     * Критерий 10-1
-     */
+      * Критерий 10-1
+      */
       reportStore.reportForCheckCH.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
@@ -1946,12 +1957,12 @@ watch(revisionPanels.value,
   () => {
     if (revisionPanels.value.length) {
       // Временно скрываем табы Просмотра и Доработки отчета (true на false)-------------------------------
-      
+
       // isRevision.value = true;
       isRevision.value = false;
 
       // Временно скрываем табы в показателях для РО для доработки отчета (true на false)------------------
-      
+
       // isTabsForRevision.value = true;
       isTabsForRevision.value = false;
 
@@ -1972,7 +1983,15 @@ onMounted(() => {
 });
 
 </script>
-<style>
+<style lang="scss">
+.btn_report {
+  padding: 12px 32px !important;
+
+  @media (max-width: 480px) {
+    width: 90% !important;
+  }
+}
+
 .swal2-shown {
   overflow: unset !important;
   padding-right: 0px !important;
