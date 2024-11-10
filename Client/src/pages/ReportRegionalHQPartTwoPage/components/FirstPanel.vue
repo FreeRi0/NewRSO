@@ -352,10 +352,8 @@ const uploadFile = async (event) => {
   }
 };
 const uploadFileDH = (event) => {
-  if (event.target.files) {
-    reportStore.reportDataDHFile.first = event.target.files[0];
-    firstPanelDataDH.value.scan_file = event.target.files[0];
-  }
+  reportStore.reportDataDHFile.first = event.target.files[0];
+  firstPanelDataDH.value.scan_file = event.target.files[0];
 };
 const uploadFileCH = (event) => {
   if (event.target.files) {

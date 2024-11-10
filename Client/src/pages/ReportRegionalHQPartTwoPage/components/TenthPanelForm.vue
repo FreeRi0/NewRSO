@@ -285,21 +285,16 @@
           class="valid-red">*</sup></label>
       <v-table>
         <tbody>
-        <tr class="report-table__tr">
-          <td class="report-table__th report-table__th__br-left">Данные РО</td>
-          <td class="report-table__th report-table__td__center">Корректировка ОШ</td>
-          <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
-        </tr>
-        <tr class="report-table__tr">
-          <td class="report-table__td">{{ tenthPanelData.event_happened ? 'Да' : 'Нет' }}</td>
-          <td class="report-table__td report-table__td__center">{{
-              tenthPanelDataDH.event_happened ? 'Да' : 'Нет'
-            }}
-          </td>
-          <td class="report-table__td">
-            {{ tenthPanelDataCH.event_happened === null ? null : tenthPanelDataCH.event_happened ? 'Да' : 'Нет' }}
-          </td>
-        </tr>
+          <tr class="report-table__tr">
+            <td class="report-table__th report-table__th__br-left">Данные РО</td>
+            <td class="report-table__th report-table__td__center">Корректировка ОШ</td>
+            <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
+          </tr>
+          <tr class="report-table__tr">
+            <td class="report-table__td">{{ tenthPanelData.event_happened ? 'Да' : 'Нет' }}</td>
+            <td class="report-table__td report-table__td__center">{{ tenthPanelDataDH.event_happened ? 'Да' : 'Нет' }}</td>
+            <td class="report-table__td">{{ tenthPanelDataCH.event_happened === null ? null : tenthPanelDataCH.event_happened ? 'Да' : 'Нет' }}</td>
+          </tr>
         </tbody>
       </v-table>
       <label class="form__label">Проведение акции <sup
@@ -447,12 +442,10 @@ const deleteFile = () => {
 };
 
 const uploadFileDH = (event) => {
-  if (event.target.files) {
-    tenthPanelDataDH.value.document = event.target.files[0];
-    fileNameDH.value = tenthPanelDataDH.value.document.name || null;
-    fileSizeDH.value = tenthPanelDataDH.value.document.size / Math.pow(1024, 2) || null;
-    fileTypeDH.value = tenthPanelDataDH.value.document.type.split('/').at(-1) || null;
-  }
+  tenthPanelDataDH.value.document = event.target.files[0];
+  fileNameDH.value = tenthPanelDataDH.value.document.name || null;
+  fileSizeDH.value = tenthPanelDataDH.value.document.size / Math.pow(1024, 2) || null;
+  fileTypeDH.value = tenthPanelDataDH.value.document.type.split('/').at(-1) || null;
 };
 const uploadFileCH = (event) => {
   if (event.target.files) {
