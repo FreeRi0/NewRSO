@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!(props.centralExpert || props.districtExpert)" class="form__field-group">
+  <div v-if="!(props.centralExpert || props.districtExpert || isReportReject)" class="form__field-group">
     <div style="display: flex; justify-content: space-between;">
       <div>
         <p class="form__title">{{ props.title }}</p>
@@ -103,7 +103,7 @@
 
   </div>
 
-  <report-tabs v-else>
+  <report-tabs v-else :isReject="isReportReject">
     <template v-slot:firstTab>
 
       <div style="display: flex; justify-content: space-between;">
@@ -125,7 +125,7 @@
                 class="custom-radio"
                 type="radio"
                 :value="true"
-                disabled
+                :disabled="(props.centralExpert || props.districtExpert) || isSent"
             />
             <label for="event_happened-true">Да</label>
           </div>
@@ -136,7 +136,7 @@
                 class="custom-radio"
                 type="radio"
                 :value="false"
-                disabled
+                :disabled="(props.centralExpert || props.districtExpert) || isSent"
             />
             <label for="event_happened-false">Нет</label>
           </div>
@@ -152,17 +152,17 @@
               id="scan_file"
               name="scan_file"
               @change="uploadFile"
-              disabled
+              :disabled="(props.centralExpert || props.districtExpert) || isSent"
           />
           <FileBoxComponent
               v-else
               :file="tenthPanelData.document"
               :fileType="tenthPanelData.file_type"
               :fileSize="tenthPanelData.file_size"
-              :isSent="true"
+              :isSent="(props.centralExpert || props.districtExpert) || isSent"
               :is-error-file="isErrorFile && !tenthPanelData.file_size"
               @click="deleteFile"
-              disabled
+              :disabled="(props.centralExpert || props.districtExpert) || isSent"
           />
         </div>
         <div>
@@ -177,14 +177,22 @@
                 type="text"
                 placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
                 @focusout="formData"
-                disabled
+                :disabled="(props.centralExpert || props.districtExpert) || isSent"
                 is-link
             />
-            <div v-if="false">
-              <Button v-if="tenthPanelData.links.length === i + 1" class="form__add-link-button"
-                      label="+ Добавить ссылку"
-                      @click="addLink"/>
-              <Button class="form__add-link-button" v-else label="Удалить" @click="onDeleteLink(i)"/>
+            <div v-if="!(props.centralExpert || props.districtExpert) || isSent">
+              <Button
+                  v-if="tenthPanelData.links.length === i + 1"
+                  class="form__add-link-button"
+                  label="+ Добавить ссылку"
+                  @click="addLink"
+              />
+              <Button
+                  class="form__add-link-button"
+                  v-else
+                  label="Удалить"
+                  @click="onDeleteLink(i)"
+              />
             </div>
           </div>
         </div>
@@ -203,7 +211,8 @@
               counter-visible
               class="form__input form__input-comment"
               style="margin-bottom: 4px;"
-              disabled
+              :disabled="(props.centralExpert || props.districtExpert) || isSent"
+              @focusout="formData"
           />
         </div>
       </div>
@@ -229,7 +238,7 @@
               class="custom-radio"
               type="radio"
               :value="true"
-              :disabled="centralExpert"
+              :disabled="centralExpert || isReportReject"
           />
           <label for="event_happenedDH-true">Да</label>
         </div>
@@ -240,7 +249,7 @@
               class="custom-radio"
               type="radio"
               :value="false"
-              :disabled="centralExpert"
+              :disabled="centralExpert || isReportReject"
           />
           <label for="event_happenedDH-false">Нет</label>
         </div>
@@ -253,10 +262,11 @@
             :file="fileNameDH"
             :fileType="fileTypeDH"
             :fileSize="fileSizeDH"
-            :disabled="centralExpert"
+            :disabled="centralExpert || isReportReject"
             :is-error-file="isErrorFile"
             @change="uploadFileDH"
             @click="deleteFileDH"
+            :is-sent="isReportReject"
         />
       </div>
 
@@ -302,6 +312,7 @@
               class="custom-radio"
               type="radio"
               :value="true"
+              :disabled="isReportReject && !centralExpert"
           />
           <label for="event_happenedCH-true">Да</label>
         </div>
@@ -312,6 +323,7 @@
               class="custom-radio"
               type="radio"
               :value="false"
+              :disabled="isReportReject && !centralExpert"
           />
           <label for="event_happenedCH-false">Нет</label>
         </div>
@@ -320,12 +332,14 @@
         <CommentFileComponent
             v-model:value="tenthPanelDataCH.comment"
             name="firstPanelDataDH.comment"
-            :file="tenthPanelDataCH.document ? tenthPanelDataCH.document.name : null"
-            :fileType="tenthPanelDataCH.document ? tenthPanelDataCH.document.type.split('/').at(-1) : null"
-            :fileSize="tenthPanelDataCH.document ? tenthPanelDataCH.document.size / Math.pow(1024, 2) : null"
+            :file="fileNameCH"
+            :fileType="fileTypeCH"
+            :fileSize="fileSizeCH"
             :is-error-file="isErrorFile"
             @change="uploadFileCH"
             @click="deleteFileCH"
+            :disabled="isReportReject && !centralExpert"
+            :is-sent="isReportReject"
         />
       </div>
       <div>
@@ -333,6 +347,7 @@
             v-model="returnReport"
             @change="onReportReturn"
             label="Вернуть в РО на доработку"
+            :disabled="isReportReject && !centralExpert"
         />
       </div>
     </template>
@@ -361,6 +376,11 @@ const props = defineProps({
   document: undefined,
   documentCH: undefined,
   returnReportProp: Boolean,
+  isReportReject: {
+    type: Boolean,
+    default: false,
+  },
+  reportRejectData: Object
 });
 
 const tenthPanelData = ref({
@@ -392,6 +412,9 @@ const tenthPanelDataCH = ref({
 const fileNameDH = ref(null);
 const fileSizeDH = ref(null);
 const fileTypeDH = ref(null);
+const fileNameCH = ref(null);
+const fileSizeCH = ref(null);
+const fileTypeCH = ref(null);
 const isSent = ref(false);
 let isErrorFile = ref(false);
 const returnReport = ref(false);
@@ -431,10 +454,12 @@ const uploadFileDH = (event) => {
     fileTypeDH.value = tenthPanelDataDH.value.document.type.split('/').at(-1) || null;
   }
 };
-
 const uploadFileCH = (event) => {
   if (event.target.files) {
     tenthPanelDataCH.value.document = event.target.files[0];
+    fileNameCH.value = tenthPanelDataCH.value.document.name || null;
+    fileSizeCH.value = tenthPanelDataCH.value.document.size / Math.pow(1024, 2) || null;
+    fileTypeCH.value = tenthPanelDataCH.value.document.type.split('/').at(-1) || null;
   }
 };
 
@@ -444,9 +469,11 @@ const deleteFileDH = () => {
   fileSizeDH.value = null;
   fileTypeDH.value = null;
 };
-
 const deleteFileCH = () => {
   tenthPanelDataCH.value.document = null;
+  fileNameCH.value = null;
+  fileSizeCH.value = null;
+  fileTypeCH.value = null;
 };
 
 const onReportReturn = (event) => {
@@ -502,6 +529,43 @@ onMounted(() => {
 
     if (props.documentCH) {
       tenthPanelDataCH.value.document = props.documentCH
+      fileNameCH.value = props.documentCH.name || null;
+      fileTypeCH.value = props.documentCH.type.split('/').at(-1) || null;
+      fileSizeCH.value = props.documentCH.size / Math.pow(1024, 2) || null;
+    }
+  }
+
+  // Мапинг данных для отчета командира РШ при возвращении на доработку
+  if (props.reportRejectData && props.isReportReject) {
+    // console.log('props.reportRejectData', props.reportRejectData)
+    // console.log('props.isReportReject', props.isReportReject)
+
+    returnReport.value = true;
+    // Добавление данных панели "корректировка ОШ"
+    const reportDataDH = JSON.parse(props.reportRejectData.district_version)
+    tenthPanelDataDH.value.event_happened = reportDataDH.event_happened;
+    tenthPanelDataDH.value.comment = reportDataDH.comment;
+    fileNameDH.value = reportDataDH.document || null;
+    fileSizeDH.value = reportDataDH.file_size || null;
+    fileTypeDH.value = reportDataDH.file_type || null;
+
+    // Добавление данных для панели "корректировка ЦШ"
+    if (props.reportRejectData.central_version) {
+      // Отчет создан:
+      tenthPanelDataCH.value.event_happened = props.reportRejectData.central_version.event_happened;
+      tenthPanelDataCH.value.comment = props.reportRejectData.central_version.comment;
+
+      fileNameCH.value = props.reportRejectData.central_version.document || null;
+      fileTypeCH.value = props.reportRejectData.central_version.file_type || null;
+      fileSizeCH.value = props.reportRejectData.central_version.file_size || null;
+    } else {
+      // Отчет не создан:
+      tenthPanelDataCH.value.event_happened = props.reportRejectData.event_happened;
+      tenthPanelDataCH.value.comment = props.reportRejectData.comment;
+
+      fileNameCH.value = props.reportRejectData.central_version.document || null;
+      fileTypeCH.value = props.reportRejectData.central_version.file_type || null;
+      fileSizeCH.value = props.reportRejectData.central_version.file_size || null;
     }
   }
 });
@@ -510,8 +574,6 @@ watchEffect(() => {
   tenthPanelData.value = {...props.data};
   isSent.value = props.data.is_sent;
   isErrorFile.value = props.isErrorFileProp;
-
-  // row.value = tenthPanelData.value.comment ? tenthPanelData.value.comment.split('\n').length : 1;
 });
 
 watchPostEffect(() => {
