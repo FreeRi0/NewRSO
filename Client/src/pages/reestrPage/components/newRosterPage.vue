@@ -56,20 +56,50 @@ const allCategories = [
     { name: 'Пользователи' },
     { name: 'Центральный штаб' },
     { name: 'Окружные штабы' },
-    { name: 'Региональные штабы' },
+    { name: 'Региональный штаб' },
     { name: 'Местные штабы' },
     { name: 'Штабы СО ОО' },
     { name: 'ЛСО' },
-    { name: 'Направления' },
+    { name: 'Направление' },
 ];
+
+const requiredFieldsByRole = {
+    centralheadquarter_commander: ['name', 'email', 'phone_number', 'district_headquarter', 'regional_headquarter', 'local_headquarter', 'educational_headquarter', 'detachment', 'position'],
+    districtheadquarter_commander: ['name', 'phone_number', 'regional_headquarter', 'local_headquarter'],
+    regionalheadquarter_commander: ['name', 'phone_number', 'regional_headquarter', 'local_headquarter'],
+    localheadquarter_commander: ['name', 'local_headquarter', 'position'],
+    educationalheadquarter_commander: ['name', 'educational_headquarter'],
+    detachment_commander: ['name', 'detachment'],
+};
+
 
 const filteredCategories = ref([]);
 const updateFilteredCategories = () => {
     if (roleStore.roles.centralheadquarter_commander) {
         filteredCategories.value = allCategories;
-    } else if (roleStore.roles.detachment_commander) {
-        filteredCategories.value = allCategories.filter(category => category.name === 'Пользователи');
-    } else {
+    }
+    else if (roleStore.roles.districtheadquarter_commander) {
+        filteredCategories.value = allCategories.filter(category => category.name == 'Пользователи' || category.name == 'Окружные штабы'
+            || category.name == 'Региональный штаб' || category.name == 'Местные штабы' ||
+            category.name == 'Штабы СО ОО' || category.name == 'ЛСО' || category.name == 'Направление');
+    }
+    else if (roleStore.roles.regionalheadquarter_commander) {
+        filteredCategories.value = allCategories.filter(category => category.name == 'Пользователи'
+            || category.name == 'Местные штабы' || category.name == 'Штабы СО ОО' || category.name == 'ЛСО' || category.name == 'Направление');
+    }
+    else if (roleStore.roles.localheadquarter_commander) {
+        filteredCategories.value = allCategories.filter(category => category.name == 'Пользователи'
+            || category.name == 'Региональный штаб' || category.name == 'Местные штабы' ||
+            category.name == 'Штабы СО ОО' || category.name == 'ЛСО' || category.name == 'Направление');
+    }
+    else if (roleStore.roles.educationalheadquarter_commander) {
+        filteredCategories.value = allCategories.filter(category => category.name == 'Пользователи' ||
+            category.name == 'Штабы СО ОО' || category.name == 'ЛСО' || category.name == 'Направление');
+    }
+    else if (roleStore.roles.detachment_commander) {
+        filteredCategories.value = allCategories.filter(category => category.name == 'Пользователи' || category.name == 'ЛСО');
+    }
+    else {
         filteredCategories.value = [];
     }
 };
@@ -91,9 +121,9 @@ const indicatorsByCategory = {
     ],
     'Центральный штаб': [
         { name: 'Количество региональных штабов', key: 'regional_headquarters', selected: true },
-        { name: 'Количество местных штабов', key: 'local_headquarters', selected: true },
-        { name: 'Количество штабов СО ОО', key: 'educational_headquarters', selected: true },
-        { name: 'Количество ЛСО', key: 'educational_headquarters', selected: true },
+        { name: 'Количество местных штабов', key: 'local_headquarter', selected: true },
+        { name: 'Количество штабов СО ОО', key: 'educational_headquarter', selected: true },
+        { name: 'Количество ЛСО', key: 'educational_headquarter', selected: true },
         { name: 'Количество участников', key: 'participants_count', selected: true },
         { name: 'Верификация участников', key: 'verification_percent', selected: true },
         { name: 'Оплата членского взноса', key: 'membership_fee_percent', selected: true },
@@ -113,8 +143,8 @@ const indicatorsByCategory = {
         { name: 'Организация мероприятий', key: 'events_organizations', selected: true },
         { name: 'Участие в мероприятиях', key: 'event_participants', selected: true },
     ],
-    'Региональные штабы': [
-        { name: 'Количество местных штабов', key: 'local_headquarters', selected: true },
+    'Региональный штаб': [
+        { name: 'Количество местных штабов', key: 'local_headquarter', selected: true },
         { name: 'Количество штабов СО ОО', key: 'educational_headquarters', selected: true },
         { name: 'Количество ЛСО', key: 'detachments', selected: true },
         { name: 'Количество участников', key: 'participants_count', selected: true },
@@ -152,7 +182,7 @@ const indicatorsByCategory = {
         { name: 'Организация мероприятия', key: 'events_organizations', selected: true },
         { name: 'Участие в мероприятии', key: 'event_participants', selected: true },
     ],
-    'Направления': [
+    'Направление': [
         { name: 'Количество ЛСО', key: 'lso_count', selected: true },
         { name: 'Верификация участников', key: 'verification_percent', selected: true },
         { name: 'Оплата членского взноса', key: 'membership_fee_percent', selected: true },
@@ -169,11 +199,11 @@ const urlMap = {
     'Пользователи': `${addr}/api/v1/registry/users/`,
     'Центральный штаб': `${addr}/api/v1/registry/centrals/`,
     'Окружные штабы': `${addr}/api/v1/registry/districts/`,
-    'Региональные штабы': `${addr}/api/v1/registry/regionals/`,
+    'Региональный штаб': `${addr}/api/v1/registry/regionals/`,
     'Местные штабы': `${addr}/api/v1/registry/locals/`,
     'Штабы СО ОО': `${addr}/api/v1/registry/educationals/`,
     'ЛСО': `${addr}/api/v1/registry/detachments/`,
-    'Направления': `${addr}/api/v1/registry/directions/`,
+    'Направление': `${addr}/api/v1/registry/directions/`,
 };
 
 const reportColumns = {
@@ -196,9 +226,9 @@ const reportColumns = {
     ],
     'Центральный штаб': [
         { key: 'name', title: 'Центральный штаб' },
-        { key: 'regional_headquarters', title: 'Количество РШ' },
-        { key: 'local_headquarters', title: 'Количество МШ' },
-        { key: 'educational_headquarters', title: 'Количество штабов СО ОО' },
+        { key: 'regional_headquarter', title: 'Количество РШ' },
+        { key: 'local_headquarter', title: 'Количество МШ' },
+        { key: 'educational_headquarter', title: 'Количество штабов СО ОО' },
         { key: 'detachments', title: 'Количество ЛСО' },
         { key: 'participants_count', title: 'Количество участников' },
         { key: 'verification_percent', title: 'Верификация участников' },
@@ -220,7 +250,7 @@ const reportColumns = {
         { key: 'events_organizations', title: 'Организация мероприятия' },
         { key: 'event_participants', title: 'Участие в мероприятии' },
     ],
-    'Региональные штабы': [
+    'Региональный штаб': [
         { key: 'name', title: 'Региональный штаб' },
         { key: 'district_headquarter', title: 'Окружной штаб' },
         { key: 'local_headquarters', title: 'Количество МШ' },
@@ -274,7 +304,7 @@ const reportColumns = {
         { key: 'events_organizations', title: 'Организация мероприятия' },
         { key: 'event_participants', title: 'Участие в мероприятии' },
     ],
-    'Направления': [
+    'Направление': [
         { key: 'name', title: 'Направление' },
         { key: 'participation_count', title: 'Количество участников' },
         { key: 'lso_count', title: 'Количество ЛСО' },
@@ -306,11 +336,15 @@ const downloadReport = async () => {
 
         const reportData = Array.isArray(parsedData) ? parsedData : [parsedData];
         const columns = reportColumns[selectedCategory.value];
+        const getRequiredFields = () => {
+            const role = Object.keys(roleStore.roles).find(role => roleStore.roles[role]);
+            return requiredFieldsByRole[role] || [];
+        };
         const selectedIndicators = currentIndicators.value.filter(indicator => indicator.selected);
+        const requiredFields = getRequiredFields();
         const filteredColumns = columns.filter(col =>
             selectedIndicators.some(indicator => indicator.key === col.key) ||
-            ['name', 'email', 'phone_number', 'district_headquarter', 'regional_headquarter',
-                'local_headquarter', 'educational_headquarter', 'detachment', 'position',].includes(col.key)
+            requiredFields.includes(col.key)
         );
 
         const excelData = reportData.map(item =>
@@ -319,7 +353,6 @@ const downloadReport = async () => {
                 return acc;
             }, {})
         );
-
         const worksheet = XLSX.utils.json_to_sheet(excelData);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Отчет');
