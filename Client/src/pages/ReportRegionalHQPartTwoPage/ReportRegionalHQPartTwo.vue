@@ -147,7 +147,8 @@
             <v-expansion-panel-text>
               <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
                 @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.eleventh"
-                :is-error-panel="isErrorPanel.eleventh" />
+                :is-error-panel="isErrorPanel.eleventh" 
+                :tab="picked"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('12', picked, revisionPanels)">
@@ -157,7 +158,8 @@
             <v-expansion-panel-text>
               <twelfth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
                 @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.twelfth"
-                :is-error-panel="isErrorPanel.twelfth" />
+                :is-error-panel="isErrorPanel.twelfth"
+                :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('13', picked, revisionPanels)">
@@ -167,7 +169,8 @@
             <v-expansion-panel-text>
               <thirteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
                 @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.thirteenth"
-                :is-error-panel="isErrorPanel.thirteenth" />
+                :is-error-panel="isErrorPanel.thirteenth"
+                :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('14', picked, revisionPanels)">
@@ -1970,6 +1973,18 @@ watch(revisionPanels.value,
       console.log('возврат на дораб', isRevision.value);
     }
   },
+)
+
+watch(
+  () => picked.value,
+  () => {
+//     if (picked.value === 'Просмотр отправленного отчета') {
+//       
+//     } else {
+//       
+//     }
+    console.log('таб', picked.value);
+  }
 )
 
 onMounted(() => {

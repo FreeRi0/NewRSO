@@ -18,17 +18,18 @@
                 :min="0"
                 :max="2147483647"
                 @focusout="focusOut"
-                :disabled="(isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+                :disabled="(props.tab === 'Просмотр отправленного отчета') || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
                 :is-error-panel="isErrorPanel"
             />
         </div>
     
         <div 
             class="report__fieldset report__fieldset--comment"
-            v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+            v-if="(!isSent && !(props.centralExpert || props.districtExpert) && (props.tab !== 'Просмотр отправленного отчета')) ||
                   (isSent && thirteenthPanelData.comment) ||
                   ((props.centralExpert || props.districtExpert) && thirteenthPanelData.comment) ||
-                  (isSent && isRevision)"
+                  (isSent && isRevision) ||
+                  ((props.tab === 'Просмотр отправленного отчета') && thirteenthPanelData.comment)"
         >
             <label class="form__label report__label" for="comment">
                 Комментарий
@@ -44,7 +45,7 @@
                 :maxlength="3000"
                 :max-length-text="3000"
                 @focusout="focusOut"
-                :disabled="(isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+                :disabled="(props.tab === 'Просмотр отправленного отчета') || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
             >
             </TextareaReport>
         </div>
@@ -162,6 +163,9 @@ const props = defineProps({
     isErrorPanel: {
         type: Boolean,
     },
+    tab: {
+        type: String,
+    }
 });
 
 const ID_PANEL = '13';
