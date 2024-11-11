@@ -10,10 +10,12 @@
           </div>
         </v-expansion-panel-title><v-expansion-panel-text>
           <SeventhPanelForm :id="item.id" :panel_number="9" @collapse-form="collapsed()"
-            @formData="formData($event, item.id)" @formDataDH="formDataDH($event, item.id)"
-            @formDataCH="formDataCH($event, item.id)" @error="setError" @uploadFile="uploadFile($event, item.id)"
-            :data="ninthPanelData" @getPanelNumber="getPanelNumber($event)" @getId="getId($event)"
-            @deleteFile="deleteFile($event, item.id)" :is-sent-ninth="isSentNinth" :ninth-id="item.id"
+            @formData="formData($event, item.id)" @formDataDH="formDataDH($event, item.id)" @formDataCH="formDataCH($event, item.id)" @error="setError"
+            @uploadFile="uploadFile($event, item.id)"
+            :data="ninthPanelData"  @getPanelNumber="getPanelNumber($event)"
+            @getId="getId($event)"  @deleteFile="deleteFile($event, item.id)"
+            :is-sent-ninth="isSentNinth"
+            :ninth-id="item.id"
             :is-error-panel="Object.values(isErrorPanel).some(i => i.error === true && i.id == item.id)"
             :isCentralHeadquarterCommander="props.centralHeadquarterCommander"
             :isDistrictHeadquarterCommander="props.districtHeadquarterCommander" :title="item"></SeventhPanelForm>
@@ -148,7 +150,9 @@ const deleteFile = async (reportData, reportNumber) => {
 
 
 watchEffect(() => {
-  if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
+  if (props.districtHeadquarterCommander) {
+    ninthPanelData.value = { ...props.data[el_id.value] };
+  } else {
     if (props.data[el_id.value] && Object.keys(props.data[el_id.value]).length > 0) {
       console.log('data yes')
       isFirstSent.value = false;
@@ -175,10 +179,7 @@ watchEffect(() => {
         }
       }
     }
-  } else {
-    ninthPanelData.value = { ...props.data[el_id.value] }
   }
-
   if (panel.value || panel.value === 0) {
     disabled.value = true;
   } else {

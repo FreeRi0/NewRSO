@@ -673,14 +673,14 @@ import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.t
 import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
 const props = defineProps({
     title: Object,
-    panel_number: String,
+    panel_number: [String, Number],
     isDisabled: Boolean,
     isSecondTab: Boolean,
     isThirdTab: Boolean,
     isCentralHeadquarterCommander: Boolean,
     isDistrictHeadquarterCommander: Boolean,
-    id: String,
-    sixId: String,
+    id: [String, Number],
+    sixId: [String, Number],
     ninthId: String,
 
     isSentSix: Boolean,
@@ -811,7 +811,11 @@ const returnForReview = (event, number) => {
     if (event.target.checked) {
         if (number == 6) {
             reportStore.returnReport.six[props.sixId] = true;
-            emit('formDataCH', sixPanelDataCH);
+            formData.append('number_of_members', sixPanelDataCH.value.number_of_members);
+            formData.append('comment', sixPanelDataCH.value.comment);
+            formData.append('reasons[comment]', sixPanelDataCH.value.comment);
+            emit('formDataCH', formData);
+            console.log('log', formData)
         } else if (number == 9) {
             reportStore.returnReport.ninth[props.ninthId] = true;
             formData.append('event_happened', ninthPanelDataCH.value.event_happened);
@@ -873,12 +877,10 @@ const uploadFile = (event, number) => {
                     fileDH.value.size = event.target.files[0].size / Math.pow(1024, 2);
                 }
                 else if (props.isCentralHeadquarterCommander) {
-                    if (props.isDistrictHeadquarterCommander) {
-                        reportStore.reportDataCHFile.ninth[props.ninthId] = null;
-                        fileCH.value.name = event.target.files[0].name;
-                        fileCH.value.type = event.target.files[0].type.split('/').at(-1);
-                        fileCH.value.size = event.target.files[0].size / Math.pow(1024, 2);
-                    }
+                    reportStore.reportDataCHFile.ninth[props.ninthId] = null;
+                    fileCH.value.name = event.target.files[0].name;
+                    fileCH.value.type = event.target.files[0].type.split('/').at(-1);
+                    fileCH.value.size = event.target.files[0].size / Math.pow(1024, 2);
                 }
             } else {
                 if (props.isDistrictHeadquarterCommander) {
@@ -906,8 +908,8 @@ const uploadFile = (event, number) => {
 
             }
         }
-
     }
+
 
 }
 
@@ -1216,11 +1218,21 @@ watchEffect(() => {
                 fileDH.value.type = reportStore.reportDataDH.ninth[props.ninthId].file_type;
                 fileDH.value.size = reportStore.reportDataDH.ninth[props.ninthId].file_size;
             }
-            if (reportStore.reportDataCHFile.ninth[props.ninthId]) {
-                fileCH.value.name = reportStore.reportDataCHFile.ninth[props.ninthId].name;
-                fileCH.value.type = reportStore.reportDataCHFile.ninth[props.ninthId].type.split('/').at(-1);
-                fileCH.value.size = reportStore.reportDataCHFile.ninth[props.ninthId].size / Math.pow(1024, 2);
+            if (reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq !== null) {
+                fileCH.value.name = reportStore.reportForCheckCH.ninth[props.ninthId].scan_file;
+                fileCH.value.type = reportStore.reportForCheckCH.ninth[props.ninthId].file_type;
+                fileCH.value.size = reportStore.reportForCheckCH.ninth[props.ninthId].file_size;
+            } else {
+                if (reportStore.reportDataCHFile.ninth[props.ninthId]) {
+                    fileCH.value.name = reportStore.reportDataCHFile.ninth[props.ninthId].name;
+                    fileCH.value.type = reportStore.reportDataCHFile.ninth[props.ninthId].type.split('/').at(-1);
+                    fileCH.value.size = reportStore.reportDataCHFile.ninth[props.ninthId].size / Math.pow(1024, 2);
+                }
+                if (reportStore.reportForCheckCH.ninth[props.ninthId].rejecting_reasons) {
+                    reportStore.returnReport.ninth[props.ninthId] = true;
+                }
             }
+
         }
 
         emit('getId', props.id)
@@ -1245,8 +1257,17 @@ watch(sixPanelDataDH.value, (newValue) => {
 watch(sixPanelDataCH.value, () => {
     if (props.isCentralHeadquarterCommander) {
         reportStore.reportDataCH.six[props.sixId] = sixPanelDataCH.value;
-        emit('formDataCH', sixPanelDataCH.value);
-        console.log(sixPanelDataCH.value)
+        let formData = new FormData();
+        formData.append('number_of_members', sixPanelDataCH.value.number_of_members);
+        formData.append('comment', sixPanelDataCH.value.comment);
+        if (sixPanelDataCH.value.links.length) {
+            for (let i = 0; i < sixPanelDataCH.value.links.length; i++) {
+                formData.append(`[links][${i}][link]`, ninthPanelDataCH.value.links[i].link);
+            }
+        }
+        if (reportStore.returnReport.six[props.sixId]) formData.append('reasons[comment]', sixPanelDataCH.value.comment);
+        console.log('6', formData)
+        emit('formDataCH', formData);
     }
 });
 
@@ -1264,7 +1285,7 @@ watch(ninthPanelDataDH.value, (newValue) => {
             }
         }
         formData.append('document', reportStore.reportDataDHFile.ninth[props.ninthId] || '');
-        console.log('9 new', formData)
+        if (reportStore.returnReport.ninth[props.ninthId]) formData.append('reasons[comment]', ninthPanelDataCH.value.comment);
         emit('formDataDH', formData);
     }
 
@@ -1294,7 +1315,13 @@ watch(fileCH.value, () => {
         let formData = new FormData();
         formData.append('event_happened', ninthPanelDataCH.value.event_happened);
         formData.append('comment', ninthPanelDataCH.value.comment || '');
+        if (ninthPanelDataCH.value.links.length) {
+            for (let i = 0; i < ninthPanelDataCH.value.links.length; i++) {
+                formData.append(`[links][${i}][link]`, ninthPanelDataCH.value.links[i].link);
+            }
+        }
         formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId] || '');
+        if (reportStore.returnReport.ninth[props.ninthId]) formData.append('reasons[comment]', ninthPanelDataCH.value.comment);
         emit('formDataCH', formData);
         console.log('file9', formData)
     }
@@ -1306,6 +1333,11 @@ watch(ninthPanelDataCH.value, () => {
         let formData = new FormData();
         formData.append('event_happened', ninthPanelDataCH.value.event_happened);
         formData.append('comment', ninthPanelDataCH.value.comment || '');
+        if (ninthPanelDataCH.value.links.length) {
+            for (let i = 0; i < ninthPanelDataCH.value.links.length; i++) {
+                formData.append(`[links][${i}][link]`, ninthPanelDataCH.value.links[i].link);
+            }
+        }
         formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId] || '');
         emit('formDataCH', formData);
     }

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.first)"
+  <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.fourth)"
        class="form__field-group">
     <div v-for="(event, index) in events" :key="index" class="form__field-fourth-panel">
       <div class="form__field-members-event">
@@ -101,7 +101,7 @@
           name="comment"
           class="form__input"
           placeholder="Укажите наименования организованных мероприятий"
-          :rows="1"
+          :rows="row"
           autoResize
           :maxlength="3000"
           :max-length-text="3000"
@@ -254,7 +254,7 @@
                 :name="i"
                 class="form__input form__input-add-link"
                 type="text"
-                placeholder="https://vk.com/cco_monolit"
+                placeholder="Введите ссылку"
                 @focusout="focusOut"
                 :disabled="props.centralExpert || props.districtExpert"
             />
@@ -277,6 +277,7 @@
             :maxlength="3000"
             :max-length-text="3000"
             counter-visible
+            @focusout="focusOut"
             :disabled="props.centralExpert || props.districtExpert"
         />
       </div>
@@ -434,6 +435,17 @@
     <!---------------------------------------------------------------------------------------------------->
     <template v-slot:thirdTab>
       <div v-for="(eventCH, index) in commonData" :key="index" class="form__field-fourth-panel">
+        <div class="form__field-members">
+          <label class="form__label" for="eventName">Название мероприятия<sup class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="eventCH.dataCH.name"
+              :id="eventCH.dataCH.name"
+              name="eventName"
+              class="form__input"
+              placeholder="Введите название мероприятия"
+              disabled
+          />
+        </div>
         <label class="form__label">Количество человек, принявших участие в мероприятии <sup
             class="valid-red">*</sup></label>
         <v-table>
@@ -521,8 +533,8 @@
             <td class="report-table__th">Корректировка ЦШ</td>
           </tr>
           <tr>
-            <td class="report-table__td">{{ eventCH.dataRH.start_date }}</td>
-            <td class="report-table__td report-table__td__center"> {{ eventCH.dataDH.start_date }}</td>
+            <td class="report-table__td">{{ formattedDate(eventCH.dataRH.start_date) }}</td>
+            <td class="report-table__td report-table__td__center"> {{ formattedDate(eventCH.dataDH.start_date) }}</td>
             <td class="report-table__td">
               <InputReport
                   v-model:value="eventCH.dataCH.start_date"
@@ -545,8 +557,8 @@
             <td class="report-table__th">Корректировка ЦШ</td>
           </tr>
           <tr>
-            <td class="report-table__td">{{ eventCH.dataRH.end_date }}</td>
-            <td class="report-table__td report-table__td__center"> {{ eventCH.dataDH.end_date }}</td>
+            <td class="report-table__td">{{ formattedDate(eventCH.dataRH.end_date) }}</td>
+            <td class="report-table__td report-table__td__center"> {{ formattedDate(eventCH.dataDH.end_date) }}</td>
             <td class="report-table__td">
               <InputReport
                   v-model:value="eventCH.dataCH.end_date"
@@ -565,12 +577,23 @@
 
       <div class="form__field">
         <label class="form__label" for="15">Комментарий <sup class="valid-red">*</sup></label>
-        <InputReport
+<!--        <InputReport-->
+<!--            v-model:value="commentCH"-->
+<!--            id="15"-->
+<!--            name="15"-->
+<!--            class="form__input"-->
+<!--            style="width: 100%"-->
+<!--            :disabled="reportStore.isReportReject?.fourth && !props.centralExpert"-->
+<!--        />-->
+        <TextareaReport
             v-model:value="commentCH"
-            id="15"
-            name="15"
+            id="commentCH"
+            name="commentCH"
             class="form__input"
-            style="width: 100%"
+            autoResize
+            :maxlength="3000"
+            :max-length-text="3000"
+            counter-visible
             :disabled="reportStore.isReportReject?.fourth && !props.centralExpert"
         />
       </div>
@@ -601,8 +624,8 @@ import {reportPartTwoService} from "@services/ReportService.ts";
 import {FileBoxComponent} from "@entities/RatingRoComponents/components";
 import {fileValidate} from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 import {useReportPartTwoStore} from "@pages/ReportRegionalHQPartTwoPage/store.ts";
+import {formattedDate} from "@pages/ReportRegionalHQPartTwoPage/Helpers.js";
 
-// const swal = inject('$swal');
 const reportStore = useReportPartTwoStore();
 
 const props = defineProps({
@@ -658,6 +681,7 @@ const finalResult = ref(0);
 const finalResultDH = ref(0);
 const commonData = ref([]);
 const commentCH = ref();
+const row = ref(1);
 
 const focusOut = async () => {
   fourthPanelData.value.events = [...events.value];
@@ -746,8 +770,14 @@ const uploadFile = async (event, index) => {
   }
 };
 const deleteFile = async (index) => {
-  const {data} = await reportPartTwoService.createReportDraft(setFormData(null, index, false, true), '4', true);
-  emit('getData', data, 4);
+  if (isFirstSent.value) {
+    const {data} = await reportPartTwoService.createReport(setFormData(null, index, false, true), '4', true);
+    emit('getData', data, 4);
+  } else {
+    const {data} = await reportPartTwoService.createReportDraft(setFormData(null, index, false, true), '4', true);
+    emit('getData', data, 4);
+  }
+
 };
 
 const setFormData = (file = null, index = null, isDeleteEvent = false, isDeleteFile = false, isLinkDelete = false, linkIndex = null) => {
@@ -923,9 +953,11 @@ watchEffect(() => {
     isSent.value = props.data.is_sent;
 
     isFirstSent.value = reportStore.isReportReject.fourth && !props.data.central_version;
-    console.log('isFirstSent.value::::::', isFirstSent.value)
-  }
+    // console.log('isFirstSent.value::::::1', isFirstSent.value)
 
+    // row.value = props.data.comment ? props.data.comment.split('\n').length : 1;
+  }
+  // console.log('isFirstSent.value::::::2', isFirstSent.value)
   // Мапинг данных для отчета командира РШ при возвращении на доработку
   if (reportStore.reportReject.fourth && reportStore.isReportReject.fourth) {
     console.log('reportStore.reportReject.fourth', reportStore.reportReject.fourth)
@@ -964,8 +996,6 @@ watchEffect(() => {
       }
     }
   }
-}, {
-  flush: "post"
 });
 
 watchPostEffect(() => {
@@ -996,7 +1026,6 @@ watch(fourthPanelDataDH.value, () => {
 });
 
 watch(() => [commonData.value, commentCH], () => {
-  console.log('herere')
   let formData = new FormData();
 
   reportStore.reportDataCH.fourth.events = [];
@@ -1109,19 +1138,19 @@ watch(() => [commonData.value, commentCH], () => {
   }
 }
 
-// .form__field-members-event {
-//   display: flex;
-//   height: 111px;
-//   margin-top: 40px;
-//   justify-content: space-between;
-
-//   @media (max-width: 568px) {
-//     flex-direction: column-reverse;
-//     gap: 8px;
-//     align-items: flex-end;
-//     margin-top: 32px;
-//   }
-// }
+//.form__field-members-event {
+//  display: flex;
+//  height: 111px;
+//  margin-top: 40px;
+//  justify-content: space-between;
+//
+//  @media (max-width: 568px) {
+//    flex-direction: column-reverse;
+//    gap: 8px;
+//    align-items: flex-end;
+//    margin-top: 32px;
+//  }
+//}
 
 .form__field-members {
   max-width: 340px;

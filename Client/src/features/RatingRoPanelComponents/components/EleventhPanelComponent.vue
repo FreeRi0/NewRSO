@@ -17,7 +17,7 @@
         :min="0"
         :max="2147483647"
         @focusout="focusOut"
-        :disabled="!(isSent && isRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+        :disabled="(isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
         :is-error-panel="isErrorPanel"
       />
     </div>
@@ -27,8 +27,17 @@
         Скриншот численности <br />
         группы РО&nbsp;РСО&nbsp;<sup class="valid-red">*</sup>
       </p>
+      <FileBoxComponent
+        v-if="eleventhPanelData.scan_file"
+        :file="eleventhPanelData.scan_file"
+        :fileType="eleventhPanelData.file_type"
+        :fileSize="eleventhPanelData.file_size"
+        @click="deleteFile"
+        :is-sent="(isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+        :is-error-file="isErrorFile"
+      ></FileBoxComponent>
       <InputReport
-        v-if="!eleventhPanelData.scan_file || (isSent && isRevision)"
+        v-if="!eleventhPanelData.scan_file || isRevision"
         isFile
         type="file"
         accept=".jpg, .jpeg, .png, .pdf"
@@ -37,18 +46,9 @@
         width="100%"
         height="auto"
         @change="uploadFile"
-        :disabled="!(isSent && isRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+        :disabled="(isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
         :is-error-panel="isErrorPanel"
       />
-      <FileBoxComponent
-        v-if="eleventhPanelData.scan_file"
-        :file="eleventhPanelData.scan_file"
-        :fileType="eleventhPanelData.file_type"
-        :fileSize="eleventhPanelData.file_size"
-        @click="deleteFile"
-        :is-sent="!(isSent && isRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
-        :is-error-file="isErrorFile"
-      ></FileBoxComponent>
     </div>
 
     <div
@@ -70,7 +70,7 @@
         :maxlength="3000"
         :max-length-text="3000"
         @focusout="focusOut"
-        :disabled="!(isSent && isRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+        :disabled="(isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
       >
       </TextareaReport>
     </div>
@@ -93,7 +93,7 @@
         :maxlength="10"
         :min="0"
         :max="2147483647"
-        :disabled="centralExpert || isRevision"
+        :disabled="centralExpert || !(districtExpert || centralExpert)"
         :is-error-panel="isErrorPanel"
       />
     </div>
@@ -106,10 +106,10 @@
       :file="fileDH.name"
       :fileType="fileDH.type"
       :fileSize="fileDH.size"
-      :disabled="centralExpert || isRevision"
+      :disabled="centralExpert || !(districtExpert || centralExpert)"
       :is-error-file="isErrorFile"
       :is-error-panel="isErrorPanel"
-      :is-sent="centralExpert || isRevision"
+      :is-sent="centralExpert || !(districtExpert || centralExpert)"
     ></CommentFileComponent>
   </div>
 
@@ -126,7 +126,7 @@
       :maxlength="10"
       :min="0"
       :max="2147483647"
-      :disabled="isRevision"
+      :disabled="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.eleventh.verified_by_chq !== null"
       :is-error-panel="isErrorPanel"
     ></ReportTable>
 
@@ -139,8 +139,8 @@
       :fileType="fileCH.type"
       :fileSize="fileCH.size"
       :is-error-file="isErrorFile"
-      :is-disabled="isRevision"
-      :is-sent="isRevision"
+      :is-disabled="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.eleventh.verified_by_chq !== null"
+      :is-sent="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.eleventh.verified_by_chq !== null"
       :is-error-panel="isErrorPanel"
     ></CommentFileComponent>
 
@@ -148,7 +148,7 @@
       <v-checkbox 
         v-model="reportStore.returnReport.eleventh"
         label="Вернуть в&nbsp;РО на&nbsp;доработку" 
-        :disabled="isRevision"
+        :disabled="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.eleventh.verified_by_chq !== null"
         @change="onReturnReport"/>
     </div>
   </div>
@@ -187,16 +187,13 @@ const props = defineProps({
   isErrorPanel: {
     type: Boolean,
   },
-  isRevision: {
-    type: Boolean,
-  }
 });
 
 const ID_PANEL = "11";
 const isFirstSent = ref(true);
-const isResend = ref(true);
+const isRevision = ref(false);
 let isErrorFile = ref(false);
-// let fileName = ref(null);
+
 const eleventhPanelData = ref({
   participants_number: null,
   scan_file: "",
@@ -234,7 +231,6 @@ const fileCH = ref({
 })
 
 const isSent = ref(false);
-//const isVerifiedDH = ref(false);
 
 const emit = defineEmits([
   'getData', 
@@ -243,48 +239,29 @@ const emit = defineEmits([
 ]);
 
 const focusOut = async () => {
-  // if (!(props.districtExpert || props.centralExpert)) {
-    let formData = new FormData();
+  let formData = new FormData();
 
-    eleventhPanelData.value.participants_number ? formData.append("participants_number", eleventhPanelData.value.participants_number) : formData.append("participants_number", "");
-    formData.append("comment", eleventhPanelData.value.comment || '');
+  // eleventhPanelData.value.participants_number ? formData.append("participants_number", eleventhPanelData.value.participants_number) : formData.append("participants_number", "");
+  formData.append("participants_number", eleventhPanelData.value.participants_number || '');
+  formData.append("comment", eleventhPanelData.value.comment || '');
 
-    if (!props.isRevision) {
-      try {
-        if (isFirstSent.value) {
-          const { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-          emit('getData', data, Number(ID_PANEL));
-        } else {
-          const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-          emit('getData', data, Number(ID_PANEL));
-        }
-      } catch (e) {
-        console.log('focusOut error:', e)
+  try {
+    if (isFirstSent.value) {
+      if (isRevision.value) {
+        formData.append("scan_file", eleventhPanelData.value.scan_file || '');
+        formData.append("file_size", eleventhPanelData.value.file_size || '');
+        formData.append("file_type", eleventhPanelData.value.file_type || '');
       }
+      const { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+      emit('getData', data, Number(ID_PANEL));
+      
     } else {
-      try {
-        // if (isResend.value) {
-          const { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-          emit('getData', data, Number(ID_PANEL));
-          console.log('здесь 1')
-        // } else {
-        //   const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-        //   emit('getData', data, Number(ID_PANEL));
-        //   console.log('здесь 2')
-        // }
-      } catch (e) {
-        console.log('focusOut error55:', e)
-      }
+      const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+      emit('getData', data, Number(ID_PANEL));
     }
-    
-
-    
-
-  // }
-  
-  // if (props.districtExpert) {
-  //   emit('getDataDH', eleventhPanelDataDH.value, Number(ID_PANEL));
-  // }
+  } catch (e) {
+    console.log('focusOut error:', e)
+  }
 };
 
 const uploadFile = async (event) => {
@@ -297,23 +274,11 @@ const uploadFile = async (event) => {
   if(!isErrorFile.value) {
     let formData = new FormData();
     formData.append("scan_file", event.target.files[0]);
+    formData.append("participants_number", eleventhPanelData.value.participants_number || '');
+    formData.append("comment", eleventhPanelData.value.comment || '');
 
     try {
       if (isFirstSent.value) {
-        let { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-        eleventhPanelData.value.scan_file = data.scan_file.split('/').at(-1);
-        emit('getData', data, Number(ID_PANEL));
-      } else {
-        let { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-        eleventhPanelData.value.scan_file = data.scan_file.split('/').at(-1);
-        emit('getData', data, Number(ID_PANEL));
-      }
-    } catch (e) {
-      console.log('uploadFile error:', e);
-    }
-
-    try {
-      if (isResend.value && props.isRevision) {
         let { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
         eleventhPanelData.value.scan_file = data.scan_file.split('/').at(-1);
         emit('getData', data, Number(ID_PANEL));
@@ -364,6 +329,8 @@ const deleteFile = async () => {
   if(!isErrorFile.value) {
     let formData = new FormData();
     formData.append("scan_file", "");
+    formData.append("participants_number", eleventhPanelData.value.participants_number || '');
+    formData.append("comment", eleventhPanelData.value.comment || '');
 
     try {
       if (isFirstSent.value) {
@@ -375,19 +342,7 @@ const deleteFile = async () => {
       }
     } catch (e) {
       console.log('deleteFile error:', e);
-    }  
-
-    try {
-      if (isResend.value && props.isRevision) {
-        let { data : scan_file } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-        emit('getData', scan_file, Number(ID_PANEL));
-      } else {
-        let { data : scan_file } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-        emit('getData', scan_file, Number(ID_PANEL));
-      }
-    } catch (e) {
-      console.log('deleteFile error:', e);
-    }  
+    }
   }
 };
 
@@ -404,7 +359,7 @@ const deleteFileCH = async () => {
 const onReturnReport = (event) => {
   let formData = new FormData();
   formData.append('participants_number', eleventhPanelDataCH.value.participants_number);
-  formData.append('comment', eleventhPanelDataCH.value.comment);
+  formData.append('comment', eleventhPanelDataCH.value.comment || '');
   formData.append('scan_file', reportStore.reportDataCHFile.eleventh || '');
   
   if (event.target.checked) {
@@ -431,15 +386,19 @@ watchEffect(() => {
     if (props.data) {
       // console.log(props.data);
       isFirstSent.value = false;
-      if (props.isRevision) {
-        isResend.value = false;
-      }
+      isRevision.value = reportStore.isReportReject.eleventh;
       eleventhPanelData.value.participants_number = props.data.participants_number;
       eleventhPanelData.value.comment = props.data.comment;
       eleventhPanelData.value.scan_file = props.data.scan_file;
       eleventhPanelData.value.file_size = props.data.file_size;
       eleventhPanelData.value.file_type = props.data.file_type;
       isSent.value = props.data.is_sent;
+
+      isFirstSent.value = reportStore.isReportReject.eleventh && !props.data.central_version;
+      console.log('isFirstSent при доработке 11', isFirstSent.value);
+      if (reportStore.isReportReject.eleventh) {
+        reportStore.returnReport.eleventh = true;
+      }
     }
   }
   if (props.districtExpert) {
@@ -454,11 +413,21 @@ watchEffect(() => {
       fileDH.value.type = reportStore.reportDataDH.eleventh.file_type;
       fileDH.value.size = reportStore.reportDataDH.eleventh.file_size;
     }
+    if (reportStore.reportForCheckCH.eleventh.verified_by_chq !== null) {
+      fileCH.value.name = reportStore.reportForCheckCH.eleventh.scan_file;
+      fileCH.value.type = reportStore.reportForCheckCH.eleventh.file_type;
+      fileCH.value.size = reportStore.reportForCheckCH.eleventh.file_size;
+    } else
     if (reportStore.reportDataCHFile.eleventh) {
       fileCH.value.name = reportStore.reportDataCHFile.eleventh.name;
       fileCH.value.type = reportStore.reportDataCHFile.eleventh.type.split('/').at(-1);
       fileCH.value.size = reportStore.reportDataCHFile.eleventh.size / Math.pow(1024, 2);
     }
+    if (reportStore.reportForCheckCH.eleventh.rejecting_reasons) {
+      reportStore.returnReport.eleventh = true;
+    } 
+
+    // console.log('чек 11', reportStore.returnReport.eleventh)
   }
 }, {
   flush: 'post'
@@ -467,9 +436,6 @@ watchEffect(() => {
 watchPostEffect(() => {
   if (props.data) {
     isFirstSent.value = false;
-    if (props.isRevision) {
-      isResend.value = false;
-    }
     eleventhPanelData.value.participants_number = props.data.participants_number;
     eleventhPanelData.value.comment = props.data.comment;
     eleventhPanelData.value.scan_file = props.data.scan_file;
@@ -488,7 +454,11 @@ watchPostEffect(() => {
     fileCH.value.type = reportStore.reportDataCH.eleventh.file_type;
     fileCH.value.size = reportStore.reportDataCH.eleventh.file_size;
 
-    reportStore.returnReport.eleventh = true;
+    if (props.data?.rejecting_reasons) {
+      reportStore.returnReport.eleventh = true;
+    } else {
+      reportStore.returnReport.eleventh = false;
+    }
   }
   
 });

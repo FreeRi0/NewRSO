@@ -28,6 +28,8 @@
               @getDataCH="getDataCH($event, 1)"
               :returnReportProp="reportStore.returnReport.tenth.first"
               @onReturnReport="onReturnReport($event, 1)"
+              :isReportReject="reportStore.isReportReject.tenth.first"
+              :reportRejectData="reportStore.reportReject.tenth.first"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -59,6 +61,8 @@
               @getDataCH="getDataCH($event, 2)"
               :returnReportProp="reportStore.returnReport.tenth.second"
               @onReturnReport="onReturnReport($event, 2)"
+              :isReportReject="reportStore.isReportReject.tenth.second"
+              :reportRejectData="reportStore.reportReject.tenth.second"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -498,10 +502,15 @@ watchEffect(() => {
   if (props.data.first) {
     isFirstSent.value.first = false;
     tenthPanelDataFirst.value = {...props.data.first}
+    // console.log('props.data.first', props.data.first)
+    isFirstSent.value.first = reportStore.isReportReject.tenth.first && !props.data.first.central_version;
+    // console.log('isFirstSent.value.first', isFirstSent.value.first)
   }
   if (props.data.second) {
     isFirstSent.value.second = false;
     tenthPanelDataSecond.value = {...props.data.second}
+    isFirstSent.value.second = reportStore.isReportReject.tenth.second && !props.data.second.central_version;
+    // console.log('isFirstSent.value.second', isFirstSent.value.second)
   }
 
   if (reportStore.reportDataDHFile.tenth.first) {

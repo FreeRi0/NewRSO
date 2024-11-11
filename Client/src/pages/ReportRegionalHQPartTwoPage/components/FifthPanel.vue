@@ -1,5 +1,6 @@
 <template>
-  <div v-if="!(props.centralExpert || props.districtExpert)" class="form__field-group">
+  <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.fifth)"
+       class="form__field-group">
     <div class="form__field-group-general" v-for="(event, index) in events" :key="index">
       <div class="form__field-people">
         <div class="form__field-people-count">
@@ -136,7 +137,7 @@
           v-model:value="fifthPanelData.comment"
           id="comment"
           name="comment"
-          :rows="1"
+          :rows="row"
           autoResize
           placeholder="Комментарий"
           @focusout="focusOut"
@@ -156,28 +157,43 @@
     </div>
   </div>
 
-  <report-tabs v-else>
+  <report-tabs v-else :isReject="reportStore.isReportReject.fifth">
+
     <template v-slot:firstTab>
       <div class="form__field-group-general" v-for="(event, index) in events" :key="index">
         <div class="form__field-people">
           <div class="form__field-people-count">
             <div class="form__field-people-count-wrap">
-              <label class="form__label" for="participants_number">Общее количество человек, принявших участие в
-                трудовом
-                проекте <sup class="valid-red">*</sup></label>
-              <InputReport v-model:value="event.participants_number" id="participants_number" name="participants_number"
-                           class="form__input form__field-people-count-field" type="number" placeholder="Введите число"
-                           @focusout="focusOut" :disabled="props.centralExpert || props.districtExpert"/>
+              <label class="form__label" for="participants_number">
+                Общее количество человек, принявших участие в трудовом проекте
+                <sup class="valid-red">*</sup>
+              </label>
+              <InputReport
+                  v-model:value="event.participants_number"
+                  id="participants_number"
+                  name="participants_number"
+                  class="form__input form__field-people-count-field"
+                  type="number"
+                  placeholder="Введите число"
+                  @focusout="focusOut"
+                  :disabled="props.centralExpert || props.districtExpert"
+              />
             </div>
             <div class="form__field-people-count-wrap">
-              <label class="form__label" for="ro_participants_number">Количество человек из&nbsp;своего региона,
-                принявших
-                участие в&nbsp;трудовом проекте <sup class="valid-red">*</sup></label>
-              <InputReport v-model:value="event.ro_participants_number" id="ro_participants_number"
-                           name="ro_participants_number" class="form__input form__field-people-count-field"
-                           type="number"
-                           placeholder="Введите число" @focusout="focusOut"
-                           :disabled="props.centralExpert || props.districtExpert"/>
+              <label class="form__label" for="ro_participants_number">
+                Количество человек из&nbsp;своего региона, принявших участие в&nbsp;трудовом проекте
+                <sup class="valid-red">*</sup>
+              </label>
+              <InputReport
+                  v-model:value="event.ro_participants_number"
+                  id="ro_participants_number"
+                  name="ro_participants_number"
+                  class="form__input form__field-people-count-field"
+                  type="number"
+                  placeholder="Введите число"
+                  @focusout="focusOut"
+                  :disabled="props.centralExpert || props.districtExpert"
+              />
             </div>
           </div>
         </div>
@@ -185,16 +201,28 @@
           <div class="form__field-date-wrap">
             <label class="form__label" for="start_date">Дата начала проведения проекта <sup
                 class="valid-red">*</sup></label>
-            <InputReport v-model:value="event.start_date" id="start_date" name="start_date"
-                         class="form__input form__field-date-wrap-field" type="date" @focusout="focusOut"
-                         :disabled="props.centralExpert || props.districtExpert"/>
+            <InputReport
+                v-model:value="event.start_date"
+                id="start_date"
+                name="start_date"
+                class="form__input form__field-date-wrap-field"
+                type="date"
+                @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert"
+            />
           </div>
           <div class="form__field-date-wrap">
             <label class="form__label" for="end_date">Дата окончания проведения проекта <sup
                 class="valid-red">*</sup></label>
-            <InputReport v-model:value="event.end_date" id="end_date" name="end_date"
-                         class="form__input form__field-date-wrap-field" type="date" @focusout="focusOut"
-                         :disabled="props.centralExpert || props.districtExpert"/>
+            <InputReport
+                v-model:value="event.end_date"
+                id="end_date"
+                name="end_date"
+                class="form__input form__field-date-wrap-field"
+                type="date"
+                @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert"
+            />
           </div>
         </div>
         <div class="report__add-file">
@@ -208,13 +236,12 @@
                 class="form__input form__field-people-count-field"
                 placeholder="Введите название"
                 @focusout="focusOut"
-                disabled
+                :disabled="props.centralExpert || props.districtExpert"
             />
           </div>
         </div>
         <div style="width: 100%;">
-          <p class="form__label">Ссылка на группу трудового проекта в социальных сетях
-          </p>
+          <p class="form__label">Ссылка на группу трудового проекта в социальных сетях</p>
           <div class="form__field-link-wrap" v-for="(link, i) in events[index].links" :key="i">
             <InputReport
                 v-model:value="link.link"
@@ -222,12 +249,13 @@
                 :name="i"
                 class="form__input form__field-link-field"
                 type="text"
-                placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
+                placeholder="Введите ссылку"
                 @focusout="focusOut"
-                disabled
+                :disabled="props.centralExpert || props.districtExpert"
             />
           </div>
         </div>
+        <div class="hr"></div>
       </div>
       <div class="form__field-comment">
         <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
@@ -235,12 +263,13 @@
             v-model:value="fifthPanelData.comment"
             id="comment"
             name="comment"
-            :rows="1"
+            :rows="row"
             autoResize
             placeholder="Комментарий"
             :maxlength="3000"
             :max-length-text="3000"
             counter-visible
+            @focusout="focusOut"
             :disabled="props.centralExpert || props.districtExpert"
         />
       </div>
@@ -269,7 +298,7 @@
                   class="form__input form__field-people-count-field"
                   type="number"
                   placeholder="Введите число"
-                  :disabled="props.centralExpert"
+                  :disabled="props.centralExpert || reportStore.isReportReject?.fifth"
               />
             </div>
             <div class="form__field-people-count-wrap">
@@ -283,18 +312,18 @@
                   class="form__input form__field-people-count-field"
                   type="number"
                   placeholder="Введите число"
-                  :disabled="props.centralExpert"
+                  :disabled="props.centralExpert || reportStore.isReportReject?.fifth"
               />
             </div>
           </div>
-          <div class="form__field-people-deleteBtn">
-            <Button
-                v-if="index > 0 && !props.centralExpert"
-                label="Удалить проект"
-                class="deleteEventBtn"
-            />
-            <!--@click="deleteProjectDH(index)"-->
-          </div>
+          <!--          <div class="form__field-people-deleteBtn">-->
+          <!--            <Button-->
+          <!--                v-if="index > 0 && !props.centralExpert"-->
+          <!--                label="Удалить проект"-->
+          <!--                class="deleteEventBtn"-->
+          <!--            />-->
+          <!--            &lt;!&ndash;@click="deleteProjectDH(index)"&ndash;&gt;-->
+          <!--          </div>-->
         </div>
         <div class="form__field-date" style="display: flex;">
           <div class="form__field-date-wrap">
@@ -306,7 +335,7 @@
                 name="start_date"
                 class="form__input form__field-date-wrap-field"
                 type="date"
-                :disabled="props.centralExpert"
+                :disabled="props.centralExpert || reportStore.isReportReject?.fifth"
             />
           </div>
           <div class="form__field-date-wrap">
@@ -318,7 +347,7 @@
                 name="end_date"
                 class="form__input form__field-date-wrap-field"
                 type="date"
-                :disabled="props.centralExpert"
+                :disabled="props.centralExpert || reportStore.isReportReject?.fifth"
             />
           </div>
         </div>
@@ -332,9 +361,10 @@
               name="eventName"
               class="form__input form__field-people-count-field"
               placeholder="Введите название"
-              :disabled="props.centralExpert"
+              :disabled="props.centralExpert || reportStore.isReportReject?.fifth"
           />
         </div>
+        <div class="hr"></div>
       </div>
 
       <!--      <div v-if="!props.centralExpert">-->
@@ -352,7 +382,7 @@
             :maxlength="3000"
             :max-length-text="3000"
             counter-visible
-            :disabled="props.centralExpert"
+            :disabled="props.centralExpert || reportStore.isReportReject?.fifth"
         />
       </div>
       <div class="form__field-result">
@@ -367,6 +397,17 @@
 
     <template v-slot:thirdTab>
       <div v-for="(eventCH, index) in commonData" :key="index" class="form__field-fourth-panel">
+        <div class="form__field-people-count-wrap" style="margin-bottom: 16px;">
+          <label class="form__label" for="eventName">Название трудового проекта <sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="eventCH.dataRH.name"
+              id="eventCH.dataRH.name"
+              name="eventCH.dataRH.name"
+              class="form__input form__field-people-count-field"
+              disabled
+          />
+        </div>
         <label class="form__label">Общее количество человек, принявших участие в трудовом проекте <sup
             class="valid-red">*</sup></label>
         <v-table>
@@ -391,6 +432,7 @@
                   :min="0"
                   :max="9999999999"
                   :step="0.01"
+                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert"
               />
             </td>
           </tr>
@@ -421,6 +463,7 @@
                   :min="0"
                   :max="9999999999"
                   :step="0.01"
+                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert"
               />
             </td>
           </tr>
@@ -435,8 +478,8 @@
             <td class="report-table__th">Корректировка ЦШ</td>
           </tr>
           <tr>
-            <td class="report-table__td">{{ eventCH.dataRH.start_date }}</td>
-            <td class="report-table__td report-table__td__center">{{ eventCH.dataDH.start_date }}</td>
+            <td class="report-table__td">{{ formattedDate(eventCH.dataRH.start_date) }}</td>
+            <td class="report-table__td report-table__td__center">{{ formattedDate(eventCH.dataDH.start_date) }}</td>
             <td class="report-table__td">
               <InputReport
                   v-model:value="eventCH.dataCH.start_date"
@@ -444,6 +487,7 @@
                   name="eventCH.dataCH.end_date"
                   class="form__input"
                   type="date"
+                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert"
               />
             </td>
           </tr>
@@ -458,8 +502,8 @@
             <td class="report-table__th">Корректировка ЦШ</td>
           </tr>
           <tr>
-            <td class="report-table__td">{{ eventCH.dataRH.end_date }}</td>
-            <td class="report-table__td report-table__td__center">{{ eventCH.dataDH.end_date }}</td>
+            <td class="report-table__td">{{ formattedDate(eventCH.dataRH.end_date) }}</td>
+            <td class="report-table__td report-table__td__center">{{ formattedDate(eventCH.dataDH.end_date) }}</td>
             <td class="report-table__td">
               <InputReport
                   v-model:value="eventCH.dataCH.end_date"
@@ -467,17 +511,29 @@
                   name="eventCH.dataCH.end_date"
                   class="form__input"
                   type="date"
+                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert"
               />
             </td>
           </tr>
           </tbody>
         </v-table>
-        <div class="hr" style="margin-bottom: 40px;"></div>
+        <div class="hr" style="margin-bottom: 30px;"></div>
       </div>
 
-      <div class="form__field">
-        <label class="form__label" for="15">Комментарий <sup class="valid-red">*</sup></label>
-        <InputReport v-model:value="commentCH" id="15" name="15" class="form__input" style="width: 100%"/>
+      <div class="form__field" style="margin-bottom: 0;">
+        <label class="form__label" for="commentCH">Комментарий <sup class="valid-red">*</sup></label>
+        <!--        <InputReport v-model:value="commentCH" id="15" name="15" class="form__input" style="width: 100%"/>-->
+        <TextareaReport
+            v-model:value="commentCH"
+            id="commentCH"
+            name="commentCH"
+            autoResize
+            placeholder="Комментарий"
+            :maxlength="3000"
+            :max-length-text="3000"
+            counter-visible
+            :disabled="reportStore.isReportReject?.fifth && !props.centralExpert"
+        />
       </div>
       <!-- <div>
         <v-checkbox label="Итоговое значение"/>
@@ -491,6 +547,7 @@
             v-model="reportStore.returnReport.fifth"
             label="Вернуть в РО на доработку"
             @change="onReportReturn"
+            :disabled="reportStore.isReportReject?.fifth && !props.centralExpert"
         />
       </div>
     </template>
@@ -503,6 +560,7 @@ import {Button} from '@shared/components/buttons';
 import {reportPartTwoService} from "@services/ReportService.ts";
 import {ReportTabs} from './index';
 import {useReportPartTwoStore} from "@pages/ReportRegionalHQPartTwoPage/store.ts";
+import {formattedDate} from "@pages/ReportRegionalHQPartTwoPage/Helpers.js";
 
 // const swal = inject('$swal');
 const reportStore = useReportPartTwoStore();
@@ -554,6 +612,7 @@ const finalResult = ref(0);
 const finalResultDH = ref(0);
 const commonData = ref([]);
 const commentCH = ref();
+const row = ref(1);
 
 const focusOut = async () => {
   if (!isLinkError.value) {
@@ -639,7 +698,7 @@ const setFormData = (file = null, index = null, isDeleteEvent = false, isDeleteF
     // Логика обнуления проекта при нулевом количестве участников
     if (!(+event.participants_number)) {
       event.name = null;
-      event.ro_participants_number = false;
+      event.ro_participants_number = null;
       event.end_date = null;
       event.start_date = null;
       event.links = [];
@@ -666,6 +725,13 @@ const setFormData = (file = null, index = null, isDeleteEvent = false, isDeleteF
         for (let j = 0; j < event.links.length; j++) {
           if (event.links[j].link) formData.append(`events[${i}][links][${j}][link]`, event.links[j].link);
         }
+      }
+
+      if (reportStore.isReportReject.fifth && !isDeleteFile) {
+        console.log('here')
+        if (event.regulations) formData.append(`events[${i}][regulations]`, event.regulations);
+        // if (event.file_size) formData.append(`events[${i}][file_size]`, event.file_size);
+        // if (event.file_type) formData.append(`events[${i}][file_type]`, event.file_type);
       }
     }
   })
@@ -745,6 +811,7 @@ const onReportReturn = (event) => {
 }
 
 onMounted(() => {
+  // Мапинг данных для отчета эксперта ОШ
   if (reportStore.reportDataDH.fifth && props.districtExpert) {
     fifthPanelDataDH.value.events = [...reportStore.reportDataDH.fifth.events];
     fifthPanelDataDH.value.comment = reportStore.reportDataDH.fifth.comment;
@@ -791,11 +858,48 @@ watchEffect(() => {
     fifthPanelData.value.comment = props.data.comment || '';
     isSent.value = props.data.is_sent;
 
-    isFirstSent.value = reportStore.isReportReject.fourth && !props.data.central_version;
+    isFirstSent.value = reportStore.isReportReject.fifth && !props.data.central_version;
     console.log('isFirstSent.value for fifth_1::::::', isFirstSent.value)
   }
-}, {
-  flush: "post"
+
+  // Мапинг данных для отчета командира РШ при возвращении на доработку
+  if (reportStore.reportReject.fifth && reportStore.isReportReject.fifth) {
+    console.log('reportStore.reportReject.fifth', reportStore.reportReject.fifth)
+    console.log('props.data', props.data)
+
+    reportStore.returnReport.fifth = true;
+    // Добавление данных панели "корректировка ОШ"
+    const reportDataDH = JSON.parse(reportStore.reportReject.fifth.district_version);
+
+    fifthPanelDataDH.value.events = reportDataDH.events;
+    fifthPanelDataDH.value.comment = reportDataDH.comment;
+
+    // Добавление данных для панели "корректировка ЦШ"
+    if (props.data.central_version) {
+      // Отчет создан:
+      commentCH.value = props.data.central_version.comment || '';
+      for (let i = 0; i < props.data.events.length; i++) {
+        commonData.value[i] = {
+          dataRH: props.data.events[i],
+          dataDH: reportDataDH.events[i],
+          dataCH: props.data.central_version.events[i],
+        }
+      }
+    } else {
+      // Отчет не создан:
+      const reportDataRH = JSON.parse(reportStore.reportReject.fifth.regional_version);
+      commentCH.value = reportStore.reportReject.fifth.comment || '';
+
+      console.log('reportDataRH', reportDataRH)
+      for (let i = 0; i < props.data.events.length; i++) {
+        commonData.value[i] = {
+          dataRH: reportDataRH.events[i],
+          dataDH: reportDataDH.events[i],
+          dataCH: reportStore.reportReject.fifth.events[i],
+        }
+      }
+    }
+  }
 });
 
 watchPostEffect(() => {

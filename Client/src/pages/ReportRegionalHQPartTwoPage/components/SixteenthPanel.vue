@@ -1,5 +1,6 @@
 <template>
-  <div v-if="!(props.centralExpert || props.districtExpert)" class="form__field-group">
+  <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.sixteenth)"
+       class="form__field-group">
     <div class="form__field-project-existence">
       <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу <sup class="valid-red">*</sup>
       </p>
@@ -108,7 +109,7 @@
                 :name="i"
                 class="form__input"
                 type="text"
-                placeholder="https://vk.com/cco_monolit"
+                placeholder="Введите ссылку"
                 @focusout="focusOut"
                 :disabled="isSent || !sixteenthPanelData.is_project"
                 isLink
@@ -144,7 +145,7 @@
             v-model:value="sixteenthPanelData.comment"
             id="comment"
             name="comment"
-            :rows="1"
+            :rows="row"
             autoResize
             placeholder="Напишите сообщение"
             @focusout="focusOut"
@@ -165,7 +166,8 @@
     </div>
   </div>
   <!------------------------------------------------------------------------------------------------>
-  <report-tabs v-else>
+  <report-tabs v-else :isReject="reportStore.isReportReject.sixteenth">
+
     <template v-slot:firstTab>
       <div class="form__field-project-existence">
         <p class="form__label">
@@ -173,18 +175,33 @@
         </p>
         <div class="form__label-radio">
           <div style="display: flex; align-items: center">
-            <input class="custom-radio" v-model="sixteenthPanelData.is_project" id="is_project-true" type="radio"
-                   :value="true" disabled/>
+            <input
+                class="custom-radio"
+                v-model="sixteenthPanelData.is_project"
+                id="is_project-true"
+                type="radio"
+                :value="true"
+                :disabled="props.centralExpert || props.districtExpert"
+            />
             <label for="is_project-true">Да</label>
           </div>
           <div style="display: flex; align-items: center">
-            <input class="custom-radio" v-model="sixteenthPanelData.is_project" id="is_project-false" type="radio"
-                   :value="false" disabled/>
+            <input
+                class="custom-radio"
+                v-model="sixteenthPanelData.is_project"
+                id="is_project-false"
+                type="radio"
+                :value="false"
+                :disabled="props.centralExpert || props.districtExpert"
+            />
             <label for="is_project-false">Нет</label>
           </div>
         </div>
+        <div class="hr" style="margin-top: 10px;"></div>
       </div>
+      <!---->
       <div class="form__field-info" v-for="(project, index) in projects" :key="index">
+        <!---->
         <div class="form__field-info-project">
           <div class="form__field-info-win">
             <label class="form__label" for="9">Наименование трудового проекта, в котором ЛСО РО одержал победу <sup
@@ -199,12 +216,13 @@
                 counter-visible
                 :max-counter="300"
                 :max-length="300"
-                :disabled="props.centralExpert || props.districtExpert"
+                :disabled="(props.centralExpert || props.districtExpert) || !sixteenthPanelData.is_project"
                 style="width: 100%;"
+                @focusout="focusOut"
             />
           </div>
         </div>
-
+        <!---->
         <div>
           <div class="project-regulations">
             <div class="project-scope">
@@ -216,7 +234,8 @@
                     type="radio"
                     :id="`All-${index}`"
                     value="Всероссийский"
-                    disabled
+                    :disabled="(props.centralExpert || props.districtExpert) || !sixteenthPanelData.is_project"
+                    @change="focusOut"
                 />
                 <label :for="`All-${index}`">Всероссийский</label>
               </div>
@@ -227,7 +246,8 @@
                     type="radio"
                     :id="`District-${index}`"
                     value="Окружной"
-                    disabled
+                    :disabled="(props.centralExpert || props.districtExpert) || !sixteenthPanelData.is_project"
+                    @change="focusOut"
                 />
                 <label :for="`District-${index}`">Окружной</label>
               </div>
@@ -238,13 +258,15 @@
                     type="radio"
                     :id="`Interregional-${index}`"
                     value="Межрегиональный"
-                    disabled
+                    :disabled="(props.centralExpert || props.districtExpert) || !sixteenthPanelData.is_project"
+                    @change="focusOut"
                 />
                 <label :for="`Interregional-${index}`">Межрегиональный</label>
               </div>
             </div>
           </div>
         </div>
+        <!---->
         <div>
           <p class="form__label">Ссылка на&nbsp;группу проекта в социальных сетях</p>
           <div class="form__field-link " v-for="(link, i) in projects[index].links" :key="i">
@@ -255,18 +277,30 @@
                   :name="i"
                   class="form__input"
                   type="text"
-                  placeholder="https://vk.com/cco_monolit"
+                  placeholder="Введите ссылку"
                   @focusout="focusOut"
-                  disabled
+                  :disabled="(props.centralExpert || props.districtExpert) || !sixteenthPanelData.is_project"
                   isLink
-                  style="width: 100%;"
               />
+            </div>
+            <div v-if="!(props.centralExpert || props.districtExpert) && (!isSent && sixteenthPanelData.is_project)">
+              <div v-if="projects[index].links.length === i + 1"
+                   class="add_link"
+                   @click="addLink(index)">
+                <span class="add_link-plus">+</span>
+                Добавить ссылку
+              </div>
+              <div v-else
+                   class="add_link"
+                   @click="deleteLink(index, i)"
+              >Удалить
+              </div>
             </div>
           </div>
         </div>
         <div class="hr" style="margin-top: 10px;"></div>
       </div>
-
+      <!---->
       <div class="form__field-comment">
         <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
         <TextareaReport
@@ -280,6 +314,7 @@
             :max-length-text="3000"
             counter-visible
             :disabled="props.centralExpert || props.districtExpert"
+            @focusout="focusOut"
         />
       </div>
       <div class="form__field-result">
@@ -305,7 +340,7 @@
                 id="is_projectDH-true"
                 type="radio"
                 :value="true"
-                :disabled="props.centralExpert"
+                :disabled="props.centralExpert || reportStore.isReportReject?.sixteenth"
             />
             <label for="is_projectDH-true">Да</label>
           </div>
@@ -316,13 +351,15 @@
                 id="is_projectDH-false"
                 type="radio"
                 :value="false"
-                :disabled="props.centralExpert"
+                :disabled="props.centralExpert || reportStore.isReportReject?.sixteenth"
             />
             <label for="is_projectDH-false">Нет</label>
           </div>
         </div>
       </div>
+      <!---->
       <div class="form__field-info" v-for="(project, index) in sixteenthPanelDataDH.projects" :key="index">
+        <!---->
         <div class="form__field-info-project">
           <div class="form__field-info-win">
             <label class="form__label" for="9">Наименование трудового проекта, в котором ЛСО РО одержал победу <sup
@@ -336,18 +373,11 @@
                 placeholder="ВВС ПРО"
                 :max-length="300"
                 style="width: 100%;"
-                :disabled="!sixteenthPanelDataDH.is_project || props.centralExpert"
+                :disabled="(!sixteenthPanelDataDH.is_project || props.centralExpert) || (props.centralExpert || reportStore.isReportReject?.sixteenth)"
             />
           </div>
-          <!--          <div class="deleteBtn">-->
-          <!--            <Button-->
-          <!--                v-if="index > 0"-->
-          <!--                label="Удалить проект"-->
-          <!--                class="deleteProjectBtn"-->
-          <!--                @click="deleteProjectDH(index)"-->
-          <!--            />-->
-          <!--          </div>-->
         </div>
+        <!---->
         <div>
           <div class="project-regulations">
             <div class="project-scope">
@@ -359,7 +389,7 @@
                     type="radio"
                     :id="`All-${index}DH`"
                     value="Всероссийский"
-                    :disabled="!sixteenthPanelDataDH.is_project || props.centralExpert"
+                    :disabled="(!sixteenthPanelDataDH.is_project || props.centralExpert) || (props.centralExpert || reportStore.isReportReject?.sixteenth)"
                 />
                 <label :for="`All-${index}DH`">Всероссийский</label>
               </div>
@@ -370,7 +400,7 @@
                     type="radio"
                     :id="`District-${index}DH`"
                     value="Окружной"
-                    :disabled="!sixteenthPanelDataDH.is_project || props.centralExpert"
+                    :disabled="(!sixteenthPanelDataDH.is_project || props.centralExpert) || (props.centralExpert || reportStore.isReportReject?.sixteenth)"
                 />
                 <label :for="`District-${index}DH`">Окружной</label>
               </div>
@@ -381,7 +411,7 @@
                     type="radio"
                     :id="`Interregional-${index}DH`"
                     value="Межрегиональный"
-                    :disabled="!sixteenthPanelDataDH.is_project || props.centralExpert"
+                    :disabled="(!sixteenthPanelDataDH.is_project || props.centralExpert) || (props.centralExpert || reportStore.isReportReject?.sixteenth)"
                 />
                 <label :for="`Interregional-${index}DH`">Межрегиональный</label>
               </div>
@@ -390,9 +420,7 @@
         </div>
         <div class="hr" style="margin-top: 10px;"></div>
       </div>
-      <!--      <div v-if="sixteenthPanelDataDH.is_project">-->
-      <!--        <Button class="add_eventBtn" label="Добавить проект" @click="addProjectDH"/>-->
-      <!--      </div>-->
+      <!---->
       <div>
         <div class="form__field-comment">
           <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
@@ -406,7 +434,7 @@
               :maxlength="3000"
               :max-length-text="3000"
               counter-visible
-              :disabled="props.centralExpert"
+              :disabled="props.centralExpert || reportStore.isReportReject?.sixteenth"
           />
         </div>
         <div class="form__field-result">
@@ -422,9 +450,9 @@
     <!------------------------------------------------------------------------------------------------>
 
     <template v-slot:thirdTab>
-      <div class="form__field-project-existence" style="margin-bottom: 10px;">
-        <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу <sup
-            class="valid-red">*</sup>
+      <div class="form__field-project-existence" style="margin-bottom: 30px;">
+        <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу
+          <sup class="valid-red">*</sup>
         </p>
         <div class="form__label-radio">
           <div style="display: flex; align-items: center">
@@ -434,7 +462,7 @@
                 id="is_projectCH-true"
                 type="radio"
                 :value="true"
-                :disabled="props.centralExpert"
+                disabled
             />
             <label for="is_projectCH-true">Да</label>
           </div>
@@ -445,31 +473,32 @@
                 id="is_projectCH-false"
                 type="radio"
                 :value="false"
-                :disabled="props.centralExpert"
+                disabled
             />
             <label for="is_projectCH-false">Нет</label>
           </div>
         </div>
       </div>
+      <div class="hr"></div>
       <div v-for="(projectCH, index) in commonData" :key="index" style="margin-top: 10px;">
         <div>
           <label class="form__label">Наименование трудового проекта, в котором ЛСО РО одержал победу <sup
               class="valid-red">*</sup></label>
           <v-table style="margin-top: 10px; width: 700px;">
             <tbody>
-            <tr class="report-table__tr">
+            <tr class="report-table__tr" style="font-weight: bold">
               <td>Данные РО</td>
             </tr>
             <tr class="report-table__td">
               <td>{{ projectCH.dataRH.name }}</td>
             </tr>
-            <tr class="report-table__tr">
+            <tr class="report-table__tr" style="font-weight: bold">
               <td>Корректировка ОШ</td>
             </tr>
             <tr class="report-table__td">
               <td>{{ projectCH.dataDH.name }}</td>
             </tr>
-            <tr class="report-table__tr">
+            <tr class="report-table__tr" style="font-weight: bold">
               <td>Корректировка ЦШ</td>
             </tr>
             <tr class="report-table__tr">
@@ -479,6 +508,7 @@
                     :id="'projectCH.dataCH.name'"
                     :name="'projectCH.dataCH.name'"
                     style="width: 100%;"
+                    :disabled="reportStore.isReportReject?.sixteenth && !props.centralExpert"
                 />
               </td>
             </tr>
@@ -510,6 +540,7 @@
                   type="radio"
                   :id="`All-${index}CH`"
                   value="Всероссийский"
+                  :disabled="reportStore.isReportReject?.sixteenth && !props.centralExpert"
               />
               <label :for="`All-${index}CH`">Всероссийский</label>
             </div>
@@ -520,6 +551,7 @@
                   type="radio"
                   :id="`District-${index}CH`"
                   value="Окружной"
+                  :disabled="reportStore.isReportReject?.sixteenth && !props.centralExpert"
               />
               <label :for="`District-${index}CH`">Окружной</label>
             </div>
@@ -530,6 +562,7 @@
                   type="radio"
                   :id="`Interregional-${index}CH`"
                   value="Межрегиональный"
+                  :disabled="reportStore.isReportReject?.sixteenth && !props.centralExpert"
               />
               <label :for="`Interregional-${index}CH`">Межрегиональный</label>
             </div>
@@ -537,22 +570,35 @@
         </div>
         <div class="hr" style="margin-top: 10px;"></div>
       </div>
-      <div class="form__field">
+      <div class="form__field" style="margin-bottom: 0;">
         <label class="form__label" for="15">Комментарий <sup class="valid-red">*</sup></label>
-        <InputReport v-model:value="commentCH" id="15" name="15" class="form__input" style="width: 100%"/>
+        <!--        <InputReport v-model:value="commentCH" id="15" name="15" class="form__input" style="width: 100%"/>-->
+        <TextareaReport
+            v-model:value="commentCH"
+            id="commentCH"
+            name="commentCH"
+            :rows="1"
+            autoResize
+            placeholder="Напишите сообщение"
+            :maxlength="3000"
+            :max-length-text="3000"
+            counter-visible
+            :disabled="reportStore.isReportReject?.sixteenth && !props.centralExpert"
+        />
       </div>
-<!--      <div>-->
-<!--        <v-checkbox label="Итоговое значение"/>-->
-<!--      </div>-->
-<!--      <div class="hr"></div>-->
-<!--      <div>-->
-<!--        <p>(4-1)*2+(4-2)+(4-3)=9</p>-->
-<!--      </div>-->
+      <!--      <div>-->
+      <!--        <v-checkbox label="Итоговое значение"/>-->
+      <!--      </div>-->
+      <!--      <div class="hr"></div>-->
+      <!--      <div>-->
+      <!--        <p>(4-1)*2+(4-2)+(4-3)=9</p>-->
+      <!--      </div>-->
       <div>
         <v-checkbox
             v-model="reportStore.returnReport.sixteenth"
             label="Вернуть в РО на доработку"
             @change="onReportReturn"
+            :disabled="reportStore.isReportReject?.sixteenth && !props.centralExpert"
         />
       </div>
     </template>
@@ -617,6 +663,7 @@ const finalResult = ref(0);
 const finalResultDH = ref(0);
 const commonData = ref([]);
 const commentCH = ref();
+const row = ref(1);
 
 const focusOut = async () => {
   sixteenthPanelData.value.projects = [...projects.value];
@@ -840,6 +887,49 @@ watchEffect(() => {
     sixteenthPanelData.value.is_project = props.data.is_project;
     sixteenthPanelData.value.comment = props.data.comment || '';
     isSent.value = props.data.is_sent;
+
+    isFirstSent.value = reportStore.isReportReject.sixteenth && !props.data.central_version;
+    // console.log('isFirstSent.value for sixteenth_1::::::', isFirstSent.value)
+  }
+
+  // Мапинг данных для отчета командира РШ при возвращении на доработку
+  if (reportStore.reportReject.sixteenth && reportStore.isReportReject.sixteenth) {
+    // console.log('reportStore.reportReject.sixteenth', reportStore.reportReject.sixteenth)
+    // console.log('props.data', props.data)
+
+    reportStore.returnReport.sixteenth = true;
+    // Добавление данных панели "корректировка ОШ"
+    const reportDataDH = JSON.parse(reportStore.reportReject.sixteenth.district_version);
+
+    sixteenthPanelDataDH.value.projects = reportDataDH.projects;
+    sixteenthPanelDataDH.value.comment = reportDataDH.comment;
+    sixteenthPanelDataDH.value.is_project = reportDataDH.is_project;
+
+    // Добавление данных для панели "корректировка ЦШ"
+    if (props.data.central_version) {
+      // Отчет создан:
+      commentCH.value = props.data.central_version.comment || '';
+      for (let i = 0; i < props.data.projects.length; i++) {
+        commonData.value[i] = {
+          dataRH: props.data.projects[i],
+          dataDH: reportDataDH.projects[i],
+          dataCH: props.data.central_version.projects[i],
+        }
+      }
+    } else {
+      // Отчет не создан:
+      const reportDataRH = JSON.parse(reportStore.reportReject.sixteenth.regional_version);
+      commentCH.value = reportStore.reportReject.sixteenth.comment || '';
+
+      console.log('reportDataRH', reportDataRH)
+      for (let i = 0; i < props.data.projects.length; i++) {
+        commonData.value[i] = {
+          dataRH: reportDataRH.projects[i],
+          dataDH: reportDataDH.projects[i],
+          dataCH: reportStore.reportReject.sixteenth.projects[i],
+        }
+      }
+    }
   }
 });
 
