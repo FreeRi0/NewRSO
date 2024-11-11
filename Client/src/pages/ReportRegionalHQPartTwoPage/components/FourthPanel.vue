@@ -112,9 +112,10 @@
     <template v-slot:firstTab>
       <div v-for="(event, index) in events" :key="index" class="form__field-fourth-panel">
         <div class="form__field-members-event">
-          <div style="display: flex; gap: 40px">
-            <div class="form__field-members">
-              <label class="form__label" for="participants_number">Количество человек, принявших участие в мероприятии
+          <div class="form__field-date">
+            <div class="form__field">
+              <label style="max-width: 300px;" class="form__label" for="participants_number">Количество человек,
+                принявших участие в мероприятии
                 <sup class="valid-red">*</sup></label>
               <div style="display: flex; justify-content: space-between;">
                 <InputReport v-model:value="event.participants_number" :id="event.participants_number"
@@ -122,9 +123,9 @@
                   :disabled="props.centralExpert || props.districtExpert" @focusout="focusOut" />
               </div>
             </div>
-            <div class="form__field-members">
+            <div class="form__field">
               <label class="form__label" for="eventName">Название мероприятия<sup class="valid-red">*</sup></label>
-              <div style="display: flex; justify-content: space-between;">
+              <div class="form__field-name">
                 <InputReport v-model:value="event.name" :id="event.name" name="eventName" class="form__input"
                   placeholder="Введите название мероприятия" :disabled="props.centralExpert || props.districtExpert"
                   @focusout="focusOut" />
@@ -210,9 +211,10 @@
     <template v-slot:secondTab>
       <div v-for="(eventDH, index) in fourthPanelDataDH.events" :key="index" class="form__field-fourth-panel">
         <div class="form__field-members-event">
-          <div style="display: flex; gap: 40px">
-            <div class="form__field-members">
-              <label class="form__label" for="participants_number">Количество человек, принявших участие в мероприятии
+          <div class="form__field-date">
+            <div class="form__field">
+              <label style="max-width: 300px;" class="form__label" for="participants_number">Количество человек,
+                принявших участие в мероприятии
                 <sup class="valid-red">*</sup></label>
               <div style="display: flex; justify-content: space-between;">
                 <InputReport v-model:value="eventDH.participants_number" :id="eventDH.participants_number"
@@ -221,9 +223,9 @@
                   :disabled="props.centralExpert || reportStore.isReportReject?.fourth" />
               </div>
             </div>
-            <div class="form__field-members">
+            <div class="form__field">
               <label class="form__label" for="eventName">Название мероприятия<sup class="valid-red">*</sup></label>
-              <div style="display: flex; justify-content: space-between;">
+              <div class="form__field-name">
                 <InputReport v-model:value="eventDH.name" :id="eventDH.name" name="eventName" class="form__input"
                   placeholder="Введите название мероприятия"
                   :disabled="props.centralExpert || reportStore.isReportReject?.fourth" />
@@ -966,6 +968,16 @@ watch(() => [commonData.value, commentCH], () => {
 //    margin-top: 32px;
 //  }
 //}
+
+.form__field-name {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 22px;
+
+  @media (max-width: 680px) {
+    margin-top: 0px;
+  }
+}
 
 .form__field-members {
   max-width: 340px;
