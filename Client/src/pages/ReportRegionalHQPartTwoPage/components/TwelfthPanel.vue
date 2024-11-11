@@ -1,6 +1,7 @@
 <template>
   <div 
-    v-if="!(props.districtExpert || props.centralExpert || reportStore.isReportReject.twelfth)"
+    v-if="!(props.districtExpert || props.centralExpert || reportStore.isReportReject.twelfth) ||
+          (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject.twelfth)"
     class="form__field-group"
   >
     <TwelfthPanelComponent
@@ -9,10 +10,14 @@
       :data="data"
       :is-error-panel="isErrorPanel"
       @get-data="getData"
+      :tab="tab"
     ></TwelfthPanelComponent>
   </div>
 
-  <report-tabs v-else :isReject="reportStore.isReportReject.twelfth" >
+  <report-tabs 
+    v-if="(props.districtExpert || props.centralExpert) || 
+          (props.tab === 'Доработка' && reportStore.isReportReject.twelfth)" 
+    :isReject="reportStore.isReportReject.twelfth" >
     <template v-slot:firstTab>
       <TwelfthPanelComponent
         :central-expert="props.centralExpert"
@@ -61,6 +66,9 @@ const props = defineProps({
   isErrorPanel: {
     type: Boolean,
   },
+  tab: {
+    type: String,
+  }
 });
 
 const reportStore = useReportPartTwoStore();
