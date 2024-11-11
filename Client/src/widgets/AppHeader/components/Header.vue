@@ -312,7 +312,7 @@ const userPages = computed(() => [
 
     {
         title: 'Реестр участников',
-        link: '/roster',
+        name: 'Roster',
         show:
             roleStore.roles?.centralheadquarter_commander ||
             roleStore.roles?.districtheadquarter_commander ||

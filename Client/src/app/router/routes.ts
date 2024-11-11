@@ -803,13 +803,22 @@ const routes: RouteRecordRaw[] = [
 
             {
                 path: '/roster',
-                name: 'Roster',
-                component: () =>
-                    import('@pages/reestrPage/components/newRosterPage.vue'),
                 meta: {
+                    redirectTo: 'Roster',
                     label: 'Реестр участников',
                 },
+                children: [
+                    {
+                        path: '',
+                        name: 'Roster',
+                        component: () =>
+                            import(
+                                '@pages/reestrPage/components/newRosterPage.vue'
+                            ),
+                    },
+                ],
             },
+
             {
                 path: '/corp-univer',
                 meta: {
