@@ -25,14 +25,22 @@
           </button>
         </div>
         <v-expansion-panels>
-          <v-expansion-panel>
+          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('1') : true">
             <v-expansion-panel-title :class="isErrorPanel.first ? 'visible-error' : ''">
               1. Численность членов РО&nbsp;РСО в&nbsp;соответствии с&nbsp;объемом уплаченных членских взносов
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <first-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.first"
-                :is-error-panel="isErrorPanel.first" :blockEditFirstReport="blockEditFirstReport" />
+              <first-panel
+                  :districtExpert="districtExpert"
+                  :centralExpert="centralExpert"
+                  @get-data="setData"
+                  @get-data-DH="setDataDH"
+                  @get-data-CH="setDataCH"
+                  :data="reportData.first"
+                  :is-error-panel="isErrorPanel.first"
+                  :blockEditFirstReport="blockEditFirstReport"
+                  :tab="picked"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('2', picked, revisionPanels)">
@@ -59,18 +67,25 @@
                 text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel>
+          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('4') : true">
             <v-expansion-panel-title :class="isErrorPanel.fourth ? 'visible-error' : ''">
               4. Организация всероссийских (международных), окружных и&nbsp;межрегиональных мероприятий и&nbsp;проектов
               (слеты, школы, фестивали, турниры и&nbsp;прочие)
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <fourth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.fourth"
-                :is-error-panel="isErrorPanel.fourth" />
+              <fourth-panel
+                :districtExpert="districtExpert"
+                :centralExpert="centralExpert"
+                @get-data="setData"
+                @get-data-DH="setDataDH"
+                @get-data-CH="setDataCH"
+                :data="reportData.fourth"
+                :is-error-panel="isErrorPanel.fourth"
+                :tab="picked"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel>
+          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('5') : true">
             <v-expansion-panel-title :class="isErrorPanel.fifth ? 'visible-error' : ''">
               5. Организация всероссийских (международных) (организатор&nbsp;&mdash; региональное отделение РСО),
               окружных и&nbsp;межрегиональных трудовых проектов в&nbsp;соответствии с&nbsp;Положением
@@ -78,9 +93,16 @@
               трудовых проектов РСО
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <fifth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.fifth"
-                :is-error-panel="isErrorPanel.fifth" />
+              <fifth-panel
+                :districtExpert="districtExpert"
+                :centralExpert="centralExpert"
+                @get-data="setData"
+                @get-data-DH="setDataDH"
+                @get-data-CH="setDataCH"
+                :data="reportData.fifth"
+                :is-error-panel="isErrorPanel.fifth"
+                :tab="picked"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -129,15 +151,24 @@
                 :is-error-panel="isErrorPanel.ninth" />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel>
+          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('10-1') || revisionPanels.includes('10-2') : true">
             <v-expansion-panel-title :class="isErrorPanel.tenth ? 'visible-error' : ''">
               10. Организация РО&nbsp;РСО всероссийских (международных) добровольческих и&nbsp;патриотических акций
               &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <tenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                @getDataDHFirst="setDataDH" @getDataDHSecond="setDataDH" @getDataCHFirst="setDataCH"
-                @getDataCHSecond="setDataCH" :data="reportData.tenth" :is-error-panel="isErrorPanel.tenth" />
+              <tenth-panel
+                :districtExpert="districtExpert"
+                :centralExpert="centralExpert"
+                @get-data="setData"
+                @getDataDHFirst="setDataDH"
+                @getDataDHSecond="setDataDH"
+                @getDataCHFirst="setDataCH"
+                @getDataCHSecond="setDataCH"
+                :data="reportData.tenth"
+                :is-error-panel="isErrorPanel.tenth"
+                :tab="picked"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('11', picked, revisionPanels)">
@@ -197,15 +228,22 @@
                 text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel>
+          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('16') : true">
             <v-expansion-panel-title :class="isErrorPanel.sixteenth ? 'visible-error' : ''">
               16. Победители всероссийских (международных), окружных и&nbsp;межрегиональных трудовых проектов
               по&nbsp;комиссарской деятельности &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <sixteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data-DH="setDataDH"
-                @get-data="setData" @get-data-CH="setDataCH" :data="reportData.sixteenth"
-                :is-error-panel="isErrorPanel.sixteenth" />
+              <sixteenth-panel
+                :districtExpert="districtExpert"
+                :centralExpert="centralExpert"
+                @get-data-DH="setDataDH"
+                @get-data="setData"
+                @get-data-CH="setDataCH"
+                :data="reportData.sixteenth"
+                :is-error-panel="isErrorPanel.sixteenth"
+                :tab="picked"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('17', picked, revisionPanels)">
@@ -826,8 +864,10 @@ const getReportData = async (reportId) => {
           reportData.value.first = dataFirst;
         } else {
           if (dataFirst.rejecting_reasons) {
-            reportStore.isReportReject.first = true;
+            reportStore.isReportReject.first = isTabsForRevision.value // true;
             reportStore.reportReject.first = dataFirst;
+
+            revisionPanels.value.push('1');
           }
 
           if (dataFirst.central_version) {
@@ -845,8 +885,10 @@ const getReportData = async (reportId) => {
           reportData.value.fourth = dataFourth;
         } else {
           if (dataFourth.rejecting_reasons) {
-            reportStore.isReportReject.fourth = true;
+            reportStore.isReportReject.fourth = isTabsForRevision.value // true;
             reportStore.reportReject.fourth = dataFourth;
+
+            revisionPanels.value.push('4');
           }
 
           if (dataFourth.central_version) {
@@ -870,8 +912,10 @@ const getReportData = async (reportId) => {
           reportData.value.fifth = dataFifth;
         } else {
           if (dataFifth.rejecting_reasons) {
-            reportStore.isReportReject.fifth = true;
+            reportStore.isReportReject.fifth = isTabsForRevision.value // true;
             reportStore.reportReject.fifth = dataFifth;
+
+            revisionPanels.value.push('5');
           }
 
           if (dataFifth.central_version) {
@@ -957,8 +1001,10 @@ const getReportData = async (reportId) => {
           reportData.value.tenth.first = dataTenthFirst;
         } else {
           if (dataTenthFirst.rejecting_reasons) {
-            reportStore.isReportReject.tenth.first = true;
+            reportStore.isReportReject.tenth.first = isTabsForRevision.value // true;
             reportStore.reportReject.tenth.first = dataTenthFirst;
+
+            revisionPanels.value.push('10-1');
           }
 
           if (dataTenthFirst.central_version) {
@@ -982,8 +1028,10 @@ const getReportData = async (reportId) => {
           reportData.value.tenth.second = dataTenthSecond;
         } else {
           if (dataTenthSecond.rejecting_reasons) {
-            reportStore.isReportReject.tenth.second = true;
+            reportStore.isReportReject.tenth.second = isTabsForRevision.value  // true;
             reportStore.reportReject.tenth.second = dataTenthSecond;
+
+            revisionPanels.value.push('10-2');
           }
 
           if (dataTenthSecond.central_version) {
@@ -1079,8 +1127,10 @@ const getReportData = async (reportId) => {
           reportData.value.sixteenth = dataSixteenth;
         } else {
           if (dataSixteenth.rejecting_reasons) {
-            reportStore.isReportReject.sixteenth = true;
+            reportStore.isReportReject.sixteenth = isTabsForRevision.value // true;
             reportStore.reportReject.sixteenth = dataSixteenth;
+
+            revisionPanels.value.push('16');
           }
 
           if (dataSixteenth.central_version) {

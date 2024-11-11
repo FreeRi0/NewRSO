@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.sixteenth)"
+  <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.sixteenth) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.sixteenth)"
        class="form__field-group">
     <div class="form__field-project-existence">
       <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу <sup class="valid-red">*</sup>
@@ -166,7 +166,7 @@
     </div>
   </div>
   <!------------------------------------------------------------------------------------------------>
-  <report-tabs v-else :isReject="reportStore.isReportReject.sixteenth">
+  <report-tabs v-else :isReject="reportStore.isReportReject.sixteenth && props.tab === 'Доработка'">
 
     <template v-slot:firstTab>
       <div class="form__field-project-existence">
@@ -326,8 +326,8 @@
         <p class="result-count">{{ finalResult.toFixed(1) }}</p>
       </div>
     </template>
-
     <!------------------------------------------------------------------------------------------------>
+
     <template v-slot:secondTab>
       <div class="form__field-project-existence">
         <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу <sup class="valid-red">*</sup>
@@ -625,6 +625,7 @@ const props = defineProps({
     default: '',
   },
   data: Object,
+  tab: String,
 });
 
 const emit = defineEmits(['getData', 'getDataDH', 'getDataCH']);
