@@ -2061,6 +2061,7 @@ watch(revisionPanels.value,
       // Временно скрываем табы Просмотра и Доработки отчета (true на false)-------------------------------
 
       isRevision.value = true; 
+      reportStore.isReportRevision = true;
       // isRevision.value = false;
 
       // Временно скрываем табы в показателях для РО для доработки отчета (true на false)------------------

@@ -17,7 +17,7 @@
         :min="0"
         :max="2147483647"
         @focusout="focusOut"
-        :disabled="(props.tab === 'Просмотр отправленного отчета') || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+        :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
         :is-error-panel="isErrorPanel"
       />
     </div>
@@ -33,7 +33,7 @@
         :fileType="eleventhPanelData.file_type"
         :fileSize="eleventhPanelData.file_size"
         @click="deleteFile"
-        :is-sent="(props.tab === 'Просмотр отправленного отчета') || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+        :is-sent="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
         :is-error-file="isErrorFile"
       ></FileBoxComponent>
       <InputReport
@@ -46,18 +46,18 @@
         width="100%"
         height="auto"
         @change="uploadFile"
-        :disabled="(props.tab === 'Просмотр отправленного отчета') || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+        :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
         :is-error-panel="isErrorPanel"
       />
     </div>
 
     <div
       class="report__fieldset report__fieldset--comment"
-      v-if="(!isSent && !(props.centralExpert || props.districtExpert) && (props.tab !== 'Просмотр отправленного отчета')) ||
+      v-if="(!isSent && !(props.centralExpert || props.districtExpert) && !reportStore.isReportRevision) ||
             (isSent && eleventhPanelData.comment) ||
             ((props.centralExpert || props.districtExpert) && eleventhPanelData.comment) ||
-            (isSent && isRevision) ||
-            ((props.tab === 'Просмотр отправленного отчета') && eleventhPanelData.comment)"
+            (props.tab !== 'Просмотр отправленного отчета') && reportStore.isReportRevision ||
+            (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision && eleventhPanelData.comment)"
     >
       <label class="form__label report__label" for="comment"> Комментарий </label>
       <TextareaReport
@@ -71,7 +71,7 @@
         :maxlength="3000"
         :max-length-text="3000"
         @focusout="focusOut"
-        :disabled="(props.tab === 'Просмотр отправленного отчета') || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+        :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
       >
       </TextareaReport>
     </div>
