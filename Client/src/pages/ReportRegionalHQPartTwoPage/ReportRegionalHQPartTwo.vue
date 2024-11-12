@@ -1066,7 +1066,8 @@ const getReportData = async (reportId) => {
           : reportData.value.eleventh = dataEleventh;
 
         // Проверка на причины отклонений отчета и вывод табов для РО
-        if (dataEleventh.rejecting_reasons) {
+        if (dataEleventh.rejecting_reasons && dataEleventh.verified_by_chq !== true) {
+          // console.log(dataEleventh);
           revisionPanels.value.push('11');
           reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version);
 
@@ -1088,7 +1089,7 @@ const getReportData = async (reportId) => {
           : reportData.value.twelfth = dataTwelfth;
 
         // Проверка на причины отклонений отчета и вывод табов для РО
-        if (dataTwelfth.rejecting_reasons) {
+        if (dataTwelfth.rejecting_reasons && dataTwelfth.verified_by_chq !== true) {
           revisionPanels.value.push('12');
           reportStore.reportDataDH.twelfth = JSON.parse(dataTwelfth.district_version);
 
@@ -1110,7 +1111,7 @@ const getReportData = async (reportId) => {
           : reportData.value.thirteenth = dataThirteenth;
 
         // Проверка на причины отклонений отчета и вывод табов для РО
-        if (dataThirteenth.rejecting_reasons) {
+        if (dataThirteenth.rejecting_reasons && dataThirteenth.verified_by_chq !== true) {
           revisionPanels.value.push('13');
           reportStore.reportDataDH.thirteenth = JSON.parse(dataThirteenth.district_version);
 
@@ -2059,13 +2060,13 @@ watch(revisionPanels.value,
     if (revisionPanels.value.length) {
       // Временно скрываем табы Просмотра и Доработки отчета (true на false)-------------------------------
 
-      // isRevision.value = true;
-      isRevision.value = false;
+      isRevision.value = true; 
+      // isRevision.value = false;
 
       // Временно скрываем табы в показателях для РО для доработки отчета (true на false)------------------
 
-      // isTabsForRevision.value = true;
-      isTabsForRevision.value = false;
+      isTabsForRevision.value = true;
+      // isTabsForRevision.value = false;
 
       console.log('массив с показателями на дораб', revisionPanels.value);
       console.log('возврат на дораб', isRevision.value);
