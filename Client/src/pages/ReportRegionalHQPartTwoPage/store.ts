@@ -131,8 +131,8 @@ export const useReportPartTwoStore = defineStore('report-two', {
                 second: null,
             },
             sixteenth: null,
-        }
-
+        },
+        isReportRevision: false,
 
     })
 })
