@@ -46,9 +46,8 @@ import axios from 'axios';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 import { useRoleStore } from '@layouts/store/role';
-import { addr_conf } from "@app/http";
+import { HTTP } from '@app/http';
 
-const addr = `${addr_conf.proto}://${addr_conf.ip}:${addr_conf.port}`;
 const roleStore = useRoleStore();
 const isLoading = ref(false);
 
@@ -65,11 +64,11 @@ const allCategories = [
 
 const requiredFieldsByRole = {
     centralheadquarter_commander: ['name', 'email', 'phone_number', 'district_headquarter', 'regional_headquarter', 'local_headquarter', 'educational_headquarter', 'detachment', 'position'],
-    districtheadquarter_commander: ['name', 'phone_number', 'regional_headquarter', 'local_headquarter'],
-    regionalheadquarter_commander: ['name', 'phone_number', 'regional_headquarter', 'local_headquarter'],
-    localheadquarter_commander: ['name', 'local_headquarter', 'position'],
-    educationalheadquarter_commander: ['name', 'educational_headquarter'],
-    detachment_commander: ['name', 'detachment'],
+    districtheadquarter_commander: ['name', 'email', 'phone_number', 'regional_headquarter', 'detachment', 'local_headquarter', 'position'],
+    regionalheadquarter_commander: ['name', 'email', 'phone_number', 'regional_headquarter', 'detachment', 'local_headquarter', 'position'],
+    localheadquarter_commander: ['name', 'email', 'local_headquarter', 'position'],
+    educationalheadquarter_commander: ['name', 'email', 'educational_headquarter', 'position'],
+    detachment_commander: ['name', 'email', 'detachment', 'position'],
 };
 
 
@@ -196,14 +195,14 @@ const selectedCategory = ref('Пользователи');
 const currentIndicators = computed(() => indicatorsByCategory[selectedCategory.value] || []);
 
 const urlMap = {
-    'Пользователи': `${addr}/api/v1/registry/users/`,
-    'Центральный штаб': `${addr}/api/v1/registry/centrals/`,
-    'Окружные штабы': `${addr}/api/v1/registry/districts/`,
-    'Региональный штаб': `${addr}/api/v1/registry/regionals/`,
-    'Местные штабы': `${addr}/api/v1/registry/locals/`,
-    'Штабы СО ОО': `${addr}/api/v1/registry/educationals/`,
-    'ЛСО': `${addr}/api/v1/registry/detachments/`,
-    'Направление': `${addr}/api/v1/registry/directions/`,
+    'Пользователи': `${HTTP.defaults.baseURL}/registry/users/`,
+    'Центральный штаб': `${HTTP.defaults.baseURL}registry/centrals/`,
+    'Окружные штабы': `${HTTP.defaults.baseURL}registry/districts/`,
+    'Региональный штаб': `${HTTP.defaults.baseURL}registry/regionals/`,
+    'Местные штабы': `${HTTP.defaults.baseURL}registry/locals/`,
+    'Штабы СО ОО': `${HTTP.defaults.baseURL}registry/educationals/`,
+    'ЛСО': `${HTTP.defaults.baseURL}registry/detachments/`,
+    'Направление': `${HTTP.defaults.baseURL}registry/directions/`,
 };
 
 const reportColumns = {
@@ -317,65 +316,82 @@ const reportColumns = {
     ]
 };
 
+
 const downloadReport = async () => {
     isLoading.value = true;
     try {
+        // Получаем URL для текущей категории
         const apiUrl = urlMap[selectedCategory.value];
         if (!apiUrl) throw new Error('Выбрана некорректная категория');
 
-        const response = await axios.get(apiUrl, {
+        // Выполняем GET запрос с использованием HTTP клиента
+        const response = await HTTP.get(apiUrl, {
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
                 Authorization: 'JWT ' + localStorage.getItem('jwt_token'),
             },
-            responseType: 'blob',
+            responseType: 'blob',  // Указываем, что ожидаем blob-ответ
         });
 
+        // Преобразуем blob в текст, затем в JSON
         const data = await response.data.text();
         const parsedData = JSON.parse(data);
 
+        // Преобразуем полученные данные в отчет
         const reportData = Array.isArray(parsedData) ? parsedData : [parsedData];
         const columns = reportColumns[selectedCategory.value];
+
+        // Функция для получения необходимых полей для текущей роли
         const getRequiredFields = () => {
             const role = Object.keys(roleStore.roles).find(role => roleStore.roles[role]);
             return requiredFieldsByRole[role] || [];
         };
+
+        // Фильтруем выбранные индикаторы
         const selectedIndicators = currentIndicators.value.filter(indicator => indicator.selected);
         const requiredFields = getRequiredFields();
+
+        // Фильтруем столбцы по выбранным индикаторам и необходимым полям
         const filteredColumns = columns.filter(col =>
             selectedIndicators.some(indicator => indicator.key === col.key) ||
             requiredFields.includes(col.key)
         );
 
+        // Формируем данные для Excel
         const excelData = reportData.map(item =>
             filteredColumns.reduce((acc, col) => {
                 acc[col.title] = item[col.key];
                 return acc;
             }, {})
         );
+
+        // Генерируем worksheet и workbook для Excel
         const worksheet = XLSX.utils.json_to_sheet(excelData);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Отчет');
+
+        // Записываем Excel файл в buffer
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+        // Создаем Blob и сохраняем его
         const fileName = `${selectedCategory.value} Отчет.xlsx`;
         const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
         saveAs(blob, fileName);
 
     } catch (error) {
         console.error('Ошибка при скачивании отчета:', error);
+        alert('Произошла ошибка при скачивании отчета. Попробуйте еще раз.');
     } finally {
         isLoading.value = false;
     }
 };
+
 </script>
 
 <style lang="scss" scoped>
-/* Заголовки */
 h3 {
     font-weight: unset;
 }
 
-/* Общий контейнер */
 .contributor {
     padding: 0px 0px 160px 0px;
 
@@ -388,19 +404,18 @@ h3 {
         display: flex;
         justify-content: space-between;
         width: 100%;
-        height: 500px;
-        /* Отступ между фильтрами */
+        min-height: 450px;
         gap: 16px;
+        flex-wrap: wrap;
 
         .filter-category,
         .filter-indicators {
-            /* Равномерное распределение ширины */
             flex: 1 1 0;
         }
     }
 }
 
-/* Стили для списка и элементов внутри него */
+
 .list {
     margin: 20px 4px;
     display: flex;
@@ -410,34 +425,30 @@ h3 {
     &-elem {
         display: flex;
         align-items: center;
-        /* Вертикальное выравнивание */
         column-gap: 8px;
-        /* Расстояние между чекбоксом и текстом */
     }
 }
 
-/* Стиль для текста в списке */
+
 .list label {
     font-size: 16px;
-
 }
 
-/* Кнопка загрузки */
+
 .downloadBtn {
+    margin-top: 16px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
-    row-gap: 32px;
+    row-gap: 24px;
 
-    &.messageForUser {
-
+    .messageForUser {
         font-weight: 500;
         font-size: 16px;
         text-align: center;
-        font-family: var(--third-family);
-        margin-top: 12px;
+        font-family: "Akrobat";
     }
 }
 
@@ -460,25 +471,19 @@ button {
     }
 }
 
-/* Медиазапросы для адаптивности */
+
 @media (max-width: 800px) {
     .contributor {
-
         &-filters {
             width: 100%;
-            height: 550px;
-
+            height: auto;
 
         }
-
     }
 }
 
 @media (max-width: 560px) {
-
-
     .contributor {
-
         padding: 0px 0px 80px 0px;
 
         &-filters {
@@ -490,10 +495,13 @@ button {
             height: auto;
 
         }
+    }
 
+    .downloadBt {
+        margin-top: 10px;
+        row-gap: 20px;
     }
 }
-
 
 /* Основные настройки для оберток */
 .custom-radio-wrapper,
@@ -524,7 +532,6 @@ button {
     margin-right: 8px;
     transition: background-color 0.2s ease;
     position: relative;
-
 }
 
 /* Внутренний круг при выбранном состоянии */
@@ -548,29 +555,23 @@ button {
     width: 8px;
     height: 8px;
     background-color: #ffffff;
-    /* Белый фон */
     border: 1px solid #006eff;
-    /* Синяя граница */
     border-radius: 50%;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     opacity: 1;
-    /* Отображается по умолчанию */
     transition: opacity 0.2s ease;
 }
-
 
 /* Отображение внутреннего круга при выборе радио-кнопки */
 .custom-radio-wrapper input[type="radio"]:checked+.custom-radio-style::after {
     opacity: 1;
 }
 
-
 /* ====== Стили для чекбоксов ====== */
 
-//  Кастомный чекбокс 
 .custom-checkbox-style {
     display: inline-block;
     width: 20px;
@@ -582,13 +583,12 @@ button {
     transition: background-color 0.2s ease;
 }
 
-// Фон кастомного чекбокса при выборе 
+/* Фон кастомного чекбокса при выборе */
 .custom-checkbox-wrapper input[type="checkbox"]:checked+.custom-checkbox-style {
     background-color: #ffffff;
-    //  Зеленый фон при выборе 
 }
 
-// Кастомная галочка внутри чекбокса 
+/* Кастомная галочка внутри чекбокса */
 .custom-checkbox-style::after {
     content: '';
     position: absolute;
@@ -596,18 +596,15 @@ button {
     left: 6px;
     width: 6px;
     height: 12px;
-    // Цвет галочки
     border: solid rgb(0, 0, 0);
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
     opacity: 0;
-    /* По умолчанию галочка не видна */
     transition: opacity 0.2s ease;
 }
 
-//  Отображение галочки при выборе чекбокса 
+/* Отображение галочки при выборе чекбокса */
 .custom-checkbox-wrapper input[type="checkbox"]:checked+.custom-checkbox-style::after {
-    // Показываем галочку 
     opacity: 1;
 }
 </style>

@@ -3,15 +3,9 @@ import { useUserStore } from '@features/store';
 import router from './router';
 import { ref } from 'vue';
 
-export const addr_conf = {
-    proto: 'http',
-    ip: '213.139.208.147',
-    port: '30000',
-}
-
 export const HTTP = axios.create({
 
-    baseURL: `${addr_conf.proto}://${addr_conf.ip}:${addr_conf.port}/api/v1/`,  //https://xn--j1ab.xn--d1amqcgedd.xn--p1ai/api/v1/  //http://213.139.208.147:30000/api/v1/
+    baseURL: 'http://213.139.208.147:30000/api/v1/',  //https://xn--j1ab.xn--d1amqcgedd.xn--p1ai/api/v1/  //http://213.139.208.147:30000/api/v1/
     headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
