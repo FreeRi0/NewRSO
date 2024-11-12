@@ -2,17 +2,19 @@
 
   <div class="grid_field">
     <div class="form__field-group" v-for="report in reports" :key=report.id>
-      <router-link :to="{ name: 'ReportRegionalPartTwo', query: {
-        reportId: report.id
-      } }">
+      <router-link :to="{
+        name: 'ReportRegionalPartTwo', query: {
+          reportId: report.id
+        }
+      }">
         <div class="data_field">
           <img class="left_img div1" src="@app/assets/folder-img.png" alt="folder">
           <div class="right_block div2">
             <p class="indicator_name">{{ report.name }}</p>
             <!--          <p class="indicator_name">{{ application.part }}</p>-->
             <div class="headquarter_block">
-              <img class="headquarter_img" v-if="report.banner"
-                   :src="`http://213.139.208.147:30000/${report.banner}`" alt="">
+              <img class="headquarter_img" v-if="report.banner" :src="`http://213.139.208.147:30000/${report.banner}`"
+                alt="">
               <p>{{ report.name }}</p>
             </div>
           </div>
@@ -29,11 +31,11 @@ import { onMounted, ref } from 'vue'
 import { reportPartTwoService } from "@services/ReportService.ts";
 
 const reports = ref([]);
-const isActive = 
+const isActive =
 
-onMounted(async () => {
-  reports.value = (await reportPartTwoService.getSentReports()).data;
-})
+  onMounted(async () => {
+    reports.value = (await reportPartTwoService.getSentReports()).data;
+  })
 </script>
 
 <style scoped>
@@ -109,7 +111,7 @@ onMounted(async () => {
 
 @media (max-width: 568px) {
   .hr {
-    width: 340px;
+    /* width: 340px; */
     margin: 0 auto;
   }
 }

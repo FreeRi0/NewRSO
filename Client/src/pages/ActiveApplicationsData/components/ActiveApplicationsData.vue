@@ -10,7 +10,7 @@
           tab.name === 'Конкурсы' && !(roleStore.experts?.is_district_expert || roleStore.experts?.is_central_expert) ||
           tab.name === 'Заявки на вступление в штаб' && !(roleStore.experts?.is_district_expert || roleStore.experts?.is_central_expert) ||
           tab.name === 'Рейтинг РО' && (roleStore.experts?.is_district_expert || roleStore.experts?.is_central_expert)"
-                :key="tab.id" @click="picked = tab.name">
+          :key="tab.id" @click="picked = tab.name">
           {{ tab.name }}
         </button>
       </div>
