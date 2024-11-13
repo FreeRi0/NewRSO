@@ -609,15 +609,33 @@ const getMultiplyData = async (reportId) => {
       //   error: false,
       // }
     } else if (centralExpert.value) {
+
+      // const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
+      // reportStore.reportForCheckCH.eleventh = dataEleventh;
+      // console.log(dataEleventh);
+      // dataEleventh.regional_version
+      //   ? reportData.value.eleventh = JSON.parse(dataEleventh.regional_version)
+      //   : reportData.value.eleventh = dataEleventh;
+
+      // dataEleventh.district_version
+      //   ? reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version)
+      //   : reportStore.reportDataDH.eleventh = dataEleventh;
+
+      // reportStore.reportDataCH.eleventh = Object.assign({}, dataEleventh);
+      // dataEleventh.verified_by_chq === null
+      //   ? reportStore.reportDataCH.eleventh.comment = ''
+      //   : reportStore.reportDataCH.eleventh.comment = dataEleventh.comment;
+
+      console.log('data 66', result.data)
       reportStore.reportForCheckCH.six[result.id] = result.data;
       console.log('ch6', reportStore.reportForCheckCH.six[result.id])
-      if (result.data.regional_version) {
-        reportData.value.six[result.id] = JSON.parse(result.data?.regional_version);
+      if (reportData.value.six[result.id].regional_version) {
+        reportData.value.six[result.id] = JSON.parse(reportData.value.six[result.id]?.regional_version);
       } else {
         reportData.value.six[result.id] = result.data;
       }
-      if (result.data.district_version) {
-        reportStore.reportDataDH.six[result.id] = JSON.parse(result.data.district_version);
+      if (reportData.value.six[result.id]?.district_version) {
+        reportStore.reportDataDH.six[result.id] = JSON.parse( reportData.value.six[result.id]?.district_version);
       } else {
         reportStore.reportDataDH.six[result.id] = result.data
       }

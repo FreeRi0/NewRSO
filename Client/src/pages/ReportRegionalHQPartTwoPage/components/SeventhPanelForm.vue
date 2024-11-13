@@ -1142,7 +1142,7 @@ const returnForReviewNinth = (event) => {
                 }
             }
 
-            if (reportStore.reportForCheckCH.six[props.sixId].rejecting_reasons) {
+            if (reportStore.reportForCheckCH.six[props.sixId]?.rejecting_reasons !== undefined) {
                 reportStore.returnReport.six[props.sixId] = true;
             }
             emit('getId', props.id);
@@ -1249,7 +1249,7 @@ const returnForReviewNinth = (event) => {
                         fileCH.value.type = reportStore.reportDataCHFile.ninth[props.ninthId].type.split('/').at(-1);
                         fileCH.value.size = reportStore.reportDataCHFile.ninth[props.ninthId].size / Math.pow(1024, 2);
                     }
-                    if (reportStore.reportForCheckCH.ninth[props.ninthId].rejecting_reasons) {
+                    if (reportStore.reportForCheckCH.ninth[props.ninthId]?.rejecting_reasons !== undefined) {
                         reportStore.returnReport.ninth[props.ninthId] = true;
                     }
                 }
