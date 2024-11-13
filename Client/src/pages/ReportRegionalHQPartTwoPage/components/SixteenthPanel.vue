@@ -458,22 +458,20 @@
           <div style="display: flex; align-items: center">
             <input
                 class="custom-radio"
-                v-model="sixteenthPanelDataDH.is_project"
+                v-model="isProjectCH"
                 id="is_projectCH-true"
                 type="radio"
                 :value="true"
-                disabled
             />
             <label for="is_projectCH-true">Да</label>
           </div>
           <div style="display: flex; align-items: center">
             <input
                 class="custom-radio"
-                v-model="sixteenthPanelDataDH.is_project"
+                v-model="isProjectCH"
                 id="is_projectCH-false"
                 type="radio"
                 :value="false"
-                disabled
             />
             <label for="is_projectCH-false">Нет</label>
           </div>
@@ -508,7 +506,7 @@
                     :id="'projectCH.dataCH.name'"
                     :name="'projectCH.dataCH.name'"
                     style="width: 100%;"
-                    :disabled="reportStore.isReportReject?.sixteenth && !props.centralExpert"
+                    :disabled="(reportStore.isReportReject?.sixteenth && !props.centralExpert) || !isProjectCH"
                 />
               </td>
             </tr>
@@ -540,7 +538,7 @@
                   type="radio"
                   :id="`All-${index}CH`"
                   value="Всероссийский"
-                  :disabled="reportStore.isReportReject?.sixteenth && !props.centralExpert"
+                  :disabled="(reportStore.isReportReject?.sixteenth && !props.centralExpert) || !isProjectCH"
               />
               <label :for="`All-${index}CH`">Всероссийский</label>
             </div>
@@ -551,7 +549,7 @@
                   type="radio"
                   :id="`District-${index}CH`"
                   value="Окружной"
-                  :disabled="reportStore.isReportReject?.sixteenth && !props.centralExpert"
+                  :disabled="(reportStore.isReportReject?.sixteenth && !props.centralExpert) || !isProjectCH"
               />
               <label :for="`District-${index}CH`">Окружной</label>
             </div>
@@ -562,7 +560,7 @@
                   type="radio"
                   :id="`Interregional-${index}CH`"
                   value="Межрегиональный"
-                  :disabled="reportStore.isReportReject?.sixteenth && !props.centralExpert"
+                  :disabled="(reportStore.isReportReject?.sixteenth && !props.centralExpert) || !isProjectCH"
               />
               <label :for="`Interregional-${index}CH`">Межрегиональный</label>
             </div>
@@ -665,6 +663,7 @@ const finalResultDH = ref(0);
 const commonData = ref([]);
 const commentCH = ref();
 const row = ref(1);
+const isProjectCH = ref(null);
 
 const focusOut = async () => {
   sixteenthPanelData.value.projects = [...projects.value];
@@ -792,36 +791,52 @@ const calculateResultDH = (event) => {
 const onReportReturn = (event) => {
   let formData = new FormData();
   if (event.target.checked) {
-    reportStore.returnReport.sixteenth = true;
-    reportStore.reportDataCH.sixteenth.projects = [];
-    commonData.value.forEach(e => {
-      reportStore.reportDataCH.sixteenth.projects.push(e.dataCH)
-    });
+    if (isProjectCH.value) {
+      reportStore.returnReport.sixteenth = true;
+      reportStore.reportDataCH.sixteenth.projects = [];
+      commonData.value.forEach(e => {
+        reportStore.reportDataCH.sixteenth.projects.push(e.dataCH)
+      });
 
-    reportStore.reportDataCH.sixteenth.comment = commentCH.value || '';
-    formData.append('comment', commentCH.value || '');
-    formData.append('reasons[comment]', commentCH.value || '');
+      reportStore.reportDataCH.sixteenth.comment = commentCH.value || '';
+      formData.append('is_project', isProjectCH.value);
+      formData.append('comment', commentCH.value || '');
+      formData.append('reasons[comment]', commentCH.value || '');
 
-    reportStore.reportDataCH.sixteenth.projects.forEach((project, i) => {
-      if (project.project_scale) formData.append(`projects[${i}][project_scale]`, project.project_scale);
-      if (project.name) formData.append(`projects[${i}][name]`, project.name);
-    })
+      reportStore.reportDataCH.sixteenth.projects.forEach((project, i) => {
+        if (project.project_scale) formData.append(`projects[${i}][project_scale]`, project.project_scale);
+        if (project.name) formData.append(`projects[${i}][name]`, project.name);
+      })
+    } else {
+      reportStore.returnReport.sixteenth = true;
+      formData.append('is_project', isProjectCH.value);
+      formData.append('comment', commentCH.value || '');
+      formData.append('reasons[comment]', commentCH.value || '');
+      formData.append('projects', '');
+    }
 
     emit('getDataCH', formData, 16);
   } else {
-    reportStore.returnReport.sixteenth = false;
-    reportStore.reportDataCH.sixteenth.projects = [];
-    commonData.value.forEach(e => {
-      reportStore.reportDataCH.sixteenth.projects.push(e.dataCH)
-    });
+    if (isProjectCH.value) {
+      reportStore.returnReport.sixteenth = false;
+      reportStore.reportDataCH.sixteenth.projects = [];
+      commonData.value.forEach(e => {
+        reportStore.reportDataCH.sixteenth.projects.push(e.dataCH)
+      });
 
-    reportStore.reportDataCH.sixteenth.comment = commentCH.value || '';
-    formData.append('comment', commentCH.value || '');
+      reportStore.reportDataCH.sixteenth.comment = commentCH.value || '';
+      formData.append('comment', commentCH.value || '');
 
-    reportStore.reportDataCH.sixteenth.projects.forEach((project, i) => {
-      if (project.project_scale) formData.append(`projects[${i}][project_scale]`, project.project_scale);
-      if (project.name) formData.append(`projects[${i}][name]`, project.name);
-    })
+      reportStore.reportDataCH.sixteenth.projects.forEach((project, i) => {
+        if (project.project_scale) formData.append(`projects[${i}][project_scale]`, project.project_scale);
+        if (project.name) formData.append(`projects[${i}][name]`, project.name);
+      })
+    } else {
+      reportStore.returnReport.sixteenth = false;
+      formData.append('is_project', isProjectCH.value);
+      formData.append('comment', commentCH.value || '');
+      formData.append('projects', '');
+    }
 
     emit('getDataCH', formData, 16);
   }
@@ -852,6 +867,7 @@ onMounted(() => {
 
     // Добавление данных из стора для панели "корректировка ЦШ"
     commentCH.value = reportStore.reportDataCH.sixteenth.comment || '';
+    isProjectCH.value = reportStore.reportForCheckCH.sixteenth.is_project;
     for (let i = 0; i < projectQuantity; i++) {
       commonData.value[i] = {
         dataRH: reportDataRH.projects[i],
@@ -910,6 +926,7 @@ watchEffect(() => {
     if (props.data.central_version) {
       // Отчет создан:
       commentCH.value = props.data.central_version.comment || '';
+      isProjectCH.value = props.data.central_version.is_project;
       for (let i = 0; i < props.data.projects.length; i++) {
         commonData.value[i] = {
           dataRH: props.data.projects[i],
@@ -921,6 +938,7 @@ watchEffect(() => {
       // Отчет не создан:
       const reportDataRH = JSON.parse(reportStore.reportReject.sixteenth.regional_version);
       commentCH.value = reportStore.reportReject.sixteenth.comment || '';
+      isProjectCH.value = reportStore.reportReject.sixteenth.is_project;
 
       console.log('reportDataRH', reportDataRH)
       for (let i = 0; i < props.data.projects.length; i++) {
@@ -975,25 +993,62 @@ watch(() => sixteenthPanelData.value.is_project, async (isProject) => {
       }
     }
   }
-
 });
+
+watch(() => isProjectCH.value, () => {
+  let formData = new FormData();
+  if (isProjectCH.value) {
+    reportStore.reportDataCH.sixteenth.projects = [];
+    commonData.value.forEach(e => {
+      reportStore.reportDataCH.sixteenth.projects.push(e.dataCH)
+    });
+
+    reportStore.reportDataCH.sixteenth.comment = commentCH.value || '';
+    formData.append('is_project', isProjectCH.value);
+    formData.append('comment', commentCH.value || '');
+    if (reportStore.returnReport.sixteenth) formData.append('reasons[comment]', commentCH.value || '');
+
+    reportStore.reportDataCH.sixteenth.projects.forEach((project, i) => {
+      if (project.project_scale) formData.append(`projects[${i}][project_scale]`, project.project_scale);
+      if (project.name) formData.append(`projects[${i}][name]`, project.name);
+    })
+
+    emit('getDataCH', formData, 16);
+  } else {
+    formData.append('is_project', isProjectCH.value);
+    formData.append('comment', commentCH.value || '');
+    formData.append('projects', '');
+    if (reportStore.returnReport.sixteenth) formData.append('reasons[comment]', commentCH.value || '');
+
+    emit('getDataCH', formData, 16);
+  }
+})
 
 watch([commonData, commentCH], () => {
   let formData = new FormData();
 
-  reportStore.reportDataCH.sixteenth.projects = [];
-  commonData.value.forEach(e => {
-    reportStore.reportDataCH.sixteenth.projects.push(e.dataCH)
-  });
+  if (isProjectCH.value) {
+    reportStore.reportDataCH.sixteenth.projects = [];
+    commonData.value.forEach(e => {
+      reportStore.reportDataCH.sixteenth.projects.push(e.dataCH)
+    });
 
-  reportStore.reportDataCH.sixteenth.comment = commentCH.value || '';
-  formData.append('comment', commentCH.value || '');
-  if (reportStore.returnReport.sixteenth) formData.append('reasons[comment]', commentCH.value || '');
+    reportStore.reportDataCH.sixteenth.comment = commentCH.value || '';
+    formData.append('is_project', isProjectCH.value);
+    formData.append('comment', commentCH.value || '');
+    if (reportStore.returnReport.sixteenth) formData.append('reasons[comment]', commentCH.value || '');
 
-  reportStore.reportDataCH.sixteenth.projects.forEach((project, i) => {
-    if (project.project_scale) formData.append(`projects[${i}][project_scale]`, project.project_scale);
-    if (project.name) formData.append(`projects[${i}][name]`, project.name);
-  })
+    reportStore.reportDataCH.sixteenth.projects.forEach((project, i) => {
+      if (project.project_scale) formData.append(`projects[${i}][project_scale]`, project.project_scale);
+      if (project.name) formData.append(`projects[${i}][name]`, project.name);
+    })
+  } else {
+    formData.append('is_project', isProjectCH.value);
+    formData.append('comment', commentCH.value || '');
+    formData.append('projects', '');
+    if (reportStore.returnReport.sixteenth) formData.append('reasons[comment]', commentCH.value || '');
+  }
+
 
   emit('getDataCH', formData, 16);
 }, {
