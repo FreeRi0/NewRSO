@@ -627,15 +627,15 @@ const getMultiplyData = async (reportId) => {
       //   : reportStore.reportDataCH.eleventh.comment = dataEleventh.comment;
 
       console.log('data 66', result.data)
-      reportStore.reportForCheckCH.six[result.id] = result.data;
+       reportStore.reportForCheckCH.six[result.id] = result.data;
       console.log('ch6', reportStore.reportForCheckCH.six[result.id])
-      if (reportData.value.six[result.id]?.regional_version) {
-        reportData.value.six[result.id] = JSON.parse(reportData.value.six[result.id]?.regional_version);
+      if (result.data?.regional_version) {
+        reportData.value.six[result.id] = JSON.parse(result.data?.regional_version);
       } else {
         reportData.value.six[result.id] = result.data;
       }
-      if (reportData.value.six[result.id]?.district_version) {
-        reportStore.reportDataDH.six[result.id] = JSON.parse( reportData.value.six[result.id]?.district_version);
+      if (result.data?.district_version) {
+        reportStore.reportDataDH.six[result.id] = JSON.parse(result.data?.district_version);
       } else {
         reportStore.reportDataDH.six[result.id] = result.data
       }
@@ -682,13 +682,13 @@ const getMultiplyData = async (reportId) => {
     } else if (centralExpert.value) {
       reportStore.reportForCheckCH.ninth[result.id] = result.data;
       console.log('ch9', reportStore.reportForCheckCH.ninth[result.id])
-      if (result.data.regional_version) {
+      if (result.data?.regional_version) {
         reportData.value.ninth[result.id] = JSON.parse(result.data?.regional_version);
       } else {
         reportData.value.ninth[result.id] = result.data;
       }
-      if (result.data.district_version) {
-        reportStore.reportDataDH.ninth[result.id] = JSON.parse(result.data.district_version);
+      if (result.data?.district_version) {
+        reportStore.reportDataDH.ninth[result.id] = JSON.parse(result.data?.district_version);
       } else {
         reportStore.reportDataDH.ninth[result.id] = result.data
       }

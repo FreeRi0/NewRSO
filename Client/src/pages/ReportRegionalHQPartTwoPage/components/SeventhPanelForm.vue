@@ -1283,7 +1283,7 @@ const returnForReviewNinth = (event) => {
             formData.append('comment', sixPanelDataCH.value.comment || '');
             if (sixPanelDataCH.value.links.length) {
                 for (let i = 0; i < sixPanelDataCH.value.links.length; i++) {
-                    formData.append(`[links][${i}][link]`, ninthPanelDataCH.value.links[i].link);
+                    formData.append(`[links][${i}][link]`, sixPanelDataCH.value.links[i].link);
                 }
             }
             if (reportStore.returnReport.six[props.sixId]) formData.append('reasons[comment]', sixPanelDataCH.value.comment);
