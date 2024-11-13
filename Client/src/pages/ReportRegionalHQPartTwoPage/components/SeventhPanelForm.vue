@@ -1142,7 +1142,7 @@ const returnForReviewNinth = (event) => {
                 }
             }
 
-            if (reportStore.reportForCheckCH.six[props.sixId].rejecting_reasons) {
+            if (reportStore.reportForCheckCH.six[props.sixId]?.rejecting_reasons !== null) {
                 reportStore.returnReport.six[props.sixId] = true;
             }
             emit('getId', props.id);
@@ -1249,7 +1249,7 @@ const returnForReviewNinth = (event) => {
                         fileCH.value.type = reportStore.reportDataCHFile.ninth[props.ninthId].type.split('/').at(-1);
                         fileCH.value.size = reportStore.reportDataCHFile.ninth[props.ninthId].size / Math.pow(1024, 2);
                     }
-                    if (reportStore.reportForCheckCH.ninth[props.ninthId].rejecting_reasons) {
+                    if (reportStore.reportForCheckCH.ninth[props.ninthId]?.rejecting_reasons !== null) {
                         reportStore.returnReport.ninth[props.ninthId] = true;
                     }
                 }
@@ -1283,7 +1283,7 @@ const returnForReviewNinth = (event) => {
             formData.append('comment', sixPanelDataCH.value.comment || '');
             if (sixPanelDataCH.value.links.length) {
                 for (let i = 0; i < sixPanelDataCH.value.links.length; i++) {
-                    formData.append(`[links][${i}][link]`, ninthPanelDataCH.value.links[i].link);
+                    formData.append(`[links][${i}][link]`, sixPanelDataCH.value.links[i].link);
                 }
             }
             if (reportStore.returnReport.six[props.sixId]) formData.append('reasons[comment]', sixPanelDataCH.value.comment);

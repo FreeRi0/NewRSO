@@ -602,6 +602,11 @@ const getMultiplyData = async (reportId) => {
 
     if (districtExpert.value) {
       reportData.value.six[result.id] = result.data;
+      if ( reportData.value.six[result.id]?.regional_version) {
+        reportData.value.six[result.id] = JSON.parse(reportData.value.six[result.id]?.regional_version);
+      } else {
+        reportData.value.six[result.id] = result.data;
+      }
       reportStore.reportDataDH.six[result.id] = Object.assign({}, reportData.value.six[result.id]);
       reportStore.reportDataDH.six[result.id].comment = '';
       // isErrorPanel.value.six[result.id] = {
@@ -609,15 +614,33 @@ const getMultiplyData = async (reportId) => {
       //   error: false,
       // }
     } else if (centralExpert.value) {
-      reportStore.reportForCheckCH.six[result.id] = result.data;
+
+      // const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
+      // reportStore.reportForCheckCH.eleventh = dataEleventh;
+      // console.log(dataEleventh);
+      // dataEleventh.regional_version
+      //   ? reportData.value.eleventh = JSON.parse(dataEleventh.regional_version)
+      //   : reportData.value.eleventh = dataEleventh;
+
+      // dataEleventh.district_version
+      //   ? reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version)
+      //   : reportStore.reportDataDH.eleventh = dataEleventh;
+
+      // reportStore.reportDataCH.eleventh = Object.assign({}, dataEleventh);
+      // dataEleventh.verified_by_chq === null
+      //   ? reportStore.reportDataCH.eleventh.comment = ''
+      //   : reportStore.reportDataCH.eleventh.comment = dataEleventh.comment;
+
+      console.log('data 66', result.data)
+       reportStore.reportForCheckCH.six[result.id] = result.data;
       console.log('ch6', reportStore.reportForCheckCH.six[result.id])
-      if (result.data.regional_version) {
+      if (result.data?.regional_version) {
         reportData.value.six[result.id] = JSON.parse(result.data?.regional_version);
       } else {
         reportData.value.six[result.id] = result.data;
       }
-      if (result.data.district_version) {
-        reportStore.reportDataDH.six[result.id] = JSON.parse(result.data.district_version);
+      if (result.data?.district_version) {
+        reportStore.reportDataDH.six[result.id] = JSON.parse(result.data?.district_version);
       } else {
         reportStore.reportDataDH.six[result.id] = result.data
       }
@@ -629,7 +652,7 @@ const getMultiplyData = async (reportId) => {
     } else {
       reportData.value.six[result.id] = result.data;
       if (reportData.value.six[result.id]?.regional_version) {
-        reportData.value.six[result.id] = JSON.parse(reportData.value.six[result.id].regional_version);
+        reportData.value.six[result.id] = JSON.parse(reportData.value.six[result.id]?.regional_version);
       } else {
         reportData.value.six[result.id] = result.data;
       }
@@ -637,10 +660,10 @@ const getMultiplyData = async (reportId) => {
       // Проверка на причины отклонений отчета и вывод табов для РО
       if (reportData.value.six[result.id]?.rejecting_reasons) {
         revisionPanels.value.push('6');
-        reportStore.reportDataDH.six[result.id] = JSON.parse(reportData.value.six[result.id].district_version);
+        reportStore.reportDataDH.six[result.id] = JSON.parse(reportData.value.six[result.id]?.district_version);
 
         reportData.value.six[result.id].central_version
-          ? reportStore.reportDataCH.six[result.id] = reportData.value.six[result.id].central_version
+          ? reportStore.reportDataCH.six[result.id] = reportData.value.six[result.id]?.central_version
           : reportStore.reportDataCH.six[result.id] = reportData.value.six[result.id];
 
         reportStore.isReportReject.six[result.id] = isTabsForRevision.value;
@@ -655,6 +678,11 @@ const getMultiplyData = async (reportId) => {
   ninthDataResults.forEach((result) => {
     if (districtExpert.value) {
       reportData.value.ninth[result.id] = result.data;
+      if ( reportData.value.ninth[result.id]?.regional_version) {
+        reportData.value.ninth[result.id] = JSON.parse(reportData.value.ninth[result.id]?.regional_version);
+      } else {
+        reportData.value.ninth[result.id] = result.data;
+      }
       reportStore.reportDataDH.ninth[result.id] = Object.assign({}, reportData.value.ninth[result.id]);
       reportStore.reportDataDH.ninth[result.id].comment = '';
       // isErrorPanel.value.ninth[result.id] = {
@@ -664,13 +692,13 @@ const getMultiplyData = async (reportId) => {
     } else if (centralExpert.value) {
       reportStore.reportForCheckCH.ninth[result.id] = result.data;
       console.log('ch9', reportStore.reportForCheckCH.ninth[result.id])
-      if (result.data.regional_version) {
+      if (result.data?.regional_version) {
         reportData.value.ninth[result.id] = JSON.parse(result.data?.regional_version);
       } else {
         reportData.value.ninth[result.id] = result.data;
       }
-      if (result.data.district_version) {
-        reportStore.reportDataDH.ninth[result.id] = JSON.parse(result.data.district_version);
+      if (result.data?.district_version) {
+        reportStore.reportDataDH.ninth[result.id] = JSON.parse(result.data?.district_version);
       } else {
         reportStore.reportDataDH.ninth[result.id] = result.data
       }
@@ -2060,7 +2088,7 @@ watch(revisionPanels.value,
     if (revisionPanels.value.length) {
       // Временно скрываем табы Просмотра и Доработки отчета (true на false)-------------------------------
 
-      isRevision.value = true; 
+      isRevision.value = true;
       reportStore.isReportRevision = true;
       // isRevision.value = false;
 

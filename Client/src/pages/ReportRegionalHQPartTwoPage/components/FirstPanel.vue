@@ -80,7 +80,7 @@
               class="form__input"
               type="number"
               placeholder="Введите число"
-              :disabled="(props.centralExpert || props.districtExpert) && isSent"
+              :disabled="props.centralExpert || props.districtExpert"
               @focusout="focusOut"
           />
         </div>
@@ -102,7 +102,7 @@
                   type="file"
                   id="scan_file"
                   name="scan_file"
-                  :disabled="(props.centralExpert || props.districtExpert)"
+                  :disabled="props.centralExpert || props.districtExpert"
                   :is-error-panel="isErrorPanel"
                   style="width: 100%;"
                   @change="uploadFile"/>
@@ -112,7 +112,7 @@
                   :fileType="firstPanelData.file_type"
                   :fileSize="firstPanelData.file_size"
                   @click="deleteFile"
-                  :is-sent="(props.centralExpert || props.districtExpert) && isSent"
+                  :is-sent="props.centralExpert || props.districtExpert"
                   :is-error-file="isErrorFile"
               ></FileBoxComponent>
             </div>
@@ -132,7 +132,7 @@
             :max-length-text="3000"
             counter-visible
             class="form__input"
-            :disabled="(props.centralExpert || props.districtExpert) && isSent"
+            :disabled="props.centralExpert || props.districtExpert"
             style="margin-bottom: 4px;"
             @focusout="focusOut"
         />
@@ -480,13 +480,16 @@ watchEffect(async () => {
     // Добавление данных панели "корректировка ОШ"
     firstPanelDataDH.value.comment = reportStore.reportForCheckCH.first.comment;
     firstPanelDataDH.value.amount_of_money = reportStore.reportForCheckCH.first.amount_of_money;
-    fileNameDH.value = reportStore.reportForCheckCH.first.scan_file || '';
-    fileTypeDH.value = reportStore.reportForCheckCH.first.file_type || '';
-    fileSizeDH.value = reportStore.reportForCheckCH.first.file_size || '';
+    // fileNameDH.value = reportStore.reportForCheckCH.first.scan_file || '';
+    // fileTypeDH.value = reportStore.reportForCheckCH.first.file_type || '';
+    // fileSizeDH.value = reportStore.reportForCheckCH.first.file_size || '';
 
     // Добавление данных из стора для панели "корректировка ЦШ"
     firstPanelDataCH.value.amount_of_money = reportStore.reportDataCH.first.amount_of_money;
     firstPanelDataCH.value.comment = reportStore.reportDataCH.first.comment || '';
+    fileNameCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.name : null;
+    fileSizeCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.size / Math.pow(1024, 2) : null;
+    fileTypeCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.type.split('/').at(-1) : null;
   }
 
 
