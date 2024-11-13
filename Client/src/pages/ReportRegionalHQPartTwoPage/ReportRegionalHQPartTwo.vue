@@ -629,7 +629,7 @@ const getMultiplyData = async (reportId) => {
       console.log('data 66', result.data)
       reportStore.reportForCheckCH.six[result.id] = result.data;
       console.log('ch6', reportStore.reportForCheckCH.six[result.id])
-      if (reportData.value.six[result.id].regional_version) {
+      if (reportData.value.six[result.id]?.regional_version) {
         reportData.value.six[result.id] = JSON.parse(reportData.value.six[result.id]?.regional_version);
       } else {
         reportData.value.six[result.id] = result.data;
@@ -647,7 +647,7 @@ const getMultiplyData = async (reportId) => {
     } else {
       reportData.value.six[result.id] = result.data;
       if (reportData.value.six[result.id]?.regional_version) {
-        reportData.value.six[result.id] = JSON.parse(reportData.value.six[result.id].regional_version);
+        reportData.value.six[result.id] = JSON.parse(reportData.value.six[result.id]?.regional_version);
       } else {
         reportData.value.six[result.id] = result.data;
       }
@@ -655,10 +655,10 @@ const getMultiplyData = async (reportId) => {
       // Проверка на причины отклонений отчета и вывод табов для РО
       if (reportData.value.six[result.id]?.rejecting_reasons) {
         revisionPanels.value.push('6');
-        reportStore.reportDataDH.six[result.id] = JSON.parse(reportData.value.six[result.id].district_version);
+        reportStore.reportDataDH.six[result.id] = JSON.parse(reportData.value.six[result.id]?.district_version);
 
         reportData.value.six[result.id].central_version
-          ? reportStore.reportDataCH.six[result.id] = reportData.value.six[result.id].central_version
+          ? reportStore.reportDataCH.six[result.id] = reportData.value.six[result.id]?.central_version
           : reportStore.reportDataCH.six[result.id] = reportData.value.six[result.id];
 
         reportStore.isReportReject.six[result.id] = isTabsForRevision.value;
