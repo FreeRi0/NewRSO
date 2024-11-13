@@ -19,17 +19,18 @@
                 :max="9999999999"
                 :step="0.01"
                 @focusout="focusOut"
-                :disabled="(isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+                :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
                 :is-error-panel="isErrorPanel"
             />
         </div>
   
         <div 
             class="report__fieldset report__fieldset--right-block"
-            v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+            v-if="(!isSent && !(props.centralExpert || props.districtExpert) && !reportStore.isReportRevision) ||
                   (isSent && twelfthPanelData.scan_file) ||
                   ((props.centralExpert || props.districtExpert) && twelfthPanelData.scan_file) || 
-                  (isSent && isRevision)"
+                  (props.tab !== 'Просмотр отправленного отчета') && reportStore.isReportRevision ||
+                  (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision && twelfthPanelData.scan_file)"
         >
             <p class="form__label report__label">
                 Скан подтверждающего <br> документа
@@ -40,11 +41,11 @@
                 :fileType="twelfthPanelData.file_type"
                 :fileSize="twelfthPanelData.file_size"
                 @click="deleteFile"
-                :is-sent="(isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+                :is-sent="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
                 :is-error-file="isErrorFile"
             ></FileBoxComponent>
             <InputReport
-                v-if="!twelfthPanelData.scan_file || isRevision"
+                v-if="!twelfthPanelData.scan_file || isRevision && (props.tab !== 'Просмотр отправленного отчета')"
                 isFile
                 type="file"
                 accept=".jpg, .jpeg, .png, .pdf"
@@ -53,16 +54,17 @@
                 width="100%"
                 height="auto"
                 @change="uploadFile"
-                :disabled="(isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+                :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
             />
         </div>
   
         <div 
             class="report__fieldset report__fieldset--comment"
-            v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+            v-if="(!isSent && !(props.centralExpert || props.districtExpert) && !reportStore.isReportRevision) ||
                   (isSent && twelfthPanelData.comment) ||
                   ((props.centralExpert || props.districtExpert) && twelfthPanelData.comment) || 
-                  (isSent && isRevision)"
+                  (props.tab !== 'Просмотр отправленного отчета') && reportStore.isReportRevision ||
+                  (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision && twelfthPanelData.comment)"
             >
             <label class="form__label report__label" for="comment">
                 Комментарий
@@ -78,7 +80,7 @@
                 :maxlength="3000"
                 :max-length-text="3000"
                 @focusout="focusOut"
-                :disabled="(isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+                :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
             >
             </TextareaReport>
         </div>
@@ -198,6 +200,9 @@ const props = defineProps({
     isErrorPanel: {
         type: Boolean,
     },
+    tab: {
+        type: String,
+    }
 });
 
 const ID_PANEL = '12';

@@ -225,7 +225,8 @@
                 </div>
             </div>
         </v-tabs-window>
-        <report-tabs v-else>
+        <report-tabs v-else
+            :isReject="reportStore.isReportReject.six[props.sixId] || reportStore.isReportReject.ninth[props.ninthId]">
             <template v-slot:firstTab>
                 <!-- <div v-if="props.panel_number == 7" class="form__field-group group-seventh">
                     <div class="d-flex justify-space-between">
@@ -326,7 +327,8 @@
                             Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
                         </p>
                         <InputReport v-model:value="sixPanelData.number_of_members" placeholder="Введите число" id="15"
-                            name="14" class="form__input number_input" type="number" :maxlength="10" :max="32767"
+                            name="14" @focusout="focusOut" class="form__input number_input" type="number"
+                            :maxlength="10" :max="32767"
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
                     </div>
                     <div class="form__field" v-if="sixPanelData?.links?.length > 0">
@@ -336,7 +338,7 @@
 
                         <div class="form__wrapper" v-for="(item, index) in sixPanelData?.links" :key="index">
                             <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                                :is-link="true"
+                                :is-link="true" @focusout="focusOut"
                                 :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                                 name="14" v-model:value="item.link" class="mb-2" />
                         </div>
@@ -366,11 +368,13 @@
                         </p>
 
                         <div class="places_wrap one_place">
-                            <input :id="12" :value="ninthPanelData.event_happened" :name="12" :disabled="props.isCentralHeadquarterCommander ||
-                                props.isDistrictHeadquarterCommander
-                                " :checked="ninthPanelData.event_happened === true ||
-                                    ninthPanelData.event_happened === false
-                                    " class="form__input places_input" type="radio"
+                            <input :id="12" :value="ninthPanelData.event_happened" @focusout="focusOut" :name="12"
+                                :disabled="props.isCentralHeadquarterCommander ||
+                                    props.isDistrictHeadquarterCommander
+
+                                    " :checked="ninthPanelData.event_happened === true ||
+                                        ninthPanelData.event_happened === false
+                                        " class="form__input places_input" type="radio"
                                 v-model="ninthPanelData.event_happened" />
                             <label v-if="ninthPanelData.event_happened === true" class="places_item_label"
                                 :for="id">Да</label>
@@ -384,11 +388,12 @@
                         </label>
                         <InputReport
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
-                            v-if="!ninthPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
-                            id="scan_file" name="scan_file" width="100%" height="auto" />
+                            @change="uploadFile($event, 9)" v-if="!ninthPanelData.document" isFile type="file"
+                            accept=".jpg, .jpeg, .png, .pdf" id="scan_file" name="scan_file" width="100%"
+                            height="auto" />
                         <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
                             :isSent="props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander"
-                            :fileSize="ninthPanelData.file_size">
+                            :fileSize="ninthPanelData.file_size" @click="deleteFile(9)">
                         </FileBoxComponent>
                     </div>
 
@@ -398,7 +403,7 @@
                             <sup class="valid-red">*</sup></label>
 
                         <div class="form__wrapper" v-for="(item, index) in ninthPanelData?.links" :key="index">
-                            <InputReport
+                            <InputReport @focusout="focusOut"
                                 :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                                 name="14" :is-link="true"
                                 placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
@@ -407,7 +412,7 @@
                     </div>
                     <div class="form__field" v-if="ninthPanelData.comment !== null || ninthPanelData.comment !== ''">
                         <label class="form__label" for="14">Комментарий</label>
-                        <TextareaReport
+                        <TextareaReport @focusout="focusOut"
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                             v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1" autoResize
                             placeholder="Комментарий" :maxlength="3000" :max-length-text="3000" counter-visible />
@@ -609,7 +614,7 @@
                         :is-six="true" :CH="true" :is-error-panel="isErrorPanel"></CommentFileComponent>
                     <div>
                         <v-checkbox v-model="reportStore.returnReport.six[props.sixId]"
-                            @change="returnForReview($event, 6)" label="Вернуть в РО на доработку" />
+                            @change="returnForReviewSix" :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.six[props.sixId].verified_by_chq !== null" label="Вернуть в РО на доработку" />
                     </div>
                 </div>
                 <div v-else-if="props.panel_number == 9" class="form__field-group group-seventh">
@@ -649,8 +654,8 @@
                         :is-error-panel="isErrorPanel">
                     </CommentFileComponent>
                     <div>
-                        <v-checkbox v-model="reportStore.returnReport.ninth[props.ninthId]"
-                            @change="returnForReview($event, 9)" label="Вернуть в РО на доработку" />
+                        <v-checkbox  v-model="reportStore.returnReport.ninth[props.ninthId]"
+                            @change="returnForReviewNinth"  :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq !== null" label="Вернуть в РО на доработку" />
                     </div>
                 </div>
             </template>
@@ -702,6 +707,7 @@ const reportStore = useReportPartTwoStore();
 let isErrorFile = ref(false);
 const isFirstSentSix = ref(true);
 // const isFirstSentSeventh = ref(true);
+const isRevision = ref(false);
 const isFirstSentNinth = ref(true);
 const isLinkError = ref(false);
 
@@ -806,252 +812,136 @@ const events = ref([
 
 const isReturn = ref(false);
 
-const returnForReview = (event, number) => {
+const returnForReviewSix = (event) => {
     let formData = new FormData();
+    formData.append('number_of_members', sixPanelDataCH.value.number_of_members);
+    formData.append('comment', sixPanelDataCH.value.comment || '');
     if (event.target.checked) {
-        if (number == 6) {
-            reportStore.returnReport.six[props.sixId] = true;
-            formData.append('number_of_members', sixPanelDataCH.value.number_of_members);
-            formData.append('comment', sixPanelDataCH.value.comment);
-            formData.append('reasons[comment]', sixPanelDataCH.value.comment);
-            emit('formDataCH', formData);
-            console.log('log', formData)
-        } else if (number == 9) {
-            reportStore.returnReport.ninth[props.ninthId] = true;
-            formData.append('event_happened', ninthPanelDataCH.value.event_happened);
-            formData.append('comment', ninthPanelDataCH.value.comment);
-            formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId] || '');
-            formData.append('reasons[comment]', ninthPanelDataCH.value.comment);
-            emit('formDataCH', formData);
-        }
+        reportStore.returnReport.six[props.sixId] = true;
+        formData.append('reasons[comment]', sixPanelDataCH.value.comment);
     } else {
-        if (number == 6) {
-            reportStore.returnReport.six[props.sixId] = false;
-            emit('formDataCH', sixPanelDataCH);
-        } else if (number == 9) {
-            reportStore.returnReport.ninth[props.ninthId] = false;
-            formData.append('event_happened', ninthPanelDataCH.value.event_happened);
-            formData.append('comment', ninthPanelDataCH.value.comment);
-            formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId] || '');
-            emit('formDataCH', formData);
-        }
+        reportStore.returnReport.six[props.sixId] = false;
     }
+    emit('formDataCH', formData);
 }
 
-
-
-const uploadFile = (event, number) => {
-    // if (number === 7) {
-    //     fileValidate(event.target.files[0], 7, isErrorFile);
-    //     if (isErrorFile.value) {
-    //         console.log('error');
-    //         scanFile.value = event.target.files[0];
-    //         seventhPanelData.value.document = scanFile.value.name;
-    //     }
-    //     else {
-    //         let formData = new FormData();
-    //         formData.append('prize_place', seventhPanelData.value.prize_place);
-    //         formData.append('document', event.target.files[0]);
-    //         if (seventhPanelData.value.links.length) {
-    //             for (let i = 0; i < seventhPanelData.value.links.length; i++) {
-    //                 !seventhPanelData.value.links[i].link
-    //                     ? formData.append(`[links][${i}][link]`, '')
-    //                     : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
-    //             }
-    //         }
-    //         formData.append('comment', seventhPanelData.value.comment);
-    //         console.log('comment', formData);
-    //         emit('uploadFile', formData);
-    //     }
-    if (number === 9) {
-        if (event.target.files) {
-            fileValidate(event.target.files[0], 9, isErrorFile);
-            if (isErrorFile.value) {
-                console.log('error');
-                scanFile.value = event.target.files[0];
-                ninthPanelData.value.document = scanFile.value.name;
-                if (props.isDistrictHeadquarterCommander) {
-                    reportStore.reportDataDHFile.ninth[props.ninthId] = null;
-                    fileDH.value.name = event.target.files[0].name;
-                    fileDH.value.type = event.target.files[0].type.split('/').at(-1);
-                    fileDH.value.size = event.target.files[0].size / Math.pow(1024, 2);
-                }
-                else if (props.isCentralHeadquarterCommander) {
-                    reportStore.reportDataCHFile.ninth[props.ninthId] = null;
-                    fileCH.value.name = event.target.files[0].name;
-                    fileCH.value.type = event.target.files[0].type.split('/').at(-1);
-                    fileCH.value.size = event.target.files[0].size / Math.pow(1024, 2);
-                }
-            } else {
-                if (props.isDistrictHeadquarterCommander) {
-                    reportStore.reportDataDHFile.ninth[props.ninthId] = event.target.files[0];
-                    console.log('fileDH', reportStore.reportDataDHFile.ninth[props.ninthId])
-                } else if (props.isCentralHeadquarterCommander) {
-                    reportStore.reportDataCHFile.ninth[props.ninthId] = event.target.files[0];
-                    console.log('fileCH', reportStore.reportDataCHFile.ninth[props.ninthId])
-                } else {
-                    let formData = new FormData();
-                    formData.append('event_happened', ninthPanelData.value.event_happened);
-                    formData.append('document', event.target.files[0]);
-                    if (ninthPanelData.value.links.length) {
-                        for (let i = 0; i < ninthPanelData.value.links.length; i++) {
-                            !ninthPanelData.value.links[i].link
-                                ? formData.append(`[links][${i}][link]`, '')
-                                : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
-                        }
-                    }
-                    if (ninthPanelData.value.comment !== null) {
-                        formData.append('comment', ninthPanelData.value.comment);
-                    }
-                    emit('uploadFile', formData);
-                }
-
-            }
-        }
-    }
-
-
-}
-
-const deleteFile = (number) => {
+const returnForReviewNinth = (event) => {
     let formData = new FormData();
-    // if (number === 7) {
-    //     seventhPanelData.value.document = '';
-    //     formData.append('prize_place', seventhPanelData.value.prize_place);
-    //     formData.append('document', '');
-    //     if (seventhPanelData.value.links.length) {
-    //         for (let i = 0; i < seventhPanelData.value.links.length; i++) {
-    //             !seventhPanelData.value.links[i].link
-    //                 ? formData.append(`[links][${i}][link]`, '')
-    //                 : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
-    //         }
-    //     }
-    //     formData.append('comment', seventhPanelData.value.comment);
-    //     formData.append('file_size', seventhPanelData.value.file_size);
-    //     formData.append('file_type', seventhPanelData.value.file_type);
-
-    //     emit('deleteFile', formData);
-    //     // emit('formData', formData)
-    // } 
-    if (number === 9) {
-        if (props.isDistrictHeadquarterCommander) {
-            fileDH.value.name = null;
-            reportStore.reportDataDHFile.ninth[props.ninthId] = null;
-        } else if (props.isCentralHeadquarterCommander) {
-            fileCH.value.name = null;
-            reportStore.reportDataCHFile.ninth[props.ninthId] = null;
-        } else {
-            ninthPanelData.value.document = '';
-            formData.append('event_happened', ninthPanelData.value.event_happened);
-            formData.append('document', '');
-            if (ninthPanelData.value.links.length) {
-                for (let i = 0; i < ninthPanelData.value.links.length; i++) {
-                    !ninthPanelData.value.links[i].link
-                        ? formData.append(`[links][${i}][link]`, '')
-                        : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
-                }
-            }
-            if (ninthPanelData.value.comment !== null) {
-                formData.append('comment', ninthPanelData.value.comment);
-            }
-            formData.append('file_size', ninthPanelData.value.file_size);
-            formData.append('file_type', ninthPanelData.value.file_type);
-            emit('deleteFile', formData);
-        }
+    formData.append('event_happened', ninthPanelDataCH.value.event_happened);
+    formData.append('comment', ninthPanelDataCH.value.comment || '');
+    formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId] || '');
+    if (event.target.checked) {
+        reportStore.returnReport.ninth[props.ninthId] = true;
+        formData.append('reasons[comment]', ninthPanelDataCH.value.comment);
+    } else {
+        reportStore.returnReport.ninth[props.ninthId] = false;
     }
-
+    emit('formDataCH', formData);
 }
-
-const focusOut = () => {
-    if (props.panel_number == 6) {
-        try {
-            emit('formData', sixPanelData.value);
-
-        } catch (e) {
-            console.log('data', e.response.data);
-        }
-    }
-    // else if (props.panel_number == 7) {
-    //     try {
-    //         if (isFirstSentSeventh.value) {
-    //             console.log('7', '1')
-    //             emit('formData', seventhPanelData.value)
-    //         } else {
-    //             if (seventhPanelData.value.prize_place == 'Нет') {
-    //                 let formData = new FormData();
-    //                 seventhPanelData.value.document = '';
-    //                 seventhPanelData.value.links = [];
-    //                 seventhPanelData.value.file_size = null;
-    //                 seventhPanelData.value.file_type = '';
-    //                 seventhPanelData.value.comment = '';
-    //                 formData.append('prize_place', seventhPanelData.value.prize_place);
-    //                 formData.append('document', '');
-    //                 if (seventhPanelData.value.links.length) {
-    //                     for (let i = 0; i < seventhPanelData.value.links.length; i++) {
-    //                         !seventhPanelData.value.links[i].link
-    //                             ? formData.append(`[links][${i}][link]`, '')
-    //                             : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
-    //                     }
-    //                 }
-    //                 formData.append('comment', seventhPanelData.value.comment);
-    //                 formData.append('file_size', seventhPanelData.value.file_size);
-    //                 formData.append('file_type', seventhPanelData.value.file_type);
-    //                 emit('formData', formData);
-    //             }
-
-    //             let formData = new FormData();
-    //             formData.append('comment', seventhPanelData.value.comment);
-    //             formData.append('prize_place', seventhPanelData.value.prize_place);
-
-    //             for (let i = 0; i < seventhPanelData.value.links.length; i++) {
-    //                 !seventhPanelData.value.links[i].link
-    //                     ? formData.append(`[links][${i}][link]`, '')
-    //                     : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
-    //             }
-
-    //             // emit('isSent', isFirstSent.value)
-    //             emit('formData', formData)
-    //             console.log('7', '2')
-
-    //         }
-    //     } catch (e) {
-    //         console.log('data', e.response.data);
-
-    //     }
-
-    // }
-    else if (props.panel_number == 9) {
-        try {
-            if (isFirstSentNinth.value === true) {
-                console.log('9', '1')
-                emit('formData', ninthPanelData.value)
-            } else {
-                if (ninthPanelData.value.event_happened === false) {
-                    let formData = new FormData();
-                    ninthPanelData.value.document = '';
-                    ninthPanelData.value.links = [];
-                    ninthPanelData.value.file_size = null;
-                    ninthPanelData.value.file_type = '';
-                    ninthPanelData.value.comment = '';
-                    formData.append('event_happened', ninthPanelData.value.event_happened);
-                    formData.append('document', '');
-                    if (ninthPanelData.value.links.length) {
-                        for (let i = 0; i < ninthPanelData.value.links.length; i++) {
-                            !ninthPanelData.value.links[i].link
-                                ? formData.append(`[links][${i}][link]`, '')
-                                : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
-                        }
+    const uploadFile = (event, number) => {
+        // if (number === 7) {
+        //     fileValidate(event.target.files[0], 7, isErrorFile);
+        //     if (isErrorFile.value) {
+        //         console.log('error');
+        //         scanFile.value = event.target.files[0];
+        //         seventhPanelData.value.document = scanFile.value.name;
+        //     }
+        //     else {
+        //         let formData = new FormData();
+        //         formData.append('prize_place', seventhPanelData.value.prize_place);
+        //         formData.append('document', event.target.files[0]);
+        //         if (seventhPanelData.value.links.length) {
+        //             for (let i = 0; i < seventhPanelData.value.links.length; i++) {
+        //                 !seventhPanelData.value.links[i].link
+        //                     ? formData.append(`[links][${i}][link]`, '')
+        //                     : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
+        //             }
+        //         }
+        //         formData.append('comment', seventhPanelData.value.comment);
+        //         console.log('comment', formData);
+        //         emit('uploadFile', formData);
+        //     }
+        if (number === 9) {
+            if (event.target.files) {
+                fileValidate(event.target.files[0], 9, isErrorFile);
+                if (isErrorFile.value) {
+                    console.log('error');
+                    scanFile.value = event.target.files[0];
+                    ninthPanelData.value.document = scanFile.value.name;
+                    if (props.isDistrictHeadquarterCommander) {
+                        reportStore.reportDataDHFile.ninth[props.ninthId] = null;
+                        fileDH.value.name = event.target.files[0].name;
+                        fileDH.value.type = event.target.files[0].type.split('/').at(-1);
+                        fileDH.value.size = event.target.files[0].size / Math.pow(1024, 2);
                     }
-                    formData.append('comment', ninthPanelData.value.comment);
-                    formData.append('file_size', ninthPanelData.value.file_size);
-                    formData.append('file_type', ninthPanelData.value.file_type);
-                    emit('formData', formData);
+                    else if (props.isCentralHeadquarterCommander) {
+                        reportStore.reportDataCHFile.ninth[props.ninthId] = null;
+                        fileCH.value.name = event.target.files[0].name;
+                        fileCH.value.type = event.target.files[0].type.split('/').at(-1);
+                        fileCH.value.size = event.target.files[0].size / Math.pow(1024, 2);
+                    }
+                } else {
+                    if (props.isDistrictHeadquarterCommander) {
+                        reportStore.reportDataDHFile.ninth[props.ninthId] = event.target.files[0];
+                        console.log('fileDH', reportStore.reportDataDHFile.ninth[props.ninthId])
+                    } else if (props.isCentralHeadquarterCommander) {
+                        reportStore.reportDataCHFile.ninth[props.ninthId] = event.target.files[0];
+                        console.log('fileCH', reportStore.reportDataCHFile.ninth[props.ninthId])
+                    } else {
+                        let formData = new FormData();
+                        formData.append('event_happened', ninthPanelData.value.event_happened);
+                        formData.append('document', event.target.files[0]);
+                        if (ninthPanelData.value.links.length) {
+                            for (let i = 0; i < ninthPanelData.value.links.length; i++) {
+                                !ninthPanelData.value.links[i].link
+                                    ? formData.append(`[links][${i}][link]`, '')
+                                    : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                            }
+                        }
+                        if (ninthPanelData.value.comment !== null) {
+                            formData.append('comment', ninthPanelData.value.comment);
+                        }
+                        emit('uploadFile', formData);
+                    }
+
                 }
-                let formData = new FormData();
-                if (ninthPanelData.value.comment !== null) {
-                    formData.append('comment', ninthPanelData.value.comment);
-                }
+            }
+        }
+
+
+    }
+
+    const deleteFile = (number) => {
+        let formData = new FormData();
+        // if (number === 7) {
+        //     seventhPanelData.value.document = '';
+        //     formData.append('prize_place', seventhPanelData.value.prize_place);
+        //     formData.append('document', '');
+        //     if (seventhPanelData.value.links.length) {
+        //         for (let i = 0; i < seventhPanelData.value.links.length; i++) {
+        //             !seventhPanelData.value.links[i].link
+        //                 ? formData.append(`[links][${i}][link]`, '')
+        //                 : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
+        //         }
+        //     }
+        //     formData.append('comment', seventhPanelData.value.comment);
+        //     formData.append('file_size', seventhPanelData.value.file_size);
+        //     formData.append('file_type', seventhPanelData.value.file_type);
+
+        //     emit('deleteFile', formData);
+        //     // emit('formData', formData)
+        // } 
+        if (number === 9) {
+            if (props.isDistrictHeadquarterCommander) {
+                fileDH.value.name = null;
+                reportStore.reportDataDHFile.ninth[props.ninthId] = null;
+            } else if (props.isCentralHeadquarterCommander) {
+                fileCH.value.name = null;
+                reportStore.reportDataCHFile.ninth[props.ninthId] = null;
+            } else {
+                ninthPanelData.value.document = '';
                 formData.append('event_happened', ninthPanelData.value.event_happened);
+                formData.append('document', '');
                 if (ninthPanelData.value.links.length) {
                     for (let i = 0; i < ninthPanelData.value.links.length; i++) {
                         !ninthPanelData.value.links[i].link
@@ -1059,294 +949,421 @@ const focusOut = () => {
                             : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
                     }
                 }
-
-                emit('formData', formData)
-                console.log('9', '2')
-            }
-
-        } catch (e) {
-            console.log('data', e.response.data);
-        }
-
-    }
-
-}
-const addLink = (number) => {
-    if (number == 6) {
-        sixPanelData.value.links.push({ link: '' });
-        // } else if (number == 7) {
-        //     seventhPanelData.value.links.push({ link: '' });
-        // }
-    }
-    else if (number == 9) {
-        ninthPanelData.value.links.push({ link: '' });
-    }
-};
-
-const deleteLink = async (number) => {
-    if (number == 6) {
-        sixPanelData.value.links.pop()
-        await reportPartTwoService.createMultipleReportDraft(sixPanelData.value, '6', props.id);
-        // } else if (number == 7) {
-        //     seventhPanelData.value.links.pop()
-        //     await reportPartTwoService.createMultipleReportDraft(seventhPanelData.value, '7', props.id, true);
-    } else if (number == 9) {
-        ninthPanelData.value.links.pop()
-        await reportPartTwoService.createMultipleReportDraft(ninthPanelData.value, '9', props.id, true);
-    }
-
-};
-
-watchEffect(() => {
-    if (props.panel_number == 6) {
-
-        if (props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) {
-            sixPanelData.value = { ...props.data };
-            if (reportStore.reportDataDH.six[props.sixId]) {
-                sixPanelDataDH.value.comment = reportStore.reportDataDH.six[props.sixId].comment;
-                sixPanelDataDH.value.number_of_members = reportStore.reportDataDH.six[props.sixId].number_of_members;
-                sixPanelDataDH.value.links = reportStore.reportDataDH.six[props.sixId].links;
-
-            }
-            if (reportStore.reportDataCH.six[props.sixId]) {
-                sixPanelDataCH.value.comment = reportStore.reportDataCH.six[props.sixId].comment;
-                sixPanelDataCH.value.number_of_members = reportStore.reportDataCH.six[props.sixId].number_of_members;
-                sixPanelDataCH.value.links = reportStore.reportDataCH.six[props.sixId].links;
-            }
-            // sixPanelDataCH.value = { ...props.dataCH };
-        } else {
-            if (Object.keys(props.data).length > 0) {
-                isFirstSentSix.value = false;
-                sixPanelData.value = { ...props.data };
-                if (isLinkError.value) {
-                    emit('error', isLinkError.value);
-                } else {
-                    emit('error', false);
+                if (ninthPanelData.value.comment !== null) {
+                    formData.append('comment', ninthPanelData.value.comment);
                 }
-                if (!sixPanelData.value.links.length)
-                    sixPanelData.value.links.push({ link: '' });
-            } else {
-                console.log('data not received');
+                formData.append('file_size', ninthPanelData.value.file_size);
+                formData.append('file_type', ninthPanelData.value.file_type);
+                emit('deleteFile', formData);
             }
         }
-        emit('getId', props.id);
-        emit('getPanelNumber', props.panel_number);
-        // } else if (props.panel_number == 7) {
-        //     if (Object.keys(props.data).length > 0) {
-        //         console.log('7')
-        //         isFirstSentSeventh.value = false;
-        //         seventhPanelData.value = { ...props.data }
-        //         if (isLinkError.value) {
-        //             emit('error', isLinkError.value)
+
+    }
+
+    const focusOut = () => {
+        if (props.panel_number == 6) {
+            try {
+                emit('formData', sixPanelData.value);
+
+            } catch (e) {
+                console.log('data', e.response.data);
+            }
+        }
+        // else if (props.panel_number == 7) {
+        //     try {
+        //         if (isFirstSentSeventh.value) {
+        //             console.log('7', '1')
+        //             emit('formData', seventhPanelData.value)
         //         } else {
-        //             emit('error', false)
+        //             if (seventhPanelData.value.prize_place == 'Нет') {
+        //                 let formData = new FormData();
+        //                 seventhPanelData.value.document = '';
+        //                 seventhPanelData.value.links = [];
+        //                 seventhPanelData.value.file_size = null;
+        //                 seventhPanelData.value.file_type = '';
+        //                 seventhPanelData.value.comment = '';
+        //                 formData.append('prize_place', seventhPanelData.value.prize_place);
+        //                 formData.append('document', '');
+        //                 if (seventhPanelData.value.links.length) {
+        //                     for (let i = 0; i < seventhPanelData.value.links.length; i++) {
+        //                         !seventhPanelData.value.links[i].link
+        //                             ? formData.append(`[links][${i}][link]`, '')
+        //                             : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
+        //                     }
+        //                 }
+        //                 formData.append('comment', seventhPanelData.value.comment);
+        //                 formData.append('file_size', seventhPanelData.value.file_size);
+        //                 formData.append('file_type', seventhPanelData.value.file_type);
+        //                 emit('formData', formData);
+        //             }
+
+        //             let formData = new FormData();
+        //             formData.append('comment', seventhPanelData.value.comment);
+        //             formData.append('prize_place', seventhPanelData.value.prize_place);
+
+        //             for (let i = 0; i < seventhPanelData.value.links.length; i++) {
+        //                 !seventhPanelData.value.links[i].link
+        //                     ? formData.append(`[links][${i}][link]`, '')
+        //                     : formData.append(`[links][${i}][link]`, seventhPanelData.value.links[i].link);
+        //             }
+
+        //             // emit('isSent', isFirstSent.value)
+        //             emit('formData', formData)
+        //             console.log('7', '2')
+
         //         }
-
-        //         if (!seventhPanelData.value.links.length) seventhPanelData.value.links.push({ link: '' })
+        //     } catch (e) {
+        //         console.log('data', e.response.data);
 
         //     }
-        //     else {
-        //         console.log('data not received');
-        //         isFirstSentSeventh.value = true;
-        //         seventhPanelData.value = {
-        //             prize_place: 'Нет',
-        //             document: '',
-        //             links: [{
-        //                 link: '',
-        //             }],
-        //             comment: '',
-        //         };
-        //     }
-        //     emit('getId', props.id)
-        //     emit('getPanelNumber', props.panel_number)
 
-    } else if (props.panel_number == 9) {
-        if (props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) {
-            ninthPanelData.value = { ...props.data };
-            if (reportStore.reportDataDH.ninth[props.ninthId]) {
-                ninthPanelDataDH.value.comment = reportStore.reportDataDH.ninth[props.ninthId].comment;
-                ninthPanelDataDH.value.event_happened = reportStore.reportDataDH.ninth[props.ninthId].event_happened;
-                ninthPanelDataDH.value.links = reportStore.reportDataDH.ninth[props.ninthId].links;
-            }
-            if (reportStore.reportDataCH.ninth[props.ninthId]) {
-                ninthPanelDataCH.value.comment = reportStore.reportDataCH.ninth[props.ninthId].comment;
-                ninthPanelDataCH.value.event_happened = reportStore.reportDataCH.ninth[props.ninthId].event_happened;
-                ninthPanelDataCH.value.links = reportStore.reportDataCH.ninth[props.ninthId].links;
-            }
-        } else {
-            if (Object.keys(props.data).length > 0) {
-                isFirstSentNinth.value = false;
-                ninthPanelData.value = { ...props.data }
-                if (isLinkError.value) {
-                    console.log('gg');
-                    emit('error', isLinkError.value)
+        // }
+        else if (props.panel_number == 9) {
+            try {
+                if (isFirstSentNinth.value === true) {
+                    console.log('9', '1')
+                    // if (isRevision.value) {
+                    //     let formData = new FormData();
+                    //     formData.append("scan_file", тштерPanelData.value.scan_file || '');
+                    //     formData.append("file_size", eleventhPanelData.value.file_size || '');
+                    //     formData.append("file_type", eleventhPanelData.value.file_type || '');
+                    // }
+                    emit('formData', ninthPanelData.value)
                 } else {
-                    console.log('hh')
-                    emit('error', false)
-                }
-                if (!ninthPanelData.value.links.length) {
-                    ninthPanelData.value.links.push({ link: '' })
+                    if (ninthPanelData.value.event_happened === false) {
+                        let formData = new FormData();
+                        ninthPanelData.value.document = '';
+                        ninthPanelData.value.links = [];
+                        ninthPanelData.value.file_size = null;
+                        ninthPanelData.value.file_type = '';
+                        ninthPanelData.value.comment = '';
+                        formData.append('event_happened', ninthPanelData.value.event_happened);
+                        formData.append('document', '');
+                        if (ninthPanelData.value.links.length) {
+                            for (let i = 0; i < ninthPanelData.value.links.length; i++) {
+                                !ninthPanelData.value.links[i].link
+                                    ? formData.append(`[links][${i}][link]`, '')
+                                    : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                            }
+                        }
+                        formData.append('comment', ninthPanelData.value.comment);
+                        formData.append('file_size', ninthPanelData.value.file_size);
+                        formData.append('file_type', ninthPanelData.value.file_type);
+                        emit('formData', formData);
+                    }
+                    let formData = new FormData();
+                    if (ninthPanelData.value.comment !== null) {
+                        formData.append('comment', ninthPanelData.value.comment);
+                    }
+                    formData.append('event_happened', ninthPanelData.value.event_happened);
+                    if (ninthPanelData.value.links.length) {
+                        for (let i = 0; i < ninthPanelData.value.links.length; i++) {
+                            !ninthPanelData.value.links[i].link
+                                ? formData.append(`[links][${i}][link]`, '')
+                                : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                        }
+                    }
+
+                    emit('formData', formData)
+                    console.log('9', '2')
                 }
 
-            }
-
-            else {
-                console.log('data not received');
-                isFirstSentNinth.value = true;
-                ninthPanelData.value = {
-                    event_happened: false,
-                    links: [{
-                        link: '',
-                    }],
-                    comment: '',
-                    file_size: '',
-                    file_type: '',
-                };
+            } catch (e) {
+                console.log('data', e.response.data);
             }
 
         }
 
-        if (props.isDistrictHeadquarterCommander) {
-            if (reportStore.reportDataDHFile.ninth[props.ninthId]) {
-                fileDH.value.name = reportStore.reportDataDHFile.ninth[props.ninthId].name;
-                fileDH.value.type = reportStore.reportDataDHFile.ninth[props.ninthId].type.split('/').at(-1);
-                fileDH.value.size = reportStore.reportDataDHFile.ninth[props.ninthId].size / Math.pow(1024, 2);
-            }
-        } else if (props.isCentralHeadquarterCommander) {
-            if (reportStore.reportDataDH.ninth[props.ninthId]) {
-                fileDH.value.name = reportStore.reportDataDH.ninth[props.ninthId].scan_file;
-                fileDH.value.type = reportStore.reportDataDH.ninth[props.ninthId].file_type;
-                fileDH.value.size = reportStore.reportDataDH.ninth[props.ninthId].file_size;
-            }
-            if (reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq !== null) {
-                fileCH.value.name = reportStore.reportForCheckCH.ninth[props.ninthId].scan_file;
-                fileCH.value.type = reportStore.reportForCheckCH.ninth[props.ninthId].file_type;
-                fileCH.value.size = reportStore.reportForCheckCH.ninth[props.ninthId].file_size;
+    }
+    const addLink = (number) => {
+        if (number == 6) {
+            sixPanelData.value.links.push({ link: '' });
+            // } else if (number == 7) {
+            //     seventhPanelData.value.links.push({ link: '' });
+            // }
+        }
+        else if (number == 9) {
+            ninthPanelData.value.links.push({ link: '' });
+        }
+    };
+
+    const deleteLink = async (number) => {
+        if (number == 6) {
+            sixPanelData.value.links.pop()
+            await reportPartTwoService.createMultipleReportDraft(sixPanelData.value, '6', props.id);
+            // } else if (number == 7) {
+            //     seventhPanelData.value.links.pop()
+            //     await reportPartTwoService.createMultipleReportDraft(seventhPanelData.value, '7', props.id, true);
+        } else if (number == 9) {
+            ninthPanelData.value.links.pop()
+            await reportPartTwoService.createMultipleReportDraft(ninthPanelData.value, '9', props.id, true);
+        }
+
+    };
+
+    watchEffect(() => {
+        if (props.panel_number == 6) {
+
+            if (props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) {
+                sixPanelData.value = { ...props.data };
+                if (reportStore.reportDataDH.six[props.sixId]) {
+                    sixPanelDataDH.value.comment = reportStore.reportDataDH.six[props.sixId].comment;
+                    sixPanelDataDH.value.number_of_members = reportStore.reportDataDH.six[props.sixId].number_of_members;
+                    sixPanelDataDH.value.links = reportStore.reportDataDH.six[props.sixId].links;
+
+                }
+                if (reportStore.reportDataCH.six[props.sixId]) {
+                    sixPanelDataCH.value.comment = reportStore.reportDataCH.six[props.sixId].comment;
+                    sixPanelDataCH.value.number_of_members = reportStore.reportDataCH.six[props.sixId].number_of_members;
+                    sixPanelDataCH.value.links = reportStore.reportDataCH.six[props.sixId].links;
+                }
+                // sixPanelDataCH.value = { ...props.dataCH };
             } else {
-                if (reportStore.reportDataCHFile.ninth[props.ninthId]) {
-                    fileCH.value.name = reportStore.reportDataCHFile.ninth[props.ninthId].name;
-                    fileCH.value.type = reportStore.reportDataCHFile.ninth[props.ninthId].type.split('/').at(-1);
-                    fileCH.value.size = reportStore.reportDataCHFile.ninth[props.ninthId].size / Math.pow(1024, 2);
+                if (Object.keys(props.data).length > 0) {
+                    isFirstSentSix.value = false;
+                    isRevision.value = reportStore.isReportReject.six[props.sixId];
+                    sixPanelData.value = { ...props.data };
+
+                    if (isLinkError.value) {
+                        emit('error', isLinkError.value);
+                    } else {
+                        emit('error', false);
+                    }
+                    if (!sixPanelData.value.links.length)
+                        sixPanelData.value.links.push({ link: '' });
+
+                    isFirstSentSix.value = reportStore.isReportReject.six[props.sixId] && !props.data.central_version;
+                    console.log('isFirstSent при доработке 6', isFirstSentSix.value);
+                    if (reportStore.isReportReject.six[props.sixId]) {
+                        reportStore.returnReport.six[props.sixId] = true;
+                    }
+                } else {
+                    console.log('data not received');
                 }
-                if (reportStore.reportForCheckCH.ninth[props.ninthId].rejecting_reasons) {
-                    reportStore.returnReport.ninth[props.ninthId] = true;
+            }
+
+            if (reportStore.reportForCheckCH.six[props.sixId].rejecting_reasons) {
+                reportStore.returnReport.six[props.sixId] = true;
+            }
+            emit('getId', props.id);
+            emit('getPanelNumber', props.panel_number);
+            // } else if (props.panel_number == 7) {
+            //     if (Object.keys(props.data).length > 0) {
+            //         console.log('7')
+            //         isFirstSentSeventh.value = false;
+            //         seventhPanelData.value = { ...props.data }
+            //         if (isLinkError.value) {
+            //             emit('error', isLinkError.value)
+            //         } else {
+            //             emit('error', false)
+            //         }
+
+            //         if (!seventhPanelData.value.links.length) seventhPanelData.value.links.push({ link: '' })
+
+            //     }
+            //     else {
+            //         console.log('data not received');
+            //         isFirstSentSeventh.value = true;
+            //         seventhPanelData.value = {
+            //             prize_place: 'Нет',
+            //             document: '',
+            //             links: [{
+            //                 link: '',
+            //             }],
+            //             comment: '',
+            //         };
+            //     }
+            //     emit('getId', props.id)
+            //     emit('getPanelNumber', props.panel_number)
+
+        } else if (props.panel_number == 9) {
+            if (props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) {
+                ninthPanelData.value = { ...props.data };
+                if (reportStore.reportDataDH.ninth[props.ninthId]) {
+                    ninthPanelDataDH.value.comment = reportStore.reportDataDH.ninth[props.ninthId].comment;
+                    ninthPanelDataDH.value.event_happened = reportStore.reportDataDH.ninth[props.ninthId].event_happened;
+                    ninthPanelDataDH.value.links = reportStore.reportDataDH.ninth[props.ninthId].links;
+                }
+                if (reportStore.reportDataCH.ninth[props.ninthId]) {
+                    ninthPanelDataCH.value.comment = reportStore.reportDataCH.ninth[props.ninthId].comment;
+                    ninthPanelDataCH.value.event_happened = reportStore.reportDataCH.ninth[props.ninthId].event_happened;
+                    ninthPanelDataCH.value.links = reportStore.reportDataCH.ninth[props.ninthId].links;
+                }
+            } else {
+                if (Object.keys(props.data).length > 0) {
+                    isFirstSentNinth.value = false;
+                    ninthPanelData.value = { ...props.data }
+                    if (isLinkError.value) {
+                        console.log('gg');
+                        emit('error', isLinkError.value)
+                    } else {
+                        console.log('hh')
+                        emit('error', false)
+                    }
+                    if (!ninthPanelData.value.links.length) {
+                        ninthPanelData.value.links.push({ link: '' })
+                    }
+                    isFirstSentNinth.value = reportStore.isReportReject.ninth[props.ninthId] && !props.data.central_version;
+                    console.log('isFirstSent при доработке 9', isFirstSentNinth.value);
+                    if (reportStore.isReportReject.ninth[props.ninthId]) {
+                        reportStore.returnReport.ninth[props.ninthId] = true;
+                    }
+
+                }
+
+                else {
+                    console.log('data not received');
+                    isFirstSentNinth.value = true;
+                    ninthPanelData.value = {
+                        event_happened: false,
+                        links: [{
+                            link: '',
+                        }],
+                        comment: '',
+                        file_size: '',
+                        file_type: '',
+                    };
+                }
+
+            }
+
+            if (props.isDistrictHeadquarterCommander) {
+                if (reportStore.reportDataDHFile.ninth[props.ninthId]) {
+                    fileDH.value.name = reportStore.reportDataDHFile.ninth[props.ninthId].name;
+                    fileDH.value.type = reportStore.reportDataDHFile.ninth[props.ninthId].type.split('/').at(-1);
+                    fileDH.value.size = reportStore.reportDataDHFile.ninth[props.ninthId].size / Math.pow(1024, 2);
+                }
+            } else if (props.isCentralHeadquarterCommander) {
+                if (reportStore.reportDataDH.ninth[props.ninthId]) {
+                    fileDH.value.name = reportStore.reportDataDH.ninth[props.ninthId].scan_file;
+                    fileDH.value.type = reportStore.reportDataDH.ninth[props.ninthId].file_type;
+                    fileDH.value.size = reportStore.reportDataDH.ninth[props.ninthId].file_size;
+                }
+                if (reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq !== null) {
+                    fileCH.value.name = reportStore.reportForCheckCH.ninth[props.ninthId].scan_file;
+                    fileCH.value.type = reportStore.reportForCheckCH.ninth[props.ninthId].file_type;
+                    fileCH.value.size = reportStore.reportForCheckCH.ninth[props.ninthId].file_size;
+                } else {
+                    if (reportStore.reportDataCHFile.ninth[props.ninthId]) {
+                        fileCH.value.name = reportStore.reportDataCHFile.ninth[props.ninthId].name;
+                        fileCH.value.type = reportStore.reportDataCHFile.ninth[props.ninthId].type.split('/').at(-1);
+                        fileCH.value.size = reportStore.reportDataCHFile.ninth[props.ninthId].size / Math.pow(1024, 2);
+                    }
+                    if (reportStore.reportForCheckCH.ninth[props.ninthId].rejecting_reasons) {
+                        reportStore.returnReport.ninth[props.ninthId] = true;
+                    }
+                }
+
+            }
+
+            emit('getId', props.id)
+            emit('getPanelNumber', props.panel_number)
+        }
+    }, {
+        flush: 'post'
+    })
+
+    watch(sixPanelDataDH.value, (newValue) => {
+        if (props.isDistrictHeadquarterCommander) {
+            reportStore.reportDataDH.six[props.sixId] = newValue;
+            emit('formDataDH', newValue);
+            console.log('6 new', newValue)
+        }
+    });
+
+    // reportStore.reportDataDH.six[props.sixId] = sixPanelDataDH.value;
+    // emit('formDataDH', sixPanelDataDH.value);
+
+
+    watch(sixPanelDataCH.value, () => {
+        if (props.isCentralHeadquarterCommander) {
+            reportStore.reportDataCH.six[props.sixId] = sixPanelDataCH.value;
+            let formData = new FormData();
+            formData.append('number_of_members', sixPanelDataCH.value.number_of_members);
+            formData.append('comment', sixPanelDataCH.value.comment || '');
+            if (sixPanelDataCH.value.links.length) {
+                for (let i = 0; i < sixPanelDataCH.value.links.length; i++) {
+                    formData.append(`[links][${i}][link]`, ninthPanelDataCH.value.links[i].link);
                 }
             }
-
+            if (reportStore.returnReport.six[props.sixId]) formData.append('reasons[comment]', sixPanelDataCH.value.comment);
+            console.log('6', formData)
+            emit('formDataCH', formData);
         }
-
-        emit('getId', props.id)
-        emit('getPanelNumber', props.panel_number)
-    }
-}, {
-    flush: 'post'
-})
-
-watch(sixPanelDataDH.value, (newValue) => {
-    if (props.isDistrictHeadquarterCommander) {
-        reportStore.reportDataDH.six[props.sixId] = newValue;
-        emit('formDataDH', newValue);
-        console.log('6 new', newValue)
-    }
-});
-
-// reportStore.reportDataDH.six[props.sixId] = sixPanelDataDH.value;
-// emit('formDataDH', sixPanelDataDH.value);
+    });
 
 
-watch(sixPanelDataCH.value, () => {
-    if (props.isCentralHeadquarterCommander) {
-        reportStore.reportDataCH.six[props.sixId] = sixPanelDataCH.value;
-        let formData = new FormData();
-        formData.append('number_of_members', sixPanelDataCH.value.number_of_members);
-        formData.append('comment', sixPanelDataCH.value.comment);
-        if (sixPanelDataCH.value.links.length) {
-            for (let i = 0; i < sixPanelDataCH.value.links.length; i++) {
-                formData.append(`[links][${i}][link]`, ninthPanelDataCH.value.links[i].link);
+    watch(ninthPanelDataDH.value, (newValue) => {
+        if (props.isDistrictHeadquarterCommander) {
+            reportStore.reportDataDH.ninth[props.ninthId] = newValue;
+
+            let formData = new FormData();
+            formData.append('event_happened', newValue.event_happened);
+            formData.append('comment', newValue.comment || '');
+            if (ninthPanelDataDH.value.links.length) {
+                for (let i = 0; i < ninthPanelDataDH.value.links.length; i++) {
+                    formData.append(`[links][${i}][link]`, ninthPanelDataDH.value.links[i].link);
+                }
             }
+            formData.append('document', reportStore.reportDataDHFile.ninth[props.ninthId] || '');
+            if (reportStore.returnReport.ninth[props.ninthId]) formData.append('reasons[comment]', ninthPanelDataCH.value.comment);
+            emit('formDataDH', formData);
         }
-        if (reportStore.returnReport.six[props.sixId]) formData.append('reasons[comment]', sixPanelDataCH.value.comment);
-        console.log('6', formData)
-        emit('formDataCH', formData);
-    }
-});
 
+    });
 
-watch(ninthPanelDataDH.value, (newValue) => {
-    if (props.isDistrictHeadquarterCommander) {
-        reportStore.reportDataDH.ninth[props.ninthId] = newValue;
+    watch(fileDH.value, () => {
+        if (props.isDistrictHeadquarterCommander) {
+            reportStore.reportDataDH.ninth[props.ninthId] = ninthPanelDataDH.value;
 
-        let formData = new FormData();
-        formData.append('event_happened', newValue.event_happened);
-        formData.append('comment', newValue.comment || '');
-        if (ninthPanelDataDH.value.links.length) {
-            for (let i = 0; i < ninthPanelDataDH.value.links.length; i++) {
-                formData.append(`[links][${i}][link]`, ninthPanelDataDH.value.links[i].link);
+            let formData = new FormData();
+            formData.append('event_happened', ninthPanelDataDH.value.event_happened);
+            formData.append('comment', ninthPanelDataDH.value.comment || '');
+            if (ninthPanelDataDH.value.links.length) {
+                for (let i = 0; i < ninthPanelDataDH.value.links.length; i++) {
+                    formData.append(`[links][${i}][link]`, ninthPanelDataDH.value.links[i].link);
+                }
             }
+            formData.append('document', reportStore.reportDataDHFile.ninth[props.ninthId] || '');
+            emit('formDataDH', formData);
         }
-        formData.append('document', reportStore.reportDataDHFile.ninth[props.ninthId] || '');
-        if (reportStore.returnReport.ninth[props.ninthId]) formData.append('reasons[comment]', ninthPanelDataCH.value.comment);
-        emit('formDataDH', formData);
-    }
+    });
 
-});
+    watch(fileCH.value, () => {
+        if (props.isCentralHeadquarterCommander) {
+            reportStore.reportDataCH.ninth[props.ninthId] = ninthPanelDataCH.value;
 
-watch(fileDH.value, () => {
-    if (props.isDistrictHeadquarterCommander) {
-        reportStore.reportDataDH.ninth[props.ninthId] = ninthPanelDataDH.value;
-
-        let formData = new FormData();
-        formData.append('event_happened', ninthPanelDataDH.value.event_happened);
-        formData.append('comment', ninthPanelDataDH.value.comment || '');
-        if (ninthPanelDataDH.value.links.length) {
-            for (let i = 0; i < ninthPanelDataDH.value.links.length; i++) {
-                formData.append(`[links][${i}][link]`, ninthPanelDataDH.value.links[i].link);
+            let formData = new FormData();
+            formData.append('event_happened', ninthPanelDataCH.value.event_happened);
+            formData.append('comment', ninthPanelDataCH.value.comment || '');
+            if (ninthPanelDataCH.value.links.length) {
+                for (let i = 0; i < ninthPanelDataCH.value.links.length; i++) {
+                    formData.append(`[links][${i}][link]`, ninthPanelDataCH.value.links[i].link);
+                }
             }
+            formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId] || '');
+            if (reportStore.returnReport.ninth[props.ninthId]) formData.append('reasons[comment]', ninthPanelDataCH.value.comment);
+            emit('formDataCH', formData);
+            console.log('file9', formData)
         }
-        formData.append('document', reportStore.reportDataDHFile.ninth[props.ninthId] || '');
-        emit('formDataDH', formData);
-    }
-});
+    });
 
-watch(fileCH.value, () => {
-    if (props.isCentralHeadquarterCommander) {
-        reportStore.reportDataCH.ninth[props.ninthId] = ninthPanelDataCH.value;
-
-        let formData = new FormData();
-        formData.append('event_happened', ninthPanelDataCH.value.event_happened);
-        formData.append('comment', ninthPanelDataCH.value.comment || '');
-        if (ninthPanelDataCH.value.links.length) {
-            for (let i = 0; i < ninthPanelDataCH.value.links.length; i++) {
-                formData.append(`[links][${i}][link]`, ninthPanelDataCH.value.links[i].link);
+    watch(ninthPanelDataCH.value, () => {
+        if (props.isCentralHeadquarterCommander) {
+            reportStore.reportDataCH.ninth[props.ninthId] = ninthPanelDataCH.value;
+            let formData = new FormData();
+            formData.append('event_happened', ninthPanelDataCH.value.event_happened);
+            formData.append('comment', ninthPanelDataCH.value.comment || '');
+            if (ninthPanelDataCH.value.links.length) {
+                for (let i = 0; i < ninthPanelDataCH.value.links.length; i++) {
+                    formData.append(`[links][${i}][link]`, ninthPanelDataCH.value.links[i].link);
+                }
             }
+            formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId] || '');
+            if (reportStore.returnReport.ninth[props.ninthId]) formData.append('reasons[comment]', ninthPanelDataCH.value.comment);
+            emit('formDataCH', formData);
         }
-        formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId] || '');
-        if (reportStore.returnReport.ninth[props.ninthId]) formData.append('reasons[comment]', ninthPanelDataCH.value.comment);
-        emit('formDataCH', formData);
-        console.log('file9', formData)
-    }
-});
-
-watch(ninthPanelDataCH.value, () => {
-    if (props.isCentralHeadquarterCommander) {
-        reportStore.reportDataCH.ninth[props.ninthId] = ninthPanelDataCH.value;
-        let formData = new FormData();
-        formData.append('event_happened', ninthPanelDataCH.value.event_happened);
-        formData.append('comment', ninthPanelDataCH.value.comment || '');
-        if (ninthPanelDataCH.value.links.length) {
-            for (let i = 0; i < ninthPanelDataCH.value.links.length; i++) {
-                formData.append(`[links][${i}][link]`, ninthPanelDataCH.value.links[i].link);
-            }
-        }
-        formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId] || '');
-        emit('formDataCH', formData);
-    }
-});
-
-// onMounted(() => {
-//     // emit('formDataDH', sixPanelDataDH);
-//     console.log('mount', sixPanelDataDH.value)
-// })
+    });
 </script>
 <style lang="scss" scoped>
 .number_input {

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.fifth)"
+  <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.fifth) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.fifth)"
        class="form__field-group">
     <div class="form__field-group-general" v-for="(event, index) in events" :key="index">
       <div class="form__field-people">
@@ -157,7 +157,7 @@
     </div>
   </div>
 
-  <report-tabs v-else :isReject="reportStore.isReportReject.fifth">
+  <report-tabs v-else :isReject="reportStore.isReportReject.fifth && props.tab === 'Доработка'">
 
     <template v-slot:firstTab>
       <div class="form__field-group-general" v-for="(event, index) in events" :key="index">
@@ -573,6 +573,7 @@ const props = defineProps({
     type: Boolean
   },
   data: Object,
+  tab: String,
 });
 const emit = defineEmits(['getData', 'getDataDH', 'getDataCH']);
 

@@ -30,6 +30,7 @@
               @onReturnReport="onReturnReport($event, 1)"
               :isReportReject="reportStore.isReportReject.tenth.first"
               :reportRejectData="reportStore.reportReject.tenth.first"
+              :tab="props.tab"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -63,6 +64,7 @@
               @onReturnReport="onReturnReport($event, 2)"
               :isReportReject="reportStore.isReportReject.tenth.second"
               :reportRejectData="reportStore.reportReject.tenth.second"
+              :tab="props.tab"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -90,6 +92,7 @@ const props = defineProps({
     default: '',
   },
   data: Object,
+  tab: String,
 });
 
 const emit = defineEmits(['getData', 'getDataDHFirst', 'getDataDHSecond', 'getDataCHFirst', 'getDataCHSecond', 'getDataCHFirst', 'getDataCHSecond']);
@@ -158,6 +161,7 @@ const formData = async (reportData, reportNumber) => {
       tenthPanelDataFirst.value = {...reportData}
       formData.append('event_happened', tenthPanelDataFirst.value.event_happened);
       formData.append('comment', tenthPanelDataFirst.value.comment || '');
+      if (tenthPanelDataFirst.value.document) formData.append('document', tenthPanelDataFirst.value.document || '');
       if (tenthPanelDataFirst.value.links.length) {
         for (let j = 0; j < tenthPanelDataFirst.value.links.length; j++) {
           if (tenthPanelDataFirst.value.links[j].link) formData.append(`[links][${j}][link]`, tenthPanelDataFirst.value.links[j].link);
@@ -174,6 +178,7 @@ const formData = async (reportData, reportNumber) => {
       tenthPanelDataSecond.value = {...reportData}
       formData.append('event_happened', tenthPanelDataSecond.value.event_happened);
       formData.append('comment', tenthPanelDataSecond.value.comment || '');
+      if (tenthPanelDataSecond.value.document) formData.append('document', tenthPanelDataSecond.value.document || '');
       if (tenthPanelDataSecond.value.links.length) {
         for (let j = 0; j < tenthPanelDataSecond.value.links.length; j++) {
           if (tenthPanelDataSecond.value.links[j].link) formData.append(`[links][${j}][link]`, tenthPanelDataSecond.value.links[j].link);

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.first)">
+  <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.first) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.first)">
     <div class="form__field-group">
       <div class="form__field-report">
         <div class="form__field">
@@ -67,7 +67,7 @@
     <ReportRegionalForm :reportData="reportData" :blockEditFirstReport="blockEditFirstReport"/>
   </div>
 
-  <report-tabs v-else :isReject="reportStore.isReportReject.first">
+  <report-tabs v-else :isReject="reportStore.isReportReject.first && props.tab === 'Доработка'">
     <template v-slot:firstTab>
       <div class="form__field-report">
         <div class="form__field">
@@ -102,7 +102,7 @@
                   type="file"
                   id="scan_file"
                   name="scan_file"
-                  :disabled="(props.centralExpert || props.districtExpert) && isSent"
+                  :disabled="(props.centralExpert || props.districtExpert)"
                   :is-error-panel="isErrorPanel"
                   style="width: 100%;"
                   @change="uploadFile"/>
@@ -262,6 +262,7 @@ const props = defineProps({
   isErrorPanel: {
     type: Boolean,
   },
+  tab: String,
 });
 
 const emit = defineEmits(['getData', 'getDataDH', 'getDataCH']);
@@ -312,6 +313,7 @@ const focusOut = async () => {
   let formData = new FormData();
   formData.append('comment', firstPanelData.value.comment || '');
   formData.append('amount_of_money', firstPanelData.value.amount_of_money || '');
+  if (firstPanelData.value.scan_file) formData.append('scan_file', firstPanelData.value.scan_file || '');
   try {
     if (isFirstSent.value) {
       const {data} = await reportPartTwoService.createReport(formData, '1', true);
@@ -431,6 +433,7 @@ const onReportReturn = (event) => {
 };
 
 watchEffect(async () => {
+  console.log('tab', props.tab)
   try {
     if (!(props.centralExpert || props.districtExpert)) {
       const res = await getReportForSecond();

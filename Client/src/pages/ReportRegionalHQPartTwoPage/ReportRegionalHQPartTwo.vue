@@ -8,11 +8,9 @@
         <p class="preloader_info">{{ preloader_text }}</p>
       </div>
       <div v-else>
-        <div class="d-flex mt-9 mb-9 active-tabs" v-if="!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && isRevision">
-          <button class="contributorBtn"
-            :class="{ active: picked === tab.name }"
-            v-for="tab in tabs"
-            :key="tab.id"
+        <div class="d-flex mt-9 mb-9 active-tabs"
+          v-if="!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && isRevision">
+          <button class="contributorBtn" :class="{ active: picked === tab.name }" v-for="tab in tabs" :key="tab.id"
             @click="picked = tab.name">
             {{ tab.name }}
           </button>
@@ -25,14 +23,22 @@
           </button>
         </div>
         <v-expansion-panels>
-          <v-expansion-panel>
+          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('1') : true">
             <v-expansion-panel-title :class="isErrorPanel.first ? 'visible-error' : ''">
               1. Численность членов РО&nbsp;РСО в&nbsp;соответствии с&nbsp;объемом уплаченных членских взносов
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <first-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.first"
-                :is-error-panel="isErrorPanel.first" :blockEditFirstReport="blockEditFirstReport" />
+              <first-panel
+                  :districtExpert="districtExpert"
+                  :centralExpert="centralExpert"
+                  @get-data="setData"
+                  @get-data-DH="setDataDH"
+                  @get-data-CH="setDataCH"
+                  :data="reportData.first"
+                  :is-error-panel="isErrorPanel.first"
+                  :blockEditFirstReport="blockEditFirstReport"
+                  :tab="picked"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('2', picked, revisionPanels)">
@@ -59,18 +65,25 @@
                 text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel>
+          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('4') : true">
             <v-expansion-panel-title :class="isErrorPanel.fourth ? 'visible-error' : ''">
               4. Организация всероссийских (международных), окружных и&nbsp;межрегиональных мероприятий и&nbsp;проектов
               (слеты, школы, фестивали, турниры и&nbsp;прочие)
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <fourth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.fourth"
-                :is-error-panel="isErrorPanel.fourth" />
+              <fourth-panel
+                :districtExpert="districtExpert"
+                :centralExpert="centralExpert"
+                @get-data="setData"
+                @get-data-DH="setDataDH"
+                @get-data-CH="setDataCH"
+                :data="reportData.fourth"
+                :is-error-panel="isErrorPanel.fourth"
+                :tab="picked"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel>
+          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('5') : true">
             <v-expansion-panel-title :class="isErrorPanel.fifth ? 'visible-error' : ''">
               5. Организация всероссийских (международных) (организатор&nbsp;&mdash; региональное отделение РСО),
               окружных и&nbsp;межрегиональных трудовых проектов в&nbsp;соответствии с&nbsp;Положением
@@ -78,12 +91,19 @@
               трудовых проектов РСО
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <fifth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.fifth"
-                :is-error-panel="isErrorPanel.fifth" />
+              <fifth-panel
+                :districtExpert="districtExpert"
+                :centralExpert="centralExpert"
+                @get-data="setData"
+                @get-data-DH="setDataDH"
+                @get-data-CH="setDataCH"
+                :data="reportData.fifth"
+                :is-error-panel="isErrorPanel.fifth"
+                :tab="picked"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel>
+          <v-expansion-panel v-if="showPanels('6', picked, revisionPanels)">
             <v-expansion-panel-title
               :class="Object.values(isErrorPanel.six).some(item => item.error === true) ? 'visible-error' : ''">
               6. Участие бойцов студенческих отрядов РО&nbsp;РСО во&nbsp;всероссийских (международных)
@@ -92,8 +112,8 @@
             <v-expansion-panel-text>
               <sixth-panel @get-data="setData" @get-data-DH="setDataDH" @get-data-CH="setDataCH" :items="six_items"
                 @getId="setId" @getPanelNumber="setPanelNumber" :district-headquarter-commander="districtExpert"
-                :data="reportData.six" :central-headquarter-commander="centralExpert"
-                :is-error-panel="isErrorPanel.six" />
+                :data="reportData.six" :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.six"
+                :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('7', picked, revisionPanels)">
@@ -117,7 +137,7 @@
                 text="Показатель рассчитывается автоматически на&nbsp;основе данных сервиса &laquo;Медиалогия&raquo;, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel>
+          <v-expansion-panel v-if="showPanels('9', picked, revisionPanels)">
             <v-expansion-panel-title
               :class="Object.values(isErrorPanel.ninth).some(item => item.error === true) ? 'visible-error' : ''">
               9. Организация обязательных общесистемных мероприятий РСО на&nbsp;региональном уровне &laquo;К&raquo;
@@ -126,18 +146,27 @@
               <ninth-panel @get-data="setData" @get-data-DH="setDataDH" @getId="setId" @get-data-CH="setDataCH"
                 @getPanelNumber="setPanelNumber" :items="ninth_items" :district-headquarter-commander="districtExpert"
                 :data="reportData.ninth" :central-headquarter-commander="centralExpert"
-                :is-error-panel="isErrorPanel.ninth" />
+                :is-error-panel="isErrorPanel.ninth" :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel>
+          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('10-1') || revisionPanels.includes('10-2') : true">
             <v-expansion-panel-title :class="isErrorPanel.tenth ? 'visible-error' : ''">
               10. Организация РО&nbsp;РСО всероссийских (международных) добровольческих и&nbsp;патриотических акций
               &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <tenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                @getDataDHFirst="setDataDH" @getDataDHSecond="setDataDH" @getDataCHFirst="setDataCH"
-                @getDataCHSecond="setDataCH" :data="reportData.tenth" :is-error-panel="isErrorPanel.tenth" />
+              <tenth-panel
+                :districtExpert="districtExpert"
+                :centralExpert="centralExpert"
+                @get-data="setData"
+                @getDataDHFirst="setDataDH"
+                @getDataDHSecond="setDataDH"
+                @getDataCHFirst="setDataCH"
+                @getDataCHSecond="setDataCH"
+                :data="reportData.tenth"
+                :is-error-panel="isErrorPanel.tenth"
+                :tab="picked"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('11', picked, revisionPanels)">
@@ -147,7 +176,7 @@
             <v-expansion-panel-text>
               <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
                 @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.eleventh"
-                :is-error-panel="isErrorPanel.eleventh" />
+                :is-error-panel="isErrorPanel.eleventh" :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('12', picked, revisionPanels)">
@@ -157,7 +186,7 @@
             <v-expansion-panel-text>
               <twelfth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
                 @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.twelfth"
-                :is-error-panel="isErrorPanel.twelfth" />
+                :is-error-panel="isErrorPanel.twelfth" :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('13', picked, revisionPanels)">
@@ -167,7 +196,7 @@
             <v-expansion-panel-text>
               <thirteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
                 @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.thirteenth"
-                :is-error-panel="isErrorPanel.thirteenth" />
+                :is-error-panel="isErrorPanel.thirteenth" :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('14', picked, revisionPanels)">
@@ -194,15 +223,22 @@
                 text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel>
+          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('16') : true">
             <v-expansion-panel-title :class="isErrorPanel.sixteenth ? 'visible-error' : ''">
               16. Победители всероссийских (международных), окружных и&nbsp;межрегиональных трудовых проектов
               по&nbsp;комиссарской деятельности &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <sixteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data-DH="setDataDH"
-                @get-data="setData" @get-data-CH="setDataCH" :data="reportData.sixteenth"
-                :is-error-panel="isErrorPanel.sixteenth" />
+              <sixteenth-panel
+                :districtExpert="districtExpert"
+                :centralExpert="centralExpert"
+                @get-data-DH="setDataDH"
+                @get-data="setData"
+                @get-data-CH="setDataCH"
+                :data="reportData.sixteenth"
+                :is-error-panel="isErrorPanel.sixteenth"
+                :tab="picked"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('17', picked, revisionPanels)">
@@ -235,15 +271,8 @@
         </v-expansion-panels>
       </div>
     </div>
-    <Button
-        class="btn_report"
-        v-if="!preloader"
-        :disabled="blockSendButton"
-        variant="text"
-        label="Отправить отчет"
-        size="large"
-        @click="sendReport"
-    />
+    <Button class="btn_report" v-if="!preloader" :disabled="blockSendButton" variant="text" label="Отправить отчет" size="large"
+      @click="sendReport" />
   </div>
 </template>
 <script setup>
@@ -580,15 +609,15 @@ const getMultiplyData = async (reportId) => {
       //   error: false,
       // }
     } else if (centralExpert.value) {
-      console.log('ch')
       reportStore.reportForCheckCH.six[result.id] = result.data;
+      console.log('ch6', reportStore.reportForCheckCH.six[result.id])
       if (result.data.regional_version) {
         reportData.value.six[result.id] = JSON.parse(result.data?.regional_version);
       } else {
         reportData.value.six[result.id] = result.data;
       }
       if (result.data.district_version) {
-        reportStore.reportDataDH.six[result.id] = JSON.patse(result.data.district_version);
+        reportStore.reportDataDH.six[result.id] = JSON.parse(result.data.district_version);
       } else {
         reportStore.reportDataDH.six[result.id] = result.data
       }
@@ -601,9 +630,22 @@ const getMultiplyData = async (reportId) => {
       reportData.value.six[result.id] = result.data;
       if (reportData.value.six[result.id]?.regional_version) {
         reportData.value.six[result.id] = JSON.parse(reportData.value.six[result.id].regional_version);
+      } else {
+        reportData.value.six[result.id] = result.data;
+      }
+
+      // Проверка на причины отклонений отчета и вывод табов для РО
+      if (reportData.value.six[result.id]?.rejecting_reasons) {
+        revisionPanels.value.push('6');
+        reportStore.reportDataDH.six[result.id] = JSON.parse(reportData.value.six[result.id].district_version);
+
+        reportData.value.six[result.id].central_version
+          ? reportStore.reportDataCH.six[result.id] = reportData.value.six[result.id].central_version
+          : reportStore.reportDataCH.six[result.id] = reportData.value.six[result.id];
+
+        reportStore.isReportReject.six[result.id] = isTabsForRevision.value;
       }
     }
-
   });
   // console.log('data66', reportData.value.six)
   // seventhDataResults.forEach((result) => {
@@ -621,13 +663,14 @@ const getMultiplyData = async (reportId) => {
       // }
     } else if (centralExpert.value) {
       reportStore.reportForCheckCH.ninth[result.id] = result.data;
+      console.log('ch9', reportStore.reportForCheckCH.ninth[result.id])
       if (result.data.regional_version) {
         reportData.value.ninth[result.id] = JSON.parse(result.data?.regional_version);
       } else {
         reportData.value.ninth[result.id] = result.data;
       }
       if (result.data.district_version) {
-        reportStore.reportDataDH.ninth[result.id] = JSON.patse(result.data.district_version);
+        reportStore.reportDataDH.ninth[result.id] = JSON.parse(result.data.district_version);
       } else {
         reportStore.reportDataDH.ninth[result.id] = result.data
       }
@@ -642,6 +685,19 @@ const getMultiplyData = async (reportId) => {
       if (reportData.value.ninth[result.id]?.regional_version !== null && Object.keys(reportData.value.ninth[result.id]).length) {
         reportData.value.ninth[result.id] = JSON.parse(reportData.value.ninth[result.id].regional_version);
       }
+
+      if (reportData.value.ninth[result.id]?.rejecting_reasons) {
+        revisionPanels.value.push('9');
+        reportStore.reportDataDH.ninth[result.id] = JSON.parse(reportData.value.ninth[result.id].district_version);
+
+        reportData.value.ninth[result.id].central_version
+          ? reportStore.reportDataCH.ninth[result.id] = reportData.value.ninth[result.id].central_version
+          : reportStore.reportDataCH.ninth[result.id] = reportData.value.ninth[result.id];
+
+        reportStore.isReportReject.ninth[result.id] = isTabsForRevision.value;
+      }
+
+
     }
   });
 }
@@ -823,8 +879,10 @@ const getReportData = async (reportId) => {
           reportData.value.first = dataFirst;
         } else {
           if (dataFirst.rejecting_reasons) {
-            reportStore.isReportReject.first = true;
+            reportStore.isReportReject.first = isTabsForRevision.value // true;
             reportStore.reportReject.first = dataFirst;
+
+            revisionPanels.value.push('1');
           }
 
           if (dataFirst.central_version) {
@@ -842,8 +900,10 @@ const getReportData = async (reportId) => {
           reportData.value.fourth = dataFourth;
         } else {
           if (dataFourth.rejecting_reasons) {
-            reportStore.isReportReject.fourth = true;
+            reportStore.isReportReject.fourth = isTabsForRevision.value // true;
             reportStore.reportReject.fourth = dataFourth;
+
+            revisionPanels.value.push('4');
           }
 
           if (dataFourth.central_version) {
@@ -867,8 +927,10 @@ const getReportData = async (reportId) => {
           reportData.value.fifth = dataFifth;
         } else {
           if (dataFifth.rejecting_reasons) {
-            reportStore.isReportReject.fifth = true;
+            reportStore.isReportReject.fifth = isTabsForRevision.value // true;
             reportStore.reportReject.fifth = dataFifth;
+
+            revisionPanels.value.push('5');
           }
 
           if (dataFifth.central_version) {
@@ -954,8 +1016,10 @@ const getReportData = async (reportId) => {
           reportData.value.tenth.first = dataTenthFirst;
         } else {
           if (dataTenthFirst.rejecting_reasons) {
-            reportStore.isReportReject.tenth.first = true;
+            reportStore.isReportReject.tenth.first = isTabsForRevision.value // true;
             reportStore.reportReject.tenth.first = dataTenthFirst;
+
+            revisionPanels.value.push('10-1');
           }
 
           if (dataTenthFirst.central_version) {
@@ -979,8 +1043,10 @@ const getReportData = async (reportId) => {
           reportData.value.tenth.second = dataTenthSecond;
         } else {
           if (dataTenthSecond.rejecting_reasons) {
-            reportStore.isReportReject.tenth.second = true;
+            reportStore.isReportReject.tenth.second = isTabsForRevision.value  // true;
             reportStore.reportReject.tenth.second = dataTenthSecond;
+
+            revisionPanels.value.push('10-2');
           }
 
           if (dataTenthSecond.central_version) {
@@ -1000,13 +1066,14 @@ const getReportData = async (reportId) => {
           : reportData.value.eleventh = dataEleventh;
 
         // Проверка на причины отклонений отчета и вывод табов для РО
-        if (dataEleventh.rejecting_reasons) {
+        if (dataEleventh.rejecting_reasons && dataEleventh.verified_by_chq !== true) {
+          // console.log(dataEleventh);
           revisionPanels.value.push('11');
           reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version);
 
           dataEleventh.central_version
-          ? reportStore.reportDataCH.eleventh = dataEleventh.central_version
-          : reportStore.reportDataCH.eleventh = dataEleventh;
+            ? reportStore.reportDataCH.eleventh = dataEleventh.central_version
+            : reportStore.reportDataCH.eleventh = dataEleventh;
 
           reportStore.isReportReject.eleventh = isTabsForRevision.value;
           // console.log('isReportReject в род комп', reportStore.isReportReject.eleventh);
@@ -1022,13 +1089,13 @@ const getReportData = async (reportId) => {
           : reportData.value.twelfth = dataTwelfth;
 
         // Проверка на причины отклонений отчета и вывод табов для РО
-        if (dataTwelfth.rejecting_reasons) {
+        if (dataTwelfth.rejecting_reasons && dataTwelfth.verified_by_chq !== true) {
           revisionPanels.value.push('12');
           reportStore.reportDataDH.twelfth = JSON.parse(dataTwelfth.district_version);
 
           dataTwelfth.central_version
-          ? reportStore.reportDataCH.twelfth = dataTwelfth.central_version
-          : reportStore.reportDataCH.twelfth = dataTwelfth;
+            ? reportStore.reportDataCH.twelfth = dataTwelfth.central_version
+            : reportStore.reportDataCH.twelfth = dataTwelfth;
 
           reportStore.isReportReject.twelfth = isTabsForRevision.value;
           // console.log('isReportReject в род комп', reportStore.isReportReject.twelfth);
@@ -1044,13 +1111,13 @@ const getReportData = async (reportId) => {
           : reportData.value.thirteenth = dataThirteenth;
 
         // Проверка на причины отклонений отчета и вывод табов для РО
-        if (dataThirteenth.rejecting_reasons) {
+        if (dataThirteenth.rejecting_reasons && dataThirteenth.verified_by_chq !== true) {
           revisionPanels.value.push('13');
           reportStore.reportDataDH.thirteenth = JSON.parse(dataThirteenth.district_version);
 
           dataThirteenth.central_version
-          ? reportStore.reportDataCH.thirteenth = dataThirteenth.central_version
-          : reportStore.reportDataCH.thirteenth = dataThirteenth;
+            ? reportStore.reportDataCH.thirteenth = dataThirteenth.central_version
+            : reportStore.reportDataCH.thirteenth = dataThirteenth;
 
           reportStore.isReportReject.thirteenth = isTabsForRevision.value;
           // console.log('isReportReject в род комп', reportStore.isReportReject.thirteenth);
@@ -1076,8 +1143,10 @@ const getReportData = async (reportId) => {
           reportData.value.sixteenth = dataSixteenth;
         } else {
           if (dataSixteenth.rejecting_reasons) {
-            reportStore.isReportReject.sixteenth = true;
+            reportStore.isReportReject.sixteenth = isTabsForRevision.value // true;
             reportStore.reportReject.sixteenth = dataSixteenth;
+
+            revisionPanels.value.push('16');
           }
 
           if (dataSixteenth.central_version) {
@@ -1260,6 +1329,7 @@ const setDataCH = (data, panel, number) => {
       break;
     case 9:
       reportDataCH.value.ninth[number] = data;
+      console.log('9 sss', ...reportDataCH.value.ninth[number])
       break;
     case 10:
       if (number === 1) {
@@ -1272,7 +1342,7 @@ const setDataCH = (data, panel, number) => {
       break;
     case 11:
       reportDataCH.value.eleventh = data;
-      // console.log('11', ...reportDataCH.value.eleventh);
+      console.log('11', ...reportDataCH.value.eleventh);
       break;
     case 12:
       reportDataCH.value.twelfth = data;
@@ -1560,16 +1630,48 @@ const sendReport = async () => {
         await reportPartTwoService.sendReportCH(reportDataCH.value.fifth, '5', route.query.reportId, true, reportStore.returnReport.fifth);
       }
 
-      for (let i in reportStore.reportForCheckCH.six) {
-        if (reportStore.reportForCheckCH.six[i].verified_by_chq === null) {
-          await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.six[i], '6', i, route.query.reportId, false, reportStore.returnReport.six[i]);
+      // for (let i in reportStore.reportForCheckCH.six) {
+      //   console.log('33', reportStore.reportForCheckCH.six[i])
+      //   if (reportStore.reportForCheckCH.six[i].verified_by_chq === null) {
+      //     console.log(11,  reportStore.reportForCheckCH.six[i])
+      //     await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.six[i], '6', i, route.query.reportId, false, reportStore.returnReport.six[i]);
+      //   }
+      // }
+      for (const [index, item] of Object.entries(reportStore.reportForCheckCH.six)) {
+        if (item && item.verified_by_chq === null) {
+          console.log(`Sending report for item 6-${index}:`, item);
+          try {
+            console.log('data 6', reportDataCH.value.six[index], reportStore.returnReport.six[index] )
+            const response = await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.six[index], '6', index, route.query.reportId, false, reportStore.returnReport.six[index]);
+            console.log(`Successfully sent report for item 6-${index}`);
+          } catch (error) {
+            console.error(`Error sending report for item 6-${index}:`, error);
+          }
+        } else {
+          console.log(`Skipping item 6-${index} as it's already verified or doesn't exist`);
         }
       }
-      for (let i in reportStore.reportForCheckCH.ninth) {
-        if (reportStore.reportForCheckCH.ninth[i].verified_by_chq === null) {
-          await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.ninth[i], '9', i, route.query.reportId, true, reportStore.returnReport.ninth[i]);
+      for (const [index, item] of Object.entries(reportStore.reportForCheckCH.ninth)) {
+        console.log('43', reportStore.reportForCheckCH.ninth[index], reportStore.reportForCheckCH.ninth[item])
+        if (item && item.verified_by_chq === null) {
+          console.log(`Sending report for item 9-${index}:`, item);
+          try {
+            console.log('data 9', reportDataCH.value.ninth[index], reportStore.returnReport.ninth[index] )
+            const response = await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.ninth[index], '9', index, route.query.reportId, true, reportStore.returnReport.ninth[index]);
+            console.log(`Successfully sent report for item 9-${index}`);
+          } catch (error) {
+            console.error(`Error sending report for item 9-${index}:`, error);
+          }
+        } else {
+          console.log(`Skipping item 9-${index} as it's already verified or doesn't exist`);
         }
       }
+      // for (let i in reportStore.reportForCheckCH.ninth) {
+      //   if (reportStore.reportForCheckCH.ninth[i].verified_by_chq === null) {
+      //     console.log(12, reportStore.reportForCheckCH.ninth[i])
+      //     await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.ninth[i], '9', i, route.query.reportId, true, reportStore.returnReport.ninth[i]);
+      //   }
+      // }
       if (reportStore.reportForCheckCH.tenth.first.verified_by_chq === null) {
         await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.tenth.first, '10', '1', route.query.reportId, true, reportStore.returnReport.tenth.first);
       }
@@ -1958,18 +2060,31 @@ watch(revisionPanels.value,
     if (revisionPanels.value.length) {
       // Временно скрываем табы Просмотра и Доработки отчета (true на false)-------------------------------
 
-      // isRevision.value = true;
-      isRevision.value = false;
+      isRevision.value = true; 
+      reportStore.isReportRevision = true;
+      // isRevision.value = false;
 
       // Временно скрываем табы в показателях для РО для доработки отчета (true на false)------------------
 
-      // isTabsForRevision.value = true;
-      isTabsForRevision.value = false;
+      isTabsForRevision.value = true;
+      // isTabsForRevision.value = false;
 
       console.log('массив с показателями на дораб', revisionPanels.value);
       console.log('возврат на дораб', isRevision.value);
     }
   },
+)
+
+watch(
+  () => picked.value,
+  () => {
+    //     if (picked.value === 'Просмотр отправленного отчета') {
+    //       
+    //     } else {
+    //       
+    //     }
+    console.log('таб', picked.value);
+  }
 )
 
 onMounted(() => {
