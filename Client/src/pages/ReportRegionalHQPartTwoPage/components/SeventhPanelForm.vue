@@ -132,7 +132,7 @@
                 <div class="form__field">
                     <label class="form__label" for="14">Комментарий </label>
                     <TextareaReport v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1"
-                        autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
+                        autoResize placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000"
                         :disabled="isSentSix || (sixPanelData.number_of_members == 0 || sixPanelData.number_of_members === null)"
                         :max-length-text="3000" counter-visible />
 
@@ -211,7 +211,7 @@
                 <div class="form__field">
                     <label class="form__label" for="14">Комментарий</label>
                     <TextareaReport v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1"
-                        autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
+                        autoResize placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000"
                         :max-length-text="3000" counter-visible
                         :disabled="isSentNinth || ninthPanelData.event_happened === false" />
                 </div>
@@ -348,7 +348,7 @@
                         <TextareaReport
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                             v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1" autoResize
-                            placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
+                            placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
                             counter-visible />
                     </div>
                 </div>
@@ -415,7 +415,7 @@
                         <TextareaReport @focusout="focusOut"
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                             v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1" autoResize
-                            placeholder="Комментарий" :maxlength="3000" :max-length-text="3000" counter-visible />
+                            placeholder="Напишите сообщение" :maxlength="3000" :max-length-text="3000" counter-visible />
                     </div>
                 </div>
             </template>
