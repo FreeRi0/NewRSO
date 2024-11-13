@@ -1370,7 +1370,7 @@ const setDataCH = (data, panel, number) => {
       break;
     case 11:
       reportDataCH.value.eleventh = data;
-      console.log('11', ...reportDataCH.value.eleventh);
+      // console.log('11', ...reportDataCH.value.eleventh);
       break;
     case 12:
       reportDataCH.value.twelfth = data;
