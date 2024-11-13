@@ -602,6 +602,11 @@ const getMultiplyData = async (reportId) => {
 
     if (districtExpert.value) {
       reportData.value.six[result.id] = result.data;
+      if ( reportData.value.six[result.id]?.regional_version) {
+        reportData.value.six[result.id] = JSON.parse(reportData.value.six[result.id]?.regional_version);
+      } else {
+        reportData.value.six[result.id] = result.data;
+      }
       reportStore.reportDataDH.six[result.id] = Object.assign({}, reportData.value.six[result.id]);
       reportStore.reportDataDH.six[result.id].comment = '';
       // isErrorPanel.value.six[result.id] = {
@@ -673,6 +678,11 @@ const getMultiplyData = async (reportId) => {
   ninthDataResults.forEach((result) => {
     if (districtExpert.value) {
       reportData.value.ninth[result.id] = result.data;
+      if ( reportData.value.ninth[result.id]?.regional_version) {
+        reportData.value.ninth[result.id] = JSON.parse(reportData.value.ninth[result.id]?.regional_version);
+      } else {
+        reportData.value.ninth[result.id] = result.data;
+      }
       reportStore.reportDataDH.ninth[result.id] = Object.assign({}, reportData.value.ninth[result.id]);
       reportStore.reportDataDH.ninth[result.id].comment = '';
       // isErrorPanel.value.ninth[result.id] = {
