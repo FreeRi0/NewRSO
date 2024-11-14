@@ -72,7 +72,9 @@ const isActive =
 }
 
 .div2 {
-  grid-area: 1 / 2 / 2 / 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between
 }
 
 .div3 {
@@ -86,6 +88,7 @@ const isActive =
   grid-template-rows: 1fr 1px;
   grid-column-gap: 16px;
   grid-row-gap: 16px;
+  height: 100%;
 }
 
 .grid_field {
@@ -94,6 +97,10 @@ const isActive =
   grid-template-rows: repeat(1, 1fr);
   grid-column-gap: 8px;
   grid-row-gap: 8px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .form__field-group {
