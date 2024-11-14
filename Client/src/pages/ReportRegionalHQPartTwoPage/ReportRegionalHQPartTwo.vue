@@ -579,43 +579,69 @@ const getMultiplyData = async (reportId) => {
       reportStore.reportDataDH.six[result.id].comment = '';
 
     } else if (centralExpert.value) {
-      console.log('data 66', result.data)
       reportStore.reportForCheckCH.six[result.id] = result.data;
+      reportData.value.six[result.id] = result.data
+      reportStore.reportDataDH.six[result.id] = result.data
       console.log('ch6', reportStore.reportForCheckCH.six[result.id])
+      // if (reportData.value.six[result.id]?.regional_version) {
+      //   console.log('reg_ver', reportData.value.six[result.id]?.regional_version)
+      //   reportData.value.six[result.id] = JSON.parse(reportData.value.six[result.id]?.regional_version);
+      // } else {
+      //   reportData.value.six[result.id] = result.data;
+      // }
+      // if (reportStore.reportDataDH.six[result.id]?.district_version) {
+      //   reportStore.reportDataDH.six[result.id] = JSON.parse(reportStore.reportDataDH.six[result.id].district_version);
+      // } else {
+      //   reportStore.reportDataDH.six[result.id] = result.data
+      // }
       if (result.data?.regional_version) {
-        reportData.value.six[result.id] = JSON.parse(result.data.regional_version);
+        try {
+          reportData.value.six[result.id] = JSON.parse(result.data.regional_version);
+        } catch (error) {
+          console.error('Error parsing regional_version JSON:', error);
+          reportData.value.six[result.id] = result.data.regional_version || result.data;
+        }
       } else {
         reportData.value.six[result.id] = result.data;
       }
       if (result.data?.district_version) {
-        reportStore.reportDataDH.six[result.id] = JSON.parse(result.data.district_version);
+        try {
+          reportStore.reportDataDH.six[result.id] = JSON.parse(result.data.district_version);
+        } catch (error) {
+          console.error('Error parsing regional_version JSON:', error);
+          reportStore.reportDataDH.six[result.id] = result.data.district_version || result.data;
+        }
       } else {
-        reportStore.reportDataDH.six[result.id] = result.data
+        reportStore.reportDataDH.six[result.id] = result.data;
       }
 
       reportStore.reportDataCH.six[result.id] = Object.assign({}, result.data);
-      result.data.verified_by_chq === null
+      reportStore.reportDataCH.six[result.id].verified_by_chq === null
         ? reportStore.reportDataCH.six[result.id].comment = ''
-        : reportStore.reportDataCH.six[result.id].comment = result.data.comment;
+        : reportStore.reportDataCH.six[result.id].comment = result.data?.comment;
     } else {
-      reportData.value.six[result.id] = result.data;
-      if (reportData.value.six[result.id]?.regional_version) {
-        reportData.value.six[result.id] = JSON.parse(reportData.value.six[result.id].regional_version);
+      if (result.data?.regional_version) {
+        try {
+          reportData.value.six[result.id] = JSON.parse(result.data.regional_version);
+        } catch (error) {
+          console.error('Error parsing regional_version JSON:', error);
+          reportData.value.six[result.id] = result.data.regional_version || result.data;
+        }
       } else {
         reportData.value.six[result.id] = result.data;
       }
 
       // Проверка на причины отклонений отчета и вывод табов для РО
-      if (reportData.value.six[result.id]?.rejecting_reasons) {
-        revisionPanels.value.push('6');
-        reportStore.reportDataDH.six[result.id] = JSON.parse(reportData.value.six[result.id].district_version);
+      // if (reportData.value.six[result.id]?.rejecting_reasons) {
+      //   revisionPanels.value.push('6');
+      //   reportStore.reportDataDH.six[result.id] = JSON.parse(reportData.value.six[result.id].district_version);
 
-        reportData.value.six[result.id].central_version
-          ? reportStore.reportDataCH.six[result.id] = reportData.value.six[result.id].central_version
-          : reportStore.reportDataCH.six[result.id] = reportData.value.six[result.id];
+      //   reportData.value.six[result.id].central_version
+      //     ? reportStore.reportDataCH.six[result.id] = reportData.value.six[result.id].central_version
+      //     : reportStore.reportDataCH.six[result.id] = reportData.value.six[result.id];
 
-        reportStore.isReportReject.six[result.id] = isTabsForRevision.value;
-      }
+      //   reportStore.isReportReject.six[result.id] = isTabsForRevision.value;
+      // }
     }
   });
   // console.log('data66', reportData.value.six)
@@ -626,10 +652,20 @@ const getMultiplyData = async (reportId) => {
   ninthDataResults.forEach((result) => {
     if (districtExpert.value) {
       // reportData.value.ninth[result.id] = result.data;
+      // if (result.data?.regional_version) {
+      //   reportData.value.ninth[result.id] = JSON.parse(result.data.regional_version);
+      // } else {
+      //   reportData.value.ninth[result.id] = result.data;
+      // }
       if (result.data?.regional_version) {
-        reportData.value.ninth[result.id] = JSON.parse(result.data.regional_version);
+        try {
+          reportData.value.ninth[result.id] = JSON.parse(result.data.regional_version);
+        } catch (error) {
+          console.error('Error parsing regional_version JSON:', error);
+          reportData.value.ninth[result.id] = result.data.regional_version || result.data;
+        }
       } else {
-        reportData.value.ninth[result.id] = result.data;
+        reportData.value.six[result.id] = result.data;
       }
       reportStore.reportDataDH.ninth[result.id] = Object.assign({}, result.data);
       reportStore.reportDataDH.ninth[result.id].comment = '';
@@ -1635,6 +1671,7 @@ const sendReport = async () => {
         console.log('43', reportStore.reportForCheckCH.ninth[index], reportStore.reportForCheckCH.ninth[item])
         if (item && item.verified_by_chq === null) {
           console.log(`Sending report for item 9-${index}:`, item);
+          // reportStore.reportDataDH.ninth[index].document = reportStore.reportDataDHFile.ninth[index]
           try {
             console.log('data 9', reportDataCH.value.ninth[index], reportStore.returnReport.ninth[index])
             const response = await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.ninth[index], '9', index, route.query.reportId, true, reportStore.returnReport.ninth[index]);
