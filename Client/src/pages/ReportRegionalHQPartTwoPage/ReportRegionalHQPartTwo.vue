@@ -1546,7 +1546,7 @@ const sendReport = async () => {
     }
   }
 
-  if (districtExpert.value && checkEmptyFieldsDH(reportStore.reportDataDH, isErrorPanel)) {
+  if (districtExpert.value) {
     blockSendButton.value = true;
     preloader.value = true;
     try {
@@ -1567,7 +1567,7 @@ const sendReport = async () => {
         if (item && item.verified_by_dhq !== true) {
           console.log(`Sending report for item 6-${index}:`, item);
           try {
-            const response = await reportPartTwoService.sendReportDHMultiply(reportStore.reportDataDH.six[item], '6', index, route.query.reportId);
+            const response = await reportPartTwoService.sendReportDHMultiply(reportStore.reportDataDH.six[index], '6', index, route.query.reportId);
             console.log(`Successfully sent report for item 6-${index}`);
           } catch (error) {
             console.error(`Error sending report for item 6-${index}:`, error);
@@ -1580,7 +1580,7 @@ const sendReport = async () => {
         if (item && item.verified_by_dhq !== true) {
           console.log(`Sending report for item 9-${index}:`, item);
           try {
-            const response = await reportPartTwoService.sendReportDHMultiply(reportStore.reportDataDH.ninth[item], '9', index, route.query.reportId, true);
+            const response = await reportPartTwoService.sendReportDHMultiply(reportStore.reportDataDH.ninth[index], '9', index, route.query.reportId, true);
             console.log(`Successfully sent report for item 9-${index}`);
           } catch (error) {
             console.error(`Error sending report for item 9-${index}:`, error);
