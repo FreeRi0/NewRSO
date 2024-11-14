@@ -235,7 +235,7 @@
         </v-expansion-panels>
       </div>
     </div>
-    <Button class="btn_report" v-if="!preloader" variant="text" label="Отправить отчет" size="large"
+    <Button class="btn_report" v-if="!preloader" :disabled="blockSendButton" variant="text" label="Отправить отчет" size="large"
       @click="sendReport" />
   </div>
 </template>
@@ -1389,7 +1389,7 @@ const sendReport = async () => {
   // console.log('reportData: ', reportData.value)
   if (!(districtExpert.value || centralExpert.value)) {
     blockSendButton.value = true;
-    if (true) {
+    if (checkEmptyFields(reportData.value)) {
       preloader.value = true;
       try {
         // const { filteredSix, filteredNinth } = filterPanelsData();
@@ -1494,7 +1494,7 @@ const sendReport = async () => {
     }
   }
 
-  if (districtExpert.value) {
+  if (districtExpert.value && checkEmptyFieldsDH(reportStore.reportDataDH, isErrorPanel)) {
     blockSendButton.value = true;
     preloader.value = true;
     try {
