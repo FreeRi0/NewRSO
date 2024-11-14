@@ -132,7 +132,7 @@
                 <div class="form__field">
                     <label class="form__label" for="14">Комментарий </label>
                     <TextareaReport v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1"
-                        autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
+                        autoResize placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000"
                         :disabled="isSentSix || (sixPanelData.number_of_members == 0 || sixPanelData.number_of_members === null)"
                         :max-length-text="3000" counter-visible />
 
@@ -211,7 +211,7 @@
                 <div class="form__field">
                     <label class="form__label" for="14">Комментарий</label>
                     <TextareaReport v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1"
-                        autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
+                        autoResize placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000"
                         :max-length-text="3000" counter-visible
                         :disabled="isSentNinth || ninthPanelData.event_happened === false" />
                 </div>
@@ -348,7 +348,7 @@
                         <TextareaReport
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                             v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1" autoResize
-                            placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
+                            placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
                             counter-visible />
                     </div>
                 </div>
@@ -415,7 +415,7 @@
                         <TextareaReport @focusout="focusOut"
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                             v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1" autoResize
-                            placeholder="Комментарий" :maxlength="3000" :max-length-text="3000" counter-visible />
+                            placeholder="Напишите сообщение" :maxlength="3000" :max-length-text="3000" counter-visible />
                     </div>
                 </div>
             </template>
@@ -1142,7 +1142,7 @@ const returnForReviewNinth = (event) => {
                 }
             }
 
-            if (reportStore.reportForCheckCH.six[props.sixId].rejecting_reasons) {
+            if (reportStore.reportForCheckCH.six[props.sixId]?.rejecting_reasons !== null) {
                 reportStore.returnReport.six[props.sixId] = true;
             }
             emit('getId', props.id);
@@ -1249,7 +1249,7 @@ const returnForReviewNinth = (event) => {
                         fileCH.value.type = reportStore.reportDataCHFile.ninth[props.ninthId].type.split('/').at(-1);
                         fileCH.value.size = reportStore.reportDataCHFile.ninth[props.ninthId].size / Math.pow(1024, 2);
                     }
-                    if (reportStore.reportForCheckCH.ninth[props.ninthId].rejecting_reasons) {
+                    if (reportStore.reportForCheckCH.ninth[props.ninthId]?.rejecting_reasons !== null) {
                         reportStore.returnReport.ninth[props.ninthId] = true;
                     }
                 }
@@ -1283,7 +1283,7 @@ const returnForReviewNinth = (event) => {
             formData.append('comment', sixPanelDataCH.value.comment || '');
             if (sixPanelDataCH.value.links.length) {
                 for (let i = 0; i < sixPanelDataCH.value.links.length; i++) {
-                    formData.append(`[links][${i}][link]`, ninthPanelDataCH.value.links[i].link);
+                    formData.append(`[links][${i}][link]`, sixPanelDataCH.value.links[i].link);
                 }
             }
             if (reportStore.returnReport.six[props.sixId]) formData.append('reasons[comment]', sixPanelDataCH.value.comment);

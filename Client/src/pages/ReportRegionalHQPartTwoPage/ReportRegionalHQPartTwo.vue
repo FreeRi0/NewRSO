@@ -28,17 +28,9 @@
               1. Численность членов РО&nbsp;РСО в&nbsp;соответствии с&nbsp;объемом уплаченных членских взносов
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <first-panel
-                  :districtExpert="districtExpert"
-                  :centralExpert="centralExpert"
-                  @get-data="setData"
-                  @get-data-DH="setDataDH"
-                  @get-data-CH="setDataCH"
-                  :data="reportData.first"
-                  :is-error-panel="isErrorPanel.first"
-                  :blockEditFirstReport="blockEditFirstReport"
-                  :tab="picked"
-              />
+              <first-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.first"
+                :is-error-panel="isErrorPanel.first" :blockEditFirstReport="blockEditFirstReport" :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('2', picked, revisionPanels)">
@@ -71,16 +63,9 @@
               (слеты, школы, фестивали, турниры и&nbsp;прочие)
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <fourth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                @get-data-DH="setDataDH"
-                @get-data-CH="setDataCH"
-                :data="reportData.fourth"
-                :is-error-panel="isErrorPanel.fourth"
-                :tab="picked"
-              />
+              <fourth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.fourth"
+                :is-error-panel="isErrorPanel.fourth" :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('5') : true">
@@ -91,16 +76,9 @@
               трудовых проектов РСО
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <fifth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                @get-data-DH="setDataDH"
-                @get-data-CH="setDataCH"
-                :data="reportData.fifth"
-                :is-error-panel="isErrorPanel.fifth"
-                :tab="picked"
-              />
+              <fifth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.fifth"
+                :is-error-panel="isErrorPanel.fifth" :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('6', picked, revisionPanels)">
@@ -149,24 +127,17 @@
                 :is-error-panel="isErrorPanel.ninth" :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('10-1') || revisionPanels.includes('10-2') : true">
+          <v-expansion-panel
+            v-if="picked === 'Доработка' ? revisionPanels.includes('10-1') || revisionPanels.includes('10-2') : true">
             <v-expansion-panel-title :class="isErrorPanel.tenth ? 'visible-error' : ''">
               10. Организация РО&nbsp;РСО всероссийских (международных) добровольческих и&nbsp;патриотических акций
               &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <tenth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                @getDataDHFirst="setDataDH"
-                @getDataDHSecond="setDataDH"
-                @getDataCHFirst="setDataCH"
-                @getDataCHSecond="setDataCH"
-                :data="reportData.tenth"
-                :is-error-panel="isErrorPanel.tenth"
-                :tab="picked"
-              />
+              <tenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                @getDataDHFirst="setDataDH" @getDataDHSecond="setDataDH" @getDataCHFirst="setDataCH"
+                @getDataCHSecond="setDataCH" :data="reportData.tenth" :is-error-panel="isErrorPanel.tenth"
+                :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('11', picked, revisionPanels)">
@@ -229,16 +200,9 @@
               по&nbsp;комиссарской деятельности &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <sixteenth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data-DH="setDataDH"
-                @get-data="setData"
-                @get-data-CH="setDataCH"
-                :data="reportData.sixteenth"
-                :is-error-panel="isErrorPanel.sixteenth"
-                :tab="picked"
-              />
+              <sixteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data-DH="setDataDH"
+                @get-data="setData" @get-data-CH="setDataCH" :data="reportData.sixteenth"
+                :is-error-panel="isErrorPanel.sixteenth" :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('17', picked, revisionPanels)">
@@ -271,8 +235,8 @@
         </v-expansion-panels>
       </div>
     </div>
-    <Button class="btn_report" v-if="!preloader" :disabled="blockSendButton" variant="text" label="Отправить отчет" size="large"
-      @click="sendReport" />
+    <Button class="btn_report" v-if="!preloader" :disabled="blockSendButton" variant="text" label="Отправить отчет"
+      size="large" @click="sendReport" />
   </div>
 </template>
 <script setup>
@@ -601,22 +565,29 @@ const getMultiplyData = async (reportId) => {
   sixDataResults.forEach((result) => {
 
     if (districtExpert.value) {
-      reportData.value.six[result.id] = result.data;
-      reportStore.reportDataDH.six[result.id] = Object.assign({}, reportData.value.six[result.id]);
-      reportStore.reportDataDH.six[result.id].comment = '';
-      // isErrorPanel.value.six[result.id] = {
-      //   id: result.id,
-      //   error: false,
-      // }
-    } else if (centralExpert.value) {
-      reportStore.reportForCheckCH.six[result.id] = result.data;
-      console.log('ch6', reportStore.reportForCheckCH.six[result.id])
-      if (result.data.regional_version) {
-        reportData.value.six[result.id] = JSON.parse(result.data?.regional_version);
+      if (result.data?.regional_version) {
+        try {
+          reportData.value.six[result.id] = JSON.parse(result.data.regional_version);
+        } catch (error) {
+          console.error('Error parsing regional_version JSON:', error);
+          reportData.value.six[result.id] = result.data.regional_version || result.data;
+        }
       } else {
         reportData.value.six[result.id] = result.data;
       }
-      if (result.data.district_version) {
+      reportStore.reportDataDH.six[result.id] = Object.assign({}, result.data);
+      reportStore.reportDataDH.six[result.id].comment = '';
+
+    } else if (centralExpert.value) {
+      console.log('data 66', result.data)
+      reportStore.reportForCheckCH.six[result.id] = result.data;
+      console.log('ch6', reportStore.reportForCheckCH.six[result.id])
+      if (result.data?.regional_version) {
+        reportData.value.six[result.id] = JSON.parse(result.data.regional_version);
+      } else {
+        reportData.value.six[result.id] = result.data;
+      }
+      if (result.data?.district_version) {
         reportStore.reportDataDH.six[result.id] = JSON.parse(result.data.district_version);
       } else {
         reportStore.reportDataDH.six[result.id] = result.data
@@ -654,8 +625,13 @@ const getMultiplyData = async (reportId) => {
 
   ninthDataResults.forEach((result) => {
     if (districtExpert.value) {
-      reportData.value.ninth[result.id] = result.data;
-      reportStore.reportDataDH.ninth[result.id] = Object.assign({}, reportData.value.ninth[result.id]);
+      // reportData.value.ninth[result.id] = result.data;
+      if (result.data?.regional_version) {
+        reportData.value.ninth[result.id] = JSON.parse(result.data.regional_version);
+      } else {
+        reportData.value.ninth[result.id] = result.data;
+      }
+      reportStore.reportDataDH.ninth[result.id] = Object.assign({}, result.data);
       reportStore.reportDataDH.ninth[result.id].comment = '';
       // isErrorPanel.value.ninth[result.id] = {
       //   id: result.id,
@@ -664,12 +640,12 @@ const getMultiplyData = async (reportId) => {
     } else if (centralExpert.value) {
       reportStore.reportForCheckCH.ninth[result.id] = result.data;
       console.log('ch9', reportStore.reportForCheckCH.ninth[result.id])
-      if (result.data.regional_version) {
-        reportData.value.ninth[result.id] = JSON.parse(result.data?.regional_version);
+      if (result.data?.regional_version) {
+        reportData.value.ninth[result.id] = JSON.parse(result.data.regional_version);
       } else {
         reportData.value.ninth[result.id] = result.data;
       }
-      if (result.data.district_version) {
+      if (result.data?.district_version) {
         reportStore.reportDataDH.ninth[result.id] = JSON.parse(result.data.district_version);
       } else {
         reportStore.reportDataDH.ninth[result.id] = result.data
@@ -1342,7 +1318,7 @@ const setDataCH = (data, panel, number) => {
       break;
     case 11:
       reportDataCH.value.eleventh = data;
-      console.log('11', ...reportDataCH.value.eleventh);
+      // console.log('11', ...reportDataCH.value.eleventh);
       break;
     case 12:
       reportDataCH.value.twelfth = data;
@@ -1539,7 +1515,7 @@ const sendReport = async () => {
         if (item && item.verified_by_dhq !== true) {
           console.log(`Sending report for item 6-${index}:`, item);
           try {
-            const response = await reportPartTwoService.sendReportDHMultiply(reportStore.reportDataDH.six[item], '6', index, route.query.reportId);
+            const response = await reportPartTwoService.sendReportDHMultiply(reportStore.reportDataDH.six[index], '6', index, route.query.reportId);
             console.log(`Successfully sent report for item 6-${index}`);
           } catch (error) {
             console.error(`Error sending report for item 6-${index}:`, error);
@@ -1552,7 +1528,11 @@ const sendReport = async () => {
         if (item && item.verified_by_dhq !== true) {
           console.log(`Sending report for item 9-${index}:`, item);
           try {
-            const response = await reportPartTwoService.sendReportDHMultiply(reportStore.reportDataDH.ninth[item], '9', index, route.query.reportId, true);
+            reportStore.reportDataDH.ninth[index].document = reportStore.reportDataDHFile.ninth[index]
+            //обьявить переменную добавить из нее данные из reportDataDH, убрать ключ документ, передать объектом document: reportDataDHFile
+            const response = await reportPartTwoService.sendReportDHMultiply(
+              reportStore.reportDataDH.ninth[index],
+              '9', index, route.query.reportId, true);
             console.log(`Successfully sent report for item 9-${index}`);
           } catch (error) {
             console.error(`Error sending report for item 9-${index}:`, error);
@@ -1641,7 +1621,7 @@ const sendReport = async () => {
         if (item && item.verified_by_chq === null) {
           console.log(`Sending report for item 6-${index}:`, item);
           try {
-            console.log('data 6', reportDataCH.value.six[index], reportStore.returnReport.six[index] )
+            console.log('data 6', reportDataCH.value.six[index], reportStore.returnReport.six[index])
             const response = await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.six[index], '6', index, route.query.reportId, false, reportStore.returnReport.six[index]);
             console.log(`Successfully sent report for item 6-${index}`);
           } catch (error) {
@@ -1656,7 +1636,7 @@ const sendReport = async () => {
         if (item && item.verified_by_chq === null) {
           console.log(`Sending report for item 9-${index}:`, item);
           try {
-            console.log('data 9', reportDataCH.value.ninth[index], reportStore.returnReport.ninth[index] )
+            console.log('data 9', reportDataCH.value.ninth[index], reportStore.returnReport.ninth[index])
             const response = await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.ninth[index], '9', index, route.query.reportId, true, reportStore.returnReport.ninth[index]);
             console.log(`Successfully sent report for item 9-${index}`);
           } catch (error) {
@@ -2060,7 +2040,7 @@ watch(revisionPanels.value,
     if (revisionPanels.value.length) {
       // Временно скрываем табы Просмотра и Доработки отчета (true на false)-------------------------------
 
-      isRevision.value = true; 
+      isRevision.value = true;
       reportStore.isReportRevision = true;
       // isRevision.value = false;
 
