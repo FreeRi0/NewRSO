@@ -235,8 +235,8 @@
         </v-expansion-panels>
       </div>
     </div>
-    <Button class="btn_report" v-if="!preloader" :disabled="blockSendButton" variant="text" label="Отправить отчет" size="large"
-      @click="sendReport" />
+    <Button class="btn_report" v-if="!preloader" :disabled="blockSendButton" variant="text" label="Отправить отчет"
+      size="large" @click="sendReport" />
   </div>
 </template>
 <script setup>
@@ -1528,10 +1528,11 @@ const sendReport = async () => {
         if (item && item.verified_by_dhq !== true) {
           console.log(`Sending report for item 9-${index}:`, item);
           try {
-            const response = await reportPartTwoService.sendReportDHMultiply({
-              data: reportStore.reportDataDH.ninth[index],
-              file: reportStore.reportDataDHFile.ninth[index]
-            }, '9', index, route.query.reportId, true);
+            reportStore.reportDataDH.ninth[index].document = reportStore.reportDataDHFile.ninth[index]
+            //обьявить переменную добавить из нее данные из reportDataDH, убрать ключ документ, передать объектом document: reportDataDHFile
+            const response = await reportPartTwoService.sendReportDHMultiply(
+              reportStore.reportDataDH.ninth[index],
+              '9', index, route.query.reportId, true);
             console.log(`Successfully sent report for item 9-${index}`);
           } catch (error) {
             console.error(`Error sending report for item 9-${index}:`, error);
