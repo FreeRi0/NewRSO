@@ -33,6 +33,7 @@ const roleStore = useRoleStore();
   align-items: center;
   row-gap: 8px;
   padding-bottom: 280px;
+  flex-wrap: wrap;
 }
 
 .ratingRO__item {

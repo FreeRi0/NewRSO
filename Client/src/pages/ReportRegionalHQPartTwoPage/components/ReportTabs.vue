@@ -1,27 +1,31 @@
 <template>
   <v-card class="panel-card">
-
     <v-tabs v-model="tab">
-      <v-tab value="one" class="panel-tab-btn" v-if="districtHeadquarterCommander || centralHeadquarterCommander">Отчет
-        РО</v-tab>
+      <v-tab value="one" class="panel-tab-btn"
+        v-if="districtHeadquarterCommander || centralHeadquarterCommander || props.isReject"><span
+          class="panel-card-visible">Отчет&nbsp;</span>РО</v-tab>
       <v-tab value="two" class="panel-tab-btn"
-        v-if="districtHeadquarterCommander || centralHeadquarterCommander">Корректировка ОШ</v-tab>
-      <v-tab value="three" class="panel-tab-btn" v-if="centralHeadquarterCommander">Корректировка ЦШ</v-tab>
+        v-if="districtHeadquarterCommander || centralHeadquarterCommander || props.isReject"><span
+          class="panel-card-visible">Корректировка&nbsp;</span>ОШ</v-tab>
+      <v-tab value="three" class="panel-tab-btn" v-if="centralHeadquarterCommander || props.isReject"><span
+          class="panel-card-visible">Корректировка&nbsp;</span>ЦШ</v-tab>
     </v-tabs>
 
     <v-card-text class="panel-card-text">
       <v-tabs-window v-model="tab">
-        <v-tabs-window-item value="one" v-if="districtHeadquarterCommander || centralHeadquarterCommander">
+        <v-tabs-window-item value="one"
+          v-if="districtHeadquarterCommander || centralHeadquarterCommander || props.isReject">
           <div class="form__field-group">
             <slot name="firstTab"></slot>
           </div>
         </v-tabs-window-item>
-        <v-tabs-window-item value="two" v-if="districtHeadquarterCommander || centralHeadquarterCommander">
+        <v-tabs-window-item value="two"
+          v-if="districtHeadquarterCommander || centralHeadquarterCommander || props.isReject">
           <div class="form__field-group">
             <slot name="secondTab"></slot>
           </div>
         </v-tabs-window-item>
-        <v-tabs-window-item value="three" v-if="centralHeadquarterCommander">
+        <v-tabs-window-item value="three" v-if="centralHeadquarterCommander || props.isReject">
           <div class="form__field-group report-table">
             <slot name="thirdTab"></slot>
           </div>
@@ -39,11 +43,18 @@ const districtHeadquarterCommander = ref(false);
 const centralHeadquarterCommander = ref(false);
 const roleStore = useRoleStore();
 
+const props = defineProps({
+  isReject: {
+    type: Boolean,
+    default: false,
+  }
+})
+
 watchEffect(() => {
-  if (roleStore.roles?.districtheadquarter_commander) {
+  if (roleStore.roles?.districtheadquarter_commander || (roleStore.experts?.is_district_expert || roleStore.experts?.is_central_expert)) {
     districtHeadquarterCommander.value = true;
   }
-  if (roleStore.roles.centralheadquarter_commander) {
+  if (roleStore.roles.centralheadquarter_commander || roleStore.experts?.is_central_expert) {
     centralHeadquarterCommander.value = true;
   }
 })
@@ -52,9 +63,11 @@ watchEffect(() => {
 .v-slide-group {
   margin-bottom: -10px;
 }
+
 .v-tabs--density-default {
   --v-tabs-height: 54px;
 }
+
 .panel-card {
   box-shadow: none;
 }
@@ -81,7 +94,19 @@ watchEffect(() => {
   border: 1px solid #000000;
   border-bottom: none;
   padding-bottom: 10px;
+
+  @media (max-width: 620px) {
+    min-width: 92px;
+    width: 92px;
+  }
 }
+
+.panel-card-visible {
+  @media (max-width: 620px) {
+    display: none;
+  }
+}
+
 .v-tab.v-tab.v-btn.v-tab-item--selected {
   border-color: #F3F4F5;
 }
@@ -90,7 +115,8 @@ watchEffect(() => {
   padding: 0;
 }
 
-//.report-table {
+
+// .report-table {
 //  &__tr {
 //    background-color: #FFFFFF;
 //    text-align: center;
@@ -129,4 +155,4 @@ watchEffect(() => {
 //  margin-bottom: 16px;
 //  border-radius: 10px;
 //  border: 1px solid #B6B6B6;
-//}</style>
+// }</style>

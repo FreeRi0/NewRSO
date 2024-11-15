@@ -21,3 +21,10 @@
         width: 100%;
     }
 }
+#form__field-members-name {
+    gap: 24px;
+    justify-content: flex-start;
+    @media (max-width: 679px) {
+        gap: 0;
+    }
+}

@@ -49,7 +49,7 @@ const props = defineProps({
         default: null,
     },
     fileSize: {
-        type: Number,
+        type: [Number, String],
         default: null,
     },
     // districtExpert: {

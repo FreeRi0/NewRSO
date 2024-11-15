@@ -1,5 +1,7 @@
 <template>
-  <div v-if="!(props.centralExpert || props.districtExpert)" class="form__field-group">
+  <div v-if="!(props.centralExpert || props.districtExpert || isReportReject) || (props.tab === 'Просмотр отправленного отчета' && isReportReject)"
+       class="form__field-group"
+  >
     <div style="display: flex; justify-content: space-between;">
       <div>
         <p class="form__title">{{ props.title }}</p>
@@ -88,7 +90,7 @@
             v-model:value="tenthPanelData.comment"
             id="comment"
             name="comment"
-            :rows="1"
+            :rows="row"
             autoResize
             :maxlength="3000"
             :max-length-text="3000"
@@ -103,7 +105,7 @@
 
   </div>
 
-  <report-tabs v-else>
+  <report-tabs v-else :isReject="isReportReject && props.tab === 'Доработка'">
     <template v-slot:firstTab>
 
       <div style="display: flex; justify-content: space-between;">
@@ -116,43 +118,58 @@
       </div>
 
       <div class="form__field">
-        <p class="form__label">Проведение акции <sup class="valid-red">*</sup></p>
-        <div class="form__field-radio">
-          <div v-if="tenthPanelData.event_happened" style="display: flex; align-items: center">
+        <p class="form__label" id="form__label-radio">Проведение акции <sup class="valid-red">*</sup></p>
+        <div class="form__field-radio" style="display: flex">
+          <div style="display: flex; align-items: center">
             <input
                 v-model="tenthPanelData.event_happened"
                 id="event_happened-true"
                 class="custom-radio"
                 type="radio"
                 :value="true"
+                :disabled="(props.centralExpert || props.districtExpert)"
             />
             <label for="event_happened-true">Да</label>
           </div>
-          <div v-else style="display: flex; align-items: center">
+          <div style="display: flex; align-items: center">
             <input
                 v-model="tenthPanelData.event_happened"
                 id="event_happened-false"
                 class="custom-radio"
                 type="radio"
                 :value="false"
+                :disabled="(props.centralExpert || props.districtExpert)"
             />
             <label for="event_happened-false">Нет</label>
           </div>
         </div>
         <div style="margin-bottom: 8px;">
-          <label class="form__label" for="4">Скан документа, подтверждающего проведение акции</label>
+          <label style="display: flex; " class="form__label" for="4">Скан документа, подтверждающего проведение
+            акции</label>
+          <InputReport
+              class="form-input__file-input"
+              v-if="!tenthPanelData.document"
+              isFile
+              type="file"
+              id="scan_file"
+              name="scan_file"
+              @change="uploadFile"
+              :disabled="(props.centralExpert || props.districtExpert)"
+          />
           <FileBoxComponent
+              v-else
               :file="tenthPanelData.document"
               :fileType="tenthPanelData.file_type"
               :fileSize="tenthPanelData.file_size"
-              :isSent="isSent"
+              :isSent="(props.centralExpert || props.districtExpert)"
               :is-error-file="isErrorFile && !tenthPanelData.file_size"
               @click="deleteFile"
+              :disabled="(props.centralExpert || props.districtExpert)"
           />
         </div>
         <div>
-          <p class="form__label">Ссылка на&nbsp;социальные сети/электронные
-            СМИ, подтверждающая проведение акции <sup class="valid-red">*</sup></p>
+          <p class="form__label">Ссылка на социальные сети/ электронные <br>
+            СМИ, подтверждающая проведение акции</p>
           <div class="input-link" v-for="(link, i) in tenthPanelData.links" :key="i">
             <InputReport
                 v-model:value="link.link"
@@ -160,10 +177,45 @@
                 :name="i"
                 class="form__input form__input-add-link"
                 type="text"
-                placeholder="https://vk.com/cco_monolit"
-                :disabled="props.centralExpert || props.districtExpert"
+                placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
+                @focusout="formData"
+                :disabled="(props.centralExpert || props.districtExpert)"
+                is-link
             />
+            <div v-if="!(props.centralExpert || props.districtExpert)">
+              <Button
+                  v-if="tenthPanelData.links.length === i + 1"
+                  class="form__add-link-button"
+                  label="+ Добавить ссылку"
+                  @click="addLink"
+              />
+              <Button
+                  class="form__add-link-button"
+                  v-else
+                  label="Удалить"
+                  @click="onDeleteLink(i)"
+              />
+            </div>
           </div>
+        </div>
+        <div class="form__field-comment">
+          <label style="display: flex; align-items: center;" class="form__label" for="comment">Комментарий <sup
+              class="valid-red">*</sup></label>
+          <TextareaReport
+              placeholder="Напишите сообщение"
+              v-model:value="tenthPanelData.comment"
+              id="comment"
+              name="comment"
+              :rows="1"
+              autoResize
+              :maxlength="3000"
+              :max-length-text="3000"
+              counter-visible
+              class="form__input form__input-comment"
+              style="margin-bottom: 4px;"
+              :disabled="(props.centralExpert || props.districtExpert)"
+              @focusout="formData"
+          />
         </div>
       </div>
 
@@ -188,6 +240,7 @@
               class="custom-radio"
               type="radio"
               :value="true"
+              :disabled="centralExpert || isReportReject"
           />
           <label for="event_happenedDH-true">Да</label>
         </div>
@@ -198,38 +251,107 @@
               class="custom-radio"
               type="radio"
               :value="false"
+              :disabled="centralExpert || isReportReject"
           />
           <label for="event_happenedDH-false">Нет</label>
         </div>
       </div>
 
       <div class="form__field">
-        <!--        <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>-->
-        <!--        <TextareaReport-->
-        <!--            placeholder="Напишите сообщение"-->
-        <!--            v-model:value="tenthPanelDataDH.comment"-->
-        <!--            id="comment"-->
-        <!--            name="comment"-->
-        <!--            :rows="1"-->
-        <!--            autoResize-->
-        <!--            :maxlength="3000"-->
-        <!--            :max-length-text="3000"-->
-        <!--            counter-visible-->
-        <!--            class="form__input"-->
-        <!--        />-->
         <CommentFileComponent
             v-model:value="tenthPanelDataDH.comment"
             name="firstPanelDataDH.comment"
-            :file="tenthPanelDataDH.document ? tenthPanelDataDH.document.name : null"
-            :fileType="tenthPanelDataDH.document ? tenthPanelDataDH.document.type.split('/').at(-1) : null"
-            :fileSize="tenthPanelDataDH.document ? tenthPanelDataDH.document.size / Math.pow(1024, 2) : null"
-            :disabled="centralExpert"
+            :file="fileNameDH"
+            :fileType="fileTypeDH"
+            :fileSize="fileSizeDH"
+            :disabled="centralExpert || isReportReject"
             :is-error-file="isErrorFile"
             @change="uploadFileDH"
             @click="deleteFileDH"
+            :is-sent="centralExpert || isReportReject"
         />
       </div>
 
+    </template>
+
+    <template v-slot:thirdTab>
+      <div style="display: flex; justify-content: space-between;">
+        <div>
+          <p class="form__title">{{ props.title }}</p>
+        </div>
+        <div>
+          <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть"/>
+        </div>
+      </div>
+      <label class="form__label">Проведение акции <sup
+          class="valid-red">*</sup></label>
+      <v-table>
+        <tbody>
+        <tr class="report-table__tr">
+          <td class="report-table__th report-table__th__br-left">Данные РО</td>
+          <td class="report-table__th report-table__td__center">Корректировка ОШ</td>
+          <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
+        </tr>
+        <tr class="report-table__tr">
+          <td class="report-table__td">{{ tenthPanelData.event_happened ? 'Да' : 'Нет' }}</td>
+          <td class="report-table__td report-table__td__center">{{
+              tenthPanelDataDH.event_happened ? 'Да' : 'Нет'
+            }}
+          </td>
+          <td class="report-table__td">
+            {{ tenthPanelDataCH.event_happened === null ? null : tenthPanelDataCH.event_happened ? 'Да' : 'Нет' }}
+          </td>
+        </tr>
+        </tbody>
+      </v-table>
+      <label class="form__label">Проведение акции <sup
+          class="valid-red">*</sup></label>
+      <div class="form__field-radio" style="display: flex; margin-top: 10px;">
+        <div style="display: flex; align-items: center">
+          <input
+              v-model="tenthPanelDataCH.event_happened"
+              id="event_happenedCH-true"
+              class="custom-radio"
+              type="radio"
+              :value="true"
+              :disabled="isReportReject && !centralExpert"
+          />
+          <label for="event_happenedCH-true">Да</label>
+        </div>
+        <div style="display: flex; align-items: center">
+          <input
+              v-model="tenthPanelDataCH.event_happened"
+              id="event_happenedCH-false"
+              class="custom-radio"
+              type="radio"
+              :value="false"
+              :disabled="isReportReject && !centralExpert"
+          />
+          <label for="event_happenedCH-false">Нет</label>
+        </div>
+      </div>
+      <div>
+        <CommentFileComponent
+            v-model:value="tenthPanelDataCH.comment"
+            name="firstPanelDataDH.comment"
+            :file="fileNameCH"
+            :fileType="fileTypeCH"
+            :fileSize="fileSizeCH"
+            :is-error-file="isErrorFile"
+            @change="uploadFileCH"
+            @click="deleteFileCH"
+            :disabled="isReportReject && !centralExpert"
+            :is-sent="isReportReject"
+        />
+      </div>
+      <div>
+        <v-checkbox
+            v-model="returnReport"
+            @change="onReportReturn"
+            label="Вернуть в РО на доработку"
+            :disabled="isReportReject && !centralExpert"
+        />
+      </div>
     </template>
   </report-tabs>
 </template>
@@ -238,7 +360,7 @@ import {onMounted, ref, watch, watchEffect, watchPostEffect} from "vue";
 import {InputReport, TextareaReport} from '@shared/components/inputs';
 import {Button} from '@shared/components/buttons';
 import {ReportTabs} from './index';
-import {FileBoxComponent, CommentFileComponent} from '@entities/RatingRoComponents/components';
+import {CommentFileComponent, FileBoxComponent} from '@entities/RatingRoComponents/components';
 
 const props = defineProps({
   data: Object,
@@ -251,7 +373,17 @@ const props = defineProps({
   isErrorFileProp: Boolean,
   title: String,
   dataDH: Object,
+  dataCH: Object,
+  dataForCheckCH: Object,
   document: undefined,
+  documentCH: undefined,
+  returnReportProp: Boolean,
+  isReportReject: {
+    type: Boolean,
+    default: false,
+  },
+  reportRejectData: Object,
+  tab: String
 });
 
 const tenthPanelData = ref({
@@ -273,10 +405,25 @@ const tenthPanelDataDH = ref({
   file_size: '',
   file_type: '',
 });
+const tenthPanelDataCH = ref({
+  event_happened: null,
+  comment: '',
+  document: '',
+  file_size: '',
+  file_type: '',
+})
+const fileNameDH = ref(null);
+const fileSizeDH = ref(null);
+const fileTypeDH = ref(null);
+const fileNameCH = ref(null);
+const fileSizeCH = ref(null);
+const fileTypeCH = ref(null);
 const isSent = ref(false);
 let isErrorFile = ref(false);
+const returnReport = ref(false);
+const row = ref(1);
 
-const emit = defineEmits(['collapse-form', 'formData', 'uploadFile', 'deleteFile', 'deleteLink', 'clearForm', 'getDataDH']);
+const emit = defineEmits(['collapse-form', 'formData', 'uploadFile', 'deleteFile', 'deleteLink', 'clearForm', 'getDataDH', 'getDataCH', 'onReturnReport']);
 
 const collapseForm = () => {
   emit('collapse-form');
@@ -303,18 +450,126 @@ const deleteFile = () => {
 };
 
 const uploadFileDH = (event) => {
-  tenthPanelDataDH.value.document = event.target.files[0];
+  if (event.target.files) {
+    tenthPanelDataDH.value.document = event.target.files[0];
+    fileNameDH.value = tenthPanelDataDH.value.document.name || null;
+    fileSizeDH.value = tenthPanelDataDH.value.document.size / Math.pow(1024, 2) || null;
+    fileTypeDH.value = tenthPanelDataDH.value.document.type.split('/').at(-1) || null;
+  }
+};
+const uploadFileCH = (event) => {
+  if (event.target.files) {
+    tenthPanelDataCH.value.document = event.target.files[0];
+    fileNameCH.value = tenthPanelDataCH.value.document.name || null;
+    fileSizeCH.value = tenthPanelDataCH.value.document.size / Math.pow(1024, 2) || null;
+    fileTypeCH.value = tenthPanelDataCH.value.document.type.split('/').at(-1) || null;
+  }
 };
 
 const deleteFileDH = () => {
   tenthPanelDataDH.value.document = null;
+  fileNameDH.value = null;
+  fileSizeDH.value = null;
+  fileTypeDH.value = null;
+};
+const deleteFileCH = () => {
+  tenthPanelDataCH.value.document = null;
+  fileNameCH.value = null;
+  fileSizeCH.value = null;
+  fileTypeCH.value = null;
 };
 
+const onReportReturn = (event) => {
+  if (event.target.checked) {
+    const data = {
+      data: tenthPanelDataCH.value,
+      reportReturn: true
+    }
+    emit('onReturnReport', data);
+  } else {
+    const data = {
+      data: tenthPanelDataCH.value,
+      reportReturn: false
+    }
+    emit('onReturnReport', data);
+  }
+
+}
+
 onMounted(() => {
+  // Мапинг данных для отчета эксперта ОШ
   tenthPanelDataDH.value.event_happened = props.dataDH.event_happened;
   tenthPanelDataDH.value.comment = props.dataDH.comment;
   if (props.document) {
     tenthPanelDataDH.value.document = props.document;
+    fileNameDH.value = props.document.name || null;
+    fileSizeDH.value = props.document.size / Math.pow(1024, 2) || null;
+    fileTypeDH.value = props.document.type.split('/').at(-1) || null;
+  }
+
+  // Мапинг данных для отчета эксперта ЦШ
+  if (props.dataForCheckCH) {
+    // Добавление данных панели "отчет РО"
+    tenthPanelData.value = JSON.parse(props.dataForCheckCH.regional_version);
+
+    // Добавление данных панели "корректировка ОШ"
+    tenthPanelDataDH.value.event_happened = props.dataForCheckCH.event_happened;
+    tenthPanelDataDH.value.comment = props.dataForCheckCH.comment;
+
+    if (props.dataForCheckCH.document) {
+      fileNameDH.value = props.dataForCheckCH.document;
+      fileTypeDH.value = props.dataForCheckCH.file_type;
+      fileSizeDH.value = props.dataForCheckCH.file_size;
+    }
+
+    // Добавление данных для панели "корректировка ЦШ"
+    if (props.dataCH) {
+      tenthPanelDataCH.value.event_happened = props.dataCH.event_happened === undefined ? null : props.dataCH.event_happened;
+      tenthPanelDataCH.value.comment = props.dataCH.comment;
+
+      returnReport.value = props.returnReportProp;
+    }
+
+    if (props.documentCH) {
+      tenthPanelDataCH.value.document = props.documentCH
+      fileNameCH.value = props.documentCH.name || null;
+      fileTypeCH.value = props.documentCH.type.split('/').at(-1) || null;
+      fileSizeCH.value = props.documentCH.size / Math.pow(1024, 2) || null;
+    }
+  }
+
+  // Мапинг данных для отчета командира РШ при возвращении на доработку
+  if (props.reportRejectData && props.isReportReject) {
+    // console.log('props.reportRejectData', props.reportRejectData)
+    // console.log('props.isReportReject', props.isReportReject)
+
+    returnReport.value = true;
+    // Добавление данных панели "корректировка ОШ"
+    const reportDataDH = JSON.parse(props.reportRejectData.district_version)
+    tenthPanelDataDH.value.event_happened = reportDataDH.event_happened;
+    tenthPanelDataDH.value.comment = reportDataDH.comment;
+    fileNameDH.value = reportDataDH.document || null;
+    fileSizeDH.value = reportDataDH.file_size || null;
+    fileTypeDH.value = reportDataDH.file_type || null;
+
+    // Добавление данных для панели "корректировка ЦШ"
+    if (props.reportRejectData.central_version) {
+      // Отчет создан:
+      tenthPanelDataCH.value.event_happened = props.reportRejectData.central_version.event_happened;
+      tenthPanelDataCH.value.comment = props.reportRejectData.central_version.comment;
+
+      fileNameCH.value = props.reportRejectData.central_version?.document || null;
+      fileTypeCH.value = props.reportRejectData.central_version?.file_type || null;
+      fileSizeCH.value = props.reportRejectData.central_version?.file_size || null;
+    } else {
+      // Отчет не создан:
+      tenthPanelDataCH.value.event_happened = props.reportRejectData.event_happened;
+      tenthPanelDataCH.value.comment = props.reportRejectData.comment;
+
+      fileNameCH.value = props.reportRejectData.central_version?.document || null;
+      fileTypeCH.value = props.reportRejectData.central_version?.file_type || null;
+      fileSizeCH.value = props.reportRejectData.central_version?.file_size || null;
+    }
   }
 });
 
@@ -330,14 +585,18 @@ watchPostEffect(() => {
 
 watch(() => tenthPanelData.value.event_happened, (isEventHappened) => {
   if (!isEventHappened) {
-    emit('clearForm')
+    if (!props.centralExpert) emit('clearForm');
   } else {
-    emit('formData', tenthPanelData.value);
+    if (!props.centralExpert) emit('formData', tenthPanelData.value);
   }
 });
 
 watch(tenthPanelDataDH.value, () => {
   emit('getDataDH', tenthPanelDataDH.value);
+});
+
+watch(tenthPanelDataCH.value, () => {
+  emit('getDataCH', tenthPanelDataCH.value);
 });
 </script>
 <style lang="scss" scoped>
@@ -620,14 +879,19 @@ watch(tenthPanelDataDH.value, () => {
     line-height: 19.2px;
     text-align: center;
 
-    &__br-left {
-      border-radius: 10px 0 0 0;
-      border-right: 1px solid #B6B6B6;
-    }
+    //&__br-left {
+    //  border-radius: 10px 0 0 0;
+    //  border-right: 1px solid #B6B6B6;
+    //}
+    //
+    //&__br-right {
+    //  border-radius: 0 10px 0 0;
+    //  border-left: 1px solid #B6B6B6;
+    //}
 
-    &__br-right {
-      border-radius: 0 10px 0 0;
+    &__br-center {
       border-left: 1px solid #B6B6B6;
+      border-right: 1px solid #B6B6B6;
     }
   }
 

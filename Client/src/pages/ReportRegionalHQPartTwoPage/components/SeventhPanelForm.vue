@@ -132,7 +132,7 @@
                 <div class="form__field">
                     <label class="form__label" for="14">Комментарий </label>
                     <TextareaReport v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1"
-                        autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
+                        autoResize placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000"
                         :disabled="isSentSix || (sixPanelData.number_of_members == 0 || sixPanelData.number_of_members === null)"
                         :max-length-text="3000" counter-visible />
 
@@ -175,9 +175,13 @@
                         id="scan_file" :is-error-panel="isErrorPanel" v-model:value="ninthPanelData.document"
                         name="scan_file" width="100%" :disabled="isSentNinth || ninthPanelData.event_happened === false"
                         height="auto" @change="uploadFile($event, 9)" />
-                    <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
-                        :isSent="isSentNinth" :is-error-file="isErrorFile" :fileSize="ninthPanelData.file_size"
-                        @click="deleteFile(9)">
+                    <div v-else-if="ninthPanelData.document && (typeof ninthPanelData.document !== 'string')"
+                        class="text-center">
+                        <v-progress-circular color="primary" indeterminate></v-progress-circular>
+                    </div>
+                    <FileBoxComponent v-else-if="ninthPanelData.document && typeof ninthPanelData.document === 'string'"
+                        :file="ninthPanelData.document" :fileType="ninthPanelData.file_type" :isSent="isSentNinth"
+                        :is-error-file="isErrorFile" :fileSize="ninthPanelData.file_size" @click="deleteFile(9)">
                     </FileBoxComponent>
                 </div>
 
@@ -207,7 +211,7 @@
                 <div class="form__field">
                     <label class="form__label" for="14">Комментарий</label>
                     <TextareaReport v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1"
-                        autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
+                        autoResize placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000"
                         :max-length-text="3000" counter-visible
                         :disabled="isSentNinth || ninthPanelData.event_happened === false" />
                 </div>
@@ -221,7 +225,8 @@
                 </div>
             </div>
         </v-tabs-window>
-        <report-tabs v-else>
+        <report-tabs v-else
+            :isReject="reportStore.isReportReject.six[props.sixId] || reportStore.isReportReject.ninth[props.ninthId]">
             <template v-slot:firstTab>
                 <!-- <div v-if="props.panel_number == 7" class="form__field-group group-seventh">
                     <div class="d-flex justify-space-between">
@@ -322,7 +327,8 @@
                             Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
                         </p>
                         <InputReport v-model:value="sixPanelData.number_of_members" placeholder="Введите число" id="15"
-                            name="14" class="form__input number_input" type="number" :maxlength="10" :max="32767"
+                            name="14" @focusout="focusOut" class="form__input number_input" type="number"
+                            :maxlength="10" :max="32767"
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
                     </div>
                     <div class="form__field" v-if="sixPanelData?.links?.length > 0">
@@ -332,7 +338,7 @@
 
                         <div class="form__wrapper" v-for="(item, index) in sixPanelData?.links" :key="index">
                             <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                                :is-link="true"
+                                :is-link="true" @focusout="focusOut"
                                 :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                                 name="14" v-model:value="item.link" class="mb-2" />
                         </div>
@@ -342,8 +348,8 @@
                         <TextareaReport
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                             v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1" autoResize
-                            placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :max-length-text="3000"
-                            counter-visible />
+                            placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000"
+                            :max-length-text="3000" counter-visible />
                     </div>
                 </div>
                 <div v-else-if="props.panel_number == 9" class="group-seventh">
@@ -362,27 +368,32 @@
                         </p>
 
                         <div class="places_wrap one_place">
-                            <input :id="12" :value="ninthPanelData.event_happened" :name="12" :disabled="props.isCentralHeadquarterCommander ||
-                                props.isDistrictHeadquarterCommander
-                                " :checked="ninthPanelData.event_happened === true ||
-                                    ninthPanelData.event_happened === false
-                                    " class="form__input places_input" type="radio"
+                            <input :id="12" :value="ninthPanelData.event_happened" @focusout="focusOut" :name="12"
+                                :disabled="props.isCentralHeadquarterCommander ||
+                                    props.isDistrictHeadquarterCommander
+
+                                    " :checked="ninthPanelData.event_happened === true ||
+                                        ninthPanelData.event_happened === false
+                                        " class="form__input places_input" type="radio"
                                 v-model="ninthPanelData.event_happened" />
                             <label v-if="ninthPanelData.event_happened === true" class="places_item_label"
                                 :for="id">Да</label>
                             <label v-else class="places_item_label" :for="id">Нет</label>
                         </div>
                     </div>
-                    <div class="report__fieldset report__fieldset--right-block" v-if="ninthPanelData.document !== null">
+                    <div class="report__fieldset report__fieldset--right-block"
+                        v-if="ninthPanelData.document !== null || ninthPanelData.document !== ''">
                         <label class="form__label report__label mb-2" for="scan_file">
                             Скан документа, подтверждающего проведение акции
                         </label>
                         <InputReport
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
-                            v-if="!ninthPanelData.document" isFile type="file" accept=".jpg, .jpeg, .png, .pdf"
-                            id="scan_file" name="scan_file" width="100%" height="auto" />
+                            @change="uploadFile($event, 9)" v-if="!ninthPanelData.document" isFile type="file"
+                            accept=".jpg, .jpeg, .png, .pdf" id="scan_file" name="scan_file" width="100%"
+                            height="auto" />
                         <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
-                            :isSent="isSent" :fileSize="ninthPanelData.file_size">
+                            :isSent="props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander"
+                            :fileSize="ninthPanelData.file_size" @click="deleteFile(9)">
                         </FileBoxComponent>
                     </div>
 
@@ -392,19 +403,20 @@
                             <sup class="valid-red">*</sup></label>
 
                         <div class="form__wrapper" v-for="(item, index) in ninthPanelData?.links" :key="index">
-                            <InputReport
+                            <InputReport @focusout="focusOut"
                                 :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                                 name="14" :is-link="true"
                                 placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
                                 v-model:value="item.link" class="mb-2" />
                         </div>
                     </div>
-                    <div class="form__field">
+                    <div class="form__field" v-if="ninthPanelData.comment !== null || ninthPanelData.comment !== ''">
                         <label class="form__label" for="14">Комментарий</label>
-                        <TextareaReport
+                        <TextareaReport @focusout="focusOut"
                             :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
                             v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1" autoResize
-                            placeholder="Комментарий" :maxlength="3000" :max-length-text="3000" counter-visible />
+                            placeholder="Напишите сообщение" :maxlength="3000" :max-length-text="3000"
+                            counter-visible />
                     </div>
                 </div>
             </template>
@@ -472,11 +484,12 @@
                         </p>
                         <InputReport v-model:value="sixPanelDataDH.number_of_members" placeholder="Введите число"
                             id="15" name="14" class="form__input number_input" :is-error-panel="isErrorPanel"
-                            type="number" :maxlength="10" :max="32767" />
+                            :disabled="props.isCentralHeadquarterCommander" type="number" :maxlength="10"
+                            :max="32767" />
                     </div>
 
                     <CommentFileComponent v-model:value="sixPanelDataDH.comment" :is-error-panel="isErrorPanel"
-                        :is-six="true" name="sixPanelDataDH.comment" :disabled="props.isCentralHeadquarterCommander">
+                        :disabled="props.isCentralHeadquarterCommander" :is-six="true" name="sixPanelDataDH.comment">
                     </CommentFileComponent>
                 </div>
                 <div v-else-if="props.panel_number == 9" class="group-seventh">
@@ -497,21 +510,27 @@
                             <div class="places_item" v-for="item in events" :key="item.id">
                                 <input :id="item.id" :value="item.value" :name="item.name"
                                     :checked="ninthPanelDataDH.event_happened == item.value"
-                                    class="form__input places_input" type="radio"
-                                    v-model="ninthPanelDataDH.event_happened" />
+                                    :disabled="props.isCentralHeadquarterCommander" class="form__input places_input"
+                                    type="radio" v-model="ninthPanelDataDH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
                                 }}</label>
                             </div>
                         </div>
                     </div>
-                    <CommentFileComponent v-model:value="ninthPanelDataDH.comment" name="ninthPanelDataDH.comment"
+                    <!-- <CommentFileComponent v-model:value="ninthPanelDataDH.comment" name="ninthPanelDataDH.comment"
                         @change="uploadFile($event, 9)" @click="deleteFile(9)"
                         :file="reportStore.reportDataDHFile.ninth[props.ninthId] ? reportStore.reportDataDHFile.ninth[props.ninthId]?.name : null"
                         :fileType="reportStore.reportDataDHFile.ninth[props.ninthId] ? reportStore.reportDataDHFile.ninth[props.ninthId]?.type.split('/').at(-1) : null"
                         :fileSize="reportStore.reportDataDHFile.ninth[props.ninthId] ? reportStore.reportDataDHFile.ninth[props.ninthId]?.size / Math.pow(1024, 2) : null"
                         :disabled="props.isCentralHeadquarterCommander" :is-error-file="isErrorFile"
                         :is-error-panel="isErrorPanel">
+                    </CommentFileComponent> -->
+                    <CommentFileComponent v-model:value="ninthPanelDataDH.comment" name="ninthPanelDataDH.comment"
+                        @change="uploadFile($event, 9)" @click="deleteFile(9)" :file="fileDH.name"
+                        :fileType="fileDH.type" :fileSize="fileDH.size" :disabled="props.isCentralHeadquarterCommander"
+                        :is-error-file="isErrorFile" :is-error-panel="isErrorPanel"
+                        :is-sent="props.isCentralHeadquarterCommander || !(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander)">
                     </CommentFileComponent>
                 </div>
             </template>
@@ -588,31 +607,17 @@
                             <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
                         </div>
                     </div>
-                    <label class="form__label">Количество человек, принявших участие в мероприятии <sup
-                            class="valid-red">*</sup></label>
-                    <v-table>
-                        <tbody>
-                            <tr class="report-table__tr">
-                                <td class="report-table__th">Данные РО</td>
-                                <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
-                                <td class="report-table__th">Корректировка ЦШ</td>
-                            </tr>
-                            <tr>
-                                <td class="report-table__td">200</td>
-                                <td class="report-table__td report-table__td__center">200</td>
-                                <td class="report-table__td">200</td>
-                            </tr>
-                        </tbody>
-                    </v-table>
+                    <ReportTable label="Количество человек, принявших участие в мероприятии" class="mb-4"
+                        name="sixPanelData.number_of_members" :dataRH="sixPanelData.number_of_members"
+                        :dataDH="sixPanelDataDH.number_of_members" v-model:value="sixPanelDataCH.number_of_members"
+                        :maxlength="10" :min="0" :max="2147483647" :is-error-panel="isErrorPanel"></ReportTable>
 
-                    <div class="form__field">
-                        <label class="form__label" for="14">Комментарий</label>
-                        <TextareaReport v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1"
-                            autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
-                            :max-length-text="3000" counter-visible />
-                    </div>
+                    <CommentFileComponent v-model:value="sixPanelDataCH.comment" name="sixPanelDataCH.comment"
+                        :is-six="true" :CH="true" :is-error-panel="isErrorPanel"></CommentFileComponent>
                     <div>
-                        <v-checkbox label="Вернуть в РО на доработку" />
+                        <v-checkbox v-model="reportStore.returnReport.six[props.sixId]" @change="returnForReviewSix"
+                            :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.six[props.sixId].verified_by_chq !== null"
+                            label="Вернуть в РО на доработку" />
                     </div>
                 </div>
                 <div v-else-if="props.panel_number == 9" class="form__field-group group-seventh">
@@ -624,22 +629,12 @@
                             <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
                         </div>
                     </div>
-                    <label class="form__label">Проведение мероприятия <sup class="valid-red">*</sup></label>
-                    <v-table>
-                        <tbody>
-                            <tr class="report-table__tr">
-                                <td class="report-table__th">Данные РО</td>
-                                <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
-                                <td class="report-table__th">Корректировка ЦШ</td>
-                            </tr>
-                            <tr>
-                                <td class="report-table__td">Да</td>
-                                <td class="report-table__td report-table__td__center">Да</td>
-                                <td class="report-table__td">Да</td>
-                            </tr>
-                        </tbody>
-                    </v-table>
-                    <div class="form__field places mt-4">
+                    <ReportTable label="Проведение мероприятия " name="ninthPanelData.event_happened"
+                        :dataRH="ninthPanelData.event_happened" :is-ninth-panel="true"
+                        :dataDH="ninthPanelDataDH.event_happened" v-model:value="ninthPanelDataCH.event_happened"
+                        :is-error-panel="isErrorPanel"></ReportTable>
+
+                    <div class="form__field places mt-4 mb-4">
                         <p class="form__label">
                             Проведение мероприятия <sup class="valid-red">*</sup>
                         </p>
@@ -647,24 +642,26 @@
                         <div class="places_wrap">
                             <div class="places_item" v-for="item in events" :key="item.id">
                                 <input :id="item.id" :value="item.value" :name="item.name"
-                                    :checked="ninthPanelData.event_happened == item.value"
-                                    class="form__input places_input" type="radio" @focusout="focusOut"
-                                    v-model="ninthPanelData.event_happened" />
+                                    :checked="ninthPanelDataCH.event_happened == item.value"
+                                    class="form__input places_input" type="radio"
+                                    v-model="ninthPanelDataCH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
                                 }}</label>
                             </div>
                         </div>
                     </div>
-
-                    <div class="form__field">
-                        <label class="form__label" for="14">Комментарий</label>
-                        <TextareaReport v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1"
-                            autoResize placeholder="Комментарий" @focusout="focusOut" :maxlength="3000"
-                            :max-length-text="3000" counter-visible />
-                    </div>
+                    <CommentFileComponent v-model:value="ninthPanelDataCH.comment" name="ninthPanelDataCH.comment"
+                        @change="uploadFile($event, 9)" @click="deleteFile(9)" :CH="true" :file="fileCH.name"
+                        :fileType="fileCH.type" :fileSize="fileCH.size" :is-error-file="isErrorFile"
+                        :is-error-panel="isErrorPanel"
+                        :is-sent="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq !== null">
+                    </CommentFileComponent>
                     <div>
-                        <v-checkbox label="Вернуть в РО на доработку" />
+                        <v-checkbox v-model="reportStore.returnReport.ninth[props.ninthId]"
+                            @change="returnForReviewNinth"
+                            :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq !== null"
+                            label="Вернуть в РО на доработку" />
                     </div>
                 </div>
             </template>
@@ -672,7 +669,7 @@
     </v-card-text>
 </template>
 <script setup>
-import { ref, watchEffect, watch } from 'vue';
+import { ref, watchEffect, watch, handleError, onMounted } from 'vue';
 import { Button } from '@shared/components/buttons';
 import {
     FileBoxComponent,
@@ -687,15 +684,16 @@ import { fileValidate } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.t
 import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
 const props = defineProps({
     title: Object,
-    panel_number: String,
+    panel_number: [String, Number],
     isDisabled: Boolean,
     isSecondTab: Boolean,
     isThirdTab: Boolean,
     isCentralHeadquarterCommander: Boolean,
     isDistrictHeadquarterCommander: Boolean,
-    id: String,
-    sixId: String,
+    id: [String, Number],
+    sixId: [String, Number],
     ninthId: String,
+
     isSentSix: Boolean,
     // isSent: Boolean,
     isSentNinth: Boolean,
@@ -705,7 +703,7 @@ const props = defineProps({
     dataCH: Object,
 });
 
-const emit = defineEmits(['collapse-form', 'formData', 'formDataDH', 'uploadFile', 'uploadFileDH', 'getId', 'getPanelNumber', 'deleteFile', 'deleteFileDH', 'error']);
+const emit = defineEmits(['collapse-form', 'formData', 'formDataDH', 'formDataCH', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'deleteFileDH', 'error']);
 
 const collapseForm = () => {
     emit('collapse-form');
@@ -715,6 +713,7 @@ const reportStore = useReportPartTwoStore();
 let isErrorFile = ref(false);
 const isFirstSentSix = ref(true);
 // const isFirstSentSeventh = ref(true);
+const isRevision = ref(false);
 const isFirstSentNinth = ref(true);
 const isLinkError = ref(false);
 
@@ -748,6 +747,9 @@ const ninthPanelData = ref({
 })
 const ninthPanelDataDH = ref({
     event_happened: false,
+    links: [{
+        link: '',
+    }],
     document: '',
     file_size: null,
     file_type: '',
@@ -763,13 +765,44 @@ const sixPanelData = ref({
 });
 const sixPanelDataDH = ref({
     number_of_members: 0,
+    links: [{
+        link: '',
+    }],
     comment: '',
+
 });
 
 const sixPanelDataCH = ref({
     number_of_members: 0,
+    links: [{
+        link: '',
+    }],
     comment: '',
 });
+
+const ninthPanelDataCH = ref({
+    event_happened: false,
+    links: [{
+        link: '',
+    }],
+    document: '',
+    file_size: null,
+    file_type: '',
+    comment: '',
+});
+
+const fileDH = ref({
+    name: '',
+    type: '',
+    size: null,
+})
+
+const fileCH = ref({
+    name: '',
+    type: '',
+    size: null,
+})
+
 
 // const prize_places = ref([
 //     { name: '1', value: 1, id: 'pp1' },
@@ -783,7 +816,34 @@ const events = ref([
     { name: 'Нет', value: false, id: 'pp2' },
 ])
 
+const isReturn = ref(false);
 
+const returnForReviewSix = (event) => {
+    let formData = new FormData();
+    formData.append('number_of_members', sixPanelDataCH.value.number_of_members);
+    formData.append('comment', sixPanelDataCH.value.comment || '');
+    if (event.target.checked) {
+        reportStore.returnReport.six[props.sixId] = true;
+        formData.append('reasons[comment]', sixPanelDataCH.value.comment);
+    } else {
+        reportStore.returnReport.six[props.sixId] = false;
+    }
+    emit('formDataCH', formData);
+}
+
+const returnForReviewNinth = (event) => {
+    let formData = new FormData();
+    formData.append('event_happened', ninthPanelDataCH.value.event_happened);
+    formData.append('comment', ninthPanelDataCH.value.comment || '');
+    formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId] || '');
+    if (event.target.checked) {
+        reportStore.returnReport.ninth[props.ninthId] = true;
+        formData.append('reasons[comment]', ninthPanelDataCH.value.comment);
+    } else {
+        reportStore.returnReport.ninth[props.ninthId] = false;
+    }
+    emit('formDataCH', formData);
+}
 const uploadFile = (event, number) => {
     // if (number === 7) {
     //     fileValidate(event.target.files[0], 7, isErrorFile);
@@ -808,36 +868,52 @@ const uploadFile = (event, number) => {
     //         emit('uploadFile', formData);
     //     }
     if (number === 9) {
-        fileValidate(event.target.files[0], 9, isErrorFile);
-        if (isErrorFile.value) {
-            console.log('error');
-            scanFile.value = event.target.files[0];
-            ninthPanelData.value.document = scanFile.value.name;
-        } else {
-            if (props.isDistrictHeadquarterCommander) {
-
-                ninthPanelDataDH.value.document = event.target.files[0];
-                reportStore.reportDataDHFile.ninth[props.ninthId] = event.target.files[0];
-                console.log('file', reportStore.reportDataDHFile.ninth[props.ninthId])
+        if (event.target.files) {
+            fileValidate(event.target.files[0], 9, isErrorFile);
+            if (isErrorFile.value) {
+                console.log('error');
+                scanFile.value = event.target.files[0];
+                ninthPanelData.value.document = scanFile.value.name;
+                if (props.isDistrictHeadquarterCommander) {
+                    reportStore.reportDataDHFile.ninth[props.ninthId] = null;
+                    fileDH.value.name = event.target.files[0].name;
+                    fileDH.value.type = event.target.files[0].type.split('/').at(-1);
+                    fileDH.value.size = event.target.files[0].size / Math.pow(1024, 2);
+                }
+                else if (props.isCentralHeadquarterCommander) {
+                    reportStore.reportDataCHFile.ninth[props.ninthId] = null;
+                    fileCH.value.name = event.target.files[0].name;
+                    fileCH.value.type = event.target.files[0].type.split('/').at(-1);
+                    fileCH.value.size = event.target.files[0].size / Math.pow(1024, 2);
+                }
             } else {
-                let formData = new FormData();
-                formData.append('event_happened', ninthPanelData.value.event_happened);
-                formData.append('document', event.target.files[0]);
-                if (ninthPanelData.value.links.length) {
-                    for (let i = 0; i < ninthPanelData.value.links.length; i++) {
-                        !ninthPanelData.value.links[i].link
-                            ? formData.append(`[links][${i}][link]`, '')
-                            : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                if (props.isDistrictHeadquarterCommander) {
+                    reportStore.reportDataDHFile.ninth[props.ninthId] = event.target.files[0];
+                    console.log('fileDH', reportStore.reportDataDHFile.ninth[props.ninthId])
+                } else if (props.isCentralHeadquarterCommander) {
+                    reportStore.reportDataCHFile.ninth[props.ninthId] = event.target.files[0];
+                    console.log('fileCH', reportStore.reportDataCHFile.ninth[props.ninthId])
+                } else {
+                    let formData = new FormData();
+                    formData.append('event_happened', ninthPanelData.value.event_happened);
+                    formData.append('document', event.target.files[0]);
+                    if (ninthPanelData.value.links.length) {
+                        for (let i = 0; i < ninthPanelData.value.links.length; i++) {
+                            !ninthPanelData.value.links[i].link
+                                ? formData.append(`[links][${i}][link]`, '')
+                                : formData.append(`[links][${i}][link]`, ninthPanelData.value.links[i].link);
+                        }
                     }
+                    if (ninthPanelData.value.comment !== null) {
+                        formData.append('comment', ninthPanelData.value.comment);
+                    }
+                    emit('uploadFile', formData);
                 }
-                if (ninthPanelData.value.comment !== null) {
-                    formData.append('comment', ninthPanelData.value.comment);
-                }
-                emit('uploadFile', formData);
-            }
 
+            }
         }
     }
+
 
 }
 
@@ -863,9 +939,11 @@ const deleteFile = (number) => {
     // } 
     if (number === 9) {
         if (props.isDistrictHeadquarterCommander) {
+            fileDH.value.name = null;
             reportStore.reportDataDHFile.ninth[props.ninthId] = null;
-            ninthPanelDataDH.value.document = '';
-
+        } else if (props.isCentralHeadquarterCommander) {
+            fileCH.value.name = null;
+            reportStore.reportDataCHFile.ninth[props.ninthId] = null;
         } else {
             ninthPanelData.value.document = '';
             formData.append('event_happened', ninthPanelData.value.event_happened);
@@ -891,12 +969,6 @@ const deleteFile = (number) => {
 const focusOut = () => {
     if (props.panel_number == 6) {
         try {
-            // if (props.isDistrictHeadquarterCommander) {
-            //     emit('formDataDH', sixPanelDataDH.value);
-            //     console.log('dataDH', sixPanelDataDH);
-            // } else {
-            //     emit('formData', sixPanelData.value);
-            // }
             emit('formData', sixPanelData.value);
 
         } catch (e) {
@@ -954,12 +1026,14 @@ const focusOut = () => {
     // }
     else if (props.panel_number == 9) {
         try {
-            // if (props.isDistrictHeadquarterCommander) {
-            //     emit('formDataDH', ninthPanelDataDH.value);
-            //     console.log('dataDH9', ninthPanelDataDH);
-            // } else {
             if (isFirstSentNinth.value === true) {
                 console.log('9', '1')
+                // if (isRevision.value) {
+                //     let formData = new FormData();
+                //     formData.append("scan_file", тштерPanelData.value.scan_file || '');
+                //     formData.append("file_size", eleventhPanelData.value.file_size || '');
+                //     formData.append("file_type", eleventhPanelData.value.file_type || '');
+                // }
                 emit('formData', ninthPanelData.value)
             } else {
                 if (ninthPanelData.value.event_happened === false) {
@@ -1036,17 +1110,26 @@ const deleteLink = async (number) => {
 watchEffect(() => {
     if (props.panel_number == 6) {
 
-        if (props.isDistrictHeadquarterCommander) {
+        if (props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) {
             sixPanelData.value = { ...props.data };
             if (reportStore.reportDataDH.six[props.sixId]) {
                 sixPanelDataDH.value.comment = reportStore.reportDataDH.six[props.sixId].comment;
                 sixPanelDataDH.value.number_of_members = reportStore.reportDataDH.six[props.sixId].number_of_members;
+                sixPanelDataDH.value.links = reportStore.reportDataDH.six[props.sixId].links;
+
+            }
+            if (reportStore.reportDataCH.six[props.sixId]) {
+                sixPanelDataCH.value.comment = reportStore.reportDataCH.six[props.sixId].comment;
+                sixPanelDataCH.value.number_of_members = reportStore.reportDataCH.six[props.sixId].number_of_members;
+                sixPanelDataCH.value.links = reportStore.reportDataCH.six[props.sixId].links;
             }
             // sixPanelDataCH.value = { ...props.dataCH };
         } else {
             if (Object.keys(props.data).length > 0) {
                 isFirstSentSix.value = false;
+                isRevision.value = reportStore.isReportReject.six[props.sixId];
                 sixPanelData.value = { ...props.data };
+
                 if (isLinkError.value) {
                     emit('error', isLinkError.value);
                 } else {
@@ -1054,9 +1137,19 @@ watchEffect(() => {
                 }
                 if (!sixPanelData.value.links.length)
                     sixPanelData.value.links.push({ link: '' });
+
+                isFirstSentSix.value = reportStore.isReportReject.six[props.sixId] && !props.data.central_version;
+                console.log('isFirstSent при доработке 6', isFirstSentSix.value);
+                if (reportStore.isReportReject.six[props.sixId]) {
+                    reportStore.returnReport.six[props.sixId] = true;
+                }
             } else {
                 console.log('data not received');
             }
+        }
+
+        if (reportStore.reportForCheckCH.six[props.sixId]?.rejecting_reasons !== null) {
+            reportStore.returnReport.six[props.sixId] = true;
         }
         emit('getId', props.id);
         emit('getPanelNumber', props.panel_number);
@@ -1090,11 +1183,17 @@ watchEffect(() => {
         //     emit('getPanelNumber', props.panel_number)
 
     } else if (props.panel_number == 9) {
-        if (props.isDistrictHeadquarterCommander) {
+        if (props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) {
             ninthPanelData.value = { ...props.data };
             if (reportStore.reportDataDH.ninth[props.ninthId]) {
                 ninthPanelDataDH.value.comment = reportStore.reportDataDH.ninth[props.ninthId].comment;
                 ninthPanelDataDH.value.event_happened = reportStore.reportDataDH.ninth[props.ninthId].event_happened;
+                ninthPanelDataDH.value.links = reportStore.reportDataDH.ninth[props.ninthId].links;
+            }
+            if (reportStore.reportDataCH.ninth[props.ninthId]) {
+                ninthPanelDataCH.value.comment = reportStore.reportDataCH.ninth[props.ninthId].comment;
+                ninthPanelDataCH.value.event_happened = reportStore.reportDataCH.ninth[props.ninthId].event_happened;
+                ninthPanelDataCH.value.links = reportStore.reportDataCH.ninth[props.ninthId].links;
             }
         } else {
             if (Object.keys(props.data).length > 0) {
@@ -1109,6 +1208,11 @@ watchEffect(() => {
                 }
                 if (!ninthPanelData.value.links.length) {
                     ninthPanelData.value.links.push({ link: '' })
+                }
+                isFirstSentNinth.value = reportStore.isReportReject.ninth[props.ninthId] && !props.data.central_version;
+                console.log('isFirstSent при доработке 9', isFirstSentNinth.value);
+                if (reportStore.isReportReject.ninth[props.ninthId]) {
+                    reportStore.returnReport.ninth[props.ninthId] = true;
                 }
 
             }
@@ -1128,40 +1232,147 @@ watchEffect(() => {
             }
 
         }
+
+        if (props.isDistrictHeadquarterCommander) {
+            if (reportStore.reportDataDHFile.ninth[props.ninthId]) {
+                fileDH.value.name = reportStore.reportDataDHFile.ninth[props.ninthId].name;
+               
+                fileDH.value.type = reportStore.reportDataDHFile.ninth[props.ninthId].type.split('/').at(-1);
+                fileDH.value.size = reportStore.reportDataDHFile.ninth[props.ninthId].size / Math.pow(1024, 2);
+            }
+        } else if (props.isCentralHeadquarterCommander) {
+            if (reportStore.reportDataDH.ninth[props.ninthId]) {
+                console.log('yahoo')
+                fileDH.value.name = reportStore.reportDataDH.ninth[props.ninthId].document;
+                fileDH.value.type = reportStore.reportDataDH.ninth[props.ninthId].file_type;
+                fileDH.value.size = reportStore.reportDataDH.ninth[props.ninthId].file_size;
+                console.log('yahoo', fileDH.value.name, )
+            }
+            if (reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq !== null) {
+                fileCH.value.name = reportStore.reportForCheckCH.ninth[props.ninthId].document;
+                fileCH.value.type = reportStore.reportForCheckCH.ninth[props.ninthId].file_type;
+                fileCH.value.size = reportStore.reportForCheckCH.ninth[props.ninthId].file_size;
+            } else {
+                if (reportStore.reportDataCHFile.ninth[props.ninthId]) {
+                    fileCH.value.name = reportStore.reportDataCHFile.ninth[props.ninthId].name;
+                    fileCH.value.type = reportStore.reportDataCHFile.ninth[props.ninthId].type.split('/').at(-1);
+                    fileCH.value.size = reportStore.reportDataCHFile.ninth[props.ninthId].size / Math.pow(1024, 2);
+                }
+                if (reportStore.reportForCheckCH.ninth[props.ninthId]?.rejecting_reasons !== null) {
+                    reportStore.returnReport.ninth[props.ninthId] = true;
+                }
+            }
+
+        }
+
         emit('getId', props.id)
         emit('getPanelNumber', props.panel_number)
-
     }
 }, {
     flush: 'post'
 })
 
-watch(sixPanelDataDH.value, () => {
-    reportStore.reportDataDH.six[props.sixId] = sixPanelDataDH.value;
-    console.log('yeah')
-    emit('formDataDH', sixPanelDataDH.value);
-    console.log(sixPanelDataDH.value)
-});
-watch(ninthPanelDataDH.value, () => {
-    reportStore.reportDataDH.ninth[props.ninthId] = ninthPanelDataDH.value;
-
-    let formData = new FormData();
-
-    ninthPanelDataDH.value.event_happened
-        ? formData.append('event_happened', ninthPanelDataDH.value.event_happened)
-        : formData.append('event_happened', false);
-
-    formData.append('comment', ninthPanelDataDH.value.comment || '');
-
-    reportStore.reportDataDHFile.ninth[props.ninthId]
-        ? formData.append('document', reportStore.reportDataDHFile.ninth[props.ninthId])
-        : formData.append('document', '');
-
-    emit('formDataDH', formData);
-    // reportStore.reportDataDH.ninth = ninthPanelDataDH.value;
-    // emit('formDataDH', ninthPanelDataDH.value);
+watch(sixPanelDataDH.value, (newValue) => {
+    if (props.isDistrictHeadquarterCommander) {
+        reportStore.reportDataDH.six[props.sixId] = newValue;
+        emit('formDataDH', newValue);
+        console.log('6 new', newValue)
+    }
 });
 
+// reportStore.reportDataDH.six[props.sixId] = sixPanelDataDH.value;
+// emit('formDataDH', sixPanelDataDH.value);
+
+
+watch(sixPanelDataCH.value, () => {
+    if (props.isCentralHeadquarterCommander) {
+        reportStore.reportDataCH.six[props.sixId] = sixPanelDataCH.value;
+        let formData = new FormData();
+        formData.append('number_of_members', sixPanelDataCH.value.number_of_members);
+        formData.append('comment', sixPanelDataCH.value.comment || '');
+        if (sixPanelDataCH.value.links.length) {
+            for (let i = 0; i < sixPanelDataCH.value.links.length; i++) {
+                formData.append(`[links][${i}][link]`, sixPanelDataCH.value.links[i].link);
+            }
+        }
+        if (reportStore.returnReport.six[props.sixId]) formData.append('reasons[comment]', sixPanelDataCH.value.comment);
+        console.log('6', formData)
+        emit('formDataCH', formData);
+    }
+});
+
+
+watch(ninthPanelDataDH.value, (newValue) => {
+    if (props.isDistrictHeadquarterCommander) {
+        reportStore.reportDataDH.ninth[props.ninthId] = newValue;
+
+        let formData = new FormData();
+        formData.append('event_happened', newValue.event_happened);
+        formData.append('comment', newValue.comment || '');
+        if (ninthPanelDataDH.value.links.length) {
+            for (let i = 0; i < ninthPanelDataDH.value.links.length; i++) {
+                formData.append(`[links][${i}][link]`, ninthPanelDataDH.value.links[i].link);
+            }
+        }
+        formData.append('document', reportStore.reportDataDHFile.ninth[props.ninthId] || '');
+        if (reportStore.returnReport.ninth[props.ninthId]) formData.append('reasons[comment]', ninthPanelDataCH.value.comment);
+        emit('formDataDH', formData);
+    }
+
+});
+
+watch(fileDH.value, () => {
+    if (props.isDistrictHeadquarterCommander) {
+        reportStore.reportDataDH.ninth[props.ninthId] = ninthPanelDataDH.value;
+
+        let formData = new FormData();
+        formData.append('event_happened', ninthPanelDataDH.value.event_happened);
+        formData.append('comment', ninthPanelDataDH.value.comment || '');
+        if (ninthPanelDataDH.value.links.length) {
+            for (let i = 0; i < ninthPanelDataDH.value.links.length; i++) {
+                formData.append(`[links][${i}][link]`, ninthPanelDataDH.value.links[i].link);
+            }
+        }
+        formData.append('document', reportStore.reportDataDHFile.ninth[props.ninthId] || '');
+        emit('formDataDH', formData);
+    }
+});
+
+watch(fileCH.value, () => {
+    if (props.isCentralHeadquarterCommander) {
+        reportStore.reportDataCH.ninth[props.ninthId] = ninthPanelDataCH.value;
+
+        let formData = new FormData();
+        formData.append('event_happened', ninthPanelDataCH.value.event_happened);
+        formData.append('comment', ninthPanelDataCH.value.comment || '');
+        if (ninthPanelDataCH.value.links.length) {
+            for (let i = 0; i < ninthPanelDataCH.value.links.length; i++) {
+                formData.append(`[links][${i}][link]`, ninthPanelDataCH.value.links[i].link);
+            }
+        }
+        formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId] || '');
+        if (reportStore.returnReport.ninth[props.ninthId]) formData.append('reasons[comment]', ninthPanelDataCH.value.comment);
+        emit('formDataCH', formData);
+        console.log('file9', formData)
+    }
+});
+
+watch(ninthPanelDataCH.value, () => {
+    if (props.isCentralHeadquarterCommander) {
+        reportStore.reportDataCH.ninth[props.ninthId] = ninthPanelDataCH.value;
+        let formData = new FormData();
+        formData.append('event_happened', ninthPanelDataCH.value.event_happened);
+        formData.append('comment', ninthPanelDataCH.value.comment || '');
+        if (ninthPanelDataCH.value.links.length) {
+            for (let i = 0; i < ninthPanelDataCH.value.links.length; i++) {
+                formData.append(`[links][${i}][link]`, ninthPanelDataCH.value.links[i].link);
+            }
+        }
+        formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId] || '');
+        if (reportStore.returnReport.ninth[props.ninthId]) formData.append('reasons[comment]', ninthPanelDataCH.value.comment);
+        emit('formDataCH', formData);
+    }
+});
 </script>
 <style lang="scss" scoped>
 .number_input {

@@ -17,7 +17,7 @@
         :min="0"
         :max="2147483647"
         @focusout="focusOut"
-        :disabled="isSent || (props.centralExpert || props.districtExpert)"
+        :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
         :is-error-panel="isErrorPanel"
       />
     </div>
@@ -27,8 +27,17 @@
         Скриншот численности <br />
         группы РО&nbsp;РСО&nbsp;<sup class="valid-red">*</sup>
       </p>
+      <FileBoxComponent
+        v-if="eleventhPanelData.scan_file"
+        :file="eleventhPanelData.scan_file"
+        :fileType="eleventhPanelData.file_type"
+        :fileSize="eleventhPanelData.file_size"
+        @click="deleteFile"
+        :is-sent="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+        :is-error-file="isErrorFile"
+      ></FileBoxComponent>
       <InputReport
-        v-if="!eleventhPanelData.scan_file"
+        v-if="!eleventhPanelData.scan_file || isRevision && (props.tab !== 'Просмотр отправленного отчета')"
         isFile
         type="file"
         accept=".jpg, .jpeg, .png, .pdf"
@@ -37,25 +46,18 @@
         width="100%"
         height="auto"
         @change="uploadFile"
-        :disabled="isSent || (props.centralExpert || props.districtExpert)"
+        :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
         :is-error-panel="isErrorPanel"
       />
-      <FileBoxComponent
-        v-else
-        :file="eleventhPanelData.scan_file"
-        :fileType="eleventhPanelData.file_type"
-        :fileSize="eleventhPanelData.file_size"
-        @click="deleteFile"
-        :is-sent="isSent || (props.centralExpert || props.districtExpert)"
-        :is-error-file="isErrorFile"
-      ></FileBoxComponent>
     </div>
 
     <div
       class="report__fieldset report__fieldset--comment"
-      v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
+      v-if="(!isSent && !(props.centralExpert || props.districtExpert) && !reportStore.isReportRevision) ||
             (isSent && eleventhPanelData.comment) ||
-            ((props.centralExpert || props.districtExpert) && eleventhPanelData.comment)"
+            ((props.centralExpert || props.districtExpert) && eleventhPanelData.comment) ||
+            (props.tab !== 'Просмотр отправленного отчета') && reportStore.isReportRevision ||
+            (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision && eleventhPanelData.comment)"
     >
       <label class="form__label report__label" for="comment"> Комментарий </label>
       <TextareaReport
@@ -69,7 +71,7 @@
         :maxlength="3000"
         :max-length-text="3000"
         @focusout="focusOut"
-        :disabled="isSent || (props.centralExpert || props.districtExpert)"
+        :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
       >
       </TextareaReport>
     </div>
@@ -92,7 +94,7 @@
         :maxlength="10"
         :min="0"
         :max="2147483647"
-        :disabled="centralExpert"
+        :disabled="centralExpert || !(districtExpert || centralExpert)"
         :is-error-panel="isErrorPanel"
       />
     </div>
@@ -102,17 +104,18 @@
       name="eleventhPanelData.comment"
       @change="uploadFileDH"
       @click="deleteFileDH"
-      :file="reportStore.reportDataDHFile.eleventh ? reportStore.reportDataDHFile.eleventh.name : null"
-      :fileType="reportStore.reportDataDHFile.eleventh ? reportStore.reportDataDHFile.eleventh.type.split('/').at(-1) : null"
-      :fileSize="reportStore.reportDataDHFile.eleventh ? reportStore.reportDataDHFile.eleventh.size / Math.pow(1024, 2) : null"
-      :disabled="centralExpert"
+      :file="fileDH.name"
+      :fileType="fileDH.type"
+      :fileSize="fileDH.size"
+      :disabled="centralExpert || !(districtExpert || centralExpert)"
       :is-error-file="isErrorFile"
       :is-error-panel="isErrorPanel"
+      :is-sent="centralExpert || !(districtExpert || centralExpert)"
     ></CommentFileComponent>
   </div>
 
   <div
-    v-if="isThirdTab && centralExpert"
+    v-if="isThirdTab"
     class="report__field-group report__field-group--column"
   >
     <ReportTable
@@ -121,12 +124,33 @@
       :dataRH="eleventhPanelData.participants_number"
       :dataDH="eleventhPanelDataDH.participants_number"
       v-model:value="eleventhPanelDataCH.participants_number"
+      :maxlength="10"
+      :min="0"
+      :max="2147483647"
+      :disabled="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.eleventh.verified_by_chq !== null"
+      :is-error-panel="isErrorPanel"
     ></ReportTable>
 
-    <CommentFileComponent></CommentFileComponent>
+    <CommentFileComponent
+      v-model:value="eleventhPanelDataCH.comment"
+      name="eleventhPanelDataCH.comment"
+      @change="uploadFileCH"
+      @click="deleteFileCH"
+      :file="fileCH.name"
+      :fileType="fileCH.type"
+      :fileSize="fileCH.size"
+      :is-error-file="isErrorFile"
+      :is-disabled="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.eleventh.verified_by_chq !== null"
+      :is-sent="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.eleventh.verified_by_chq !== null"
+      :is-error-panel="isErrorPanel"
+    ></CommentFileComponent>
 
     <div>
-      <v-checkbox label="Вернуть в&nbsp;РО на&nbsp;доработку" />
+      <v-checkbox 
+        v-model="reportStore.returnReport.eleventh"
+        label="Вернуть в&nbsp;РО на&nbsp;доработку" 
+        :disabled="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.eleventh.verified_by_chq !== null"
+        @change="onReturnReport"/>
     </div>
   </div>
 </template>
@@ -161,17 +185,19 @@ const props = defineProps({
     default: false,
   },
   data: Object,
-  // dataDH: Object,
-  // dataCH: Object,
   isErrorPanel: {
     type: Boolean,
   },
+  tab: {
+    type: String,
+  }
 });
 
 const ID_PANEL = "11";
 const isFirstSent = ref(true);
+const isRevision = ref(false);
 let isErrorFile = ref(false);
-// let fileName = ref(null);
+
 const eleventhPanelData = ref({
   participants_number: null,
   scan_file: "",
@@ -188,6 +214,12 @@ const eleventhPanelDataDH = ref({
   comment: "",
 });
 
+const fileDH = ref({
+  name: '',
+  type: '',
+  size: null,
+})
+
 const eleventhPanelDataCH = ref({
   participants_number: null,
   scan_file: "",
@@ -196,39 +228,44 @@ const eleventhPanelDataCH = ref({
   comment: "",
 });
 
+const fileCH = ref({
+  name: '',
+  type: '',
+  size: null,
+})
+
 const isSent = ref(false);
-//const isVerifiedDH = ref(false);
 
 const emit = defineEmits([
   'getData', 
   'getDataDH', 
   'getDataCH', 
-  // 'getFileDH'
 ]);
 
 const focusOut = async () => {
-  // if (!(props.districtExpert || props.centralExpert)) {
-    let formData = new FormData();
+  let formData = new FormData();
 
-    eleventhPanelData.value.participants_number ? formData.append("participants_number", eleventhPanelData.value.participants_number) : formData.append("participants_number", "");
-    formData.append("comment", eleventhPanelData.value.comment || '');
+  // eleventhPanelData.value.participants_number ? formData.append("participants_number", eleventhPanelData.value.participants_number) : formData.append("participants_number", "");
+  formData.append("participants_number", eleventhPanelData.value.participants_number || '');
+  formData.append("comment", eleventhPanelData.value.comment || '');
 
-    try {
-      if (isFirstSent.value) {
-        const { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-        emit('getData', data, Number(ID_PANEL));
-      } else {
-        const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-        emit('getData', data, Number(ID_PANEL));
+  try {
+    if (isFirstSent.value) {
+      if (isRevision.value) {
+        formData.append("scan_file", eleventhPanelData.value.scan_file || '');
+        formData.append("file_size", eleventhPanelData.value.file_size || '');
+        formData.append("file_type", eleventhPanelData.value.file_type || '');
       }
-    } catch (e) {
-      console.log('focusOut error:', e)
+      const { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+      emit('getData', data, Number(ID_PANEL));
+      
+    } else {
+      const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+      emit('getData', data, Number(ID_PANEL));
     }
-  // }
-  
-  // if (props.districtExpert) {
-  //   emit('getDataDH', eleventhPanelDataDH.value, Number(ID_PANEL));
-  // }
+  } catch (e) {
+    console.log('focusOut error:', e)
+  }
 };
 
 const uploadFile = async (event) => {
@@ -241,6 +278,8 @@ const uploadFile = async (event) => {
   if(!isErrorFile.value) {
     let formData = new FormData();
     formData.append("scan_file", event.target.files[0]);
+    formData.append("participants_number", eleventhPanelData.value.participants_number || '');
+    formData.append("comment", eleventhPanelData.value.comment || '');
 
     try {
       if (isFirstSent.value) {
@@ -259,13 +298,33 @@ const uploadFile = async (event) => {
 };
 
 const uploadFileDH = async (event) => {
-  eleventhPanelDataDH.value.scan_file = event.target.files[0];
+  if (event.target.files) {
+    fileValidate(event.target.files[0], 7, isErrorFile);
 
-  // fileValidate(event.target.files[0], 7, isErrorFile);
+    if (isErrorFile.value) {
+      reportStore.reportDataDHFile.eleventh = null;
+      fileDH.value.name = event.target.files[0].name;
+      fileDH.value.type = event.target.files[0].type.split('/').at(-1);
+      fileDH.value.size = event.target.files[0].size / Math.pow(1024, 2);
+    } else {
+      reportStore.reportDataDHFile.eleventh = event.target.files[0];
+    }
+  }
+}
 
-  // if (!isErrorFile.value) {
-    reportStore.reportDataDHFile.eleventh = event.target.files[0];
-  // }
+const uploadFileCH = async (event) => {
+  if (event.target.files) {
+    fileValidate(event.target.files[0], 7, isErrorFile);
+
+    if (isErrorFile.value) {
+      reportStore.reportDataCHFile.eleventh = null;
+      fileCH.value.name = event.target.files[0].name;
+      fileCH.value.type = event.target.files[0].type.split('/').at(-1);
+      fileCH.value.size = event.target.files[0].size / Math.pow(1024, 2);
+    } else {
+      reportStore.reportDataCHFile.eleventh = event.target.files[0];
+    }
+  }
 }
 
 const deleteFile = async () => {
@@ -274,6 +333,8 @@ const deleteFile = async () => {
   if(!isErrorFile.value) {
     let formData = new FormData();
     formData.append("scan_file", "");
+    formData.append("participants_number", eleventhPanelData.value.participants_number || '');
+    formData.append("comment", eleventhPanelData.value.comment || '');
 
     try {
       if (isFirstSent.value) {
@@ -285,36 +346,92 @@ const deleteFile = async () => {
       }
     } catch (e) {
       console.log('deleteFile error:', e);
-    }  
+    }
   }
 };
 
 const deleteFileDH = async () => {
-  eleventhPanelDataDH.value.scan_file = '';
+  fileDH.value.name = null;
+  reportStore.reportDataDHFile.eleventh = null;
+}
+
+const deleteFileCH = async () => {
+  fileCH.value.name = null;
+  reportStore.reportDataCHFile.eleventh = null;
+}
+
+const onReturnReport = (event) => {
+  let formData = new FormData();
+  formData.append('participants_number', eleventhPanelDataCH.value.participants_number);
+  formData.append('comment', eleventhPanelDataCH.value.comment || '');
+  formData.append('scan_file', reportStore.reportDataCHFile.eleventh || '');
   
-  // if (!isErrorFile.value) {
-    reportStore.reportDataDHFile.eleventh = null;
-  // }
+  if (event.target.checked) {
+    reportStore.returnReport.eleventh = true;
+    formData.append('reasons[comment]', eleventhPanelDataCH.value.comment);
+  } else {
+    reportStore.returnReport.eleventh = false;
+  }
+
+  emit('getDataCH', formData, Number(ID_PANEL));
 }
 
 watchEffect(() => {
-  if (props.districtExpert) {
+  if (props.centralExpert || props.districtExpert) {
+    if (reportStore.reportDataCH.eleventh) {
+      eleventhPanelDataCH.value.comment = reportStore.reportDataCH.eleventh.comment;
+      eleventhPanelDataCH.value.participants_number = reportStore.reportDataCH.eleventh.participants_number;
+    }
     if (reportStore.reportDataDH.eleventh) {
       eleventhPanelDataDH.value.comment = reportStore.reportDataDH.eleventh.comment;
       eleventhPanelDataDH.value.participants_number = reportStore.reportDataDH.eleventh.participants_number;
     }
-
   } else {
     if (props.data) {
       // console.log(props.data);
       isFirstSent.value = false;
+      isRevision.value = reportStore.isReportReject.eleventh;
       eleventhPanelData.value.participants_number = props.data.participants_number;
       eleventhPanelData.value.comment = props.data.comment;
       eleventhPanelData.value.scan_file = props.data.scan_file;
       eleventhPanelData.value.file_size = props.data.file_size;
       eleventhPanelData.value.file_type = props.data.file_type;
       isSent.value = props.data.is_sent;
+
+      isFirstSent.value = reportStore.isReportReject.eleventh && !props.data.central_version;
+      console.log('isFirstSent при доработке 11', isFirstSent.value);
+      if (reportStore.isReportReject.eleventh) {
+        reportStore.returnReport.eleventh = true;
+      }
     }
+  }
+  if (props.districtExpert) {
+    if (reportStore.reportDataDHFile.eleventh) {
+      fileDH.value.name = reportStore.reportDataDHFile.eleventh.name;
+      fileDH.value.type = reportStore.reportDataDHFile.eleventh.type.split('/').at(-1);
+      fileDH.value.size = reportStore.reportDataDHFile.eleventh.size / Math.pow(1024, 2);
+    }
+  } else if (props.centralExpert) {
+    if (reportStore.reportDataDH.eleventh) {
+      fileDH.value.name = reportStore.reportDataDH.eleventh.scan_file;
+      fileDH.value.type = reportStore.reportDataDH.eleventh.file_type;
+      fileDH.value.size = reportStore.reportDataDH.eleventh.file_size;
+    }
+    if (reportStore.reportForCheckCH.eleventh.verified_by_chq !== null) {
+      fileCH.value.name = reportStore.reportForCheckCH.eleventh.scan_file;
+      fileCH.value.type = reportStore.reportForCheckCH.eleventh.file_type;
+      fileCH.value.size = reportStore.reportForCheckCH.eleventh.file_size;
+    } else
+    if (reportStore.reportDataCHFile.eleventh) {
+      fileCH.value.name = reportStore.reportDataCHFile.eleventh.name;
+      fileCH.value.type = reportStore.reportDataCHFile.eleventh.type.split('/').at(-1);
+      fileCH.value.size = reportStore.reportDataCHFile.eleventh.size / Math.pow(1024, 2);
+    }
+    if (reportStore.reportForCheckCH.eleventh.rejecting_reasons) {
+      reportStore.returnReport.eleventh = true;
+    } 
+
+    // console.log('чек 11', reportStore.returnReport.eleventh)
   }
 }, {
   flush: 'post'
@@ -330,24 +447,74 @@ watchPostEffect(() => {
     eleventhPanelData.value.file_type = props.data.file_type;
     isSent.value = props.data.is_sent;
   }
+  if (!(props.centralExpert || props.districtExpert)) {
+    eleventhPanelDataDH.value = reportStore.reportDataDH.eleventh;
+    fileDH.value.name = reportStore.reportDataDH.eleventh.scan_file;
+    fileDH.value.type = reportStore.reportDataDH.eleventh.file_type;
+    fileDH.value.size = reportStore.reportDataDH.eleventh.file_size;
+
+    eleventhPanelDataCH.value = reportStore.reportDataCH.eleventh;
+    fileCH.value.name = reportStore.reportDataCH.eleventh.scan_file;
+    fileCH.value.type = reportStore.reportDataCH.eleventh.file_type;
+    fileCH.value.size = reportStore.reportDataCH.eleventh.file_size;
+
+    if (props.data?.rejecting_reasons) {
+      reportStore.returnReport.eleventh = true;
+    } else {
+      reportStore.returnReport.eleventh = false;
+    }
+  }
+  
 });
 
 watch(eleventhPanelDataDH.value, () => {
-  reportStore.reportDataDH.eleventh = eleventhPanelDataDH.value;
+  if (props.districtExpert) {
+    reportStore.reportDataDH.eleventh = eleventhPanelDataDH.value;
 
-  let formData = new FormData();
+    let formData = new FormData();
+    formData.append('participants_number', eleventhPanelDataDH.value.participants_number);
+    formData.append('comment', eleventhPanelDataDH.value.comment || '');
+    formData.append('scan_file', reportStore.reportDataDHFile.eleventh || '');
+    emit('getDataDH', formData, Number(ID_PANEL));
+  }
+});
 
-  eleventhPanelDataDH.value.participants_number 
-  ? formData.append('participants_number', eleventhPanelDataDH.value.participants_number) 
-  : formData.append('participants_number', '');
+watch(fileDH.value, ()=> {
+    if (props.districtExpert) {
+      reportStore.reportDataDH.eleventh = eleventhPanelDataDH.value;
 
-  formData.append('comment', eleventhPanelDataDH.value.comment || '');
+      let formData = new FormData();
+      formData.append('participants_number', eleventhPanelDataDH.value.participants_number);
+      formData.append('comment', eleventhPanelDataDH.value.comment || '');
+      formData.append('scan_file', reportStore.reportDataDHFile.eleventh || '');
+      emit('getDataDH', formData, Number(ID_PANEL));
+    }
+});
 
-  reportStore.reportDataDHFile.eleventh 
-  ? formData.append('scan_file', reportStore.reportDataDHFile.eleventh) 
-  : formData.append('scan_file', '');
+watch(eleventhPanelDataCH.value, () => {
+  if (props.centralExpert) {
+    reportStore.reportDataCH.eleventh = eleventhPanelDataCH.value;
+    
+    let formData = new FormData();
+    formData.append('participants_number', eleventhPanelDataCH.value.participants_number);
+    formData.append('comment', eleventhPanelDataCH.value.comment || '');
+    formData.append('scan_file', reportStore.reportDataCHFile.eleventh || '');
+    if (reportStore.returnReport.eleventh) formData.append('reasons[comment]', eleventhPanelDataCH.value.comment);
+    emit('getDataCH', formData, Number(ID_PANEL));
+  }
+});
 
-  emit('getDataDH', formData, Number(ID_PANEL));
+watch(fileCH.value, ()=> {
+  if (props.centralExpert) {
+    reportStore.reportDataCH.eleventh = eleventhPanelDataCH.value;
+  
+    let formData = new FormData();
+    formData.append('participants_number', eleventhPanelDataCH.value.participants_number);
+    formData.append('comment', eleventhPanelDataCH.value.comment || '');
+    formData.append('scan_file', reportStore.reportDataCHFile.eleventh || '');
+    if (reportStore.returnReport.eleventh) formData.append('reasons[comment]', eleventhPanelDataCH.value.comment);
+    emit('getDataCH', formData, Number(ID_PANEL));
+  }
 });
 </script>
 
