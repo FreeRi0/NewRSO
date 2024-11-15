@@ -158,6 +158,7 @@ import { useRoleStore } from '@layouts/store/role';
 import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
 import { SvgIcon } from '@shared/ui/SvgIcon';
+import { showByUrl } from '@services/ProdUrlService';
 
 const props = defineProps({
     isActive: {
@@ -188,6 +189,9 @@ const regionAction = ref(null);
 const userUpdate = (userData) => {
     userStore.currentUser = userData;
 };
+const showRoster = ref(false);
+showRoster.value = showByUrl();
+
 
 const pages = ref([
     { title: 'ЛСО', link: '/all-squads', show: true },
@@ -314,10 +318,10 @@ const userPages = computed(() => [
         title: 'Реестр участников',
         name: 'Roster',
         show:
-            roleStore.roles?.centralheadquarter_commander ||
-            roleStore.roles?.districtheadquarter_commander ||
-            roleStore.roles?.regionalheadquarter_commander ||
-            roleStore.roles?.detachment_commander,
+            showRoster.value && (roleStore.roles?.centralheadquarter_commander ||
+                roleStore.roles?.districtheadquarter_commander ||
+                roleStore.roles?.regionalheadquarter_commander ||
+                roleStore.roles?.detachment_commander),
     },
 
     {

@@ -195,14 +195,14 @@ const selectedCategory = ref('Пользователи');
 const currentIndicators = computed(() => indicatorsByCategory[selectedCategory.value] || []);
 
 const urlMap = {
-    'Пользователи': `${HTTP.defaults.baseURL}/registry/users/`,
-    'Центральный штаб': `${HTTP.defaults.baseURL}registry/centrals/`,
-    'Окружные штабы': `${HTTP.defaults.baseURL}registry/districts/`,
-    'Региональный штаб': `${HTTP.defaults.baseURL}registry/regionals/`,
-    'Местные штабы': `${HTTP.defaults.baseURL}registry/locals/`,
-    'Штабы СО ОО': `${HTTP.defaults.baseURL}registry/educationals/`,
-    'ЛСО': `${HTTP.defaults.baseURL}registry/detachments/`,
-    'Направление': `${HTTP.defaults.baseURL}registry/directions/`,
+    'Пользователи': '/registry/users/',
+    'Центральный штаб': 'registry/centrals/',
+    'Окружные штабы': 'registry/districts/',
+    'Региональный штаб': 'registry/regionals/',
+    'Местные штабы': 'registry/locals/',
+    'Штабы СО ОО': 'registry/educationals/',
+    'ЛСО': 'registry/detachments/',
+    'Направление': 'registry/directions/',
 };
 
 const reportColumns = {
