@@ -554,7 +554,11 @@ watch(firstPanelDataDH.value, () => {
   let formData = new FormData();
   formData.append('comment', firstPanelDataDH.value.comment || '');
   formData.append('amount_of_money', firstPanelDataDH.value.amount_of_money);
-  if (reportStore.reportDataDHFile.first) formData.append('scan_file', reportStore.reportDataDHFile.first);
+  if (reportStore.reportDataDHFile.first) {
+    formData.append('scan_file', reportStore.reportDataDHFile.first);
+  } else {
+    formData.append('scan_file', '');
+  }
 
   emit('getDataDH', formData, 1);
 });

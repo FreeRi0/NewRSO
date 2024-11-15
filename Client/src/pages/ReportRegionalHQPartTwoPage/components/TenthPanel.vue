@@ -337,6 +337,7 @@ const getDataDH = (data, reportNumber) => {
     } else {
       reportStore.reportDataDHFile.tenth.first = null;
       documentFirst.value = null
+      formData.append('document', '');
     }
 
     emit('getDataDHFirst', formData, 10, 1);
@@ -354,6 +355,7 @@ const getDataDH = (data, reportNumber) => {
     } else {
       reportStore.reportDataDHFile.tenth.second = null;
       documentSecond.value = null;
+      formData.append('document', '');
     }
 
     emit('getDataDHSecond', formData, 10, 2);
