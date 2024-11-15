@@ -563,25 +563,26 @@ const getMultiplyData = async (reportId) => {
   ]);
 
   sixDataResults.forEach((result) => {
-
+    const sixData = result.data;
+    console.log('good 6', sixData)
     if (districtExpert.value) {
-      if (result.data?.regional_version) {
+      if (sixData?.regional_version) {
         try {
-          reportData.value.six[result.id] = JSON.parse(result.data.regional_version);
+          reportData.value.six[result.id] = JSON.parse(sixData.regional_version);
         } catch (error) {
           console.error('Error parsing regional_version JSON:', error);
-          reportData.value.six[result.id] = result.data.regional_version || result.data;
+          // reportData.value.six[result.id] = sixData.regional_version || sixData;
         }
       } else {
-        reportData.value.six[result.id] = result.data;
+        reportData.value.six[result.id] = sixData;
       }
-      reportStore.reportDataDH.six[result.id] = Object.assign({}, result.data);
+      reportStore.reportDataDH.six[result.id] = Object.assign({}, sixData);
       reportStore.reportDataDH.six[result.id].comment = '';
 
     } else if (centralExpert.value) {
-      reportStore.reportForCheckCH.six[result.id] = result.data;
-      reportData.value.six[result.id] = result.data
-      reportStore.reportDataDH.six[result.id] = result.data
+      reportStore.reportForCheckCH.six[result.id] = sixData;
+      reportData.value.six[result.id] = sixData;
+      reportStore.reportDataDH.six[result.id] = sixData;
       console.log('ch6', reportStore.reportForCheckCH.six[result.id])
       // if (reportData.value.six[result.id]?.regional_version) {
       //   console.log('reg_ver', reportData.value.six[result.id]?.regional_version)
@@ -594,41 +595,41 @@ const getMultiplyData = async (reportId) => {
       // } else {
       //   reportStore.reportDataDH.six[result.id] = result.data
       // }
-      if (result.data?.regional_version) {
+      if (sixData?.regional_version) {
         try {
-          reportData.value.six[result.id] = JSON.parse(result.data.regional_version);
+          reportData.value.six[result.id] = JSON.parse(sixData.regional_version);
         } catch (error) {
           console.error('Error parsing regional_version JSON:', error);
-          reportData.value.six[result.id] = result.data.regional_version || result.data;
+          reportData.value.six[result.id] = sixData.regional_version || sixData;
         }
       } else {
-        reportData.value.six[result.id] = result.data;
+        reportData.value.six[result.id] = sixData;
       }
-      if (result.data?.district_version) {
+      if (sixData?.district_version) {
         try {
-          reportStore.reportDataDH.six[result.id] = JSON.parse(result.data.district_version);
+          reportStore.reportDataDH.six[result.id] = JSON.parse(sixData.district_version);
         } catch (error) {
           console.error('Error parsing regional_version JSON:', error);
-          reportStore.reportDataDH.six[result.id] = result.data.district_version || result.data;
+          reportStore.reportDataDH.six[result.id] = sixData.district_version || sixData;
         }
       } else {
-        reportStore.reportDataDH.six[result.id] = result.data;
+        reportStore.reportDataDH.six[result.id] = sixData;
       }
 
-      reportStore.reportDataCH.six[result.id] = Object.assign({}, result.data);
+      reportStore.reportDataCH.six[result.id] = Object.assign({}, sixData);
       reportStore.reportDataCH.six[result.id].verified_by_chq === null
         ? reportStore.reportDataCH.six[result.id].comment = ''
-        : reportStore.reportDataCH.six[result.id].comment = result.data?.comment;
+        : reportStore.reportDataCH.six[result.id].comment = sixData?.comment;
     } else {
-      if (result.data?.regional_version) {
+      if (sixData?.regional_version) {
         try {
-          reportData.value.six[result.id] = JSON.parse(result.data.regional_version);
+          reportData.value.six[result.id] = JSON.parse(sixData.regional_version);
         } catch (error) {
           console.error('Error parsing regional_version JSON:', error);
-          reportData.value.six[result.id] = result.data.regional_version || result.data;
+          reportData.value.six[result.id] = sixData.regional_version || sixData;
         }
       } else {
-        reportData.value.six[result.id] = result.data;
+        reportData.value.six[result.id] = sixData;
       }
 
       // Проверка на причины отклонений отчета и вывод табов для РО
@@ -650,6 +651,8 @@ const getMultiplyData = async (reportId) => {
   // });
 
   ninthDataResults.forEach((result) => {
+    const ninthData = result.data;
+    console.log('good 9', ninthData)
     if (districtExpert.value) {
       // reportData.value.ninth[result.id] = result.data;
       // if (result.data?.regional_version) {
@@ -657,43 +660,43 @@ const getMultiplyData = async (reportId) => {
       // } else {
       //   reportData.value.ninth[result.id] = result.data;
       // }
-      if (result.data?.regional_version) {
+      if (ninthData?.regional_version) {
         try {
-          reportData.value.ninth[result.id] = JSON.parse(result.data.regional_version);
+          reportData.value.ninth[result.id] = JSON.parse(ninthData.regional_version);
         } catch (error) {
           console.error('Error parsing regional_version JSON:', error);
-          reportData.value.ninth[result.id] = result.data.regional_version || result.data;
+          reportData.value.ninth[result.id] = ninthData.regional_version || ninthData;
         }
       } else {
-        reportData.value.six[result.id] = result.data;
+        reportData.value.ninth[result.id] = ninthData;
       }
-      reportStore.reportDataDH.ninth[result.id] = Object.assign({}, result.data);
+      reportStore.reportDataDH.ninth[result.id] = Object.assign({}, ninthData);
       reportStore.reportDataDH.ninth[result.id].comment = '';
       // isErrorPanel.value.ninth[result.id] = {
       //   id: result.id,
       //   error: false,
       // }
     } else if (centralExpert.value) {
-      reportStore.reportForCheckCH.ninth[result.id] = result.data;
+      reportStore.reportForCheckCH.ninth[result.id] = ninthData;
       console.log('ch9', reportStore.reportForCheckCH.ninth[result.id])
-      if (result.data?.regional_version) {
-        reportData.value.ninth[result.id] = JSON.parse(result.data.regional_version);
+      if (ninthData?.regional_version) {
+        reportData.value.ninth[result.id] = JSON.parse(ninthData.regional_version);
       } else {
-        reportData.value.ninth[result.id] = result.data;
+        reportData.value.ninth[result.id] = ninthData;
       }
-      if (result.data?.district_version) {
-        reportStore.reportDataDH.ninth[result.id] = JSON.parse(result.data.district_version);
+      if (ninthData?.district_version) {
+        reportStore.reportDataDH.ninth[result.id] = JSON.parse(ninthData.district_version);
       } else {
-        reportStore.reportDataDH.ninth[result.id] = result.data
+        reportStore.reportDataDH.ninth[result.id] = ninthData
       }
 
-      reportStore.reportDataCH.ninth[result.id] = Object.assign({}, result.data);
-      result.data.verified_by_chq === null
+      reportStore.reportDataCH.ninth[result.id] = Object.assign({}, ninthData);
+      ninthData.verified_by_chq === null
         ? reportStore.reportDataCH.ninth[result.id].comment = ''
-        : reportStore.reportDataCH.ninth[result.id].comment = result.data.comment;
+        : reportStore.reportDataCH.ninth[result.id].comment = ninthData.comment;
     }
     else {
-      reportData.value.ninth[result.id] = result.data;
+      reportData.value.ninth[result.id] = ninthData;
       if (reportData.value.ninth[result.id]?.regional_version !== null && Object.keys(reportData.value.ninth[result.id]).length) {
         reportData.value.ninth[result.id] = JSON.parse(reportData.value.ninth[result.id].regional_version);
       }
