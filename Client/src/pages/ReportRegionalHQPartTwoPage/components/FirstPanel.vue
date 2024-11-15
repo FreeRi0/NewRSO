@@ -93,7 +93,7 @@
                 :file="firstPanelData.scan_file"
                 :fileType="firstPanelData.file_type"
                 :fileSize="firstPanelData.file_size"
-                :is-sent="isSent"
+                :is-sent="props.centralExpert || props.districtExpert"
             ></FileBoxComponent>
             <div v-else class="report__add-file">
               <InputReport
@@ -172,7 +172,7 @@
             @change="uploadFileDH"
             @click="deleteFileDH"
             :is-error-panel="isErrorPanel"
-            :is-sent="reportStore.isReportReject?.first"
+            :is-sent="props.centralExpert || reportStore.isReportReject?.first"
             :rows="row"
         />
       </div>
@@ -480,9 +480,9 @@ watchEffect(async () => {
     // Добавление данных панели "корректировка ОШ"
     firstPanelDataDH.value.comment = reportStore.reportForCheckCH.first.comment;
     firstPanelDataDH.value.amount_of_money = reportStore.reportForCheckCH.first.amount_of_money;
-    // fileNameDH.value = reportStore.reportForCheckCH.first.scan_file || '';
-    // fileTypeDH.value = reportStore.reportForCheckCH.first.file_type || '';
-    // fileSizeDH.value = reportStore.reportForCheckCH.first.file_size || '';
+    fileNameDH.value = reportStore.reportForCheckCH.first.scan_file || '';
+    fileTypeDH.value = reportStore.reportForCheckCH.first.file_type || '';
+    fileSizeDH.value = reportStore.reportForCheckCH.first.file_size || '';
 
     // Добавление данных из стора для панели "корректировка ЦШ"
     firstPanelDataCH.value.amount_of_money = reportStore.reportDataCH.first.amount_of_money;
@@ -554,7 +554,11 @@ watch(firstPanelDataDH.value, () => {
   let formData = new FormData();
   formData.append('comment', firstPanelDataDH.value.comment || '');
   formData.append('amount_of_money', firstPanelDataDH.value.amount_of_money);
-  if (reportStore.reportDataDHFile.first) formData.append('scan_file', reportStore.reportDataDHFile.first);
+  if (reportStore.reportDataDHFile.first) {
+    formData.append('scan_file', reportStore.reportDataDHFile.first);
+  } else {
+    formData.append('scan_file', '');
+  }
 
   emit('getDataDH', formData, 1);
 });

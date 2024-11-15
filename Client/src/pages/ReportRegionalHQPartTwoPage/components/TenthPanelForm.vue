@@ -268,7 +268,7 @@
             :is-error-file="isErrorFile"
             @change="uploadFileDH"
             @click="deleteFileDH"
-            :is-sent="isReportReject"
+            :is-sent="centralExpert || isReportReject"
         />
       </div>
 

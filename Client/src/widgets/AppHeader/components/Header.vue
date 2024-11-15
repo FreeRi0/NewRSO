@@ -158,6 +158,7 @@ import { useRoleStore } from '@layouts/store/role';
 import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
 import { SvgIcon } from '@shared/ui/SvgIcon';
+import { showByUrl } from '@services/ProdUrlService';
 
 const props = defineProps({
     isActive: {
@@ -188,6 +189,9 @@ const regionAction = ref(null);
 const userUpdate = (userData) => {
     userStore.currentUser = userData;
 };
+const showRoster = ref(false);
+showRoster.value = showByUrl();
+
 
 const pages = ref([
     { title: 'ЛСО', link: '/all-squads', show: true },
@@ -309,6 +313,18 @@ const userPages = computed(() => [
     //         roleStore.roles?.regionalheadquarter_commander ||
     //         roleStore.roles?.detachment_commander,
     // },
+
+
+    {
+        title: 'Реестр участников',
+        name: 'Roster',
+        show:
+            showRoster.value && (roleStore.roles?.centralheadquarter_commander ||
+                roleStore.roles?.districtheadquarter_commander ||
+                roleStore.roles?.regionalheadquarter_commander ||
+                roleStore.roles?.detachment_commander),
+    },
+
     {
         title: 'Членский взнос',
         name: 'contributorPay',
@@ -432,7 +448,6 @@ watch(
             nameUrl = 'rating-ro'
 
         } else if (roleStore.roles.regionalheadquarter_commander && roleStore.experts.is_district_expert) {
-            console
             nameUrl = 'reportingRo'
         } else if (roleStore.experts.is_central_expert || roleStore.experts.is_district_expert) {
             nameUrl = 'rating-ro'
@@ -440,6 +455,7 @@ watch(
         else {
             nameUrl = 'reportingRo'
         }
+        
         if (localStorage.getItem('jwt_token') !== null) {
             userStore.getCountApp();
         }

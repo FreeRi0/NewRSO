@@ -825,14 +825,19 @@ const onReportReturn = (event) => {
       });
 
       reportStore.reportDataCH.sixteenth.comment = commentCH.value || '';
-      formData.append('comment', commentCH.value || '');
+      reportStore.reportDataCH.sixteenth.isProject = isProjectCH.value;
 
+      formData.append('comment', commentCH.value || '');
       reportStore.reportDataCH.sixteenth.projects.forEach((project, i) => {
         if (project.project_scale) formData.append(`projects[${i}][project_scale]`, project.project_scale);
         if (project.name) formData.append(`projects[${i}][name]`, project.name);
       })
     } else {
       reportStore.returnReport.sixteenth = false;
+
+      reportStore.reportDataCH.sixteenth.comment = commentCH.value || '';
+      reportStore.reportDataCH.sixteenth.isProject = isProjectCH.value;
+
       formData.append('is_project', isProjectCH.value);
       formData.append('comment', commentCH.value || '');
       formData.append('projects', '');
@@ -867,7 +872,8 @@ onMounted(() => {
 
     // Добавление данных из стора для панели "корректировка ЦШ"
     commentCH.value = reportStore.reportDataCH.sixteenth.comment || '';
-    isProjectCH.value = reportStore.reportForCheckCH.sixteenth.is_project;
+    isProjectCH.value = reportStore.reportDataCH.sixteenth.isProject;
+
     for (let i = 0; i < projectQuantity; i++) {
       commonData.value[i] = {
         dataRH: reportDataRH.projects[i],
@@ -1004,6 +1010,8 @@ watch(() => isProjectCH.value, () => {
     });
 
     reportStore.reportDataCH.sixteenth.comment = commentCH.value || '';
+    reportStore.reportDataCH.sixteenth.isProject = isProjectCH.value;
+
     formData.append('is_project', isProjectCH.value);
     formData.append('comment', commentCH.value || '');
     if (reportStore.returnReport.sixteenth) formData.append('reasons[comment]', commentCH.value || '');
@@ -1015,6 +1023,9 @@ watch(() => isProjectCH.value, () => {
 
     emit('getDataCH', formData, 16);
   } else {
+    reportStore.reportDataCH.sixteenth.comment = commentCH.value || '';
+    reportStore.reportDataCH.sixteenth.isProject = isProjectCH.value;
+
     formData.append('is_project', isProjectCH.value);
     formData.append('comment', commentCH.value || '');
     formData.append('projects', '');
@@ -1032,8 +1043,9 @@ watch([commonData, commentCH], () => {
     commonData.value.forEach(e => {
       reportStore.reportDataCH.sixteenth.projects.push(e.dataCH)
     });
-
     reportStore.reportDataCH.sixteenth.comment = commentCH.value || '';
+    reportStore.reportDataCH.sixteenth.isProject = isProjectCH.value;
+
     formData.append('is_project', isProjectCH.value);
     formData.append('comment', commentCH.value || '');
     if (reportStore.returnReport.sixteenth) formData.append('reasons[comment]', commentCH.value || '');
@@ -1043,12 +1055,14 @@ watch([commonData, commentCH], () => {
       if (project.name) formData.append(`projects[${i}][name]`, project.name);
     })
   } else {
+    reportStore.reportDataCH.sixteenth.comment = commentCH.value || '';
+    reportStore.reportDataCH.sixteenth.isProject = isProjectCH.value;
+
     formData.append('is_project', isProjectCH.value);
     formData.append('comment', commentCH.value || '');
     formData.append('projects', '');
     if (reportStore.returnReport.sixteenth) formData.append('reasons[comment]', commentCH.value || '');
   }
-
 
   emit('getDataCH', formData, 16);
 }, {

@@ -1,126 +1,66 @@
 <template>
-  <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.fifth) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.fifth)"
-       class="form__field-group">
+  <div
+    v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.fifth) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.fifth)"
+    class="form__field-group">
     <div class="form__field-group-general" v-for="(event, index) in events" :key="index">
       <div class="form__field-people">
         <div class="form__field-people-count">
           <div class="form__field-people-count-wrap">
             <label class="form__label" for="participants_number">Общее количество человек, принявших участие в трудовом
               проекте <sup class="valid-red">*</sup></label>
-            <InputReport
-                v-model:value="event.participants_number"
-                id="participants_number"
-                name="participants_number"
-                class="form__input form__field-people-count-field"
-                type="number"
-                placeholder="Введите число"
-                :maxlength="10"
-                :min="0"
-                :max="2147483647"
-                @focusout="focusOut($event)"
-                :disabled="isSent"
-
-            />
+            <InputReport v-model:value="event.participants_number" id="participants_number" name="participants_number"
+              class="form__input form__field-people-count-field" type="number" placeholder="Введите число"
+              :maxlength="10" :min="0" :max="2147483647" @focusout="focusOut($event)" :disabled="isSent" />
           </div>
           <div class="form__field-people-count-wrap">
             <label class="form__label" for="ro_participants_number">Количество человек из&nbsp;своего региона, принявших
               участие в&nbsp;трудовом проекте <sup class="valid-red">*</sup></label>
-            <InputReport
-                v-model:value="event.ro_participants_number"
-                id="ro_participants_number"
-                name="ro_participants_number"
-                class="form__input form__field-people-count-field"
-                type="number"
-                placeholder="Введите число"
-                :maxlength="10"
-                :min="0"
-                :max="2147483647"
-                @focusout="focusOut"
-                :disabled="isSent || !event.participants_number"
-            />
+            <InputReport v-model:value="event.ro_participants_number" id="ro_participants_number"
+              name="ro_participants_number" class="form__input form__field-people-count-field" type="number"
+              placeholder="Введите число" :maxlength="10" :min="0" :max="2147483647" @focusout="focusOut"
+              :disabled="isSent || !event.participants_number" />
           </div>
         </div>
         <div class="form__field-people-deleteBtn">
-          <Button
-              v-if="index > 0 && !isSent"
-              label="Удалить проект"
-              class="deleteEventBtn"
-              @click="deleteProject(index)"
-          />
+          <Button v-if="index > 0 && !isSent" label="Удалить проект" class="deleteEventBtn"
+            @click="deleteProject(index)" />
         </div>
       </div>
       <div class="form__field-date">
         <div class="form__field-date-wrap">
           <label class="form__label" for="start_date">Дата начала проведения проекта <sup
               class="valid-red">*</sup></label>
-          <InputReport
-              v-model:value="event.start_date"
-              id="start_date"
-              name="start_date"
-              class="form__input form__field-date-wrap-field"
-              type="date"
-              @focusout="focusOut"
-              :disabled="isSent || !event.participants_number"
-          />
+          <InputReport v-model:value="event.start_date" id="start_date" name="start_date"
+            class="form__input form__field-date-wrap-field" type="date" @focusout="focusOut"
+            :disabled="isSent || !event.participants_number" />
         </div>
         <div class="form__field-date-wrap">
           <label class="form__label" for="end_date">Дата окончания проведения проекта <sup
               class="valid-red">*</sup></label>
-          <InputReport
-              v-model:value="event.end_date"
-              id="end_date"
-              name="end_date"
-              class="form__input form__field-date-wrap-field"
-              type="date"
-              @focusout="focusOut"
-              :disabled="isSent || !event.participants_number"
-              :min-date="event.start_date"
-              :is-error-date="Object.values(isErrorDate).some(item => item.error === true && item.id === index)"
-          />
+          <InputReport v-model:value="event.end_date" id="end_date" name="end_date"
+            class="form__input form__field-date-wrap-field" type="date" @focusout="focusOut"
+            :disabled="isSent || !event.participants_number" :min-date="event.start_date"
+            :is-error-date="Object.values(isErrorDate).some(item => item.error === true && item.id === index)" />
         </div>
       </div>
       <div class="report__add-file">
         <div class="form__field-people-count-wrap">
-          <label class="form__label" for="eventName">Название трудового проекта <sup
-              class="valid-red">*</sup></label>
-          <InputReport
-              v-model:value="event.name"
-              id="eventName"
-              name="eventName"
-              class="form__input form__field-people-count-field"
-              placeholder="Введите название"
-              @focusout="focusOut"
-              :disabled="isSent || !event.participants_number"
-          />
+          <label class="form__label" for="eventName">Название трудового проекта <sup class="valid-red">*</sup></label>
+          <InputReport v-model:value="event.name" id="eventName" name="eventName"
+            class="form__input form__field-people-count-field" placeholder="Введите название" @focusout="focusOut"
+            :disabled="isSent || !event.participants_number" />
         </div>
       </div>
       <div style="width: 100%;">
         <p class="form__label">Ссылка на группу трудового проекта в социальных сетях <sup class="valid-red">*</sup></p>
         <div class="form__field-link-wrap" v-for="(link, i) in events[index].links" :key="i">
-          <InputReport
-              v-model:value="link.link"
-              :id="i"
-              :name="i"
-              class="form__input form__field-link-field"
-              type="text"
-              placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-              @focusout="focusOut"
-              :disabled="isSent || !event.participants_number"
-              :is-link="true"
-              @error="setError"
-          />
+          <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__field-link-field"
+            type="text" placeholder="Введите ссылку, например, https://vk.com/cco_monolit" @focusout="focusOut"
+            :disabled="isSent || !event.participants_number" :is-link="true" @error="setError" />
           <div v-if="!isSent && event.participants_number">
-            <div
-                v-if="events[index].links.length === i + 1"
-                @click="addLink(index)"
-                class="add_link"
-            >+ Добавить ссылку
+            <div v-if="events[index].links.length === i + 1" @click="addLink(index)" class="add_link">+ Добавить ссылку
             </div>
-            <div
-                v-else
-                class="add_link"
-                @click="deleteLink(index, i)"
-            >Удалить
+            <div v-else class="add_link" @click="deleteLink(index, i)">Удалить
             </div>
           </div>
         </div>
@@ -129,26 +69,16 @@
       <div class="hr"></div>
     </div>
     <div v-if="!isSent">
-      <Button class="add_eventBtn" label="Добавить проект" @click="addProject"/>
+      <Button class="add_eventBtn" label="Добавить проект" @click="addProject" />
     </div>
     <div class="form__field-comment">
       <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
-      <TextareaReport
-          v-model:value="fifthPanelData.comment"
-          id="comment"
-          name="comment"
-          :rows="row"
-          autoResize
-          placeholder="Комментарий"
-          @focusout="focusOut"
-          :maxlength="3000"
-          :max-length-text="3000"
-          counter-visible
-          :disabled="isSent"
-      />
+      <TextareaReport v-model:value="fifthPanelData.comment" id="comment" name="comment" :rows="row" autoResize
+        placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :max-length-text="3000" counter-visible
+        :disabled="isSent" />
     </div>
     <div class="form__field-result">
-      <v-checkbox class="result-checkbox" id="v-checkbox" @change="calculateResult($event)"/>
+      <v-checkbox class="result-checkbox" id="v-checkbox" @change="calculateResult($event)" />
       <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
     </div>
     <div class="hr"></div>
@@ -168,32 +98,19 @@
                 Общее количество человек, принявших участие в трудовом проекте
                 <sup class="valid-red">*</sup>
               </label>
-              <InputReport
-                  v-model:value="event.participants_number"
-                  id="participants_number"
-                  name="participants_number"
-                  class="form__input form__field-people-count-field"
-                  type="number"
-                  placeholder="Введите число"
-                  @focusout="focusOut"
-                  :disabled="props.centralExpert || props.districtExpert"
-              />
+              <InputReport v-model:value="event.participants_number" id="participants_number" name="participants_number"
+                class="form__input form__field-people-count-field" type="number" placeholder="Введите число"
+                @focusout="focusOut" :disabled="props.centralExpert || props.districtExpert" />
             </div>
             <div class="form__field-people-count-wrap">
               <label class="form__label" for="ro_participants_number">
                 Количество человек из&nbsp;своего региона, принявших участие в&nbsp;трудовом проекте
                 <sup class="valid-red">*</sup>
               </label>
-              <InputReport
-                  v-model:value="event.ro_participants_number"
-                  id="ro_participants_number"
-                  name="ro_participants_number"
-                  class="form__input form__field-people-count-field"
-                  type="number"
-                  placeholder="Введите число"
-                  @focusout="focusOut"
-                  :disabled="props.centralExpert || props.districtExpert"
-              />
+              <InputReport v-model:value="event.ro_participants_number" id="ro_participants_number"
+                name="ro_participants_number" class="form__input form__field-people-count-field" type="number"
+                placeholder="Введите число" @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert" />
             </div>
           </div>
         </div>
@@ -201,80 +118,44 @@
           <div class="form__field-date-wrap">
             <label class="form__label" for="start_date">Дата начала проведения проекта <sup
                 class="valid-red">*</sup></label>
-            <InputReport
-                v-model:value="event.start_date"
-                id="start_date"
-                name="start_date"
-                class="form__input form__field-date-wrap-field"
-                type="date"
-                @focusout="focusOut"
-                :disabled="props.centralExpert || props.districtExpert"
-            />
+            <InputReport v-model:value="event.start_date" id="start_date" name="start_date"
+              class="form__input form__field-date-wrap-field" type="date" @focusout="focusOut"
+              :disabled="props.centralExpert || props.districtExpert" />
           </div>
           <div class="form__field-date-wrap">
             <label class="form__label" for="end_date">Дата окончания проведения проекта <sup
                 class="valid-red">*</sup></label>
-            <InputReport
-                v-model:value="event.end_date"
-                id="end_date"
-                name="end_date"
-                class="form__input form__field-date-wrap-field"
-                type="date"
-                @focusout="focusOut"
-                :disabled="props.centralExpert || props.districtExpert"
-            />
+            <InputReport v-model:value="event.end_date" id="end_date" name="end_date"
+              class="form__input form__field-date-wrap-field" type="date" @focusout="focusOut"
+              :disabled="props.centralExpert || props.districtExpert" />
           </div>
         </div>
         <div class="report__add-file">
           <div class="form__field-people-count-wrap">
-            <label class="form__label" for="eventName">Название трудового проекта <sup
-                class="valid-red">*</sup></label>
-            <InputReport
-                v-model:value="event.name"
-                id="eventName"
-                name="eventName"
-                class="form__input form__field-people-count-field"
-                placeholder="Введите название"
-                @focusout="focusOut"
-                :disabled="props.centralExpert || props.districtExpert"
-            />
+            <label class="form__label" for="eventName">Название трудового проекта <sup class="valid-red">*</sup></label>
+            <InputReport v-model:value="event.name" id="eventName" name="eventName"
+              class="form__input form__field-people-count-field" placeholder="Введите название" @focusout="focusOut"
+              :disabled="props.centralExpert || props.districtExpert" />
           </div>
         </div>
         <div style="width: 100%;">
           <p class="form__label">Ссылка на группу трудового проекта в социальных сетях</p>
           <div class="form__field-link-wrap" v-for="(link, i) in events[index].links" :key="i">
-            <InputReport
-                v-model:value="link.link"
-                :id="i"
-                :name="i"
-                class="form__input form__field-link-field"
-                type="text"
-                placeholder="Введите ссылку"
-                @focusout="focusOut"
-                :disabled="props.centralExpert || props.districtExpert"
-            />
+            <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__field-link-field"
+              type="text" placeholder="Введите ссылку" @focusout="focusOut"
+              :disabled="props.centralExpert || props.districtExpert" />
           </div>
         </div>
         <div class="hr"></div>
       </div>
       <div class="form__field-comment">
         <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
-        <TextareaReport
-            v-model:value="fifthPanelData.comment"
-            id="comment"
-            name="comment"
-            :rows="row"
-            autoResize
-            placeholder="Комментарий"
-            :maxlength="3000"
-            :max-length-text="3000"
-            counter-visible
-            @focusout="focusOut"
-            :disabled="props.centralExpert || props.districtExpert"
-        />
+        <TextareaReport v-model:value="fifthPanelData.comment" id="comment" name="comment" :rows="row" autoResize
+          placeholder="Комментарий" :maxlength="3000" :max-length-text="3000" counter-visible @focusout="focusOut"
+          :disabled="props.centralExpert || props.districtExpert" />
       </div>
       <div class="form__field-result">
-        <v-checkbox class="result-checkbox" id="v-checkbox" @change="calculateResult($event)"/>
+        <v-checkbox class="result-checkbox" id="v-checkbox" @change="calculateResult($event)" />
         <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
       </div>
       <div class="hr"></div>
@@ -291,29 +172,17 @@
               <label class="form__label" for="participants_number">Общее количество человек, принявших участие в
                 трудовом
                 проекте <sup class="valid-red">*</sup></label>
-              <InputReport
-                  v-model:value="event.participants_number"
-                  id="participants_number"
-                  name="participants_number"
-                  class="form__input form__field-people-count-field"
-                  type="number"
-                  placeholder="Введите число"
-                  :disabled="props.centralExpert || reportStore.isReportReject?.fifth"
-              />
+              <InputReport v-model:value="event.participants_number" id="participants_number" name="participants_number"
+                class="form__input form__field-people-count-field" type="number" placeholder="Введите число"
+                :disabled="props.centralExpert || reportStore.isReportReject?.fifth" />
             </div>
             <div class="form__field-people-count-wrap">
               <label class="form__label" for="ro_participants_number">Количество человек из&nbsp;своего региона,
                 принявших
                 участие в&nbsp;трудовом проекте <sup class="valid-red">*</sup></label>
-              <InputReport
-                  v-model:value="event.ro_participants_number"
-                  id="ro_participants_number"
-                  name="ro_participants_number"
-                  class="form__input form__field-people-count-field"
-                  type="number"
-                  placeholder="Введите число"
-                  :disabled="props.centralExpert || reportStore.isReportReject?.fifth"
-              />
+              <InputReport v-model:value="event.ro_participants_number" id="ro_participants_number"
+                name="ro_participants_number" class="form__input form__field-people-count-field" type="number"
+                placeholder="Введите число" :disabled="props.centralExpert || reportStore.isReportReject?.fifth" />
             </div>
           </div>
           <!--          <div class="form__field-people-deleteBtn">-->
@@ -329,40 +198,24 @@
           <div class="form__field-date-wrap">
             <label class="form__label" for="start_date">Дата начала проведения проекта <sup
                 class="valid-red">*</sup></label>
-            <InputReport
-                v-model:value="event.start_date"
-                id="start_date"
-                name="start_date"
-                class="form__input form__field-date-wrap-field"
-                type="date"
-                :disabled="props.centralExpert || reportStore.isReportReject?.fifth"
-            />
+            <InputReport v-model:value="event.start_date" id="start_date" name="start_date"
+              class="form__input form__field-date-wrap-field" type="date"
+              :disabled="props.centralExpert || reportStore.isReportReject?.fifth" />
           </div>
           <div class="form__field-date-wrap">
             <label class="form__label" for="end_date">Дата окончания проведения проекта <sup
                 class="valid-red">*</sup></label>
-            <InputReport
-                v-model:value="event.end_date"
-                id="end_date"
-                name="end_date"
-                class="form__input form__field-date-wrap-field"
-                type="date"
-                :disabled="props.centralExpert || reportStore.isReportReject?.fifth"
-            />
+            <InputReport v-model:value="event.end_date" id="end_date" name="end_date"
+              class="form__input form__field-date-wrap-field" type="date"
+              :disabled="props.centralExpert || reportStore.isReportReject?.fifth" />
           </div>
         </div>
 
         <div class="form__field-people-count-wrap">
-          <label class="form__label" for="eventName">Название трудового проекта <sup
-              class="valid-red">*</sup></label>
-          <InputReport
-              v-model:value="event.name"
-              id="eventName"
-              name="eventName"
-              class="form__input form__field-people-count-field"
-              placeholder="Введите название"
-              :disabled="props.centralExpert || reportStore.isReportReject?.fifth"
-          />
+          <label class="form__label" for="eventName">Название трудового проекта <sup class="valid-red">*</sup></label>
+          <InputReport v-model:value="event.name" id="eventName" name="eventName"
+            class="form__input form__field-people-count-field" placeholder="Введите название"
+            :disabled="props.centralExpert || reportStore.isReportReject?.fifth" />
         </div>
         <div class="hr"></div>
       </div>
@@ -372,21 +225,12 @@
       <!--      </div>-->
       <div class="form__field-comment" style="margin-top: 10px;">
         <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
-        <TextareaReport
-            v-model:value="fifthPanelDataDH.comment"
-            id="comment"
-            name="comment"
-            :rows="1"
-            autoResize
-            placeholder="Примечания, ссылки"
-            :maxlength="3000"
-            :max-length-text="3000"
-            counter-visible
-            :disabled="props.centralExpert || reportStore.isReportReject?.fifth"
-        />
+        <TextareaReport v-model:value="fifthPanelDataDH.comment" id="comment" name="comment" :rows="1" autoResize
+          placeholder="Примечания, ссылки" :maxlength="3000" :max-length-text="3000" counter-visible
+          :disabled="props.centralExpert || reportStore.isReportReject?.fifth" />
       </div>
       <div class="form__field-result">
-        <v-checkbox class="result-checkbox" id="v-checkboxDH" @change="calculateResultDH($event)"/>
+        <v-checkbox class="result-checkbox" id="v-checkboxDH" @change="calculateResultDH($event)" />
         <label class="result-checkbox-text" for="v-checkboxDH">Итоговое значение</label>
       </div>
       <div class="hr"></div>
@@ -398,123 +242,89 @@
     <template v-slot:thirdTab>
       <div v-for="(eventCH, index) in commonData" :key="index" class="form__field-fourth-panel">
         <div class="form__field-people-count-wrap" style="margin-bottom: 16px;">
-          <label class="form__label" for="eventName">Название трудового проекта <sup
-              class="valid-red">*</sup></label>
-          <InputReport
-              v-model:value="eventCH.dataRH.name"
-              id="eventCH.dataRH.name"
-              name="eventCH.dataRH.name"
-              class="form__input form__field-people-count-field"
-              disabled
-          />
+          <label class="form__label" for="eventName">Название трудового проекта <sup class="valid-red">*</sup></label>
+          <InputReport v-model:value="eventCH.dataRH.name" id="eventCH.dataRH.name" name="eventCH.dataRH.name"
+            class="form__input form__field-people-count-field" disabled />
         </div>
-        <label class="form__label">Общее количество человек, принявших участие в трудовом проекте <sup
-            class="valid-red">*</sup></label>
-        <v-table>
+        <label class="form__label">Общее количество человек, принявших участие в трудовом
+          проекте
+          <sup class="valid-red">*</sup></label>
+        <v-table style="margin-top: 8px;">
           <tbody>
-          <tr class="report-table__tr">
-            <td class="report-table__th">Данные РО</td>
-            <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
-            <td class="report-table__th">Корректировка ЦШ</td>
-          </tr>
-          <tr>
-            <td class="report-table__td">{{ eventCH.dataRH.participants_number }}</td>
-            <td class="report-table__td report-table__td__center">{{ eventCH.dataDH.participants_number }}</td>
-            <td class="report-table__td">
-              <InputReport
-                  v-model:value="eventCH.dataCH.participants_number"
-                  :id="'participants_numberCH'"
-                  :name="'participants_numberCH'"
-                  style="width: 100%;"
-                  type="number"
-                  placeholder="0"
-                  :maxlength="10"
-                  :min="0"
-                  :max="9999999999"
-                  :step="0.01"
-                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert"
-              />
-            </td>
-          </tr>
+            <tr class="report-table__tr">
+              <td class="report-table__th">Данные РО</td>
+              <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
+              <td class="report-table__th">Корректировка ЦШ</td>
+            </tr>
+            <tr>
+              <td class="report-table__td">{{ eventCH.dataRH.participants_number }}</td>
+              <td class="report-table__td report-table__td__center">{{ eventCH.dataDH.participants_number }}</td>
+              <td class="report-table__td">
+                <InputReport v-model:value="eventCH.dataCH.participants_number" :id="'participants_numberCH'"
+                  :name="'participants_numberCH'" style="width: 100%;" type="number" placeholder="0" :maxlength="10"
+                  :min="0" :max="9999999999" :step="0.01"
+                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" />
+              </td>
+            </tr>
           </tbody>
         </v-table>
         <label class="form__label">Количество человек из&nbsp;своего региона, принявших участие в&nbsp;трудовом проекте
-          <sup
-              class="valid-red">*</sup></label>
-        <v-table>
+          <sup class="valid-red">*</sup></label>
+        <v-table style="margin-top: 8px;">
           <tbody>
-          <tr class="report-table__tr">
-            <td class="report-table__th">Данные РО</td>
-            <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
-            <td class="report-table__th">Корректировка ЦШ</td>
-          </tr>
-          <tr>
-            <td class="report-table__td">{{ eventCH.dataRH.ro_participants_number }}</td>
-            <td class="report-table__td report-table__td__center">{{ eventCH.dataDH.ro_participants_number }}</td>
-            <td class="report-table__td">
-              <InputReport
-                  v-model:value="eventCH.dataCH.ro_participants_number"
-                  :id="'participants_numberCH'"
-                  :name="'participants_numberCH'"
-                  style="width: 100%;"
-                  type="number"
-                  placeholder="0"
-                  :maxlength="10"
-                  :min="0"
-                  :max="9999999999"
-                  :step="0.01"
-                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert"
-              />
-            </td>
-          </tr>
+            <tr class="report-table__tr">
+              <td class="report-table__th">Данные РО</td>
+              <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
+              <td class="report-table__th">Корректировка ЦШ</td>
+            </tr>
+            <tr>
+              <td class="report-table__td">{{ eventCH.dataRH.ro_participants_number }}</td>
+              <td class="report-table__td report-table__td__center">{{ eventCH.dataDH.ro_participants_number }}</td>
+              <td class="report-table__td">
+                <InputReport v-model:value="eventCH.dataCH.ro_participants_number" :id="'participants_numberCH'"
+                  :name="'participants_numberCH'" style="width: 100%;" type="number" placeholder="0" :maxlength="10"
+                  :min="0" :max="9999999999" :step="0.01"
+                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" />
+              </td>
+            </tr>
           </tbody>
         </v-table>
         <label class="form__label">Дата начала проведения проекта <sup class="valid-red">*</sup></label>
-        <v-table>
+        <v-table style="margin-top: 8px;">
           <tbody>
-          <tr class="report-table__tr">
-            <td class="report-table__th">Данные РО</td>
-            <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
-            <td class="report-table__th">Корректировка ЦШ</td>
-          </tr>
-          <tr>
-            <td class="report-table__td">{{ formattedDate(eventCH.dataRH.start_date) }}</td>
-            <td class="report-table__td report-table__td__center">{{ formattedDate(eventCH.dataDH.start_date) }}</td>
-            <td class="report-table__td">
-              <InputReport
-                  v-model:value="eventCH.dataCH.start_date"
-                  :id="'eventCH.dataCH.end_date'"
-                  name="eventCH.dataCH.end_date"
-                  class="form__input"
-                  type="date"
-                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert"
-              />
-            </td>
-          </tr>
+            <tr class="report-table__tr">
+              <td class="report-table__th">Данные РО</td>
+              <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
+              <td class="report-table__th">Корректировка ЦШ</td>
+            </tr>
+            <tr>
+              <td class="report-table__td">{{ formattedDate(eventCH.dataRH.start_date) }}</td>
+              <td class="report-table__td report-table__td__center">{{ formattedDate(eventCH.dataDH.start_date) }}</td>
+              <td class="report-table__td">
+                <InputReport v-model:value="eventCH.dataCH.start_date" :id="'eventCH.dataCH.end_date'"
+                  name="eventCH.dataCH.end_date" class="form__input" type="date"
+                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" />
+              </td>
+            </tr>
           </tbody>
         </v-table>
         <label class="form__label">Дата окончания проведения проекта <sup class="valid-red">*</sup></label>
-        <v-table>
+        <v-table style="margin-top: 8px;">
           <tbody>
-          <tr class="report-table__tr">
-            <td class="report-table__th">Данные РО</td>
-            <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
-            <td class="report-table__th">Корректировка ЦШ</td>
-          </tr>
-          <tr>
-            <td class="report-table__td">{{ formattedDate(eventCH.dataRH.end_date) }}</td>
-            <td class="report-table__td report-table__td__center">{{ formattedDate(eventCH.dataDH.end_date) }}</td>
-            <td class="report-table__td">
-              <InputReport
-                  v-model:value="eventCH.dataCH.end_date"
-                  :id="'eventCH.dataCH.end_date'"
-                  name="eventCH.dataCH.end_date"
-                  class="form__input"
-                  type="date"
-                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert"
-              />
-            </td>
-          </tr>
+            <tr class="report-table__tr">
+              <td class="report-table__th">Данные РО</td>
+              <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
+              <td class="report-table__th">Корректировка ЦШ</td>
+            </tr>
+            <tr>
+              <td class="report-table__td">{{ formattedDate(eventCH.dataRH.end_date) }}</td>
+              <td class="report-table__td report-table__td__center">{{ formattedDate(eventCH.dataDH.end_date) }}</td>
+              <td class="report-table__td">
+                <InputReport v-model:value="eventCH.dataCH.end_date" :id="'eventCH.dataCH.end_date'"
+                  name="eventCH.dataCH.end_date" class="form__input" type="date"
+                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" />
+              </td>
+            </tr>
           </tbody>
         </v-table>
         <div class="hr" style="margin-bottom: 30px;"></div>
@@ -523,17 +333,9 @@
       <div class="form__field" style="margin-bottom: 0;">
         <label class="form__label" for="commentCH">Комментарий <sup class="valid-red">*</sup></label>
         <!--        <InputReport v-model:value="commentCH" id="15" name="15" class="form__input" style="width: 100%"/>-->
-        <TextareaReport
-            v-model:value="commentCH"
-            id="commentCH"
-            name="commentCH"
-            autoResize
-            placeholder="Комментарий"
-            :maxlength="3000"
-            :max-length-text="3000"
-            counter-visible
-            :disabled="reportStore.isReportReject?.fifth && !props.centralExpert"
-        />
+        <TextareaReport v-model:value="commentCH" id="commentCH" name="commentCH" autoResize placeholder="Комментарий"
+          :maxlength="3000" :max-length-text="3000" counter-visible
+          :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" />
       </div>
       <!-- <div>
         <v-checkbox label="Итоговое значение"/>
@@ -543,24 +345,20 @@
         <p>(4-1)*2+(4-2)+(4-3)=9</p>
       </div> -->
       <div>
-        <v-checkbox
-            v-model="reportStore.returnReport.fifth"
-            label="Вернуть в РО на доработку"
-            @change="onReportReturn"
-            :disabled="reportStore.isReportReject?.fifth && !props.centralExpert"
-        />
+        <v-checkbox v-model="reportStore.returnReport.fifth" label="Вернуть в РО на доработку" @change="onReportReturn"
+          :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" />
       </div>
     </template>
   </report-tabs>
 </template>
 <script setup>
-import {onMounted, ref, watch, watchEffect, watchPostEffect} from "vue";
-import {InputReport, TextareaReport} from '@shared/components/inputs';
-import {Button} from '@shared/components/buttons';
-import {reportPartTwoService} from "@services/ReportService.ts";
-import {ReportTabs} from './index';
-import {useReportPartTwoStore} from "@pages/ReportRegionalHQPartTwoPage/store.ts";
-import {formattedDate} from "@pages/ReportRegionalHQPartTwoPage/Helpers.js";
+import { onMounted, ref, watch, watchEffect, watchPostEffect } from "vue";
+import { InputReport, TextareaReport } from '@shared/components/inputs';
+import { Button } from '@shared/components/buttons';
+import { reportPartTwoService } from "@services/ReportService.ts";
+import { ReportTabs } from './index';
+import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
+import { formattedDate } from "@pages/ReportRegionalHQPartTwoPage/Helpers.js";
 
 // const swal = inject('$swal');
 const reportStore = useReportPartTwoStore();
@@ -619,10 +417,10 @@ const focusOut = async () => {
   if (!isLinkError.value) {
     try {
       if (isFirstSent.value) {
-        const {data} = await reportPartTwoService.createReport(setFormData(), '5', true);
+        const { data } = await reportPartTwoService.createReport(setFormData(), '5', true);
         emit('getData', data, 5);
       } else {
-        const {data} = await reportPartTwoService.createReportDraft(setFormData(), '5', true);
+        const { data } = await reportPartTwoService.createReportDraft(setFormData(), '5', true);
         emit('getData', data, 5);
       }
     } catch (e) {
@@ -632,10 +430,10 @@ const focusOut = async () => {
 }
 
 const addLink = (index) => {
-  events.value[index].links.push({link: ''})
+  events.value[index].links.push({ link: '' })
 };
 const deleteLink = async (eventIndex, linkIndex) => {
-  let {data} = await reportPartTwoService.createReportDraft(setFormData(null, eventIndex, false, false, true, linkIndex), '5', true);
+  let { data } = await reportPartTwoService.createReportDraft(setFormData(null, eventIndex, false, false, true, linkIndex), '5', true);
   emit('getData', data, 5);
 };
 
@@ -681,7 +479,7 @@ const deleteProject = async (index) => {
     }
   })
   try {
-    let {data} = await reportPartTwoService.createReportDraft(formData, '5', true);
+    let { data } = await reportPartTwoService.createReportDraft(formData, '5', true);
     emit('getData', data, 5);
   } catch (e) {
     console.log('deleteEvent error: ', e);
@@ -905,7 +703,7 @@ watchEffect(() => {
 
 watchPostEffect(() => {
   events.value.forEach((event) => {
-    if (!event.links.length) event.links.push({link: ''})
+    if (!event.links.length) event.links.push({ link: '' })
   });
   if (!events.value.length) {
     addProject()
@@ -1102,6 +900,7 @@ watch([commonData, commentCH], () => {
   &__tr {
     background-color: #FFFFFF;
     text-align: center;
+
   }
 
   &__th {
