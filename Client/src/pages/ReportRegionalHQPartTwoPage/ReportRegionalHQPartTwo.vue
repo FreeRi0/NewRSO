@@ -91,7 +91,7 @@
               <sixth-panel @get-data="setData" @get-data-DH="setDataDH" @get-data-CH="setDataCH" :items="six_items"
                 @getId="setId" @getPanelNumber="setPanelNumber" :district-headquarter-commander="districtExpert"
                 :data="reportData.six" :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.six"
-                :tab="picked" />
+                :tab="picked" :revision-panels="revisionPanels" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('7', picked, revisionPanels)">
@@ -124,7 +124,7 @@
               <ninth-panel @get-data="setData" @get-data-DH="setDataDH" @getId="setId" @get-data-CH="setDataCH"
                 @getPanelNumber="setPanelNumber" :items="ninth_items" :district-headquarter-commander="districtExpert"
                 :data="reportData.ninth" :central-headquarter-commander="centralExpert"
-                :is-error-panel="isErrorPanel.ninth" :tab="picked" />
+                :is-error-panel="isErrorPanel.ninth" :tab="picked" :revision-panels="revisionPanels" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel
@@ -564,7 +564,6 @@ const getMultiplyData = async (reportId) => {
 
   sixDataResults.forEach((result) => {
     const sixData = result.data;
-    console.log('good 6', sixData)
     if (districtExpert.value) {
       if (sixData?.regional_version) {
         try {
@@ -632,17 +631,23 @@ const getMultiplyData = async (reportId) => {
         reportData.value.six[result.id] = sixData;
       }
 
-      // Проверка на причины отклонений отчета и вывод табов для РО
-      // if (reportData.value.six[result.id]?.rejecting_reasons) {
-      //   revisionPanels.value.push('6');
-      //   reportStore.reportDataDH.six[result.id] = JSON.parse(reportData.value.six[result.id].district_version);
 
-      //   reportData.value.six[result.id].central_version
-      //     ? reportStore.reportDataCH.six[result.id] = reportData.value.six[result.id].central_version
-      //     : reportStore.reportDataCH.six[result.id] = reportData.value.six[result.id];
+      if (sixData?.rejecting_reasons) {
+        if (!revisionPanels.value.find((item) => item === '6')) {
+          revisionPanels.value.push(`6`);
+        }
+        revisionPanels.value.push(`6-${result.id}`);
+        console.log('6 rev', revisionPanels.value)
+        reportStore.reportDataDH.six[result.id] = JSON.parse(sixData?.district_version);
+        console.log('6 dis', sixData, reportStore.reportDataDH.six[result.id])
+       sixData?.central_version
+          ? reportStore.reportDataCH.six[result.id] = sixData?.central_version
+          : reportStore.reportDataCH.six[result.id] = sixData;
 
-      //   reportStore.isReportReject.six[result.id] = isTabsForRevision.value;
-      // }
+        reportStore.isReportReject.six[result.id] = isTabsForRevision.value;
+      }
+
+
     }
   });
   // console.log('data66', reportData.value.six)
@@ -652,7 +657,7 @@ const getMultiplyData = async (reportId) => {
 
   ninthDataResults.forEach((result) => {
     const ninthData = result.data;
-    console.log('good 9', ninthData)
+
     if (districtExpert.value) {
       // reportData.value.ninth[result.id] = result.data;
       // if (result.data?.regional_version) {
@@ -700,14 +705,20 @@ const getMultiplyData = async (reportId) => {
       if (reportData.value.ninth[result.id]?.regional_version !== null && Object.keys(reportData.value.ninth[result.id]).length) {
         reportData.value.ninth[result.id] = JSON.parse(reportData.value.ninth[result.id].regional_version);
       }
+      console.log('reasons: ', reportData.value.ninth[result.id]?.rejecting_reasons)
 
-      if (reportData.value.ninth[result.id]?.rejecting_reasons) {
-        revisionPanels.value.push('9');
-        reportStore.reportDataDH.ninth[result.id] = JSON.parse(reportData.value.ninth[result.id].district_version);
+      if (ninthData?.rejecting_reasons) {
+        if (!revisionPanels.value.find((item) => item === '9')) {
+          revisionPanels.value.push(`9`);
+        }
 
-        reportData.value.ninth[result.id].central_version
-          ? reportStore.reportDataCH.ninth[result.id] = reportData.value.ninth[result.id].central_version
-          : reportStore.reportDataCH.ninth[result.id] = reportData.value.ninth[result.id];
+
+        revisionPanels.value.push(`9-${result.id}`);
+        console.log('9 rev', revisionPanels.value)
+        reportStore.reportDataDH.ninth[result.id] = JSON.parse(ninthData.district_version);
+        ninthData.central_version
+          ? reportStore.reportDataCH.ninth[result.id] = ninthData.central_version
+          : reportStore.reportDataCH.ninth[result.id] = ninthData;
 
         reportStore.isReportReject.ninth[result.id] = isTabsForRevision.value;
       }

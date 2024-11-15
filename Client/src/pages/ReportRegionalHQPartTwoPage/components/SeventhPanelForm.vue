@@ -1,6 +1,7 @@
 <template>
     <v-card-text class="panel-card-text">
-        <v-tabs-window v-if="!(props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)">
+        <v-tabs-window
+            v-if="!(props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander) && (props.tab === 'Просмотр отправленного отчета' && (reportStore.isReportReject?.six[props.sixId] || reportStore.isReportReject?.ninth[props.ninthId]))">
             <!-- <div v-if="props.panel_number == 7" class="form__field-group group-seventh">
                 <div class="d-flex justify-space-between">
                     <div class="title_wrap">
@@ -163,7 +164,7 @@
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                            }}</label>
+                                }}</label>
                         </div>
                     </div>
                 </div>
@@ -226,7 +227,7 @@
             </div>
         </v-tabs-window>
         <report-tabs v-else
-            :isReject="reportStore.isReportReject.six[props.sixId] || reportStore.isReportReject.ninth[props.ninthId]">
+            :isReject="(reportStore.isReportReject.six[props.sixId] || reportStore.isReportReject.ninth[props.ninthId]) && props.tab === 'Доработка'">
             <template v-slot:firstTab>
                 <!-- <div v-if="props.panel_number == 7" class="form__field-group group-seventh">
                     <div class="d-flex justify-space-between">
@@ -378,7 +379,8 @@
                                 v-model="ninthPanelData.event_happened" />
                             <label v-if="ninthPanelData.event_happened === true" class="places_item_label"
                                 :for="id">Да</label>
-                            <label v-else class="places_item_label" :for="id">Нет</label>
+                            <label v-else-if="ninthPanelData.event_happened === false" class="places_item_label"
+                                :for="id">Нет</label>
                         </div>
                     </div>
                     <div class="report__fieldset report__fieldset--right-block"
@@ -514,7 +516,7 @@
                                     type="radio" v-model="ninthPanelDataDH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -647,7 +649,7 @@
                                     v-model="ninthPanelDataCH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -693,7 +695,7 @@ const props = defineProps({
     id: [String, Number],
     sixId: [String, Number],
     ninthId: String,
-
+    tab: String,
     isSentSix: Boolean,
     // isSent: Boolean,
     isSentNinth: Boolean,
@@ -1130,6 +1132,18 @@ watchEffect(() => {
                 isRevision.value = reportStore.isReportReject.six[props.sixId];
                 sixPanelData.value = { ...props.data };
 
+
+                if (props.data.rejecting_reasons !== null) {
+                    sixPanelDataDH.value.comment = reportStore.reportDataDH.six[props.sixId].comment;
+                    sixPanelDataDH.value.number_of_members = reportStore.reportDataDH.six[props.sixId].number_of_members;
+                    sixPanelDataDH.value.links = reportStore.reportDataDH.six[props.sixId].links;
+
+                    sixPanelDataCH.value.comment = reportStore.reportDataCH.six[props.sixId].comment;
+                    sixPanelDataCH.value.number_of_members = reportStore.reportDataCH.six[props.sixId].number_of_members;
+                    sixPanelDataCH.value.links = reportStore.reportDataCH.six[props.sixId].links;
+                }
+
+
                 if (isLinkError.value) {
                     emit('error', isLinkError.value);
                 } else {
@@ -1138,7 +1152,7 @@ watchEffect(() => {
                 if (!sixPanelData.value.links.length)
                     sixPanelData.value.links.push({ link: '' });
 
-                isFirstSentSix.value = reportStore.isReportReject.six[props.sixId] && !props.data.central_version;
+                // isFirstSentSix.value = reportStore.isReportReject.six[props.sixId] && !props.data.central_version;
                 console.log('isFirstSent при доработке 6', isFirstSentSix.value);
                 if (reportStore.isReportReject.six[props.sixId]) {
                     reportStore.returnReport.six[props.sixId] = true;
@@ -1206,10 +1220,22 @@ watchEffect(() => {
                     console.log('hh')
                     emit('error', false)
                 }
+
+                if (props.data.rejecting_reasons !== null) {
+                    ninthPanelDataDH.value.comment = reportStore.reportDataDH.ninth[props.ninthId].comment;
+                    ninthPanelDataDH.value.event_happened = reportStore.reportDataDH.ninth[props.ninthId].event_happened;
+                    ninthPanelDataDH.value.links = reportStore.reportDataDH.ninth[props.ninthId].links;
+                    ninthPanelDataDH.value.document = reportStore.reportDataDH.ninth[props.ninthId].document;
+
+                    ninthPanelDataCH.value.comment = reportStore.reportDataCH.ninth[props.ninthId].comment;
+                    ninthPanelDataCH.value.event_happened = reportStore.reportDataCH.ninth[props.ninthId].event_happened;
+                    ninthPanelDataCH.value.document = reportStore.reportDataCH.ninth[props.ninthId].document;
+                    ninthPanelDataCH.value.links = reportStore.reportDataCH.ninth[props.ninthId].links;
+                }
                 if (!ninthPanelData.value.links.length) {
                     ninthPanelData.value.links.push({ link: '' })
                 }
-                isFirstSentNinth.value = reportStore.isReportReject.ninth[props.ninthId] && !props.data.central_version;
+                // isFirstSentNinth.value = reportStore.isReportReject.ninth[props.ninthId] && !props.data.central_version;
                 console.log('isFirstSent при доработке 9', isFirstSentNinth.value);
                 if (reportStore.isReportReject.ninth[props.ninthId]) {
                     reportStore.returnReport.ninth[props.ninthId] = true;
@@ -1236,7 +1262,7 @@ watchEffect(() => {
         if (props.isDistrictHeadquarterCommander) {
             if (reportStore.reportDataDHFile.ninth[props.ninthId]) {
                 fileDH.value.name = reportStore.reportDataDHFile.ninth[props.ninthId].name;
-               
+
                 fileDH.value.type = reportStore.reportDataDHFile.ninth[props.ninthId].type.split('/').at(-1);
                 fileDH.value.size = reportStore.reportDataDHFile.ninth[props.ninthId].size / Math.pow(1024, 2);
             }
@@ -1246,7 +1272,7 @@ watchEffect(() => {
                 fileDH.value.name = reportStore.reportDataDH.ninth[props.ninthId].document;
                 fileDH.value.type = reportStore.reportDataDH.ninth[props.ninthId].file_type;
                 fileDH.value.size = reportStore.reportDataDH.ninth[props.ninthId].file_size;
-                console.log('yahoo', fileDH.value.name, )
+                console.log('yahoo', fileDH.value.name,)
             }
             if (reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq !== null) {
                 fileCH.value.name = reportStore.reportForCheckCH.ninth[props.ninthId].document;
