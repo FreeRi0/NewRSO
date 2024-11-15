@@ -46,9 +46,10 @@ const props = defineProps({
     width: 100%;
     text-align: center;
   }
+
   &__wrap {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     column-gap: 8px;
   }
 }
