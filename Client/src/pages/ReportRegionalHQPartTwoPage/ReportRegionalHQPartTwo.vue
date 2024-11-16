@@ -570,7 +570,7 @@ const getMultiplyData = async (reportId) => {
           reportData.value.six[result.id] = JSON.parse(sixData.regional_version);
         } catch (error) {
           console.error('Error parsing regional_version JSON:', error);
-          // reportData.value.six[result.id] = sixData.regional_version || sixData;
+          reportData.value.six[result.id] = sixData.regional_version || sixData;
         }
       } else {
         reportData.value.six[result.id] = sixData;

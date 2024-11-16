@@ -368,7 +368,20 @@
                             <sup class="valid-red">*</sup>
                         </p>
 
-                        <div class="places_wrap one_place">
+                        <div class="places_wrap" v-if="isRejected">
+                            <div class="places_item" v-for="item in events" :key="item.id">
+                                <input :id="item.id" :value="item.value" :name="item.name" :disabled="props.isCentralHeadquarterCommander ||
+                                    props.isDistrictHeadquarterCommander"
+                                    :checked="ninthPanelData.event_happened == item.value"
+                                    class="form__input places_input" type="radio" @focusout="focusOut"
+                                    v-model="ninthPanelData.event_happened" />
+                                <label class="places_item_label" :for="id">{{
+                                    item.name
+                                }}</label>
+                            </div>
+                        </div>
+
+                        <div v-else class="places_wrap one_place">
                             <input :id="12" :value="ninthPanelData.event_happened" @focusout="focusOut" :name="12"
                                 :disabled="props.isCentralHeadquarterCommander ||
                                     props.isDistrictHeadquarterCommander
@@ -382,6 +395,8 @@
                             <label v-else-if="ninthPanelData.event_happened === false" class="places_item_label"
                                 :for="id">Нет</label>
                         </div>
+
+
                     </div>
                     <div class="report__fieldset report__fieldset--right-block"
                         v-if="ninthPanelData.document !== null || ninthPanelData.document !== ''">
@@ -486,12 +501,13 @@
                         </p>
                         <InputReport v-model:value="sixPanelDataDH.number_of_members" placeholder="Введите число"
                             id="15" name="14" class="form__input number_input" :is-error-panel="isErrorPanel"
-                            :disabled="props.isCentralHeadquarterCommander" type="number" :maxlength="10"
-                            :max="32767" />
+                            :disabled="props.isCentralHeadquarterCommander || reportStore.isReportReject?.six[props.sixId]"
+                            type="number" :maxlength="10" :max="32767" />
                     </div>
 
                     <CommentFileComponent v-model:value="sixPanelDataDH.comment" :is-error-panel="isErrorPanel"
-                        :disabled="props.isCentralHeadquarterCommander" :is-six="true" name="sixPanelDataDH.comment">
+                        :disabled="props.isCentralHeadquarterCommander || reportStore.isReportReject?.six[props.sixId]"
+                        :is-six="true" name="sixPanelDataDH.comment">
                     </CommentFileComponent>
                 </div>
                 <div v-else-if="props.panel_number == 9" class="group-seventh">
@@ -512,8 +528,9 @@
                             <div class="places_item" v-for="item in events" :key="item.id">
                                 <input :id="item.id" :value="item.value" :name="item.name"
                                     :checked="ninthPanelDataDH.event_happened == item.value"
-                                    :disabled="props.isCentralHeadquarterCommander" class="form__input places_input"
-                                    type="radio" v-model="ninthPanelDataDH.event_happened" />
+                                    :disabled="props.isCentralHeadquarterCommander || reportStore.isReportReject?.ninth[props.ninthId]"
+                                    class="form__input places_input" type="radio"
+                                    v-model="ninthPanelDataDH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
                                     }}</label>
@@ -530,7 +547,8 @@
                     </CommentFileComponent> -->
                     <CommentFileComponent v-model:value="ninthPanelDataDH.comment" name="ninthPanelDataDH.comment"
                         @change="uploadFile($event, 9)" @click="deleteFile(9)" :file="fileDH.name"
-                        :fileType="fileDH.type" :fileSize="fileDH.size" :disabled="props.isCentralHeadquarterCommander"
+                        :fileType="fileDH.type" :fileSize="fileDH.size"
+                        :disabled="props.isCentralHeadquarterCommander || reportStore.isReportReject?.ninth[props.ninthId]"
                         :is-error-file="isErrorFile" :is-error-panel="isErrorPanel"
                         :is-sent="props.isCentralHeadquarterCommander || !(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander)">
                     </CommentFileComponent>
@@ -612,10 +630,14 @@
                     <ReportTable label="Количество человек, принявших участие в мероприятии" class="mb-4"
                         name="sixPanelData.number_of_members" :dataRH="sixPanelData.number_of_members"
                         :dataDH="sixPanelDataDH.number_of_members" v-model:value="sixPanelDataCH.number_of_members"
-                        :maxlength="10" :min="0" :max="2147483647" :is-error-panel="isErrorPanel"></ReportTable>
+                        :maxlength="10" :min="0" :max="2147483647" :is-error-panel="isErrorPanel"
+                        :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.six[props.sixId].verified_by_chq !== null">
+                    </ReportTable>
 
                     <CommentFileComponent v-model:value="sixPanelDataCH.comment" name="sixPanelDataCH.comment"
-                        :is-six="true" :CH="true" :is-error-panel="isErrorPanel"></CommentFileComponent>
+                        :is-six="true" :CH="true" :is-error-panel="isErrorPanel"
+                        :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.six[props.sixId].verified_by_chq !== null">
+                    </CommentFileComponent>
                     <div>
                         <v-checkbox v-model="reportStore.returnReport.six[props.sixId]" @change="returnForReviewSix"
                             :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.six[props.sixId].verified_by_chq !== null"
@@ -634,7 +656,9 @@
                     <ReportTable label="Проведение мероприятия " name="ninthPanelData.event_happened"
                         :dataRH="ninthPanelData.event_happened" :is-ninth-panel="true"
                         :dataDH="ninthPanelDataDH.event_happened" v-model:value="ninthPanelDataCH.event_happened"
-                        :is-error-panel="isErrorPanel"></ReportTable>
+                        :is-error-panel="isErrorPanel"
+                        :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq !== null">
+                    </ReportTable>
 
                     <div class="form__field places mt-4 mb-4">
                         <p class="form__label">
@@ -645,6 +669,7 @@
                             <div class="places_item" v-for="item in events" :key="item.id">
                                 <input :id="item.id" :value="item.value" :name="item.name"
                                     :checked="ninthPanelDataCH.event_happened == item.value"
+                                    :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq !== null"
                                     class="form__input places_input" type="radio"
                                     v-model="ninthPanelDataCH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
@@ -657,6 +682,7 @@
                         @change="uploadFile($event, 9)" @click="deleteFile(9)" :CH="true" :file="fileCH.name"
                         :fileType="fileCH.type" :fileSize="fileCH.size" :is-error-file="isErrorFile"
                         :is-error-panel="isErrorPanel"
+                        :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq !== null"
                         :is-sent="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq !== null">
                     </CommentFileComponent>
                     <div>
@@ -967,6 +993,7 @@ const deleteFile = (number) => {
     }
 
 }
+const isRejected = ref(false);
 
 const focusOut = () => {
     if (props.panel_number == 6) {
@@ -1134,6 +1161,7 @@ watchEffect(() => {
 
 
                 if (props.data.rejecting_reasons !== null) {
+
                     sixPanelDataDH.value.comment = reportStore.reportDataDH.six[props.sixId].comment;
                     sixPanelDataDH.value.number_of_members = reportStore.reportDataDH.six[props.sixId].number_of_members;
                     sixPanelDataDH.value.links = reportStore.reportDataDH.six[props.sixId].links;
@@ -1222,6 +1250,7 @@ watchEffect(() => {
                 }
 
                 if (props.data.rejecting_reasons !== null) {
+                    isRejected.value = true;
                     ninthPanelDataDH.value.comment = reportStore.reportDataDH.ninth[props.ninthId].comment;
                     ninthPanelDataDH.value.event_happened = reportStore.reportDataDH.ninth[props.ninthId].event_happened;
                     ninthPanelDataDH.value.links = reportStore.reportDataDH.ninth[props.ninthId].links;
