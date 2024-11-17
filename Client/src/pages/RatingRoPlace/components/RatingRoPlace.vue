@@ -5,7 +5,12 @@
         <!-- <p class="RoPlace_number">{{ PlaceId.id }}.</p> -->
         <h2 class="RoPlace_title"> {{ PlaceId.title }}</h2>
       </div>
-
+      <div class="download_wrapper">
+        <SvgIcon class="download_img" iconName="download" @click="downloadReport" />
+        <p class="download_text" @click="downloadReport">
+          Скачать отчет по показателю
+        </p>
+      </div>
       <div class="RoPlace_wrapper">
         <RatingRoPlaceList :items="sortedRegionalHeadquarters" />
         <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate color="blue"></v-progress-circular>
@@ -30,7 +35,7 @@ import { useRegionalsStore } from '@features/store/regionals';
 import { HTTP } from '@app/http';
 import { useRoute } from 'vue-router';
 import { usePage } from '@shared';
-
+import SvgIcon from '@shared/ui/SvgIcon/SvgIcon.vue';
 
 const regionalsStore = useRegionalsStore();
 const route = useRoute();
@@ -112,6 +117,23 @@ const getRegionals = async (pagination, orderLimit) => {
   }
 };
 
+const downloadReport = async () => {
+  try {
+    const reportData = await HTTP.get(`/regional_competitions/reports/${id}/download_all_reports_data/`,
+      { 'responseType': 'blob', }
+    );
+
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(reportData.data);
+    link.download = `Отчет по ${id} показателю.xlsx`; 
+    link.click();
+    URL.revokeObjectURL(link.href);
+    link.remove();
+  } catch(error){
+    console.error(error);
+  }
+}
+
 watch(
   () => route.params.id,
 
@@ -145,6 +167,34 @@ onMounted(() => {
   font-family: 'Bert Sans';
 }
 
+.download{
+  &_wrapper {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    display: flex; 
+    justify-content: flex-end;
+  }
+
+  &_img{
+    width: 24px;
+    height: 24px;
+    margin-right: 4px;
+    cursor: pointer
+  }
+
+  &_text {
+    height: 22px;
+    font-family: Akrobat;
+    color: #1f7cc0;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 21.6px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+    cursor: pointer
+  }
+}
 .RoPlace {
   padding-bottom: 60px;
 
@@ -163,7 +213,7 @@ onMounted(() => {
   }
 
   &_wrapper {
-    margin-top: 40px;
+    margin-top: 8px;
     display: flex;
     flex-direction: column;
     row-gap: 8px;
