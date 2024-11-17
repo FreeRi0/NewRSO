@@ -736,30 +736,52 @@ onMounted(() => {
   if (reportStore.reportForCheckCH.fourth && props.centralExpert) {
     const eventQuantity = reportStore.reportForCheckCH.fourth.events.length;
 
-    // Добавление данных панели "отчет РО"
-    const reportDataRH = JSON.parse(reportStore.reportForCheckCH.fourth.regional_version);
-    events.value = reportDataRH.events;
-    fourthPanelData.value.comment = reportDataRH.comment || '';
+    if (reportStore.reportForCheckCH.fourth.rejecting_reasons) {
+      // Добавление данных панели "отчет РО"
+      events.value = reportStore.reportForCheckCH.fourth.events;
+      fourthPanelData.value.comment = reportStore.reportForCheckCH.fourth.comment || '';
 
-    // Добавление данных панели "корректировка ОШ"
-    fourthPanelDataDH.value.events = reportStore.reportForCheckCH.fourth.events;
-    fourthPanelDataDH.value.comment = reportStore.reportForCheckCH.fourth.comment;
+      // Добавление данных панели "корректировка ОШ"
+      const reportDataDH = JSON.parse(reportStore.reportForCheckCH.fourth.district_version);
+      fourthPanelDataDH.value.events = reportDataDH.events;
+      fourthPanelDataDH.value.comment = reportDataDH.comment;
 
-    // Добавление данных из стора для панели "корректировка ЦШ"
-    commentCH.value = reportStore.reportDataCH.fourth.comment || '';
-    for (let i = 0; i < eventQuantity; i++) {
-      commonData.value[i] = {
-        dataRH: reportDataRH.events[i],
-        dataDH: reportStore.reportForCheckCH.fourth.events[i],
-        dataCH: reportStore.reportDataCH.fourth.events[i],
-        //     ? reportStore.reportDataCH.fourth.events[i] : {
-        //   participants_number: '',
-        //   start_date: null,
-        //   end_date: null,
-        // }
+      // Добавление данных из стора для панели "корректировка ЦШ"
+      const reportDataCH = reportStore.reportForCheckCH.fourth.central_version;
+      commentCH.value = reportDataCH.comment || '';
+      for (let i = 0; i < eventQuantity; i++) {
+        commonData.value[i] = {
+          dataRH: reportStore.reportForCheckCH.fourth.events[i],
+          dataDH: reportDataDH.events[i],
+          dataCH: reportDataCH.events[i],
+        }
       }
+    } else {
+      // Добавление данных панели "отчет РО"
+      const reportDataRH = JSON.parse(reportStore.reportForCheckCH.fourth.regional_version);
+      events.value = reportDataRH.events;
+      fourthPanelData.value.comment = reportDataRH.comment || '';
+
+      // Добавление данных панели "корректировка ОШ"
+      fourthPanelDataDH.value.events = reportStore.reportForCheckCH.fourth.events;
+      fourthPanelDataDH.value.comment = reportStore.reportForCheckCH.fourth.comment;
+
+      // Добавление данных из стора для панели "корректировка ЦШ"
+      commentCH.value = reportStore.reportDataCH.fourth.comment || '';
+      for (let i = 0; i < eventQuantity; i++) {
+        commonData.value[i] = {
+          dataRH: reportDataRH.events[i],
+          dataDH: reportStore.reportForCheckCH.fourth.events[i],
+          dataCH: reportStore.reportDataCH.fourth.events[i],
+          //     ? reportStore.reportDataCH.fourth.events[i] : {
+          //   participants_number: '',
+          //   start_date: null,
+          //   end_date: null,
+          // }
+        }
+      }
+      // console.log('commonData', commonData.value)
     }
-    // console.log('commonData', commonData.value)
   }
 })
 
@@ -793,6 +815,7 @@ watchEffect(() => {
       // Отчет создан:
       commentCH.value = props.data.central_version.comment || '';
       for (let i = 0; i < props.data.events.length; i++) {
+        // TODO: не приходит name с сервера
         commonData.value[i] = {
           dataRH: props.data.events[i],
           dataDH: reportDataDH.events[i],

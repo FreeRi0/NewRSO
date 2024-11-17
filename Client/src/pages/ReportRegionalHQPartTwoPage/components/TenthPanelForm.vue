@@ -509,32 +509,63 @@ onMounted(() => {
 
   // Мапинг данных для отчета эксперта ЦШ
   if (props.dataForCheckCH) {
-    // Добавление данных панели "отчет РО"
-    tenthPanelData.value = JSON.parse(props.dataForCheckCH.regional_version);
+    if (props.dataForCheckCH.rejecting_reasons) {
+      // Добавление данных панели "отчет РО"
+      tenthPanelData.value = props.dataForCheckCH;
 
-    // Добавление данных панели "корректировка ОШ"
-    tenthPanelDataDH.value.event_happened = props.dataForCheckCH.event_happened;
-    tenthPanelDataDH.value.comment = props.dataForCheckCH.comment;
+      // Добавление данных панели "корректировка ОШ"
+      const reportDH = JSON.parse(props.dataForCheckCH.district_version)
+      tenthPanelDataDH.value.event_happened = reportDH.event_happened;
+      tenthPanelDataDH.value.comment = reportDH.comment;
+      if (reportDH.document) {
+        fileNameDH.value = reportDH.document;
+        fileTypeDH.value = reportDH.file_type;
+        fileSizeDH.value = reportDH.file_size;
+      }
 
-    if (props.dataForCheckCH.document) {
-      fileNameDH.value = props.dataForCheckCH.document;
-      fileTypeDH.value = props.dataForCheckCH.file_type;
-      fileSizeDH.value = props.dataForCheckCH.file_size;
-    }
+      // Добавление данных для панели "корректировка ЦШ"
+      const reportCH = props.dataForCheckCH.central_version;
+      if (reportCH) {
+        tenthPanelDataCH.value.event_happened = reportCH.event_happened === undefined ? null : reportCH.event_happened;
+        tenthPanelDataCH.value.comment = reportCH.comment;
 
-    // Добавление данных для панели "корректировка ЦШ"
-    if (props.dataCH) {
-      tenthPanelDataCH.value.event_happened = props.dataCH.event_happened === undefined ? null : props.dataCH.event_happened;
-      tenthPanelDataCH.value.comment = props.dataCH.comment;
+        returnReport.value = reportCH.returnReportProp;
+      }
 
-      returnReport.value = props.returnReportProp;
-    }
+      if (reportCH.document) {
+        tenthPanelDataCH.value.document = reportCH.document
+        fileNameCH.value = reportCH.document || null;
+        fileTypeCH.value = reportCH.file_type || null;
+        fileSizeCH.value = reportCH.file_size || null;
+      }
+    } else {
+      // Добавление данных панели "отчет РО"
+      tenthPanelData.value = JSON.parse(props.dataForCheckCH.regional_version);
 
-    if (props.documentCH) {
-      tenthPanelDataCH.value.document = props.documentCH
-      fileNameCH.value = props.documentCH.name || null;
-      fileTypeCH.value = props.documentCH.type.split('/').at(-1) || null;
-      fileSizeCH.value = props.documentCH.size / Math.pow(1024, 2) || null;
+      // Добавление данных панели "корректировка ОШ"
+      tenthPanelDataDH.value.event_happened = props.dataForCheckCH.event_happened;
+      tenthPanelDataDH.value.comment = props.dataForCheckCH.comment;
+
+      if (props.dataForCheckCH.document) {
+        fileNameDH.value = props.dataForCheckCH.document;
+        fileTypeDH.value = props.dataForCheckCH.file_type;
+        fileSizeDH.value = props.dataForCheckCH.file_size;
+      }
+
+      // Добавление данных для панели "корректировка ЦШ"
+      if (props.dataCH) {
+        tenthPanelDataCH.value.event_happened = props.dataCH.event_happened === undefined ? null : props.dataCH.event_happened;
+        tenthPanelDataCH.value.comment = props.dataCH.comment;
+
+        returnReport.value = props.returnReportProp;
+      }
+
+      if (props.documentCH) {
+        tenthPanelDataCH.value.document = props.documentCH
+        fileNameCH.value = props.documentCH.name || null;
+        fileTypeCH.value = props.documentCH.type.split('/').at(-1) || null;
+        fileSizeCH.value = props.documentCH.size / Math.pow(1024, 2) || null;
+      }
     }
   }
 

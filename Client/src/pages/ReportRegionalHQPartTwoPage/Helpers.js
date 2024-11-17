@@ -49,29 +49,30 @@ export function checkEmptyFieldsDH(data, isErrorPanel) {
         // }
     }
 
-    if (data.fifth) {
-        for (const event of data.fifth.events) {
-            if (
-                (event.participants_number != 0 ||
-                    !event.participants_number) &&
-                !(
-                    event.end_date &&
-                    event.start_date &&
-                    event.name &&
-                    data.fifth.comment
-                )
-            ) {
-                isErrorPanel.value.fifth = true;
-                swal.fire({
-                    position: 'center',
-                    icon: 'warning',
-                    title: `Заполните обязательные поля в 5 показателе`,
-                    showConfirmButton: false,
-                    timer: 2500,
-                });
-                return false;
-            }
-        }
+    if (data.fifth && !(data.fifth.comment)) {
+        isErrorPanel.value.fifth = true;
+        swal.fire({
+            position: 'center',
+            icon: 'warning',
+            title: `Заполните обязательные поля в 5 показателе`,
+            showConfirmButton: false,
+            timer: 2500,
+        });
+        return false;
+        // for (const event of data.fifth.events) {
+        //     if (
+        //         (event.participants_number != 0 ||
+        //             !event.participants_number) &&
+        //         !(
+        //             event.end_date &&
+        //             event.start_date &&
+        //             event.name &&
+        //             data.fifth.comment
+        //         )
+        //     ) {
+        //
+        //     }
+        // }
     }
 
     for (const item in data.six) {

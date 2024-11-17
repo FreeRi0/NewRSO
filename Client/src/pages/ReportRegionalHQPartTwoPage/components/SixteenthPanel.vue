@@ -859,33 +859,65 @@ onMounted(() => {
   if (reportStore.reportForCheckCH.sixteenth && props.centralExpert) {
     const projectQuantity = reportStore.reportForCheckCH.sixteenth.projects.length;
 
-    // Добавление данных панели "отчет РО"
-    const reportDataRH = JSON.parse(reportStore.reportForCheckCH.sixteenth.regional_version);
-    projects.value = reportDataRH.projects;
-    sixteenthPanelData.value.comment = reportDataRH.comment;
-    sixteenthPanelData.value.is_project = reportDataRH.is_project;
+    if (reportStore.reportForCheckCH.sixteenth.rejecting_reasons) {
+      // Добавление данных панели "отчет РО"
+      projects.value = reportStore.reportForCheckCH.sixteenth.projects;
+      sixteenthPanelData.value.comment = reportStore.reportForCheckCH.sixteenth.comment;
+      sixteenthPanelData.value.is_project = reportStore.reportForCheckCH.sixteenth.is_project;
 
-    // Добавление данных панели "корректировка ОШ"
-    sixteenthPanelDataDH.value.is_project = reportStore.reportForCheckCH.sixteenth.is_project;
-    sixteenthPanelDataDH.value.comment = reportStore.reportForCheckCH.sixteenth.comment;
-    sixteenthPanelDataDH.value.projects = reportStore.reportForCheckCH.sixteenth.projects;
+      // Добавление данных панели "корректировка ОШ"
+      const reportDataDH = JSON.parse(reportStore.reportForCheckCH.sixteenth.district_version);
+      sixteenthPanelDataDH.value.is_project = reportDataDH.is_project;
+      sixteenthPanelDataDH.value.comment = reportDataDH.comment;
+      sixteenthPanelDataDH.value.projects = reportDataDH.projects;
 
-    // Добавление данных из стора для панели "корректировка ЦШ"
-    commentCH.value = reportStore.reportDataCH.sixteenth.comment || '';
-    isProjectCH.value = reportStore.reportDataCH.sixteenth.isProject;
+      // Добавление данных из стора для панели "корректировка ЦШ"
+      const reportDataCH = reportStore.reportForCheckCH.sixteenth.central_version;
+      commentCH.value = reportDataCH.comment || '';
+      isProjectCH.value = reportDataCH.is_project;
 
-    for (let i = 0; i < projectQuantity; i++) {
-      commonData.value[i] = {
-        dataRH: reportDataRH.projects[i],
-        dataDH: reportStore.reportForCheckCH.sixteenth.projects[i],
-        dataCH: reportStore.reportDataCH.sixteenth.projects[i],
-        // dataCH: reportStore.reportDataCH.sixteenth.projects.length ? reportStore.reportDataCH.sixteenth.projects[i] : {
-        //   name: '',
-        //   project_scale: null,
-        // }
+      for (let i = 0; i < projectQuantity; i++) {
+        commonData.value[i] = {
+          dataRH: reportStore.reportForCheckCH.sixteenth.projects[i],
+          dataDH: reportDataDH.projects.length ? reportDataDH.projects[i] : [{
+            name: '',
+            project_scale: null,
+          }][i],
+          dataCH: reportDataCH.projects.length ? reportDataCH.projects[i] : [{
+            name: '',
+            project_scale: null,
+          }][i],
+        }
       }
+    } else {
+      // Добавление данных панели "отчет РО"
+      const reportDataRH = JSON.parse(reportStore.reportForCheckCH.sixteenth.regional_version);
+      projects.value = reportDataRH.projects;
+      sixteenthPanelData.value.comment = reportDataRH.comment;
+      sixteenthPanelData.value.is_project = reportDataRH.is_project;
+
+      // Добавление данных панели "корректировка ОШ"
+      sixteenthPanelDataDH.value.is_project = reportStore.reportForCheckCH.sixteenth.is_project;
+      sixteenthPanelDataDH.value.comment = reportStore.reportForCheckCH.sixteenth.comment;
+      sixteenthPanelDataDH.value.projects = reportStore.reportForCheckCH.sixteenth.projects;
+
+      // Добавление данных из стора для панели "корректировка ЦШ"
+      commentCH.value = reportStore.reportDataCH.sixteenth.comment || '';
+      isProjectCH.value = reportStore.reportDataCH.sixteenth.isProject;
+
+      for (let i = 0; i < projectQuantity; i++) {
+        commonData.value[i] = {
+          dataRH: reportDataRH.projects[i],
+          dataDH: reportStore.reportForCheckCH.sixteenth.projects[i],
+          dataCH: reportStore.reportDataCH.sixteenth.projects[i],
+          // dataCH: reportStore.reportDataCH.sixteenth.projects.length ? reportStore.reportDataCH.sixteenth.projects[i] : {
+          //   name: '',
+          //   project_scale: null,
+          // }
+        }
+      }
+      // console.log('sixteenth commonData', commonData.value)
     }
-    console.log('sixteenth commonData', commonData.value)
   }
 });
 

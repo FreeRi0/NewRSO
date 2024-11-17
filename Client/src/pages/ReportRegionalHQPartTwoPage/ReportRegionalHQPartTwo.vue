@@ -235,7 +235,7 @@
         </v-expansion-panels>
       </div>
     </div>
-    <Button class="btn_report" v-if="!preloader" :disabled="blockSendButton" variant="text" label="Отправить отчет"
+    <Button class="btn_report" v-if="!preloader"  variant="text" label="Отправить отчет"
       size="large" @click="sendReport" />
   </div>
 </template>
@@ -739,7 +739,11 @@ const getReportData = async (reportId) => {
       reportStore.reportForCheckCH.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
-      reportStore.reportDataCH.first.comment = '';
+      if (reportStore.reportDataCH.first.rejecting_reasons) {
+        reportStore.reportDataCH.first.comment = JSON.parse(reportStore.reportDataCH.first.rejecting_reasons).comment;
+      } else {
+        reportStore.reportDataCH.first.comment = '';
+      }
 
       /*
       * Критерий 4

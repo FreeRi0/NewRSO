@@ -470,12 +470,20 @@ watchEffect(async () => {
   // Мапинг данных для отчета эксперта ЦШ
   if (reportStore.reportForCheckCH.first && props.centralExpert) {
     // Добавление данных панели "отчет РО"
-    const reportDataRH = JSON.parse(reportStore.reportForCheckCH.first.regional_version);
-    firstPanelData.value.comment = reportDataRH.comment || '';
-    firstPanelData.value.amount_of_money = reportDataRH.amount_of_money;
-    firstPanelData.value.scan_file = reportDataRH.scan_file || null;
-    firstPanelData.value.file_type = reportDataRH.file_type || null;
-    firstPanelData.value.file_size = reportDataRH.file_size || null;
+    if (reportStore.reportForCheckCH.first.rejecting_reasons) {
+      firstPanelData.value.comment = reportStore.reportForCheckCH.first.comment;
+      firstPanelData.value.amount_of_money = reportStore.reportForCheckCH.first.amount_of_money;
+      firstPanelData.value.scan_file = reportStore.reportForCheckCH.first.scan_file || null;
+      firstPanelData.value.file_type = reportStore.reportForCheckCH.first.file_type || null;
+      firstPanelData.value.file_size = reportStore.reportForCheckCH.first.file_size || null;
+    } else {
+      const reportDataRH = JSON.parse(reportStore.reportForCheckCH.first.regional_version);
+      firstPanelData.value.comment = reportDataRH?.comment || '';
+      firstPanelData.value.amount_of_money = reportDataRH?.amount_of_money;
+      firstPanelData.value.scan_file = reportDataRH?.scan_file || null;
+      firstPanelData.value.file_type = reportDataRH?.file_type || null;
+      firstPanelData.value.file_size = reportDataRH?.file_size || null;
+    }
 
     // Добавление данных панели "корректировка ОШ"
     firstPanelDataDH.value.comment = reportStore.reportForCheckCH.first.comment;
@@ -491,7 +499,6 @@ watchEffect(async () => {
     fileSizeCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.size / Math.pow(1024, 2) : null;
     fileTypeCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.type.split('/').at(-1) : null;
   }
-
 
   // Мапинг данных для отчета командира РШ при возвращении на доработку
   if (reportStore.reportReject.first && reportStore.isReportReject.first) {
