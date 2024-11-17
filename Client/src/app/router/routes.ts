@@ -987,6 +987,14 @@ const routes: RouteRecordRaw[] = [
                                                 '@pages/RatingRoPlace/components/RatingRoPlace.vue'
                                             ),
                                     },
+                                    {
+                                        path: ':id_event',
+                                        name: 'EventPlace',
+                                        component: () =>
+                                            import(
+                                                '@pages/RatingRoPlace/components/RatingRoPlace.vue'
+                                            ),
+                                    },
                                 ],
                             },
                         ],
