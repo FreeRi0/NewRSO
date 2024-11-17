@@ -412,9 +412,9 @@ watchEffect(async () => {
 
             isFirstSent.value = reportStore.isReportReject.twelfth && !props.data.central_version;
             console.log('isFirstSent при доработке 12', isFirstSent.value);
-            if (reportStore.isReportReject.twelfth) {
-                reportStore.returnReport.twelfth = true;
-            }
+            // if (reportStore.isReportReject.twelfth) {
+            //     reportStore.returnReport.twelfth = true;
+            // }
         }
     }
     if (props.districtExpert) {
@@ -439,11 +439,14 @@ watchEffect(async () => {
             fileCH.value.type = reportStore.reportDataCHFile.twelfth.type.split('/').at(-1);
             fileCH.value.size = reportStore.reportDataCHFile.twelfth.size / Math.pow(1024, 2);
         }
-        if (reportStore.reportForCheckCH.twelfth.rejecting_reasons) {
-            reportStore.returnReport.twelfth = true;
-        } 
+        // if (reportStore.reportForCheckCH.twelfth.rejecting_reasons) {
+        //     reportStore.returnReport.twelfth = true;
+        // } 
 
         // console.log('чек 12', reportStore.returnReport.twelfth)
+    }
+    if (reportStore.reportReject.twelfth && reportStore.isReportReject.twelfth) {
+        reportStore.returnReport.twelfth = true;
     }
 }, {
     flush: 'post'
