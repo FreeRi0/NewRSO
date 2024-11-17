@@ -594,6 +594,16 @@ const getMultiplyData = async (reportId) => {
       reportStore.reportForCheckCH.six[result.id] = sixData;
       reportData.value.six[result.id] = sixData;
       reportStore.reportDataDH.six[result.id] = sixData;
+
+      if (sixData.rejecting_reasons && sixData.verified_by_chq !== true) {
+        if (!revisionPanels.value.find((item) => item === '6')) {
+          revisionPanels.value.push(`6`);
+        }
+        revisionPanels.value.push(`6-${result.id}`);
+      }
+
+      
+
       // console.log('ch6', reportStore.reportForCheckCH.six[result.id])
       // if (reportData.value.six[result.id]?.regional_version) {
       //   console.log('reg_ver', reportData.value.six[result.id]?.regional_version)
@@ -693,16 +703,33 @@ const getMultiplyData = async (reportId) => {
       // }
     } else if (centralExpert.value) {
       reportStore.reportForCheckCH.ninth[result.id] = ninthData;
+      
+      if (ninthData.rejecting_reasons && ninthData.verified_by_chq !== true) {
+        if (!revisionPanels.value.find((item) => item === '9')) {
+          revisionPanels.value.push(`9`);
+        }
+        revisionPanels.value.push(`9-${result.id}`);
+      }
       // console.log('ch9', reportStore.reportForCheckCH.ninth[result.id])
       if (ninthData?.regional_version) {
-        reportData.value.ninth[result.id] = JSON.parse(ninthData.regional_version);
+        try {
+          reportData.value.ninth[result.id] = JSON.parse(ninthData.regional_version);
+        } catch (error) {
+          console.error('Error parsing regional_version JSON:', error);
+          reportData.value.ninth[result.id] = ninthData.regional_version || ninthData;
+        }
       } else {
         reportData.value.ninth[result.id] = ninthData;
       }
       if (ninthData?.district_version) {
-        reportStore.reportDataDH.ninth[result.id] = JSON.parse(ninthData.district_version);
+        try {
+          reportStore.reportDataDH.ninth[result.id] = JSON.parse(ninthData.district_version);
+        } catch (error) {
+          console.error('Error parsing regional_version JSON:', error);
+          reportStore.reportDataDH.ninth[result.id] = ninthData.district_version || ninthData;
+        }
       } else {
-        reportStore.reportDataDH.ninth[result.id] = ninthData
+        reportStore.reportDataDH.ninth[result.id] = ninthData;
       }
 
       reportStore.reportDataCH.ninth[result.id] = Object.assign({}, ninthData);
