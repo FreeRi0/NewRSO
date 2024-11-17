@@ -23,7 +23,7 @@
           </button>
         </div>
         <v-expansion-panels>
-          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('1') : true">
+          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('1') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('1') ? false : true">
             <v-expansion-panel-title :class="isErrorPanel.first ? 'visible-error' : ''">
               1. Численность членов РО&nbsp;РСО в&nbsp;соответствии с&nbsp;объемом уплаченных членских взносов
             </v-expansion-panel-title>
@@ -57,7 +57,7 @@
                 text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('4') : true">
+          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('4') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('4') ? false : true">
             <v-expansion-panel-title :class="isErrorPanel.fourth ? 'visible-error' : ''">
               4. Организация всероссийских (международных), окружных и&nbsp;межрегиональных мероприятий и&nbsp;проектов
               (слеты, школы, фестивали, турниры и&nbsp;прочие)
@@ -68,7 +68,7 @@
                 :is-error-panel="isErrorPanel.fourth" :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('5') : true">
+          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('5') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('5') ? false : true">
             <v-expansion-panel-title :class="isErrorPanel.fifth ? 'visible-error' : ''">
               5. Организация всероссийских (международных) (организатор&nbsp;&mdash; региональное отделение РСО),
               окружных и&nbsp;межрегиональных трудовых проектов в&nbsp;соответствии с&nbsp;Положением
@@ -128,7 +128,8 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel
-            v-if="picked === 'Доработка' ? revisionPanels.includes('10-1') || revisionPanels.includes('10-2') : true">
+            v-if="picked === 'Доработка' ? revisionPanels.includes('10-1') || revisionPanels.includes('10-2')
+            : picked === 'Просмотр отправленного отчета' && (verifiedByChqPanels.includes('10-1') || verifiedByChqPanels.includes('10-2')) ? false : true">
             <v-expansion-panel-title :class="isErrorPanel.tenth ? 'visible-error' : ''">
               10. Организация РО&nbsp;РСО всероссийских (международных) добровольческих и&nbsp;патриотических акций
               &laquo;К&raquo;
@@ -194,7 +195,7 @@
                 text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('16') : true">
+          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('16') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('16') ? false : true">
             <v-expansion-panel-title :class="isErrorPanel.sixteenth ? 'visible-error' : ''">
               16. Победители всероссийских (международных), окружных и&nbsp;межрегиональных трудовых проектов
               по&nbsp;комиссарской деятельности &laquo;К&raquo;
@@ -728,7 +729,7 @@ const getMultiplyData = async (reportId) => {
 const revisionPanels = ref([]);
 const isRevision = ref(false);
 const isTabsForRevision = ref(false);
-
+const verifiedByChqPanels = ref([])
 const getReportData = async (reportId) => {
   try {
     // Загрузка данных для отчета эксперта ЦШ
@@ -744,6 +745,7 @@ const getReportData = async (reportId) => {
       } else {
         reportStore.reportDataCH.first.comment = '';
       }
+      if (reportStore.reportForCheckCH.first.verified_by_chq) verifiedByChqPanels.value.push('1')
 
       /*
       * Критерий 4
@@ -751,14 +753,18 @@ const getReportData = async (reportId) => {
       reportStore.reportForCheckCH.fourth = (await reportPartTwoService.getReportDH('4', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.fourth.events = (await reportPartTwoService.getReportDH('4', reportId)).data.events;
-
+      console.log('reportStore.reportForCheckCH.fourth', reportStore.reportForCheckCH.fourth)
+      if (reportStore.reportForCheckCH.fourth.verified_by_chq) verifiedByChqPanels.value.push('4')
       /*
       * Критерий 5
       */
       reportStore.reportForCheckCH.fifth = (await reportPartTwoService.getReportDH('5', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.fifth.events = (await reportPartTwoService.getReportDH('5', reportId)).data.events;
-
+      if (reportStore.reportForCheckCH.fifth.verified_by_chq) verifiedByChqPanels.value.push('5')
+      //   revisionPanels.value.push('5');
+      // if (reportStore.reportForCheckCH.fifth.rejecting_reasons) reportStore.isReportReject.fifth = true;
+      // console.log('reportStore.isReportReject', reportStore.isReportReject)
       /*
       * Критерий 6 и 9  
       */
@@ -770,7 +776,7 @@ const getReportData = async (reportId) => {
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
       reportStore.reportDataCH.tenth.first.comment = ''
-
+      if (reportStore.reportForCheckCH.tenth.first.verified_by_chq) verifiedByChqPanels.value.push('10-1')
       /*
       * Критерий 10-2
       */
@@ -778,7 +784,7 @@ const getReportData = async (reportId) => {
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', reportId)).data;
       reportStore.reportDataCH.tenth.second.comment = ''
-
+      if (reportStore.reportForCheckCH.tenth.second.verified_by_chq) verifiedByChqPanels.value.push('10-2')
       /*
       * Критерий 16
       */
@@ -786,7 +792,7 @@ const getReportData = async (reportId) => {
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.sixteenth.projects = (await reportPartTwoService.getReportDH('16', reportId)).data.projects;
       reportStore.reportDataCH.sixteenth.isProject = (await reportPartTwoService.getReportDH('16', reportId)).data.is_project;
-
+      if (reportStore.reportForCheckCH.sixteenth.verified_by_chq) verifiedByChqPanels.value.push('16')
       /* 
       * Критерий 11
       */
@@ -922,7 +928,7 @@ const getReportData = async (reportId) => {
             reportStore.isReportReject.first = isTabsForRevision.value // true;
             reportStore.reportReject.first = dataFirst;
 
-            revisionPanels.value.push('1');
+            if (!dataFirst.verified_by_chq) revisionPanels.value.push('1');
           }
 
           if (dataFirst.central_version) {
@@ -943,7 +949,7 @@ const getReportData = async (reportId) => {
             reportStore.isReportReject.fourth = isTabsForRevision.value // true;
             reportStore.reportReject.fourth = dataFourth;
 
-            revisionPanels.value.push('4');
+            if (!dataFourth.verified_by_chq) revisionPanels.value.push('4');
           }
 
           if (dataFourth.central_version) {
@@ -970,7 +976,7 @@ const getReportData = async (reportId) => {
             reportStore.isReportReject.fifth = isTabsForRevision.value // true;
             reportStore.reportReject.fifth = dataFifth;
 
-            revisionPanels.value.push('5');
+            if (!dataFifth.verified_by_chq) revisionPanels.value.push('5');
           }
 
           if (dataFifth.central_version) {
@@ -1059,7 +1065,7 @@ const getReportData = async (reportId) => {
             reportStore.isReportReject.tenth.first = isTabsForRevision.value // true;
             reportStore.reportReject.tenth.first = dataTenthFirst;
 
-            revisionPanels.value.push('10-1');
+            if (!dataTenthFirst.verified_by_chq) revisionPanels.value.push('10-1');
           }
 
           if (dataTenthFirst.central_version) {
@@ -1086,7 +1092,7 @@ const getReportData = async (reportId) => {
             reportStore.isReportReject.tenth.second = isTabsForRevision.value  // true;
             reportStore.reportReject.tenth.second = dataTenthSecond;
 
-            revisionPanels.value.push('10-2');
+            if (!dataTenthSecond.verified_by_chq) revisionPanels.value.push('10-2');
           }
 
           if (dataTenthSecond.central_version) {
@@ -1186,7 +1192,7 @@ const getReportData = async (reportId) => {
             reportStore.isReportReject.sixteenth = isTabsForRevision.value // true;
             reportStore.reportReject.sixteenth = dataSixteenth;
 
-            revisionPanels.value.push('16');
+            if (!dataSixteenth.verified_by_chq) revisionPanels.value.push('16');
           }
 
           if (dataSixteenth.central_version) {
