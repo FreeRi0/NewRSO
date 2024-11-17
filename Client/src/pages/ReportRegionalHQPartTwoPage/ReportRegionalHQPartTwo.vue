@@ -693,17 +693,27 @@ const getMultiplyData = async (reportId) => {
       // }
     } else if (centralExpert.value) {
       reportStore.reportForCheckCH.ninth[result.id] = ninthData;
-      // console.log('ch9', reportStore.reportForCheckCH.ninth[result.id])
       if (ninthData?.regional_version) {
-        reportData.value.ninth[result.id] = JSON.parse(ninthData.regional_version);
+        try {
+          reportData.value.ninth[result.id] = JSON.parse(ninthData.regional_version);
+        } catch (error) {
+          console.error('Error parsing regional_version JSON:', error);
+          reportData.value.ninth[result.id] = ninthData.regional_version || ninthData;
+        }
       } else {
         reportData.value.ninth[result.id] = ninthData;
       }
       if (ninthData?.district_version) {
-        reportStore.reportDataDH.ninth[result.id] = JSON.parse(ninthData.district_version);
+        try {
+          reportStore.reportDataDH.ninth[result.id] = JSON.parse(ninthData.district_version);
+        } catch (error) {
+          console.error('Error parsing regional_version JSON:', error);
+          reportStore.reportDataDH.ninth[result.id] = ninthData.district_version || ninthData;
+        }
       } else {
-        reportStore.reportDataDH.ninth[result.id] = ninthData
+        reportStore.reportDataDH.ninth[result.id] = ninthData;
       }
+
 
       reportStore.reportDataCH.ninth[result.id] = Object.assign({}, ninthData);
       ninthData.verified_by_chq === null
