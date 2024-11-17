@@ -129,16 +129,24 @@
           </v-expansion-panel>
           <v-expansion-panel
             v-if="picked === 'Доработка' ? revisionPanels.includes('10-1') || revisionPanels.includes('10-2')
-            : picked === 'Просмотр отправленного отчета' && (verifiedByChqPanels.includes('10-1') || verifiedByChqPanels.includes('10-2')) ? false : true">
+            : picked === 'Просмотр отправленного отчета' && (verifiedByChqPanels.includes('10-1') && verifiedByChqPanels.includes('10-2')) ? false : true">
             <v-expansion-panel-title :class="isErrorPanel.tenth ? 'visible-error' : ''">
               10. Организация РО&nbsp;РСО всероссийских (международных) добровольческих и&nbsp;патриотических акций
               &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <tenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                @getDataDHFirst="setDataDH" @getDataDHSecond="setDataDH" @getDataCHFirst="setDataCH"
-                @getDataCHSecond="setDataCH" :data="reportData.tenth" :is-error-panel="isErrorPanel.tenth"
-                :tab="picked" />
+              <tenth-panel
+                :districtExpert="districtExpert"
+                :centralExpert="centralExpert"
+                @get-data="setData"
+                @getDataDHFirst="setDataDH"
+                @getDataDHSecond="setDataDH"
+                @getDataCHFirst="setDataCH"
+                @getDataCHSecond="setDataCH"
+                :data="reportData.tenth"
+                :is-error-panel="isErrorPanel.tenth"
+                :tab="picked"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('11', picked, revisionPanels)">
@@ -239,6 +247,7 @@
     <Button class="btn_report" v-if="!preloader" variant="text" label="Отправить отчет" size="large"
       @click="sendReport" />
   </div>
+  <ReportModalWarning v-if="showModalWarning" @reportConfirmation="reportConfirmation" isCentral />
 </template>
 <script setup>
 import {
@@ -271,6 +280,9 @@ import {
   checkEmptyFieldsDH,
   showPanels,
 } from "@pages/ReportRegionalHQPartTwoPage/Helpers.js";
+import ReportModalWarning from "@pages/ReportRegionalHQPartOnePage/components/ReportModalWarning.vue";
+
+const showModalWarning = ref(false)
 
 const picked = ref('Просмотр отправленного отчета');
 const tabs = ref([
@@ -1661,6 +1673,11 @@ const sendReport = async () => {
   }
 
   if (centralExpert.value) {
+     showModalWarning.value = true
+  }
+};
+const reportConfirmation = async (value) => {
+  if (value) {
     blockSendButton.value = true;
     // if (checkEmptyFieldsDH(reportStore.reportDataCH, isErrorPanel)) {
     preloader.value = true;
@@ -1772,8 +1789,11 @@ const sendReport = async () => {
     // } else {
     //   blockSendButton.value = false;
     // }
+    showModalWarning.value = false;
+  } else {
+    showModalWarning.value = false;
   }
-};
+}
 
 const checkEmptyFields = (data) => {
   const { filteredSix, filteredNinth } = filterPanelsData();

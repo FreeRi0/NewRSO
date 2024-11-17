@@ -1,7 +1,9 @@
 <template>
   <div style="margin-right: 10px; margin-bottom: 10px;">
     <v-expansion-panels v-model="panel">
-      <v-expansion-panel>
+      <v-expansion-panel v-if="(props.tab === 'Просмотр отправленного отчета' && !props.centralExpert)
+      || (reportStore.isReportReject.tenth.first && props.tab === 'Доработка') || (props.tab === 'Просмотр отправленного отчета' && !reportStore.reportDataCH.tenth.first?.verified_by_chq)"
+      >
         <v-expansion-panel-title>
           Всероссийская патриотическая акция «Снежный Десант РСО»
         </v-expansion-panel-title>
@@ -35,7 +37,8 @@
         </v-expansion-panel-text>
       </v-expansion-panel>
 
-      <v-expansion-panel>
+      <v-expansion-panel v-if="(props.tab === 'Просмотр отправленного отчета' && !props.centralExpert)
+      || (reportStore.isReportReject.tenth.second && props.tab === 'Доработка') || (props.tab === 'Просмотр отправленного отчета' && !reportStore.reportDataCH.tenth.second?.verified_by_chq)">
         <v-expansion-panel-title>
           Всероссийская трудовая патриотическая акция «Поклонимся великим тем годам»
         </v-expansion-panel-title>
@@ -481,6 +484,7 @@ const onReturnReport = (event, reportNumber) => {
 }
 
 onMounted(() => {
+  console.log('props', reportStore.reportDataCH.tenth.first)
   if (reportStore.reportDataDH.tenth.first) {
     tenthPanelDataFirstDH.value = reportStore.reportDataDH.tenth.first;
   }
