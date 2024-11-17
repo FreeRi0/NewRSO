@@ -235,8 +235,8 @@
         </v-expansion-panels>
       </div>
     </div>
-    <Button class="btn_report" v-if="!preloader"  variant="text" label="Отправить отчет"
-      size="large" @click="sendReport" />
+    <Button class="btn_report" v-if="!preloader" variant="text" label="Отправить отчет" size="large"
+      @click="sendReport" />
   </div>
 </template>
 <script setup>
@@ -472,7 +472,7 @@ const getMultiplyData = async (reportId) => {
       if (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) {
         return { id: item.id, data: (await reportPartTwoService.getMultipleReportDH('6', item.id, reportId)).data };
       } else {
-       
+
         return { id: item.id, data: (await reportPartTwoService.getMultipleReport('6', item.id)).data };
       }
 

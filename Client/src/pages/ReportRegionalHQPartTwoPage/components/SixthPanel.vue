@@ -143,10 +143,10 @@ watchEffect(() => {
       isFirstSent.value = false;
       sixPanelData.value = { ...props.data[el_id.value] }
       isSentSix.value = props.data[el_id.value].is_sent;
-      if (props.data[el_id.value]?.rejecting_reasons !== null) {
-        isFirstSent.value = reportStore.isReportReject.six[el_id.value] && !props.data[el_id.value].central_version;
-        console.log('isFirstSent при доработке 6', isFirstSent.value);
-      }
+
+      isFirstSent.value = reportStore.isReportReject.six[el_id.value] && !props.data[el_id.value].central_version;
+      console.log('isFirstSent при доработке 6', isFirstSent.value);
+
 
       if (props.data[el_id.value].number_of_members == 0 || props.data[el_id.value].number_of_members == null) {
         sixPanelData.value = {

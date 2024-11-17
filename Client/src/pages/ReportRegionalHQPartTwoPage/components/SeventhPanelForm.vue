@@ -84,7 +84,7 @@
                     <p>0</p>
                 </div>
             </div> -->
-            <div v-if="props.panel_number == 6" class="form__field-group group-seventh" >
+            <div v-if="props.panel_number == 6" class="form__field-group group-seventh">
                 <div class="d-flex justify-space-between">
                     <div class="title_wrap">
                         <p class="form__title">{{ props.title.name }}</p>
@@ -164,7 +164,7 @@
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                            }}</label>
+                                }}</label>
                         </div>
                     </div>
                 </div>
@@ -377,7 +377,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
 
@@ -533,7 +533,7 @@
                                     v-model="ninthPanelDataDH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -631,16 +631,16 @@
                         name="sixPanelData.number_of_members" :dataRH="sixPanelData.number_of_members"
                         :dataDH="sixPanelDataDH.number_of_members" v-model:value="sixPanelDataCH.number_of_members"
                         :maxlength="10" :min="0" :max="2147483647" :is-error-panel="isErrorPanel"
-                        :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.six[props.sixId].verified_by_chq !== null">
+                        :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.six[props.sixId]?.verified_by_chq">
                     </ReportTable>
 
                     <CommentFileComponent v-model:value="sixPanelDataCH.comment" name="sixPanelDataCH.comment"
                         :is-six="true" :CH="true" :is-error-panel="isErrorPanel"
-                        :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.six[props.sixId].verified_by_chq !== null">
+                        :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.six[props.sixId]?.verified_by_chq">
                     </CommentFileComponent>
                     <div>
                         <v-checkbox v-model="reportStore.returnReport.six[props.sixId]" @change="returnForReviewSix"
-                            :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.six[props.sixId].verified_by_chq !== null"
+                            :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.six[props.sixId]?.verified_by_chq"
                             label="Вернуть в РО на доработку" />
                     </div>
                 </div>
@@ -657,7 +657,7 @@
                         :dataRH="ninthPanelData.event_happened" :is-ninth-panel="true"
                         :dataDH="ninthPanelDataDH.event_happened" v-model:value="ninthPanelDataCH.event_happened"
                         :is-error-panel="isErrorPanel"
-                        :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq !== null">
+                        :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq">
                     </ReportTable>
 
                     <div class="form__field places mt-4 mb-4">
@@ -669,12 +669,12 @@
                             <div class="places_item" v-for="item in events" :key="item.id">
                                 <input :id="item.id" :value="item.value" :name="item.name"
                                     :checked="ninthPanelDataCH.event_happened == item.value"
-                                    :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq !== null"
+                                    :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq"
                                     class="form__input places_input" type="radio"
                                     v-model="ninthPanelDataCH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -682,13 +682,13 @@
                         @change="uploadFile($event, 9)" @click="deleteFile(9)" :CH="true" :file="fileCH.name"
                         :fileType="fileCH.type" :fileSize="fileCH.size" :is-error-file="isErrorFile"
                         :is-error-panel="isErrorPanel"
-                        :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq !== null"
-                        :is-sent="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq !== null">
+                        :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq "
+                        :is-sent="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq ">
                     </CommentFileComponent>
                     <div>
                         <v-checkbox v-model="reportStore.returnReport.ninth[props.ninthId]"
                             @change="returnForReviewNinth"
-                            :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq !== null"
+                            :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq"
                             label="Вернуть в РО на доработку" />
                     </div>
                 </div>
@@ -1152,6 +1152,12 @@ watchEffect(() => {
                 sixPanelDataCH.value.number_of_members = reportStore.reportDataCH.six[props.sixId].number_of_members;
                 sixPanelDataCH.value.links = reportStore.reportDataCH.six[props.sixId].links;
             }
+
+            // if (props.isCentralHeadquarterCommander) {
+            //     if (reportStore.reportForCheckCH.six[props.sixId]?.rejecting_reasons.length > 0) {
+            //         reportStore.returnReport.six[props.sixId] = true;
+            //     }
+            // }
             // sixPanelDataCH.value = { ...props.dataCH };
         } else {
             if (Object.keys(props.data).length > 0) {
@@ -1161,16 +1167,16 @@ watchEffect(() => {
                 console.log('data', sixPanelData.value)
 
 
-                if (props.data?.rejecting_reasons !== null && props.tab === 'Доработка') {
+                if (props.data?.rejecting_reasons !== null) {
 
                     console.log('data6dh', reportStore.reportDataDH.six[props.sixId])
                     sixPanelDataDH.value.comment = reportStore.reportDataDH.six[props.sixId]?.comment;
-                    sixPanelDataDH.value.number_of_members = reportStore.reportDataDH.six[props.sixId].number_of_members;
-                    sixPanelDataDH.value.links = reportStore.reportDataDH.six[props.sixId].links;
-                   
+                    sixPanelDataDH.value.number_of_members = reportStore.reportDataDH.six[props.sixId]?.number_of_members;
+                    sixPanelDataDH.value.links = reportStore.reportDataDH.six[props.sixId]?.links;
+
                     sixPanelDataCH.value.comment = reportStore.reportDataCH.six[props.sixId]?.comment;
-                    sixPanelDataCH.value.number_of_members = reportStore.reportDataCH.six[props.sixId].number_of_members;
-                    sixPanelDataCH.value.links = reportStore.reportDataCH.six[props.sixId].links;
+                    sixPanelDataCH.value.number_of_members = reportStore.reportDataCH.six[props.sixId]?.number_of_members;
+                    sixPanelDataCH.value.links = reportStore.reportDataCH.six[props.sixId]?.links;
                 }
 
 
@@ -1192,9 +1198,7 @@ watchEffect(() => {
             }
         }
 
-        if (reportStore.reportForCheckCH.six[props.sixId]?.rejecting_reasons !== null) {
-            reportStore.returnReport.six[props.sixId] = true;
-        }
+
         emit('getId', props.id);
         emit('getPanelNumber', props.panel_number);
         // } else if (props.panel_number == 7) {
@@ -1314,9 +1318,9 @@ watchEffect(() => {
                     fileCH.value.type = reportStore.reportDataCHFile.ninth[props.ninthId].type.split('/').at(-1);
                     fileCH.value.size = reportStore.reportDataCHFile.ninth[props.ninthId].size / Math.pow(1024, 2);
                 }
-                if (reportStore.reportForCheckCH.ninth[props.ninthId]?.rejecting_reasons !== null) {
-                    reportStore.returnReport.ninth[props.ninthId] = true;
-                }
+                // if (reportStore.reportForCheckCH.ninth[props.ninthId]?.rejecting_reasons !== null) {
+                //     reportStore.returnReport.ninth[props.ninthId] = true;
+                // }
             }
 
         }
