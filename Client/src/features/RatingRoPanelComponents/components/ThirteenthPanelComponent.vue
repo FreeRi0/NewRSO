@@ -314,9 +314,9 @@ watchEffect(async () => {
 
             isFirstSent.value = reportStore.isReportReject.thirteenth && !props.data.central_version;
             console.log('isFirstSent при доработке 13', isFirstSent.value);
-            if (reportStore.isReportReject.thirteenth) {
-                reportStore.returnReport.thirteenth = true;
-            }
+            // if (reportStore.isReportReject.thirteenth) {
+            //     reportStore.returnReport.thirteenth = true;
+            // }
         }
     }
     if (props.districtExpert) {
@@ -341,11 +341,14 @@ watchEffect(async () => {
             fileCH.value.type = reportStore.reportDataCHFile.thirteenth.type.split('/').at(-1);
             fileCH.value.size = reportStore.reportDataCHFile.thirteenth.size / Math.pow(1024, 2);
         }
-        if (reportStore.reportForCheckCH.thirteenth.rejecting_reasons) {
-            reportStore.returnReport.thirteenth = true;
-        } 
+        // if (reportStore.reportForCheckCH.thirteenth.rejecting_reasons) {
+        //     reportStore.returnReport.thirteenth = true;
+        // } 
 
         // console.log('чек 13', reportStore.returnReport.thirteenth)
+    }
+    if (reportStore.reportReject.thirteenth && reportStore.isReportReject.thirteenth) {
+        reportStore.returnReport.thirteenth = true;
     }
 }, {
     flush: 'post'

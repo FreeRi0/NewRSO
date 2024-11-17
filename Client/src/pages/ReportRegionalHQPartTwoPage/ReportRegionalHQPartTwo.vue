@@ -799,6 +799,8 @@ const getReportData = async (reportId) => {
       const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
       reportStore.reportForCheckCH.eleventh = dataEleventh;
       // console.log(dataEleventh);
+
+      // если используем функцию showPanels обязательна проверка на 2 поля:
       if (dataEleventh.rejecting_reasons && dataEleventh.verified_by_chq !== true) {
         revisionPanels.value.push('11');
       }
@@ -822,6 +824,8 @@ const getReportData = async (reportId) => {
       const dataTwelfth = (await reportPartTwoService.getReportDH('12', reportId)).data;
       reportStore.reportForCheckCH.twelfth = dataTwelfth;
       // console.log(dataTwelfth);
+
+      // если используем функцию showPanels обязательна проверка на 2 поля:
       if (dataTwelfth.rejecting_reasons && dataTwelfth.verified_by_chq !== true) {
         revisionPanels.value.push('12');
       }
@@ -845,6 +849,8 @@ const getReportData = async (reportId) => {
       const dataThirteenth = (await reportPartTwoService.getReportDH('13', reportId)).data;
       reportStore.reportForCheckCH.thirteenth = dataThirteenth;
       // console.log(dataThirteenth);
+
+      // если используем функцию showPanels обязательна проверка на 2 поля:
       if (dataThirteenth.rejecting_reasons && dataThirteenth.verified_by_chq !== true) {
         revisionPanels.value.push('13');
       }
