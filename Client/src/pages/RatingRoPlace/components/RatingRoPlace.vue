@@ -40,6 +40,7 @@ import SvgIcon from '@shared/ui/SvgIcon/SvgIcon.vue';
 const regionalsStore = useRegionalsStore();
 const route = useRoute();
 let id = route.params.id;
+const idEvent = route.params?.id_event;
 
 const RoPlaces = ref([{
   id: 1, title: 'Численность членов РО РСО в соответствии с объемом уплаченных членских взносов'
@@ -90,7 +91,6 @@ const prev = () => {
 
 const sortedRegionalHeadquarters = ref([]);
 
-
 const isLoading = ref(false);
 const regionals = ref({});
 const limit = 20;
@@ -116,6 +116,28 @@ const getRegionals = async (pagination, orderLimit) => {
     console.log('an error occured ' + error);
   }
 };
+
+const getRegionalsByEvent = async(pagination, orderLimit) => {
+  try {
+    isLoading.value = true;
+    let data = [];
+    let url = '/regionals/?';
+    if (orderLimit) data.push('limit=' + orderLimit);
+    else if (!pagination) data.push('limit=' + limit);
+    else if (pagination == 'next') url = regionals.value.next.replace('http', 'https');
+    const viewHeadquartersResponse = await HTTP.get(url + data.join('&'),);
+    isLoading.value = false;
+
+    let response = viewHeadquartersResponse.data;
+    if (pagination) {
+      response.results = [...regionals.value.results, ...response.results];
+    }
+    regionals.value = response;
+    sortedRegionalHeadquarters.value = response.results
+  } catch (error) {
+    console.log('an error occured ' + error);
+  }
+}
 
 const downloadReport = async () => {
   try {
@@ -148,7 +170,11 @@ watch(
 );
 
 onMounted(() => {
-  getRegionals();
+  if(idEvent){
+    getRegionalsByEvent();
+  } else {
+    getRegionals();
+  }
 })
 </script>
 <style lang="scss" scoped>
