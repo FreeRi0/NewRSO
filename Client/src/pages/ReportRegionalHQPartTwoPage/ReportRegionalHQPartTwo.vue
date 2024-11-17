@@ -470,10 +470,9 @@ const getMultiplyData = async (reportId) => {
   const sixDataPromises = six_items.value.map(async (item) => {
     try {
       if (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) {
-        console.log('1.6')
         return { id: item.id, data: (await reportPartTwoService.getMultipleReportDH('6', item.id, reportId)).data };
       } else {
-        console.log('2.6')
+       
         return { id: item.id, data: (await reportPartTwoService.getMultipleReport('6', item.id)).data };
       }
 
@@ -632,15 +631,13 @@ const getMultiplyData = async (reportId) => {
       }
 
 
-      if (sixData?.rejecting_reasons) {
+      if (sixData?.rejecting_reasons && sixData?.verified_by_chq !== true) {
         if (!revisionPanels.value.find((item) => item === '6')) {
           revisionPanels.value.push(`6`);
         }
         revisionPanels.value.push(`6-${result.id}`);
-        console.log('6 rev', revisionPanels.value)
         reportStore.reportDataDH.six[result.id] = JSON.parse(sixData?.district_version);
-        console.log('6 dis', sixData, reportStore.reportDataDH.six[result.id])
-       sixData?.central_version
+        sixData?.central_version
           ? reportStore.reportDataCH.six[result.id] = sixData?.central_version
           : reportStore.reportDataCH.six[result.id] = sixData;
 
@@ -715,7 +712,7 @@ const getMultiplyData = async (reportId) => {
 
         revisionPanels.value.push(`9-${result.id}`);
         console.log('9 rev', revisionPanels.value)
-        reportStore.reportDataDH.ninth[result.id] = JSON.parse(ninthData.district_version);
+        ninthData?.district_version ? reportStore.reportDataDH.ninth[result.id] = JSON.parse(ninthData?.district_version) : reportStore.reportDataDH.ninth[result.id] = ninthData
         ninthData.central_version
           ? reportStore.reportDataCH.ninth[result.id] = ninthData.central_version
           : reportStore.reportDataCH.ninth[result.id] = ninthData;
@@ -2124,7 +2121,7 @@ onMounted(() => {
     preloader.value = true;
     getReportData();
   }
-  console.log('ddd', route.query.reportId)
+  // console.log('ddd', route.query.reportId)
   getItems(6);
   getItems(9);
 });

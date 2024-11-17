@@ -1,7 +1,7 @@
 <template>
     <v-card-text class="panel-card-text">
         <v-tabs-window
-            v-if="!(props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander) && (props.tab === 'Просмотр отправленного отчета' && (reportStore.isReportReject?.six[props.sixId] || reportStore.isReportReject?.ninth[props.ninthId]))">
+            v-if="!(props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander || (reportStore.isReportReject?.six[props.sixId] || reportStore.isReportReject?.ninth[props.ninthId])) || (props.tab === 'Просмотр отправленного отчета' && (reportStore.isReportReject?.six[props.sixId] || reportStore.isReportReject?.ninth[props.ninthId]))">
             <!-- <div v-if="props.panel_number == 7" class="form__field-group group-seventh">
                 <div class="d-flex justify-space-between">
                     <div class="title_wrap">
@@ -84,7 +84,7 @@
                     <p>0</p>
                 </div>
             </div> -->
-            <div v-if="props.panel_number == 6" class="form__field-group group-seventh">
+            <div v-if="props.panel_number == 6" class="form__field-group group-seventh" >
                 <div class="d-flex justify-space-between">
                     <div class="title_wrap">
                         <p class="form__title">{{ props.title.name }}</p>
@@ -164,7 +164,7 @@
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                                }}</label>
+                            }}</label>
                         </div>
                     </div>
                 </div>
@@ -377,7 +377,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
 
@@ -533,7 +533,7 @@
                                     v-model="ninthPanelDataDH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -674,7 +674,7 @@
                                     v-model="ninthPanelDataCH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -1156,17 +1156,19 @@ watchEffect(() => {
         } else {
             if (Object.keys(props.data).length > 0) {
                 isFirstSentSix.value = false;
-                isRevision.value = reportStore.isReportReject.six[props.sixId];
+                // isRevision.value = reportStore.isReportReject.six[props.sixId];
                 sixPanelData.value = { ...props.data };
+                console.log('data', sixPanelData.value)
 
 
-                if (props.data.rejecting_reasons !== null) {
+                if (props.data?.rejecting_reasons !== null && props.tab === 'Доработка') {
 
-                    sixPanelDataDH.value.comment = reportStore.reportDataDH.six[props.sixId].comment;
+                    console.log('data6dh', reportStore.reportDataDH.six[props.sixId])
+                    sixPanelDataDH.value.comment = reportStore.reportDataDH.six[props.sixId]?.comment;
                     sixPanelDataDH.value.number_of_members = reportStore.reportDataDH.six[props.sixId].number_of_members;
                     sixPanelDataDH.value.links = reportStore.reportDataDH.six[props.sixId].links;
-
-                    sixPanelDataCH.value.comment = reportStore.reportDataCH.six[props.sixId].comment;
+                   
+                    sixPanelDataCH.value.comment = reportStore.reportDataCH.six[props.sixId]?.comment;
                     sixPanelDataCH.value.number_of_members = reportStore.reportDataCH.six[props.sixId].number_of_members;
                     sixPanelDataCH.value.links = reportStore.reportDataCH.six[props.sixId].links;
                 }
@@ -1181,7 +1183,7 @@ watchEffect(() => {
                     sixPanelData.value.links.push({ link: '' });
 
                 // isFirstSentSix.value = reportStore.isReportReject.six[props.sixId] && !props.data.central_version;
-                console.log('isFirstSent при доработке 6', isFirstSentSix.value);
+                // console.log('isFirstSent при доработке 6', isFirstSentSix.value);
                 if (reportStore.isReportReject.six[props.sixId]) {
                     reportStore.returnReport.six[props.sixId] = true;
                 }
@@ -1249,14 +1251,13 @@ watchEffect(() => {
                     emit('error', false)
                 }
 
-                if (props.data.rejecting_reasons !== null) {
+                if (props.data?.rejecting_reasons !== null && props.tab == 'Доработка') {
                     isRejected.value = true;
-                    ninthPanelDataDH.value.comment = reportStore.reportDataDH.ninth[props.ninthId].comment;
+                    ninthPanelDataDH.value.comment = reportStore.reportDataDH.ninth[props.ninthId]?.comment;
                     ninthPanelDataDH.value.event_happened = reportStore.reportDataDH.ninth[props.ninthId].event_happened;
                     ninthPanelDataDH.value.links = reportStore.reportDataDH.ninth[props.ninthId].links;
                     ninthPanelDataDH.value.document = reportStore.reportDataDH.ninth[props.ninthId].document;
-
-                    ninthPanelDataCH.value.comment = reportStore.reportDataCH.ninth[props.ninthId].comment;
+                    ninthPanelDataCH.value.comment = reportStore.reportDataCH.ninth[props.ninthId]?.comment;
                     ninthPanelDataCH.value.event_happened = reportStore.reportDataCH.ninth[props.ninthId].event_happened;
                     ninthPanelDataCH.value.document = reportStore.reportDataCH.ninth[props.ninthId].document;
                     ninthPanelDataCH.value.links = reportStore.reportDataCH.ninth[props.ninthId].links;
