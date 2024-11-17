@@ -581,7 +581,7 @@ const getMultiplyData = async (reportId) => {
       reportStore.reportForCheckCH.six[result.id] = sixData;
       reportData.value.six[result.id] = sixData;
       reportStore.reportDataDH.six[result.id] = sixData;
-      console.log('ch6', reportStore.reportForCheckCH.six[result.id])
+      // console.log('ch6', reportStore.reportForCheckCH.six[result.id])
       // if (reportData.value.six[result.id]?.regional_version) {
       //   console.log('reg_ver', reportData.value.six[result.id]?.regional_version)
       //   reportData.value.six[result.id] = JSON.parse(reportData.value.six[result.id]?.regional_version);
@@ -680,7 +680,7 @@ const getMultiplyData = async (reportId) => {
       // }
     } else if (centralExpert.value) {
       reportStore.reportForCheckCH.ninth[result.id] = ninthData;
-      console.log('ch9', reportStore.reportForCheckCH.ninth[result.id])
+      // console.log('ch9', reportStore.reportForCheckCH.ninth[result.id])
       if (ninthData?.regional_version) {
         reportData.value.ninth[result.id] = JSON.parse(ninthData.regional_version);
       } else {
@@ -793,6 +793,10 @@ const getReportData = async (reportId) => {
       const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
       reportStore.reportForCheckCH.eleventh = dataEleventh;
       // console.log(dataEleventh);
+      if (dataEleventh.rejecting_reasons && dataEleventh.verified_by_chq !== true) {
+        revisionPanels.value.push('11');
+      }
+
       dataEleventh.regional_version
         ? reportData.value.eleventh = JSON.parse(dataEleventh.regional_version)
         : reportData.value.eleventh = dataEleventh;
@@ -812,6 +816,10 @@ const getReportData = async (reportId) => {
       const dataTwelfth = (await reportPartTwoService.getReportDH('12', reportId)).data;
       reportStore.reportForCheckCH.twelfth = dataTwelfth;
       // console.log(dataTwelfth);
+      if (dataTwelfth.rejecting_reasons && dataTwelfth.verified_by_chq !== true) {
+        revisionPanels.value.push('12');
+      }
+
       dataTwelfth.regional_version
         ? reportData.value.twelfth = JSON.parse(dataTwelfth.regional_version)
         : reportData.value.twelfth = dataTwelfth;
@@ -831,6 +839,10 @@ const getReportData = async (reportId) => {
       const dataThirteenth = (await reportPartTwoService.getReportDH('13', reportId)).data;
       reportStore.reportForCheckCH.thirteenth = dataThirteenth;
       // console.log(dataThirteenth);
+      if (dataThirteenth.rejecting_reasons && dataThirteenth.verified_by_chq !== true) {
+        revisionPanels.value.push('13');
+      }
+
       dataThirteenth.regional_version
         ? reportData.value.thirteenth = JSON.parse(dataThirteenth.regional_version)
         : reportData.value.thirteenth = dataThirteenth;

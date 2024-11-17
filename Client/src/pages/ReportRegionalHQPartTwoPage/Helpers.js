@@ -247,7 +247,9 @@ const roleStore = useRoleStore();
 
 export const showPanels = (numberPanel, picked, revisionPanels) => {
     if (
-        (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) || 
+        roleStore.experts.is_district_expert || 
+        (roleStore.experts.is_central_expert && !revisionPanels.length) || 
+        (roleStore.experts.is_central_expert && revisionPanels.includes(numberPanel)) || 
         (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && !revisionPanels) ||
         (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && picked == 'Просмотр отправленного отчета') ||
         (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && picked == 'Доработка' && revisionPanels.includes(numberPanel))
