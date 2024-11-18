@@ -999,6 +999,23 @@ const routes: RouteRecordRaw[] = [
                             },
                         ],
                     },
+                    {
+                        path: 'place-ro',
+                        meta:{
+                            label: 'Места РО',
+                            redirectTo: 'place-ro',
+                        },
+                        children:[
+                            {
+                                path: '',
+                                name: 'place-ro',
+                                component: () =>
+                                    import(
+                                        '@pages/PlaceRO/components/PlaceRO.vue'
+                                    ),
+                            },
+                        ]
+                    }
 
 
                 ],
