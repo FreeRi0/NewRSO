@@ -826,9 +826,14 @@ const getReportData = async (reportId) => {
         : reportStore.reportDataDH.eleventh = dataEleventh;
 
       reportStore.reportDataCH.eleventh = Object.assign({}, dataEleventh);
-      dataEleventh.verified_by_chq === null
-        ? reportStore.reportDataCH.eleventh.comment = ''
-        : reportStore.reportDataCH.eleventh.comment = dataEleventh.comment;
+      if (!dataEleventh.rejecting_reasons) {
+        reportStore.reportDataCH.eleventh.comment = ''
+      } else if (dataEleventh.rejecting_reasons) {
+        reportStore.reportDataCH.eleventh.comment = JSON.parse(reportStore.reportDataCH.eleventh.rejecting_reasons).comment
+      }
+      if (dataEleventh.verified_by_chq === true) {
+        reportStore.reportDataCH.eleventh.comment = dataEleventh.comment
+      }
 
       /* 
       * Критерий 12
@@ -851,9 +856,14 @@ const getReportData = async (reportId) => {
         : reportStore.reportDataDH.twelfth = dataTwelfth;
 
       reportStore.reportDataCH.twelfth = Object.assign({}, dataTwelfth);
-      dataTwelfth.verified_by_chq === null
-        ? reportStore.reportDataCH.twelfth.comment = ''
-        : reportStore.reportDataCH.twelfth.comment = dataTwelfth.comment;
+      if (!dataTwelfth.rejecting_reasons) {
+        reportStore.reportDataCH.twelfth.comment = ''
+      } else if (dataTwelfth.rejecting_reasons) {
+        reportStore.reportDataCH.twelfth.comment = JSON.parse(reportStore.reportDataCH.twelfth.rejecting_reasons).comment
+      }
+      if (dataTwelfth.verified_by_chq === true) {
+        reportStore.reportDataCH.twelfth.comment = dataTwelfth.comment
+      }
 
       /* 
       * Критерий 13
@@ -876,9 +886,14 @@ const getReportData = async (reportId) => {
         : reportStore.reportDataDH.thirteenth = dataThirteenth;
 
       reportStore.reportDataCH.thirteenth = Object.assign({}, dataThirteenth);
-      dataThirteenth.verified_by_chq === null
-        ? reportStore.reportDataCH.thirteenth.comment = ''
-        : reportStore.reportDataCH.thirteenth.comment = dataThirteenth.comment;
+      if (!dataThirteenth.rejecting_reasons) {
+        reportStore.reportDataCH.thirteenth.comment = ''
+      } else if (dataThirteenth.rejecting_reasons) {
+        reportStore.reportDataCH.thirteenth.comment = JSON.parse(reportStore.reportDataCH.thirteenth.rejecting_reasons).comment
+      }
+      if (dataThirteenth.verified_by_chq === true) {
+        reportStore.reportDataCH.thirteenth.comment = dataThirteenth.comment
+      }
 
       /* 
       * Критерий 17-19
