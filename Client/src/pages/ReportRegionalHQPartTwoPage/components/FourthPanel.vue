@@ -737,6 +737,7 @@ onMounted(() => {
     const eventQuantity = reportStore.reportForCheckCH.fourth.events.length;
 
     if (reportStore.reportForCheckCH.fourth.rejecting_reasons) {
+      // Повторная доработка
       // Добавление данных панели "отчет РО"
       events.value = reportStore.reportForCheckCH.fourth.events;
       fourthPanelData.value.comment = reportStore.reportForCheckCH.fourth.comment || '';
@@ -748,7 +749,7 @@ onMounted(() => {
 
       // Добавление данных из стора для панели "корректировка ЦШ"
       const reportDataCH = reportStore.reportForCheckCH.fourth.central_version;
-      commentCH.value = reportDataCH.comment || '';
+      commentCH.value = reportStore.reportDataCH.fourth.comment || '';
       for (let i = 0; i < eventQuantity; i++) {
         commonData.value[i] = {
           dataRH: reportStore.reportForCheckCH.fourth.events[i],
