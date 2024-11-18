@@ -590,6 +590,13 @@ const getMultiplyData = async (reportId) => {
       reportStore.reportForCheckCH.six[result.id] = sixData;
       reportData.value.six[result.id] = sixData;
       reportStore.reportDataDH.six[result.id] = sixData;
+
+      if (sixData.rejecting_reasons && sixData.verified_by_chq !== true) {
+        if (!revisionPanels.value.find((item) => item === '6')) {
+          revisionPanels.value.push(`6`);
+        }
+        revisionPanels.value.push(`6-${result.id}`);
+      }
       if (sixData?.regional_version) {
         try {
           if (typeof sixData.regional_version === 'object') {
@@ -679,7 +686,12 @@ const getMultiplyData = async (reportId) => {
       // }
     } else if (centralExpert.value) {
       reportStore.reportForCheckCH.ninth[result.id] = ninthData;
-
+      if (ninthData.rejecting_reasons && ninthData.verified_by_chq !== true) {
+        if (!revisionPanels.value.find((item) => item === '9')) {
+          revisionPanels.value.push(`9`);
+        }
+        revisionPanels.value.push(`9-${result.id}`);
+      }
       if (ninthData?.regional_version) {
         try {
           if (typeof ninthData.regional_version === 'object') {

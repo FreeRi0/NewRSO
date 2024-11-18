@@ -682,8 +682,8 @@
                         @change="uploadFile($event, 9)" @click="deleteFile(9)" :CH="true" :file="fileCH.name"
                         :fileType="fileCH.type" :fileSize="fileCH.size" :is-error-file="isErrorFile"
                         :is-error-panel="isErrorPanel"
-                        :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq "
-                        :is-sent="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq ">
+                        :disabled="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq"
+                        :is-sent="!(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) || reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq">
                     </CommentFileComponent>
                     <div>
                         <v-checkbox v-model="reportStore.returnReport.ninth[props.ninthId]"
@@ -1190,12 +1190,16 @@ watchEffect(() => {
 
                 // isFirstSentSix.value = reportStore.isReportReject.six[props.sixId] && !props.data.central_version;
                 // console.log('isFirstSent при доработке 6', isFirstSentSix.value);
-                if (reportStore.isReportReject.six[props.sixId]) {
-                    reportStore.returnReport.six[props.sixId] = true;
-                }
+                // if (reportStore.isReportReject.six[props.sixId]) {
+                //     reportStore.returnReport.six[props.sixId] = true;
+                // }
             } else {
                 console.log('data not received');
             }
+        }
+
+        if (reportStore.reportReject.six[props.sixId] && reportStore.isReportReject.six[props.sixId]) {
+            reportStore.returnReport.six[props.sixId] = true;
         }
 
 
@@ -1271,9 +1275,9 @@ watchEffect(() => {
                 }
                 // isFirstSentNinth.value = reportStore.isReportReject.ninth[props.ninthId] && !props.data.central_version;
                 console.log('isFirstSent при доработке 9', isFirstSentNinth.value);
-                if (reportStore.isReportReject.ninth[props.ninthId]) {
-                    reportStore.returnReport.ninth[props.ninthId] = true;
-                }
+                // if (reportStore.isReportReject.ninth[props.ninthId]) {
+                //     reportStore.returnReport.ninth[props.ninthId] = true;
+                // }
 
             }
 
@@ -1323,6 +1327,11 @@ watchEffect(() => {
                 // }
             }
 
+        }
+
+
+        if (reportStore.reportReject.ninth[props.ninthId] && reportStore.isReportReject.ninth[props.ninthId]) {
+            reportStore.returnReport.ninth[props.ninthId] = true;
         }
 
         emit('getId', props.id)
