@@ -3,17 +3,42 @@
     <div class="RoPlaces">
       <h2 class="RoPlaces_title">Места РО по показателям</h2>
       <div class="RoPlaces_wrapper">
-        <router-link :to="{ name: 'Place', params: {id: item.id} }" v-for="item in RoPlaces" :key="item.id" class="RoPlaces_item">
-          <p>{{ item.id }}.</p>
-          <p>{{ item.title }}</p>
-        </router-link>
+        <div v-for="item in RoPlaces" :key="item.id" >
+          <router-link :to="{ name: 'Place', params: {id: item.id} }" class="RoPlaces_item" v-if="!(item.id == 6 || item.id == 9)">
+            <p>{{ item.id }}.</p>
+            <p>{{ item.title }}</p>
+          </router-link>
+          <div v-else>
+            <v-expansion-panels>
+              <v-expansion-panel>
+                <v-expansion-panel-title @click="getData(item.id)">
+                  {{ item.id }}.
+                  {{ item.title }}
+                </v-expansion-panel-title>
+                <v-expansion-panel-text class="form__field-group ">
+                  <div v-for="event in eventsArrays[item.id]" :key="event.id" class=" mb-2 title">
+                    <router-link :to="{ name: 'EventPlace', params: {id: item.id, id_event: event.id} }" class="title_wrap">
+                      {{ event.name }}
+                    </router-link>
+                  </div>
+                </v-expansion-panel-text>
+              </v-expansion-panel>
+            </v-expansion-panels>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script setup>
 import { ref } from 'vue';
+import { HTTP } from '@app/http';
 
+const loaded = ref({6: false, 9: false})
+const eventsArrays = ref({
+  6: [],
+  9: [],
+})
 const RoPlaces = ref([{
   id: 1, title: 'Численность членов РО РСО в соответствии с объемом уплаченных членских взносов'
 }, {
@@ -47,6 +72,18 @@ const RoPlaces = ref([{
 }, {
   id: 16, title: 'Победители всероссийских (международных), окружных и межрегиональных трудовых проектов по комиссарской деятельности «К»',
 }])
+
+const getData = async (id) => {
+  if(loaded[id]) return
+  try {
+    const { data } = await HTTP.get(`/regional_competitions/reports/event_names/r${id}-event-names/`,)
+    eventsArrays.value[id] = data;
+    console.log(eventsArrays.value);
+    loaded[id] = true
+  } catch(error){
+    console.error(error);
+  }
+}
 </script>
 <style lang="scss">
 .RoPlaces {
@@ -88,5 +125,101 @@ const RoPlaces = ref([{
       font-family: 'Akrobat';
     }
   }
+}
+.v-expansion-panel-title__icon{
+  display: none;
+}
+.title {
+  background: #F3F4F5;
+  margin: 0px;
+  border-radius: 0px;
+  font-family: Akrobat;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 21.6px;
+  text-align: left;
+  border-left: 6px solid #F3F4F5;
+  padding-left: 30px;
+}
+.title_wrap {
+  display: grid;
+  grid-template-columns: 600px 300px;
+  column-gap: 40px;
+  width: 100%;
+  max-width: 900px;
+  padding-top: 10px;
+  padding-bottom:10px;
+
+  @media screen and (max-width: 1024px) {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 6px;
+    max-width: 828px;
+    width: auto;
+  }
+
+  @media screen and (max-width: 768px) {
+    max-width: 636px;
+  }
+
+  @media screen and (max-width: 578px) {
+    max-width: 360px;
+  }
+
+}
+
+.form__field-group {
+  padding: 0px;
+  display: flex;
+  flex-direction: column;
+  background: #F3F4F5;
+  border: none;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  gap: 20px;
+}
+.v-expansion-panel-text__wrapper{
+  padding: 8px 10px 16px;
+}
+.v-expansion-panel__shadow{
+  height: auto;
+}
+
+.v-expansion-panel-title {
+  background: #F3F4F5;
+  border-left: 6px solid #1f7cc0;
+  margin-bottom: 8px;
+  border-radius: 10px;
+  font-family: Akrobat;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 24px;
+  text-align: left;
+}
+
+.v-expansion-panel--active>.v-expansion-panel-title {
+  border-radius: 10px;
+  min-height: none;
+  border-left: none;
+  border-right: 6px solid #1f7cc0;
+}
+
+.v-expansion-panel-title.visible-error,
+.v-expansion-panel--active>.v-expansion-panel-title.visible-error {
+  border-color: #db0000;
+}
+
+.v-expansion-panel-title__overlay {
+  border-radius: 10px;
+}
+
+.v-expansion-panel--active:not(:first-child),
+.v-expansion-panel--active+.v-expansion-panel {
+  margin-top: 0;
+  opacity: unset;
+}
+
+.v-expansion-panel:not(:first-child)::after {
+  border-top-style: none;
 }
 </style>

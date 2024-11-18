@@ -49,29 +49,30 @@ export function checkEmptyFieldsDH(data, isErrorPanel) {
         // }
     }
 
-    if (data.fifth) {
-        for (const event of data.fifth.events) {
-            if (
-                (event.participants_number != 0 ||
-                    !event.participants_number) &&
-                !(
-                    event.end_date &&
-                    event.start_date &&
-                    event.name &&
-                    data.fifth.comment
-                )
-            ) {
-                isErrorPanel.value.fifth = true;
-                swal.fire({
-                    position: 'center',
-                    icon: 'warning',
-                    title: `Заполните обязательные поля в 5 показателе`,
-                    showConfirmButton: false,
-                    timer: 2500,
-                });
-                return false;
-            }
-        }
+    if (data.fifth && !(data.fifth.comment)) {
+        isErrorPanel.value.fifth = true;
+        swal.fire({
+            position: 'center',
+            icon: 'warning',
+            title: `Заполните обязательные поля в 5 показателе`,
+            showConfirmButton: false,
+            timer: 2500,
+        });
+        return false;
+        // for (const event of data.fifth.events) {
+        //     if (
+        //         (event.participants_number != 0 ||
+        //             !event.participants_number) &&
+        //         !(
+        //             event.end_date &&
+        //             event.start_date &&
+        //             event.name &&
+        //             data.fifth.comment
+        //         )
+        //     ) {
+        //
+        //     }
+        // }
     }
 
     for (const item in data.six) {
@@ -246,7 +247,9 @@ const roleStore = useRoleStore();
 
 export const showPanels = (numberPanel, picked, revisionPanels) => {
     if (
-        (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) || 
+        roleStore.experts.is_district_expert || 
+        (roleStore.experts.is_central_expert && !revisionPanels.length) || 
+        (roleStore.experts.is_central_expert && revisionPanels.includes(numberPanel)) || 
         (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && !revisionPanels) ||
         (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && picked == 'Просмотр отправленного отчета') ||
         (!(roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) && picked == 'Доработка' && revisionPanels.includes(numberPanel))

@@ -803,13 +803,22 @@ const routes: RouteRecordRaw[] = [
 
             {
                 path: '/roster',
-                name: 'Roster',
-                component: () =>
-                    import('@pages/reestrPage/components/rosterPage.vue'),
                 meta: {
+                    redirectTo: 'Roster',
                     label: 'Реестр участников',
                 },
+                children: [
+                    {
+                        path: '',
+                        name: 'Roster',
+                        component: () =>
+                            import(
+                                '@pages/reestrPage/components/newRosterPage.vue'
+                            ),
+                    },
+                ],
             },
+
             {
                 path: '/corp-univer',
                 meta: {
@@ -944,6 +953,17 @@ const routes: RouteRecordRaw[] = [
                                     label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 1',
                                 },
                             },
+                            {
+                                path: 'report-regional-two',
+                                name: 'ReportRegionalPartTwoComander',
+                                component: () =>
+                                    import(
+                                        '@pages/ReportRegionalHQPartTwoPage/ReportRegionalHQPartTwo.vue'
+                                    ),
+                                meta: {
+                                    label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 2',
+                                },
+                            },
                         ],
                     },
                     {
@@ -973,6 +993,14 @@ const routes: RouteRecordRaw[] = [
                                     {
                                         path: '',
                                         name: 'Place',
+                                        component: () =>
+                                            import(
+                                                '@pages/RatingRoPlace/components/RatingRoPlace.vue'
+                                            ),
+                                    },
+                                    {
+                                        path: ':id_event',
+                                        name: 'EventPlace',
                                         component: () =>
                                             import(
                                                 '@pages/RatingRoPlace/components/RatingRoPlace.vue'

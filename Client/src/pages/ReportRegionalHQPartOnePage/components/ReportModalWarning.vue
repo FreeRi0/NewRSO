@@ -2,7 +2,8 @@
   <div class="modal-background">
     <div class="report-modal-warning">
       <div class="report-modal-warning__wrapper">
-        <p class="report-modal-warning__wrapper_title">Вы точно уверены, что хотите отправить отчетность?</p>
+        <p v-if="isCentral" class="report-modal-warning__wrapper_title">Вы точно уверены, что хотите верифицировать отчет?</p>
+        <p v-else class="report-modal-warning__wrapper_title">Вы точно уверены, что хотите отправить отчетность?</p>
       </div>
       <div class="report-modal-warning__wrapper_buttons">
         <Button type="button" label="Да" @click="reportConfirmation(true)"
@@ -16,7 +17,9 @@
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
-
+defineProps({
+  isCentral: Boolean
+})
 const emit = defineEmits(['reportConfirmation']);
 const reportConfirmation = (value) => {
   emit('reportConfirmation', value)

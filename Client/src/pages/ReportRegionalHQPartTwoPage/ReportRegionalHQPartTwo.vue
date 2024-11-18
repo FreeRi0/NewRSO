@@ -23,7 +23,8 @@
           </button>
         </div>
         <v-expansion-panels>
-          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('1') : true">
+          <v-expansion-panel
+            v-if="picked === 'Доработка' ? revisionPanels.includes('1') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('1') ? false : true">
             <v-expansion-panel-title :class="isErrorPanel.first ? 'visible-error' : ''">
               1. Численность членов РО&nbsp;РСО в&nbsp;соответствии с&nbsp;объемом уплаченных членских взносов
             </v-expansion-panel-title>
@@ -57,7 +58,8 @@
                 text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('4') : true">
+          <v-expansion-panel
+            v-if="picked === 'Доработка' ? revisionPanels.includes('4') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('4') ? false : true">
             <v-expansion-panel-title :class="isErrorPanel.fourth ? 'visible-error' : ''">
               4. Организация всероссийских (международных), окружных и&nbsp;межрегиональных мероприятий и&nbsp;проектов
               (слеты, школы, фестивали, турниры и&nbsp;прочие)
@@ -68,7 +70,8 @@
                 :is-error-panel="isErrorPanel.fourth" :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('5') : true">
+          <v-expansion-panel
+            v-if="picked === 'Доработка' ? revisionPanels.includes('5') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('5') ? false : true">
             <v-expansion-panel-title :class="isErrorPanel.fifth ? 'visible-error' : ''">
               5. Организация всероссийских (международных) (организатор&nbsp;&mdash; региональное отделение РСО),
               окружных и&nbsp;межрегиональных трудовых проектов в&nbsp;соответствии с&nbsp;Положением
@@ -91,7 +94,7 @@
               <sixth-panel @get-data="setData" @get-data-DH="setDataDH" @get-data-CH="setDataCH" :items="six_items"
                 @getId="setId" @getPanelNumber="setPanelNumber" :district-headquarter-commander="districtExpert"
                 :data="reportData.six" :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.six"
-                :tab="picked" />
+                :tab="picked" :revision-panels="revisionPanels" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('7', picked, revisionPanels)">
@@ -124,11 +127,12 @@
               <ninth-panel @get-data="setData" @get-data-DH="setDataDH" @getId="setId" @get-data-CH="setDataCH"
                 @getPanelNumber="setPanelNumber" :items="ninth_items" :district-headquarter-commander="districtExpert"
                 :data="reportData.ninth" :central-headquarter-commander="centralExpert"
-                :is-error-panel="isErrorPanel.ninth" :tab="picked" />
+                :is-error-panel="isErrorPanel.ninth" :tab="picked" :revision-panels="revisionPanels" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel
-            v-if="picked === 'Доработка' ? revisionPanels.includes('10-1') || revisionPanels.includes('10-2') : true">
+            v-if="picked === 'Доработка' ? revisionPanels.includes('10-1') || revisionPanels.includes('10-2')
+              : picked === 'Просмотр отправленного отчета' && (verifiedByChqPanels.includes('10-1') && verifiedByChqPanels.includes('10-2')) ? false : true">
             <v-expansion-panel-title :class="isErrorPanel.tenth ? 'visible-error' : ''">
               10. Организация РО&nbsp;РСО всероссийских (международных) добровольческих и&nbsp;патриотических акций
               &laquo;К&raquo;
@@ -194,7 +198,8 @@
                 text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('16') : true">
+          <v-expansion-panel
+            v-if="picked === 'Доработка' ? revisionPanels.includes('16') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('16') ? false : true">
             <v-expansion-panel-title :class="isErrorPanel.sixteenth ? 'visible-error' : ''">
               16. Победители всероссийских (международных), окружных и&nbsp;межрегиональных трудовых проектов
               по&nbsp;комиссарской деятельности &laquo;К&raquo;
@@ -235,9 +240,10 @@
         </v-expansion-panels>
       </div>
     </div>
-    <Button class="btn_report" v-if="!preloader" :disabled="blockSendButton" variant="text" label="Отправить отчет"
-      size="large" @click="sendReport" />
+    <Button class="btn_report" v-if="!preloader" variant="text" label="Отправить отчет" size="large"
+      @click="sendReport" />
   </div>
+  <ReportModalWarning v-if="showModalWarning" @reportConfirmation="reportConfirmation" isCentral />
 </template>
 <script setup>
 import {
@@ -270,6 +276,9 @@ import {
   checkEmptyFieldsDH,
   showPanels,
 } from "@pages/ReportRegionalHQPartTwoPage/Helpers.js";
+import ReportModalWarning from "@pages/ReportRegionalHQPartOnePage/components/ReportModalWarning.vue";
+
+const showModalWarning = ref(false)
 
 const picked = ref('Просмотр отправленного отчета');
 const tabs = ref([
@@ -470,10 +479,9 @@ const getMultiplyData = async (reportId) => {
   const sixDataPromises = six_items.value.map(async (item) => {
     try {
       if (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) {
-        console.log('1.6')
         return { id: item.id, data: (await reportPartTwoService.getMultipleReportDH('6', item.id, reportId)).data };
       } else {
-        console.log('2.6')
+
         return { id: item.id, data: (await reportPartTwoService.getMultipleReport('6', item.id)).data };
       }
 
@@ -563,148 +571,180 @@ const getMultiplyData = async (reportId) => {
   ]);
 
   sixDataResults.forEach((result) => {
-
+    const sixData = result.data;
     if (districtExpert.value) {
-      if (result.data?.regional_version) {
+      if (sixData?.regional_version) {
         try {
-          reportData.value.six[result.id] = JSON.parse(result.data.regional_version);
+          reportData.value.six[result.id] = JSON.parse(sixData.regional_version);
         } catch (error) {
           console.error('Error parsing regional_version JSON:', error);
-          reportData.value.six[result.id] = result.data.regional_version || result.data;
+          reportData.value.six[result.id] = sixData.regional_version || sixData;
         }
       } else {
-        reportData.value.six[result.id] = result.data;
+        reportData.value.six[result.id] = sixData;
       }
-      reportStore.reportDataDH.six[result.id] = Object.assign({}, result.data);
+      reportStore.reportDataDH.six[result.id] = Object.assign({}, sixData);
       reportStore.reportDataDH.six[result.id].comment = '';
 
     } else if (centralExpert.value) {
-      reportStore.reportForCheckCH.six[result.id] = result.data;
-      reportData.value.six[result.id] = result.data
-      reportStore.reportDataDH.six[result.id] = result.data
-      console.log('ch6', reportStore.reportForCheckCH.six[result.id])
-      // if (reportData.value.six[result.id]?.regional_version) {
-      //   console.log('reg_ver', reportData.value.six[result.id]?.regional_version)
-      //   reportData.value.six[result.id] = JSON.parse(reportData.value.six[result.id]?.regional_version);
-      // } else {
-      //   reportData.value.six[result.id] = result.data;
-      // }
-      // if (reportStore.reportDataDH.six[result.id]?.district_version) {
-      //   reportStore.reportDataDH.six[result.id] = JSON.parse(reportStore.reportDataDH.six[result.id].district_version);
-      // } else {
-      //   reportStore.reportDataDH.six[result.id] = result.data
-      // }
-      if (result.data?.regional_version) {
-        try {
-          reportData.value.six[result.id] = JSON.parse(result.data.regional_version);
-        } catch (error) {
-          console.error('Error parsing regional_version JSON:', error);
-          reportData.value.six[result.id] = result.data.regional_version || result.data;
+      reportStore.reportForCheckCH.six[result.id] = sixData;
+      reportData.value.six[result.id] = sixData;
+      reportStore.reportDataDH.six[result.id] = sixData;
+
+      if (sixData.rejecting_reasons && sixData.verified_by_chq !== true) {
+        if (!revisionPanels.value.find((item) => item === '6')) {
+          revisionPanels.value.push(`6`);
         }
-      } else {
-        reportData.value.six[result.id] = result.data;
+        revisionPanels.value.push(`6-${result.id}`);
       }
-      if (result.data?.district_version) {
+      if (sixData?.regional_version) {
         try {
-          reportStore.reportDataDH.six[result.id] = JSON.parse(result.data.district_version);
+          if (typeof sixData.regional_version === 'object') {
+            reportData.value.six[result.id] = JSON.stringify(sixData.regional_version);
+            if (sixData.regional_version?.regional_version?.regional_version) {
+              reportData.value.six[result.id] = JSON.parse(sixData.regional_version?.regional_version?.regional_version);
+            } else {
+              reportData.value.six[result.id] = JSON.parse(sixData.regional_version?.regional_version);
+            }
+
+          } else if (typeof sixData.regional_version === 'string') {
+            reportData.value.six[result.id] = JSON.parse(sixData.regional_version);
+          } else {
+            throw new Error('Invalid type for regional_version');
+          }
         } catch (error) {
           console.error('Error parsing regional_version JSON:', error);
-          reportStore.reportDataDH.six[result.id] = result.data.district_version || result.data;
+          reportData.value.six[result.id] = sixData.regional_version || sixData;
         }
       } else {
-        reportStore.reportDataDH.six[result.id] = result.data;
+        reportData.value.six[result.id] = sixData;
+      }
+      if (sixData?.district_version) {
+        try {
+          reportStore.reportDataDH.six[result.id] = JSON.parse(sixData.district_version);
+        } catch (error) {
+          console.error('Error parsing regional_version JSON:', error);
+          reportStore.reportDataDH.six[result.id] = sixData.district_version || sixData;
+        }
+      } else {
+        reportStore.reportDataDH.six[result.id] = sixData;
       }
 
-      reportStore.reportDataCH.six[result.id] = Object.assign({}, result.data);
+      reportStore.reportDataCH.six[result.id] = Object.assign({}, sixData);
       reportStore.reportDataCH.six[result.id].verified_by_chq === null
         ? reportStore.reportDataCH.six[result.id].comment = ''
-        : reportStore.reportDataCH.six[result.id].comment = result.data?.comment;
+        : reportStore.reportDataCH.six[result.id].comment = sixData?.comment;
     } else {
-      if (result.data?.regional_version) {
+      if (sixData?.regional_version) {
         try {
-          reportData.value.six[result.id] = JSON.parse(result.data.regional_version);
+          reportData.value.six[result.id] = JSON.parse(sixData.regional_version);
         } catch (error) {
           console.error('Error parsing regional_version JSON:', error);
-          reportData.value.six[result.id] = result.data.regional_version || result.data;
+          reportData.value.six[result.id] = sixData.regional_version || sixData;
         }
       } else {
-        reportData.value.six[result.id] = result.data;
+        reportData.value.six[result.id] = sixData;
       }
 
-      // Проверка на причины отклонений отчета и вывод табов для РО
-      // if (reportData.value.six[result.id]?.rejecting_reasons) {
-      //   revisionPanels.value.push('6');
-      //   reportStore.reportDataDH.six[result.id] = JSON.parse(reportData.value.six[result.id].district_version);
 
-      //   reportData.value.six[result.id].central_version
-      //     ? reportStore.reportDataCH.six[result.id] = reportData.value.six[result.id].central_version
-      //     : reportStore.reportDataCH.six[result.id] = reportData.value.six[result.id];
+      if (sixData?.rejecting_reasons && sixData?.verified_by_chq !== true) {
+        if (!revisionPanels.value.find((item) => item === '6')) {
+          revisionPanels.value.push(`6`);
+        }
+        revisionPanels.value.push(`6-${result.id}`);
+        reportStore.reportDataDH.six[result.id] = JSON.parse(sixData?.district_version);
+        sixData?.central_version
+          ? reportStore.reportDataCH.six[result.id] = sixData?.central_version
+          : reportStore.reportDataCH.six[result.id] = sixData;
 
-      //   reportStore.isReportReject.six[result.id] = isTabsForRevision.value;
-      // }
+        reportStore.isReportReject.six[result.id] = isTabsForRevision.value;
+      }
+
+
     }
   });
-  // console.log('data66', reportData.value.six)
-  // seventhDataResults.forEach((result) => {
-  //   reportData.value.seventh[result.id] = result.data;
-  // });
 
   ninthDataResults.forEach((result) => {
+    const ninthData = result.data;
+
     if (districtExpert.value) {
-      // reportData.value.ninth[result.id] = result.data;
-      // if (result.data?.regional_version) {
-      //   reportData.value.ninth[result.id] = JSON.parse(result.data.regional_version);
-      // } else {
-      //   reportData.value.ninth[result.id] = result.data;
-      // }
-      if (result.data?.regional_version) {
+      if (ninthData?.regional_version) {
         try {
-          reportData.value.ninth[result.id] = JSON.parse(result.data.regional_version);
+          reportData.value.ninth[result.id] = JSON.parse(ninthData.regional_version);
         } catch (error) {
           console.error('Error parsing regional_version JSON:', error);
-          reportData.value.ninth[result.id] = result.data.regional_version || result.data;
+          reportData.value.ninth[result.id] = ninthData.regional_version || ninthData;
         }
       } else {
-        reportData.value.six[result.id] = result.data;
+        reportData.value.ninth[result.id] = ninthData;
       }
-      reportStore.reportDataDH.ninth[result.id] = Object.assign({}, result.data);
+      reportStore.reportDataDH.ninth[result.id] = Object.assign({}, ninthData);
       reportStore.reportDataDH.ninth[result.id].comment = '';
       // isErrorPanel.value.ninth[result.id] = {
       //   id: result.id,
       //   error: false,
       // }
     } else if (centralExpert.value) {
-      reportStore.reportForCheckCH.ninth[result.id] = result.data;
-      console.log('ch9', reportStore.reportForCheckCH.ninth[result.id])
-      if (result.data?.regional_version) {
-        reportData.value.ninth[result.id] = JSON.parse(result.data.regional_version);
-      } else {
-        reportData.value.ninth[result.id] = result.data;
+      reportStore.reportForCheckCH.ninth[result.id] = ninthData;
+      if (ninthData.rejecting_reasons && ninthData.verified_by_chq !== true) {
+        if (!revisionPanels.value.find((item) => item === '9')) {
+          revisionPanels.value.push(`9`);
+        }
+        revisionPanels.value.push(`9-${result.id}`);
       }
-      if (result.data?.district_version) {
-        reportStore.reportDataDH.ninth[result.id] = JSON.parse(result.data.district_version);
+      if (ninthData?.regional_version) {
+        try {
+          if (typeof ninthData.regional_version === 'object') {
+            reportData.value.ninth[result.id] = JSON.stringify(ninthData.regional_version?.regional_version);
+            reportData.value.ninth[result.id] = JSON.parse(ninthData.regional_version?.regional_version);
+          } else if (typeof ninthData.regional_version === 'string') {
+            reportData.value.ninth[result.id] = JSON.parse(ninthData.regional_version);
+          } else {
+            throw new Error('Invalid type for regional_version');
+          }
+        } catch (error) {
+          console.error('Error parsing regional_version JSON:', error);
+          reportData.value.ninth[result.id] = ninthData.regional_version || ninthData;
+        }
       } else {
-        reportStore.reportDataDH.ninth[result.id] = result.data
+        reportData.value.ninth[result.id] = ninthData;
+      }
+      if (ninthData?.district_version) {
+        try {
+          reportStore.reportDataDH.ninth[result.id] = JSON.parse(ninthData.district_version);
+        } catch (error) {
+          console.error('Error parsing regional_version JSON:', error);
+          reportStore.reportDataDH.ninth[result.id] = ninthData.district_version || ninthData;
+        }
+      } else {
+        reportStore.reportDataDH.ninth[result.id] = ninthData;
       }
 
-      reportStore.reportDataCH.ninth[result.id] = Object.assign({}, result.data);
-      result.data.verified_by_chq === null
+
+      reportStore.reportDataCH.ninth[result.id] = Object.assign({}, ninthData);
+      ninthData.verified_by_chq === null
         ? reportStore.reportDataCH.ninth[result.id].comment = ''
-        : reportStore.reportDataCH.ninth[result.id].comment = result.data.comment;
+        : reportStore.reportDataCH.ninth[result.id].comment = ninthData.comment;
     }
     else {
-      reportData.value.ninth[result.id] = result.data;
+      reportData.value.ninth[result.id] = ninthData;
       if (reportData.value.ninth[result.id]?.regional_version !== null && Object.keys(reportData.value.ninth[result.id]).length) {
         reportData.value.ninth[result.id] = JSON.parse(reportData.value.ninth[result.id].regional_version);
       }
+      console.log('reasons: ', reportData.value.ninth[result.id]?.rejecting_reasons)
 
-      if (reportData.value.ninth[result.id]?.rejecting_reasons) {
-        revisionPanels.value.push('9');
-        reportStore.reportDataDH.ninth[result.id] = JSON.parse(reportData.value.ninth[result.id].district_version);
+      if (ninthData?.rejecting_reasons) {
+        if (!revisionPanels.value.find((item) => item === '9')) {
+          revisionPanels.value.push(`9`);
+        }
 
-        reportData.value.ninth[result.id].central_version
-          ? reportStore.reportDataCH.ninth[result.id] = reportData.value.ninth[result.id].central_version
-          : reportStore.reportDataCH.ninth[result.id] = reportData.value.ninth[result.id];
+
+        revisionPanels.value.push(`9-${result.id}`);
+        console.log('9 rev', revisionPanels.value)
+        ninthData?.district_version ? reportStore.reportDataDH.ninth[result.id] = JSON.parse(ninthData?.district_version) : reportStore.reportDataDH.ninth[result.id] = ninthData
+        ninthData.central_version
+          ? reportStore.reportDataCH.ninth[result.id] = ninthData.central_version
+          : reportStore.reportDataCH.ninth[result.id] = ninthData;
 
         reportStore.isReportReject.ninth[result.id] = isTabsForRevision.value;
       }
@@ -717,7 +757,7 @@ const getMultiplyData = async (reportId) => {
 const revisionPanels = ref([]);
 const isRevision = ref(false);
 const isTabsForRevision = ref(false);
-
+const verifiedByChqPanels = ref([])
 const getReportData = async (reportId) => {
   try {
     // Загрузка данных для отчета эксперта ЦШ
@@ -728,7 +768,12 @@ const getReportData = async (reportId) => {
       reportStore.reportForCheckCH.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
-      reportStore.reportDataCH.first.comment = '';
+      if (reportStore.reportDataCH.first.rejecting_reasons) {
+        reportStore.reportDataCH.first.comment = JSON.parse(reportStore.reportDataCH.first.rejecting_reasons).comment;
+      } else {
+        reportStore.reportDataCH.first.comment = '';
+      }
+      if (reportStore.reportForCheckCH.first.verified_by_chq) verifiedByChqPanels.value.push('1')
 
       /*
       * Критерий 4
@@ -736,14 +781,18 @@ const getReportData = async (reportId) => {
       reportStore.reportForCheckCH.fourth = (await reportPartTwoService.getReportDH('4', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.fourth.events = (await reportPartTwoService.getReportDH('4', reportId)).data.events;
-
+      console.log('reportStore.reportForCheckCH.fourth', reportStore.reportForCheckCH.fourth)
+      if (reportStore.reportForCheckCH.fourth.verified_by_chq) verifiedByChqPanels.value.push('4')
       /*
       * Критерий 5
       */
       reportStore.reportForCheckCH.fifth = (await reportPartTwoService.getReportDH('5', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.fifth.events = (await reportPartTwoService.getReportDH('5', reportId)).data.events;
-
+      if (reportStore.reportForCheckCH.fifth.verified_by_chq) verifiedByChqPanels.value.push('5')
+      //   revisionPanels.value.push('5');
+      // if (reportStore.reportForCheckCH.fifth.rejecting_reasons) reportStore.isReportReject.fifth = true;
+      // console.log('reportStore.isReportReject', reportStore.isReportReject)
       /*
       * Критерий 6 и 9  
       */
@@ -755,7 +804,7 @@ const getReportData = async (reportId) => {
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
       reportStore.reportDataCH.tenth.first.comment = ''
-
+      if (reportStore.reportForCheckCH.tenth.first.verified_by_chq) verifiedByChqPanels.value.push('10-1')
       /*
       * Критерий 10-2
       */
@@ -763,7 +812,7 @@ const getReportData = async (reportId) => {
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', reportId)).data;
       reportStore.reportDataCH.tenth.second.comment = ''
-
+      if (reportStore.reportForCheckCH.tenth.second.verified_by_chq) verifiedByChqPanels.value.push('10-2')
       /*
       * Критерий 16
       */
@@ -771,13 +820,19 @@ const getReportData = async (reportId) => {
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.sixteenth.projects = (await reportPartTwoService.getReportDH('16', reportId)).data.projects;
       reportStore.reportDataCH.sixteenth.isProject = (await reportPartTwoService.getReportDH('16', reportId)).data.is_project;
-
+      if (reportStore.reportForCheckCH.sixteenth.verified_by_chq) verifiedByChqPanels.value.push('16')
       /* 
       * Критерий 11
       */
       const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
       reportStore.reportForCheckCH.eleventh = dataEleventh;
       // console.log(dataEleventh);
+
+      // если используем функцию showPanels обязательна проверка на 2 поля:
+      if (dataEleventh.rejecting_reasons && dataEleventh.verified_by_chq !== true) {
+        revisionPanels.value.push('11');
+      }
+
       dataEleventh.regional_version
         ? reportData.value.eleventh = JSON.parse(dataEleventh.regional_version)
         : reportData.value.eleventh = dataEleventh;
@@ -797,6 +852,12 @@ const getReportData = async (reportId) => {
       const dataTwelfth = (await reportPartTwoService.getReportDH('12', reportId)).data;
       reportStore.reportForCheckCH.twelfth = dataTwelfth;
       // console.log(dataTwelfth);
+
+      // если используем функцию showPanels обязательна проверка на 2 поля:
+      if (dataTwelfth.rejecting_reasons && dataTwelfth.verified_by_chq !== true) {
+        revisionPanels.value.push('12');
+      }
+
       dataTwelfth.regional_version
         ? reportData.value.twelfth = JSON.parse(dataTwelfth.regional_version)
         : reportData.value.twelfth = dataTwelfth;
@@ -816,6 +877,12 @@ const getReportData = async (reportId) => {
       const dataThirteenth = (await reportPartTwoService.getReportDH('13', reportId)).data;
       reportStore.reportForCheckCH.thirteenth = dataThirteenth;
       // console.log(dataThirteenth);
+
+      // если используем функцию showPanels обязательна проверка на 2 поля:
+      if (dataThirteenth.rejecting_reasons && dataThirteenth.verified_by_chq !== true) {
+        revisionPanels.value.push('13');
+      }
+
       dataThirteenth.regional_version
         ? reportData.value.thirteenth = JSON.parse(dataThirteenth.regional_version)
         : reportData.value.thirteenth = dataThirteenth;
@@ -895,7 +962,7 @@ const getReportData = async (reportId) => {
             reportStore.isReportReject.first = isTabsForRevision.value // true;
             reportStore.reportReject.first = dataFirst;
 
-            revisionPanels.value.push('1');
+            if (!dataFirst.verified_by_chq) revisionPanels.value.push('1');
           }
 
           if (dataFirst.central_version) {
@@ -916,7 +983,7 @@ const getReportData = async (reportId) => {
             reportStore.isReportReject.fourth = isTabsForRevision.value // true;
             reportStore.reportReject.fourth = dataFourth;
 
-            revisionPanels.value.push('4');
+            if (!dataFourth.verified_by_chq) revisionPanels.value.push('4');
           }
 
           if (dataFourth.central_version) {
@@ -943,7 +1010,7 @@ const getReportData = async (reportId) => {
             reportStore.isReportReject.fifth = isTabsForRevision.value // true;
             reportStore.reportReject.fifth = dataFifth;
 
-            revisionPanels.value.push('5');
+            if (!dataFifth.verified_by_chq) revisionPanels.value.push('5');
           }
 
           if (dataFifth.central_version) {
@@ -1032,7 +1099,7 @@ const getReportData = async (reportId) => {
             reportStore.isReportReject.tenth.first = isTabsForRevision.value // true;
             reportStore.reportReject.tenth.first = dataTenthFirst;
 
-            revisionPanels.value.push('10-1');
+            if (!dataTenthFirst.verified_by_chq) revisionPanels.value.push('10-1');
           }
 
           if (dataTenthFirst.central_version) {
@@ -1059,7 +1126,7 @@ const getReportData = async (reportId) => {
             reportStore.isReportReject.tenth.second = isTabsForRevision.value  // true;
             reportStore.reportReject.tenth.second = dataTenthSecond;
 
-            revisionPanels.value.push('10-2');
+            if (!dataTenthSecond.verified_by_chq) revisionPanels.value.push('10-2');
           }
 
           if (dataTenthSecond.central_version) {
@@ -1159,7 +1226,7 @@ const getReportData = async (reportId) => {
             reportStore.isReportReject.sixteenth = isTabsForRevision.value // true;
             reportStore.reportReject.sixteenth = dataSixteenth;
 
-            revisionPanels.value.push('16');
+            if (!dataSixteenth.verified_by_chq) revisionPanels.value.push('16');
           }
 
           if (dataSixteenth.central_version) {
@@ -1628,6 +1695,11 @@ const sendReport = async () => {
   }
 
   if (centralExpert.value) {
+    showModalWarning.value = true
+  }
+};
+const reportConfirmation = async (value) => {
+  if (value) {
     blockSendButton.value = true;
     // if (checkEmptyFieldsDH(reportStore.reportDataCH, isErrorPanel)) {
     preloader.value = true;
@@ -1739,8 +1811,11 @@ const sendReport = async () => {
     // } else {
     //   blockSendButton.value = false;
     // }
+    showModalWarning.value = false;
+  } else {
+    showModalWarning.value = false;
   }
-};
+}
 
 const checkEmptyFields = (data) => {
   const { filteredSix, filteredNinth } = filterPanelsData();
@@ -2110,7 +2185,7 @@ onMounted(() => {
     preloader.value = true;
     getReportData();
   }
-  console.log('ddd', route.query.reportId)
+  // console.log('ddd', route.query.reportId)
   getItems(6);
   getItems(9);
 });

@@ -400,9 +400,9 @@ watchEffect(() => {
 
       isFirstSent.value = reportStore.isReportReject.eleventh && !props.data.central_version;
       console.log('isFirstSent при доработке 11', isFirstSent.value);
-      if (reportStore.isReportReject.eleventh) {
-        reportStore.returnReport.eleventh = true;
-      }
+      // if (reportStore.isReportReject.eleventh) {
+      //   reportStore.returnReport.eleventh = true;
+      // }
     }
   }
   if (props.districtExpert) {
@@ -427,11 +427,14 @@ watchEffect(() => {
       fileCH.value.type = reportStore.reportDataCHFile.eleventh.type.split('/').at(-1);
       fileCH.value.size = reportStore.reportDataCHFile.eleventh.size / Math.pow(1024, 2);
     }
-    if (reportStore.reportForCheckCH.eleventh.rejecting_reasons) {
-      reportStore.returnReport.eleventh = true;
-    } 
+    // if (reportStore.reportForCheckCH.eleventh.rejecting_reasons) {
+    //   reportStore.returnReport.eleventh = true;
+    // } 
 
     // console.log('чек 11', reportStore.returnReport.eleventh)
+  }
+  if (reportStore.reportReject.eleventh && reportStore.isReportReject.eleventh) {
+    reportStore.returnReport.eleventh = true;
   }
 }, {
   flush: 'post'
