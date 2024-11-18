@@ -3,7 +3,7 @@
     <div class="RoPlace">
       <div class="RoPlace_wrap">
         <!-- <p class="RoPlace_number">{{ PlaceId.id }}.</p> -->
-        <h2 class="RoPlace_title"> {{ PlaceId.title }}</h2>
+        <h2 class="RoPlace_title"> {{PlaceId.title}}</h2>
       </div>
       <div class="download_wrapper">
         <SvgIcon class="download_img" iconName="download" @click="downloadReport" />
@@ -43,7 +43,7 @@ let id = route.params.id;
 const idEvent = route.params?.id_event;
 
 const RoPlaces = ref([{
-  id: 1, title: 'Численность членов РО РСО в соответствии с объемом уплаченных членских взносов'
+  id: 1, title: '1. Численность членов РО РСО в соответствии с объемом уплаченных членских взносов'
 }, {
   id: 2, title: '2. Отношение численности членов РО РСО к численности студентов очной формы обучения субъекта Российской Федерации, обучающихся в профессиональных образовательных организациях и образовательных организациях высшего образования в государственных, муниципальных и частных образовательных организациях, включая филиалы (исключения — учебные заведения специальных ведомств, проводящих обучение на казарменном положении)',
 }, {
@@ -74,10 +74,10 @@ const RoPlaces = ref([{
   id: 15, title: '15. Исполнительская дисциплина РО РСО, соблюдение условий охраны труда на трудовых проектах РСО, наличие проблемной неурегулированной задолженности по выплате заработной платы перед бойцами РСО за трудовой семестр предыдущего года, отсутствие отчислений от членских взносов в Центральный штаб, исполнение решений Центральных руководящих органов РСО, наличие ежегодного акта проверки КРК РО РСО',
 }, {
   id: 16, title: '16. Победители всероссийских (международных), окружных и межрегиональных трудовых проектов по комиссарской деятельности «К»',
-}])
+}].map(item => ({ ...item, id: Number(item.id) })))
 
-const PlaceId = RoPlaces.value.find((item) => item.id == id);
 
+const PlaceId = ref({});
 
 const { replaceTargetObjects } = usePage();
 
@@ -155,19 +155,31 @@ const downloadReport = async () => {
     console.error(error);
   }
 }
-
 watch(
   () => route.params.id,
-
   async (newId) => {
-    if (!newId || route.name !== 'Place') return;
-    PlaceId.id = newId;
-    await replaceTargetObjects([PlaceId]);
+    if (!newId) return;
+    id = Number(newId);
+    console.log(newId, id);
+    const foundPlace = RoPlaces.value.find((item) => item.id === id); 
+    console.log('foundPlace', foundPlace);
+    if (foundPlace) {
+      PlaceId.value = {
+        id: foundPlace.id,
+        title: foundPlace.title
+      };
+    } else {
+      console.error(`Place with id ${id} not found`);
+      PlaceId.value = { id: null, title: 'Not Found' };
+    }
+    await replaceTargetObjects([PlaceId.value]);
   },
   {
     immediate: true,
-  },
+    deep: true,
+  }
 );
+
 
 onMounted(() => {
   if(idEvent){

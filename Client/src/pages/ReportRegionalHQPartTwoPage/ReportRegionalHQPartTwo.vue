@@ -15,7 +15,14 @@
             {{ tab.name }}
           </button>
         </div>
-        <div class="download-item">
+        <div class="download-item" v-if="roleStore.experts.is_central_expert">
+          <SvgIcon iconName="download" />
+          <button type="button" id="download" class="download-item__report"
+            @click="downloadReportAll(route.query.reportId)">
+            Скачать архив
+          </button>
+        </div>
+        <div v-else class="download-item">
           <SvgIcon iconName="download" />
           <button type="button" id="download" class="download-item__report"
             @click="downloadReportAll(roleStore.roles.regionalheadquarter_commander?.id)">
