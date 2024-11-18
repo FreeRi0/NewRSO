@@ -9,6 +9,9 @@
       <router-link :to="{ name: 'places' }" class="ratingRO__item">
         <p>Места РО по показателям</p>
       </router-link>
+      <router-link :to="{ name: 'place-ro' }" class="ratingRO__item">
+        <p>Места РО</p>
+      </router-link>
     </div>
   </div>
 </template>
