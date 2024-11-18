@@ -525,15 +525,17 @@
                         </p>
 
                         <div class="places_wrap">
-                            <div class="places_item" v-for="item in events" :key="item.id">
-                                <input :id="item.id" :value="item.value" :name="item.name"
-                                    :checked="ninthPanelDataDH.event_happened == item.value"
-                                    :disabled="props.isCentralHeadquarterCommander || reportStore.isReportReject?.ninth[props.ninthId]"
-                                    class="form__input places_input" type="radio"
-                                    v-model="ninthPanelDataDH.event_happened" />
-                                <label class="places_item_label" :for="id">{{
-                                    item.name
-                                    }}</label>
+                            <div class="places_item">
+                                <input v-model="ninthPanelDataDH.event_happened" id="event_happenedDH-true"
+                                    class="form__input places_input" type="radio" :value="true"
+                                    :disabled="props.isCentralHeadquarterCommander || isReportReject" />
+                                <label for="event_happenedDH-true">Да</label>
+                            </div>
+                            <div class="places_item">
+                                <input v-model="ninthPanelDataDH.event_happened" id="event_happenedDH-true"
+                                    class="form__input places_input" type="radio" :value="false"
+                                    :disabled="props.isCentralHeadquarterCommander || isReportReject" />
+                                <label for="event_happenedDH-true">Нет</label>
                             </div>
                         </div>
                     </div>
