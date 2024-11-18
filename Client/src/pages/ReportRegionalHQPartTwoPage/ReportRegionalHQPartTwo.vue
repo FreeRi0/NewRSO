@@ -23,7 +23,8 @@
           </button>
         </div>
         <v-expansion-panels>
-          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('1') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('1') ? false : true">
+          <v-expansion-panel
+            v-if="picked === 'Доработка' ? revisionPanels.includes('1') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('1') ? false : true">
             <v-expansion-panel-title :class="isErrorPanel.first ? 'visible-error' : ''">
               1. Численность членов РО&nbsp;РСО в&nbsp;соответствии с&nbsp;объемом уплаченных членских взносов
             </v-expansion-panel-title>
@@ -57,7 +58,8 @@
                 text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('4') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('4') ? false : true">
+          <v-expansion-panel
+            v-if="picked === 'Доработка' ? revisionPanels.includes('4') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('4') ? false : true">
             <v-expansion-panel-title :class="isErrorPanel.fourth ? 'visible-error' : ''">
               4. Организация всероссийских (международных), окружных и&nbsp;межрегиональных мероприятий и&nbsp;проектов
               (слеты, школы, фестивали, турниры и&nbsp;прочие)
@@ -68,7 +70,8 @@
                 :is-error-panel="isErrorPanel.fourth" :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('5') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('5') ? false : true">
+          <v-expansion-panel
+            v-if="picked === 'Доработка' ? revisionPanels.includes('5') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('5') ? false : true">
             <v-expansion-panel-title :class="isErrorPanel.fifth ? 'visible-error' : ''">
               5. Организация всероссийских (международных) (организатор&nbsp;&mdash; региональное отделение РСО),
               окружных и&nbsp;межрегиональных трудовых проектов в&nbsp;соответствии с&nbsp;Положением
@@ -129,24 +132,16 @@
           </v-expansion-panel>
           <v-expansion-panel
             v-if="picked === 'Доработка' ? revisionPanels.includes('10-1') || revisionPanels.includes('10-2')
-            : picked === 'Просмотр отправленного отчета' && (verifiedByChqPanels.includes('10-1') && verifiedByChqPanels.includes('10-2')) ? false : true">
+              : picked === 'Просмотр отправленного отчета' && (verifiedByChqPanels.includes('10-1') && verifiedByChqPanels.includes('10-2')) ? false : true">
             <v-expansion-panel-title :class="isErrorPanel.tenth ? 'visible-error' : ''">
               10. Организация РО&nbsp;РСО всероссийских (международных) добровольческих и&nbsp;патриотических акций
               &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <tenth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                @getDataDHFirst="setDataDH"
-                @getDataDHSecond="setDataDH"
-                @getDataCHFirst="setDataCH"
-                @getDataCHSecond="setDataCH"
-                :data="reportData.tenth"
-                :is-error-panel="isErrorPanel.tenth"
-                :tab="picked"
-              />
+              <tenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                @getDataDHFirst="setDataDH" @getDataDHSecond="setDataDH" @getDataCHFirst="setDataCH"
+                @getDataCHSecond="setDataCH" :data="reportData.tenth" :is-error-panel="isErrorPanel.tenth"
+                :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('11', picked, revisionPanels)">
@@ -203,7 +198,8 @@
                 text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel v-if="picked === 'Доработка' ? revisionPanels.includes('16') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('16') ? false : true">
+          <v-expansion-panel
+            v-if="picked === 'Доработка' ? revisionPanels.includes('16') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('16') ? false : true">
             <v-expansion-panel-title :class="isErrorPanel.sixteenth ? 'visible-error' : ''">
               16. Победители всероссийских (международных), окружных и&nbsp;межрегиональных трудовых проектов
               по&nbsp;комиссарской деятельности &laquo;К&raquo;
@@ -594,21 +590,21 @@ const getMultiplyData = async (reportId) => {
       reportStore.reportForCheckCH.six[result.id] = sixData;
       reportData.value.six[result.id] = sixData;
       reportStore.reportDataDH.six[result.id] = sixData;
-      // console.log('ch6', reportStore.reportForCheckCH.six[result.id])
-      // if (reportData.value.six[result.id]?.regional_version) {
-      //   console.log('reg_ver', reportData.value.six[result.id]?.regional_version)
-      //   reportData.value.six[result.id] = JSON.parse(reportData.value.six[result.id]?.regional_version);
-      // } else {
-      //   reportData.value.six[result.id] = result.data;
-      // }
-      // if (reportStore.reportDataDH.six[result.id]?.district_version) {
-      //   reportStore.reportDataDH.six[result.id] = JSON.parse(reportStore.reportDataDH.six[result.id].district_version);
-      // } else {
-      //   reportStore.reportDataDH.six[result.id] = result.data
-      // }
       if (sixData?.regional_version) {
         try {
-          reportData.value.six[result.id] = JSON.parse(sixData.regional_version);
+          if (typeof sixData.regional_version === 'object') {
+            reportData.value.six[result.id] = JSON.stringify(sixData.regional_version);
+            if (sixData.regional_version?.regional_version?.regional_version) {
+              reportData.value.six[result.id] = JSON.parse(sixData.regional_version?.regional_version?.regional_version);
+            } else {
+              reportData.value.six[result.id] = JSON.parse(sixData.regional_version?.regional_version);
+            }
+
+          } else if (typeof sixData.regional_version === 'string') {
+            reportData.value.six[result.id] = JSON.parse(sixData.regional_version);
+          } else {
+            throw new Error('Invalid type for regional_version');
+          }
         } catch (error) {
           console.error('Error parsing regional_version JSON:', error);
           reportData.value.six[result.id] = sixData.regional_version || sixData;
@@ -660,21 +656,11 @@ const getMultiplyData = async (reportId) => {
 
     }
   });
-  // console.log('data66', reportData.value.six)
-  // seventhDataResults.forEach((result) => {
-  //   reportData.value.seventh[result.id] = result.data;
-  // });
 
   ninthDataResults.forEach((result) => {
     const ninthData = result.data;
 
     if (districtExpert.value) {
-      // reportData.value.ninth[result.id] = result.data;
-      // if (result.data?.regional_version) {
-      //   reportData.value.ninth[result.id] = JSON.parse(result.data.regional_version);
-      // } else {
-      //   reportData.value.ninth[result.id] = result.data;
-      // }
       if (ninthData?.regional_version) {
         try {
           reportData.value.ninth[result.id] = JSON.parse(ninthData.regional_version);
@@ -693,9 +679,17 @@ const getMultiplyData = async (reportId) => {
       // }
     } else if (centralExpert.value) {
       reportStore.reportForCheckCH.ninth[result.id] = ninthData;
+
       if (ninthData?.regional_version) {
         try {
-          reportData.value.ninth[result.id] = JSON.parse(ninthData.regional_version);
+          if (typeof ninthData.regional_version === 'object') {
+            reportData.value.ninth[result.id] = JSON.stringify(ninthData.regional_version?.regional_version);
+            reportData.value.ninth[result.id] = JSON.parse(ninthData.regional_version?.regional_version);
+          } else if (typeof ninthData.regional_version === 'string') {
+            reportData.value.ninth[result.id] = JSON.parse(ninthData.regional_version);
+          } else {
+            throw new Error('Invalid type for regional_version');
+          }
         } catch (error) {
           console.error('Error parsing regional_version JSON:', error);
           reportData.value.ninth[result.id] = ninthData.regional_version || ninthData;
@@ -1689,7 +1683,7 @@ const sendReport = async () => {
   }
 
   if (centralExpert.value) {
-     showModalWarning.value = true
+    showModalWarning.value = true
   }
 };
 const reportConfirmation = async (value) => {
