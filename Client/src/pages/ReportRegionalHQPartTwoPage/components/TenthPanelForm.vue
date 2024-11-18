@@ -509,7 +509,9 @@ onMounted(() => {
 
   // Мапинг данных для отчета эксперта ЦШ
   if (props.dataForCheckCH) {
+    console.log('props.dataForCheckCH', props.dataForCheckCH)
     if (props.dataForCheckCH.rejecting_reasons) {
+      console.log('here')
       // Добавление данных панели "отчет РО"
       tenthPanelData.value = props.dataForCheckCH;
 
@@ -527,9 +529,9 @@ onMounted(() => {
       const reportCH = props.dataForCheckCH.central_version;
       if (reportCH) {
         tenthPanelDataCH.value.event_happened = reportCH.event_happened === undefined ? null : reportCH.event_happened;
-        tenthPanelDataCH.value.comment = reportCH.comment;
+        tenthPanelDataCH.value.comment = props.dataCH.comment;
 
-        returnReport.value = reportCH.returnReportProp;
+        returnReport.value = props.returnReportProp;
       }
 
       if (reportCH.document) {
@@ -539,6 +541,7 @@ onMounted(() => {
         fileSizeCH.value = reportCH.file_size || null;
       }
     } else {
+      console.log('here2')
       // Добавление данных панели "отчет РО"
       tenthPanelData.value = JSON.parse(props.dataForCheckCH.regional_version);
 

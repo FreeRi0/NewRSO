@@ -860,6 +860,7 @@ onMounted(() => {
     const projectQuantity = reportStore.reportForCheckCH.sixteenth.projects.length;
 
     if (reportStore.reportForCheckCH.sixteenth.rejecting_reasons) {
+      // Повторная доработка
       // Добавление данных панели "отчет РО"
       projects.value = reportStore.reportForCheckCH.sixteenth.projects;
       sixteenthPanelData.value.comment = reportStore.reportForCheckCH.sixteenth.comment;
@@ -873,8 +874,8 @@ onMounted(() => {
 
       // Добавление данных из стора для панели "корректировка ЦШ"
       const reportDataCH = reportStore.reportForCheckCH.sixteenth.central_version;
-      commentCH.value = reportDataCH.comment || '';
-      isProjectCH.value = reportDataCH.is_project;
+      commentCH.value = reportStore.reportDataCH.sixteenth.comment || '';
+      isProjectCH.value = reportStore.reportDataCH.sixteenth.isProject;
 
       for (let i = 0; i < projectQuantity; i++) {
         commonData.value[i] = {

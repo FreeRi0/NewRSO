@@ -484,7 +484,6 @@ const onReturnReport = (event, reportNumber) => {
 }
 
 onMounted(() => {
-  console.log('props', reportStore.reportDataCH.tenth.first)
   if (reportStore.reportDataDH.tenth.first) {
     tenthPanelDataFirstDH.value = reportStore.reportDataDH.tenth.first;
   }
