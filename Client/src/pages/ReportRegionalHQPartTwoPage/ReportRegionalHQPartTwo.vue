@@ -15,7 +15,14 @@
             {{ tab.name }}
           </button>
         </div>
-        <div class="download-item">
+        <div class="download-item" v-if="roleStore.experts.is_central_expert">
+          <SvgIcon iconName="download" />
+          <button type="button" id="download" class="download-item__report"
+            @click="downloadReportAll(route.query.reportId)">
+            Скачать архив
+          </button>
+        </div>
+        <div v-else class="download-item">
           <SvgIcon iconName="download" />
           <button type="button" id="download" class="download-item__report"
             @click="downloadReportAll(roleStore.roles.regionalheadquarter_commander?.id)">
@@ -781,7 +788,9 @@ const getReportData = async (reportId) => {
       reportStore.reportForCheckCH.fourth = (await reportPartTwoService.getReportDH('4', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.fourth.events = (await reportPartTwoService.getReportDH('4', reportId)).data.events;
-      console.log('reportStore.reportForCheckCH.fourth', reportStore.reportForCheckCH.fourth)
+      if (reportStore.reportForCheckCH.fourth.rejecting_reasons) {
+        reportStore.reportDataCH.fourth.comment = JSON.parse(reportStore.reportForCheckCH.fourth.rejecting_reasons).comment;
+      }
       if (reportStore.reportForCheckCH.fourth.verified_by_chq) verifiedByChqPanels.value.push('4')
       /*
       * Критерий 5
@@ -789,6 +798,9 @@ const getReportData = async (reportId) => {
       reportStore.reportForCheckCH.fifth = (await reportPartTwoService.getReportDH('5', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.fifth.events = (await reportPartTwoService.getReportDH('5', reportId)).data.events;
+      if (reportStore.reportForCheckCH.fifth.rejecting_reasons) {
+        reportStore.reportDataCH.fifth.comment = JSON.parse(reportStore.reportForCheckCH.fifth.rejecting_reasons).comment;
+      }
       if (reportStore.reportForCheckCH.fifth.verified_by_chq) verifiedByChqPanels.value.push('5')
       //   revisionPanels.value.push('5');
       // if (reportStore.reportForCheckCH.fifth.rejecting_reasons) reportStore.isReportReject.fifth = true;
@@ -803,7 +815,12 @@ const getReportData = async (reportId) => {
       reportStore.reportForCheckCH.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
-      reportStore.reportDataCH.tenth.first.comment = ''
+      if (reportStore.reportDataCH.tenth.first.rejecting_reasons) {
+        reportStore.reportDataCH.tenth.first.comment = JSON.parse(reportStore.reportDataCH.tenth.first.rejecting_reasons).comment;
+      } else {
+        reportStore.reportDataCH.tenth.first.comment = '';
+      }
+      // reportStore.reportDataCH.tenth.first.comment = ''
       if (reportStore.reportForCheckCH.tenth.first.verified_by_chq) verifiedByChqPanels.value.push('10-1')
       /*
       * Критерий 10-2
@@ -811,7 +828,12 @@ const getReportData = async (reportId) => {
       reportStore.reportForCheckCH.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', reportId)).data;
-      reportStore.reportDataCH.tenth.second.comment = ''
+      if (reportStore.reportDataCH.tenth.second.rejecting_reasons) {
+        reportStore.reportDataCH.tenth.second.comment = JSON.parse(reportStore.reportDataCH.tenth.second.rejecting_reasons).comment;
+      } else {
+        reportStore.reportDataCH.tenth.second.comment = '';
+      }
+      // reportStore.reportDataCH.tenth.second.comment = ''
       if (reportStore.reportForCheckCH.tenth.second.verified_by_chq) verifiedByChqPanels.value.push('10-2')
       /*
       * Критерий 16
@@ -820,6 +842,11 @@ const getReportData = async (reportId) => {
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.sixteenth.projects = (await reportPartTwoService.getReportDH('16', reportId)).data.projects;
       reportStore.reportDataCH.sixteenth.isProject = (await reportPartTwoService.getReportDH('16', reportId)).data.is_project;
+
+      if (reportStore.reportForCheckCH.sixteenth.rejecting_reasons) {
+        reportStore.reportDataCH.sixteenth.comment = JSON.parse(reportStore.reportForCheckCH.sixteenth.rejecting_reasons).comment;
+        reportStore.reportDataCH.sixteenth.isProject = reportStore.reportForCheckCH.sixteenth.central_version?.is_project;
+      }
       if (reportStore.reportForCheckCH.sixteenth.verified_by_chq) verifiedByChqPanels.value.push('16')
       /* 
       * Критерий 11
@@ -842,9 +869,14 @@ const getReportData = async (reportId) => {
         : reportStore.reportDataDH.eleventh = dataEleventh;
 
       reportStore.reportDataCH.eleventh = Object.assign({}, dataEleventh);
-      dataEleventh.verified_by_chq === null
-        ? reportStore.reportDataCH.eleventh.comment = ''
-        : reportStore.reportDataCH.eleventh.comment = dataEleventh.comment;
+      if (!dataEleventh.rejecting_reasons) {
+        reportStore.reportDataCH.eleventh.comment = ''
+      } else if (dataEleventh.rejecting_reasons) {
+        reportStore.reportDataCH.eleventh.comment = JSON.parse(reportStore.reportDataCH.eleventh.rejecting_reasons).comment
+      }
+      if (dataEleventh.verified_by_chq === true) {
+        reportStore.reportDataCH.eleventh.comment = dataEleventh.comment
+      }
 
       /* 
       * Критерий 12
@@ -867,9 +899,14 @@ const getReportData = async (reportId) => {
         : reportStore.reportDataDH.twelfth = dataTwelfth;
 
       reportStore.reportDataCH.twelfth = Object.assign({}, dataTwelfth);
-      dataTwelfth.verified_by_chq === null
-        ? reportStore.reportDataCH.twelfth.comment = ''
-        : reportStore.reportDataCH.twelfth.comment = dataTwelfth.comment;
+      if (!dataTwelfth.rejecting_reasons) {
+        reportStore.reportDataCH.twelfth.comment = ''
+      } else if (dataTwelfth.rejecting_reasons) {
+        reportStore.reportDataCH.twelfth.comment = JSON.parse(reportStore.reportDataCH.twelfth.rejecting_reasons).comment
+      }
+      if (dataTwelfth.verified_by_chq === true) {
+        reportStore.reportDataCH.twelfth.comment = dataTwelfth.comment
+      }
 
       /* 
       * Критерий 13
@@ -892,9 +929,14 @@ const getReportData = async (reportId) => {
         : reportStore.reportDataDH.thirteenth = dataThirteenth;
 
       reportStore.reportDataCH.thirteenth = Object.assign({}, dataThirteenth);
-      dataThirteenth.verified_by_chq === null
-        ? reportStore.reportDataCH.thirteenth.comment = ''
-        : reportStore.reportDataCH.thirteenth.comment = dataThirteenth.comment;
+      if (!dataThirteenth.rejecting_reasons) {
+        reportStore.reportDataCH.thirteenth.comment = ''
+      } else if (dataThirteenth.rejecting_reasons) {
+        reportStore.reportDataCH.thirteenth.comment = JSON.parse(reportStore.reportDataCH.thirteenth.rejecting_reasons).comment
+      }
+      if (dataThirteenth.verified_by_chq === true) {
+        reportStore.reportDataCH.thirteenth.comment = dataThirteenth.comment
+      }
 
       /* 
       * Критерий 17-19
@@ -1700,6 +1742,7 @@ const sendReport = async () => {
 };
 const reportConfirmation = async (value) => {
   if (value) {
+    showModalWarning.value = false;
     blockSendButton.value = true;
     // if (checkEmptyFieldsDH(reportStore.reportDataCH, isErrorPanel)) {
     preloader.value = true;
@@ -1811,7 +1854,6 @@ const reportConfirmation = async (value) => {
     // } else {
     //   blockSendButton.value = false;
     // }
-    showModalWarning.value = false;
   } else {
     showModalWarning.value = false;
   }

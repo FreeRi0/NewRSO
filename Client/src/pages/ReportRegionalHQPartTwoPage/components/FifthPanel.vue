@@ -633,7 +633,7 @@ onMounted(() => {
 
       // Добавление данных из стора для панели "корректировка ЦШ"
       const reportDataCH = reportStore.reportForCheckCH.fifth.central_version;
-      commentCH.value = reportDataCH.comment || '';
+      commentCH.value = reportStore.reportDataCH.fifth.comment || '';
       for (let i = 0; i < eventQuantity; i++) {
         commonData.value[i] = {
           dataRH: reportStore.reportForCheckCH.fifth.events[i],
