@@ -1,5 +1,6 @@
 <template>
-  <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.fourth) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.fourth)"
+  <div
+    v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.fourth) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.fourth)"
     class="form__field-group">
     <div v-for="(event, index) in events" :key="index" class="form__field-fourth-panel">
       <div class="form__field-members-event">
@@ -76,8 +77,8 @@
         <p class="form__label">Ссылка на группу мероприятия в социальных сетях</p>
         <div class="form__add-link" v-for="(link, i) in events[index].links" :key="i">
           <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__input-add-link" type="text"
-            placeholder="Введите ссылку" @focusout="focusOut"
-            :disabled="isSent || !event.participants_number" :is-link="true" @error="setError" />
+            placeholder="Введите ссылку" @focusout="focusOut" :disabled="isSent || !event.participants_number"
+            :is-link="true" @error="setError" />
           <div v-if="!isSent && event.participants_number">
             <Button v-if="events[index].links.length === i + 1" label="+ Добавить ссылку" @click="addLink(index)"
               class="form__add-link-button" />
@@ -327,7 +328,7 @@
         </v-table>
         <label class="form__label">Межрегиональное <sup class="valid-red">*</sup></label>
         <v-table>
-          <tbody>
+          <tbody class="report-table">
             <tr class="report-table__tr">
               <td class="report-table__th">Данные РО</td>
               <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
@@ -953,10 +954,10 @@ watch(() => [commonData.value, commentCH], () => {
 .form__field-fourth-panel {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  // gap: 16px;
 
   @media (max-width: 568px) {
-    align-items: center;
+    // align-items: center;
   }
 }
 
@@ -980,19 +981,23 @@ watch(() => [commonData.value, commentCH], () => {
   }
 }
 
-//.form__field-members-event {
-//  display: flex;
-//  height: 111px;
-//  margin-top: 40px;
-//  justify-content: space-between;
-//
-//  @media (max-width: 568px) {
-//    flex-direction: column-reverse;
-//    gap: 8px;
-//    align-items: flex-end;
-//    margin-top: 32px;
-//  }
-//}
+// .form__field-members-event {
+//   display: flex;
+//   height: 111px;
+//   margin-top: 40px;
+//   justify-content: space-between;
+
+//   @media (max-width: 568px) {
+//     flex-direction: column-reverse;
+//     gap: 8px;
+//     align-items: flex-end;
+//     margin-top: 32px;
+//   }
+// }
+
+.form__field-members-event {
+  position: relative;
+}
 
 .form__field-name {
   display: flex;
@@ -1035,10 +1040,18 @@ watch(() => [commonData.value, commentCH], () => {
 
 #form__field-date-first {
   margin-top: 40px;
+
+  @media (max-width: 568px) {
+    padding-right: 40px;
+  }
+
+  @media (max-width: 400px) {
+    padding-right: 0px;
+  }
 }
 
 .form__add-event {
-  margin: 30px 0;
+  margin: 16px 0px 30px;
   background-color: transparent;
   color: #1F7CC0;
   border-color: #1F7CC0;
@@ -1140,6 +1153,9 @@ watch(() => [commonData.value, commentCH], () => {
 }
 
 .form__field-delete-button {
+  position: absolute;
+  top: 40px;
+  right: 0;
   margin: 0;
   width: 177px;
   height: 33px;
@@ -1150,6 +1166,13 @@ watch(() => [commonData.value, commentCH], () => {
   border: none;
   border-radius: 4px;
 
+  @media (max-width: 1124px) {
+    top: 0px;
+  }
+
+  @media (max-width: 568px) {
+    right: 16px;
+  }
 }
 
 .form__file-box {
@@ -1195,6 +1218,7 @@ watch(() => [commonData.value, commentCH], () => {
 .form__label-radio {
   display: flex;
   gap: 40px;
+  margin-bottom: 16px;
 }
 
 .valid-red {
@@ -1227,6 +1251,7 @@ watch(() => [commonData.value, commentCH], () => {
 }
 
 .hr {
+  margin-top: 12px;
   margin-bottom: 16px;
   width: 100%;
   border-top: 1px solid #B6B6B6;
