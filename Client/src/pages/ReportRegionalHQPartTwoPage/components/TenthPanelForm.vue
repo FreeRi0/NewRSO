@@ -600,9 +600,9 @@ onMounted(() => {
       tenthPanelDataCH.value.event_happened = props.reportRejectData.event_happened;
       tenthPanelDataCH.value.comment = props.reportRejectData.comment;
 
-      fileNameCH.value = props.reportRejectData.central_version?.document || null;
-      fileTypeCH.value = props.reportRejectData.central_version?.file_type || null;
-      fileSizeCH.value = props.reportRejectData.central_version?.file_size || null;
+      fileNameCH.value = props.reportRejectData?.document || null;
+      fileTypeCH.value = props.reportRejectData?.file_type || null;
+      fileSizeCH.value = props.reportRejectData?.file_size || null;
     }
   }
 });

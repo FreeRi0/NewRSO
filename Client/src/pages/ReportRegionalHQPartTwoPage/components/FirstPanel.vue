@@ -403,6 +403,9 @@ const deleteFileCH = () => {
   fileNameCH.value = null;
   fileSizeCH.value = null;
   fileTypeCH.value = null;
+  reportStore.reportDataCH.first.scan_file = null;
+  reportStore.reportDataCH.first.file_size = null;
+  reportStore.reportDataCH.first.file_type = null;
 
   let formData = new FormData();
   formData.append('comment', firstPanelDataCH.value.comment);
@@ -419,21 +422,28 @@ const onReportReturn = (event) => {
     formData.append('reasons[comment]', firstPanelDataCH.value.comment);
     formData.append('comment', firstPanelDataCH.value.comment);
     formData.append('amount_of_money', firstPanelDataCH.value.amount_of_money);
-    if (reportStore.reportDataCHFile.first) formData.append('scan_file', reportStore.reportDataCHFile.first);
+    if (reportStore.reportDataCHFile.first) {
+      formData.append('scan_file', reportStore.reportDataCHFile.first);
+    } else if (reportStore.reportDataCH.first.scan_file) {
+      formData.append('scan_file', firstPanelDataCH.value.scan_file);
+    }
 
     emit('getDataCH', formData, 1);
   } else {
     reportStore.returnReport.first = false;
     formData.append('comment', firstPanelDataCH.value.comment);
     formData.append('amount_of_money', firstPanelDataCH.value.amount_of_money);
-    if (reportStore.reportDataCHFile.first) formData.append('scan_file', reportStore.reportDataCHFile.first);
+    if (reportStore.reportDataCHFile.first) {
+      formData.append('scan_file', reportStore.reportDataCHFile.first);
+    } else if (reportStore.reportDataCH.first.scan_file) {
+      formData.append('scan_file', firstPanelDataCH.value.scan_file);
+    }
 
     emit('getDataCH', formData, 1);
   }
 };
 
 watchEffect(async () => {
-  console.log('tab', props.tab)
   try {
     if (!(props.centralExpert || props.districtExpert)) {
       const res = await getReportForSecond();
@@ -486,11 +496,27 @@ watchEffect(async () => {
       fileSizeDH.value = reportDataDH.file_size || '';
 
       // Добавление данных из стора для панели "корректировка ЦШ"
-      firstPanelDataCH.value.amount_of_money = reportStore.reportDataCH.first.amount_of_money;
-      firstPanelDataCH.value.comment = reportStore.reportDataCH.first.comment || '';
-      fileNameCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.name : null;
-      fileSizeCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.size / Math.pow(1024, 2) : null;
-      fileTypeCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.type.split('/').at(-1) : null;
+      if (reportStore.reportDataCH.first.central_version) {
+        firstPanelDataCH.value.amount_of_money = reportStore.reportDataCH.first.central_version.amount_of_money;
+        firstPanelDataCH.value.comment = reportStore.reportDataCH.first.central_version.comment || '';
+        firstPanelDataCH.value.scan_file = reportStore.reportDataCH.first.central_version.scan_file;
+        firstPanelDataCH.value.file_size = reportStore.reportDataCH.first.central_version.file_size;
+        firstPanelDataCH.value.file_type = reportStore.reportDataCH.first.central_version.file_type;
+        fileNameCH.value = reportStore.reportDataCH.first.central_version.scan_file;
+        fileSizeCH.value = reportStore.reportDataCH.first.central_version.file_size;
+        fileTypeCH.value = reportStore.reportDataCH.first.central_version.file_type;
+      } else {
+        firstPanelDataCH.value.amount_of_money = reportStore.reportDataCH.first.amount_of_money;
+        firstPanelDataCH.value.comment = reportStore.reportDataCH.first.comment || '';
+        firstPanelDataCH.value.scan_file = reportStore.reportDataCH.first.scan_file;
+        firstPanelDataCH.value.file_size = reportStore.reportDataCH.first.file_size;
+        firstPanelDataCH.value.file_type = reportStore.reportDataCH.first.file_type;
+        fileNameCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.name : reportStore.reportDataCH.first.scan_file ? reportStore.reportDataCH.first.scan_file : null;
+        fileSizeCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.size / Math.pow(1024, 2) : reportStore.reportDataCH.first.file_size ? reportStore.reportDataCH.first.file_size : null;
+        fileTypeCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.type.split('/').at(-1) : reportStore.reportDataCH.first.file_type ? reportStore.reportDataCH.first.file_type : null;
+      }
+
+
     } else {
       const reportDataRH = JSON.parse(reportStore.reportForCheckCH.first.regional_version);
       firstPanelData.value.comment = reportDataRH?.comment || '';
@@ -589,7 +615,11 @@ watch(firstPanelDataCH.value, () => {
   let formData = new FormData();
   formData.append('comment', firstPanelDataCH.value.comment || '');
   formData.append('amount_of_money', firstPanelDataCH.value.amount_of_money);
-  if (reportStore.reportDataCHFile.first) formData.append('scan_file', reportStore.reportDataCHFile.first);
+  if (reportStore.reportDataCHFile.first) {
+    formData.append('scan_file', reportStore.reportDataCHFile.first);
+  } else if (reportStore.reportDataCH.first.scan_file) {
+    formData.append('scan_file', reportStore.reportDataCH.first.scan_file);
+  }
   if (reportStore.returnReport.first) formData.append('reasons[comment]', firstPanelDataCH.value.comment || '');
 
   emit('getDataCH', formData, 1);
