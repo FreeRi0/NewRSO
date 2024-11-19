@@ -517,7 +517,7 @@ watch(twelfthPanelDataCH.value, () => {
         let formData = new FormData();
         formData.append('amount_of_money', twelfthPanelDataCH.value.amount_of_money);
         formData.append('comment', twelfthPanelDataCH.value.comment || '');
-        formData.append('scan_file', reportStore.reportDataCHFile.twelfth || reportStore.reportForCheckCH.twelfth.central_version.scan_file || '');
+        formData.append('scan_file', reportStore.reportDataCHFile.twelfth || reportStore.reportForCheckCH.twelfth.central_version?.scan_file || '');
         if (reportStore.returnReport.twelfth) formData.append('reasons[comment]', twelfthPanelDataCH.value.comment);
         emit('getDataCH', formData, Number(ID_PANEL));
     }
@@ -530,7 +530,7 @@ watch(fileCH.value, ()=> {
         let formData = new FormData();
         formData.append('amount_of_money', twelfthPanelDataCH.value.amount_of_money);
         formData.append('comment', twelfthPanelDataCH.value.comment || '');
-        formData.append('scan_file', reportStore.reportDataCHFile.twelfth || reportStore.reportForCheckCH.twelfth.central_version.scan_file || '');
+        formData.append('scan_file', reportStore.reportDataCHFile.twelfth || reportStore.reportForCheckCH.twelfth.central_version?.scan_file || '');
         if (reportStore.returnReport.twelfth) formData.append('reasons[comment]', twelfthPanelDataCH.value.comment);
         emit('getDataCH', formData, Number(ID_PANEL));
     }
