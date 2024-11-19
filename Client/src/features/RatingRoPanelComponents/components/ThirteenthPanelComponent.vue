@@ -414,7 +414,7 @@ watch(thirteenthPanelDataCH.value, () => {
         let formData = new FormData();
         formData.append('number_of_members', thirteenthPanelDataCH.value.number_of_members);
         formData.append('comment', thirteenthPanelDataCH.value.comment || '');
-        formData.append('scan_file', reportStore.reportDataCHFile.thirteenth || reportStore.reportForCheckCH.thirteenth.central_version.scan_file || '');
+        formData.append('scan_file', reportStore.reportDataCHFile.thirteenth || reportStore.reportForCheckCH.thirteenth.central_version?.scan_file || '');
         if (reportStore.returnReport.thirteenth) formData.append('reasons[comment]', thirteenthPanelDataCH.value.comment);
         emit('getDataCH', formData, Number(ID_PANEL));
     }
@@ -427,7 +427,7 @@ watch(fileCH.value, ()=> {
         let formData = new FormData();
         formData.append('number_of_members', thirteenthPanelDataCH.value.number_of_members);
         formData.append('comment', thirteenthPanelDataCH.value.comment || '');
-        formData.append('scan_file', reportStore.reportDataCHFile.thirteenth || reportStore.reportForCheckCH.thirteenth.central_version.scan_file || '');
+        formData.append('scan_file', reportStore.reportDataCHFile.thirteenth || reportStore.reportForCheckCH.thirteenth.central_version?.scan_file || '');
         if (reportStore.returnReport.thirteenth) formData.append('reasons[comment]', thirteenthPanelDataCH.value.comment);
         emit('getDataCH', formData, Number(ID_PANEL));
     }
