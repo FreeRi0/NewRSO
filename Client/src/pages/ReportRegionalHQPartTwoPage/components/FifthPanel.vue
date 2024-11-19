@@ -21,10 +21,7 @@
               :disabled="isSent || !event.participants_number" />
           </div>
         </div>
-        <div class="form__field-people-deleteBtn">
-          <Button v-if="index > 0 && !isSent" label="Удалить проект" class="deleteEventBtn"
-            @click="deleteProject(index)" />
-        </div>
+
       </div>
       <div class="form__field-date">
         <div class="form__field-date-wrap">
@@ -67,6 +64,10 @@
       </div>
 
       <div class="hr"></div>
+      <div class="form__field-people-deleteBtn">
+        <Button v-if="index > 0 && !isSent" label="Удалить проект" class="deleteEventBtn"
+          @click="deleteProject(index)" />
+      </div>
     </div>
     <div v-if="!isSent">
       <Button class="add_eventBtn" label="Добавить проект" @click="addProject" />
@@ -795,17 +796,19 @@ watch([commonData, commentCH], () => {
 }
 
 .form__field-group-general {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 16px;
   padding-top: 40px;
 
-  @media (max-width: 400px) {
-    padding-top: 16px;
-  }
+  // @media (max-width: 400px) {
+  //   padding-top: 16px;
+  // }
 }
 
 .form__field-people {
+  position: relative;
   display: flex;
   max-width: 901px;
   justify-content: space-between;
@@ -815,9 +818,15 @@ watch([commonData, commentCH], () => {
 }
 
 .form__field-people-deleteBtn {
+  position: absolute;
   display: flex;
-  width: 100%;
   justify-content: flex-end;
+  top: 40px;
+  right: 0;
+
+  @media (max-width: 1078px) {
+    top: 0px;
+  }
 }
 
 .form__field-people-count,
@@ -825,6 +834,7 @@ watch([commonData, commentCH], () => {
   display: flex;
   max-width: 720px;
   gap: 40px;
+  align-items: flex-end;
 
   @media (max-width: 768px) {
     flex-wrap: wrap;

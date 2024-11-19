@@ -980,19 +980,23 @@ watch(() => [commonData.value, commentCH], () => {
   }
 }
 
-//.form__field-members-event {
-//  display: flex;
-//  height: 111px;
-//  margin-top: 40px;
-//  justify-content: space-between;
-//
-//  @media (max-width: 568px) {
-//    flex-direction: column-reverse;
-//    gap: 8px;
-//    align-items: flex-end;
-//    margin-top: 32px;
-//  }
-//}
+// .form__field-members-event {
+//   display: flex;
+//   height: 111px;
+//   margin-top: 40px;
+//   justify-content: space-between;
+
+//   @media (max-width: 568px) {
+//     flex-direction: column-reverse;
+//     gap: 8px;
+//     align-items: flex-end;
+//     margin-top: 32px;
+//   }
+// }
+
+.form__field-members-event {
+  position: relative;
+}
 
 .form__field-name {
   display: flex;
@@ -1035,10 +1039,18 @@ watch(() => [commonData.value, commentCH], () => {
 
 #form__field-date-first {
   margin-top: 40px;
+
+  @media (max-width: 568px) {
+    padding-right: 40px;
+  }
+
+  @media (max-width: 400px) {
+    padding-right: 0px;
+  }
 }
 
 .form__add-event {
-  margin: 30px 0;
+  margin: 16px 0px 30px;
   background-color: transparent;
   color: #1F7CC0;
   border-color: #1F7CC0;
@@ -1140,6 +1152,9 @@ watch(() => [commonData.value, commentCH], () => {
 }
 
 .form__field-delete-button {
+  position: absolute;
+  top: 40px;
+  right: 0;
   margin: 0;
   width: 177px;
   height: 33px;
@@ -1150,6 +1165,13 @@ watch(() => [commonData.value, commentCH], () => {
   border: none;
   border-radius: 4px;
 
+  @media (max-width: 1124px) {
+    top: 0px;
+  }
+
+  @media (max-width: 568px) {
+    right: 16px;
+  }
 }
 
 .form__file-box {
@@ -1228,6 +1250,7 @@ watch(() => [commonData.value, commentCH], () => {
 }
 
 .hr {
+  margin-top: 12px;
   margin-bottom: 16px;
   width: 100%;
   border-top: 1px solid #B6B6B6;
