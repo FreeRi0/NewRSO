@@ -1142,6 +1142,7 @@ const getReportData = async (reportId) => {
             reportStore.reportReject.tenth.first = dataTenthFirst;
 
             if (!dataTenthFirst.verified_by_chq) revisionPanels.value.push('10-1');
+            if (dataTenthFirst.verified_by_chq) reportStore.isReportReject.tenth.first = false;
           }
 
           if (dataTenthFirst.central_version) {
@@ -1169,6 +1170,7 @@ const getReportData = async (reportId) => {
             reportStore.reportReject.tenth.second = dataTenthSecond;
 
             if (!dataTenthSecond.verified_by_chq) revisionPanels.value.push('10-2');
+            if (dataTenthSecond.verified_by_chq) reportStore.isReportReject.tenth.second = false;
           }
 
           if (dataTenthSecond.central_version) {
