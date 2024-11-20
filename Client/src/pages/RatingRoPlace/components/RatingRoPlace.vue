@@ -12,13 +12,13 @@
         </p>
       </div>
       <div class="RoPlace_wrapper">
-        <RatingRoPlaceList :items="sortedRegionalHeadquarters" />
+        <RatingRoPlaceList :items="sortedRegionalHeadquartersByIndicator" />
         <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate color="blue"></v-progress-circular>
       </div>
-      <template v-if='regionals.count && regionals.count > limit'>
+      <template v-if="responce && responce.count && responce.count > limit">
         <Button @click="next" v-if="
           sortedRegionalHeadquarters.length <
-          regionals.count
+          responce.count
         " label="Показать еще"></Button>
         <Button @click="prev" v-else label="Свернуть все"></Button>
       </template>
@@ -82,17 +82,19 @@ const PlaceId = RoPlaces.value.find((item) => item.id == id);
 const { replaceTargetObjects } = usePage();
 
 const next = () => {
-  getRegionals('next')
-};
+  getPlaceRegionals('next');
+}
 
 const prev = () => {
-  getRegionals();
-};
+  getPlaceRegionals();
+}
 
 const sortedRegionalHeadquarters = ref([]);
+const sortedRegionalHeadquartersByIndicator = ref([]);
 
 const isLoading = ref(false);
 const regionals = ref({});
+const responce = ref({});
 const limit = 20;
 
 const getRegionals = async (pagination, orderLimit) => {
@@ -139,11 +141,35 @@ const getRegionalsByEvent = async(pagination, orderLimit) => {
   }
 }
 
+const getPlaceRegionals = async(pagination) => {
+  try{
+    const indicator = `r${id}_place`;
+    let url = `/regional_competitions/ranking?ordering=${indicator}`;
+    if (pagination == 'next') url = responce.value.next.replace('http', 'https');
+    const { data } = await HTTP.get(url,);
+    console.log(data)
+    for(const item of data.results) {
+      sortedRegionalHeadquartersByIndicator.value.push({
+        id: item[indicator],
+        name: item.regional_headquarter_name,
+      })
+    }
+    console.log(sortedRegionalHeadquartersByIndicator.value);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 const downloadReport = async () => {
   try {
-    const reportData = await HTTP.get(`/regional_competitions/reports/${id}/download_all_reports_data/`,
-      { 'responseType': 'blob', }
-    );
+    let endpoint = '';
+    if([6, 9, 10].includes(+id)){
+      endpoint = `/regional_competitions/${id}/download_mass_reports_xlsx/`
+    } else {
+      endpoint `/regional_competitions/reports/${id}/download_all_reports_data/`
+    }
+
+    const reportData = await HTTP.get(endpoint, { 'responseType': 'blob' });
 
     const link = document.createElement('a');
     link.href = URL.createObjectURL(reportData.data);
@@ -169,7 +195,8 @@ watch(
   },
 );
 
-onMounted(() => {
+onMounted(async () => {
+  await getPlaceRegionals();
   if(idEvent){
     getRegionalsByEvent();
   } else {
