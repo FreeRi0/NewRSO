@@ -147,6 +147,7 @@
 
     <div>
       <v-checkbox 
+        v-if="!reportStore.isAllReportsVerifiedByCH"
         v-model="reportStore.returnReport.eleventh"
         label="Вернуть в&nbsp;РО на&nbsp;доработку" 
         :disabled="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.eleventh.verified_by_chq !== null"
@@ -504,7 +505,7 @@ watch(eleventhPanelDataCH.value, () => {
     let formData = new FormData();
     formData.append('participants_number', eleventhPanelDataCH.value.participants_number);
     formData.append('comment', eleventhPanelDataCH.value.comment || '');
-    formData.append('scan_file', reportStore.reportDataCHFile.eleventh || reportStore.reportForCheckCH.eleventh.central_version.scan_file || '');
+    formData.append('scan_file', reportStore.reportDataCHFile.eleventh || reportStore.reportForCheckCH.eleventh.central_version?.scan_file || '');
     if (reportStore.returnReport.eleventh) formData.append('reasons[comment]', eleventhPanelDataCH.value.comment);
     emit('getDataCH', formData, Number(ID_PANEL));
   }
@@ -517,7 +518,7 @@ watch(fileCH.value, ()=> {
     let formData = new FormData();
     formData.append('participants_number', eleventhPanelDataCH.value.participants_number);
     formData.append('comment', eleventhPanelDataCH.value.comment || '');
-    formData.append('scan_file', reportStore.reportDataCHFile.eleventh || reportStore.reportForCheckCH.eleventh.central_version.scan_file || '');
+    formData.append('scan_file', reportStore.reportDataCHFile.eleventh || reportStore.reportForCheckCH.eleventh.central_version?.scan_file || '');
     if (reportStore.returnReport.eleventh) formData.append('reasons[comment]', eleventhPanelDataCH.value.comment);
     emit('getDataCH', formData, Number(ID_PANEL));
   }

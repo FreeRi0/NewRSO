@@ -159,6 +159,7 @@
 
         <div>
             <v-checkbox
+                v-if="!reportStore.isAllReportsVerifiedByCH"
                 v-model="reportStore.returnReport.twelfth"
                 label="Вернуть в&nbsp;РО на&nbsp;доработку"
                 :disabled="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.twelfth.verified_by_chq !== null"
@@ -414,7 +415,7 @@ watchEffect(async () => {
             isSent.value = props.data.is_sent;
 
             isFirstSent.value = reportStore.isReportReject.twelfth && !props.data.central_version;
-            console.log('isFirstSent при доработке 12', isFirstSent.value);
+            // console.log('isFirstSent при доработке 12', isFirstSent.value);
             // if (reportStore.isReportReject.twelfth) {
             //     reportStore.returnReport.twelfth = true;
             // }
@@ -517,7 +518,7 @@ watch(twelfthPanelDataCH.value, () => {
         let formData = new FormData();
         formData.append('amount_of_money', twelfthPanelDataCH.value.amount_of_money);
         formData.append('comment', twelfthPanelDataCH.value.comment || '');
-        formData.append('scan_file', reportStore.reportDataCHFile.twelfth || reportStore.reportForCheckCH.twelfth.central_version.scan_file || '');
+        formData.append('scan_file', reportStore.reportDataCHFile.twelfth || reportStore.reportForCheckCH.twelfth.central_version?.scan_file || '');
         if (reportStore.returnReport.twelfth) formData.append('reasons[comment]', twelfthPanelDataCH.value.comment);
         emit('getDataCH', formData, Number(ID_PANEL));
     }
@@ -530,7 +531,7 @@ watch(fileCH.value, ()=> {
         let formData = new FormData();
         formData.append('amount_of_money', twelfthPanelDataCH.value.amount_of_money);
         formData.append('comment', twelfthPanelDataCH.value.comment || '');
-        formData.append('scan_file', reportStore.reportDataCHFile.twelfth || reportStore.reportForCheckCH.twelfth.central_version.scan_file || '');
+        formData.append('scan_file', reportStore.reportDataCHFile.twelfth || reportStore.reportForCheckCH.twelfth.central_version?.scan_file || '');
         if (reportStore.returnReport.twelfth) formData.append('reasons[comment]', twelfthPanelDataCH.value.comment);
         emit('getDataCH', formData, Number(ID_PANEL));
     }

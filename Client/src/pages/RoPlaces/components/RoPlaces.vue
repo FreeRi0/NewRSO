@@ -3,42 +3,17 @@
     <div class="RoPlaces">
       <h2 class="RoPlaces_title">Места РО по показателям</h2>
       <div class="RoPlaces_wrapper">
-        <div v-for="item in RoPlaces" :key="item.id" >
-          <router-link :to="{ name: 'Place', params: {id: item.id} }" class="RoPlaces_item" v-if="!(item.id == 6 || item.id == 9)">
-            <p>{{ item.id }}.</p>
-            <p>{{ item.title }}</p>
-          </router-link>
-          <div v-else>
-            <v-expansion-panels>
-              <v-expansion-panel>
-                <v-expansion-panel-title @click="getData(item.id)">
-                  {{ item.id }}.
-                  {{ item.title }}
-                </v-expansion-panel-title>
-                <v-expansion-panel-text class="form__field-group ">
-                  <div v-for="event in eventsArrays[item.id]" :key="event.id" class=" mb-2 title">
-                    <router-link :to="{ name: 'EventPlace', params: {id: item.id, id_event: event.id} }" class="title_wrap">
-                      {{ event.name }}
-                    </router-link>
-                  </div>
-                </v-expansion-panel-text>
-              </v-expansion-panel>
-            </v-expansion-panels>
-          </div>
-        </div>
+        <router-link :to="{ name: 'Place', params: {id: item.id} }" class="RoPlaces_item" v-for="item in RoPlaces" :key="item.id" >
+          <p>{{ item.id }}.</p>
+          <p>{{ item.title }}</p>
+        </router-link>
       </div>
     </div>
   </div>
 </template>
 <script setup>
 import { ref } from 'vue';
-import { HTTP } from '@app/http';
 
-const loaded = ref({6: false, 9: false})
-const eventsArrays = ref({
-  6: [],
-  9: [],
-})
 const RoPlaces = ref([{
   id: 1, title: 'Численность членов РО РСО в соответствии с объемом уплаченных членских взносов'
 }, {
@@ -72,18 +47,6 @@ const RoPlaces = ref([{
 }, {
   id: 16, title: 'Победители всероссийских (международных), окружных и межрегиональных трудовых проектов по комиссарской деятельности «К»',
 }])
-
-const getData = async (id) => {
-  if(loaded[id]) return
-  try {
-    const { data } = await HTTP.get(`/regional_competitions/reports/event_names/r${id}-event-names/`,)
-    eventsArrays.value[id] = data;
-    console.log(eventsArrays.value);
-    loaded[id] = true
-  } catch(error){
-    console.error(error);
-  }
-}
 </script>
 <style lang="scss">
 .RoPlaces {

@@ -134,5 +134,10 @@ export const useReportPartTwoStore = defineStore('report-two', {
         },
         isReportRevision: false,
 
+        /*
+        * Переменная для хранения подтверждения полной верификации отчета экспертом ЦШ 
+        * (verified_by_chq === true по всем показателям)
+        */
+        isAllReportsVerifiedByCH: false,
     })
 })

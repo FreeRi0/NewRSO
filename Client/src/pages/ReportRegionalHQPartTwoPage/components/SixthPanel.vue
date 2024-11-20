@@ -89,14 +89,17 @@ const formData = async (reportData, reportNumber) => {
   try {
     if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
       if (!link_err.value) {
+        console.log('First time sending data 1');
         if (isFirstSent.value) {
-          if (reportData.number_of_members > 0) {
+          console.log('First time sending data 2', props.tab, reportData.number_of_members);
+
+          if (reportData.number_of_members > 0 || props.tab == 'Доработка') {
             console.log('First time sending data');
             const { data } = await reportPartTwoService.createMultipleReport(reportData, '6', reportNumber);
             console.log('datas1', data);
             emit('getData', data, 6, reportNumber);
             isFirstSent.value = false;
-          }
+          } 
         } else {
           console.log('Second time sending data');
           const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '6', reportNumber);
@@ -146,9 +149,9 @@ watchEffect(() => {
 
       isFirstSent.value = reportStore.isReportReject.six[el_id.value] && !props.data[el_id.value].central_version;
       console.log('isFirstSent при доработке 6', isFirstSent.value);
+      console.log('datadd', props.data[el_id.value])
 
-
-      if (props.data[el_id.value].number_of_members == 0 || props.data[el_id.value].number_of_members == null) {
+      if ((props.data[el_id.value].number_of_members == 0 || props.data[el_id.value].number_of_members == null) && props.tab !== 'Доработка') {
         sixPanelData.value = {
           number_of_members: 0,
           links: [],

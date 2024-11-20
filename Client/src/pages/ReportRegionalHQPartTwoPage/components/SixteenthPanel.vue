@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.sixteenth) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.sixteenth)"
+  <div v-if="reportStore?.isAllReportsVerifiedByCH ? false : !(props.centralExpert || props.districtExpert || reportStore.isReportReject?.sixteenth) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.sixteenth)"
        class="form__field-group">
     <div class="form__field-project-existence">
       <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу <sup class="valid-red">*</sup>
@@ -949,7 +949,7 @@ watchEffect(() => {
   }
 
   // Мапинг данных для отчета командира РШ при возвращении на доработку
-  if (reportStore.reportReject.sixteenth && reportStore.isReportReject.sixteenth) {
+  if (reportStore.reportReject.sixteenth && (reportStore.isReportReject.sixteenth || reportStore.isAllReportsVerifiedByCH)) {
     // console.log('reportStore.reportReject.sixteenth', reportStore.reportReject.sixteenth)
     // console.log('props.data', props.data)
 
