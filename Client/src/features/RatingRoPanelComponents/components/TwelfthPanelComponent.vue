@@ -159,6 +159,7 @@
 
         <div>
             <v-checkbox
+                v-if="!reportStore.isAllReportsVerifiedByCH"
                 v-model="reportStore.returnReport.twelfth"
                 label="Вернуть в&nbsp;РО на&nbsp;доработку"
                 :disabled="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.twelfth.verified_by_chq !== null"
@@ -414,7 +415,7 @@ watchEffect(async () => {
             isSent.value = props.data.is_sent;
 
             isFirstSent.value = reportStore.isReportReject.twelfth && !props.data.central_version;
-            console.log('isFirstSent при доработке 12', isFirstSent.value);
+            // console.log('isFirstSent при доработке 12', isFirstSent.value);
             // if (reportStore.isReportReject.twelfth) {
             //     reportStore.returnReport.twelfth = true;
             // }
