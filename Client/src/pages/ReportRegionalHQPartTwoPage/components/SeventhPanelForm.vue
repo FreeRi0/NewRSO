@@ -332,7 +332,7 @@
                         <InputReport v-model:value="sixPanelData.number_of_members" placeholder="Введите число" id="15"
                             name="14" @focusout="focusOut" class="form__input number_input" type="number"
                             :maxlength="10" :max="32767"
-                            :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander" />
+                            :disabled="props.tab === 'Просмотр отправленного отчета' && (props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)" />
                     </div>
                     <div class="form__field" v-if="sixPanelData?.links?.length > 0">
                         <label class="form__label" for="14">Ссылка на социальные сети/ электронные
@@ -342,14 +342,14 @@
                         <div class="form__wrapper" v-for="(item, index) in sixPanelData?.links" :key="index">
                             <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
                                 :is-link="true" @focusout="focusOut"
-                                :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
+                                :disabled="props.tab === 'Просмотр отправленного отчета' && (props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)"
                                 name="14" v-model:value="item.link" class="mb-2" />
                         </div>
                     </div>
                     <div class="form__field">
                         <label class="form__label" for="14">Комментарий</label>
                         <TextareaReport
-                            :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
+                            :disabled="props.tab === 'Просмотр отправленного отчета' && (props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)"
                             v-model:value="sixPanelData.comment" id="comment" name="comment" :rows="1" autoResize
                             placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000"
                             :max-length-text="3000" counter-visible />
@@ -373,8 +373,7 @@
 
                         <div class="places_wrap" v-if="isRejected">
                             <div class="places_item" v-for="item in events" :key="item.id">
-                                <input :id="item.id" :value="item.value" :name="item.name" :disabled="props.isCentralHeadquarterCommander ||
-                                    props.isDistrictHeadquarterCommander"
+                                <input :id="item.id" :value="item.value" :name="item.name" :disabled="props.tab === 'Просмотр отправленного отчета' && (props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)"
                                     :checked="ninthPanelData.event_happened == item.value"
                                     class="form__input places_input" type="radio" @focusout="focusOut"
                                     v-model="ninthPanelData.event_happened" />
@@ -386,10 +385,7 @@
 
                         <div v-else class="places_wrap one_place">
                             <input :id="12" :value="ninthPanelData.event_happened" @focusout="focusOut" :name="12"
-                                :disabled="props.isCentralHeadquarterCommander ||
-                                    props.isDistrictHeadquarterCommander
-
-                                    " :checked="ninthPanelData.event_happened === true ||
+                                :disabled="props.tab === 'Просмотр отправленного отчета' && (props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)" :checked="ninthPanelData.event_happened === true ||
                                         ninthPanelData.event_happened === false
                                         " class="form__input places_input" type="radio"
                                 v-model="ninthPanelData.event_happened" />
@@ -407,12 +403,12 @@
                             Скан документа, подтверждающего проведение акции
                         </label>
                         <InputReport
-                            :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
-                            @change="uploadFile($event, 9)" v-if="!ninthPanelData.document" isFile type="file"
+                            :disabled="props.tab === 'Просмотр отправленного отчета' && (props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)"
+                            @change="uploadFile($event, 9)" v-if="!ninthPanelData.document && (props.tab !== 'Просмотр отправленного отчета')" isFile type="file"
                             accept=".jpg, .jpeg, .png, .pdf" id="scan_file" name="scan_file" width="100%"
                             height="auto" />
-                        <FileBoxComponent v-else :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
-                            :isSent="props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander"
+                        <FileBoxComponent v-if="ninthPanelData.document" :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
+                            :isSent="props.tab === 'Просмотр отправленного отчета' && (props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)"
                             :fileSize="ninthPanelData.file_size" @click="deleteFile(9)">
                         </FileBoxComponent>
                     </div>
@@ -424,7 +420,7 @@
 
                         <div class="form__wrapper" v-for="(item, index) in ninthPanelData?.links" :key="index">
                             <InputReport @focusout="focusOut"
-                                :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
+                                :disabled="props.tab === 'Просмотр отправленного отчета' && (props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)"
                                 name="14" :is-link="true"
                                 placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
                                 v-model:value="item.link" class="mb-2" />
@@ -433,7 +429,7 @@
                     <div class="form__field" v-if="ninthPanelData.comment !== null || ninthPanelData.comment !== ''">
                         <label class="form__label" for="14">Комментарий</label>
                         <TextareaReport @focusout="focusOut"
-                            :disabled="props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander"
+                            :disabled="props.tab === 'Просмотр отправленного отчета' && (props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)"
                             v-model:value="ninthPanelData.comment" id="comment" name="comment" :rows="1" autoResize
                             placeholder="Напишите сообщение" :maxlength="3000" :max-length-text="3000"
                             counter-visible />
