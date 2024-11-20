@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.fifth) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.fifth)"
+    v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.fifth || reportStore.isAllReportsVerifiedByCH) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.fifth)"
     class="form__field-group">
     <div class="form__field-group-general" v-for="(event, index) in events" :key="index">
       <div class="form__field-people">
@@ -101,7 +101,7 @@
               </label>
               <InputReport v-model:value="event.participants_number" id="participants_number" name="participants_number"
                 class="form__input form__field-people-count-field" type="number" placeholder="Введите число"
-                @focusout="focusOut" :disabled="props.centralExpert || props.districtExpert" />
+                @focusout="focusOut" :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" />
             </div>
             <div class="form__field-people-count-wrap">
               <label class="form__label" for="ro_participants_number">
@@ -111,7 +111,7 @@
               <InputReport v-model:value="event.ro_participants_number" id="ro_participants_number"
                 name="ro_participants_number" class="form__input form__field-people-count-field" type="number"
                 placeholder="Введите число" @focusout="focusOut"
-                :disabled="props.centralExpert || props.districtExpert" />
+                :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" />
             </div>
           </div>
         </div>
@@ -121,14 +121,14 @@
                 class="valid-red">*</sup></label>
             <InputReport v-model:value="event.start_date" id="start_date" name="start_date"
               class="form__input form__field-date-wrap-field" type="date" @focusout="focusOut"
-              :disabled="props.centralExpert || props.districtExpert" />
+              :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" />
           </div>
           <div class="form__field-date-wrap">
             <label class="form__label" for="end_date">Дата окончания проведения проекта <sup
                 class="valid-red">*</sup></label>
             <InputReport v-model:value="event.end_date" id="end_date" name="end_date"
               class="form__input form__field-date-wrap-field" type="date" @focusout="focusOut"
-              :disabled="props.centralExpert || props.districtExpert" />
+              :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" />
           </div>
         </div>
         <div class="report__add-file">
@@ -136,7 +136,7 @@
             <label class="form__label" for="eventName">Название трудового проекта <sup class="valid-red">*</sup></label>
             <InputReport v-model:value="event.name" id="eventName" name="eventName"
               class="form__input form__field-people-count-field" placeholder="Введите название" @focusout="focusOut"
-              :disabled="props.centralExpert || props.districtExpert" />
+              :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" />
           </div>
         </div>
         <div style="width: 100%;">
@@ -144,7 +144,7 @@
           <div class="form__field-link-wrap" v-for="(link, i) in events[index].links" :key="i">
             <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__field-link-field"
               type="text" placeholder="Введите ссылку" @focusout="focusOut"
-              :disabled="props.centralExpert || props.districtExpert" />
+              :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" />
           </div>
         </div>
         <div class="hr"></div>
@@ -153,7 +153,7 @@
         <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
         <TextareaReport v-model:value="fifthPanelData.comment" id="comment" name="comment" :rows="row" autoResize
           placeholder="Комментарий" :maxlength="3000" :max-length-text="3000" counter-visible @focusout="focusOut"
-          :disabled="props.centralExpert || props.districtExpert" />
+          :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" />
       </div>
       <div class="form__field-result">
         <v-checkbox class="result-checkbox" id="v-checkbox" @change="calculateResult($event)" />
@@ -453,7 +453,7 @@
       <div>
         <p>(4-1)*2+(4-2)+(4-3)=9</p>
       </div> -->
-      <div>
+      <div v-if="!reportStore.isAllReportsVerifiedByCH">
         <v-checkbox v-model="reportStore.returnReport.fifth" label="Вернуть в РО на доработку" @change="onReportReturn"
           :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" />
       </div>
@@ -791,9 +791,9 @@ watchEffect(() => {
   }
 
   // Мапинг данных для отчета командира РШ при возвращении на доработку
-  if (reportStore.reportReject.fifth && reportStore.isReportReject.fifth) {
-    console.log('reportStore.reportReject.fifth', reportStore.reportReject.fifth)
-    console.log('props.data', props.data)
+  if (reportStore.reportReject.fifth && (reportStore.isReportReject.fifth || reportStore.isAllReportsVerifiedByCH)) {
+    // console.log('reportStore.reportReject.fifth', reportStore.reportReject.fifth)
+    // console.log('props.data', props.data)
 
     reportStore.returnReport.fifth = true;
     // Добавление данных панели "корректировка ОШ"

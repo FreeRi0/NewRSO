@@ -1013,9 +1013,11 @@ const getReportData = async (reportId) => {
     }
     // Загрузка данных для отчета командира РШ
     else {
+      /*-------------1-------------*/
+      let dataFirst;
       try {
         // reportData.value.first = (await reportPartTwoService.getReport('1')).data;
-        const dataFirst = (await reportPartTwoService.getReport('1')).data;
+        dataFirst = (await reportPartTwoService.getReport('1')).data;
         if (!dataFirst.regional_version && !dataFirst.central_version) {
           reportData.value.first = dataFirst;
         } else {
@@ -1035,8 +1037,10 @@ const getReportData = async (reportId) => {
       } catch (e) {
         console.log(e.message)
       }
+      /*------------4--------------*/
+      let dataFourth;
       try {
-        const dataFourth = (await reportPartTwoService.getReport('4')).data;
+        dataFourth = (await reportPartTwoService.getReport('4')).data;
         if (!dataFourth.regional_version && !dataFourth.central_version) {
           reportData.value.fourth = dataFourth;
         } else {
@@ -1056,8 +1060,10 @@ const getReportData = async (reportId) => {
       } catch (e) {
         console.log(e.message)
       }
+      /*------------5--------------*/
+      let dataFifth;
       try {
-        const dataFifth = (await reportPartTwoService.getReport('5')).data;
+        dataFifth = (await reportPartTwoService.getReport('5')).data;
         console.log('5', dataFifth)
         // if (!dataFifth.regional_version) {
         //   reportData.value.fifth = dataFifth;
@@ -1144,10 +1150,11 @@ const getReportData = async (reportId) => {
       } catch (e) {
         console.error('Error in six_items processing:', e);
       }
-
+      /*------------10-1--------------*/
+      let dataTenthFirst;
       try {
         // reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
-        const dataTenthFirst = (await reportPartTwoService.getMultipleReport('10', '1')).data;
+        dataTenthFirst = (await reportPartTwoService.getMultipleReport('10', '1')).data;
         // if (!dataTenthFirst.regional_version) {
         //   reportData.value.tenth.first = dataTenthFirst;
         // } else {
@@ -1173,9 +1180,11 @@ const getReportData = async (reportId) => {
       } catch (e) {
         console.log(e.message)
       }
+      /*------------10-2--------------*/
+      let dataTenthSecond;
       try {
         // reportData.value.tenth.second = (await reportPartTwoService.getMultipleReport('10', '2')).data;
-        const dataTenthSecond = (await reportPartTwoService.getMultipleReport('10', '2')).data;
+        dataTenthSecond = (await reportPartTwoService.getMultipleReport('10', '2')).data;
         // if (!dataTenthSecond.regional_version) {
         //   reportData.value.tenth.second = dataTenthSecond;
         // } else {
@@ -1276,7 +1285,8 @@ const getReportData = async (reportId) => {
       } catch (e) {
         console.log(e.message)
       }
-      //-------------------------------------------------------------
+      //-----------------------------16--------------------------------
+      let dataSixteenth;
       try {
         // reportData.value.sixteenth = (await reportPartTwoService.getReport('16')).data;
         // if (reportData.value.sixteenth.is_sent) {
@@ -1284,7 +1294,7 @@ const getReportData = async (reportId) => {
         //   blockEditFirstReport.value = true;
         // }
 
-        const dataSixteenth = (await reportPartTwoService.getReport('16')).data;
+        dataSixteenth = (await reportPartTwoService.getReport('16')).data;
         // if (!dataSixteenth.regional_version) {
         //   reportData.value.sixteenth = dataSixteenth;
         // } else {
@@ -1357,10 +1367,17 @@ const getReportData = async (reportId) => {
       }
 
       if (
+        dataFirst.verified_by_chq &&
+        dataFourth.verified_by_chq &&
+        dataFifth.verified_by_chq &&
+        dataTenthFirst.verified_by_chq &&
+        dataTenthSecond.verified_by_chq &&
         isAllSixVerified && isAllNinthVerified &&
         dataEleventh.verified_by_chq &&
         dataTwelfth.verified_by_chq &&
-        dataThirteenth.verified_by_chq) {
+        dataThirteenth.verified_by_chq &&
+        dataSixteenth.verified_by_chq
+      ) {
         reportStore.isAllReportsVerifiedByCH = true;
       }
     }

@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.fourth) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.fourth)"
+    v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.fourth || reportStore.isAllReportsVerifiedByCH) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.fourth)"
     class="form__field-group">
     <div v-for="(event, index) in events" :key="index" class="form__field-fourth-panel">
       <div class="form__field-members-event">
@@ -121,14 +121,14 @@
               <div style="display: flex; justify-content: space-between;">
                 <InputReport v-model:value="event.participants_number" :id="event.participants_number"
                   name="participants_number" class="form__input" type="number" placeholder="Введите число"
-                  :disabled="props.centralExpert || props.districtExpert" @focusout="focusOut" />
+                  :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" @focusout="focusOut" />
               </div>
             </div>
             <div class="form__field">
               <label class="form__label" for="eventName">Название мероприятия<sup class="valid-red">*</sup></label>
               <div class="form__field-name">
                 <InputReport v-model:value="event.name" :id="event.name" name="eventName" class="form__input"
-                  placeholder="Введите название мероприятия" :disabled="props.centralExpert || props.districtExpert"
+                  placeholder="Введите название мероприятия" :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
                   @focusout="focusOut" />
               </div>
             </div>
@@ -140,13 +140,13 @@
             <label style="max-width: 280px;" class="form__label" for="start_date">Дата начала проведения мероприятия
               <sup class="valid-red">*</sup></label>
             <InputReport v-model:value="event.start_date" :id="event.start_date" name="start_date" class="form__input"
-              type="date" :disabled="props.centralExpert || props.districtExpert" @focusout="focusOut" />
+              type="date" :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" @focusout="focusOut" />
           </div>
           <div class="form__field">
             <label style="max-width: 300px;" class="form__label" for="end_date">Дата окончания проведения мероприятия
               <sup class="valid-red">*</sup></label>
             <InputReport v-model:value="event.end_date" :id="event.end_date" name="end_date" class="form__input"
-              type="date" :disabled="props.centralExpert || props.districtExpert" @focusout="focusOut" />
+              type="date" :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" @focusout="focusOut" />
           </div>
         </div>
         <div class="form__field-event">
@@ -154,9 +154,9 @@
             <label class="form__label" for="4">Положение о мероприятии <sup class="valid-red">*</sup></label>
             <InputReport class="form-input__file-input" v-if="!event.regulations" isFile type="file" id="scan_file"
               name="scan_file" width="100%" @change="uploadFile($event, index)"
-              :disabled="props.centralExpert || props.districtExpert" />
+              :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" />
             <FileBoxComponent v-else-if="event.regulations" :file="event.regulations" :fileType="event.file_type"
-              :fileSize="event.file_size" :is-sent="props.centralExpert || props.districtExpert"
+              :fileSize="event.file_size" :is-sent="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
               :is-error-file="isErrorFile && !event.file_size" @click="deleteFile(index)" />
           </div>
           <div class="form__field-event-interregion">
@@ -165,7 +165,7 @@
               <div style="display: flex;">
                 <input v-model="event.is_interregional" type="radio" :id="`is_interregional-true_${index}`"
                   :value="true" class="custom-radio" @change="focusOut"
-                  :disabled="props.centralExpert || props.districtExpert" />
+                  :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" />
                 <label :for="`is_interregional-true_${index}`">
                   Да
                 </label>
@@ -173,7 +173,7 @@
               <div style="display: flex">
                 <input v-model="event.is_interregional" type="radio" :id="`is_interregional-false_${index}`"
                   :value="false" class="custom-radio" @change="focusOut"
-                  :disabled="props.centralExpert || props.districtExpert" />
+                  :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" />
                 <label :for="`is_interregional-false_${index}`">
                   Нет
                 </label>
@@ -186,7 +186,7 @@
           <div class="form__add-link" v-for="(link, i) in events[index].links" :key="i">
             <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__input-add-link"
               type="text" placeholder="Введите ссылку" @focusout="focusOut"
-              :disabled="props.centralExpert || props.districtExpert" />
+              :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" />
           </div>
         </div>
         <div class="hr"></div>
@@ -196,7 +196,7 @@
         <TextareaReport v-model:value="fourthPanelData.comment" id="comment" name="comment" class="form__input"
           type="textarea" placeholder="Укажите наименования организованных мероприятий" style="width: 100%;" :rows="1"
           autoResize :maxlength="3000" :max-length-text="3000" counter-visible @focusout="focusOut"
-          :disabled="props.centralExpert || props.districtExpert" />
+          :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" />
       </div>
       <div class="form__field-result" style="display: flex; align-items: center;">
         <v-checkbox class="result-checkbox" id="v-checkbox" @change="calculateResult($event)" />
@@ -529,7 +529,7 @@
       <!--      <div>-->
       <!--        <p>(4-1)*2+(4-2)+(4-3)=9</p>-->
       <!--      </div>-->
-      <div>
+      <div v-if="!reportStore.isAllReportsVerifiedByCH">
         <v-checkbox v-model="reportStore.returnReport.fourth" label="Вернуть в РО на доработку" @change="onReportReturn"
           :disabled="reportStore.isReportReject?.fourth && !props.centralExpert" />
       </div>
@@ -904,7 +904,7 @@ watchEffect(() => {
   }
   // console.log('isFirstSent.value::::::2', isFirstSent.value)
   // Мапинг данных для отчета командира РШ при возвращении на доработку
-  if (reportStore.reportReject.fourth && reportStore.isReportReject.fourth) {
+  if (reportStore.reportReject.fourth && (reportStore.isReportReject.fourth || reportStore.isAllReportsVerifiedByCH)) {
     console.log('reportStore.reportReject.fourth', reportStore.reportReject.fourth)
     console.log('props.data', props.data)
 

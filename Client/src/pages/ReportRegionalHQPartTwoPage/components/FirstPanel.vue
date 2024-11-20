@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.first) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.first)">
+  <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.first || reportStore.isAllReportsVerifiedByCH) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.first)">
     <div class="form__field-group">
       <div class="form__field-report">
         <div class="form__field">
@@ -80,7 +80,7 @@
               class="form__input"
               type="number"
               placeholder="Введите число"
-              :disabled="props.centralExpert || props.districtExpert"
+              :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
               @focusout="focusOut"
           />
         </div>
@@ -93,7 +93,7 @@
                 :file="firstPanelData.scan_file"
                 :fileType="firstPanelData.file_type"
                 :fileSize="firstPanelData.file_size"
-                :is-sent="props.centralExpert || props.districtExpert"
+                :is-sent="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
             ></FileBoxComponent>
             <div v-else class="report__add-file">
               <InputReport
@@ -102,7 +102,7 @@
                   type="file"
                   id="scan_file"
                   name="scan_file"
-                  :disabled="props.centralExpert || props.districtExpert"
+                  :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
                   :is-error-panel="isErrorPanel"
                   style="width: 100%;"
                   @change="uploadFile"/>
@@ -112,7 +112,7 @@
                   :fileType="firstPanelData.file_type"
                   :fileSize="firstPanelData.file_size"
                   @click="deleteFile"
-                  :is-sent="props.centralExpert || props.districtExpert"
+                  :is-sent="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
                   :is-error-file="isErrorFile"
               ></FileBoxComponent>
             </div>
@@ -132,7 +132,7 @@
             :max-length-text="3000"
             counter-visible
             class="form__input"
-            :disabled="props.centralExpert || props.districtExpert"
+            :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
             style="margin-bottom: 4px;"
             @focusout="focusOut"
         />
@@ -226,7 +226,7 @@
             :is-sent="reportStore.isReportReject?.first && !props.centralExpert"
         />
       </div>
-      <div>
+      <div v-if="!reportStore.isAllReportsVerifiedByCH">
         <v-checkbox
             v-model="reportStore.returnReport.first"
             @change="onReportReturn"
@@ -444,6 +444,7 @@ const onReportReturn = (event) => {
 };
 
 watchEffect(async () => {
+  console.log('reportStore.isReportReject?.first', reportStore.isReportReject?.first)
   try {
     if (!(props.centralExpert || props.districtExpert)) {
       const res = await getReportForSecond();
@@ -542,8 +543,7 @@ watchEffect(async () => {
   }
 
   // Мапинг данных для отчета командира РШ при возвращении на доработку
-  if (reportStore.reportReject.first && reportStore.isReportReject.first) {
-    console.log('reportStore.reportReject.first', reportStore.reportReject.first)
+  if (reportStore.reportReject.first && (reportStore.isReportReject.first || reportStore.isAllReportsVerifiedByCH)) {
     // console.log('props.data', props.data)
 
     reportStore.returnReport.first = true;
