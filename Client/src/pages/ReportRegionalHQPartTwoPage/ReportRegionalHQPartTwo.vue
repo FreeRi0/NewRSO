@@ -1182,73 +1182,82 @@ const getReportData = async (reportId) => {
       } catch (e) {
         console.log(e.message)
       }
+      //--------------------------------------------------------------
+      let dataEleventh;
       try {
-        const dataEleventh = (await reportPartTwoService.getReport('11')).data;
+        dataEleventh = (await reportPartTwoService.getReport('11')).data;
         console.log(dataEleventh);
         dataEleventh.regional_version
           ? reportData.value.eleventh = JSON.parse(dataEleventh.regional_version)
           : reportData.value.eleventh = dataEleventh;
 
+        dataEleventh.district_version
+          ? reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version)
+          : reportStore.reportDataDH.eleventh = dataEleventh;
+
+        dataEleventh.central_version
+          ? reportStore.reportDataCH.eleventh = dataEleventh.central_version
+          : reportStore.reportDataCH.eleventh = dataEleventh;
+
         // Проверка на причины отклонений отчета и вывод табов для РО
         if (dataEleventh.rejecting_reasons && dataEleventh.verified_by_chq !== true) {
-          // console.log(dataEleventh);
           revisionPanels.value.push('11');
-          reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version);
-
-          dataEleventh.central_version
-            ? reportStore.reportDataCH.eleventh = dataEleventh.central_version
-            : reportStore.reportDataCH.eleventh = dataEleventh;
-
           reportStore.isReportReject.eleventh = isTabsForRevision.value;
-          // console.log('isReportReject в род комп', reportStore.isReportReject.eleventh);
         }
       } catch (e) {
         console.log(e.message)
       }
+      //--------------------------------------------------------------
+      let dataTwelfth;
       try {
-        const dataTwelfth = (await reportPartTwoService.getReport('12')).data;
+        dataTwelfth = (await reportPartTwoService.getReport('12')).data;
         console.log(dataTwelfth);
         dataTwelfth.regional_version
           ? reportData.value.twelfth = JSON.parse(dataTwelfth.regional_version)
           : reportData.value.twelfth = dataTwelfth;
 
+        dataTwelfth.district_version
+          ? reportStore.reportDataDH.twelfth = JSON.parse(dataTwelfth.district_version)
+          : reportStore.reportDataDH.twelfth = dataTwelfth;
+
+        dataTwelfth.central_version
+          ? reportStore.reportDataCH.twelfth = dataTwelfth.central_version
+          : reportStore.reportDataCH.twelfth = dataTwelfth;
+
         // Проверка на причины отклонений отчета и вывод табов для РО
         if (dataTwelfth.rejecting_reasons && dataTwelfth.verified_by_chq !== true) {
           revisionPanels.value.push('12');
-          reportStore.reportDataDH.twelfth = JSON.parse(dataTwelfth.district_version);
-
-          dataTwelfth.central_version
-            ? reportStore.reportDataCH.twelfth = dataTwelfth.central_version
-            : reportStore.reportDataCH.twelfth = dataTwelfth;
-
           reportStore.isReportReject.twelfth = isTabsForRevision.value;
-          // console.log('isReportReject в род комп', reportStore.isReportReject.twelfth);
         }
       } catch (e) {
         console.log(e.message)
       }
+      //--------------------------------------------------------------
+      let dataThirteenth
       try {
-        const dataThirteenth = (await reportPartTwoService.getReport('13')).data;
+        dataThirteenth = (await reportPartTwoService.getReport('13')).data;
         console.log(dataThirteenth);
         dataThirteenth.regional_version
           ? reportData.value.thirteenth = JSON.parse(dataThirteenth.regional_version)
           : reportData.value.thirteenth = dataThirteenth;
 
+        dataThirteenth.district_version
+          ? reportStore.reportDataDH.thirteenth = JSON.parse(dataThirteenth.district_version)
+          : reportStore.reportDataDH.thirteenth = dataThirteenth;
+
+        dataThirteenth.central_version
+          ? reportStore.reportDataCH.thirteenth = dataThirteenth.central_version
+          : reportStore.reportDataCH.thirteenth = dataThirteenth;
+
         // Проверка на причины отклонений отчета и вывод табов для РО
         if (dataThirteenth.rejecting_reasons && dataThirteenth.verified_by_chq !== true) {
           revisionPanels.value.push('13');
-          reportStore.reportDataDH.thirteenth = JSON.parse(dataThirteenth.district_version);
-
-          dataThirteenth.central_version
-            ? reportStore.reportDataCH.thirteenth = dataThirteenth.central_version
-            : reportStore.reportDataCH.thirteenth = dataThirteenth;
-
           reportStore.isReportReject.thirteenth = isTabsForRevision.value;
-          // console.log('isReportReject в род комп', reportStore.isReportReject.thirteenth);
         }
       } catch (e) {
         console.log(e.message)
       }
+      //-------------------------------------------------------------
       try {
         // reportData.value.sixteenth = (await reportPartTwoService.getReport('16')).data;
         // if (reportData.value.sixteenth.is_sent) {
@@ -1326,6 +1335,14 @@ const getReportData = async (reportId) => {
         reportData.value.nineteenth = (await reportPartTwoService.getReport('19')).data;
       } catch (e) {
         console.log(e.message)
+      }
+
+      if (
+        dataEleventh.verified_by_chq && 
+        dataTwelfth.verified_by_chq && 
+        dataThirteenth.verified_by_chq) 
+      {
+        reportStore.isAllReportsVerifiedByCH = true;
       }
     }
   } catch (e) {
@@ -2212,17 +2229,12 @@ watch(revisionPanels.value,
   },
 )
 
-watch(
-  () => picked.value,
-  () => {
-    //     if (picked.value === 'Просмотр отправленного отчета') {
-    //       
-    //     } else {
-    //       
-    //     }
-    console.log('таб', picked.value);
-  }
-)
+// watch(
+//   () => picked.value,
+//   () => {
+//     console.log('таб', picked.value);
+//   }
+// )
 
 onMounted(() => {
   if (roleStore.roles.regionalheadquarter_commander && typeof (route.query.reportId) === 'undefined' && window.performance.navigation.type === 1) {

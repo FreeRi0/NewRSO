@@ -122,6 +122,7 @@
 
         <div>
             <v-checkbox 
+                v-if="!reportStore.isAllReportsVerifiedByCH"
                 v-model="reportStore.returnReport.thirteenth"
                 label="Вернуть в&nbsp;РО на&nbsp;доработку"
                 :disabled="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.thirteenth.verified_by_chq !== null"
