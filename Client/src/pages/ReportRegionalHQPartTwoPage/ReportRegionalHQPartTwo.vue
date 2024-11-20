@@ -482,6 +482,9 @@ const handleReturnToRo = (checked) => {
 //   }
 // };
 
+
+let isAllSixVerified = true;
+let isAllNinthVerified = true;
 const getMultiplyData = async (reportId) => {
   const sixDataPromises = six_items.value.map(async (item) => {
     try {
@@ -578,7 +581,10 @@ const getMultiplyData = async (reportId) => {
   ]);
 
   sixDataResults.forEach((result) => {
+
     const sixData = result.data;
+
+
     if (districtExpert.value) {
       if (sixData?.regional_version) {
         try {
@@ -642,6 +648,7 @@ const getMultiplyData = async (reportId) => {
         ? reportStore.reportDataCH.six[result.id].comment = ''
         : reportStore.reportDataCH.six[result.id].comment = sixData?.comment;
     } else {
+
       if (sixData?.regional_version) {
         try {
           reportData.value.six[result.id] = JSON.parse(sixData.regional_version);
@@ -653,18 +660,26 @@ const getMultiplyData = async (reportId) => {
         reportData.value.six[result.id] = sixData;
       }
 
+      reportStore.reportDataDH.six[result.id] = JSON.parse(sixData?.district_version);
+      sixData?.central_version
+        ? reportStore.reportDataCH.six[result.id] = sixData?.central_version
+        : reportStore.reportDataCH.six[result.id] = sixData;
 
       if (sixData?.rejecting_reasons && sixData?.verified_by_chq !== true) {
         if (!revisionPanels.value.find((item) => item === '6')) {
           revisionPanels.value.push(`6`);
         }
         revisionPanels.value.push(`6-${result.id}`);
-        reportStore.reportDataDH.six[result.id] = JSON.parse(sixData?.district_version);
-        sixData?.central_version
-          ? reportStore.reportDataCH.six[result.id] = sixData?.central_version
-          : reportStore.reportDataCH.six[result.id] = sixData;
+        // reportStore.reportDataDH.six[result.id] = JSON.parse(sixData?.district_version);
+        // sixData?.central_version
+        //   ? reportStore.reportDataCH.six[result.id] = sixData?.central_version
+        //   : reportStore.reportDataCH.six[result.id] = sixData;
 
         reportStore.isReportReject.six[result.id] = isTabsForRevision.value;
+      }
+
+      if (!sixData?.verified_by_chq) {
+        isAllSixVerified = false;
       }
 
 
@@ -739,7 +754,10 @@ const getMultiplyData = async (reportId) => {
         reportData.value.ninth[result.id] = JSON.parse(reportData.value.ninth[result.id].regional_version);
       }
       console.log('reasons: ', reportData.value.ninth[result.id]?.rejecting_reasons)
-
+      ninthData?.district_version ? reportStore.reportDataDH.ninth[result.id] = JSON.parse(ninthData?.district_version) : reportStore.reportDataDH.ninth[result.id] = ninthData
+      ninthData.central_version
+        ? reportStore.reportDataCH.ninth[result.id] = ninthData.central_version
+        : reportStore.reportDataCH.ninth[result.id] = ninthData;
       if (ninthData?.rejecting_reasons) {
         if (!revisionPanels.value.find((item) => item === '9')) {
           revisionPanels.value.push(`9`);
@@ -748,12 +766,13 @@ const getMultiplyData = async (reportId) => {
 
         revisionPanels.value.push(`9-${result.id}`);
         console.log('9 rev', revisionPanels.value)
-        ninthData?.district_version ? reportStore.reportDataDH.ninth[result.id] = JSON.parse(ninthData?.district_version) : reportStore.reportDataDH.ninth[result.id] = ninthData
-        ninthData.central_version
-          ? reportStore.reportDataCH.ninth[result.id] = ninthData.central_version
-          : reportStore.reportDataCH.ninth[result.id] = ninthData;
+
 
         reportStore.isReportReject.ninth[result.id] = isTabsForRevision.value;
+      }
+
+      if (!ninthData?.verified_by_chq) {
+        isAllNinthVerified = false;
       }
 
 
@@ -1338,10 +1357,10 @@ const getReportData = async (reportId) => {
       }
 
       if (
-        dataEleventh.verified_by_chq && 
-        dataTwelfth.verified_by_chq && 
-        dataThirteenth.verified_by_chq) 
-      {
+        isAllSixVerified && isAllNinthVerified &&
+        dataEleventh.verified_by_chq &&
+        dataTwelfth.verified_by_chq &&
+        dataThirteenth.verified_by_chq) {
         reportStore.isAllReportsVerifiedByCH = true;
       }
     }
