@@ -1451,7 +1451,7 @@ watch(() => [commonData.value, commentCH], () => {
     font-size: 16px;
     font-weight: 500;
     color: #8E8E93;
-    padding: 0 !important;
+    padding: 0 10px !important;
     table-layout: fixed;
 
     &__center {

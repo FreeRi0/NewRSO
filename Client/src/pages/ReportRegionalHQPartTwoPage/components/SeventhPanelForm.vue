@@ -616,7 +616,7 @@
                         <v-checkbox label="Вернуть в РО на доработку" />
                     </div>
                 </div> -->
-                <div v-if="props.panel_number == 6" class="form__field-group group-seventh">
+                <div v-if="props.panel_number == 6" class=" group-seventh">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -646,7 +646,7 @@
                             label="Вернуть в РО на доработку" />
                     </div>
                 </div>
-                <div v-else-if="props.panel_number == 9" class="form__field-group group-seventh">
+                <div v-else-if="props.panel_number == 9" class="group-seventh form__field-group-panel-ninth">
                     <div class="d-flex justify-space-between">
                         <div class="title_wrap">
                             <p class="form__title">{{ props.title.name }}</p>
@@ -1586,7 +1586,6 @@ input[type='radio']:disabled {
 
 .group-seventh {
     margin-top: 8px;
-    border-radius: 10px;
 }
 
 .form__field-result {

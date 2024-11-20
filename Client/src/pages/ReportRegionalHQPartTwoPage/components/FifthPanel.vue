@@ -250,7 +250,7 @@
         <label class="form__label">Общее количество человек, принявших участие в трудовом
           проекте
           <sup class="valid-red">*</sup></label>
-        <v-table style="margin-top: 8px;">
+        <v-table class="report_table-wide">
           <tbody>
             <tr class="report-table__tr">
               <td class="report-table__th">Данные РО</td>
@@ -269,9 +269,37 @@
             </tr>
           </tbody>
         </v-table>
-        <label class="form__label">Количество человек из&nbsp;своего региона, принявших участие в&nbsp;трудовом проекте
+        <v-table class="report_table-narrow">
+          <tbody>
+            <tr class="report-table__tr">
+              <td class="report-table__th">Данные РО</td>
+            </tr>
+            <tr style="background-color: #f9fafb;">
+              <td class="report-table__td">{{ eventCH.dataRH.participants_number }}</td>
+            </tr>
+            <tr class="report-table__tr">
+              <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
+            </tr>
+            <tr style="background-color: #f9fafb;">
+              <td class="report-table__td report-table__td__center">{{ eventCH.dataDH.participants_number }}</td>
+            </tr>
+            <tr class="report-table__tr">
+              <td class="report-table__th">Корректировка ЦШ</td>
+            </tr>
+            <tr>
+              <td class="report-table__td">
+                <InputReport v-model:value="eventCH.dataCH.participants_number" :id="'participants_numberCH'"
+                  :name="'participants_numberCH'" style="width: 100%;" type="number" placeholder="0" :maxlength="10"
+                  :min="0" :max="9999999999" :step="0.01"
+                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" />
+              </td>
+            </tr>
+          </tbody>
+        </v-table>
+        <label class="form__label">Количество человек из&nbsp;своего региона, принявших участие
+          в&nbsp;трудовом проекте
           <sup class="valid-red">*</sup></label>
-        <v-table style="margin-top: 8px;">
+        <v-table class="report_table-wide">
           <tbody>
             <tr class="report-table__tr">
               <td class="report-table__th">Данные РО</td>
@@ -290,8 +318,35 @@
             </tr>
           </tbody>
         </v-table>
+        <v-table class="report_table-narrow">
+          <tbody>
+            <tr class="report-table__tr">
+              <td class="report-table__th">Данные РО</td>
+            </tr>
+            <tr style="background-color: #f9fafb;">
+              <td class="report-table__td">{{ eventCH.dataRH.ro_participants_number }}</td>
+            </tr>
+            <tr class="report-table__tr">
+              <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
+            </tr>
+            <tr style="background-color: #f9fafb;">
+              <td class="report-table__td report-table__td__center">{{ eventCH.dataDH.ro_participants_number }}</td>
+            </tr>
+            <tr class="report-table__tr">
+              <td class="report-table__th">Корректировка ЦШ</td>
+            </tr>
+            <tr>
+              <td class="report-table__td">
+                <InputReport v-model:value="eventCH.dataCH.ro_participants_number" :id="'participants_numberCH'"
+                  :name="'participants_numberCH'" style="width: 100%;" type="number" placeholder="0" :maxlength="10"
+                  :min="0" :max="9999999999" :step="0.01"
+                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" />
+              </td>
+            </tr>
+          </tbody>
+        </v-table>
         <label class="form__label">Дата начала проведения проекта <sup class="valid-red">*</sup></label>
-        <v-table style="margin-top: 8px;">
+        <v-table class="report_table-wide">
           <tbody>
             <tr class="report-table__tr">
               <td class="report-table__th">Данные РО</td>
@@ -304,13 +359,40 @@
               <td class="report-table__td">
                 <InputReport v-model:value="eventCH.dataCH.start_date" :id="'eventCH.dataCH.end_date'"
                   name="eventCH.dataCH.end_date" class="form__input" type="date"
-                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" />
+                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" style="width: 100%;" />
               </td>
             </tr>
           </tbody>
         </v-table>
-        <label class="form__label">Дата окончания проведения проекта <sup class="valid-red">*</sup></label>
-        <v-table style="margin-top: 8px;">
+        <v-table class="report_table-narrow">
+          <tbody>
+            <tr class="report-table__tr">
+              <td class="report-table__th">Данные РО</td>
+            </tr>
+            <tr style="background-color: #f9fafb;">
+              <td class="report-table__td">{{ formattedDate(eventCH.dataRH.start_date) }}</td>
+            </tr>
+            <tr class="report-table__tr">
+              <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
+            </tr>
+            <tr style="background-color: #f9fafb;">
+              <td class="report-table__td report-table__td__center">{{ formattedDate(eventCH.dataDH.start_date) }}</td>
+            </tr>
+            <tr class="report-table__tr">
+              <td class="report-table__th">Корректировка ЦШ</td>
+            </tr>
+            <tr>
+              <td class="report-table__td">
+                <InputReport v-model:value="eventCH.dataCH.start_date" :id="'eventCH.dataCH.end_date'"
+                  name="eventCH.dataCH.end_date" class="form__input" type="date"
+                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" style="width: 100%;" />
+              </td>
+            </tr>
+          </tbody>
+        </v-table>
+        <label style="display: block;" class="form__label">Дата окончания проведения проекта <sup
+            class="valid-red">*</sup></label>
+        <v-table class="report_table-wide">
           <tbody>
             <tr class="report-table__tr">
               <td class="report-table__th">Данные РО</td>
@@ -323,7 +405,33 @@
               <td class="report-table__td">
                 <InputReport v-model:value="eventCH.dataCH.end_date" :id="'eventCH.dataCH.end_date'"
                   name="eventCH.dataCH.end_date" class="form__input" type="date"
-                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" />
+                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" style="width: 100%;" />
+              </td>
+            </tr>
+          </tbody>
+        </v-table>
+        <v-table class="report_table-narrow">
+          <tbody>
+            <tr class="report-table__tr">
+              <td class="report-table__th">Данные РО</td>
+            </tr>
+            <tr style="background-color: #f9fafb;">
+              <td class="report-table__td">{{ formattedDate(eventCH.dataRH.end_date) }}</td>
+            </tr>
+            <tr class="report-table__tr">
+              <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
+            </tr>
+            <tr style="background-color: #f9fafb;">
+              <td class="report-table__td report-table__td__center">{{ formattedDate(eventCH.dataDH.end_date) }}</td>
+            </tr>
+            <tr class="report-table__tr">
+              <td class="report-table__th">Корректировка ЦШ</td>
+            </tr>
+            <tr>
+              <td class="report-table__td">
+                <InputReport v-model:value="eventCH.dataCH.end_date" :id="'eventCH.dataCH.end_date'"
+                  name="eventCH.dataCH.end_date" class="form__input" type="date"
+                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" style="width: 100%;" />
               </td>
             </tr>
           </tbody>
@@ -953,6 +1061,11 @@ watch([commonData, commentCH], () => {
     &__br-center {
       border-left: 1px solid #B6B6B6;
       border-right: 1px solid #B6B6B6;
+
+      @media (max-width: 568px) {
+        border-left: 0px solid #B6B6B6;
+        border-right: 0px solid #B6B6B6;
+      }
     }
   }
 
@@ -961,11 +1074,17 @@ watch([commonData, commentCH], () => {
     font-family: Akrobat;
     font-size: 16px;
     font-weight: 500;
+    padding: 0 10px !important;
     color: #8E8E93;
 
     &__center {
       border-left: 1px solid #B6B6B6;
       border-right: 1px solid #B6B6B6;
+
+      @media (max-width: 568px) {
+        border-left: 0px solid #B6B6B6;
+        border-right: 0px solid #B6B6B6;
+      }
     }
   }
 }
@@ -1056,5 +1175,24 @@ watch([commonData, commentCH], () => {
 .result-checkbox-text {
   font-family: 'Bert sans';
   font-weight: 700;
+}
+
+.report_table-wide {
+  @media (max-width: 568px) {
+    display: none;
+  }
+}
+
+.report_table-narrow {
+  display: none;
+
+  @media (max-width: 568px) {
+    display: table;
+    width: 100%;
+  }
+}
+
+.form__label {
+  display: block;
 }
 </style>
