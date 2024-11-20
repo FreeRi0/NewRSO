@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!(props.centralExpert || props.districtExpert || isReportReject) || (props.tab === 'Просмотр отправленного отчета' && isReportReject)"
+  <div v-if="!(props.centralExpert || props.districtExpert || isReportReject || reportStore.isAllReportsVerifiedByCH) || (props.tab === 'Просмотр отправленного отчета' && isReportReject)"
        class="form__field-group"
   >
     <div style="display: flex; justify-content: space-between;">
@@ -127,7 +127,7 @@
                 class="custom-radio"
                 type="radio"
                 :value="true"
-                :disabled="(props.centralExpert || props.districtExpert)"
+                :disabled="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)"
             />
             <label for="event_happened-true">Да</label>
           </div>
@@ -138,7 +138,7 @@
                 class="custom-radio"
                 type="radio"
                 :value="false"
-                :disabled="(props.centralExpert || props.districtExpert)"
+                :disabled="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)"
             />
             <label for="event_happened-false">Нет</label>
           </div>
@@ -154,17 +154,17 @@
               id="scan_file"
               name="scan_file"
               @change="uploadFile"
-              :disabled="(props.centralExpert || props.districtExpert)"
+              :disabled="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)"
           />
           <FileBoxComponent
               v-else
               :file="tenthPanelData.document"
               :fileType="tenthPanelData.file_type"
               :fileSize="tenthPanelData.file_size"
-              :isSent="(props.centralExpert || props.districtExpert)"
+              :isSent="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)"
               :is-error-file="isErrorFile && !tenthPanelData.file_size"
               @click="deleteFile"
-              :disabled="(props.centralExpert || props.districtExpert)"
+              :disabled="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)"
           />
         </div>
         <div>
@@ -179,10 +179,10 @@
                 type="text"
                 placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
                 @focusout="formData"
-                :disabled="(props.centralExpert || props.districtExpert)"
+                :disabled="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)"
                 is-link
             />
-            <div v-if="!(props.centralExpert || props.districtExpert)">
+            <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)">
               <Button
                   v-if="tenthPanelData.links.length === i + 1"
                   class="form__add-link-button"
@@ -213,7 +213,7 @@
               counter-visible
               class="form__input form__input-comment"
               style="margin-bottom: 4px;"
-              :disabled="(props.centralExpert || props.districtExpert)"
+              :disabled="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)"
               @focusout="formData"
           />
         </div>
@@ -344,7 +344,7 @@
             :is-sent="isReportReject"
         />
       </div>
-      <div>
+      <div v-if="!reportStore.isAllReportsVerifiedByCH">
         <v-checkbox
             v-model="returnReport"
             @change="onReportReturn"
@@ -361,6 +361,9 @@ import {InputReport, TextareaReport} from '@shared/components/inputs';
 import {Button} from '@shared/components/buttons';
 import {ReportTabs} from './index';
 import {CommentFileComponent, FileBoxComponent} from '@entities/RatingRoComponents/components';
+import {useReportPartTwoStore} from "@pages/ReportRegionalHQPartTwoPage/store.ts";
+
+const reportStore = useReportPartTwoStore();
 
 const props = defineProps({
   data: Object,
@@ -509,7 +512,9 @@ onMounted(() => {
 
   // Мапинг данных для отчета эксперта ЦШ
   if (props.dataForCheckCH) {
+    console.log('props.dataForCheckCH', props.dataForCheckCH)
     if (props.dataForCheckCH.rejecting_reasons) {
+      console.log('here')
       // Добавление данных панели "отчет РО"
       tenthPanelData.value = props.dataForCheckCH;
 
@@ -527,9 +532,9 @@ onMounted(() => {
       const reportCH = props.dataForCheckCH.central_version;
       if (reportCH) {
         tenthPanelDataCH.value.event_happened = reportCH.event_happened === undefined ? null : reportCH.event_happened;
-        tenthPanelDataCH.value.comment = reportCH.comment;
+        tenthPanelDataCH.value.comment = props.dataCH.comment;
 
-        returnReport.value = reportCH.returnReportProp;
+        returnReport.value = props.returnReportProp;
       }
 
       if (reportCH.document) {
@@ -539,6 +544,7 @@ onMounted(() => {
         fileSizeCH.value = reportCH.file_size || null;
       }
     } else {
+      console.log('here2')
       // Добавление данных панели "отчет РО"
       tenthPanelData.value = JSON.parse(props.dataForCheckCH.regional_version);
 
@@ -570,7 +576,7 @@ onMounted(() => {
   }
 
   // Мапинг данных для отчета командира РШ при возвращении на доработку
-  if (props.reportRejectData && props.isReportReject) {
+  if (props.reportRejectData && (props.isReportReject || reportStore.isAllReportsVerifiedByCH)) {
     // console.log('props.reportRejectData', props.reportRejectData)
     // console.log('props.isReportReject', props.isReportReject)
 
@@ -597,9 +603,9 @@ onMounted(() => {
       tenthPanelDataCH.value.event_happened = props.reportRejectData.event_happened;
       tenthPanelDataCH.value.comment = props.reportRejectData.comment;
 
-      fileNameCH.value = props.reportRejectData.central_version?.document || null;
-      fileTypeCH.value = props.reportRejectData.central_version?.file_type || null;
-      fileSizeCH.value = props.reportRejectData.central_version?.file_size || null;
+      fileNameCH.value = props.reportRejectData?.document || null;
+      fileTypeCH.value = props.reportRejectData?.file_type || null;
+      fileSizeCH.value = props.reportRejectData?.file_size || null;
     }
   }
 });

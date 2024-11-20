@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.sixteenth) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.sixteenth)"
+  <div v-if="!(props.centralExpert || props.districtExpert || !reportStore.isReportReject?.sixteenth || reportStore?.isAllReportsVerifiedByCH) || (props.tab === 'Просмотр отправленного отчета' && !reportStore.isReportReject?.sixteenth)"
        class="form__field-group">
     <div class="form__field-project-existence">
       <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу <sup class="valid-red">*</sup>
@@ -860,6 +860,7 @@ onMounted(() => {
     const projectQuantity = reportStore.reportForCheckCH.sixteenth.projects.length;
 
     if (reportStore.reportForCheckCH.sixteenth.rejecting_reasons) {
+      // Повторная доработка
       // Добавление данных панели "отчет РО"
       projects.value = reportStore.reportForCheckCH.sixteenth.projects;
       sixteenthPanelData.value.comment = reportStore.reportForCheckCH.sixteenth.comment;
@@ -873,8 +874,8 @@ onMounted(() => {
 
       // Добавление данных из стора для панели "корректировка ЦШ"
       const reportDataCH = reportStore.reportForCheckCH.sixteenth.central_version;
-      commentCH.value = reportDataCH.comment || '';
-      isProjectCH.value = reportDataCH.is_project;
+      commentCH.value = reportStore.reportDataCH.sixteenth.comment || '';
+      isProjectCH.value = reportStore.reportDataCH.sixteenth.isProject;
 
       for (let i = 0; i < projectQuantity; i++) {
         commonData.value[i] = {
@@ -948,7 +949,7 @@ watchEffect(() => {
   }
 
   // Мапинг данных для отчета командира РШ при возвращении на доработку
-  if (reportStore.reportReject.sixteenth && reportStore.isReportReject.sixteenth) {
+  if (reportStore.reportReject.sixteenth && (reportStore.isReportReject.sixteenth || reportStore.isAllReportsVerifiedByCH)) {
     // console.log('reportStore.reportReject.sixteenth', reportStore.reportReject.sixteenth)
     // console.log('props.data', props.data)
 

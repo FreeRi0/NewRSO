@@ -953,6 +953,17 @@ const routes: RouteRecordRaw[] = [
                                     label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 1',
                                 },
                             },
+                            {
+                                path: 'report-regional-two',
+                                name: 'ReportRegionalPartTwoComander',
+                                component: () =>
+                                    import(
+                                        '@pages/ReportRegionalHQPartTwoPage/ReportRegionalHQPartTwo.vue'
+                                    ),
+                                meta: {
+                                    label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 2',
+                                },
+                            },
                         ],
                     },
                     {

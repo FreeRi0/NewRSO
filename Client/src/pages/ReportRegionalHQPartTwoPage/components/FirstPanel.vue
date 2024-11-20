@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.first) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.first)">
+  <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.first || reportStore.isAllReportsVerifiedByCH) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.first)">
     <div class="form__field-group">
       <div class="form__field-report">
         <div class="form__field">
@@ -80,7 +80,7 @@
               class="form__input"
               type="number"
               placeholder="Введите число"
-              :disabled="props.centralExpert || props.districtExpert"
+              :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
               @focusout="focusOut"
           />
         </div>
@@ -93,7 +93,7 @@
                 :file="firstPanelData.scan_file"
                 :fileType="firstPanelData.file_type"
                 :fileSize="firstPanelData.file_size"
-                :is-sent="props.centralExpert || props.districtExpert"
+                :is-sent="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
             ></FileBoxComponent>
             <div v-else class="report__add-file">
               <InputReport
@@ -102,7 +102,7 @@
                   type="file"
                   id="scan_file"
                   name="scan_file"
-                  :disabled="props.centralExpert || props.districtExpert"
+                  :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
                   :is-error-panel="isErrorPanel"
                   style="width: 100%;"
                   @change="uploadFile"/>
@@ -112,7 +112,7 @@
                   :fileType="firstPanelData.file_type"
                   :fileSize="firstPanelData.file_size"
                   @click="deleteFile"
-                  :is-sent="props.centralExpert || props.districtExpert"
+                  :is-sent="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
                   :is-error-file="isErrorFile"
               ></FileBoxComponent>
             </div>
@@ -132,7 +132,7 @@
             :max-length-text="3000"
             counter-visible
             class="form__input"
-            :disabled="props.centralExpert || props.districtExpert"
+            :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
             style="margin-bottom: 4px;"
             @focusout="focusOut"
         />
@@ -226,7 +226,7 @@
             :is-sent="reportStore.isReportReject?.first && !props.centralExpert"
         />
       </div>
-      <div>
+      <div v-if="!reportStore.isAllReportsVerifiedByCH">
         <v-checkbox
             v-model="reportStore.returnReport.first"
             @change="onReportReturn"
@@ -403,6 +403,9 @@ const deleteFileCH = () => {
   fileNameCH.value = null;
   fileSizeCH.value = null;
   fileTypeCH.value = null;
+  reportStore.reportDataCH.first.scan_file = null;
+  reportStore.reportDataCH.first.file_size = null;
+  reportStore.reportDataCH.first.file_type = null;
 
   let formData = new FormData();
   formData.append('comment', firstPanelDataCH.value.comment);
@@ -419,21 +422,29 @@ const onReportReturn = (event) => {
     formData.append('reasons[comment]', firstPanelDataCH.value.comment);
     formData.append('comment', firstPanelDataCH.value.comment);
     formData.append('amount_of_money', firstPanelDataCH.value.amount_of_money);
-    if (reportStore.reportDataCHFile.first) formData.append('scan_file', reportStore.reportDataCHFile.first);
+    if (reportStore.reportDataCHFile.first) {
+      formData.append('scan_file', reportStore.reportDataCHFile.first);
+    } else if (reportStore.reportDataCH.first.scan_file) {
+      formData.append('scan_file', firstPanelDataCH.value.scan_file);
+    }
 
     emit('getDataCH', formData, 1);
   } else {
     reportStore.returnReport.first = false;
     formData.append('comment', firstPanelDataCH.value.comment);
     formData.append('amount_of_money', firstPanelDataCH.value.amount_of_money);
-    if (reportStore.reportDataCHFile.first) formData.append('scan_file', reportStore.reportDataCHFile.first);
+    if (reportStore.reportDataCHFile.first) {
+      formData.append('scan_file', reportStore.reportDataCHFile.first);
+    } else if (reportStore.reportDataCH.first.scan_file) {
+      formData.append('scan_file', firstPanelDataCH.value.scan_file);
+    }
 
     emit('getDataCH', formData, 1);
   }
 };
 
 watchEffect(async () => {
-  console.log('tab', props.tab)
+  console.log('reportStore.isReportReject?.first', reportStore.isReportReject?.first)
   try {
     if (!(props.centralExpert || props.districtExpert)) {
       const res = await getReportForSecond();
@@ -486,11 +497,27 @@ watchEffect(async () => {
       fileSizeDH.value = reportDataDH.file_size || '';
 
       // Добавление данных из стора для панели "корректировка ЦШ"
-      firstPanelDataCH.value.amount_of_money = reportStore.reportDataCH.first.amount_of_money;
-      firstPanelDataCH.value.comment = reportStore.reportDataCH.first.comment || '';
-      fileNameCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.name : null;
-      fileSizeCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.size / Math.pow(1024, 2) : null;
-      fileTypeCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.type.split('/').at(-1) : null;
+      if (reportStore.reportDataCH.first.central_version) {
+        firstPanelDataCH.value.amount_of_money = reportStore.reportDataCH.first.central_version.amount_of_money;
+        firstPanelDataCH.value.comment = reportStore.reportDataCH.first.central_version.comment || '';
+        firstPanelDataCH.value.scan_file = reportStore.reportDataCH.first.central_version.scan_file;
+        firstPanelDataCH.value.file_size = reportStore.reportDataCH.first.central_version.file_size;
+        firstPanelDataCH.value.file_type = reportStore.reportDataCH.first.central_version.file_type;
+        fileNameCH.value = reportStore.reportDataCH.first.central_version.scan_file;
+        fileSizeCH.value = reportStore.reportDataCH.first.central_version.file_size;
+        fileTypeCH.value = reportStore.reportDataCH.first.central_version.file_type;
+      } else {
+        firstPanelDataCH.value.amount_of_money = reportStore.reportDataCH.first.amount_of_money;
+        firstPanelDataCH.value.comment = reportStore.reportDataCH.first.comment || '';
+        firstPanelDataCH.value.scan_file = reportStore.reportDataCH.first.scan_file;
+        firstPanelDataCH.value.file_size = reportStore.reportDataCH.first.file_size;
+        firstPanelDataCH.value.file_type = reportStore.reportDataCH.first.file_type;
+        fileNameCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.name : reportStore.reportDataCH.first.scan_file ? reportStore.reportDataCH.first.scan_file : null;
+        fileSizeCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.size / Math.pow(1024, 2) : reportStore.reportDataCH.first.file_size ? reportStore.reportDataCH.first.file_size : null;
+        fileTypeCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.type.split('/').at(-1) : reportStore.reportDataCH.first.file_type ? reportStore.reportDataCH.first.file_type : null;
+      }
+
+
     } else {
       const reportDataRH = JSON.parse(reportStore.reportForCheckCH.first.regional_version);
       firstPanelData.value.comment = reportDataRH?.comment || '';
@@ -516,8 +543,7 @@ watchEffect(async () => {
   }
 
   // Мапинг данных для отчета командира РШ при возвращении на доработку
-  if (reportStore.reportReject.first && reportStore.isReportReject.first) {
-    console.log('reportStore.reportReject.first', reportStore.reportReject.first)
+  if (reportStore.reportReject.first && (reportStore.isReportReject.first || reportStore.isAllReportsVerifiedByCH)) {
     // console.log('props.data', props.data)
 
     reportStore.returnReport.first = true;
@@ -589,7 +615,11 @@ watch(firstPanelDataCH.value, () => {
   let formData = new FormData();
   formData.append('comment', firstPanelDataCH.value.comment || '');
   formData.append('amount_of_money', firstPanelDataCH.value.amount_of_money);
-  if (reportStore.reportDataCHFile.first) formData.append('scan_file', reportStore.reportDataCHFile.first);
+  if (reportStore.reportDataCHFile.first) {
+    formData.append('scan_file', reportStore.reportDataCHFile.first);
+  } else if (reportStore.reportDataCH.first.scan_file) {
+    formData.append('scan_file', reportStore.reportDataCH.first.scan_file);
+  }
   if (reportStore.returnReport.first) formData.append('reasons[comment]', firstPanelDataCH.value.comment || '');
 
   emit('getDataCH', formData, 1);

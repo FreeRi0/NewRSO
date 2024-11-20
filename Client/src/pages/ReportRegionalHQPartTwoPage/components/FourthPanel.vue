@@ -1,5 +1,6 @@
 <template>
-  <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.fourth) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.fourth)"
+  <div
+    v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.fourth || reportStore.isAllReportsVerifiedByCH) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.fourth)"
     class="form__field-group">
     <div v-for="(event, index) in events" :key="index" class="form__field-fourth-panel">
       <div class="form__field-members-event">
@@ -76,8 +77,8 @@
         <p class="form__label">Ссылка на группу мероприятия в социальных сетях</p>
         <div class="form__add-link" v-for="(link, i) in events[index].links" :key="i">
           <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__input-add-link" type="text"
-            placeholder="Введите ссылку" @focusout="focusOut"
-            :disabled="isSent || !event.participants_number" :is-link="true" @error="setError" />
+            placeholder="Введите ссылку" @focusout="focusOut" :disabled="isSent || !event.participants_number"
+            :is-link="true" @error="setError" />
           <div v-if="!isSent && event.participants_number">
             <Button v-if="events[index].links.length === i + 1" label="+ Добавить ссылку" @click="addLink(index)"
               class="form__add-link-button" />
@@ -120,14 +121,14 @@
               <div style="display: flex; justify-content: space-between;">
                 <InputReport v-model:value="event.participants_number" :id="event.participants_number"
                   name="participants_number" class="form__input" type="number" placeholder="Введите число"
-                  :disabled="props.centralExpert || props.districtExpert" @focusout="focusOut" />
+                  :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" @focusout="focusOut" />
               </div>
             </div>
             <div class="form__field">
               <label class="form__label" for="eventName">Название мероприятия<sup class="valid-red">*</sup></label>
               <div class="form__field-name">
                 <InputReport v-model:value="event.name" :id="event.name" name="eventName" class="form__input"
-                  placeholder="Введите название мероприятия" :disabled="props.centralExpert || props.districtExpert"
+                  placeholder="Введите название мероприятия" :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
                   @focusout="focusOut" />
               </div>
             </div>
@@ -139,13 +140,13 @@
             <label style="max-width: 280px;" class="form__label" for="start_date">Дата начала проведения мероприятия
               <sup class="valid-red">*</sup></label>
             <InputReport v-model:value="event.start_date" :id="event.start_date" name="start_date" class="form__input"
-              type="date" :disabled="props.centralExpert || props.districtExpert" @focusout="focusOut" />
+              type="date" :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" @focusout="focusOut" />
           </div>
           <div class="form__field">
             <label style="max-width: 300px;" class="form__label" for="end_date">Дата окончания проведения мероприятия
               <sup class="valid-red">*</sup></label>
             <InputReport v-model:value="event.end_date" :id="event.end_date" name="end_date" class="form__input"
-              type="date" :disabled="props.centralExpert || props.districtExpert" @focusout="focusOut" />
+              type="date" :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" @focusout="focusOut" />
           </div>
         </div>
         <div class="form__field-event">
@@ -153,9 +154,9 @@
             <label class="form__label" for="4">Положение о мероприятии <sup class="valid-red">*</sup></label>
             <InputReport class="form-input__file-input" v-if="!event.regulations" isFile type="file" id="scan_file"
               name="scan_file" width="100%" @change="uploadFile($event, index)"
-              :disabled="props.centralExpert || props.districtExpert" />
+              :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" />
             <FileBoxComponent v-else-if="event.regulations" :file="event.regulations" :fileType="event.file_type"
-              :fileSize="event.file_size" :is-sent="props.centralExpert || props.districtExpert"
+              :fileSize="event.file_size" :is-sent="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
               :is-error-file="isErrorFile && !event.file_size" @click="deleteFile(index)" />
           </div>
           <div class="form__field-event-interregion">
@@ -164,7 +165,7 @@
               <div style="display: flex;">
                 <input v-model="event.is_interregional" type="radio" :id="`is_interregional-true_${index}`"
                   :value="true" class="custom-radio" @change="focusOut"
-                  :disabled="props.centralExpert || props.districtExpert" />
+                  :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" />
                 <label :for="`is_interregional-true_${index}`">
                   Да
                 </label>
@@ -172,7 +173,7 @@
               <div style="display: flex">
                 <input v-model="event.is_interregional" type="radio" :id="`is_interregional-false_${index}`"
                   :value="false" class="custom-radio" @change="focusOut"
-                  :disabled="props.centralExpert || props.districtExpert" />
+                  :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" />
                 <label :for="`is_interregional-false_${index}`">
                   Нет
                 </label>
@@ -185,7 +186,7 @@
           <div class="form__add-link" v-for="(link, i) in events[index].links" :key="i">
             <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__input-add-link"
               type="text" placeholder="Введите ссылку" @focusout="focusOut"
-              :disabled="props.centralExpert || props.districtExpert" />
+              :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" />
           </div>
         </div>
         <div class="hr"></div>
@@ -195,7 +196,7 @@
         <TextareaReport v-model:value="fourthPanelData.comment" id="comment" name="comment" class="form__input"
           type="textarea" placeholder="Укажите наименования организованных мероприятий" style="width: 100%;" :rows="1"
           autoResize :maxlength="3000" :max-length-text="3000" counter-visible @focusout="focusOut"
-          :disabled="props.centralExpert || props.districtExpert" />
+          :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" />
       </div>
       <div class="form__field-result" style="display: flex; align-items: center;">
         <v-checkbox class="result-checkbox" id="v-checkbox" @change="calculateResult($event)" />
@@ -306,7 +307,7 @@
         </div>
         <label class="form__label">Количество человек, принявших участие в мероприятии <sup
             class="valid-red">*</sup></label>
-        <v-table>
+        <v-table class="report_table-wide">
           <tbody>
             <tr class="report-table__tr">
               <td class="report-table__th">Данные РО</td>
@@ -325,8 +326,35 @@
             </tr>
           </tbody>
         </v-table>
+        <v-table class="report_table-narrow">
+          <tbody>
+            <tr class="report-table__tr">
+              <td class="report-table__th">Данные РО</td>
+            </tr>
+            <tr style="background-color: #f9fafb;">
+              <td class="report-table__td">{{ eventCH.dataRH.participants_number }}</td>
+            </tr>
+            <tr class="report-table__tr">
+              <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
+            </tr>
+            <tr style="background-color: #f9fafb;">
+              <td class="report-table__td report-table__td__center">{{ eventCH.dataDH.participants_number }}</td>
+            </tr>
+            <tr class="report-table__tr">
+              <td class="report-table__th">Корректировка ЦШ</td>
+            </tr>
+            <tr>
+              <td class="report-table__td">
+                <InputReport v-model:value="eventCH.dataCH.participants_number" :id="'participants_numberCH'"
+                  :name="'participants_numberCH'" style="width: 100%;" type="number" placeholder="0" :maxlength="10"
+                  :min="0" :max="9999999999" :step="0.01"
+                  :disabled="reportStore.isReportReject?.fourth && !props.centralExpert" />
+              </td>
+            </tr>
+          </tbody>
+        </v-table>
         <label class="form__label">Межрегиональное <sup class="valid-red">*</sup></label>
-        <v-table>
+        <v-table class="report_table-wide">
           <tbody>
             <tr class="report-table__tr">
               <td class="report-table__th">Данные РО</td>
@@ -338,6 +366,30 @@
               <td class="report-table__td report-table__td__center">
                 {{ eventCH.dataDH.is_interregional ? 'Да' : 'Нет' }}
               </td>
+              <td class="report-table__td">{{ eventCH.dataCH.is_interregional ? 'Да' : 'Нет' }}</td>
+            </tr>
+          </tbody>
+        </v-table>
+        <v-table class="report_table-narrow">
+          <tbody>
+            <tr class="report-table__tr">
+              <td class="report-table__th">Данные РО</td>
+            </tr>
+            <tr style="background-color: #f9fafb;">
+              <td class="report-table__td">{{ eventCH.dataRH.is_interregional ? 'Да' : 'Нет' }}</td>
+            </tr>
+            <tr class="report-table__tr">
+              <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
+            </tr>
+            <tr style="background-color: #f9fafb;">
+              <td class="report-table__td report-table__td__center">
+                {{ eventCH.dataDH.is_interregional ? 'Да' : 'Нет' }}
+              </td>
+            </tr>
+            <tr class="report-table__tr">
+              <td class="report-table__th">Корректировка ЦШ</td>
+            </tr>
+            <tr>
               <td class="report-table__td">{{ eventCH.dataCH.is_interregional ? 'Да' : 'Нет' }}</td>
             </tr>
           </tbody>
@@ -364,8 +416,8 @@
           </div>
         </div>
         <label class="form__label">Дата начала проведения мероприятия <sup class="valid-red">*</sup></label>
-        <v-table>
-          <tbody>
+        <v-table class="report_table-wide">
+          <tbody class="report-table">
             <tr class="report-table__tr">
               <td class="report-table__th">Данные РО</td>
               <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
@@ -377,14 +429,40 @@
               <td class="report-table__td">
                 <InputReport v-model:value="eventCH.dataCH.start_date" :id="'eventCH.dataCH.end_date'"
                   name="eventCH.dataCH.end_date" class="form__input" type="date"
-                  :disabled="reportStore.isReportReject?.fourth && !props.centralExpert" />
+                  :disabled="reportStore.isReportReject?.fourth && !props.centralExpert" style="width: 100%;" />
+              </td>
+            </tr>
+          </tbody>
+        </v-table>
+        <v-table class="report_table-narrow">
+          <tbody class="report-table">
+            <tr class="report-table__tr">
+              <td class="report-table__th">Данные РО</td>
+            </tr>
+            <tr style="background-color: #f9fafb;">
+              <td class="report-table__td">{{ formattedDate(eventCH.dataRH.start_date) }}</td>
+            </tr>
+            <tr class="report-table__tr">
+              <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
+            </tr>
+            <tr style="background-color: #f9fafb;">
+              <td class="report-table__td report-table__td__center"> {{ formattedDate(eventCH.dataDH.start_date) }}</td>
+            </tr>
+            <tr class="report-table__tr">
+              <td class="report-table__th">Корректировка ЦШ</td>
+            </tr>
+            <tr>
+              <td class="report-table__td">
+                <InputReport v-model:value="eventCH.dataCH.start_date" :id="'eventCH.dataCH.end_date'"
+                  name="eventCH.dataCH.end_date" class="form__input" type="date"
+                  :disabled="reportStore.isReportReject?.fourth && !props.centralExpert" style="width: 100%;" />
               </td>
             </tr>
           </tbody>
         </v-table>
         <label class="form__label">Дата окончания проведения мероприятия <sup class="valid-red">*</sup></label>
-        <v-table>
-          <tbody>
+        <v-table class="report_table-wide">
+          <tbody class="report-table">
             <tr class="report-table__tr">
               <td class="report-table__th">Данные РО</td>
               <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
@@ -396,7 +474,33 @@
               <td class="report-table__td">
                 <InputReport v-model:value="eventCH.dataCH.end_date" :id="'eventCH.dataCH.end_date'"
                   name="eventCH.dataCH.end_date" class="form__input" type="date"
-                  :disabled="reportStore.isReportReject?.fourth && !props.centralExpert" />
+                  :disabled="reportStore.isReportReject?.fourth && !props.centralExpert" style="width: 100%;" />
+              </td>
+            </tr>
+          </tbody>
+        </v-table>
+        <v-table class="report_table-narrow">
+          <tbody class="report-table">
+            <tr class="report-table__tr">
+              <td class="report-table__th">Данные РО</td>
+            </tr>
+            <tr style="background-color: #f9fafb;">
+              <td class="report-table__td">{{ formattedDate(eventCH.dataRH.end_date) }}</td>
+            </tr>
+            <tr class="report-table__tr">
+              <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
+            </tr>
+            <tr style="background-color: #f9fafb;">
+              <td class="report-table__td report-table__td__center"> {{ formattedDate(eventCH.dataDH.end_date) }}</td>
+            </tr>
+            <tr class="report-table__tr">
+              <td class="report-table__th">Корректировка ЦШ</td>
+            </tr>
+            <tr>
+              <td class="report-table__td">
+                <InputReport v-model:value="eventCH.dataCH.end_date" :id="'eventCH.dataCH.end_date'"
+                  name="eventCH.dataCH.end_date" class="form__input" type="date"
+                  :disabled="reportStore.isReportReject?.fourth && !props.centralExpert" style="width: 100%;" />
               </td>
             </tr>
           </tbody>
@@ -425,7 +529,7 @@
       <!--      <div>-->
       <!--        <p>(4-1)*2+(4-2)+(4-3)=9</p>-->
       <!--      </div>-->
-      <div>
+      <div v-if="!reportStore.isAllReportsVerifiedByCH">
         <v-checkbox v-model="reportStore.returnReport.fourth" label="Вернуть в РО на доработку" @change="onReportReturn"
           :disabled="reportStore.isReportReject?.fourth && !props.centralExpert" />
       </div>
@@ -737,6 +841,7 @@ onMounted(() => {
     const eventQuantity = reportStore.reportForCheckCH.fourth.events.length;
 
     if (reportStore.reportForCheckCH.fourth.rejecting_reasons) {
+      // Повторная доработка
       // Добавление данных панели "отчет РО"
       events.value = reportStore.reportForCheckCH.fourth.events;
       fourthPanelData.value.comment = reportStore.reportForCheckCH.fourth.comment || '';
@@ -748,7 +853,7 @@ onMounted(() => {
 
       // Добавление данных из стора для панели "корректировка ЦШ"
       const reportDataCH = reportStore.reportForCheckCH.fourth.central_version;
-      commentCH.value = reportDataCH.comment || '';
+      commentCH.value = reportStore.reportDataCH.fourth.comment || '';
       for (let i = 0; i < eventQuantity; i++) {
         commonData.value[i] = {
           dataRH: reportStore.reportForCheckCH.fourth.events[i],
@@ -799,7 +904,7 @@ watchEffect(() => {
   }
   // console.log('isFirstSent.value::::::2', isFirstSent.value)
   // Мапинг данных для отчета командира РШ при возвращении на доработку
-  if (reportStore.reportReject.fourth && reportStore.isReportReject.fourth) {
+  if (reportStore.reportReject.fourth && (reportStore.isReportReject.fourth || reportStore.isAllReportsVerifiedByCH)) {
     console.log('reportStore.reportReject.fourth', reportStore.reportReject.fourth)
     console.log('props.data', props.data)
 
@@ -952,10 +1057,10 @@ watch(() => [commonData.value, commentCH], () => {
 .form__field-fourth-panel {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  // gap: 16px;
 
   @media (max-width: 568px) {
-    align-items: center;
+    // align-items: center;
   }
 }
 
@@ -979,19 +1084,23 @@ watch(() => [commonData.value, commentCH], () => {
   }
 }
 
-//.form__field-members-event {
-//  display: flex;
-//  height: 111px;
-//  margin-top: 40px;
-//  justify-content: space-between;
-//
-//  @media (max-width: 568px) {
-//    flex-direction: column-reverse;
-//    gap: 8px;
-//    align-items: flex-end;
-//    margin-top: 32px;
-//  }
-//}
+// .form__field-members-event {
+//   display: flex;
+//   height: 111px;
+//   margin-top: 40px;
+//   justify-content: space-between;
+
+//   @media (max-width: 568px) {
+//     flex-direction: column-reverse;
+//     gap: 8px;
+//     align-items: flex-end;
+//     margin-top: 32px;
+//   }
+// }
+
+.form__field-members-event {
+  position: relative;
+}
 
 .form__field-name {
   display: flex;
@@ -1034,10 +1143,18 @@ watch(() => [commonData.value, commentCH], () => {
 
 #form__field-date-first {
   margin-top: 40px;
+
+  @media (max-width: 568px) {
+    padding-right: 40px;
+  }
+
+  @media (max-width: 400px) {
+    padding-right: 0px;
+  }
 }
 
 .form__add-event {
-  margin: 30px 0;
+  margin: 16px 0px 30px;
   background-color: transparent;
   color: #1F7CC0;
   border-color: #1F7CC0;
@@ -1139,6 +1256,9 @@ watch(() => [commonData.value, commentCH], () => {
 }
 
 .form__field-delete-button {
+  position: absolute;
+  top: 40px;
+  right: 0;
   margin: 0;
   width: 177px;
   height: 33px;
@@ -1149,6 +1269,13 @@ watch(() => [commonData.value, commentCH], () => {
   border: none;
   border-radius: 4px;
 
+  @media (max-width: 1124px) {
+    top: 0px;
+  }
+
+  @media (max-width: 568px) {
+    right: 16px;
+  }
 }
 
 .form__file-box {
@@ -1194,6 +1321,7 @@ watch(() => [commonData.value, commentCH], () => {
 .form__label-radio {
   display: flex;
   gap: 40px;
+  margin-bottom: 16px;
 }
 
 .valid-red {
@@ -1226,6 +1354,7 @@ watch(() => [commonData.value, commentCH], () => {
 }
 
 .hr {
+  margin-top: 12px;
   margin-bottom: 16px;
   width: 100%;
   border-top: 1px solid #B6B6B6;
@@ -1280,9 +1409,12 @@ watch(() => [commonData.value, commentCH], () => {
 }
 
 .report-table {
+  table-layout: fixed;
+
   &__tr {
     background-color: #FFFFFF;
     text-align: center;
+    table-layout: fixed;
   }
 
   &__th {
@@ -1305,6 +1437,11 @@ watch(() => [commonData.value, commentCH], () => {
     &__br-center {
       border-left: 1px solid #B6B6B6;
       border-right: 1px solid #B6B6B6;
+
+      @media (max-width: 568px) {
+        border-left: 0px solid #B6B6B6;
+        border-right: 0px solid #B6B6B6;
+      }
     }
   }
 
@@ -1314,10 +1451,17 @@ watch(() => [commonData.value, commentCH], () => {
     font-size: 16px;
     font-weight: 500;
     color: #8E8E93;
+    padding: 0 10px !important;
+    table-layout: fixed;
 
     &__center {
       border-left: 1px solid #B6B6B6;
       border-right: 1px solid #B6B6B6;
+
+      @media (max-width: 568px) {
+        border-left: 0px solid #B6B6B6;
+        border-right: 0px solid #B6B6B6;
+      }
     }
   }
 }
@@ -1388,5 +1532,19 @@ watch(() => [commonData.value, commentCH], () => {
 .result-checkbox-text {
   font-family: 'Bert sans';
   font-weight: 700;
+}
+
+.report_table-wide {
+  @media (max-width: 568px) {
+    display: none;
+  }
+}
+
+.report_table-narrow {
+  display: none;
+
+  @media (max-width: 568px) {
+    display: table;
+  }
 }
 </style>

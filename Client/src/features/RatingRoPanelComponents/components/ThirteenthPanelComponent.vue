@@ -122,6 +122,7 @@
 
         <div>
             <v-checkbox 
+                v-if="!reportStore.isAllReportsVerifiedByCH"
                 v-model="reportStore.returnReport.thirteenth"
                 label="Вернуть в&nbsp;РО на&nbsp;доработку"
                 :disabled="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.thirteenth.verified_by_chq !== null"
@@ -275,13 +276,16 @@ const deleteFileDH = async () => {
 const deleteFileCH = async () => {
     fileCH.value.name = null;
     reportStore.reportDataCHFile.thirteenth = null;
+    if (reportStore.reportForCheckCH.thirteenth.central_version) {
+        reportStore.reportForCheckCH.thirteenth.central_version.scan_file = null;
+    }
 }
 
 const onReturnReport = (event) => {
   let formData = new FormData();
   formData.append('number_of_members', thirteenthPanelDataCH.value.number_of_members);
   formData.append('comment', thirteenthPanelDataCH.value.comment || '');
-  formData.append('scan_file', reportStore.reportDataCHFile.thirteenth || '');
+  formData.append('scan_file', reportStore.reportDataCHFile.thirteenth || reportStore.reportForCheckCH.thirteenth.central_version.scan_file || '');
   
   if (event.target.checked) {
     reportStore.returnReport.thirteenth = true;
@@ -331,21 +335,21 @@ watchEffect(async () => {
             fileDH.value.type = reportStore.reportDataDH.thirteenth.file_type;
             fileDH.value.size = reportStore.reportDataDH.thirteenth.file_size;
         }
-        if (reportStore.reportForCheckCH.thirteenth.verified_by_chq !== null) {
+        if (reportStore.reportForCheckCH.thirteenth.verified_by_chq === true) {
             fileCH.value.name = reportStore.reportForCheckCH.thirteenth.scan_file;
             fileCH.value.type = reportStore.reportForCheckCH.thirteenth.file_type;
             fileCH.value.size = reportStore.reportForCheckCH.thirteenth.file_size;
+        } else
+        if (reportStore.reportForCheckCH.thirteenth.rejecting_reasons && !reportStore.reportDataCHFile.thirteenth) {
+            fileCH.value.name = reportStore.reportForCheckCH.thirteenth.central_version.scan_file || '';
+            fileCH.value.type = reportStore.reportForCheckCH.thirteenth.central_version.file_type || '';
+            fileCH.value.size = reportStore.reportForCheckCH.thirteenth.central_version.file_size || '';
         } else
         if (reportStore.reportDataCHFile.thirteenth) {
             fileCH.value.name = reportStore.reportDataCHFile.thirteenth.name;
             fileCH.value.type = reportStore.reportDataCHFile.thirteenth.type.split('/').at(-1);
             fileCH.value.size = reportStore.reportDataCHFile.thirteenth.size / Math.pow(1024, 2);
-        }
-        // if (reportStore.reportForCheckCH.thirteenth.rejecting_reasons) {
-        //     reportStore.returnReport.thirteenth = true;
-        // } 
-
-        // console.log('чек 13', reportStore.returnReport.thirteenth)
+        } 
     }
     if (reportStore.reportReject.thirteenth && reportStore.isReportReject.thirteenth) {
         reportStore.returnReport.thirteenth = true;
@@ -372,7 +376,7 @@ watchPostEffect(() => {
     fileCH.value.type = reportStore.reportDataCH.thirteenth.file_type;
     fileCH.value.size = reportStore.reportDataCH.thirteenth.file_size;
 
-    if (props.data?.rejecting_reasons) {
+    if (reportStore.isReportReject.thirteenth) {
       reportStore.returnReport.thirteenth = true;
     } else {
       reportStore.returnReport.thirteenth = false;
@@ -411,7 +415,7 @@ watch(thirteenthPanelDataCH.value, () => {
         let formData = new FormData();
         formData.append('number_of_members', thirteenthPanelDataCH.value.number_of_members);
         formData.append('comment', thirteenthPanelDataCH.value.comment || '');
-        formData.append('scan_file', reportStore.reportDataCHFile.thirteenth || '');
+        formData.append('scan_file', reportStore.reportDataCHFile.thirteenth || reportStore.reportForCheckCH.thirteenth.central_version?.scan_file || '');
         if (reportStore.returnReport.thirteenth) formData.append('reasons[comment]', thirteenthPanelDataCH.value.comment);
         emit('getDataCH', formData, Number(ID_PANEL));
     }
@@ -424,7 +428,7 @@ watch(fileCH.value, ()=> {
         let formData = new FormData();
         formData.append('number_of_members', thirteenthPanelDataCH.value.number_of_members);
         formData.append('comment', thirteenthPanelDataCH.value.comment || '');
-        formData.append('scan_file', reportStore.reportDataCHFile.thirteenth || '');
+        formData.append('scan_file', reportStore.reportDataCHFile.thirteenth || reportStore.reportForCheckCH.thirteenth.central_version?.scan_file || '');
         if (reportStore.returnReport.thirteenth) formData.append('reasons[comment]', thirteenthPanelDataCH.value.comment);
         emit('getDataCH', formData, Number(ID_PANEL));
     }

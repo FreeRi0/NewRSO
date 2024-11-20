@@ -1,6 +1,6 @@
 <template>
   <div 
-    v-if="!(props.districtExpert || props.centralExpert || reportStore.isReportReject.eleventh) || 
+    v-if="!(props.districtExpert || props.centralExpert || reportStore.isReportReject.eleventh || reportStore.isAllReportsVerifiedByCH) || 
           (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject.eleventh)"
     class="form__field-group"
   >
@@ -16,7 +16,8 @@
 
   <report-tabs 
     v-if="(props.districtExpert || props.centralExpert) || 
-          (props.tab === 'Доработка' && reportStore.isReportReject.eleventh)" 
+          (props.tab === 'Доработка' && reportStore.isReportReject.eleventh) ||
+          reportStore.isAllReportsVerifiedByCH" 
     :isReject="reportStore.isReportReject.eleventh" >
     <template v-slot:firstTab>
       <EleventhPanelComponent
@@ -24,6 +25,7 @@
         :district-expert="props.districtExpert"
         :data="data"
         @get-data="getData"
+        :tab="tab"
       ></EleventhPanelComponent>
     </template>
 
