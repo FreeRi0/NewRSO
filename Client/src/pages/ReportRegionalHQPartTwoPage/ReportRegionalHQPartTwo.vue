@@ -1033,6 +1033,11 @@ const getReportData = async (reportId) => {
           } else {
             reportData.value.first = JSON.parse(dataFirst.regional_version);
           }
+
+          /*Добавление данных для просмотра показателя который не был отклонен*/
+          if (dataFirst.verified_by_chq && !dataFirst.rejecting_reasons) {
+            reportStore.reportReject.first = dataFirst;
+          }
         }
       } catch (e) {
         console.log(e.message)
@@ -1055,6 +1060,11 @@ const getReportData = async (reportId) => {
             reportData.value.fourth = dataFourth;
           } else {
             reportData.value.fourth = JSON.parse(dataFourth.regional_version);
+          }
+
+          /*Добавление данных для просмотра показателя который не был отклонен*/
+          if (dataFourth.verified_by_chq && !dataFourth.rejecting_reasons) {
+            reportStore.reportReject.fourth = dataFourth;
           }
         }
       } catch (e) {
@@ -1084,6 +1094,11 @@ const getReportData = async (reportId) => {
             reportData.value.fifth = dataFifth;
           } else {
             reportData.value.fifth = JSON.parse(dataFifth.regional_version);
+          }
+
+          /*Добавление данных для просмотра показателя который не был отклонен*/
+          if (dataFifth.verified_by_chq && !dataFifth.rejecting_reasons) {
+            reportStore.reportReject.fifth = dataFifth;
           }
         }
       } catch (e) {
@@ -1176,6 +1191,11 @@ const getReportData = async (reportId) => {
           } else {
             reportData.value.tenth.first = JSON.parse(dataTenthFirst.regional_version);
           }
+
+          /*Добавление данных для просмотра показателя который не был отклонен*/
+          if (dataTenthFirst.verified_by_chq && !dataTenthFirst.rejecting_reasons) {
+            reportStore.reportReject.tenth.first = dataTenthFirst;
+          }
         }
       } catch (e) {
         console.log(e.message)
@@ -1205,6 +1225,11 @@ const getReportData = async (reportId) => {
             reportData.value.tenth.second = dataTenthSecond;
           } else {
             reportData.value.tenth.second = JSON.parse(dataTenthSecond.regional_version);
+          }
+
+          /*Добавление данных для просмотра показателя который не был отклонен*/
+          if (dataTenthSecond.verified_by_chq && !dataTenthSecond.rejecting_reasons) {
+            reportStore.reportReject.tenth.second = dataTenthSecond;
           }
         }
       } catch (e) {
@@ -1315,6 +1340,11 @@ const getReportData = async (reportId) => {
             reportData.value.sixteenth = dataSixteenth;
           } else {
             reportData.value.sixteenth = JSON.parse(dataSixteenth.regional_version);
+          }
+
+          /*Добавление данных для просмотра показателя который не был отклонен*/
+          if (dataSixteenth.verified_by_chq && !dataSixteenth.rejecting_reasons) {
+            reportStore.reportReject.sixteenth = dataSixteenth;
           }
         }
 
