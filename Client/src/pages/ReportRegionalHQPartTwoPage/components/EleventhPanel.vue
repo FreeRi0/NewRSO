@@ -25,6 +25,7 @@
         :district-expert="props.districtExpert"
         :data="data"
         @get-data="getData"
+        :is-error-panel="isErrorPanel"
         :tab="tab"
       ></EleventhPanelComponent>
     </template>

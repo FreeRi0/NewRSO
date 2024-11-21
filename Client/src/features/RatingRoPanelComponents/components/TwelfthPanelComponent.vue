@@ -379,7 +379,7 @@ const onReturnReport = (event) => {
   let formData = new FormData();
   formData.append('amount_of_money', twelfthPanelDataCH.value.amount_of_money);
   formData.append('comment', twelfthPanelDataCH.value.comment || '');
-  formData.append('scan_file', reportStore.reportDataCHFile.twelfth || reportStore.reportForCheckCH.twelfth.central_version.scan_file || '');
+  formData.append('scan_file', reportStore.reportDataCHFile.twelfth || reportStore.reportForCheckCH.twelfth.central_version?.scan_file || '');
   
   if (event.target.checked) {
     reportStore.returnReport.twelfth = true;
@@ -415,10 +415,6 @@ watchEffect(async () => {
             isSent.value = props.data.is_sent;
 
             isFirstSent.value = reportStore.isReportReject.twelfth && !props.data.central_version;
-            // console.log('isFirstSent при доработке 12', isFirstSent.value);
-            // if (reportStore.isReportReject.twelfth) {
-            //     reportStore.returnReport.twelfth = true;
-            // }
         }
     }
     if (props.districtExpert) {
@@ -465,6 +461,8 @@ watchPostEffect(() => {
     twelfthPanelData.value.file_size = props.data.file_size;
     twelfthPanelData.value.file_type = props.data.file_type;
     isSent.value = props.data.is_sent;
+
+    isFirstSent.value = reportStore.isReportReject.twelfth && !props.data.central_version;
   }
   if (!(props.centralExpert || props.districtExpert)) {
     twelfthPanelDataDH.value = reportStore.reportDataDH.twelfth;
