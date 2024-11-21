@@ -240,7 +240,7 @@
               class="custom-radio"
               type="radio"
               :value="true"
-              :disabled="centralExpert || isReportReject"
+              :disabled="centralExpert || isReportReject || reportStore.isAllReportsVerifiedByCH"
           />
           <label for="event_happenedDH-true">Да</label>
         </div>
@@ -251,7 +251,7 @@
               class="custom-radio"
               type="radio"
               :value="false"
-              :disabled="centralExpert || isReportReject"
+              :disabled="centralExpert || isReportReject || reportStore.isAllReportsVerifiedByCH"
           />
           <label for="event_happenedDH-false">Нет</label>
         </div>
@@ -264,11 +264,11 @@
             :file="fileNameDH"
             :fileType="fileTypeDH"
             :fileSize="fileSizeDH"
-            :disabled="centralExpert || isReportReject"
+            :disabled="centralExpert || isReportReject || reportStore.isAllReportsVerifiedByCH"
             :is-error-file="isErrorFile"
             @change="uploadFileDH"
             @click="deleteFileDH"
-            :is-sent="centralExpert || isReportReject"
+            :is-sent="centralExpert || isReportReject || reportStore.isAllReportsVerifiedByCH"
         />
       </div>
 
@@ -314,7 +314,7 @@
               class="custom-radio"
               type="radio"
               :value="true"
-              :disabled="isReportReject && !centralExpert"
+              :disabled="(isReportReject && !centralExpert) || reportStore.isAllReportsVerifiedByCH"
           />
           <label for="event_happenedCH-true">Да</label>
         </div>
@@ -325,7 +325,7 @@
               class="custom-radio"
               type="radio"
               :value="false"
-              :disabled="isReportReject && !centralExpert"
+              :disabled="(isReportReject && !centralExpert) || reportStore.isAllReportsVerifiedByCH"
           />
           <label for="event_happenedCH-false">Нет</label>
         </div>
@@ -340,8 +340,8 @@
             :is-error-file="isErrorFile"
             @change="uploadFileCH"
             @click="deleteFileCH"
-            :disabled="isReportReject && !centralExpert"
-            :is-sent="isReportReject"
+            :disabled="(isReportReject && !centralExpert) || reportStore.isAllReportsVerifiedByCH"
+            :is-sent="isReportReject || reportStore.isAllReportsVerifiedByCH"
         />
       </div>
       <div v-if="!reportStore.isAllReportsVerifiedByCH">

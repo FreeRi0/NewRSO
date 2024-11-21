@@ -221,7 +221,7 @@
                 <InputReport v-model:value="eventDH.participants_number" :id="eventDH.participants_number"
                   name="participants_number" class="form__input" type="number" placeholder="Введите число"
                   :maxlength="10" :min="0" :max="2147483647"
-                  :disabled="props.centralExpert || reportStore.isReportReject?.fourth" />
+                  :disabled="props.centralExpert || reportStore.isReportReject?.fourth || reportStore.isAllReportsVerifiedByCH" />
               </div>
             </div>
             <div class="form__field">
@@ -229,7 +229,7 @@
               <div class="form__field-name">
                 <InputReport v-model:value="eventDH.name" :id="eventDH.name" name="eventName" class="form__input"
                   placeholder="Введите название мероприятия"
-                  :disabled="props.centralExpert || reportStore.isReportReject?.fourth" />
+                  :disabled="props.centralExpert || reportStore.isReportReject?.fourth || reportStore.isAllReportsVerifiedByCH" />
               </div>
             </div>
           </div>
@@ -242,14 +242,14 @@
             <label style="max-width: 280px;" class="form__label" for="start_date">Дата начала проведения мероприятия
               <sup class="valid-red">*</sup></label>
             <InputReport v-model:value="eventDH.start_date" :id="eventDH.start_date" name="start_date"
-              class="form__input" type="date" :disabled="props.centralExpert || reportStore.isReportReject?.fourth" />
+              class="form__input" type="date" :disabled="props.centralExpert || reportStore.isReportReject?.fourth || reportStore.isAllReportsVerifiedByCH" />
           </div>
           <div class="form__field">
             <label style="max-width: 300px;" class="form__label" for="end_date">Дата окончания проведения мероприятия
               <sup class="valid-red">*</sup></label>
             <InputReport v-model:value="eventDH.end_date" :id="eventDH.end_date" name="end_date" class="form__input"
               type="date" :min-date="eventDH.start_date"
-              :disabled="props.centralExpert || reportStore.isReportReject?.fourth" />
+              :disabled="props.centralExpert || reportStore.isReportReject?.fourth || reportStore.isAllReportsVerifiedByCH" />
           </div>
         </div>
         <div class="form__field-event">
@@ -259,7 +259,7 @@
               <div style="display: flex;">
                 <input v-model="eventDH.is_interregional" type="radio" :id="`is_interregional-true_${index}DH`"
                   :value="true" class="custom-radio"
-                  :disabled="props.centralExpert || reportStore.isReportReject?.fourth" />
+                  :disabled="props.centralExpert || reportStore.isReportReject?.fourth || reportStore.isAllReportsVerifiedByCH" />
                 <label :for="`is_interregional-true_${index}DH`">
                   Да
                 </label>
@@ -267,7 +267,7 @@
               <div style="display: flex">
                 <input v-model="eventDH.is_interregional" type="radio" :id="`is_interregional-false_${index}DH`"
                   :value="false" class="custom-radio"
-                  :disabled="props.centralExpert || reportStore.isReportReject?.fourth" />
+                  :disabled="props.centralExpert || reportStore.isReportReject?.fourth || reportStore.isAllReportsVerifiedByCH" />
                 <label :for="`is_interregional-false_${index}DH`">
                   Нет
                 </label>
@@ -285,7 +285,7 @@
         <TextareaReport v-model:value="fourthPanelDataDH.comment" id="comment" name="comment" class="form__input"
           type="textarea" placeholder="Примечания, ссылки" :rows="1" autoResize :maxlength="3000"
           :max-length-text="3000" counter-visible style="width: 100%;"
-          :disabled="props.centralExpert || reportStore.isReportReject?.fourth" />
+          :disabled="props.centralExpert || reportStore.isReportReject?.fourth || reportStore.isAllReportsVerifiedByCH" />
       </div>
       <div class="form__field-result" style="display: flex; align-items: center;">
         <v-checkbox class="result-checkbox" id="v-checkboxDH" @change="calculateResultDH($event)" />
@@ -321,7 +321,7 @@
                 <InputReport v-model:value="eventCH.dataCH.participants_number" :id="'participants_numberCH'"
                   :name="'participants_numberCH'" style="width: 100%;" type="number" placeholder="0" :maxlength="10"
                   :min="0" :max="9999999999" :step="0.01"
-                  :disabled="reportStore.isReportReject?.fourth && !props.centralExpert" />
+                  :disabled="(reportStore.isReportReject?.fourth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" />
               </td>
             </tr>
           </tbody>
@@ -348,7 +348,7 @@
                 <InputReport v-model:value="eventCH.dataCH.participants_number" :id="'participants_numberCH'"
                   :name="'participants_numberCH'" style="width: 100%;" type="number" placeholder="0" :maxlength="10"
                   :min="0" :max="9999999999" :step="0.01"
-                  :disabled="reportStore.isReportReject?.fourth && !props.centralExpert" />
+                  :disabled="(reportStore.isReportReject?.fourth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" />
               </td>
             </tr>
           </tbody>
@@ -400,7 +400,7 @@
             <div style="display: flex;">
               <input v-model="eventCH.dataCH.is_interregional" type="radio" :id="`is_interregional-true_${index}CH`"
                 :value="true" class="custom-radio"
-                :disabled="reportStore.isReportReject?.fourth && !props.centralExpert" />
+                :disabled="(reportStore.isReportReject?.fourth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" />
               <label :for="`is_interregional-true_${index}CH`">
                 Да
               </label>
@@ -408,7 +408,7 @@
             <div style="display: flex">
               <input v-model="eventCH.dataCH.is_interregional" type="radio" :id="`is_interregional-false_${index}CH`"
                 :value="false" class="custom-radio"
-                :disabled="reportStore.isReportReject?.fourth && !props.centralExpert" />
+                :disabled="(reportStore.isReportReject?.fourth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" />
               <label :for="`is_interregional-false_${index}CH`">
                 Нет
               </label>
@@ -429,7 +429,7 @@
               <td class="report-table__td">
                 <InputReport v-model:value="eventCH.dataCH.start_date" :id="'eventCH.dataCH.end_date'"
                   name="eventCH.dataCH.end_date" class="form__input" type="date"
-                  :disabled="reportStore.isReportReject?.fourth && !props.centralExpert" style="width: 100%;" />
+                  :disabled="(reportStore.isReportReject?.fourth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" style="width: 100%;" />
               </td>
             </tr>
           </tbody>
@@ -455,7 +455,7 @@
               <td class="report-table__td">
                 <InputReport v-model:value="eventCH.dataCH.start_date" :id="'eventCH.dataCH.end_date'"
                   name="eventCH.dataCH.end_date" class="form__input" type="date"
-                  :disabled="reportStore.isReportReject?.fourth && !props.centralExpert" style="width: 100%;" />
+                  :disabled="(reportStore.isReportReject?.fourth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" style="width: 100%;" />
               </td>
             </tr>
           </tbody>
@@ -474,7 +474,7 @@
               <td class="report-table__td">
                 <InputReport v-model:value="eventCH.dataCH.end_date" :id="'eventCH.dataCH.end_date'"
                   name="eventCH.dataCH.end_date" class="form__input" type="date"
-                  :disabled="reportStore.isReportReject?.fourth && !props.centralExpert" style="width: 100%;" />
+                  :disabled="(reportStore.isReportReject?.fourth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" style="width: 100%;" />
               </td>
             </tr>
           </tbody>
@@ -500,7 +500,7 @@
               <td class="report-table__td">
                 <InputReport v-model:value="eventCH.dataCH.end_date" :id="'eventCH.dataCH.end_date'"
                   name="eventCH.dataCH.end_date" class="form__input" type="date"
-                  :disabled="reportStore.isReportReject?.fourth && !props.centralExpert" style="width: 100%;" />
+                  :disabled="(reportStore.isReportReject?.fourth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" style="width: 100%;" />
               </td>
             </tr>
           </tbody>
@@ -520,7 +520,7 @@
         <!--        />-->
         <TextareaReport v-model:value="commentCH" id="commentCH" name="commentCH" class="form__input" autoResize
           :maxlength="3000" :max-length-text="3000" counter-visible
-          :disabled="reportStore.isReportReject?.fourth && !props.centralExpert" />
+          :disabled="(reportStore.isReportReject?.fourth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" />
       </div>
       <!--      <div>-->
       <!--        <v-checkbox label="Итоговое значение"/>-->

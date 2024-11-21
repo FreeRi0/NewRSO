@@ -155,7 +155,7 @@
               :min="0"
               :max="9999999999"
               :step="0.01"
-              :disabled="props.centralExpert || reportStore.isReportReject?.first"
+              :disabled="props.centralExpert || reportStore.isReportReject?.first || reportStore.isAllReportsVerifiedByCH"
               :is-error-panel="isErrorPanel"
           />
         </div>
@@ -167,12 +167,12 @@
             :file="fileNameDH"
             :fileType="fileTypeDH"
             :fileSize="fileSizeDH"
-            :disabled="props.centralExpert || reportStore.isReportReject?.first"
+            :disabled="props.centralExpert || reportStore.isReportReject?.first || reportStore.isAllReportsVerifiedByCH"
             :is-error-file="isErrorFile"
             @change="uploadFileDH"
             @click="deleteFileDH"
             :is-error-panel="isErrorPanel"
-            :is-sent="props.centralExpert || reportStore.isReportReject?.first"
+            :is-sent="props.centralExpert || reportStore.isReportReject?.first || reportStore.isAllReportsVerifiedByCH"
             :rows="row"
         />
       </div>
@@ -204,7 +204,7 @@
                 :max="9999999999"
                 :step="0.01"
                 :is-error-panel="isErrorPanel"
-                :disabled="reportStore.isReportReject?.first && !props.centralExpert"
+                :disabled="(reportStore.isReportReject?.first && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH"
                 :is-sent="reportStore.isReportReject?.first"
             />
           </td>
@@ -222,8 +222,8 @@
             @change="uploadFileCH"
             @click="deleteFileCH"
             :is-error-panel="isErrorPanel"
-            :disabled="reportStore.isReportReject?.first && !props.centralExpert"
-            :is-sent="reportStore.isReportReject?.first && !props.centralExpert"
+            :disabled="(reportStore.isReportReject?.first && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH"
+            :is-sent="(reportStore.isReportReject?.first && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH"
         />
       </div>
       <div v-if="!reportStore.isAllReportsVerifiedByCH">

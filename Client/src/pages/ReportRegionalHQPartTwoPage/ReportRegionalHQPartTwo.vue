@@ -248,7 +248,7 @@
       </div>
     </div>
     <Button class="btn_report" v-if="!preloader" variant="text" label="Отправить отчет" size="large"
-      @click="sendReport" />
+      @click="sendReport" :disabled="reportStore.isAllReportsVerifiedByCH"/>
   </div>
   <ReportModalWarning v-if="showModalWarning" @reportConfirmation="reportConfirmation" isCentral />
 </template>
