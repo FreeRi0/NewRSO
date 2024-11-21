@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.sixteenth) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.sixteenth)"
+  <div v-if="reportStore?.isAllReportsVerifiedByCH ? false : !(props.centralExpert || props.districtExpert || reportStore.isReportReject?.sixteenth) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.sixteenth)"
        class="form__field-group">
     <div class="form__field-project-existence">
       <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу <sup class="valid-red">*</sup>
@@ -181,7 +181,7 @@
                 id="is_project-true"
                 type="radio"
                 :value="true"
-                :disabled="props.centralExpert || props.districtExpert"
+                :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
             />
             <label for="is_project-true">Да</label>
           </div>
@@ -192,7 +192,7 @@
                 id="is_project-false"
                 type="radio"
                 :value="false"
-                :disabled="props.centralExpert || props.districtExpert"
+                :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
             />
             <label for="is_project-false">Нет</label>
           </div>
@@ -216,7 +216,7 @@
                 counter-visible
                 :max-counter="300"
                 :max-length="300"
-                :disabled="(props.centralExpert || props.districtExpert) || !sixteenthPanelData.is_project"
+                :disabled="(props.centralExpert || props.districtExpert) || !sixteenthPanelData.is_project || reportStore.isAllReportsVerifiedByCH"
                 style="width: 100%;"
                 @focusout="focusOut"
             />
@@ -234,7 +234,7 @@
                     type="radio"
                     :id="`All-${index}`"
                     value="Всероссийский"
-                    :disabled="(props.centralExpert || props.districtExpert) || !sixteenthPanelData.is_project"
+                    :disabled="(props.centralExpert || props.districtExpert) || !sixteenthPanelData.is_project || reportStore.isAllReportsVerifiedByCH"
                     @change="focusOut"
                 />
                 <label :for="`All-${index}`">Всероссийский</label>
@@ -246,7 +246,7 @@
                     type="radio"
                     :id="`District-${index}`"
                     value="Окружной"
-                    :disabled="(props.centralExpert || props.districtExpert) || !sixteenthPanelData.is_project"
+                    :disabled="(props.centralExpert || props.districtExpert) || !sixteenthPanelData.is_project || reportStore.isAllReportsVerifiedByCH"
                     @change="focusOut"
                 />
                 <label :for="`District-${index}`">Окружной</label>
@@ -258,7 +258,7 @@
                     type="radio"
                     :id="`Interregional-${index}`"
                     value="Межрегиональный"
-                    :disabled="(props.centralExpert || props.districtExpert) || !sixteenthPanelData.is_project"
+                    :disabled="(props.centralExpert || props.districtExpert) || !sixteenthPanelData.is_project || reportStore.isAllReportsVerifiedByCH"
                     @change="focusOut"
                 />
                 <label :for="`Interregional-${index}`">Межрегиональный</label>
@@ -279,7 +279,7 @@
                   type="text"
                   placeholder="Введите ссылку"
                   @focusout="focusOut"
-                  :disabled="(props.centralExpert || props.districtExpert) || !sixteenthPanelData.is_project"
+                  :disabled="(props.centralExpert || props.districtExpert) || !sixteenthPanelData.is_project || reportStore.isAllReportsVerifiedByCH"
                   isLink
               />
             </div>
@@ -313,7 +313,7 @@
             :maxlength="3000"
             :max-length-text="3000"
             counter-visible
-            :disabled="props.centralExpert || props.districtExpert"
+            :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
             @focusout="focusOut"
         />
       </div>
@@ -591,7 +591,7 @@
       <!--      <div>-->
       <!--        <p>(4-1)*2+(4-2)+(4-3)=9</p>-->
       <!--      </div>-->
-      <div>
+      <div v-if="!reportStore.isAllReportsVerifiedByCH">
         <v-checkbox
             v-model="reportStore.returnReport.sixteenth"
             label="Вернуть в РО на доработку"
@@ -949,7 +949,7 @@ watchEffect(() => {
   }
 
   // Мапинг данных для отчета командира РШ при возвращении на доработку
-  if (reportStore.reportReject.sixteenth && reportStore.isReportReject.sixteenth) {
+  if (reportStore.reportReject.sixteenth && (reportStore.isReportReject.sixteenth || reportStore.isAllReportsVerifiedByCH)) {
     // console.log('reportStore.reportReject.sixteenth', reportStore.reportReject.sixteenth)
     // console.log('props.data', props.data)
 

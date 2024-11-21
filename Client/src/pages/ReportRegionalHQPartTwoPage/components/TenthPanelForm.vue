@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!(props.centralExpert || props.districtExpert || isReportReject) || (props.tab === 'Просмотр отправленного отчета' && isReportReject)"
+  <div v-if="!(props.centralExpert || props.districtExpert || isReportReject || reportStore.isAllReportsVerifiedByCH) || (props.tab === 'Просмотр отправленного отчета' && isReportReject)"
        class="form__field-group"
   >
     <div style="display: flex; justify-content: space-between;">
@@ -127,7 +127,7 @@
                 class="custom-radio"
                 type="radio"
                 :value="true"
-                :disabled="(props.centralExpert || props.districtExpert)"
+                :disabled="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)"
             />
             <label for="event_happened-true">Да</label>
           </div>
@@ -138,7 +138,7 @@
                 class="custom-radio"
                 type="radio"
                 :value="false"
-                :disabled="(props.centralExpert || props.districtExpert)"
+                :disabled="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)"
             />
             <label for="event_happened-false">Нет</label>
           </div>
@@ -154,17 +154,17 @@
               id="scan_file"
               name="scan_file"
               @change="uploadFile"
-              :disabled="(props.centralExpert || props.districtExpert)"
+              :disabled="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)"
           />
           <FileBoxComponent
               v-else
               :file="tenthPanelData.document"
               :fileType="tenthPanelData.file_type"
               :fileSize="tenthPanelData.file_size"
-              :isSent="(props.centralExpert || props.districtExpert)"
+              :isSent="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)"
               :is-error-file="isErrorFile && !tenthPanelData.file_size"
               @click="deleteFile"
-              :disabled="(props.centralExpert || props.districtExpert)"
+              :disabled="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)"
           />
         </div>
         <div>
@@ -179,10 +179,10 @@
                 type="text"
                 placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
                 @focusout="formData"
-                :disabled="(props.centralExpert || props.districtExpert)"
+                :disabled="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)"
                 is-link
             />
-            <div v-if="!(props.centralExpert || props.districtExpert)">
+            <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)">
               <Button
                   v-if="tenthPanelData.links.length === i + 1"
                   class="form__add-link-button"
@@ -213,7 +213,7 @@
               counter-visible
               class="form__input form__input-comment"
               style="margin-bottom: 4px;"
-              :disabled="(props.centralExpert || props.districtExpert)"
+              :disabled="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)"
               @focusout="formData"
           />
         </div>
@@ -344,7 +344,7 @@
             :is-sent="isReportReject"
         />
       </div>
-      <div>
+      <div v-if="!reportStore.isAllReportsVerifiedByCH">
         <v-checkbox
             v-model="returnReport"
             @change="onReportReturn"
@@ -361,6 +361,9 @@ import {InputReport, TextareaReport} from '@shared/components/inputs';
 import {Button} from '@shared/components/buttons';
 import {ReportTabs} from './index';
 import {CommentFileComponent, FileBoxComponent} from '@entities/RatingRoComponents/components';
+import {useReportPartTwoStore} from "@pages/ReportRegionalHQPartTwoPage/store.ts";
+
+const reportStore = useReportPartTwoStore();
 
 const props = defineProps({
   data: Object,
@@ -573,7 +576,7 @@ onMounted(() => {
   }
 
   // Мапинг данных для отчета командира РШ при возвращении на доработку
-  if (props.reportRejectData && props.isReportReject) {
+  if (props.reportRejectData && (props.isReportReject || reportStore.isAllReportsVerifiedByCH)) {
     // console.log('props.reportRejectData', props.reportRejectData)
     // console.log('props.isReportReject', props.isReportReject)
 

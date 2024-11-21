@@ -482,6 +482,9 @@ const handleReturnToRo = (checked) => {
 //   }
 // };
 
+
+let isAllSixVerified = true;
+let isAllNinthVerified = true;
 const getMultiplyData = async (reportId) => {
   const sixDataPromises = six_items.value.map(async (item) => {
     try {
@@ -578,7 +581,10 @@ const getMultiplyData = async (reportId) => {
   ]);
 
   sixDataResults.forEach((result) => {
+
     const sixData = result.data;
+
+
     if (districtExpert.value) {
       if (sixData?.regional_version) {
         try {
@@ -642,6 +648,7 @@ const getMultiplyData = async (reportId) => {
         ? reportStore.reportDataCH.six[result.id].comment = ''
         : reportStore.reportDataCH.six[result.id].comment = sixData?.comment;
     } else {
+
       if (sixData?.regional_version) {
         try {
           reportData.value.six[result.id] = JSON.parse(sixData.regional_version);
@@ -653,18 +660,26 @@ const getMultiplyData = async (reportId) => {
         reportData.value.six[result.id] = sixData;
       }
 
+      reportStore.reportDataDH.six[result.id] = JSON.parse(sixData?.district_version);
+      sixData?.central_version
+        ? reportStore.reportDataCH.six[result.id] = sixData?.central_version
+        : reportStore.reportDataCH.six[result.id] = sixData;
 
       if (sixData?.rejecting_reasons && sixData?.verified_by_chq !== true) {
         if (!revisionPanels.value.find((item) => item === '6')) {
           revisionPanels.value.push(`6`);
         }
         revisionPanels.value.push(`6-${result.id}`);
-        reportStore.reportDataDH.six[result.id] = JSON.parse(sixData?.district_version);
-        sixData?.central_version
-          ? reportStore.reportDataCH.six[result.id] = sixData?.central_version
-          : reportStore.reportDataCH.six[result.id] = sixData;
+        // reportStore.reportDataDH.six[result.id] = JSON.parse(sixData?.district_version);
+        // sixData?.central_version
+        //   ? reportStore.reportDataCH.six[result.id] = sixData?.central_version
+        //   : reportStore.reportDataCH.six[result.id] = sixData;
 
         reportStore.isReportReject.six[result.id] = isTabsForRevision.value;
+      }
+
+      if (!sixData?.verified_by_chq) {
+        isAllSixVerified = false;
       }
 
 
@@ -739,7 +754,10 @@ const getMultiplyData = async (reportId) => {
         reportData.value.ninth[result.id] = JSON.parse(reportData.value.ninth[result.id].regional_version);
       }
       console.log('reasons: ', reportData.value.ninth[result.id]?.rejecting_reasons)
-
+      ninthData?.district_version ? reportStore.reportDataDH.ninth[result.id] = JSON.parse(ninthData?.district_version) : reportStore.reportDataDH.ninth[result.id] = ninthData
+      ninthData.central_version
+        ? reportStore.reportDataCH.ninth[result.id] = ninthData.central_version
+        : reportStore.reportDataCH.ninth[result.id] = ninthData;
       if (ninthData?.rejecting_reasons) {
         if (!revisionPanels.value.find((item) => item === '9')) {
           revisionPanels.value.push(`9`);
@@ -748,12 +766,13 @@ const getMultiplyData = async (reportId) => {
 
         revisionPanels.value.push(`9-${result.id}`);
         console.log('9 rev', revisionPanels.value)
-        ninthData?.district_version ? reportStore.reportDataDH.ninth[result.id] = JSON.parse(ninthData?.district_version) : reportStore.reportDataDH.ninth[result.id] = ninthData
-        ninthData.central_version
-          ? reportStore.reportDataCH.ninth[result.id] = ninthData.central_version
-          : reportStore.reportDataCH.ninth[result.id] = ninthData;
+
 
         reportStore.isReportReject.ninth[result.id] = isTabsForRevision.value;
+      }
+
+      if (!ninthData?.verified_by_chq) {
+        isAllNinthVerified = false;
       }
 
 
@@ -994,9 +1013,11 @@ const getReportData = async (reportId) => {
     }
     // Загрузка данных для отчета командира РШ
     else {
+      /*-------------1-------------*/
+      let dataFirst;
       try {
         // reportData.value.first = (await reportPartTwoService.getReport('1')).data;
-        const dataFirst = (await reportPartTwoService.getReport('1')).data;
+        dataFirst = (await reportPartTwoService.getReport('1')).data;
         if (!dataFirst.regional_version && !dataFirst.central_version) {
           reportData.value.first = dataFirst;
         } else {
@@ -1012,12 +1033,19 @@ const getReportData = async (reportId) => {
           } else {
             reportData.value.first = JSON.parse(dataFirst.regional_version);
           }
+
+          /*Добавление данных для просмотра показателя который не был отклонен*/
+          if (dataFirst.verified_by_chq && !dataFirst.rejecting_reasons) {
+            reportStore.reportReject.first = dataFirst;
+          }
         }
       } catch (e) {
         console.log(e.message)
       }
+      /*------------4--------------*/
+      let dataFourth;
       try {
-        const dataFourth = (await reportPartTwoService.getReport('4')).data;
+        dataFourth = (await reportPartTwoService.getReport('4')).data;
         if (!dataFourth.regional_version && !dataFourth.central_version) {
           reportData.value.fourth = dataFourth;
         } else {
@@ -1033,12 +1061,19 @@ const getReportData = async (reportId) => {
           } else {
             reportData.value.fourth = JSON.parse(dataFourth.regional_version);
           }
+
+          /*Добавление данных для просмотра показателя который не был отклонен*/
+          if (dataFourth.verified_by_chq && !dataFourth.rejecting_reasons) {
+            reportStore.reportReject.fourth = dataFourth;
+          }
         }
       } catch (e) {
         console.log(e.message)
       }
+      /*------------5--------------*/
+      let dataFifth;
       try {
-        const dataFifth = (await reportPartTwoService.getReport('5')).data;
+        dataFifth = (await reportPartTwoService.getReport('5')).data;
         console.log('5', dataFifth)
         // if (!dataFifth.regional_version) {
         //   reportData.value.fifth = dataFifth;
@@ -1059,6 +1094,11 @@ const getReportData = async (reportId) => {
             reportData.value.fifth = dataFifth;
           } else {
             reportData.value.fifth = JSON.parse(dataFifth.regional_version);
+          }
+
+          /*Добавление данных для просмотра показателя который не был отклонен*/
+          if (dataFifth.verified_by_chq && !dataFifth.rejecting_reasons) {
+            reportStore.reportReject.fifth = dataFifth;
           }
         }
       } catch (e) {
@@ -1125,10 +1165,11 @@ const getReportData = async (reportId) => {
       } catch (e) {
         console.error('Error in six_items processing:', e);
       }
-
+      /*------------10-1--------------*/
+      let dataTenthFirst;
       try {
         // reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
-        const dataTenthFirst = (await reportPartTwoService.getMultipleReport('10', '1')).data;
+        dataTenthFirst = (await reportPartTwoService.getMultipleReport('10', '1')).data;
         // if (!dataTenthFirst.regional_version) {
         //   reportData.value.tenth.first = dataTenthFirst;
         // } else {
@@ -1150,13 +1191,20 @@ const getReportData = async (reportId) => {
           } else {
             reportData.value.tenth.first = JSON.parse(dataTenthFirst.regional_version);
           }
+
+          /*Добавление данных для просмотра показателя который не был отклонен*/
+          if (dataTenthFirst.verified_by_chq && !dataTenthFirst.rejecting_reasons) {
+            reportStore.reportReject.tenth.first = dataTenthFirst;
+          }
         }
       } catch (e) {
         console.log(e.message)
       }
+      /*------------10-2--------------*/
+      let dataTenthSecond;
       try {
         // reportData.value.tenth.second = (await reportPartTwoService.getMultipleReport('10', '2')).data;
-        const dataTenthSecond = (await reportPartTwoService.getMultipleReport('10', '2')).data;
+        dataTenthSecond = (await reportPartTwoService.getMultipleReport('10', '2')).data;
         // if (!dataTenthSecond.regional_version) {
         //   reportData.value.tenth.second = dataTenthSecond;
         // } else {
@@ -1177,6 +1225,11 @@ const getReportData = async (reportId) => {
             reportData.value.tenth.second = dataTenthSecond;
           } else {
             reportData.value.tenth.second = JSON.parse(dataTenthSecond.regional_version);
+          }
+
+          /*Добавление данных для просмотра показателя который не был отклонен*/
+          if (dataTenthSecond.verified_by_chq && !dataTenthSecond.rejecting_reasons) {
+            reportStore.reportReject.tenth.second = dataTenthSecond;
           }
         }
       } catch (e) {
@@ -1257,7 +1310,8 @@ const getReportData = async (reportId) => {
       } catch (e) {
         console.log(e.message)
       }
-      //-------------------------------------------------------------
+      //-----------------------------16--------------------------------
+      let dataSixteenth;
       try {
         // reportData.value.sixteenth = (await reportPartTwoService.getReport('16')).data;
         // if (reportData.value.sixteenth.is_sent) {
@@ -1265,7 +1319,7 @@ const getReportData = async (reportId) => {
         //   blockEditFirstReport.value = true;
         // }
 
-        const dataSixteenth = (await reportPartTwoService.getReport('16')).data;
+        dataSixteenth = (await reportPartTwoService.getReport('16')).data;
         // if (!dataSixteenth.regional_version) {
         //   reportData.value.sixteenth = dataSixteenth;
         // } else {
@@ -1286,6 +1340,11 @@ const getReportData = async (reportId) => {
             reportData.value.sixteenth = dataSixteenth;
           } else {
             reportData.value.sixteenth = JSON.parse(dataSixteenth.regional_version);
+          }
+
+          /*Добавление данных для просмотра показателя который не был отклонен*/
+          if (dataSixteenth.verified_by_chq && !dataSixteenth.rejecting_reasons) {
+            reportStore.reportReject.sixteenth = dataSixteenth;
           }
         }
 
@@ -1338,10 +1397,17 @@ const getReportData = async (reportId) => {
       }
 
       if (
-        dataEleventh.verified_by_chq && 
-        dataTwelfth.verified_by_chq && 
-        dataThirteenth.verified_by_chq) 
-      {
+        dataFirst.verified_by_chq &&
+        dataFourth.verified_by_chq &&
+        dataFifth.verified_by_chq &&
+        dataTenthFirst.verified_by_chq &&
+        dataTenthSecond.verified_by_chq &&
+        isAllSixVerified && isAllNinthVerified &&
+        dataEleventh.verified_by_chq &&
+        dataTwelfth.verified_by_chq &&
+        dataThirteenth.verified_by_chq &&
+        dataSixteenth.verified_by_chq
+      ) {
         reportStore.isAllReportsVerifiedByCH = true;
       }
     }

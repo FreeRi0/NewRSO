@@ -148,6 +148,9 @@ watchEffect(() => {
   padding: 0;
 }
 
+.form__field-group {
+  border-radius: 10px;
+}
 
 // .report-table {
 //  &__tr {
