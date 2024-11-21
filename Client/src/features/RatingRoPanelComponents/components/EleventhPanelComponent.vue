@@ -368,7 +368,7 @@ const onReturnReport = (event) => {
   let formData = new FormData();
   formData.append('participants_number', eleventhPanelDataCH.value.participants_number);
   formData.append('comment', eleventhPanelDataCH.value.comment || '');
-  formData.append('scan_file', reportStore.reportDataCHFile.eleventh || reportStore.reportForCheckCH.eleventh.central_version.scan_file || '');
+  formData.append('scan_file', reportStore.reportDataCHFile.eleventh || reportStore.reportForCheckCH.eleventh.central_version?.scan_file || '');
   
   if (event.target.checked) {
     reportStore.returnReport.eleventh = true;
@@ -403,10 +403,6 @@ watchEffect(() => {
       isSent.value = props.data.is_sent;
 
       isFirstSent.value = reportStore.isReportReject.eleventh && !props.data.central_version;
-      console.log('isFirstSent при доработке 11', isFirstSent.value);
-      // if (reportStore.isReportReject.eleventh) {
-      //   reportStore.returnReport.eleventh = true;
-      // }
     }
   }
   if (props.districtExpert) {
@@ -453,6 +449,8 @@ watchPostEffect(() => {
     eleventhPanelData.value.file_size = props.data.file_size;
     eleventhPanelData.value.file_type = props.data.file_type;
     isSent.value = props.data.is_sent;
+
+    isFirstSent.value = reportStore.isReportReject.eleventh && !props.data.central_version;
   }
   if (!(props.centralExpert || props.districtExpert)) {
     eleventhPanelDataDH.value = reportStore.reportDataDH.eleventh;
