@@ -24,6 +24,7 @@
         :central-expert="props.centralExpert"
         :district-expert="props.districtExpert"
         :data="data"
+        :is-error-panel="isErrorPanel"
         @get-data="getData"
         :tab="tab"
       ></TwelfthPanelComponent>
