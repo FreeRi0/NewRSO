@@ -175,7 +175,7 @@
                 проекте <sup class="valid-red">*</sup></label>
               <InputReport v-model:value="event.participants_number" id="participants_number" name="participants_number"
                 class="form__input form__field-people-count-field" type="number" placeholder="Введите число"
-                :disabled="props.centralExpert || reportStore.isReportReject?.fifth" />
+                :disabled="props.centralExpert || reportStore.isReportReject?.fifth || reportStore.isAllReportsVerifiedByCH" />
             </div>
             <div class="form__field-people-count-wrap">
               <label class="form__label" for="ro_participants_number">Количество человек из&nbsp;своего региона,
@@ -183,7 +183,7 @@
                 участие в&nbsp;трудовом проекте <sup class="valid-red">*</sup></label>
               <InputReport v-model:value="event.ro_participants_number" id="ro_participants_number"
                 name="ro_participants_number" class="form__input form__field-people-count-field" type="number"
-                placeholder="Введите число" :disabled="props.centralExpert || reportStore.isReportReject?.fifth" />
+                placeholder="Введите число" :disabled="props.centralExpert || reportStore.isReportReject?.fifth || reportStore.isAllReportsVerifiedByCH" />
             </div>
           </div>
           <!--          <div class="form__field-people-deleteBtn">-->
@@ -201,14 +201,14 @@
                 class="valid-red">*</sup></label>
             <InputReport v-model:value="event.start_date" id="start_date" name="start_date"
               class="form__input form__field-date-wrap-field" type="date"
-              :disabled="props.centralExpert || reportStore.isReportReject?.fifth" />
+              :disabled="props.centralExpert || reportStore.isReportReject?.fifth || reportStore.isAllReportsVerifiedByCH" />
           </div>
           <div class="form__field-date-wrap">
             <label class="form__label" for="end_date">Дата окончания проведения проекта <sup
                 class="valid-red">*</sup></label>
             <InputReport v-model:value="event.end_date" id="end_date" name="end_date"
               class="form__input form__field-date-wrap-field" type="date"
-              :disabled="props.centralExpert || reportStore.isReportReject?.fifth" />
+              :disabled="props.centralExpert || reportStore.isReportReject?.fifth || reportStore.isAllReportsVerifiedByCH" />
           </div>
         </div>
 
@@ -216,7 +216,7 @@
           <label class="form__label" for="eventName">Название трудового проекта <sup class="valid-red">*</sup></label>
           <InputReport v-model:value="event.name" id="eventName" name="eventName"
             class="form__input form__field-people-count-field" placeholder="Введите название"
-            :disabled="props.centralExpert || reportStore.isReportReject?.fifth" />
+            :disabled="props.centralExpert || reportStore.isReportReject?.fifth || reportStore.isAllReportsVerifiedByCH" />
         </div>
         <div class="hr"></div>
       </div>
@@ -228,7 +228,7 @@
         <label class="form__label" for="comment">Комментарий <sup class="valid-red">*</sup></label>
         <TextareaReport v-model:value="fifthPanelDataDH.comment" id="comment" name="comment" :rows="1" autoResize
           placeholder="Примечания, ссылки" :maxlength="3000" :max-length-text="3000" counter-visible
-          :disabled="props.centralExpert || reportStore.isReportReject?.fifth" />
+          :disabled="props.centralExpert || reportStore.isReportReject?.fifth || reportStore.isAllReportsVerifiedByCH" />
       </div>
       <div class="form__field-result">
         <v-checkbox class="result-checkbox" id="v-checkboxDH" @change="calculateResultDH($event)" />
@@ -264,7 +264,7 @@
                 <InputReport v-model:value="eventCH.dataCH.participants_number" :id="'participants_numberCH'"
                   :name="'participants_numberCH'" style="width: 100%;" type="number" placeholder="0" :maxlength="10"
                   :min="0" :max="9999999999" :step="0.01"
-                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" />
+                  :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" />
               </td>
             </tr>
           </tbody>
@@ -291,7 +291,7 @@
                 <InputReport v-model:value="eventCH.dataCH.participants_number" :id="'participants_numberCH'"
                   :name="'participants_numberCH'" style="width: 100%;" type="number" placeholder="0" :maxlength="10"
                   :min="0" :max="9999999999" :step="0.01"
-                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" />
+                  :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" />
               </td>
             </tr>
           </tbody>
@@ -313,7 +313,7 @@
                 <InputReport v-model:value="eventCH.dataCH.ro_participants_number" :id="'participants_numberCH'"
                   :name="'participants_numberCH'" style="width: 100%;" type="number" placeholder="0" :maxlength="10"
                   :min="0" :max="9999999999" :step="0.01"
-                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" />
+                  :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" />
               </td>
             </tr>
           </tbody>
@@ -340,7 +340,7 @@
                 <InputReport v-model:value="eventCH.dataCH.ro_participants_number" :id="'participants_numberCH'"
                   :name="'participants_numberCH'" style="width: 100%;" type="number" placeholder="0" :maxlength="10"
                   :min="0" :max="9999999999" :step="0.01"
-                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" />
+                  :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" />
               </td>
             </tr>
           </tbody>
@@ -359,7 +359,7 @@
               <td class="report-table__td">
                 <InputReport v-model:value="eventCH.dataCH.start_date" :id="'eventCH.dataCH.end_date'"
                   name="eventCH.dataCH.end_date" class="form__input" type="date"
-                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" style="width: 100%;" />
+                  :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" style="width: 100%;" />
               </td>
             </tr>
           </tbody>
@@ -385,7 +385,7 @@
               <td class="report-table__td">
                 <InputReport v-model:value="eventCH.dataCH.start_date" :id="'eventCH.dataCH.end_date'"
                   name="eventCH.dataCH.end_date" class="form__input" type="date"
-                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" style="width: 100%;" />
+                  :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" style="width: 100%;" />
               </td>
             </tr>
           </tbody>
@@ -405,7 +405,7 @@
               <td class="report-table__td">
                 <InputReport v-model:value="eventCH.dataCH.end_date" :id="'eventCH.dataCH.end_date'"
                   name="eventCH.dataCH.end_date" class="form__input" type="date"
-                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" style="width: 100%;" />
+                  :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" style="width: 100%;" />
               </td>
             </tr>
           </tbody>
@@ -431,7 +431,7 @@
               <td class="report-table__td">
                 <InputReport v-model:value="eventCH.dataCH.end_date" :id="'eventCH.dataCH.end_date'"
                   name="eventCH.dataCH.end_date" class="form__input" type="date"
-                  :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" style="width: 100%;" />
+                  :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" style="width: 100%;" />
               </td>
             </tr>
           </tbody>
@@ -444,7 +444,7 @@
         <!--        <InputReport v-model:value="commentCH" id="15" name="15" class="form__input" style="width: 100%"/>-->
         <TextareaReport v-model:value="commentCH" id="commentCH" name="commentCH" autoResize placeholder="Комментарий"
           :maxlength="3000" :max-length-text="3000" counter-visible
-          :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" />
+          :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" />
       </div>
       <!-- <div>
         <v-checkbox label="Итоговое значение"/>

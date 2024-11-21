@@ -462,6 +462,7 @@
                 id="is_projectCH-true"
                 type="radio"
                 :value="true"
+                :disabled="reportStore.isAllReportsVerifiedByCH"
             />
             <label for="is_projectCH-true">Да</label>
           </div>
@@ -472,6 +473,7 @@
                 id="is_projectCH-false"
                 type="radio"
                 :value="false"
+                :disabled="reportStore.isAllReportsVerifiedByCH"
             />
             <label for="is_projectCH-false">Нет</label>
           </div>
