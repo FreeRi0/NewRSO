@@ -12,8 +12,8 @@
         </p>
       </div>
       <div class="RoPlace_wrapper">
-        <RatingRoPlaceList :items="sortedRegionalHeadquartersByIndicator" />
         <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate color="blue"></v-progress-circular>
+        <RatingRoPlaceList v-else :items="sortedRegionalHeadquartersByIndicator" />
       </div>
       <template v-if="responce && responce.count && responce.count > limit">
         <Button @click="next" v-if="
@@ -143,18 +143,19 @@ const getRegionalsByEvent = async (pagination, orderLimit) => {
 
 const getPlaceRegionals = async (pagination) => {
   try {
+    isLoading.value = true;
     const indicator = `r${id}_place`;
     let url = `/regional_competitions/ranking?ordering=${indicator}`;
     if (pagination == 'next') url = responce.value.next.replace('http', 'https');
     const { data } = await HTTP.get(url,);
-    console.log(data)
+    sortedRegionalHeadquartersByIndicator.value = [];
     for (const item of data.results) {
       sortedRegionalHeadquartersByIndicator.value.push({
         id: item[indicator],
         name: item.regional_headquarter_name,
       })
     }
-    console.log(sortedRegionalHeadquartersByIndicator.value);
+    isLoading.value = false;
   } catch (error) {
     console.error(error);
   }
@@ -199,6 +200,7 @@ watch(
       PlaceId.value = { id: null, title: 'Not Found' };
     }
     await replaceTargetObjects([PlaceId.value]);
+    await getPlaceRegionals();
   },
   {
     immediate: true,
