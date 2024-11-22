@@ -75,12 +75,16 @@ const getRanking = async (pagination) => {
     let params = '';
     ascending.value ? params = 'overall_place' : params = '-overall_place';
 
-    let url = `/regional_competitions/ranking?ordering=${params}`;
+    let url = `/regional_competitions/ranking?ordering=${params}&limit=20`;
 
-    if (pagination == 'next') url = responce.value.next.replace('http', 'https');
+    if (pagination == 'next') {
+      url = responce.value.next.replace('http', 'https'); 
+    } else sortedRegionalHeadquarters.value = [];
 
     const { data } = await HTTP.get(url,)
-    sortedRegionalHeadquarters.value = data.results;
+    for (const item of data.results) {
+      sortedRegionalHeadquarters.value.push(item);
+    }
     responce.value = data;
   } catch(error) {
     console.error(error);
