@@ -69,13 +69,6 @@ const ninthPanelData = ref({
   file_type: '',
   comment: '',
 });
-// const ninthPanelDataDH = ref({
-//   event_happened: false,
-//   document: '',
-//   file_size: null,
-//   file_type: '',
-//   comment: '',
-// });
 
 const isFirstSent = ref(null);
 let el_id = ref(null);
@@ -85,12 +78,10 @@ const formData = async (reportData, reportNumber) => {
     if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
       if (!link_err.value) {
         if (isFirstSent.value) {
-          console.log('First time sending data');
           const { data } = await reportPartTwoService.createMultipleReport(reportData, '9', reportNumber, true);
           isFirstSent.value = false;
           emit('getData', data, 9, reportNumber);
         } else {
-          console.log('Second time sending data');
           const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
           emit('getData', data, 9, reportNumber);
         }
@@ -104,14 +95,12 @@ const formData = async (reportData, reportNumber) => {
 const formDataDH = (reportData, reportNumber) => {
   if (props.districtHeadquarterCommander) {
     emit('getDataDH', reportData, 9, reportNumber);
-    console.log('dh9', reportData);
   }
 };
 
 const formDataCH = (reportData, reportNumber) => {
   if (props.centralHeadquarterCommander) {
     emit('getDataCH', reportData, 9, reportNumber);
-    console.log('ch9', reportData);
   }
 };
 
@@ -123,13 +112,11 @@ const collapsed = () => {
 
 
 const getId = (id) => {
-  console.log('id', id);
   el_id.value = id;
   emit('getId', id);
 }
 
 const getPanelNumber = (number) => {
-  console.log('num', number);
   emit('getPanelNumber', number);
 }
 
@@ -161,13 +148,11 @@ watchEffect(() => {
     ninthPanelData.value = { ...props.data[el_id.value] };
   } else {
     if (props.data[el_id.value] && Object.keys(props.data[el_id.value]).length > 0) {
-      console.log('data yes')
       isFirstSent.value = false;
       ninthPanelData.value = { ...props.data[el_id.value] }
       isSentNinth.value = props.data[el_id.value].is_sent;
       isFirstSent.value = reportStore.isReportReject.ninth[el_id.value] && !props.data[el_id.value].central_version;
     } else {
-      console.log('data no')
       isFirstSent.value = true;
       isSentNinth.value = false;
       ninthPanelData.value = {
