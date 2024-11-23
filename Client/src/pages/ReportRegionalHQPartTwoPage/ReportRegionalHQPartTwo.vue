@@ -277,7 +277,6 @@ import { HTTP } from '@app/http';
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { useRoute, useRouter } from "vue-router";
 import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
-// import { checkEmptyFieldsDH } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 import swal from '@/library/sweetalert2/sweetalert2.esm.all.min.js';
 import {
   checkEmptyFieldsDH,
@@ -832,7 +831,6 @@ const getReportData = async (reportId) => {
       */
       const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
       reportStore.reportForCheckCH.eleventh = dataEleventh;
-      // console.log(dataEleventh);
 
       // если используем функцию showPanels обязательна проверка на 2 поля:
       if (dataEleventh.rejecting_reasons && dataEleventh.verified_by_chq !== true) {
@@ -862,7 +860,6 @@ const getReportData = async (reportId) => {
       */
       const dataTwelfth = (await reportPartTwoService.getReportDH('12', reportId)).data;
       reportStore.reportForCheckCH.twelfth = dataTwelfth;
-      // console.log(dataTwelfth);
 
       // если используем функцию showPanels обязательна проверка на 2 поля:
       if (dataTwelfth.rejecting_reasons && dataTwelfth.verified_by_chq !== true) {
@@ -892,7 +889,6 @@ const getReportData = async (reportId) => {
       */
       const dataThirteenth = (await reportPartTwoService.getReportDH('13', reportId)).data;
       reportStore.reportForCheckCH.thirteenth = dataThirteenth;
-      // console.log(dataThirteenth);
 
       // если используем функцию showPanels обязательна проверка на 2 поля:
       if (dataThirteenth.rejecting_reasons && dataThirteenth.verified_by_chq !== true) {
@@ -1140,7 +1136,7 @@ const getReportData = async (reportId) => {
       } catch (e) {
         console.log(e.message)
       }
-      //--------------------------------------------------------------
+      //-----------------11------------------------------------------
       let dataEleventh;
       try {
         dataEleventh = (await reportPartTwoService.getReport('11')).data;
@@ -1165,7 +1161,7 @@ const getReportData = async (reportId) => {
       } catch (e) {
         console.log(e.message)
       }
-      //--------------------------------------------------------------
+      //-----------------12-------------------------------------------
       let dataTwelfth;
       try {
         dataTwelfth = (await reportPartTwoService.getReport('12')).data;
@@ -1190,7 +1186,7 @@ const getReportData = async (reportId) => {
       } catch (e) {
         console.log(e.message)
       }
-      //--------------------------------------------------------------
+      //-----------------13-------------------------------------------
       let dataThirteenth
       try {
         dataThirteenth = (await reportPartTwoService.getReport('13')).data;
@@ -1389,15 +1385,12 @@ const setDataDH = (data, panel, number) => {
       break;
     case 11:
       reportDataDH.value.eleventh = data;
-      // console.log('11', ...reportDataDH.value.eleventh);
       break;
     case 12:
       reportDataDH.value.twelfth = data;
-      // console.log('12', ...reportDataDH.value.twelfth);
       break;
     case 13:
       reportDataDH.value.thirteenth = data;
-      // console.log('13', ...reportDataDH.value.thirteenth);
       break;
     case 16:
       reportDataDH.value.sixteenth = data;
@@ -1436,15 +1429,12 @@ const setDataCH = (data, panel, number) => {
       break;
     case 11:
       reportDataCH.value.eleventh = data;
-      // console.log('11', ...reportDataCH.value.eleventh);
       break;
     case 12:
       reportDataCH.value.twelfth = data;
-      // console.log('12', ...reportDataCH.value.twelfth);
       break;
     case 13:
       reportDataCH.value.thirteenth = data;
-      // console.log('13', ...reportDataCH.value.thirteenth);
       break;
     case 16:
       reportDataCH.value.sixteenth = data;
@@ -2056,12 +2046,10 @@ watch(
   () => {
     if (roleStore.experts?.is_district_expert) {
       districtExpert.value = true;
-      console.log('окружной эксперт', districtExpert.value);
     }
     if (roleStore.experts?.is_central_expert) {
 
       centralExpert.value = true;
-      console.log('центральный эксперт', centralExpert.value);
     }
   },
   {
@@ -2106,19 +2094,9 @@ watch(
 watch(revisionPanels.value,
   () => {
     if (revisionPanels.value.length) {
-      // Временно скрываем табы Просмотра и Доработки отчета (true на false)-------------------------------
-
       isRevision.value = true;
       reportStore.isReportRevision = true;
-      // isRevision.value = false;
-
-      // Временно скрываем табы в показателях для РО для доработки отчета (true на false)------------------
-
       isTabsForRevision.value = true;
-      // isTabsForRevision.value = false;
-
-      console.log('массив с показателями на дораб', revisionPanels.value);
-      console.log('возврат на дораб', isRevision.value);
     }
   },
 )
