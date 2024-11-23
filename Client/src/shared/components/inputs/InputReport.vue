@@ -1,22 +1,43 @@
 <template>
-  <div :is-file="isFile" :class="[
-    'form-input',
-    isFile ? 'form-input__file-input' : '',
-    isFileDistrict ? 'form-input__add-file' : '',
-    isLink ? 'form-input__link' : '',
-    (isErrorPanel && !value) ? 'form-input__file-error' : '',
-  ]" :style="{ width: width }">
-    <input :type="type" :name="name" :style="{
-      height: height,
-    }" :value="value" :id="name" :placeholder="placeholder" :maxlength="maxLength" :readonly="readonly" :max="max"
-           class="form-input__report" :step="step"
-           :class="{ 'link__input': isLink, 'form-input__report--error': (isErrorPanel && !value), 'form__input--error': isErrorDate, }"
-           @input="updateValue"
-           v-bind="$attrs" :disabled="disabled" :min="props.type === 'date' ? props.minDate : props.type === 'number' ? props.min : null"/>
+  <div 
+    :is-file="isFile" 
+    :class="[
+      'form-input',
+      isFile ? 'form-input__file-input' : '',
+      isFileDistrict ? 'form-input__add-file' : '',
+      isLink ? 'form-input__link' : '',
+      (isErrorPanel && !value) ? 'form-input__file-error' : '',
+    ]" 
+    :style="{ width: width }">
+    <input 
+      :type="type" 
+      :name="name" 
+      :style="{ height: height, }" 
+      :value="value" 
+      :id="name" 
+      :placeholder="placeholder" 
+      :maxlength="maxLength" 
+      :readonly="readonly" 
+      :max="max"
+      class="form-input__report" 
+      :step="step"
+      :class="{ 
+        'link__input': isLink, 
+        'form-input__report--error': (isErrorPanel && !value), 
+        'form__input--error': isErrorDate, 
+      }"
+      @input="updateValue"
+      v-bind="$attrs" 
+      :disabled="disabled" 
+      :min="props.type === 'date' ? props.minDate : props.type === 'number' ? props.min : null"
+    />
     <div class="form__counter" v-if="counterVisible">
       {{ textInputLength }} / {{ maxCounter }}
     </div>
-    <div v-if="isFile" class="form-input__text">
+    <div 
+      v-if="isFile" 
+      class="form-input__text"
+    >
       <span>Перетащите файлы или выберите на&nbsp;компьютере</span>
       <span>
         <SvgIcon iconName="add-file"/>
@@ -26,25 +47,32 @@
     <div v-if="isFileDistrict" class="form-input__icon">
       <SvgIcon iconName="add-file"/>
     </div>
-    <div v-if="isError" class="form-input__error-block">
+    <div 
+      v-if="isError" 
+      class="form-input__error-block"
+    >
       <span class="form-input__error-text">
         {{ isErrorMessage }}
-        </span>
+      </span>
     </div>
-    <div v-if="isErrorDate" class="form-input__error-block">
+    <div 
+      v-if="isErrorDate" 
+      class="form-input__error-block"
+    >
       <span class="form-input__error-text">
         Дата окончания не может быть меньше даты начала
       </span>
     </div>
-    <div v-show="isLinkError && props.isLink && (value || value === null)"> <span class="form-input__error-text">Не верный формат
-        url</span></div>
-
+    <div v-show="isLinkError && props.isLink && (value || value === null)">
+      <span class="form-input__error-text">
+        Не верный формат url
+      </span>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, watchEffect } from 'vue';
-// import { MaskInput } from 'vue-3-mask';
 import { SvgIcon } from '@shared/index';
 
 defineOptions({
@@ -119,10 +147,6 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  // isError: {
-  //   type: Boolean,
-  //   default: false,
-  // },
   isErrorDate: {
     type: Boolean,
   },
@@ -132,7 +156,6 @@ const props = defineProps({
   minDate: String
 });
 
-// let isError = ref(props.isError);
 let isLinkError = ref(false);
 
 const textInputLength = ref(null);
@@ -156,12 +179,6 @@ let isErrorMessage = ref('');
 
 watchEffect(() => {
   textInputLength.value = typeof props.value === 'string' ? props.value.length : 0;
-
-  // if (typeof props.max === 'number' && props.value > props.max) {
-  //   isError.value = true;
-  // } else {
-  //   isError.value = false;
-  // }
 });
 
 watchEffect(() => {
@@ -170,9 +187,7 @@ watchEffect(() => {
 
 const updateValue = (event) => {
   emit('update:value', event.target.value);
-  // emit('update:value', event.target.maxLength ? event.target.value = event.target.value.slice(0, event.target.maxLength) : event.target.value);
 
-  // console.log(event.target.validity);//------------------------------------------
   if (!event.target.validity.valid) {
     isError.value = true;
 
