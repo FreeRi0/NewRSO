@@ -247,8 +247,8 @@
         </v-expansion-panels>
       </div>
     </div>
-    <Button class="btn_report" v-if="!preloader" variant="text" label="Отправить отчет" size="large"
-      @click="sendReport" :disabled="reportStore.isAllReportsVerifiedByCH"/>
+    <Button class="btn_report" v-if="!preloader" variant="text" label="Отправить отчет" size="large" @click="sendReport"
+      :disabled="reportStore.isAllReportsVerifiedByCH" />
   </div>
   <ReportModalWarning v-if="showModalWarning" @reportConfirmation="reportConfirmation" isCentral />
 </template>
@@ -621,7 +621,15 @@ const getMultiplyData = async (reportId) => {
         reportData.value.six[result.id] = sixData;
       }
 
-      reportStore.reportDataDH.six[result.id] = JSON.parse(sixData?.district_version);
+      if (sixData?.district_version) {
+        try {
+          reportStore.reportDataDH.six[result.id] = JSON.parse(sixData?.district_version);
+        } catch (error) {
+          console.error('Error parsing district_version JSON:', error);
+          reportStore.reportDataDH.six[result.id] = sixData?.district_version || sixData;
+        }
+      }
+
       sixData?.central_version
         ? reportStore.reportDataCH.six[result.id] = sixData?.central_version
         : reportStore.reportDataCH.six[result.id] = sixData;
@@ -1060,7 +1068,7 @@ const getReportData = async (reportId) => {
       } catch (e) {
         console.log(e.message)
       }
-      
+
       try {
         await getMultiplyData();
       } catch (e) {
