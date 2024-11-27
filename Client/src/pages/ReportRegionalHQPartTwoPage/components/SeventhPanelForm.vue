@@ -163,7 +163,7 @@
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                                }}</label>
+                            }}</label>
                         </div>
                     </div>
                 </div>
@@ -372,21 +372,23 @@
 
                         <div class="places_wrap" v-if="isRejected">
                             <div class="places_item" v-for="item in events" :key="item.id">
-                                <input :id="item.id" :value="item.value" :name="item.name" :disabled="props.tab === 'Просмотр отправленного отчета' && (props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)"
+                                <input :id="item.id" :value="item.value" :name="item.name"
+                                    :disabled="props.tab === 'Просмотр отправленного отчета' && (props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)"
                                     :checked="ninthPanelData.event_happened == item.value"
                                     class="form__input places_input" type="radio" @focusout="focusOut"
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
 
                         <div v-else class="places_wrap one_place">
                             <input :id="12" :value="ninthPanelData.event_happened" @focusout="focusOut" :name="12"
-                                :disabled="props.tab === 'Просмотр отправленного отчета' && (props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)" :checked="ninthPanelData.event_happened === true ||
-                                        ninthPanelData.event_happened === false
-                                        " class="form__input places_input" type="radio"
+                                :disabled="props.tab === 'Просмотр отправленного отчета' && (props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)"
+                                :checked="ninthPanelData.event_happened === true ||
+                                    ninthPanelData.event_happened === false
+                                    " class="form__input places_input" type="radio"
                                 v-model="ninthPanelData.event_happened" />
                             <label v-if="ninthPanelData.event_happened === true" class="places_item_label"
                                 :for="id">Да</label>
@@ -403,10 +405,12 @@
                         </label>
                         <InputReport
                             :disabled="props.tab === 'Просмотр отправленного отчета' && (props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)"
-                            @change="uploadFile($event, 9)" v-if="!ninthPanelData.document && (props.tab !== 'Просмотр отправленного отчета')" isFile type="file"
-                            accept=".jpg, .jpeg, .png, .pdf" id="scan_file" name="scan_file" width="100%"
+                            @change="uploadFile($event, 9)"
+                            v-if="!ninthPanelData.document && (props.tab !== 'Просмотр отправленного отчета')" isFile
+                            type="file" accept=".jpg, .jpeg, .png, .pdf" id="scan_file" name="scan_file" width="100%"
                             height="auto" />
-                        <FileBoxComponent v-if="ninthPanelData.document" :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
+                        <FileBoxComponent v-if="ninthPanelData.document" :file="ninthPanelData.document"
+                            :fileType="ninthPanelData.file_type"
                             :isSent="props.tab === 'Просмотр отправленного отчета' && (props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)"
                             :fileSize="ninthPanelData.file_size" @click="deleteFile(9)">
                         </FileBoxComponent>
@@ -540,7 +544,7 @@
                     <CommentFileComponent v-model:value="ninthPanelDataDH.comment" name="ninthPanelDataDH.comment"
                         @change="uploadFile($event, 9)" @click="deleteFile(9)" :file="fileDH.name"
                         :fileType="fileDH.type" :fileSize="fileDH.size"
-                      :disabled="props.isCentralHeadquarterCommander || !(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander)"
+                        :disabled="props.isCentralHeadquarterCommander || !(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander)"
                         :is-error-file="isErrorFile" :is-error-panel="isErrorPanel"
                         :is-sent="props.isCentralHeadquarterCommander || !(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander)">
                     </CommentFileComponent>
@@ -667,7 +671,7 @@
                                     v-model="ninthPanelDataCH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
