@@ -265,6 +265,11 @@ const updateValue = (event) => {
     height: 20px;
   }
 
+  &__add-file {
+    position: absolute;
+    top: 41px;
+  }
+
   &__text {
     padding: 16px 8px;
     display: flex;
