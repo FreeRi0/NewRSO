@@ -51,6 +51,7 @@
 
         &--comment-expert {
             position: relative;
+            margin-bottom: 0;
 
             .form-input__add-file {
                 position: absolute;
@@ -79,6 +80,11 @@
                     left: 43px;
                     bottom: 16px;
                 }
+            }
+
+            .report__file-box {
+                margin-top: 0;
+                margin-bottom: 0;
             }
         }
     }

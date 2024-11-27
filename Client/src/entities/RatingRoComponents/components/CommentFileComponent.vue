@@ -3,7 +3,7 @@
         <label class="form__label report__label" :for="name">Комментарий&nbsp; <sup v-show="!props.CH" class="valid-red">*</sup></label>
 
         <InputReport v-show="!props.isSix" is-file-district type="file" accept=".jpg, .jpeg, .png, .pdf" id="scan_file"
-            name="scan_file" width="20px" height="20px" :disabled="isDisabled" change="onChange" />
+            name="scan_file" width="20px" height="20px" :disabled="isDisabled" @change="onChange" />
 
         <TextareaReport :value="value" :id="name" :name="name" placeholder="Примечания, ссылки" :rows="rows" autoResize
             counter-visible :maxlength="3000" :max-length-text="3000" :disabled="isDisabled" v-bind="$attrs">
@@ -67,10 +67,6 @@ const props = defineProps({
 const onChange = (event) => {
     emit('onChange', event.target.value);
 };
-
-// const focusOutField = (event) => {
-//     emit('focusOut', event.target.value);
-// };
 
 const clickOnButton = () => {
     emit('click');
