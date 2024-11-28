@@ -1319,6 +1319,7 @@ watchPostEffect(() => {
     //   }
     if (!(props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)) {
         if (props.panel_number == 6) {
+            console.log('data', reportStore.reportDataDH.six[props.sixId], reportStore.reportDataCH.six[props.sixId])
             sixPanelDataDH.value = reportStore.reportDataDH.six[props.sixId];
             sixPanelDataCH.value = reportStore.reportDataCH.six[props.sixId];
 

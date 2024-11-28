@@ -2066,6 +2066,9 @@ watch(
   },
 )
 
+
+
+
 watch(
   () => route.query.reportId,
 
@@ -2082,13 +2085,12 @@ watch(
 );
 
 watch(
-  () => route.path,
+  () => route.fullPath,
 
   async (newUrl) => {
-    if (roleStore.roles.regionalheadquarter_commander && typeof (route.query.reportId) === 'undefined') {
-      if (newUrl.includes('reporting-ro/report-regional-two')) {
+    if (newUrl && typeof (route.query.reportId) === 'undefined') {
+      if (newUrl.includes('/reporting-ro/report-regional-two')) {
         preloader.value = true;
-        console.log(1.1);
         await getReportData();
       }
     }
@@ -2117,6 +2119,7 @@ onMounted(() => {
   getItems(6);
   getItems(9);
 });
+
 
 </script>
 <style lang="scss">
