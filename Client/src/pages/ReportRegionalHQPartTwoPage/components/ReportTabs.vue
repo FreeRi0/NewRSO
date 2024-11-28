@@ -56,7 +56,7 @@
             props.isReject || 
             reportStore.isAllReportsVerifiedByCH
           ">
-          <div class="form__field-group report-table">
+          <div class="form__field-group">
             <slot name="thirdTab"></slot>
           </div>
         </v-tabs-window-item>

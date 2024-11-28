@@ -3,33 +3,53 @@
         <label class="form__label report__label">
             {{ label }}&nbsp;<sup class="valid-red">*</sup>
         </label>
-        <v-table>
-            <tbody>
-                <tr class="report-table__tr">
-                    <td class="report-table__th report-table__th__br-left">Данные РО</td>
-                    <td class="report-table__th report-table__td__center">Корректировка ОШ</td>
-                    <td class="report-table__th report-table__th__br-right">Корректировка ЦШ</td>
-                </tr>
-                <tr class="report-table__tr">
-                    <td v-show="typeof (dataRH) === 'number'" class="report-table__td">{{ dataRH }}</td>
-                    <td v-show="typeof (dataRH) === 'boolean'" class="report-table__td"> {{ dataRH ? 'Да' : 'Нет' }}
-                    </td>
-                    <td v-show="typeof (dataDH) === 'number'" class="report-table__td report-table__td__center">{{
-                        dataDH
-                        }}</td>
-                    <td v-show="typeof (dataDH) === 'boolean'" class="report-table__td report-table__td__center">{{
-                        dataDH ? 'Да' : 'Нет' }}</td>
-                    <td :class="['report-table__td', props.disabled ? 'report-table__td--bgcolor' : '']">
-                        <InputReport v-if="isNinthPanel" :value="value ? 'Да' : 'Нет'" :disabled="isNinthPanel"
-                            :id="name" :name="name" style="width: 100%;" type="text" :placeholder="Нет"
-                            :maxlength="maxlength" :is-error-panel="isErrorPanel" @input="updateValue" />
-                        <InputReport v-else :value="value" :id="name" :name="name" style="width: 100%;" type="number"
-                            placeholder="0" :maxlength="maxlength" :min="min" :max="max" :step="step"
-                            :is-error-panel="isErrorPanel" :disabled="disabled" @input="updateValue" />
-                    </td>
-                </tr>
-            </tbody>
-        </v-table>
+        <ul class="report-table">
+            <li class="report-table__block">
+                <span class="report-table__th">Данные РО</span>
+                <span v-show="typeof (dataRH) === 'number'" class="report-table__td">{{ dataRH }}</span>
+                <span v-show="typeof (dataRH) === 'boolean'" class="report-table__td">{{ dataRH ? 'Да' : 'Нет' }}</span>
+            </li>
+            <li class="report-table__block report-table__block--center">
+                <span class="report-table__th">Корректировка ОШ</span>
+                <span v-show="typeof (dataDH) === 'number'" class="report-table__td">{{ dataDH }}</span>
+                <span v-show="typeof (dataDH) === 'boolean'" class="report-table__td">{{ dataDH ? 'Да' : 'Нет' }}</span>
+            </li>
+            <li class="report-table__block">
+                <span class="report-table__th">Корректировка ЦШ</span>
+                <span :class="['report-table__td', 'report-table__td--bgtransparent', props.disabled ? 'report-table__td--bgcolor' : '']">
+                    <InputReport 
+                        v-if="isNinthPanel" 
+                        :value="value ? 'Да' : 'Нет'" 
+                        :disabled="isNinthPanel"
+                        :id="name" 
+                        :name="name" 
+                        style="width: 100%;" 
+                        type="text" 
+                        :placeholder="Нет"
+                        :maxlength="maxlength" 
+                        :is-error-panel="isErrorPanel" 
+                        @input="updateValue" 
+                    />
+                    <InputReport 
+                        v-else 
+                        :value="value" 
+                        :id="name" 
+                        :name="name" 
+                        style="width: 100%;" 
+                        type="number"
+                        placeholder="0" 
+                        :maxlength="maxlength" 
+                        :min="min" 
+                        :max="max" 
+                        :step="step"
+                        :is-error-panel="isErrorPanel" 
+                        :disabled="disabled" 
+                        @input="updateValue"
+                    />
+                </span>
+                
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -88,11 +108,5 @@ const updateValue = (event) => {
 <style lang="scss" scoped>
 .valid-red {
     color: #db0000;
-}
-
-.report-table__td {
-    &--bgcolor {
-        background-color: #f9fafb;
-    }
 }
 </style>
