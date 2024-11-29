@@ -32,7 +32,6 @@
 </template>
 
 <script setup>
-// import { ref, watchEffect } from 'vue';
 import { SvgIcon } from '@shared/index';
 
 defineOptions({
@@ -52,12 +51,6 @@ const props = defineProps({
         type: [Number, String],
         default: null,
     },
-    // districtExpert: {
-    //     type: Boolean,
-    // },
-    // centralExpert: {
-    //     type: Boolean,
-    // },
     isSent: {
         type: Boolean,
     },
@@ -71,8 +64,4 @@ const emit = defineEmits(['click']);
 const clickOnButton = () => {
     emit('click');
 };
-
-// watchEffect(() => {
-    
-// })
 </script>

@@ -22,15 +22,9 @@
                         <v-list>
                             <v-list-group>
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Что такое РСО?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Что такое РСО?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -60,16 +54,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Где я могу узнать, действует ли движение РСО в моем регионе и какие существуют направления работы?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Где я могу узнать, действует ли движение РСО в моем регионе и какие существуют направления работы?">
+                                        <SvgIcon iconName="wrap" class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -88,15 +75,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Могу ли я вступить в РСО, если мне нет 18 лет?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Могу ли я вступить в РСО, если мне нет 18 лет?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -115,15 +96,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Хочу узнать подробнее о структуре организации, правах, обязанностях членов РСО"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Хочу узнать подробнее о структуре организации, правах, обязанностях членов РСО">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -142,15 +118,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Для чего нужен членский взнос?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Для чего нужен членский взнос?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -170,15 +140,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как просмотреть информацию об оплате членского взноса?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Как просмотреть информацию об оплате членского взноса?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -199,15 +164,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Что означают аббревиатуры ЛСО, Штаб СО ОО?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Что означают аббревиатуры ЛСО, Штаб СО ОО?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -227,15 +186,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Что такое линейный студенческий отряд?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Что такое линейный студенческий отряд?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -265,61 +218,30 @@
                 <v-expansion-panel-title>
                     <template v-slot="{ expanded }">
                         <v-row no-gutters>
-                            <v-col cols="4" class="d-flex justify-start"
-                                >Работа с Личным кабинетом
+                            <v-col cols="4" class="d-flex justify-start">Работа с Личным кабинетом
                             </v-col>
                         </v-row>
                     </template>
                     <template v-slot:actions="{ expanded }">
                         <v-icon v-if="!expanded">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="32"
-                                height="32"
-                                viewBox="0 0 32 32"
-                                fill="none"
-                            >
-                                <circle
-                                    cx="16"
-                                    cy="16"
-                                    r="15.5"
-                                    fill="#1F7CC0"
-                                    stroke="#1F7CC0"
-                                />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
+                                fill="none">
+                                <circle cx="16" cy="16" r="15.5" fill="#1F7CC0" stroke="#1F7CC0" />
                                 <path
                                     d="M23.9181 12.9492L17.3981 19.4692C16.6281 20.2392 15.3681 20.2392 14.5981 19.4692L8.07812 12.9492"
-                                    stroke="white"
-                                    stroke-width="1.5"
-                                    stroke-miterlimit="10"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                />
+                                    stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
+                                    stroke-linejoin="round" />
                             </svg>
                         </v-icon>
                         <v-icon v-else>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="32"
-                                height="32"
-                                viewBox="0 0 32 32"
-                                fill="none"
-                            >
-                                <circle
-                                    cx="16"
-                                    cy="16"
-                                    r="15.5"
-                                    transform="rotate(-180 16 16)"
-                                    fill="#1F7CC0"
-                                    stroke="#1F7CC0"
-                                />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
+                                fill="none">
+                                <circle cx="16" cy="16" r="15.5" transform="rotate(-180 16 16)" fill="#1F7CC0"
+                                    stroke="#1F7CC0" />
                                 <path
                                     d="M8.08187 19.0508L14.6019 12.5308C15.3719 11.7608 16.6319 11.7608 17.4019 12.5308L23.9219 19.0508"
-                                    stroke="white"
-                                    stroke-width="1.5"
-                                    stroke-miterlimit="10"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                />
+                                    stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
+                                    stroke-linejoin="round" />
                             </svg>
                         </v-icon>
                     </template>
@@ -330,15 +252,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как зарегистрироваться в РСО?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Как зарегистрироваться в РСО?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -361,15 +277,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как изменить пароль?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Как изменить пароль?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -391,15 +301,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как изменить логин?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Как изменить логин?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -422,15 +326,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как восстановить пароль?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Как восстановить пароль?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -454,15 +352,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как изменить персональные данные?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Как изменить персональные данные?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -484,15 +376,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как настроить приватность данных?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Как настроить приватность данных?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -514,15 +400,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Для чего нужна верификация данных?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Для чего нужна верификация данных?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -545,15 +425,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как пройти верификацию данных?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Как пройти верификацию данных?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -601,15 +475,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как создать отряд?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Как создать отряд?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -631,15 +499,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как редактировать данные об отряде?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Как редактировать данные об отряде?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -661,15 +523,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как создать штаб?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Как создать штаб?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -692,15 +548,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как редактировать данные о штабе?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Как редактировать данные о штабе?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -722,15 +572,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как вступить в отряд?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Как вступить в отряд?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -774,15 +618,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как создать мероприятие?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Как создать мероприятие?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -804,15 +642,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как редактировать данные о мероприятии?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Как редактировать данные о мероприятии?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -835,15 +667,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как зарегистрироваться на участие в мероприятии?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Как зарегистрироваться на участие в мероприятии?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -887,15 +714,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как отказаться от участия в мероприятии?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Как отказаться от участия в мероприятии?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -936,15 +757,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как одобрить/отклонить заявку на участие в мероприятии?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Как одобрить/отклонить заявку на участие в мероприятии?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -968,15 +784,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как одобрить/отклонить заявку на вступление в отряд?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Как одобрить/отклонить заявку на вступление в отряд?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1000,15 +811,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как одобрить/отклонить заявку на верификацию аккаунта?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Как одобрить/отклонить заявку на верификацию аккаунта?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1032,15 +838,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как одобрить/отклонить заявку на Конкурс?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Как одобрить/отклонить заявку на Конкурс?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1083,15 +883,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как пользоваться реестром участников?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Как пользоваться реестром участников?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1115,15 +909,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как сформировать справку о членстве в РСО?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Как сформировать справку о членстве в РСО?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1158,8 +946,7 @@
                 <v-expansion-panel-title>
                     <template v-slot="{ expanded }">
                         <v-row no-gutters>
-                            <v-col cols="4" class="d-flex justify-start"
-                                >О Конкурсе
+                            <v-col cols="4" class="d-flex justify-start">О Конкурсе
                             </v-col>
                         </v-row>
                     </template>
@@ -1175,15 +962,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Кто может принять участие в Конкурсе?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Кто может принять участие в Конкурсе?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1192,11 +973,7 @@
                                         участник (боец) РСО в составе
                                         студенческого отряда. Подробные условия
                                         Конкурса размещены по
-                                        <a
-                                            class="accordion_text-link"
-                                            href="/Competition"
-                                            >ссылке</a
-                                        >.
+                                        <a class="accordion_text-link" href="/Competition">ссылке</a>.
                                     </template>
                                 </v-list-group>
                                 <!-- <v-card-actions class="form__button-group">
@@ -1209,15 +986,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Какие номинации есть в Конкурсе?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Какие номинации есть в Конкурсе?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1243,15 +1014,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как принять участие в Конкурсе?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Как принять участие в Конкурсе?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1263,11 +1028,8 @@
                                         Командиром. Для участия студенческого
                                         отряда в Конкурсе Командиру отряда
                                         необходимо подать
-                                        <a
-                                            class="accordion_text-link"
-                                            href="/Competition"
-                                            >заявку на участие</a
-                                        >. Для подачи заявки от ЛСО допустимо
+                                        <a class="accordion_text-link" href="/Competition">заявку на участие</a>. Для
+                                        подачи заявки от ЛСО допустимо
                                         количество участников отряда от 1
                                         человека.
                                     </template>
@@ -1279,25 +1041,17 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как Командиру отряда подать заявку на участие в конкурсе в номинации «Дебют»?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Как Командиру отряда подать заявку на участие в конкурсе в номинации «Дебют»?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
                                         Перейдите на страницу
-                                        <a
-                                            class="accordion_text-link"
-                                            href="/Competition"
-                                            >«Конкурс»</a
-                                        >. Нажмите на кнопку «Участвовать»,
+                                        <a class="accordion_text-link" href="/Competition">«Конкурс»</a>. Нажмите на
+                                        кнопку «Участвовать»,
                                         выберите в всплывающем окне номинацию
                                         «Дебют». После подтверждения вашего
                                         участия уполномоченным сотрудником
@@ -1315,25 +1069,17 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как командиру отряда подать заявку на участие в конкурсе в номинации «Тандем»?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Как командиру отряда подать заявку на участие в конкурсе в номинации «Тандем»?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
                                         Перейдите на страницу
-                                        <a
-                                            class="accordion_text-link"
-                                            href="/Competition"
-                                            >«Конкурс»</a
-                                        >. Нажмите на кнопку «Участвовать»,
+                                        <a class="accordion_text-link" href="/Competition">«Конкурс»</a>. Нажмите на
+                                        кнопку «Участвовать»,
                                         выберите в всплывающем окне номинацию
                                         «Тандем». Далее выберите из предложенных
                                         вариантов отряд-старт, вместе с которым
@@ -1357,15 +1103,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как определяется место отряда в рейтинге отрядов-участников Конкурса?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Как определяется место отряда в рейтинге отрядов-участников Конкурса?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1390,15 +1131,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как командиру отряда отправить отчетность для формирования места в рейтинге отрядов-участников Конкурса?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Как командиру отряда отправить отчетность для формирования места в рейтинге отрядов-участников Конкурса?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1420,15 +1156,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как узнать рейтинг своего отряда в конкурсе?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Как узнать рейтинг своего отряда в конкурсе?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1447,15 +1177,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Учитываются ли в Конкурсе места на региональных трудовых проектах?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Учитываются ли в Конкурсе места на региональных трудовых проектах?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1473,15 +1198,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Засчитываются ли в Конкурсе мероприятия штаба студенческих отрядов образовательной организации?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Засчитываются ли в Конкурсе мероприятия штаба студенческих отрядов образовательной организации?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1498,15 +1218,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Засчитываются ли в Конкурсе победы штаба студенческих отрядов образовательной организации (в которых участвовал отряд в том числе)?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Засчитываются ли в Конкурсе победы штаба студенческих отрядов образовательной организации (в которых участвовал отряд в том числе)?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1524,15 +1239,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Что подразумевается под «Победы членов отряда в региональных, окружных и всероссийских грантовых конкурсах, направленных на развитие студенческих отрядов»?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Что подразумевается под «Победы членов отряда в региональных, окружных и всероссийских грантовых конкурсах, направленных на развитие студенческих отрядов»?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1546,21 +1256,12 @@
                                         конкурсах в сети интернет, уточнить в
                                         региональном отделении РСО.<br />Ссылки
                                         на всероссийские грантовые площадки:
-                                        <br /><a
-                                            class="accordion_text-link"
-                                            href="https://президентскиегранты.рф/"
-                                            >https://президентскиегранты.рф/</a
-                                        >
-                                        <br /><a
-                                            class="accordion_text-link"
-                                            href="https://фондкультурныхинициатив.рф/"
-                                            >https://фондкультурныхинициатив.рф/</a
-                                        >
-                                        <br /><a
-                                            class="accordion_text-link"
-                                            href="https://fadm.gov.ru/directions/grant/"
-                                            >https://fadm.gov.ru/directions/grant/</a
-                                        >
+                                        <br /><a class="accordion_text-link"
+                                            href="https://президентскиегранты.рф/">https://президентскиегранты.рф/</a>
+                                        <br /><a class="accordion_text-link"
+                                            href="https://фондкультурныхинициатив.рф/">https://фондкультурныхинициатив.рф/</a>
+                                        <br /><a class="accordion_text-link"
+                                            href="https://fadm.gov.ru/directions/grant/">https://fadm.gov.ru/directions/grant/</a>
                                     </template>
                                 </v-list-group>
                             </v-list-group>
@@ -1570,15 +1271,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Учитывается ли в Конкурсе производственная часть отряда на целине? Или только победы?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Учитывается ли в Конкурсе производственная часть отряда на целине? Или только победы?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1601,15 +1297,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Как поступить в случае возникновения ошибки при загрузке данных во время отправки Отчетности?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Как поступить в случае возникновения ошибки при загрузке данных во время отправки Отчетности?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1618,11 +1309,8 @@
                                         подскажут, в чем конкретно проблема в
                                         тех или иных пунктах. Тех. поддержка
                                         сайта:
-                                        <a
-                                            class="accordion_text-link"
-                                            href="https://t.me/LK_RSO_Support"
-                                            >https://t.me/LK_RSO_Support</a
-                                        >
+                                        <a class="accordion_text-link"
+                                            href="https://t.me/LK_RSO_Support">https://t.me/LK_RSO_Support</a>
                                     </template>
                                 </v-list-group>
                             </v-list-group>
@@ -1632,16 +1320,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Учитываются ли в Конкурсе награды за победу и участие в региональных конкурсах РО?
-"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Учитываются ли в Конкурсе награды за победу и участие в региональных конкурсах РО?
+">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1658,15 +1340,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Засчитывается ли в Конкурсе участие в акции «Снежный десант РСО», если участвовал от другого отряда?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Засчитывается ли в Конкурсе участие в акции «Снежный десант РСО», если участвовал от другого отряда?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1685,15 +1362,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Какие данные подтверждает командир РО, а какие комиссар РО?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Какие данные подтверждает командир РО, а какие комиссар РО?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1701,11 +1373,8 @@
                                         Таблица с расчётом показателей, где
                                         отразили дедлайн по каждому показателю и
                                         лицо, которое верифицирует результаты:
-                                        <a
-                                            class="accordion_text-link"
-                                            href="https://docs.google.com/spreadsheets/d/1TiQQ2meY9D2-pUmsAlY3DjgpENTo0W-w3WInX44zuRE/edit?gid=0#gid=0"
-                                            >https://docs.google.com/spreadsheets/d/1TiQQ2meY9D2-pUmsAlY3DjgpENTo0W-w3WInX44zuRE/edit?gid=0#gid=0</a
-                                        >
+                                        <a class="accordion_text-link"
+                                            href="https://docs.google.com/spreadsheets/d/1TiQQ2meY9D2-pUmsAlY3DjgpENTo0W-w3WInX44zuRE/edit?gid=0#gid=0">https://docs.google.com/spreadsheets/d/1TiQQ2meY9D2-pUmsAlY3DjgpENTo0W-w3WInX44zuRE/edit?gid=0#gid=0</a>
                                     </template>
                                 </v-list-group>
                             </v-list-group>
@@ -1715,15 +1384,9 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Что означает «Рейтинг ещё не сформирован»?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Что означает «Рейтинг ещё не сформирован»?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1732,11 +1395,8 @@
                                         наступил(а) и (или) показатель ещё не
                                         верифицирован. Крайний срок подачи
                                         данных, можно отследить в таблице с
-                                        расчётом показателей:<a
-                                            class="accordion_text-link"
-                                            href="https://docs.google.com/spreadsheets/d/1TiQQ2meY9D2-pUmsAlY3DjgpENTo0W-w3WInX44zuRE/edit?gid=0#gid=0"
-                                            >https://docs.google.com/spreadsheets/d/1TiQQ2meY9D2-pUmsAlY3DjgpENTo0W-w3WInX44zuRE/edit?gid=0#gid=0</a
-                                        >
+                                        расчётом показателей:<a class="accordion_text-link"
+                                            href="https://docs.google.com/spreadsheets/d/1TiQQ2meY9D2-pUmsAlY3DjgpENTo0W-w3WInX44zuRE/edit?gid=0#gid=0">https://docs.google.com/spreadsheets/d/1TiQQ2meY9D2-pUmsAlY3DjgpENTo0W-w3WInX44zuRE/edit?gid=0#gid=0</a>
                                     </template>
                                 </v-list-group>
                             </v-list-group>
@@ -1746,15 +1406,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Проф. обучение на ребят (сертификаты) загружать по одному или сразу на всех? Можно ли потом добавлять?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Проф. обучение на ребят (сертификаты) загружать по одному или сразу на всех? Можно ли потом добавлять?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1775,15 +1430,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="После отправки того или иного сертификата на согласование, можно ли добавлять потом еще?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="После отправки того или иного сертификата на согласование, можно ли добавлять потом еще?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1802,15 +1452,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Сколько человек в отряде должно быть для того, чтобы место в рейтинге было выше?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Сколько человек в отряде должно быть для того, чтобы место в рейтинге было выше?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1832,15 +1477,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Какие отчетные документы нужно подготовить по итогу конкурса и как/куда их прикреплять? На данный момент показатели в критериях подтверждаются на сайте со страницы ком. состава регионального отделения, готовим ли мы к этому же какой-то отчет для достоверности этих показателей? К какому числу и как?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Какие отчетные документы нужно подготовить по итогу конкурса и как/куда их прикреплять? На данный момент показатели в критериях подтверждаются на сайте со страницы ком. состава регионального отделения, готовим ли мы к этому же какой-то отчет для достоверности этих показателей? К какому числу и как?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1861,16 +1501,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Нужно ли прикладывать платежные поручения об оплате членских взносов? 
-"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props" title="Нужно ли прикладывать платежные поручения об оплате членских взносов? 
+">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1886,15 +1520,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Нужно ли прикладывать сертификаты о прохождении Школы командных составов командиром и комиссаром отряда?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Нужно ли прикладывать сертификаты о прохождении Школы командных составов командиром и комиссаром отряда?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1904,11 +1533,8 @@
                                         прикрепить ссылку на пост в данном
                                         показателе. Данный пункт подтверждает
                                         региональное отделение. (Смотри видео –
-                                        3:00) Видео:<a
-                                            class="accordion_text-link"
-                                            href="https://vk.com/video-223571150_456239061"
-                                            >https://vk.com/video-223571150_456239061</a
-                                        >
+                                        3:00) Видео:<a class="accordion_text-link"
+                                            href="https://vk.com/video-223571150_456239061">https://vk.com/video-223571150_456239061</a>
                                     </template>
                                 </v-list-group>
                             </v-list-group>
@@ -1918,26 +1544,18 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Нужно ли прикладывать выписку из списка участников мероприятий? Как подтверждается количество участников на мероприятиях (в частности Открытие ТТС): общее фото, например, или достаточно того, что это подтверждает командир РО в критерии?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Нужно ли прикладывать выписку из списка участников мероприятий? Как подтверждается количество участников на мероприятиях (в частности Открытие ТТС): общее фото, например, или достаточно того, что это подтверждает командир РО в критерии?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
                                     <template v-slot:activator="{ props }">
                                         Смотри видео – 4:22, там показано какие
                                         данные нужны для заполнения данного
-                                        показателя. Видео:<a
-                                            class="accordion_text-link"
-                                            href="https://vk.com/video-223571150_456239061"
-                                            >https://vk.com/video-223571150_456239061</a
-                                        >
+                                        показателя. Видео:<a class="accordion_text-link"
+                                            href="https://vk.com/video-223571150_456239061">https://vk.com/video-223571150_456239061</a>
                                     </template>
                                 </v-list-group>
                             </v-list-group>
@@ -1947,15 +1565,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Какие упоминания в СМИ о деятельности отряда учитываются в рамках конкурса? Учитываются ли публикации на сайте университета, где учатся ребята, университетские газеты, или учитываются только упоминания в СМИ, зарегистрированных в Роскомнадзоре?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Какие упоминания в СМИ о деятельности отряда учитываются в рамках конкурса? Учитываются ли публикации на сайте университета, где учатся ребята, университетские газеты, или учитываются только упоминания в СМИ, зарегистрированных в Роскомнадзоре?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -1975,15 +1588,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="Будет ли происходить перерасчёт баллов за тестирование в связи с прибавлением членов отряда или исключением?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="Будет ли происходить перерасчёт баллов за тестирование в связи с прибавлением членов отряда или исключением?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -2002,15 +1610,10 @@
                         <v-list>
                             <v-list-group value="Programming Group">
                                 <template v-slot:activator="{ props }">
-                                    <v-list-item
-                                        v-bind="props"
-                                        title="У некоторых регионов заканчивается профобучение 30 июня 2024 г. 30 июня – крайний срок загрузки документов: есть риск, что организация не успеет выдать /направить свидетельства: есть ли вариант переноса срока?"
-                                    >
-                                        <SvgIcon
-                                            iconName="wrap"
-                                            :class="{ expanded }"
-                                            class="helpInfo_optimize_button"
-                                        />
+                                    <v-list-item v-bind="props"
+                                        title="У некоторых регионов заканчивается профобучение 30 июня 2024 г. 30 июня – крайний срок загрузки документов: есть риск, что организация не успеет выдать /направить свидетельства: есть ли вариант переноса срока?">
+                                        <SvgIcon iconName="wrap" :class="{ expanded }"
+                                            class="helpInfo_optimize_button" />
                                     </v-list-item>
                                 </template>
                                 <v-list-group class="accordion_text">
@@ -2042,6 +1645,13 @@ usePage({ isHidden: true });
 </script>
 
 <style lang="scss">
+.v-list-item--active {
+    .helpInfo_optimize_button {
+        transform: rotate(180deg);
+        transition: transform 0.3s ease;
+    }
+}
+
 .expanded {
     transform: rotate(180deg);
     transition: transform 0.3s ease;
@@ -2089,6 +1699,7 @@ usePage({ isHidden: true });
     padding-top: 20px;
     padding-bottom: 20px;
 }
+
 .v-row.v-row--no-gutters .v-col-4 {
     flex: none;
     max-width: none;
@@ -2097,6 +1708,7 @@ usePage({ isHidden: true });
 .v-list-item-title {
     white-space: wrap;
 }
+
 .accordion_text-link {
     font-size: 18px;
     color: #1f7cc0;
@@ -2109,29 +1721,32 @@ usePage({ isHidden: true });
     font-weight: 500;
     line-height: normal;
 }
+
 .accordion_text-link {
     text-decoration: underline;
 }
 
 @media screen and (min-width: 320px) and (max-width:480px) {
     .v-list-item-title {
-    white-space: wrap;
-    margin-right: 50px;
+        white-space: wrap;
+        margin-right: 50px;
     }
 
-    .v-expansion-panel:nth-child(6){
+    .v-expansion-panel:nth-child(6) {
         top: 0px;
         padding: 20px 0px;
     }
 
-    .v-expansion-panel:nth-child(7){
+    .v-expansion-panel:nth-child(7) {
         transform: translateY(0px);
         margin-bottom: 30px
     }
-    .optimize{
+
+    .optimize {
         transform: translateY(20px);
     }
-    .helpInfo_optimize_button{
+
+    .helpInfo_optimize_button {
         position: absolute;
         top: 10px;
         right: 1px;

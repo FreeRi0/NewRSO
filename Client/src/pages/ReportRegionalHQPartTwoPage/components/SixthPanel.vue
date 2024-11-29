@@ -52,10 +52,8 @@ const props = defineProps({
   revisionPanels: Array,
   dataDH: Object,
 });
-// console.log('error66', props.isErrorPanel)
 const disabled = ref(false);
 const link_err = ref(false);
-// const swal = inject('$swal');
 const setError = (err) => {
   link_err.value = err;
 }
@@ -72,12 +70,6 @@ const sixPanelData = ref({
   comment: '',
 });
 
-// const sixPanelDataDH = ref({
-//   number_of_members: 0,
-//   comment: '',
-// });
-
-
 const panel = ref(false);
 
 const collapsed = () => {
@@ -89,21 +81,14 @@ const formData = async (reportData, reportNumber) => {
   try {
     if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
       if (!link_err.value) {
-        console.log('First time sending data 1');
         if (isFirstSent.value) {
-          console.log('First time sending data 2', props.tab, reportData.number_of_members);
-
           if (reportData.number_of_members > 0 || props.tab == 'Доработка') {
-            console.log('First time sending data');
             const { data } = await reportPartTwoService.createMultipleReport(reportData, '6', reportNumber);
-            console.log('datas1', data);
             emit('getData', data, 6, reportNumber);
             isFirstSent.value = false;
           } 
         } else {
-          console.log('Second time sending data');
           const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '6', reportNumber);
-          console.log('datas2', data);
           emit('getData', data, 6, reportNumber);
         }
       }
@@ -116,40 +101,32 @@ const formData = async (reportData, reportNumber) => {
 const formDataDH = (reportData, reportNumber) => {
   if (props.districtHeadquarterCommander) {
     emit('getDataDH', reportData, 6, reportNumber);
-    console.log('dh', reportData);
   }
 };
 
 const formDataCH = (reportData, reportNumber) => {
   if (props.centralHeadquarterCommander) {
     emit('getDataCH', reportData, 6, reportNumber);
-    console.log('ch', reportData);
   }
 };
 
 
 
 const getId = (id) => {
-  // console.log('id', id);
   el_id.value = id
   emit('getId', id);
 }
 const getPanelNumber = (number) => {
-  // console.log('num', number);
   emit('getPanelNumber', number);
 }
 watchEffect(() => {
-  // sixPanelData.value = { ...props.data[el_id.value] }
   if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
     if (props.data[el_id.value] && Object.keys(props.data[el_id.value]).length > 0) {
-      console.log('data received', props.data)
       isFirstSent.value = false;
       sixPanelData.value = { ...props.data[el_id.value] }
       isSentSix.value = props.data[el_id.value].is_sent;
 
       isFirstSent.value = reportStore.isReportReject.six[el_id.value] && !props.data[el_id.value].central_version;
-      console.log('isFirstSent при доработке 6', isFirstSent.value);
-      console.log('datadd', props.data[el_id.value])
 
       if ((props.data[el_id.value].number_of_members == 0 || props.data[el_id.value].number_of_members == null) && props.tab !== 'Доработка') {
         sixPanelData.value = {
@@ -160,23 +137,15 @@ watchEffect(() => {
       }
     }
     else {
-      console.log('data not received');
       isFirstSent.value = true;
       sixPanelData.value = {
         number_of_members: 0,
         links: [],
         comment: '',
       };
-      // for (let i in props.data) {
-      //   if (props.data[i].is_sent) {
-      //     isSentSix.value = true;
-      //     break;
-      //   }
-      // }
       isSentSix.value = false;
     }
   } else {
-    console.log('else');
     sixPanelData.value = { ...props.data[el_id.value] }
   }
 

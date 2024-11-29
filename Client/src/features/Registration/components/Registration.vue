@@ -6,52 +6,27 @@
                 <regionsDropdown open-on-clear id="reg" name="regdrop" placeholder="Выберите регион обучения"
                     v-model="form.region" @update:value="changeValue" class="mb-2 region-input" address="/regions/">
                 </regionsDropdown>
-                <Input
-                    placeholder="Фамилия" 
-                    name="surname" 
-                    height="40px" 
-                    v-model:value.trim="form.last_name" 
-                    maxlength="25"  
-                    pattern="[а-яА-ЯЁё\s]+" 
-                    error-message="Введите не более 25 букв на кириллице" 
-                />
+                <Input placeholder="Фамилия" name="surname" height="40px" v-model:value.trim="form.last_name"
+                    maxlength="25" pattern="[а-яА-ЯЁё\s]+" error-message="Введите не более 25 букв на кириллице" />
                 <p class="error" v-if="isError.last_name">
                     {{ isError.last_name }}
                 </p>
-                <Input 
-                    placeholder="Имя" 
-                    name="name" 
-                    height="40px" 
-                    v-model:value.trim="form.first_name" maxlength="20"  
-                    pattern="[а-яА-ЯЁё\s]+" 
-                    error-message="Введите не более 20 букв на кириллице" 
-                />
+                <Input placeholder="Имя" name="name" height="40px" v-model:value.trim="form.first_name" maxlength="20"
+                    pattern="[а-яА-ЯЁё\s]+" error-message="Введите не более 20 букв на кириллице" />
                 <p class="error" v-if="isError.first_name">
                     {{ isError.first_name }}
                 </p>
-                <Input 
-                    placeholder="Отчество (при наличии)" 
-                    name="patronomyc" 
-                    height="40px" 
-                    maxlength="23" 
-                    pattern="[а-яА-ЯЁё\s]+" 
-                    error-message="Введите не более 23 букв на кириллице" 
-                    v-model:value.trim="form.patronymic_name" 
-                />
+                <Input placeholder="Отчество (при наличии)" name="patronomyc" height="40px" maxlength="23"
+                    pattern="[а-яА-ЯЁё\s]+" error-message="Введите не более 23 букв на кириллице"
+                    v-model:value.trim="form.patronymic_name" />
                 <div class="form-input">
                     <MaskInput type="tel" placeholder="+7 (999) 999-99-99" name="phone" class="mb-2 phone-input"
                         v-model="form.phone_number" mask="+7(###) ###-##-##" />
                 </div>
-                <Input 
-                    placeholder="Электронная почта" 
-                    name="email" 
-                    type="email" 
-                    height="40px" 
-                    maxlength="256" 
-                    pattern="([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)" 
-                    error-message="Введите адрес электронной почты в формате mail@example.com не более 256 символов на латиннице" 
-                    v-model:value.trim="form.email" 
-                />
+                <Input placeholder="Электронная почта" name="email" type="email" height="40px" maxlength="256"
+                    pattern="([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)"
+                    error-message="Введите адрес электронной почты в формате mail@example.com не более 256 символов на латиннице"
+                    v-model:value.trim="form.email" />
                 <p class="error" v-if="isError.email">
                     {{ isError.email }}
                 </p>
@@ -61,41 +36,25 @@
                 <p class="error" v-if="isError.date_of_birth">
                     Дата рождения в формате ДД.ММ.ГГГГ
                 </p>
-                <Input 
-                    placeholder="Придумайте логин" 
-                    name="login" 
-                    height="40px" 
-                    minlength="8"
-                    maxlength="20" 
-                    pattern="[a-zA-Z0-9.+-_@]+" 
-                    error-message="Введите от 8 до 20 символов на латинице, чисел и символы @ . + - _" 
-                    v-model:value.trim="form.username" 
-                />
+                <Input placeholder="Придумайте логин" name="login" height="40px" minlength="8" maxlength="20"
+                    pattern="[a-zA-Z0-9.+-_@]+"
+                    error-message="Введите от 8 до 20 символов на латинице, чисел и символы @ . + - _"
+                    v-model:value.trim="form.username" />
                 <p class="error" v-if="isError.username">
                     {{ isError.username }}
                 </p>
 
-                <passwordInput 
-                    class="mb-2" 
-                    placeholder="Придумайте пароль" 
-                    maxlength="20" 
-                    minlength="8"
-                    pattern="[a-zA-Z0-9.+-_@]+" 
-                    error-message="Введите от 8 до 20 символов на латинице, чисел и символы @ . + - _" 
-                    v-model:value="form.password" 
-                />
+                <passwordInput class="mb-2" placeholder="Придумайте пароль" maxlength="20" minlength="8"
+                    pattern="^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d.+-_@]{1,}$"
+                    error-message="Введите от 8 до 20 символов на латинице, чисел и символы @ . + - _"
+                    v-model:value="form.password" />
                 <p class="error" v-if="isError.password">
                     {{ isError.password }}
                 </p>
 
-                <passwordInput 
-                    placeholder="Повторите пароль" 
-                    maxlength="20" 
-                    minlength="8"
-                    pattern="[a-zA-Z0-9.+-_@]+" 
-                    error-message="Введите от 8 до 20 символов на латинице, чисел и символы @ . + - _" 
-                    v-model:value="form.re_password" 
-                />
+                <passwordInput placeholder="Повторите пароль" maxlength="20" minlength="8" pattern="[a-zA-Z0-9.+-_@]+"
+                    error-message="Введите от 8 до 20 символов на латинице, чисел и символы @ . + - _"
+                    v-model:value="form.re_password" />
                 <p class="error" v-if="isError.re_password">
                     {{ isError.re_password }}
                 </p>
@@ -378,11 +337,11 @@ input {
 
 .form-input input:invalid,
 .password input:invalid {
-  border: red solid 1px;
+    border: red solid 1px;
 
-  & + .error-text {
-    display: block;
-  }
+    &+.error-text {
+        display: block;
+    }
 }
 </style>
 
@@ -443,8 +402,8 @@ const getErrorsValidate = () => {
     });
     if (!regexpEmail.test(inputEmail)) {
         if (inputEmail.length > 0) {
-                errorsBlock.push(inputEmail);
-            }
+            errorsBlock.push(inputEmail);
+        }
     }
     inputEnter.forEach((element) => {
         if (!regexpEnter.test(element)) {
@@ -506,6 +465,6 @@ const RegisterUser = async () => {
             }
         }
     }
-    
+
 };
 </script>

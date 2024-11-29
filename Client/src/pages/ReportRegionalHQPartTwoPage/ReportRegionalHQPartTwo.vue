@@ -247,8 +247,8 @@
         </v-expansion-panels>
       </div>
     </div>
-    <Button class="btn_report" v-if="!preloader" variant="text" label="Отправить отчет" size="large"
-      @click="sendReport" :disabled="reportStore.isAllReportsVerifiedByCH"/>
+    <Button class="btn_report" v-if="!preloader" variant="text" label="Отправить отчет" size="large" @click="sendReport"
+      :disabled="reportStore.isAllReportsVerifiedByCH" />
   </div>
   <ReportModalWarning v-if="showModalWarning" @reportConfirmation="reportConfirmation" isCentral />
 </template>
@@ -277,7 +277,6 @@ import { HTTP } from '@app/http';
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { useRoute, useRouter } from "vue-router";
 import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
-// import { checkEmptyFieldsDH } from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 import swal from '@/library/sweetalert2/sweetalert2.esm.all.min.js';
 import {
   checkEmptyFieldsDH,
@@ -387,22 +386,18 @@ const isErrorPanel = ref({
 
 const setId = (id) => {
   panel_id.value = id;
-  console.log('panel_id', panel_id.value, id);
 }
 
 const handleReturnToRoSix = (checked) => {
   is_return_six.value = checked;
-  console.log('checked6', is_return_six.value)
 }
 
 const handleReturnToRoNinth = (checked) => {
   is_return_ninth.value = checked;
-  console.log('checked9', is_return_ninth.value)
 }
 
 const setPanelNumber = (number) => {
   panel_num.value = number;
-  console.log('panel_num', panel_num.value, number);
 }
 const roleStore = useRoleStore();
 const route = useRoute();
@@ -449,39 +444,7 @@ const getItems = async (number) => {
 
 const handleReturnToRo = (checked) => {
   is_return_six.value = checked;
-  console.log('returnToRo6-2', checked, is_return_six.value);
 };
-
-
-
-// const errorHandler = async (error, id) => {
-//   if (error.response && error.response.status === 404) {
-//     console.log('An error occurred: ', error);
-
-//     const url = 'http://213.139.208.147:30000/api/v1/regional_competitions/me/reports';
-
-//     if (error.response.request.responseURL.includes(url + '/6/')) {
-//       reportData.value.six = {};
-//       console.log('Data not found for panel 6', reportData.value.six);
-//     } else if (error.response.request.responseURL.includes(url + '/7/')) {
-//       console.log('Data not found for panel 7');
-//       reportData.value.seventh = {};
-//     } else if (error.response.request.responseURL.includes(url + '/9/')) {
-//       console.log('Data not found for panel 9');
-//       reportData.value.ninth = {};
-//     } else {
-//       console.log('Data found for panel 6');
-//       reportData.value.six = (await reportPartTwoService.getMultipleReport('6', id)).data;
-//       console.log('Data found for panel 7');
-//       reportData.value.seventh = (await reportPartTwoService.getMultipleReport('7', id)).data;
-//       console.log('Data found for panel 9');
-//       reportData.value.ninth = (await reportPartTwoService.getMultipleReport('9', id)).data;
-//     }
-//   } else {
-//     console.log('An unexpected error occurred: ', error);
-//   }
-// };
-
 
 let isAllSixVerified = true;
 let isAllNinthVerified = true;
@@ -541,10 +504,8 @@ const getMultiplyData = async (reportId) => {
   const ninthDataPromises = ninth_items.value.map(async (item) => {
     try {
       if (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) {
-        console.log('1.9')
         return { id: item.id, data: (await reportPartTwoService.getMultipleReportDH('9', item.id, reportId)).data };
       } else {
-        console.log('2.9')
         return { id: item.id, data: (await reportPartTwoService.getMultipleReport('9', item.id)).data };
       }
     } catch (error) {
@@ -660,7 +621,15 @@ const getMultiplyData = async (reportId) => {
         reportData.value.six[result.id] = sixData;
       }
 
-      reportStore.reportDataDH.six[result.id] = JSON.parse(sixData?.district_version);
+      if (sixData?.district_version) {
+        try {
+          reportStore.reportDataDH.six[result.id] = JSON.parse(sixData?.district_version);
+        } catch (error) {
+          console.error('Error parsing district_version JSON:', error);
+          reportStore.reportDataDH.six[result.id] = sixData?.district_version || sixData;
+        }
+      }
+
       sixData?.central_version
         ? reportStore.reportDataCH.six[result.id] = sixData?.central_version
         : reportStore.reportDataCH.six[result.id] = sixData;
@@ -753,7 +722,6 @@ const getMultiplyData = async (reportId) => {
       if (reportData.value.ninth[result.id]?.regional_version !== null && Object.keys(reportData.value.ninth[result.id]).length) {
         reportData.value.ninth[result.id] = JSON.parse(reportData.value.ninth[result.id].regional_version);
       }
-      console.log('reasons: ', reportData.value.ninth[result.id]?.rejecting_reasons)
       ninthData?.district_version ? reportStore.reportDataDH.ninth[result.id] = JSON.parse(ninthData?.district_version) : reportStore.reportDataDH.ninth[result.id] = ninthData
       ninthData.central_version
         ? reportStore.reportDataCH.ninth[result.id] = ninthData.central_version
@@ -765,7 +733,6 @@ const getMultiplyData = async (reportId) => {
 
 
         revisionPanels.value.push(`9-${result.id}`);
-        console.log('9 rev', revisionPanels.value)
 
 
         reportStore.isReportReject.ninth[result.id] = isTabsForRevision.value;
@@ -872,7 +839,6 @@ const getReportData = async (reportId) => {
       */
       const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
       reportStore.reportForCheckCH.eleventh = dataEleventh;
-      // console.log(dataEleventh);
 
       // если используем функцию showPanels обязательна проверка на 2 поля:
       if (dataEleventh.rejecting_reasons && dataEleventh.verified_by_chq !== true) {
@@ -902,7 +868,6 @@ const getReportData = async (reportId) => {
       */
       const dataTwelfth = (await reportPartTwoService.getReportDH('12', reportId)).data;
       reportStore.reportForCheckCH.twelfth = dataTwelfth;
-      // console.log(dataTwelfth);
 
       // если используем функцию showPanels обязательна проверка на 2 поля:
       if (dataTwelfth.rejecting_reasons && dataTwelfth.verified_by_chq !== true) {
@@ -932,7 +897,6 @@ const getReportData = async (reportId) => {
       */
       const dataThirteenth = (await reportPartTwoService.getReportDH('13', reportId)).data;
       reportStore.reportForCheckCH.thirteenth = dataThirteenth;
-      // console.log(dataThirteenth);
 
       // если используем функцию showPanels обязательна проверка на 2 поля:
       if (dataThirteenth.rejecting_reasons && dataThirteenth.verified_by_chq !== true) {
@@ -1104,64 +1068,9 @@ const getReportData = async (reportId) => {
       } catch (e) {
         console.log(e.message)
       }
-      // ReportRegionalHQPartTwo.vue
-      // try {
-      //   for (let itemId in six_items) {
-      //     try {
-      //       const dataSix = await reportPartTwoService.getMultipleReport('6', itemId);
-      //       console.log('data for item', itemId, ':', dataSix.data);
-
-      //       if (dataSix.data && typeof dataSix.data === 'object') {
-      //         if (dataSix.data.regional_version) {
-      //           try {
-      //             reportData.value.six[itemId] = JSON.parse(dataSix.data.regional_version);
-      //           } catch (parseError) {
-      //             console.error('Error parsing regional_version for item', itemId, ':', parseError);
-      //             reportData.value.six[itemId] = dataSix.data;
-      //           }
-      //         } else {
-      //           reportData.value.six[itemId] = dataSix.data;
-      //         }
-      //       } else {
-      //         console.warn('Unexpected data structure for item', itemId);
-      //         reportData.value.six[itemId] = {};
-      //       }
-      //     } catch (itemError) {
-      //       console.error('Error processing item', itemId, ':', itemError);
-      //       reportData.value.six[itemId] = {};
-      //     }
-      //   }
-      // } catch (e) {
-      //   console.error('Error in six_items processing:', e);
-      // }
 
       try {
         await getMultiplyData();
-        // for (let itemId in ninth_items) {
-        //   try {
-        //     const dataNinth = await reportPartTwoService.getMultipleReport('9', itemId);
-        //     console.log('data for item', itemId, ':', dataNinth.data);
-
-        //     if (dataNinth.data && typeof dataNinth.data === 'object') {
-        //       if (dataNinth.data.regional_version) {
-        //         try {
-        //           reportData.value.ninth[itemId] = JSON.parse(dataNinth.data.regional_version);
-        //         } catch (parseError) {
-        //           console.error('Error parsing regional_version for item', itemId, ':', parseError);
-        //           reportData.value.ninth[itemId] = dataNinth.data;
-        //         }
-        //       } else {
-        //         reportData.value.ninth[itemId] = dataNinth.data;
-        //       }
-        //     } else {
-        //       console.warn('Unexpected data structure for item', itemId);
-        //       // reportData.value.ninth[itemId] = {};
-        //     }
-        //   } catch (itemError) {
-        //     console.error('Error processing item', itemId, ':', itemError);
-        //     // reportData.value.ninth[itemId] = {};
-        //   }
-        // }
       } catch (e) {
         console.error('Error in six_items processing:', e);
       }
@@ -1235,7 +1144,7 @@ const getReportData = async (reportId) => {
       } catch (e) {
         console.log(e.message)
       }
-      //--------------------------------------------------------------
+      //-----------------11------------------------------------------
       let dataEleventh;
       try {
         dataEleventh = (await reportPartTwoService.getReport('11')).data;
@@ -1260,7 +1169,7 @@ const getReportData = async (reportId) => {
       } catch (e) {
         console.log(e.message)
       }
-      //--------------------------------------------------------------
+      //-----------------12-------------------------------------------
       let dataTwelfth;
       try {
         dataTwelfth = (await reportPartTwoService.getReport('12')).data;
@@ -1285,7 +1194,7 @@ const getReportData = async (reportId) => {
       } catch (e) {
         console.log(e.message)
       }
-      //--------------------------------------------------------------
+      //-----------------13-------------------------------------------
       let dataThirteenth
       try {
         dataThirteenth = (await reportPartTwoService.getReport('13')).data;
@@ -1369,17 +1278,6 @@ const getReportData = async (reportId) => {
         }
 
       }
-
-      // for (let item in reportData.value.ninth) {
-      //   console.log('9', reportData.value.ninth[item].is_sent == false || !Object.keys(reportData.value.ninth[item]).length)
-      //   if (reportData.value.ninth[item].is_sent == false || !Object.keys(reportData.value.ninth[item]).length) {
-      //     blockSendButton.value = false;
-      //     break
-      //     // blockEditFirstReport.value = false;
-      //   } else {
-      //     blockSendButton.value = true;
-      //   }
-      // }
       try {
         reportData.value.seventeenth = (await reportPartTwoService.getReport('17')).data;
       } catch (e) {
@@ -1412,12 +1310,10 @@ const getReportData = async (reportId) => {
       }
     }
   } catch (e) {
-    // errorHandler(e, id);
     console.log('getReportData error: ', e.message)
   } finally {
     preloader.value = false;
   }
-  // console.log('getReportData: ', reportData.value);
 };
 
 const setData = (data, panel, number = 0) => {
@@ -1469,7 +1365,6 @@ const setData = (data, panel, number = 0) => {
       reportData.value.nineteenth = data
       break;
   }
-  // console.log('setData: ', reportData.value)
 };
 
 const setDataDH = (data, panel, number) => {
@@ -1485,11 +1380,9 @@ const setDataDH = (data, panel, number) => {
       break;
     case 6:
       reportDataDH.value.six[number] = data;
-      console.log('reportDataDH.value6', reportDataDH.value.six[number])
       break;
     case 9:
       reportDataDH.value.ninth[number] = data;
-      console.log('reportDataDH.value9', reportDataDH.value.ninth[number])
       break;
     case 10:
       if (number === 1) {
@@ -1500,15 +1393,12 @@ const setDataDH = (data, panel, number) => {
       break;
     case 11:
       reportDataDH.value.eleventh = data;
-      // console.log('11', ...reportDataDH.value.eleventh);
       break;
     case 12:
       reportDataDH.value.twelfth = data;
-      // console.log('12', ...reportDataDH.value.twelfth);
       break;
     case 13:
       reportDataDH.value.thirteenth = data;
-      // console.log('13', ...reportDataDH.value.thirteenth);
       break;
     case 16:
       reportDataDH.value.sixteenth = data;
@@ -1532,11 +1422,9 @@ const setDataCH = (data, panel, number) => {
       break;
     case 6:
       reportDataCH.value.six[number] = data;
-      console.log('6 sss', ...reportDataCH.value.six[number])
       break;
     case 9:
       reportDataCH.value.ninth[number] = data;
-      console.log('9 sss', ...reportDataCH.value.ninth[number])
       break;
     case 10:
       if (number === 1) {
@@ -1549,15 +1437,12 @@ const setDataCH = (data, panel, number) => {
       break;
     case 11:
       reportDataCH.value.eleventh = data;
-      // console.log('11', ...reportDataCH.value.eleventh);
       break;
     case 12:
       reportDataCH.value.twelfth = data;
-      // console.log('12', ...reportDataCH.value.twelfth);
       break;
     case 13:
       reportDataCH.value.thirteenth = data;
-      // console.log('13', ...reportDataCH.value.thirteenth);
       break;
     case 16:
       reportDataCH.value.sixteenth = data;
@@ -1568,7 +1453,6 @@ const setDataCH = (data, panel, number) => {
 
 const filterPanelsData = () => {
   const filteredSix = {};
-  // const filteredSeventh = {};
   const filteredNinth = {};
 
   for (let i in reportData.value.six) {
@@ -1577,32 +1461,17 @@ const filterPanelsData = () => {
     }
 
   }
-  console.log('setData6: ', filteredSix)
   for (let i in filteredSix) {
     isErrorPanel.value.six[i] = {
       id: i,
       error: false,
     }
   }
-
-  // for (let i in reportData.value.seventh) {
-  //   if (reportData.value.seventh[i].prize_place !== 'Нет' && Object.keys(reportData.value.seventh[i]).length !== 0) {
-  //     filteredSeventh[i] = reportData.value.seventh[i];
-  //   }
-  // }
-  // for (let i in filteredSeventh) {
-  //   isErrorPanel.value.seventh[i] = {
-  //     id: i,
-  //     error: false,
-  //   }
-  // }
-
   for (let i in reportData.value.ninth) {
     if (reportData.value.ninth[i].event_happened !== false && reportData.value.ninth[i].is_sent === false && Object.keys(reportData.value.ninth[i]).length !== 0) {
       filteredNinth[i] = reportData.value.ninth[i];
     }
   }
-  console.log('setData9: ', filteredNinth)
   for (let i in filteredNinth) {
     isErrorPanel.value.ninth[i] = {
       id: i,
@@ -1617,13 +1486,11 @@ const filterPanelsData = () => {
 };
 
 const sendReport = async () => {
-  // console.log('reportData: ', reportData.value)
   if (!(districtExpert.value || centralExpert.value)) {
     blockSendButton.value = true;
     if (checkEmptyFields(reportData.value)) {
       preloader.value = true;
       try {
-        // const { filteredSix, filteredNinth } = filterPanelsData();
         if (!reportData.value.first.is_sent) {
           await reportPartTwoService.sendReport(reportData.value.first, '1');
         }
@@ -1637,7 +1504,6 @@ const sendReport = async () => {
           await reportPartTwoService.sendReport(reportData.value.fifth, '5');
         }
         for (let item in reportData.value.six) {
-          console.log('dev', reportData.value.six)
           if (!Object.keys(reportData.value.six[item]).length) {
             await reportPartTwoService.createMultipleReport({
               number_of_members: 0,
@@ -1760,7 +1626,6 @@ const sendReport = async () => {
           console.log(`Sending report for item 9-${index}:`, item);
           try {
             reportStore.reportDataDH.ninth[index].document = reportStore.reportDataDHFile.ninth[index]
-            //обьявить переменную добавить из нее данные из reportDataDH, убрать ключ документ, передать объектом document: reportDataDHFile
             const response = await reportPartTwoService.sendReportDHMultiply(
               reportStore.reportDataDH.ninth[index],
               '9', index, route.query.reportId, true);
@@ -1816,9 +1681,6 @@ const sendReport = async () => {
     } finally {
       preloader.value = false;
     }
-    // } else {
-    // blockSendButton.value = false;
-    // }
   }
 
   if (centralExpert.value) {
@@ -1829,10 +1691,7 @@ const reportConfirmation = async (value) => {
   if (value) {
     showModalWarning.value = false;
     blockSendButton.value = true;
-    // if (checkEmptyFieldsDH(reportStore.reportDataCH, isErrorPanel)) {
     preloader.value = true;
-    console.log('chc6', reportStore.reportDataCH.six, reportStore.returnReport.six)
-    console.log('chc9', reportStore.reportDataCH.ninth, reportStore.returnReport.ninth)
 
     try {
       if (reportStore.reportForCheckCH.first.verified_by_chq === null) {
@@ -1846,14 +1705,6 @@ const reportConfirmation = async (value) => {
       if (reportStore.reportForCheckCH.fifth.verified_by_chq === null) {
         await reportPartTwoService.sendReportCH(reportDataCH.value.fifth, '5', route.query.reportId, true, reportStore.returnReport.fifth);
       }
-
-      // for (let i in reportStore.reportForCheckCH.six) {
-      //   console.log('33', reportStore.reportForCheckCH.six[i])
-      //   if (reportStore.reportForCheckCH.six[i].verified_by_chq === null) {
-      //     console.log(11,  reportStore.reportForCheckCH.six[i])
-      //     await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.six[i], '6', i, route.query.reportId, false, reportStore.returnReport.six[i]);
-      //   }
-      // }
       for (const [index, item] of Object.entries(reportStore.reportForCheckCH.six)) {
         if (item && item.verified_by_chq === null) {
           console.log(`Sending report for item 6-${index}:`, item);
@@ -1884,12 +1735,6 @@ const reportConfirmation = async (value) => {
           console.log(`Skipping item 9-${index} as it's already verified or doesn't exist`);
         }
       }
-      // for (let i in reportStore.reportForCheckCH.ninth) {
-      //   if (reportStore.reportForCheckCH.ninth[i].verified_by_chq === null) {
-      //     console.log(12, reportStore.reportForCheckCH.ninth[i])
-      //     await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.ninth[i], '9', i, route.query.reportId, true, reportStore.returnReport.ninth[i]);
-      //   }
-      // }
       if (reportStore.reportForCheckCH.tenth.first.verified_by_chq === null) {
         await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.tenth.first, '10', '1', route.query.reportId, true, reportStore.returnReport.tenth.first);
       }
@@ -1936,9 +1781,6 @@ const reportConfirmation = async (value) => {
     } finally {
       preloader.value = false;
     }
-    // } else {
-    //   blockSendButton.value = false;
-    // }
   } else {
     showModalWarning.value = false;
   }
@@ -2050,22 +1892,6 @@ const checkEmptyFields = (data) => {
       }
     }
   }
-  // // for (let item in filteredSeventh) {
-  // //   if (!(filteredSeventh[item]?.links?.length && filteredSeventh[item].document && filteredSeventh[item].comment)) {
-  // //     isErrorPanel.value.seventh[item] = {
-  // //       id: item,
-  // //       error: true,
-  // //     };
-  // //     swal.fire({
-  // //       position: 'center',
-  // //       icon: 'warning',
-  // //       title: `Заполните обязательные поля в 7 показателе`,
-  // //       showConfirmButton: false,
-  // //       timer: 2500,
-  // //     })
-  // //     return false;
-  // //   }
-  // // }
   for (let item in filteredNinth) {
     if (!filteredNinth[item]?.links?.length) {
       isErrorPanel.value.ninth[item] = {
@@ -2228,12 +2054,10 @@ watch(
   () => {
     if (roleStore.experts?.is_district_expert) {
       districtExpert.value = true;
-      console.log('окружной эксперт', districtExpert.value);
     }
     if (roleStore.experts?.is_central_expert) {
 
       centralExpert.value = true;
-      console.log('центральный эксперт', centralExpert.value);
     }
   },
   {
@@ -2241,6 +2065,9 @@ watch(
     deep: true,
   },
 )
+
+
+
 
 watch(
   () => route.query.reportId,
@@ -2258,13 +2085,12 @@ watch(
 );
 
 watch(
-  () => route.path,
+  () => route.fullPath,
 
   async (newUrl) => {
-    if (roleStore.roles.regionalheadquarter_commander && typeof (route.query.reportId) === 'undefined') {
-      if (newUrl.includes('reporting-ro/report-regional-two')) {
+    if (newUrl && typeof (route.query.reportId) === 'undefined') {
+      if (newUrl.includes('/reporting-ro/report-regional-two')) {
         preloader.value = true;
-        console.log(1.1);
         await getReportData();
       }
     }
@@ -2278,39 +2104,22 @@ watch(
 watch(revisionPanels.value,
   () => {
     if (revisionPanels.value.length) {
-      // Временно скрываем табы Просмотра и Доработки отчета (true на false)-------------------------------
-
       isRevision.value = true;
       reportStore.isReportRevision = true;
-      // isRevision.value = false;
-
-      // Временно скрываем табы в показателях для РО для доработки отчета (true на false)------------------
-
       isTabsForRevision.value = true;
-      // isTabsForRevision.value = false;
-
-      console.log('массив с показателями на дораб', revisionPanels.value);
-      console.log('возврат на дораб', isRevision.value);
     }
   },
 )
-
-// watch(
-//   () => picked.value,
-//   () => {
-//     console.log('таб', picked.value);
-//   }
-// )
 
 onMounted(() => {
   if (roleStore.roles.regionalheadquarter_commander && typeof (route.query.reportId) === 'undefined' && window.performance.navigation.type === 1) {
     preloader.value = true;
     getReportData();
   }
-  // console.log('ddd', route.query.reportId)
   getItems(6);
   getItems(9);
 });
+
 
 </script>
 <style lang="scss">

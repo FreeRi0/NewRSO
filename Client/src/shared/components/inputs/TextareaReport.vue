@@ -1,30 +1,28 @@
 <template>
-    <div
-        :style="{ width: width }"
-    >
+    <div :style="{ width: width }">
         <div class="report__textarea-block">
             <Textarea 
-            :id="name"
-            :name="name"
-            :value="value" 
-            :class="[
-                'report__textarea',
-                (isErrorPanel && !value) ? 'report__textarea--error' : '',
-            ]"
-            :rows="textRows"
-            :maxlength="maxLength"
-            :placeholder="placeholder"
-            :disabled="disabled"
-            :readonly="readonly"
-            :autoResize="autoResize"
-            @input="updateValue"
-            v-bind="$attrs"
-        >
-        </Textarea>
+                :id="name"
+                :name="name"
+                :value="value" 
+                :class="[
+                    'report__textarea',
+                    (isErrorPanel && !value) ? 'report__textarea--error' : '',
+                ]"
+                :rows="textRows"
+                :maxlength="maxLength"
+                :placeholder="placeholder"
+                :disabled="disabled"
+                :readonly="readonly"
+                :autoResize="autoResize"
+                @input="updateValue"
+                v-bind="$attrs"
+            >
+            </Textarea>
         </div>
 
         <div class="report__counter" v-if="counterVisible">
-          {{ textLength }} / {{ maxLengthText }}
+            {{ textLength }} / {{ maxLengthText }}
         </div>
     </div>
 </template>
@@ -113,11 +111,9 @@
         padding: 9.5px 16px;
         width: 100%;
         min-height: 40px;
-        // max-height: 229px;
         overflow: auto !important;
         background-color: #ffffff;
         color: #35383F;
-        // border: 1px solid #bec2c6;
         border: none;
         outline: 1px solid #bec2c6;
         border-radius: 10px;
@@ -163,13 +159,11 @@
     }
     
     &__counter {
-        //margin-top: -6px;
         margin-left: auto;
         width: fit-content;
         font-family: "Bert Sans";
         font-size: 12px;
         line-height: 16px;
-        // letter-spacing: -0.9px;
         color: #6d6d6d;
     }
 }

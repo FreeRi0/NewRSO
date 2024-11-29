@@ -9,10 +9,6 @@
         display: grid;
         grid-template-columns: minmax(24.13%, 30.91%) minmax(59.13%, 65.46%);
         gap: 16px 40px;
-        // padding: 40px;
-        // background: #F3F4F5;
-        // border: none;
-        // border-radius: 10px;
 
         &--column {
             grid-template-columns: 1fr;
@@ -55,6 +51,7 @@
 
         &--comment-expert {
             position: relative;
+            margin-bottom: 0;
 
             .form-input__add-file {
                 position: absolute;
@@ -84,6 +81,11 @@
                     bottom: 16px;
                 }
             }
+
+            .report__file-box {
+                margin-top: 0;
+                margin-bottom: 0;
+            }
         }
     }
 
@@ -108,7 +110,6 @@
     }
 
     &__link-item {
-        // display: flex;
         display: grid;
         grid-template-columns: 1fr 152px 170px;
         column-gap: 29px;
@@ -182,17 +183,6 @@
         }
     }
 
-    // &__btn-block {
-    //     display: grid;
-    //     grid-template-columns: 141px 147px;
-    //     column-gap: 29px;
-
-    //     @media (max-width: 768px) {
-    //         display: flex;
-    //         flex-wrap: wrap;
-    //     }
-    // }
-
     &__btn-link {
         margin: 0;
         padding: 9.5px 0;
@@ -208,7 +198,6 @@
         }
 
         &--add-link {
-            // margin-right: 11px;
            @media (max-width: 1024px) {
                 grid-column: 1 / 2;
                 width: fit-content;

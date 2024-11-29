@@ -122,7 +122,7 @@
 
         <div>
             <v-checkbox 
-                v-if="!reportStore.isAllReportsVerifiedByCH"
+                v-if="centralExpert ? !reportStore.reportForCheckCH.thirteenth.verified_by_chq : !reportStore.isAllReportsVerifiedByCH"
                 v-model="reportStore.returnReport.thirteenth"
                 label="Вернуть в&nbsp;РО на&nbsp;доработку"
                 :disabled="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.thirteenth.verified_by_chq !== null"
@@ -136,7 +136,6 @@ import { ref, watchEffect, watchPostEffect, watch } from "vue";
 import { InputReport, TextareaReport } from '@shared/components/inputs';
 import {
     CommentFileComponent,
-    // FileBoxComponent,
     ReportTable,
 } from "@entities/RatingRoComponents/components";
 import { reportPartTwoService } from "@services/ReportService.ts";
@@ -221,7 +220,6 @@ const emit = defineEmits([
 const focusOut = async () => {
     let formData = new FormData();
 
-    // thirteenthPanelData.value.number_of_members ? formData.append('number_of_members', thirteenthPanelData.value.number_of_members) : formData.append('number_of_members', "");
     formData.append('number_of_members', thirteenthPanelData.value.number_of_members || '');
     formData.append('comment', thirteenthPanelData.value.comment || '');
 
@@ -309,7 +307,6 @@ watchEffect(async () => {
         }
     } else {
         if (props.data) {
-            // console.log(props.data);
             isFirstSent.value = false;
             isRevision.value = reportStore.isReportReject.thirteenth;
             thirteenthPanelData.value.number_of_members = props.data.number_of_members;

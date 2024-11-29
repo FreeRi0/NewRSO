@@ -110,7 +110,6 @@
                     <label class="form__label" for="14">Ссылка на социальные сети/ электронные<br>
                         СМИ, подтверждающая участие в мероприятии
                         <sup class="valid-red">*</sup></label>
-                    <!-- <p>{{ !isSentSix && sixPanelData.number_of_members > 0 }}</p> -->
 
                     <div class="form__wrapper" v-for="(item, index) in sixPanelData.links" :key="index">
                         <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
@@ -164,7 +163,7 @@
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                                }}</label>
+                            }}</label>
                         </div>
                     </div>
                 </div>
@@ -373,21 +372,23 @@
 
                         <div class="places_wrap" v-if="isRejected">
                             <div class="places_item" v-for="item in events" :key="item.id">
-                                <input :id="item.id" :value="item.value" :name="item.name" :disabled="props.tab === 'Просмотр отправленного отчета' && (props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)"
+                                <input :id="item.id" :value="item.value" :name="item.name"
+                                    :disabled="props.tab === 'Просмотр отправленного отчета' && (props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)"
                                     :checked="ninthPanelData.event_happened == item.value"
                                     class="form__input places_input" type="radio" @focusout="focusOut"
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
 
                         <div v-else class="places_wrap one_place">
                             <input :id="12" :value="ninthPanelData.event_happened" @focusout="focusOut" :name="12"
-                                :disabled="props.tab === 'Просмотр отправленного отчета' && (props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)" :checked="ninthPanelData.event_happened === true ||
-                                        ninthPanelData.event_happened === false
-                                        " class="form__input places_input" type="radio"
+                                :disabled="props.tab === 'Просмотр отправленного отчета' && (props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)"
+                                :checked="ninthPanelData.event_happened === true ||
+                                    ninthPanelData.event_happened === false
+                                    " class="form__input places_input" type="radio"
                                 v-model="ninthPanelData.event_happened" />
                             <label v-if="ninthPanelData.event_happened === true" class="places_item_label"
                                 :for="id">Да</label>
@@ -404,10 +405,12 @@
                         </label>
                         <InputReport
                             :disabled="props.tab === 'Просмотр отправленного отчета' && (props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)"
-                            @change="uploadFile($event, 9)" v-if="!ninthPanelData.document && (props.tab !== 'Просмотр отправленного отчета')" isFile type="file"
-                            accept=".jpg, .jpeg, .png, .pdf" id="scan_file" name="scan_file" width="100%"
+                            @change="uploadFile($event, 9)"
+                            v-if="!ninthPanelData.document && (props.tab !== 'Просмотр отправленного отчета')" isFile
+                            type="file" accept=".jpg, .jpeg, .png, .pdf" id="scan_file" name="scan_file" width="100%"
                             height="auto" />
-                        <FileBoxComponent v-if="ninthPanelData.document" :file="ninthPanelData.document" :fileType="ninthPanelData.file_type"
+                        <FileBoxComponent v-if="ninthPanelData.document" :file="ninthPanelData.document"
+                            :fileType="ninthPanelData.file_type"
                             :isSent="props.tab === 'Просмотр отправленного отчета' && (props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)"
                             :fileSize="ninthPanelData.file_size" @click="deleteFile(9)">
                         </FileBoxComponent>
@@ -538,18 +541,10 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <CommentFileComponent v-model:value="ninthPanelDataDH.comment" name="ninthPanelDataDH.comment"
-                        @change="uploadFile($event, 9)" @click="deleteFile(9)"
-                        :file="reportStore.reportDataDHFile.ninth[props.ninthId] ? reportStore.reportDataDHFile.ninth[props.ninthId]?.name : null"
-                        :fileType="reportStore.reportDataDHFile.ninth[props.ninthId] ? reportStore.reportDataDHFile.ninth[props.ninthId]?.type.split('/').at(-1) : null"
-                        :fileSize="reportStore.reportDataDHFile.ninth[props.ninthId] ? reportStore.reportDataDHFile.ninth[props.ninthId]?.size / Math.pow(1024, 2) : null"
-                        :disabled="props.isCentralHeadquarterCommander" :is-error-file="isErrorFile"
-                        :is-error-panel="isErrorPanel">
-                    </CommentFileComponent> -->
                     <CommentFileComponent v-model:value="ninthPanelDataDH.comment" name="ninthPanelDataDH.comment"
                         @change="uploadFile($event, 9)" @click="deleteFile(9)" :file="fileDH.name"
                         :fileType="fileDH.type" :fileSize="fileDH.size"
-                      :disabled="props.isCentralHeadquarterCommander || !(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander)"
+                        :disabled="props.isCentralHeadquarterCommander || !(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander)"
                         :is-error-file="isErrorFile" :is-error-panel="isErrorPanel"
                         :is-sent="props.isCentralHeadquarterCommander || !(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander)">
                     </CommentFileComponent>
@@ -676,7 +671,7 @@
                                     v-model="ninthPanelDataCH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -725,7 +720,6 @@ const props = defineProps({
     ninthId: String,
     tab: String,
     isSentSix: Boolean,
-    // isSent: Boolean,
     isSentNinth: Boolean,
     isErrorPanel: Boolean,
     data: Object,
@@ -919,10 +913,8 @@ const uploadFile = (event, number) => {
             } else {
                 if (props.isDistrictHeadquarterCommander) {
                     reportStore.reportDataDHFile.ninth[props.ninthId] = event.target.files[0];
-                    console.log('fileDH', reportStore.reportDataDHFile.ninth[props.ninthId])
                 } else if (props.isCentralHeadquarterCommander) {
                     reportStore.reportDataCHFile.ninth[props.ninthId] = event.target.files[0];
-                    console.log('fileCH', reportStore.reportDataCHFile.ninth[props.ninthId])
                 } else {
                     let formData = new FormData();
                     formData.append('event_happened', ninthPanelData.value.event_happened);
@@ -1058,13 +1050,6 @@ const focusOut = () => {
     else if (props.panel_number == 9) {
         try {
             if (isFirstSentNinth.value === true) {
-                console.log('9', '1')
-                // if (isRevision.value) {
-                //     let formData = new FormData();
-                //     formData.append("scan_file", тштерPanelData.value.scan_file || '');
-                //     formData.append("file_size", eleventhPanelData.value.file_size || '');
-                //     formData.append("file_type", eleventhPanelData.value.file_type || '');
-                // }
                 emit('formData', ninthPanelData.value)
             } else {
                 if (ninthPanelData.value.event_happened === false) {
@@ -1105,7 +1090,6 @@ const focusOut = () => {
                 }
 
                 emit('formData', formData)
-                console.log('9', '2')
             }
 
         } catch (e) {
@@ -1167,14 +1151,9 @@ watchEffect(() => {
         } else {
             if (Object.keys(props.data).length > 0) {
                 isFirstSentSix.value = false;
-                // isRevision.value = reportStore.isReportReject.six[props.sixId];
                 sixPanelData.value = { ...props.data };
-                console.log('data', sixPanelData.value)
-
 
                 if (props.data?.rejecting_reasons !== null) {
-
-                    console.log('data6dh', reportStore.reportDataDH.six[props.sixId])
                     sixPanelDataDH.value.comment = reportStore.reportDataDH.six[props.sixId]?.comment;
                     sixPanelDataDH.value.number_of_members = reportStore.reportDataDH.six[props.sixId]?.number_of_members;
                     sixPanelDataDH.value.links = reportStore.reportDataDH.six[props.sixId]?.links;
@@ -1192,12 +1171,6 @@ watchEffect(() => {
                 }
                 if (!sixPanelData.value.links.length)
                     sixPanelData.value.links.push({ link: '' });
-
-                // isFirstSentSix.value = reportStore.isReportReject.six[props.sixId] && !props.data.central_version;
-                // console.log('isFirstSent при доработке 6', isFirstSentSix.value);
-                // if (reportStore.isReportReject.six[props.sixId]) {
-                //     reportStore.returnReport.six[props.sixId] = true;
-                // }
             } else {
                 console.log('data not received');
             }
@@ -1257,16 +1230,12 @@ watchEffect(() => {
                 isFirstSentNinth.value = false;
                 ninthPanelData.value = { ...props.data }
                 if (isLinkError.value) {
-                    console.log('gg');
                     emit('error', isLinkError.value)
                 } else {
-                    console.log('hh')
                     emit('error', false)
                 }
-                console.log('what', props.data)
 
                 if (props.tab == 'Доработка') {
-                    console.log('ddd')
                     isRejected.value = true;
                     ninthPanelDataDH.value.comment = reportStore.reportDataDH.ninth[props.ninthId]?.comment;
                     ninthPanelDataDH.value.event_happened = reportStore.reportDataDH.ninth[props.ninthId].event_happened;
@@ -1280,14 +1249,7 @@ watchEffect(() => {
                 if (!ninthPanelData.value.links.length) {
                     ninthPanelData.value.links.push({ link: '' })
                 }
-                // isFirstSentNinth.value = reportStore.isReportReject.ninth[props.ninthId] && !props.data.central_version;
-                console.log('isFirstSent при доработке 9', isFirstSentNinth.value);
-                // if (reportStore.isReportReject.ninth[props.ninthId]) {
-                //     reportStore.returnReport.ninth[props.ninthId] = true;
-                // }
-
             }
-
             else {
                 console.log('data not received');
                 isFirstSentNinth.value = true;
@@ -1312,23 +1274,6 @@ watchEffect(() => {
                 fileDH.value.size = reportStore.reportDataDHFile.ninth[props.ninthId].size / Math.pow(1024, 2);
             }
         } else if (props.isCentralHeadquarterCommander) {
-            // if (reportStore.reportDataDH.ninth[props.ninthId]) {
-            //     fileDH.value.name = reportStore.reportDataDH.ninth[props.ninthId].document;
-            //     fileDH.value.type = reportStore.reportDataDH.ninth[props.ninthId].file_type;
-            //     fileDH.value.size = reportStore.reportDataDH.ninth[props.ninthId].file_size;
-            //     console.log('yahoo', fileDH.value.name,)
-            // }
-            // if (reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq === true) {
-            //     fileCH.value.name = reportStore.reportForCheckCH.ninth[props.ninthId].document;
-            //     fileCH.value.type = reportStore.reportForCheckCH.ninth[props.ninthId].file_type;
-            //     fileCH.value.size = reportStore.reportForCheckCH.ninth[props.ninthId].file_size;
-            // } else {
-            //     if (reportStore.reportDataCHFile.ninth[props.ninthId]) {
-            //         fileCH.value.name = reportStore.reportDataCHFile.ninth[props.ninthId].name;
-            //         fileCH.value.type = reportStore.reportDataCHFile.ninth[props.ninthId].type.split('/').at(-1);
-            //         fileCH.value.size = reportStore.reportDataCHFile.ninth[props.ninthId].size / Math.pow(1024, 2);
-            //     }
-            // }
             if (reportStore.reportDataDH.ninth[props.ninthId]) {
                 fileDH.value.name = reportStore.reportDataDH.ninth[props.ninthId].document;
                 fileDH.value.type = reportStore.reportDataDH.ninth[props.ninthId].file_type;
@@ -1374,6 +1319,7 @@ watchPostEffect(() => {
     //   }
     if (!(props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)) {
         if (props.panel_number == 6) {
+            console.log('data', reportStore.reportDataDH.six[props.sixId], reportStore.reportDataCH.six[props.sixId])
             sixPanelDataDH.value = reportStore.reportDataDH.six[props.sixId];
             sixPanelDataCH.value = reportStore.reportDataCH.six[props.sixId];
 
@@ -1410,13 +1356,8 @@ watch(sixPanelDataDH.value, (newValue) => {
     if (props.isDistrictHeadquarterCommander) {
         reportStore.reportDataDH.six[props.sixId] = newValue;
         emit('formDataDH', newValue);
-        console.log('6 new', newValue)
     }
 });
-
-// reportStore.reportDataDH.six[props.sixId] = sixPanelDataDH.value;
-// emit('formDataDH', sixPanelDataDH.value);
-
 
 watch(sixPanelDataCH.value, () => {
     if (props.isCentralHeadquarterCommander) {
@@ -1430,7 +1371,6 @@ watch(sixPanelDataCH.value, () => {
             }
         }
         if (reportStore.returnReport.six[props.sixId]) formData.append('reasons[comment]', sixPanelDataCH.value.comment);
-        console.log('6', formData)
         emit('formDataCH', formData);
     }
 });
@@ -1487,7 +1427,6 @@ watch(fileCH.value, () => {
         formData.append('document', reportStore.reportDataCHFile.ninth[props.ninthId] || '');
         if (reportStore.returnReport.ninth[props.ninthId]) formData.append('reasons[comment]', ninthPanelDataCH.value.comment);
         emit('formDataCH', formData);
-        console.log('file9', formData)
     }
 });
 

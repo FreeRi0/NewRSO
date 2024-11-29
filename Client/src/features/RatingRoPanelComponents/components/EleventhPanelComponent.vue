@@ -147,7 +147,7 @@
 
     <div>
       <v-checkbox 
-        v-if="!reportStore.isAllReportsVerifiedByCH"
+        v-if="centralExpert ? !reportStore.reportForCheckCH.eleventh.verified_by_chq : !reportStore.isAllReportsVerifiedByCH"
         v-model="reportStore.returnReport.eleventh"
         label="Вернуть в&nbsp;РО на&nbsp;доработку" 
         :disabled="!(districtExpert || centralExpert) || reportStore.reportForCheckCH.eleventh.verified_by_chq !== null"
@@ -246,7 +246,6 @@ const emit = defineEmits([
 const focusOut = async () => {
   let formData = new FormData();
 
-  // eleventhPanelData.value.participants_number ? formData.append("participants_number", eleventhPanelData.value.participants_number) : formData.append("participants_number", "");
   formData.append("participants_number", eleventhPanelData.value.participants_number || '');
   formData.append("comment", eleventhPanelData.value.comment || '');
 
@@ -392,7 +391,6 @@ watchEffect(() => {
     }
   } else {
     if (props.data) {
-      // console.log(props.data);
       isFirstSent.value = false;
       isRevision.value = reportStore.isReportReject.eleventh;
       eleventhPanelData.value.participants_number = props.data.participants_number;

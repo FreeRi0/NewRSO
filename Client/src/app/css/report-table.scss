@@ -1,56 +1,60 @@
 .report-table {
-  .v-table {
-    border-radius: 10px;
-    border: 1px solid #B6B6B6;
-  }
-  
-  .v-table > .v-table__wrapper > table > tbody > tr > td {
-    padding: 10.5px;
-    height: 40px;
-  }
-  
-  .v-table td {
-    padding: 10.5px;
-    height: 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  background-color: #FFFFFF;
+  border: 1px solid #B6B6B6;
+  border-radius: 10px;
+  text-align: center;
+  font-family: Akrobat;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 19px;
+  overflow: hidden;
+
+  @media (max-width: 620px) {
+    grid-template-columns: 1fr;
   }
 
-  &__tr {
-    background-color: #FFFFFF;
-    text-align: center;
+  &__block {
+    display: flex;
+    flex-direction: column;
+
+    @media (min-width: 621px) {
+      &--center {
+        border-right: 1px solid #B6B6B6;
+        border-left: 1px solid #B6B6B6;
+      }
+    }
+
+    @media (max-width: 620px) {
+      &:not(:last-child) {
+        .report-table__td {
+          border-bottom: 1px solid #B6B6B6;
+        }
+      }
+    }
   }
 
   &__th {
-    font-family: Akrobat;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 19px;
-    text-align: center;
-
-    &__br-left {
-      border-radius: 10px 0 0 0;
-    }
-
-    &__br-right {
-      border-radius: 0 10px 0 0;
-    }
+    max-height: 40px;
+    padding: 10px;
+    color: #000000;
+    border-bottom: 1px solid #B6B6B6;
   }
   
   &__td {
-    width: 33.33%;
-    text-align: center;
-    font-family: Akrobat;
-    font-size: 16px;
-    line-height: 19px;
-    font-weight: 500;
+    max-height: 40px;
+    height: 100%;
+    padding: 10px;
     color: #8E8E93;
+    background-color: #f9fafb;
 
-    &:not(:last-child) {
-      background-color: #f9fafb;
+    &--bgtransparent {
+      background-color: transparent;
     }
 
-    &__center {
-      border-left: 1px solid #B6B6B6;
-      border-right: 1px solid #B6B6B6;
+    &--bgcolor {
+        background-color: #f9fafb;
     }
   
     .form-input__report {
