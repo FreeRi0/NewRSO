@@ -104,7 +104,6 @@ const props = defineProps({
 
 });
 const name = ref('');
-
 const selected = computed({
     get: () => props.modelValue,
     set: (value) => emit('update:value', value)
