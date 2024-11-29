@@ -1,7 +1,8 @@
 <template>
     <v-autocomplete v-model="selected" :items="items" chips clearable v-model:search.trim="name" variant="outlined"
-        item-title="name" item-value="id" v-bind="$attrs" @keyup="searchRegion" @update:value="changeValue"
-        :address="address" v-if="props.valueChange === false" :no-data-text="noDataText" class="option-select">
+        :item-title="itemTitle" :item-value="itemValue" v-bind="$attrs" @keyup="searchRegion"
+        @update:value="changeValue" :address="address" v-if="props.valueChange === false" :no-data-text="noDataText"
+        class="option-select">
         <template #prepend-inner v-if="changeUser">
             <Icon icon="clarity-search-line" color="#222222" width="24" height="24" class="option-select__icon mr-3">
             </Icon>
@@ -63,11 +64,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, toRef } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { Icon } from '@iconify/vue';
 import { HTTP } from '@app/http';
 import { useRegionalsStore } from '@features/store/regionals';
-import { storeToRefs } from 'pinia';
 
 defineOptions({
     inheritAttrs: false,
@@ -75,7 +75,6 @@ defineOptions({
 const emit = defineEmits(['update:value']);
 
 const regionalsStore = useRegionalsStore();
-const regions = storeToRefs(regionalsStore);
 
 const props = defineProps({
     items: {
@@ -106,40 +105,44 @@ const props = defineProps({
 });
 const name = ref('');
 
-const selected = toRef(props, 'modelValue');
+const selected = computed({
+    get: () => props.modelValue,
+    set: (value) => emit('update:value', value)
+});
 const isLoading = ref(false);
 const changeValue = (event) => {
     emit('update:value', event);
 };
-
+const itemTitle = computed(() => props.valueChange ? 'name' : 'name');
+const itemValue = computed(() => props.valueChange ? 'value' : 'id');
 const items = ref(props.items);
+
 const onChangeItem = async () => {
     try {
         isLoading.value = true;
-        setTimeout(async () => {
-            const ItemResponse = await HTTP.get(props.address, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            items.value = ItemResponse.data.results;
-            isLoading.value = false;
-        }, 500);
+        const response = await HTTP.get(props.address, {
+            headers: { 'Content-Type': 'application/json' },
+        });
+        items.value = response.data.results;
     } catch (error) {
-        console.log('an error occured ' + error);
+        console.error('An error occurred:', error);
+    } finally {
+        isLoading.value = false;
     }
 };
 
-const searchRegion = (val) => {
-    if (name.value.length < 3) {
-        return;
-    }
-    items.value = regionalsStore.regions.find((reg) => reg.name.indexOf(name.value) !== false);
+const searchRegion = () => {  
+    if (name.value.length < 3) {  
+        items.value = [...regionalsStore.regions]; 
+        return;  
+    }  
+    items.value = regionalsStore.regions.filter((reg) =>   
+        reg.name.toLowerCase().includes(name.value.toLowerCase())  
+    );  
 };
 
 onMounted(() => {
     onChangeItem();
-    // regionalsStore.getRegions();
 });
 </script>
 
