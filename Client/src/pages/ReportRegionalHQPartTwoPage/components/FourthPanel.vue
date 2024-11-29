@@ -121,14 +121,16 @@
               <div style="display: flex; justify-content: space-between;">
                 <InputReport v-model:value="event.participants_number" :id="event.participants_number"
                   name="participants_number" class="form__input" type="number" placeholder="Введите число"
-                  :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" @focusout="focusOut" />
+                  :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+                  @focusout="focusOut" />
               </div>
             </div>
             <div class="form__field">
               <label class="form__label" for="eventName">Название мероприятия<sup class="valid-red">*</sup></label>
               <div class="form__field-name">
                 <InputReport v-model:value="event.name" :id="event.name" name="eventName" class="form__input"
-                  placeholder="Введите название мероприятия" :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+                  placeholder="Введите название мероприятия"
+                  :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
                   @focusout="focusOut" />
               </div>
             </div>
@@ -140,13 +142,17 @@
             <label style="max-width: 280px;" class="form__label" for="start_date">Дата начала проведения мероприятия
               <sup class="valid-red">*</sup></label>
             <InputReport v-model:value="event.start_date" :id="event.start_date" name="start_date" class="form__input"
-              type="date" :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" @focusout="focusOut" />
+              type="date"
+              :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+              @focusout="focusOut" />
           </div>
           <div class="form__field">
             <label style="max-width: 300px;" class="form__label" for="end_date">Дата окончания проведения мероприятия
               <sup class="valid-red">*</sup></label>
             <InputReport v-model:value="event.end_date" :id="event.end_date" name="end_date" class="form__input"
-              type="date" :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" @focusout="focusOut" />
+              type="date"
+              :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+              @focusout="focusOut" />
           </div>
         </div>
         <div class="form__field-event">
@@ -156,7 +162,8 @@
               name="scan_file" width="100%" @change="uploadFile($event, index)"
               :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" />
             <FileBoxComponent v-else-if="event.regulations" :file="event.regulations" :fileType="event.file_type"
-              :fileSize="event.file_size" :is-sent="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+              :fileSize="event.file_size"
+              :is-sent="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
               :is-error-file="isErrorFile && !event.file_size" @click="deleteFile(index)" />
           </div>
           <div class="form__field-event-interregion">
@@ -242,7 +249,8 @@
             <label style="max-width: 280px;" class="form__label" for="start_date">Дата начала проведения мероприятия
               <sup class="valid-red">*</sup></label>
             <InputReport v-model:value="eventDH.start_date" :id="eventDH.start_date" name="start_date"
-              class="form__input" type="date" :disabled="props.centralExpert || reportStore.isReportReject?.fourth || reportStore.isAllReportsVerifiedByCH" />
+              class="form__input" type="date"
+              :disabled="props.centralExpert || reportStore.isReportReject?.fourth || reportStore.isAllReportsVerifiedByCH" />
           </div>
           <div class="form__field">
             <label style="max-width: 300px;" class="form__label" for="end_date">Дата окончания проведения мероприятия
@@ -429,7 +437,8 @@
               <td class="report-table__td">
                 <InputReport v-model:value="eventCH.dataCH.start_date" :id="'eventCH.dataCH.end_date'"
                   name="eventCH.dataCH.end_date" class="form__input" type="date"
-                  :disabled="(reportStore.isReportReject?.fourth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" style="width: 100%;" />
+                  :disabled="(reportStore.isReportReject?.fourth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH"
+                  style="width: 100%;" />
               </td>
             </tr>
           </tbody>
@@ -455,7 +464,8 @@
               <td class="report-table__td">
                 <InputReport v-model:value="eventCH.dataCH.start_date" :id="'eventCH.dataCH.end_date'"
                   name="eventCH.dataCH.end_date" class="form__input" type="date"
-                  :disabled="(reportStore.isReportReject?.fourth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" style="width: 100%;" />
+                  :disabled="(reportStore.isReportReject?.fourth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH"
+                  style="width: 100%;" />
               </td>
             </tr>
           </tbody>
@@ -474,7 +484,8 @@
               <td class="report-table__td">
                 <InputReport v-model:value="eventCH.dataCH.end_date" :id="'eventCH.dataCH.end_date'"
                   name="eventCH.dataCH.end_date" class="form__input" type="date"
-                  :disabled="(reportStore.isReportReject?.fourth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" style="width: 100%;" />
+                  :disabled="(reportStore.isReportReject?.fourth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH"
+                  style="width: 100%;" />
               </td>
             </tr>
           </tbody>
@@ -500,7 +511,8 @@
               <td class="report-table__td">
                 <InputReport v-model:value="eventCH.dataCH.end_date" :id="'eventCH.dataCH.end_date'"
                   name="eventCH.dataCH.end_date" class="form__input" type="date"
-                  :disabled="(reportStore.isReportReject?.fourth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" style="width: 100%;" />
+                  :disabled="(reportStore.isReportReject?.fourth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH"
+                  style="width: 100%;" />
               </td>
             </tr>
           </tbody>
