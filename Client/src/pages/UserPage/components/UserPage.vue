@@ -71,28 +71,14 @@ const media = ref({
 const route = useRoute();
 let id = route.params.id;
 
-const canViewBio = computed(() => {
+const canView = (privacyType) => {
     const user = userStore.user;
     const roles = roleStore.roles;
-    return user.is_verified ||
-        (user.privacy?.privacy_about === 'Члены отряда' && user.detachment_id === userStore.currentUser.detachment_id) ||
-        (user.privacy?.privacy_about === 'Руководство' && (
-            (roles.detachment_commander && roles.detachment_commander?.id === user.detachment_id) ||
-            (roles.regionalheadquarter_commander && roles.regionalheadquarter_commander?.id === user.regional_headquarter_id) ||
-            roles.localheadquarter_commander ||
-            roles.educationalheadquarter_commander ||
-            roles.districtheadquarter_commander ||
-            roles.centralheadquarter_commander
-        )) ||
-        user.privacy?.privacy_about === 'Все' ||
-        user.privacy?.privacy_about === 'all';
-});
+    const privacy = user.privacy?.[privacyType];
 
-const canViewPhotos = computed(() => {
-    const user = userStore.user;
-    const roles = roleStore.roles;
-    return (user.privacy?.privacy_photo === 'Члены отряда' && user.detachment_id === userStore.currentUser.detachment_id) ||
-        (user.privacy?.privacy_photo === 'Руководство' && (
+    return user.is_verified ||
+        (privacy === 'Члены отряда' && user.detachment_id === userStore.currentUser.detachment_id) ||
+        (privacy === 'Руководство' && (
             (roles.detachment_commander && roles.detachment_commander?.id === user.detachment_id) ||
             (roles.regionalheadquarter_commander && roles.regionalheadquarter_commander?.id === user.regional_headquarter_id) ||
             roles.localheadquarter_commander ||
@@ -100,9 +86,12 @@ const canViewPhotos = computed(() => {
             roles.districtheadquarter_commander ||
             roles.centralheadquarter_commander
         )) ||
-        user.privacy?.privacy_photo === 'Все' ||
-        user.privacy?.privacy_photo === 'all';
-});
+        privacy === 'Все' ||
+        privacy === 'all';
+};
+
+const canViewBio = computed(() => canView('privacy_about'));
+const canViewPhotos = computed(() => canView('privacy_photo'));
 
 const updateMedia = (type, image) => {
     userStore.user.media[type] = image;
