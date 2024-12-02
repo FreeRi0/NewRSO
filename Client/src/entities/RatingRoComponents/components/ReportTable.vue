@@ -3,20 +3,20 @@
         <label class="form__label report__label">
             {{ label }}&nbsp;<sup class="valid-red">*</sup>
         </label>
-        <ul class="report-table">
-            <li class="report-table__block">
-                <span class="report-table__th">Данные РО</span>
-                <span v-show="typeof (dataRH) === 'number'" class="report-table__td">{{ dataRH }}</span>
-                <span v-show="typeof (dataRH) === 'boolean'" class="report-table__td">{{ dataRH ? 'Да' : 'Нет' }}</span>
+        <ul class="report-tableCH">
+            <li class="report-tableCH__block">
+                <span class="report-tableCH__th">Данные РО</span>
+                <span v-show="typeof (dataRH) === 'number'" class="report-tableCH__td">{{ dataRH }}</span>
+                <span v-show="typeof (dataRH) === 'boolean'" class="report-tableCH__td">{{ dataRH ? 'Да' : 'Нет' }}</span>
             </li>
-            <li class="report-table__block report-table__block--center">
-                <span class="report-table__th">Корректировка ОШ</span>
-                <span v-show="typeof (dataDH) === 'number'" class="report-table__td">{{ dataDH }}</span>
-                <span v-show="typeof (dataDH) === 'boolean'" class="report-table__td">{{ dataDH ? 'Да' : 'Нет' }}</span>
+            <li class="report-tableCH__block report-tableCH__block--center">
+                <span class="report-tableCH__th">Корректировка ОШ</span>
+                <span v-show="typeof (dataDH) === 'number'" class="report-tableCH__td">{{ dataDH }}</span>
+                <span v-show="typeof (dataDH) === 'boolean'" class="report-tableCH__td">{{ dataDH ? 'Да' : 'Нет' }}</span>
             </li>
-            <li class="report-table__block">
-                <span class="report-table__th">Корректировка ЦШ</span>
-                <span :class="['report-table__td', 'report-table__td--bgtransparent', props.disabled ? 'report-table__td--bgcolor' : '']">
+            <li class="report-tableCH__block">
+                <span class="report-tableCH__th">Корректировка ЦШ</span>
+                <span :class="['report-tableCH__td', 'report-tableCH__td--bgtransparent', props.disabled ? 'report-tableCH__td--bgcolor' : '']">
                     <InputReport 
                         v-if="isNinthPanel" 
                         :value="value ? 'Да' : 'Нет'" 

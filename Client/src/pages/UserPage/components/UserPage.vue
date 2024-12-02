@@ -1,68 +1,41 @@
 <template>
     <div class="container">
-        <div class="user-wrapper" v-if="!isLoading.isLoading.value">
+        <div class="user-wrapper" v-if="!userStore.isLoading">
             <h2 class="page-title">Страница пользователя</h2>
-            <Wall :user="user.user.value" :education="education" :user_region="region" :position="roleStore.positions"
-                :commander="roleStore.userRoles" class="mt-3" @upload-wall="uploadWall" @update-wall="updateWall"
-                @delete-wall="deleteWall" @upload="uploadAva" @update="updateAva" @delete="deleteAva"></Wall>
+            <Wall 
+                :user="userStore.user" 
+                :education="education" 
+                :user_region="region" 
+                :position="roleStore.positions"
+                :commander="roleStore.userRoles" 
+                class="mt-3" 
+                @upload-wall="uploadWall" 
+                @update-wall="updateWall"
+                @delete-wall="deleteWall" 
+                @upload="uploadAva" 
+                @update="updateAva" 
+                @delete="deleteAva"
+            />
 
-            <div class="mt-14" v-if="
-                user.user.value.is_verified ||
-                (user.user.value.privacy?.privacy_about ===
-                    'Члены отряда' &&
-                    user.user.value.detachment_id ===
-                    currentUser.currentUser.value.detachment_id) ||
-                (user.user.value.privacy?.privacy_about === 'Руководство' &&
-                    ((roleStore.roles.detachment_commander &&
-                        roleStore.roles.detachment_commander?.id ===
-                        user.user.value.detachment_id) ||
-                        (roleStore.roles.regionalheadquarter_commander &&
-                            roleStore.roles.regionalheadquarter_commander
-                                ?.id ===
-                            user.user.value.regional_headquarter_id) ||
-                        roleStore.roles.localheadquarter_commander ||
-                        roleStore.roles.educationalheadquarter_commander ||
-                        roleStore.roles.districtheadquarter_commander ||
-                        roleStore.roles.centralheadquarter_commander)) ||
-                user.user.value.privacy?.privacy_about === 'Все' ||
-                user.user.value.privacy?.privacy_about === 'all'
-            ">
-                {{ user.user.value.bio }}
+            <div class="mt-14" v-if="canViewBio">
+                {{ userStore.user.bio }}
             </div>
-            <div class="mt-8 photoWrapper" v-if="
-                (user.user.value.privacy?.privacy_photo ===
-                    'Члены отряда' &&
-                    user.user.value.detachment_id ===
-                    currentUser.currentUser.value.detachment_id) ||
-                (user.user.value.privacy?.privacy_photo === 'Руководство' &&
-                    ((roleStore.roles.detachment_commander &&
-                        roleStore.roles.detachment_commander?.id ===
-                        user.user.value.detachment_id) ||
-                        (roleStore.roles.regionalheadquarter_commander &&
-                            roleStore.roles.regionalheadquarter_commander
-                                ?.id ===
-                            user.user.value.regional_headquarter_id) ||
-                        roleStore.roles.localheadquarter_commander ||
-                        roleStore.roles.educationalheadquarter_commander ||
-                        roleStore.roles.districtheadquarter_commander ||
-                        roleStore.roles.centralheadquarter_commander)) ||
-                user.user.value.privacy?.privacy_photo === 'Все' ||
-                user.user.value.privacy?.privacy_photo === 'all'
-            ">
-                <user-photo v-for="(photo, index) in media" :key="index" class="photo-item" :photo="photo" :add="false"
-                    :number="index" />
+            <div class="mt-8 photoWrapper" v-if="canViewPhotos">
+                <user-photo 
+                    v-for="(photo, index) in media" 
+                    :key="index" 
+                    class="photo-item" 
+                    :photo="photo" 
+                    :add="false"
+                    :number="index" 
+                />
             </div>
             <div class="mt-8 photoWrapper" v-else>
-                <div class="avatar-preview my_photo__plug photo-item">
-                    <img src="@/app/assets/user-banner.jpg" alt="Фото пользователя(пусто)" />
-                </div>
-                <div class="avatar-preview my_photo__plug photo-item">
-                    <img src="@/app/assets/user-banner.jpg" alt="Фото пользователя(пусто)" />
-                </div>
-                <div class="avatar-preview my_photo__plug photo-item">
-                    <img src="@/app/assets/user-banner.jpg" alt="Фото пользователя(пусто)" />
-                </div>
-                <div class="avatar-preview my_photo__plug photo-item">
+                <div 
+                    v-for="index in 4" 
+                    :key="index" 
+                    class="avatar-preview my_photo__plug photo-item"
+                >
                     <img src="@/app/assets/user-banner.jpg" alt="Фото пользователя(пусто)" />
                 </div>
             </div>
@@ -70,38 +43,24 @@
         <v-progress-circular class="circleLoader" v-else indeterminate color="blue"></v-progress-circular>
     </div>
 </template>
+
 <script setup>
-import { Button } from '@shared/components/buttons';
+import { ref, watch, computed } from 'vue';
+import { useRoute } from 'vue-router';
 import { Wall } from '@features/baner/components';
-import { TextArea } from '@shared/components/inputs';
+import { useUserStore } from '@features/store/index';
+import { useRoleStore } from '@layouts/store/role';
+// import { useSquadsStore } from '@features/store/squads';
+// import { useRegionalsStore } from '@features/store/regionals';
 import { userPhoto } from '@shared/components/imagescomp';
 
-import { ref, watch, onMounted } from 'vue';
-import { HTTP } from '@app/http';
-import { useRoute, onBeforeRouteUpdate } from 'vue-router';
-import { useUserStore } from '@features/store/index';
-
-import { useRegionalsStore } from '@features/store/regionals';
-import { useSquadsStore } from '@features/store/squads';
-import { useRoleStore } from '@layouts/store/role';
-import { storeToRefs } from 'pinia';
 const userStore = useUserStore();
 const roleStore = useRoleStore();
-const squadsStore = useSquadsStore();
-const regionalsStore = useRegionalsStore();
-const regionals = storeToRefs(regionalsStore);
-const regionalHeadquarter = storeToRefs(regionalsStore);
-const roles = storeToRefs(roleStore);
-const squad = storeToRefs(squadsStore);
-const user = storeToRefs(userStore);
-const currentUser = storeToRefs(userStore);
-const isLoading = storeToRefs(userStore);
+// const squadsStore = useSquadsStore();
+// const regionalsStore = useRegionalsStore();
 
 const education = ref({});
-const member = ref([]);
 const region = ref({});
-const route = useRoute();
-
 const media = ref({
     photo1: null,
     photo2: null,
@@ -109,41 +68,45 @@ const media = ref({
     photo4: null,
 });
 
+const route = useRoute();
 let id = route.params.id;
 
-const uploadAva = (imageAva) => {
+const canView = (privacyType) => {
+    const user = userStore.user;
+    const roles = roleStore.roles;
+    const privacy = user.privacy?.[privacyType];
 
-    user.user.value.media.photo = imageAva;
+    return user.is_verified ||
+        (privacy === 'Члены отряда' && user.detachment_id === userStore.currentUser.detachment_id) ||
+        (privacy === 'Руководство' && (
+            (roles.detachment_commander && roles.detachment_commander?.id === user.detachment_id) ||
+            (roles.regionalheadquarter_commander && roles.regionalheadquarter_commander?.id === user.regional_headquarter_id) ||
+            roles.localheadquarter_commander ||
+            roles.educationalheadquarter_commander ||
+            roles.districtheadquarter_commander ||
+            roles.centralheadquarter_commander
+        )) ||
+        privacy === 'Все' ||
+        privacy === 'all';
 };
 
-const updateAva = (imageAva) => {
+const canViewBio = computed(() => canView('privacy_about'));
+const canViewPhotos = computed(() => canView('privacy_photo'));
 
-    user.user.value.media.photo = imageAva;
+const updateMedia = (type, image) => {
+    userStore.user.media[type] = image;
 };
 
-const deleteAva = (imageAva) => {
+const uploadAva = (imageAva) => updateMedia('photo', imageAva);
+const updateAva = (imageAva) => updateMedia('photo', imageAva);
+const deleteAva = () => updateMedia('photo', null);
 
-    user.user.value.media.photo = imageAva;
-};
-
-const uploadWall = (imageWall) => {
-
-    user.user.value.media.banner = imageWall;
-};
-
-const updateWall = (imageWall) => {
-
-    user.user.value.media.banner = imageWall;
-};
-
-const deleteWall = (imageWall) => {
-
-    user.user.value.media.banner = imageWall;
-};
+const uploadWall = (imageWall) => updateMedia('banner', imageWall);
+const updateWall = (imageWall) => updateMedia('banner', imageWall);
+const deleteWall = () => updateMedia('banner', null);
 
 watch(
     () => route.params.id,
-
     async (newId) => {
         if (!newId && route.name !== "userpage") {
             return false;
@@ -159,21 +122,16 @@ watch(
     },
 );
 
-watch(() => user.user.value.media, (photos) => {
+watch(() => userStore.user.media, (photos) => {
     media.value = {
         photo1: photos?.photo1,
         photo2: photos?.photo2,
         photo3: photos?.photo3,
         photo4: photos?.photo4,
-    }
+    };
 }, { deep: true });
-
-onMounted(() => {
-    // userStore.getUserId(id);
-    // roleStore.getPositions(id);
-    // roleStore.getUserRoles(id);
-});
 </script>
+
 <style lang="scss" scoped>
 .user-wrapper {
     padding: 0px 0px 80px 0px;
@@ -200,38 +158,6 @@ onMounted(() => {
     height: 60px;
     display: block;
     margin: 30px auto;
-}
-
-.user-verify {
-    margin-top: 60px;
-    margin-bottom: 40px;
-
-    &__title {
-        font-size: 32px;
-        color: #35383f;
-        font-weight: 600;
-
-        @media screen and (max-width: 575px) {
-            font-size: 28px;
-        }
-    }
-
-    &__desc {
-        font-size: 18px;
-        color: #35383f;
-        font-weight: 40;
-        margin-top: 40px;
-        max-width: 835px;
-        margin-bottom: 40px;
-
-        @media screen and (max-width: 768px) {
-            max-width: 620px;
-        }
-
-        @media screen and (max-width: 575px) {
-            width: 100%;
-        }
-    }
 }
 
 .photo-item {

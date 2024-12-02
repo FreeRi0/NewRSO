@@ -31,7 +31,7 @@
         </div>
         <v-expansion-panels>
           <v-expansion-panel
-            v-if="picked === 'Доработка' ? revisionPanels.includes('1') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('1') ? false : true">
+            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('1') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('1') ? false : true">
             <v-expansion-panel-title :class="isErrorPanel.first ? 'visible-error' : ''">
               1. Численность членов РО&nbsp;РСО в&nbsp;соответствии с&nbsp;объемом уплаченных членских взносов
             </v-expansion-panel-title>
@@ -66,7 +66,7 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel
-            v-if="picked === 'Доработка' ? revisionPanels.includes('4') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('4') ? false : true">
+            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('4') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('4') ? false : true">
             <v-expansion-panel-title :class="isErrorPanel.fourth ? 'visible-error' : ''">
               4. Организация всероссийских (международных), окружных и&nbsp;межрегиональных мероприятий и&nbsp;проектов
               (слеты, школы, фестивали, турниры и&nbsp;прочие)
@@ -78,7 +78,7 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel
-            v-if="picked === 'Доработка' ? revisionPanels.includes('5') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('5') ? false : true">
+            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('5') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('5') ? false : true">
             <v-expansion-panel-title :class="isErrorPanel.fifth ? 'visible-error' : ''">
               5. Организация всероссийских (международных) (организатор&nbsp;&mdash; региональное отделение РСО),
               окружных и&nbsp;межрегиональных трудовых проектов в&nbsp;соответствии с&nbsp;Положением
@@ -138,7 +138,7 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel
-            v-if="picked === 'Доработка' ? revisionPanels.includes('10-1') || revisionPanels.includes('10-2')
+            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('10-1') || revisionPanels.includes('10-2')
               : picked === 'Просмотр отправленного отчета' && (verifiedByChqPanels.includes('10-1') && verifiedByChqPanels.includes('10-2')) ? false : true">
             <v-expansion-panel-title :class="isErrorPanel.tenth ? 'visible-error' : ''">
               10. Организация РО&nbsp;РСО всероссийских (международных) добровольческих и&nbsp;патриотических акций
@@ -206,7 +206,7 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel
-            v-if="picked === 'Доработка' ? revisionPanels.includes('16') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('16') ? false : true">
+            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('16') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('16') ? false : true">
             <v-expansion-panel-title :class="isErrorPanel.sixteenth ? 'visible-error' : ''">
               16. Победители всероссийских (международных), окружных и&nbsp;межрегиональных трудовых проектов
               по&nbsp;комиссарской деятельности &laquo;К&raquo;

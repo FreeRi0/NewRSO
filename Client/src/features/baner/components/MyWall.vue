@@ -1,12 +1,21 @@
 <template>
     <div class="user-metric">
-        <bannerPhoto :banner="user.media?.banner" @upload-wall="uploadWall" @update-wall="updateWall"
-            @delete-wall="deleteWall" :edited="true"></bannerPhoto>
-        <Avatar :avatar="user.media?.photo" @upload="uploadAva" @update="updateAva" @delete="deleteAva" :edited="true">
-        </Avatar>
+        <bannerPhoto
+            :banner="user.media?.banner"
+            @upload-wall="uploadWall"
+            @update-wall="updateWall"
+            @delete-wall="deleteWall"
+            :edited="true"
+        ></bannerPhoto>
+        <Avatar
+            :avatar="user.media?.photo"
+            @upload="uploadAva"
+            @update="updateAva"
+            @delete="deleteAva"
+            :edited="true"
+        ></Avatar>
 
         <div class="user-metric__bottom">
-            <!-- Данные пользователя  -->
             <div class="user-data__wrapper">
                 <div v-if="user" class="user-data__name">
                     <p>{{ user.last_name }}</p>
@@ -16,107 +25,33 @@
 
                 <div class="user-data__list-wrapper">
                     <ul class="user-data__list">
-                        <li class="user-data__title" v-if="
-                            roleStore.roles.detachment_commander !== null ||
-                            roleStore.roles
-                                .educationalheadquarter_commander !==
-                            null ||
-                            roleStore.roles.localheadquarter_commander !==
-                            null ||
-                            roleStore.roles
-                                .regionalheadquarter_commander !== null ||
-                            roleStore.roles
-                                .districtheadquarter_commander !== null ||
-                            roleStore.roles.centralheadquarter_commander !==
-                            null
-                        ">
+                        <li class="user-data__title" v-if="isCommander">
                             <p>Командир</p>
                         </li>
-                        <li class="user-data__title" v-else-if="
-                            roleStore.myPositions
-                                ?.userdetachmentposition ||
-                            roleStore.myPositions
-                                ?.userregionalheadquarterposition ||
-                            roleStore.myPositions
-                                ?.usereducationalheadquarterposition ||
-                            roleStore.myPositions
-                                ?.userlocalheadquarterposition ||
-                            roleStore.myPositions
-                                ?.userdistrictheadquarterposition ||
-                            roleStore.myPositions
-                                ?.usercentralheadquarterposition
-                        ">
-                            <p>
-                                {{
-                                    getPositions()
-                                }}
-                            </p>
+                        <li class="user-data__title" v-else-if="hasPosition">
+                            <p>{{ getPositions() }}</p>
                         </li>
                         <li class="user-data__title" v-else>
                             <p>Кандидат</p>
                         </li>
-                        <li class="user-data__title" v-if="
-                            roleStore.myPositions
-                                ?.userdetachmentposition">
-                            <p>{{
-                                roleStore.myPositions
-                                    ?.userdetachmentposition?.headquarter?.name }}</p>
+                        <li class="user-data__title" v-for="position in positions" :key="position">
+                            <p>{{ position }}</p>
                         </li>
-
-                        <li class="user-data__title" v-if="
-                            roleStore.myPositions
-                                ?.usereducationalheadquarterposition">
-                            <p>{{
-                                roleStore.myPositions
-                                    .usereducationalheadquarterposition
-                                    ?.headquarter?.name }}</p>
-                        </li>
-                        <li class="user-data__title" v-if="
-                            roleStore.myPositions
-                                ?.userlocalheadquarterposition">
-                            <p>{{
-                                roleStore.myPositions
-                                    .userlocalheadquarterposition
-                                    ?.headquarter?.name
-                            }}</p>
-                        </li>
-                        <li class="user-data__regional-office">
-                            <div v-if="user.region && !isLoading.isLoading.value">
-                                <div v-for="item in regionals.filteredMyRegional
-                                    .value">
-                                    <p>{{ item.name }}</p>
-                                </div>
+                        <li class="user-data__regional-office" v-if="user.region && !regionalsStore.isLoading">
+                            <div v-for="item in regionals.filteredMyRegional.value" :key="item.name">
+                                <p>{{ item.name }}</p>
                             </div>
-
-                            <p v-else>Загрузка региона...</p>
                         </li>
-
-                        <li class="user-data__title" v-if="
-                            roleStore.myPositions
-                                ?.userdistrictheadquarterposition">
-                            <p>{{
-                                roleStore.myPositions
-                                    .userdistrictheadquarterposition
-                                    ?.headquarter?.name }}</p>
-                        </li>
-
+                        <li v-else>Загрузка региона...</li>
                         <li v-if="user.education?.study_institution?.short_name">
-                            <p>
-                                {{
-                                    user.education?.study_institution
-                                        ?.short_name
-                                }}
-                            </p>
+                            <p>{{ user.education?.study_institution?.short_name }}</p>
                         </li>
-
                         <li v-if="user.education?.study_faculty">
                             <p>{{ user.education?.study_faculty }}</p>
                         </li>
-
                         <li v-if="user.education?.study_specialty">
                             <p>{{ user.education?.study_specialty }}</p>
                         </li>
-
                         <li v-if="user.education?.study_year">
                             <p>Курс {{ user.education?.study_year }}</p>
                         </li>
@@ -124,18 +59,12 @@
                 </div>
                 <div class="user-data__contact">
                     <div class="user-data__social-network">
-                        <div class="user-data__link-vk mr-2" v-if="
-                            user.social_vk &&
-                            user.social_vk !== 'https://vk.com/'
-                        ">
+                        <div class="user-data__link-vk mr-2" v-if="isValidLink(user.social_vk)">
                             <a :href="user.social_vk" target="_blank">
                                 <SvgIcon icon-name="vk" />
                             </a>
                         </div>
-                        <div class="user-data__link-telegram mr-2" v-if="
-                            user.social_tg &&
-                            user.social_tg !== 'https://t.me/'
-                        ">
+                        <div class="user-data__link-telegram mr-2" v-if="isValidLink(user.social_tg)">
                             <a :href="user.social_tg">
                                 <SvgIcon icon-name="telegram" />
                             </a>
@@ -164,101 +93,58 @@
         </div>
     </div>
 </template>
+
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue';
-import { testUpload, Avatar } from '@shared/components/imagescomp';
-import { bannerPhoto } from '@shared/components/imagescomp';
-import { HTTP } from '@app/http';
+import { ref, watch, computed } from 'vue';
+import { Avatar, bannerPhoto } from '@shared/components/imagescomp';
 import { useRegionalsStore } from '@features/store/regionals';
-import { useRoute } from 'vue-router';
 import { useRoleStore } from '@layouts/store/role';
 import { storeToRefs } from 'pinia';
 import { SvgIcon } from '@shared/index';
 
 const props = defineProps({
-    banner: {
-        type: String,
-    },
-    avatar: {
-        type: String,
-    },
-    user: {
-        type: Object,
-    },
-    education: {
-        type: Object,
-    },
+    banner: String,
+    avatar: String,
+    user: Object,
+    education: Object,
 });
+
 const emit = defineEmits(['upload', 'update', 'delete']);
 
-const uploadAva = (imageAva) => {
-    // console.log('photo', imageAva);
-    emit('upload', imageAva);
-    // console.log('ghhhgh');
-};
+const uploadAva = (imageAva) => emit('upload', imageAva);
+const updateAva = (imageAva) => emit('update', imageAva);
+const deleteAva = (imageAva) => emit('delete', imageAva);
 
-const updateAva = (imageAva) => {
-    // console.log('photoUpdate', imageAva);
-    emit('update', imageAva);
-    // console.log('update');
-};
-
-const deleteAva = (imageAva) => {
-    // console.log('photoDel', imageAva);
-    emit('delete', imageAva);
-    // console.log('del');
-};
-
-const uploadWall = (imageWall) => {
-    // console.log('ban', imageWall);
-    emit('uploadWall', imageWall);
-    // console.log('ghhhgh');
-};
-
-const updateWall = (imageWall) => {
-    // console.log('banUpdate', imageWall);
-    emit('updateWall', imageWall);
-    // console.log('update');
-};
-const deleteWall = (imageWall) => {
-    // console.log('banDelete', imageWall);
-    emit('deleteWall', imageWall);
-    // console.log('delete');
-};
+const uploadWall = (imageWall) => emit('uploadWall', imageWall);
+const updateWall = (imageWall) => emit('updateWall', imageWall);
+const deleteWall = (imageWall) => emit('deleteWall', imageWall);
 
 const regionalsStore = useRegionalsStore();
 const roleStore = useRoleStore();
-const role = storeToRefs(roleStore);
 const regionals = storeToRefs(regionalsStore);
-const isLoading = storeToRefs(regionalsStore);
 
-const participant = ref({});
+const isCommander = computed(() => {
+    return Object.values(roleStore.roles).some(role => role !== null);
+});
+
+const hasPosition = computed(() => {
+    return Object.values(roleStore.myPositions).some(position => position?.position);
+});
+
+const positions = computed(() => {
+    return Object.values(roleStore.myPositions)
+        .filter(position => position?.headquarter?.name)
+        .map(position => position.headquarter.name);
+});
 
 const getPositions = () => {
-    switch (roleStore.myPositions?.userdetachmentposition?.position || roleStore.myPositions?.usereducationalheadquarterposition?.position || roleStore.myPositions?.userlocalheadquarterposition?.position || roleStore.myPositions?.userregionalheadquarterposition?.position || roleStore.myPositions?.userdistrictheadquarterposition?.position || roleStore.myPositions?.usercentralheadquarterposition?.position) {
-        case 'Комиссар':
-            return 'Комиссар';
-        case 'Боец':
-            return 'Боец';
-
-        case 'Комиссар': case 'Боец':
-            return 'Комиссар'
-
-        default:
-            return 'Неизвестная должность';
-    }
+    const position = Object.values(roleStore.myPositions).find(pos => pos?.position);
+    return position ? position.position : 'Неизвестная должность';
 };
 
-watch(
-    () => props.user,
-
-    (newUser, oldUser) => {
-        if (Object.keys(props.user).length === 0) {
-            return;
-        }
-        regionalsStore.searchMyRegionals(props.user.region);
-    },
-);
+const isValidLink = (link) => {
+    return link && !link.endsWith('/');
+};
 
 const copyL = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -268,7 +154,13 @@ const copyL = () => {
         copyMessage.hidden = true;
     }, 2000);
 };
+
+watch(() => props.user, (newUser) => {
+    if (Object.keys(props.user).length === 0) return;
+    regionalsStore.searchMyRegionals(props.user.region);
+});
 </script>
+
 <style lang="scss" scoped>
 .profile-settings-top {
     padding-top: 40px;
@@ -314,10 +206,8 @@ const copyL = () => {
         margin-right: auto;
         transform: translateX(-10px)
     }
-    
 }
 
-/* Данные пользователя */
 .user-data__wrapper {
     display: flex;
     flex-direction: column;
@@ -327,7 +217,6 @@ const copyL = () => {
         transform: translateX(10px);
         align-items: center;
     }
-    
 }
 
 .user-data__name {
@@ -343,7 +232,6 @@ const copyL = () => {
         align-items: center;
         justify-content: center;
     }
-    
 }
 
 .user-data__social-network {
@@ -400,13 +288,11 @@ const copyL = () => {
 
 .user-data__name p {
     color: #35383f;
-    /* Desktop/H-3 */
     font-family: 'Akrobat';
     font-size: 32px;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
-    color: #35383f;
     margin-right: 8px;
 }
 
@@ -447,7 +333,6 @@ const copyL = () => {
 .user-data__list p,
 .user-data__list time {
     color: #35383f;
-    /*  */
     font-family: 'BertSans';
     font-size: 16px;
     font-style: normal;
@@ -485,4 +370,3 @@ const copyL = () => {
     cursor: pointer;
 }
 </style>
-@shared/components/inputs/imagescomp@shared/components/inputs/imagescomp
