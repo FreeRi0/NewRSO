@@ -16,6 +16,7 @@ const goToReport = (item) => {
       name: 'ReportRegionalPartTwoComander',
       query: {
         reportId: item.regional_headquarter.id,
+        headquartersName: item.regional_headquarter.name
       },
     })
   } else {
