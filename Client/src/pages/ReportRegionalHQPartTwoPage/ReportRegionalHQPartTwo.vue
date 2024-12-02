@@ -367,7 +367,6 @@ const isSentLastIndex = ref(false);
 const blockEditFirstReport = ref(false);
 const preloader_text = ref('Загрузка отчета может занять до 1 минуты.')
 
-// const swal = inject('$swal');
 const router = useRouter();
 
 const isErrorPanel = ref({
@@ -484,22 +483,6 @@ const getMultiplyData = async (reportId) => {
       }
     }
   });
-
-  // const seventhDataPromises = seventh_items.value.map(async (item) => {
-  //   try {
-  //     if (!isExpert) {
-  //       return { id: item.id, data: (await reportPartTwoService.getMultipleReport('7', item.id)).data };
-  //     } else {
-  //       return { id: item.id, data: (await reportPartTwoService.getMultipleReportDH('7', item.id, reportId)).data };
-  //     }
-  //   } catch (error) {
-  //     if (error.response && error.response.status === 404) {
-  //       return { id: item.id, data: {} };
-  //     } else {
-  //       throw error;
-  //     }
-  //   }
-  // });
 
   const ninthDataPromises = ninth_items.value.map(async (item) => {
     try {
@@ -619,6 +602,24 @@ const getMultiplyData = async (reportId) => {
         }
       } else {
         reportData.value.six[result.id] = sixData;
+        // try {
+        //   if (typeof sixData.comment === 'object') {
+        //     reportData.value.six[result.id].comment = JSON.stringify(sixData.comment);
+        //     if (sixData.comment?.comment) {
+        //       reportData.value.six[result.id].comment = JSON.parse();
+        //     } else {
+        //       reportData.value.six[result.id].comment = JSON.parse(sixData.regional_version?.regional_version);
+        //     }
+
+        //   } else if (typeof sixData.regional_version === 'string') {
+        //     reportData.value.six[result.id] = JSON.parse(sixData.regional_version);
+        //   } else {
+        //     throw new Error('Invalid type for regional_version');
+        //   }
+        // } catch (error) {
+        //   console.error('Error parsing regional_version JSON:', error);
+        //   reportData.value.six[result.id] = sixData.regional_version || sixData;
+        // }
       }
 
       if (sixData?.district_version) {
@@ -639,19 +640,12 @@ const getMultiplyData = async (reportId) => {
           revisionPanels.value.push(`6`);
         }
         revisionPanels.value.push(`6-${result.id}`);
-        // reportStore.reportDataDH.six[result.id] = JSON.parse(sixData?.district_version);
-        // sixData?.central_version
-        //   ? reportStore.reportDataCH.six[result.id] = sixData?.central_version
-        //   : reportStore.reportDataCH.six[result.id] = sixData;
-
         reportStore.isReportReject.six[result.id] = isTabsForRevision.value;
       }
 
       if (!sixData?.verified_by_chq) {
         isAllSixVerified = false;
       }
-
-
     }
   });
 
@@ -671,10 +665,6 @@ const getMultiplyData = async (reportId) => {
       }
       reportStore.reportDataDH.ninth[result.id] = Object.assign({}, ninthData);
       reportStore.reportDataDH.ninth[result.id].comment = '';
-      // isErrorPanel.value.ninth[result.id] = {
-      //   id: result.id,
-      //   error: false,
-      // }
     } else if (centralExpert.value) {
       reportStore.reportForCheckCH.ninth[result.id] = ninthData;
       if (ninthData.rejecting_reasons && ninthData.verified_by_chq !== true) {
@@ -730,11 +720,7 @@ const getMultiplyData = async (reportId) => {
         if (!revisionPanels.value.find((item) => item === '9')) {
           revisionPanels.value.push(`9`);
         }
-
-
         revisionPanels.value.push(`9-${result.id}`);
-
-
         reportStore.isReportReject.ninth[result.id] = isTabsForRevision.value;
       }
 

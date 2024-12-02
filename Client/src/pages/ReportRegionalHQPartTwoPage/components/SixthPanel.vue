@@ -77,25 +77,52 @@ const collapsed = () => {
 }
 let el_id = ref(null);
 
+// const formData = async (reportData, reportNumber) => {
+//   try {
+//     if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
+//       if (!link_err.value) {
+//         if (isFirstSent.value) {
+//           if (reportData.number_of_members > 0 || props.tab == 'Доработка') {
+//             const { data } = await reportPartTwoService.createMultipleReport(reportData, '6', reportNumber);
+//             emit('getData', data, 6, reportNumber);
+//             isFirstSent.value = false;
+//           } 
+//         } else {
+//           const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '6', reportNumber);
+//           emit('getData', data, 6, reportNumber);
+//         }
+//       }
+//     }
+//   } catch (e) {
+//     console.log('six panel error: ', e);
+//   }
+// };
+
 const formData = async (reportData, reportNumber) => {
   try {
-    if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
+    // Проверка прав доступа  
+    if (!props.districtHeadquarterCommander && !props.centralHeadquarterCommander) {
       if (!link_err.value) {
-        if (isFirstSent.value) {
-          if (reportData.number_of_members > 0 || props.tab == 'Доработка') {
-            const { data } = await reportPartTwoService.createMultipleReport(reportData, '6', reportNumber);
-            emit('getData', data, 6, reportNumber);
-            isFirstSent.value = false;
-          } 
-        } else {
-          const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '6', reportNumber);
-          emit('getData', data, 6, reportNumber);
-        }
+        const action = isFirstSent.value ? handleSendReport : handleSendDraft;
+        await action(reportData, reportNumber);
       }
     }
   } catch (e) {
     console.log('six panel error: ', e);
   }
+};
+
+const handleSendReport = async (reportData, reportNumber) => {
+  if (reportData.number_of_members > 0 || props.tab === 'Доработка') {
+    const { data } = await reportPartTwoService.createMultipleReport(reportData, '6', reportNumber);
+    emit('getData', data, 6, reportNumber);
+    isFirstSent.value = false;
+  }
+};
+
+const handleSendDraft = async (reportData, reportNumber) => {
+  const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '6', reportNumber);
+  emit('getData', data, 6, reportNumber);
 };
 
 const formDataDH = (reportData, reportNumber) => {
@@ -119,42 +146,88 @@ const getId = (id) => {
 const getPanelNumber = (number) => {
   emit('getPanelNumber', number);
 }
+
 watchEffect(() => {
+  // Проверка прав доступа  
   if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
-    if (props.data[el_id.value] && Object.keys(props.data[el_id.value]).length > 0) {
-      isFirstSent.value = false;
-      sixPanelData.value = { ...props.data[el_id.value] }
-      isSentSix.value = props.data[el_id.value].is_sent;
+    const currentData = props.data[el_id.value];
 
-      isFirstSent.value = reportStore.isReportReject.six[el_id.value] && !props.data[el_id.value].central_version;
-
-      if ((props.data[el_id.value].number_of_members == 0 || props.data[el_id.value].number_of_members == null) && props.tab !== 'Доработка') {
-        sixPanelData.value = {
-          number_of_members: 0,
-          links: [],
-          comment: '',
-        };
-      }
-    }
-    else {
-      isFirstSent.value = true;
-      sixPanelData.value = {
-        number_of_members: 0,
-        links: [],
-        comment: '',
-      };
-      isSentSix.value = false;
+    // Проверяем, существуют ли данные для текущего идентификатора  
+    if (currentData && Object.keys(currentData).length > 0) {
+      updateSixPanelData(currentData);
+    } else {
+      resetSixPanelData();
     }
   } else {
-    sixPanelData.value = { ...props.data[el_id.value] }
+    sixPanelData.value = { ...props.data[el_id.value] };
   }
-
-  if (panel.value || panel.value === 0) {
-    disabled.value = true;
-  } else {
-    disabled.value = false;
-  }
+  disabled.value = (panel.value || panel.value === 0) ? true : false;  
 });
+
+// Функция для обновления данных панели  
+const updateSixPanelData = (data) => {
+  isFirstSent.value = false;
+  sixPanelData.value = { ...data };
+  isSentSix.value = data.is_sent;
+
+  isFirstSent.value = reportStore.isReportReject.six[el_id.value] && !data.central_version;
+
+  // Проверка количества участников  
+  if ((data.number_of_members === 0 || data.number_of_members == null) && props.tab !== 'Доработка') {
+    sixPanelData.value = {
+      number_of_members: 0,
+      links: [],
+      comment: '',
+    };
+  }
+};
+
+// Функция для сброса данных панели  
+const resetSixPanelData = () => {
+  isFirstSent.value = true;
+  sixPanelData.value = {
+    number_of_members: 0,
+    links: [],
+    comment: '',
+  };
+  isSentSix.value = false;
+};
+// watchEffect(() => {
+//   if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
+//     if (props.data[el_id.value] && Object.keys(props.data[el_id.value]).length > 0) {
+//       isFirstSent.value = false;
+//       sixPanelData.value = { ...props.data[el_id.value] }
+//       isSentSix.value = props.data[el_id.value].is_sent;
+
+//       isFirstSent.value = reportStore.isReportReject.six[el_id.value] && !props.data[el_id.value].central_version;
+
+//       if ((props.data[el_id.value].number_of_members == 0 || props.data[el_id.value].number_of_members == null) && props.tab !== 'Доработка') {
+//         sixPanelData.value = {
+//           number_of_members: 0,
+//           links: [],
+//           comment: '',
+//         };
+//       }
+//     }
+//     else {
+//       isFirstSent.value = true;
+//       sixPanelData.value = {
+//         number_of_members: 0,
+//         links: [],
+//         comment: '',
+//       };
+//       isSentSix.value = false;
+//     }
+//   } else {
+//     sixPanelData.value = { ...props.data[el_id.value] }
+//   }
+
+//   if (panel.value || panel.value === 0) {
+//     disabled.value = true;
+//   } else {
+//     disabled.value = false;
+//   }
+// });
 </script>
 <style lang="scss" scoped>
 .panel-card {

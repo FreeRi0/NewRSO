@@ -73,36 +73,80 @@ const ninthPanelData = ref({
 const isFirstSent = ref(null);
 let el_id = ref(null);
 
-const formData = async (reportData, reportNumber) => {
-  try {
-    if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
-      if (!link_err.value) {
-        if (isFirstSent.value) {
-          const { data } = await reportPartTwoService.createMultipleReport(reportData, '9', reportNumber, true);
-          isFirstSent.value = false;
-          emit('getData', data, 9, reportNumber);
-        } else {
-          const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
-          emit('getData', data, 9, reportNumber);
-        }
-      }
-    }
-  } catch (e) {
-    console.log('ninth panel error: ', e);
-  }
+const submitReport = async (reportData, reportNumber, isDraft = false) => {  
+  try {  
+    const reportMethod = isDraft   
+      ? reportPartTwoService.createMultipleReportDraft   
+      : reportPartTwoService.createMultipleReport;  
+
+    const { data } = await reportMethod(reportData, '9', reportNumber, true);  
+    emit('getData', data, 9, reportNumber);  
+  } catch (e) {  
+    console.log('ninth panel error: ', e);  
+  }  
+};  
+
+const formData = async (reportData, reportNumber) => {  
+  if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {  
+    if (!link_err.value) {  
+      await submitReport(reportData, reportNumber, !isFirstSent.value);  
+      isFirstSent.value = false; // Изменение состояния только после первой отправки  
+    }  
+  }  
+};  
+
+const formDataDH = (reportData, reportNumber) => {  
+  if (props.districtHeadquarterCommander) {  
+    emit('getDataDH', reportData, 9, reportNumber);  
+  }  
+};  
+
+const formDataCH = (reportData, reportNumber) => {  
+  if (props.centralHeadquarterCommander) {  
+    emit('getDataCH', reportData, 9, reportNumber);  
+  }  
+};  
+
+const uploadFile = async (reportData, reportNumber) => {  
+  await formData(reportData, reportNumber);  
+};  
+
+const deleteFile = async (reportData, reportNumber) => {  
+  if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {  
+    await submitReport(reportData, reportNumber, !isFirstSent.value);  
+  }  
 };
 
-const formDataDH = (reportData, reportNumber) => {
-  if (props.districtHeadquarterCommander) {
-    emit('getDataDH', reportData, 9, reportNumber);
-  }
-};
+// const formData = async (reportData, reportNumber) => {
+//   try {
+//     if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
+//       if (!link_err.value) {
+//         if (isFirstSent.value) {
+//           const { data } = await reportPartTwoService.createMultipleReport(reportData, '9', reportNumber, true);
+//           isFirstSent.value = false;
+//           emit('getData', data, 9, reportNumber);
+//         } else {
+//           const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
+//           emit('getData', data, 9, reportNumber);
+//         }
+//       }
+//     }
+//   } catch (e) {
+//     console.log('ninth panel error: ', e);
+//   }
+// };
 
-const formDataCH = (reportData, reportNumber) => {
-  if (props.centralHeadquarterCommander) {
-    emit('getDataCH', reportData, 9, reportNumber);
-  }
-};
+// const formDataDH = (reportData, reportNumber) => {
+//   if (props.districtHeadquarterCommander) {
+//     emit('getDataDH', reportData, 9, reportNumber);
+//   }
+// };
+
+// const formDataCH = (reportData, reportNumber) => {
+//   if (props.centralHeadquarterCommander) {
+//     emit('getDataCH', reportData, 9, reportNumber);
+//   }
+// };
 
 
 const collapsed = () => {
@@ -120,65 +164,114 @@ const getPanelNumber = (number) => {
   emit('getPanelNumber', number);
 }
 
-const uploadFile = async (reportData, reportNumber) => {
-  if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
-    if (isFirstSent.value) {
-      let { data } = await reportPartTwoService.createMultipleReport(reportData, '9', reportNumber, true);
-      emit('getData', data, 9, reportNumber);
-    } else {
-      let { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
-      emit('getData', data, 9, reportNumber);
-    }
-  }
+// const uploadFile = async (reportData, reportNumber) => {
+//   if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
+//     if (isFirstSent.value) {
+//       let { data } = await reportPartTwoService.createMultipleReport(reportData, '9', reportNumber, true);
+//       emit('getData', data, 9, reportNumber);
+//     } else {
+//       let { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
+//       emit('getData', data, 9, reportNumber);
+//     }
+//   }
+// };
+
+// const deleteFile = async (reportData, reportNumber) => {
+//   if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
+//     if (isFirstSent.value) {
+//       await reportPartTwoService.createMultipleReport(reportData, '9', reportNumber, true);
+//     } else {
+//       await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
+//     }
+//   }
+// };
+
+
+watchEffect(() => {  
+  const currentData = props.data[el_id.value];  
+  
+  // Проверка наличия данных для элемента  
+  if (props.districtHeadquarterCommander) {  
+    ninthPanelData.value = { ...currentData };  
+  } else {  
+    handleNonDistrictCommander(currentData);  
+  }  
+
+  // Обновление состояния disabled  
+  disabled.value = (panel.value || panel.value === 0) ? true : false; 
+});  
+
+// Функция для обработки случая, когда не districtHeadquarterCommander  
+const handleNonDistrictCommander = (currentData) => {  
+  if (currentData && Object.keys(currentData).length > 0) {  
+    processReportData(currentData);  
+  } else {  
+    resetPanelData();  
+  }  
+};  
+
+// Функция для обработки данных отчета  
+const processReportData = (currentData) => {  
+  isFirstSent.value = false;  
+  ninthPanelData.value = { ...currentData };  
+  isSentNinth.value = currentData.is_sent;  
+  isFirstSent.value = reportStore.isReportReject.ninth[el_id.value] && !currentData.central_version;  
+};  
+
+// Функция для сброса данных панели  
+const resetPanelData = () => {  
+  isFirstSent.value = true;  
+  isSentNinth.value = false;  
+
+  // Начальное состояние ninthPanelData  
+  ninthPanelData.value = {  
+    event_happened: false,  
+    links: [{ link: '' }],  
+    document: '',  
+    file_size: null,  
+    file_type: '',  
+    comment: '',  
+  };  
+
+  // Проверка на отправленные данные  
+  isSentNinth.value = Object.values(props.data).some(data => data.is_sent);  
 };
-
-const deleteFile = async (reportData, reportNumber) => {
-  if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
-    if (isFirstSent.value) {
-      await reportPartTwoService.createMultipleReport(reportData, '9', reportNumber, true);
-    } else {
-      await reportPartTwoService.createMultipleReportDraft(reportData, '9', reportNumber, true);
-    }
-  }
-};
-
-
-watchEffect(() => {
-  if (props.districtHeadquarterCommander) {
-    ninthPanelData.value = { ...props.data[el_id.value] };
-  } else {
-    if (props.data[el_id.value] && Object.keys(props.data[el_id.value]).length > 0) {
-      isFirstSent.value = false;
-      ninthPanelData.value = { ...props.data[el_id.value] }
-      isSentNinth.value = props.data[el_id.value].is_sent;
-      isFirstSent.value = reportStore.isReportReject.ninth[el_id.value] && !props.data[el_id.value].central_version;
-    } else {
-      isFirstSent.value = true;
-      isSentNinth.value = false;
-      ninthPanelData.value = {
-        event_happened: false,
-        links: [{
-          link: '',
-        }],
-        document: '',
-        file_size: null,
-        file_type: '',
-        comment: '',
-      };
-      for (let i in props.data) {
-        if (props.data[i].is_sent) {
-          isSentNinth.value = true;
-          break;
-        }
-      }
-    }
-  }
-  if (panel.value || panel.value === 0) {
-    disabled.value = true;
-  } else {
-    disabled.value = false;
-  }
-});
+// watchEffect(() => {
+//   if (props.districtHeadquarterCommander) {
+//     ninthPanelData.value = { ...props.data[el_id.value] };
+//   } else {
+//     if (props.data[el_id.value] && Object.keys(props.data[el_id.value]).length > 0) {
+//       isFirstSent.value = false;
+//       ninthPanelData.value = { ...props.data[el_id.value] }
+//       isSentNinth.value = props.data[el_id.value].is_sent;
+//       isFirstSent.value = reportStore.isReportReject.ninth[el_id.value] && !props.data[el_id.value].central_version;
+//     } else {
+//       isFirstSent.value = true;
+//       isSentNinth.value = false;
+//       ninthPanelData.value = {
+//         event_happened: false,
+//         links: [{
+//           link: '',
+//         }],
+//         document: '',
+//         file_size: null,
+//         file_type: '',
+//         comment: '',
+//       };
+//       for (let i in props.data) {
+//         if (props.data[i].is_sent) {
+//           isSentNinth.value = true;
+//           break;
+//         }
+//       }
+//     }
+//   }
+//   if (panel.value || panel.value === 0) {
+//     disabled.value = true;
+//   } else {
+//     disabled.value = false;
+//   }
+// });
 
 </script>
 <style lang="scss" scoped>

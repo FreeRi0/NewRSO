@@ -2,6 +2,11 @@ import {defineStore} from "pinia";
 
 export const useReportPartTwoStore = defineStore('report-two', {
     state: () => ({
+
+        reportData: {
+           six: {},
+           ninth: {},
+        },
         /*
         * Объект для хранения данных эксперта ОШ
         */
@@ -34,6 +39,10 @@ export const useReportPartTwoStore = defineStore('report-two', {
             eleventh: null,
             twelfth: null,
             thirteenth: null,
+        },
+
+        reportDataFile: {
+            ninth: {},
         },
         /*
         * Объект для хранения данных эксперта ЦШ
