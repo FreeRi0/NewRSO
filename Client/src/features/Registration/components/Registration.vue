@@ -32,7 +32,8 @@
                 </p>
 
                 <date-picker v-model:value="form.date_of_birth" placeholder="Дата рождения" name="date" type="date"
-                    class="dateInput" value-type="format" :lang="langObject" format="YYYY-MM-DD"></date-picker>
+                    :disabled-date="disableOutOfRangeDates" class="dateInput" value-type="format" :lang="langObject"
+                    format="DD-MM-YYYY"></date-picker>
                 <p class="error" v-if="isError.date_of_birth">
                     Дата рождения в формате ДД.ММ.ГГГГ
                 </p>
@@ -372,6 +373,13 @@ const isLoading = ref(false);
 const isError = ref([]);
 const router = useRouter();
 const swal = inject('$swal');
+
+//
+const today = new Date();
+const maxDate = new Date(today.getFullYear() - 13, today.getMonth());
+const minDate = new Date(today.getFullYear() - 100, today.getMonth());
+const disableOutOfRangeDates = (date) => date > maxDate || date < minDate;
+//
 
 const termsError = computed(() => {
     return validated.value && !form.personal_data_agreement;

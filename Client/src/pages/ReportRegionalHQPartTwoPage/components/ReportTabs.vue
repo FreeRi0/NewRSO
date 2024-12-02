@@ -1,61 +1,55 @@
 <template>
   <v-card class="panel-card">
     <v-tabs v-model="tab">
-      <v-tab value="one" class="panel-tab-btn"
-        v-if="
-          districtHeadquarterCommander || 
-          centralHeadquarterCommander || 
-          props.isReject || 
-          reportStore.isAllReportsVerifiedByCH
-        ">
-          <span class="panel-card-visible">Отчет&nbsp;</span>РО</v-tab>
-      <v-tab value="two" class="panel-tab-btn"
-        v-if="
-          districtHeadquarterCommander || 
-          centralHeadquarterCommander || 
-          props.isReject || 
-          reportStore.isAllReportsVerifiedByCH
-        ">
-          <span class="panel-card-visible">Корректировка&nbsp;</span>ОШ</v-tab>
-      <v-tab value="three" class="panel-tab-btn" 
-        v-if="
-          centralHeadquarterCommander || 
-          props.isReject || 
-          reportStore.isAllReportsVerifiedByCH
-        ">
+      <v-tab value="one" class="panel-tab-btn" v-if="
+        districtHeadquarterCommander ||
+        centralHeadquarterCommander ||
+        props.isReject ||
+        reportStore.isAllReportsVerifiedByCH
+      ">
+        <span class="panel-card-visible">Отчет&nbsp;</span>РО</v-tab>
+      <v-tab value="two" class="panel-tab-btn" v-if="
+        districtHeadquarterCommander ||
+        centralHeadquarterCommander ||
+        props.isReject ||
+        reportStore.isAllReportsVerifiedByCH
+      ">
+        <span class="panel-card-visible">Корректировка&nbsp;</span>ОШ</v-tab>
+      <v-tab value="three" class="panel-tab-btn" v-if="
+        centralHeadquarterCommander ||
+        props.isReject ||
+        reportStore.isAllReportsVerifiedByCH
+      ">
         <span class="panel-card-visible">Корректировка&nbsp;</span>ЦШ</v-tab>
     </v-tabs>
 
     <v-card-text class="panel-card-text">
       <v-tabs-window v-model="tab">
-        <v-tabs-window-item value="one"
-          v-if="
-            districtHeadquarterCommander || 
-            centralHeadquarterCommander || 
-            props.isReject || 
-            reportStore.isAllReportsVerifiedByCH
-          ">
+        <v-tabs-window-item value="one" v-if="
+          districtHeadquarterCommander ||
+          centralHeadquarterCommander ||
+          props.isReject ||
+          reportStore.isAllReportsVerifiedByCH
+        ">
           <div class="form__field-group">
             <slot name="firstTab"></slot>
           </div>
         </v-tabs-window-item>
-        <v-tabs-window-item value="two"
-          v-if="
-            districtHeadquarterCommander || 
-            centralHeadquarterCommander || 
-            props.isReject || 
-            reportStore.isAllReportsVerifiedByCH
-          ">
+        <v-tabs-window-item value="two" v-if="
+          districtHeadquarterCommander ||
+          centralHeadquarterCommander ||
+          props.isReject ||
+          reportStore.isAllReportsVerifiedByCH
+        ">
           <div class="form__field-group">
             <slot name="secondTab"></slot>
           </div>
         </v-tabs-window-item>
-        <v-tabs-window-item value="three" 
-          v-if="
-            centralHeadquarterCommander || 
-            props.isReject || 
-            reportStore.isAllReportsVerifiedByCH
-          ">
+        <v-tabs-window-item value="three" v-if="
+          centralHeadquarterCommander ||
+          props.isReject ||
+          reportStore.isAllReportsVerifiedByCH
+        ">
           <div class="form__field-group">
             <slot name="thirdTab"></slot>
           </div>

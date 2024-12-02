@@ -3,6 +3,7 @@
     <div class="container">
       <h1 class="title title--mb">Отчет о&nbsp;деятельности регионального отделения РСО за&nbsp;2024&nbsp;год.
         Часть&nbsp;2</h1>
+        <p>{{route.query.headquartersName}}</p>
       <div v-if="preloader" class="text-center">
         <v-progress-circular color="primary" indeterminate></v-progress-circular>
         <p class="preloader_info">{{ preloader_text }}</p>
@@ -22,6 +23,7 @@
             Скачать архив
           </button>
         </div>
+
         <div v-else class="download-item">
           <SvgIcon iconName="download" />
           <button type="button" id="download" class="download-item__report"
@@ -270,13 +272,14 @@ import {
   TwelfthPanel
 } from './components/index'
 import { Button } from '@shared/components/buttons';
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch} from "vue";
 import { SvgIcon } from '@shared/ui/SvgIcon';
 import { useRoleStore } from "@layouts/store/role.ts";
 import { HTTP } from '@app/http';
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { useRoute, useRouter } from "vue-router";
 import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
+import { useRegionalsStore } from '@features/store/regionals';
 import swal from '@/library/sweetalert2/sweetalert2.esm.all.min.js';
 import {
   checkEmptyFieldsDH,
@@ -299,6 +302,8 @@ const tabs = ref([
 ]);
 
 const reportStore = useReportPartTwoStore();
+const regionalsStore = useRegionalsStore()
+
 
 const districtExpert = ref(false);
 const centralExpert = ref(false);
@@ -401,6 +406,7 @@ const setPanelNumber = (number) => {
 }
 const roleStore = useRoleStore();
 const route = useRoute();
+
 
 const downloadReportAll = (id) => {
   HTTP.get(`/regionals/${id}/download_regional_competition_report/`, {
@@ -1316,6 +1322,7 @@ const getReportData = async (reportId) => {
   }
 };
 
+
 const setData = (data, panel, number = 0) => {
   switch (panel) {
     case 1:
@@ -1484,6 +1491,8 @@ const filterPanelsData = () => {
     filteredNinth,
   };
 };
+
+
 
 const sendReport = async () => {
   if (!(districtExpert.value || centralExpert.value)) {
