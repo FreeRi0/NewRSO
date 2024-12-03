@@ -89,7 +89,7 @@
                                 </v-select>
                             </div>
                             <div class="sort-select sort-select--width-sort">
-                                <sortByEducation variant="outlined" clearable v-model="sortBy" :options="sortOptionss"
+                                <sortByEducation variant="outlined" clearable v-model="sortBy" :options="sortOptions"
                                     :sorts-boolean="false" class="sort-alphabet" placeholder="Выберите фильтр">
                                 </sortByEducation>
                             </div>
@@ -132,204 +132,210 @@ import { useSquadsStore } from '@features/store/squads';
 import { HTTP } from '@app/http';
 import { useDistrictsStore } from '@features/store/districts';
 import { useRegionalsStore } from '@features/store/regionals';
-const squadsStore = useSquadsStore();
-const districtsStore = useDistrictsStore();
-const regionalsStore = useRegionalsStore();
-const name = ref('');
-const timerSearch = ref(null);
-const education = ref(null);
 
-const isLoading = ref(false);
-const detachments = ref({});
-const limit = 20;
+const squadsStore = useSquadsStore();  
+const districtsStore = useDistrictsStore();  
+const regionalsStore = useRegionalsStore();  
 
-const SelectedSortDistrict = ref(
-    JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.districtName,
-);
-const SelectedSortRegional = ref(
-    JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.regionalName,
-);
-const SelectedSortLocal = ref(
-    JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.localName,
-);
+const name = ref('');  
+const timerSearch = ref(null);  
+const education = ref(null);  
+const isLoading = ref(false);  
+const detachments = ref({});  
+const limit = 20;  
 
-const next = () => {
-    getDetachments('next');
-};
+const SelectedSortDistrict = ref(  
+    JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.districtName  
+);  
+const SelectedSortRegional = ref(  
+    JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.regionalName  
+);  
+const SelectedSortLocal = ref(  
+    JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.localName  
+);  
 
-const prev = () => {
-    getDetachments();
+const ascending = ref(true);  
+const sortBy = ref('name');  
+const picked = ref('');  
+const vertical = ref(true);  
+const locals = ref([]);  
+const educationals = ref([]);  
+const sortedSquads = ref([]);  
 
-};
+const showVertical = () => {  
+    vertical.value = !vertical.value;  
+};  
 
-const ascending = ref(true);
-const sortBy = ref('name');
-const picked = ref('');
+const sortOptions = ref([  
+    { value: 'name', name: 'Алфавиту от А - Я' },  
+    { value: 'founding_date', name: 'Дате создания отряда' },  
+]);  
 
-const vertical = ref(true);
-const locals = ref([]);
-const educationals = ref([]);
-const sortedSquads = ref([]);
-// console.log('area', squadsStore.areas)
+const next = () => getDetachments('next');  
+const prev = () => getDetachments();  
 
-const showVertical = () => {
-    vertical.value = !vertical.value;
-};
+const getLocalsHeadquartersForFilters = async () => {  
+    if (!SelectedSortRegional.value) {  
+        locals.value = [];  
+        SelectedSortLocal.value = '';  
+        return;  
+    }  
 
-const sortOptionss = ref([
-    {
-        value: 'name',
-        name: 'Алфавиту от А - Я',
-    },
+    try {  
+        const { data } = await HTTP.get(  
+            `/locals/?ordering=${sortBy.value}&regional_headquarter__name=${SelectedSortRegional.value}`  
+        );  
+        locals.value = data.results;  
+    } catch (error) {  
+        console.error('Ошибка при запросе местных штабов:', error);  
+    }  
+};  
 
-    { value: 'founding_date', name: 'Дате создания отряда' },
-]);
+const getEducationalsHeadquartersForFilters = async () => {  
+    if (!SelectedSortRegional.value) {  
+        educationals.value = [];  
+        education.value = '';  
+        return;  
+    }  
 
-const getLocalsHeadquartersForFilters = async () => {
-    if (!SelectedSortRegional.value) {
-        locals.value = [];
-        SelectedSortLocal.value = '';
-        return false;
-    }
-    try {
-        const { data } = await HTTP.get(
-            '/locals/?ordering=' +
-            sortBy.value +
-            '&regional_headquarter__name=' +
-            SelectedSortRegional.value,
-        );
-        locals.value = data.results;
-    } catch (e) {
-        console.log('error request locals headquarters');
-    }
-};
+    const params = [`regional_headquarter__name=${SelectedSortRegional.value}`];  
+    if (SelectedSortLocal.value) {  
+        params.push(`local_headquarter__name=${SelectedSortLocal.value}`);  
+    }  
 
-const getEducationalsHeadquartersForFilters = async () => {
-    if (!SelectedSortRegional.value) {
-        educationals.value = [];
-        education.value = '';
-        return false;
-    }
-    let params = ['regional_headquarter__name=' + SelectedSortRegional.value];
-    if (SelectedSortLocal.value)
-        params.push('local_headquarter__name=' + SelectedSortLocal.value);
-    try {
-        const { data } = await HTTP.get(
-            '/eduicational_institutions/?' + params.join('&'),
-        );
-        educationals.value = data.results;
-    } catch (e) {
-        console.log('error request educationals');
-    }
-};
-const getDetachments = async (pagination, orderLimit) => {
-    if (isLoading.value) return false;
-    try {
-        isLoading.value = true;
-        let data = [];
-        let url = '/detachments/?';
-        if (orderLimit) data.push('limit=' + orderLimit);
-        else if (!pagination) data.push('limit=' + limit);
-        else if (pagination == 'next' && !detachments.value.next.includes('213.139.208.147:30000'))
-            url = detachments.value.next.replace('http', 'https');
-        if (name.value) data.push('search=' + name.value);
-        if (pagination != 'next') {
-            if (SelectedSortDistrict.value)
-                data.push(
-                    'district_headquarter__name=' + SelectedSortDistrict.value,
-                );
-            if (SelectedSortRegional.value)
-                data.push(
-                    'regional_headquarter__name=' + SelectedSortRegional.value,
-                );
-            if (SelectedSortLocal.value)
-                data.push('local_headquarter__name=' + SelectedSortLocal.value);
-            if (education.value)
-                data.push('educational_institution__name=' + education.value);
-            if (picked.value) data.push('area__name=' + picked.value);
-            if (sortBy.value && !pagination)
-                data.push(
-                    'ordering=' + (ascending.value ? '' : '-') + sortBy.value,
-                );
-        }
+    try {  
+        const { data } = await HTTP.get(`/eduicational_institutions/?${params.join('&')}`);  
+        educationals.value = data.results;  
+    } catch (error) {  
+        console.error('Ошибка при запросе образовательных учреждений:', error);  
+    }  
+};  
 
-        const viewHeadquartersResponse = await HTTP.get(url + data.join('&'));
-        isLoading.value = false;
+const getDetachments = async (pagination, orderLimit) => {  
+    if (isLoading.value) return;  
 
-        let response = viewHeadquartersResponse.data;
-        if (pagination) {
-            response.results = [
-                ...detachments.value.results,
-                ...response.results,
-            ];
-        }
+    isLoading.value = true;  
+
+    try {  
+        console.log('1', orderLimit);  
+        const url = buildDetachmentsUrl(pagination, orderLimit);  
+        const response = await HTTP.get(url);  
+        
+        if (response && response.data) {  
+            updateDetachments(response.data, pagination);  
+        } else {  
+            console.error('Ответ от сервера не содержит данных');  
+        }  
+    } catch (error) {  
+        console.error('Произошла ошибка:', error);  
+    } finally {  
+        isLoading.value = false;  
+    }  
+};  
+
+const buildDetachmentsUrl = (pagination, orderLimit) => {  
+    const params = [];  
+    let url = '/detachments/?';  
+    console.log('2', orderLimit);  
+
+    // Устанавливаем limit  
+    if (orderLimit) {  
+        console.log('11', orderLimit)
+        params.push(`limit=${orderLimit}`);  
+    } else {  
+        console.log('12')
+        params.push(`limit=${limit}`);  // Используем фиксированный limit, если orderLimit не задан  
+    }  
+
+    // Обработка пагинации  
+    if (pagination === 'next' && detachments.value.next && !detachments.value.next.includes('213.139.208.147:30000')) {  
+        url = detachments.value.next.replace('http', 'https');  
+    } else if (pagination === 'prev' && detachments.value.previous && !detachments.value.previous.includes('213.139.208.147:30000')) {  
+        url = detachments.value.previous.replace('http', 'https');  
+    } else {  
+        // Если пагинация не указана, используем базовый URL  
+        url = '/detachments/?' + params.join('&');  
+    }  
+
+    // Добавление параметров поиска  
+    if (name.value) params.push(`search=${encodeURIComponent(name.value)}`);  
+    if (pagination !== 'next') {  
+        addFilters(params);  
+        if (sortBy.value) {  
+            params.push(`ordering=${ascending.value ? '' : '-'}${sortBy.value}`);  
+        }  
+    }  
+
+    return url + (params.length ? '&' + params.join('&') : '');  
+};  
+
+const addFilters = (params) => {  
+    if (SelectedSortDistrict.value) {  
+        params.push(`district_headquarter__name=${SelectedSortDistrict.value}`);  
+    }  
+    if (SelectedSortRegional.value) {  
+        params.push(`regional_headquarter__name=${SelectedSortRegional.value}`);  
+    }  
+    if (SelectedSortLocal.value) {  
+        params.push(`local_headquarter__name=${SelectedSortLocal.value}`);  
+    }  
+    if (education.value) {  
+        params.push(`educational_institution__name=${education.value}`);  
+    }  
+    if (picked.value) {  
+        params.push(`area__name=${picked.value}`);  
+    }  
+};  
+
+const updateDetachments = (response, pagination) => {
+    if (pagination === 'next') {
+        detachments.value = {
+            ...response,
+            results: [...detachments.value.results, ...response.results]
+        };
+    } else {
         detachments.value = response;
-        sortedSquads.value = response.results;
-    } catch (error) {
-        console.log('an error occured ' + error);
     }
+    sortedSquads.value = detachments.value.results;
 };
 
-const searchDetachments = () => {
-    clearTimeout(timerSearch.value);
-    timerSearch.value = setTimeout(() => {
-        getDetachments();
-    }, 400);
-};
-onMounted(() => {
-    regionalsStore.getRegionalsForFilters(sortBy.value);
-    districtsStore.getDistricts();
-    getDetachments();
-});
-onActivated(() => {
-    localStorage.removeItem('AllHeadquarters_filters');
-});
+const searchDetachments = () => {  
+    clearTimeout(timerSearch.value);  
+    timerSearch.value = setTimeout(() => {  
+        getDetachments();  
+    }, 400);  
+};  
 
-watch(
-    () => SelectedSortDistrict.value,
-    () => {
-        getDetachments();
-    },
-);
-watch(
-    () => SelectedSortRegional.value,
-    () => {
-        getLocalsHeadquartersForFilters();
-        getEducationalsHeadquartersForFilters();
-        getDetachments();
-    },
-);
-watch(
-    () => SelectedSortLocal.value,
-    () => {
-        getEducationalsHeadquartersForFilters();
-        getDetachments();
-    },
-);
-watch(
-    () => education.value,
-    () => {
-        getDetachments();
-    },
-);
-watch(
-    () => picked.value,
-    () => {
-        getDetachments();
-    },
-);
-watch(
-    () => sortBy.value,
-    () => {
-        getDetachments('', sortedSquads.value.length);
-    },
-);
-watch(
-    () => ascending.value,
-    () => {
-        getDetachments('', sortedSquads.value.length);
-    },
-);
+onMounted(() => {  
+    regionalsStore.getRegionalsForFilters(sortBy.value);  
+    districtsStore.getDistricts();  
+    getDetachments();  
+});  
+
+onActivated(() => {  
+    localStorage.removeItem('AllHeadquarters_filters');  
+});  
+
+// Наблюдение за изменениями  
+const watchDetachments = () => {  
+    watch(() => SelectedSortDistrict.value, () => getDetachments());  
+    watch(() => SelectedSortRegional.value, async () => {  
+        await getLocalsHeadquartersForFilters();  
+        await getEducationalsHeadquartersForFilters();  
+        getDetachments();  
+    });  
+    watch(() => SelectedSortLocal.value, async () => {  
+        await getEducationalsHeadquartersForFilters();  
+        getDetachments();  
+    });  
+    watch(() => education.value, () => getDetachments());  
+    watch(() => picked.value, () => getDetachments());  
+    watch(() => sortBy.value, () => getDetachments('', sortedSquads.value.length));  
+    watch(() => ascending.value, () => getDetachments('', sortedSquads.value.length));  
+};  
+
+watchDetachments();  
+
 </script>
 <style lang="scss">
 .dashboard {
