@@ -8,13 +8,13 @@
                     {{ tab.name }}
                 </button>
             </div>
-            <ul class="members__list members__list--debut header-table">
-                <li class="members__item">Название отряда</li>
+            <ul class="members__list header-table">
+                <li class="members__item members__item--title">Название отряда</li>
                 <li class="members__item">Регион</li>
                 <li class="members__item">Место</li>
             </ul>
             <div>
-                <div class="horizontal" v-if="toggle === 'Тандем'">
+                <div class="horizontals" v-if="toggle === 'Тандем'">
                     <ul class="members__list" v-for="winner in winnersTandem" :key="winner.id">
                         <li class="members__item" v-if="winner.detachment">
                             {{ winner.detachment }}
@@ -30,9 +30,9 @@
                         </li>
                     </ul>
                 </div>
-                <div class="horizontal" v-if="toggle === 'Дебют'">
-                    <ul class="members__list members__list--debut" v-for="winner in winnersDebut" :key="winner.id">
-                        <li class="members__item">
+                <div class="horizontals" v-if="toggle === 'Дебют'">
+                    <ul class="members__list" v-for="winner in winnersDebut" :key="winner.id">
+                        <li :class="['members__item', toggle === 'Дебют' ? 'members__item--title' : '']">
                             {{ winner.junior_detachment }}
                         </li>
                         <li class="members__item">
@@ -434,16 +434,16 @@ onMounted(() => {
         font-size: 16px;
         line-height: 21px;
         color: #35383F;
-
-        &--debut {
-            grid-template-columns: 2fr 1fr 176px;
-        }
     }
 
     &__item {
         padding: 12px;
         border: 1px solid #b6b6b6;
         border-radius: 10px;
+
+        &--title {
+            grid-column: 1 / 3;
+        }
     }
 }
 
@@ -551,11 +551,10 @@ onMounted(() => {
     }
 }
 
-.horizontal {
+.horizontals {
     display: grid;
     grid-template-columns: 1fr;
-    grid-row-gap: 16px;
-
+    grid-row-gap: 12px;
 }
 
 .contributorBtn {
