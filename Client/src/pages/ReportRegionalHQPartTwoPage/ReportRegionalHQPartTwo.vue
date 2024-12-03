@@ -3,7 +3,7 @@
     <div class="container">
       <h1 class="title title--mb">Отчет о&nbsp;деятельности регионального отделения РСО за&nbsp;2024&nbsp;год.
         Часть&nbsp;2</h1>
-        <p>{{route.query.headquartersName}}</p>
+      <p>{{ route.query.headquartersName }}</p>
       <div v-if="preloader" class="text-center">
         <v-progress-circular color="primary" indeterminate></v-progress-circular>
         <p class="preloader_info">{{ preloader_text }}</p>
@@ -272,7 +272,7 @@ import {
   TwelfthPanel
 } from './components/index'
 import { Button } from '@shared/components/buttons';
-import { onMounted, ref, watch} from "vue";
+import { onMounted, ref, watch } from "vue";
 import { SvgIcon } from '@shared/ui/SvgIcon';
 import { useRoleStore } from "@layouts/store/role.ts";
 import { HTTP } from '@app/http';
@@ -557,7 +557,7 @@ const getMultiplyData = async (reportId) => {
         try {
           reportData.value.six[result.id] = JSON.parse(sixData.regional_version);
         } catch (error) {
-          console.error('Error parsing regional_version JSON:', error);
+          console.error('Error parsing regional_version JSON 6-DH:', error);
           reportData.value.six[result.id] = sixData.regional_version || sixData;
         }
       } else {
@@ -593,7 +593,7 @@ const getMultiplyData = async (reportId) => {
             throw new Error('Invalid type for regional_version');
           }
         } catch (error) {
-          console.error('Error parsing regional_version JSON:', error);
+          console.error('Error parsing regional_version JSON 6-CH-RH:', error);
           reportData.value.six[result.id] = sixData.regional_version || sixData;
         }
       } else {
@@ -603,7 +603,7 @@ const getMultiplyData = async (reportId) => {
         try {
           reportStore.reportDataDH.six[result.id] = JSON.parse(sixData.district_version);
         } catch (error) {
-          console.error('Error parsing regional_version JSON:', error);
+          console.error('Error parsing regional_version JSON-6-CH-DH:', error);
           reportStore.reportDataDH.six[result.id] = sixData.district_version || sixData;
         }
       } else {
@@ -616,11 +616,33 @@ const getMultiplyData = async (reportId) => {
         : reportStore.reportDataCH.six[result.id].comment = sixData?.comment;
     } else {
 
+      // if (sixData?.regional_version) {
+      //   try {
+      //     reportData.value.six[result.id] = JSON.parse(sixData?.regional_version);
+      //   } catch (error) {
+      //     console.error('Error parsing regional_version JSON 6-RH:', error);
+      //     reportData.value.six[result.id] = sixData?.regional_version || sixData;
+      //   }
+      // } else {
+      //   reportData.value.six[result.id] = sixData;
+      // }
       if (sixData?.regional_version) {
         try {
-          reportData.value.six[result.id] = JSON.parse(sixData.regional_version);
+          if (typeof sixData.regional_version === 'object') {
+            reportData.value.six[result.id] = JSON.stringify(sixData.regional_version);
+            if (sixData.regional_version?.regional_version?.regional_version) {
+              reportData.value.six[result.id] = JSON.parse(sixData.regional_version?.regional_version?.regional_version);
+            } else {
+              reportData.value.six[result.id] = JSON.parse(sixData.regional_version?.regional_version);
+            }
+
+          } else if (typeof sixData.regional_version === 'string') {
+            reportData.value.six[result.id] = JSON.parse(sixData.regional_version);
+          } else {
+            throw new Error('Invalid type for regional_version');
+          }
         } catch (error) {
-          console.error('Error parsing regional_version JSON:', error);
+          console.error('Error parsing regional_version JSON 6-CH-RH:', error);
           reportData.value.six[result.id] = sixData.regional_version || sixData;
         }
       } else {
@@ -631,7 +653,7 @@ const getMultiplyData = async (reportId) => {
         try {
           reportStore.reportDataDH.six[result.id] = JSON.parse(sixData?.district_version);
         } catch (error) {
-          console.error('Error parsing district_version JSON:', error);
+          console.error('Error parsing district_version JSON-6-RH-DH:', error);
           reportStore.reportDataDH.six[result.id] = sixData?.district_version || sixData;
         }
       }
@@ -669,7 +691,7 @@ const getMultiplyData = async (reportId) => {
         try {
           reportData.value.ninth[result.id] = JSON.parse(ninthData.regional_version);
         } catch (error) {
-          console.error('Error parsing regional_version JSON:', error);
+          console.error('Error parsing regional_version JSON 9-DH :', error);
           reportData.value.ninth[result.id] = ninthData.regional_version || ninthData;
         }
       } else {
@@ -700,7 +722,7 @@ const getMultiplyData = async (reportId) => {
             throw new Error('Invalid type for regional_version');
           }
         } catch (error) {
-          console.error('Error parsing regional_version JSON:', error);
+          console.error('Error parsing regional_version JSON 9-CH-RH:', error);
           reportData.value.ninth[result.id] = ninthData.regional_version || ninthData;
         }
       } else {
@@ -710,7 +732,7 @@ const getMultiplyData = async (reportId) => {
         try {
           reportStore.reportDataDH.ninth[result.id] = JSON.parse(ninthData.district_version);
         } catch (error) {
-          console.error('Error parsing regional_version JSON:', error);
+          console.error('Error parsing regional_version JSON 9-CH-DH:', error);
           reportStore.reportDataDH.ninth[result.id] = ninthData.district_version || ninthData;
         }
       } else {
@@ -724,11 +746,33 @@ const getMultiplyData = async (reportId) => {
         : reportStore.reportDataCH.ninth[result.id].comment = ninthData.comment;
     }
     else {
-      reportData.value.ninth[result.id] = ninthData;
-      if (reportData.value.ninth[result.id]?.regional_version !== null && Object.keys(reportData.value.ninth[result.id]).length) {
-        reportData.value.ninth[result.id] = JSON.parse(reportData.value.ninth[result.id].regional_version);
+
+      if (ninthData?.regional_version) {
+        try {
+          if (typeof ninthData.regional_version === 'object') {
+            reportData.value.ninth[result.id] = JSON.stringify(ninthData.regional_version?.regional_version);
+            reportData.value.ninth[result.id] = JSON.parse(ninthData.regional_version?.regional_version);
+          } else if (typeof ninthData.regional_version === 'string') {
+            reportData.value.ninth[result.id] = JSON.parse(ninthData.regional_version);
+          } else {
+            throw new Error('Invalid type for regional_version');
+          }
+        } catch (error) {
+          console.error('Error parsing regional_version JSON 9-CH-RH:', error);
+          reportData.value.ninth[result.id] = ninthData.regional_version || ninthData;
+        }
+      } else {
+        reportData.value.ninth[result.id] = ninthData;
       }
-      ninthData?.district_version ? reportStore.reportDataDH.ninth[result.id] = JSON.parse(ninthData?.district_version) : reportStore.reportDataDH.ninth[result.id] = ninthData
+      if (ninthData?.district_version) {
+        try {
+          reportStore.reportDataDH.ninth[result.id] = JSON.parse(ninthData?.district_version);
+          console.log("NinthData", reportStore.reportDataDH.ninth[result.id])
+        } catch (error) {
+          console.error('Error parsing district_version JSON-RH-DH:', error);
+          reportStore.reportDataDH.ninth[result.id] = ninthData?.district_version || ninthData;
+        }
+      }
       ninthData.central_version
         ? reportStore.reportDataCH.ninth[result.id] = ninthData.central_version
         : reportStore.reportDataCH.ninth[result.id] = ninthData;

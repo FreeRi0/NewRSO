@@ -1319,7 +1319,6 @@ watchPostEffect(() => {
     //   }
     if (!(props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)) {
         if (props.panel_number == 6) {
-            console.log('data', reportStore.reportDataDH.six[props.sixId], reportStore.reportDataCH.six[props.sixId])
             sixPanelDataDH.value = reportStore.reportDataDH.six[props.sixId];
             sixPanelDataCH.value = reportStore.reportDataCH.six[props.sixId];
 
@@ -1331,15 +1330,15 @@ watchPostEffect(() => {
         } else if (props.panel_number == 9) {
             ninthPanelDataDH.value = reportStore.reportDataDH.ninth[props.ninthId];
 
-            fileDH.value.name = reportStore.reportDataDH.ninth[props.ninthId].document;
-            fileDH.value.type = reportStore.reportDataDH.ninth[props.ninthId].file_type;
-            fileDH.value.size = reportStore.reportDataDH.ninth[props.ninthId].file_size;
+            fileDH.value.name = reportStore.reportDataDH.ninth[props.ninthId]?.document;
+            fileDH.value.type = reportStore.reportDataDH.ninth[props.ninthId]?.file_type;
+            fileDH.value.size = reportStore.reportDataDH.ninth[props.ninthId]?.file_size;
 
 
             ninthPanelDataCH.value = reportStore.reportDataCH.ninth[props.ninthId];
-            fileCH.value.name = reportStore.reportDataCH.ninth[props.ninthId].document;
-            fileCH.value.type = reportStore.reportDataCH.ninth[props.ninthId].file_type;
-            fileCH.value.size = reportStore.reportDataCH.ninth[props.ninthId].file_size;
+            fileCH.value.name = reportStore.reportDataCH.ninth[props.ninthId]?.document;
+            fileCH.value.type = reportStore.reportDataCH.ninth[props.ninthId]?.file_type;
+            fileCH.value.size = reportStore.reportDataCH.ninth[props.ninthId]?.file_size;
 
             if (reportStore.isReportReject.ninth[props.ninthId]) {
                 reportStore.returnReport.ninth[props.ninthId] = true;
