@@ -1,0 +1,1 @@
+// export { default as CompetitionWinners } from './components/CompetitionWinners.vue';
