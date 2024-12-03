@@ -693,6 +693,16 @@ const routes: RouteRecordRaw[] = [
                             label: 'Участники конкурса',
                         },
                     },
+                    {
+                        path: '/competition-winners',
+                        name: 'CompetitionWinners',
+                        component: () =>
+                            import('@pages/CompetitionWinnersPage/components/CompetitionWinners.vue'),
+                        meta: {
+                            requiresAuth: true,
+                            label: 'Победители конкурса',
+                        },
+                    },
                 ],
             },
 

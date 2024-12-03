@@ -175,6 +175,13 @@
             <h2 class="subtitle subtitle--link">Участники конкурса</h2>
         </router-link> -->
 
+        <router-link :to="{
+            name: 'CompetitionWinners',
+            params: { id: competition.id },
+        }">
+            <h2 class="subtitle subtitle--link">Победители конкурса</h2>
+        </router-link>
+
         <!--Модальные окна-->
         <ModalCompetition v-if="isSendApplication" @close-pop-up="closeSendApplication" @sucsess="onSucsess"
             :squad="squad"></ModalCompetition>
