@@ -51,7 +51,7 @@
             </div>
         </div>
 
-        <div
+        <!-- <div
             v-if="(roleStore.status.is_commander_detachment && roleStore.roles?.detachment_commander?.id === squad.id) || (roleStore.roles?.regionalheadquarter_commander?.id === squadsStore.squad?.regional_headquarter)">
             <router-link :to="{
                 name: 'debut',
@@ -59,7 +59,7 @@
             }">
                 <div class="route">Отчетность</div>
             </router-link>
-        </div>
+        </div> -->
 
     </section>
 </template>
