@@ -168,12 +168,12 @@
 
             <img src="@app/assets/bg_safety.jpg" alt="bg" />
         </div>
-        <!-- <router-link :to="{
+        <router-link :to="{
             name: 'CompetitionParticipants',
             params: { id: competition.id },
         }">
             <h2 class="subtitle subtitle--link">Участники конкурса</h2>
-        </router-link> -->
+        </router-link>
 
         <router-link :to="{
             name: 'CompetitionWinners',
