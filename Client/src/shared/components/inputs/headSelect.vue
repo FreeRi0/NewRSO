@@ -1,7 +1,7 @@
 <template>   
     <v-select   
       class="form__select filter-district"   
-      :items="items"  
+      :items="props.items"  
       clearable   
       variant="outlined"  
       name="select_district"   
@@ -9,7 +9,7 @@
       v-model="selectedOption"  
       @update:model-value="updateValue" 
       item-title="name"  
-      :placeholder="placeholder"  
+      :placeholder="props.placeholder"  
     >  
       <template #selection="{ item }">  
         <pre>{{ item.title }}</pre>    
@@ -18,7 +18,7 @@
 </template>  
 
 <script setup>  
-import { ref, watch, toRefs } from 'vue';  
+import { ref } from 'vue';  
 
 const props = defineProps({  
   modelValue: {  
@@ -33,20 +33,14 @@ const props = defineProps({
     type: String,  
     default: 'Окружные штабы'  
   },  
-});  
-
-const { items, modelValue} = toRefs(props);   
-const selectedOption = ref(modelValue.value);  
+});     
+const selectedOption = ref(null);  
 
 const emit = defineEmits(['update']);  
 
 const updateValue = () => {  
   emit('update', selectedOption.value);  
 }  
- 
-watch(() => modelValue.value, (newValue) => {  
-  selectedOption.value = newValue;  
-});  
 </script>  
 
 <style scoped>  

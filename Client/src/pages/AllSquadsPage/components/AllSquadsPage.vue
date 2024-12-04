@@ -216,7 +216,7 @@ const buildDetachmentsUrl = (pagination, orderLimit) => {
         }
     }
 
-    return url + (params.length ? '&' + params.join('&') : '');
+    return url + (params.length ? params.join('&') : '');
 };
 
 const addFilters = (params) => {
