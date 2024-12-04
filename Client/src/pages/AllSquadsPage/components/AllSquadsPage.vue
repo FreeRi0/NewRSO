@@ -133,48 +133,42 @@ const sortOptions = ref([
 const next = () => getDetachments('next');
 const prev = () => getDetachments();
 
-const getLocalsHeadquartersForFilters = async () => {
+const getHeadquartersForFilters = async (type) => {
     if (!SelectedSortRegional.value) {
-        locals.value = [];
-        SelectedSortLocal.value = '';
-        return;
-    }
-
-    try {
-        const { data } = await HTTP.get(
-            `/locals/?ordering=${sortBy.value}&regional_headquarter__name=${SelectedSortRegional.value}`
-        );
-        locals.value = data.results;
-    } catch (error) {
-        console.error('Ошибка при запросе местных штабов:', error);
-    }
-};
-
-const getEducationalsHeadquartersForFilters = async () => {
-    if (!SelectedSortRegional.value) {
-        educationals.value = [];
-        education.value = '';
+        if (type === 'local') {
+            locals.value = [];
+            SelectedSortLocal.value = '';
+        } else if (type === 'educational') {
+            educationals.value = [];
+            education.value = '';
+        }
         return;
     }
 
     const params = [`regional_headquarter__name=${SelectedSortRegional.value}`];
-    if (SelectedSortLocal.value) {
+
+    if (type === 'educational' && SelectedSortLocal.value) {
         params.push(`local_headquarter__name=${SelectedSortLocal.value}`);
     }
 
+    const url = type === 'local' ? `/locals/?ordering=${sortBy.value}&${params.join('&')}`
+        : `/eduicational_institutions/?${params.join('&')}`;
+
     try {
-        const { data } = await HTTP.get(`/eduicational_institutions/?${params.join('&')}`);
-        educationals.value = data.results;
+        const { data } = await HTTP.get(url);
+        if (type === 'local') {
+            locals.value = data.results;
+        } else if (type === 'educational') {
+            educationals.value = data.results;
+        }
     } catch (error) {
-        console.error('Ошибка при запросе образовательных учреждений:', error);
+        console.error(`Ошибка при запросе ${type} штабов:`, error);
     }
 };
 
 const getDetachments = async (pagination, orderLimit) => {
     if (isLoading.value) return;
-
     isLoading.value = true;
-
     try {
         const url = buildDetachmentsUrl(pagination, orderLimit);
         const response = await HTTP.get(url);
@@ -191,6 +185,33 @@ const getDetachments = async (pagination, orderLimit) => {
     }
 };
 
+// const buildDetachmentsUrl = (pagination, orderLimit) => {
+//     const params = [];
+//     let url = '/detachments/?';
+
+//     // Устанавливаем limit  
+//     if (orderLimit) {
+//         params.push(`limit=${orderLimit}`);
+//     } else {
+//         params.push(`limit=${limit}`);  // Используем фиксированный limit, если orderLimit не задан  
+//     }
+
+//     // Обработка пагинации  
+//     if (pagination === 'next') {
+//         url = detachments.value.next;
+//     }
+
+//     // Добавление параметров поиска  
+//     if (name.value) params.push(`search=${encodeURIComponent(name.value)}`);
+//     if (pagination !== 'next') {
+//         addFilters(params);
+//         if (sortBy.value) {
+//             params.push(`ordering=${ascending.value ? '' : '-'}${sortBy.value}`);
+//         }
+//     }
+//     return url + (params.length ? '&' + params.join('&') : '');
+// };
+
 const buildDetachmentsUrl = (pagination, orderLimit) => {
     const params = [];
     let url = '/detachments/?';
@@ -205,18 +226,16 @@ const buildDetachmentsUrl = (pagination, orderLimit) => {
     // Обработка пагинации  
     if (pagination === 'next') {
         url = detachments.value.next;
-    }
-
-    // Добавление параметров поиска  
-    if (name.value) params.push(`search=${encodeURIComponent(name.value)}`);
-    if (pagination !== 'next') {
+    } else {
+        // Добавление параметров поиска и фильтров, если не используем пагинацию "next"  
+        if (name.value) params.push(`search=${encodeURIComponent(name.value)}`);
         addFilters(params);
         if (sortBy.value) {
             params.push(`ordering=${ascending.value ? '' : '-'}${sortBy.value}`);
         }
     }
+    return pagination ? url : url + (params.length ? params.join('&') : '');
 
-    return url + (params.length ? params.join('&') : '');
 };
 
 const addFilters = (params) => {
@@ -283,12 +302,14 @@ onActivated(() => {
 // Наблюдение за изменениями  
 const watchDetachments = () => {
     watch(() => SelectedSortDistrict.value, () => getDetachments());
-    watch(() => SelectedSortRegional.value, async () => {
-        await getLocalsHeadquartersForFilters();
-        await getEducationalsHeadquartersForFilters();
+    watch(() => SelectedSortRegional.value, () => {
+        getHeadquartersForFilters('local');
+        getHeadquartersForFilters('educational');
+        getDetachments();
     });
-    watch(() => SelectedSortLocal.value, async () => {
-        await getEducationalsHeadquartersForFilters();
+    watch(() => SelectedSortLocal.value, () => {
+        getHeadquartersForFilters('educational');
+        getDetachments();
     });
     watch(() => education.value, () => getDetachments());
     watch(() => picked.value, () => getDetachments());
