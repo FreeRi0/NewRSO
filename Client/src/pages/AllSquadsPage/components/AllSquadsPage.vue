@@ -12,15 +12,8 @@
                     v-for="area in squadsStore.areas" :key="area" @click="picked = area.name">{{ area.name }}
                 </v-btn>
             </div>
-            <div class="squads-search">
-                <input type="text" id="search" class="squads-search__input" v-model="name" @keyup="searchDetachments"
-                    placeholder="Поищем отряд?" />
-                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M18.511 19.0914L24 24.8M21 12.84C21 14.5884 20.5015 16.2975 19.5675 17.7512C18.6335 19.205 17.306 20.338 15.7528 21.0071C14.1997 21.6762 12.4906 21.8512 10.8417 21.5101C9.1929 21.169 7.67835 20.3271 6.4896 19.0908C5.30085 17.8545 4.4913 16.2794 4.16333 14.5646C3.83535 12.8498 4.00368 11.0724 4.64703 9.45708C5.29037 7.84178 6.37984 6.46116 7.77766 5.48981C9.17548 4.51846 10.8189 4 12.5 4C14.7544 4 16.9164 4.93135 18.5104 6.58918C20.1045 8.247 21 10.4955 21 12.84Z"
-                        stroke="#898989" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-            </div>
+
+            <Search v-model="name" @update:modelValue="searchDetachments" />
             <div class="squads-sorts">
                 <div class="sort-layout">
                     <div>
@@ -42,51 +35,23 @@
                     <div class="squads-sort">
                         <div class="sort-filters">
                             <div class="sort-select sort-select--width-district">
-                                <v-select class="form__select filter-district" :items="districtsStore.districts"
-                                    clearable variant="outlined" name="select_district" id="select-district"
-                                    v-model="SelectedSortDistrict" item-title="name" placeholder="Окружной штаб">
-                                    <template #selection="{ item }">
-                                        <pre v-if="!districtsStore.isLoading">{{
-                                            item.title
-                                        }}</pre>
-                                        <v-progress-circular class="circleLoader" v-else indeterminate
-                                            color="blue"></v-progress-circular>
-                                    </template>
-                                </v-select>
+                                <headSelect v-model="SelectedSortDistrict" @update="sortDistricts"
+                                    placeholder="Окружные штабы" :items="districtsStore.districts" />
                             </div>
                             <div class="sort-select sort-select--width-regional">
-                                <v-select class="form__select filter-district" :items="regionalsStore.regionals"
-                                    clearable variant="outlined" name="select_region" id="select-region"
-                                    v-model="SelectedSortRegional" item-title="name" placeholder="Региональные штабы">
-                                    <template #selection="{ item }">
-                                        <pre v-if="!regionalsStore.isLoading">{{
-                                            item.title
-                                        }}</pre>
-                                        <v-progress-circular class="circleLoader" v-else indeterminate
-                                            color="blue"></v-progress-circular>
-                                    </template>
-                                </v-select>
+                                <headSelect v-model="SelectedSortRegional" @update="sortRegionals"
+                                    placeholder="Региональные штабы" :items="regionalsStore.regionals" />
                             </div>
 
                             <div class="sort-select sort-select--width-local"
                                 v-if="SelectedSortRegional || SelectedSortLocal">
-                                <v-select class="form__select filter-district" :items="locals" clearable
-                                    variant="outlined" name="select_local" id="select-local" v-model="SelectedSortLocal"
-                                    item-title="name" placeholder="Местные штабы">
-                                    <template #selection="{ item }">
-                                        <pre>{{ item.title }}</pre>
-                                    </template>
-                                </v-select>
+                                <headSelect v-model="SelectedSortLocal" @update="sortLocals" placeholder="Местные штабы"
+                                    :items="locals" />
                             </div>
                             <div class="sort-select sort-select--width-education"
                                 v-if="SelectedSortRegional || SelectedSortLocal">
-                                <v-select class="form__select filter-district sortedEducation" :items="educationals"
-                                    clearable variant="outlined" name="select_local" id="select-local"
-                                    v-model="education" item-title="name" placeholder="Образовательная организация">
-                                    <template #selection="{ item }">
-                                        <pre>{{ item.title }}</pre>
-                                    </template>
-                                </v-select>
+                                <headSelect v-model="education" @update="sortEducationals"
+                                    placeholder="Образовательная организация" :items="educationals" />
                             </div>
                             <div class="sort-select sort-select--width-sort">
                                 <sortByEducation variant="outlined" clearable v-model="sortBy" :options="sortOptions"
@@ -102,19 +67,12 @@
             </div>
 
             <div v-show="vertical">
-                <squadsList :squads="sortedSquads"></squadsList>
-                <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
-                    color="blue"></v-progress-circular>
-                <p v-else-if="!isLoading && !sortedSquads.length">
-                    Ничего не найдено
-                </p>
+                <squadsList :squads="sortedSquads" :is-loading="isLoading"></squadsList>
             </div>
 
             <div class="horizontal" v-show="!vertical">
-                <horizontalList :squads="sortedSquads"></horizontalList>
-                <p v-if="!sortedSquads.length">Ничего не найдено</p>
+                <horizontalList :squads="sortedSquads" :is-loading="isLoading"></horizontalList>
             </div>
-
             <template v-if="detachments.count && detachments.count > limit">
                 <Button @click="next" v-if="sortedSquads.length < detachments.count" label="Показать еще"></Button>
                 <Button @click="prev" v-else label="Свернуть все"></Button>
@@ -130,211 +88,215 @@ import { sortByEducation } from '@shared/components/selects';
 import { ref, onMounted, onActivated, watch } from 'vue';
 import { useSquadsStore } from '@features/store/squads';
 import { HTTP } from '@app/http';
+import { Search, headSelect } from '@shared/components/inputs';
 import { useDistrictsStore } from '@features/store/districts';
 import { useRegionalsStore } from '@features/store/regionals';
 
-const squadsStore = useSquadsStore();  
-const districtsStore = useDistrictsStore();  
-const regionalsStore = useRegionalsStore();  
+const squadsStore = useSquadsStore();
+const districtsStore = useDistrictsStore();
+const regionalsStore = useRegionalsStore();
 
-const name = ref('');  
-const timerSearch = ref(null);  
-const education = ref(null);  
-const isLoading = ref(false);  
-const detachments = ref({});  
-const limit = 20;  
+const name = ref('');
+const timerSearch = ref(null);
+const education = ref(null);
+const isLoading = ref(false);
+const detachments = ref({});
+const limit = 20;
 
-const SelectedSortDistrict = ref(  
-    JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.districtName  
-);  
-const SelectedSortRegional = ref(  
-    JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.regionalName  
-);  
-const SelectedSortLocal = ref(  
-    JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.localName  
-);  
+const SelectedSortDistrict = ref(
+    JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.districtName
+);
+const SelectedSortRegional = ref(
+    JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.regionalName
+);
+const SelectedSortLocal = ref(
+    JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.localName
+);
+// const text = ref('Окружные штабы')
+const ascending = ref(true);
+const sortBy = ref('name');
+const picked = ref('');
+const vertical = ref(true);
+const locals = ref([]);
+const educationals = ref([]);
+const sortedSquads = ref([]);
 
-const ascending = ref(true);  
-const sortBy = ref('name');  
-const picked = ref('');  
-const vertical = ref(true);  
-const locals = ref([]);  
-const educationals = ref([]);  
-const sortedSquads = ref([]);  
+const showVertical = () => {
+    vertical.value = !vertical.value;
+};
 
-const showVertical = () => {  
-    vertical.value = !vertical.value;  
-};  
+const sortOptions = ref([
+    { value: 'name', name: 'Алфавиту от А - Я' },
+    { value: 'founding_date', name: 'Дате создания отряда' },
+]);
 
-const sortOptions = ref([  
-    { value: 'name', name: 'Алфавиту от А - Я' },  
-    { value: 'founding_date', name: 'Дате создания отряда' },  
-]);  
+const next = () => getDetachments('next');
+const prev = () => getDetachments();
 
-const next = () => getDetachments('next');  
-const prev = () => getDetachments();  
+const getLocalsHeadquartersForFilters = async () => {
+    if (!SelectedSortRegional.value) {
+        locals.value = [];
+        SelectedSortLocal.value = '';
+        return;
+    }
 
-const getLocalsHeadquartersForFilters = async () => {  
-    if (!SelectedSortRegional.value) {  
-        locals.value = [];  
-        SelectedSortLocal.value = '';  
-        return;  
-    }  
+    try {
+        const { data } = await HTTP.get(
+            `/locals/?ordering=${sortBy.value}&regional_headquarter__name=${SelectedSortRegional.value}`
+        );
+        locals.value = data.results;
+    } catch (error) {
+        console.error('Ошибка при запросе местных штабов:', error);
+    }
+};
 
-    try {  
-        const { data } = await HTTP.get(  
-            `/locals/?ordering=${sortBy.value}&regional_headquarter__name=${SelectedSortRegional.value}`  
-        );  
-        locals.value = data.results;  
-    } catch (error) {  
-        console.error('Ошибка при запросе местных штабов:', error);  
-    }  
-};  
+const getEducationalsHeadquartersForFilters = async () => {
+    if (!SelectedSortRegional.value) {
+        educationals.value = [];
+        education.value = '';
+        return;
+    }
 
-const getEducationalsHeadquartersForFilters = async () => {  
-    if (!SelectedSortRegional.value) {  
-        educationals.value = [];  
-        education.value = '';  
-        return;  
-    }  
+    const params = [`regional_headquarter__name=${SelectedSortRegional.value}`];
+    if (SelectedSortLocal.value) {
+        params.push(`local_headquarter__name=${SelectedSortLocal.value}`);
+    }
 
-    const params = [`regional_headquarter__name=${SelectedSortRegional.value}`];  
-    if (SelectedSortLocal.value) {  
-        params.push(`local_headquarter__name=${SelectedSortLocal.value}`);  
-    }  
+    try {
+        const { data } = await HTTP.get(`/eduicational_institutions/?${params.join('&')}`);
+        educationals.value = data.results;
+    } catch (error) {
+        console.error('Ошибка при запросе образовательных учреждений:', error);
+    }
+};
 
-    try {  
-        const { data } = await HTTP.get(`/eduicational_institutions/?${params.join('&')}`);  
-        educationals.value = data.results;  
-    } catch (error) {  
-        console.error('Ошибка при запросе образовательных учреждений:', error);  
-    }  
-};  
+const getDetachments = async (pagination, orderLimit) => {
+    if (isLoading.value) return;
 
-const getDetachments = async (pagination, orderLimit) => {  
-    if (isLoading.value) return;  
+    isLoading.value = true;
 
-    isLoading.value = true;  
+    try {
+        const url = buildDetachmentsUrl(pagination, orderLimit);
+        const response = await HTTP.get(url);
 
-    try {  
-        console.log('1', orderLimit);  
-        const url = buildDetachmentsUrl(pagination, orderLimit);  
-        const response = await HTTP.get(url);  
-        
-        if (response && response.data) {  
-            updateDetachments(response.data, pagination);  
-        } else {  
-            console.error('Ответ от сервера не содержит данных');  
-        }  
-    } catch (error) {  
-        console.error('Произошла ошибка:', error);  
-    } finally {  
-        isLoading.value = false;  
-    }  
-};  
+        if (response && response.data) {
+            updateDetachments(response.data, pagination);
+        } else {
+            console.error('Ответ от сервера не содержит данных');
+        }
+    } catch (error) {
+        console.error('Произошла ошибка:', error);
+    } finally {
+        isLoading.value = false;
+    }
+};
 
-const buildDetachmentsUrl = (pagination, orderLimit) => {  
-    const params = [];  
-    let url = '/detachments/?';  
-    console.log('2', orderLimit);  
+const buildDetachmentsUrl = (pagination, orderLimit) => {
+    const params = [];
+    let url = '/detachments/?';
 
     // Устанавливаем limit  
-    if (orderLimit) {  
-        console.log('11', orderLimit)
-        params.push(`limit=${orderLimit}`);  
-    } else {  
-        console.log('12')
+    if (orderLimit) {
+        params.push(`limit=${orderLimit}`);
+    } else {
         params.push(`limit=${limit}`);  // Используем фиксированный limit, если orderLimit не задан  
-    }  
+    }
 
     // Обработка пагинации  
-    if (pagination === 'next' && detachments.value.next && !detachments.value.next.includes('213.139.208.147:30000')) {  
-        url = detachments.value.next.replace('http', 'https');  
-    } else if (pagination === 'prev' && detachments.value.previous && !detachments.value.previous.includes('213.139.208.147:30000')) {  
-        url = detachments.value.previous.replace('http', 'https');  
-    } else {  
-        // Если пагинация не указана, используем базовый URL  
-        url = '/detachments/?' + params.join('&');  
-    }  
+    if (pagination === 'next') {
+        url = detachments.value.next;
+    }
 
     // Добавление параметров поиска  
-    if (name.value) params.push(`search=${encodeURIComponent(name.value)}`);  
-    if (pagination !== 'next') {  
-        addFilters(params);  
-        if (sortBy.value) {  
-            params.push(`ordering=${ascending.value ? '' : '-'}${sortBy.value}`);  
-        }  
-    }  
+    if (name.value) params.push(`search=${encodeURIComponent(name.value)}`);
+    if (pagination !== 'next') {
+        addFilters(params);
+        if (sortBy.value) {
+            params.push(`ordering=${ascending.value ? '' : '-'}${sortBy.value}`);
+        }
+    }
 
-    return url + (params.length ? '&' + params.join('&') : '');  
-};  
+    return url + (params.length ? '&' + params.join('&') : '');
+};
 
-const addFilters = (params) => {  
-    if (SelectedSortDistrict.value) {  
-        params.push(`district_headquarter__name=${SelectedSortDistrict.value}`);  
-    }  
-    if (SelectedSortRegional.value) {  
-        params.push(`regional_headquarter__name=${SelectedSortRegional.value}`);  
-    }  
-    if (SelectedSortLocal.value) {  
-        params.push(`local_headquarter__name=${SelectedSortLocal.value}`);  
-    }  
-    if (education.value) {  
-        params.push(`educational_institution__name=${education.value}`);  
-    }  
-    if (picked.value) {  
-        params.push(`area__name=${picked.value}`);  
-    }  
-};  
+const addFilters = (params) => {
+    if (SelectedSortDistrict.value) {
+        params.push(`district_headquarter__name=${SelectedSortDistrict.value}`);
+    }
+    if (SelectedSortRegional.value) {
+        params.push(`regional_headquarter__name=${SelectedSortRegional.value}`);
+    }
+    if (SelectedSortLocal.value) {
+        params.push(`local_headquarter__name=${SelectedSortLocal.value}`);
+    }
+    if (education.value) {
+        params.push(`educational_institution__name=${education.value}`);
+    }
+    if (picked.value) {
+        params.push(`area__name=${picked.value}`);
+    }
+};
 
 const updateDetachments = (response, pagination) => {
     if (pagination === 'next') {
-        detachments.value = {
-            ...response,
-            results: [...detachments.value.results, ...response.results]
-        };
-    } else {
-        detachments.value = response;
+        response.results = [...detachments.value.results, ...response.results]
     }
-    sortedSquads.value = detachments.value.results;
+    detachments.value = response;
+    sortedSquads.value = response.results;
 };
 
-const searchDetachments = () => {  
-    clearTimeout(timerSearch.value);  
-    timerSearch.value = setTimeout(() => {  
-        getDetachments();  
-    }, 400);  
-};  
+const updateSearch = (newValue) => {
+    name.value = newValue;
+    searchDetachments();
+};
 
-onMounted(() => {  
-    regionalsStore.getRegionalsForFilters(sortBy.value);  
-    districtsStore.getDistricts();  
-    getDetachments();  
-});  
+const sortDistricts = (newValue) => {
+    SelectedSortDistrict.value = newValue;
+}
 
-onActivated(() => {  
-    localStorage.removeItem('AllHeadquarters_filters');  
-});  
+const sortRegionals = (newValue) => {
+    SelectedSortRegional.value = newValue;
+}
+
+const sortLocals = (newValue) => {
+    SelectedSortLocal.value = newValue;
+}
+
+const sortEducationals = (newValue) => {
+    education.value = newValue;
+}
+
+const searchDetachments = () => {
+    getDetachments();
+};
+
+onMounted(() => {
+    regionalsStore.getRegionalsForFilters(sortBy.value);
+    districtsStore.getDistricts();
+    getDetachments();
+});
+
+onActivated(() => {
+    localStorage.removeItem('AllHeadquarters_filters');
+});
 
 // Наблюдение за изменениями  
-const watchDetachments = () => {  
-    watch(() => SelectedSortDistrict.value, () => getDetachments());  
-    watch(() => SelectedSortRegional.value, async () => {  
-        await getLocalsHeadquartersForFilters();  
-        await getEducationalsHeadquartersForFilters();  
-        getDetachments();  
-    });  
-    watch(() => SelectedSortLocal.value, async () => {  
-        await getEducationalsHeadquartersForFilters();  
-        getDetachments();  
-    });  
-    watch(() => education.value, () => getDetachments());  
-    watch(() => picked.value, () => getDetachments());  
-    watch(() => sortBy.value, () => getDetachments('', sortedSquads.value.length));  
-    watch(() => ascending.value, () => getDetachments('', sortedSquads.value.length));  
-};  
+const watchDetachments = () => {
+    watch(() => SelectedSortDistrict.value, () => getDetachments());
+    watch(() => SelectedSortRegional.value, async () => {
+        await getLocalsHeadquartersForFilters();
+        await getEducationalsHeadquartersForFilters();
+    });
+    watch(() => SelectedSortLocal.value, async () => {
+        await getEducationalsHeadquartersForFilters();
+    });
+    watch(() => education.value, () => getDetachments());
+    watch(() => picked.value, () => getDetachments());
+    watch(() => sortBy.value, () => getDetachments('', sortedSquads.value.length));
+    watch(() => ascending.value, () => getDetachments('', sortedSquads.value.length));
+};
 
-watchDetachments();  
+watchDetachments();
 
 </script>
 <style lang="scss">
@@ -495,24 +457,6 @@ watchDetachments();
 
     @media (max-width: 768px) {
         margin-top: 0;
-    }
-}
-
-.squads-search {
-    position: relative;
-    box-sizing: border-box;
-
-    svg {
-        position: absolute;
-        top: 10px;
-        left: 16px;
-    }
-
-    &__input {
-        width: 100%;
-        padding: 13px 0px 10px 60px;
-        border-radius: 10px;
-        border: 1px solid black;
     }
 }
 

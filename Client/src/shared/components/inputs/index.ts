@@ -5,6 +5,6 @@ import passwordInput from './passwordInput.vue';
 import InputReport from './InputReport.vue';
 import TextareaReport from './TextareaReport.vue';
 import TextareaAbout from './TextareaAbout.vue';
+import headSelect from './headSelect.vue';
 
-
-export { Input, TextArea, Search, TextareaAbout, passwordInput, InputReport, TextareaReport };
+export { Input, TextArea, Search, TextareaAbout, headSelect, passwordInput, InputReport, TextareaReport };
