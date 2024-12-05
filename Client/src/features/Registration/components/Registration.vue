@@ -32,7 +32,7 @@
                 </p>
 
                 <date-picker v-model:value="form.date_of_birth" placeholder="Дата рождения" name="date" type="date"
-                    :disabled-date="disableOutOfRangeDates" class="dateInput" value-type="format" :lang="langObject"
+                    :disabled-date="disableOutOfRangeDates" class="dateInput" value-type="date" :lang="langObject"
                     format="DD-MM-YYYY"></date-picker>
                 <p class="error" v-if="isError.date_of_birth">
                     Дата рождения в формате ДД.ММ.ГГГГ
@@ -87,6 +87,155 @@
         </v-card>
     </div>
 </template>
+
+<script setup>
+import { ref, inject, computed } from 'vue';
+import { Button } from '@shared/components/buttons';
+import { Input, passwordInput } from '@shared/components/inputs';
+import { HTTP } from '@app/http';
+import { useRouter } from 'vue-router';
+import { Select, regionsDropdown } from '@shared/components/selects';
+
+const validated = ref(false);
+const form = ref({
+    region: null,
+    last_name: '',
+    first_name: '',
+    patronymic_name: '',
+    phone_number: '',
+    email: '',
+    date_of_birth: '',
+    username: '',
+    password: '',
+    re_password: '',
+    personal_data_agreement: false,
+});
+
+const isLoading = ref(false);
+const isError = ref([]);
+const router = useRouter();
+const swal = inject('$swal');
+
+//
+const formatDateForBackend = (date) => {
+    if (typeof date === 'string') {
+        const parts = date.split('-');
+        if (parts.length === 3) {
+            return `${parts[2]}-${parts[1]}-${parts[0]}`;
+        }
+    } else if (date instanceof Date) {
+        return date.toISOString().split('T')[0];
+    }
+    return date;
+};
+//
+
+//
+const today = new Date();
+const maxDate = new Date(today.getFullYear() - 13, today.getMonth());
+const minDate = new Date(today.getFullYear() - 100, today.getMonth());
+const disableOutOfRangeDates = (date) => date > maxDate || date < minDate;
+//
+
+const termsError = computed(() => {
+    return validated.value && !form.personal_data_agreement;
+});
+const handleTermsState = () => {
+    validated.value = false;
+};
+
+const regexpName = /^[а-яА-ЯЁё\s]+$/;
+const regexpEmail = /^([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)$/;
+const regexpEnter = /^[a-zA-Z0-9_@.+-]+$/;
+
+const validateClient = ref(false);
+
+const getErrorsValidate = () => {
+    const inputs = [form.value.last_name, form.value.first_name, form.value.patronymic_name];
+    const inputEmail = form.value.email;
+    const inputEnter = [form.value.username, form.value.password, form.value.re_password];
+
+    let errorsBlock = [];
+
+    inputs.forEach((element) => {
+        if (!regexpName.test(element)) {
+            if (element.length > 0) {
+                errorsBlock.push(element);
+            }
+        }
+    });
+    if (!regexpEmail.test(inputEmail)) {
+        if (inputEmail.length > 0) {
+            errorsBlock.push(inputEmail);
+        }
+    }
+    inputEnter.forEach((element) => {
+        if (!regexpEnter.test(element)) {
+            if (element.length > 0) {
+                errorsBlock.push(element);
+            }
+        } else {
+            if (element.length > 0 && element.length < 8) {
+                errorsBlock.push(element);
+            }
+        }
+    });
+    // console.log("ошибки -", errorsBlock, "кол-во ошибок -", errorsBlock.length);
+    if (errorsBlock.length > 0) {
+        return validateClient.value = true;
+    }
+}
+
+const RegisterUser = async () => {
+    validateClient.value = false;
+    getErrorsValidate();
+    if (validateClient.value) {
+        swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: `Заполните поля в соответствии с указанным форматом`,
+            showConfirmButton: false,
+            timer: 2500,
+        });
+    } else {
+        try {
+            isLoading.value = true;
+            validated.value = true;
+            //
+            const formattedDateOfBirth = formatDateForBackend(form.value.date_of_birth);
+            form.value.date_of_birth = formattedDateOfBirth;
+            //
+            const response = await HTTP.post('/register/', form.value);
+            form.value = response.data;
+            // console.log(response.data);
+            isLoading.value = false;
+            swal.fire({
+                position: 'top-center',
+                icon: 'success',
+                title: 'успешно',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            router.push('/');
+        } catch (error) {
+            console.log('errr', error);
+            isError.value = error.response.data;
+            console.error('There was an error!', error);
+            isLoading.value = false;
+            if (isError.value) {
+                swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: `ошибка`,
+                    showConfirmButton: false,
+                    timer: 2500,
+                });
+            }
+        }
+    }
+
+};
+</script>
 
 <style lang="scss">
 .btn {
@@ -345,134 +494,3 @@ input {
     }
 }
 </style>
-
-<script setup>
-import { ref, inject, computed } from 'vue';
-import { Button } from '@shared/components/buttons';
-import { Input, passwordInput } from '@shared/components/inputs';
-import { HTTP } from '@app/http';
-import { useRouter } from 'vue-router';
-import { Select, regionsDropdown } from '@shared/components/selects';
-
-const validated = ref(false);
-const form = ref({
-    region: null,
-    last_name: '',
-    first_name: '',
-    patronymic_name: '',
-    phone_number: '',
-    email: '',
-    date_of_birth: '',
-    username: '',
-    password: '',
-    re_password: '',
-    personal_data_agreement: false,
-});
-
-const isLoading = ref(false);
-const isError = ref([]);
-const router = useRouter();
-const swal = inject('$swal');
-
-//
-const today = new Date();
-const maxDate = new Date(today.getFullYear() - 13, today.getMonth());
-const minDate = new Date(today.getFullYear() - 100, today.getMonth());
-const disableOutOfRangeDates = (date) => date > maxDate || date < minDate;
-//
-
-const termsError = computed(() => {
-    return validated.value && !form.personal_data_agreement;
-});
-const handleTermsState = () => {
-    validated.value = false;
-};
-
-const regexpName = /^[а-яА-ЯЁё\s]+$/;
-const regexpEmail = /^([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)$/;
-const regexpEnter = /^[a-zA-Z0-9_@.+-]+$/;
-
-const validateClient = ref(false);
-
-const getErrorsValidate = () => {
-    const inputs = [form.value.last_name, form.value.first_name, form.value.patronymic_name];
-    const inputEmail = form.value.email;
-    const inputEnter = [form.value.username, form.value.password, form.value.re_password];
-
-    let errorsBlock = [];
-
-    inputs.forEach((element) => {
-        if (!regexpName.test(element)) {
-            if (element.length > 0) {
-                errorsBlock.push(element);
-            }
-        }
-    });
-    if (!regexpEmail.test(inputEmail)) {
-        if (inputEmail.length > 0) {
-            errorsBlock.push(inputEmail);
-        }
-    }
-    inputEnter.forEach((element) => {
-        if (!regexpEnter.test(element)) {
-            if (element.length > 0) {
-                errorsBlock.push(element);
-            }
-        } else {
-            if (element.length > 0 && element.length < 8) {
-                errorsBlock.push(element);
-            }
-        }
-    });
-    // console.log("ошибки -", errorsBlock, "кол-во ошибок -", errorsBlock.length);
-    if (errorsBlock.length > 0) {
-        return validateClient.value = true;
-    }
-}
-
-const RegisterUser = async () => {
-    validateClient.value = false;
-    getErrorsValidate();
-    if (validateClient.value) {
-        swal.fire({
-            position: 'center',
-            icon: 'error',
-            title: `Заполните поля в соответствии с указанным форматом`,
-            showConfirmButton: false,
-            timer: 2500,
-        });
-    } else {
-        try {
-            isLoading.value = true;
-            validated.value = true;
-            const response = await HTTP.post('/register/', form.value);
-            form.value = response.data;
-            // console.log(response.data);
-            isLoading.value = false;
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-            router.push('/');
-        } catch (error) {
-            console.log('errr', error);
-            isError.value = error.response.data;
-            console.error('There was an error!', error);
-            isLoading.value = false;
-            if (isError.value) {
-                swal.fire({
-                    position: 'center',
-                    icon: 'error',
-                    title: `ошибка`,
-                    showConfirmButton: false,
-                    timer: 2500,
-                });
-            }
-        }
-    }
-
-};
-</script>
