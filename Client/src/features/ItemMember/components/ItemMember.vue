@@ -40,10 +40,10 @@
                         v-model:checked="confidant" @update:checked="changeConfidant"></FormCheckbox>
 
                 </div>
-                <!-- <div v-if="((roleStore.roles.detachment_commander?.id === squadsStore.squad?.id) || (item.user?.id == userStore.currentUser?.id && item.is_trusted === true)) || ((roleStore.roles.educationalheadquarter_commander?.id === educationalsStore.educational?.id) || (item.user?.id == userStore.currentUser?.id && item.is_trusted === true)) || ((roleStore.roles.localheadquarter_commander?.id === localsStore.local?.id) || (item.user?.id == userStore.currentUser?.id && item.is_trusted === true)) || ((roleStore.roles.regionalheadquarter_commander?.id === regionalsStore.regional?.id) || (item.user?.id == userStore.currentUser?.id && item.is_trusted === true)) || ((roleStore.roles.districtheadquarter_commander?.id === districtsStore.district?.id) || (item.user?.id == userStore.currentUser?.id && item.is_trusted === true)) || ((roleStore.roles.centralheadquarter_commander === userStore.currentUser?.central_headquarter_id) || (item.user?.id == userStore.currentUser?.id && item.is_trusted === true))"
+                <div v-if="((roleStore.roles.detachment_commander?.id === squadsStore.squad?.id) || (item.user?.id == userStore.currentUser?.id && item.is_trusted === true)) || ((roleStore.roles.educationalheadquarter_commander?.id === educationalsStore.educational?.id) || (item.user?.id == userStore.currentUser?.id && item.is_trusted === true)) || ((roleStore.roles.localheadquarter_commander?.id === localsStore.local?.id) || (item.user?.id == userStore.currentUser?.id && item.is_trusted === true)) || ((roleStore.roles.regionalheadquarter_commander?.id === regionalsStore.regional?.id) || (item.user?.id == userStore.currentUser?.id && item.is_trusted === true)) || ((roleStore.roles.districtheadquarter_commander?.id === districtsStore.district?.id) || (item.user?.id == userStore.currentUser?.id && item.is_trusted === true)) || ((roleStore.roles.centralheadquarter_commander === userStore.currentUser?.central_headquarter_id) || (item.user?.id == userStore.currentUser?.id && item.is_trusted === true))"
                     class="member__delete" @click="deleteMember(item.id)">
                     <img src="@app/assets/closeDel.png" alt="del">
-                </div> -->
+                </div>
             </div>
         </div>
     </div>
