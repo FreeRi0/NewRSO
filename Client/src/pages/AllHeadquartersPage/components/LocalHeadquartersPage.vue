@@ -5,15 +5,8 @@
                 label="Создать штаб" name="CreateLHQ" :button="false" :educ-com="true"></bannerCreate>
             <!-- :loc-com="true" -->
             <h2 class="headquarters-title">Местные штабы</h2>
-            <div class="headquarters-search">
-                <input type="text" id="search" class="headquarters-search__input" v-model="name" @keyup="searchLocal"
-                    placeholder="Начните вводить название штаба." />
-                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M18.511 19.0914L24 24.8M21 12.84C21 14.5884 20.5015 16.2975 19.5675 17.7512C18.6335 19.205 17.306 20.338 15.7528 21.0071C14.1997 21.6762 12.4906 21.8512 10.8417 21.5101C9.1929 21.169 7.67835 20.3271 6.4896 19.0908C5.30085 17.8545 4.4913 16.2794 4.16333 14.5646C3.83535 12.8498 4.00368 11.0724 4.64703 9.45708C5.29037 7.84178 6.37984 6.46116 7.77766 5.48981C9.17548 4.51846 10.8189 4 12.5 4C14.7544 4 16.9164 4.93135 18.5104 6.58918C20.1045 8.247 21 10.4955 21 12.84Z"
-                        stroke="#898989" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-            </div>
+            <Search v-model="name" placeholder="Начните вводить название штаба"
+                @update:modelValue="searchHeadquarters" />
             <div class="headquarters-sort">
                 <div class="sort-layout">
                     <div>
@@ -32,26 +25,16 @@
                 </div>
 
                 <div class="sort-filters">
-                    <div class="sort-select">
-                        <v-select class="form__select filter-district" :items="districtsStore.districts" clearable
-                            variant="outlined" name="select_district" id="select-district"
-                            v-model="selectedSortdistrict" item-title="name" placeholder="Окружной штаб">
-                            <template #selection="{ item }">
-                                <pre>{{ item.title }}</pre>
-                            </template>
-                        </v-select>
+                    <div class="sort-select sort-select--width-district">
+                        <headSelect v-model="SelectedSortDistrict" @update="sortDistricts" placeholder="Окружные штабы"
+                            :items="districtsStore.districts" />
+                    </div>
+                    <div class="sort-select sort-select--width-regional">
+                        <headSelect v-model="SelectedSortRegional" @update="sortRegionals"
+                            placeholder="Региональные штабы" :items="regionalsStore.regionals" />
                     </div>
                     <div class="sort-select">
-                        <v-select class="form__select filter-region" :items="regionalsStore.regionals" clearable
-                            variant="outlined" name="select_region" id="select-region" v-model="selectedSortRegional"
-                            item-title="name" placeholder="Региональные штабы">
-                            <template #selection="{ item }">
-                                <pre>{{ item.title }}</pre>
-                            </template>
-                        </v-select>
-                    </div>
-                    <div class="sort-select">
-                        <sortByEducation variant="outlined" clearable v-model="sortBy" :options="sortOptionss"
+                        <sortByEducation variant="outlined" clearable v-model="sortBy" :options="sortOptions"
                             class="sort-alphabet" :sorts-boolean="false" placeholder="Выберите фильтр">
                         </sortByEducation>
                     </div>
@@ -60,21 +43,11 @@
                         color="white"></Button>
                 </div>
             </div>
-            <div v-show="vertical" class="mt-10">
-                <LocalHQList :localHeadquarters="sortedLocalsHeadquarters"></LocalHQList>
-                <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
-                    color="blue"></v-progress-circular>
-                <p v-else-if="!isLoading && !sortedLocalsHeadquarters.length">
-                    Ничего не найдено
-                </p>
+            <div v-show="vertical">
+                <LocalHQList :is-loading="isLoading" :localHeadquarters="sortedLocalsHeadquarters"></LocalHQList>
             </div>
             <div class="horizontal" v-show="!vertical">
-                <HorizontalLocalHQs :localHeadquarters="sortedLocalsHeadquarters"></HorizontalLocalHQs>
-                <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
-                    color="blue"></v-progress-circular>
-                <p v-else-if="!isLoading && !sortedLocalsHeadquarters.length">
-                    Ничего не найдено
-                </p>
+                <HorizontalLocalHQs :is-loading="isLoading" :localHeadquarters="sortedLocalsHeadquarters"></HorizontalLocalHQs>
             </div>
             <template v-if="locals.count && locals.count > limit">
                 <Button @click="next" v-if="sortedLocalsHeadquarters.length < locals.count"
@@ -86,19 +59,18 @@
 </template>
 <script setup>
 import { bannerCreate } from '@shared/components/imagescomp';
-import { Input, Search } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import {
     LocalHQList,
     HorizontalLocalHQs,
 } from '@features/Headquarters/components';
 import { sortByEducation, Select } from '@shared/components/selects';
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted, watch, onActivated } from 'vue';
 import { HTTP } from '@app/http';
 import { onBeforeRouteLeave } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
+import { Search, headSelect, Input } from '@shared/components/inputs';
 import { useLocalsStore } from '@features/store/local';
-import { onActivated } from 'vue';
 import { useDistrictsStore } from '@features/store/districts';
 import { useRegionalsStore } from '@features/store/regionals';
 
@@ -108,95 +80,125 @@ const localStore = useLocalsStore();
 const districtsStore = useDistrictsStore();
 const regionalsStore = useRegionalsStore();
 const limit = 20;
-const timerSearch = ref(null);
 const isLoading = ref(false);
 const ascending = ref(true);
 const sortBy = ref('name');
 
 const vertical = ref(true);
-const locals = ref({});
+const locals = ref({ results: [], next: null });
 const name = ref('');
 
-const next = () => {
-    getLocals('next');
-};
-
-const sortedLocalsHeadquarters = ref([]);
-
-const prev = () => {
-    getLocals();
-};
-
-const showVertical = () => {
-    vertical.value = !vertical.value;
-};
-const selectedSortdistrict = ref(
-    JSON.parse(localStorage.getItem('LocalHeadquarters_filters'))?.districtName,
-);
-const selectedSortRegional = ref(
-    JSON.parse(localStorage.getItem('LocalHeadquarters_filters'))?.regionalName,
-);
-
-const searchLocal = (event) => {
-    clearTimeout(timerSearch.value);
-    timerSearch.value = setTimeout(() => {
-        getLocals();
-    }, 400);
-};
-
-const getLocals = async (pagination, orderLimit) => {
-    try {
-        isLoading.value = true;
-        let data = [];
-        let url = '/locals/?';
-        if (orderLimit) data.push('limit=' + orderLimit);
-        else if (!pagination) data.push('limit=' + limit);
-        else if (pagination == 'next')
-            url = locals.value.next.replace('http', 'https');
-        if (name.value) data.push('search=' + name.value);
-        if (selectedSortdistrict.value)
-            data.push(
-                'district_headquarter__name=' + selectedSortdistrict.value,
-            );
-        if (selectedSortRegional.value)
-            data.push(
-                'regional_headquarter__name=' + selectedSortRegional.value,
-            );
-        if (sortBy.value && !pagination)
-            data.push(
-                'ordering=' + (ascending.value ? '' : '-') + sortBy.value,
-            );
-        const viewHeadquartersResponse = await HTTP.get(url + data.join('&'),);
-        isLoading.value = false;
-
-        let response = viewHeadquartersResponse.data;
-        if (pagination) {
-            response.results = [...locals.value.results, ...response.results];
-        }
-        locals.value = response;
-        sortedLocalsHeadquarters.value = response.results;
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
-};
-
-onMounted(() => {
-    districtsStore.getDistricts();
-    regionalsStore.getRegionals(sortBy.value);
-    getLocals();
-});
-
-// const selectedSort = ref(0);
-// const selectedSortRegion = ref(null);
-// const selectedSortDistrict = ref(null);
-
-const sortOptionss = ref([
+const sortOptions = ref([
     {
         value: 'name',
         name: 'Алфавиту от А - Я',
     },
     { value: 'founding_date', name: 'Дате создания штаба' },
 ]);
+
+const next = () => {
+    getLocals('next');
+};
+
+const prev = () => {
+    getLocals();
+};
+
+const sortedLocalsHeadquarters = ref([]);
+
+const showVertical = () => {
+    vertical.value = !vertical.value;
+};
+const SelectedSortDistrict = ref(
+    JSON.parse(localStorage.getItem('LocalHeadquarters_filters'))?.districtName,
+);
+const SelectedSortRegional = ref(
+    JSON.parse(localStorage.getItem('LocalHeadquarters_filters'))?.regionalName,
+);
+
+const getLocals = async (pagination, orderLimit) => {
+    if (isLoading.value) return;
+    isLoading.value = true;
+    try {
+        const url = buildLocalsUrl(pagination, orderLimit);
+        const response = await HTTP.get(url);
+
+        if (response && response.data) {
+            updateLocals(response.data, pagination);
+        } else {
+            console.error('Ответ от сервера не содержит данных');
+        }
+    } catch (error) {
+        console.error('Произошла ошибка:', error);
+    } finally {
+        isLoading.value = false;
+    }
+};
+
+const buildLocalsUrl = (pagination, orderLimit) => {
+    const params = [];
+    let url = '/locals/?';
+
+    // Устанавливаем limit  
+    if (orderLimit) {
+        params.push(`limit=${orderLimit}`);
+    } else {
+        params.push(`limit=${limit}`);  // Используем фиксированный limit, если orderLimit не задан  
+    }
+
+    // Обработка пагинации  
+    if (pagination === 'next') {
+        locals.value.next.includes('213.139.208.147:30000') ? url = locals.value.next : url = locals.value.next.replace('http', 'https');
+    } else {
+        // Добавление параметров поиска и фильтров, если не используем пагинацию "next"  
+        if (name.value) params.push(`search=${encodeURIComponent(name.value)}`);
+        addFilters(params);
+        if (sortBy.value) {
+            params.push(`ordering=${ascending.value ? '' : '-'}${sortBy.value}`);
+        }
+    }
+    return pagination ? url : url + (params.length ? params.join('&') : '');
+
+};
+
+const addFilters = (params) => {
+    if (SelectedSortDistrict.value) {
+        params.push(`district_headquarter__name=${SelectedSortDistrict.value}`);
+    }
+    if (SelectedSortRegional.value) {
+        params.push(`regional_headquarter__name=${SelectedSortRegional.value}`);
+    }
+};
+
+const updateLocals = (response, pagination) => {
+    if (pagination === 'next') {
+        response.results = [...locals.value.results, ...response.results]
+    }
+    locals.value = response;
+    sortedLocalsHeadquarters.value = response.results;
+};
+
+const updateSearch = (newValue) => {
+    name.value = newValue;
+    searchLocals();
+};
+
+const searchHeadquarters = () => {
+    getLocals();
+};
+const sortDistricts = (newValue) => {
+    SelectedSortDistrict.value = newValue;
+}
+
+const sortRegionals = (newValue) => {
+    SelectedSortRegional.value = newValue;
+}
+
+onMounted(() => {
+    districtsStore.getDistricts();
+    regionalsStore.getRegionals(sortBy.value);
+    getLocals();
+});
 
 onBeforeRouteLeave(async (to, from) => {
     const pageName = 'LocalHeadquarters';
@@ -206,42 +208,29 @@ onBeforeRouteLeave(async (to, from) => {
 });
 
 onActivated(() => {
-    selectedSortdistrict.value = JSON.parse(
+    SelectedSortDistrict.value = JSON.parse(
         localStorage.getItem('LocalHeadquarters_filters'),
     )?.districtName;
 
-    selectedSortRegional.value = JSON.parse(
+    SelectedSortRegional.value = JSON.parse(
         localStorage.getItem('LocalHeadquarters_filters'),
     )?.regionalName;
 
     localStorage.removeItem('LocalHeadquarters_filters');
 });
 
-watch(
-    () => selectedSortdistrict.value,
-    () => {
+const watchLocals = () => {
+    watch(() => SelectedSortDistrict.value, () => getLocals());
+    watch(() => SelectedSortRegional.value, () => {
+        ;
         getLocals();
-    },
-);
-watch(
-    () => selectedSortRegional.value,
-    () => {
-        getLocals();
-    },
-);
+    });
+    watch(() => sortBy.value, () => getLocals('', sortedLocalsHeadquarters.value.length));
+    watch(() => ascending.value, () => getLocals('', sortedLocalsHeadquarters.value.length));
+};
 
-watch(
-    () => sortBy.value,
-    () => {
-        getLocals('', sortedLocalsHeadquarters.value.length);
-    },
-);
-watch(
-    () => ascending.value,
-    () => {
-        getLocals('', sortedLocalsHeadquarters.value.length);
-    },
-);
+watchLocals();
+
 </script>
 <style lang="scss">
 .headquarters {
@@ -271,24 +260,6 @@ watch(
         }
     }
 
-    &-search {
-        position: relative;
-        box-sizing: border-box;
-
-        svg {
-            position: absolute;
-            top: 10px;
-            left: 16px;
-        }
-
-        &__input {
-            width: 100%;
-            padding: 13px 0px 10px 60px;
-            border-radius: 10px;
-            border: 1px solid black;
-        }
-    }
-
     &-wrapper {
         padding: 60px 0px;
         display: grid;
@@ -303,6 +274,33 @@ watch(
         @media screen and (max-width: 575px) {
             grid-template-columns: 1fr 1fr;
         }
+    }
+}
+
+.sort-select {
+    &--width {
+        &-district {
+            min-width: 193px;
+        }
+
+        &-regional {
+            min-width: 227px;
+        }
+
+        &-local {
+            min-width: 185px;
+        }
+
+        &-sort {
+            min-width: 180px;
+        }
+    }
+
+    span {
+        font-family: 'Bert Sans';
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 20px;
     }
 }
 
@@ -356,13 +354,6 @@ pre {
     line-height: 20px;
 }
 
-.circleLoader {
-    width: 60px;
-    height: 60px;
-    display: block;
-    margin: 30px auto;
-}
-
 .horizontal {
     margin-top: 40px;
     display: grid;
@@ -413,9 +404,6 @@ pre {
     }
 }
 
-// .v-label {
-//     margin-top: 20px;
-// }
 .ascend {
     background-image: url('@app/assets/icon/switch.svg');
     background-repeat: no-repeat;
@@ -472,4 +460,3 @@ pre {
     border: none;
 }
 </style>
-@shared/components/inputs/imagescomp

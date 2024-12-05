@@ -1,13 +1,12 @@
 <template>
     <div class="headquarters-wrapper__item">
-        <router-link :to="{ name: 'HQ', params: { id: headquarter.id } }">
+        <router-link :to="{ name: props.name, params: { id: headquarter.id } }">
             <div class="round-img">
                 <img
-                    :src="headquarter.emblem"
+                    :src="headquarter.emblem ? headquarter.emblem : '@app/assets/hq-emblem-squad.png'"
                     alt="logo"
-                    v-if="headquarter.emblem"
                 />
-                <img src="@app/assets/hq-emblem-squad.png" alt="logo" v-else />
+                <!-- <img src="@app/assets/hq-emblem-squad.png" alt="logo" v-else /> -->
             </div>
             <div class="container-headquarters">
                 <p class="headquarters-wrapper__item-title">
@@ -23,6 +22,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    name: {
+        type: String,
+        required: true,
+    }
 });
 </script>
 <style lang="scss" scoped>
@@ -44,6 +47,5 @@ const props = defineProps({
 }
 .container-headquarters {
     padding-top: 10px;
-    
 }
 </style>

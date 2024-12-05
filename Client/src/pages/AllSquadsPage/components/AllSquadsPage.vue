@@ -50,8 +50,8 @@
                             </div>
                             <div class="sort-select sort-select--width-education"
                                 v-if="SelectedSortRegional || SelectedSortLocal">
-                                <headSelect v-model="education" @update="sortEducationals"
-                                    placeholder="Образовательная организация" :items="educationals" />
+                                <headSelect v-model="education" @update="sortEducations"
+                                    placeholder="Образовательная организация" :items="educations" />
                             </div>
                             <div class="sort-select sort-select--width-sort">
                                 <sortByEducation variant="outlined" clearable v-model="sortBy" :options="sortOptions"
@@ -67,7 +67,8 @@
             </div>
 
             <div v-show="vertical">
-                <squadsList :squads="sortedSquads" :is-loading="isLoading"></squadsList>
+                <squadsList  :squads="sortedSquads"
+                    :is-loading="isLoading"></squadsList>
             </div>
 
             <div class="horizontal" v-show="!vertical">
@@ -85,7 +86,7 @@ import { bannerCreate } from '@shared/components/imagescomp';
 import { Button } from '@shared/components/buttons';
 import { squadsList, horizontalList } from '@features/Squads/components';
 import { sortByEducation } from '@shared/components/selects';
-import { ref, onMounted, onActivated, watch } from 'vue';
+import { ref, onMounted, onActivated, watch, nextTick } from 'vue';
 import { useSquadsStore } from '@features/store/squads';
 import { HTTP } from '@app/http';
 import { Search, headSelect } from '@shared/components/inputs';
@@ -95,12 +96,10 @@ import { useRegionalsStore } from '@features/store/regionals';
 const squadsStore = useSquadsStore();
 const districtsStore = useDistrictsStore();
 const regionalsStore = useRegionalsStore();
-
 const name = ref('');
-const timerSearch = ref(null);
 const education = ref(null);
 const isLoading = ref(false);
-const detachments = ref({});
+const detachments = ref({ results: [], next: null });
 const limit = 20;
 
 const SelectedSortDistrict = ref(
@@ -112,13 +111,13 @@ const SelectedSortRegional = ref(
 const SelectedSortLocal = ref(
     JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.localName
 );
-// const text = ref('Окружные штабы')
+
 const ascending = ref(true);
 const sortBy = ref('name');
 const picked = ref('');
 const vertical = ref(true);
 const locals = ref([]);
-const educationals = ref([]);
+const educations = ref([]);
 const sortedSquads = ref([]);
 
 const showVertical = () => {
@@ -130,7 +129,17 @@ const sortOptions = ref([
     { value: 'founding_date', name: 'Дате создания отряда' },
 ]);
 
-const next = () => getDetachments('next');
+const next = () => {
+    getDetachments('next');
+    nextTick(() => {
+        const container = document.querySelector('.detachments-container');
+        if (container) {
+           
+            container.scrollTop = container.scrollHeight;
+            console.log('cont', container.scrollTop, container.scrollHeight)
+        }
+    });
+};
 const prev = () => getDetachments();
 
 const getHeadquartersForFilters = async (type) => {
@@ -139,7 +148,7 @@ const getHeadquartersForFilters = async (type) => {
             locals.value = [];
             SelectedSortLocal.value = '';
         } else if (type === 'educational') {
-            educationals.value = [];
+            educations.value = [];
             education.value = '';
         }
         return;
@@ -159,7 +168,7 @@ const getHeadquartersForFilters = async (type) => {
         if (type === 'local') {
             locals.value = data.results;
         } else if (type === 'educational') {
-            educationals.value = data.results;
+            educations.value = data.results;
         }
     } catch (error) {
         console.error(`Ошибка при запросе ${type} штабов:`, error);
@@ -185,33 +194,6 @@ const getDetachments = async (pagination, orderLimit) => {
     }
 };
 
-// const buildDetachmentsUrl = (pagination, orderLimit) => {
-//     const params = [];
-//     let url = '/detachments/?';
-
-//     // Устанавливаем limit  
-//     if (orderLimit) {
-//         params.push(`limit=${orderLimit}`);
-//     } else {
-//         params.push(`limit=${limit}`);  // Используем фиксированный limit, если orderLimit не задан  
-//     }
-
-//     // Обработка пагинации  
-//     if (pagination === 'next') {
-//         url = detachments.value.next;
-//     }
-
-//     // Добавление параметров поиска  
-//     if (name.value) params.push(`search=${encodeURIComponent(name.value)}`);
-//     if (pagination !== 'next') {
-//         addFilters(params);
-//         if (sortBy.value) {
-//             params.push(`ordering=${ascending.value ? '' : '-'}${sortBy.value}`);
-//         }
-//     }
-//     return url + (params.length ? '&' + params.join('&') : '');
-// };
-
 const buildDetachmentsUrl = (pagination, orderLimit) => {
     const params = [];
     let url = '/detachments/?';
@@ -225,7 +207,7 @@ const buildDetachmentsUrl = (pagination, orderLimit) => {
 
     // Обработка пагинации  
     if (pagination === 'next') {
-        url = detachments.value.next;
+        detachments.value.next.includes('213.139.208.147:30000') ? url = detachments.value.next : url = detachments.value.next.replace('http', 'https');
     } else {
         // Добавление параметров поиска и фильтров, если не используем пагинацию "next"  
         if (name.value) params.push(`search=${encodeURIComponent(name.value)}`);
@@ -281,7 +263,7 @@ const sortLocals = (newValue) => {
     SelectedSortLocal.value = newValue;
 }
 
-const sortEducationals = (newValue) => {
+const sortEducations = (newValue) => {
     education.value = newValue;
 }
 

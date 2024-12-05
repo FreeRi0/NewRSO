@@ -4,7 +4,7 @@
             <v-progress-circular class="circleLoader text-center" indeterminate color="blue"></v-progress-circular>  
         </template>  
         <template v-else>  
-            <template v-if="squads.length">  
+            <template v-if="squads.length" class="detachments-container">  
                 <squadItem v-for="squad in squads" :squad="squad" :key="squad.id" />  
             </template>  
             <p v-else>Ничего не найдено</p>  
@@ -33,4 +33,7 @@ const props = defineProps({
     justify-content: center;
     align-items: center;
 }
+.detachments-container {   
+  overflow-y: auto; /* Enable vertical scrolling */  
+}  
 </style>
