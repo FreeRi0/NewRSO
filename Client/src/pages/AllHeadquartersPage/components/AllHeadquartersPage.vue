@@ -204,7 +204,6 @@ const updateEducations = (response, pagination) => {
 
 const updateSearch = (newValue) => {
     name.value = newValue;
-    searchEducational();
 };
 
 const searchHeadquarters = () => {

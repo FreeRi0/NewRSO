@@ -1,12 +1,17 @@
 <template>
-    <div class="headquarters-wrapper">
-        <regionalItem
-            v-for="regionalHeadquarter in regionalHeadquarters"
-            :regional-headquarter="regionalHeadquarter"
-            :key="regionalHeadquarter.id"
-        />
+    <div
+        :class="{ 'top': isLoading || !regionalHeadquarters.length, 'headquarters-wrapper': !isLoading && regionalHeadquarters.length }">
+        <template v-if="isLoading">
+            <v-progress-circular class="circleLoader text-center" indeterminate color="blue"></v-progress-circular>
+        </template>
+        <template v-else>
+            <template v-if="regionalHeadquarters.length">
+                <regionalItem v-for="regionalHeadquarter in regionalHeadquarters"
+                    :regional-headquarter="regionalHeadquarter" :key="regionalHeadquarter.id" />
+            </template>
+            <p v-else>Ничего не найдено</p>
+        </template>
     </div>
-
 </template>
 <script setup>
 import { regionalItem } from '@entities/HeadquartersData/components';
@@ -15,33 +20,17 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    isLoading: {
+        type: Boolean,
+        required: false,
+    }
 });
 </script>
 <style lang="scss" scoped>
-.round-img {
-    width: 128px;
-    height: 128px;
-    display: block;
-    margin: 0px auto;
-    @media screen and (max-width: 575px) {
-        width: 100px;
-        height: 100px;
-    }
-}
-.headquarters-wrapper__item {
-    margin: 0px auto;
-    width: 180px;
-    @media screen and (max-width: 575px) {
-        width: 150px;
-    }
-    &-title {
-        text-align: center;
-        font-size: 20px;
-        font-family: 'Akrobat';
-        color: #1e1e1e;
-        @media screen and (max-width: 575px) {
-            font-size: 16px;
-        }
-    }
+.top {
+    display: flex;
+    margin-top: 50px;
+    justify-content: center;
+    align-items: center;
 }
 </style>

@@ -65,7 +65,7 @@ import {
     HorizontalLocalHQs,
 } from '@features/Headquarters/components';
 import { sortByEducation, Select } from '@shared/components/selects';
-import { ref, computed, onMounted, watch, onActivated } from 'vue';
+import { ref, onMounted, watch, onActivated } from 'vue';
 import { HTTP } from '@app/http';
 import { onBeforeRouteLeave } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
@@ -180,7 +180,6 @@ const updateLocals = (response, pagination) => {
 
 const updateSearch = (newValue) => {
     name.value = newValue;
-    searchLocals();
 };
 
 const searchHeadquarters = () => {

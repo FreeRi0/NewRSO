@@ -248,7 +248,6 @@ const updateDetachments = (response, pagination) => {
 
 const updateSearch = (newValue) => {
     name.value = newValue;
-    searchDetachments();
 };
 
 const sortDistricts = (newValue) => {
