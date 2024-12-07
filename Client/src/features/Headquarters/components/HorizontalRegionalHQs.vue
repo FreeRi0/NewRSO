@@ -5,14 +5,14 @@
         </template>
         <template v-else>
             <template v-if="regionalHeadquarters.length">
-                <regionalHorizontalItem v-for="regionalHeadquarter in regionalHeadquarters"
-                    :regional-headquarter="regionalHeadquarter" :key="regionalHeadquarter.id"></regionalHorizontalItem>
+                <headquarterItem v-for="regionalHeadquarter in regionalHeadquarters" :headquarter="regionalHeadquarter"
+                    :name="'RegionalHQ'" :horizontal="true" :key="regionalHeadquarter.id" />
             </template>
         </template>
     </div>
 </template>
 <script setup>
-import { regionalHorizontalItem } from '@entities/HeadquartersData';
+import { headquarterItem } from '@entities/HeadquartersData';
 const props = defineProps({
     regionalHeadquarters: {
         type: Array,

@@ -5,15 +5,15 @@
         </template>
         <template v-else>
             <template v-if="localHeadquarters.length">
-                <localItemHorizontal v-for="localHeadquarter in localHeadquarters" :local-headquarter="localHeadquarter"
-                    :key="localHeadquarter.id"></localItemHorizontal>
+                <headquarterItem v-for="localHeadquarter in localHeadquarters" :headquarter="localHeadquarter"
+                    :name="'LocalHQ'" :horizontal="true" :key="localHeadquarter.id" />
             </template>
         </template>
     </div>
 </template>
 
 <script setup>
-import { localItemHorizontal } from '@entities/HeadquartersData';
+import { headquarterItem } from '@entities/HeadquartersData';
 const props = defineProps({
     localHeadquarters: {
         type: Array,
@@ -25,5 +25,4 @@ const props = defineProps({
     },
 });
 </script>
-<style lang="scss">
-</style>
+<style lang="scss"></style>

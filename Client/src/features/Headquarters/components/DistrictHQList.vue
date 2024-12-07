@@ -6,16 +6,15 @@
         </template>
         <template v-else>
             <template v-if="districtHeadquarters.length">
-                <districtItem v-for="districtHeadquarter in districtHeadquarters"
-                    :district-headquarter="districtHeadquarter" :key="districtHeadquarter.id"></districtItem>
+                <headquarterItem  v-for="districtHeadquarter in districtHeadquarters"
+                    :headquarter="districtHeadquarter" :name="'DistrictHQ'" :key="districtHeadquarter.id"></headquarterItem>
             </template>
             <p v-else>Ничего не найдено</p>
         </template>
-
     </div>
 </template>
 <script setup>
-import { districtItem } from '@entities/HeadquartersData/components';
+import { headquarterItem } from '@entities/HeadquartersData/components';
 const props = defineProps({
     districtHeadquarters: {
         type: Array,

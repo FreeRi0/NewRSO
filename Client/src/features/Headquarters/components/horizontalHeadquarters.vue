@@ -5,15 +5,15 @@
         </template>
         <template v-else>
             <template v-if="headquarters.length">
-                <educationItemHorizontal v-for="headquarter in headquarters" :headquarter="headquarter"
-                    :key="headquarter.id"></educationItemHorizontal>
+                <headquarterItem v-for="headquarter in headquarters" :headquarter="headquarter" :name="'HQ'" :horizontal="true"
+                    :key="headquarter.id"></headquarterItem>
             </template>
         </template>
     </div>
 </template>
 
 <script setup>
-import { educationItemHorizontal } from '@entities/HeadquartersData';
+import { headquarterItem } from '@entities/HeadquartersData';
 const props = defineProps({
     headquarters: {
         type: Array,
