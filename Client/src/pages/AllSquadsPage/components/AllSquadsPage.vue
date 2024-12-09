@@ -15,21 +15,7 @@
 
             <Search v-model="name" @update:modelValue="searchDetachments" />
             <div class="squads-sorts">
-                <div class="sort-layout">
-                    <div>
-                        <Button v-if="vertical" label="" type="button" class="dashboard" color="white"
-                            @click="showVertical">
-                        </Button>
-                        <Button v-else type="button" label="" class="dashboardD" color="white" @click="showVertical">
-                        </Button>
-                    </div>
-                    <div>
-                        <Button v-if="!vertical" type="button" label="" class="menuuA" color="white"
-                            @click="showVertical"></Button>
-                        <Button v-else type="button" class="menuu" label="" color="white"
-                            @click="showVertical"></Button>
-                    </div>
-                </div>
+                <changeButton :vertical="vertical" @switch="showVertical()" />
 
                 <div class="sort-filter">
                     <div class="squads-sort">
@@ -67,24 +53,23 @@
             </div>
 
             <div v-show="vertical">
-                <squadsList  :squads="sortedSquads"
-                    :is-loading="isLoading"></squadsList>
+                <squadsList :squads="sortedSquads" :is-loading="isLoading" />
             </div>
 
-            <div class="horizontal" v-show="!vertical">
-                <horizontalList :squads="sortedSquads" :is-loading="isLoading"></horizontalList>
+            <div v-show="!vertical">
+                <squadsList :squads="sortedSquads" :is-loading="isLoading" :horizontal="true" />
             </div>
             <template v-if="detachments.count && detachments.count > limit">
-                <Button @click="next" v-if="sortedSquads.length < detachments.count" label="Показать еще"></Button>
-                <Button @click="prev" v-else label="Свернуть все"></Button>
+                <Button @click="sortedSquads.length < detachments.count ? next : prev"
+                    :label="sortedSquads.length < detachments.count ? 'Показать еще' : 'Свернуть все'" />
             </template>
         </div>
     </div>
 </template>
 <script setup>
 import { bannerCreate } from '@shared/components/imagescomp';
-import { Button } from '@shared/components/buttons';
-import { squadsList, horizontalList } from '@features/Squads/components';
+import { Button, changeButton } from '@shared/components/buttons';
+import { squadsList } from '@features/Squads/components';
 import { sortByEducation } from '@shared/components/selects';
 import { ref, onMounted, onActivated, watch, nextTick } from 'vue';
 import { useSquadsStore } from '@features/store/squads';
@@ -134,7 +119,7 @@ const next = () => {
     nextTick(() => {
         const container = document.querySelector('.detachments-container');
         if (container) {
-           
+
             container.scrollTop = container.scrollHeight;
             console.log('cont', container.scrollTop, container.scrollHeight)
         }
@@ -302,56 +287,6 @@ watchDetachments();
 
 </script>
 <style lang="scss">
-.dashboard {
-    background-image: url('@app/assets/icon/darhboard-active.svg');
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    margin: 0 !important;
-    width: 32px;
-    height: 32px;
-    padding: 12px 20px !important;
-}
-
-.dashboardD {
-    background-image: url('@app/assets/icon/darhboard-disable.svg');
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    margin: 0 !important;
-    width: 32px;
-    height: 32px;
-    padding: 12px 20px !important;
-}
-
-.menuuA {
-    background-image: url('@app/assets/icon/MenuA.svg');
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    margin: 0 !important;
-    width: 32px;
-    height: 32px;
-    padding: 12px 20px !important;
-}
-
-.menuu {
-    background-image: url('@app/assets/icon/Menu.svg');
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    margin: 0 !important;
-    width: 32px;
-    height: 32px;
-    padding: 12px 20px !important;
-}
-
-.ascend {
-    background-image: url('@app/assets/icon/switch.svg');
-    background-repeat: no-repeat;
-    background-position: 50%;
-    margin: 0 !important;
-    padding: 7px 0 !important;
-    width: 32px;
-    height: 32px;
-}
-
 .v-select__selection {
     padding-bottom: 4px;
 
@@ -380,12 +315,12 @@ watchDetachments();
     }
 
     &-wrapper {
-        padding: 60px 0px;
+        padding: 40px 0px;
         display: grid;
+        margin-top: 40px;
         grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-row-gap: 40px;
         box-shadow: 0px 4px 30px 0px #0000000D;
-        margin-top: 20px;
         border-radius: 10px;
 
         @media screen and (max-width: 1024px) {
@@ -431,25 +366,7 @@ watchDetachments();
     }
 }
 
-.horizontal {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-row-gap: 16px;
-    margin-top: 40px;
-}
 
-.active {
-    background-color: #1c5c94;
-    color: white;
-    border: 1px solid #1c5c94;
-}
-
-.circleLoader {
-    width: 60px;
-    height: 60px;
-    display: block;
-    margin: 30px auto;
-}
 
 .sort-filters {
     flex-wrap: wrap;
@@ -479,7 +396,7 @@ watchDetachments();
 .squads-sorts {
     margin-top: 30px;
     display: flex;
-    column-gap: 23px;
+    align-items: center;
     justify-content: space-between;
 
     @media (max-width: 768px) {
@@ -488,13 +405,10 @@ watchDetachments();
         gap: 60px 0;
     }
 }
-
-.sort-layout {
-    margin-top: 30px;
-
-    @media screen and (max-width: 768px) {
-        margin-top: 0;
-    }
+.active {
+    background-color: #1c5c94;
+    color: white;
+    border: 1px solid #1c5c94;
 }
 
 .sort-select {
@@ -534,10 +448,6 @@ watchDetachments();
 .v-field--variant-outlined .v-field__outline__end,
 .v-field--variant-outlined .v-field__outline__start {
     border: none;
-}
-
-.Sort-alphabet {
-    margin-right: 8px;
 }
 
 .sort-alphabet {

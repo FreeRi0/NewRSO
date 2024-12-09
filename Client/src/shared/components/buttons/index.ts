@@ -1,4 +1,4 @@
 import Button from "./Button.vue";
 import RadioButton from "./RadioButton.vue";
-
-export { Button, RadioButton };
+import changeButton from "./changeButton.vue";
+export { Button, RadioButton, changeButton};

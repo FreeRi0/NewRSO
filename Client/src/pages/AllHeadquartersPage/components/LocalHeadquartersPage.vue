@@ -8,21 +8,7 @@
             <Search v-model="name" placeholder="Начните вводить название штаба"
                 @update:modelValue="searchHeadquarters" />
             <div class="headquarters-sort">
-                <div class="sort-layout">
-                    <div>
-                        <Button v-if="vertical" type="button" class="dashboard" icon="icon" color="white"
-                            @click="showVertical">
-                        </Button>
-                        <Button v-else type="button" class="dashboardD" icon="icon" color="white" @click="showVertical">
-                        </Button>
-                    </div>
-                    <div>
-                        <Button v-if="!vertical" type="button" class="menuuA" icon="icon" color="white"
-                            @click="showVertical"></Button>
-                        <Button v-else type="button" class="menuu" icon="icon" color="white"
-                            @click="showVertical"></Button>
-                    </div>
-                </div>
+                <changeButton :vertical="vertical" @switch="showVertical()" />
 
                 <div class="sort-filters">
                     <div class="sort-select sort-select--width-district">
@@ -44,10 +30,10 @@
                 </div>
             </div>
             <div v-show="vertical">
-                <LocalHQList :is-loading="isLoading" :localHeadquarters="sortedLocalsHeadquarters"></LocalHQList>
+                <HeadquartersList :is-loading="isLoading" :headquarters="sortedLocalsHeadquarters" :name="'LocalHQ'" />
             </div>
-            <div class="horizontal" v-show="!vertical">
-                <HorizontalLocalHQs :is-loading="isLoading" :localHeadquarters="sortedLocalsHeadquarters"></HorizontalLocalHQs>
+            <div v-show="!vertical">
+                <HeadquartersList :is-loading="isLoading" :headquarters="sortedLocalsHeadquarters" :name="'LocalHQ'" :horizontal="true"/> 
             </div>
             <template v-if="locals.count && locals.count > limit">
                 <Button @click="next" v-if="sortedLocalsHeadquarters.length < locals.count"
@@ -59,10 +45,9 @@
 </template>
 <script setup>
 import { bannerCreate } from '@shared/components/imagescomp';
-import { Button } from '@shared/components/buttons';
+import { Button, changeButton } from '@shared/components/buttons';
 import {
-    LocalHQList,
-    HorizontalLocalHQs,
+    HeadquartersList
 } from '@features/Headquarters/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, onMounted, watch, onActivated } from 'vue';
@@ -260,10 +245,13 @@ watchLocals();
     }
 
     &-wrapper {
-        padding: 60px 0px;
+        padding: 40px 0px;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-row-gap: 40px;
+        box-shadow: 0px 4px 30px 0px #0000000D;
+        border-radius: 10px;
+        margin-top: 40px;
 
         /* box-shadow: 1em 2em 2.5em rgba(1, 2, 68, 0.08); */
         @media screen and (max-width: 1024px) {
@@ -300,14 +288,6 @@ watchLocals();
         font-weight: 500;
         font-size: 16px;
         line-height: 20px;
-    }
-}
-
-.sort-layout {
-    margin-top: 40px;
-
-    @media screen and (max-width: 768px) {
-        margin-top: 0;
     }
 }
 
@@ -353,41 +333,10 @@ pre {
     line-height: 20px;
 }
 
-.horizontal {
-    margin-top: 40px;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-row-gap: 16px;
-}
-
 .form__select {
     margin-bottom: 0px;
     // margin-right: 8px;
     border: 1px solid #35383f;
-}
-
-.dashboard {
-    background-image: url('@app/assets/icon/darhboard-active.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-.dashboardD {
-    background-image: url('@app/assets/icon/darhboard-disable.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-.menuuA {
-    background-image: url('@app/assets/icon/MenuA.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-.menuu {
-    background-image: url('@app/assets/icon/Menu.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
 }
 
 .v-select__selection {
@@ -401,12 +350,6 @@ pre {
         font-size: 16px;
         line-height: 20px;
     }
-}
-
-.ascend {
-    background-image: url('@app/assets/icon/switch.svg');
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
 .sort-filters {

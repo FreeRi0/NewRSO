@@ -7,22 +7,7 @@
             <Search v-model="name" placeholder="Начните вводить название штаба"
                 @update:modelValue="searchHeadquarters" />
             <div class="headquarters-sort">
-                <div class="sort-layout">
-                    <div>
-                        <Button v-if="vertical" type="button" class="dashboard" icon="icon" color="white"
-                            @click="showVertical">
-                        </Button>
-                        <Button v-else type="button" class="dashboardD" icon="icon" color="white" @click="showVertical">
-                        </Button>
-                    </div>
-                    <div>
-                        <Button v-if="!vertical" type="button" class="menuuA" icon="icon" color="white"
-                            @click="showVertical"></Button>
-                        <Button v-else type="button" class="menuu" icon="icon" color="white"
-                            @click="showVertical"></Button>
-                    </div>
-                </div>
-
+                <changeButton :vertical="vertical" @switch="showVertical()" />
                 <div class="sort-filters">
                     <div class="sort-select sort-select--width-district">
                         <headSelect v-model="SelectedSortDistrict" @update="sortDistricts" placeholder="Окружные штабы"
@@ -39,12 +24,13 @@
                 </div>
             </div>
 
-            <div class="mt-10" v-show="vertical">
-                <RegionalHQList :is-loading="isLoading" :regionalHeadquarters="sortedRegionalHeadquarters"></RegionalHQList>
+            <div v-show="vertical">
+                <HeadquartersList :is-loading="isLoading" :headquarters="sortedRegionalHeadquarters"
+                    :name="'RegionalHQ'" />
             </div>
-
-            <div class="horizontal" v-show="!vertical">
-                <HorizontalRegionalHQs :is-loading="isLoading" :regionalHeadquarters="sortedRegionalHeadquarters"></HorizontalRegionalHQs>
+            <div v-show="!vertical">
+                <HeadquartersList :is-loading="isLoading" :headquarters="sortedRegionalHeadquarters"
+                    :name="'RegionalHQ'" :horizontal="true" />
             </div>
             <template v-if='regionals.count && regionals.count > limit'>
                 <Button @click="next" v-if="
@@ -59,10 +45,9 @@
 <script setup>
 import { bannerCreate } from '@shared/components/imagescomp';
 import { Input, Search, headSelect } from '@shared/components/inputs';
-import { Button } from '@shared/components/buttons';
+import { Button, changeButton } from '@shared/components/buttons';
 import {
-    RegionalHQList,
-    HorizontalRegionalHQs,
+    HeadquartersList
 } from '@features/Headquarters/components';
 import { sortByEducation, Select } from '@shared/components/selects';
 import { ref, onMounted, onActivated, watch } from 'vue';
@@ -256,29 +241,14 @@ watchRegionals();
         }
     }
 
-    &-search {
-        position: relative;
-        box-sizing: border-box;
-
-        svg {
-            position: absolute;
-            top: 10px;
-            left: 16px;
-        }
-
-        &__input {
-            width: 100%;
-            padding: 13px 0px 10px 60px;
-            border-radius: 10px;
-            border: 1px solid black;
-        }
-    }
-
     &-wrapper {
-        padding: 60px 0px;
+        padding: 40px 0px;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-row-gap: 40px;
+        box-shadow: 0px 4px 30px 0px #0000000D;
+        border-radius: 10px;
+        margin-top: 40px;
 
         /* box-shadow: 1em 2em 2.5em rgba(1, 2, 68, 0.08); */
         @media screen and (max-width: 1024px) {
@@ -355,29 +325,10 @@ pre {
     }
 }
 
-.horizontal {
-    margin-top: 40px;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-row-gap: 16px;
-}
-
 .form__select {
     margin-bottom: 0px;
     margin-right: 8px;
     border: 1px solid #35383f;
-}
-
-.dashboard {
-    background-image: url('@app/assets/icon/darhboard-active.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-.dashboardD {
-    background-image: url('@app/assets/icon/darhboard-disable.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
 }
 
 .v-select__selection {
@@ -388,23 +339,6 @@ pre {
     }
 }
 
-.menuuA {
-    background-image: url('@app/assets/icon/MenuA.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-.menuu {
-    background-image: url('@app/assets/icon/Menu.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-.ascend {
-    background-image: url('@app/assets/icon/switch.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-}
 
 .sort-filters {
     @media screen and (max-width: 768px) {

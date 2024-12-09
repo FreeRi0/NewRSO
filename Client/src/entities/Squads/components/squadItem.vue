@@ -1,134 +1,78 @@
 <template>
-    <div
-        v-if="props.competition === true && member"
-        class="squads-wrapper__item rating_wrapper"
-    >
-        <router-link :to="{ name: 'lso', params: { id: member.id } }">
-            <div class="round-img">
-                <img :src="member?.banner" alt="logo" v-if="member?.banner" />
-                <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
-            </div>
-            <div class="container-squad">
-                <p class="squads-wrapper__item-title normal-title">
-                    {{ member?.name }}
-                </p>
-            </div>
-            <div>
-                <p class="squads-wrapper__item-title normal-title">{{ member?.regional_headquarter_name }}</p>
-            </div>
-            <div class="container-squad" v-if="rating">
-                <p class="squads-wrapper__item-title normal-title">
-                    Место в рейтинге: 102
-                </p>
-            </div>
-        </router-link>
-    </div>
-    <div
-        v-else-if="props.competition === true && member"
-        class="squads-wrapper__item rating_wrapper"
-    >
-        <router-link :to="{ name: 'lso', params: { id: member.id } }">
-            <div class="round-img">
-                <img :src="member?.banner" alt="logo" v-if="member?.banner" />
-                <img src="@app/assets/hq-emblem.png" alt="logo" v-else />
-            </div>
-            <div class="container-squad">
-                <p class="squads-wrapper__item-title normal-title">
-                    {{ member?.name }}
-                </p>
-            </div>
-            <div>
-                <p class="squads-wrapper__item-title normal-title">{{ member?.regional_headquarter_name }}</p>
-            </div>
-            <div class="container-squad" v-if="rating">
-                <p class="squads-wrapper__item-title normal-title">
-                    Место в рейтинге: 102
-                </p>
-            </div>
-        </router-link>
-    </div>
-    <div
-        v-else-if="props.competition === false"
-        class="squads-wrapper__item rating_wrapper"
-    >
-        <router-link :to="{ name: 'lso', params: { id: squad.id } }">
-            <div class="round-img" id="img-squad">
-                <img :src="squad.emblem" alt="logo" v-if="squad.emblem" />
-                <img src="@app/assets/hq-emblem-squad.png" alt="logo" v-else />
-            </div>
-            <div class="container-squad">
-                <p
-                    class="squads-wrapper__item-title normal-title squad-title-normal"
-                >
-                    {{ squad.name }}
-                </p>
-            </div>
-        </router-link>
-    </div>
+  <div :class="{ 'squads-wrapper__item': !horizontal, '': horizontal }">
+    <router-link :class="{ 'horizontal-item': horizontal, '': !horizontal }"
+      :to="{ name: 'lso', params: { id: squad.id } }">
+      <div :class="{ 'round-img': !horizontal, 'horizontal-img': horizontal }">
+        <img :src="getEmblemSrc(squad.emblem)" alt="logo" />
+      </div>
+      <div :class="{ 'container-headquarters': !horizontal, 'containerHorizontal': horizontal }">
+        <p
+          :class="{ 'headquarters-wrapper__item-title': !horizontal, 'headquarters-wrapper__item-category-full': horizontal }">
+          {{ squad.name }}
+        </p>
+      </div>
+    </router-link>
+  </div>
 </template>
 <script setup>
+import defaultAvatar from '@app/assets/hq-emblem-squad.png';
 const props = defineProps({
-    squad: {
-        type: Object,
-        required: true,
-    },
-    rating: {
-        type: Boolean,
-        default: false,
-    },
-    competition: {
-        type: Boolean,
-        default: false,
-    },
-    member: {
-        type: Object,
-    },
+  squad: {
+    type: Object,
+    required: true,
+  },
+  horizontal: {
+    type: Boolean,
+    default: false,
+  },
 });
+const getEmblemSrc = (emblem) => emblem || defaultAvatar;
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .round-img {
-    img {
-        width: 128px;
-        height: 128px;
-        display: block;
-        margin: 0px auto;
-        border-radius: 100%;
-        object-fit: cover;
-        overflow: hidden;
-    }
-}
-#img-squad img {
-    @media screen and (max-width: 450px) {
-        width: 100px;
-        height: 100px;
-    }
-}
-.squads-wrapper__item {
+  img {
+    width: 128px;
+    height: 128px;
+    display: block;
     margin: 0px auto;
-    width: 180px;
+    border-radius: 100%;
+    object-fit: cover;
+    overflow: hidden;
 
-    &-category {
-        margin-top: 10px;
-        margin-bottom: 5px;
-        text-align: center;
-        text-transform: uppercase;
-        font-size: 20px;
-        font-family: 'Akrobat';
-        color: #1e1e1e;
+    @media screen and (min-width: 320px) and (max-width:480px) {
+      width: 128px;
+      height: 128px;
     }
-    &-title {
-        text-align: center;
-        font-size: 20px;
-        font-family: 'Akrobat';
-        color: #1e1e1e;
-    }
+  }
 }
 
-.rating__wrapper {
-    width: 200px;
+.container-headquarters {
+  padding-top: 10px;
+  text-align: center;
 }
 
-.squad-title-normal {
-    padding-top: 10px;
+.horizontal {
+  &-item {
+    border: 1px solid grey;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 4px 20px;
+  }
+
+  &-img {
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 100%;
+    }
+  }
+}
+
+.containerHorizontal {
+  display: flex;
+  margin-left: 20px;
+  align-items: center;
 }
 </style>

@@ -4,23 +4,11 @@
             <bannerCreate desc="Находим крутых работодателей. Стань частью большой команды, для которой «Труд Крут»!"
                 label="Создать штаб" name="createhq" :button="false" :educ-com="true"></bannerCreate>
             <h2 class="headquarters-title">Штабы СО ОО</h2>
-            <Search v-model="name" placeholder="Начните вводить название штаба образовательной организации" @update:modelValue="searchHeadquarters" />
+            <Search v-model="name" placeholder="Начните вводить название штаба образовательной организации"
+                @update:modelValue="searchHeadquarters" />
             <div class="headquarters-sort">
-                <div class="sort-layout">
-                    <div>
-                        <Button v-if="vertical" type="button" class="dashboard" icon="icon" color="white"
-                            @click="showVertical">
-                        </Button>
-                        <Button v-else type="button" class="dashboardD" icon="icon" color="white" @click="showVertical">
-                        </Button>
-                    </div>
-                    <Button v-if="!vertical" type="button" class="menuuA" icon="icon" color="white"
-                        @click="showVertical"></Button>
-                    <Button v-else type="button" class="menuu" icon="icon" color="white" @click="showVertical"></Button>
-                </div>
-
+                <changeButton :vertical="vertical" @switch="showVertical()" />
                 <div class="sort-filters">
-
                     <div class="sort-select sort-select--width-district">
                         <headSelect v-model="SelectedSortDistrict" @update="sortDistricts" placeholder="Окружные штабы"
                             :items="districtsStore.districts" />
@@ -45,13 +33,13 @@
                 </div>
             </div>
 
-            <div v-show="vertical" class="mt-10">
-                <HeadquartersList :is-loading="isLoading" :headquarters="sortedHeadquarters"></HeadquartersList>
+            <div v-show="vertical">
+                <HeadquartersList :is-loading="isLoading" :headquarters="sortedHeadquarters" :name="'HQ'" />
             </div>
 
-            <div class="horizontal" v-show="!vertical">
-                <horizontalHeadquarters :is-loading="isLoading" :headquarters="sortedHeadquarters">
-                </horizontalHeadquarters>
+            <div v-show="!vertical">
+                <HeadquartersList :is-loading="isLoading" :headquarters="sortedHeadquarters" :name="'HQ'"
+                    :horizontal="true" />
             </div>
             <template v-if='educations.count && educations.count > limit'>
                 <Button @click="next" v-if="
@@ -65,10 +53,9 @@
 </template>
 <script setup>
 import { bannerCreate } from '@shared/components/imagescomp';
-import { Button } from '@shared/components/buttons';
+import { Button, changeButton } from '@shared/components/buttons';
 import {
-    HeadquartersList,
-    horizontalHeadquarters,
+    HeadquartersList
 } from '@features/Headquarters/components';
 import { sortByEducation } from '@shared/components/selects';
 import { ref, onMounted, watch, onActivated } from 'vue';
@@ -279,7 +266,7 @@ watchEducations();
         margin-top: 20px;
 
         @media screen and (max-width: 768px) {
-            flex-direction: column-reverse;
+            flex-direction: column-re  verse;
             align-items: flex-start;
             gap: 60px 0;
             margin-top: 0;
@@ -292,10 +279,13 @@ watchEducations();
             justify-content: center;
         }
 
-        padding: 60px 0px;
+        padding: 40px 0px;
+        margin-top: 40px;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-row-gap: 40px;
+        box-shadow: 0px 4px 30px 0px #0000000D;
+        border-radius: 10px;
 
         /* box-shadow: 1em 2em 2.5em rgba(1, 2, 68, 0.08); */
         @media screen and (max-width: 1024px) {
@@ -308,13 +298,6 @@ watchEducations();
     }
 }
 
-.sort-layout {
-    margin-top: 40px;
-
-    @media screen and (max-width: 768px) {
-        margin-top: 0;
-    }
-}
 
 pre {
     overflow: hidden;
@@ -372,41 +355,10 @@ pre {
     }
 }
 
-.horizontal {
-    margin-top: 40px;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-row-gap: 16px;
-}
-
 .form__select {
     margin-bottom: 0px;
     // margin-right: 8px;
     border: 1px solid #35383f;
-}
-
-.dashboard {
-    background-image: url('@app/assets/icon/darhboard-active.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-.dashboardD {
-    background-image: url('@app/assets/icon/darhboard-disable.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-.menuuA {
-    background-image: url('@app/assets/icon/MenuA.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-.menuu {
-    background-image: url('@app/assets/icon/Menu.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
 }
 
 .sort-filters {
@@ -418,6 +370,7 @@ pre {
         display: flex;
     }
 }
+
 .sort-select {
     &--width {
         &-district {

@@ -848,12 +848,6 @@ onMounted(() => {
     margin-right: 4px;
 }
 
-.ascend {
-    background-image: url('@app/assets/icon/switch.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
 .sort-select {
     &--width {
         width: 193px;

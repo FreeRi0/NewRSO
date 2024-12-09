@@ -71,14 +71,7 @@ const emit = defineEmits(['click']);
 
 const clickOnButton = () => {
     emit('click');
-};
-// onMounted(() => {
-//     if (props.icon) {
-//         document.getElementById('icon').src = props.icon;
-//     } else {
-//         document.getElementById('iconn').src = props.iconn;
-//     }
-// })
+}; 
 </script>
 <style lang="scss" scoped>
 .btn {
