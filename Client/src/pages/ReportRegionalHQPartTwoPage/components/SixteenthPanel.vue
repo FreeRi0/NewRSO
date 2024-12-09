@@ -340,7 +340,7 @@
                 id="is_projectDH-true"
                 type="radio"
                 :value="true"
-                :disabled="props.centralExpert || reportStore.isReportReject?.sixteenth"
+                :disabled="props.centralExpert || reportStore.isReportReject?.sixteenth || reportStore.isAllReportsVerifiedByCH"
             />
             <label for="is_projectDH-true">Да</label>
           </div>
@@ -351,7 +351,7 @@
                 id="is_projectDH-false"
                 type="radio"
                 :value="false"
-                :disabled="props.centralExpert || reportStore.isReportReject?.sixteenth"
+                :disabled="props.centralExpert || reportStore.isReportReject?.sixteenth || reportStore.isAllReportsVerifiedByCH"
             />
             <label for="is_projectDH-false">Нет</label>
           </div>
@@ -373,7 +373,7 @@
                 placeholder="ВВС ПРО"
                 :max-length="300"
                 style="width: 100%;"
-                :disabled="(!sixteenthPanelDataDH.is_project || props.centralExpert) || (props.centralExpert || reportStore.isReportReject?.sixteenth)"
+                :disabled="(!sixteenthPanelDataDH.is_project || props.centralExpert) || (props.centralExpert || reportStore.isReportReject?.sixteenth) || reportStore.isAllReportsVerifiedByCH"
             />
           </div>
         </div>
@@ -389,7 +389,7 @@
                     type="radio"
                     :id="`All-${index}DH`"
                     value="Всероссийский"
-                    :disabled="(!sixteenthPanelDataDH.is_project || props.centralExpert) || (props.centralExpert || reportStore.isReportReject?.sixteenth)"
+                    :disabled="(!sixteenthPanelDataDH.is_project || props.centralExpert) || (props.centralExpert || reportStore.isReportReject?.sixteenth) || reportStore.isAllReportsVerifiedByCH"
                 />
                 <label :for="`All-${index}DH`">Всероссийский</label>
               </div>
@@ -400,7 +400,7 @@
                     type="radio"
                     :id="`District-${index}DH`"
                     value="Окружной"
-                    :disabled="(!sixteenthPanelDataDH.is_project || props.centralExpert) || (props.centralExpert || reportStore.isReportReject?.sixteenth)"
+                    :disabled="(!sixteenthPanelDataDH.is_project || props.centralExpert) || (props.centralExpert || reportStore.isReportReject?.sixteenth) || reportStore.isAllReportsVerifiedByCH"
                 />
                 <label :for="`District-${index}DH`">Окружной</label>
               </div>
@@ -411,7 +411,7 @@
                     type="radio"
                     :id="`Interregional-${index}DH`"
                     value="Межрегиональный"
-                    :disabled="(!sixteenthPanelDataDH.is_project || props.centralExpert) || (props.centralExpert || reportStore.isReportReject?.sixteenth)"
+                    :disabled="(!sixteenthPanelDataDH.is_project || props.centralExpert) || (props.centralExpert || reportStore.isReportReject?.sixteenth) || reportStore.isAllReportsVerifiedByCH"
                 />
                 <label :for="`Interregional-${index}DH`">Межрегиональный</label>
               </div>
@@ -434,7 +434,7 @@
               :maxlength="3000"
               :max-length-text="3000"
               counter-visible
-              :disabled="props.centralExpert || reportStore.isReportReject?.sixteenth"
+              :disabled="props.centralExpert || reportStore.isReportReject?.sixteenth || reportStore.isAllReportsVerifiedByCH"
           />
         </div>
         <div class="form__field-result">
@@ -508,7 +508,7 @@
                     :id="'projectCH.dataCH.name'"
                     :name="'projectCH.dataCH.name'"
                     style="width: 100%;"
-                    :disabled="(reportStore.isReportReject?.sixteenth && !props.centralExpert) || !isProjectCH"
+                    :disabled="(reportStore.isReportReject?.sixteenth && !props.centralExpert) || !isProjectCH || reportStore.isAllReportsVerifiedByCH"
                 />
               </td>
             </tr>
@@ -540,7 +540,7 @@
                   type="radio"
                   :id="`All-${index}CH`"
                   value="Всероссийский"
-                  :disabled="(reportStore.isReportReject?.sixteenth && !props.centralExpert) || !isProjectCH"
+                  :disabled="(reportStore.isReportReject?.sixteenth && !props.centralExpert) || !isProjectCH || reportStore.isAllReportsVerifiedByCH"
               />
               <label :for="`All-${index}CH`">Всероссийский</label>
             </div>
@@ -551,7 +551,7 @@
                   type="radio"
                   :id="`District-${index}CH`"
                   value="Окружной"
-                  :disabled="(reportStore.isReportReject?.sixteenth && !props.centralExpert) || !isProjectCH"
+                  :disabled="(reportStore.isReportReject?.sixteenth && !props.centralExpert) || !isProjectCH || reportStore.isAllReportsVerifiedByCH"
               />
               <label :for="`District-${index}CH`">Окружной</label>
             </div>
@@ -562,7 +562,7 @@
                   type="radio"
                   :id="`Interregional-${index}CH`"
                   value="Межрегиональный"
-                  :disabled="(reportStore.isReportReject?.sixteenth && !props.centralExpert) || !isProjectCH"
+                  :disabled="(reportStore.isReportReject?.sixteenth && !props.centralExpert) || !isProjectCH || reportStore.isAllReportsVerifiedByCH"
               />
               <label :for="`Interregional-${index}CH`">Межрегиональный</label>
             </div>
@@ -583,7 +583,7 @@
             :maxlength="3000"
             :max-length-text="3000"
             counter-visible
-            :disabled="reportStore.isReportReject?.sixteenth && !props.centralExpert"
+            :disabled="reportStore.isReportReject?.sixteenth && !props.centralExpert || reportStore.isAllReportsVerifiedByCH"
         />
       </div>
       <!--      <div>-->

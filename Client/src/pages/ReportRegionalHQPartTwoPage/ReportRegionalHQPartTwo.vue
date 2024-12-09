@@ -150,7 +150,7 @@
               <tenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
                 @getDataDHFirst="setDataDH" @getDataDHSecond="setDataDH" @getDataCHFirst="setDataCH"
                 @getDataCHSecond="setDataCH" :data="reportData.tenth" :is-error-panel="isErrorPanel.tenth"
-                :tab="picked" />
+                :tab="picked" :revisionPanels="revisionPanels"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('11', picked, revisionPanels)">

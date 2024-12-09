@@ -202,8 +202,7 @@ const RegisterUser = async () => {
             isLoading.value = true;
             validated.value = true;
             //
-            const formattedDateOfBirth = formatDateForBackend(form.value.date_of_birth);
-            form.value.date_of_birth = formattedDateOfBirth;
+            form.value.date_of_birth = formatDateForBackend(form.value.date_of_birth);
             //
             const response = await HTTP.post('/register/', form.value);
             form.value = response.data;
