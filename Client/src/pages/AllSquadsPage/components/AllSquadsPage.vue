@@ -52,23 +52,21 @@
                 </div>
             </div>
 
-            <div v-show="vertical">
+            <div v-if="vertical">
                 <squadsList :squads="sortedSquads" :is-loading="isLoading" />
             </div>
 
             <div v-show="!vertical">
                 <squadsList :squads="sortedSquads" :is-loading="isLoading" :horizontal="true" />
             </div>
-            <template v-if="detachments.count && detachments.count > limit">
-                <Button @click="sortedSquads.length < detachments.count ? next : prev"
-                    :label="sortedSquads.length < detachments.count ? 'Показать еще' : 'Свернуть все'" />
-            </template>
+            <paginationButton :next="next" :prev="prev" :limit="limit" :element="detachments"
+                :sorted-elements="sortedSquads" />
         </div>
     </div>
 </template>
 <script setup>
 import { bannerCreate } from '@shared/components/imagescomp';
-import { Button, changeButton } from '@shared/components/buttons';
+import {changeButton, paginationButton } from '@shared/components/buttons';
 import { squadsList } from '@features/Squads/components';
 import { sortByEducation } from '@shared/components/selects';
 import { ref, onMounted, onActivated, watch, nextTick } from 'vue';
@@ -84,7 +82,7 @@ const regionalsStore = useRegionalsStore();
 const name = ref('');
 const education = ref(null);
 const isLoading = ref(false);
-const detachments = ref({ results: [], next: null });
+const detachments = ref({});
 const limit = 20;
 
 const SelectedSortDistrict = ref(
@@ -116,16 +114,10 @@ const sortOptions = ref([
 
 const next = () => {
     getDetachments('next');
-    nextTick(() => {
-        const container = document.querySelector('.detachments-container');
-        if (container) {
-
-            container.scrollTop = container.scrollHeight;
-            console.log('cont', container.scrollTop, container.scrollHeight)
-        }
-    });
 };
 const prev = () => getDetachments();
+
+
 
 const getHeadquartersForFilters = async (type) => {
     if (!SelectedSortRegional.value) {
@@ -405,6 +397,7 @@ watchDetachments();
         gap: 60px 0;
     }
 }
+
 .active {
     background-color: #1c5c94;
     color: white;

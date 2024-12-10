@@ -32,20 +32,15 @@
                 <HeadquartersList :is-loading="isLoading" :headquarters="sortedRegionalHeadquarters"
                     :name="'RegionalHQ'" :horizontal="true" />
             </div>
-            <template v-if='regionals.count && regionals.count > limit'>
-                <Button @click="next" v-if="
-                    sortedRegionalHeadquarters.length <
-                    regionals.count
-                " label="Показать еще"></Button>
-                <Button @click="prev" v-else label="Свернуть все"></Button>
-            </template>
+            <paginationButton :next="next" :prev="prev" :limit="limit" :element="regionals"
+                :sorted-elements="sortedRegionalHeadquarters" />
         </div>
     </div>
 </template>
 <script setup>
 import { bannerCreate } from '@shared/components/imagescomp';
-import { Input, Search, headSelect } from '@shared/components/inputs';
-import { Button, changeButton } from '@shared/components/buttons';
+import { Search, headSelect } from '@shared/components/inputs';
+import { paginationButton, changeButton } from '@shared/components/buttons';
 import {
     HeadquartersList
 } from '@features/Headquarters/components';
@@ -66,7 +61,7 @@ const sortBy = ref('name');
 const limit = 20;
 const vertical = ref(true);
 const name = ref('');
-const regionals = ref({ results: [], next: null });
+const regionals = ref({});
 const sortedRegionalHeadquarters = ref([]);
 
 

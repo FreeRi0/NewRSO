@@ -41,19 +41,14 @@
                 <HeadquartersList :is-loading="isLoading" :headquarters="sortedHeadquarters" :name="'HQ'"
                     :horizontal="true" />
             </div>
-            <template v-if='educations.count && educations.count > limit'>
-                <Button @click="next" v-if="
-                    sortedHeadquarters.length <
-                    educations.count
-                " label="Показать еще"></Button>
-                <Button @click="prev" v-else label="Свернуть все"></Button>
-            </template>
+            <paginationButton :next="next" :prev="prev" :limit="limit" :element="educations"
+            :sorted-elements="sortedHeadquarters" />
         </div>
     </div>
 </template>
 <script setup>
 import { bannerCreate } from '@shared/components/imagescomp';
-import { Button, changeButton } from '@shared/components/buttons';
+import { paginationButton, changeButton } from '@shared/components/buttons';
 import {
     HeadquartersList
 } from '@features/Headquarters/components';
@@ -83,7 +78,7 @@ const ascending = ref(true);
 const sortBy = ref('name');
 const vertical = ref(true);
 const isLoading = ref(false);
-const educations = ref({ results: [], next: null });
+const educations = ref({});
 const limit = 20;
 const name = ref('');
 
@@ -266,7 +261,7 @@ watchEducations();
         margin-top: 20px;
 
         @media screen and (max-width: 768px) {
-            flex-direction: column-re  verse;
+            flex-direction: column-re verse;
             align-items: flex-start;
             gap: 60px 0;
             margin-top: 0;

@@ -35,17 +35,14 @@
             <div v-show="!vertical">
                 <HeadquartersList :is-loading="isLoading" :headquarters="sortedLocalsHeadquarters" :name="'LocalHQ'" :horizontal="true"/> 
             </div>
-            <template v-if="locals.count && locals.count > limit">
-                <Button @click="next" v-if="sortedLocalsHeadquarters.length < locals.count"
-                    label="Показать еще"></Button>
-                <Button @click="prev" v-else label="Свернуть все"></Button>
-            </template>
+            <paginationButton :next="next" :prev="prev" :limit="limit" :element="locals"
+            :sorted-elements="sortedLocalsHeadquarters" />
         </div>
     </div>
 </template>
 <script setup>
 import { bannerCreate } from '@shared/components/imagescomp';
-import { Button, changeButton } from '@shared/components/buttons';
+import { paginationButton, changeButton } from '@shared/components/buttons';
 import {
     HeadquartersList
 } from '@features/Headquarters/components';
@@ -54,7 +51,7 @@ import { ref, onMounted, watch, onActivated } from 'vue';
 import { HTTP } from '@app/http';
 import { onBeforeRouteLeave } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
-import { Search, headSelect, Input } from '@shared/components/inputs';
+import { Search, headSelect } from '@shared/components/inputs';
 import { useLocalsStore } from '@features/store/local';
 import { useDistrictsStore } from '@features/store/districts';
 import { useRegionalsStore } from '@features/store/regionals';
@@ -70,7 +67,7 @@ const ascending = ref(true);
 const sortBy = ref('name');
 
 const vertical = ref(true);
-const locals = ref({ results: [], next: null });
+const locals = ref({});
 const name = ref('');
 
 const sortOptions = ref([
