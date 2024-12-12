@@ -3,7 +3,7 @@
     <div class="container">
       <h1 class="title title--mb">Отчет о&nbsp;деятельности регионального отделения РСО за&nbsp;2024&nbsp;год.
         Часть&nbsp;2</h1>
-      <p>{{ route.query.headquartersName }}</p>
+      <p class="report_title-name">{{ route.query.headquartersName }}</p>
       <div v-if="preloader" class="text-center">
         <v-progress-circular color="primary" indeterminate></v-progress-circular>
         <p class="preloader_info">{{ preloader_text }}</p>
@@ -2285,6 +2285,15 @@ onMounted(() => {
 .active {
   background-color: #1c5c94;
   color: white;
+}
+
+.report_title-name {
+  font-family: Bert Sans;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 22.1px;
+  text-align: left;
+  margin-bottom: 20px;
 }
 
 /* .active-app {
