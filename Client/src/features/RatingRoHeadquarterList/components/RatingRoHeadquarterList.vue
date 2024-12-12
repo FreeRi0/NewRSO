@@ -28,6 +28,7 @@ const goToReport = (item) => {
       params: { edited: false },
       query: {
         id: item.id,
+        headquartersName: item.regional_headquarter.name
       },
     });
   }

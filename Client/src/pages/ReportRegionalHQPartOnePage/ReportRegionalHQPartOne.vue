@@ -4,6 +4,8 @@
     <h2 class="report_title-h2">Свод статистических данных по трудоустройству бойцов студенческих отрядов РО за 2024 год
       на 1 сентября 2024 года</h2>
 
+      <p class="report_title-name">{{ route.query.headquartersName }}</p>
+
     <report-regional-form :reportData="reportData" @sentReport="sentReport" isNewReport
       :isButtonDisabled="isButtonDisabled" :key="route.path"/>
   </div>
@@ -127,6 +129,14 @@ const hasEmptyField = (obj) => {
   line-height: 29.01px;
   text-align: left;
   margin-bottom: 40px;
+}
+.report_title-name {
+  font-family: Bert Sans;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 22.1px;
+  text-align: left;
+  margin-bottom: 20px;
 }
 
 .form {
