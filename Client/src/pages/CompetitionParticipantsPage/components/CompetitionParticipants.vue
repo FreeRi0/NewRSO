@@ -42,15 +42,13 @@
             <div class="mt-10">
                 <horizontalCompetitionList :is-loading="isLoading" :members="sortedSquads" />
             </div>
-            <template v-if="detachments.count && detachments.count > limit">
-                <Button @click="next" v-if="sortedSquads.length < detachments.count" label="Показать еще"></Button>
-                <Button @click="prev" v-else label="Свернуть все"></Button>
-            </template>
+            <paginationButton :next="next" :prev="prev" :limit="limit" :element="detachments"
+            :sorted-elements="sortedSquads" />
         </div>
     </div>
 </template>
 <script setup>
-import { Button } from '@shared/components/buttons';
+import { paginationButton } from '@shared/components/buttons';
 import {
     horizontalCompetitionList,
 } from '@features/Squads/components';
@@ -66,7 +64,7 @@ import { HTTP } from '@app/http';
 const squadsStore = useSquadsStore();
 const name = ref('');
 const isLoading = ref(false);
-const detachments = ref({ results: [], next: null });
+const detachments = ref({});
 const isTandem = ref(true);
 const limit = 24;
 const sortBy = ref('detachment__copy_ranking_main_detachment__place');

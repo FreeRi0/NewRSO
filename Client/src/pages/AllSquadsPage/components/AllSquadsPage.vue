@@ -53,7 +53,7 @@
             </div>
 
             <div v-if="vertical">
-                <squadsList :squads="sortedSquads" :is-loading="isLoading" />
+                <squadsList  :squads="sortedSquads" :is-loading="isLoading" />
             </div>
 
             <div v-show="!vertical">
@@ -84,6 +84,7 @@ const education = ref(null);
 const isLoading = ref(false);
 const detachments = ref({});
 const limit = 20;
+const lastLoadedElementRef = ref(null)  
 
 const SelectedSortDistrict = ref(
     JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.districtName
@@ -116,8 +117,6 @@ const next = () => {
     getDetachments('next');
 };
 const prev = () => getDetachments();
-
-
 
 const getHeadquartersForFilters = async (type) => {
     if (!SelectedSortRegional.value) {
@@ -160,7 +159,8 @@ const getDetachments = async (pagination, orderLimit) => {
         const response = await HTTP.get(url);
 
         if (response && response.data) {
-            updateDetachments(response.data, pagination);
+            await updateDetachments(response.data, pagination);
+            await scrollToLastElement();  
         } else {
             console.error('Ответ от сервера не содержит данных');
         }
@@ -221,7 +221,22 @@ const updateDetachments = (response, pagination) => {
     }
     detachments.value = response;
     sortedSquads.value = response.results;
+
+    // nextTick(() => {
+    //     lastLoadedElementRef.value = document.querySelector('.squads-wrapper__item:last-child');
+    // });
 };
+
+const scrollToLastElement = async () => {  
+    await nextTick(() => {  
+        if (lastLoadedElementRef.value) {  
+            lastLoadedElementRef.value.scrollIntoView({  
+                behavior: 'smooth',  
+                block: 'start'  
+            });  
+        }  
+    });  
+};  
 
 const updateSearch = (newValue) => {
     name.value = newValue;
