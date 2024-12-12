@@ -6,7 +6,8 @@
         </template>
         <template v-else>
             <template v-if="squads.length && !horizontal">
-                <squadItem class="squads-wrapper__item" v-for="(squad, index) in squads" :squad="squad" :key="squad.id" :ref="index === squads.length - 1 ? 'lastLoadedElementRef' : null" />
+                <squadItem v-for="(squad, index) in squads" :squad="squad" :key="squad.id"
+                   />
             </template>
             <template v-else-if="squads.length && horizontal">
                 <squadItem v-for="squad in squads" :squad="squad" :horizontal="true" :key="squad.id" />
@@ -18,7 +19,7 @@
 
 <script setup>
 import { squadItem } from '@entities/Squads';
-import { ref } from 'vue';
+import { ref} from 'vue';
 const props = defineProps({
     squads: {
         type: Array,
@@ -33,18 +34,7 @@ const props = defineProps({
         default: false,
     },
 });
-
-const lastLoadedElementRef = document.querySelector('.squads-wrapper__item');
-
-console.log('element', lastLoadedElementRef)
-
-
-
-
 </script>
-
-
-
 <style lang="scss" scoped>
 .top {
     display: flex;

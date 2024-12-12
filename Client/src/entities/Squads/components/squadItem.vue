@@ -1,4 +1,5 @@
 <template>
+  <div :class="{ 'squads-wrapper__item': !horizontal, '': horizontal }">
     <router-link :class="{ 'horizontal-item': horizontal, '': !horizontal }"
       :to="{ name: 'lso', params: { id: squad.id } }">
       <div :class="{ 'round-img': !horizontal, 'horizontal-img': horizontal }">
@@ -11,6 +12,8 @@
         </p>
       </div>
     </router-link>
+  </div>
+
 </template>
 <script setup>
 import defaultAvatar from '@app/assets/hq-emblem-squad.png';
@@ -23,14 +26,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  // ref: {
-  //   type: Object,
-  //   default: null
-  // }
 });
-
-
-
 const getEmblemSrc = (emblem) => emblem || defaultAvatar;
 </script>
 <style lang="scss" scoped>

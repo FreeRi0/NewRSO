@@ -21,6 +21,8 @@ const props = defineProps({
 });
 
 const getEmblemSrc = (emblem) => emblem || defaultAvatar;
+
+
 </script>
 
 <style lang="scss" scoped>

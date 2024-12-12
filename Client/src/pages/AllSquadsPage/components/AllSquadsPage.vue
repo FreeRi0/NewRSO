@@ -53,7 +53,7 @@
             </div>
 
             <div v-if="vertical">
-                <squadsList  :squads="sortedSquads" :is-loading="isLoading" />
+                <squadsList :squads="sortedSquads" :is-loading="isLoading" />
             </div>
 
             <div v-show="!vertical">
@@ -66,7 +66,7 @@
 </template>
 <script setup>
 import { bannerCreate } from '@shared/components/imagescomp';
-import {changeButton, paginationButton } from '@shared/components/buttons';
+import { changeButton, paginationButton } from '@shared/components/buttons';
 import { squadsList } from '@features/Squads/components';
 import { sortByEducation } from '@shared/components/selects';
 import { ref, onMounted, onActivated, watch, nextTick } from 'vue';
@@ -84,8 +84,6 @@ const education = ref(null);
 const isLoading = ref(false);
 const detachments = ref({});
 const limit = 20;
-const lastLoadedElementRef = ref(null)  
-
 const SelectedSortDistrict = ref(
     JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.districtName
 );
@@ -106,6 +104,9 @@ const sortedSquads = ref([]);
 
 const showVertical = () => {
     vertical.value = !vertical.value;
+    nextTick(() => {  
+        scrollToLastElement(); // Прокрутка после изменения vertical  
+    }); 
 };
 
 const sortOptions = ref([
@@ -159,8 +160,10 @@ const getDetachments = async (pagination, orderLimit) => {
         const response = await HTTP.get(url);
 
         if (response && response.data) {
-            await updateDetachments(response.data, pagination);
-            await scrollToLastElement();  
+            updateDetachments(response.data, pagination);
+            nextTick(() => {
+                scrollToLastElement();
+            });
         } else {
             console.error('Ответ от сервера не содержит данных');
         }
@@ -221,22 +224,7 @@ const updateDetachments = (response, pagination) => {
     }
     detachments.value = response;
     sortedSquads.value = response.results;
-
-    // nextTick(() => {
-    //     lastLoadedElementRef.value = document.querySelector('.squads-wrapper__item:last-child');
-    // });
 };
-
-const scrollToLastElement = async () => {  
-    await nextTick(() => {  
-        if (lastLoadedElementRef.value) {  
-            lastLoadedElementRef.value.scrollIntoView({  
-                behavior: 'smooth',  
-                block: 'start'  
-            });  
-        }  
-    });  
-};  
 
 const updateSearch = (newValue) => {
     name.value = newValue;
@@ -261,6 +249,24 @@ const sortEducations = (newValue) => {
 const searchDetachments = () => {
     getDetachments();
 };
+
+const scrollToLastElement = async () => {  
+    await nextTick(() => {  
+        const squadItems = vertical.value  
+            ? document.querySelectorAll('.squads-wrapper__item')  
+            : document.querySelectorAll('.horizontal-item');  
+        
+        // Проверка наличия элементов перед прокруткой  
+        if (squadItems.length > 0) {  
+            const lastLoadedElement = squadItems[squadItems.length - 1];  
+            lastLoadedElement.scrollIntoView({  
+                behavior: 'smooth',  
+                block: 'end',  
+                inline: 'nearest'  
+            });  
+        }  
+    });  
+};  
 
 onMounted(() => {
     regionalsStore.getRegionalsForFilters(sortBy.value);
