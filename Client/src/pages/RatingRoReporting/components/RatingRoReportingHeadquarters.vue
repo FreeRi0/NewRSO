@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="RoReporting">
-      <h2 class="RoReporting_title">Отчеты РО</h2>
+      <h2 class="RoReporting_title">{{ edited ? 'Отчеты РО 2 часть' : 'Отчеты РО 1 часть' }}</h2>
       <div class="RoReporting_search">
         <input type="text" id="search" class="RoReporting_search__input" v-model="name" @keyup="searchHeadquarters"
           placeholder="Начните вводить" />
@@ -42,9 +42,9 @@
         </div>
       </div>
       <div class="RoReporting_wrapper">
-        <RatingRoHeadquartersList :items="sortedRegionalHeadquarters" />
+        <RatingRoHeadquartersList :items="filteredEntities" />
         <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate color="blue"></v-progress-circular>
-        <p v-else-if="!isLoading && !sortedRegionalHeadquarters.length" class="no-found-text">
+        <p v-else-if="!isLoading && !filteredEntities.length" class="no-found-text">
           К сожалению, не удалось найти информацию о штабах по вашему запросу.
         </p>
       </div>
@@ -60,12 +60,13 @@
 
 </template>
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { Button } from '@shared/components/buttons';
 import { sortByEducation } from '@shared/components/selects';
 import { RatingRoHeadquartersList } from '@features/RatingRoHeadquarterList';
 import { useDistrictsStore } from '@features/store/districts';
 import { useRegionalsStore } from '@features/store/regionals';
+import { useRoute } from 'vue-router';
 import { useRoleStore } from '@layouts/store/role';
 import { HTTP } from '@app/http';
 import router from "@app/router/index.ts";
@@ -74,6 +75,9 @@ const districtsStore = useDistrictsStore();
 const regionalsStore = useRegionalsStore();
 const roleStore = useRoleStore();
 const SelectedSortItem = ref(null);
+
+const route = useRoute();
+const edited = computed(() => route.params.edited === 'true');
 
 const next = () => {
   getRegionals('next')
@@ -139,6 +143,10 @@ const getRegionals = async (pagination, orderLimit) => {
   }
 };
 
+const filteredEntities = computed(() => {
+  return sortedRegionalHeadquarters.value.filter(item => item.edited === edited.value);
+});
+
 watch(
   () => SelectedSortItem.value,
   () => {
@@ -153,22 +161,9 @@ watch(
   },
 );
 
-// watch(() => [roleStore.roles, roleStore.experts],
-//   async () => {
-//     await getRegionals();
-//   },
-//   {
-//     immediate: true,
-//     deep: true,
-//   }
-// )
-
-
 onMounted(async () => {
   await  getRegionals();
   districtsStore.getDistricts()
-
-
 })
 </script>
 <style lang="scss" scoped>
@@ -176,9 +171,6 @@ onMounted(async () => {
   margin: 40px auto;
 }
 
-// .v-field__input::placeholder {
-//     color: green;
-// }
 .sorting_btn {
   cursor: pointer;
   border: none;
@@ -246,10 +238,6 @@ onMounted(async () => {
 .v-field {
   background: red;
 }
-
-// .v-input__control {
-//   background: red;
-// }
 
 .RoReporting {
   padding-bottom: 60px;

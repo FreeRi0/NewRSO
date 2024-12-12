@@ -3,30 +3,34 @@
 </template>
 <script setup>
 import { RatingRoItem } from '@entities/RatingRoHeadquarter'
-import router from "@app/router/index.ts";
+import { useRouter } from 'vue-router';
+const router = useRouter();
 const props = defineProps({
   items: {
     type: Array,
     required: true
   }
 })
+
 const goToReport = (item) => {
-  if(item.edited){
+  if (item.edited) {
     router.push({
       name: 'ReportRegionalPartTwoComander',
+      params: { edited: true },
       query: {
         reportId: item.regional_headquarter.id,
         headquartersName: item.regional_headquarter.name
       },
-    })
+    });
   } else {
     router.push({
       name: 'ReportRegionalPartOneComander',
+      params: { edited: false },
       query: {
         id: item.id,
       },
-    })
+    });
   }
-}
+}  
 </script>
 <style lang="scss"></style>

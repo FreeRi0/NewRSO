@@ -880,50 +880,52 @@ const routes: RouteRecordRaw[] = [
                     },
                 ],
             },
-            {
-                path: '/reporting-ro',
-                meta: {
-                    label: 'Рейтинг РО',
-                    redirectTo: 'reportingRo',
-                },
-                children: [
-                    {
-                        name: 'reportingRo',
-                        path: 'reporting',
-                        component: () =>
-                            import(
-                                '@pages/RatingRoReporting/components/RatingRoReporting.vue'
-                            ),
-                        meta: {
-                            label: 'Отчетность',
-                            redirectTo: 'reportingRo',
-                        },
+            // {
+            //     path: '/reporting-ro',
+            //     meta: {
+            //         label: 'Рейтинг РО',
+            //         redirectTo: 'reportingRo',
+            //     },
+            //     children: [
+            //         {
+            //             name: 'reportingRo',
+            //             path: 'reporting',
+            //             component: () =>
+            //                 import(
+            //                     '@pages/RatingRoReporting/components/RatingRoReporting.vue'
+            //                 ),
+            //             meta: {
+            //                 label: 'Отчетность',
+            //                 redirectTo: 'reportingRo',
+            //             },
 
-                    },
-                    {
-                        path: 'report-regional-one',
-                        name: 'ReportRegionalPartOne',
-                        component: () =>
-                            import(
-                                '@pages/ReportRegionalHQPartOnePage/ReportRegionalHQPartOne.vue'
-                            ),
-                        meta: {
-                            label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 1',
-                        },
-                    },
-                    {
-                        path: 'report-regional-two',
-                        name: 'ReportRegionalPartTwo',
-                        component: () =>
-                            import(
-                                '@pages/ReportRegionalHQPartTwoPage/ReportRegionalHQPartTwo.vue'
-                            ),
-                        meta: {
-                            label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 2',
-                        },
-                    },
-                ],
-            },
+            //         },
+            //         {
+            //             path: 'report-regional-one',
+            //             name: 'ReportRegionalPartOne',
+            //             component: () =>
+            //                 import(
+            //                     '@pages/ReportRegionalHQPartOnePage/ReportRegionalHQPartOne.vue'
+            //                 ),
+            //             meta: {
+            //                 label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 1',
+            //                 redirectTo: 'rating-ro-reporting',
+            //             },
+            //         },
+            //         {
+            //             path: 'report-regional-two',
+            //             name: 'ReportRegionalPartTwo',
+            //             component: () =>
+            //                 import(
+            //                     '@pages/ReportRegionalHQPartTwoPage/ReportRegionalHQPartTwo.vue'
+            //                 ),
+            //             meta: {
+            //                 label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 2',
+            //                 redirectTo: 'rating-ro-reporting',
+            //             },
+            //         },
+            //     ],
+            // },
             {
                 path: '/rating-ro',
                 meta: {
@@ -945,35 +947,39 @@ const routes: RouteRecordRaw[] = [
                         },
                         children: [
                             {
-                                path: '',
+                                path: ':edited',
                                 name: 'rating-ro-reporting',
                                 component: () =>
                                     import(
                                         '@pages/RatingRoReporting/components/RatingRoReportingHeadquarters.vue'
                                     ),
+                                props: true,
                             },
                             {
-                                path: 'report-regional-one-comander',
+                                path: 'report-regional-one-comander/:edited',
                                 name: 'ReportRegionalPartOneComander',
                                 component: () =>
                                     import(
                                         '@pages/ReportRegionalHQPartOnePage/ReportRegionalHQPartOne.vue'
                                     ),
                                 meta: {
-                                    label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 1',
+                                    label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 1',
                                 },
+                                props: true,
                             },
                             {
-                                path: 'report-regional-two',
+                                path: 'report-regional-two-comander/:edited',
                                 name: 'ReportRegionalPartTwoComander',
                                 component: () =>
                                     import(
                                         '@pages/ReportRegionalHQPartTwoPage/ReportRegionalHQPartTwo.vue'
                                     ),
                                 meta: {
-                                    label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 2',
+                                    label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 2',
                                 },
+                                props: true,
                             },
+
                         ],
                     },
                     {
@@ -1022,11 +1028,11 @@ const routes: RouteRecordRaw[] = [
                     },
                     {
                         path: 'place-ro',
-                        meta:{
+                        meta: {
                             label: 'Места РО',
                             redirectTo: 'place-ro',
                         },
-                        children:[
+                        children: [
                             {
                                 path: '',
                                 name: 'place-ro',
@@ -1037,8 +1043,6 @@ const routes: RouteRecordRaw[] = [
                             },
                         ]
                     }
-
-
                 ],
             },
             {
