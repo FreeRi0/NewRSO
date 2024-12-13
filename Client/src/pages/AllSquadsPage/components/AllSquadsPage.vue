@@ -51,14 +51,7 @@
                     </div>
                 </div>
             </div>
-
-            <div v-if="vertical">
-                <squadsList :squads="sortedSquads" :is-loading="isLoading" />
-            </div>
-
-            <div v-show="!vertical">
-                <squadsList :squads="sortedSquads" :is-loading="isLoading" :horizontal="true" />
-            </div>
+            <squadsList v-bind="listProps" />
             <paginationButton :next="next" :prev="prev" :limit="limit" :element="detachments"
                 :sorted-elements="sortedSquads" />
         </div>
@@ -72,6 +65,7 @@ import { sortByEducation } from '@shared/components/selects';
 import { ref, onMounted, onActivated, watch, nextTick } from 'vue';
 import { useSquadsStore } from '@features/store/squads';
 import { HTTP } from '@app/http';
+import { scrollToLastElement, ListPropsSquads } from '@services/ListItemsServices.ts';
 import { Search, headSelect } from '@shared/components/inputs';
 import { useDistrictsStore } from '@features/store/districts';
 import { useRegionalsStore } from '@features/store/regionals';
@@ -104,9 +98,9 @@ const sortedSquads = ref([]);
 
 const showVertical = () => {
     vertical.value = !vertical.value;
-    nextTick(() => {  
-        scrollToLastElement(); // Прокрутка после изменения vertical  
-    }); 
+    nextTick(() => {
+        scrollToLastElement(vertical.value, '.squads-wrapper__item');
+    });
 };
 
 const sortOptions = ref([
@@ -114,10 +108,10 @@ const sortOptions = ref([
     { value: 'founding_date', name: 'Дате создания отряда' },
 ]);
 
-const next = () => {
-    getDetachments('next');
-};
+const next = () => getDetachments('next');
 const prev = () => getDetachments();
+
+const listProps = ListPropsSquads(sortedSquads, isLoading, vertical);
 
 const getHeadquartersForFilters = async (type) => {
     if (!SelectedSortRegional.value) {
@@ -162,7 +156,7 @@ const getDetachments = async (pagination, orderLimit) => {
         if (response && response.data) {
             updateDetachments(response.data, pagination);
             nextTick(() => {
-                scrollToLastElement();
+                scrollToLastElement(vertical.value, '.squads-wrapper__item');
             });
         } else {
             console.error('Ответ от сервера не содержит данных');
@@ -249,24 +243,6 @@ const sortEducations = (newValue) => {
 const searchDetachments = () => {
     getDetachments();
 };
-
-const scrollToLastElement = async () => {  
-    await nextTick(() => {  
-        const squadItems = vertical.value  
-            ? document.querySelectorAll('.squads-wrapper__item')  
-            : document.querySelectorAll('.horizontal-item');  
-        
-        // Проверка наличия элементов перед прокруткой  
-        if (squadItems.length > 0) {  
-            const lastLoadedElement = squadItems[squadItems.length - 1];  
-            lastLoadedElement.scrollIntoView({  
-                behavior: 'smooth',  
-                block: 'end',  
-                inline: 'nearest'  
-            });  
-        }  
-    });  
-};  
 
 onMounted(() => {
     regionalsStore.getRegionalsForFilters(sortBy.value);
@@ -378,8 +354,6 @@ watchDetachments();
         }
     }
 }
-
-
 
 .sort-filters {
     flex-wrap: wrap;

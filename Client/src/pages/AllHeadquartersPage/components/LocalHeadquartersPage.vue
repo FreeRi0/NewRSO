@@ -29,14 +29,9 @@
                         color="white"></Button>
                 </div>
             </div>
-            <div v-show="vertical">
-                <HeadquartersList :is-loading="isLoading" :headquarters="sortedLocalsHeadquarters" :name="'LocalHQ'" />
-            </div>
-            <div v-show="!vertical">
-                <HeadquartersList :is-loading="isLoading" :headquarters="sortedLocalsHeadquarters" :name="'LocalHQ'" :horizontal="true"/> 
-            </div>
+            <HeadquartersList v-bind="listProps" />
             <paginationButton :next="next" :prev="prev" :limit="limit" :element="locals"
-            :sorted-elements="sortedLocalsHeadquarters" />
+                :sorted-elements="sortedLocalsHeadquarters" />
         </div>
     </div>
 </template>
@@ -47,12 +42,13 @@ import {
     HeadquartersList
 } from '@features/Headquarters/components';
 import { sortByEducation, Select } from '@shared/components/selects';
-import { ref, onMounted, watch, onActivated } from 'vue';
+import { ref, onMounted, watch, onActivated, nextTick } from 'vue';
 import { HTTP } from '@app/http';
 import { onBeforeRouteLeave } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
 import { Search, headSelect } from '@shared/components/inputs';
 import { useLocalsStore } from '@features/store/local';
+import { scrollToLastElement, ListPropsHeadquarters } from '@services/ListItemsServices.ts';
 import { useDistrictsStore } from '@features/store/districts';
 import { useRegionalsStore } from '@features/store/regionals';
 
@@ -65,11 +61,11 @@ const limit = 20;
 const isLoading = ref(false);
 const ascending = ref(true);
 const sortBy = ref('name');
-
 const vertical = ref(true);
 const locals = ref({});
 const name = ref('');
-
+const sortedLocalsHeadquarters = ref([]);
+const listProps = ListPropsHeadquarters(sortedLocalsHeadquarters, isLoading, vertical, 'LocalHQ');
 const sortOptions = ref([
     {
         value: 'name',
@@ -78,18 +74,14 @@ const sortOptions = ref([
     { value: 'founding_date', name: 'Дате создания штаба' },
 ]);
 
-const next = () => {
-    getLocals('next');
-};
-
-const prev = () => {
-    getLocals();
-};
-
-const sortedLocalsHeadquarters = ref([]);
+const next = () => getLocals('next');
+const prev = () => getLocals();
 
 const showVertical = () => {
     vertical.value = !vertical.value;
+    nextTick(() => {
+        scrollToLastElement(vertical.value, '.headquarters-wrapper__item');
+    });
 };
 const SelectedSortDistrict = ref(
     JSON.parse(localStorage.getItem('LocalHeadquarters_filters'))?.districtName,
@@ -107,6 +99,9 @@ const getLocals = async (pagination, orderLimit) => {
 
         if (response && response.data) {
             updateLocals(response.data, pagination);
+            nextTick(() => {
+                scrollToLastElement(vertical.value, '.headquarters-wrapper__item');
+            });
         } else {
             console.error('Ответ от сервера не содержит данных');
         }

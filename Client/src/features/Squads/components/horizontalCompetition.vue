@@ -4,8 +4,8 @@
             <v-progress-circular class="circleLoader text-center" indeterminate color="blue"></v-progress-circular>
         </template>
         <template v-else>
-            <template v-if="members.length">
-                <horizontalSquadItem v-for="member in members" :member="member" :rating="true" :key="member.id" />
+            <template v-if="squads.length">
+                <horizontalSquadItem v-for="squad in squads" :member="squad" :rating="true" :key="squad.id" />
             </template>
             <p v-else>Ничего не найдено</p>
         </template>
@@ -14,7 +14,7 @@
 <script setup>
 import { horizontalSquadItem } from '@entities/Squads';
 const props = defineProps({
-    members: {
+    squads: {
         type: Array,
         required: true,
     },

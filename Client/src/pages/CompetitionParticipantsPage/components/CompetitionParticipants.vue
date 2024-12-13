@@ -40,10 +40,10 @@
             </div>
 
             <div class="mt-10">
-                <horizontalCompetitionList :is-loading="isLoading" :members="sortedSquads" />
+                <horizontalCompetitionList v-bind="listProps" />
             </div>
             <paginationButton :next="next" :prev="prev" :limit="limit" :element="detachments"
-            :sorted-elements="sortedSquads" />
+                :sorted-elements="sortedSquads" />
         </div>
     </div>
 </template>
@@ -55,9 +55,10 @@ import {
 import {
     sortByEducation
 } from '@shared/components/selects';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, nextTick } from 'vue';
 import { useSquadsStore } from '@features/store/squads';
 import { storeToRefs } from 'pinia';
+import { scrollToLastElement, ListPropsSquads } from '@services/ListItemsServices.ts';
 import { Search } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
 
@@ -68,13 +69,6 @@ const detachments = ref({});
 const isTandem = ref(true);
 const limit = 24;
 const sortBy = ref('detachment__copy_ranking_main_detachment__place');
-
-const next = () => {
-    getCompetitions('next');
-};
-const prev = () => {
-    switched.value ? getCompetitions() : getCompetitions()
-};
 const ascending = ref(true);
 const picked = ref('');
 const switched = ref(true);
@@ -89,6 +83,12 @@ const sortOptions = ref([{
     value: 'detachment__copy_ranking_main_detachment__place',
     name: 'Рейтингу',
 }]);
+
+const listProps = ListPropsSquads(sortedSquads, isLoading, false);
+
+const next = () => getCompetitions('next');
+const prev = () => switched.value ? getCompetitions() : getCompetitions()
+
 const getCompetitions = async (pagination, orderLimit) => {
     if (isLoading.value) return;
     isLoading.value = true;
@@ -98,6 +98,9 @@ const getCompetitions = async (pagination, orderLimit) => {
 
         if (response && response.data) {
             updateCompetitions(response.data, pagination);
+            nextTick(() => {
+                scrollToLastElement(true, '.CompItem');
+            });
         } else {
             console.error('Ответ от сервера не содержит данных');
         }
@@ -112,14 +115,11 @@ const buildCompetitionsUrl = (pagination, orderLimit) => {
     const params = [];
     let url = '/competitions/1/participants/?';
 
-    // Set the limit  
     if (orderLimit) {
         params.push(`limit=${orderLimit}`);
     } else {
         params.push(`limit=${limit}`);  // Use a fixed limit if orderLimit is not provided  
     }
-
-    // Handle pagination  
     if (pagination === 'next') {
         detachments.value.next.includes('213.139.208.147:30000') ? url = detachments.value.next : url = detachments.value.next.replace('http', 'https');
     } else {

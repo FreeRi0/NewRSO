@@ -23,15 +23,7 @@
                         color="white"></Button>
                 </div>
             </div>
-
-            <div v-show="vertical">
-                <HeadquartersList :is-loading="isLoading" :headquarters="sortedRegionalHeadquarters"
-                    :name="'RegionalHQ'" />
-            </div>
-            <div v-show="!vertical">
-                <HeadquartersList :is-loading="isLoading" :headquarters="sortedRegionalHeadquarters"
-                    :name="'RegionalHQ'" :horizontal="true" />
-            </div>
+            <HeadquartersList v-bind="listProps" />
             <paginationButton :next="next" :prev="prev" :limit="limit" :element="regionals"
                 :sorted-elements="sortedRegionalHeadquarters" />
         </div>
@@ -45,10 +37,11 @@ import {
     HeadquartersList
 } from '@features/Headquarters/components';
 import { sortByEducation, Select } from '@shared/components/selects';
-import { ref, onMounted, onActivated, watch } from 'vue';
+import { ref, onMounted, onActivated, watch, nextTick } from 'vue';
 import { HTTP } from '@app/http';
 import { useRegionalsStore } from '@features/store/regionals';
 import { onBeforeRouteLeave } from 'vue-router';
+import { scrollToLastElement, ListPropsHeadquarters } from '@services/ListItemsServices.ts';
 import { useDistrictsStore } from '@features/store/districts';
 import { useCrosspageFilter } from '@shared';
 
@@ -63,8 +56,7 @@ const vertical = ref(true);
 const name = ref('');
 const regionals = ref({});
 const sortedRegionalHeadquarters = ref([]);
-
-
+const listProps = ListPropsHeadquarters(sortedRegionalHeadquarters, isLoading, vertical, 'RegionalHQ');
 const sortOptions = ref([
     {
         value: 'name',
@@ -74,22 +66,19 @@ const sortOptions = ref([
 ]);
 
 
-const next = () => {
-    getRegionals('next')
-};
-
-const prev = () => {
-    getRegionals();
-};
+const next = () => getRegionals('next')
+const prev = () => getRegionals();
 
 const showVertical = () => {
     vertical.value = !vertical.value;
+    nextTick(() => {
+        scrollToLastElement(vertical.value, '.headquarters-wrapper__item');
+    });
 };
 const SelectedSortDistrict = ref(
     JSON.parse(localStorage.getItem('regionalHeadquarters_filters'))
         ?.districtName ?? '',
 );
-
 
 const getRegionals = async (pagination, orderLimit) => {
     if (isLoading.value) return;
@@ -100,6 +89,9 @@ const getRegionals = async (pagination, orderLimit) => {
 
         if (response && response.data) {
             updateRegionals(response.data, pagination);
+            nextTick(() => {
+                scrollToLastElement(vertical.value, '.headquarters-wrapper__item');
+            });
         } else {
             console.error('Ответ от сервера не содержит данных');
         }
@@ -142,7 +134,6 @@ const addFilters = (params) => {
     }
 };
 
-
 const updateRegionals = (response, pagination) => {
     if (pagination === 'next') {
         response.results = [...regionals.value.results, ...response.results]
@@ -162,7 +153,6 @@ const searchHeadquarters = () => {
 const sortDistricts = (newValue) => {
     SelectedSortDistrict.value = newValue;
 }
-
 
 onBeforeRouteLeave(async (to, from) => {
     const pageName = 'regionalHeadquarters';
@@ -184,7 +174,7 @@ onMounted(() => {
 });
 
 watch(
-    () => selectedSortDistrict.value,
+    () => SelectedSortDistrict.value,
     () => {
         getRegionals();
     },

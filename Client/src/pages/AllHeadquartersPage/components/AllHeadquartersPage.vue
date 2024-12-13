@@ -32,17 +32,10 @@
                         color="white"></Button>
                 </div>
             </div>
+            <HeadquartersList v-bind="listProps" />
 
-            <div v-show="vertical">
-                <HeadquartersList :is-loading="isLoading" :headquarters="sortedHeadquarters" :name="'HQ'" />
-            </div>
-
-            <div v-show="!vertical">
-                <HeadquartersList :is-loading="isLoading" :headquarters="sortedHeadquarters" :name="'HQ'"
-                    :horizontal="true" />
-            </div>
             <paginationButton :next="next" :prev="prev" :limit="limit" :element="educations"
-            :sorted-elements="sortedHeadquarters" />
+                :sorted-elements="sortedHeadquarters" />
         </div>
     </div>
 </template>
@@ -53,10 +46,11 @@ import {
     HeadquartersList
 } from '@features/Headquarters/components';
 import { sortByEducation } from '@shared/components/selects';
-import { ref, onMounted, watch, onActivated } from 'vue';
+import { ref, onMounted, watch, onActivated, nextTick } from 'vue';
 import { HTTP } from '@app/http';
 import { onBeforeRouteLeave } from 'vue-router';
 import { useCrosspageFilter } from '@shared';
+import { scrollToLastElement, ListPropsHeadquarters } from '@services/ListItemsServices.ts';
 import { Search, headSelect } from '@shared/components/inputs';
 import { useDistrictsStore } from '@features/store/districts';
 import { useRegionalsStore } from '@features/store/regionals';
@@ -66,13 +60,8 @@ const crosspageFilters = useCrosspageFilter();
 const districtsStore = useDistrictsStore();
 const regionalsStore = useRegionalsStore();
 
-const next = () => {
-    getEducations('next')
-};
-
-const prev = () => {
-    getEducations();
-};
+const next = () => getEducations('next');
+const prev = () => getEducations();
 
 const ascending = ref(true);
 const sortBy = ref('name');
@@ -81,6 +70,10 @@ const isLoading = ref(false);
 const educations = ref({});
 const limit = 20;
 const name = ref('');
+const locals = ref([]);
+const sortedHeadquarters = ref([]);
+
+const listProps = ListPropsHeadquarters(sortedHeadquarters, isLoading, vertical, 'HQ');
 
 const sortOptions = ref([
     {
@@ -92,6 +85,9 @@ const sortOptions = ref([
 
 const showVertical = () => {
     vertical.value = !vertical.value;
+    nextTick(() => {
+        scrollToLastElement(vertical.value, '.headquarters-wrapper__item');
+    });
 };
 const SelectedSortDistrict = ref(
     JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.districtName,
@@ -102,9 +98,6 @@ const SelectedSortRegional = ref(
 const SelectedSortLocal = ref(
     JSON.parse(localStorage.getItem('AllHeadquarters_filters'))?.localName,
 );
-
-const locals = ref([]);
-const sortedHeadquarters = ref([]);
 
 const getLocalsHeadquartersForFilters = async () => {
     if (!SelectedSortRegional.value) {
@@ -128,6 +121,9 @@ const getEducations = async (pagination, orderLimit) => {
 
         if (response && response.data) {
             updateEducations(response.data, pagination);
+            nextTick(() => {
+                scrollToLastElement(vertical.value, '.headquarters-wrapper__item');
+            });
         } else {
             console.error('Ответ от сервера не содержит данных');
         }
@@ -202,7 +198,6 @@ const sortRegionals = (newValue) => {
 const sortLocals = (newValue) => {
     SelectedSortLocal.value = newValue;
 }
-
 
 onMounted(() => {
     regionalsStore.getRegionalsForFilters(sortBy.value);
