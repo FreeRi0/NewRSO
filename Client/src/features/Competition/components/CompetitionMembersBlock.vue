@@ -159,11 +159,11 @@ onMounted(() => {
 });
 </script>
 <style scoped lang="scss">
-.active {
-    background-color: #1c5c94;
-    color: white;
-    border: 1px solid #1c5c94;
-}
+// .active {
+//     background-color: #1c5c94;
+//     color: white;
+//     border: 1px solid #1c5c94;
+// }
 .squad-tabs {
     margin-bottom: 60px;
 }
@@ -277,11 +277,11 @@ onMounted(() => {
     // height: 38px;
 }
 
-.active {
-    background-color: #1c5c94;
-    color: white;
-    border: 1px solid #1c5c94;
-}
+// .active {
+//     background-color: #1c5c94;
+//     color: white;
+//     border: 1px solid #1c5c94;
+// }
 
 /* ****************************************************************************************** */
 

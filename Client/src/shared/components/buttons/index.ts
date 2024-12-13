@@ -1,4 +1,5 @@
 import Button from "./Button.vue";
 import RadioButton from "./RadioButton.vue";
-
-export { Button, RadioButton };
+import changeButton from "./changeButton.vue";
+import paginationButton from "./paginationButton.vue";
+export { Button, RadioButton, changeButton, paginationButton};

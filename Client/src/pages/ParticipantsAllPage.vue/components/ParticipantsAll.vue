@@ -314,12 +314,6 @@ onActivated(async () => {
         background-size: cover;
     }
 
-    .ascend {
-        background-image: url('@app/assets/icon/switch.svg');
-        background-repeat: no-repeat;
-        background-position: center;
-    }
-
     .horizontallso {
         padding-top: 40px;
     }
