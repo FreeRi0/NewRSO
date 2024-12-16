@@ -348,9 +348,9 @@ const userPages = computed(() => [
         title: 'Рейтинг РО',
         name: nameUrl,
         show:
-            (roleStore.roles?.regionalheadquarter_commander && roleStore.experts.is_district_expert) ||
-            roleStore.experts.is_central_expert === true ||
-            roleStore.roles?.regionalheadquarter_commander ||
+            (roleStore.experts.is_reg_commander && roleStore.experts.is_district_expert) ||
+            roleStore.experts.is_central_expert ||
+            roleStore.experts.is_reg_commander ||
             roleStore.roles?.centralheadquarter_commander,
     },
 
@@ -436,26 +436,30 @@ watch(
     },
 );
 
-
 watch(
     () => [roleStore.roles, roleStore.experts],
     (newRoles, newExperts) => {
         if (Object.keys(newRoles).length === 0) {
+            console.log('1')
             return;
         }
 
         if (roleStore.roles.centralheadquarter_commander !== null) {
+            console.log('2')
             nameUrl = 'rating-ro'
 
-        } else if (roleStore.roles.regionalheadquarter_commander && roleStore.experts.is_district_expert) {
+        } else if (roleStore.experts.is_reg_commander && roleStore.experts.is_district_expert) {
+            console.log('3')
             nameUrl = 'reportingRo'
         } else if (roleStore.experts.is_central_expert || roleStore.experts.is_district_expert) {
+            console.log('4')
             nameUrl = 'rating-ro'
         }
         else {
+            console.log('5')
             nameUrl = 'reportingRo'
         }
-        
+
         if (localStorage.getItem('jwt_token') !== null) {
             userStore.getCountApp();
         }
@@ -471,6 +475,7 @@ onMounted(() => {
         return;
     }
 });
+
 </script>
 
 <style lang="scss">
