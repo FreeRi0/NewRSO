@@ -12,6 +12,7 @@
                 </p>
 
                 <passwordInput placeholder="Пароль" v-model:value="data.password" />
+                <p class="error" v-if="check_err">Невозможно войти с предоставленными учетными данными</p>
                 <p class="text-right mt-3 mb-8"><router-link to="/recovery-pass">Забыли пароль?</router-link>
                 </p>
 
@@ -88,7 +89,7 @@ VKID.Config.set({
 const Click = () => {
     // console.log("Click");
 }
-
+const check_err = ref(false);
 const LoginUser = async () => {
     try {
         isLoading.value = true;
@@ -98,6 +99,7 @@ const LoginUser = async () => {
         localStorage.setItem('jwt_token', response.data.access);
         localStorage.setItem('refresh_token', response.data.refresh);
         isLoading.value = false;
+        check_err.value = false;
         router.push({
             name: 'mypage',
         });
@@ -122,14 +124,16 @@ const LoginUser = async () => {
         isError.value = error.response.data;
         console.error('There was an error!', error);
         isLoading.value = false;
+        check_err.value = true;
         if (isError.value) {
-            swal.fire({
-                position: 'center',
-                icon: 'error',
-                title: `ошибка`,
-                showConfirmButton: false,
-                timer: 2500,
-            });
+            check_err = true;
+            // swal.fire({
+            //     position: 'center',
+            //     icon: 'error',
+            //     title: `ошибка`,
+            //     showConfirmButton: false,
+            //     timer: 2500,
+            // });
         }
     }
 };
