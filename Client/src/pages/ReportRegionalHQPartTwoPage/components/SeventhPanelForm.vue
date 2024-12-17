@@ -1150,311 +1150,160 @@ const deleteLink = async (number) => {
         await reportPartTwoService.createMultipleReportDraft(panelData.value, number.toString(), props.id, number === 9);
     }
 };
-// const addLink = (number) => {
-//     if (number == 6) {
-//         sixPanelData.value.links.push({ link: '' });
-//         // } else if (number == 7) {
-//         //     seventhPanelData.value.links.push({ link: '' });
-//         // }
-//     }
-//     else if (number == 9) {
-//         ninthPanelData.value.links.push({ link: '' });
-//     }
-// };
-
-// const deleteLink = async (number) => {
-//     if (number == 6) {
-//         sixPanelData.value.links.pop()
-//         await reportPartTwoService.createMultipleReportDraft(sixPanelData.value, '6', props.id);
-//         // } else if (number == 7) {
-//         //     seventhPanelData.value.links.pop()
-//         //     await reportPartTwoService.createMultipleReportDraft(seventhPanelData.value, '7', props.id, true);
-//     } else if (number == 9) {
-//         ninthPanelData.value.links.pop()
-//         await reportPartTwoService.createMultipleReportDraft(ninthPanelData.value, '9', props.id, true);
-//     }
-// };
-
-
-// Функция для обновления данных по panelData и reportStore  
-const updatePanelData = (panelData, reportData, reportDataCH, id) => {
-    if (reportData[id]) {
-        panelData.comment = reportData[id].comment;
-        panelData.number_of_members = reportData[id].number_of_members;
-        panelData.links = reportData[id].links;
-    }
-
-    if (reportDataCH[id]) {
-        panelData.comment = reportDataCH[id].comment;
-        panelData.number_of_members = reportDataCH[id].number_of_members;
-        panelData.links = reportDataCH[id].links;
-    }
-};
-
-// Функция для инициализации данных панели  
-const initializePanelData = (panelData, data) => {
-    if (Object.keys(data).length > 0) {
-        panelData.value = { ...data };
-
-        if (!panelData.value.links.length) {
-            panelData.value.links.push({ link: '' });
-        }
-    } else {
-        console.log('данные не получены');
-    }
-};
 
 // Функция для обработки ошибок ссылки  
 const handleLinkError = () => {
     emit('error', isLinkError.value ? isLinkError.value : false);
 };
 
-// Основная watchEffect  
 watchEffect(() => {
-    if (props.panel_number == 6) {
-        if (props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) {
-            sixPanelData.value = { ...props.data };
-            updatePanelData(sixPanelDataDH.value, reportStore.reportDataDH.six, reportStore.reportDataCH.six, props.sixId);
+    const isPanelSix = props.panel_number == 6;
+    const isPanelNine = props.panel_number == 9;
+    const isCommander = props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander;
+
+    if (isPanelSix) {
+        handlePanelSix();
+    } else if (isPanelNine) {
+        handlePanelNine();
+    }
+
+    function handlePanelSix() {
+        if (isCommander) {
+            updateSixPanelData();
         } else {
-            initializePanelData(sixPanelData, props.data);
-            handleLinkError();
+            initializeSixPanelData();
         }
 
         if (reportStore.reportReject.six[props.sixId] && reportStore.isReportReject.six[props.sixId]) {
             reportStore.returnReport.six[props.sixId] = true;
         }
 
-        emit('getId', props.id);
-        emit('getPanelNumber', props.panel_number);
-    } else if (props.panel_number == 9) {
-        if (props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) {
-            ninthPanelData.value = { ...props.data };
-            updatePanelData(ninthPanelDataDH.value, reportStore.reportDataDH.ninth, reportStore.reportDataCH.ninth, props.ninthId);
+        emitPanelInfo();
+    }
+
+    function handlePanelNine() {
+        if (isCommander) {
+            updateNinthPanelData();
         } else {
-            initializePanelData(ninthPanelData, props.data);
-            handleLinkError();
+            initializeNinthPanelData();
         }
 
-        // Обработка файлов для DH и CH  
-        if (props.isDistrictHeadquarterCommander) {
-            if (reportStore.reportDataDHFile.ninth[props.ninthId]) {
-                fileDH.value.name = reportStore.reportDataDHFile.ninth[props.ninthId].name;
-                fileDH.value.type = reportStore.reportDataDHFile.ninth[props.ninthId].type.split('/').at(-1);
-                fileDH.value.size = reportStore.reportDataDHFile.ninth[props.ninthId].size / Math.pow(1024, 2);
-            }
-        } else if (props.isCentralHeadquarterCommander) {
-            if (reportStore.reportDataDH.ninth[props.ninthId]) {
-                fileDH.value.name = reportStore.reportDataDH.ninth[props.ninthId].document;
-                fileDH.value.type = reportStore.reportDataDH.ninth[props.ninthId].file_type;
-                fileDH.value.size = reportStore.reportDataDH.ninth[props.ninthId].file_size;
-            }
-            // Обработка файла CH  
-            if (reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq === true) {
-                fileCH.value.name = reportStore.reportForCheckCH.ninth[props.ninthId].document;
-                fileCH.value.type = reportStore.reportForCheckCH.ninth[props.ninthId].file_type;
-                fileCH.value.size = reportStore.reportForCheckCH.ninth[props.ninthId].file_size;
-            } else if (reportStore.reportForCheckCH.ninth[props.ninthId].rejecting_reasons && !reportStore.reportDataCHFile.ninth[props.ninthId]) {
-                fileCH.value.name = reportStore.reportForCheckCH.ninth[props.ninthId].central_version.document || '';
-                fileCH.value.type = reportStore.reportForCheckCH.ninth[props.ninthId].central_version.file_type || '';
-                fileCH.value.size = reportStore.reportForCheckCH.ninth[props.ninthId].central_version.file_size || '';
-            } else if (reportStore.reportDataCHFile.ninth[props.ninthId]) {
-                fileCH.value.name = reportStore.reportDataCHFile.ninth[props.ninthId].name;
-                fileCH.value.type = reportStore.reportDataCHFile.ninth[props.ninthId].type.split('/').at(-1);
-                fileCH.value.size = reportStore.reportDataCHFile.ninth[props.ninthId].size / Math.pow(1024, 2);
-            }
-        }
+        handleFileProcessing();
 
         if (reportStore.reportReject.ninth[props.ninthId] && reportStore.isReportReject.ninth[props.ninthId]) {
             reportStore.returnReport.ninth[props.ninthId] = true;
         }
 
+        emitPanelInfo();
+    }
+
+    function updateSixPanelData() {
+        sixPanelData.value = { ...props.data };
+        updatePanelData(sixPanelDataDH, reportStore.reportDataDH.six, props.sixId);
+        updatePanelData(sixPanelDataCH, reportStore.reportDataCH.six, props.sixId);
+    }
+
+    function initializeSixPanelData() {
+        if (Object.keys(props.data).length > 0) {
+            isFirstSentSix.value = false;
+            sixPanelData.value = { ...props.data };
+
+            if (props.data?.rejecting_reasons !== null) {
+                updatePanelData(sixPanelDataDH, reportStore.reportDataDH.six, props.sixId);
+                updatePanelData(sixPanelDataCH, reportStore.reportDataCH.six, props.sixId);
+            }
+
+            emit('error', isLinkError.value || false);
+
+            if (!sixPanelData.value.links.length) {
+                sixPanelData.value.links.push({ link: '' });
+            }
+        } else {
+            console.log('data not received');
+        }
+    }
+
+    function updateNinthPanelData() {
+        ninthPanelData.value = { ...props.data };
+        updatePanelData(ninthPanelDataDH, reportStore.reportDataDH.ninth, props.ninthId);
+        updatePanelData(ninthPanelDataCH, reportStore.reportDataCH.ninth, props.ninthId);
+    }
+
+    function initializeNinthPanelData() {
+        if (Object.keys(props.data).length > 0) {
+            isFirstSentNinth.value = false;
+            ninthPanelData.value = { ...props.data };
+            emit('error', isLinkError.value || false);
+
+            if (props.tab == 'Доработка') {
+                isRejected.value = true;
+                updatePanelData(ninthPanelDataDH, reportStore.reportDataDH.ninth, props.ninthId);
+                updatePanelData(ninthPanelDataCH, reportStore.reportDataCH.ninth, props.ninthId);
+            }
+
+            if (!ninthPanelData.value.links.length) {
+                ninthPanelData.value.links.push({ link: '' });
+            }
+        } else {
+            console.log('data not received');
+            isFirstSentNinth.value = true;
+            ninthPanelData.value = {
+                event_happened: false,
+                links: [{ link: '' }],
+                comment: '',
+                file_size: '',
+                file_type: '',
+            };
+        }
+    }
+
+    function handleFileProcessing() {
+        if (props.isDistrictHeadquarterCommander) {
+            processFile(fileDH, reportStore.reportDataDHFile.ninth, props.ninthId);
+        } else if (props.isCentralHeadquarterCommander) {
+            processFile(fileDH, reportStore.reportDataDH.ninth, props.ninthId, true);
+            processCentralFile();
+        }
+    }
+
+    function processCentralFile() {
+        const chData = reportStore.reportForCheckCH.ninth[props.ninthId];
+        if (chData.verified_by_chq === true) {
+            processFile(fileCH, reportStore.reportForCheckCH.ninth, props.ninthId, true);
+        } else if (chData.rejecting_reasons && !reportStore.reportDataCHFile.ninth[props.ninthId]) {
+            processFile(fileCH, chData.central_version, props.ninthId, true, true);
+        } else {
+            processFile(fileCH, reportStore.reportDataCHFile.ninth, props.ninthId);
+        }
+    }
+
+    function processFile(file, data, id, isDirect = false, isOptional = false) {
+        if (isDirect || data[id]) {
+            file.value.name = data[id]?.name || data[id]?.document || '';
+            file.value.type = (data[id]?.type || data[id]?.file_type || '').split('/').at(-1);
+            file.value.size = (data[id]?.size || data[id]?.file_size || 0) / Math.pow(1024, 2);
+        } else if (!isOptional) {
+            file.value.name = '';
+            file.value.type = '';
+            file.value.size = 0;
+        }
+    }
+
+    function updatePanelData(panelData, reportData, id) {
+        if (reportData[id]) {
+            panelData.value.comment = reportData[id].comment;
+            panelData.value.number_of_members = reportData[id].number_of_members;
+            panelData.value.links = reportData[id].links;
+        }
+    }
+
+    function emitPanelInfo() {
         emit('getId', props.id);
-        emit('getPanelNumber', props.panel_number)
+        emit('getPanelNumber', props.panel_number);
     }
 }, {
     flush: 'post'
 });
-
-// watchEffect(() => {
-//     if (props.panel_number == 6) {
-
-//         if (props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) {
-//             sixPanelData.value = { ...props.data };
-//             if (reportStore.reportDataDH.six[props.sixId]) {
-//                 sixPanelDataDH.value.comment = reportStore.reportDataDH.six[props.sixId].comment;
-//                 sixPanelDataDH.value.number_of_members = reportStore.reportDataDH.six[props.sixId].number_of_members;
-//                 sixPanelDataDH.value.links = reportStore.reportDataDH.six[props.sixId].links;
-
-//             }
-//             if (reportStore.reportDataCH.six[props.sixId]) {
-//                 sixPanelDataCH.value.comment = reportStore.reportDataCH.six[props.sixId].comment;
-//                 sixPanelDataCH.value.number_of_members = reportStore.reportDataCH.six[props.sixId].number_of_members;
-//                 sixPanelDataCH.value.links = reportStore.reportDataCH.six[props.sixId].links;
-//             }
-//         } else {
-//             if (Object.keys(props.data).length > 0) {
-//                 isFirstSentSix.value = false;
-//                 sixPanelData.value = { ...props.data };
-
-//                 if (props.data?.rejecting_reasons !== null) {
-//                     sixPanelDataDH.value.comment = reportStore.reportDataDH.six[props.sixId]?.comment;
-//                     sixPanelDataDH.value.number_of_members = reportStore.reportDataDH.six[props.sixId]?.number_of_members;
-//                     sixPanelDataDH.value.links = reportStore.reportDataDH.six[props.sixId]?.links;
-
-//                     sixPanelDataCH.value.comment = reportStore.reportDataCH.six[props.sixId]?.comment;
-//                     sixPanelDataCH.value.number_of_members = reportStore.reportDataCH.six[props.sixId]?.number_of_members;
-//                     sixPanelDataCH.value.links = reportStore.reportDataCH.six[props.sixId]?.links;
-//                 }
-
-
-//                 if (isLinkError.value) {
-//                     emit('error', isLinkError.value);
-//                 } else {
-//                     emit('error', false);
-//                 }
-//                 if (!sixPanelData.value.links.length)
-//                     sixPanelData.value.links.push({ link: '' });
-//             } else {
-//                 console.log('data not received');
-//             }
-//         }
-
-//         if (reportStore.reportReject.six[props.sixId] && reportStore.isReportReject.six[props.sixId]) {
-//             reportStore.returnReport.six[props.sixId] = true;
-//         }
-
-
-//         emit('getId', props.id);
-//         emit('getPanelNumber', props.panel_number);
-//     } else if (props.panel_number == 9) {
-//         if (props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander) {
-//             ninthPanelData.value = { ...props.data };
-//             if (reportStore.reportDataDH.ninth[props.ninthId]) {
-//                 ninthPanelDataDH.value.comment = reportStore.reportDataDH.ninth[props.ninthId].comment;
-//                 ninthPanelDataDH.value.event_happened = reportStore.reportDataDH.ninth[props.ninthId].event_happened;
-//                 ninthPanelDataDH.value.links = reportStore.reportDataDH.ninth[props.ninthId].links;
-//             }
-//             if (reportStore.reportDataCH.ninth[props.ninthId]) {
-//                 ninthPanelDataCH.value.comment = reportStore.reportDataCH.ninth[props.ninthId].comment;
-//                 ninthPanelDataCH.value.event_happened = reportStore.reportDataCH.ninth[props.ninthId].event_happened;
-//                 ninthPanelDataCH.value.links = reportStore.reportDataCH.ninth[props.ninthId].links;
-//             }
-//         } else {
-//             if (Object.keys(props.data).length > 0) {
-//                 isFirstSentNinth.value = false;
-//                 ninthPanelData.value = { ...props.data }
-//                 if (isLinkError.value) {
-//                     emit('error', isLinkError.value)
-//                 } else {
-//                     emit('error', false)
-//                 }
-
-//                 if (props.tab == 'Доработка') {
-//                     isRejected.value = true;
-//                     ninthPanelDataDH.value.comment = reportStore.reportDataDH.ninth[props.ninthId]?.comment;
-//                     ninthPanelDataDH.value.event_happened = reportStore.reportDataDH.ninth[props.ninthId].event_happened;
-//                     ninthPanelDataDH.value.links = reportStore.reportDataDH.ninth[props.ninthId].links;
-//                     ninthPanelDataDH.value.document = reportStore.reportDataDH.ninth[props.ninthId].document;
-//                     ninthPanelDataCH.value.comment = reportStore.reportDataCH.ninth[props.ninthId]?.comment;
-//                     ninthPanelDataCH.value.event_happened = reportStore.reportDataCH.ninth[props.ninthId].event_happened;
-//                     ninthPanelDataCH.value.document = reportStore.reportDataCH.ninth[props.ninthId].document;
-//                     ninthPanelDataCH.value.links = reportStore.reportDataCH.ninth[props.ninthId].links;
-//                 }
-//                 if (!ninthPanelData.value.links.length) {
-//                     ninthPanelData.value.links.push({ link: '' })
-//                 }
-//             }
-//             else {
-//                 console.log('data not received');
-//                 isFirstSentNinth.value = true;
-//                 ninthPanelData.value = {
-//                     event_happened: false,
-//                     links: [{
-//                         link: '',
-//                     }],
-//                     comment: '',
-//                     file_size: '',
-//                     file_type: '',
-//                 };
-//             }
-
-//         }
-
-//         if (props.isDistrictHeadquarterCommander) {
-//             if (reportStore.reportDataDHFile.ninth[props.ninthId]) {
-//                 fileDH.value.name = reportStore.reportDataDHFile.ninth[props.ninthId].name;
-
-//                 fileDH.value.type = reportStore.reportDataDHFile.ninth[props.ninthId].type.split('/').at(-1);
-//                 fileDH.value.size = reportStore.reportDataDHFile.ninth[props.ninthId].size / Math.pow(1024, 2);
-//             }
-//         } else if (props.isCentralHeadquarterCommander) {
-//             if (reportStore.reportDataDH.ninth[props.ninthId]) {
-//                 fileDH.value.name = reportStore.reportDataDH.ninth[props.ninthId].document;
-//                 fileDH.value.type = reportStore.reportDataDH.ninth[props.ninthId].file_type;
-//                 fileDH.value.size = reportStore.reportDataDH.ninth[props.ninthId].file_size;
-//             }
-//             if (reportStore.reportForCheckCH.ninth[props.ninthId].verified_by_chq === true) {
-//                 fileCH.value.name = reportStore.reportForCheckCH.ninth[props.ninthId].document;
-//                 fileCH.value.type = reportStore.reportForCheckCH.ninth[props.ninthId].file_type;
-//                 fileCH.value.size = reportStore.reportForCheckCH.ninth[props.ninthId].file_size;
-//             } else
-//                 if (reportStore.reportForCheckCH.ninth[props.ninthId].rejecting_reasons && !reportStore.reportDataCHFile.ninth[props.ninthId]) {
-//                     fileCH.value.name = reportStore.reportForCheckCH.ninth[props.ninthId].central_version.document || '';
-//                     fileCH.value.type = reportStore.reportForCheckCH.ninth[props.ninthId].central_version.file_type || '';
-//                     fileCH.value.size = reportStore.reportForCheckCH.ninth[props.ninthId].central_version.file_size || '';
-//                 } else
-//                     if (reportStore.reportDataCHFile.ninth[props.ninthId]) {
-//                         fileCH.value.name = reportStore.reportDataCHFile.ninth[props.ninthId].name;
-//                         fileCH.value.type = reportStore.reportDataCHFile.ninth[props.ninthId].type.split('/').at(-1);
-//                         fileCH.value.size = reportStore.reportDataCHFile.ninth[props.ninthId].size / Math.pow(1024, 2);
-//                     }
-
-//         }
-//         if (reportStore.reportReject.ninth[props.ninthId] && reportStore.isReportReject.ninth[props.ninthId]) {
-//             reportStore.returnReport.ninth[props.ninthId] = true;
-//         }
-
-//         emit('getId', props.id)
-//         emit('getPanelNumber', props.panel_number)
-//     }
-// }, {
-//     flush: 'post'
-// })
-
-// watchPostEffect(() => {
-//     if (!(props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)) {
-//         if (props.panel_number == 6) {
-//             console.log('data', reportStore.reportDataDH.six[props.sixId], reportStore.reportDataCH.six[props.sixId])
-//             sixPanelDataDH.value = reportStore.reportDataDH.six[props.sixId];
-//             sixPanelDataCH.value = reportStore.reportDataCH.six[props.sixId];
-
-//             if (reportStore.isReportReject.six[props.sixId]) {
-//                 reportStore.returnReport.six[props.sixId] = true;
-//             } else {
-//                 reportStore.returnReport.six[props.sixId] = false;
-//             }
-//         } else if (props.panel_number == 9) {
-//             ninthPanelDataDH.value = reportStore.reportDataDH.ninth[props.ninthId];
-
-//             fileDH.value.name = reportStore.reportDataDH.ninth[props.ninthId].document;
-//             fileDH.value.type = reportStore.reportDataDH.ninth[props.ninthId].file_type;
-//             fileDH.value.size = reportStore.reportDataDH.ninth[props.ninthId].file_size;
-
-
-//             ninthPanelDataCH.value = reportStore.reportDataCH.ninth[props.ninthId];
-//             fileCH.value.name = reportStore.reportDataCH.ninth[props.ninthId].document;
-//             fileCH.value.type = reportStore.reportDataCH.ninth[props.ninthId].file_type;
-//             fileCH.value.size = reportStore.reportDataCH.ninth[props.ninthId].file_size;
-
-//             if (reportStore.isReportReject.ninth[props.ninthId]) {
-//                 reportStore.returnReport.ninth[props.ninthId] = true;
-//             } else {
-//                 reportStore.returnReport.ninth[props.ninthId] = false;
-//             }
-//         }
-
-//     }
-// });
 
 watchPostEffect(() => {
     if (!(props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)) {
@@ -1531,10 +1380,20 @@ watch(sixPanelDataDH.value, (newValue) => {
 watch(sixPanelDataCH.value, () => {
     if (props.isCentralHeadquarterCommander) {
         reportStore.reportDataCH.six[props.sixId] = sixPanelDataCH.value;
-        let formData = createFormData(sixPanelDataCH.value, reportStore.reportDataCH.six, reportStore.reportDataCHFile.six[props.sixId], reportStore.returnReport.six[props.sixId]);
+        let formData = createFormData(sixPanelDataCH.value, reportStore.reportDataCH.six, reportStore.returnReport.six[props.sixId]);
         emit('formDataCH', formData);
     }
 });
+
+watch(ninthPanelDataCH.value, () => {
+    if (props.isCentralHeadquarterCommander) {
+        reportStore.reportDataCH.ninth[props.ninthId] = ninthPanelDataCH.value;
+
+        let formData = createFormData(ninthPanelDataCH.value, reportStore.reportDataCH.ninth, reportStore.reportDataCHFile.ninth[props.ninthId], reportStore.returnReport.ninth[props.ninthId]);
+        emit('formDataCH', formData);
+    }
+});
+
 
 // Watchers for ninth panel data  
 watch(ninthPanelDataDH.value, (newValue) => {
@@ -1564,14 +1423,6 @@ watch(fileCH.value, () => {
     }
 });
 
-watch(ninthPanelDataCH.value, () => {
-    if (props.isCentralHeadquarterCommander) {
-        reportStore.reportDataCH.ninth[props.ninthId] = ninthPanelDataCH.value;
-
-        let formData = createFormData(ninthPanelDataCH.value, reportStore.reportDataCH.ninth, reportStore.reportDataCHFile.ninth[props.ninthId], reportStore.returnReport.ninth[props.ninthId]);
-        emit('formDataCH', formData);
-    }
-});
 
 
 // watch(sixPanelDataDH.value, (newValue) => {
