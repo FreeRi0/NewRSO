@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="RoReporting">
-      <h2 class="RoReporting_title">{{ edited ? 'Отчеты РО 2 часть' : 'Отчеты РО 1 часть' }}</h2>
+      <h2 class="RoReporting_title">{{ part == 'Часть 2' ? 'Отчеты РО 2 часть' : 'Отчеты РО 1 часть' }}</h2>
       <div class="RoReporting_search">
         <input type="text" id="search" class="RoReporting_search__input" v-model="name" @keyup="searchHeadquarters"
           placeholder="Начните вводить" />
@@ -42,9 +42,9 @@
         </div>
       </div>
       <div class="RoReporting_wrapper">
-        <RatingRoHeadquartersList :items="filteredEntities" />
+        <RatingRoHeadquartersList :items="sortedRegionalHeadquarters" />
         <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate color="blue"></v-progress-circular>
-        <p v-else-if="!isLoading && !filteredEntities.length" class="no-found-text">
+        <p v-else-if="!isLoading && !sortedRegionalHeadquarters.length" class="no-found-text">
           К сожалению, не удалось найти информацию о штабах по вашему запросу.
         </p>
       </div>
@@ -77,7 +77,7 @@ const roleStore = useRoleStore();
 const SelectedSortItem = ref(null);
 
 const route = useRoute();
-const edited = computed(() => route.params.edited === 'true');
+const part = computed(() => route.params.part);
 
 const next = () => {
   getRegionals('next')
@@ -105,7 +105,7 @@ const sortOptions = ref(
     name: 'По алфавиту',
   });
 
-  const isAuth = ref(!!localStorage.getItem('jwt_token'));
+const isAuth = ref(!!localStorage.getItem('jwt_token'));
 const clearItem = () => {
   SelectedSortItem.value = null;
 }
@@ -143,10 +143,6 @@ const getRegionals = async (pagination, orderLimit) => {
   }
 };
 
-const filteredEntities = computed(() => {
-  return sortedRegionalHeadquarters.value.filter(item => item.edited === edited.value);
-});
-
 watch(
   () => SelectedSortItem.value,
   () => {
@@ -162,7 +158,7 @@ watch(
 );
 
 onMounted(async () => {
-  await  getRegionals();
+  await getRegionals();
   districtsStore.getDistricts()
 })
 </script>

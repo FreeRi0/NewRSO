@@ -947,7 +947,7 @@ const routes: RouteRecordRaw[] = [
                         },
                         children: [
                             {
-                                path: ':edited',
+                                path: ':part',
                                 name: 'rating-ro-reporting',
                                 component: () =>
                                     import(
@@ -956,7 +956,7 @@ const routes: RouteRecordRaw[] = [
                                 props: true,
                             },
                             {
-                                path: 'report-regional-one-comander/:edited',
+                                path: 'report-regional-one-comander/:part',
                                 name: 'ReportRegionalPartOneComander',
                                 component: () =>
                                     import(
@@ -968,7 +968,7 @@ const routes: RouteRecordRaw[] = [
                                 props: true,
                             },
                             {
-                                path: 'report-regional-two-comander/:edited',
+                                path: 'report-regional-two-comander/:part',
                                 name: 'ReportRegionalPartTwoComander',
                                 component: () =>
                                     import(
