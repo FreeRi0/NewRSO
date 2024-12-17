@@ -167,7 +167,7 @@ const downloadReport = async () => {
     if ([6, 9, 10].includes(+id)) {
       endpoint = `/regional_competitions/${id}/download_mass_reports_xlsx/`
     } else {
-      endpoint`/regional_competitions/reports/${id}/download_all_reports_data/`
+      endpoint = `/regional_competitions/reports/${id}/download_all_reports_data/`
     }
 
     const reportData = await HTTP.get(endpoint, { 'responseType': 'blob' });
