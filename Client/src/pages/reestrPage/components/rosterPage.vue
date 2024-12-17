@@ -121,11 +121,6 @@
     height: 40px;
 }
 
-.ascend {
-    background-image: url('@app/assets/icon/switch.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-}
 </style>
 
 <script setup>

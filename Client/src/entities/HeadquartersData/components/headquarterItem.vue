@@ -1,33 +1,35 @@
 <template>
-  <div :class="{ 'squads-wrapper__item': !horizontal, '': horizontal }">
+  <div :class="{ 'headquarters-wrapper__item': !horizontal, '': horizontal }">
     <router-link :class="{ 'horizontal-item': horizontal, '': !horizontal }"
-      :to="{ name: 'lso', params: { id: squad.id } }">
+      :to="{ name: props.name, params: { id: headquarter.id } }">
       <div :class="{ 'round-img': !horizontal, 'horizontal-img': horizontal }">
-        <img :src="getEmblemSrc(squad.emblem)" alt="logo" />
+        <img :src="headquarter.emblem" alt="logo" v-if="headquarter.emblem" />
+        <img src="@app/assets/hq-emblem-squad.png" alt="logo" v-else />
       </div>
       <div :class="{ 'container-headquarters': !horizontal, 'containerHorizontal': horizontal }">
         <p
           :class="{ 'headquarters-wrapper__item-title': !horizontal, 'headquarters-wrapper__item-category-full': horizontal }">
-          {{ squad.name }}
+          {{ headquarter.name }}
         </p>
       </div>
     </router-link>
   </div>
-
 </template>
 <script setup>
-import defaultAvatar from '@app/assets/hq-emblem-squad.png';
 const props = defineProps({
-  squad: {
+  headquarter: {
     type: Object,
+    required: true,
+  },
+  name: {
+    type: String,
     required: true,
   },
   horizontal: {
     type: Boolean,
     default: false,
-  },
+  }
 });
-const getEmblemSrc = (emblem) => emblem || defaultAvatar;
 </script>
 <style lang="scss" scoped>
 .round-img {
@@ -49,7 +51,6 @@ const getEmblemSrc = (emblem) => emblem || defaultAvatar;
 
 .container-headquarters {
   padding-top: 10px;
-  text-align: center;
 }
 
 .horizontal {
@@ -73,7 +74,6 @@ const getEmblemSrc = (emblem) => emblem || defaultAvatar;
 
 .containerHorizontal {
   display: flex;
-  margin-left: 20px;
   align-items: center;
 }
 </style>

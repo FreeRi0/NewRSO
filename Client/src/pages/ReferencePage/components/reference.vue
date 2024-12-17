@@ -932,11 +932,6 @@ p {
     border: 1px solid #35383F;
 }
 
-.ascend {
-    width: 32px !important;
-    height: 32px !important;
-}
-
 .Sort-alphabet .v-field__input {
     padding-top: 0 !important;
 }

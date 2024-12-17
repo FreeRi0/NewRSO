@@ -1059,13 +1059,6 @@ const sortOptions = ref([
   background-repeat: no-repeat;
   background-size: cover;
 }
-
-.ascend {
-  background-image: url('@app/assets/icon/switch.svg');
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
 //Стиль поисковика
 .searcher {
   width: 100%;

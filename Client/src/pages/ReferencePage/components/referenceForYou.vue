@@ -657,13 +657,6 @@ input[type='number']::-webkit-outer-spin-button {
     margin: 0;
 }
 
-.ascend {
-    margin-left: 5px;
-    background-image: url('@app/assets/icon/switch.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
 .references {
     padding: 0px 0px 60px 0px;
 
