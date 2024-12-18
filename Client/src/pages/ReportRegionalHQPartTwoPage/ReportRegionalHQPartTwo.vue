@@ -505,254 +505,180 @@ const getMultiplyData = async (reportId) => {
     Promise.all(ninthDataPromises),
   ]);
 
-  const processDistrictExpertData = (sixData, resultId) => {  
-  if (sixData?.regional_version) {  
-    try {  
-      reportData.value.six[resultId] = JSON.parse(sixData.regional_version);  
-    } catch (error) {  
-      console.error('Error parsing regional_version JSON 6-DH:', error);  
-      reportData.value.six[resultId] = sixData.regional_version || sixData;  
-    }  
-  } else {  
-    reportData.value.six[resultId] = sixData;  
-  }  
+  const processDistrictExpertData = (data, resultId, panelId) => {
+    if (data?.regional_version) {
+      try {
+        reportData.value[panelId][resultId] = JSON.parse(data.regional_version);
+      } catch (error) {
+        console.error(`Error parsing regional_version JSON ${panelId}-DH:`, error);
+        reportData.value[panelId][resultId] = data.regional_version || data;
+      }
+    } else {
+      reportData.value[panelId][resultId] = data;
+    }
 
-  reportStore.reportDataDH.six[resultId] = { ...sixData };  
-  reportStore.reportDataDH.six[resultId].comment = '';  
-};  
+    reportStore.reportDataDH[panelId][resultId] = { ...data };
+    reportStore.reportDataDH[panelId][resultId].comment = '';
+  };
 
-const processCentralExpertData = (sixData, resultId) => {  
-  reportStore.reportForCheckCH.six[resultId] = sixData;  
-  reportData.value.six[resultId] = sixData;  
-  reportStore.reportDataDH.six[resultId] = sixData;  
+  const processCentralExpertData = (data, resultId, panelId) => {
+    const panelKey = panelId === '6' ? 'six' : 'ninth';
 
-  if (sixData.rejecting_reasons && sixData.verified_by_chq !== true) {  
-    if (!revisionPanels.value.find((item) => item === '6')) {  
-      revisionPanels.value.push('6');  
-    }  
-    revisionPanels.value.push(`6-${resultId}`);  
-  }  
+    // Парсинг и нормализация данных
+    let parsedData = { ...data };
+    try {
+      if (typeof data === 'string') {
+        parsedData = JSON.parse(data);
+      }
 
-  if (sixData?.regional_version) {  
-    try {  
-      if (typeof sixData.regional_version === 'object') {  
-        reportData.value.six[resultId] = JSON.stringify(sixData.regional_version);  
-        if (sixData.regional_version?.regional_version?.regional_version) {  
-          reportData.value.six[resultId] = JSON.parse(sixData.regional_version?.regional_version?.regional_version);  
-        } else {  
-          reportData.value.six[resultId] = JSON.parse(sixData.regional_version?.regional_version);  
-        }  
-      } else if (typeof sixData.regional_version === 'string') {  
-        reportData.value.six[resultId] = JSON.parse(sixData.regional_version);  
-      } else {  
-        throw new Error('Invalid type for regional_version');  
-      }  
-    } catch (error) {  
-      console.error('Error parsing regional_version JSON 6-CH-RH:', error);  
-      reportData.value.six[resultId] = sixData.regional_version || sixData;  
-    }  
-  } else {  
-    reportData.value.six[resultId] = sixData;  
-  }  
+      // Обработка rejecting_reasons
+      if (typeof parsedData.rejecting_reasons === 'string') {
+        parsedData.rejecting_reasons = JSON.parse(parsedData.rejecting_reasons);
+      }
 
-  if (sixData?.district_version) {  
-    try {  
-      reportStore.reportDataDH.six[resultId] = JSON.parse(sixData.district_version);  
-    } catch (error) {  
-      console.error('Error parsing regional_version JSON-6-CH-DH:', error);  
-      reportStore.reportDataDH.six[resultId] = sixData.district_version || sixData;  
-    }  
-  } else {  
-    reportStore.reportDataDH.six[resultId] = sixData;  
-  }  
+      if (typeof parsedData.comment === 'string') {
+        try {
+          const commentObj = JSON.parse(parsedData.comment);
+          if (commentObj && typeof commentObj === 'object' && 'comment' in commentObj) {
+            parsedData.comment = commentObj.comment;
+          }
+        } catch (commentError) {
+          console.error('Error parsing comment:', commentError);
+          // Если парсинг не удался, оставляем comment как есть
+        }
+      }
+      // Убедимся, что comment установлен в null, если он не определен
+      parsedData.comment = parsedData.comment || null;
 
-  reportStore.reportDataCH.six[resultId] = { ...sixData };  
-  reportStore.reportDataCH.six[resultId].verified_by_chq === null  
-    ? reportStore.reportDataCH.six[resultId].comment = ''  
-    : reportStore.reportDataCH.six[resultId].comment = sixData?.comment;  
-};  
+    } catch (error) {
+      console.error(`Error parsing data for ${panelId}-${resultId}:`, error);
+    }
 
-const processCommonData = (sixData, resultId) => {  
-  if (sixData?.regional_version) {  
-    try {  
-      if (typeof sixData.regional_version === 'object') {  
-        reportData.value.six[resultId] = JSON.stringify(sixData.regional_version);  
-        if (sixData.regional_version?.regional_version?.regional_version) {  
-          reportData.value.six[resultId] = JSON.parse(sixData.regional_version?.regional_version?.regional_version);  
-        } else {  
-          reportData.value.six[resultId] = JSON.parse(sixData.regional_version?.regional_version);  
-        }  
-      } else if (typeof sixData.regional_version === 'string') {  
-        reportData.value.six[resultId] = JSON.parse(sixData.regional_version);  
-      } else {  
-        throw new Error('Invalid type for regional_version');  
-      }  
-    } catch (error) {  
-      console.error('Error parsing regional_version JSON 6-CH-RH:', error);  
-      reportData.value.six[resultId] = sixData.regional_version || sixData;  
-    }  
-  } else {  
-    reportData.value.six[resultId] = sixData;  
-  }  
+    reportStore.reportForCheckCH[panelKey][resultId] = parsedData;
+    reportData.value[panelKey][resultId] = parsedData;
+    reportStore.reportDataDH[panelKey][resultId] = parsedData;
 
-  if (sixData?.district_version) {  
-    try {  
-      reportStore.reportDataDH.six[resultId] = JSON.parse(sixData?.district_version);  
-    } catch (error) {  
-      console.error('Error parsing district_version JSON-6-RH-DH:', error);  
-      reportStore.reportDataDH.six[resultId] = sixData?.district_version || sixData;  
-    }  
-  }  
+    if (parsedData.rejecting_reasons && parsedData.verified_by_chq !== true) {
+      if (!revisionPanels.value.find((item) => item === panelId)) {
+        revisionPanels.value.push(panelId);
+      }
+      revisionPanels.value.push(`${panelId}-${resultId}`);
+    }
 
-  sixData?.central_version  
-    ? reportStore.reportDataCH.six[resultId] = sixData?.central_version  
-    : reportStore.reportDataCH.six[resultId] = sixData;  
+    // Обработка regional_version
+    if (parsedData.regional_version) {
+      try {
+        let regionalVersion = parsedData.regional_version;
+        if (typeof regionalVersion === 'string') {
+          regionalVersion = JSON.parse(regionalVersion);
+        }
+        if (panelId === '6' && regionalVersion.regional_version?.regional_version) {
+          reportData.value[panelKey][resultId] = regionalVersion.regional_version.regional_version;
+        } else {
+          reportData.value[panelKey][resultId] = regionalVersion.regional_version || regionalVersion;
+        }
+      } catch (error) {
+        console.error(`Error parsing regional_version JSON ${panelId}-CH-RH:`, error);
+        reportData.value[panelKey][resultId] = parsedData.regional_version || parsedData;
+      }
+    } else {
+      reportData.value[panelKey][resultId] = parsedData;
+    }
 
-  if (sixData?.rejecting_reasons && sixData?.verified_by_chq !== true) {  
-    if (!revisionPanels.value.find((item) => item === '6')) {  
-      revisionPanels.value.push('6');  
-    }  
-    revisionPanels.value.push(`6-${resultId}`);  
-  }  
+    // Обработка district_version
+    if (parsedData.district_version) {
+      try {
+        reportStore.reportDataDH[panelKey][resultId] =
+          typeof parsedData.district_version === 'string'
+            ? JSON.parse(parsedData.district_version)
+            : parsedData.district_version;
+      } catch (error) {
+        console.error(`Error parsing district_version JSON-${panelId}-CH-DH:`, error);
+        reportStore.reportDataDH[panelKey][resultId] = parsedData.district_version || parsedData;
+      }
+    } else {
+      reportStore.reportDataDH[panelKey][resultId] = parsedData;
+    }
 
-  if (!sixData?.verified_by_chq) {  
-    isAllSixVerified = false;  
-  }  
-};  
+    reportStore.reportDataCH[panelKey][resultId] = { ...parsedData };
+    reportStore.reportDataCH[panelKey][resultId].comment =
+      parsedData.verified_by_chq === null ? null : (parsedData.comment || '');
+  };
 
-sixDataResults.forEach((result) => {  
-  const sixData = result.data;  
+  const processCommonData = (data, resultId, panelId) => {
+    const parseVersion = (version) => {
+      try {
+        if (typeof version === 'object') {
+          return JSON.parse(JSON.stringify(version.regional_version || version));
+        } else if (typeof version === 'string') {
+          return JSON.parse(version);
+        }
+        throw new Error('Invalid type for version');
+      } catch (error) {
+        console.error(`Error parsing ${panelId} version JSON:`, error);
+        return version;
+      }
+    };
 
-  if (districtExpert.value) {  
-    processDistrictExpertData(sixData, result.id);  
-  } else if (centralExpert.value) {  
-    processCentralExpertData(sixData, result.id);  
-  } else {  
-    processCommonData(sixData, result.id);  
-  }  
-});
+    if (data?.regional_version) {
+      reportData.value[panelId][resultId] = parseVersion(data.regional_version);
+    } else {
+      reportData.value[panelId][resultId] = data;
+    }
 
-const processDistrictExpertDataNinth = (ninthData, resultId) => {  
-  if (ninthData?.regional_version) {  
-    try {  
-      reportData.value.ninth[resultId] = JSON.parse(ninthData.regional_version);  
-    } catch (error) {  
-      console.error('Error parsing regional_version JSON 9-DH :', error);  
-      reportData.value.ninth[resultId] = ninthData.regional_version || ninthData;  
-    }  
-  } else {  
-    reportData.value.ninth[resultId] = ninthData;  
-  }  
+    if (data?.district_version) {
+      try {
+        reportStore.reportDataDH[panelId][resultId] = parseVersion(data.district_version);
+      } catch (error) {
+        console.error(`Error parsing district_version JSON-${panelId}-RH-DH:`, error);
+        reportStore.reportDataDH[panelId][resultId] = data.district_version || data;
+      }
+    }
 
-  reportStore.reportDataDH.ninth[resultId] = { ...ninthData };  
-  reportStore.reportDataDH.ninth[resultId].comment = '';  
-};  
+    reportStore.reportDataCH[panelId][resultId] = data?.central_version || data;
 
-const processCentralExpertDataNinth = (ninthData, resultId) => {  
-  reportStore.reportForCheckCH.ninth[resultId] = ninthData;  
-  reportData.value.ninth[resultId] = ninthData;  
-  reportStore.reportDataDH.ninth[resultId] = ninthData;  
+    if (data?.rejecting_reasons && (panelId === '9' || data?.verified_by_chq !== true)) {
+      if (!revisionPanels.value.includes(panelId)) {
+        revisionPanels.value.push(panelId);
+      }
+      revisionPanels.value.push(`${panelId}-${resultId}`);
 
-  if (ninthData.rejecting_reasons && ninthData.verified_by_chq !== true) {  
-    if (!revisionPanels.value.find((item) => item === '9')) {  
-      revisionPanels.value.push('9');  
-    }  
-    revisionPanels.value.push(`9-${resultId}`);  
-  }  
+      if (panelId === '9') {
+        reportStore.isReportReject.ninth[resultId] = isTabsForRevision.value;
+      }
+    }
 
-  if (ninthData?.regional_version) {  
-    try {  
-      if (typeof ninthData.regional_version === 'object') {  
-        reportData.value.ninth[resultId] = JSON.stringify(ninthData.regional_version?.regional_version);  
-        reportData.value.ninth[resultId] = JSON.parse(ninthData.regional_version?.regional_version);  
-      } else if (typeof ninthData.regional_version === 'string') {  
-        reportData.value.ninth[resultId] = JSON.parse(ninthData.regional_version);  
-      } else {  
-        throw new Error('Invalid type for regional_version');  
-      }  
-    } catch (error) {  
-      console.error('Error parsing regional_version JSON 9-CH-RH:', error);  
-      reportData.value.ninth[resultId] = ninthData.regional_version || ninthData;  
-    }  
-  } else {  
-    reportData.value.ninth[resultId] = ninthData;  
-  }  
+    if (!data?.verified_by_chq) {
+      if (panelId === '6') {
+        isAllSixVerified = false;
+      } else if (panelId === '9') {
+        isAllNinthVerified = false;
+      }
+    }
+  };
 
-  if (ninthData?.district_version) {  
-    try {  
-      reportStore.reportDataDH.ninth[resultId] = JSON.parse(ninthData.district_version);  
-    } catch (error) {  
-      console.error('Error parsing regional_version JSON 9-CH-DH:', error);  
-      reportStore.reportDataDH.ninth[resultId] = ninthData.district_version || ninthData;  
-    }  
-  } else {  
-    reportStore.reportDataDH.ninth[resultId] = ninthData;  
-  }  
+  const processDataResults = (dataResults, panelId) => {
+    dataResults.forEach((result) => {
+      const data = result.data;
+      const resultId = result.id;
+      const panelKey = panelId === '6' ? 'six' : 'ninth';
 
-  reportStore.reportDataCH.ninth[resultId] = { ...ninthData };  
-  reportStore.reportDataCH.ninth[resultId].verified_by_chq === null  
-    ? reportStore.reportDataCH.ninth[resultId].comment = ''  
-    : reportStore.reportDataCH.ninth[resultId].comment = ninthData?.comment;  
-};  
+      if (districtExpert.value) {
+        processDistrictExpertData(data, resultId, panelKey);
+      } else if (centralExpert.value) {
+        processCentralExpertData(data, resultId, panelId);
+      } else {
+        processCommonData(data, resultId, panelId);
+      }
+    });
+  };
 
-const processCommonDataNinth = (ninthData, resultId) => {  
-  if (ninthData?.regional_version) {  
-    try {  
-      if (typeof ninthData.regional_version === 'object') {  
-        reportData.value.ninth[resultId] = JSON.stringify(ninthData.regional_version?.regional_version);  
-        reportData.value.ninth[resultId] = JSON.parse(ninthData.regional_version?.regional_version);  
-      } else if (typeof ninthData.regional_version === 'string') {  
-        reportData.value.ninth[resultId] = JSON.parse(ninthData.regional_version);  
-      } else {  
-        throw new Error('Invalid type for regional_version');  
-      }  
-    } catch (error) {  
-      console.error('Error parsing regional_version JSON 9-CH-RH:', error);  
-      reportData.value.ninth[resultId] = ninthData.regional_version || ninthData;  
-    }  
-  } else {  
-    reportData.value.ninth[resultId] = ninthData;  
-  }  
+  // Обработка данных для шестой панели
+  processDataResults(sixDataResults, '6');
 
-  if (ninthData?.district_version) {  
-    try {  
-      reportStore.reportDataDH.ninth[resultId] = JSON.parse(ninthData?.district_version);  
-    } catch (error) {  
-      console.error('Error parsing district_version JSON-RH-DH:', error);  
-      reportStore.reportDataDH.ninth[resultId] = ninthData?.district_version || ninthData;  
-    }  
-  }  
-
-  ninthData?.central_version  
-    ? reportStore.reportDataCH.ninth[resultId] = ninthData?.central_version  
-    : reportStore.reportDataCH.ninth[resultId] = ninthData;  
-
-  if (ninthData?.rejecting_reasons) {  
-    if (!revisionPanels.value.find((item) => item === '9')) {  
-      revisionPanels.value.push('9');  
-    }  
-    revisionPanels.value.push(`9-${resultId}`);  
-    reportStore.isReportReject.ninth[resultId] = isTabsForRevision.value;  
-  }  
-
-  if (!ninthData?.verified_by_chq) {  
-    isAllNinthVerified = false;  
-  }  
-};  
-
-ninthDataResults.forEach((result) => {  
-  const ninthData = result.data;  
-
-  if (districtExpert.value) {  
-    processDistrictExpertDataNinth(ninthData, result.id);  
-  } else if (centralExpert.value) {  
-    processCentralExpertDataNinth(ninthData, result.id);  
-  } else {  
-    processCommonDataNinth(ninthData, result.id);  
-  }  
-});
+  // Обработка данных для девятой панели
+  processDataResults(ninthDataResults, '9');
 }
-
 
 const getReportData = async (reportId) => {
   try {
@@ -1455,41 +1381,69 @@ const setDataCH = (data, panel, number) => {
   }
 }
 
+// const filterPanelsData = () => {
+//   const filteredSix = {};
+//   const filteredNinth = {};
+
+//   for (let i in reportData.value.six) {
+//     if ((reportData.value.six[i].number_of_members > 0 && reportData.value.six[i].number_of_members !== null && reportData.value.six[i].is_sent === false) && Object.keys(reportData.value.six[i]).length !== 0) {
+//       filteredSix[i] = reportData.value.six[i];
+//     }
+
+//   }
+//   for (let i in filteredSix) {
+//     isErrorPanel.value.six[i] = {
+//       id: i,
+//       error: false,
+//     }
+//   }
+//   for (let i in reportData.value.ninth) {
+//     if (reportData.value.ninth[i].event_happened !== false && reportData.value.ninth[i].is_sent === false && Object.keys(reportData.value.ninth[i]).length !== 0) {
+//       filteredNinth[i] = reportData.value.ninth[i];
+//     }
+//   }
+//   for (let i in filteredNinth) {
+//     isErrorPanel.value.ninth[i] = {
+//       id: i,
+//       error: false,
+//     }
+//   }
+
+//   return {
+//     filteredSix,
+//     filteredNinth,
+//   };
+// };
+
 const filterPanelsData = () => {
-  const filteredSix = {};
-  const filteredNinth = {};
-
-  for (let i in reportData.value.six) {
-    if ((reportData.value.six[i].number_of_members > 0 && reportData.value.six[i].number_of_members !== null && reportData.value.six[i].is_sent === false) && Object.keys(reportData.value.six[i]).length !== 0) {
-      filteredSix[i] = reportData.value.six[i];
-    }
-
-  }
-  for (let i in filteredSix) {
-    isErrorPanel.value.six[i] = {
-      id: i,
-      error: false,
-    }
-  }
-  for (let i in reportData.value.ninth) {
-    if (reportData.value.ninth[i].event_happened !== false && reportData.value.ninth[i].is_sent === false && Object.keys(reportData.value.ninth[i]).length !== 0) {
-      filteredNinth[i] = reportData.value.ninth[i];
-    }
-  }
-  for (let i in filteredNinth) {
-    isErrorPanel.value.ninth[i] = {
-      id: i,
-      error: false,
-    }
-  }
-
-  return {
-    filteredSix,
-    filteredNinth,
+  const filterPanel = (data, condition) => {
+    return Object.entries(data).reduce((acc, [key, value]) => {
+      if (condition(value)) {
+        acc[key] = value;
+        isErrorPanel.value[data === reportData.value.six ? 'six' : 'ninth'][key] = {
+          id: key,
+          error: false,
+        };
+      }
+      return acc;
+    }, {});
   };
+
+  const filteredSix = filterPanel(reportData.value.six, item =>
+    item.number_of_members > 0 &&
+    item.number_of_members !== null &&
+    !item.is_sent &&
+    Object.keys(item).length !== 0
+  );
+
+  const filteredNinth = filterPanel(reportData.value.ninth, item =>
+    item.event_happened !== false &&
+    !item.is_sent &&
+    Object.keys(item).length !== 0
+  );
+
+  return { filteredSix, filteredNinth };
 };
-
-
 
 const sendReport = async () => {
   if (!(districtExpert.value || centralExpert.value)) {

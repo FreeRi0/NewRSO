@@ -163,7 +163,7 @@
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                                }}</label>
+                            }}</label>
                         </div>
                     </div>
                 </div>
@@ -204,8 +204,6 @@
                                 Удалить поле ввода
                             </div>
                         </div>
-
-
                     </div>
                 </div>
                 <div class="form__field">
@@ -366,7 +364,7 @@
                         </p>
 
 
-                        <div class="places_wrap" v-if="isRejected">
+                        <!-- <div class="places_wrap" v-if="isRejected">
                             <div class="places_item" v-for="item in events" :key="item.id">
                                 <input :id="item.id" :value="item.value" :name="item.name" :disabled="isDataRHDisabled"
                                     :checked="ninthPanelData.event_happened == item.value"
@@ -374,7 +372,7 @@
                                     v-model="ninthPanelData.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
 
@@ -388,6 +386,29 @@
                                 :for="id">Да</label>
                             <label v-else-if="ninthPanelData.event_happened === false" class="places_item_label"
                                 :for="id">Нет</label>
+                        </div> -->
+
+                        <div class="places_wrap" :class="{ 'one_place': !isRejected }">
+                            <template v-if="isRejected">
+                                <div v-for="item in events" :key="item.id" class="places_item">
+                                    <input :id="item.id" :value="item.value" :name="item.name"
+                                        :disabled="isDataRHDisabled"
+                                        :checked="ninthPanelData.event_happened === item.value"
+                                        class="form__input places_input" type="radio" @focusout="focusOut"
+                                        v-model="ninthPanelData.event_happened" />
+                                    <label :for="item.id" class="places_item_label">{{ item.name }}</label>
+                                </div>
+                            </template>
+                            <template v-else>
+                                <input id="event_happened" :value="ninthPanelData.event_happened" :name="event_happened"
+                                    :disabled="isDataRHDisabled"
+                                    :checked="ninthPanelData.event_happened === true || ninthPanelData.event_happened === false"
+                                    class="form__input places_input" type="radio" @focusout="focusOut"
+                                    v-model="ninthPanelData.event_happened" />
+                                <label :for="event_happened" class="places_item_label">
+                                    {{ ninthPanelData.event_happened ? 'Да' : 'Нет' }}
+                                </label>
+                            </template>
                         </div>
 
 
@@ -513,17 +534,13 @@
                         </p>
 
                         <div class="places_wrap">
-                            <div class="places_item">
-                                <input v-model="ninthPanelDataDH.event_happened" id="event_happenedDH-true"
-                                    class="form__input places_input" type="radio" :value="true"
+                            <div v-for="option in ['true', 'false']" :key="option" class="places_item">
+                                <input v-model="ninthPanelDataDH.event_happened" :id="`event_happenedDH-${option}`"
+                                    class="form__input places_input" type="radio" :value="option === 'true'"
                                     :disabled="isDataDHDDisabled" />
-                                <label for="event_happenedDH-true">Да</label>
-                            </div>
-                            <div class="places_item">
-                                <input v-model="ninthPanelDataDH.event_happened" id="event_happenedDH-true"
-                                    class="form__input places_input" type="radio" :value="false"
-                                    :disabled="isDataDHDDisabled" />
-                                <label for="event_happenedDH-true">Нет</label>
+                                <label :for="`event_happenedDH-${option}`">
+                                    {{ option === 'true' ? 'Да' : 'Нет' }}
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -651,7 +668,7 @@
                                     v-model="ninthPanelDataCH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                    }}</label>
+                                }}</label>
                             </div>
                         </div>
                     </div>
@@ -1293,6 +1310,7 @@ watchEffect(() => {
         if (reportData[id]) {
             panelData.value.comment = reportData[id].comment;
             panelData.value.number_of_members = reportData[id].number_of_members;
+            panelData.value.event_happened = reportData[id].event_happened;
             panelData.value.links = reportData[id].links;
         }
     }
