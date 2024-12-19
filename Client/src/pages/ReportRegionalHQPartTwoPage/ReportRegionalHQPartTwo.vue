@@ -505,7 +505,28 @@ const getMultiplyData = async (reportId) => {
     Promise.all(ninthDataPromises),
   ]);
 
+  const normalizeComment = (data) => {
+    try {
+      if (typeof data.comment === 'string') {
+        try {
+          const commentObj = JSON.parse(data.comment);
+          if (commentObj && typeof commentObj === 'object' && 'comment' in commentObj) {
+            data.comment = commentObj.comment;
+          }
+        } catch (commentError) {
+          console.error('Error parsing comment:', commentError);
+        }
+      }
+      data.comment = data.comment || null;
+
+    } catch (error) {
+      console.error(`Error parsing data for ${panelId}-${resultId}:`, error);
+    }
+  }
+
+
   const processDistrictExpertData = (data, resultId, panelId) => {
+    normalizeComment(data);
     if (data?.regional_version) {
       try {
         reportData.value[panelId][resultId] = JSON.parse(data.regional_version);
@@ -521,44 +542,21 @@ const getMultiplyData = async (reportId) => {
     reportStore.reportDataDH[panelId][resultId].comment = '';
   };
 
+
   const processCentralExpertData = (data, resultId, panelId) => {
     const panelKey = panelId === '6' ? 'six' : 'ninth';
 
-    // Парсинг и нормализация данных
-    let parsedData = { ...data };
-    try {
-      if (typeof data === 'string') {
-        parsedData = JSON.parse(data);
-      }
+    normalizeComment(data);
 
-      // Обработка rejecting_reasons
-      if (typeof parsedData.rejecting_reasons === 'string') {
-        parsedData.rejecting_reasons = JSON.parse(parsedData.rejecting_reasons);
-      }
+    reportStore.reportForCheckCH[panelKey][resultId] = data;
+    reportData.value[panelKey][resultId] = data;
+    reportStore.reportDataDH[panelKey][resultId] = data;
 
-      if (typeof parsedData.comment === 'string') {
-        try {
-          const commentObj = JSON.parse(parsedData.comment);
-          if (commentObj && typeof commentObj === 'object' && 'comment' in commentObj) {
-            parsedData.comment = commentObj.comment;
-          }
-        } catch (commentError) {
-          console.error('Error parsing comment:', commentError);
-          // Если парсинг не удался, оставляем comment как есть
-        }
-      }
-      // Убедимся, что comment установлен в null, если он не определен
-      parsedData.comment = parsedData.comment || null;
-
-    } catch (error) {
-      console.error(`Error parsing data for ${panelId}-${resultId}:`, error);
+    if (typeof data.rejecting_reasons === 'string') {
+      data.rejecting_reasons = JSON.parse(data.rejecting_reasons);
     }
 
-    reportStore.reportForCheckCH[panelKey][resultId] = parsedData;
-    reportData.value[panelKey][resultId] = parsedData;
-    reportStore.reportDataDH[panelKey][resultId] = parsedData;
-
-    if (parsedData.rejecting_reasons && parsedData.verified_by_chq !== true) {
+    if (data.rejecting_reasons && data.verified_by_chq !== true) {
       if (!revisionPanels.value.find((item) => item === panelId)) {
         revisionPanels.value.push(panelId);
       }
@@ -566,9 +564,9 @@ const getMultiplyData = async (reportId) => {
     }
 
     // Обработка regional_version
-    if (parsedData.regional_version) {
+    if (data.regional_version) {
       try {
-        let regionalVersion = parsedData.regional_version;
+        let regionalVersion = data.regional_version;
         if (typeof regionalVersion === 'string') {
           regionalVersion = JSON.parse(regionalVersion);
         }
@@ -579,33 +577,34 @@ const getMultiplyData = async (reportId) => {
         }
       } catch (error) {
         console.error(`Error parsing regional_version JSON ${panelId}-CH-RH:`, error);
-        reportData.value[panelKey][resultId] = parsedData.regional_version || parsedData;
+        reportData.value[panelKey][resultId] = data.regional_version || data;
       }
     } else {
-      reportData.value[panelKey][resultId] = parsedData;
+      reportData.value[panelKey][resultId] = data;
     }
 
     // Обработка district_version
-    if (parsedData.district_version) {
+    if (data.district_version) {
       try {
         reportStore.reportDataDH[panelKey][resultId] =
-          typeof parsedData.district_version === 'string'
-            ? JSON.parse(parsedData.district_version)
-            : parsedData.district_version;
+          typeof data.district_version === 'string'
+            ? JSON.parse(data.district_version)
+            : data.district_version;
       } catch (error) {
         console.error(`Error parsing district_version JSON-${panelId}-CH-DH:`, error);
-        reportStore.reportDataDH[panelKey][resultId] = parsedData.district_version || parsedData;
+        reportStore.reportDataDH[panelKey][resultId] = data.district_version || data;
       }
     } else {
-      reportStore.reportDataDH[panelKey][resultId] = parsedData;
+      reportStore.reportDataDH[panelKey][resultId] = data;
     }
 
-    reportStore.reportDataCH[panelKey][resultId] = { ...parsedData };
+    reportStore.reportDataCH[panelKey][resultId] = { ...data };
     reportStore.reportDataCH[panelKey][resultId].comment =
-      parsedData.verified_by_chq === null ? null : (parsedData.comment || '');
+      data.verified_by_chq === null ? null : (data.comment || '');
   };
 
   const processCommonData = (data, resultId, panelId) => {
+    normalizeComment(data);
     const parseVersion = (version) => {
       try {
         if (typeof version === 'object') {
@@ -621,7 +620,7 @@ const getMultiplyData = async (reportId) => {
     };
 
     if (data?.regional_version) {
-      reportData.value[panelId][resultId] = parseVersion(data.regional_version);
+      reportData.value[panelId][resultId] = parseVersion(data?.regional_version);
     } else {
       reportData.value[panelId][resultId] = data;
     }
@@ -637,15 +636,19 @@ const getMultiplyData = async (reportId) => {
 
     reportStore.reportDataCH[panelId][resultId] = data?.central_version || data;
 
-    if (data?.rejecting_reasons && (panelId === '9' || data?.verified_by_chq !== true)) {
+    const processPanelRevision = (panelId, resultId) => {
       if (!revisionPanels.value.includes(panelId)) {
         revisionPanels.value.push(panelId);
       }
       revisionPanels.value.push(`${panelId}-${resultId}`);
 
-      if (panelId === '9') {
-        reportStore.isReportReject.ninth[resultId] = isTabsForRevision.value;
-      }
+      const panelKey = panelId === '6' ? 'six' : 'ninth';
+      reportStore.isReportReject[panelKey][resultId] = isTabsForRevision.value;
+    };
+
+    if (data?.rejecting_reasons && data?.verified_by_chq !== true) {
+      processPanelRevision('6', resultId);
+      processPanelRevision('9', resultId);
     }
 
     if (!data?.verified_by_chq) {
@@ -668,7 +671,7 @@ const getMultiplyData = async (reportId) => {
       } else if (centralExpert.value) {
         processCentralExpertData(data, resultId, panelId);
       } else {
-        processCommonData(data, resultId, panelId);
+        processCommonData(data, resultId, panelKey);
       }
     });
   };
