@@ -462,7 +462,7 @@
                 id="is_projectCH-true"
                 type="radio"
                 :value="true"
-                :disabled="reportStore.isAllReportsVerifiedByCH"
+                :disabled="reportStore.isAllReportsVerifiedByCH || reportVerifiedByCH"
             />
             <label for="is_projectCH-true">Да</label>
           </div>
@@ -473,7 +473,7 @@
                 id="is_projectCH-false"
                 type="radio"
                 :value="false"
-                :disabled="reportStore.isAllReportsVerifiedByCH"
+                :disabled="reportStore.isAllReportsVerifiedByCH || reportVerifiedByCH"
             />
             <label for="is_projectCH-false">Нет</label>
           </div>
@@ -508,7 +508,7 @@
                     :id="'projectCH.dataCH.name'"
                     :name="'projectCH.dataCH.name'"
                     style="width: 100%;"
-                    :disabled="(reportStore.isReportReject?.sixteenth && !props.centralExpert) || !isProjectCH || reportStore.isAllReportsVerifiedByCH"
+                    :disabled="(reportStore.isReportReject?.sixteenth && !props.centralExpert) || !isProjectCH || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH"
                 />
               </td>
             </tr>
@@ -540,7 +540,7 @@
                   type="radio"
                   :id="`All-${index}CH`"
                   value="Всероссийский"
-                  :disabled="(reportStore.isReportReject?.sixteenth && !props.centralExpert) || !isProjectCH || reportStore.isAllReportsVerifiedByCH"
+                  :disabled="(reportStore.isReportReject?.sixteenth && !props.centralExpert) || !isProjectCH || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH"
               />
               <label :for="`All-${index}CH`">Всероссийский</label>
             </div>
@@ -551,7 +551,7 @@
                   type="radio"
                   :id="`District-${index}CH`"
                   value="Окружной"
-                  :disabled="(reportStore.isReportReject?.sixteenth && !props.centralExpert) || !isProjectCH || reportStore.isAllReportsVerifiedByCH"
+                  :disabled="(reportStore.isReportReject?.sixteenth && !props.centralExpert) || !isProjectCH || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH"
               />
               <label :for="`District-${index}CH`">Окружной</label>
             </div>
@@ -562,7 +562,7 @@
                   type="radio"
                   :id="`Interregional-${index}CH`"
                   value="Межрегиональный"
-                  :disabled="(reportStore.isReportReject?.sixteenth && !props.centralExpert) || !isProjectCH || reportStore.isAllReportsVerifiedByCH"
+                  :disabled="(reportStore.isReportReject?.sixteenth && !props.centralExpert) || !isProjectCH || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH"
               />
               <label :for="`Interregional-${index}CH`">Межрегиональный</label>
             </div>
@@ -583,7 +583,7 @@
             :maxlength="3000"
             :max-length-text="3000"
             counter-visible
-            :disabled="reportStore.isReportReject?.sixteenth && !props.centralExpert || reportStore.isAllReportsVerifiedByCH"
+            :disabled="reportStore.isReportReject?.sixteenth && !props.centralExpert || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH"
         />
       </div>
       <!--      <div>-->
@@ -593,7 +593,7 @@
       <!--      <div>-->
       <!--        <p>(4-1)*2+(4-2)+(4-3)=9</p>-->
       <!--      </div>-->
-      <div v-if="!reportStore.isAllReportsVerifiedByCH">
+      <div v-if="!reportStore.isAllReportsVerifiedByCH && !reportVerifiedByCH">
         <v-checkbox
             v-model="reportStore.returnReport.sixteenth"
             label="Вернуть в РО на доработку"
@@ -666,6 +666,7 @@ const commonData = ref([]);
 const commentCH = ref();
 const row = ref(1);
 const isProjectCH = ref(null);
+const reportVerifiedByCH = ref(false);
 
 const focusOut = async () => {
   sixteenthPanelData.value.projects = [...projects.value];
@@ -850,14 +851,20 @@ const onReportReturn = (event) => {
 }
 
 onMounted(() => {
-  // Мапинг данных для отчета эксперта ОШ
+  reportVerifiedByCH.value = reportStore.reportForCheckCH.fifth?.verified_by_chq !== null;
+
+  /*
+  * Мапинг данных для отчета эксперта ОШ
+  */
   if (reportStore.reportDataDH.sixteenth && props.districtExpert) {
     sixteenthPanelDataDH.value.is_project = reportStore.reportDataDH.sixteenth.is_project;
     sixteenthPanelDataDH.value.comment = reportStore.reportDataDH.sixteenth.comment;
     sixteenthPanelDataDH.value.projects = [...reportStore.reportDataDH.sixteenth.projects];
   }
 
-  // Мапинг данных для отчета эксперта ЦШ
+  /*
+  * Мапинг данных для отчета эксперта ЦШ
+  */
   if (reportStore.reportForCheckCH.sixteenth && props.centralExpert) {
     const projectQuantity = reportStore.reportForCheckCH.sixteenth.projects.length;
 
@@ -875,9 +882,17 @@ onMounted(() => {
       sixteenthPanelDataDH.value.projects = reportDataDH.projects;
 
       // Добавление данных из стора для панели "корректировка ЦШ"
-      const reportDataCH = reportStore.reportForCheckCH.sixteenth.central_version;
+      let reportDataCH;
+      // Проверка на верификацию отчета ЦШ. При верифицированом отчете данные берутся из общего объекта
+      if (reportVerifiedByCH.value) {
+        reportDataCH = reportStore.reportForCheckCH.sixteenth
+        isProjectCH.value = reportStore.reportDataCH.sixteenth.isProject;
+      } else {
+        reportDataCH = reportStore.reportForCheckCH.sixteenth.central_version;
+        isProjectCH.value = reportStore.reportDataCH.sixteenth.central_version.isProject;
+      }
       commentCH.value = reportStore.reportDataCH.sixteenth.comment || '';
-      isProjectCH.value = reportStore.reportDataCH.sixteenth.isProject;
+
 
       for (let i = 0; i < projectQuantity; i++) {
         commonData.value[i] = {

@@ -33,6 +33,7 @@
               :isReportReject="reportStore.isReportReject.tenth.first"
               :reportRejectData="reportStore.reportReject.tenth.first"
               :tab="props.tab"
+              :reportVerifiedByCH="reportVerifiedByCHFirst"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -68,6 +69,7 @@
               :isReportReject="reportStore.isReportReject.tenth.second"
               :reportRejectData="reportStore.reportReject.tenth.second"
               :tab="props.tab"
+              :reportVerifiedByCH="reportVerifiedByCHSecond"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -152,6 +154,8 @@ const tenthPanelDataCHFirst = ref(null);
 const tenthPanelDataCHSecond = ref(null);
 const returnReportFirst = ref();
 const returnReportSecond = ref();
+const reportVerifiedByCHFirst = ref(false);
+const reportVerifiedByCHSecond = ref(false);
 
 const collapseForm = () => {
   panel.value = false;
@@ -491,6 +495,9 @@ onMounted(() => {
   if (reportStore.reportDataDH.tenth.second) {
     tenthPanelDataSecondDH.value = reportStore.reportDataDH.tenth.second;
   }
+
+  reportVerifiedByCHFirst.value = reportStore.reportForCheckCH.tenth.first?.verified_by_chq !== null;
+  reportVerifiedByCHSecond.value = reportStore.reportForCheckCH.tenth.second?.verified_by_chq !== null;
 
   // Добавление данных для отчета эксперта ЦШ
   if (reportStore.reportForCheckCH.tenth.first && props.centralExpert) {

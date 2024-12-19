@@ -137,6 +137,7 @@
             @focusout="focusOut"
         />
       </div>
+      <ReportRegionalForm v-if="reportData?.id" :reportData="reportData" :blockEditFirstReport="true"/>
     </template>
 
     <template v-slot:secondTab>
@@ -204,7 +205,7 @@
                 :max="9999999999"
                 :step="0.01"
                 :is-error-panel="isErrorPanel"
-                :disabled="(reportStore.isReportReject?.first && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH"
+                :disabled="(reportStore.isReportReject?.first && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH"
                 :is-sent="reportStore.isReportReject?.first"
             />
           </td>
@@ -222,11 +223,11 @@
             @change="uploadFileCH"
             @click="deleteFileCH"
             :is-error-panel="isErrorPanel"
-            :disabled="(reportStore.isReportReject?.first && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH"
-            :is-sent="(reportStore.isReportReject?.first && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH"
+            :disabled="(reportStore.isReportReject?.first && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH"
+            :is-sent="(reportStore.isReportReject?.first && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH"
         />
       </div>
-      <div v-if="!reportStore.isAllReportsVerifiedByCH">
+      <div v-if="!reportVerifiedByCH && !reportStore.isAllReportsVerifiedByCH">
         <v-checkbox
             v-model="reportStore.returnReport.first"
             @change="onReportReturn"
@@ -243,10 +244,11 @@ import {ref, watch, watchEffect, watchPostEffect} from "vue";
 import {InputReport, TextareaReport} from '@shared/components/inputs';
 import {FileBoxComponent, CommentFileComponent} from "@entities/RatingRoComponents/components";
 import {ReportRegionalForm} from '../../ReportRegionalHQPartOnePage/components/index'
-import {getReportForSecond, reportPartTwoService} from "@services/ReportService.ts";
+import {getCurrentReport, getReportForSecond, reportPartTwoService} from "@services/ReportService.ts";
 import {ReportTabs} from './index';
 import {fileValidate} from "@pages/ReportRegionalHQPartTwoPage/ReportHelpers.ts";
 import {useReportPartTwoStore} from "@pages/ReportRegionalHQPartTwoPage/store.ts";
+import {useRoute} from "vue-router";
 
 const reportStore = useReportPartTwoStore();
 
@@ -308,6 +310,7 @@ const fileNameCH = ref(null);
 const fileSizeCH = ref(null);
 const fileTypeCH = ref(null);
 const row = ref(1);
+const reportVerifiedByCH = ref(false);
 
 const focusOut = async () => {
   let formData = new FormData();
@@ -443,11 +446,15 @@ const onReportReturn = (event) => {
   }
 };
 
+const route = useRoute()
+
 watchEffect(async () => {
-  console.log('reportStore.isReportReject?.first', reportStore.isReportReject?.first)
   try {
     if (!(props.centralExpert || props.districtExpert)) {
       const res = await getReportForSecond();
+      reportData.value = res.data;
+    } else {
+      const res = await getCurrentReport(String(route.query.reportId));
       reportData.value = res.data;
     }
   } catch (e) {
@@ -574,7 +581,6 @@ watchEffect(async () => {
       fileSizeCH.value = reportStore.reportReject.first.file_size ? reportStore.reportReject.first.file_size : null;
       fileTypeCH.value = reportStore.reportReject.first.file_type ? reportStore.reportReject.first.file_type : null;
     }
-
   }
 });
 
@@ -590,6 +596,7 @@ watchPostEffect(() => {
 
     isFirstSent.value = reportStore.isReportReject.first && !props.data.central_version;
   }
+  reportVerifiedByCH.value = reportStore.reportForCheckCH.first?.verified_by_chq !== null;
 });
 
 watch(firstPanelDataDH.value, () => {
