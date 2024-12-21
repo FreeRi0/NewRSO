@@ -2,20 +2,22 @@
     <div class="wrap">
         <v-card class="regWrapper">
             <v-card-title class="text-h4 text-center regTitle">Регистрация</v-card-title>
-            <v-form action="#" method="post" @submit.prevent="RegisterUser">
+            <v-form action="#" method="post" @submit.prevent="handleSubmit">
                 <regionsDropdown open-on-clear id="reg" name="regdrop" placeholder="Выберите регион обучения"
                     v-model="form.region" @update:value="changeValue" class="mb-2 region-input" address="/regions/">
                 </regionsDropdown>
                 <Input placeholder="Фамилия" name="surname" height="40px" v-model:value.trim="form.last_name"
                     maxlength="25" pattern="[а-яА-ЯЁё\s]+" error-message="Введите не более 25 букв на кириллице" />
-                <p class="error" v-if="isError.last_name">
+                <!-- <p class="error" v-if="isError.last_name">
                     {{ isError.last_name }}
-                </p>
+                </p> -->
+                <ErrorMessage :error="isError.last_name" />
                 <Input placeholder="Имя" name="name" height="40px" v-model:value.trim="form.first_name" maxlength="20"
                     pattern="[а-яА-ЯЁё\s]+" error-message="Введите не более 20 букв на кириллице" />
-                <p class="error" v-if="isError.first_name">
+                <!-- <p class="error" v-if="isError.first_name">
                     {{ isError.first_name }}
-                </p>
+                </p> -->
+                <ErrorMessage :error="isError.first_name" />
                 <Input placeholder="Отчество (при наличии)" name="patronomyc" height="40px" maxlength="23"
                     pattern="[а-яА-ЯЁё\s]+" error-message="Введите не более 23 букв на кириллице"
                     v-model:value.trim="form.patronymic_name" />
@@ -24,44 +26,45 @@
                         v-model="form.phone_number" mask="+7(###) ###-##-##" />
                 </div>
                 <Input placeholder="Электронная почта" name="email" type="email" height="40px" maxlength="256"
-                    pattern="([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)"
-                    error-message="Введите адрес электронной почты в формате mail@example.com не более 256 символов на латиннице"
+                    pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+"
+                    error-message="Введите адрес электронной почты в формате mail@example.com не более 256 символов на латинице"
                     v-model:value.trim="form.email" />
-                <p class="error" v-if="isError.email">
-                    {{ isError.email }}
-                </p>
+                <ErrorMessage :error="isError.email" />
 
                 <date-picker v-model:value="form.date_of_birth" placeholder="Дата рождения" name="date" type="date"
                     :disabled-date="disableOutOfRangeDates" class="dateInput" value-type="date" :lang="langObject"
-                    format="DD-MM-YYYY"></date-picker>
-                <p class="error" v-if="isError.date_of_birth">
+                    format="DD-MM-YYYY" :clearable="false"></date-picker>
+                <!-- <p class="error" v-if="isError.date_of_birth">
                     Дата рождения в формате ДД.ММ.ГГГГ
-                </p>
+                </p> -->
+                <ErrorMessage :error="isError.date_of_birth" />
                 <Input placeholder="Придумайте логин" name="login" height="40px" minlength="8" maxlength="20"
                     pattern="[a-zA-Z0-9.+-_@]+"
                     error-message="Введите от 8 до 20 символов на латинице, чисел и символы @ . + - _"
                     v-model:value.trim="form.username" />
-                <p class="error" v-if="isError.username">
+                <!-- <p class="error" v-if="isError.username">
                     {{ isError.username }}
-                </p>
+                </p> -->
+                <ErrorMessage :error="isError.username" />
 
                 <passwordInput class="mb-2" placeholder="Придумайте пароль" maxlength="20" minlength="8"
                     pattern="^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d.+-_@]{1,}$"
                     error-message="Введите от 8 до 20 символов на латинице, чисел и символы @ . + - _"
                     v-model:value="form.password" />
-                <p class="error" v-if="isError.password">
-                    {{ isError.password }}
-                </p>
+                <ErrorMessage :error="isError.password" />
 
                 <passwordInput placeholder="Повторите пароль" maxlength="20" minlength="8" pattern="[a-zA-Z0-9.+-_@]+"
                     error-message="Введите от 8 до 20 символов на латинице, чисел и символы @ . + - _"
                     v-model:value="form.re_password" />
-                <p class="error" v-if="isError.re_password">
+                <!-- <p class="error" v-if="isError.re_password">
                     {{ isError.re_password }}
                 </p>
                 <p class="error" v-else-if="isError.non_field_errors">
                     Пароли не совпадают
-                </p>
+                </p> -->
+                <ErrorMessage :error="isError.re_password" />
+                <ErrorMessage :error="isError.non_field_errors" />
+
 
                 <div class="regCheck">
                     <input v-model="form.personal_data_agreement" type="checkbox" @change="handleTermsState" />
@@ -89,150 +92,59 @@
 </template>
 
 <script setup>
-import { ref, inject, computed } from 'vue';
+import { ref, computed } from 'vue';
 import { Button } from '@shared/components/buttons';
 import { Input, passwordInput } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
 import { Select, regionsDropdown } from '@shared/components/selects';
+import { ErrorMessage } from '@shared/components/inputs';
+import { useRegistration } from '@services/useRegister';
 
-const validated = ref(false);
-const form = ref({
-    region: null,
-    last_name: '',
-    first_name: '',
-    patronymic_name: '',
-    phone_number: '',
-    email: '',
-    date_of_birth: '',
-    username: '',
-    password: '',
-    re_password: '',
-    personal_data_agreement: false,
-});
+const { form,
+    isLoading,
+    isError,
+    validated,
+    termsError,
+    handleTermsState,
+    registerUser, } = useRegistration();
 
-const isLoading = ref(false);
-const isError = ref([]);
 const router = useRouter();
-const swal = inject('$swal');
 
-//
-const formatDateForBackend = (date) => {
-    if (typeof date === 'string') {
-        const parts = date.split('-');
-        if (parts.length === 3) {
-            return `${parts[2]}-${parts[1]}-${parts[0]}`;
-        }
-    } else if (date instanceof Date) {
-        return date.toISOString().split('T')[0];
+const handleSubmit = async () => {
+    if (await registerUser()) {
+        router.push({ name: 'Login' });
     }
-    return date;
 };
-//
 
-//
 const today = new Date();
-const maxDate = new Date(today.getFullYear() - 13, today.getMonth());
-const minDate = new Date(today.getFullYear() - 100, today.getMonth());
-const disableOutOfRangeDates = (date) => date > maxDate || date < minDate;
-//
 
-const termsError = computed(() => {
-    return validated.value && !form.personal_data_agreement;
+const maxDate = computed(() => {
+    const date = new Date(today);
+    date.setFullYear(date.getFullYear() - 13);
+    return date;
 });
-const handleTermsState = () => {
-    validated.value = false;
+
+const minDate = computed(() => {
+    const date = new Date(today);
+    date.setFullYear(date.getFullYear() - 100);
+    return date;
+});
+
+const disableOutOfRangeDates = (date) => {
+    return date > maxDate.value || date < minDate.value;
 };
 
-const regexpName = /^[а-яА-ЯЁё\s]+$/;
-const regexpEmail = /^([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)$/;
-const regexpEnter = /^[a-zA-Z0-9_@.+-]+$/;
-
-const validateClient = ref(false);
-
-const getErrorsValidate = () => {
-    const inputs = [form.value.last_name, form.value.first_name, form.value.patronymic_name];
-    const inputEmail = form.value.email;
-    const inputEnter = [form.value.username, form.value.password, form.value.re_password];
-
-    let errorsBlock = [];
-
-    inputs.forEach((element) => {
-        if (!regexpName.test(element)) {
-            if (element.length > 0) {
-                errorsBlock.push(element);
-            }
-        }
-    });
-    if (!regexpEmail.test(inputEmail)) {
-        if (inputEmail.length > 0) {
-            errorsBlock.push(inputEmail);
-        }
+const langObject = {
+    formatLocale: {
+        months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+        monthsShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+        weekdays: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'],
+        weekdaysShort: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+        weekdaysMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+        firstDayOfWeek: 1,
+        firstWeekContainsDate: 1,
     }
-    inputEnter.forEach((element) => {
-        if (!regexpEnter.test(element)) {
-            if (element.length > 0) {
-                errorsBlock.push(element);
-            }
-        } else {
-            if (element.length > 0 && element.length < 8) {
-                errorsBlock.push(element);
-            }
-        }
-    });
-    // console.log("ошибки -", errorsBlock, "кол-во ошибок -", errorsBlock.length);
-    if (errorsBlock.length > 0) {
-        return validateClient.value = true;
-    }
-}
-
-const RegisterUser = async () => {
-    validateClient.value = false;
-    getErrorsValidate();
-    if (validateClient.value) {
-        swal.fire({
-            position: 'center',
-            icon: 'error',
-            title: `Заполните поля в соответствии с указанным форматом`,
-            showConfirmButton: false,
-            timer: 2500,
-        });
-    } else {
-        try {
-            isLoading.value = true;
-            validated.value = true;
-            //
-            form.value.date_of_birth = formatDateForBackend(form.value.date_of_birth);
-            //
-            const response = await HTTP.post('/register/', form.value);
-            form.value = response.data;
-            // console.log(response.data);
-            isLoading.value = false;
-            swal.fire({
-                position: 'top-center',
-                icon: 'success',
-                title: 'успешно',
-                showConfirmButton: false,
-                timer: 1500,
-            });
-            router.push('/');
-        } catch (error) {
-            console.log('errr', error);
-            isError.value = error.response.data;
-            console.error('There was an error!', error);
-            isLoading.value = false;
-            if (isError.value) {
-                swal.fire({
-                    position: 'center',
-                    icon: 'error',
-                    title: `ошибка`,
-                    showConfirmButton: false,
-                    timer: 2500,
-                });
-            }
-        }
-    }
-
 };
 </script>
 

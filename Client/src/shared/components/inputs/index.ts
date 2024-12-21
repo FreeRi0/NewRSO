@@ -6,5 +6,6 @@ import InputReport from './InputReport.vue';
 import TextareaReport from './TextareaReport.vue';
 import TextareaAbout from './TextareaAbout.vue';
 import headSelect from './headSelect.vue';
+import ErrorMessage from './ErrorMessage.vue';
 
-export { Input, TextArea, Search, TextareaAbout, headSelect, passwordInput, InputReport, TextareaReport };
+export { Input, TextArea, Search, TextareaAbout, headSelect, passwordInput, InputReport, TextareaReport, ErrorMessage };
