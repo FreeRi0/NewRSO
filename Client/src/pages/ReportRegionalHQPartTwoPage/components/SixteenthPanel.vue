@@ -501,7 +501,11 @@
             <tr class="report-table__tr" style="font-weight: bold">
               <td>Корректировка ЦШ</td>
             </tr>
-            <tr class="report-table__tr">
+            <tr 
+              :class="[
+                'report-table__td',
+                (reportStore.isReportReject?.sixteenth && !props.centralExpert) || !isProjectCH || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+            >
               <td>
                 <InputReport
                     v-model:value="projectCH.dataCH.name"
@@ -526,7 +530,11 @@
           <tr>
             <td class="report-table__td">{{ projectCH.dataRH.project_scale }}</td>
             <td class="report-table__td report-table__td__center">{{ projectCH.dataDH.project_scale }}</td>
-            <td class="report-table__td">{{ projectCH.dataCH.project_scale }}</td>
+            <td 
+              :class="[
+                'report-table__td',
+                (reportStore.isReportReject?.sixteenth && !props.centralExpert) || !isProjectCH || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+            >{{ projectCH.dataCH.project_scale }}</td>
           </tr>
           </tbody>
         </v-table>
@@ -1244,6 +1252,10 @@ watch([commonData, commentCH], () => {
   /* Заполнение внутреннего круга синим цветом при выборе */
 }
 
+.custom-radio:disabled + label {
+  pointer-events: none;
+}
+
 .form__field-info {
   display: flex;
   flex-direction: column;
@@ -1397,6 +1409,14 @@ watch([commonData, commentCH], () => {
     font-size: 16px;
     font-weight: 500;
     color: #8E8E93;
+
+    &:not(:last-child) {
+      background-color: #f9fafb;
+    }
+
+    &--bgcolor {
+        background-color: #f9fafb;
+    }
 
     &__center {
       border-left: 1px solid #B6B6B6;

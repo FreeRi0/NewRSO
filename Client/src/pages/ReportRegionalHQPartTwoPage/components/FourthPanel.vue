@@ -330,7 +330,11 @@
           <tr>
             <td class="report-table__td">{{ eventCH.dataRH.participants_number }}</td>
             <td class="report-table__td report-table__td__center">{{ eventCH.dataDH.participants_number }}</td>
-            <td class="report-table__td">
+            <td 
+              :class="[
+                'report-table__td',
+                (reportStore.isReportReject?.fourth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+            >
               <InputReport v-model:value="eventCH.dataCH.participants_number" :id="'participants_numberCH'"
                            :name="'participants_numberCH'" style="width: 100%;" type="number" placeholder="0"
                            :maxlength="10"
@@ -358,7 +362,11 @@
             <td class="report-table__th">Корректировка ЦШ</td>
           </tr>
           <tr>
-            <td class="report-table__td">
+            <td 
+              :class="[
+                'report-table__td',
+                (reportStore.isReportReject?.fourth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+            >
               <InputReport v-model:value="eventCH.dataCH.participants_number" :id="'participants_numberCH'"
                            :name="'participants_numberCH'" style="width: 100%;" type="number" placeholder="0"
                            :maxlength="10"
@@ -381,7 +389,11 @@
             <td class="report-table__td report-table__td__center">
               {{ eventCH.dataDH.is_interregional ? 'Да' : 'Нет' }}
             </td>
-            <td class="report-table__td">{{ eventCH.dataCH.is_interregional ? 'Да' : 'Нет' }}</td>
+            <td 
+              :class="[
+                'report-table__td',
+                (reportStore.isReportReject?.fourth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+            >{{ eventCH.dataCH.is_interregional ? 'Да' : 'Нет' }}</td>
           </tr>
           </tbody>
         </v-table>
@@ -405,7 +417,11 @@
             <td class="report-table__th">Корректировка ЦШ</td>
           </tr>
           <tr>
-            <td class="report-table__td">{{ eventCH.dataCH.is_interregional ? 'Да' : 'Нет' }}</td>
+            <td 
+              :class="[
+                'report-table__td',
+                (reportStore.isReportReject?.fourth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+            >{{ eventCH.dataCH.is_interregional ? 'Да' : 'Нет' }}</td>
           </tr>
           </tbody>
         </v-table>
@@ -441,7 +457,11 @@
           <tr>
             <td class="report-table__td">{{ formattedDate(eventCH.dataRH.start_date) }}</td>
             <td class="report-table__td report-table__td__center"> {{ formattedDate(eventCH.dataDH.start_date) }}</td>
-            <td class="report-table__td">
+            <td 
+              :class="[
+                'report-table__td',
+                (reportStore.isReportReject?.fourth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+            >
               <InputReport v-model:value="eventCH.dataCH.start_date" :id="'eventCH.dataCH.end_date'"
                            name="eventCH.dataCH.end_date" class="form__input" type="date"
                            :disabled="(reportStore.isReportReject?.fourth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH"
@@ -468,7 +488,11 @@
             <td class="report-table__th">Корректировка ЦШ</td>
           </tr>
           <tr>
-            <td class="report-table__td">
+            <td 
+              :class="[
+                'report-table__td',
+                (reportStore.isReportReject?.fourth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+            >
               <InputReport v-model:value="eventCH.dataCH.start_date" :id="'eventCH.dataCH.end_date'"
                            name="eventCH.dataCH.end_date" class="form__input" type="date"
                            :disabled="(reportStore.isReportReject?.fourth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH"
@@ -488,7 +512,11 @@
           <tr>
             <td class="report-table__td">{{ formattedDate(eventCH.dataRH.end_date) }}</td>
             <td class="report-table__td report-table__td__center"> {{ formattedDate(eventCH.dataDH.end_date) }}</td>
-            <td class="report-table__td">
+            <td 
+              :class="[
+                'report-table__td',
+                (reportStore.isReportReject?.fourth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+            >
               <InputReport v-model:value="eventCH.dataCH.end_date" :id="'eventCH.dataCH.end_date'"
                            name="eventCH.dataCH.end_date" class="form__input" type="date"
                            :disabled="(reportStore.isReportReject?.fourth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH"
@@ -515,7 +543,11 @@
             <td class="report-table__th">Корректировка ЦШ</td>
           </tr>
           <tr>
-            <td class="report-table__td">
+            <td 
+              :class="[
+                'report-table__td',
+                (reportStore.isReportReject?.fourth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+            >
               <InputReport v-model:value="eventCH.dataCH.end_date" :id="'eventCH.dataCH.end_date'"
                            name="eventCH.dataCH.end_date" class="form__input" type="date"
                            :disabled="(reportStore.isReportReject?.fourth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH"
@@ -1084,6 +1116,9 @@ watch(() => [commonData.value, commentCH], () => {
   /* Заполнение внутреннего круга синим цветом при выборе */
 }
 
+.custom-radio:disabled + label {
+  pointer-events: none;
+}
 
 .form__field-fourth-panel {
   display: flex;
@@ -1484,6 +1519,14 @@ watch(() => [commonData.value, commentCH], () => {
     color: #8E8E93;
     padding: 0 10px !important;
     table-layout: fixed;
+
+    &:not(:last-child) {
+      background-color: #f9fafb;
+    }
+
+    &--bgcolor {
+        background-color: #f9fafb;
+    }
 
     &__center {
       border-left: 1px solid #B6B6B6;
