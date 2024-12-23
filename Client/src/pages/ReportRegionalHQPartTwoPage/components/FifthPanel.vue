@@ -260,7 +260,11 @@
             <tr>
               <td class="report-table__td">{{ eventCH.dataRH.participants_number }}</td>
               <td class="report-table__td report-table__td__center">{{ eventCH.dataDH.participants_number }}</td>
-              <td class="report-table__td">
+              <td 
+                :class="[
+                  'report-table__td',
+                  (reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+              >
                 <InputReport v-model:value="eventCH.dataCH.participants_number" :id="'participants_numberCH'"
                   :name="'participants_numberCH'" style="width: 100%;" type="number" placeholder="0" :maxlength="10"
                   :min="0" :max="9999999999" :step="0.01"
@@ -287,7 +291,11 @@
               <td class="report-table__th">Корректировка ЦШ</td>
             </tr>
             <tr>
-              <td class="report-table__td">
+              <td 
+                :class="[
+                  'report-table__td',
+                  (reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+              >
                 <InputReport v-model:value="eventCH.dataCH.participants_number" :id="'participants_numberCH'"
                   :name="'participants_numberCH'" style="width: 100%;" type="number" placeholder="0" :maxlength="10"
                   :min="0" :max="9999999999" :step="0.01"
@@ -309,7 +317,11 @@
             <tr>
               <td class="report-table__td">{{ eventCH.dataRH.ro_participants_number }}</td>
               <td class="report-table__td report-table__td__center">{{ eventCH.dataDH.ro_participants_number }}</td>
-              <td class="report-table__td">
+              <td 
+                :class="[
+                  'report-table__td',
+                  (reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+              >
                 <InputReport v-model:value="eventCH.dataCH.ro_participants_number" :id="'participants_numberCH'"
                   :name="'participants_numberCH'" style="width: 100%;" type="number" placeholder="0" :maxlength="10"
                   :min="0" :max="9999999999" :step="0.01"
@@ -336,7 +348,11 @@
               <td class="report-table__th">Корректировка ЦШ</td>
             </tr>
             <tr>
-              <td class="report-table__td">
+              <td 
+                :class="[
+                  'report-table__td',
+                  (reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+              >
                 <InputReport v-model:value="eventCH.dataCH.ro_participants_number" :id="'participants_numberCH'"
                   :name="'participants_numberCH'" style="width: 100%;" type="number" placeholder="0" :maxlength="10"
                   :min="0" :max="9999999999" :step="0.01"
@@ -356,7 +372,10 @@
             <tr>
               <td class="report-table__td">{{ formattedDate(eventCH.dataRH.start_date) }}</td>
               <td class="report-table__td report-table__td__center">{{ formattedDate(eventCH.dataDH.start_date) }}</td>
-              <td class="report-table__td">
+              <td 
+                :class="[
+                  'report-table__td',
+                  (reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']">
                 <InputReport v-model:value="eventCH.dataCH.start_date" :id="'eventCH.dataCH.end_date'"
                   name="eventCH.dataCH.end_date" class="form__input" type="date"
                   :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH" style="width: 100%;" />
@@ -382,7 +401,11 @@
               <td class="report-table__th">Корректировка ЦШ</td>
             </tr>
             <tr>
-              <td class="report-table__td">
+              <td 
+                :class="[
+                  'report-table__td',
+                  (reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+              >
                 <InputReport v-model:value="eventCH.dataCH.start_date" :id="'eventCH.dataCH.end_date'"
                   name="eventCH.dataCH.end_date" class="form__input" type="date"
                   :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH" style="width: 100%;" />
@@ -402,7 +425,11 @@
             <tr>
               <td class="report-table__td">{{ formattedDate(eventCH.dataRH.end_date) }}</td>
               <td class="report-table__td report-table__td__center">{{ formattedDate(eventCH.dataDH.end_date) }}</td>
-              <td class="report-table__td">
+              <td 
+                :class="[
+                  'report-table__td',
+                  (reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+              >
                 <InputReport v-model:value="eventCH.dataCH.end_date" :id="'eventCH.dataCH.end_date'"
                   name="eventCH.dataCH.end_date" class="form__input" type="date"
                   :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH" style="width: 100%;" />
@@ -428,7 +455,11 @@
               <td class="report-table__th">Корректировка ЦШ</td>
             </tr>
             <tr>
-              <td class="report-table__td">
+              <td 
+                :class="[
+                  'report-table__td',
+                  (reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+              >
                 <InputReport v-model:value="eventCH.dataCH.end_date" :id="'eventCH.dataCH.end_date'"
                   name="eventCH.dataCH.end_date" class="form__input" type="date"
                   :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH" style="width: 100%;" />
@@ -921,7 +952,7 @@ watch([commonData, commentCH], () => {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding-top: 40px;
+  // padding-top: 40px;
 
   // @media (max-width: 400px) {
   //   padding-top: 16px;
@@ -1089,6 +1120,14 @@ watch([commonData, commentCH], () => {
     font-weight: 500;
     padding: 0 10px !important;
     color: #8E8E93;
+
+    &:not(:last-child) {
+      background-color: #f9fafb;
+    }
+
+    &--bgcolor {
+        background-color: #f9fafb;
+    }
 
     &__center {
       border-left: 1px solid #B6B6B6;

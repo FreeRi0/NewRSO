@@ -192,7 +192,11 @@
         <tr>
           <td class="report-table__td">{{ firstPanelData.amount_of_money }}</td>
           <td class="report-table__td report-table__td__center">{{ firstPanelDataDH.amount_of_money }}</td>
-          <td class="report-table__td">
+          <td 
+            :class="[
+              'report-table__td',
+              (reportStore.isReportReject?.first && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+          >
             <InputReport
                 v-model:value="firstPanelDataCH.amount_of_money"
                 :id="'amount_of_moneyCH'"
@@ -779,6 +783,14 @@ watch(firstPanelDataCH.value, () => {
     font-size: 16px;
     font-weight: 500;
     color: #8E8E93;
+
+    &:not(:last-child) {
+      background-color: #f9fafb;
+    }
+
+    &--bgcolor {
+        background-color: #f9fafb;
+    }
 
     &__center {
       border-left: 1px solid #B6B6B6;

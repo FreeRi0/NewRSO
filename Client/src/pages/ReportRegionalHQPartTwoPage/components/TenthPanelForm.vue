@@ -187,7 +187,11 @@
               tenthPanelDataDH.event_happened ? 'Да' : 'Нет'
             }}
           </td>
-          <td style="background-color: white;" class="report-table__td">
+          <td 
+            :class="[
+              'report-table__td',
+              (isReportReject && !centralExpert) || props.reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+          >
             {{ tenthPanelDataCH.event_happened === null ? null : tenthPanelDataCH.event_happened ? 'Да' : 'Нет' }}
           </td>
         </tr>
@@ -215,7 +219,11 @@
           </td>
         </tr>
         <tr class="report-table__tr">
-          <td style="background-color: white;" class="report-table__td">
+          <td 
+            :class="[
+              'report-table__td',
+              (isReportReject && !centralExpert) || props.reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+          >
             {{ tenthPanelDataCH.event_happened === null ? null : tenthPanelDataCH.event_happened ? 'Да' : 'Нет' }}
           </td>
         </tr>
@@ -699,6 +707,10 @@ watch(tenthPanelDataCH.value, () => {
   /* Заполнение внутреннего круга синим цветом при выборе */
 }
 
+.custom-radio:disabled + label {
+  pointer-events: none;
+}
+
 .form {
   &__title {
     font-family: Akrobat;
@@ -826,6 +838,10 @@ watch(tenthPanelDataCH.value, () => {
     background-color: #FFFFFF;
     text-align: center;
     table-layout: fixed;
+
+    .report-table__td {
+      background-color: #f9fafb;
+    }
   }
 
   &__th {
@@ -862,8 +878,15 @@ watch(tenthPanelDataCH.value, () => {
     font-size: 16px;
     font-weight: 500;
     color: #8E8E93;
-    background-color: #F9FAFB;
     table-layout: fixed;
+
+    &:not(:last-child) {
+      background-color: #f9fafb;
+    }
+
+    &--bgcolor {
+      background-color: #f9fafb;
+    }
 
     &__center {
       border-left: 1px solid #B6B6B6;

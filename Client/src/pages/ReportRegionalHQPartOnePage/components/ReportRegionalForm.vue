@@ -384,6 +384,10 @@ const deleteAdditionalStatistics = async (index) => {
   }
 }
 
+.form__field-group .form__field-group.Report-Regional-Form__style {
+  padding: 0;
+}
+
 .form__field-group p {
   color: #6D6D6D;
 }
