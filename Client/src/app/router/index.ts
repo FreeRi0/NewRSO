@@ -1,5 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import routes from './routes';
+
 const router = createRouter({
   history: createWebHistory(),
   routes,
@@ -13,32 +14,36 @@ const router = createRouter({
   },
 });
 
-
+const publicRoutes: string[] = [
+  'Login',
+  'Register',
+  'RecoveryPassword',
+  'CreaturePassword',
+  'Competition',
+  'faq',
+  'actionSquads',
+  'allsquads',
+  'AllHeadquarters',
+  'LocalHeadquarters',
+  'regionalHeadquarters',
+  'districtHeadquarters',
+  'CentralHQ',
+  'privacy_policy',
+  'terms_of_use',
+  'mypage'
+];
 
 router.beforeEach((to, _from, next) => {
-  if (
-    to.name !== 'Login' &&
-    to.name !== 'Register' &&
-    to.name !== 'RecoveryPassword' &&
-    to.name !== 'CreaturePassword' &&
-    to.name !== 'Competition' &&
-    to.name !== 'faq' &&
-    to.name !== 'actionSquads' &&
-    to.name !== 'allsquads' &&
-    to.name !== 'AllHeadquarters' &&
-    to.name !== 'LocalHeadquarters' &&
-    to.name !== 'regionalHeadquarters' &&
-    to.name !== 'districtHeadquarters' &&
-    to.name !== 'CentralHQ' &&
-    to.name !== 'privacy_policy' &&
-    to.name !== 'terms_of_use' &&
-    to.name !== 'mypage' &&
-    localStorage.getItem('jwt_token') === null
-  )
+  const isPublicRoute = publicRoutes.includes(to.name as string);
+  const isAuthenticated = localStorage.getItem('jwt_token') !== null;
+
+  if (!isPublicRoute && !isAuthenticated) {
     next({ name: 'Login' });
-  else if (to.name == 'Login' && localStorage.getItem('jwt_token') !== null)
+  } else if (to.name === 'Login' && isAuthenticated) {
     next({ name: 'mypage' });
-  else next();
+  } else {
+    next();
+  }
 });
 
 export default router;

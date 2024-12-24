@@ -8,15 +8,9 @@
                 </regionsDropdown>
                 <Input placeholder="Фамилия" name="surname" height="40px" v-model:value.trim="form.last_name"
                     maxlength="25" pattern="[а-яА-ЯЁё\s]+" error-message="Введите не более 25 букв на кириллице" />
-                <!-- <p class="error" v-if="isError.last_name">
-                    {{ isError.last_name }}
-                </p> -->
                 <ErrorMessage :error="isError.last_name" />
                 <Input placeholder="Имя" name="name" height="40px" v-model:value.trim="form.first_name" maxlength="20"
                     pattern="[а-яА-ЯЁё\s]+" error-message="Введите не более 20 букв на кириллице" />
-                <!-- <p class="error" v-if="isError.first_name">
-                    {{ isError.first_name }}
-                </p> -->
                 <ErrorMessage :error="isError.first_name" />
                 <Input placeholder="Отчество (при наличии)" name="patronomyc" height="40px" maxlength="23"
                     pattern="[а-яА-ЯЁё\s]+" error-message="Введите не более 23 букв на кириллице"
@@ -31,20 +25,12 @@
                     v-model:value.trim="form.email" />
                 <ErrorMessage :error="isError.email" />
 
-                <date-picker v-model:value="form.date_of_birth" placeholder="Дата рождения" name="date" type="date"
-                    :disabled-date="disableOutOfRangeDates" class="dateInput" value-type="date" :lang="langObject"
-                    format="DD-MM-YYYY" :clearable="false"></date-picker>
-                <!-- <p class="error" v-if="isError.date_of_birth">
-                    Дата рождения в формате ДД.ММ.ГГГГ
-                </p> -->
+                <DatePicker v-model="form.date_of_birth" placeholder="Дата рождения" name="date" />
                 <ErrorMessage :error="isError.date_of_birth" />
                 <Input placeholder="Придумайте логин" name="login" height="40px" minlength="8" maxlength="20"
                     pattern="[a-zA-Z0-9.+-_@]+"
                     error-message="Введите от 8 до 20 символов на латинице, чисел и символы @ . + - _"
                     v-model:value.trim="form.username" />
-                <!-- <p class="error" v-if="isError.username">
-                    {{ isError.username }}
-                </p> -->
                 <ErrorMessage :error="isError.username" />
 
                 <passwordInput class="mb-2" placeholder="Придумайте пароль" maxlength="20" minlength="8"
@@ -77,11 +63,13 @@
                     </div>
                 </div>
 
-                <Button label="Зарегистрироваться" :loaded="isLoading" :disabled="isLoading ||
+                <!-- <Button label="Зарегистрироваться" :loaded="isLoading" :disabled="isLoading ||
                     !form.personal_data_agreement ||
                     !form.region
                     " type="submit" color="primary">
-                </Button>
+                </Button> -->
+                <Button label="Зарегистрироваться" :loaded="isLoading" :disabled="isButtonDisabled" type="submit"
+                    color="primary" />
 
                 <div class="text-center goLog">
                     <router-link class="Reg_link ml-1" to="/">У меня уже есть аккаунт</router-link>
@@ -94,11 +82,10 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { Button } from '@shared/components/buttons';
-import { Input, passwordInput } from '@shared/components/inputs';
+import { Input, passwordInput, ErrorMessage, DatePicker } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
 import { Select, regionsDropdown } from '@shared/components/selects';
-import { ErrorMessage } from '@shared/components/inputs';
 import { useRegistration } from '@services/useRegister';
 
 const { form,
@@ -111,39 +98,13 @@ const { form,
 
 const router = useRouter();
 
+const isButtonDisabled = computed(() => {
+    return isLoading || !form.personal_data_agreement || !form.region;
+});
+
 const handleSubmit = async () => {
     if (await registerUser()) {
         router.push({ name: 'Login' });
-    }
-};
-
-const today = new Date();
-
-const maxDate = computed(() => {
-    const date = new Date(today);
-    date.setFullYear(date.getFullYear() - 13);
-    return date;
-});
-
-const minDate = computed(() => {
-    const date = new Date(today);
-    date.setFullYear(date.getFullYear() - 100);
-    return date;
-});
-
-const disableOutOfRangeDates = (date) => {
-    return date > maxDate.value || date < minDate.value;
-};
-
-const langObject = {
-    formatLocale: {
-        months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-        monthsShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
-        weekdays: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'],
-        weekdaysShort: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
-        weekdaysMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
-        firstDayOfWeek: 1,
-        firstWeekContainsDate: 1,
     }
 };
 </script>
@@ -331,8 +292,7 @@ input {
     font: normal;
 }
 
-.form-input input,
-.dateInput input {
+.form-input input {
     box-sizing: border-box;
     border: 1px solid #a3a3a3;
     border-radius: 10px;
@@ -345,8 +305,7 @@ input {
     color: #35383f;
 }
 
-.form-input input::placeholder,
-.dateInput input::placeholder {
+.form-input input::placeholder {
     color: #a3a3a3;
     font-size: 16px;
     font-weight: 500;
@@ -363,11 +322,6 @@ input {
     width: 100%;
 }
 
-.dateInput .mx-input:hover,
-.dateInput .mx-input:focus {
-    border-color: #a3a3a3;
-}
-
 .v-autocomplete .v-field--dirty .v-autocomplete__selection {
     color: #35383f;
     font-size: 16px;
@@ -375,20 +329,8 @@ input {
     font-weight: 500;
 }
 
-.dateInput.mx-datepicker {
-    width: 100%;
-}
-
 #login {
     margin-top: 6px;
-}
-
-.dateInput .mx-input {
-    height: 40px;
-}
-
-.dateInput.mx-datepicker svg {
-    margin-right: 6px;
 }
 
 .v-field--variant-outlined .v-field__outline__end,
