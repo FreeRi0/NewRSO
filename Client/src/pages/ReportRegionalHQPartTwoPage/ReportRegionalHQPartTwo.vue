@@ -32,8 +32,8 @@
           </button>
         </div>
         <v-expansion-panels>
-          <v-expansion-panel
-            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('1') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('1') ? false : true">
+          <v-expansion-panel v-if="showPanels('1', picked, revisionPanels)">
+<!--            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('1') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('1') ? false : true"-->
             <v-expansion-panel-title :class="isErrorPanel.first ? 'visible-error' : ''">
               1. Численность членов РО&nbsp;РСО в&nbsp;соответствии с&nbsp;объемом уплаченных членских взносов
             </v-expansion-panel-title>
@@ -67,8 +67,10 @@
                 text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel
-            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('4') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('4') ? false : true">
+          <v-expansion-panel v-if="showPanels('4', picked, revisionPanels)"
+          >
+<!--            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('4') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('4') ? false : true"-->
+
             <v-expansion-panel-title :class="isErrorPanel.fourth ? 'visible-error' : ''">
               4. Организация всероссийских (международных), окружных и&nbsp;межрегиональных мероприятий и&nbsp;проектов
               (слеты, школы, фестивали, турниры и&nbsp;прочие)
@@ -80,7 +82,9 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel
-            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('5') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('5') ? false : true">
+              v-if="showPanels('5', picked, revisionPanels)"
+          >
+<!--            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('5') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('5') ? false : true">-->
             <v-expansion-panel-title :class="isErrorPanel.fifth ? 'visible-error' : ''">
               5. Организация всероссийских (международных) (организатор&nbsp;&mdash; региональное отделение РСО),
               окружных и&nbsp;межрегиональных трудовых проектов в&nbsp;соответствии с&nbsp;Положением
@@ -208,7 +212,9 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel
-            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('16') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('16') ? false : true">
+              v-if="showPanels('16', picked, revisionPanels)"
+          >
+<!--            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('16') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('16') ? false : true">-->
             <v-expansion-panel-title :class="isErrorPanel.sixteenth ? 'visible-error' : ''">
               16. Победители всероссийских (международных), окружных и&nbsp;межрегиональных трудовых проектов
               по&nbsp;комиссарской деятельности &laquo;К&raquo;
@@ -826,6 +832,8 @@ const getReportData = async (reportId) => {
       reportStore.reportDataCH.fourth.events = (await reportPartTwoService.getReportDH('4', reportId)).data.events;
       if (reportStore.reportForCheckCH.fourth.rejecting_reasons) {
         reportStore.reportDataCH.fourth.comment = JSON.parse(reportStore.reportForCheckCH.fourth.rejecting_reasons).comment;
+      } else {
+        reportStore.reportDataCH.fourth.comment = reportStore.reportForCheckCH.fourth.comment;
       }
       if (reportStore.reportForCheckCH.fourth.verified_by_chq) verifiedByChqPanels.value.push('4')
       /*
@@ -836,6 +844,8 @@ const getReportData = async (reportId) => {
       reportStore.reportDataCH.fifth.events = (await reportPartTwoService.getReportDH('5', reportId)).data.events;
       if (reportStore.reportForCheckCH.fifth.rejecting_reasons) {
         reportStore.reportDataCH.fifth.comment = JSON.parse(reportStore.reportForCheckCH.fifth.rejecting_reasons).comment;
+      } else {
+        reportStore.reportDataCH.fifth.comment = reportStore.reportForCheckCH.fifth.comment;
       }
       if (reportStore.reportForCheckCH.fifth.verified_by_chq) verifiedByChqPanels.value.push('5')
       //   revisionPanels.value.push('5');
@@ -882,6 +892,8 @@ const getReportData = async (reportId) => {
       if (reportStore.reportForCheckCH.sixteenth.rejecting_reasons) {
         reportStore.reportDataCH.sixteenth.comment = JSON.parse(reportStore.reportForCheckCH.sixteenth.rejecting_reasons).comment;
         reportStore.reportDataCH.sixteenth.isProject = reportStore.reportForCheckCH.sixteenth.central_version?.is_project;
+      } else {
+        reportStore.reportDataCH.sixteenth.comment = reportStore.reportForCheckCH.sixteenth.comment;
       }
       if (reportStore.reportForCheckCH.sixteenth.verified_by_chq) verifiedByChqPanels.value.push('16')
       /* 
@@ -1356,6 +1368,7 @@ const getReportData = async (reportId) => {
         dataThirteenth.verified_by_chq &&
         dataSixteenth.verified_by_chq
       ) {
+        console.log('~~~~HERE')
         reportStore.isAllReportsVerifiedByCH = true;
       }
     }

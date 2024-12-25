@@ -3,8 +3,9 @@
 </template>
 <script setup>
 import { RatingRoItem } from '@entities/RatingRoHeadquarter'
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 const router = useRouter();
+const route = useRoute();
 const props = defineProps({
   items: {
     type: Array,
@@ -13,10 +14,10 @@ const props = defineProps({
 })
 
 const goToReport = (item) => {
-  if (item.edited) {
+  if (route.params.part == 'Часть 2') {
     router.push({
       name: 'ReportRegionalPartTwoComander',
-      params: { edited: true },
+      params: { part: 'Часть 2'},
       query: {
         reportId: item.regional_headquarter.id,
         headquartersName: item.regional_headquarter.name
@@ -25,7 +26,7 @@ const goToReport = (item) => {
   } else {
     router.push({
       name: 'ReportRegionalPartOneComander',
-      params: { edited: false },
+      params: { part: 'Часть 1' },
       query: {
         id: item.id,
         headquartersName: item.regional_headquarter.name

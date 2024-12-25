@@ -2,11 +2,11 @@
   <div class="container">
     <h2 class="ratingRO__title">Рейтинг РО</h2>
     <div class="ratingRO__wrapper">
-      <router-link v-if="roleStore.experts.is_central_expert === true" :to="{ name: 'rating-ro-reporting', params: {edited: false} }"
+      <router-link v-if="roleStore.experts.is_central_expert === true" :to="{ name: 'rating-ro-reporting', params: {part: 'Часть 1'} }"
         class="ratingRO__item">
         <p>Отчеты РО 1 часть</p>
       </router-link>
-      <router-link v-if="roleStore.experts.is_central_expert === true" :to="{ name: 'rating-ro-reporting', params: {edited: true} }"
+      <router-link v-if="roleStore.experts.is_central_expert === true" :to="{ name: 'rating-ro-reporting', params: {part: 'Часть 2'} }"
         class="ratingRO__item">
         <p>Отчеты РО 2 часть</p>
       </router-link>

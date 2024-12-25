@@ -260,11 +260,15 @@
             <tr>
               <td class="report-table__td">{{ eventCH.dataRH.participants_number }}</td>
               <td class="report-table__td report-table__td__center">{{ eventCH.dataDH.participants_number }}</td>
-              <td class="report-table__td">
+              <td 
+                :class="[
+                  'report-table__td',
+                  (reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+              >
                 <InputReport v-model:value="eventCH.dataCH.participants_number" :id="'participants_numberCH'"
                   :name="'participants_numberCH'" style="width: 100%;" type="number" placeholder="0" :maxlength="10"
                   :min="0" :max="9999999999" :step="0.01"
-                  :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" />
+                  :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH" />
               </td>
             </tr>
           </tbody>
@@ -287,11 +291,15 @@
               <td class="report-table__th">Корректировка ЦШ</td>
             </tr>
             <tr>
-              <td class="report-table__td">
+              <td 
+                :class="[
+                  'report-table__td',
+                  (reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+              >
                 <InputReport v-model:value="eventCH.dataCH.participants_number" :id="'participants_numberCH'"
                   :name="'participants_numberCH'" style="width: 100%;" type="number" placeholder="0" :maxlength="10"
                   :min="0" :max="9999999999" :step="0.01"
-                  :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" />
+                  :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH" />
               </td>
             </tr>
           </tbody>
@@ -309,11 +317,15 @@
             <tr>
               <td class="report-table__td">{{ eventCH.dataRH.ro_participants_number }}</td>
               <td class="report-table__td report-table__td__center">{{ eventCH.dataDH.ro_participants_number }}</td>
-              <td class="report-table__td">
+              <td 
+                :class="[
+                  'report-table__td',
+                  (reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+              >
                 <InputReport v-model:value="eventCH.dataCH.ro_participants_number" :id="'participants_numberCH'"
                   :name="'participants_numberCH'" style="width: 100%;" type="number" placeholder="0" :maxlength="10"
                   :min="0" :max="9999999999" :step="0.01"
-                  :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" />
+                  :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH" />
               </td>
             </tr>
           </tbody>
@@ -336,11 +348,15 @@
               <td class="report-table__th">Корректировка ЦШ</td>
             </tr>
             <tr>
-              <td class="report-table__td">
+              <td 
+                :class="[
+                  'report-table__td',
+                  (reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+              >
                 <InputReport v-model:value="eventCH.dataCH.ro_participants_number" :id="'participants_numberCH'"
                   :name="'participants_numberCH'" style="width: 100%;" type="number" placeholder="0" :maxlength="10"
                   :min="0" :max="9999999999" :step="0.01"
-                  :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" />
+                  :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH" />
               </td>
             </tr>
           </tbody>
@@ -356,10 +372,13 @@
             <tr>
               <td class="report-table__td">{{ formattedDate(eventCH.dataRH.start_date) }}</td>
               <td class="report-table__td report-table__td__center">{{ formattedDate(eventCH.dataDH.start_date) }}</td>
-              <td class="report-table__td">
+              <td 
+                :class="[
+                  'report-table__td',
+                  (reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']">
                 <InputReport v-model:value="eventCH.dataCH.start_date" :id="'eventCH.dataCH.end_date'"
                   name="eventCH.dataCH.end_date" class="form__input" type="date"
-                  :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" style="width: 100%;" />
+                  :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH" style="width: 100%;" />
               </td>
             </tr>
           </tbody>
@@ -382,10 +401,14 @@
               <td class="report-table__th">Корректировка ЦШ</td>
             </tr>
             <tr>
-              <td class="report-table__td">
+              <td 
+                :class="[
+                  'report-table__td',
+                  (reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+              >
                 <InputReport v-model:value="eventCH.dataCH.start_date" :id="'eventCH.dataCH.end_date'"
                   name="eventCH.dataCH.end_date" class="form__input" type="date"
-                  :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" style="width: 100%;" />
+                  :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH" style="width: 100%;" />
               </td>
             </tr>
           </tbody>
@@ -402,10 +425,14 @@
             <tr>
               <td class="report-table__td">{{ formattedDate(eventCH.dataRH.end_date) }}</td>
               <td class="report-table__td report-table__td__center">{{ formattedDate(eventCH.dataDH.end_date) }}</td>
-              <td class="report-table__td">
+              <td 
+                :class="[
+                  'report-table__td',
+                  (reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+              >
                 <InputReport v-model:value="eventCH.dataCH.end_date" :id="'eventCH.dataCH.end_date'"
                   name="eventCH.dataCH.end_date" class="form__input" type="date"
-                  :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" style="width: 100%;" />
+                  :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH" style="width: 100%;" />
               </td>
             </tr>
           </tbody>
@@ -428,10 +455,14 @@
               <td class="report-table__th">Корректировка ЦШ</td>
             </tr>
             <tr>
-              <td class="report-table__td">
+              <td 
+                :class="[
+                  'report-table__td',
+                  (reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+              >
                 <InputReport v-model:value="eventCH.dataCH.end_date" :id="'eventCH.dataCH.end_date'"
                   name="eventCH.dataCH.end_date" class="form__input" type="date"
-                  :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" style="width: 100%;" />
+                  :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH" style="width: 100%;" />
               </td>
             </tr>
           </tbody>
@@ -444,7 +475,7 @@
         <!--        <InputReport v-model:value="commentCH" id="15" name="15" class="form__input" style="width: 100%"/>-->
         <TextareaReport v-model:value="commentCH" id="commentCH" name="commentCH" autoResize placeholder="Комментарий"
           :maxlength="3000" :max-length-text="3000" counter-visible
-          :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportStore.isAllReportsVerifiedByCH" />
+          :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH" />
       </div>
       <!-- <div>
         <v-checkbox label="Итоговое значение"/>
@@ -453,7 +484,7 @@
       <div>
         <p>(4-1)*2+(4-2)+(4-3)=9</p>
       </div> -->
-      <div v-if="!reportStore.isAllReportsVerifiedByCH">
+      <div v-if="!reportStore.isAllReportsVerifiedByCH && !reportVerifiedByCH">
         <v-checkbox v-model="reportStore.returnReport.fifth" label="Вернуть в РО на доработку" @change="onReportReturn"
           :disabled="reportStore.isReportReject?.fifth && !props.centralExpert" />
       </div>
@@ -521,6 +552,7 @@ const finalResultDH = ref(0);
 const commonData = ref([]);
 const commentCH = ref();
 const row = ref(1);
+const reportVerifiedByCH = ref(false);
 
 const focusOut = async () => {
   if (!isLinkError.value) {
@@ -719,13 +751,19 @@ const onReportReturn = (event) => {
 }
 
 onMounted(() => {
-  // Мапинг данных для отчета эксперта ОШ
+  reportVerifiedByCH.value = reportStore.reportForCheckCH.fifth?.verified_by_chq !== null;
+
+  /*
+  * Мапинг данных для отчета эксперта ОШ
+  */
   if (reportStore.reportDataDH.fifth && props.districtExpert) {
     fifthPanelDataDH.value.events = [...reportStore.reportDataDH.fifth.events];
     fifthPanelDataDH.value.comment = reportStore.reportDataDH.fifth.comment;
   }
 
-  // Мапинг данных для отчета эксперта ЦШ
+  /*
+  * Мапинг данных для отчета эксперта ЦШ
+  */
   if (reportStore.reportForCheckCH.fifth && props.centralExpert) {
     const eventQuantity = reportStore.reportForCheckCH.fifth.events.length;
 
@@ -740,7 +778,13 @@ onMounted(() => {
       fifthPanelDataDH.value.comment = reportDataDH.comment;
 
       // Добавление данных из стора для панели "корректировка ЦШ"
-      const reportDataCH = reportStore.reportForCheckCH.fifth.central_version;
+      let reportDataCH;
+      // Проверка на верификацию отчета ЦШ. При верифицированом отчете данные берутся из общего объекта
+      if (reportVerifiedByCH.value) {
+        reportDataCH = reportStore.reportForCheckCH.fifth
+      } else {
+        reportDataCH = reportStore.reportForCheckCH.fifth.central_version;
+      }
       commentCH.value = reportStore.reportDataCH.fifth.comment || '';
       for (let i = 0; i < eventQuantity; i++) {
         commonData.value[i] = {
@@ -908,7 +952,7 @@ watch([commonData, commentCH], () => {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding-top: 40px;
+  // padding-top: 40px;
 
   // @media (max-width: 400px) {
   //   padding-top: 16px;
@@ -1076,6 +1120,14 @@ watch([commonData, commentCH], () => {
     font-weight: 500;
     padding: 0 10px !important;
     color: #8E8E93;
+
+    &:not(:last-child) {
+      background-color: #f9fafb;
+    }
+
+    &--bgcolor {
+        background-color: #f9fafb;
+    }
 
     &__center {
       border-left: 1px solid #B6B6B6;
