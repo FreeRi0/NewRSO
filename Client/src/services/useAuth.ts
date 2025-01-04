@@ -2,6 +2,8 @@ import { ref, Ref } from 'vue';
 import { useUserStore } from '@features/store/index';
 import { useRoleStore } from '@layouts/store/role';
 import { HTTP } from '@app/http';
+import { useMessage } from './useMessage'
+
 
 interface FormData {
     username: string;
@@ -20,6 +22,7 @@ export function useAuth() {
     const formData: Ref<FormData> = ref({ username: '', password: '' });
     const errors: Ref<Errors> = ref({});
     const isLoading = ref(false);
+    const { showMessage } = useMessage();
     const loginUser = async (): Promise<boolean> => {
         try {
             isLoading.value = true;
@@ -36,10 +39,18 @@ export function useAuth() {
                 roleStore.getUserParticipantsStatus('1')
             ]);
 
+            showMessage('Вы успешно авторизовались!', false);
             return true;
         } catch (error: any) {
-            console.error('Login error:', error);
             errors.value = error.response?.data || { non_field_errors: ['An unexpected error occurred'] };
+            const errorMessage = 'Ошибка авторизации: ' +
+                (errors.value.non_field_errors?.[0] ||
+                    errors.value.username ||
+                    errors.value.password ||
+                    Object.values(errors.value).flat()[0] ||
+                    'Неизвестная ошибка');
+
+            showMessage(errorMessage, true);
             return false;
         } finally {
             isLoading.value = false;

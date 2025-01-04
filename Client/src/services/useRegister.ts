@@ -1,7 +1,7 @@
-import { ref, computed, inject } from 'vue';
+import { ref, computed, Ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { HTTP } from '@app/http';
-import Swal from 'sweetalert2';
+import { useMessage } from './useMessage'
 
 interface RegistrationForm {
   region: string | null;
@@ -15,6 +15,12 @@ interface RegistrationForm {
   password: string;
   re_password: string;
   personal_data_agreement: boolean;
+}
+
+interface Errors {
+  username?: string;
+  password?: string;
+  non_field_errors?: string[];
 }
 
 export function useRegistration() {
@@ -34,12 +40,11 @@ export function useRegistration() {
   });
 
   const isLoading = ref(false);
-  const isError = ref<Record<string, string>>({});
+  const errors: Ref<Errors> = ref({});
   const validated = ref(false);
   const validateClient = ref(false);
-  const swal = inject('$swal') as typeof Swal;
   const termsError = computed(() => validated.value && !form.value.personal_data_agreement);
-
+  const { showMessage } = useMessage();
   const regexps = {
     name: /^[а-яА-ЯЁё\s]+$/,
     email: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+$/,
@@ -50,16 +55,6 @@ export function useRegistration() {
     validated.value = false;
   };
 
-  const showMessage = (message: string, isError: boolean) => {
-    swal.fire({
-      position: 'center',
-      icon: isError ? 'error' : 'success' as const,
-      title: message,
-      showConfirmButton: false,
-      timer: 1500,
-    });
-  };
-
   const validateInput = (value: string, regex: RegExp, minLength = 0): boolean => {
     return value.length > 0 && regex.test(value) && (minLength === 0 || value.length >= minLength);
   };
@@ -67,18 +62,18 @@ export function useRegistration() {
   const getErrorsValidate = (): boolean => {
     const requiredNameInputs = [form.value.last_name, form.value.first_name];
     const usernameInputs = [form.value.username, form.value.password, form.value.re_password];
-  
+
     const hasRequiredNameErrors = requiredNameInputs.some(name => !validateInput(name, regexps.name));
     const hasOptionalNameError = form.value.patronymic_name !== '' && !validateInput(form.value.patronymic_name, regexps.name);
     const hasEmailError = !validateInput(form.value.email, regexps.email);
     const hasUsernameErrors = usernameInputs.some(input => !validateInput(input, regexps.username, 8));
-  
+
     console.log('Required Name validation:', requiredNameInputs.map(name => validateInput(name, regexps.name)));
     console.log('Optional Name validation:', form.value.patronymic_name === '' || validateInput(form.value.patronymic_name, regexps.name));
     console.log('Email validation:', validateInput(form.value.email, regexps.email));
     console.log('Username validation:', usernameInputs.map(input => validateInput(input, regexps.username, 8)));
     console.log('Errors:', { hasRequiredNameErrors, hasOptionalNameError, hasEmailError, hasUsernameErrors });
-  
+
     return hasRequiredNameErrors || hasOptionalNameError || hasEmailError || hasUsernameErrors;
   };
 
@@ -109,10 +104,15 @@ export function useRegistration() {
       showMessage('Успешно!', false);
       router.push('/');
     } catch (error: any) {
-      console.error('Registration error:', error);
-      isError.value = error.response?.data || {};
-      if (isError.value) {
-        showMessage('Ошибка', true);
+      errors.value = error.response?.data || {};
+      const errorMessage = 'Ошибка регистрации: ' +
+        (errors.value.non_field_errors?.[0] ||
+          errors.value.username ||
+          errors.value.password ||
+          Object.values(errors.value).flat()[0] ||
+          'Неизвестная ошибка');
+      if (errors.value) {
+        showMessage(errorMessage, true);
       }
     } finally {
       isLoading.value = false;
@@ -122,7 +122,7 @@ export function useRegistration() {
   return {
     form,
     isLoading,
-    isError,
+    errors,
     validated,
     termsError,
     handleTermsState,

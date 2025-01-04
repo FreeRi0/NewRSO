@@ -90,7 +90,7 @@ import { useRegistration } from '@services/useRegister';
 
 const { form,
     isLoading,
-    isError,
+    errors,
     validated,
     termsError,
     handleTermsState,
