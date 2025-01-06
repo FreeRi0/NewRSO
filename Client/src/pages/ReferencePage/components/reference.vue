@@ -4,11 +4,8 @@
             <h2 class="references-title">
                 Справка о членстве в РСО (для работодателя)
             </h2>
-            <div class="references-search">
-                <input type="text" id="search" class="references-search__input" @keyup="searchContributors"
-                    v-model="name" placeholder="Поищем пользователей?" />
-                <SvgIcon icon-name="search" />
-            </div>
+            <Search v-model="name" placeholder="Поищем пользователей ?"
+            @update:modelValue="searchPeoples" />
             <div class="references-container">
                 <div class="filters">
                     <filters @update-district="updateDistrict" @update-reg="updateReg" @update-local="updateLocal"
@@ -18,7 +15,6 @@
                         :roles="roles.roles.value" :sorted-participants="participants" :count-participants="count"
                         :is-membership="false" />
                 </div>
-                <!-- <pre>{{ reg }}</pre> -->
                 <div class="references-items">
                     <div class="references-sort">
                         <div class="d-flex align-center">
@@ -41,11 +37,6 @@
                     <div class="references-wrapper">
                         <referencesList :participants="participants" :selected-peoples="selectedPeoples"
                             @change="changePeoples"></referencesList>
-                        <v-progress-circular class="circleLoader" v-if="isLoading" indeterminate
-                            color="blue"></v-progress-circular>
-                        <p class="text-center" v-else-if="!isLoading && !participants.length">
-                            Ничего не найдено
-                        </p>
                     </div>
                     <template v-if="users.count && users.count > limit">
                         <Button @click="next" v-if="participants.length < users.count" label="Показать еще"></Button>
@@ -118,7 +109,7 @@
 </template>
 <script setup>
 import { Button } from '@shared/components/buttons';
-import { Input } from '@shared/components/inputs';
+import { Input, Search } from '@shared/components/inputs';
 import { filters } from '@features/Contributor/components';
 import {
     referencesList,

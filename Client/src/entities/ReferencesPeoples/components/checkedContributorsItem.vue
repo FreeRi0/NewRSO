@@ -2,50 +2,33 @@
     <div class="checked checkedReference">
         <div class="checked-item__wrapper">
             <div class="checked-img">
-                <img :src="participant.media?.photo" alt="logo" v-if="participant.media?.photo" />
-                <img src="@app/assets/user-avatar.png" alt="photo" v-else />
+                <img :src="participantPhoto" :alt="participant.last_name" />
             </div>
             <div class="containerHorizontal">
                 <div class="d-flex">
-                    <p class="horizontallso-item__list-full">
-                        {{ participant.last_name }}
-                    </p>
-                    <p class="horizontallso-item__list-full">
-                        {{ participant.first_name }}
-                    </p>
-                    <p class="horizontallso-item__list-full">
-                        {{ participant.patronymic_name }}
+                    <p v-for="name in fullName" :key="name" class="horizontallso-item__list-full">
+                        {{ name }}
                     </p>
                 </div>
                 <div class="checked-item__list-date">
-                    <span style="
-                            border-left: 2px solid #b6b6b6;
-                            padding-right: 8px;
-                        "></span>
+                    <span class="date-separator"></span>
                     <p>{{ participant.date_of_birth }}</p>
                 </div>
             </div>
         </div>
         <div class="checked__confidant ml-3">
-            <input type="checkbox" v-model="checked" :value="participant" @change="updateMembership" />
+            <input type="checkbox" :checked="isChecked" @change="updateMembership" />
         </div>
     </div>
 </template>
+
 <script setup>
-import { Button } from '@shared/components/buttons';
-import { Select, sortByEducation } from '@shared/components/selects';
-import { useRoute } from 'vue-router';
-import { ref, watch, inject } from 'vue';
-import { HTTP } from '@app/http';
+import { computed } from 'vue';
 
 const props = defineProps({
     participant: {
         type: Object,
-        require: true,
-    },
-    participants: {
-        type: Array,
-        require: true,
+        required: true,
     },
     selectedParticipants: {
         type: Array,
@@ -54,26 +37,26 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['change']);
-const updateMembership = (e) => {
-    // console.log('checkeed', checked.value);
-    emit('change', checked.value, props.participant.id);
-};
 
-
-const checked = ref(true);
-
-const swal = inject('$swal');
-const selectedPeoples = ref(props.selectedParticipants);
-
-watch(
-    () => props.selectedParticipants,
-    (newChecked) => {
-        if (!newChecked) return;
-        selectedPeoples.value = newChecked;
-    },
+const isChecked = computed(() =>
+    props.selectedParticipants.some(item => item.id === props.participant.id)
 );
 
+const updateMembership = () => {
+    emit('change', !isChecked.value, props.participant.id);
+};
+
+const participantPhoto = computed(() =>
+    props.participant.media?.photo || '@app/assets/user-avatar.png'
+);
+
+const fullName = computed(() => [
+    props.participant.last_name,
+    props.participant.first_name,
+    props.participant.patronymic_name
+]);
 </script>
+
 <style lang="scss" scoped>
 .checked {
     display: flex;
@@ -95,21 +78,31 @@ watch(
             border-radius: 100%;
         }
     }
-}
 
-.checked-item__wrapper {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: baseline;
-    align-items: center;
+    &-item__wrapper {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        padding: 4px 20px;
+        border-radius: 10px;
+        border: 1px solid #b6b6b6;
+        background: #fff;
+        width: 100%;
+    }
 
-    padding: 4px 20px;
+    &__confidant {
+        padding: 10px;
+        border: 1px solid #b6b6b6;
+        border-radius: 10px;
+        height: 48px;
+        margin: 0 12px;
+        width: 48px;
 
-    border-radius: 10px;
-    border: 1px solid #b6b6b6;
-    background: #fff;
-
-    width: 100%;
+        input {
+            width: 24px;
+            height: 24px;
+        }
+    }
 }
 
 .containerHorizontal {
@@ -119,84 +112,8 @@ watch(
     margin-left: 10px;
 }
 
-.checked-item img {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    overflow: cover;
-}
-
-.checked-item p {
-    margin-left: 10px;
-}
-
-.error {
-    color: #db0000;
-    font-size: 14px;
-    font-weight: 600;
-    font-family: 'Acrobat';
-    margin-top: 10px;
-    text-align: center;
-}
-
-.checked-item__list-date {
-    width: 95px;
-    display: grid;
-    grid-template-columns: auto 1fr 0fr;
-}
-
-.checked-itemo__list-img {
-    margin-right: 13px;
-}
-
-.checked-item__list-full {
-    color: #35383f;
-    font-family: 'BertSans', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    margin-left: 10px;
-}
-
+.horizontallso-item__list-full,
 .checked-item__list-date p {
-    color: #1c5c94;
-    font-family: 'BertSans', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-}
-
-.checked__confidant {
-    padding: 10px 10px;
-    border: 1px solid #b6b6b6;
-    border-radius: 10px;
-    height: 48px;
-    margin: 0px 12px;
-    width: 48px;
-
-    input {
-        width: 24px;
-        height: 24px;
-    }
-}
-
-.save {
-    // background-color: white;
-    // color: #35383f;
-    // border: 1px solid black;
-    width: 168px;
-    height: 48px;
-    padding: 12px 32px;
-    margin: 0px;
-
-    span {
-        font-size: 16px;
-    }
-}
-
-.v-field {
-    border-radius: 10px;
-}
-
-.horizontallso-item__list-full {
     color: #35383f;
     font-family: 'BertSans', sans-serif;
     font-size: 16px;
@@ -204,13 +121,18 @@ watch(
     margin-right: 10px;
 }
 
-.sort-select {
-    height: 46px;
-    width: 185px;
+.checked-item__list-date {
+    width: 95px;
+    display: grid;
+    grid-template-columns: auto 1fr 0fr;
+
+    p {
+        color: #1c5c94;
+    }
 }
 
-.form__select {
-    margin-bottom: 0px;
-    border: none;
+.date-separator {
+    border-left: 2px solid #b6b6b6;
+    padding-right: 8px;
 }
 </style>

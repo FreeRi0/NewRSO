@@ -1,104 +1,77 @@
 <template>
     <div class="horizontallso">
         <div class="horizontallso__confidant mr-3">
-            <input
-                type="checkbox"
-                v-model="checked"
-                :value="participant"
-                @change="updateMembership"
-            />
+            <input type="checkbox" :checked="isChecked" @change="updateMembership" />
         </div>
         <div class="horizontallso-item__wrapper">
             <div class="horizontallso-img">
-                <img
-                    :src="participant.media?.photo"
-                    alt="logo"
-                    v-if="participant.media?.photo"
-                />
-                <img src="@app/assets/user-avatar.png" alt="photo" v-else />
+                <img :src="participantPhoto" :alt="participant.last_name" />
             </div>
             <div class="containerHorizontal">
                 <div class="d-flex">
-                    <p class="horizontallso-item__list-full">
-                        {{ participant.last_name }}
-                    </p>
-                    <p class="horizontallso-item__list-full">
-                        {{ participant.first_name }}
-                    </p>
-                    <p class="horizontallso-item__list-full">
-                        {{ participant.patronymic_name }}
+                    <p v-for="name in fullName" :key="name" class="horizontallso-item__list-full">
+                        {{ name }}
                     </p>
                 </div>
                 <div class="horizontallso-item__list-date">
-                    <span
-                        style="
-                            border-left: 2px solid #b6b6b6;
-                            padding-right: 8px;
-                        "
-                    ></span>
+                    <span class="date-separator"></span>
                     <p>{{ participant.date_of_birth }}</p>
                 </div>
             </div>
         </div>
-
-        <div v-if="reference"></div>
-
     </div>
 </template>
+
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, computed, watch } from 'vue';
 
 const props = defineProps({
     participant: {
         type: Object,
-        require: true,
+        required: true,
     },
     selectedParticipants: {
         type: Array,
         default: () => [],
     },
-    reference: {
-        type: Boolean,
-        default: true,
-    },
 });
 
 const emit = defineEmits(['change']);
-const checked = ref(false);
 
-const updateMembership = (e) => {
-    // console.log('dddddd', checked.value);
-    emit('change', checked.value, props.participant.id);
+const isChecked = computed(() =>
+    props.selectedParticipants.some(item => item.id === props.participant.id)
+);
+
+const updateMembership = () => {
+    emit('change', !isChecked.value, props.participant.id);
 };
 
-const selectedPeoples = ref(props.selectedParticipants);
-
-watch(
-    () => props.selectedParticipants,
-    (newChecked) => {
-        if (!newChecked) return;
-        selectedPeoples.value = newChecked;
-        // console.log('newChecked', newChecked);
-        const checkedItem = newChecked.find(
-            (item) => item.id == props.participant.id,
-        );
-        // console.log('checkedItem', checkedItem);
-        if (!checkedItem) checked.value = false;
-        else checked.value = true;
-    },
+const participantPhoto = computed(() =>
+    props.participant.media?.photo || '@app/assets/user-avatar.png'
 );
+
+const fullName = computed(() => [
+    props.participant.last_name,
+    props.participant.first_name,
+    props.participant.patronymic_name
+]);
+
+watch(() => props.selectedParticipants, () => { }, { deep: true });
 </script>
 <style lang="scss" scoped>
 .horizontallso {
     display: flex;
+
     @media (max-width: 768px) {
         flex-wrap: wrap;
     }
+
     &-img {
         align-items: center;
         width: 36px;
         height: 36px;
         justify-content: start;
+
         img {
             width: 36px;
             height: 36px;
@@ -108,6 +81,7 @@ watch(
             border-radius: 100%;
         }
     }
+
     &-info {
         border: 1px solid #b6b6b6;
         border-radius: 10px;
@@ -118,11 +92,13 @@ watch(
         text-align: center;
 
         width: 185px;
+
         @media (max-width: 768px) {
             margin-right: 0px;
             margin-left: 0px;
             margin-bottom: 12px;
         }
+
         p {
             display: block;
             font-size: 16px;
@@ -131,6 +107,7 @@ watch(
         }
     }
 }
+
 .horizontallso-item__wrapper {
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -144,10 +121,12 @@ watch(
     background: #fff;
     margin-bottom: 12px;
     width: 100%;
+
     @media (max-width: 1024px) {
         padding: 0px 5px;
         height: 48px;
     }
+
     @media (max-width: 768px) {
         margin-top: 12px;
     }
@@ -158,6 +137,7 @@ watch(
     align-items: center;
     justify-content: space-between;
     margin-left: 10px;
+
     @media (max-width: 1024px) {
         flex-direction: column;
         align-items: flex-start;
@@ -179,6 +159,7 @@ watch(
 .horizontallso-item__list-date {
     display: grid;
     grid-template-columns: auto 1fr 0fr;
+
     @media (max-width: 1024px) {
         grid-template-columns: 1fr;
     }
@@ -209,6 +190,7 @@ watch(
     border-radius: 10px;
     height: 48px;
     width: 48px;
+
     input {
         width: 24px;
         height: 24px;
@@ -226,6 +208,7 @@ watch(
     height: 48px;
     margin: 0px 12px;
     width: 48px;
+
     input {
         width: 24px;
         height: 24px;
@@ -233,15 +216,18 @@ watch(
 }
 
 .save {
-    // background-color: white;
-    // color: #35383f;
-    // border: 1px solid black;
     width: 168px;
     height: 48px;
     padding: 12px 32px;
     margin: 0px;
+
     span {
         font-size: 16px;
     }
+}
+
+.date-separator {
+    border-left: 2px solid #b6b6b6;
+    padding-right: 8px;
 }
 </style>

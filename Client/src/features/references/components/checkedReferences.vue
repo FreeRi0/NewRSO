@@ -8,7 +8,6 @@
     />
 </template>
 <script setup>
-import { ref} from 'vue';
 import { checkedContributorsItem } from '@entities/ReferencesPeoples';
 const emit = defineEmits(['change']);
 
