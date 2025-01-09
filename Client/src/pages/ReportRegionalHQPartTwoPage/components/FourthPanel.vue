@@ -315,7 +315,7 @@
       <div v-for="(eventCH, index) in commonData" :key="index" class="form__field-fourth-panel">
         <div class="form__field-members">
           <label class="form__label" for="eventName">Название мероприятия<sup class="valid-red">*</sup></label>
-          <InputReport v-model:value="eventCH.dataCH.name" :id="eventCH.dataCH.name" name="eventName"
+          <InputReport v-model:value="eventCH.dataRH.name" :id="eventCH.dataRH.name" name="eventName"
                        class="form__input" placeholder="Введите название мероприятия" disabled/>
         </div>
         <label class="form__label">Количество человек, принявших участие в мероприятии <sup
@@ -574,6 +574,7 @@
             id="commentCH"
             name="commentCH"
             class="form__input"
+            placeholder="Примечания, ссылки"
             autoResize
             :maxlength="3000"
             :max-length-text="3000"
@@ -901,6 +902,13 @@ onMounted(() => {
       events.value = reportStore.reportForCheckCH.fourth.events;
       fourthPanelData.value.comment = reportStore.reportForCheckCH.fourth.comment || '';
 
+      // Рефакторинг - добавлен код ниже, т.к. на вкл РО отображались данные ЦШ
+      if(reportStore.reportForCheckCH.fourth.regional_version) {
+        const reportDataRH = JSON.parse(reportStore.reportForCheckCH.fourth.regional_version);
+        events.value = reportDataRH.events;
+        fourthPanelData.value.comment = reportDataRH.comment || '';
+      }
+
       // Добавление данных панели "корректировка ОШ"
       const reportDataDH = JSON.parse(reportStore.reportForCheckCH.fourth.district_version);
       fourthPanelDataDH.value.events = reportDataDH.events;
@@ -912,16 +920,22 @@ onMounted(() => {
       if (reportVerifiedByCH.value) {
         console.log('reportStore.reportForCheckCH.fourth', reportStore.reportForCheckCH.fourth)
         reportDataCH = reportStore.reportForCheckCH.fourth
-        commentCH.value = reportStore.reportDataCH.fourth.comment || '';
       } else {
         console.log('reportStore.reportForCheckCH.fourth2', reportStore.reportForCheckCH.fourth)
         reportDataCH = reportStore.reportForCheckCH.fourth.central_version;
-        commentCH.value = reportStore.reportDataCH.fourth.comment.central_version || '';
+      }
+      commentCH.value = reportDataCH.comment || '';
+      // Проверяем наличие версии РО
+      let reportDataRH;
+      if (reportStore.reportForCheckCH.fourth.regional_version) {
+        reportDataRH = JSON.parse(reportStore.reportForCheckCH.fourth.regional_version);
+      } else {
+        reportDataRH = reportStore.reportForCheckCH.fourth;
       }
 
       for (let i = 0; i < eventQuantity; i++) {
         commonData.value[i] = {
-          dataRH: reportStore.reportForCheckCH.fourth.events[i],
+          dataRH: reportDataRH.events[i],
           dataDH: reportDataDH.events[i],
           dataCH: reportDataCH.events[i],
         }
