@@ -435,6 +435,11 @@ onMounted(() => {
       // Добавление данных панели "отчет РО"
       tenthPanelData.value = props.dataForCheckCH;
 
+      // Рефакторинг - добавлен код ниже, т.к. на вкл РО отображались данные ЦШ
+      if (props.dataForCheckCH.regional_version) {
+        tenthPanelData.value = JSON.parse(props.dataForCheckCH.regional_version);
+      }      
+
       // Добавление данных панели "корректировка ОШ"
       const reportDH = JSON.parse(props.dataForCheckCH.district_version)
       tenthPanelDataDH.value.event_happened = reportDH.event_happened;

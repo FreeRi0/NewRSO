@@ -882,6 +882,15 @@ onMounted(() => {
       projects.value = reportStore.reportForCheckCH.sixteenth.projects;
       sixteenthPanelData.value.comment = reportStore.reportForCheckCH.sixteenth.comment;
       sixteenthPanelData.value.is_project = reportStore.reportForCheckCH.sixteenth.is_project;
+      
+      // Рефакторинг - добавлен код ниже, т.к. на вкл РО отображались данные ЦШ
+      if (reportStore.reportForCheckCH.sixteenth.regional_version) {
+        const reportDataRH = JSON.parse(reportStore.reportForCheckCH.sixteenth.regional_version);
+        projects.value = reportDataRH.projects;
+        sixteenthPanelData.value.comment = reportDataRH.comment;
+        sixteenthPanelData.value.is_project = reportDataRH.is_project;
+      }
+      
 
       // Добавление данных панели "корректировка ОШ"
       const reportDataDH = JSON.parse(reportStore.reportForCheckCH.sixteenth.district_version);
@@ -899,12 +908,18 @@ onMounted(() => {
         reportDataCH = reportStore.reportForCheckCH.sixteenth.central_version;
         isProjectCH.value = reportStore.reportDataCH.sixteenth.central_version.isProject;
       }
-      commentCH.value = reportStore.reportDataCH.sixteenth.comment || '';
-
-
+      commentCH.value = reportDataCH.comment || '';
+      // Проверяем наличие версии РО
+      let reportDataRH;
+      if (reportStore.reportForCheckCH.sixteenth.regional_version) {
+        reportDataRH = JSON.parse(reportStore.reportForCheckCH.sixteenth.regional_version);
+      } else {
+        reportDataRH = reportStore.reportForCheckCH.sixteenth
+      }
+      
       for (let i = 0; i < projectQuantity; i++) {
         commonData.value[i] = {
-          dataRH: reportStore.reportForCheckCH.sixteenth.projects[i],
+          dataRH: reportDataRH.projects[i],
           dataDH: reportDataDH.projects.length ? reportDataDH.projects[i] : [{
             name: '',
             project_scale: null,

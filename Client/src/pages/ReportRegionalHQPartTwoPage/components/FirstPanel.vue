@@ -499,6 +499,16 @@ watchEffect(async () => {
       firstPanelData.value.file_type = reportStore.reportForCheckCH.first.file_type || null;
       firstPanelData.value.file_size = reportStore.reportForCheckCH.first.file_size || null;
 
+      // Рефакторинг - добавлен код ниже, т.к. на вкл РО отображались данные ЦШ
+      if (reportStore.reportForCheckCH.first.regional_version) {
+        const reportDataRH = JSON.parse(reportStore.reportForCheckCH.first.regional_version);
+        firstPanelData.value.comment = reportDataRH?.comment || '';
+        firstPanelData.value.amount_of_money = reportDataRH?.amount_of_money;
+        firstPanelData.value.scan_file = reportDataRH?.scan_file || null;
+        firstPanelData.value.file_type = reportDataRH?.file_type || null;
+        firstPanelData.value.file_size = reportDataRH?.file_size || null;
+      }
+      
       // Добавление данных панели "корректировка ОШ"
       const reportDataDH = JSON.parse(reportStore.reportForCheckCH.first.district_version);
       firstPanelDataDH.value.comment = reportDataDH.comment;
