@@ -473,7 +473,7 @@
       <div class="form__field" style="margin-bottom: 0;">
         <label class="form__label" for="commentCH">Комментарий <sup class="valid-red">*</sup></label>
         <!--        <InputReport v-model:value="commentCH" id="15" name="15" class="form__input" style="width: 100%"/>-->
-        <TextareaReport v-model:value="commentCH" id="commentCH" name="commentCH" autoResize placeholder="Комментарий"
+        <TextareaReport v-model:value="commentCH" id="commentCH" name="commentCH" autoResize placeholder="Примечания, ссылки"
           :maxlength="3000" :max-length-text="3000" counter-visible
           :disabled="(reportStore.isReportReject?.fifth && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH" />
       </div>
@@ -772,6 +772,13 @@ onMounted(() => {
       events.value = reportStore.reportForCheckCH.fifth.events;
       fifthPanelData.value.comment = reportStore.reportForCheckCH.fifth.comment || '';
 
+      // Рефакторинг - добавлен код ниже, т.к. на вкл РО отображались данные ЦШ
+      if (reportStore.reportForCheckCH.fifth.regional_version) {
+        const reportDataRH = JSON.parse(reportStore.reportForCheckCH.fifth.regional_version);
+        events.value = reportDataRH.events;
+        fifthPanelData.value.comment = reportDataRH.comment || '';
+      }
+
       // Добавление данных панели "корректировка ОШ"
       const reportDataDH = JSON.parse(reportStore.reportForCheckCH.fifth.district_version);
       fifthPanelDataDH.value.events = reportDataDH.events;
@@ -785,10 +792,17 @@ onMounted(() => {
       } else {
         reportDataCH = reportStore.reportForCheckCH.fifth.central_version;
       }
-      commentCH.value = reportStore.reportDataCH.fifth.comment || '';
+      commentCH.value = reportDataCH.comment || '';
+      // Проверяем наличие версии РО
+      let reportDataRH;
+      if (reportStore.reportForCheckCH.fifth.regional_version) {
+        reportDataRH = JSON.parse(reportStore.reportForCheckCH.fifth.regional_version);
+      } else {
+        reportDataRH = reportStore.reportForCheckCH.fifth;
+      }
       for (let i = 0; i < eventQuantity; i++) {
         commonData.value[i] = {
-          dataRH: reportStore.reportForCheckCH.fifth.events[i],
+          dataRH: reportDataRH.events[i],
           dataDH: reportDataDH.events[i],
           dataCH: reportDataCH.events[i],
         }

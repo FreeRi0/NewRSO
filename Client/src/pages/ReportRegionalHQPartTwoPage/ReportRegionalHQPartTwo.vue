@@ -817,40 +817,61 @@ const getReportData = async (reportId) => {
       reportStore.reportForCheckCH.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.first = (await reportPartTwoService.getReportDH('1', reportId)).data;
-      if (reportStore.reportDataCH.first.rejecting_reasons) {
-        reportStore.reportDataCH.first.comment = JSON.parse(reportStore.reportDataCH.first.rejecting_reasons).comment;
-      } else {
-        reportStore.reportDataCH.first.comment = '';
+      if (!reportStore.reportForCheckCH.first.verified_by_chq) {
+        if (reportStore.reportDataCH.first.rejecting_reasons) {
+          reportStore.reportDataCH.first.comment = JSON.parse(reportStore.reportDataCH.first.rejecting_reasons).comment;
+        } else {
+          reportStore.reportDataCH.first.comment = '';
+        }
       }
       if (reportStore.reportForCheckCH.first.verified_by_chq) verifiedByChqPanels.value.push('1')
 
+      // Рефакторинг - добавлен код ниже, т.к. не отображ панельки показателей на доработке у ЦШ
+      // если используем функцию showPanels обязательна проверка на 2 поля:
+      if (reportStore.reportDataCH.first.rejecting_reasons && reportStore.reportDataCH.first.verified_by_chq !== true) {
+        revisionPanels.value.push('1');
+      }
       /*
       * Критерий 4
       */
       reportStore.reportForCheckCH.fourth = (await reportPartTwoService.getReportDH('4', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.fourth.events = (await reportPartTwoService.getReportDH('4', reportId)).data.events;
-      if (reportStore.reportForCheckCH.fourth.rejecting_reasons) {
-        reportStore.reportDataCH.fourth.comment = JSON.parse(reportStore.reportForCheckCH.fourth.rejecting_reasons).comment;
-      } else {
-        reportStore.reportDataCH.fourth.comment = reportStore.reportForCheckCH.fourth.comment;
+      if (!reportStore.reportForCheckCH.fourth.verified_by_chq) {
+        if (reportStore.reportForCheckCH.fourth.rejecting_reasons) {
+          reportStore.reportDataCH.fourth.comment = JSON.parse(reportStore.reportForCheckCH.fourth.rejecting_reasons).comment;
+        } else {
+          reportStore.reportDataCH.fourth.comment = '';
+        }
       }
       if (reportStore.reportForCheckCH.fourth.verified_by_chq) verifiedByChqPanels.value.push('4')
+      // Рефакторинг - добавлен код ниже, т.к. не отображ панельки показателей на доработке у ЦШ
+      // если используем функцию showPanels обязательна проверка на 2 поля:
+      if (reportStore.reportForCheckCH.fourth.rejecting_reasons && reportStore.reportForCheckCH.fourth.verified_by_chq !== true) {
+        revisionPanels.value.push('4');
+      }
       /*
       * Критерий 5
       */
       reportStore.reportForCheckCH.fifth = (await reportPartTwoService.getReportDH('5', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.fifth.events = (await reportPartTwoService.getReportDH('5', reportId)).data.events;
-      if (reportStore.reportForCheckCH.fifth.rejecting_reasons) {
-        reportStore.reportDataCH.fifth.comment = JSON.parse(reportStore.reportForCheckCH.fifth.rejecting_reasons).comment;
-      } else {
-        reportStore.reportDataCH.fifth.comment = reportStore.reportForCheckCH.fifth.comment;
+      if (!reportStore.reportForCheckCH.fifth.verified_by_chq) {
+        if (reportStore.reportForCheckCH.fifth.rejecting_reasons) {
+          reportStore.reportDataCH.fifth.comment = JSON.parse(reportStore.reportForCheckCH.fifth.rejecting_reasons).comment;
+        } else {
+          reportStore.reportDataCH.fifth.comment = '';
+        }
       }
       if (reportStore.reportForCheckCH.fifth.verified_by_chq) verifiedByChqPanels.value.push('5')
       //   revisionPanels.value.push('5');
       // if (reportStore.reportForCheckCH.fifth.rejecting_reasons) reportStore.isReportReject.fifth = true;
       // console.log('reportStore.isReportReject', reportStore.isReportReject)
+      // Рефакторинг - добавлен код ниже, т.к. не отображ панельки показателей на доработке у ЦШ
+      // если используем функцию showPanels обязательна проверка на 2 поля:
+      if (reportStore.reportForCheckCH.fifth.rejecting_reasons && reportStore.reportForCheckCH.fifth.verified_by_chq !== true) {
+        revisionPanels.value.push('5');
+      }
       /*
       * Критерий 6 и 9  
       */
@@ -861,26 +882,44 @@ const getReportData = async (reportId) => {
       reportStore.reportForCheckCH.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.tenth.first = (await reportPartTwoService.getMultipleReportDH('10', '1', reportId)).data;
-      if (reportStore.reportDataCH.tenth.first.rejecting_reasons) {
-        reportStore.reportDataCH.tenth.first.comment = JSON.parse(reportStore.reportDataCH.tenth.first.rejecting_reasons).comment;
-      } else {
-        reportStore.reportDataCH.tenth.first.comment = '';
+      if (!reportStore.reportForCheckCH.tenth.first.verified_by_chq) {
+        if (reportStore.reportDataCH.tenth.first.rejecting_reasons) {
+          reportStore.reportDataCH.tenth.first.comment = JSON.parse(reportStore.reportDataCH.tenth.first.rejecting_reasons).comment;
+        } else {
+          reportStore.reportDataCH.tenth.first.comment = '';
+        }
       }
+      
       // reportStore.reportDataCH.tenth.first.comment = ''
       if (reportStore.reportForCheckCH.tenth.first.verified_by_chq) verifiedByChqPanels.value.push('10-1')
+
+      // Рефакторинг - добавлен код ниже, т.к. не отображ панельки показателей на доработке у ЦШ
+      // если используем функцию showPanels обязательна проверка на 2 поля:
+      if (reportStore.reportDataCH.tenth.first.rejecting_reasons && reportStore.reportForCheckCH.tenth.first.verified_by_chq !== true) {
+        revisionPanels.value.push('10-1');
+      }
       /*
       * Критерий 10-2
       */
       reportStore.reportForCheckCH.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
       reportStore.reportDataCH.tenth.second = (await reportPartTwoService.getMultipleReportDH('10', '2', reportId)).data;
-      if (reportStore.reportDataCH.tenth.second.rejecting_reasons) {
-        reportStore.reportDataCH.tenth.second.comment = JSON.parse(reportStore.reportDataCH.tenth.second.rejecting_reasons).comment;
-      } else {
-        reportStore.reportDataCH.tenth.second.comment = '';
+      if (!reportStore.reportForCheckCH.tenth.second.verified_by_chq) {
+        if (reportStore.reportDataCH.tenth.second.rejecting_reasons) {
+          reportStore.reportDataCH.tenth.second.comment = JSON.parse(reportStore.reportDataCH.tenth.second.rejecting_reasons).comment;
+        } else {
+          reportStore.reportDataCH.tenth.second.comment = '';
+        }
       }
+      
       // reportStore.reportDataCH.tenth.second.comment = ''
       if (reportStore.reportForCheckCH.tenth.second.verified_by_chq) verifiedByChqPanels.value.push('10-2')
+
+      // Рефакторинг - добавлен код ниже, т.к. не отображ панельки показателей на доработке у ЦШ
+      // если используем функцию showPanels обязательна проверка на 2 поля:
+      if (reportStore.reportDataCH.tenth.second.rejecting_reasons && reportStore.reportForCheckCH.tenth.second.verified_by_chq !== true) {
+        revisionPanels.value.push('10-2');
+      }
       /*
       * Критерий 16
       */
@@ -889,13 +928,22 @@ const getReportData = async (reportId) => {
       reportStore.reportDataCH.sixteenth.projects = (await reportPartTwoService.getReportDH('16', reportId)).data.projects;
       reportStore.reportDataCH.sixteenth.isProject = (await reportPartTwoService.getReportDH('16', reportId)).data.is_project;
 
-      if (reportStore.reportForCheckCH.sixteenth.rejecting_reasons) {
-        reportStore.reportDataCH.sixteenth.comment = JSON.parse(reportStore.reportForCheckCH.sixteenth.rejecting_reasons).comment;
-        reportStore.reportDataCH.sixteenth.isProject = reportStore.reportForCheckCH.sixteenth.central_version?.is_project;
-      } else {
-        reportStore.reportDataCH.sixteenth.comment = reportStore.reportForCheckCH.sixteenth.comment;
+      if (!reportStore.reportForCheckCH.sixteenth.verified_by_chq) {
+        if (reportStore.reportForCheckCH.sixteenth.rejecting_reasons) {
+          reportStore.reportDataCH.sixteenth.comment = JSON.parse(reportStore.reportForCheckCH.sixteenth.rejecting_reasons).comment;
+          reportStore.reportDataCH.sixteenth.isProject = reportStore.reportForCheckCH.sixteenth.central_version?.is_project;
+        } else {
+          reportStore.reportDataCH.sixteenth.comment = '';
+        }
       }
+      
       if (reportStore.reportForCheckCH.sixteenth.verified_by_chq) verifiedByChqPanels.value.push('16')
+
+      // Рефакторинг - добавлен код ниже, т.к. не отображ панельки показателей на доработке у ЦШ
+      // если используем функцию showPanels обязательна проверка на 2 поля:
+      if (reportStore.reportForCheckCH.sixteenth.rejecting_reasons && reportStore.reportForCheckCH.sixteenth.verified_by_chq !== true) {
+        revisionPanels.value.push('16');
+      }
       /* 
       * Критерий 11
       */
@@ -1048,10 +1096,12 @@ const getReportData = async (reportId) => {
           reportData.value.first = dataFirst;
         } else {
           if (dataFirst.rejecting_reasons) {
-            reportStore.isReportReject.first = isTabsForRevision.value // true;
             reportStore.reportReject.first = dataFirst;
 
-            if (!dataFirst.verified_by_chq) revisionPanels.value.push('1');
+            if (!dataFirst.verified_by_chq) {
+              revisionPanels.value.push('1');
+              reportStore.isReportReject.first = isTabsForRevision.value // true;
+            }
           }
 
           if (dataFirst.central_version) {
@@ -1076,10 +1126,12 @@ const getReportData = async (reportId) => {
           reportData.value.fourth = dataFourth;
         } else {
           if (dataFourth.rejecting_reasons) {
-            reportStore.isReportReject.fourth = isTabsForRevision.value // true;
             reportStore.reportReject.fourth = dataFourth;
 
-            if (!dataFourth.verified_by_chq) revisionPanels.value.push('4');
+            if (!dataFourth.verified_by_chq) {
+              revisionPanels.value.push('4');
+              reportStore.isReportReject.fourth = isTabsForRevision.value // true;
+            }
           }
 
           if (dataFourth.central_version) {
@@ -1110,10 +1162,12 @@ const getReportData = async (reportId) => {
           reportData.value.fifth = dataFifth;
         } else {
           if (dataFifth.rejecting_reasons) {
-            reportStore.isReportReject.fifth = isTabsForRevision.value // true;
             reportStore.reportReject.fifth = dataFifth;
 
-            if (!dataFifth.verified_by_chq) revisionPanels.value.push('5');
+            if (!dataFifth.verified_by_chq) {
+              revisionPanels.value.push('5');
+              reportStore.isReportReject.fifth = isTabsForRevision.value // true;
+            }
           }
 
           if (dataFifth.central_version) {
@@ -1150,10 +1204,12 @@ const getReportData = async (reportId) => {
           reportData.value.tenth.first = dataTenthFirst;
         } else {
           if (dataTenthFirst.rejecting_reasons) {
-            reportStore.isReportReject.tenth.first = isTabsForRevision.value // true;
             reportStore.reportReject.tenth.first = dataTenthFirst;
 
-            if (!dataTenthFirst.verified_by_chq) revisionPanels.value.push('10-1');
+            if (!dataTenthFirst.verified_by_chq) {
+              revisionPanels.value.push('10-1');
+              reportStore.isReportReject.tenth.first = isTabsForRevision.value // true;
+            }
             if (dataTenthFirst.verified_by_chq) reportStore.isReportReject.tenth.first = false;
           }
 
@@ -1185,10 +1241,12 @@ const getReportData = async (reportId) => {
           reportData.value.tenth.second = dataTenthSecond;
         } else {
           if (dataTenthSecond.rejecting_reasons) {
-            reportStore.isReportReject.tenth.second = isTabsForRevision.value  // true;
             reportStore.reportReject.tenth.second = dataTenthSecond;
 
-            if (!dataTenthSecond.verified_by_chq) revisionPanels.value.push('10-2');
+            if (!dataTenthSecond.verified_by_chq) {
+              revisionPanels.value.push('10-2');
+              reportStore.isReportReject.tenth.second = isTabsForRevision.value  // true;
+            }
             if (dataTenthSecond.verified_by_chq) reportStore.isReportReject.tenth.second = false;
           }
 
@@ -1301,10 +1359,12 @@ const getReportData = async (reportId) => {
           reportData.value.sixteenth = dataSixteenth;
         } else {
           if (dataSixteenth.rejecting_reasons) {
-            reportStore.isReportReject.sixteenth = isTabsForRevision.value // true;
             reportStore.reportReject.sixteenth = dataSixteenth;
 
-            if (!dataSixteenth.verified_by_chq) revisionPanels.value.push('16');
+            if (!dataSixteenth.verified_by_chq) {
+              revisionPanels.value.push('16');
+              reportStore.isReportReject.sixteenth = isTabsForRevision.value // true;
+            }
           }
 
           if (dataSixteenth.central_version) {
