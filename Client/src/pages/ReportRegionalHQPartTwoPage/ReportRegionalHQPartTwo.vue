@@ -1384,40 +1384,6 @@ const setDataCH = (data, panel, number) => {
   }
 }
 
-// const filterPanelsData = () => {
-//   const filteredSix = {};
-//   const filteredNinth = {};
-
-//   for (let i in reportData.value.six) {
-//     if ((reportData.value.six[i].number_of_members > 0 && reportData.value.six[i].number_of_members !== null && reportData.value.six[i].is_sent === false) && Object.keys(reportData.value.six[i]).length !== 0) {
-//       filteredSix[i] = reportData.value.six[i];
-//     }
-
-//   }
-//   for (let i in filteredSix) {
-//     isErrorPanel.value.six[i] = {
-//       id: i,
-//       error: false,
-//     }
-//   }
-//   for (let i in reportData.value.ninth) {
-//     if (reportData.value.ninth[i].event_happened !== false && reportData.value.ninth[i].is_sent === false && Object.keys(reportData.value.ninth[i]).length !== 0) {
-//       filteredNinth[i] = reportData.value.ninth[i];
-//     }
-//   }
-//   for (let i in filteredNinth) {
-//     isErrorPanel.value.ninth[i] = {
-//       id: i,
-//       error: false,
-//     }
-//   }
-
-//   return {
-//     filteredSix,
-//     filteredNinth,
-//   };
-// };
-
 const filterPanelsData = () => {
   const filterPanel = (data, condition) => {
     return Object.entries(data).reduce((acc, [key, value]) => {
@@ -1436,13 +1402,13 @@ const filterPanelsData = () => {
     item.number_of_members > 0 &&
     item.number_of_members !== null &&
     !item.is_sent &&
-    Object.keys(item).length !== 0
+    Object.values(item).some(value => value !== null && value !== undefined)
   );
 
   const filteredNinth = filterPanel(reportData.value.ninth, item =>
     item.event_happened !== false &&
     !item.is_sent &&
-    Object.keys(item).length !== 0
+    Object.values(item).some(value => value !== null && value !== undefined)
   );
 
   return { filteredSix, filteredNinth };
@@ -1856,6 +1822,7 @@ const checkEmptyFields = (data) => {
     }
   }
   for (let item in filteredNinth) {
+    console.log('filteredNinth[item]', filteredNinth[item])
     if (!filteredNinth[item]?.links?.length) {
       isErrorPanel.value.ninth[item] = {
         id: item,

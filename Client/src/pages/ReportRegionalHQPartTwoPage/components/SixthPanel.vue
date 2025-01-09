@@ -82,6 +82,7 @@ const formData = async (reportData, reportNumber) => {
     // Проверка прав доступа  
     if (!props.districtHeadquarterCommander && !props.centralHeadquarterCommander) {
       if (!link_err.value) {
+      console.log('sss', isFirstSent.value)
         const action = isFirstSent.value ? handleSendReport : handleSendDraft;
         await action(reportData, reportNumber);
       }
@@ -152,19 +153,21 @@ const getPanelNumber = (number) => {
 }
 
 watchEffect(() => {
-  // Проверка прав доступа  
-  if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
-    const currentData = props.data[el_id.value];
+  const currentData = props.data[el_id.value] || {};
+  const isCommanderOrCentralCommander = props.districtHeadquarterCommander || props.centralHeadquarterCommander;
 
-    // Проверяем, существуют ли данные для текущего идентификатора  
-    if (currentData && Object.keys(currentData).length > 0) {
+  if (!isCommanderOrCentralCommander) {
+    const hasValidData = Object.values(currentData).some(value => value != null);
+    
+    if (hasValidData) {
       updateSixPanelData(currentData);
     } else {
       resetSixPanelData();
     }
   } else {
-    sixPanelData.value = { ...props.data[el_id.value] };
+    sixPanelData.value = { ...currentData };
   }
+
   disabled.value = (panel.value || panel.value === 0) ? true : false;  
 });
 </script>

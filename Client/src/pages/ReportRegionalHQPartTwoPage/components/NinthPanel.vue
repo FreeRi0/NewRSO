@@ -131,7 +131,7 @@ const getPanelNumber = (number) => {
 }
 
 const handleNonDistrictCommander = (currentData) => {  
-  if (currentData && Object.keys(currentData).length > 0) {  
+  if (Object.values(currentData).some(value => value !== null && value !== undefined)) {  
     processReportData(currentData);  
   } else {  
     resetPanelData();  
