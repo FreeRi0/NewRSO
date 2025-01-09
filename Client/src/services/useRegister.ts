@@ -1,6 +1,7 @@
 import { ref, computed, Ref } from 'vue';
-import { useRouter } from 'vue-router';
 import { HTTP } from '@app/http';
+import { useUserStore } from '@features/store/index';
+import { useRoleStore } from '@layouts/store/role';
 import { useMessage } from './useMessage'
 
 interface RegistrationForm {
@@ -24,7 +25,8 @@ interface Errors {
 }
 
 export function useRegistration() {
-  const router = useRouter();
+  const userStore = useUserStore();
+  const roleStore = useRoleStore();
   const form = ref<RegistrationForm>({
     region: null,
     last_name: '',
@@ -91,18 +93,30 @@ export function useRegistration() {
     return date instanceof Date ? date.toISOString().split('T')[0] : String(date);
   };
 
-  const registerUser = async () => {
+  const registerUser = async (): Promise<boolean> => {
     if (!validateForm()) {
       showMessage('Заполните поля в соответствии с указанным форматом', true);
-      return;
+      return false;
     }
     try {
       isLoading.value = true;
       validated.value = true;
       const formData = { ...form.value, date_of_birth: formatDateForBackend(form.value.date_of_birth) };
-      await HTTP.post('/register/', formData);
+      const response = await HTTP.post('/register/', formData);
+      localStorage.setItem('jwt_token', response.data.access);
+      localStorage.setItem('refresh_token', response.data.refresh);
+
+      await Promise.all([
+        userStore.getUser(),
+        userStore.getCountApp(),
+        roleStore.getRoles(),
+        roleStore.getExperts(),
+        roleStore.getMyPositions(),
+        roleStore.getUserParticipantsStatus('1')
+    ]);
+
       showMessage('Успешно!', false);
-      router.push('/');
+      return true;
     } catch (error: any) {
       errors.value = error.response?.data || {};
       const errorMessage = 'Ошибка регистрации: ' +
@@ -114,6 +128,7 @@ export function useRegistration() {
       if (errors.value) {
         showMessage(errorMessage, true);
       }
+      return false;
     } finally {
       isLoading.value = false;
     }

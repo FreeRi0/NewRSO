@@ -8,10 +8,10 @@
                 </regionsDropdown>
                 <Input placeholder="Фамилия" name="surname" height="40px" v-model:value.trim="form.last_name"
                     maxlength="25" pattern="[а-яА-ЯЁё\s]+" error-message="Введите не более 25 букв на кириллице" />
-                <ErrorMessage :error="isError.last_name" />
+                <ErrorMessage :error="errors.last_name" />
                 <Input placeholder="Имя" name="name" height="40px" v-model:value.trim="form.first_name" maxlength="20"
                     pattern="[а-яА-ЯЁё\s]+" error-message="Введите не более 20 букв на кириллице" />
-                <ErrorMessage :error="isError.first_name" />
+                <ErrorMessage :error="errors.first_name" />
                 <Input placeholder="Отчество (при наличии)" name="patronomyc" height="40px" maxlength="23"
                     pattern="[а-яА-ЯЁё\s]+" error-message="Введите не более 23 букв на кириллице"
                     v-model:value.trim="form.patronymic_name" />
@@ -23,33 +23,33 @@
                     pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+"
                     error-message="Введите адрес электронной почты в формате mail@example.com не более 256 символов на латинице"
                     v-model:value.trim="form.email" />
-                <ErrorMessage :error="isError.email" />
+                <ErrorMessage :error="errors.email" />
 
                 <DatePicker v-model="form.date_of_birth" placeholder="Дата рождения" name="date" />
-                <ErrorMessage :error="isError.date_of_birth" />
+                <ErrorMessage :error="errors.date_of_birth" />
                 <Input placeholder="Придумайте логин" name="login" height="40px" minlength="8" maxlength="20"
                     pattern="[a-zA-Z0-9.+-_@]+"
                     error-message="Введите от 8 до 20 символов на латинице, чисел и символы @ . + - _"
                     v-model:value.trim="form.username" />
-                <ErrorMessage :error="isError.username" />
+                <ErrorMessage :error="errors.username" />
 
                 <passwordInput class="mb-2" placeholder="Придумайте пароль" maxlength="20" minlength="8"
                     pattern="^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d.+-_@]{1,}$"
                     error-message="Введите от 8 до 20 символов на латинице, чисел и символы @ . + - _"
                     v-model:value="form.password" />
-                <ErrorMessage :error="isError.password" />
+                <ErrorMessage :error="errors.password" />
 
                 <passwordInput placeholder="Повторите пароль" maxlength="20" minlength="8" pattern="[a-zA-Z0-9.+-_@]+"
                     error-message="Введите от 8 до 20 символов на латинице, чисел и символы @ . + - _"
                     v-model:value="form.re_password" />
-                <!-- <p class="error" v-if="isError.re_password">
-                    {{ isError.re_password }}
+                <!-- <p class="error" v-if="errors.re_password">
+                    {{ errors.re_password }}
                 </p>
-                <p class="error" v-else-if="isError.non_field_errors">
+                <p class="error" v-else-if="errors.non_field_errors">
                     Пароли не совпадают
                 </p> -->
-                <ErrorMessage :error="isError.re_password" />
-                <ErrorMessage :error="isError.non_field_errors" />
+                <ErrorMessage :error="errors.re_password" />
+                <ErrorMessage :error="errors.non_field_errors" />
 
 
                 <div class="regCheck">
@@ -62,12 +62,6 @@
                         данных.
                     </div>
                 </div>
-
-                <!-- <Button label="Зарегистрироваться" :loaded="isLoading" :disabled="isLoading ||
-                    !form.personal_data_agreement ||
-                    !form.region
-                    " type="submit" color="primary">
-                </Button> -->
                 <Button label="Зарегистрироваться" :loaded="isLoading" :disabled="isButtonDisabled" type="submit"
                     color="primary" />
 
@@ -99,12 +93,12 @@ const { form,
 const router = useRouter();
 
 const isButtonDisabled = computed(() => {
-    return isLoading || !form.personal_data_agreement || !form.region;
+    return isLoading.value || !form.value.personal_data_agreement || !form.value.region;
 });
 
 const handleSubmit = async () => {
     if (await registerUser()) {
-        router.push({ name: 'Login' });
+        router.push({ name: 'mypage' });
     }
 };
 </script>
