@@ -208,6 +208,9 @@ const RegisterUser = async () => {
             form.value = response.data;
             // console.log(response.data);
             isLoading.value = false;
+            router.push({
+                name: 'mypage',
+            });
             swal.fire({
                 position: 'top-center',
                 icon: 'success',
@@ -215,7 +218,7 @@ const RegisterUser = async () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
-            router.push('/');
+            // router.push('/');
         } catch (error) {
             console.log('errr', error);
             isError.value = error.response.data;
