@@ -362,8 +362,6 @@
                             Проведение мероприятия
                             <sup class="valid-red">*</sup>
                         </p>
-
-
                         <!-- <div class="places_wrap" v-if="isRejected">
                             <div class="places_item" v-for="item in events" :key="item.id">
                                 <input :id="item.id" :value="item.value" :name="item.name" :disabled="isDataRHDisabled"
@@ -387,7 +385,6 @@
                             <label v-else-if="ninthPanelData.event_happened === false" class="places_item_label"
                                 :for="id">Нет</label>
                         </div> -->
-
                         <div class="places_wrap" :class="{ 'one_place': !isRejected }">
                             <template v-if="isRejected">
                                 <div v-for="item in events" :key="item.id" class="places_item">
@@ -410,11 +407,8 @@
                                 </label>
                             </template>
                         </div>
-
-
                     </div>
-                    <div class="report__fieldset report__fieldset--right-block"
-                        v-if="ninthPanelData.document !== null || ninthPanelData.document !== ''">
+                    <div class="report__fieldset report__fieldset--right-block" v-if="ninthPanelData.document !== null">
                         <label class="form__label report__label mb-2" for="scan_file">
                             Скан документа, подтверждающего проведение акции
                         </label>
@@ -506,6 +500,7 @@
                             <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
                         </div>
                     </div>
+
                     <div class="form__field places">
                         <p class="form__label">
                             Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
@@ -756,7 +751,7 @@ const isDataDHDDisabled = computed(() => {
     return props.isCentralHeadquarterCommander || !(props.isDistrictHeadquarterCommander || props.isCentralHeadquarterCommander)
 })
 const isDataRHDisabled = computed(() => {
-    return props.tab === 'Просмотр отправленного отчета' && (props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)
+    return props.tab === 'Просмотр отправленного отчета' || (props.isCentralHeadquarterCommander || props.isDistrictHeadquarterCommander)
 })
 
 // const seventhPanelData = ref({
@@ -1224,19 +1219,25 @@ watchEffect(() => {
         if (Object.keys(props.data).length > 0) {
             isFirstSentSix.value = false;
             sixPanelData.value = { ...props.data };
+            emit('error', isLinkError.value || false);
 
-            if (props.data?.rejecting_reasons !== null) {
+            if (props.tab == 'Доработка') {
+                isRejected.value = true;
                 updatePanelData(sixPanelDataDH, reportStore.reportDataDH.six, props.sixId);
                 updatePanelData(sixPanelDataCH, reportStore.reportDataCH.six, props.sixId);
             }
-
-            emit('error', isLinkError.value || false);
 
             if (!sixPanelData.value.links.length) {
                 sixPanelData.value.links.push({ link: '' });
             }
         } else {
             console.log('data not received');
+            isFirstSentSix.value = true;
+            sixPanelData.value = {
+                number_of_members: 0,
+                links: [{ link: '' }],
+                comment: '',
+            };
         }
     }
 
@@ -1387,7 +1388,6 @@ const createFormData = (panelData, reportData, fileData, returnReportCondition) 
     return formData;
 };
 
-// Watchers for DH and CH panels  
 watch(sixPanelDataDH.value, (newValue) => {
     if (props.isDistrictHeadquarterCommander) {
         reportStore.reportDataDH.six[props.sixId] = newValue;
@@ -1412,8 +1412,6 @@ watch(ninthPanelDataCH.value, () => {
     }
 });
 
-
-// Watchers for ninth panel data  
 watch(ninthPanelDataDH.value, (newValue) => {
     if (props.isDistrictHeadquarterCommander) {
         reportStore.reportDataDH.ninth[props.ninthId] = newValue;

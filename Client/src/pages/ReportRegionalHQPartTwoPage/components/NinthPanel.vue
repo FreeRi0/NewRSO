@@ -89,6 +89,7 @@ const submitReport = async (reportData, reportNumber, isDraft = false) => {
 const formData = async (reportData, reportNumber) => {  
   if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {  
     if (!link_err.value) {  
+      console.log('firstSent', isFirstSent.value)
       await submitReport(reportData, reportNumber, !isFirstSent.value);  
       isFirstSent.value = false; // Изменение состояния только после первой отправки  
     }  
@@ -143,7 +144,7 @@ const processReportData = (currentData) => {
   isFirstSent.value = false;  
   ninthPanelData.value = { ...currentData };  
   isSentNinth.value = currentData.is_sent;  
-  isFirstSent.value = reportStore.isReportReject.ninth[el_id.value] && !currentData.central_version;  
+  isFirstSent.value = reportStore.isReportReject.ninth[el_id.value] && !props.data[el_id.value].central_version;;  
 };  
 
 // Функция для сброса данных панели  

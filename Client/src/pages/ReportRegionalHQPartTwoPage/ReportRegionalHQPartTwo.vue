@@ -507,9 +507,9 @@ const getMultiplyData = async (reportId) => {
 
   const normalizeComment = (data) => {
     try {
-      if (typeof data.comment === 'string') {
+      if (typeof data?.comment === 'string') {
         try {
-          const commentObj = JSON.parse(data.comment);
+          const commentObj = JSON.parse(data?.comment);
           if (commentObj && typeof commentObj === 'object' && 'comment' in commentObj) {
             data.comment = commentObj.comment;
           }
@@ -1414,6 +1414,86 @@ const filterPanelsData = () => {
   return { filteredSix, filteredNinth };
 };
 
+const processReportSection = async (section, sectionNumber, defaultData) => {
+  const updatedItems = Object.entries(section).map(async ([key, item]) => {
+    if (!item.id) {
+      await reportPartTwoService.createMultipleReport(defaultData, sectionNumber, key);
+      item.event_happened = false;
+    }
+
+    if (sectionNumber === '6') {
+      if (item.number_of_members === 0 || item.number_of_members === null) {
+        item.event_happened = false;
+      }
+    } else if (sectionNumber === '9') {
+      if (item.event_happened === false || item.event_happened === null) {
+        item.event_happened = false;
+      }
+    }
+
+    return [key, item];
+  });
+
+  const processedItems = await Promise.all(updatedItems);
+  return Object.fromEntries(processedItems);
+};
+
+// const sendReportForItems = async (items, itemNumber, sendFunction, isDHReport = false) => {
+//   for (const [index, item] of Object.entries(items)) {
+//     const verificationCondition = isDHReport 
+//       ? item.verified_by_dhq !== true 
+//       : item.verified_by_chq === null && !item.is_sent;
+
+//     if (item && verificationCondition) {
+//       console.log(`Sending report for item ${itemNumber}-${index}:`, item);
+//       try {
+//         const isNinth = itemNumber === '9';
+//         const storeKey = isDHReport ? 'reportDataDH' : 'reportDataCH';
+
+//         let reportData;
+//         if (isDHReport) {
+//           if (itemNumber === '6' || itemNumber === '9') {
+//             reportData = reportStore.reportDataDH[itemNumber === '6' ? 'six' : 'ninth'][index];
+//           } else {
+//             reportData = reportStore.reportDataDH[itemNumber][index];
+//           }
+//         } else {
+//           if (itemNumber === '6' || itemNumber === '9') {
+//             reportData = reportStore.reportDataCH[itemNumber === '6' ? 'six' : 'ninth'][index];
+//           } else {
+//             reportData = reportDataCH.value[itemNumber][index];
+//           }
+//         }
+
+//         if (isNinth) {
+//           reportData.document = reportStore.reportDataDHFile[itemNumber][index];
+//         }
+
+//         const response = await sendFunction(
+//           reportData,
+//           itemNumber,
+//           index,
+//           route.query.reportId,
+//           isNinth,
+//           isDHReport ? undefined : reportStore.returnReport[itemNumber][index]
+//         );
+
+//         // Обновляем статус отправки после успешной отправки
+//         if (isDHReport) {
+//           reportStore.reportDataDH[itemNumber === '6' ? 'six' : itemNumber === '9' ? 'ninth' : itemNumber][index].verified_by_dhq = true;
+//         } else {
+//           reportStore.reportDataCH[itemNumber === '6' ? 'six' : itemNumber === '9' ? 'ninth' : itemNumber][index].verified_by_chq = true;
+//         }
+
+//         console.log(`Successfully sent report for item ${itemNumber}-${index}`);
+//       } catch (error) {
+//         console.error(`Error sending report for item ${itemNumber}-${index}:`, error);
+//       }
+//     } else {
+//       console.log(`Skipping item ${itemNumber}-${index} as it's already verified, sent, or doesn't exist`);
+//     }
+//   }
+// };
 const sendReport = async () => {
   if (!(districtExpert.value || centralExpert.value)) {
     blockSendButton.value = true;
@@ -1432,43 +1512,22 @@ const sendReport = async () => {
         if (!reportData.value.fifth.is_sent) {
           await reportPartTwoService.sendReport(reportData.value.fifth, '5');
         }
-        for (let item in reportData.value.six) {
-          if (!Object.keys(reportData.value.six[item]).length) {
-            await reportPartTwoService.createMultipleReport({
-              number_of_members: 0,
-              links: [],
-              comment: '',
-            }, '6', item)
-            reportData.value.six[item].event_happened = false;
-          }
-          if (reportData.value.six[item].number_of_members == 0 || reportData.value.six[item].number_of_members === null) {
-            reportData.value.six[item].event_happened = false;
-          }
-        }
+        const sixthSection = await processReportSection(reportData.value.six, '6', {
+          number_of_members: 0,
+          links: [],
+          comment: '',
+        });
+        await reportPartTwoService.sendReportWithSlash(sixthSection, '6');
 
-        await reportPartTwoService.sendReportWithSlash(reportData.value.six, '6');
-        // for (let item in filteredSeventh) {
-        //   if (filteredSeventh[item].is_sent === false) {
-        //     await reportPartTwoService.sendReportWithSlash(filteredSeventh, '7');
-        //   }
-        // }
-        for (let item in reportData.value.ninth) {
-          if (!Object.keys(reportData.value.ninth[item]).length) {
-            await reportPartTwoService.createMultipleReport({
-              event_happened: false,
-              links: [],
-              document: '',
-              file_size: null,
-              file_type: '',
-              comment: '',
-            }, '9', item)
-            reportData.value.ninth[item].event_happened = false;
-          }
-          if (reportData.value.ninth[item].event_happened == false || reportData.value.ninth[item].event_happened === null) {
-            reportData.value.ninth[item].event_happened = false;
-          }
-        }
-        await reportPartTwoService.sendReportWithSlash(reportData.value.ninth, '9');
+        const ninthSection = await processReportSection(reportData.value.ninth, '9', {
+          event_happened: false,
+          links: [],
+          document: '',
+          file_size: null,
+          file_type: '',
+          comment: '',
+        });
+        await reportPartTwoService.sendReportWithSlash(ninthSection, '9');
         if (!reportData.value.tenth.first.is_sent) {
           await reportPartTwoService.sendMultipleReport(reportData.value.tenth.first, '10', '1');
         }
@@ -1520,7 +1579,7 @@ const sendReport = async () => {
     }
   }
 
-  if (districtExpert.value && checkEmptyFieldsDH(reportStore.reportDataDH, isErrorPanel)) {
+  if (districtExpert.value) {
     blockSendButton.value = true;
     preloader.value = true;
     try {
@@ -1536,6 +1595,9 @@ const sendReport = async () => {
       if (!reportData.value.fifth.verified_by_dhq) {
         await reportPartTwoService.sendReportDH(reportDataDH.value.fifth, '5', route.query.reportId, true)
       }
+
+      // await sendReportForItems(reportData.value.six, '6', reportPartTwoService.sendReportDHMultiply, true);
+      // await sendReportForItems(reportData.value.ninth, '9', reportPartTwoService.sendReportDHMultiply, true);
 
       for (const [index, item] of Object.entries(reportData.value.six)) {
         if (item && item.verified_by_dhq !== true) {
@@ -1634,6 +1696,9 @@ const reportConfirmation = async (value) => {
       if (reportStore.reportForCheckCH.fifth.verified_by_chq === null) {
         await reportPartTwoService.sendReportCH(reportDataCH.value.fifth, '5', route.query.reportId, true, reportStore.returnReport.fifth);
       }
+
+      // await sendReportForItems(reportStore.reportForCheckCH.six, '6', reportPartTwoService.sendMultipleReportCH);
+      // await sendReportForItems(reportStore.reportForCheckCH.ninth, '9', reportPartTwoService.sendMultipleReportCH);
       for (const [index, item] of Object.entries(reportStore.reportForCheckCH.six)) {
         if (item && item.verified_by_chq === null) {
           console.log(`Sending report for item 6-${index}:`, item);

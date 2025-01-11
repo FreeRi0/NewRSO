@@ -82,7 +82,7 @@ const formData = async (reportData, reportNumber) => {
     // Проверка прав доступа  
     if (!props.districtHeadquarterCommander && !props.centralHeadquarterCommander) {
       if (!link_err.value) {
-      console.log('sss', isFirstSent.value)
+      console.log('firstSent', isFirstSent.value)
         const action = isFirstSent.value ? handleSendReport : handleSendDraft;
         await action(reportData, reportNumber);
       }
@@ -131,7 +131,7 @@ const updateSixPanelData = (data) => {
   isFirstSent.value = false;
   sixPanelData.value = { ...data };
   isSentSix.value = data.is_sent;
-
+console.log('sixPanelData', reportStore.isReportReject.six[el_id.value], data)
   isFirstSent.value = reportStore.isReportReject.six[el_id.value] && !data.central_version;
 
   // Проверка количества участников  
@@ -158,6 +158,7 @@ watchEffect(() => {
 
   if (!isCommanderOrCentralCommander) {
     const hasValidData = Object.values(currentData).some(value => value != null);
+    console.log('hasValidData', hasValidData)
     
     if (hasValidData) {
       updateSixPanelData(currentData);
