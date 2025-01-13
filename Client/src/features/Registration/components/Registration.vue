@@ -95,8 +95,12 @@ import { Input, passwordInput } from '@shared/components/inputs';
 import { HTTP } from '@app/http';
 import { useRouter } from 'vue-router';
 import { Select, regionsDropdown } from '@shared/components/selects';
+import { useUserStore } from '@features/store/index';
+import { useRoleStore } from '@layouts/store/role';
 
 const validated = ref(false);
+const userStore = useUserStore();
+const roleStore = useRoleStore();
 const form = ref({
     region: null,
     last_name: '',
@@ -115,6 +119,7 @@ const isLoading = ref(false);
 const isError = ref([]);
 const router = useRouter();
 const swal = inject('$swal');
+const competition_pk = 1;
 
 //
 const formatDateForBackend = (date) => {
@@ -206,11 +211,21 @@ const RegisterUser = async () => {
             //
             const response = await HTTP.post('/register/', form.value);
             form.value = response.data;
+            localStorage.setItem('jwt_token', response.data.access);
+            localStorage.setItem('refresh_token', response.data.refresh);
             // console.log(response.data);
             isLoading.value = false;
             router.push({
                 name: 'mypage',
             });
+            userStore.getUser();
+            userStore.getCountApp();
+            roleStore.getRoles();
+            roleStore.getExperts();
+            roleStore.getMyPositions();
+            roleStore.getExperts();
+            roleStore.getUserParticipantsStatus(competition_pk);
+
             swal.fire({
                 position: 'top-center',
                 icon: 'success',
