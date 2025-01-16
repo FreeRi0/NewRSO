@@ -1,156 +1,55 @@
 <template>
     <div class="d-flex justify-end align-self-center">
         <div class="Login">
-
-            <form action="#" class="Login_form" method="post" @submit.prevent="Click">
+            <form class="Login_form" @submit.prevent="handleSubmit">
                 <h2 class="Login_title">Вход в личный кабинет</h2>
-                <Input placeholder="Логин" name="login" height="40px" v-model:value="data.username"
+                <Input placeholder="Логин" name="login"  height="40px" v-model:value="formData.username"
                     class="username-input mb-3 Login_input" />
+                <ErrorMessage :error="errors.username" />
 
-                <p class="error" v-if="isError.username">
-                    {{ '' + isError.username }}
+                <passwordInput placeholder="Пароль" v-model:value="formData.password" />
+                <p class="text-right mt-3 mb-8">
+                    <router-link to="/recovery-pass">Забыли пароль?</router-link>
                 </p>
+                <ErrorMessage :error="errors.password" />
+                <ErrorMessage :error="errors.non_field_errors" />
 
-                <passwordInput placeholder="Пароль" v-model:value="data.password" />
-                <p class="text-right mt-3 mb-8"><router-link to="/recovery-pass">Забыли пароль?</router-link>
-                </p>
-
-                <p class="error" v-if="isError.password">
-                    {{ '' + isError.password }}
-                </p>
-
-                <p class="error" v-if="isError.non_field_errors">
-                    {{ '' + isError.non_field_errors }}
-                </p>
-
-
-                <Button class="Login_btn" type="submit" @click="LoginUser" label="Войти" :loaded="isLoading"
-                    :disabled="isLoading" color="primary"></Button>
+                <Button class="Login_btn" type="submit" label="Войти" :loaded="isLoading" :disabled="isLoading"
+                    color="primary" />
                 <p class="text-center Login_and">или</p>
                 <div id="VkIdSdkOAuthList"></div>
-                <div class="text-center goReg">У вас нет аккаунта?
+                <p class="text-center goReg">
+                    У вас нет аккаунта?
                     <router-link class="Login_link ml-1" to="/Register">Зарегистрироваться</router-link>
-                </div>
+                </p>
             </form>
         </div>
     </div>
 </template>
 
-<script setup scoped>
-import { ref, inject, onMounted } from 'vue';
+<script  setup>
+import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { Button } from '@shared/components/buttons';
 import { Input, passwordInput } from '@shared/components/inputs';
-import { HTTP } from '@app/http';
-import { useRouter } from 'vue-router';
-import { useUserStore } from '@features/store/index';
-import { useRoleStore } from '@layouts/store/role';
-import * as VKID from '@vkid/sdk';
-import { storeToRefs } from 'pinia';
+import { useAuth } from '@services/useAuth';
+import { useVkAuth } from '@services/useVkAuth';
+import {ErrorMessage} from '@shared/components/inputs';
 
 const router = useRouter();
-const userStore = useUserStore();
-const roleStore = useRoleStore();
-const user = storeToRefs(userStore);
-const data = ref({
-    username: '',
-    password: '',
-});
+const { loginUser, formData, errors, isLoading } = useAuth();
+const { initVkAuth } = useVkAuth();
 
-// let textVk = document.querySelector('.VkIdSdk_oauth_link_text');
-// textVk.textContent = 'войдите через Вк'
-
-const isError = ref([]);
-const isLoading = ref(false);
-const swal = inject('$swal');
-const competition_pk = 1;
-
-const CLIENT_ID = 51915086
-const REDIRECT_URL = 'https://xn--j1ab.xn--d1amqcgedd.xn--p1ai/my-page/'
-
-// const oneTap = new VKID.OneTap();
-const oauthList = new VKID.OAuthList();
-
-
-// VKID.Config.set({
-//     app: APP_ID, // Идентификатор приложения.
-//     redirectUrl: REDIRECT_URL, // Адрес для перехода после авторизации.
-//     state: 'dj29fnsadjsd82...' // Произвольная строка состояния приложения.
-// });
-VKID.Config.set({
-    app: CLIENT_ID, // Идентификатор приложения.
-    redirectUrl: REDIRECT_URL, // Адрес для перехода после авторизации.
-    state: 'dj29fnsadjsd82', // Произвольная строка состояния приложения.
-    codeVerifier: 'FGH767Gd65', // Верификатор в виде случайной строки. Обеспечивает защиту передаваемых данных.
-    scope: 'email phone' // Список прав доступа, которые нужны приложению.
-});
-
-
-const Click = () => {
-    // console.log("Click");
-}
-
-const LoginUser = async () => {
-    try {
-        isLoading.value = true;
-        const response = await HTTP.post('/jwt/create/', data.value);
-        data.value = response.data;
-        // console.log(response.data);
-        localStorage.setItem('jwt_token', response.data.access);
-        localStorage.setItem('refresh_token', response.data.refresh);
-        isLoading.value = false;
-        router.push({
-            name: 'mypage',
-        });
-        userStore.getUser();
-        userStore.getCountApp();
-        roleStore.getRoles();
-        roleStore.getExperts();
-        roleStore.getMyPositions();
-        roleStore.getExperts();
-        roleStore.getUserParticipantsStatus(competition_pk);
-
-
-        swal.fire({
-            position: 'top-center',
-            icon: 'success',
-            title: 'успешно',
-            showConfirmButton: false,
-            timer: 1500,
-        });
-    } catch (error) {
-        console.log('errr', error);
-        isError.value = error.response.data;
-        console.error('There was an error!', error);
-        isLoading.value = false;
-        if (isError.value) {
-            swal.fire({
-                position: 'center',
-                icon: 'error',
-                title: `ошибка`,
-                showConfirmButton: false,
-                timer: 2500,
-            });
-        }
+const handleSubmit = async () => {
+    if (await loginUser()) {
+        router.push({ name: 'mypage' });
     }
 };
 
 onMounted(() => {
-    // const container = document.getElementById('VkIdSdkOneTap');
-    const container = document.getElementById('VkIdSdkOAuthList');
-    const oauthListNames = [
-        VKID.OAuthName.VK,
-        VKID.OAuthName.MAIL,
-        VKID.OAuthName.OK,
-    ];
-    if (container) {
-        oauthList.render({ container: container, oauthList: oauthListNames, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS, styles: { height: 44, borderRadius: 8 } })
-            .on(VKID.WidgetEvents.ERROR);
-        // oneTap.render({ container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS });
-    }
-})
-
+    initVkAuth();
+});
 </script>
-
 
 <style lang="scss" scoped>
 .justify-end {
