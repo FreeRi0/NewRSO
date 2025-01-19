@@ -163,7 +163,7 @@
                                 type="radio" @focusout="focusOut" v-model="ninthPanelData.event_happened" />
                             <label class="places_item_label" :for="id">{{
                                 item.name
-                            }}</label>
+                                }}</label>
                         </div>
                     </div>
                 </div>
@@ -663,7 +663,7 @@
                                     v-model="ninthPanelDataCH.event_happened" />
                                 <label class="places_item_label" :for="id">{{
                                     item.name
-                                }}</label>
+                                    }}</label>
                             </div>
                         </div>
                     </div>
@@ -1188,11 +1188,27 @@ watchEffect(() => {
 
         if (reportStore.reportReject.six[props.sixId] && reportStore.isReportReject.six[props.sixId]) {
             reportStore.returnReport.six[props.sixId] = true;
+            console.log('Отклонение 6-го показателя:', reportStore.reportForCheckCH.six[props.sixId]);
+            if (reportStore.reportForCheckCH.six[props.sixId]?.rejecting_reasons) {
+                // Обработка отклонения для 6-го показателя
+                processSixthPanelRejection(reportStore.reportForCheckCH.six[props.sixId]);
+            }
         }
 
         emitPanelInfo();
     }
 
+    function processSixthPanelRejection(chData) {
+        console.log('Обработка отклонения 6-го показателя:', chData);
+        if (chData.rejecting_reasons) {
+            if (chData.rejecting_reasons.comment) {
+                sixPanelData.value.comment = chData.rejecting_reasons.comment;
+            }
+            // Обработка других полей, если они есть в rejecting_reasons
+        }
+        // Обновление других данных панели, если необходимо
+        sixPanelDataCH.value = chData.central_version || sixPanelDataCH.value;
+    }
     function handlePanelNine() {
         if (isCommander) {
             updateNinthPanelData();
@@ -1287,10 +1303,16 @@ watchEffect(() => {
     function processCentralFile() {
         const chData = reportStore.reportForCheckCH.ninth[props.ninthId];
         if (chData.verified_by_chq === true) {
+            // Если показатель верифицирован, не отображаем его в табе "Доработка"
+            reportStore.returnReport.ninth[props.ninthId] = false;
             processFile(fileCH, reportStore.reportForCheckCH.ninth, props.ninthId, true);
         } else if (chData.rejecting_reasons && !reportStore.reportDataCHFile.ninth[props.ninthId]) {
+            // Если показатель не верифицирован и есть причины отклонения, отображаем его в табе "Доработка"
+            reportStore.returnReport.ninth[props.ninthId] = true;
             processFile(fileCH, chData.central_version, props.ninthId, true, true);
         } else {
+            // В остальных случаях не отображаем показатель в табе "Доработка"
+            reportStore.returnReport.ninth[props.ninthId] = false;
             processFile(fileCH, reportStore.reportDataCHFile.ninth, props.ninthId);
         }
     }

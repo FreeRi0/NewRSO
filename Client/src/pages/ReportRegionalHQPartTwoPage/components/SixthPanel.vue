@@ -131,7 +131,7 @@ const updateSixPanelData = (data) => {
   isFirstSent.value = false;
   sixPanelData.value = { ...data };
   isSentSix.value = data.is_sent;
-console.log('sixPanelData', reportStore.isReportReject.six[el_id.value], data)
+console.log('sixPanelData', reportStore.isReportReject.six[el_id.value] && !data.central_version)
   isFirstSent.value = reportStore.isReportReject.six[el_id.value] && !data.central_version;
 
   // Проверка количества участников  

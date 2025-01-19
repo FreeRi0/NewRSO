@@ -144,7 +144,8 @@ const processReportData = (currentData) => {
   isFirstSent.value = false;  
   ninthPanelData.value = { ...currentData };  
   isSentNinth.value = currentData.is_sent;  
-  isFirstSent.value = reportStore.isReportReject.ninth[el_id.value] && !props.data[el_id.value].central_version;;  
+  console.log('ninthPanelData', reportStore.isReportReject.ninth[el_id.value] && !props.data[el_id.value].central_version)
+  isFirstSent.value = reportStore.isReportReject.ninth[el_id.value] && !props.data[el_id.value].central_version; 
 };  
 
 // Функция для сброса данных панели  

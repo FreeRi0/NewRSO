@@ -643,7 +643,7 @@ const getMultiplyData = async (reportId) => {
       revisionPanels.value.push(`${panelId}-${resultId}`);
 
       const panelKey = panelId === '6' ? 'six' : 'ninth';
-      reportStore.isReportReject[panelKey][resultId] = isTabsForRevision.value;
+      reportStore.isReportReject[panelKey][resultId] = true;
     };
 
     if (data?.rejecting_reasons && data?.verified_by_chq !== true) {
@@ -1438,62 +1438,6 @@ const processReportSection = async (section, sectionNumber, defaultData) => {
   return Object.fromEntries(processedItems);
 };
 
-// const sendReportForItems = async (items, itemNumber, sendFunction, isDHReport = false) => {
-//   for (const [index, item] of Object.entries(items)) {
-//     const verificationCondition = isDHReport 
-//       ? item.verified_by_dhq !== true 
-//       : item.verified_by_chq === null && !item.is_sent;
-
-//     if (item && verificationCondition) {
-//       console.log(`Sending report for item ${itemNumber}-${index}:`, item);
-//       try {
-//         const isNinth = itemNumber === '9';
-//         const storeKey = isDHReport ? 'reportDataDH' : 'reportDataCH';
-
-//         let reportData;
-//         if (isDHReport) {
-//           if (itemNumber === '6' || itemNumber === '9') {
-//             reportData = reportStore.reportDataDH[itemNumber === '6' ? 'six' : 'ninth'][index];
-//           } else {
-//             reportData = reportStore.reportDataDH[itemNumber][index];
-//           }
-//         } else {
-//           if (itemNumber === '6' || itemNumber === '9') {
-//             reportData = reportStore.reportDataCH[itemNumber === '6' ? 'six' : 'ninth'][index];
-//           } else {
-//             reportData = reportDataCH.value[itemNumber][index];
-//           }
-//         }
-
-//         if (isNinth) {
-//           reportData.document = reportStore.reportDataDHFile[itemNumber][index];
-//         }
-
-//         const response = await sendFunction(
-//           reportData,
-//           itemNumber,
-//           index,
-//           route.query.reportId,
-//           isNinth,
-//           isDHReport ? undefined : reportStore.returnReport[itemNumber][index]
-//         );
-
-//         // Обновляем статус отправки после успешной отправки
-//         if (isDHReport) {
-//           reportStore.reportDataDH[itemNumber === '6' ? 'six' : itemNumber === '9' ? 'ninth' : itemNumber][index].verified_by_dhq = true;
-//         } else {
-//           reportStore.reportDataCH[itemNumber === '6' ? 'six' : itemNumber === '9' ? 'ninth' : itemNumber][index].verified_by_chq = true;
-//         }
-
-//         console.log(`Successfully sent report for item ${itemNumber}-${index}`);
-//       } catch (error) {
-//         console.error(`Error sending report for item ${itemNumber}-${index}:`, error);
-//       }
-//     } else {
-//       console.log(`Skipping item ${itemNumber}-${index} as it's already verified, sent, or doesn't exist`);
-//     }
-//   }
-// };
 const sendReport = async () => {
   if (!(districtExpert.value || centralExpert.value)) {
     blockSendButton.value = true;
@@ -1596,9 +1540,6 @@ const sendReport = async () => {
         await reportPartTwoService.sendReportDH(reportDataDH.value.fifth, '5', route.query.reportId, true)
       }
 
-      // await sendReportForItems(reportData.value.six, '6', reportPartTwoService.sendReportDHMultiply, true);
-      // await sendReportForItems(reportData.value.ninth, '9', reportPartTwoService.sendReportDHMultiply, true);
-
       for (const [index, item] of Object.entries(reportData.value.six)) {
         if (item && item.verified_by_dhq !== true) {
           console.log(`Sending report for item 6-${index}:`, item);
@@ -1685,20 +1626,18 @@ const reportConfirmation = async (value) => {
     preloader.value = true;
 
     try {
-      if (reportStore.reportForCheckCH.first.verified_by_chq === null) {
-        await reportPartTwoService.sendReportCH(reportDataCH.value.first, '1', route.query.reportId, true, reportStore.returnReport.first);
-      }
+      // if (reportStore.reportForCheckCH.first.verified_by_chq === null) {
+      //   await reportPartTwoService.sendReportCH(reportDataCH.value.first, '1', route.query.reportId, true, reportStore.returnReport.first);
+      // }
 
-      if (reportStore.reportForCheckCH.fourth.verified_by_chq === null) {
-        await reportPartTwoService.sendReportCH(reportDataCH.value.fourth, '4', route.query.reportId, true, reportStore.returnReport.fourth);
-      }
+      // if (reportStore.reportForCheckCH.fourth.verified_by_chq === null) {
+      //   await reportPartTwoService.sendReportCH(reportDataCH.value.fourth, '4', route.query.reportId, true, reportStore.returnReport.fourth);
+      // }
 
-      if (reportStore.reportForCheckCH.fifth.verified_by_chq === null) {
-        await reportPartTwoService.sendReportCH(reportDataCH.value.fifth, '5', route.query.reportId, true, reportStore.returnReport.fifth);
-      }
+      // if (reportStore.reportForCheckCH.fifth.verified_by_chq === null) {
+      //   await reportPartTwoService.sendReportCH(reportDataCH.value.fifth, '5', route.query.reportId, true, reportStore.returnReport.fifth);
+      // }
 
-      // await sendReportForItems(reportStore.reportForCheckCH.six, '6', reportPartTwoService.sendMultipleReportCH);
-      // await sendReportForItems(reportStore.reportForCheckCH.ninth, '9', reportPartTwoService.sendMultipleReportCH);
       for (const [index, item] of Object.entries(reportStore.reportForCheckCH.six)) {
         if (item && item.verified_by_chq === null) {
           console.log(`Sending report for item 6-${index}:`, item);
@@ -1713,45 +1652,45 @@ const reportConfirmation = async (value) => {
           console.log(`Skipping item 6-${index} as it's already verified or doesn't exist`);
         }
       }
-      for (const [index, item] of Object.entries(reportStore.reportForCheckCH.ninth)) {
-        console.log('43', reportStore.reportForCheckCH.ninth[index], reportStore.reportForCheckCH.ninth[item])
-        if (item && item.verified_by_chq === null) {
-          console.log(`Sending report for item 9-${index}:`, item);
-          // reportStore.reportDataDH.ninth[index].document = reportStore.reportDataDHFile.ninth[index]
-          try {
-            console.log('data 9', reportDataCH.value.ninth[index], reportStore.returnReport.ninth[index])
-            const response = await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.ninth[index], '9', index, route.query.reportId, true, reportStore.returnReport.ninth[index]);
-            console.log(`Successfully sent report for item 9-${index}`);
-          } catch (error) {
-            console.error(`Error sending report for item 9-${index}:`, error);
-          }
-        } else {
-          console.log(`Skipping item 9-${index} as it's already verified or doesn't exist`);
-        }
-      }
-      if (reportStore.reportForCheckCH.tenth.first.verified_by_chq === null) {
-        await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.tenth.first, '10', '1', route.query.reportId, true, reportStore.returnReport.tenth.first);
-      }
+      // for (const [index, item] of Object.entries(reportStore.reportForCheckCH.ninth)) {
+      //   console.log('43', reportStore.reportForCheckCH.ninth[index], reportStore.reportForCheckCH.ninth[item])
+      //   if (item && item.verified_by_chq === null) {
+      //     console.log(`Sending report for item 9-${index}:`, item);
+      //     // reportStore.reportDataDH.ninth[index].document = reportStore.reportDataDHFile.ninth[index]
+      //     try {
+      //       console.log('data 9', reportDataCH.value.ninth[index], reportStore.returnReport.ninth[index])
+      //       const response = await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.ninth[index], '9', index, route.query.reportId, true, reportStore.returnReport.ninth[index]);
+      //       console.log(`Successfully sent report for item 9-${index}`);
+      //     } catch (error) {
+      //       console.error(`Error sending report for item 9-${index}:`, error);
+      //     }
+      //   } else {
+      //     console.log(`Skipping item 9-${index} as it's already verified or doesn't exist`);
+      //   }
+      // }
+      // if (reportStore.reportForCheckCH.tenth.first.verified_by_chq === null) {
+      //   await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.tenth.first, '10', '1', route.query.reportId, true, reportStore.returnReport.tenth.first);
+      // }
 
-      if (reportStore.reportForCheckCH.tenth.second.verified_by_chq === null) {
-        await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.tenth.second, '10', '2', route.query.reportId, true, reportStore.returnReport.tenth.second);
-      }
+      // if (reportStore.reportForCheckCH.tenth.second.verified_by_chq === null) {
+      //   await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.tenth.second, '10', '2', route.query.reportId, true, reportStore.returnReport.tenth.second);
+      // }
 
-      if (reportStore.reportForCheckCH.eleventh.verified_by_chq === null) {
-        await reportPartTwoService.sendReportCH(reportDataCH.value.eleventh, '11', route.query.reportId, true, reportStore.returnReport.eleventh);
-      }
+      // if (reportStore.reportForCheckCH.eleventh.verified_by_chq === null) {
+      //   await reportPartTwoService.sendReportCH(reportDataCH.value.eleventh, '11', route.query.reportId, true, reportStore.returnReport.eleventh);
+      // }
 
-      if (reportStore.reportForCheckCH.twelfth.verified_by_chq === null) {
-        await reportPartTwoService.sendReportCH(reportDataCH.value.twelfth, '12', route.query.reportId, true, reportStore.returnReport.twelfth);
-      }
+      // if (reportStore.reportForCheckCH.twelfth.verified_by_chq === null) {
+      //   await reportPartTwoService.sendReportCH(reportDataCH.value.twelfth, '12', route.query.reportId, true, reportStore.returnReport.twelfth);
+      // }
 
-      if (reportStore.reportForCheckCH.thirteenth.verified_by_chq === null) {
-        await reportPartTwoService.sendReportCH(reportDataCH.value.thirteenth, '13', route.query.reportId, true, reportStore.returnReport.thirteenth);
-      }
+      // if (reportStore.reportForCheckCH.thirteenth.verified_by_chq === null) {
+      //   await reportPartTwoService.sendReportCH(reportDataCH.value.thirteenth, '13', route.query.reportId, true, reportStore.returnReport.thirteenth);
+      // }
 
-      if (reportStore.reportForCheckCH.sixteenth.verified_by_chq === null) {
-        await reportPartTwoService.sendReportCH(reportDataCH.value.sixteenth, '16', route.query.reportId, true, reportStore.returnReport.sixteenth);
-      }
+      // if (reportStore.reportForCheckCH.sixteenth.verified_by_chq === null) {
+      //   await reportPartTwoService.sendReportCH(reportDataCH.value.sixteenth, '16', route.query.reportId, true, reportStore.returnReport.sixteenth);
+      // }
 
       swal.fire({
         position: 'center',
