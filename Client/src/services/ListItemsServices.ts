@@ -29,6 +29,24 @@ export const ListPropsSquads = (
         horizontal: !verticalRef.value,
     }));
 };
+export const ListPropsMembers = (
+    itemsRef: Ref<any[]>, // Замените Item на фактический тип ваших данных  
+    isLoadingRef: Ref<boolean>,
+    verticalRef: Ref<boolean>,
+    isVerifiedRef: Ref<boolean>,
+    verifiedMembers: Ref<any[]>
+) => {
+    return computed(() => ({
+        participants: itemsRef.value,
+        isLoading: isLoadingRef.value,
+        horizontal: !verticalRef.value,
+        isVerified: isVerifiedRef.value,
+        verifiedMembers: verifiedMembers.value,
+      
+      
+
+    }));
+};
 
 export const ListPropsHeadquarters = (
     itemsRef: Ref<any[]>, // Замените Item на фактический тип ваших данных  

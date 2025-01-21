@@ -1,27 +1,21 @@
 <template>
     <section class="squad-participants">
         <section class="squad-tabs">
-            <!--  Контейнер c вкладками   -->
             <nav class="squad__navigation">
                 <h3 class="squad-participants__title">Участники</h3>
                 <div class="d-flex">
-                    <Button type="button" label="Уже в отряде" class="memberBtn mr-2"
-                        :class="{ active: picked === true }" @click="picked = true"></Button>
-
-                    <Button type="button" label="Ожидают одобрение" class="memberBtn"
-                        :class="{ active: picked === false }" @click="picked = false"></Button>
+                    <Button v-for="tab in tabs" :key="tab.value" type="button" :label="tab.label" class="memberBtn"
+                        :class="{ active: activeTab === tab.value, 'mr-2': tab.value === 'members' }"
+                        @click="setActiveTab(tab.value)" />
                 </div>
             </nav>
             <div class="squad__wrapper">
-                <div class="squad__wrapper-container">
-                    <ParticipantsList v-if="picked === true" :participants="member.slice(0, 6)" />
-                    <VerifiedList v-else="picked === false" :verified="isVerified.slice(0, 6)"></VerifiedList>
+                <div :class="{ 'squad__wrapper-container': hasParticipants }">
+                    <component :is="activeTabComponent" :participants="activeTabData" :verifiedMembers="activeTabData"
+                        :isVerified="isVerified" />
                 </div>
-                <div v-if="props.member.length > 3 || isVerified.length > 6">
-                    <router-link :to="{
-                        name: 'allparticipants',
-                        params: { id: squad.id },
-                    }">
+                <div v-if="showAllLink">
+                    <router-link :to="allParticipantsRoute">
                         <div class="squad__wrapper-route">
                             Показать всех
                         </div>
@@ -32,76 +26,67 @@
     </section>
 </template>
 
-<script setup>
-import { Button } from '@shared/components/buttons';
-import { ref, onMounted, watch } from 'vue';
-import { HTTP } from '@app/http';
+<script setup lang="ts">
+import { ref, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import {
-    ParticipantsList,
-    VerifiedList,
-} from '@features/Participants/components';
+import { Button } from '@shared/components/buttons';
+import { ParticipantsList } from '@features/Participants/components';
+import useSquadParticipants from '@shared/composables/useSquadParticipants';
 
-const isVerified = ref([]);
 const route = useRoute();
-const picked = ref(true);
-let id = route.params.id;
+const squadId = computed(() => route.params.id as string);
+const { squad, members, verifiedMembers, fetchVerifiedMembers } = useSquadParticipants(squadId);
 
-const props = defineProps({
-    member: {
-        type: Array,
-    },
-    isVerified: {
-        type: Array,
-    },
-    squad: {
-        type: Object,
-        required: true,
-    },
-});
+const MAX_DISPLAYED_MEMBERS = 6;
 
-const getVerified = async (id) => {
-    try {
-        const verified = await HTTP.get(`/detachments/${id}/applications/`,);
-        isVerified.value = verified.data;
-    } catch (error) {
-        console.log('an error occured ' + error);
-    }
+type TabValue = 'members' | 'verified';
+
+const tabs = [
+    { label: 'Уже в отряде', value: 'members' as TabValue },
+    { label: 'Ожидают одобрение', value: 'verified' as TabValue },
+];
+
+const activeTab = ref<TabValue>('members');
+
+const setActiveTab = (value: TabValue) => {
+    activeTab.value = value;
 };
 
+const hasParticipants = computed(() => {
+    return activeTab.value === 'members' 
+        ? members.value.length > 0 
+        : verifiedMembers.value.length > 0;
+});
+const isVerified = computed(() => activeTab.value !== 'members');
 
+const activeTabComponent = computed(() => ParticipantsList);
 
-watch(
-    () => route.params.id,
-
-    async (newId) => {
-        if (!newId || route.name !== 'lso') return;
-        await getVerified(newId);
-    },
-    {
-        immediate: true,
-    },
+const activeTabData = computed(() =>
+    (activeTab.value === 'members' ? members.value : verifiedMembers.value).slice(0, MAX_DISPLAYED_MEMBERS)
 );
+ 
+const showAllLink = computed(() => {
+    if (activeTab.value === 'members') {
+        return members.value.length > MAX_DISPLAYED_MEMBERS;
+    } else {
+        return verifiedMembers.value.length > MAX_DISPLAYED_MEMBERS;
+    }
+});
 
+const allParticipantsRoute = computed(() => ({
+    name: 'allparticipants',
+    params: { id: squad.value?.id },
+}));
+
+watch(squadId, async (newId) => {
+    if (newId && route.name === 'lso') {
+        await fetchVerifiedMembers(newId);
+    }
+}, { immediate: true });
 </script>
 
 <style scoped lang="scss">
 /* Табы */
-.notFound {
-    font-size: 18px;
-    font-family: 'Akrobat';
-
-    @media screen and (max-width: 768px) {
-        font-size: 16px;
-    }
-
-    @media screen and (max-width: 575px) {
-        font-size: 14px;
-        text-align: center;
-    }
-
-}
-
 .squad__navigation {
     display: flex;
     justify-content: space-between;
@@ -184,9 +169,10 @@ watch(
         font-size: 14px;
         font-family: 'Akrobat';
     }
+
     @media screen and (min-width: 320px) and (max-width:480px) {
-    text-wrap: nowrap;
-  }
+        text-wrap: nowrap;
+    }
 }
 
 .active {
