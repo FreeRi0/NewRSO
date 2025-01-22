@@ -78,13 +78,14 @@ const clickOnButton = () => {
     display: block;
     margin: 20px auto;
     padding: 12px 32px;
-    // height: 52px;
     color: white;
     box-shadow: none;
     border-radius: 10px;
     border: none;
     cursor: pointer;
     font-size: 16px;
+    font-weight: 600;
+    font-family: Bert Sans;
     transition: 0.2s;
     text-transform: none;
     @media screen and (min-width: 320px) and (max-width: 480px) {
@@ -109,16 +110,6 @@ const clickOnButton = () => {
     &_info {
         background: var(--info);
         border: 1px solid var(--info);
-    }
-
-    &_warning {
-        background: var(--warning);
-        border: 1px solid var(--warning);
-    }
-
-    &_danger {
-        background: var(--danger);
-        border: 1px solid var(--danger);
     }
 
     &:disabled {

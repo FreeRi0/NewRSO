@@ -1,5 +1,5 @@
 <template>
-    <v-autocomplete v-model="selected" :items="items" chips clearable v-model:search.trim="name" variant="outlined"
+    <v-autocomplete  height="40px"  v-model="selected" :items="items" chips clearable v-model:search.trim="name" variant="outlined"
         :item-title="itemTitle" :item-value="itemValue" v-bind="$attrs" @keyup="searchRegion"
         @update:value="changeValue" :address="address" v-if="props.valueChange === false" :no-data-text="noDataText"
         class="option-select">
@@ -30,7 +30,7 @@
             </v-container>
         </template>
     </v-autocomplete>
-    <v-autocomplete v-model="selected" :items="items" chips clearable v-else-if="props.valueChange === true"
+    <v-autocomplete  height="40px" v-model="selected" :items="items" chips clearable v-else-if="props.valueChange === true"
         v-model:search.trim="name" variant="outlined" item-title="name" item-value="value" v-bind="$attrs"
         @keyup="searchRegion" @update:value="changeValue" :address="address" :no-data-text="noDataText"
         class="option-select">
