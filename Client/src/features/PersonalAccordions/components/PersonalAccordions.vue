@@ -98,10 +98,13 @@
                         <div class="form-field">
                             <label for="date_of_birth">Дата рождения<span class="valid-red">&nbsp;*</span></label>
                             <Input type="date" name="date_of_birth" class="input-small"
-                                v-model:value="props.user.date_of_birth" />
+                                v-model:value="props.user.date_of_birth" :min="minDate" :max="maxDateMinor" />
+                            <p class="error-form" v-if="isError.date_of_birth">
+                                {{ isError.date_of_birth }}
+                            </p>
                         </div>
                     </div>
-                    <div class="parents-wrapper" v-if="!props.user.is_adult">
+                    <div class="parents-wrapper" v-if="isUnderage">
                         <p class="parents-wrapper__title">
                             Законный представитель несовершеннолетнего
                         </p>
@@ -110,47 +113,58 @@
                                 <div class="form-field">
                                     <label for="surname-parent">Фамилия<span class="valid-red">&nbsp;*</span></label>
                                     <Input name="surname-parent" class="input-big" placeholder="Введите фамилию"
-                                        v-model:value="props.user.parent.parent_last_name
-                                            " />
+                                        v-model:value="props.user.parent.parent_last_name" />
+                                    <p class="error-form" v-if="isError.parent_last_name">
+                                        {{ isError.parent_last_name }}
+                                    </p>
                                 </div>
                                 <div class="form-field">
                                     <label for="">Кем является<span class="valid-red">&nbsp;*</span></label>
-                                    <sortByEducation class="input-small" variant="outlined" clearable
-                                        placeholder="Выберете родителя" v-model="props.user.parent.relationship"
-                                        :options="parents" :sorts-boolean="false">
-                                    </sortByEducation>
+                                    <sortByEducation name="relationship_parent" class="input-small" variant="outlined"
+                                        clearable placeholder="Выберите родителя"
+                                        v-model="props.user.parent.relationship" :options="parents"
+                                        :sorts-boolean="false" />
+                                    <p class="error-form" v-if="isError.relationship_parent">
+                                        {{ isError.relationship_parent }}
+                                    </p>
                                 </div>
-
                                 <!-- <p>{{ user.is_adult }}</p> -->
                                 <div class="form-field">
                                     <label for="name-parent">Имя<span class="valid-red">&nbsp;*</span></label>
-                                    <Input name="name-parent" class="input-big" placeholder="Введите имя" v-model:value="props.user.parent.parent_first_name
-                                        " />
+                                    <Input name="name-parent" class="input-big" placeholder="Введите имя"
+                                        v-model:value="props.user.parent.parent_first_name" />
+                                    <p class="error-form" v-if="isError.parent_first_name">
+                                        {{ isError.parent_first_name }}
+                                    </p>
                                 </div>
                                 <div class="form-field">
                                     <label for="date-parent">Дата рождения<span class="valid-red">&nbsp;*</span></label>
-                                    <Input type="date" name="date-parent" class="input-small" v-model:value="props.user.parent
-                                        .parent_date_of_birth
-                                        " />
+                                    <Input type="date" name="date_parent" class="input-small"
+                                        v-model:value="props.user.parent.parent_date_of_birth" :min="minDate"
+                                        :max="maxDateAdult" />
+                                    <p class="error-form" v-if="isError.date_parent">
+                                        {{ isError.date_parent }}
+                                    </p>
                                 </div>
                                 <div class="form-field">
                                     <label for="patronomyc-parent">Отчество</label>
                                     <Input class="input-big" name="patronomyc-parent" placeholder="Введите отчество"
-                                        v-model:value="props.user.parent
-                                            .parent_patronymic_name
-                                            " />
+                                        v-model:value="props.user.parent.parent_patronymic_name" />
                                 </div>
-
                                 <div class="form-field">
                                     <label for="phone-parent">Телефон<span class="valid-red">&nbsp;*</span></label>
                                     <div class="input-small phone">
-                                        <MaskInput type="tel" placeholder="+7(___) ___ __ __" name="phone-parent"
-                                            :value="user.parent.parent_phone_number
-                                                " v-model="user.parent.parent_phone_number
-                                                    " mask="+7(###) ###-##-##" />
+                                        <MaskInput type="tel" placeholder="+7(___) ___ __ __" name="phone_parent"
+                                            :value="props.user.parent.parent_phone_number"
+                                            v-model="props.user.parent.parent_phone_number" mask="+7(###) ###-##-##" />
+                                        <p class="error-form" v-if="isError.phone_parent">
+                                            {{ isError.phone_parent }}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Блок родительского паспорта -->
                             <div class="how">
                                 <div class="checkbox passport" id="checkbox-parent-pass">
                                     <p class="checkbox-title">
@@ -167,100 +181,134 @@
                                                     " />
                                         <label :for="id">{{
                                             passP.name
-                                            }}</label>
+                                        }}</label>
                                     </div>
+
                                 </div>
                                 <div class="addres" id="pass-no-addr" v-if="props.user.parent.russian_passport">
                                     Адрес постоянной регистрации
                                 </div>
                             </div>
 
+                            <!-- Если выбран паспорт РФ -->
                             <div class="izm" id="passport-parent-yes" v-if="props.user.parent.russian_passport">
                                 <div class="form-field" id="pass-no-pass-id">
-                                    <label for="passInput">Номер и серия<span class="valid-red">&nbsp;*</span></label>
+                                    <label for="passInput">Серия и номер<span class="valid-red">&nbsp;*</span></label>
                                     <div class="input-small passport-number">
                                         <MaskInput name="passInput" mask="## ## ######" placeholder="__ __ ______"
-                                            :value="user.parent.passport_number" v-model="user.parent.passport_number
+                                            :value="props.user.parent.passport_number" v-model="props.user.parent.passport_number
                                                 " />
+                                        <p class="error-form" v-if="isError.passInput">
+                                            {{ isError.passInput }}
+                                        </p>
                                     </div>
-                                </div>
 
+                                </div>
                                 <div class="form-field" id="pass-no-reg">
                                     <label for="">Регион<span class="valid-red">&nbsp;*</span></label>
                                     <regionsDropdown open-on-clear id="reg" name="regdrop" placeholder="Выберите регион"
                                         v-model="props.user.parent.region" @update:value="changeValue"
                                         address="/regions/" class="mb-2">
                                     </regionsDropdown>
+                                    <p class="error-form" v-if="isError.regdrop">
+                                        {{ isError.regdrop }}
+                                    </p>
                                 </div>
-
                                 <div class="form-field" id="pass-no-date">
                                     <label for="pass-date-parent">Дата выдачи<span
                                             class="valid-red">&nbsp;*</span></label>
-                                    <Input type="date" name="pass-date-parent" class="input-small" max="9999-12-31"
-                                        v-model:value="props.user.parent.passport_date
-                                            " />
+                                    <Input type="date" name="pass_date_parent" class="input-small" max="9999-12-31"
+                                        v-model:value="props.user.parent.passport_date" :min="minDate" />
+                                    <p class="error-form" v-if="isError.pass_date_parent">
+                                        {{ isError.pass_date_parent }}
+                                    </p>
                                 </div>
-
                                 <div class="form-field" id="pass-no-locality">
                                     <label for="locality-parent">Населенный пункт<span
                                             class="valid-red">&nbsp;*</span></label>
-                                    <Input name="locality-parent" class="input-big"
+                                    <Input name="locality_parent" class="input-big"
                                         placeholder="Например, город Новосибирск"
                                         v-model:value="props.user.parent.city" />
+                                    <p class="error-form" v-if="isError.locality_parent">
+                                        {{ isError.locality_parent }}
+                                    </p>
                                 </div>
-
                                 <div class="form-field" id="pass-no-pass">
                                     <label for="pass-id-parent">Кем выдан<span class="valid-red">&nbsp;*</span></label>
-                                    <Input name="pass-id-parent" class="input-big"
-                                        placeholder="Введите полное название организации как в паспорте" v-model:value="props.user.parent.passport_authority
-                                            " />
+                                    <Input name="pass_id_parent" class="input-big"
+                                        placeholder="Введите полное название организации как в паспорте"
+                                        v-model:value="props.user.parent.passport_authority" :max-length="200"
+                                        :isRequired="requiredPassportAuthority" />
+                                    <div class="form__counter">
+                                        {{ counterPassWhomParent }} / 200
+                                    </div>
+                                    <p class="error-form" v-if="isError.pass_id_parent">
+                                        {{ isError.pass_id_parent }}
+                                    </p>
                                 </div>
-
                                 <div class="form-field" id="pass-no-street">
                                     <label for="addres-parent">Улица, дом, квартира<span
                                             class="valid-red">&nbsp;*</span></label>
-                                    <Input name="addres-parent" class="input-big"
-                                        placeholder="Например, ул. Приморская, дом 10, кв. 255" v-model:value="props.user.parent.address
-                                            " />
+                                    <Input name="addres_parent" class="input-big"
+                                        placeholder="Например, ул. Приморская, дом 10, кв. 255"
+                                        v-model:value="props.user.parent.address" />
+                                    <p class="error-form" v-if="isError.addres_parent">
+                                        {{ isError.addres_parent }}
+                                    </p>
                                 </div>
                             </div>
+
+                            <!-- Если выбран НЕ паспорт РФ -->
                             <div id="no-passport" class="form-data izm" v-else="!props.user.parent.russian_passport">
-                                <div class="form-field one" v-if="props.isArr" v-for="item in props.foreignParent">
+                                <div class="form-field one" v-if="props.isArr" v-for="item in props.foreignParent"
+                                    :key="item.id">
                                     <label for="pass-num">Документ удостоверяющий личность
                                         <span class="valid-red">*</span></label>
-                                    <Input type="text" class="input-full"
+                                    <Input type="text" class="input-full" name="foreign_passport_number"
                                         placeholder="Паспорт инностранного гражданина, вид на жительство или иной документ"
                                         v-model:value="item.name" :max-length="200" />
                                     <div class="form__counter">
                                         {{ counterForeignParent }} / 200
                                     </div>
+                                    <p class="error-form" v-if="isError.foreign_passport_number">
+                                        {{ isError.foreign_passport_number }}
+                                    </p>
                                 </div>
-                                <div class="form-field one" v-else>
+                                <div v-else class="form-field one">
                                     <label for="pass-num">Документ удостоверяющий личность
                                         <span class="valid-red">*</span></label>
                                     <Input type="text" class="input-full"
                                         placeholder="Паспорт инностранного гражданина, вид на жительство или иной документ"
-                                        v-model:value="props.foreignParent.name" :max-length="200" />
+                                        name="foreign_passport_number" v-model:value="props.foreignParent.name"
+                                        :max-length="200" />
                                     <div class="form__counter">
                                         {{ counterForeignParent }} / 200
                                     </div>
+                                    <p class="error-form" v-if="isError.foreign_passport_number">
+                                        {{ isError.foreign_passport_number }}
+                                    </p>
                                 </div>
-
-                                <div class="form-field" v-if="props.isArr" v-for="item in props.foreignParent">
+                                <div class="form-field" v-if="props.isArr" v-for="item in props.foreignParent"
+                                    :key="item.id">
                                     <label for="pass-date">Дата выдачи<span class="valid-red">*</span></label>
-                                    <Input type="date" name="pass-date" class="input-small"
-                                        v-model:value="item.foreign_pass_date" />
+                                    <Input type="date" name="foreign_pass_date" class="input-small"
+                                        v-model:value="item.foreign_pass_date" :min="minDate" :max="maxDateMinor" />
+                                    <p class="error" v-if="isError.foreign_pass_date">
+                                        {{ isError.foreign_pass_date }}
+                                    </p>
                                 </div>
-
                                 <div class="form-field" v-else>
                                     <label for="pass-date">Дата выдачи<span class="valid-red">*</span></label>
-                                    <Input type="date" name="pass-date" class="input-small" v-model:value="props.foreignParent
-                                        .foreign_pass_date
-                                        " />
+                                    <Input type="date" name="foreign_pass_date" class="input-small"
+                                        v-model:value="props.foreignParent.foreign_pass_date" :min="minDate"
+                                        :max="maxDateMinor" />
+                                    <p class="error-form" v-if="isError.foreign_pass_date">
+                                        {{ isError.foreign_pass_date }}
+                                    </p>
                                 </div>
-
-                                <div class="form-field" v-if="props.isArr" v-for="item in props.foreignParent">
-                                    <label for="pass-id">Серия номер</label>
+                                <div class="form-field" v-if="props.isArr" v-for="item in props.foreignParent"
+                                    :key="item.id">
+                                    <label for="pass-id">Серия и номер</label>
                                     <Input type="text" id="pass-id" class="input-small pass-masked"
                                         placeholder="__ ___ ____" v-model:value="item.foreign_pass_num" vmaska
                                         maska="####-######" :max-length="50" />
@@ -268,9 +316,8 @@
                                         {{ counterForeignParentNumber }} / 50
                                     </div>
                                 </div>
-
                                 <div class="form-field" v-else>
-                                    <label for="pass-id">Серия номер</label>
+                                    <label for="pass-id">Серия и номер</label>
                                     <Input type="text" id="pass-id" class="input-small pass-masked"
                                         placeholder="__ ___ ____" v-model:value="props.foreignParent.foreign_pass_num
                                             " vmaska maska="####-######" :max-length="50" />
@@ -278,47 +325,52 @@
                                         {{ counterForeignParentNumber }} / 50
                                     </div>
                                 </div>
-
-                                <div class="form-field one" v-if="props.isArr" v-for="item in props.foreignParent">
+                                <div class="form-field one" v-if="props.isArr" v-for="item in props.foreignParent"
+                                    :key="item.id">
                                     <label for="org-id">Кем выдан<span class="valid-red">*</span></label>
                                     <Input type="text" id="org-id" class="input-full" placeholder="Страна"
-                                        v-model:value="item.foreign_pass_whom" :max-length="230" />
+                                        name="foreign_pass_whom_parent" v-model:value="item.foreign_pass_whom"
+                                        :max-length="200" :isRequired="requiredForeignPassport" />
                                     <div class="form__counter">
-                                        {{ counterForeignParentOrg }} / 230
+                                        {{ counterForeignParentOrg }} / 200
                                     </div>
+                                    <p class="error-form" v-if="isError.foreign_pass_whom_parent">
+                                        {{ isError.foreign_pass_whom_parent }}
+                                    </p>
                                 </div>
-
                                 <div class="form-field one" v-else>
                                     <label for="org-id">Кем выдан<span class="valid-red">*</span></label>
-                                    <Input type="text" id="org-id" class="input-full" placeholder="Страна"
-                                        v-model:value="props.foreignParent
-                                            .foreign_pass_whom
-                                            " :max-length="230" />
+                                    <Input type="text" id="org-id" class="input-full" name="foreign_pass_whom_parent"
+                                        placeholder="Страна" v-model:value="props.foreignParent.foreign_pass_whom"
+                                        :max-length="200" />
                                     <div class="form__counter">
-                                        {{ counterForeignParentOrg }} / 230
+                                        {{ counterForeignParentOrg }} / 200
                                     </div>
+                                    <p class="error-form" v-if="isError.foreign_pass_whom_parent">
+                                        {{ isError.foreign_pass_whom_parent }}
+                                    </p>
                                 </div>
-                                <div class="form-field" v-if="props.isArr" v-for="item in props.foreignParent">
-                                    <label for="work-book-foreign">Трудовая книжка
-                                    </label>
+                                <div class="form-field" v-if="props.isArr" v-for="item in props.foreignParent"
+                                    :key="item.id">
+                                    <label for="work-book-foreign">Трудовая книжка</label>
                                     <Input type="text" id="work-book-foreign" class="input-big mask-workbook"
                                         placeholder="AA 999999999" v-model:value="item.work_book_num" vmaska
-                                        maska="AA #########" :max-length="15" />
+                                        maska="AA #########" :max-length="14" />
                                     <div class="form__counter">
-                                        {{ counterForeignParentWork }} / 15
+                                        {{ counterForeignParentWork }} / 14
                                     </div>
                                 </div>
                                 <div class="form-field" v-else>
-                                    <label for="work-book-foreign">Трудовая книжка
-                                    </label>
+                                    <label for="work-book-foreign">Трудовая книжка</label>
                                     <Input type="text" id="work-book-foreign" class="input-big mask-workbook"
-                                        placeholder="AA 999999999" v-model:value="props.foreignParent.work_book_num
-                                            " vmaska maska="AA #########" :max-length="15" />
+                                        placeholder="AA 999999999" v-model:value="props.foreignParent.work_book_num"
+                                        vmaska maska="AA #########" :max-length="15" />
                                     <div class="form__counter">
-                                        {{ counterForeignParentWork }} / 15
+                                        {{ counterForeignParentWork }} / 14
                                     </div>
                                 </div>
-                                <div class="form-field" v-if="props.isArr" v-for="item in props.foreignParent">
+                                <div class="form-field" v-if="props.isArr" v-for="item in props.foreignParent"
+                                    :key="item.id">
                                     <label for="INN-id-foreign">ИНН</label>
                                     <Input type="text" id="INN-id-foreign" class="input-big mask-inn"
                                         placeholder="AA 999999999" v-model:value="item.inn" vmaska maska="AA #########"
@@ -336,7 +388,8 @@
                                         {{ counterForeignParentInn }} / 12
                                     </div>
                                 </div>
-                                <div class="form-field" v-if="props.isArr" v-for="item in props.foreignParent">
+                                <div class="form-field" v-if="props.isArr" v-for="item in props.foreignParent"
+                                    :key="item.id">
                                     <label for="snils-id-foreign">Номер СНИЛС</label>
                                     <Input type="text" id="snils-id-foreign" class="input-big mask-snils"
                                         placeholder="AA 999999999" v-model:value="item.snils" vmaska
@@ -345,12 +398,11 @@
                                         {{ counterForeignParentSnils }} / 30
                                     </div>
                                 </div>
-
                                 <div class="form-field" v-else>
                                     <label for="snils-id-foreign">Номер СНИЛС</label>
                                     <Input type="text" id="snils-id-foreign" class="input-big mask-snils"
-                                        placeholder="AA 999999999" v-model:value="props.foreignParent.snils
-                                            " vmaska maska="AA #########" :max-length="30" />
+                                        placeholder="AA 999999999" v-model:value="props.foreignParent.snils" vmaska
+                                        maska="AA #########" :max-length="30" />
                                     <div class="form__counter">
                                         {{ counterForeignParentSnils }} / 30
                                     </div>
@@ -358,7 +410,6 @@
                             </div>
                         </div>
                     </div>
-
                     <v-card-actions class="nav-btn__wrapper">
                         <button type="button" class="form__button form__button--next" label="Далее" size="large"
                             @click="openPanelTwo">
@@ -370,11 +421,65 @@
                     Гендер пользователя обязательное поле
                 </p>
                 <p class="error" v-if="isError.first_name">
-                    Имя пользователя обязательное поле
+                    {{ isError.first_name }}
                 </p>
-                <p class="error" v-if="isError.first_name">
-                    Фамилия пользователя
+                <p class="error" v-if="isError.last_name">
+                    {{ isError.last_name }}
                 </p>
+                <p class="error" v-if="isError.date_of_birth">
+                    {{ isError.date_of_birth }}
+                </p>
+                <p class="error" v-if="isError.date_parent">
+                    {{ isError.date_parent }}
+                </p>
+                <p class="error" v-if="isError.parent_last_name">
+                    {{ isError.parent_last_name }}
+                </p>
+                <p class="error" v-if="isError.parent_first_name">
+                    {{ isError.parent_first_name }}
+                </p>
+                <p class="error" v-if="isError.relationship_parent">
+                    {{ isError.relationship_parent }}
+                </p>
+                <p class="error" v-if="isError.phone_parent">
+                    {{ isError.phone_parent }}
+                </p>
+                <p class="error" v-if="isError.passInput">
+                    {{ isError.passInput }}
+                </p>
+                <p class="error" v-if="isError.passport_authority">
+                    {{ isError.passport_authority }}
+                </p>
+                <p class="error" v-if="isError.pass_date_parent">
+                    {{ isError.pass_date_parent }}
+                </p>
+                <p class="error" v-if="isError.regdrop">
+                    {{ isError.regdrop }}
+                </p>
+                <p class="error" v-if="isError.locality_parent">
+                    {{ isError.locality_parent }}
+                </p>
+                <p class="error" v-if="isError.addres_parent">
+                    {{ isError.addres_parent }}
+                </p>
+                <p class="error" v-if="isError.pass_id_parent">
+                    {{ isError.pass_id_parent }}
+                </p>
+                <p class="error" v-if="isError.foreign_passport_number">
+                    {{ isError.foreign_passport_number }}
+                </p>
+                <p class="error" v-if="isError.foreign_pass_date">
+                    {{ isError.foreign_pass_date }}
+                </p>
+                <p class="error" v-if="isError.foreign_pass_whom_parent">
+                    {{ isError.foreign_pass_whom_parent }}
+                </p>
+
+
+
+
+
+
 
             </v-expansion-panel>
 
@@ -400,15 +505,22 @@
                         <div class="form-field">
                             <label for="phone-contact">Телефон<span class="valid-red">&nbsp;*</span></label>
                             <div class="input-small phone">
-                                <MaskInput type="tel" placeholder="+7(___) ___ __ __" name="phone-contact"
-                                    :value="user.phone_number" v-model="user.phone_number" mask="+7(###) ###-##-##" />
+                                <MaskInput type="tel" placeholder="+7(___) ___ __ __" name="phone_user"
+                                    :value="props.user.phone_number" v-model="props.user.phone_number"
+                                    mask="+7(###) ###-##-##" />
+                                <p class="error-form" v-if="isError.phone_user">
+                                    {{ isError.phone_user }}
+                                </p>
                             </div>
                         </div>
                         <div class="form-field">
                             <label for="">Регион<span class="valid-red">&nbsp;*</span></label>
-                            <regionsDropdown open-on-clear id="reg" name="regdrop" placeholder="Выберите регион"
+                            <regionsDropdown open-on-clear id="reg" name="regdrop_user" placeholder="Выберите регион"
                                 v-model="props.user.user_region.reg_region_id" @update:value="changeValue"
                                 address="/regions/" class="mb-2"></regionsDropdown>
+                            <p class="error-form" v-if="isError.regdrop_user">
+                                {{ isError.regdrop_user }}
+                            </p>
                         </div>
                         <div class="form-field">
                             <label for="email-contact">Электронная почта<span class="valid-red">&nbsp;*</span></label>
@@ -419,11 +531,14 @@
                         </div>
                         <div class="form-field">
                             <label for="locality-contact">Населенный пункт<span class="valid-red">&nbsp;*</span></label>
-                            <Input type="text" name="locality-contact" class="input-big" placeholder="Город"
-                                v-model:value="props.user.user_region.reg_town" :max-length="40" />
+                            <Input type="text" name="locality_contact" class="input-big" placeholder="Город"
+                                v-model:value="props.user.user_region.reg_town" :max-length="200" />
                             <div class="form__counter">
-                                {{ counterTown }} / 40
+                                {{ counterTown }} / 200
                             </div>
+                            <p class="error-form" v-if="isError.locality_contact">
+                                {{ isError.locality_contact }}
+                            </p>
                         </div>
 
                         <div class="scoial-networks">
@@ -450,12 +565,15 @@
                         <div class="form-field">
                             <label for="addres-contact">Улица, дом, квартира<span
                                     class="valid-red">&nbsp;*</span></label>
-                            <Input type="text" name="addres-contact" class="input-big"
+                            <Input type="text" name="addres_contact" class="input-big"
                                 placeholder="Например, ул. Приморская, дом 10, кв. 255"
                                 v-model:value="props.user.user_region.reg_house" :max-length="250" />
                             <div class="form__counter">
                                 {{ counterHouse }} / 250
                             </div>
+                            <p class="error-form" v-if="isError.addres_contact">
+                                {{ isError.addres_contact }}
+                            </p>
                         </div>
                         <div class="checkbox addr" id="checkbox">
                             <p class="checkbox-title">
@@ -492,9 +610,9 @@
                             <div class="form-field">
                                 <label for="locality-fact">Населенный пункт</label>
                                 <Input name="locality-fact" class="input-big" placeholder="Город" v-model:value="props.user.user_region.fact_town
-                                    " :max-length="40" />
+                                    " :max-length="200" />
                                 <div class="form__counter">
-                                    {{ counterFactTown }} / 40
+                                    {{ counterFactTown }} / 200
                                 </div>
                             </div>
                             <div class="form-field">
@@ -520,15 +638,35 @@
                         </button>
                     </v-card-actions>
 
+
                 </v-expansion-panel-text>
+
                 <p class="error" v-if="isError.detail">
                     <!-- {{ isError.detail }} -->Данные региона пользователя уже
                     существуют
                 </p>
+
+
+                <p class="error" v-if="isError.phone_user">
+                    {{ isError.phone_user }}
+                </p>
+                <p class="error" v-if="isError.email">
+                    {{ isError.email }}
+                </p>
+                <p class="error" v-if="isError.regdrop_user">
+                    {{ isError.regdrop_user }}
+                </p>
+                <p class="error" v-if="isError.locality_contact">
+                    {{ isError.locality_contact }}
+                </p>
+                <p class="error" v-if="isError.addres_contact">
+                    {{ isError.addres_contact }}
+                </p>
+
+
+
             </v-expansion-panel>
-            <p class="error" v-if="isError.email">
-                {{ '' + isError.email }}
-            </p>
+
             <v-expansion-panel value="panelThree">
                 <v-expansion-panel-title>
                     <v-row no-gutters>
@@ -564,77 +702,93 @@
                         <!-- <pre>{{ documents.russian_passport }}</pre> -->
                         <div class="form-data izm" v-if="props.user.documents.russian_passport">
                             <div class="form-field">
-                                <label for="pass-num">Номер и серия<span class="valid-red">&nbsp;*</span></label>
+                                <label for="pass-num">Серия и номер<span class="valid-red">&nbsp;*</span></label>
                                 <div class="input-big">
-                                    <MaskInput name="pass-num " type="text" mask="## ## ######"
+                                    <MaskInput name="pass_num" type="text" mask="## ## ######"
                                         placeholder="__ __ ______" :value="user.documents.pass_ser_num"
                                         v-model="user.documents.pass_ser_num" />
+                                    <p class="error-form" v-if="isError.pass_num">
+                                        {{ isError.pass_num }}
+                                    </p>
                                 </div>
+
                                 <!-- <div class="form__counter">
-                                    {{ counterPass }} / 20
-                                </div> -->
+              {{ counterPass }} / 20
+          </div> -->
                             </div>
 
                             <div class="form-field">
                                 <label for="pass-date">Дата выдачи<span class="valid-red">&nbsp;*</span></label>
-                                <Input type="date" name="pass_date" class="input-small" v-model:value="props.user.documents.pass_date
-                                    " />
+                                <Input type="date" name="pass_date_user" class="input-small"
+                                    v-model:value="props.user.documents.pass_date" :min="minDate" :max="maxDateMinor" />
+                                <p class="error-form" v-if="isError.pass_date_user">
+                                    {{ isError.pass_date_user }}
+                                </p>
                             </div>
 
                             <div class="form-field one">
                                 <label for="pass-id">Кем выдан</label>
                                 <Input name="pass-id" type="text" class="input-full"
                                     placeholder="Например, ОВД Советского района города Новосибирска и может быть длиннее"
-                                    v-model:value="props.user.documents.pass_whom
-                                        " :max-length="230" />
+                                    v-model:value="props.user.documents.pass_whom" :max-length="200" />
                                 <div class="form__counter">
-                                    {{ counterPassWhom }} / 230
+                                    {{ counterPassWhom }} / 200
                                 </div>
+                                <p class="error-form" v-if="isError.pass_whom">
+                                    {{ isError.pass_whom }}
+                                </p>
                             </div>
                             <div class="form-field">
-                                <label for="SNILS-id">Номер СНИЛС<span class="valid-red">&nbsp;*</span></label>
-                                <div class="input-big mask-snils">
-                                    <MaskInput name="SNILS-d" mask="###-###-### ##" type="text"
-                                        placeholder="___-___-___ __" :value="user.documents.snils"
-                                        v-model="user.documents.snils" />
-                                </div>
+                                <div class="form-field">
+                                    <label for="SNILS-id">Номер СНИЛС<span class="valid-red">&nbsp;*</span></label>
+                                    <div class="input-big mask-snils">
+                                        <MaskInput name="SNILS_user" mask="###-###-### ##" type="text"
+                                            placeholder="___-___-___ __" :value="user.documents.snils"
+                                            v-model="user.documents.snils" />
+                                        <p class="error-form" v-if="isError.SNILS_user">
+                                            {{ isError.SNILS_user }}
+                                        </p>
+                                    </div>
 
-                                <!-- <div class="form__counter">
+                                    <!-- <div class="form__counter">
                                     {{ counterSnils }} / 30
                                 </div> -->
+                                </div>
                             </div>
                             <div class="form-field">
                                 <label for="INN-id">ИНН<span class="valid-red">&nbsp;*</span></label>
-                                <Input name="INN-id" type="text" class="input-big mask-inn"
+                                <Input name="INN_user" type="text" class="input-big mask-inn"
                                     v-model:value="props.user.documents.inn" :max-length="12" />
                                 <div class="form__counter">
                                     {{ counterInn }} / 12
                                 </div>
+                                <p class="error-form" v-if="isError.INN_user">
+                                    {{ isError.INN_user }}
+                                </p>
                             </div>
                             <div class="form-field">
                                 <label for="work-book">Трудовая книжка </label>
                                 <Input name="work_book" type="text" class="input-big mask-workbook" vmaska
-                                    maska="AA ##########" v-model:value="props.user.documents.work_book_num
-                                        " :max-length="30" />
+                                    placeholder="AA 999999999" maska="AA ##########"
+                                    v-model:value="props.user.documents.work_book_num" :max-length="14" />
                                 <div class="form__counter">
-                                    {{ counterWorkbook }} / 30
+                                    {{ counterWorkbook }} / 14
                                 </div>
                             </div>
                             <div class="form-field">
                                 <label for="foreign-pass">Загранпаспорт</label>
                                 <Input name="foreign-pass" type="text" class="input-big mask-foreign-pass" vmaska
-                                    maska="AA ##########" v-model:value="props.user.documents.international_pass
-                                        " :max-length="30" />
-
+                                    maska="AA ##########" v-model:value="props.user.documents.international_pass"
+                                    :max-length="9" />
                                 <div class="form__counter">
-                                    {{ counterIntPass }} / 30
+                                    {{ counterIntPass }} / 9
                                 </div>
                             </div>
                             <div class="form-field">
                                 <label for="">Документ воинского учета</label>
-
-                                <sortByEducation placeholder="Выберите документ" clearable variant="outlined" v-model="props.user.documents.mil_reg_doc_type
-                                    " :options="militaryDocs" class="select-big" :sorts-boolean="false">
+                                <sortByEducation placeholder="Выберите документ" clearable variant="outlined"
+                                    v-model="props.user.documents.mil_reg_doc_type" :options="militaryDocs"
+                                    class="select-big" :sorts-boolean="false">
                                 </sortByEducation>
                                 <p class="error" v-if="isError.mil_reg_doc_type">
                                     {{ '' + isError.mil_reg_doc_type }}
@@ -642,55 +796,67 @@
                             </div>
 
                             <div class="form-field">
-                                <label for="military-id">Серия и номер документов воинского
-                                    учета</label>
+                                <label for="military-id">Серия и номер документов воинского учета</label>
                                 <Input name="military-id" type="text" class="input-big mask-military" vmaska
-                                    maska="AA ##########" v-model:value="props.user.documents.mil_reg_doc_ser_num
-                                        " :max-length="30" />
-
+                                    maska="AA ##########" v-model:value="props.user.documents.mil_reg_doc_ser_num"
+                                    :max-length="9" />
                                 <div class="form__counter">
-                                    {{ counterMilitary }} / 30
+                                    {{ counterMilitary }} / 9
                                 </div>
                             </div>
                         </div>
                         <div class="form-data izm" v-else-if="!props.user.documents.russian_passport">
                             <div class="form-field one" v-for="item in props.foreignUserDocs"
                                 v-if="props.isArr === true">
-                                <label for="pass-num">Документ удостоверяющий личность
-                                    <span class="valid-red">&nbsp;*</span></label>
-                                <Input type="text" class="input-full"
+                                <label for="pass-num">Документ удостоверяющий личность<span
+                                        class="valid-red">&nbsp;*</span></label>
+                                <Input type="text" class="input-full" name="foreign_passport_number_user"
                                     placeholder="Паспорт инностранного гражданина, вид на жительство или иной документ"
                                     v-model:value="item.name" :max-length="200" />
                                 <div class="form__counter">
                                     {{ counterOtherDoc }} / 200
                                 </div>
+                                <p class="error-form" v-if="isError.foreign_passport_number_user">
+                                    {{ isError.foreign_passport_number }}
+                                </p>
                             </div>
 
                             <div v-else class="form-field one">
-                                <label for="pass-num">Документ удостоверяющий личность
-                                    <span class="valid-red">&nbsp;*</span></label>
-                                <Input type="text" class="input-full"
+                                <label for="pass-num">Документ удостоверяющий личность<span
+                                        class="valid-red">&nbsp;*</span></label>
+                                <Input type="text" class="input-full" name="foreign_passport_number_user"
                                     placeholder="Паспорт инностранного гражданина, вид на жительство или иной документ"
                                     v-model:value="props.foreignUserDocs.name" :max-length="200" />
                                 <div class="form__counter">
                                     {{ counterOtherDoc }} / 200
                                 </div>
+                                <p class="error-form" v-if="isError.foreign_passport_number_user">
+                                    {{ isError.foreign_passport_number_user }}
+                                </p>
+                            </div>
+
+                            <div class="form-field one" v-for="item in props.foreignUserDocs"
+                                v-if="props.isArr === true">
+                                <label for="pass-date">Дата выдачи<span class="valid-red">&nbsp;*</span></label>
+                                <Input type="date" name="foreign_pass_date_user" class="input-small"
+                                    v-model:value="item.foreign_pass_date" :min="minDate" :max="maxDateMinor" />
+                                <p class="error-form" v-if="isError.foreign_pass_date_user">
+                                    {{ isError.foreign_pass_date_user }}
+                                </p>
+                            </div>
+
+                            <div class="form-field one" v-else>
+                                <label for="pass-date">Дата выдачи<span class="valid-red">&nbsp;*</span></label>
+                                <Input type="date" name="foreign_pass_date_user" class="input-small"
+                                    v-model:value="props.foreignUserDocs.foreign_pass_date" :min="minDate"
+                                    :max="maxDateMinor" />
+                                <p class="error-form" v-if="isError.foreign_pass_date_user">
+                                    {{ isError.foreign_pass_date_user }}
+                                </p>
                             </div>
 
                             <div class="form-field" v-for="item in props.foreignUserDocs" v-if="props.isArr === true">
-                                <label for="pass-date">Дата выдачи<span class="valid-red">&nbsp;*</span></label>
-                                <Input type="date" name="pass-date" class="input-small"
-                                    v-model:value="item.foreign_pass_date" />
-                            </div>
-
-                            <div class="form-field" v-else>
-                                <label for="pass-date">Дата выдачи<span class="valid-red">&nbsp;*</span></label>
-                                <Input type="date" name="pass-date" class="input-small" v-model:value="props.foreignUserDocs.foreign_pass_date
-                                    " />
-                            </div>
-
-                            <div class="form-field" v-for="item in props.foreignUserDocs" v-if="props.isArr === true">
-                                <label for="pass-id">Серия и номер</label>
+                                placeholder="__ __ ______" <label for="pass-id">Серия и номер</label>
                                 <Input type="text" id="pass-id" class="input-small pass-masked" vmaska
                                     maska="AA ##########" v-model:value="item.foreign_pass_num" :max-length="50" />
                                 <div class="form__counter">
@@ -701,7 +867,7 @@
                             <div class="form-field" v-else>
                                 <label for="pass-id">Серия и номер</label>
                                 <Input type="text" id="pass-id" class="input-small pass-masked" vmaska
-                                    maska="AA ##########" v-model:value="props.foreignUserDocs.foreign_pass_num
+                                    placeholder="__ __ ______" maska="AA ##########" v-model:value="props.foreignUserDocs.foreign_pass_num
                                         " :max-length="50" />
                                 <div class="form__counter">
                                     {{ counterOtherPassNum }} / 50
@@ -711,38 +877,39 @@
                                 v-if="props.isArr === true">
                                 <label for="org-id">Кем выдан<span class="valid-red">&nbsp;*</span></label>
                                 <Input type="text" id="org-id" class="input-full" placeholder="Страна"
-                                    v-model:value="item.foreign_pass_whom" :max-length="230" />
+                                    v-model:value="item.foreign_pass_whom" :max-length="200" />
                                 <div class="form__counter">
-                                    {{ counterOtherPassWhom }} / 230
+                                    {{ counterOtherPassWhom }} / 200
                                 </div>
                             </div>
 
                             <div class="form-field one" v-else>
                                 <label for="org-id">Кем выдан<span class="valid-red">&nbsp;*</span></label>
-                                <Input type="text" id="org-id" class="input-full" placeholder="Страна" v-model:value="props.foreignUserDocs.foreign_pass_whom
-                                    " :max-length="230" />
+                                <Input type="text" id="org-id" class="input-full" placeholder="Страна"
+                                    v-model:value="props.foreignUserDocs.foreign_pass_whom" :max-length="200" />
                                 <div class="form__counter">
-                                    {{ counterOtherPassWhom }} / 230
+                                    {{ counterOtherPassWhom }} / 200
                                 </div>
+                                <p class="error-form" v-if="isError.foreign_pass_whom">
+                                    {{ isError.foreign_pass_whom }}
+                                </p>
                             </div>
                             <div class="form-field" v-for="item in props.foreignUserDocs" v-if="props.isArr === true">
-                                <label for="work-book-foreign">Трудовая книжка
-                                </label>
+                                <label for="work-book-foreign">Трудовая книжка</label>
                                 <Input type="text" id="work-book-foreign" class="input-big mask-workbook" vmaska
-                                    maska="AA ##########" v-model:value="item.work_book_num" :max-length="15" />
+                                    maska="AA ##########" v-model:value="item.work_book_num" :max-length="14" />
                                 <div class="form__counter">
-                                    {{ counterOtherWorkbook }} / 15
+                                    {{ counterOtherWorkbook }} / 14
                                 </div>
                             </div>
 
                             <div class="form-field" v-else>
-                                <label for="work-book-foreign">Трудовая книжка
-                                </label>
+                                <label for="work-book-foreign">Трудовая книжка</label>
                                 <Input type="text" id="work-book-foreign" class="input-big mask-workbook" vmaska
-                                    maska="AA ##########" v-model:value="props.foreignUserDocs.work_book_num
-                                        " :max-length="15" />
+                                    placeholder="AA 999999999" maska="AA ##########"
+                                    v-model:value="props.foreignUserDocs.work_book_num" :max-length="14" />
                                 <div class="form__counter">
-                                    {{ counterOtherWorkbook }} / 15
+                                    {{ counterOtherWorkbook }} / 14
                                 </div>
                             </div>
                             <div class="form-field" v-for="item in props.foreignUserDocs" v-if="props.isArr === true">
@@ -793,7 +960,35 @@
                             Далее
                         </button>
                     </v-card-actions>
+
                 </v-expansion-panel-text>
+
+                <p class="error" v-if="isError.pass_num">
+                    {{ isError.pass_num }}
+                </p>
+                <p class="error" v-if="isError.pass_date_user">
+                    {{ isError.pass_date_user }}
+                </p>
+                <p class="error" v-if="isError.pass_whom">
+                    {{ isError.pass_whom }}
+                </p>
+                <p class="error" v-if="isError.SNILS_user">
+                    {{ isError.SNILS_user }}
+                </p>
+                <p class="error" v-if="isError.INN_user">
+                    {{ isError.INN_user }}
+                </p>
+                <p class="error" v-if="isError.foreign_passport_number_user">
+                    {{ isError.foreign_passport_number_user }}
+                </p>
+                <p class="error" v-if="isError.foreign_pass_whom">
+                    {{ isError.foreign_pass_whom }}
+                </p>
+                <p class="error" v-if="isError.foreign_pass_date_user">
+                    {{ isError.foreign_pass_date_user }}
+                </p>
+
+
                 <p class="error" v-if="isError.detail">
                     Данные документов пользователя уже существуют
                 </p>
@@ -817,11 +1012,14 @@
                             <label for="education-org">Образовательная организация<span
                                     class="valid-red">&nbsp;*</span></label>
 
-                            <educInstitutionDropdown open-on-clear id="reg" name="regdrop"
+                            <educInstitutionDropdown open-on-clear id="reg" name="study_institution"
                                 placeholder="Введите название образовательной организации"
                                 v-model="props.user.education.study_institution" @update:value="changeValue"
                                 class="mb-2" :SortDropdown="false"></educInstitutionDropdown>
                         </div>
+                        <p class="error-form" v-if="isError.study_institution">
+                            {{ isError.study_institution }}
+                        </p>
                         <div class="form-field">
                             <label for="facultet">Факультет</label>
                             <Input name="study_faculty" type="text" id="facultet" class="input-full"
@@ -839,10 +1037,10 @@
                             <div class="form__counter">
                                 {{ counterCourse }} / 50
                             </div>
+                            <p class="error-form" v-if="isError.study_year">
+                                {{ isError.study_year }}
+                            </p>
                         </div>
-                        <p class="error" v-if="isError.study_year">
-                            {{ '' + isError.study_year }}
-                        </p>
                         <div class="form-field">
                             <label for="speciality">Специальность</label>
                             <Input name="study_spec" type="text" id="speciality" class="input-full"
@@ -864,6 +1062,13 @@
                         </button>
                     </v-card-actions>
                 </v-expansion-panel-text>
+                <p class="error" v-if="isError.study_institution">
+                    {{ isError.study_institution }}
+                </p>
+                <p class="error" v-if="isError.study_year">
+                    {{ isError.study_year }}
+                </p>
+
                 <p class="error" v-if="isError.detail">
                     Образовательные данные пользователя уже существуют
                 </p>
@@ -901,7 +1106,7 @@
                                         <SvgIcon iconName="file" />
                                         <p id="file-chosen-statement">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
@@ -925,7 +1130,7 @@
                                                 chooseLabel="Выбрать файл"
                                             /> -->
                                             <FileUpload mode="advanced" name="demo[]" accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000"
+                                                :maxFileSize="5242880"
                                                 invalidFileSizeMessage="Превышен размер загружаемого файла"
                                                 @select="statementUp" v-if="!statement" chooseLabel="Выбрать файл">
                                                 <!-- <template
@@ -963,7 +1168,11 @@
                                                 " target="_blank">Заявление</a>
                                         </div>
                                     </div>
+                                    <!-- <p class="error-form" v-if="isError.statement">
+                                        {{ isError.statement }}
+                                    </p> -->
                                 </div>
+
                                 <p class="statement-title">
                                     Согласие на обработку персональных
                                     данных<span class="valid-red">&nbsp;*</span>
@@ -974,7 +1183,7 @@
 
                                         <p id="file-chosen-personal">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
@@ -989,7 +1198,7 @@
                                             <SvgIcon iconName="add-file" />
 
                                             <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000" :customUpload="true" @select="selectPersonal"
+                                                :maxFileSize="5242880" :customUpload="true" @select="selectPersonal"
                                                 chooseLabel="Выбрать файл" v-if="!consent_personal_data" />
                                             <div v-else-if="
                                                 consent_personal_data
@@ -1021,19 +1230,19 @@
                                         </div>
                                     </div>
                                 </div>
-                                <p class="statement-title" v-if="!props.user.is_adult">
+                                <p class="statement-title" v-if="isUnderage">
                                     Согласие законного представителя на
                                     обработку персональных данных
                                     несовершеннолетнего<span class="valid-red">
                                         &nbsp;*</span>
                                 </p>
-                                <div class="statement-wrapper" v-if="!props.user.is_adult">
+                                <div class="statement-wrapper" v-if="isUnderage">
                                     <div class="statement-item">
                                         <SvgIcon iconName="file" />
 
                                         <p id="file-chosen-children">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
@@ -1047,7 +1256,7 @@
                                         <div class="statement-item">
                                             <SvgIcon iconName="add-file" />
                                             <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000" :customUpload="true"
+                                                :maxFileSize="5242880" :customUpload="true"
                                                 @select="selectParentPersonal" chooseLabel="Выбрать файл" v-if="
                                                     !consent_personal_data_representative
                                                 " />
@@ -1106,14 +1315,14 @@
 
                                         <p id="file-chosen-pass">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-wrapper">
                                         <div class="statement-item">
                                             <SvgIcon iconName="add-file" />
                                             <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000" :customUpload="true" @select="selectPass"
+                                                :maxFileSize="5242880" :customUpload="true" @select="selectPass"
                                                 chooseLabel="Выбрать файл" v-if="!passportUpload" />
                                             <div v-else-if="passportUpload">
                                                 <div class="flex flex-wrap p-0 sm:p-5 gap-5">
@@ -1145,7 +1354,7 @@
                                     Обязательное поле
                                 </p>
                             </div>
-                            <div class="pass-details__item" v-if="!props.user.is_adult">
+                            <div class="pass-details__item" v-if="isUnderage">
                                 <p class="statement-title">
                                     Паспорт законного представителя<span class="valid-red">
                                         &nbsp;*&nbsp;<sup>для несовершеннолетних</sup></span>
@@ -1156,14 +1365,14 @@
 
                                         <p id="file-chosen-parent-pass">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-wrapper">
                                         <div class="statement-item">
                                             <SvgIcon iconName="add-file" />
                                             <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                                :maxFileSize="7000000" :customUpload="true" @select="selectParentPersonalPass
+                                                :maxFileSize="5242880" :customUpload="true" @select="selectParentPersonalPass
                                                     " chooseLabel="Выбрать файл" v-if="!passport_representative" />
                                             <div v-else-if="
                                                 passport_representative
@@ -1214,13 +1423,13 @@
 
                                         <p id="file-chosen-snils">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
                                         <SvgIcon iconName="add-file" />
                                         <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000" :customUpload="true" @select="selectSnils"
+                                            :maxFileSize="5242880" :customUpload="true" @select="selectSnils"
                                             chooseLabel="Выбрать файл" v-if="!snils_file" />
                                         <div v-else-if="snils_file">
                                             <div class="flex flex-wrap p-0 sm:p-5 gap-5">
@@ -1254,13 +1463,13 @@
 
                                         <p id="file-chosen-military">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
                                         <SvgIcon iconName="add-file" />
                                         <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000" :customUpload="true" @select="selectMilitary"
+                                            :maxFileSize="5242880" :customUpload="true" @select="selectMilitary"
                                             chooseLabel="Выбрать файл" v-if="!military_document" />
                                         <div v-else-if="military_document">
                                             <div class="flex flex-wrap p-0 sm:p-5 gap-5">
@@ -1298,13 +1507,13 @@
 
                                         <p id="file-chosen-INN">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
                                         <SvgIcon iconName="add-file" />
                                         <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000" :customUpload="true" @select="selectINN"
+                                            :maxFileSize="5242880" :customUpload="true" @select="selectINN"
                                             chooseLabel="Выбрать файл" v-if="!inn_file" />
                                         <div v-else-if="inn_file">
                                             <div class="flex flex-wrap p-0 sm:p-5 gap-5">
@@ -1338,13 +1547,13 @@
 
                                         <p id="file-chosen-foreign-pass">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
                                         <SvgIcon iconName="add-file" />
                                         <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000" :customUpload="true" @select="selectIntPass"
+                                            :maxFileSize="5242880" :customUpload="true" @select="selectIntPass"
                                             chooseLabel="Выбрать файл" v-if="!international_passport" />
                                         <div v-else-if="international_passport">
                                             <div class="flex flex-wrap p-0 sm:p-5 gap-5">
@@ -1382,13 +1591,13 @@
 
                                         <p id="file-chosen-workbook">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
                                         <SvgIcon iconName="add-file" />
                                         <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000" :customUpload="true" @select="selectEmployment"
+                                            :maxFileSize="5242880" :customUpload="true" @select="selectEmployment"
                                             chooseLabel="Выбрать файл" v-if="!employment_document" />
                                         <div v-else-if="employment_document">
                                             <div class="flex flex-wrap p-0 sm:p-5 gap-5">
@@ -1432,9 +1641,9 @@
                             size="large" @click="openPanelFour">
                             Назад
                         </button>
-                        <button type="button" class="form__button form__button--next" label="Далее" size="large">
+                        <!-- <button type="button" class="form__button form__button--next" label="Далее" size="large">
                             Далее
-                        </button>
+                        </button> -->
                     </v-card-actions>
                 </v-expansion-panel-text>
             </v-expansion-panel>
@@ -1471,13 +1680,13 @@
 
                                         <p id="file-chosen-pass">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
                                         <SvgIcon iconName="add-file" />
                                         <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000" :customUpload="true" @select="selectPass"
+                                            :maxFileSize="5242880" :customUpload="true" @select="selectPass"
                                             chooseLabel="Выбрать файл" v-if="!passportUpload" />
                                         <div v-else-if="passportUpload">
                                             <div class="flex flex-wrap p-0 sm:p-5 gap-5">
@@ -1504,23 +1713,23 @@
                                 </div>
                             </div>
                             <div class="pass-details__item">
-                                <p class="statement-title" v-if="!props.user.is_adult">
+                                <p class="statement-title" v-if="isUnderage">
                                     Паспорт законного представителя<span class="valid-red">
                                         &nbsp;*</span>
                                 </p>
-                                <div class="statement-wrapper" v-if="!props.user.is_adult">
+                                <div class="statement-wrapper" v-if="isUnderage">
                                     <div class="statement-item">
                                         <SvgIcon iconName="file" />
 
                                         <p id="file-chosen-parent-pass">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
                                         <SvgIcon iconName="add-file" />
                                         <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000" :customUpload="true"
+                                            :maxFileSize="5242880" :customUpload="true"
                                             @select="selectParentPersonalPass" chooseLabel="Выбрать файл"
                                             v-if="!passport_representative" />
                                         <div v-else-if="passport_representative">
@@ -1566,13 +1775,13 @@
 
                                         <p id="file-chosen-snils">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
                                         <SvgIcon iconName="add-file" />
                                         <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000" :customUpload="true" @select="selectSnils"
+                                            :maxFileSize="5242880" :customUpload="true" @select="selectSnils"
                                             chooseLabel="Выбрать файл" v-if="!snils_file" />
                                         <div v-else-if="snils_file">
                                             <div class="flex flex-wrap p-0 sm:p-5 gap-5">
@@ -1606,13 +1815,13 @@
 
                                         <p id="file-chosen-military">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
                                         <SvgIcon iconName="add-file" />
                                         <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000" :customUpload="true" @select="selectMilitary"
+                                            :maxFileSize="5242880" :customUpload="true" @select="selectMilitary"
                                             chooseLabel="Выбрать файл" v-if="!military_document" />
                                         <div v-else-if="military_document">
                                             <div class="flex flex-wrap p-0 sm:p-5 gap-5">
@@ -1650,13 +1859,13 @@
 
                                         <p id="file-chosen-INN">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
                                         <SvgIcon iconName="add-file" />
                                         <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000" :customUpload="true" @select="selectINN"
+                                            :maxFileSize="5242880" :customUpload="true" @select="selectINN"
                                             chooseLabel="Выбрать файл" v-if="!inn_file" />
                                         <div v-else-if="inn_file">
                                             <div class="flex flex-wrap p-0 sm:p-5 gap-5">
@@ -1690,13 +1899,13 @@
 
                                         <p id="file-chosen-foreign-pass">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
                                         <SvgIcon iconName="add-file" />
                                         <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000" :customUpload="true" @select="selectIntPass"
+                                            :maxFileSize="5242880" :customUpload="true" @select="selectIntPass"
                                             chooseLabel="Выбрать файл" v-if="!international_passport" />
                                         <div v-else-if="international_passport">
                                             <div class="flex flex-wrap p-0 sm:p-5 gap-5">
@@ -1734,13 +1943,13 @@
 
                                         <p id="file-chosen-workbook">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
                                         <SvgIcon iconName="add-file" />
                                         <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000" :customUpload="true" @select="selectEmployment"
+                                            :maxFileSize="5242880" :customUpload="true" @select="selectEmployment"
                                             chooseLabel="Выбрать файл" v-if="!employment_document" />
 
                                         <div v-else-if="employment_document">
@@ -1819,7 +2028,7 @@
 
                                         <p id="file-chosen-statement">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
@@ -1832,7 +2041,7 @@
                                     <div class="statement-item">
                                         <SvgIcon iconName="add-file" />
                                         <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000" :customUpload="true" @select="statementUp"
+                                            :maxFileSize="5242880" :customUpload="true" @select="statementUp"
                                             v-if="!statement" chooseLabel="Выбрать файл" />
                                         <div v-else-if="statement">
                                             <div class="flex flex-wrap p-0 sm:p-5 gap-5">
@@ -1867,7 +2076,7 @@
 
                                         <p id="file-chosen-personal">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
@@ -1880,7 +2089,7 @@
                                     <div class="statement-item">
                                         <SvgIcon iconName="add-file" />
                                         <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000" :customUpload="true" @select="selectPersonal"
+                                            :maxFileSize="5242880" :customUpload="true" @select="selectPersonal"
                                             chooseLabel="Выбрать файл" v-if="!consent_personal_data" />
                                         <div v-else-if="consent_personal_data">
                                             <div class="flex flex-wrap p-0 sm:p-5 gap-5">
@@ -1934,13 +2143,13 @@
 
                                         <p id="file-chosen-pass">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
                                         <SvgIcon iconName="add-file" />
                                         <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000" :customUpload="true" @select="selectPass"
+                                            :maxFileSize="5242880" :customUpload="true" @select="selectPass"
                                             chooseLabel="Выбрать файл" v-if="!passportUpload" />
                                         <div v-else-if="passportUpload">
                                             <div class="flex flex-wrap p-0 sm:p-5 gap-5">
@@ -1981,13 +2190,13 @@
 
                                         <p id="file-chosen-snils">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
                                         <SvgIcon iconName="add-file" />
                                         <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000" :customUpload="true" @select="selectSnils"
+                                            :maxFileSize="5242880" :customUpload="true" @select="selectSnils"
                                             v-if="!snils_file" chooseLabel="Выбрать файл" />
                                         <div v-else-if="snils_file">
                                             <div class="flex flex-wrap p-0 sm:p-5 gap-5">
@@ -2021,13 +2230,13 @@
 
                                         <p id="file-chosen-INN">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
                                         <SvgIcon iconName="add-file" />
                                         <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000" :customUpload="true" @select="selectINN"
+                                            :maxFileSize="5242880" :customUpload="true" @select="selectINN"
                                             v-if="!inn_file" chooseLabel="Выбрать файл" />
                                         <div v-else-if="inn_file">
                                             <div class="flex flex-wrap p-0 sm:p-5 gap-5">
@@ -2061,13 +2270,13 @@
 
                                         <p id="file-chosen-workbook">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
                                         <SvgIcon iconName="add-file" />
                                         <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000" :customUpload="true" @select="selectEmployment"
+                                            :maxFileSize="5242880" :customUpload="true" @select="selectEmployment"
                                             chooseLabel="Выбрать файл" v-if="!employment_document" />
                                         <div v-else-if="employment_document">
                                             <div class="flex flex-wrap p-0 sm:p-5 gap-5">
@@ -2152,13 +2361,13 @@
 
                                         <p id="file-chosen-pass">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
                                         <SvgIcon iconName="add-file" />
                                         <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000" :customUpload="true" @select="selectPass"
+                                            :maxFileSize="5242880" :customUpload="true" @select="selectPass"
                                             chooseLabel="Выбрать файл" v-if="!passportUpload" />
                                         <div v-else-if="passportUpload">
                                             <div class="flex flex-wrap p-0 sm:p-5 gap-5">
@@ -2184,7 +2393,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="pass-details__item" v-if="!props.user.is_adult">
+                            <div class="pass-details__item" v-if="isUnderage">
                                 <p class="statement-title">
                                     Паспорт законного представителя<span class="valid-red">&nbsp;*</span>
                                 </p>
@@ -2194,13 +2403,13 @@
 
                                         <p id="file-chosen-parent-pass">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
                                         <SvgIcon iconName="add-file" />
                                         <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000" :customUpload="true"
+                                            :maxFileSize="5242880" :customUpload="true"
                                             @select="selectParentPersonalPass" chooseLabel="Выбрать файл"
                                             v-if="!passport_representative" />
                                         <div v-else-if="passport_representative">
@@ -2246,13 +2455,13 @@
 
                                         <p id="file-chosen-snils">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
                                         <SvgIcon iconName="add-file" />
                                         <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000" :customUpload="true" @select="selectSnils"
+                                            :maxFileSize="5242880" :customUpload="true" @select="selectSnils"
                                             chooseLabel="Выбрать файл" v-if="!snils_file" />
                                         <div v-else-if="snils_file">
                                             <div class="flex flex-wrap p-0 sm:p-5 gap-5">
@@ -2286,13 +2495,13 @@
 
                                         <p id="file-chosen-INN">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
                                         <SvgIcon iconName="add-file" />
                                         <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000" :customUpload="true" @select="selectINN"
+                                            :maxFileSize="5242880" :customUpload="true" @select="selectINN"
                                             v-if="!inn_file" chooseLabel="Выбрать файл" />
                                         <div v-else-if="inn_file">
                                             <div class="flex flex-wrap p-0 sm:p-5 gap-5">
@@ -2327,13 +2536,13 @@
 
                                         <p id="file-chosen-workbook">
                                             Файл в формате pdf, png, jpeg
-                                            размером не более 7 мб
+                                            размером не более 5 мб
                                         </p>
                                     </div>
                                     <div class="statement-item">
                                         <SvgIcon iconName="add-file" />
                                         <FileUpload mode="basic" name="demo[]" accept=".pdf, .jpeg, .png"
-                                            :maxFileSize="7000000" :customUpload="true" @select="selectEmployment"
+                                            :maxFileSize="5242880" :customUpload="true" @select="selectEmployment"
                                             chooseLabel="Выбрать файл" v-if="!employment_document" />
                                         <div v-else-if="employment_document">
                                             <div class="flex flex-wrap p-0 sm:p-5 gap-5">
@@ -2391,48 +2600,66 @@
                     !props.user.education.study_institution ||
                     !props.user.education.study_year ||
                     (props.user.documents.russian_passport &&
-                        (!props.user.documents.pass_ser_num ||
+                        (
+                            !props.user.documents.pass_ser_num ||
                             !props.user.documents.pass_date ||
                             !props.user.documents.inn ||
-                            !props.user.documents.snils)) ||
+                            !props.user.documents.snils ||
+                            !props.user.documents.pass_file
+                        )
+                    ) ||
                     (props.user.documents.russian_passport === false &&
-                        (!props.foreignUserDocs.name ||
+                        (
+                            !props.foreignUserDocs.name ||
                             !props.foreignUserDocs.foreign_pass_date ||
-                            !props.foreignUserDocs.foreign_pass_whom)) ||
+                            !props.foreignUserDocs.foreign_pass_whom ||
+                            !props.foreignUserDocs.pass_file
+                        )
+                    ) ||
                     (props.user.is_adult === false &&
-                        (!props.user.parent.parent_first_name ||
+                        (
+                            !props.user.parent.parent_first_name ||
                             !props.user.parent.parent_last_name ||
                             !props.user.parent.parent_date_of_birth ||
                             !props.user.parent.relationship ||
-                            !props.user.parent.parent_phone_number)) ||
+                            !props.user.parent.parent_phone_number
+                        )
+                    ) ||
                     (props.user.is_adult === false &&
                         props.user.parent.russian_passport &&
-                        (!props.user.parent.passport_number ||
+                        (
+                            !props.user.parent.passport_number ||
                             !props.user.parent.passport_date ||
                             !props.user.parent.parent_date_of_birth ||
                             !props.user.parent.passport_authority ||
                             !props.user.parent.region ||
                             !props.user.parent.city ||
-                            !props.user.parent.address)) ||
+                            !props.user.parent.address ||
+                            !props.user.parent.pass_file
+                        )
+                    ) ||
                     (props.user.is_adult === false &&
                         props.user.parent.russian_passport === false &&
-                        (!props.foreignParent.name ||
+                        (
+                            !props.foreignParent.name ||
                             !props.foreignParent.foreign_pass_date ||
-                            !props.foreignParent.foreign_pass_whom))
-                    " :loaded="isLoading" v-if="
-                        props.user.sent_verification === false &&
-                        props.user.is_verified === false
-                    " type="submit" label="Отправить данные на верификацию"></Button>
+                            !props.foreignParent.foreign_pass_whom ||
+                            !props.foreignParent.pass_file
+                        )
+                    )" :loaded="isLoading"
+                    v-if="props.user.sent_verification == false && props.user.is_verified === false" type="submit"
+                    label="Отправить данные на верификацию">
+                </Button>
+
 
                 <Button v-else :disabled="isLoading" :loaded="isLoading" type="submit"
                     label="Редактировать данные"></Button>
             </v-card-actions>
         </v-expansion-panels>
-        <p class="error" v-if="isError.error">{{ '' + isError.error }}</p>
     </form>
 </template>
 <script setup>
-import { ref, computed, onMounted, reactive, inject } from 'vue';
+import { ref, computed, onMounted, reactive, inject, watch } from 'vue';
 import { Input } from '@shared/components/inputs';
 import { useRouter } from 'vue-router';
 import {
@@ -2449,6 +2676,7 @@ import { TextArea } from '@shared/components/inputs';
 import { MaskInput } from 'vue-3-mask';
 import { userData } from '@features/userData';
 import { SvgIcon } from '@shared/ui/SvgIcon';
+
 const props = defineProps({
     button: Boolean,
     user: Object,
@@ -2464,7 +2692,10 @@ const emit = defineEmits([
     'updateFileData',
     'updateParentData',
     'updateStatus',
+    'update-passport',
+    'update-passport-parent'
 ]);
+
 const onNumber = ref('');
 const router = useRouter();
 const userStore = useUserStore();
@@ -2695,6 +2926,11 @@ const counterOtherInn = computed(() => {
 const counterPassWhom = computed(() => {
     return props.user.documents.pass_whom?.length || 0;
 });
+
+const counterPassWhomParent = computed(() => {
+    return props.user.parent.passport_authority?.length || 0;
+});
+
 const counterKnow = computed(() => {
     return props.user.statement.rso_info_from?.length || 0;
 });
@@ -2702,8 +2938,77 @@ const counterKnow = computed(() => {
 
 
 
+const errorMessages = computed(() => {
+    return Object.entries(isError)
+        .filter(([key, message]) => key !== 'error' && message) // исключаем "error" и пустые значения
+        .map(([key, message]) => message);
+});
+
+/**
+ * Двусторонняя привязка для паспорта родителя.
+ * Если значение уже задано, используем его.
+ * Иначе, если passportParent содержит данные, берём значение первого элемента,
+ * а если нет — возвращаем значение по умолчанию (true).
+ */
+const selectedPassportParent = computed({
+    get() {
+        // Проверяем наличие значения в props
+        if (props.user.parent.russian_passport !== undefined && props.user.parent.russian_passport !== null) {
+            return props.user.parent.russian_passport;
+        }
+        // Значение по умолчанию
+        return props.passportParent.length > 0 ? props.passportParent[0].value : true;
+    },
+    set(newValue) {
+        emit('update-passport-parent', newValue);
+    }
+});
+
+// Вычисляемые свойства для флагов на основе выбранного значения
+
+const requiredPassportAuthority = computed(() => selectedPassportParent.value === true);
+const requiredForeignPassport = computed(() => selectedPassportParent.value === false);
 
 
+//   Двусторонняя привязка для паспорта пользователя.
+
+const selectedPassport = computed({
+    get() {
+        return props.user.documents.russian_passport;
+    },
+    set(newValue) {
+        emit('update-passport', newValue);
+
+    }
+});
+
+
+const isPassportRF = computed(() => selectedPassport.value === true);
+const isPassportForeign = computed(() => selectedPassport.value === false);
+
+// Работа с датами
+const today = new Date();
+const getDateYearsAgo = (years) => {
+    return new Date(
+        today.getFullYear() - years,
+        today.getMonth(),
+        today.getDate()
+    )
+        .toISOString()
+        .split('T')[0];
+};
+
+const minDate = getDateYearsAgo(100);
+const maxDateMinor = getDateYearsAgo(13);
+const maxDateAdult = getDateYearsAgo(18);
+
+// Флаг, определяющий, является ли пользователь несовершеннолетним.
+const isUnderage = computed(() => {
+    const dob = props.user.date_of_birth;
+    if (!dob) return false; // если дата не указана, считаем совершеннолетним
+    const adultDate = new Date(today.getFullYear() - 17, today.getMonth(), today.getDate());
+    return new Date(dob) > adultDate;
+});
 
 // const updateValue = (event) => {
 //     console.log('textt');
@@ -2807,87 +3112,146 @@ const downloadAll = async () => {
 };
 
 
+
+
+
+
+// Регулярные выражения
 const kyrillicPattern = /^[а-яА-ЯЁё\s]+$/;
+const kyrillicAndNumbersPattern = /^[а-яА-ЯЁё0-9\s]+$/;
 const latinPattern = /^[a-zA-Z\s]+$/;
 const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const skipPattern = /^.*$/;
 
-
-// Универсальная функция для проверки поля
-const validateField = (fieldValue, maxLength, pattern, isRequired, fieldDisplayName) => {
-    // Проверка на обязательное поле
-    if (isRequired && !fieldValue) {
-        return `${fieldDisplayName} является обязательным полем!`;
+class FieldValidator {
+    constructor({ fieldName, fieldValue, maxLength, pattern, isRequired, displayName }) {
+        this.fieldName = fieldName;
+        this.fieldValue = fieldValue;
+        this.maxLength = maxLength;
+        this.pattern = pattern;
+        this.isRequired = isRequired;
+        this.displayName = displayName;
     }
 
-    // Специальная проверка для email
-
-    if (fieldDisplayName === 'Электронная почта') {
-        const containsCyrillic = /[а-яА-ЯЁё]/.test(fieldValue);
-        if (containsCyrillic) {
-            return
+    validate() {
+        // Проверка на обязательное поле
+        if (this.isRequired && !this.fieldValue) {
+            return `${this.displayName} обязательное поле`;
         }
-        // Проверка на корректный формат email
-        if (fieldValue && !emailPattern.test(fieldValue)) {
-            return `Пожалуйста, введите корректный адрес электронной почты!`;
+
+        // Специальная проверка для email
+        if (this.displayName === 'Электронная почта') {
+            const containsCyrillic = /[а-яА-ЯЁё]/.test(this.fieldValue);
+            if (containsCyrillic) {
+                return `${this.displayName} не должен содержать кириллицу`;
+            }
+            if (this.fieldValue && !emailPattern.test(this.fieldValue)) {
+                return `Пожалуйста, введите корректный адрес электронной почты`;
+            }
+            if (this.fieldValue && this.fieldValue.length > this.maxLength) {
+                return `Адрес электронной почты не может превышать ${this.maxLength} символов`;
+            }
         }
-        // Проверка на максимальную длину
-        if (fieldValue && fieldValue.length > maxLength) {
-            return `Адрес электронной почты не может превышать ${maxLength} символов!`;
+
+        // Общая проверка: соответствие шаблону
+        if (this.fieldValue && !this.pattern.test(this.fieldValue)) {
+            return `${this.displayName} содержит некорректные символы!`;
         }
-    }
 
-    // Общая проверка для других полей (кириллица/латиница)
-    if (fieldValue && !pattern.test(fieldValue)) {
-        return `${fieldDisplayName} содержит некорректные символы!`;
-    }
+        // Проверка максимальной длины
+        if (this.fieldValue && this.fieldValue.length > this.maxLength) {
+            return `${this.displayName} не может превышать ${this.maxLength} символов!`;
+        }
 
-    // Проверка на максимальную длину для всех полей
-    if (fieldValue && fieldValue.length > maxLength) {
-        return `${fieldDisplayName} не может превышать ${maxLength} символов!`;
+        return null; // Ошибок нет
     }
+}
 
-    return null; // Нет ошибок
-};
+
 
 
 const updateData = async () => {
     try {
-        // Очищаем все ошибки динамически
+        // Сбрасываем ошибки
         Object.keys(isError.value).forEach(key => {
             isError.value[key] = null;
         });
 
-        isLoading.value = true; // Устанавливаем индикатор загрузки
-        let hasError = false; // Флаг, указывающий на наличие ошибок
+        isLoading.value = true; // Индикатор загрузки
+        let hasError = false;
 
-        // Регулярные выражения для кириллицы и латиницы
-        // Персональная длина символов для каждого поля
+        // Максимальные длины для полей
         const maxLength = {
             last_name: 25,
             first_name: 20,
             patronymic_name: 23,
-            email: 256
+            email: 256,
+            parent_last_name: 23,
+            midle: 200,
+            skip: 250,
         };
 
-        // Проверка каждого поля с использованием универсальной функции
-        const fieldsToValidate = [
+        // Формируем массив конфигураций для валидации
+        const fieldsConfig = [
+            // Основная информация
             { fieldName: 'last_name', fieldValue: props.user.last_name, maxLength: maxLength.last_name, pattern: kyrillicPattern, isRequired: true, displayName: 'Фамилия' },
             { fieldName: 'last_name_lat', fieldValue: props.user.last_name_lat, maxLength: maxLength.last_name, pattern: latinPattern, isRequired: false, displayName: 'Фамилия (латиницей)' },
             { fieldName: 'first_name', fieldValue: props.user.first_name, maxLength: maxLength.first_name, pattern: kyrillicPattern, isRequired: true, displayName: 'Имя' },
             { fieldName: 'first_name_lat', fieldValue: props.user.first_name_lat, maxLength: maxLength.first_name, pattern: latinPattern, isRequired: false, displayName: 'Имя (латиницей)' },
             { fieldName: 'patronymic_name', fieldValue: props.user.patronymic_name, maxLength: maxLength.patronymic_name, pattern: kyrillicPattern, isRequired: false, displayName: 'Отчество' },
             { fieldName: 'patronymic_lat', fieldValue: props.user.patronymic_lat, maxLength: maxLength.patronymic_name, pattern: latinPattern, isRequired: false, displayName: 'Отчество (латиницей)' },
-            { fieldName: 'email', fieldValue: props.user.email, maxLength: maxLength.email, pattern: emailPattern, isRequired: true, displayName: 'Электронная почта' }
+            { fieldName: 'parent_last_name', fieldValue: props.user.parent.parent_last_name, maxLength: maxLength.parent_last_name, pattern: kyrillicPattern, isRequired: isUnderage.value, displayName: 'Фамилия родителя' },
+            { fieldName: 'relationship_parent', fieldValue: props.user.parent.relationship, maxLength: maxLength.skip, pattern: skipPattern, isRequired: isUnderage.value, displayName: 'Кем является представитель' },
+            { fieldName: 'date_of_birth', fieldValue: props.user.date_of_birth, maxLength: maxLength.skip, pattern: skipPattern, isRequired: true, displayName: 'Дата рождения' },
+            { fieldName: 'date_parent', fieldValue: props.user.parent.parent_date_of_birth, maxLength: maxLength.skip, pattern: skipPattern, isRequired: isUnderage.value, displayName: 'Дата рождения родителя' },
+            { fieldName: 'parent_first_name', fieldValue: props.user.parent.parent_first_name, maxLength: maxLength.first_name, pattern: kyrillicPattern, isRequired: isUnderage.value, displayName: 'Имя родителя' },
+            { fieldName: 'pass_id_parent', fieldValue: props.user.parent.passport_authority, maxLength: maxLength.midle, pattern: kyrillicAndNumbersPattern, isRequired: isUnderage.value && requiredPassportAuthority.value, displayName: 'Кем выдан' },
+            { fieldName: 'foreign_pass_whom_parent', fieldValue: props.foreignParent.foreign_pass_whom, maxLength: maxLength.midle, pattern: kyrillicAndNumbersPattern, isRequired: isUnderage.value && requiredForeignPassport.value, displayName: 'Кем выдан' },
+            { fieldName: 'phone_parent', fieldValue: props.user.parent.parent_phone_number, maxLength: maxLength.skip, pattern: skipPattern, isRequired: true, displayName: 'Телефон' },
+            { fieldName: 'passInput', fieldValue: props.user.parent.passport_number, maxLength: maxLength.skip, pattern: skipPattern, isRequired: isUnderage.value && requiredPassportAuthority.value, displayName: 'Серия и номер' },
+            { fieldName: 'regdrop', fieldValue: props.user.parent.region, maxLength: maxLength.skip, pattern: skipPattern, isRequired: isUnderage.value && requiredPassportAuthority.value, displayName: 'Регион' },
+            { fieldName: 'locality_parent', fieldValue: props.user.parent.city, maxLength: maxLength.skip, pattern: skipPattern, isRequired: isUnderage.value && requiredPassportAuthority.value, displayName: 'Населенный пункт' },
+            { fieldName: 'addres_parent', fieldValue: props.user.parent.address, maxLength: maxLength.skip, pattern: skipPattern, isRequired: isUnderage.value && requiredPassportAuthority.value, displayName: 'Улица, дом, квартира' },
+            { fieldName: 'pass_date_parent', fieldValue: props.user.parent.passport_date, maxLength: maxLength.skip, pattern: skipPattern, isRequired: isUnderage.value && requiredPassportAuthority.value, displayName: 'Дата выдачи' },
+            { fieldName: 'foreign_passport_number', fieldValue: props.foreignParent.name, maxLength: maxLength.skip, pattern: skipPattern, isRequired: isUnderage.value && requiredForeignPassport.value, displayName: 'Документ удостоверяющий личность' },
+            { fieldName: 'foreign_pass_date', fieldValue: props.foreignParent.foreign_pass_date, maxLength: maxLength.skip, pattern: skipPattern, isRequired: isUnderage.value && requiredForeignPassport.value, displayName: 'Дата выдачи' },
+            //
+            // Адрес и контакты
+            { fieldName: 'phone_user', fieldValue: props.user.phone_number, maxLength: maxLength.skip, pattern: skipPattern, isRequired: true, displayName: 'Телефон' },
+            { fieldName: 'email', fieldValue: props.user.email, maxLength: maxLength.email, pattern: emailPattern, isRequired: true, displayName: 'Электронная почта' },
+            { fieldName: 'regdrop_user', fieldValue: props.user.user_region.reg_region_id, maxLength: maxLength.skip, pattern: skipPattern, isRequired: true, displayName: 'Регион' },
+            { fieldName: 'locality_contact', fieldValue: props.user.user_region.reg_town, maxLength: maxLength.midle, pattern: kyrillicAndNumbersPattern, isRequired: true, displayName: 'Населенный пункт' },
+            { fieldName: 'addres_contact', fieldValue: props.user.user_region.reg_house, maxLength: maxLength.skip, pattern: kyrillicAndNumbersPattern, isRequired: true, displayName: 'Улица, дом, квартира' },
+            //
+            // Документы (паспорт, СНИЛС, ИНН, сведения о трудовой деятельности, документ воинского учета)
+            { fieldName: 'pass_num', fieldValue: props.user.documents.pass_ser_num, maxLength: maxLength.skip, pattern: skipPattern, isRequired: isPassportRF.value, displayName: 'Серия и номер' },
+            { fieldName: 'pass_date_user', fieldValue: props.user.documents.pass_date, maxLength: maxLength.skip, pattern: skipPattern, isRequired: isPassportRF.value, displayName: 'Дата выдачи' },
+            { fieldName: 'pass_whom', fieldValue: props.user.documents.pass_whom, maxLength: maxLength.midle, pattern: kyrillicAndNumbersPattern, isRequired: false, displayName: 'Кем выдан' },
+            { fieldName: 'SNILS_user', fieldValue: props.user.documents.snils, maxLength: maxLength.skip, pattern: skipPattern, isRequired: isPassportRF.value, displayName: 'СНИЛС' },
+            { fieldName: 'INN_user', fieldValue: props.user.documents.inn, maxLength: maxLength.skip, pattern: skipPattern, isRequired: isPassportRF.value, displayName: 'ИНН' },
+
+            { fieldName: 'foreign_passport_number_user', fieldValue: props.foreignUserDocs.name, maxLength: maxLength.midle, pattern: skipPattern, isRequired: isPassportForeign.value, displayName: 'Документ удостоверяющий личность' },
+            { fieldName: 'foreign_pass_whom', fieldValue: props.foreignUserDocs.foreign_pass_whom, maxLength: maxLength.midle, pattern: kyrillicAndNumbersPattern, isRequired: isPassportForeign.value, displayName: 'Кем выдан' },
+            { fieldName: 'foreign_pass_date_user', fieldValue: props.foreignUserDocs.foreign_pass_date, maxLength: maxLength.midle, pattern: skipPattern, isRequired: isPassportForeign.value, displayName: 'Дата выдачи' },
+            //
+            //Образовательная организация
+            { fieldName: 'study_institution', fieldValue: props.user.education.study_institution, maxLength: maxLength.skip, pattern: skipPattern, isRequired: true, displayName: 'Название образовательной организации' },
+            { fieldName: 'study_year', fieldValue: props.user.education.study_year, maxLength: maxLength.skip, pattern: skipPattern, isRequired: true, displayName: 'Курс' },
+            //
+
         ];
 
-        // Цикл для проверки всех полей
-        fieldsToValidate.forEach(field => {
-            const error = validateField(field.fieldValue, field.maxLength, field.pattern, field.isRequired, field.displayName);
+        // Создаём валидаторы и выполняем проверку
+        fieldsConfig.forEach(config => {
+            const validator = new FieldValidator(config);
+            const error = validator.validate();
             if (error) {
-                isError.value[field.fieldName] = error;
+                isError.value[config.fieldName] = error;
                 hasError = true;
             }
+
         });
+
         if (hasError) {
             swal.fire({
                 position: 'center',
@@ -2896,22 +3260,13 @@ const updateData = async () => {
                 text: 'Некоторые поля заполнены неверно. Пожалуйста, проверьте введенные данные.',
                 showConfirmButton: true
             });
-            isLoading.value = false; // Останавливаем индикатор загрузки
-            return; // Прерываем выполнение, если есть ошибки
-        }
-
-        // Если есть ошибки, остановить выполнение
-        if (hasError) {
-            isLoading.value = false; // Останавливаем индикатор загрузки
+            isLoading.value = false;
             return; // Прерываем выполнение, если есть ошибки
         }
 
         // Если ошибок нет, продолжаем отправку данных
         let fd = new FormData();
         fd.append('rso_info_from', props.user.statement.rso_info_from);
-
-
-
 
         // Логика добавления файлов
         if (isStatementChange.value)
@@ -3001,7 +3356,7 @@ const updateData = async () => {
             address: '',
         });
         if (
-            !props.user.is_adult &&
+            isUnderage &&
             (props.user.parent.russian_passport ||
                 !props.user.parent.russian_passport)
         ) {
@@ -3025,7 +3380,7 @@ const updateData = async () => {
         }
 
         const axiosrequestForeignDocsParent = ref(null);
-        if (!props.user.is_adult && !props.user.parent.russian_passport) {
+        if (isUnderage && !props.user.parent.russian_passport) {
             const axiosrequestForeignDocsParent = await HTTP.post(
                 '/rsousers/me/foreign_parent_documents/',
                 {
@@ -3144,6 +3499,7 @@ const updateData = async () => {
             });
         }
     }
+
 };
 
 const answers = ref([
@@ -3165,7 +3521,14 @@ const parents = ref([
         value: 'father',
         name: 'Отец',
     },
-    { value: 'mother', name: 'Мать' },
+    {
+        value: 'mother',
+        name: 'Мать'
+    },
+    {
+        value: 'guardian',
+        name: 'Законный представитель'
+    },
 ]);
 
 const militaryDocs = ref([
@@ -3252,7 +3615,7 @@ const passport = ref([
     font-size: 14px;
     font-weight: 600;
     font-family: 'Acrobat';
-    margin-top: 10px;
+
     text-align: start;
 }
 
@@ -3720,7 +4083,7 @@ const passport = ref([
     font-size: 16px;
     font-weight: 500;
     padding: 10px 16px 10px 16px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-family: 'Bert Sans';
     color: #35383f;
 }
