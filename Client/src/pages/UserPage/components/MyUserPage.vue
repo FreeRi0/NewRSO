@@ -37,6 +37,7 @@
     </div>
 </template>
 <script setup>
+import * as VKID from '@vkid/sdk';
 import { Button } from '@shared/components/buttons';
 import { MyWall } from '@features/baner/components';
 import { TextArea } from '@shared/components/inputs';
@@ -57,6 +58,9 @@ const media = ref({
     photo4: null,
 })
 
+const access_token = ref();
+const GROUP_ID = 353000;
+
 const tokenUser = ref("");
 const isAuth = ref(!!localStorage.getItem('jwt_token'));
 const query = new URLSearchParams(window.location.search);
@@ -74,11 +78,29 @@ const getAccessToken = async () => {
     try {
         const resp = await HTTP.post('/jwt/vk-login/', TokenData.value);
         localStorage.setItem('jwt_token', resp.data.access);
+        access_token.value = resp.data.vk_access_token;
+        comSubscription();
         router.replace({ query: null });
     } catch (e) {
         console.log('Error:', e);
     }
 };
+
+const CLIENT_ID = 51915086
+
+VKID.Config.set({
+    app: CLIENT_ID, // Идентификатор приложения.
+    state: 'dj29fnsadjsd82', // Произвольная строка состояния приложения.
+    codeVerifier: 'FGH767Gd65', // Верификатор в виде случайной строки. Обеспечивает защиту передаваемых данных.
+    scope: 'email phone groups' // Список прав доступа, которые нужны приложению.
+});
+
+const comSubscription = () => {
+    const communitySubscription = new VKID.CommunitySubscription();
+
+    // communitySubscription.render({ groupId: GROUP_ID, accessToken: TokenData.value.access_token, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS })
+    communitySubscription.render({ groupId: GROUP_ID, accessToken: access_token, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS })
+}
 
 const updateMedia = (type, image) => {
     userStore.currentUser.media[type] = image;
