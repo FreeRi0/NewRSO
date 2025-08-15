@@ -2,17 +2,10 @@
     <div class="container">
         <header class="header">
             <ul class="header__logo">
-                <li class="header__logo-rso">
-                    <a href="https://трудкрут.рф/" target="_blank">
-                        <img src="@app/assets/logo/logo-rso-tablet.svg" width="60" height="56"
-                            alt="Логотип сайта трудкрут.рф" />
-                    </a>
-                </li>
-
-                <li class="header__logo-labor-cool">
-                    <a href="https://trudkrutshop.ru/" target="_blank">
-                        <img src="@app/assets/logo/logo-shop-tablet.png" width="56" height="56"
-                            alt="Логотип сайта trudkrutshop.ru" />
+                <li class="header__new-logo-rso">
+                    <a href="https://xn--d1amqcgedd.xn--p1ai/" target="_blank">
+                        <img src="@app/assets/logo/new-logo-rso.svg" width="129" height="58"
+                            alt="Логотип сайта Российские студенческие отряды" />
                     </a>
                 </li>
             </ul>
@@ -521,7 +514,8 @@ onMounted(() => {
         margin-top: 9px;
     }
 
-    &__logo {
+    // Стили для списка со старыми логотипами в первой версии сайта для 2024
+    /*&__logo {
         display: grid;
         grid-template-columns: 1fr 1fr;
         align-items: center;
@@ -541,6 +535,23 @@ onMounted(() => {
             width: 88px;
             // height: 36px;
             column-gap: 12px;
+        }
+    }*/
+
+    &__new-logo-rso {
+        a {
+            display: block;
+            width: fit-content;
+        }
+        
+        img {
+            width: 129px;
+            height: 58px;
+
+            @media (max-width: 768px) {
+                width: 82px;
+                height: 37px;
+            }
         }
     }
 
