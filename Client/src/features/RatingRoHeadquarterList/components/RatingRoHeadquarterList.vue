@@ -13,6 +13,7 @@ const props = defineProps({
   }
 })
 
+
 const goToReport = (item) => {
   if (route.params.part == 'Часть 2') {
     router.push({

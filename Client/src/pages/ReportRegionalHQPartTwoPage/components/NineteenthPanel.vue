@@ -107,7 +107,7 @@ const props = defineProps({
 
 const emit = defineEmits(['getData']);
 
-const ID_PANEL = '19';
+const ID_PANEL = '18';// номер показателя для 2024 - 19, для 2025 - 18
 const isFirstSent = ref(true);
 
 const nineteenthPanelData = ref({
@@ -159,7 +159,6 @@ watchEffect(() => {
   &__field-group {
     grid-template-columns: 1fr 1fr;
     // grid-template-columns: minmax(27.35%, 44.9%) minmax(27.35%, 44.9%);
-    margin-bottom: 0;
 
     &--column {
       grid-template-columns: 1fr;

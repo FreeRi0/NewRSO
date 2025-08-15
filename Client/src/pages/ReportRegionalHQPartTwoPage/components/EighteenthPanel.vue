@@ -125,7 +125,7 @@ const setError = (err) => {
   link_err.value = err;
 }
 
-const ID_PANEL = '18';
+const ID_PANEL = '17';// номер показателя для 2024 - 18, для 2025 - 17
 const isFirstSent = ref(true);
 const scanFile = ref([]);
 let isErrorFile = ref(false);

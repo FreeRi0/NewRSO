@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container">
-      <h1 class="title title--mb">Отчет о&nbsp;деятельности регионального отделения РСО за&nbsp;2024&nbsp;год.
+      <h1 class="title title--mb">Отчет о&nbsp;деятельности регионального отделения РСО за&nbsp;2025&nbsp;год.
         Часть&nbsp;2</h1>
       <p class="report_title-name">{{ route.query.headquartersName }}</p>
       <div v-if="preloader" class="text-center">
@@ -60,7 +60,7 @@
           <v-expansion-panel v-if="showPanels('3', picked, revisionPanels)">
             <v-expansion-panel-title>
               3. Прирост численности членов РО&nbsp;РСО относительно количества членов в&nbsp;соответствии
-              с&nbsp;отчетом РО&nbsp;РСО за&nbsp;2023&nbsp;г.
+              с&nbsp;отчетом РО&nbsp;РСО за&nbsp;2024&nbsp;г.
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
@@ -177,7 +177,7 @@
                 :is-error-panel="isErrorPanel.twelfth" :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel v-if="showPanels('13', picked, revisionPanels)">
+          <!-- <v-expansion-panel v-if="showPanels('13', picked, revisionPanels)">
             <v-expansion-panel-title :class="isErrorPanel.thirteenth ? 'visible-error' : ''">
               13. Охват членов РО&nbsp;РСО, принявших участие во&nbsp;Всероссийском дне ударного труда &laquo;К&raquo;
             </v-expansion-panel-title>
@@ -186,8 +186,8 @@
                 @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.thirteenth"
                 :is-error-panel="isErrorPanel.thirteenth" :tab="picked" />
             </v-expansion-panel-text>
-          </v-expansion-panel>
-          <v-expansion-panel v-if="showPanels('14', picked, revisionPanels)">
+          </v-expansion-panel> -->
+          <!-- <v-expansion-panel v-if="showPanels('14', picked, revisionPanels)">
             <v-expansion-panel-title>
               14. Отношение объема средств, собранных бойцами РО&nbsp;РСО во&nbsp;Всероссийском дне ударного труда
               к&nbsp;количеству членов
@@ -197,10 +197,11 @@
               <calculated-panel
                 text="Показатель рассчитывается автоматически на&nbsp;основе данных из&nbsp;12&nbsp;и&nbsp;13&nbsp;показателей." />
             </v-expansion-panel-text>
-          </v-expansion-panel>
-          <v-expansion-panel v-if="showPanels('15', picked, revisionPanels)">
+          </v-expansion-panel> -->
+          
+          <v-expansion-panel v-if="showPanels('13', picked, revisionPanels)">
             <v-expansion-panel-title>
-              15. Исполнительская дисциплина РО&nbsp;РСО, соблюдение условий охраны труда на&nbsp;трудовых проектах РСО,
+              13. Исполнительская дисциплина РО&nbsp;РСО, соблюдение условий охраны труда на&nbsp;трудовых проектах РСО,
               наличие проблемной неурегулированной задолженности по&nbsp;выплате заработной платы перед бойцами РСО
               за&nbsp;трудовой семестр предыдущего года, отсутствие отчислений от&nbsp;членских взносов
               в&nbsp;Центральный штаб, исполнение решений Центральных руководящих органов РСО, наличие ежегодного акта
@@ -211,6 +212,7 @@
                 text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
+
           <v-expansion-panel
               v-if="showPanels('16', picked, revisionPanels)"
           >
@@ -225,31 +227,63 @@
                 :is-error-panel="isErrorPanel.sixteenth" :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel v-if="showPanels('17', picked, revisionPanels)">
+
+          <v-expansion-panel v-if="showPanels('15', picked, revisionPanels)">
             <v-expansion-panel-title>
-              17. Дислокация студенческих отрядов РО&nbsp;РСО
+              15. Отношение количества трудоустроенных и&nbsp;прошедших профобучение членов РО&nbsp;РСО по&nbsp;соответствующему основному направлению ЛСО к&nbsp;общей запланированной квоте профобучения на&nbsp;текущий период.
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <calculated-panel
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных из&nbsp;12&nbsp;и&nbsp;13&nbsp;показателей." />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+
+          
+          <v-expansion-panel v-if="showPanels('16', picked, revisionPanels)">
+            <v-expansion-panel-title>
+              16. Дислокация студенческих отрядов РО&nbsp;РСО
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <seventeenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
                 :data="reportData.seventeenth" :is-sent="isSentLastIndex" />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel v-if="showPanels('18', picked, revisionPanels)">
+          <v-expansion-panel v-if="showPanels('17', picked, revisionPanels)">
             <v-expansion-panel-title>
-              18. Количество научных работ и&nbsp;публикаций по&nbsp;теме&nbsp;СО, выпущенных в&nbsp;текущем году
+              17. Количество научных работ и&nbsp;публикаций по&nbsp;теме&nbsp;СО, выпущенных в&nbsp;текущем году
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <eighteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
                 :data="reportData.eighteenth" :is-sent="isSentLastIndex" />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel v-if="showPanels('19', picked, revisionPanels)">
+          <v-expansion-panel v-if="showPanels('18', picked, revisionPanels)">
             <v-expansion-panel-title>
-              19. Трудоустройство
+              18. Трудоустройство
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <nineteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
                 :data="reportData.nineteenth" :is-sent="isSentLastIndex" />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+
+          <v-expansion-panel v-if="showPanels('19', picked, revisionPanels)">
+            <v-expansion-panel-title>
+              19. Количество и&nbsp;трудоустройство сотрудников РО&nbsp;РСО
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <nineteen-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.nineteen" :is-sent="isSentLastIndex" />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+
+          <v-expansion-panel v-if="showPanels('20', picked, revisionPanels)">
+            <v-expansion-panel-title>
+              20. Инфраструктура РО&nbsp;РСО
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <twentieth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.twentieth" :is-sent="isSentLastIndex" />
             </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -274,8 +308,10 @@ import {
   SixteenthPanel,
   SixthPanel,
   TenthPanel,
-  ThirteenthPanel,
-  TwelfthPanel
+  // ThirteenthPanel,
+  TwelfthPanel,
+  NineteenPanel,
+  TwentiethPanel,
 } from './components/index'
 import { Button } from '@shared/components/buttons';
 import { onMounted, ref, watch } from "vue";
@@ -331,6 +367,8 @@ const reportData = ref({
   seventeenth: null,
   eighteenth: null,
   nineteenth: null,
+  nineteen: null,
+  twentieth: null,
 });
 
 const reportDataDH = ref({
