@@ -399,6 +399,9 @@ const deleteFile = async () => {
 };
 const deleteFileDH = () => {
   reportStore.reportDataDHFile.first = null;
+  fileNameDH.value = null;
+  fileTypeDH.value = null;
+  fileSizeDH.value = null;
 
   let formData = new FormData();
   formData.append('comment', firstPanelDataDH.value.comment);
@@ -621,8 +624,16 @@ watch(firstPanelDataDH.value, () => {
   formData.append('amount_of_money', firstPanelDataDH.value.amount_of_money);
   if (reportStore.reportDataDHFile.first) {
     formData.append('scan_file', reportStore.reportDataDHFile.first);
+
+    fileNameDH.value = reportStore.reportDataDHFile.first.name;
+    fileTypeDH.value = reportStore.reportDataDHFile.first.type.split('/').at(-1);
+    fileSizeDH.value = reportStore.reportDataDHFile.first.size / Math.pow(1024, 2);
   } else {
     formData.append('scan_file', '');
+
+    fileNameDH.value = null;
+    fileTypeDH.value = null;
+    fileSizeDH.value = null;
   }
 
   emit('getDataDH', formData, 1);

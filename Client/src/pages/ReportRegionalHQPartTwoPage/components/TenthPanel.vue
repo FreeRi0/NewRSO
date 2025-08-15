@@ -216,6 +216,7 @@ const uploadFile = async (event, reportNumber) => {
     } else {
       formData.append('document', event.target.files[0]);
       formData.append('event_happened', true);
+      formData.append('comment', tenthPanelDataFirst.value.comment || '');
       if (tenthPanelDataFirst.value.links.length) {
         for (let j = 0; j < tenthPanelDataFirst.value.links.length; j++) {
           if (tenthPanelDataFirst.value.links[j].link) formData.append(`[links][${j}][link]`, tenthPanelDataFirst.value.links[j].link);
@@ -237,6 +238,7 @@ const uploadFile = async (event, reportNumber) => {
     } else {
       formData.append('document', event.target.files[0]);
       formData.append('event_happened', true);
+      formData.append('comment', tenthPanelDataSecond.value.comment || '');
       if (tenthPanelDataSecond.value.links.length) {
         for (let j = 0; j < tenthPanelDataSecond.value.links.length; j++) {
           if (tenthPanelDataSecond.value.links[j].link) formData.append(`[links][${j}][link]`, tenthPanelDataSecond.value.links[j].link);
@@ -261,6 +263,7 @@ const deleteFile = async (reportNumber) => {
     formData.append('document', '');
     formData.append('file_size', '');
     formData.append('file_type', '');
+    formData.append('comment', tenthPanelDataFirst.value.comment || '');
     if (tenthPanelDataFirst.value.links.length) {
       for (let j = 0; j < tenthPanelDataFirst.value.links.length; j++) {
         if (tenthPanelDataFirst.value.links[j].link) formData.append(`[links][${j}][link]`, tenthPanelDataFirst.value.links[j].link);
@@ -278,6 +281,7 @@ const deleteFile = async (reportNumber) => {
     formData.append('document', '');
     formData.append('file_size', '');
     formData.append('file_type', '');
+    formData.append('comment', tenthPanelDataSecond.value.comment || '');
     if (tenthPanelDataSecond.value.links.length) {
       for (let j = 0; j < tenthPanelDataSecond.value.links.length; j++) {
         if (tenthPanelDataSecond.value.links[j].link) formData.append(`[links][${j}][link]`, tenthPanelDataSecond.value.links[j].link);
