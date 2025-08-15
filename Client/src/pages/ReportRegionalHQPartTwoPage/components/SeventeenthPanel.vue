@@ -93,7 +93,7 @@ const props = defineProps({
 
 const emit = defineEmits(['getData']);
 
-const ID_PANEL = '17';
+const ID_PANEL = '16';// номер показателя для 2024 - 17, для 2025 - 16
 const isFirstSent = ref(true);
 let isErrorFile = ref(false);
 const seventeenthPanelData = ref({

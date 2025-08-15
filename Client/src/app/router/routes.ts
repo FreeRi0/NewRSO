@@ -908,7 +908,7 @@ const routes: RouteRecordRaw[] = [
                                 '@pages/ReportRegionalHQPartOnePage/ReportRegionalHQPartOne.vue'
                             ),
                         meta: {
-                            label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 1',
+                            label: 'Отчет о деятельности регионального отделения РСО за 2025 год. Часть 1',
                             redirectTo: 'rating-ro-reporting',
                         },
                     },
@@ -920,7 +920,7 @@ const routes: RouteRecordRaw[] = [
                                 '@pages/ReportRegionalHQPartTwoPage/ReportRegionalHQPartTwo.vue'
                             ),
                         meta: {
-                            label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 2',
+                            label: 'Отчет о деятельности регионального отделения РСО за 2025 год. Часть 2',
                             redirectTo: 'rating-ro-reporting',
                         },
                     },
@@ -963,7 +963,7 @@ const routes: RouteRecordRaw[] = [
                                         '@pages/ReportRegionalHQPartOnePage/ReportRegionalHQPartOne.vue'
                                     ),
                                 meta: {
-                                    label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 1',
+                                    label: 'Отчет о деятельности регионального отделения РСО за 2025 год. Часть 1',
                                 },
                                 props: true,
                             },
@@ -975,7 +975,7 @@ const routes: RouteRecordRaw[] = [
                                         '@pages/ReportRegionalHQPartTwoPage/ReportRegionalHQPartTwo.vue'
                                     ),
                                 meta: {
-                                    label: 'Отчет о деятельности регионального отделения РСО за 2024 год. Часть 2',
+                                    label: 'Отчет о деятельности регионального отделения РСО за 2025 год. Часть 2',
                                 },
                                 props: true,
                             },

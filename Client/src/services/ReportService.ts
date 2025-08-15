@@ -1,32 +1,38 @@
 import { HTTP } from '@app/http';
 
+// Для рейтинго РО 2024 года
+// const APPLICATION_NAME = "regional_competitions"
+
+// Для рейтинга РО 2025 года
+const APPLICATION_NAME = "regional_competitions_2025"
+
 export function createReport(data: object) {
-    return HTTP.post('regional_competitions/statistical_report/', data)
+    return HTTP.post(`${APPLICATION_NAME}/statistical_report/`, data)
 }
 
 export function getReport() {
-    return HTTP.get('regional_competitions/statistical_report/me_first/')
+    return HTTP.get(`${APPLICATION_NAME}/statistical_report/me_first/`)
 }
 
 export function getReportForSecond() {
-    return HTTP.get('regional_competitions/statistical_report/me/')
+    return HTTP.get(`${APPLICATION_NAME}/statistical_report/me/`)
 }
 
 export function getCurrentReport(id: string) {
-    return HTTP.get(`regional_competitions/statistical_report/${id}/`)
+    return HTTP.get(`${APPLICATION_NAME}/statistical_report/${id}/`)
 }
 
 export function patchReport(data: object) {
-    return HTTP.patch('regional_competitions/statistical_report/me/', data)
+    return HTTP.patch(`${APPLICATION_NAME}/statistical_report/me/`, data)
 }
 
 export function editReport(data: object) {
-    return HTTP.put('/regional_competitions/statistical_report/me/', data)
+    return HTTP.put(`/${APPLICATION_NAME}/statistical_report/me/`, data)
 }
 
 export const reportPartTwoService = {
     createReport(data: object, panel: string, withFile = false) {
-        return HTTP.post(`regional_competitions/reports/${panel}/`, data, {
+        return HTTP.post(`${APPLICATION_NAME}/reports/${panel}/`, data, {
             headers: {
                 'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
             },
@@ -34,7 +40,7 @@ export const reportPartTwoService = {
     },
 
     createReportId(data: object, panel: string, id: string, withFile = false) {
-        return HTTP.post(`regional_competitions/reports/${panel}/${id}/`, data, {
+        return HTTP.post(`${APPLICATION_NAME}/reports/${panel}/${id}/`, data, {
             headers: {
                 'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
             },
@@ -42,14 +48,14 @@ export const reportPartTwoService = {
     },
 
     createReportDraft(data: object, panel: string, withFile = false) {
-        return HTTP.put(`regional_competitions/me/reports/${panel}/`, data, {
+        return HTTP.put(`${APPLICATION_NAME}/me/reports/${panel}/`, data, {
             headers: {
                 'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
             },
         })
     },
     createReportDraftId(data: object, panel: string, id: string, withFile = false) {
-        return HTTP.put(`regional_competitions/me/reports/${panel}/${id}/`, data, {
+        return HTTP.put(`${APPLICATION_NAME}/me/reports/${panel}/${id}/`, data, {
             headers: {
                 'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
             },
@@ -58,25 +64,25 @@ export const reportPartTwoService = {
 
     
     getReport(panel: string) {
-        return HTTP.get(`regional_competitions/me/reports/${panel}/`)
+        return HTTP.get(`${APPLICATION_NAME}/me/reports/${panel}/`)
     },
 
     getReportId(panel: string, id: string) {
-        return HTTP.get(`regional_competitions/me/reports/${panel}/${id}/`)
+        return HTTP.get(`${APPLICATION_NAME}/me/reports/${panel}/${id}/`)
     },
     getReportDH(panel: string, reportId: string) {
-        return HTTP.get(`regional_competitions/reports/${panel}/${reportId}/`)
+        return HTTP.get(`${APPLICATION_NAME}/reports/${panel}/${reportId}/`)
     },
 
     createMultipleReport(data: object, panel: string, reportNumber: string, withFile = false) {
-        return HTTP.post(`regional_competitions/reports/${panel}/${reportNumber}/`, data, {
+        return HTTP.post(`${APPLICATION_NAME}/reports/${panel}/${reportNumber}/`, data, {
             headers: {
                 'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
             },
         })
     },
     createMultipleReportAll(data: object, panel: string, reportNumber: string, withFile = false) {
-        return HTTP.post(`regional_competitions/me/reports/${panel}/${reportNumber}/all`, data, {
+        return HTTP.post(`${APPLICATION_NAME}/me/reports/${panel}/${reportNumber}/all`, data, {
             headers: {
                 'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
             },
@@ -84,7 +90,7 @@ export const reportPartTwoService = {
     },
 
     createMultipleReportDraft(data: object, panel: string, reportNumber: string, withFile = false) {
-        return HTTP.put(`regional_competitions/me/reports/${panel}/${reportNumber}/`, data, {
+        return HTTP.put(`${APPLICATION_NAME}/me/reports/${panel}/${reportNumber}/`, data, {
             headers: {
                 'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
             },
@@ -92,34 +98,34 @@ export const reportPartTwoService = {
     },
 
     getMultipleReport(panel: string, reportNumber: string) {
-        return HTTP.get(`regional_competitions/me/reports/${panel}/${reportNumber}/`)
+        return HTTP.get(`${APPLICATION_NAME}/me/reports/${panel}/${reportNumber}/`)
     },
 
     getMultipleReportDH(panel: string, reportNumber: string, reportId: string) {
-        return HTTP.get(`/regional_competitions/reports/${panel}/${reportNumber}/${reportId}/`)
+        return HTTP.get(`/${APPLICATION_NAME}/reports/${panel}/${reportNumber}/${reportId}/`)
     },
 
     sendReport(data: object, panel: string) {
-        return HTTP.post(`regional_competitions/me/reports/${panel}/send`, data)
+        return HTTP.post(`${APPLICATION_NAME}/me/reports/${panel}/send`, data)
     },
 
     sendReportWithSlash(data: object, panel: string) {
-        return HTTP.post(`regional_competitions/me/reports/${panel}/send/`, data)
+        return HTTP.post(`${APPLICATION_NAME}/me/reports/${panel}/send/`, data)
     },
 
     sendMultipleReport(data: object, panel: string, reportNumber: string) {
-        return HTTP.post(`regional_competitions/me/reports/${panel}/${reportNumber}/send`, data)
+        return HTTP.post(`${APPLICATION_NAME}/me/reports/${panel}/${reportNumber}/send`, data)
     },
 
     sendReportDH(data: object, panel: string, reportNumber: string, withFile = false) {
-        return HTTP.put(`regional_competitions/reports/${panel}/${reportNumber}/district_review/`, data, {
+        return HTTP.put(`${APPLICATION_NAME}/reports/${panel}/${reportNumber}/district_review/`, data, {
             headers: {
                 'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
             },
         })
     },
     sendReportDHMultiply(data: object, panel: string, reportId: string,  reportNumber: string, withFile = false) {
-        return HTTP.put(`regional_competitions/reports/${panel}/${reportId}/${reportNumber}/district_review/`, data, {
+        return HTTP.put(`${APPLICATION_NAME}/reports/${panel}/${reportId}/${reportNumber}/district_review/`, data, {
             headers: {
                 'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
             },
@@ -128,14 +134,14 @@ export const reportPartTwoService = {
 
     sendReportCH(data: object, panel: string, reportNumber: string, withFile = false, isReturn = false) {
         if (!isReturn) {
-            return HTTP.put(`regional_competitions/reports/${panel}/${reportNumber}/central_review/`, data, {
+            return HTTP.put(`${APPLICATION_NAME}/reports/${panel}/${reportNumber}/central_review/`, data, {
                 headers: {
                     'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
                 },
             });
             // console.log('ВЕРИФИЦИРОВАН ЦШ');
         } else {
-            return HTTP.delete(`regional_competitions/reports/${panel}/${reportNumber}/central_review/`, {
+            return HTTP.delete(`${APPLICATION_NAME}/reports/${panel}/${reportNumber}/central_review/`, {
                 headers: {
                     'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
                 },
@@ -147,13 +153,13 @@ export const reportPartTwoService = {
 
     sendMultipleReportCH(data: object, panel: string, reportId: string,  reportNumber: string, withFile = false, isReturn = false) {
         if (!isReturn) {
-            return HTTP.put(`regional_competitions/reports/${panel}/${reportId}/${reportNumber}/central_review/`, data, {
+            return HTTP.put(`${APPLICATION_NAME}/reports/${panel}/${reportId}/${reportNumber}/central_review/`, data, {
                 headers: {
                     'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
                 },
             });
         } else {
-            return HTTP.delete(`regional_competitions/reports/${panel}/${reportId}/${reportNumber}/central_review/`, {
+            return HTTP.delete(`${APPLICATION_NAME}/reports/${panel}/${reportId}/${reportNumber}/central_review/`, {
                 headers: {
                     'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
                 },
@@ -163,6 +169,6 @@ export const reportPartTwoService = {
     },
 
     getSentReports() {
-        return HTTP.get('/regional_competitions/get_sent_reports/')
+        return HTTP.get(`/${APPLICATION_NAME}/get_sent_reports/`)
     }
 }
