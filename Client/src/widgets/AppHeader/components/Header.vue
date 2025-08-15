@@ -345,7 +345,16 @@ const userPages = computed(() => [
             roleStore.roles.centralheadquarter_commander,
     },
     {
-        title: 'Рейтинг РО',
+        title: 'Рейтинг РО 2024',
+        name: nameUrl,
+        show:
+            (roleStore.roles?.regionalheadquarter_commander && roleStore.experts.is_district_expert) ||
+            roleStore.experts.is_central_expert === true ||
+            roleStore.roles?.regionalheadquarter_commander ||
+            roleStore.roles?.centralheadquarter_commander,
+    },
+    {
+        title: 'Рейтинг РО 2025',
         name: nameUrl,
         show:
             (roleStore.roles?.regionalheadquarter_commander && roleStore.experts.is_district_expert) ||
@@ -455,7 +464,7 @@ watch(
         else {
             nameUrl = 'reportingRo'
         }
-        
+
         if (localStorage.getItem('jwt_token') !== null) {
             userStore.getCountApp();
         }
