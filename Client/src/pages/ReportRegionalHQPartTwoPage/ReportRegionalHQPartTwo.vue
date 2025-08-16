@@ -35,7 +35,7 @@
           <v-expansion-panel v-if="showPanels('1', picked, revisionPanels)">
 <!--            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('1') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('1') ? false : true"-->
             <v-expansion-panel-title :class="isErrorPanel.first ? 'visible-error' : ''">
-              1. Численность членов РО&nbsp;РСО в&nbsp;соответствии с&nbsp;объемом уплаченных членских взносов
+              1. Численность членов РО РСО
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <first-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"

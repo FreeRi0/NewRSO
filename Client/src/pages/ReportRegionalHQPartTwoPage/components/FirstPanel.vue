@@ -46,6 +46,32 @@
         </div>
       </div>
       <div class="form__field">
+        <label class="form__label" for="comment">Численность иностранных граждан</label>
+        <InputReport
+            v-model:value="firstPanelData.foreign_participants"
+            id="foreign_participants"
+            name="foreign_participants"
+            class="form__input"
+            type="number"
+            placeholder="Введите число"
+            :maxlength="10"
+            :min="0"
+            :max="9999999999"
+            :step="0.01"
+            @focusout="focusOut"
+            :disabled="isSent"
+            :is-error-panel="isErrorPanel"
+            style="width: 100%"
+        />
+      </div>
+      <div>
+        <v-checkbox
+            v-model="firstPanelData.top_must_pay"
+            label="ТОП освобождены от оплаты членских взносов в данном РО"
+            @change="focusOut"
+        />
+      </div>
+      <div class="form__field">
         <label class="form__label" for="comment">Комментарий</label>
         <TextareaReport
             placeholder="Напишите сообщение"
@@ -120,6 +146,32 @@
         </div>
       </div>
       <div class="form__field">
+        <label class="form__label" for="comment">Численность иностранных граждан</label>
+        <InputReport
+            v-model:value="firstPanelData.foreign_participants"
+            id="foreign_participants"
+            name="foreign_participants"
+            class="form__input"
+            type="number"
+            placeholder="Введите число"
+            :maxlength="10"
+            :min="0"
+            :max="9999999999"
+            :step="0.01"
+            @focusout="focusOut"
+            :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+            style="width: 100%"
+        />
+      </div>
+      <div>
+        <v-checkbox
+            v-model="firstPanelData.top_must_pay"
+            label="ТОП освобождены от оплаты членских взносов в данном РО"
+            @change="focusOut"
+            :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+        />
+      </div>
+      <div class="form__field">
         <label class="form__label" for="comment">Комментарий</label>
         <TextareaReport
             placeholder="Напишите сообщение"
@@ -160,6 +212,30 @@
               :is-error-panel="isErrorPanel"
           />
         </div>
+      </div>
+      <div class="form__field">
+        <label class="form__label" for="comment">Численность иностранных граждан</label>
+        <InputReport
+            v-model:value="firstPanelDataDH.foreign_participants"
+            id="foreign_participants"
+            name="foreign_participants"
+            class="form__input"
+            type="number"
+            placeholder="Введите число"
+            :maxlength="10"
+            :min="0"
+            :max="9999999999"
+            :step="0.01"
+            :disabled="props.centralExpert || reportStore.isReportReject?.first || reportStore.isAllReportsVerifiedByCH"
+            style="width: 100%"
+        />
+      </div>
+      <div>
+        <v-checkbox
+            v-model="firstPanelDataDH.top_must_pay"
+            label="ТОП освобождены от оплаты членских взносов в данном РО"
+            :disabled="props.centralExpert || reportStore.isReportReject?.first || reportStore.isAllReportsVerifiedByCH"
+        />
       </div>
       <div class="form__field">
         <CommentFileComponent
@@ -295,16 +371,22 @@ const firstPanelData = ref({
   scan_file: '',
   file_type: '',
   file_size: '',
+  foreign_participants: '',
+  top_must_pay: false,
 });
 const firstPanelDataDH = ref({
   comment: '',
   amount_of_money: '',
   scan_file: '',
+  foreign_participants: '',
+  top_must_pay: false,
 });
 const firstPanelDataCH = ref({
   comment: '',
   amount_of_money: '',
   scan_file: '',
+  foreign_participants: '',
+  top_must_pay: false,
 });
 const isSent = ref(false);
 const fileNameDH = ref(null);
@@ -320,6 +402,9 @@ const focusOut = async () => {
   let formData = new FormData();
   formData.append('comment', firstPanelData.value.comment || '');
   formData.append('amount_of_money', firstPanelData.value.amount_of_money || '');
+  formData.append('foreign_participants', firstPanelData.value.foreign_participants || '');
+  formData.append('top_must_pay', firstPanelData.value.top_must_pay);
+
   if (firstPanelData.value.scan_file) formData.append('scan_file', firstPanelData.value.scan_file || '');
   try {
     if (isFirstSent.value) {
@@ -340,6 +425,8 @@ const uploadFile = async (event) => {
   formData.append('scan_file', event.target.files[0]);
   formData.append('comment', firstPanelData.value.comment || '');
   formData.append('amount_of_money', firstPanelData.value.amount_of_money || '');
+  formData.append('foreign_participants', firstPanelData.value.foreign_participants || '');
+  formData.append('top_must_pay', firstPanelData.value.top_must_pay);
 
   firstPanelData.value.file_size = (event.target.files[0].size / Math.pow(1024, 2));
   firstPanelData.value.file_type = event.target.files[0].type.split('/').at(-1);
@@ -384,6 +471,8 @@ const deleteFile = async () => {
   formData.append('scan_file', '');
   formData.append('comment', firstPanelData.value.comment || '');
   formData.append('amount_of_money', firstPanelData.value.amount_of_money || '');
+  formData.append('foreign_participants', firstPanelData.value.foreign_participants || '');
+  formData.append('top_must_pay', firstPanelData.value.top_must_pay);
 
   if (isErrorFile.value) {
     firstPanelData.value.scan_file = "";
@@ -432,6 +521,8 @@ const onReportReturn = (event) => {
     formData.append('reasons[comment]', firstPanelDataCH.value.comment);
     formData.append('comment', firstPanelDataCH.value.comment);
     formData.append('amount_of_money', firstPanelDataCH.value.amount_of_money);
+    formData.append('foreign_participants', firstPanelData.value.foreign_participants);
+    formData.append('top_must_pay', firstPanelData.value.top_must_pay);
     if (reportStore.reportDataCHFile.first) {
       formData.append('scan_file', reportStore.reportDataCHFile.first);
     } else if (reportStore.reportDataCH.first.scan_file) {
@@ -443,6 +534,8 @@ const onReportReturn = (event) => {
     reportStore.returnReport.first = false;
     formData.append('comment', firstPanelDataCH.value.comment);
     formData.append('amount_of_money', firstPanelDataCH.value.amount_of_money);
+    formData.append('foreign_participants', firstPanelData.value.foreign_participants);
+    formData.append('top_must_pay', firstPanelData.value.top_must_pay);
     if (reportStore.reportDataCHFile.first) {
       formData.append('scan_file', reportStore.reportDataCHFile.first);
     } else if (reportStore.reportDataCH.first.scan_file) {
@@ -472,6 +565,8 @@ watchEffect(async () => {
     isFirstSent.value = false;
     firstPanelData.value.comment = props.data.comment;
     firstPanelData.value.amount_of_money = props.data.amount_of_money;
+    firstPanelData.value.foreign_participants = props.data.foreign_participants;
+    firstPanelData.value.top_must_pay = props.data.top_must_pay;
     firstPanelData.value.scan_file = props.data.scan_file;
     firstPanelData.value.file_type = props.data.file_type;
     firstPanelData.value.file_size = props.data.file_size;
@@ -498,6 +593,8 @@ watchEffect(async () => {
     if (reportStore.reportForCheckCH.first.rejecting_reasons) {
       firstPanelData.value.comment = reportStore.reportForCheckCH.first.comment;
       firstPanelData.value.amount_of_money = reportStore.reportForCheckCH.first.amount_of_money;
+      firstPanelData.value.foreign_participants = reportStore.reportForCheckCH.first.foreign_participants;
+      firstPanelData.value.top_must_pay = reportStore.reportForCheckCH.first.top_must_pay;
       firstPanelData.value.scan_file = reportStore.reportForCheckCH.first.scan_file || null;
       firstPanelData.value.file_type = reportStore.reportForCheckCH.first.file_type || null;
       firstPanelData.value.file_size = reportStore.reportForCheckCH.first.file_size || null;
@@ -507,6 +604,8 @@ watchEffect(async () => {
         const reportDataRH = JSON.parse(reportStore.reportForCheckCH.first.regional_version);
         firstPanelData.value.comment = reportDataRH?.comment || '';
         firstPanelData.value.amount_of_money = reportDataRH?.amount_of_money;
+        firstPanelData.value.foreign_participants = reportDataRH?.foreign_participants;
+        firstPanelData.value.top_must_pay = reportDataRH?.top_must_pay;
         firstPanelData.value.scan_file = reportDataRH?.scan_file || null;
         firstPanelData.value.file_type = reportDataRH?.file_type || null;
         firstPanelData.value.file_size = reportDataRH?.file_size || null;
@@ -516,6 +615,8 @@ watchEffect(async () => {
       const reportDataDH = JSON.parse(reportStore.reportForCheckCH.first.district_version);
       firstPanelDataDH.value.comment = reportDataDH.comment;
       firstPanelDataDH.value.amount_of_money = reportDataDH.amount_of_money;
+      firstPanelDataDH.value.foreign_participants = reportDataDH.foreign_participants;
+      firstPanelDataDH.value.top_must_pay = reportDataDH.top_must_pay;
       fileNameDH.value = reportDataDH.scan_file || '';
       fileTypeDH.value = reportDataDH.file_type || '';
       fileSizeDH.value = reportDataDH.file_size || '';
@@ -524,6 +625,8 @@ watchEffect(async () => {
       if (reportStore.reportDataCH.first.central_version) {
         firstPanelDataCH.value.amount_of_money = reportStore.reportDataCH.first.central_version.amount_of_money;
         firstPanelDataCH.value.comment = reportStore.reportDataCH.first.central_version.comment || '';
+        firstPanelDataCH.value.foreign_participants = reportStore.reportDataCH.first.central_version.foreign_participants || '';
+        firstPanelDataCH.value.top_must_pay = reportStore.reportDataCH.first.central_version.top_must_pay;
         firstPanelDataCH.value.scan_file = reportStore.reportDataCH.first.central_version.scan_file;
         firstPanelDataCH.value.file_size = reportStore.reportDataCH.first.central_version.file_size;
         firstPanelDataCH.value.file_type = reportStore.reportDataCH.first.central_version.file_type;
@@ -533,6 +636,8 @@ watchEffect(async () => {
       } else {
         firstPanelDataCH.value.amount_of_money = reportStore.reportDataCH.first.amount_of_money;
         firstPanelDataCH.value.comment = reportStore.reportDataCH.first.comment || '';
+        firstPanelDataCH.value.foreign_participants = reportStore.reportDataCH.first.foreign_participants || '';
+        firstPanelDataCH.value.top_must_pay = reportStore.reportDataCH.first.top_must_pay;
         firstPanelDataCH.value.scan_file = reportStore.reportDataCH.first.scan_file;
         firstPanelDataCH.value.file_size = reportStore.reportDataCH.first.file_size;
         firstPanelDataCH.value.file_type = reportStore.reportDataCH.first.file_type;
@@ -546,6 +651,8 @@ watchEffect(async () => {
       const reportDataRH = JSON.parse(reportStore.reportForCheckCH.first.regional_version);
       firstPanelData.value.comment = reportDataRH?.comment || '';
       firstPanelData.value.amount_of_money = reportDataRH?.amount_of_money;
+      firstPanelData.value.foreign_participants = reportDataRH?.foreign_participants;
+      firstPanelData.value.top_must_pay = reportDataRH?.top_must_pay;
       firstPanelData.value.scan_file = reportDataRH?.scan_file || null;
       firstPanelData.value.file_type = reportDataRH?.file_type || null;
       firstPanelData.value.file_size = reportDataRH?.file_size || null;
@@ -553,6 +660,8 @@ watchEffect(async () => {
       // Добавление данных панели "корректировка ОШ"
       firstPanelDataDH.value.comment = reportStore.reportForCheckCH.first.comment;
       firstPanelDataDH.value.amount_of_money = reportStore.reportForCheckCH.first.amount_of_money;
+      firstPanelDataDH.value.foreign_participants = reportStore.reportForCheckCH.first.foreign_participants;
+      firstPanelDataDH.value.top_must_pay = reportStore.reportForCheckCH.first.top_must_pay;
       fileNameDH.value = reportStore.reportForCheckCH.first.scan_file || '';
       fileTypeDH.value = reportStore.reportForCheckCH.first.file_type || '';
       fileSizeDH.value = reportStore.reportForCheckCH.first.file_size || '';
@@ -560,6 +669,8 @@ watchEffect(async () => {
       // Добавление данных из стора для панели "корректировка ЦШ"
       firstPanelDataCH.value.amount_of_money = reportStore.reportDataCH.first.amount_of_money;
       firstPanelDataCH.value.comment = reportStore.reportDataCH.first.comment || '';
+      firstPanelDataCH.value.foreign_participants = reportStore.reportDataCH.first.foreign_participants || '';
+      firstPanelDataCH.value.top_must_pay = reportStore.reportDataCH.first.top_must_pay;
       fileNameCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.name : null;
       fileSizeCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.size / Math.pow(1024, 2) : null;
       fileTypeCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.type.split('/').at(-1) : null;
@@ -575,6 +686,8 @@ watchEffect(async () => {
     const reportDataDH = JSON.parse(reportStore.reportReject.first.district_version);
     firstPanelDataDH.value.comment = reportDataDH.comment || '';
     firstPanelDataDH.value.amount_of_money = reportDataDH.amount_of_money;
+    firstPanelDataDH.value.foreign_participants = reportDataDH.foreign_participants;
+    firstPanelDataDH.value.top_must_pay = reportDataDH.top_must_pay;
 
     fileNameDH.value = reportDataDH.scan_file;
     fileTypeDH.value = reportDataDH.file_type;
@@ -585,6 +698,8 @@ watchEffect(async () => {
       // Отчет создан:
       firstPanelDataCH.value.amount_of_money = props.data.central_version.amount_of_money;
       firstPanelDataCH.value.comment = props.data.central_version.comment || '';
+      firstPanelDataCH.value.foreign_participants = props.data.central_version.foreign_participants || '';
+      firstPanelDataCH.value.top_must_pay = props.data.central_version.top_must_pay;
 
       fileNameCH.value = props.data.central_version.scan_file ? props.data.central_version.scan_file : null;
       fileSizeCH.value = props.data.central_version.file_size ? props.data.central_version.file_size : null;
@@ -593,6 +708,8 @@ watchEffect(async () => {
       // Отчет не создан:
       firstPanelDataCH.value.amount_of_money = reportStore.reportReject.first.amount_of_money;
       firstPanelDataCH.value.comment = reportStore.reportReject.first.comment || '';
+      firstPanelDataCH.value.foreign_participants = reportStore.reportReject.first.foreign_participants || '';
+      firstPanelDataCH.value.top_must_pay = reportStore.reportReject.first.top_must_pay;
 
       fileNameCH.value = reportStore.reportReject.first.scan_file ? reportStore.reportReject.first.scan_file : null;
       fileSizeCH.value = reportStore.reportReject.first.file_size ? reportStore.reportReject.first.file_size : null;
@@ -606,6 +723,8 @@ watchPostEffect(() => {
     isFirstSent.value = false;
     firstPanelData.value.comment = props.data.comment;
     firstPanelData.value.amount_of_money = props.data.amount_of_money;
+    firstPanelData.value.foreign_participants = props.data.foreign_participants;
+    firstPanelData.value.top_must_pay = props.data.top_must_pay;
     firstPanelData.value.scan_file = props.data.scan_file || '';
     firstPanelData.value.file_type = props.data.file_type || '';
     firstPanelData.value.file_size = props.data.file_size || '';
@@ -622,6 +741,8 @@ watch(firstPanelDataDH.value, () => {
   let formData = new FormData();
   formData.append('comment', firstPanelDataDH.value.comment || '');
   formData.append('amount_of_money', firstPanelDataDH.value.amount_of_money);
+  formData.append('foreign_participants', firstPanelDataDH.value.foreign_participants);
+  formData.append('top_must_pay', firstPanelDataDH.value.top_must_pay);
   if (reportStore.reportDataDHFile.first) {
     formData.append('scan_file', reportStore.reportDataDHFile.first);
 
@@ -647,6 +768,8 @@ watch(firstPanelDataCH.value, () => {
   let formData = new FormData();
   formData.append('comment', firstPanelDataCH.value.comment || '');
   formData.append('amount_of_money', firstPanelDataCH.value.amount_of_money);
+  formData.append('foreign_participants', firstPanelDataCH.value.foreign_participants);
+  formData.append('top_must_pay', firstPanelDataCH.value.top_must_pay);
   if (reportStore.reportDataCHFile.first) {
     formData.append('scan_file', reportStore.reportDataCHFile.first);
   } else if (reportStore.reportDataCH.first.scan_file) {

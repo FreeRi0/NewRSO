@@ -1,11 +1,7 @@
 <template>
   <form class="form__field-group Report-Regional-Form__style" @submit.prevent="sentReport">
-    <h2 v-if="isSecondReport" class="report_title-h3">Свод статистических данных по&nbsp;трудоустройству бойцов
-      студенческих
-      отрядов РО&nbsp;за&nbsp;2024 год на&nbsp;15&nbsp;октября 2024 года</h2>
-    <h2 v-else-if="!isNewReport" class="report_title-h3">Свод статистических данных по&nbsp;трудоустройству бойцов
-      студенческих
-      отрядов РО&nbsp;за&nbsp;2024 год на&nbsp;1&nbsp;сентября 2024 года</h2>
+    <h2 v-if="isSecondReport" class="report_title-h3">Свод статистических данных по трудоустройству бойцов студенческих отрядов РО за 2025 год на 15 октября 2025 года</h2>
+    <h2 v-else-if="!isNewReport" class="report_title-h3">Свод статистических данных по трудоустройству бойцов студенческих отрядов РО за 2025 год на 15 октября 2025 года</h2>
     <div class="form__field">
       <label class="form__label" for="participants_number">Количество членов РО <sup class="valid-red">*</sup></label>
       <InputReport
