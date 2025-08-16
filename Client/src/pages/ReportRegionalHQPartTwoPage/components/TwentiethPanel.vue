@@ -187,7 +187,7 @@ watchEffect(() => {
     // ссылка на документацию, названия полей--------------------------------------------------
     twentiethPanelData.value.premises_available = props.data.premises_available;
     twentiethPanelData.value.equipped_workplaces = props.data.equipped_workplaces;
-    twentiethPanelData.value.event_spaces = props.event_spaces;
+    twentiethPanelData.value.event_spaces = props.data.event_spaces;
   }
 }, {
   flush: 'post'
