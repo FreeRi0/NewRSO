@@ -78,10 +78,10 @@
         placeholder="Комментарий" @focusout="focusOut" :maxlength="3000" :max-length-text="3000" counter-visible
         :disabled="isSent" />
     </div>
-    <div class="form__field-result">
-      <v-checkbox class="result-checkbox" id="v-checkbox" @change="calculateResult($event)" />
-      <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
-    </div>
+<!--    <div class="form__field-result">-->
+<!--      <v-checkbox class="result-checkbox" id="v-checkbox" @change="calculateResult($event)" />-->
+<!--      <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>-->
+<!--    </div>-->
     <div class="hr"></div>
     <div>
       <p>{{ finalResult.toFixed(1) }}</p>
@@ -155,10 +155,10 @@
           placeholder="Комментарий" :maxlength="3000" :max-length-text="3000" counter-visible @focusout="focusOut"
           :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH" />
       </div>
-      <div class="form__field-result">
-        <v-checkbox class="result-checkbox" id="v-checkbox" @change="calculateResult($event)" />
-        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
-      </div>
+<!--      <div class="form__field-result">-->
+<!--        <v-checkbox class="result-checkbox" id="v-checkbox" @change="calculateResult($event)" />-->
+<!--        <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>-->
+<!--      </div>-->
       <div class="hr"></div>
       <div>
         <p>{{ finalResult.toFixed(1) }}</p>
@@ -230,10 +230,10 @@
           placeholder="Примечания, ссылки" :maxlength="3000" :max-length-text="3000" counter-visible
           :disabled="props.centralExpert || reportStore.isReportReject?.fifth || reportStore.isAllReportsVerifiedByCH" />
       </div>
-      <div class="form__field-result">
-        <v-checkbox class="result-checkbox" id="v-checkboxDH" @change="calculateResultDH($event)" />
-        <label class="result-checkbox-text" for="v-checkboxDH">Итоговое значение</label>
-      </div>
+<!--      <div class="form__field-result">-->
+<!--        <v-checkbox class="result-checkbox" id="v-checkboxDH" @change="calculateResultDH($event)" />-->
+<!--        <label class="result-checkbox-text" for="v-checkboxDH">Итоговое значение</label>-->
+<!--      </div>-->
       <div class="hr"></div>
       <div>
         <p>{{ finalResultDH.toFixed(1) }}</p>
