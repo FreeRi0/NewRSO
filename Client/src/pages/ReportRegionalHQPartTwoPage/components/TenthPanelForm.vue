@@ -1,13 +1,13 @@
 <template>
   <div
-      v-if="!(props.centralExpert || props.districtExpert || isReportReject || reportStore.isAllReportsVerifiedByCH) || (props.tab === 'Просмотр отправленного отчета' && isReportReject)"
-      class="form__field-group">
+    v-if="!(props.centralExpert || props.districtExpert || isReportReject || reportStore.isAllReportsVerifiedByCH) || (props.tab === 'Просмотр отправленного отчета' && isReportReject)"
+    class="form__field-group">
     <div style="display: flex; justify-content: space-between;">
       <div>
         <p class="form__title">{{ props.title }}</p>
       </div>
       <div>
-        <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть"/>
+        <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
       </div>
     </div>
 
@@ -16,12 +16,12 @@
       <div class="form__field-radio" style="display: flex">
         <div style="display: flex; align-items: center">
           <input v-model="tenthPanelData.event_happened" id="event_happened-true" class="custom-radio" type="radio"
-                 :value="true" :disabled="isSent"/>
+            :value="true" :disabled="isSent" />
           <label for="event_happened-true">Да</label>
         </div>
         <div style="display: flex; align-items: center">
           <input v-model="tenthPanelData.event_happened" id="event_happened-false" class="custom-radio" type="radio"
-                 :value="false" :disabled="isSent"/>
+            :value="false" :disabled="isSent" />
           <label for="event_happened-false">Нет</label>
         </div>
       </div>
@@ -29,32 +29,66 @@
         <label style="display: flex; " class="form__label" for="4">Скан документа, подтверждающего проведение
           акции</label>
         <InputReport class="form-input__file-input" v-if="!tenthPanelData.document" isFile type="file" id="scan_file"
-                     name="scan_file" @change="uploadFile" :disabled="isSent || !tenthPanelData.event_happened"/>
+          name="scan_file" @change="uploadFile" :disabled="isSent || !tenthPanelData.event_happened" />
         <FileBoxComponent v-else :file="tenthPanelData.document" :fileType="tenthPanelData.file_type"
-                          :fileSize="tenthPanelData.file_size" :isSent="isSent"
-                          :is-error-file="isErrorFile && !tenthPanelData.file_size" @click="deleteFile"/>
+          :fileSize="tenthPanelData.file_size" :isSent="isSent"
+          :is-error-file="isErrorFile && !tenthPanelData.file_size" @click="deleteFile" />
       </div>
       <div>
         <p class="form__label">Ссылка на социальные сети/ электронные <br>
           СМИ, подтверждающая проведение акции</p>
         <div class="input-link" v-for="(link, i) in tenthPanelData.links" :key="i">
           <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__input-add-link" type="text"
-                       placeholder="Введите ссылку, например, https://vk.com/cco_monolit" @focusout="formData"
-                       :disabled="isSent || !tenthPanelData.event_happened" is-link/>
+            placeholder="Введите ссылку, например, https://vk.com/cco_monolit" @focusout="formData"
+            :disabled="isSent || !tenthPanelData.event_happened" is-link />
           <div v-if="!isSent && tenthPanelData.event_happened">
             <Button v-if="tenthPanelData.links.length === i + 1" class="form__add-link-button" label="+ Добавить ссылку"
-                    @click="addLink"/>
-            <Button class="form__add-link-button" v-else label="Удалить" @click="onDeleteLink(i)"/>
+              @click="addLink" />
+            <Button class="form__add-link-button" v-else label="Удалить" @click="onDeleteLink(i)" />
           </div>
+        </div>
+      </div>
+      <div class="field_number">
+        <div class="item_number form__field places">
+          <p class="form__label">
+            Общее количество участников
+          </p>
+          <InputReport @focusout="focusOut" v-model:value="tenthPanelData.number_members" :disabled="isSentSix"
+            :is-error-panel="isErrorPanel" :is-link="false" placeholder="Введите число" id="15" name="14"
+            class="form__input number_input" type="number" :max="32767" />
+        </div>
+        <div class="item_number form__field places">
+          <p class="form__label">
+            Количество новых участников
+          </p>
+          <InputReport @focusout="focusOut" v-model:value="tenthPanelData.number_new_members" :disabled="isSentSix"
+            :is-error-panel="isErrorPanel" :is-link="false" placeholder="Введите число" id="15" name="14"
+            class="form__input number_input" type="number" :max="32767" />
+        </div>
+        <div class="item_number form__field places">
+          <p class="form__label">
+            Количество благополучателей
+          </p>
+          <InputReport @focusout="focusOut" v-model:value="tenthPanelData.number_beneficiaries" :disabled="isSentSix"
+            :is-error-panel="isErrorPanel" :is-link="false" placeholder="Введите число" id="15" name="14"
+            class="form__input number_input" type="number" :max="32767" />
+        </div>
+        <div class="item_number form__field places">
+          <p class="form__label">
+            Количество населенных пунктов
+          </p>
+          <InputReport @focusout="focusOut" v-model:value="tenthPanelData.number_settlements" :disabled="isSentSix"
+            :is-error-panel="isErrorPanel" :is-link="false" placeholder="Введите число" id="15" name="14"
+            class="form__input number_input" type="number" :max="32767" />
         </div>
       </div>
       <div class="form__field-comment">
         <label style="display: flex; align-items: center;" class="form__label" for="comment">Комментарий <sup
             class="valid-red">*</sup></label>
         <TextareaReport placeholder="Напишите сообщение" v-model:value="tenthPanelData.comment" id="comment"
-                        name="comment" :rows="row" autoResize :maxlength="3000" :max-length-text="3000" counter-visible
-                        class="form__input form__input-comment" style="margin-bottom: 4px;"
-                        :disabled="isSent || !tenthPanelData.event_happened" @focusout="formData"/>
+          name="comment" :rows="row" autoResize :maxlength="3000" :max-length-text="3000" counter-visible
+          class="form__input form__input-comment" style="margin-bottom: 4px;"
+          :disabled="isSent || !tenthPanelData.event_happened" @focusout="formData" />
       </div>
     </div>
 
@@ -68,7 +102,7 @@
           <p class="form__title">{{ props.title }}</p>
         </div>
         <div>
-          <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть"/>
+          <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
         </div>
       </div>
 
@@ -77,14 +111,14 @@
         <div class="form__field-radio" style="display: flex">
           <div style="display: flex; align-items: center">
             <input v-model="tenthPanelData.event_happened" id="event_happened-true" class="custom-radio" type="radio"
-                   :value="true"
-                   :disabled="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)"/>
+              :value="true"
+              :disabled="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)" />
             <label for="event_happened-true">Да</label>
           </div>
           <div style="display: flex; align-items: center">
             <input v-model="tenthPanelData.event_happened" id="event_happened-false" class="custom-radio" type="radio"
-                   :value="false"
-                   :disabled="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)"/>
+              :value="false"
+              :disabled="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)" />
             <label for="event_happened-false">Нет</label>
           </div>
         </div>
@@ -92,27 +126,26 @@
           <label style="display: flex; " class="form__label" for="4">Скан документа, подтверждающего проведение
             акции</label>
           <InputReport class="form-input__file-input" v-if="!tenthPanelData.document" isFile type="file" id="scan_file"
-                       name="scan_file" @change="uploadFile"
-                       :disabled="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)"/>
+            name="scan_file" @change="uploadFile"
+            :disabled="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)" />
           <FileBoxComponent v-else :file="tenthPanelData.document" :fileType="tenthPanelData.file_type"
-                            :fileSize="tenthPanelData.file_size"
-                            :isSent="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)"
-                            :is-error-file="isErrorFile && !tenthPanelData.file_size" @click="deleteFile"
-                            :disabled="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)"/>
+            :fileSize="tenthPanelData.file_size"
+            :isSent="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)"
+            :is-error-file="isErrorFile && !tenthPanelData.file_size" @click="deleteFile"
+            :disabled="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)" />
         </div>
         <div>
           <p class="form__label">Ссылка на социальные сети/ электронные <br>
             СМИ, подтверждающая проведение акции</p>
           <div class="input-link" v-for="(link, i) in tenthPanelData.links" :key="i">
             <InputReport v-model:value="link.link" :id="i" :name="i" class="form__input form__input-add-link"
-                         type="text" placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
-                         @focusout="formData"
-                         :disabled="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)"
-                         is-link/>
+              type="text" placeholder="Введите ссылку, например, https://vk.com/cco_monolit" @focusout="formData"
+              :disabled="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)"
+              is-link />
             <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)">
               <Button v-if="tenthPanelData.links.length === i + 1" class="form__add-link-button"
-                      label="+ Добавить ссылку" @click="addLink"/>
-              <Button class="form__add-link-button" v-else label="Удалить" @click="onDeleteLink(i)"/>
+                label="+ Добавить ссылку" @click="addLink" />
+              <Button class="form__add-link-button" v-else label="Удалить" @click="onDeleteLink(i)" />
             </div>
           </div>
         </div>
@@ -120,10 +153,10 @@
           <label style="display: flex; align-items: center;" class="form__label" for="comment">Комментарий <sup
               class="valid-red">*</sup></label>
           <TextareaReport placeholder="Напишите сообщение" v-model:value="tenthPanelData.comment" id="comment"
-                          name="comment" :rows="1" autoResize :maxlength="3000" :max-length-text="3000" counter-visible
-                          class="form__input form__input-comment" style="margin-bottom: 4px;"
-                          :disabled="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)"
-                          @focusout="formData"/>
+            name="comment" :rows="1" autoResize :maxlength="3000" :max-length-text="3000" counter-visible
+            class="form__input form__input-comment" style="margin-bottom: 4px;"
+            :disabled="(props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH)"
+            @focusout="formData" />
         </div>
       </div>
 
@@ -136,29 +169,29 @@
           <p class="form__title">{{ props.title }}</p>
         </div>
         <div>
-          <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть"/>
+          <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
         </div>
       </div>
 
       <div class="form__field-radio" style="display: flex">
         <div style="display: flex; align-items: center">
           <input v-model="tenthPanelDataDH.event_happened" id="event_happenedDH-true" class="custom-radio" type="radio"
-                 :value="true" :disabled="centralExpert || isReportReject || reportStore.isAllReportsVerifiedByCH"/>
+            :value="true" :disabled="centralExpert || isReportReject || reportStore.isAllReportsVerifiedByCH" />
           <label for="event_happenedDH-true">Да</label>
         </div>
         <div style="display: flex; align-items: center">
           <input v-model="tenthPanelDataDH.event_happened" id="event_happenedDH-false" class="custom-radio" type="radio"
-                 :value="false" :disabled="centralExpert || isReportReject || reportStore.isAllReportsVerifiedByCH"/>
+            :value="false" :disabled="centralExpert || isReportReject || reportStore.isAllReportsVerifiedByCH" />
           <label for="event_happenedDH-false">Нет</label>
         </div>
       </div>
 
       <div class="form__field">
         <CommentFileComponent v-model:value="tenthPanelDataDH.comment" name="firstPanelDataDH.comment"
-                              :file="fileNameDH" :fileType="fileTypeDH" :fileSize="fileSizeDH"
-                              :disabled="centralExpert || isReportReject || reportStore.isAllReportsVerifiedByCH"
-                              :is-error-file="isErrorFile" @change="uploadFileDH" @click="deleteFileDH"
-                              :is-sent="centralExpert || isReportReject || reportStore.isAllReportsVerifiedByCH"/>
+          :file="fileNameDH" :fileType="fileTypeDH" :fileSize="fileSizeDH"
+          :disabled="centralExpert || isReportReject || reportStore.isAllReportsVerifiedByCH"
+          :is-error-file="isErrorFile" @change="uploadFileDH" @click="deleteFileDH"
+          :is-sent="centralExpert || isReportReject || reportStore.isAllReportsVerifiedByCH" />
       </div>
 
     </template>
@@ -169,111 +202,100 @@
           <p class="form__title">{{ props.title }}</p>
         </div>
         <div>
-          <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть"/>
+          <Button @click="collapseForm" class="form__btn" style="margin: 0" label="Свернуть" />
         </div>
       </div>
       <label style="display: block;" class="form__label">Проведение акции <sup class="valid-red">*</sup></label>
       <v-table class="report_table-wide">
         <tbody class="report-table">
-        <tr class="report-table__tr">
-          <td class="report-table__th report-table__th__br-left">Данные РО</td>
-          <td class="report-table__th report-table__td__center">Корректировка ОШ</td>
-          <td class="report-table__th report-table__th__br-right">Корректировка ЦШ
-          </td>
-        </tr>
-        <tr class="report-table__tr">
-          <td class="report-table__td">{{ tenthPanelData.event_happened ? 'Да' : 'Нет' }}</td>
-          <td class="report-table__td report-table__td__center">{{
+          <tr class="report-table__tr">
+            <td class="report-table__th report-table__th__br-left">Данные РО</td>
+            <td class="report-table__th report-table__td__center">Корректировка ОШ</td>
+            <td class="report-table__th report-table__th__br-right">Корректировка ЦШ
+            </td>
+          </tr>
+          <tr class="report-table__tr">
+            <td class="report-table__td">{{ tenthPanelData.event_happened ? 'Да' : 'Нет' }}</td>
+            <td class="report-table__td report-table__td__center">{{
               tenthPanelDataDH.event_happened ? 'Да' : 'Нет'
             }}
-          </td>
-          <td 
-            :class="[
-              'report-table__td',
-              (isReportReject && !centralExpert) || props.reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
-          >
-            {{ tenthPanelDataCH.event_happened === null ? null : tenthPanelDataCH.event_happened ? 'Да' : 'Нет' }}
-          </td>
-        </tr>
+            </td>
+            <td
+              :class="[
+                'report-table__td',
+                (isReportReject && !centralExpert) || props.reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']">
+              {{ tenthPanelDataCH.event_happened === null ? null : tenthPanelDataCH.event_happened ? 'Да' : 'Нет' }}
+            </td>
+          </tr>
         </tbody>
       </v-table>
       <v-table class="report_table-narrow">
         <tbody class="report-table">
-        <tr class="report-table__tr">
-          <td class="report-table__th report-table__th__br-left">Данные РО</td>
-        </tr>
-        <tr class="report-table__tr">
-          <td class="report-table__td">{{ tenthPanelData.event_happened ? 'Да' : 'Нет' }}</td>
-        </tr>
-        <tr class="report-table__tr">
-          <td class="report-table__th report-table__td__center">Корректировка ОШ</td>
-        </tr>
-        <tr class="report-table__tr">
-          <td class="report-table__td report-table__td__center">{{
+          <tr class="report-table__tr">
+            <td class="report-table__th report-table__th__br-left">Данные РО</td>
+          </tr>
+          <tr class="report-table__tr">
+            <td class="report-table__td">{{ tenthPanelData.event_happened ? 'Да' : 'Нет' }}</td>
+          </tr>
+          <tr class="report-table__tr">
+            <td class="report-table__th report-table__td__center">Корректировка ОШ</td>
+          </tr>
+          <tr class="report-table__tr">
+            <td class="report-table__td report-table__td__center">{{
               tenthPanelDataDH.event_happened ? 'Да' : 'Нет'
             }}
-          </td>
-        </tr>
-        <tr class="report-table__tr">
-          <td class="report-table__th report-table__th__br-right">Корректировка ЦШ
-          </td>
-        </tr>
-        <tr class="report-table__tr">
-          <td 
-            :class="[
-              'report-table__td',
-              (isReportReject && !centralExpert) || props.reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
-          >
-            {{ tenthPanelDataCH.event_happened === null ? null : tenthPanelDataCH.event_happened ? 'Да' : 'Нет' }}
-          </td>
-        </tr>
+            </td>
+          </tr>
+          <tr class="report-table__tr">
+            <td class="report-table__th report-table__th__br-right">Корректировка ЦШ
+            </td>
+          </tr>
+          <tr class="report-table__tr">
+            <td
+              :class="[
+                'report-table__td',
+                (isReportReject && !centralExpert) || props.reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']">
+              {{ tenthPanelDataCH.event_happened === null ? null : tenthPanelDataCH.event_happened ? 'Да' : 'Нет' }}
+            </td>
+          </tr>
         </tbody>
       </v-table>
       <label class="form__label">Проведение акции <sup class="valid-red">*</sup></label>
       <div class="form__field-radio" style="display: flex; margin-top: 10px;">
         <div style="display: flex; align-items: center">
           <input v-model="tenthPanelDataCH.event_happened" id="event_happenedCH-true" class="custom-radio" type="radio"
-                 :value="true" :disabled="(isReportReject && !centralExpert) || props.reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH"/>
+            :value="true"
+            :disabled="(isReportReject && !centralExpert) || props.reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH" />
           <label for="event_happenedCH-true">Да</label>
         </div>
         <div style="display: flex; align-items: center">
           <input v-model="tenthPanelDataCH.event_happened" id="event_happenedCH-false" class="custom-radio" type="radio"
-                 :value="false" :disabled="(isReportReject && !centralExpert) || props.reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH"/>
+            :value="false"
+            :disabled="(isReportReject && !centralExpert) || props.reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH" />
           <label for="event_happenedCH-false">Нет</label>
         </div>
       </div>
       <div>
-        <CommentFileComponent
-            v-model:value="tenthPanelDataCH.comment"
-            name="firstPanelDataDH.comment"
-            :file="fileNameCH"
-            :fileType="fileTypeCH"
-            :fileSize="fileSizeCH"
-            :is-error-file="isErrorFile"
-            @change="uploadFileCH"
-            @click="deleteFileCH"
-            :disabled="(isReportReject && !centralExpert) || props.reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH"
-            :is-sent="isReportReject || props.reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH"
-        />
+        <CommentFileComponent v-model:value="tenthPanelDataCH.comment" name="firstPanelDataDH.comment"
+          :file="fileNameCH" :fileType="fileTypeCH" :fileSize="fileSizeCH" :is-error-file="isErrorFile"
+          @change="uploadFileCH" @click="deleteFileCH"
+          :disabled="(isReportReject && !centralExpert) || props.reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH"
+          :is-sent="isReportReject || props.reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH" />
       </div>
       <div v-if="!reportStore.isAllReportsVerifiedByCH && !props.reportVerifiedByCH">
-        <v-checkbox
-            v-model="returnReport"
-            @change="onReportReturn"
-            label="Вернуть в РО на доработку"
-            :disabled="isReportReject && !centralExpert"
-        />
+        <v-checkbox v-model="returnReport" @change="onReportReturn" label="Вернуть в РО на доработку"
+          :disabled="isReportReject && !centralExpert" />
       </div>
     </template>
   </report-tabs>
 </template>
 <script setup>
-import {onMounted, ref, watch, watchEffect, watchPostEffect} from "vue";
-import {InputReport, TextareaReport} from '@shared/components/inputs';
-import {Button} from '@shared/components/buttons';
-import {ReportTabs} from './index';
-import {CommentFileComponent, FileBoxComponent} from '@entities/RatingRoComponents/components';
-import {useReportPartTwoStore} from "@pages/ReportRegionalHQPartTwoPage/store.ts";
+import { onMounted, ref, watch, watchEffect, watchPostEffect } from "vue";
+import { InputReport, TextareaReport } from '@shared/components/inputs';
+import { Button } from '@shared/components/buttons';
+import { ReportTabs } from './index';
+import { CommentFileComponent, FileBoxComponent } from '@entities/RatingRoComponents/components';
+import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
 
 const reportStore = useReportPartTwoStore();
 
@@ -308,6 +330,10 @@ const tenthPanelData = ref({
   file_size: '',
   file_type: '',
   comment: '',
+  number_members: '',
+  number_new_members: '',
+  number_beneficiaries: '',
+  number_settlements: '',
   links: [
     {
       link: '',
@@ -317,6 +343,10 @@ const tenthPanelData = ref({
 const tenthPanelDataDH = ref({
   event_happened: null,
   comment: '',
+  number_members: '',
+  number_new_members: '',
+  number_beneficiaries: '',
+  number_settlements: '',
   document: '',
   file_size: '',
   file_type: '',
@@ -324,6 +354,10 @@ const tenthPanelDataDH = ref({
 const tenthPanelDataCH = ref({
   event_happened: null,
   comment: '',
+  number_members: '',
+  number_new_members: '',
+  number_beneficiaries: '',
+  number_settlements: '',
   document: '',
   file_size: '',
   file_type: '',
@@ -350,7 +384,7 @@ const formData = () => {
 };
 
 const addLink = () => {
-  tenthPanelData.value.links.push({link: ''})
+  tenthPanelData.value.links.push({ link: '' })
 };
 
 const onDeleteLink = (linkIndex) => {
@@ -438,7 +472,7 @@ onMounted(() => {
       // Рефакторинг - добавлен код ниже, т.к. на вкл РО отображались данные ЦШ
       if (props.dataForCheckCH.regional_version) {
         tenthPanelData.value = JSON.parse(props.dataForCheckCH.regional_version);
-      }      
+      }
 
       // Добавление данных панели "корректировка ОШ"
       const reportDH = JSON.parse(props.dataForCheckCH.district_version)
@@ -540,13 +574,13 @@ onMounted(() => {
 });
 
 watchEffect(() => {
-  tenthPanelData.value = {...props.data};
+  tenthPanelData.value = { ...props.data };
   isSent.value = props.data.is_sent;
   isErrorFile.value = props.isErrorFileProp;
 });
 
 watchPostEffect(() => {
-  if (!tenthPanelData.value.links.length) tenthPanelData.value.links.push({link: ''})
+  if (!tenthPanelData.value.links.length) tenthPanelData.value.links.push({ link: '' })
 });
 
 watch(() => tenthPanelData.value.event_happened, (isEventHappened) => {
@@ -566,6 +600,19 @@ watch(tenthPanelDataCH.value, () => {
 });
 </script>
 <style lang="scss" scoped>
+.field_number {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.item_number {
+  flex: 1 1 calc(50% - 8px);
+  min-width: calc(50% - 8px);
+  display: flex;
+  margin-bottom: 0px;
+}
+
 .form__add-link-button {
   width: 141px;
   margin: 8px 0;
@@ -671,14 +718,14 @@ watch(tenthPanelDataCH.value, () => {
   /* -стандартное отображение*/
 }
 
-.custom-radio + label {
+.custom-radio+label {
   position: relative;
   padding-left: 30px;
   cursor: pointer;
   line-height: 20px;
 }
 
-.custom-radio + label::before {
+.custom-radio+label::before {
   content: '';
   position: absolute;
   left: 0;
@@ -691,7 +738,7 @@ watch(tenthPanelDataCH.value, () => {
   /* Внешний синий круг */
 }
 
-.custom-radio + label::after {
+.custom-radio+label::after {
   content: '';
   position: absolute;
   left: 5px;
@@ -707,12 +754,12 @@ watch(tenthPanelDataCH.value, () => {
   /* Пустота внутри внутреннего круга */
 }
 
-.custom-radio:checked + label::after {
+.custom-radio:checked+label::after {
   background-color: #1F7CC0;
   /* Заполнение внутреннего круга синим цветом при выборе */
 }
 
-.custom-radio:disabled + label {
+.custom-radio:disabled+label {
   pointer-events: none;
 }
 
