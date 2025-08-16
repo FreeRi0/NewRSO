@@ -169,7 +169,7 @@
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('12', picked, revisionPanels)">
             <v-expansion-panel-title :class="isErrorPanel.twelfth ? 'visible-error' : ''">
-              12. Объем средств, собранных бойцами РО&nbsp;РСО во&nbsp;Всероссийском дне ударного труда
+              12. Показатель участия во&nbsp;Всероссийском дне ударного труда
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <twelfth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
@@ -218,7 +218,7 @@
           >
 <!--            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('16') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('16') ? false : true">-->
             <v-expansion-panel-title :class="isErrorPanel.sixteenth ? 'visible-error' : ''">
-              16. Победители всероссийских (международных), окружных и&nbsp;межрегиональных трудовых проектов
+              14. Победители всероссийских (международных), окружных и&nbsp;межрегиональных трудовых проектов
               по&nbsp;комиссарской деятельности &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
@@ -237,15 +237,13 @@
                 text="Показатель рассчитывается автоматически на&nbsp;основе данных из&nbsp;12&nbsp;и&nbsp;13&nbsp;показателей." />
             </v-expansion-panel-text>
           </v-expansion-panel>
-
-          
           <v-expansion-panel v-if="showPanels('16', picked, revisionPanels)">
             <v-expansion-panel-title>
               16. Дислокация студенческих отрядов РО&nbsp;РСО
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <seventeenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.seventeenth" :is-sent="isSentLastIndex" />
+                :data="reportData.sixteenth" :is-sent="isSentLastIndex" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('17', picked, revisionPanels)">
@@ -254,7 +252,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <eighteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.eighteenth" :is-sent="isSentLastIndex" />
+                :data="reportData.seventeenth" :is-sent="isSentLastIndex" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('18', picked, revisionPanels)">
@@ -263,20 +261,18 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <nineteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.nineteenth" :is-sent="isSentLastIndex" />
+                :data="reportData.eighteenth" :is-sent="isSentLastIndex" />
             </v-expansion-panel-text>
           </v-expansion-panel>
-
           <v-expansion-panel v-if="showPanels('19', picked, revisionPanels)">
             <v-expansion-panel-title>
               19. Количество и&nbsp;трудоустройство сотрудников РО&nbsp;РСО
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <nineteen-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                :data="reportData.nineteen" :is-sent="isSentLastIndex" />
+                :data="reportData.nineteenth" :is-sent="isSentLastIndex" />
             </v-expansion-panel-text>
           </v-expansion-panel>
-
           <v-expansion-panel v-if="showPanels('20', picked, revisionPanels)">
             <v-expansion-panel-title>
               20. Инфраструктура РО&nbsp;РСО
@@ -362,12 +358,12 @@ const reportData = ref({
   },
   eleventh: null,
   twelfth: null,
-  thirteenth: null,
+  // thirteenth: null,
+  // добавить показатель 14
   sixteenth: null,
   seventeenth: null,
   eighteenth: null,
   nineteenth: null,
-  nineteen: null,
   twentieth: null,
 });
 
@@ -383,8 +379,9 @@ const reportDataDH = ref({
   },
   eleventh: null,
   twelfth: null,
-  thirteenth: null,
-  sixteenth: null,
+  // thirteenth: null,
+  // добавить 14 показатель
+  // sixteenth: null,
 });
 
 const reportDataCH = ref({
@@ -399,8 +396,9 @@ const reportDataCH = ref({
   },
   eleventh: null,
   twelfth: null,
-  thirteenth: null,
-  sixteenth: null,
+  // thirteenth: null,
+  // добавить 14 показатель
+  // sixteenth: null,
 });
 
 const preloader = ref(true);
@@ -429,8 +427,9 @@ const isErrorPanel = ref({
   tenth: false,
   eleventh: false,
   twelfth: false,
-  thirteenth: false,
-  sixteenth: false,
+  // thirteenth: false,
+  // добавить 14 показатель
+  // sixteenth: false,
 });
 
 const setId = (id) => {
@@ -959,7 +958,7 @@ const getReportData = async (reportId) => {
         revisionPanels.value.push('10-2');
       }
       /*
-      * Критерий 16
+      * Критерий 16 --- переделать на показатель 14 в 2025 году
       */
       reportStore.reportForCheckCH.sixteenth = (await reportPartTwoService.getReportDH('16', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
@@ -1042,41 +1041,44 @@ const getReportData = async (reportId) => {
 
       /* 
       * Критерий 13
+      * !!! В 2025 году данный показатель объединен с показателем 12
       */
-      const dataThirteenth = (await reportPartTwoService.getReportDH('13', reportId)).data;
-      reportStore.reportForCheckCH.thirteenth = dataThirteenth;
+      // const dataThirteenth = (await reportPartTwoService.getReportDH('13', reportId)).data;
+      // reportStore.reportForCheckCH.thirteenth = dataThirteenth;
 
-      // если используем функцию showPanels обязательна проверка на 2 поля:
-      if (dataThirteenth.rejecting_reasons && dataThirteenth.verified_by_chq !== true) {
-        revisionPanels.value.push('13');
-      }
+      // // если используем функцию showPanels обязательна проверка на 2 поля:
+      // if (dataThirteenth.rejecting_reasons && dataThirteenth.verified_by_chq !== true) {
+      //   revisionPanels.value.push('13');
+      // }
 
-      dataThirteenth.regional_version
-        ? reportData.value.thirteenth = JSON.parse(dataThirteenth.regional_version)
-        : reportData.value.thirteenth = dataThirteenth;
+      // dataThirteenth.regional_version
+      //   ? reportData.value.thirteenth = JSON.parse(dataThirteenth.regional_version)
+      //   : reportData.value.thirteenth = dataThirteenth;
 
-      dataThirteenth.district_version
-        ? reportStore.reportDataDH.thirteenth = JSON.parse(dataThirteenth.district_version)
-        : reportStore.reportDataDH.thirteenth = dataThirteenth;
+      // dataThirteenth.district_version
+      //   ? reportStore.reportDataDH.thirteenth = JSON.parse(dataThirteenth.district_version)
+      //   : reportStore.reportDataDH.thirteenth = dataThirteenth;
 
-      reportStore.reportDataCH.thirteenth = Object.assign({}, dataThirteenth);
-      if (!dataThirteenth.rejecting_reasons) {
-        reportStore.reportDataCH.thirteenth.comment = ''
-      } else if (dataThirteenth.rejecting_reasons) {
-        reportStore.reportDataCH.thirteenth.comment = JSON.parse(reportStore.reportDataCH.thirteenth.rejecting_reasons).comment
-      }
-      if (dataThirteenth.verified_by_chq === true) {
-        reportStore.reportDataCH.thirteenth.comment = dataThirteenth.comment
-      }
+      // reportStore.reportDataCH.thirteenth = Object.assign({}, dataThirteenth);
+      // if (!dataThirteenth.rejecting_reasons) {
+      //   reportStore.reportDataCH.thirteenth.comment = ''
+      // } else if (dataThirteenth.rejecting_reasons) {
+      //   reportStore.reportDataCH.thirteenth.comment = JSON.parse(reportStore.reportDataCH.thirteenth.rejecting_reasons).comment
+      // }
+      // if (dataThirteenth.verified_by_chq === true) {
+      //   reportStore.reportDataCH.thirteenth.comment = dataThirteenth.comment
+      // }
 
       /* 
-      * Критерий 17-19
+      * Критерий 16-20
       */
       const dataSeventeenth = (await reportPartTwoService.getReportDH('16', reportId)).data;
       if (dataSeventeenth.is_sent) isSentLastIndex.value = true;
+      reportData.value.sixteenth = (await reportPartTwoService.getReportDH('16', reportId)).data;
       reportData.value.seventeenth = (await reportPartTwoService.getReportDH('17', reportId)).data;
       reportData.value.eighteenth = (await reportPartTwoService.getReportDH('18', reportId)).data;
       reportData.value.nineteenth = (await reportPartTwoService.getReportDH('19', reportId)).data;
+      reportData.value.twentieth = (await reportPartTwoService.getReportDH('20', reportId)).data;
     }
     // Загрузка данных для отчета эксперта ОШ
     else if (districtExpert.value && typeof reportId != "undefined") {
@@ -1114,14 +1116,17 @@ const getReportData = async (reportId) => {
       reportStore.reportDataDH.thirteenth = Object.assign({}, reportData.value.thirteenth);
       reportStore.reportDataDH.thirteenth.comment = '';
 
+      //1120-1122 переделать на показатель 14
       reportData.value.sixteenth = (await reportPartTwoService.getReportDH('16', reportId)).data;
       reportStore.reportDataDH.sixteenth = (await reportPartTwoService.getReportDH('16', reportId)).data;
       reportStore.reportDataDH.sixteenth.comment = '';
 
-      if (reportData.value.sixteenth.is_sent) isSentLastIndex.value = true;
+      if (reportData.value.sixteenth.is_sent) isSentLastIndex.value = true;//?????????????????????????
+      reportData.value.sixteenth = (await reportPartTwoService.getReportDH('16', reportId)).data;
       reportData.value.seventeenth = (await reportPartTwoService.getReportDH('17', reportId)).data;
       reportData.value.eighteenth = (await reportPartTwoService.getReportDH('18', reportId)).data;
       reportData.value.nineteenth = (await reportPartTwoService.getReportDH('19', reportId)).data;
+      reportData.value.twentieth = (await reportPartTwoService.getReportDH('20', reportId)).data;
     }
     // Загрузка данных для отчета командира РШ
     else {
@@ -1353,31 +1358,34 @@ const getReportData = async (reportId) => {
         console.log(e.message)
       }
       //-----------------13-------------------------------------------
-      let dataThirteenth
-      try {
-        dataThirteenth = (await reportPartTwoService.getReport('13')).data;
-        console.log(dataThirteenth);
-        dataThirteenth.regional_version
-          ? reportData.value.thirteenth = JSON.parse(dataThirteenth.regional_version)
-          : reportData.value.thirteenth = dataThirteenth;
+      // В 2025 году данный показатель объединен с показателем 12
+      // let dataThirteenth
+      // try {
+      //   dataThirteenth = (await reportPartTwoService.getReport('13')).data;
+      //   console.log(dataThirteenth);
+      //   dataThirteenth.regional_version
+      //     ? reportData.value.thirteenth = JSON.parse(dataThirteenth.regional_version)
+      //     : reportData.value.thirteenth = dataThirteenth;
 
-        dataThirteenth.district_version
-          ? reportStore.reportDataDH.thirteenth = JSON.parse(dataThirteenth.district_version)
-          : reportStore.reportDataDH.thirteenth = dataThirteenth;
+      //   dataThirteenth.district_version
+      //     ? reportStore.reportDataDH.thirteenth = JSON.parse(dataThirteenth.district_version)
+      //     : reportStore.reportDataDH.thirteenth = dataThirteenth;
 
-        dataThirteenth.central_version
-          ? reportStore.reportDataCH.thirteenth = dataThirteenth.central_version
-          : reportStore.reportDataCH.thirteenth = dataThirteenth;
+      //   dataThirteenth.central_version
+      //     ? reportStore.reportDataCH.thirteenth = dataThirteenth.central_version
+      //     : reportStore.reportDataCH.thirteenth = dataThirteenth;
 
-        // Проверка на причины отклонений отчета и вывод табов для РО
-        if (dataThirteenth.rejecting_reasons && dataThirteenth.verified_by_chq !== true) {
-          revisionPanels.value.push('13');
-          reportStore.isReportReject.thirteenth = isTabsForRevision.value;
-        }
-      } catch (e) {
-        console.log(e.message)
-      }
+      //   // Проверка на причины отклонений отчета и вывод табов для РО
+      //   if (dataThirteenth.rejecting_reasons && dataThirteenth.verified_by_chq !== true) {
+      //     revisionPanels.value.push('13');
+      //     reportStore.isReportReject.thirteenth = isTabsForRevision.value;
+      //   }
+      // } catch (e) {
+      //   console.log(e.message)
+      // }
+
       //-----------------------------16--------------------------------
+      // Переделать этот показатель на 14
       let dataSixteenth;
       try {
         // reportData.value.sixteenth = (await reportPartTwoService.getReport('16')).data;
@@ -1438,6 +1446,13 @@ const getReportData = async (reportId) => {
         }
 
       }
+      
+      //Статистические показатели 16-20, не участвующие в рейтинге (не требуют согласования ОЩ и ЦШ) 2025 год
+      try {
+        reportData.value.sixteenth = (await reportPartTwoService.getReport('16')).data;
+      } catch (e) {
+        console.log(e.message)
+      }
       try {
         reportData.value.seventeenth = (await reportPartTwoService.getReport('17')).data;
       } catch (e) {
@@ -1453,6 +1468,11 @@ const getReportData = async (reportId) => {
       } catch (e) {
         console.log(e.message)
       }
+      try {
+        reportData.value.twentieth = (await reportPartTwoService.getReport('20')).data;
+      } catch (e) {
+        console.log(e.message)
+      }
 
       if (
         dataFirst.verified_by_chq &&
@@ -1462,9 +1482,8 @@ const getReportData = async (reportId) => {
         dataTenthSecond.verified_by_chq &&
         isAllSixVerified && isAllNinthVerified &&
         dataEleventh.verified_by_chq &&
-        dataTwelfth.verified_by_chq &&
-        dataThirteenth.verified_by_chq &&
-        dataSixteenth.verified_by_chq
+        dataTwelfth.verified_by_chq 
+        // Добавить 14 показатель 2025 года
       ) {
         console.log('~~~~HERE')
         reportStore.isAllReportsVerifiedByCH = true;
@@ -1511,9 +1530,12 @@ const setData = (data, panel, number = 0) => {
     case 12:
       reportData.value.twelfth = data
       break;
-    case 13:
-      reportData.value.thirteenth = data
-      break;
+    // case 13:
+    //   reportData.value.thirteenth = data
+    //   break;
+
+    // Добавить 14 показатель 2025 года
+
     case 16:
       reportData.value.sixteenth = data
       break;
@@ -1525,6 +1547,9 @@ const setData = (data, panel, number = 0) => {
       break;
     case 19:
       reportData.value.nineteenth = data
+      break;
+    case 20:
+      reportData.value.twentieth = data
       break;
   }
 };
@@ -1559,12 +1584,11 @@ const setDataDH = (data, panel, number) => {
     case 12:
       reportDataDH.value.twelfth = data;
       break;
-    case 13:
-      reportDataDH.value.thirteenth = data;
-      break;
-    case 16:
-      reportDataDH.value.sixteenth = data;
-      break;
+    // case 13:
+    //   reportDataDH.value.thirteenth = data;
+    //   break;
+
+    // Добавить 14 показатель 2025 года
   }
 }
 
@@ -1603,13 +1627,11 @@ const setDataCH = (data, panel, number) => {
     case 12:
       reportDataCH.value.twelfth = data;
       break;
-    case 13:
-      reportDataCH.value.thirteenth = data;
-      break;
-    case 16:
-      reportDataCH.value.sixteenth = data;
-      console.log('16', ...reportDataCH.value.sixteenth);
-      break;
+    // case 13:
+    //   reportDataCH.value.thirteenth = data;
+    //   break;
+
+    // Добавить 14 показатель 2025 года
   }
 }
 
@@ -1716,12 +1738,14 @@ const sendReport = async () => {
         if (!reportData.value.twelfth.is_sent) {
           await reportPartTwoService.sendReport(reportData.value.twelfth, '12');
         }
-        if (!reportData.value.thirteenth.is_sent) {
-          await reportPartTwoService.sendReport(reportData.value.thirteenth, '13');
-        }
-        if (!reportData.value.sixteenth.is_sent) {
-          await reportPartTwoService.sendReport(reportData.value.sixteenth, '16');
-        }
+        // if (!reportData.value.thirteenth.is_sent) {
+        //   await reportPartTwoService.sendReport(reportData.value.thirteenth, '13');
+        // }
+
+        //Переделать на 14 показатель
+        // if (!reportData.value.sixteenth.is_sent) {
+        //   await reportPartTwoService.sendReport(reportData.value.sixteenth, '16');
+        // }
 
         await getReportData(route.query.reportId);
         blockSendButton.value = true;
@@ -1817,13 +1841,14 @@ const sendReport = async () => {
         await reportPartTwoService.sendReportDH(reportDataDH.value.twelfth, '12', route.query.reportId, true);
       }
 
-      if (!reportData.value.thirteenth.verified_by_dhq) {
-        await reportPartTwoService.sendReportDH(reportDataDH.value.thirteenth, '13', route.query.reportId, true);
-      }
+      // if (!reportData.value.thirteenth.verified_by_dhq) {
+      //   await reportPartTwoService.sendReportDH(reportDataDH.value.thirteenth, '13', route.query.reportId, true);
+      // }
 
-      if (!reportData.value.sixteenth.verified_by_dhq) {
-        await reportPartTwoService.sendReportDH(reportDataDH.value.sixteenth, '16', route.query.reportId, true);
-      }
+      //Переделать на 14 показатель 2025
+      // if (!reportData.value.sixteenth.verified_by_dhq) {
+      //   await reportPartTwoService.sendReportDH(reportDataDH.value.sixteenth, '16', route.query.reportId, true);
+      // }
 
       swal.fire({
         position: 'center',
@@ -1915,13 +1940,14 @@ const reportConfirmation = async (value) => {
         await reportPartTwoService.sendReportCH(reportDataCH.value.twelfth, '12', route.query.reportId, true, reportStore.returnReport.twelfth);
       }
 
-      if (reportStore.reportForCheckCH.thirteenth.verified_by_chq === null) {
-        await reportPartTwoService.sendReportCH(reportDataCH.value.thirteenth, '13', route.query.reportId, true, reportStore.returnReport.thirteenth);
-      }
+      // if (reportStore.reportForCheckCH.thirteenth.verified_by_chq === null) {
+      //   await reportPartTwoService.sendReportCH(reportDataCH.value.thirteenth, '13', route.query.reportId, true, reportStore.returnReport.thirteenth);
+      // }
 
-      if (reportStore.reportForCheckCH.sixteenth.verified_by_chq === null) {
-        await reportPartTwoService.sendReportCH(reportDataCH.value.sixteenth, '16', route.query.reportId, true, reportStore.returnReport.sixteenth);
-      }
+      //Переделать на 14 показатель 2025
+      // if (reportStore.reportForCheckCH.sixteenth.verified_by_chq === null) {
+      //   await reportPartTwoService.sendReportCH(reportDataCH.value.sixteenth, '16', route.query.reportId, true, reportStore.returnReport.sixteenth);
+      // }
 
       swal.fire({
         position: 'center',
@@ -2155,7 +2181,7 @@ const checkEmptyFields = (data) => {
     isErrorPanel.value.eleventh = false;
   }
 
-  if (!data.twelfth || !(data.twelfth.amount_of_money)) {
+  if (!data.twelfth || !(data.twelfth.amount_of_money && data.twelfth.number_of_members)) {
     isErrorPanel.value.twelfth = true;
     swal.fire({
       position: 'center',
@@ -2169,45 +2195,47 @@ const checkEmptyFields = (data) => {
     isErrorPanel.value.twelfth = false;
   }
 
-  if (!data.thirteenth || !(data.thirteenth.number_of_members)) {
-    isErrorPanel.value.thirteenth = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      title: `Заполните обязательные поля в 13 показателе`,
-      showConfirmButton: false,
-      timer: 2500,
-    })
-    return false;
-  } else {
-    isErrorPanel.value.thirteenth = false;
-  }
+  // if (!data.thirteenth || !(data.thirteenth.number_of_members)) {
+  //   isErrorPanel.value.thirteenth = true;
+  //   swal.fire({
+  //     position: 'center',
+  //     icon: 'warning',
+  //     title: `Заполните обязательные поля в 13 показателе`,
+  //     showConfirmButton: false,
+  //     timer: 2500,
+  //   })
+  //   return false;
+  // } else {
+  //   isErrorPanel.value.thirteenth = false;
+  // }
 
-  if (data.sixteenth) {
-    for (let project of data.sixteenth.projects) {
-      if (data.sixteenth.is_project && !(data.sixteenth.comment && project.name && project.project_scale)) {
-        isErrorPanel.value.sixteenth = true;
-        swal.fire({
-          position: 'center',
-          icon: 'warning',
-          title: `Заполните обязательные поля в 16 показателе`,
-          showConfirmButton: false,
-          timer: 2500,
-        })
-        return false;
-      }
-    }
-  } else {
-    isErrorPanel.value.sixteenth = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      title: `Укажите информацию о наличии трудового проекта в 16 показателе`,
-      showConfirmButton: false,
-      timer: 3500,
-    })
-    return false;
-  }
+
+  //Переделать на 14 показатель 2025
+  // if (data.sixteenth) {
+  //   for (let project of data.sixteenth.projects) {
+  //     if (data.sixteenth.is_project && !(data.sixteenth.comment && project.name && project.project_scale)) {
+  //       isErrorPanel.value.sixteenth = true;
+  //       swal.fire({
+  //         position: 'center',
+  //         icon: 'warning',
+  //         title: `Заполните обязательные поля в 16 показателе`,
+  //         showConfirmButton: false,
+  //         timer: 2500,
+  //       })
+  //       return false;
+  //     }
+  //   }
+  // } else {
+  //   isErrorPanel.value.sixteenth = true;
+  //   swal.fire({
+  //     position: 'center',
+  //     icon: 'warning',
+  //     title: `Укажите информацию о наличии трудового проекта в 16 показателе`,
+  //     showConfirmButton: false,
+  //     timer: 3500,
+  //   })
+  //   return false;
+  // }
 
   return true;
 }

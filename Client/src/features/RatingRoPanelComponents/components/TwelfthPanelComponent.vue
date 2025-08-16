@@ -57,6 +57,29 @@
                 :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
             />
         </div>
+
+        <div class="report__fieldset report__fieldset--left-block">
+            <label 
+                class="form__label report__label"
+                for="number-of-members">
+                Количество членов РО&nbsp;РСО, принявших участие во&nbsp;Всероссийском дне ударного труда&nbsp;<sup class="valid-red">*</sup>
+            </label>
+            <InputReport
+                v-model:value="twelfthPanelData.number_of_members"
+                id="number-of-members"
+                name="number-of-members"
+                style="width: 100%;"
+                height="40px"
+                type="number"
+                placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="2147483647"
+                @focusout="focusOut"
+                :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (isSent && !isRevision) || (props.centralExpert || props.districtExpert)"
+                :is-error-panel="isErrorPanel"
+            />
+        </div>
   
         <div 
             class="report__fieldset report__fieldset--comment"
@@ -105,6 +128,28 @@
                 :min="0"
                 :max="9999999999"
                 :step="0.01"
+                :disabled="centralExpert || !(districtExpert || centralExpert)"
+                :is-error-panel="isErrorPanel"
+            />
+        </div>
+
+        <div class="report__fieldset report__fieldset--left-block">
+            <label 
+                class="form__label report__label"
+                for="number-of-members">
+                Количество членов РО&nbsp;РСО, принявших участие во&nbsp;Всероссийском дне ударного труда&nbsp;<sup class="valid-red">*</sup>
+            </label>
+            <InputReport
+                v-model:value="twelfthPanelDataDH.number_of_members"
+                id="number-of-members"
+                name="number-of-members"
+                style="width: 100%;"
+                height="40px"
+                type="number"
+                placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="2147483647"
                 :disabled="centralExpert || !(districtExpert || centralExpert)"
                 :is-error-panel="isErrorPanel"
             />
@@ -206,13 +251,14 @@ const props = defineProps({
     }
 });
 
-const ID_PANEL = '12';
+const ID_PANEL = '12';// В 2025 году объединяет 2 показателя 12 и 13 - добавилось одно поле
 const isFirstSent = ref(true);
 const isRevision = ref(false);
 let isErrorFile = ref(false);
 
 const twelfthPanelData = ref({
     amount_of_money: null,
+    number_of_members: null,
     scan_file: '',
     file_size: null,
     file_type: '',
@@ -221,6 +267,7 @@ const twelfthPanelData = ref({
 
 const twelfthPanelDataDH = ref({
     amount_of_money: null,
+    number_of_members: null,
     scan_file: '',
     file_size: null,
     file_type: '',
@@ -235,6 +282,7 @@ const fileDH = ref({
 
 const twelfthPanelDataCH = ref({
     amount_of_money: null,
+    number_of_members: null,
     scan_file: '',
     file_size: null,
     file_type: '',
@@ -259,6 +307,7 @@ const focusOut = async () => {
     let formData = new FormData();
 
     formData.append('amount_of_money', twelfthPanelData.value.amount_of_money || '');
+    formData.append('number_of_members', twelfthPanelData.value.number_of_members || '');
     formData.append('comment', twelfthPanelData.value.comment || '');
 
     try {
@@ -290,6 +339,7 @@ const uploadFile = async (event) => {
         let formData = new FormData();
         formData.append('scan_file', event.target.files[0]);
         formData.append('amount_of_money', twelfthPanelData.value.amount_of_money || '');
+        formData.append('number_of_members', twelfthPanelData.value.number_of_members || '');
         formData.append('comment', twelfthPanelData.value.comment || '');
 
         try {
@@ -345,6 +395,7 @@ const deleteFile = async () => {
         let formData = new FormData();
         formData.append('scan_file', '');
         formData.append('amount_of_money', twelfthPanelData.value.amount_of_money || '');
+        formData.append('number_of_members', twelfthPanelData.value.number_of_members || '');
         formData.append('comment', twelfthPanelData.value.comment || '');
 
         try {
@@ -377,6 +428,7 @@ const deleteFileCH = async () => {
 const onReturnReport = (event) => {
   let formData = new FormData();
   formData.append('amount_of_money', twelfthPanelDataCH.value.amount_of_money);
+  formData.append('number_of_members', twelfthPanelDataCH.value.number_of_members);  
   formData.append('comment', twelfthPanelDataCH.value.comment || '');
   formData.append('scan_file', reportStore.reportDataCHFile.twelfth || reportStore.reportForCheckCH.twelfth.central_version?.scan_file || '');
   
@@ -395,10 +447,12 @@ watchEffect(async () => {
         if (reportStore.reportDataCH.twelfth) {
             twelfthPanelDataCH.value.comment = reportStore.reportDataCH.twelfth.comment;
             twelfthPanelDataCH.value.amount_of_money = reportStore.reportDataCH.twelfth.amount_of_money;
+            twelfthPanelDataCH.value.number_of_members = reportStore.reportDataCH.twelfth.number_of_members;
         }
         if (reportStore.reportDataDH.twelfth) {
             twelfthPanelDataDH.value.comment = reportStore.reportDataDH.twelfth.comment;
             twelfthPanelDataDH.value.amount_of_money = reportStore.reportDataDH.twelfth.amount_of_money;
+            twelfthPanelDataDH.value.number_of_members = reportStore.reportDataDH.twelfth.number_of_members;
         }
 
     } else {
@@ -406,6 +460,7 @@ watchEffect(async () => {
             isFirstSent.value = false;
             isRevision.value = reportStore.isReportReject.twelfth;
             twelfthPanelData.value.amount_of_money = props.data.amount_of_money;
+            twelfthPanelData.value.number_of_members = props.data.number_of_members;
             twelfthPanelData.value.comment = props.data.comment;
             twelfthPanelData.value.scan_file = props.data.scan_file;
             twelfthPanelData.value.file_size = props.data.file_size;
@@ -454,6 +509,7 @@ watchPostEffect(() => {
   if (props.data) {
     isFirstSent.value = false;
     twelfthPanelData.value.amount_of_money = props.data.amount_of_money;
+    twelfthPanelData.value.number_of_members = props.data.number_of_members;
     twelfthPanelData.value.comment = props.data.comment;
     twelfthPanelData.value.scan_file = props.data.scan_file;
     twelfthPanelData.value.file_size = props.data.file_size;
@@ -488,6 +544,7 @@ watch(twelfthPanelDataDH.value, () => {
         let formData = new FormData();
 
         formData.append('amount_of_money', twelfthPanelDataDH.value.amount_of_money);
+        formData.append('number_of_members', twelfthPanelDataDH.value.number_of_members);
         formData.append('comment', twelfthPanelDataDH.value.comment || '');
         formData.append('scan_file', reportStore.reportDataDHFile.twelfth || '');
         emit('getDataDH', formData, Number(ID_PANEL));
@@ -501,6 +558,7 @@ watch(fileDH.value, ()=> {
         let formData = new FormData();
 
         formData.append('amount_of_money', twelfthPanelDataDH.value.amount_of_money);
+        formData.append('number_of_members', twelfthPanelDataDH.value.number_of_members);
         formData.append('comment', twelfthPanelDataDH.value.comment || '');
         formData.append('scan_file', reportStore.reportDataDHFile.twelfth || '');
         emit('getDataDH', formData, Number(ID_PANEL));
@@ -513,6 +571,7 @@ watch(twelfthPanelDataCH.value, () => {
 
         let formData = new FormData();
         formData.append('amount_of_money', twelfthPanelDataCH.value.amount_of_money);
+        formData.append('number_of_members', twelfthPanelDataCH.value.number_of_members);
         formData.append('comment', twelfthPanelDataCH.value.comment || '');
         formData.append('scan_file', reportStore.reportDataCHFile.twelfth || reportStore.reportForCheckCH.twelfth.central_version?.scan_file || '');
         if (reportStore.returnReport.twelfth) formData.append('reasons[comment]', twelfthPanelDataCH.value.comment);
@@ -526,6 +585,7 @@ watch(fileCH.value, ()=> {
 
         let formData = new FormData();
         formData.append('amount_of_money', twelfthPanelDataCH.value.amount_of_money);
+        formData.append('number_of_members', twelfthPanelDataCH.value.number_of_members);
         formData.append('comment', twelfthPanelDataCH.value.comment || '');
         formData.append('scan_file', reportStore.reportDataCHFile.twelfth || reportStore.reportForCheckCH.twelfth.central_version?.scan_file || '');
         if (reportStore.returnReport.twelfth) formData.append('reasons[comment]', twelfthPanelDataCH.value.comment);

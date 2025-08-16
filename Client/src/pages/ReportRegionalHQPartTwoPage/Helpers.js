@@ -172,7 +172,8 @@ export function checkEmptyFieldsDH(data, isErrorPanel) {
     if (
         !data.twelfth ||
         !data.twelfth.amount_of_money ||
-        !data.twelfth.comment
+        !data.twelfth.comment ||
+        !data.twelfth.number_of_members
     ) {
         isErrorPanel.value.twelfth = true;
         swal.fire({
@@ -187,46 +188,48 @@ export function checkEmptyFieldsDH(data, isErrorPanel) {
         isErrorPanel.value.twelfth = false;
     }
 
-    if (
-        !data.thirteenth ||
-        !data.thirteenth.number_of_members ||
-        !data.thirteenth.comment
-    ) {
-        isErrorPanel.value.thirteenth = true;
-        swal.fire({
-            position: 'center',
-            icon: 'warning',
-            title: `Заполните обязательные поля в 13 показателе`,
-            showConfirmButton: false,
-            timer: 2500,
-        });
-        return false;
-    } else {
-        isErrorPanel.value.thirteenth = false;
-    }
+    // if (
+    //     !data.thirteenth ||
+    //     !data.thirteenth.number_of_members ||
+    //     !data.thirteenth.comment
+    // ) {
+    //     isErrorPanel.value.thirteenth = true;
+    //     swal.fire({
+    //         position: 'center',
+    //         icon: 'warning',
+    //         title: `Заполните обязательные поля в 13 показателе`,
+    //         showConfirmButton: false,
+    //         timer: 2500,
+    //     });
+    //     return false;
+    // } else {
+    //     isErrorPanel.value.thirteenth = false;
+    // }
 
-    if (data.sixteenth) {
-        for (const project of data.sixteenth.projects) {
-            if (
-                data.sixteenth.is_project &&
-                !(
-                    data.sixteenth.comment &&
-                    project.name &&
-                    project.project_scale
-                )
-            ) {
-                isErrorPanel.value.sixteenth = true;
-                swal.fire({
-                    position: 'center',
-                    icon: 'warning',
-                    title: `Заполните обязательные поля в 16 показателе`,
-                    showConfirmButton: false,
-                    timer: 2500,
-                });
-                return false;
-            }
-        }
-    }
+    //Переделать на 14 показатель 2025 года
+    
+    // if (data.sixteenth) {
+    //     for (const project of data.sixteenth.projects) {
+    //         if (
+    //             data.sixteenth.is_project &&
+    //             !(
+    //                 data.sixteenth.comment &&
+    //                 project.name &&
+    //                 project.project_scale
+    //             )
+    //         ) {
+    //             isErrorPanel.value.sixteenth = true;
+    //             swal.fire({
+    //                 position: 'center',
+    //                 icon: 'warning',
+    //                 title: `Заполните обязательные поля в 16 показателе`,
+    //                 showConfirmButton: false,
+    //                 timer: 2500,
+    //             });
+    //             return false;
+    //         }
+    //     }
+    // }
 
     return true;
 }
