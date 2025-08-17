@@ -113,6 +113,10 @@ const tenthPanelDataFirst = ref({
   file_size: '',
   file_type: '',
   comment: '',
+  number_members: '',
+  number_new_members: '',
+  number_beneficiaries: '',
+  number_settlements: '',
   links: [
     {
       link: '',
@@ -130,6 +134,10 @@ const tenthPanelDataSecond = ref({
   file_size: '',
   file_type: '',
   comment: '',
+  number_members: '',
+  number_new_members: '',
+  number_beneficiaries: '',
+  number_settlements: '',
   links: [
     {
       link: '',
@@ -169,6 +177,7 @@ const formData = async (reportData, reportNumber) => {
       tenthPanelDataFirst.value = {...reportData}
       formData.append('event_happened', tenthPanelDataFirst.value.event_happened);
       formData.append('comment', tenthPanelDataFirst.value.comment || '');
+      formData.append('number_members', tenthPanelDataFirst.value.number_members || '');
       if (tenthPanelDataFirst.value.document) formData.append('document', tenthPanelDataFirst.value.document || '');
       if (tenthPanelDataFirst.value.links.length) {
         for (let j = 0; j < tenthPanelDataFirst.value.links.length; j++) {
