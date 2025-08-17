@@ -337,15 +337,15 @@ const userPages = computed(() => [
             roleStore.roles.regionalheadquarter_commander ||
             roleStore.roles.centralheadquarter_commander,
     },
-    {
-        title: 'Рейтинг РО 2024',
-        name: nameUrl,
-        show:
-            (roleStore.roles?.regionalheadquarter_commander && roleStore.experts.is_district_expert) ||
-            roleStore.experts.is_central_expert === true ||
-            roleStore.roles?.regionalheadquarter_commander ||
-            roleStore.roles?.centralheadquarter_commander,
-    },
+    // {
+    //     title: 'Рейтинг РО 2024',
+    //     name: nameUrl,
+    //     show:
+    //         (roleStore.roles?.regionalheadquarter_commander && roleStore.experts.is_district_expert) ||
+    //         roleStore.experts.is_central_expert === true ||
+    //         roleStore.roles?.regionalheadquarter_commander ||
+    //         roleStore.roles?.centralheadquarter_commander,
+    // },
     {
         title: 'Рейтинг РО 2025',
         name: nameUrl,
@@ -552,7 +552,7 @@ onMounted(() => {
             display: block;
             width: fit-content;
         }
-        
+
         img {
             width: 129px;
             height: 58px;
