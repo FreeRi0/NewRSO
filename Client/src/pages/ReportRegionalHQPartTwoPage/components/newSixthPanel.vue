@@ -8,7 +8,13 @@
                 </div>
                 <div v-if="selectedEvents.length">
                     <div v-for="event in selectedEvents" :key="event.id" class="form__field-event">
-                        <event-form :event="event" @collapse-form="collapsed()" @delete-event="eventDelete" />
+                        <event-form :event="event"
+                            :is-sent-six="!!(props.data && props.data[event.id] && props.data[event.id].is_sent)"
+                            :is-error-panel="!!(props.isErrorPanel && props.isErrorPanel[event.id] && props.isErrorPanel[event.id].error)"
+                            :data="(props.data && props.data[event.id]) ? props.data[event.id] : {}" :tab="props.tab"
+                            @collapse-form="collapsed()" @delete-event="eventDelete"
+                            @formData="formData($event, event.id)" @formDataDH="formDataDH($event, event.id)"
+                            @formDataCH="formDataCH($event, event.id)" @error="setError($event, event.id)" />
                     </div>
                 </div>
             </v-expansion-panel>
@@ -17,11 +23,13 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, watchEffect } from "vue";
 
 import SelectSearchIndicator from '@shared/components/selects/SelectSearchIndicator.vue'
 import EventForm from "./EventForm.vue";
 // import SeventhPanelForm from "./SeventhPanelForm.vue";
+import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
+import { reportPartTwoService } from "@services/ReportService.ts";
 
 const props = defineProps({
     districtHeadquarterCommander: {
@@ -44,25 +52,133 @@ const selectedEvents = ref([]);
 
 const panel = ref(false);
 
+const emit = defineEmits(['getData', 'getDataDH', 'getDataCH', 'getId', 'getPanelNumber']);
+
+const reportStore = useReportPartTwoStore();
+const linkErrById = ref({});
+const isFirstSentById = ref({});
+
 const collapsed = () => {
     panel.value = false;
 }
 
-const eventDelete = (id) => {
+const eventDelete = async (id) => {
     const index = selectedEvents.value.findIndex(item => item.id === id);
 
     if (index !== -1) {
         selectedEvents.value.splice(index, 1);
+    }
+
+    try {
+        // Overwrite data on server with zeroed draft to emulate deletion
+        const payload = {
+            number_of_members: 0,
+            links: [],
+            comment: '',
+            is_hq_member: false,
+            hq_members_count: null,
+        };
+        const { data } = await reportPartTwoService.createMultipleReportDraft(payload, '6', String(id));
+        emit('getData', data, 6, id);
+        // Clear local flags so the event isn't re-added or blocked by stale state
+        delete isFirstSentById.value[id];
+        delete linkErrById.value[id];
+    } catch (e) {
+        console.log('delete event (reset) error: ', e);
     }
 }
 
 watch(() => selectedEvent.value, () => {
     const arledyHasEvent = (array, id) => array.some(obj => obj.id === id);
 
+    if (!selectedEvent.value || !selectedEvent.value.id) return;
     if (!arledyHasEvent(selectedEvents.value, selectedEvent.value.id)) {
         selectedEvents.value.unshift(selectedEvent.value);
     }
+    // reset current selection to avoid accidental re-adds
+    selectedEvent.value = {};
 })
+
+// Sync first-send flags per event id from incoming data/store
+watchEffect(() => {
+    selectedEvents.value.forEach((ev) => {
+        const id = ev.id;
+        const hasData = props.data && props.data[id] && Object.keys(props.data[id]).length > 0;
+        if (hasData) {
+            // If rejected and no central version, allow re-send as first
+            const isRejected = reportStore.isReportReject?.six?.[id];
+            const hasCentralVersion = !!props.data[id].central_version;
+            isFirstSentById.value[id] = isRejected && !hasCentralVersion;
+        } else {
+            isFirstSentById.value[id] = true;
+        }
+    });
+});
+
+// Auto-select only once on initial load to avoid re-adding after user deletion
+const didAutoselect = ref(false);
+watchEffect(() => {
+    if (didAutoselect.value) return;
+    if (Array.isArray(props.items) && props.data) {
+        const existingIds = new Set(selectedEvents.value.map(e => e.id));
+        props.items.forEach(ev => {
+            const id = ev.id;
+            const d = props.data[id];
+            const hasData = d && Object.keys(d).length > 0 && (d.number_of_members > 0);
+            if (hasData && !existingIds.has(id)) {
+                selectedEvents.value.push(ev);
+                existingIds.add(id);
+            }
+        });
+        didAutoselect.value = true;
+    }
+});
+
+// Forward id and panel number to parent for each selected event (once)
+watch(selectedEvents, (list) => {
+    list.forEach((ev) => {
+        emit('getId', ev.id);
+        emit('getPanelNumber', 6);
+    });
+}, { deep: true });
+
+const setError = (err, id) => {
+    linkErrById.value[id] = err;
+}
+
+const formData = async (reportData, reportNumber) => {
+    console.log('reportData', reportData);
+    try {
+        if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
+            if (!linkErrById.value[reportNumber]) {
+                if (isFirstSentById.value[reportNumber]) {
+                    if (reportData.number_of_members > 0 || props.tab == 'Доработка') {
+                        const { data } = await reportPartTwoService.createMultipleReport(reportData, '6', reportNumber);
+                        emit('getData', data, 6, reportNumber);
+                        isFirstSentById.value[reportNumber] = false;
+                    }
+                } else {
+                    const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '6', reportNumber);
+                    emit('getData', data, 6, reportNumber);
+                }
+            }
+        }
+    } catch (e) {
+        console.log('six panel error: ', e);
+    }
+};
+
+const formDataDH = (reportData, reportNumber) => {
+    if (props.districtHeadquarterCommander) {
+        emit('getDataDH', reportData, 6, reportNumber);
+    }
+};
+
+const formDataCH = (reportData, reportNumber) => {
+    if (props.centralHeadquarterCommander) {
+        emit('getDataCH', reportData, 6, reportNumber);
+    }
+};
 </script>
 
 <style lang="scss" scoped>

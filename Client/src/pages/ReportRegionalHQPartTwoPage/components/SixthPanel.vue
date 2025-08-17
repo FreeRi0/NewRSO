@@ -86,7 +86,7 @@ const formData = async (reportData, reportNumber) => {
             const { data } = await reportPartTwoService.createMultipleReport(reportData, '6', reportNumber);
             emit('getData', data, 6, reportNumber);
             isFirstSent.value = false;
-          } 
+          }
         } else {
           const { data } = await reportPartTwoService.createMultipleReportDraft(reportData, '6', reportNumber);
           emit('getData', data, 6, reportNumber);

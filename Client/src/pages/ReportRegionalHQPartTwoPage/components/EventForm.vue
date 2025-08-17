@@ -72,19 +72,20 @@
 
                     <div class="checkbox_field">
                         <div class="checkbox_title">
-                            <input class="checkbox" type="checkbox" v-model="eventData.isCheckboxPressed" />
+                            <input class="checkbox" type="checkbox" v-model="eventData.is_hq_member" />
                             <p class="form__label checkbox_label">
                                 Члены РО являлись членами Штаба всероссийского трудового проекта
                             </p>
                         </div>
-                        <div v-if="eventData.isCheckboxPressed">
+                        <div v-if="eventData.is_hq_member">
                             <p class="form__label">
                                 Количество членов Штаба всероссийского трудового проекта от РО
                             </p>
-                            <InputReport @focusout="focusOut" v-model:value="eventData.count_members_headquarter"
-                                :disabled="isSentSix" :is-error-panel="isErrorPanel" :is-link="false"
-                                placeholder="Введите число" id="15" name="14" class="form__input" type="number"
-                                :max="32767" width="100%" />
+                            <InputReport @focusout="focusOut" v-model:value="eventData.hq_members_count"
+                                :disabled="isSentSix || !eventData.is_hq_member" :is-error-panel="isErrorPanel"
+                                :is-link="false" placeholder="Введите число" id="hq_members_count"
+                                name="hq_members_count" class="form__input" type="number" :max="2147483647"
+                                width="100%" />
                         </div>
                     </div>
 
@@ -103,24 +104,41 @@
 </template>
 
 <script setup>
-import { ref, defineProps, computed } from 'vue';
+import { ref, defineProps, watchEffect, computed, watch } from 'vue';
 
 import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
+import { reportPartTwoService } from '@services/ReportService.ts';
 
 const props = defineProps({
     event: {
         type: Object,
         required: true
-    }
+    },
+    isSentSix: {
+        type: Boolean,
+        default: false,
+    },
+    isErrorPanel: {
+        type: Boolean,
+        default: false,
+    },
+    data: {
+        type: Object,
+        default: () => ({}),
+    },
+    tab: {
+        type: String,
+        default: '',
+    },
 })
 
 const eventData = ref({
-    count_members: null,
-    links: [{}],
-    isCheckboxPressed: false,
-    count_members_headquarter: null,
-    comment: null,
+    number_of_members: 0,
+    links: [{ link: '' }],
+    comment: '',
+    is_hq_member: false,
+    hq_members_count: null,
 })
 
 const emit = defineEmits(['collapse-form', 'delete-event', 'formData', 'formDataDH', 'formDataCH', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'deleteFileDH', 'error']);
@@ -134,6 +152,68 @@ const togglePanel = () => {
 const deleteEvent = () => {
     emit('delete-event', props.event.id);
 }
+
+const setError = (err) => {
+    emit('error', err);
+}
+
+const focusOut = async () => {
+    emit('formData', {
+        number_of_members: eventData.value.number_of_members,
+        links: eventData.value.links,
+        comment: eventData.value.comment,
+        is_hq_member: eventData.value.is_hq_member,
+        hq_members_count: eventData.value.is_hq_member ? eventData.value.hq_members_count : null,
+    });
+}
+
+const addLink = () => {
+    eventData.value.links.push({ link: '' });
+}
+
+const deleteLink = async () => {
+    eventData.value.links.pop();
+    try {
+        await reportPartTwoService.createMultipleReportDraft({
+            number_of_members: eventData.value.number_of_members,
+            links: eventData.value.links,
+            comment: eventData.value.comment,
+            is_hq_member: eventData.value.is_hq_member,
+            hq_members_count: eventData.value.is_hq_member ? eventData.value.hq_members_count : null,
+        }, '6', props.event.id);
+    } catch (e) {
+        console.log('six draft deleteLink error', e);
+    }
+}
+
+watchEffect(() => {
+    if (props.data && Object.keys(props.data).length) {
+        eventData.value.number_of_members = props.data.number_of_members ?? 0;
+        eventData.value.links = Array.isArray(props.data.links) && props.data.links.length ? props.data.links : [{ link: '' }];
+        eventData.value.comment = props.data.comment ?? '';
+        eventData.value.is_hq_member = props.data.is_hq_member ?? false;
+        eventData.value.hq_members_count = props.data.hq_members_count ?? null;
+    }
+});
+
+// expose convenience bindings for template to match existing usage
+const isSentSix = computed(() => props.isSentSix);
+const isErrorPanel = computed(() => props.isErrorPanel);
+
+// Save and emit immediately on checkbox toggle
+watch(() => eventData.value.is_hq_member, async (newVal) => {
+    if (!newVal) {
+        eventData.value.hq_members_count = null;
+    }
+    const payload = {
+        number_of_members: eventData.value.number_of_members,
+        links: eventData.value.links,
+        comment: eventData.value.comment,
+        is_hq_member: eventData.value.is_hq_member,
+        hq_members_count: eventData.value.is_hq_member ? eventData.value.hq_members_count : null,
+    };
+    emit('formData', payload);
+});
 
 </script>
 

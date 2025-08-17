@@ -195,7 +195,7 @@
                 text="Показатель рассчитывается автоматически на&nbsp;основе данных из&nbsp;12&nbsp;и&nbsp;13&nbsp;показателей." />
             </v-expansion-panel-text>
           </v-expansion-panel> -->
-          
+
           <v-expansion-panel v-if="showPanels('13', picked, revisionPanels)">
             <v-expansion-panel-title>
               13. Исполнительская дисциплина РО&nbsp;РСО, соблюдение условий охраны труда на&nbsp;трудовых проектах РСО,
@@ -210,10 +210,8 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
 
-          <v-expansion-panel
-              v-if="showPanels('16', picked, revisionPanels)"
-          >
-<!--            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('16') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('16') ? false : true">-->
+          <v-expansion-panel v-if="showPanels('16', picked, revisionPanels)">
+            <!--            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('16') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('16') ? false : true">-->
             <v-expansion-panel-title :class="isErrorPanel.sixteenth ? 'visible-error' : ''">
               14. Победители всероссийских (международных), окружных и&nbsp;межрегиональных трудовых проектов
               по&nbsp;комиссарской деятельности &laquo;К&raquo;
@@ -227,7 +225,9 @@
 
           <v-expansion-panel v-if="showPanels('15', picked, revisionPanels)">
             <v-expansion-panel-title>
-              15. Отношение количества трудоустроенных и&nbsp;прошедших профобучение членов РО&nbsp;РСО по&nbsp;соответствующему основному направлению ЛСО к&nbsp;общей запланированной квоте профобучения на&nbsp;текущий период.
+              15. Отношение количества трудоустроенных и&nbsp;прошедших профобучение членов РО&nbsp;РСО
+              по&nbsp;соответствующему основному направлению ЛСО к&nbsp;общей запланированной квоте профобучения
+              на&nbsp;текущий период.
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
@@ -1443,7 +1443,7 @@ const getReportData = async (reportId) => {
         }
 
       }
-      
+
       //Статистические показатели 16-20, не участвующие в рейтинге (не требуют согласования ОЩ и ЦШ) 2025 год
       try {
         reportData.value.sixteenth = (await reportPartTwoService.getReport('16')).data;
@@ -1479,7 +1479,7 @@ const getReportData = async (reportId) => {
         dataTenthSecond.verified_by_chq &&
         isAllSixVerified && isAllNinthVerified &&
         dataEleventh.verified_by_chq &&
-        dataTwelfth.verified_by_chq 
+        dataTwelfth.verified_by_chq
         // Добавить 14 показатель 2025 года
       ) {
         console.log('~~~~HERE')
