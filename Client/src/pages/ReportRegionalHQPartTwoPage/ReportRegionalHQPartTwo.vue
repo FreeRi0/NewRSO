@@ -33,7 +33,7 @@
         </div>
         <v-expansion-panels>
           <v-expansion-panel v-if="showPanels('1', picked, revisionPanels)">
-<!--            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('1') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('1') ? false : true"-->
+            <!--            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('1') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('1') ? false : true"-->
             <v-expansion-panel-title :class="isErrorPanel.first ? 'visible-error' : ''">
               1. Численность членов РО РСО
             </v-expansion-panel-title>
@@ -67,9 +67,8 @@
                 text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel v-if="showPanels('4', picked, revisionPanels)"
-          >
-<!--            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('4') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('4') ? false : true"-->
+          <v-expansion-panel v-if="showPanels('4', picked, revisionPanels)">
+            <!--            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('4') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('4') ? false : true"-->
 
             <v-expansion-panel-title :class="isErrorPanel.fourth ? 'visible-error' : ''">
               4. Организация всероссийских (международных), окружных и&nbsp;межрегиональных мероприятий и&nbsp;проектов
@@ -81,10 +80,8 @@
                 :is-error-panel="isErrorPanel.fourth" :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel
-              v-if="showPanels('5', picked, revisionPanels)"
-          >
-<!--            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('5') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('5') ? false : true">-->
+          <v-expansion-panel v-if="showPanels('5', picked, revisionPanels)">
+            <!--            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('5') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('5') ? false : true">-->
             <v-expansion-panel-title :class="isErrorPanel.fifth ? 'visible-error' : ''">
               5. Организация всероссийских (международных) (организатор&nbsp;&mdash; региональное отделение РСО),
               окружных и&nbsp;межрегиональных трудовых проектов в&nbsp;соответствии с&nbsp;Положением
@@ -104,7 +101,7 @@
               мероприятиях и&nbsp;проектах (в&nbsp;том числе и&nbsp;трудовых) &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <sixth-panel @get-data="setData" @get-data-DH="setDataDH" @get-data-CH="setDataCH" :items="six_items"
+              <new-sixth-panel @get-data="setData" @get-data-DH="setDataDH" @get-data-CH="setDataCH" :items="six_items"
                 @getId="setId" @getPanelNumber="setPanelNumber" :district-headquarter-commander="districtExpert"
                 :data="reportData.six" :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.six"
                 :tab="picked" :revision-panels="revisionPanels" />
@@ -153,8 +150,8 @@
             <v-expansion-panel-text>
               <tenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
                 @getDataDHFirst="setDataDH" @getDataDHSecond="setDataDH" @getDataCHFirst="setDataCH"
-                @getDataCHSecond="setDataCH" :data="reportData.tenth" :is-error-panel="isErrorPanel.tenth"
-                :tab="picked" :revisionPanels="revisionPanels"/>
+                @getDataCHSecond="setDataCH" :data="reportData.tenth" :is-error-panel="isErrorPanel.tenth" :tab="picked"
+                :revisionPanels="revisionPanels" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('11', picked, revisionPanels)">
@@ -302,13 +299,13 @@ import {
   NinthPanel,
   SeventeenthPanel,
   SixteenthPanel,
-  SixthPanel,
   TenthPanel,
   // ThirteenthPanel,
   TwelfthPanel,
   NineteenPanel,
   TwentiethPanel,
 } from './components/index'
+import NewSixthPanel from './components/newSixthPanel.vue'
 import { Button } from '@shared/components/buttons';
 import { onMounted, ref, watch } from "vue";
 import { SvgIcon } from '@shared/ui/SvgIcon';
@@ -926,7 +923,7 @@ const getReportData = async (reportId) => {
           reportStore.reportDataCH.tenth.first.comment = '';
         }
       }
-      
+
       // reportStore.reportDataCH.tenth.first.comment = ''
       if (reportStore.reportForCheckCH.tenth.first.verified_by_chq) verifiedByChqPanels.value.push('10-1')
 
@@ -948,7 +945,7 @@ const getReportData = async (reportId) => {
           reportStore.reportDataCH.tenth.second.comment = '';
         }
       }
-      
+
       // reportStore.reportDataCH.tenth.second.comment = ''
       if (reportStore.reportForCheckCH.tenth.second.verified_by_chq) verifiedByChqPanels.value.push('10-2')
 
@@ -973,7 +970,7 @@ const getReportData = async (reportId) => {
           reportStore.reportDataCH.sixteenth.comment = '';
         }
       }
-      
+
       if (reportStore.reportForCheckCH.sixteenth.verified_by_chq) verifiedByChqPanels.value.push('16')
 
       // Рефакторинг - добавлен код ниже, т.к. не отображ панельки показателей на доработке у ЦШ
