@@ -82,10 +82,10 @@
 <!--      <v-checkbox class="result-checkbox" id="v-checkbox" @change="calculateResult($event)" />-->
 <!--      <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>-->
 <!--    </div>-->
-    <div class="hr"></div>
-    <div>
-      <p>{{ finalResult.toFixed(1) }}</p>
-    </div>
+<!--    <div class="hr"></div>-->
+<!--    <div>-->
+<!--      <p>{{ finalResult.toFixed(1) }}</p>-->
+<!--    </div>-->
   </div>
 
   <report-tabs v-else :isReject="reportStore.isReportReject.fifth && props.tab === 'Доработка'">
