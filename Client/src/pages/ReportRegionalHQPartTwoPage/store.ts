@@ -18,6 +18,7 @@ export const useReportPartTwoStore = defineStore('report-two', {
             eleventh: {},
             twelfth: {},
             thirteenth: {},
+            fourteenth: {},
             sixteenth: {},
         },
         /*
@@ -34,6 +35,7 @@ export const useReportPartTwoStore = defineStore('report-two', {
             eleventh: null,
             twelfth: null,
             thirteenth: null,
+            fourteenth: null,
         },
         /*
         * Объект для хранения данных эксперта ЦШ
@@ -47,6 +49,7 @@ export const useReportPartTwoStore = defineStore('report-two', {
             eleventh: {},
             twelfth: {},
             thirteenth: {},
+            fourteenth: {},
             tenth: {
                 first: {},
                 second: {},
@@ -62,6 +65,7 @@ export const useReportPartTwoStore = defineStore('report-two', {
             eleventh: null,
             twelfth: null,
             thirteenth: null,
+            fourteenth: null,
             tenth: {
                 first: null,
                 second: null,
@@ -79,6 +83,7 @@ export const useReportPartTwoStore = defineStore('report-two', {
             eleventh: false,
             twelfth: false,
             thirteenth: false,
+            fourteenth: false,
             tenth: {
                 first: false,
                 second: false,
@@ -100,6 +105,7 @@ export const useReportPartTwoStore = defineStore('report-two', {
             },
             eleventh: null,
             twelfth: null,
+            fourteenth: null,
             thirteenth: null,
             sixteenth: null,
         },
@@ -117,6 +123,7 @@ export const useReportPartTwoStore = defineStore('report-two', {
             eleventh: false,
             twelfth: false,
             thirteenth: false,
+            fourteenth: false,
             sixteenth: false,
         },
 
@@ -131,6 +138,7 @@ export const useReportPartTwoStore = defineStore('report-two', {
                 second: null,
             },
             sixteenth: null,
+            fourteenth: null,
         },
         isReportRevision: false,
 

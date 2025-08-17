@@ -680,11 +680,11 @@ const focusOut = async () => {
   sixteenthPanelData.value.projects = [...projects.value];
   try {
     if (isFirstSent.value) {
-      const {data} = await reportPartTwoService.createReport(sixteenthPanelData.value, '16');
-      emit('getData', data, 16);
+      const {data} = await reportPartTwoService.createReport(sixteenthPanelData.value, '14');
+      emit('getData', data, 14);
     } else {
-      const {data} = await reportPartTwoService.createReportDraft(setFormData(), '16', true);
-      emit('getData', data, 16);
+      const {data} = await reportPartTwoService.createReportDraft(setFormData(), '14', true);
+      emit('getData', data, 14);
     }
   } catch (e) {
     console.log('focusOut error:', e);
@@ -695,8 +695,8 @@ const addLink = (index) => {
   projects.value[index].links.push({link: ''})
 };
 const deleteLink = async (projectIndex, linkIndex) => {
-  let {data} = await reportPartTwoService.createReportDraft(setFormData(null, projectIndex, false, false, true, linkIndex), '16', true);
-  emit('getData', data, 16);
+  let {data} = await reportPartTwoService.createReportDraft(setFormData(null, projectIndex, false, false, true, linkIndex), '14', true);
+  emit('getData', data, 14);
 };
 
 const addProject = () => {
@@ -733,8 +733,8 @@ const deleteProject = async (index) => {
     }
   })
   try {
-    let {data} = await reportPartTwoService.createReportDraft(formData, '16', true);
-    emit('getData', data, 16);
+    let {data} = await reportPartTwoService.createReportDraft(formData, '14', true);
+    emit('getData', data, 14);
   } catch (e) {
     console.log('deleteEvent error: ', e);
   }
@@ -826,7 +826,7 @@ const onReportReturn = (event) => {
       formData.append('projects', '');
     }
 
-    emit('getDataCH', formData, 16);
+    emit('getDataCH', formData, 14);
   } else {
     if (isProjectCH.value) {
       reportStore.returnReport.sixteenth = false;
@@ -854,7 +854,7 @@ const onReportReturn = (event) => {
       formData.append('projects', '');
     }
 
-    emit('getDataCH', formData, 16);
+    emit('getDataCH', formData, 14);
   }
 }
 
@@ -973,7 +973,7 @@ watch(sixteenthPanelDataDH.value, () => {
     if (project.name) formData.append(`projects[${i}][name]`, project.name);
   });
 
-  emit('getDataDH', formData, 16);
+  emit('getDataDH', formData, 14);
 });
 
 watchEffect(() => {
@@ -1050,11 +1050,11 @@ watch(() => sixteenthPanelData.value.is_project, async (isProject) => {
       formData.append(`projects[0][project_scale]`, '');
 
       if (isFirstSent.value) {
-        const {data} = await reportPartTwoService.createReport(formData, '16');
-        emit('getData', data, 16);
+        const {data} = await reportPartTwoService.createReport(formData, '14');
+        emit('getData', data, 14);
       } else {
-        const {data} = await reportPartTwoService.createReportDraft(formData, '16', true);
-        emit('getData', data, 16);
+        const {data} = await reportPartTwoService.createReportDraft(formData, '14', true);
+        emit('getData', data, 14);
       }
     } else {
       let formData = new FormData();
@@ -1064,11 +1064,11 @@ watch(() => sixteenthPanelData.value.is_project, async (isProject) => {
       formData.append(`projects[0][project_scale]`, '');
 
       if (isFirstSent.value) {
-        const {data} = await reportPartTwoService.createReport(formData, '16');
-        emit('getData', data, 16);
+        const {data} = await reportPartTwoService.createReport(formData, '14');
+        emit('getData', data, 14);
       } else {
-        const {data} = await reportPartTwoService.createReportDraft(formData, '16', true);
-        emit('getData', data, 16);
+        const {data} = await reportPartTwoService.createReportDraft(formData, '14', true);
+        emit('getData', data, 14);
       }
     }
   }
@@ -1094,7 +1094,7 @@ watch(() => isProjectCH.value, () => {
       if (project.name) formData.append(`projects[${i}][name]`, project.name);
     })
 
-    emit('getDataCH', formData, 16);
+    emit('getDataCH', formData, 14);
   } else {
     reportStore.reportDataCH.sixteenth.comment = commentCH.value || '';
     reportStore.reportDataCH.sixteenth.isProject = isProjectCH.value;
@@ -1104,7 +1104,7 @@ watch(() => isProjectCH.value, () => {
     formData.append('projects', '');
     if (reportStore.returnReport.sixteenth) formData.append('reasons[comment]', commentCH.value || '');
 
-    emit('getDataCH', formData, 16);
+    emit('getDataCH', formData, 14);
   }
 })
 
@@ -1137,7 +1137,7 @@ watch([commonData, commentCH], () => {
     if (reportStore.returnReport.sixteenth) formData.append('reasons[comment]', commentCH.value || '');
   }
 
-  emit('getDataCH', formData, 16);
+  emit('getDataCH', formData, 14);
 }, {
   deep: true
 })

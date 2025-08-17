@@ -210,16 +210,16 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
 
-          <v-expansion-panel v-if="showPanels('16', picked, revisionPanels)">
+          <v-expansion-panel v-if="showPanels('14', picked, revisionPanels)">
             <!--            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('16') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('16') ? false : true">-->
-            <v-expansion-panel-title :class="isErrorPanel.sixteenth ? 'visible-error' : ''">
+            <v-expansion-panel-title :class="isErrorPanel.fourteenth ? 'visible-error' : ''">
               14. Победители всероссийских (международных), окружных и&nbsp;межрегиональных трудовых проектов
               по&nbsp;комиссарской деятельности &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <sixteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data-DH="setDataDH"
-                @get-data="setData" @get-data-CH="setDataCH" :data="reportData.sixteenth"
-                :is-error-panel="isErrorPanel.sixteenth" :tab="picked" />
+                @get-data="setData" @get-data-CH="setDataCH" :data="reportData.fourteenth"
+                :is-error-panel="isErrorPanel.fourteenth" :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
 
@@ -357,6 +357,7 @@ const reportData = ref({
   twelfth: null,
   // thirteenth: null,
   // добавить показатель 14
+  fourteenth: null,
   sixteenth: null,
   seventeenth: null,
   eighteenth: null,
@@ -379,6 +380,7 @@ const reportDataDH = ref({
   // thirteenth: null,
   // добавить 14 показатель
   // sixteenth: null,
+  fourteenth: null,
 });
 
 const reportDataCH = ref({
@@ -396,6 +398,7 @@ const reportDataCH = ref({
   // thirteenth: null,
   // добавить 14 показатель
   // sixteenth: null,
+  fourteenth: null,
 });
 
 const preloader = ref(true);
@@ -427,6 +430,7 @@ const isErrorPanel = ref({
   // thirteenth: false,
   // добавить 14 показатель
   // sixteenth: false,
+  fourteenth: false
 });
 
 const setId = (id) => {
@@ -957,26 +961,26 @@ const getReportData = async (reportId) => {
       /*
       * Критерий 16 --- переделать на показатель 14 в 2025 году
       */
-      reportStore.reportForCheckCH.sixteenth = (await reportPartTwoService.getReportDH('16', reportId)).data;
+      reportStore.reportForCheckCH.fourteenth = (await reportPartTwoService.getReportDH('14', reportId)).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
-      reportStore.reportDataCH.sixteenth.projects = (await reportPartTwoService.getReportDH('16', reportId)).data.projects;
-      reportStore.reportDataCH.sixteenth.isProject = (await reportPartTwoService.getReportDH('16', reportId)).data.is_project;
+      reportStore.reportDataCH.fourteenth.projects = (await reportPartTwoService.getReportDH('14', reportId)).data.projects;
+      reportStore.reportDataCH.fourteenth.isProject = (await reportPartTwoService.getReportDH('14', reportId)).data.is_project;
 
-      if (!reportStore.reportForCheckCH.sixteenth.verified_by_chq) {
-        if (reportStore.reportForCheckCH.sixteenth.rejecting_reasons) {
-          reportStore.reportDataCH.sixteenth.comment = JSON.parse(reportStore.reportForCheckCH.sixteenth.rejecting_reasons).comment;
-          reportStore.reportDataCH.sixteenth.isProject = reportStore.reportForCheckCH.sixteenth.central_version?.is_project;
+      if (!reportStore.reportForCheckCH.fourteenth.verified_by_chq) {
+        if (reportStore.reportForCheckCH.fourteenth.rejecting_reasons) {
+          reportStore.reportDataCH.fourteenth.comment = JSON.parse(reportStore.reportForCheckCH.fourteenth.rejecting_reasons).comment;
+          reportStore.reportDataCH.fourteenth.isProject = reportStore.reportForCheckCH.fourteenth.central_version?.is_project;
         } else {
-          reportStore.reportDataCH.sixteenth.comment = '';
+          reportStore.reportDataCH.fourteenth.comment = '';
         }
       }
 
-      if (reportStore.reportForCheckCH.sixteenth.verified_by_chq) verifiedByChqPanels.value.push('16')
+      if (reportStore.reportForCheckCH.fourteenth.verified_by_chq) verifiedByChqPanels.value.push('14')
 
       // Рефакторинг - добавлен код ниже, т.к. не отображ панельки показателей на доработке у ЦШ
       // если используем функцию showPanels обязательна проверка на 2 поля:
-      if (reportStore.reportForCheckCH.sixteenth.rejecting_reasons && reportStore.reportForCheckCH.sixteenth.verified_by_chq !== true) {
-        revisionPanels.value.push('16');
+      if (reportStore.reportForCheckCH.fourteenth.rejecting_reasons && reportStore.reportForCheckCH.fourteenth.verified_by_chq !== true) {
+        revisionPanels.value.push('14');
       }
       /* 
       * Критерий 11
@@ -1114,9 +1118,9 @@ const getReportData = async (reportId) => {
       reportStore.reportDataDH.thirteenth.comment = '';
 
       //1120-1122 переделать на показатель 14
-      reportData.value.sixteenth = (await reportPartTwoService.getReportDH('16', reportId)).data;
-      reportStore.reportDataDH.sixteenth = (await reportPartTwoService.getReportDH('16', reportId)).data;
-      reportStore.reportDataDH.sixteenth.comment = '';
+      reportData.value.fourteenth = (await reportPartTwoService.getReportDH('14', reportId)).data;
+      reportStore.reportDataDH.fourteenth = (await reportPartTwoService.getReportDH('14', reportId)).data;
+      reportStore.reportDataDH.fourteenth.comment = '';
 
       if (reportData.value.sixteenth.is_sent) isSentLastIndex.value = true;//?????????????????????????
       reportData.value.sixteenth = (await reportPartTwoService.getReportDH('16', reportId)).data;
@@ -1383,7 +1387,7 @@ const getReportData = async (reportId) => {
 
       //-----------------------------16--------------------------------
       // Переделать этот показатель на 14
-      let dataSixteenth;
+      let dataFourteenth;
       try {
         // reportData.value.sixteenth = (await reportPartTwoService.getReport('16')).data;
         // if (reportData.value.sixteenth.is_sent) {
@@ -1391,38 +1395,38 @@ const getReportData = async (reportId) => {
         //   blockEditFirstReport.value = true;
         // }
 
-        dataSixteenth = (await reportPartTwoService.getReport('16')).data;
+        dataFourteenth = (await reportPartTwoService.getReport('14')).data;
         // if (!dataSixteenth.regional_version) {
         //   reportData.value.sixteenth = dataSixteenth;
         // } else {
         //   reportData.value.sixteenth = JSON.parse(dataSixteenth.regional_version);
         // }
 
-        if (!dataSixteenth.regional_version && !dataSixteenth.central_version) {
-          reportData.value.sixteenth = dataSixteenth;
+        if (!dataFourteenth.regional_version && !dataFourteenth.central_version) {
+          reportData.value.fourteenth = dataFourteenth;
         } else {
-          if (dataSixteenth.rejecting_reasons) {
-            reportStore.reportReject.sixteenth = dataSixteenth;
+          if (dataFourteenth.rejecting_reasons) {
+            reportStore.reportReject.fourteenth = dataFourteenth;
 
-            if (!dataSixteenth.verified_by_chq) {
-              revisionPanels.value.push('16');
-              reportStore.isReportReject.sixteenth = isTabsForRevision.value // true;
+            if (!dataFourteenth.verified_by_chq) {
+              revisionPanels.value.push('14');
+              reportStore.isReportReject.fourteenth = isTabsForRevision.value // true;
             }
           }
 
-          if (dataSixteenth.central_version) {
-            reportData.value.sixteenth = dataSixteenth;
+          if (dataFourteenth.central_version) {
+            reportData.value.fourteenth = dataFourteenth;
           } else {
-            reportData.value.sixteenth = JSON.parse(dataSixteenth.regional_version);
+            reportData.value.fourteenth = JSON.parse(dataFourteenth.regional_version);
           }
 
           /*Добавление данных для просмотра показателя который не был отклонен*/
-          if (dataSixteenth.verified_by_chq && !dataSixteenth.rejecting_reasons) {
-            reportStore.reportReject.sixteenth = dataSixteenth;
+          if (dataFourteenth.verified_by_chq && !dataFourteenth.rejecting_reasons) {
+            reportStore.reportReject.fourteenth = dataFourteenth;
           }
         }
 
-        if (reportData.value.sixteenth.is_sent) {
+        if (reportData.value.fourteenth.is_sent) {
           blockSendButton.value = true;
           blockEditFirstReport.value = true;
           isSentLastIndex.value = true;
@@ -1533,8 +1537,8 @@ const setData = (data, panel, number = 0) => {
 
     // Добавить 14 показатель 2025 года
 
-    case 16:
-      reportData.value.sixteenth = data
+    case 14:
+      reportData.value.fourteenth = data
       break;
     case 17:
       reportData.value.seventeenth = data
@@ -1740,9 +1744,9 @@ const sendReport = async () => {
         // }
 
         //Переделать на 14 показатель
-        // if (!reportData.value.sixteenth.is_sent) {
-        //   await reportPartTwoService.sendReport(reportData.value.sixteenth, '16');
-        // }
+        if (!reportData.value.fourteenth.is_sent) {
+          await reportPartTwoService.sendReport(reportData.value.fourteenth, '14');
+        }
 
         await getReportData(route.query.reportId);
         blockSendButton.value = true;
@@ -1843,9 +1847,9 @@ const sendReport = async () => {
       // }
 
       //Переделать на 14 показатель 2025
-      // if (!reportData.value.sixteenth.verified_by_dhq) {
-      //   await reportPartTwoService.sendReportDH(reportDataDH.value.sixteenth, '16', route.query.reportId, true);
-      // }
+      if (!reportData.value.fourteenth.verified_by_dhq) {
+        await reportPartTwoService.sendReportDH(reportDataDH.value.fourteenth, '14', route.query.reportId, true);
+      }
 
       swal.fire({
         position: 'center',
@@ -1942,9 +1946,9 @@ const reportConfirmation = async (value) => {
       // }
 
       //Переделать на 14 показатель 2025
-      // if (reportStore.reportForCheckCH.sixteenth.verified_by_chq === null) {
-      //   await reportPartTwoService.sendReportCH(reportDataCH.value.sixteenth, '16', route.query.reportId, true, reportStore.returnReport.sixteenth);
-      // }
+      if (reportStore.reportForCheckCH.fourteenth.verified_by_chq === null) {
+        await reportPartTwoService.sendReportCH(reportDataCH.value.fourteenth, '14', route.query.reportId, true, reportStore.returnReport.fourteenth);
+      }
 
       swal.fire({
         position: 'center',
@@ -2208,31 +2212,31 @@ const checkEmptyFields = (data) => {
 
 
   //Переделать на 14 показатель 2025
-  // if (data.sixteenth) {
-  //   for (let project of data.sixteenth.projects) {
-  //     if (data.sixteenth.is_project && !(data.sixteenth.comment && project.name && project.project_scale)) {
-  //       isErrorPanel.value.sixteenth = true;
-  //       swal.fire({
-  //         position: 'center',
-  //         icon: 'warning',
-  //         title: `Заполните обязательные поля в 16 показателе`,
-  //         showConfirmButton: false,
-  //         timer: 2500,
-  //       })
-  //       return false;
-  //     }
-  //   }
-  // } else {
-  //   isErrorPanel.value.sixteenth = true;
-  //   swal.fire({
-  //     position: 'center',
-  //     icon: 'warning',
-  //     title: `Укажите информацию о наличии трудового проекта в 16 показателе`,
-  //     showConfirmButton: false,
-  //     timer: 3500,
-  //   })
-  //   return false;
-  // }
+  if (data.fourteenth) {
+    for (let project of data.fourteenth.projects) {
+      if (data.fourteenth.is_project && !(data.fourteenth.comment && project.name && project.project_scale)) {
+        isErrorPanel.value.fourteenth = true;
+        swal.fire({
+          position: 'center',
+          icon: 'warning',
+          title: `Заполните обязательные поля в 14 показателе`,
+          showConfirmButton: false,
+          timer: 2500,
+        })
+        return false;
+      }
+    }
+  } else {
+    isErrorPanel.value.fourteenth = true;
+    swal.fire({
+      position: 'center',
+      icon: 'warning',
+      title: `Укажите информацию о наличии трудового проекта в 14 показателе`,
+      showConfirmButton: false,
+      timer: 3500,
+    })
+    return false;
+  }
 
   return true;
 }
