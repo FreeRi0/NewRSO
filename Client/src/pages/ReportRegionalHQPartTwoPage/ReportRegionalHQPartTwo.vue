@@ -469,7 +469,7 @@ const downloadReportAll = (id) => {
 
 const getItems = async (number) => {
   try {
-    const response = await HTTP.get(`regional_competitions/reports/event_names/r${number}-event-names/`);
+    const response = await HTTP.get(`regional_competitions_2025/reports/event_names/r${number}-event-names/`);
     switch (number) {
       case 6:
         six_items.value = response.data;
