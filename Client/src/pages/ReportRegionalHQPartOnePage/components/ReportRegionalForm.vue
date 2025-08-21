@@ -1,7 +1,9 @@
 <template>
   <form class="form__field-group Report-Regional-Form__style" @submit.prevent="sentReport">
-    <h2 v-if="isSecondReport" class="report_title-h3">Свод статистических данных по трудоустройству бойцов студенческих отрядов РО за 2025 год на 15 октября 2025 года</h2>
-    <h2 v-else-if="!isNewReport" class="report_title-h3">Свод статистических данных по трудоустройству бойцов студенческих отрядов РО за 2025 год на 15 октября 2025 года</h2>
+    <h2 v-if="isSecondReport" class="report_title-h3">Свод статистических данных по трудоустройству бойцов студенческих
+      отрядов РО за 2025 год на 15 октября 2025 года</h2>
+    <h2 v-else-if="!isNewReport" class="report_title-h3">Свод статистических данных по трудоустройству бойцов
+      студенческих отрядов РО за 2025 год на 15 октября 2025 года</h2>
     <div class="form__field">
       <label class="form__label" for="participants_number">Количество членов РО <sup class="valid-red">*</sup></label>
       <InputReport
@@ -16,7 +18,7 @@
           :disabled="blockEditFirstReport"
       />
     </div>
-    <p>Количество трудоустроенных по направлениям:</p>
+    <p style="font-weight: bold">Количество членов РО, трудоустроенных по направлениям в текущем периоде:</p>
     <div class="form-container">
       <div class="form-col">
         <div class="form__field">
@@ -140,6 +142,140 @@
       </div>
     </div>
 
+    <div style="margin-bottom: 8px;">
+      <label style="display: flex; " class="form__label" for="4">Загрузите документы, подтверждающие факт
+        трудоустройства, по каждому направлению</label>
+      <InputReport class="form-input__file-input" v-if="!reportDataChildren.document" isFile type="file" id="scan_file"
+                   name="scan_file" @change="uploadFile"/>
+      <FileBoxComponent v-else :file="reportDataChildren.supporting_documents" :fileType="reportDataChildren.file_type"
+                        :fileSize="reportDataChildren.file_size"/>
+    </div>
+
+    <p style="font-weight: bold">Количество членов РО, прошедших профессиональное обучение от Центрального штаба
+      и трудоустроенных в текущем периоде</p>
+    <div class="form-container">
+      <div class="form-col">
+        <div class="form__field">
+          <label class="form__label" for="sso">ССО <sup class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="reportDataChildren.learned_sso"
+              id="sso"
+              name="sso"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+              :disabled="blockEditFirstReport"
+          />
+        </div>
+        <div class="form__field">
+          <label class="form__label" for="smo">СМО <sup class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="reportDataChildren.learned_smo"
+              id="smo"
+              name="smo"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+              :disabled="blockEditFirstReport"
+          />
+        </div>
+        <div class="form__field">
+          <label class="form__label" for="specialized_detachment">Профильные отряды <sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="reportDataChildren.learned_specialized_detachments"
+              id="specialized_detachment"
+              name="specialized_detachment"
+              class="form__input" type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+              :disabled="blockEditFirstReport"
+          />
+        </div>
+        <div class="form__field">
+          <label class="form__label" for="spo">СПО <sup class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="reportDataChildren.learned_spo"
+              id="spo"
+              name="spo"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+              :disabled="blockEditFirstReport"
+          />
+        </div>
+        <div class="form__field">
+          <label class="form__label" for="sservo">ССервО <sup class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="reportDataChildren.learned_sservo"
+              id="sservo"
+              name="sservo"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+              :disabled="blockEditFirstReport"
+          />
+        </div>
+        <div class="form__field">
+          <label class="form__label" for="production_detachments">Производственные отряды <sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="reportDataChildren.learned_production_detachments"
+              id="production_detachments"
+              name="production_detachments"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+              :disabled="blockEditFirstReport"
+          />
+        </div>
+        <div class="form__field">
+          <label class="form__label" for="sop">СОП <sup class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="reportDataChildren.learned_sop"
+              id="sop"
+              name="sop"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+              :disabled="blockEditFirstReport"
+          />
+        </div>
+        <div class="form__field">
+          <label class="form__label" for="ssho">ССхО <sup class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="reportDataChildren.learned_ssho"
+              id="ssho"
+              name="ssho"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+              :disabled="blockEditFirstReport"
+          />
+        </div>
+        <div class="form__field">
+          <label class="form__label" for="top">ТОП <sup class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="reportDataChildren.learned_top"
+              id="top"
+              name="top"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+              :disabled="blockEditFirstReport"
+          />
+        </div>
+      </div>
+    </div>
+
     <div v-if="isSecondReport">
       <p>Количество работников:</p>
       <div class="form-container">
@@ -250,12 +386,12 @@
 </template>
 
 <script setup>
-import { InputReport } from '@shared/components/inputs';
-import { Button } from '@shared/components/buttons';
-import { ref, watchEffect } from "vue";
-import { useRoleStore } from '@layouts/store/role';
-import { useRoute } from "vue-router";
-import { editReport } from "@services/ReportService.ts";
+import {InputReport} from '@shared/components/inputs';
+import {Button} from '@shared/components/buttons';
+import {ref, watchEffect} from "vue";
+import {useRoleStore} from '@layouts/store/role';
+import {useRoute} from "vue-router";
+import {editReport} from "@services/ReportService.ts";
 
 const roleStore = useRoleStore();
 const route = useRoute();
@@ -295,7 +431,17 @@ const reportDataChildren = ref(
       employed_so_poo: '',
       employed_so_oovo: '',
       employed_ro_rso: '',
-      additional_statistics: []
+      additional_statistics: [],
+      learned_sso: '',
+      learned_spo: '',
+      learned_sop: '',
+      learned_smo: '',
+      learned_sservo: '',
+      learned_ssho: '',
+      learned_specialized_detachments: '',
+      learned_production_detachments: '',
+      learned_top: '',
+      supporting_documents: ''
     }
 );
 watchEffect(() => {
@@ -329,6 +475,16 @@ const deleteAdditionalStatistics = async (index) => {
     const {data} = await editReport(reportDataChildren.value);
     emit('sentReport', data);
   }
+}
+
+const uploadFile = async (event) => {
+  let formData = new FormData();
+
+  formData.append('supporting_documents', event.target.files[0]);
+
+  // console.log('event', event.target.files[0])
+
+  await editReport(formData, true);
 }
 </script>
 <style lang="scss" scoped>
