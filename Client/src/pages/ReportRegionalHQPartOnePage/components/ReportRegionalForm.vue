@@ -1,10 +1,11 @@
 <template>
-  <form class="form__field-group Report-Regional-Form__style" @submit.prevent="sentReport">
-    <h2 v-if="isSecondReport" class="report_title-h3">Свод статистических данных по трудоустройству бойцов студенческих
-      отрядов РО за 2025 год на 15 октября 2025 года</h2>
-    <h2 v-else-if="!isNewReport" class="report_title-h3">Свод статистических данных по трудоустройству бойцов
-      студенческих отрядов РО за 2025 год на 15 октября 2025 года</h2>
-    <div class="form__field">
+  <form class=" Report-Regional-Form__style" @submit.prevent="sentReport">
+    <!--    <h2 v-if="isSecondReport" class="report_title-h3">Свод статистических данных по трудоустройству бойцов студенческих-->
+    <!--      отрядов РО за 2025 год на 15 октября 2025 года</h2>-->
+    <!--    <h2 v-if="!isNewReport" class="report_title-h3">Свод статистических данных по трудоустройству бойцов-->
+    <!--      студенческих отрядов РО за 2025 год на 15 октября 2025 года</h2>-->
+
+    <div v-if="!isSecondReport" class="form__field form__field-group">
       <label class="form__label" for="participants_number">Количество членов РО <sup class="valid-red">*</sup></label>
       <InputReport
           v-model:value="reportDataChildren.participants_number"
@@ -18,8 +19,13 @@
           :disabled="blockEditFirstReport"
       />
     </div>
-    <p style="font-weight: bold">Количество членов РО, трудоустроенных по направлениям в текущем периоде:</p>
-    <div class="form-container">
+
+    <div class="form-container form__field-group">
+      <h2 v-if="isSecondReport" class="report_title-h3">Свод статистических данных по трудоустройству бойцов
+        студенческих
+        отрядов РО за 2025 год на 15 октября 2025 года</h2>
+      <p style="font-weight: bold; margin-bottom: 40px; color: black">Количество членов РО, трудоустроенных по
+        направлениям в текущем периоде:</p>
       <div class="form-col">
         <div class="form__field">
           <label class="form__label" for="sso">ССО <sup class="valid-red">*</sup></label>
@@ -140,20 +146,32 @@
           />
         </div>
       </div>
+      <div style="margin-bottom: 8px;">
+        <label style="display: flex; " class="form__label" for="4">Загрузите документы, подтверждающие факт
+          трудоустройства, по каждому направлению</label>
+        <InputReport
+            class="form-input__file-input"
+            v-if="!document.document"
+            isFile
+            type="file"
+            id="scan_file"
+            name="scan_file"
+            @change="uploadFile"
+        />
+        <FileBoxComponent
+            v-else
+            :file="document.document"
+            :fileType="document.file_type"
+            :fileSize="document.file_size"
+            @click="deleteFile"
+        />
+      </div>
     </div>
 
-    <div style="margin-bottom: 8px;">
-      <label style="display: flex; " class="form__label" for="4">Загрузите документы, подтверждающие факт
-        трудоустройства, по каждому направлению</label>
-      <InputReport class="form-input__file-input" v-if="!reportDataChildren.document" isFile type="file" id="scan_file"
-                   name="scan_file" @change="uploadFile"/>
-      <FileBoxComponent v-else :file="reportDataChildren.supporting_documents" :fileType="reportDataChildren.file_type"
-                        :fileSize="reportDataChildren.file_size"/>
-    </div>
-
-    <p style="font-weight: bold">Количество членов РО, прошедших профессиональное обучение от Центрального штаба
-      и трудоустроенных в текущем периоде</p>
-    <div class="form-container">
+    <div v-if="!isSecondReport" class="form-container form__field-group">
+      <p style="font-weight: bold; margin-bottom: 40px; color: black; max-width: 530px;">Количество членов РО, прошедших профессиональное
+        обучение от Центрального штаба
+        и трудоустроенных в текущем периоде<sup class="valid-red">*</sup></p>
       <div class="form-col">
         <div class="form__field">
           <label class="form__label" for="sso">ССО <sup class="valid-red">*</sup></label>
@@ -277,8 +295,8 @@
     </div>
 
     <div v-if="isSecondReport">
-      <p>Количество работников:</p>
-      <div class="form-container">
+      <div class="form-container form__field-group">
+        <p>Количество работников:</p>
         <div class="form-col">
           <div class="form__field">
             <label class="form__label" for="employed_so_poo">Штабы СО ПОО <sup class="valid-red">*</sup></label>
@@ -320,55 +338,54 @@
             />
           </div>
         </div>
-      </div>
-
-      <p>Свой вариант:</p>
-      <Button
-          v-if="!blockEditFirstReport"
-          class="form__add-link-button"
-          label="+ Добавить свой вариант"
-          @click="addAdditionalStatistics"
-      />
-      <div class="form-container" v-for="(statistic, i) in reportDataChildren.additional_statistics" :key="i"
-           style="align-items: end">
-        <div class="form-col">
-          <div class="form__field">
-            <label class="form__label" for="statisticName">Название подразделения: <sup
-                class="valid-red">*</sup></label>
-            <InputReport
-                v-model:value="statistic.name"
-                id="statisticName"
-                name="statisticName"
-                class="form__input"
-                placeholder="название подразделения"
-                @focusout="focusOut"
-                :disabled="blockEditFirstReport"
-            />
+        <p>Свой вариант:</p>
+        <Button
+            v-if="!blockEditFirstReport"
+            class="form__add-link-button"
+            label="+ Добавить свой вариант"
+            @click="addAdditionalStatistics"
+        />
+        <div class="form-container" v-for="(statistic, i) in reportDataChildren.additional_statistics" :key="i"
+             style="align-items: end">
+          <div class="form-col">
+            <div class="form__field">
+              <label class="form__label" for="statisticName">Название подразделения: <sup
+                  class="valid-red">*</sup></label>
+              <InputReport
+                  v-model:value="statistic.name"
+                  id="statisticName"
+                  name="statisticName"
+                  class="form__input"
+                  placeholder="название подразделения"
+                  @focusout="focusOut"
+                  :disabled="blockEditFirstReport"
+              />
+            </div>
           </div>
-        </div>
-        <div class="form-col">
-          <div class="form__field">
-            <label class="form__label" for="statisticName">Количество: <sup class="valid-red">*</sup></label>
-            <InputReport
-                v-model:value="statistic.value"
-                id="statisticQuantity"
-                name="statisticQuantity"
-                class="form__input"
-                type="number"
-                placeholder="количество"
-                @focusout="focusOut"
-                :disabled="blockEditFirstReport"
-            />
+          <div class="form-col">
+            <div class="form__field">
+              <label class="form__label" for="statisticName">Количество: <sup class="valid-red">*</sup></label>
+              <InputReport
+                  v-model:value="statistic.value"
+                  id="statisticQuantity"
+                  name="statisticQuantity"
+                  class="form__input"
+                  type="number"
+                  placeholder="количество"
+                  @focusout="focusOut"
+                  :disabled="blockEditFirstReport"
+              />
+            </div>
           </div>
-        </div>
-        <div class="form-col">
-          <div class="form__field">
-            <Button
-                v-if="!blockEditFirstReport"
-                class="form__add-link-button"
-                label="Удалить свой вариант"
-                @click="deleteAdditionalStatistics(i)"
-            />
+          <div class="form-col">
+            <div class="form__field">
+              <Button
+                  v-if="!blockEditFirstReport"
+                  class="form__add-link-button"
+                  label="Удалить свой вариант"
+                  @click="deleteAdditionalStatistics(i)"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -392,6 +409,7 @@ import {ref, watchEffect} from "vue";
 import {useRoleStore} from '@layouts/store/role';
 import {useRoute} from "vue-router";
 import {editReport} from "@services/ReportService.ts";
+import {FileBoxComponent} from '@entities/RatingRoComponents/components';
 
 const roleStore = useRoleStore();
 const route = useRoute();
@@ -444,16 +462,42 @@ const reportDataChildren = ref(
       supporting_documents: ''
     }
 );
+
+const document = ref({
+  document: '',
+  file_size: '',
+  file_type: ''
+});
+
 watchEffect(() => {
   if (route.fullPath === '/reporting-ro/report-regional-two') {
     isSecondReport.value = true;
   }
   reportDataChildren.value = {...props.reportData};
+
+  if (props.reportData.supporting_documents) {
+    document.value.document = props.reportData.supporting_documents;
+    document.value.file_type = props.reportData.supporting_documents.split('.').slice(-1)[0];
+  }
 })
 
 const sentReport = () => {
-  emit('sentReport', reportDataChildren.value)
+  emit('sentReport', reportDataChildren.value);
 };
+
+const uploadFile = (event) => {
+  document.value.document = event.target.files[0].name;
+  document.value.file_size = (event.target.files[0].size / Math.pow(1024, 2));
+  document.value.file_type = event.target.files[0].type.split('/').at(-1);
+  reportDataChildren.value.supporting_documents = event.target.files[0];
+};
+
+const deleteFile = () => {
+  document.value.document = '';
+  document.value.file_size = '';
+  document.value.file_type = '';
+  reportDataChildren.value.supporting_documents = '';
+}
 
 const focusOut = async () => {
   if (isSecondReport.value) {
@@ -475,16 +519,6 @@ const deleteAdditionalStatistics = async (index) => {
     const {data} = await editReport(reportDataChildren.value);
     emit('sentReport', data);
   }
-}
-
-const uploadFile = async (event) => {
-  let formData = new FormData();
-
-  formData.append('supporting_documents', event.target.files[0]);
-
-  // console.log('event', event.target.files[0])
-
-  await editReport(formData, true);
 }
 </script>
 <style lang="scss" scoped>

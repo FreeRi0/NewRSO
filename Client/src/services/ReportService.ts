@@ -6,8 +6,12 @@ import { HTTP } from '@app/http';
 // Для рейтинга РО 2025 года
 const APPLICATION_NAME = "regional_competitions_2025"
 
-export function createReport(data: object) {
-    return HTTP.post(`${APPLICATION_NAME}/statistical_report/`, data)
+export function createReport(data: object, withFile = false) {
+    return HTTP.post(`${APPLICATION_NAME}/statistical_report/`, data, {
+        headers: {
+            'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
+        },
+    })
 }
 
 export function getReport() {

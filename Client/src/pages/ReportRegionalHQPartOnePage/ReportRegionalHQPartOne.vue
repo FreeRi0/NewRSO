@@ -81,7 +81,17 @@ const reportConfirmation = async (value) => {
   if (value) {
     isButtonDisabled.value = true;
     try {
-      await createReport(reportData.value)
+      const formData = new FormData();
+
+      for (const key in reportData.value) {
+        // eslint-disable-next-line no-prototype-builtins
+        if (reportData.value.hasOwnProperty(key)) {
+          formData.append(key, reportData.value[key]);
+        }
+      }
+
+      // await createReport(reportData.value)
+      await createReport(formData, true);
       showModalWarning.value = false;
       showModalSuccess.value = true;
     } catch (e) {
