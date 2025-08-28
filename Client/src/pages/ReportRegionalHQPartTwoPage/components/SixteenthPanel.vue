@@ -59,42 +59,52 @@
       <div>
         <div class="project-regulations">
           <div class="project-scope">
-            <p class="form__label form__field-label-project">Масштаб проекта <sup class="valid-red">*</sup></p>
-            <div>
-              <input
-                  class="custom-radio"
-                  v-model="project.project_scale"
-                  type="radio"
-                  :id="`All-${index}`"
-                  value="Всероссийский"
-                  :disabled="isSent || !sixteenthPanelData.is_project"
-                  @change="focusOut"
-              />
-              <label :for="`All-${index}`">Всероссийский</label>
+            <div class="project-file">
+              <span class="form__label form__field-label-project">Загрузите документы, подтверждающие факт трудоустройства</span>
+                <InputReport class="form-input__file-input" v-if="!project.file" isFile type="file"
+                    id="scan_file" name="scan_file" width="100%" @change="uploadFile($event, index)" />
+                <FileBoxComponent v-else :file="project.file" :fileType="project.file_type"
+                    :fileSize="project.file_size" :is-sent="isSent"
+                    :is-error-file="isErrorFile && !project.file_size" @click="deleteFile(index)" />
             </div>
-            <div>
-              <input
-                  class="custom-radio"
-                  v-model="project.project_scale"
-                  type="radio"
-                  :id="`District-${index}`"
-                  value="Окружной"
-                  :disabled="isSent || !sixteenthPanelData.is_project"
-                  @change="focusOut"
-              />
-              <label :for="`District-${index}`">Окружной</label>
-            </div>
-            <div>
-              <input
-                  class="custom-radio"
-                  v-model="project.project_scale"
-                  type="radio"
-                  :id="`Interregional-${index}`"
-                  value="Межрегиональный"
-                  :disabled="isSent || !sixteenthPanelData.is_project"
-                  @change="focusOut"
-              />
-              <label :for="`Interregional-${index}`">Межрегиональный</label>
+            <div class="project-radio">
+              <p class="form__label form__field-label-project">Масштаб проекта <sup class="valid-red">*</sup></p>
+              <div>
+                <input
+                    class="custom-radio"
+                    v-model="project.project_scale"
+                    type="radio"
+                    :id="`All-${index}`"
+                    value="Всероссийский"
+                    :disabled="isSent || !sixteenthPanelData.is_project"
+                    @change="focusOut"
+                />
+                <label :for="`All-${index}`">Всероссийский</label>
+              </div>
+              <div>
+                <input
+                    class="custom-radio"
+                    v-model="project.project_scale"
+                    type="radio"
+                    :id="`District-${index}`"
+                    value="Окружной"
+                    :disabled="isSent || !sixteenthPanelData.is_project"
+                    @change="focusOut"
+                />
+                <label :for="`District-${index}`">Окружной</label>
+              </div>
+              <div>
+                <input
+                    class="custom-radio"
+                    v-model="project.project_scale"
+                    type="radio"
+                    :id="`Interregional-${index}`"
+                    value="Межрегиональный"
+                    :disabled="isSent || !sixteenthPanelData.is_project"
+                    @change="focusOut"
+                />
+                <label :for="`Interregional-${index}`">Межрегиональный</label>
+              </div>
             </div>
           </div>
         </div>
@@ -155,14 +165,14 @@
             :disabled="isSent || !sixteenthPanelData.is_project"
         />
       </div>
-      <div class="form__field-result">
+      <!-- <div class="form__field-result">
         <v-checkbox class="result-checkbox" id="v-checkbox" @change="calculateResult($event)"/>
         <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
       </div>
       <div class="hr"></div>
       <div>
         <p class="result-count">{{ finalResult.toFixed(1) }}</p>
-      </div>
+      </div> -->
     </div>
   </div>
   <!------------------------------------------------------------------------------------------------>
@@ -317,14 +327,14 @@
             @focusout="focusOut"
         />
       </div>
-      <div class="form__field-result">
+      <!-- <div class="form__field-result">
         <v-checkbox class="result-checkbox" id="v-checkbox" @change="calculateResult($event)"/>
         <label class="result-checkbox-text" for="v-checkbox">Итоговое значение</label>
       </div>
       <div class="hr"></div>
       <div class="form__field-result">
         <p class="result-count">{{ finalResult.toFixed(1) }}</p>
-      </div>
+      </div> -->
     </template>
     <!------------------------------------------------------------------------------------------------>
 
@@ -437,14 +447,14 @@
               :disabled="props.centralExpert || reportStore.isReportReject?.sixteenth || reportStore.isAllReportsVerifiedByCH"
           />
         </div>
-        <div class="form__field-result">
+        <!-- <div class="form__field-result">
           <v-checkbox class="result-checkbox" id="v-checkboxDH" @change="calculateResultDH($event)"/>
           <label class="result-checkbox-text" for="v-checkboxDH">Итоговое значение</label>
         </div>
         <div class="hr"></div>
         <div>
           <p class="result-count">{{ finalResultDH.toFixed(1) }}</p>
-        </div>
+        </div> -->
       </div>
     </template>
     <!------------------------------------------------------------------------------------------------>
@@ -620,6 +630,7 @@ import {Button} from '@shared/components/buttons';
 import {reportPartTwoService} from "@services/ReportService.ts";
 import {ReportTabs} from './index';
 import {useReportPartTwoStore} from "@pages/ReportRegionalHQPartTwoPage/store.ts";
+import { FileBoxComponent } from '@entities/RatingRoComponents/components';
 
 const props = defineProps({
   districtExpert: {
@@ -655,6 +666,9 @@ const sixteenthPanelDataDH = ref({
 const projects = ref([
   {
     name: '',
+    file_type: '',
+    file_size: '',
+    project_file: null,
     project_scale: null,
     regulations: '',
     file_size: '',
@@ -1150,6 +1164,7 @@ watch([commonData, commentCH], () => {
 }
 
 .form-input__file-input {
+  margin-top: 8px;
   display: flex;
   justify-content: center;
   text-align: center;
@@ -1335,8 +1350,8 @@ watch([commonData, commentCH], () => {
 
 .project-scope {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  flex-direction: row;
+  gap: 40px;
 }
 
 .panel-card {
