@@ -230,8 +230,7 @@
               на&nbsp;текущий период.
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <calculated-panel
-                text="Показатель рассчитывается автоматически на&nbsp;основе данных из&nbsp;12&nbsp;и&nbsp;13&nbsp;показателей." />
+              <fifteenth-panel />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('16', picked, revisionPanels)">
@@ -293,6 +292,7 @@ import {
   EighteenthPanel,
   EleventhPanel,
   FifthPanel,
+  FifteenthPanel,
   FirstPanel,
   FourthPanel,
   NineteenthPanel,
