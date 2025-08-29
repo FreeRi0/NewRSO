@@ -9,6 +9,15 @@
   </div>
 
   <div v-else class="form__field-group report__field-group">
+    <a 
+      v-if="!isSent && !(props.centralExpert || props.districtExpert)"
+      href=""
+      download 
+      class="report__add-button"
+    >
+      Скачать шаблон
+    </a>
+
     <div class="report__fieldset report__file-input"
       v-if="(!isSent && !(props.centralExpert || props.districtExpert)) ||
             (isSent && seventeenthPanelData.scan_file)"

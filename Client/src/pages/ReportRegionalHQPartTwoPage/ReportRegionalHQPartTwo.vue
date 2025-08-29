@@ -59,8 +59,7 @@
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('3', picked, revisionPanels)">
             <v-expansion-panel-title>
-              3. Прирост численности членов РО&nbsp;РСО относительно количества членов в&nbsp;соответствии
-              с&nbsp;отчетом РО&nbsp;РСО за&nbsp;2024&nbsp;г.
+              3. Отношение количества трудоустроенных членов РО&nbsp;РСО к&nbsp;общей численности членов РО&nbsp;РСО
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
@@ -159,9 +158,11 @@
               11. Активность РО&nbsp;РСО в&nbsp;социальных сетях &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+              <!-- <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
                 @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.eleventh"
-                :is-error-panel="isErrorPanel.eleventh" :tab="picked" />
+                :is-error-panel="isErrorPanel.eleventh" :tab="picked" /> -->
+              <calculated-panel
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('12', picked, revisionPanels)">
@@ -291,7 +292,7 @@
 import {
   CalculatedPanel,
   EighteenthPanel,
-  EleventhPanel,
+  // EleventhPanel,
   FifthPanel,
   FirstPanel,
   FourthPanel,
@@ -353,7 +354,7 @@ const reportData = ref({
     first: null,
     second: null,
   },
-  eleventh: null,
+  // eleventh: null,
   twelfth: null,
   // thirteenth: null,
   // добавить показатель 14
@@ -375,7 +376,7 @@ const reportDataDH = ref({
     first: null,
     second: null,
   },
-  eleventh: null,
+  // eleventh: null,
   twelfth: null,
   // thirteenth: null,
   // добавить 14 показатель
@@ -393,7 +394,7 @@ const reportDataCH = ref({
     first: null,
     second: null,
   },
-  eleventh: null,
+  // eleventh: null,
   twelfth: null,
   // thirteenth: null,
   // добавить 14 показатель
@@ -425,7 +426,7 @@ const isErrorPanel = ref({
   // seventh: {},
   ninth: {},
   tenth: false,
-  eleventh: false,
+  // eleventh: false,
   twelfth: false,
   // thirteenth: false,
   // добавить 14 показатель
@@ -984,32 +985,33 @@ const getReportData = async (reportId) => {
       }
       /* 
       * Критерий 11
+      * В 2025 году данный показатель рассчитывается автоматически
       */
-      const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
-      reportStore.reportForCheckCH.eleventh = dataEleventh;
+      // const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
+      // reportStore.reportForCheckCH.eleventh = dataEleventh;
 
       // если используем функцию showPanels обязательна проверка на 2 поля:
-      if (dataEleventh.rejecting_reasons && dataEleventh.verified_by_chq !== true) {
-        revisionPanels.value.push('11');
-      }
+      // if (dataEleventh.rejecting_reasons && dataEleventh.verified_by_chq !== true) {
+      //   revisionPanels.value.push('11');
+      // }
 
-      dataEleventh.regional_version
-        ? reportData.value.eleventh = JSON.parse(dataEleventh.regional_version)
-        : reportData.value.eleventh = dataEleventh;
+      // dataEleventh.regional_version
+      //   ? reportData.value.eleventh = JSON.parse(dataEleventh.regional_version)
+      //   : reportData.value.eleventh = dataEleventh;
 
-      dataEleventh.district_version
-        ? reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version)
-        : reportStore.reportDataDH.eleventh = dataEleventh;
+      // dataEleventh.district_version
+      //   ? reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version)
+      //   : reportStore.reportDataDH.eleventh = dataEleventh;
 
-      reportStore.reportDataCH.eleventh = Object.assign({}, dataEleventh);
-      if (!dataEleventh.rejecting_reasons) {
-        reportStore.reportDataCH.eleventh.comment = ''
-      } else if (dataEleventh.rejecting_reasons) {
-        reportStore.reportDataCH.eleventh.comment = JSON.parse(reportStore.reportDataCH.eleventh.rejecting_reasons).comment
-      }
-      if (dataEleventh.verified_by_chq === true) {
-        reportStore.reportDataCH.eleventh.comment = dataEleventh.comment
-      }
+      // reportStore.reportDataCH.eleventh = Object.assign({}, dataEleventh);
+      // if (!dataEleventh.rejecting_reasons) {
+      //   reportStore.reportDataCH.eleventh.comment = ''
+      // } else if (dataEleventh.rejecting_reasons) {
+      //   reportStore.reportDataCH.eleventh.comment = JSON.parse(reportStore.reportDataCH.eleventh.rejecting_reasons).comment
+      // }
+      // if (dataEleventh.verified_by_chq === true) {
+      //   reportStore.reportDataCH.eleventh.comment = dataEleventh.comment
+      // }
 
       /* 
       * Критерий 12
@@ -1105,9 +1107,9 @@ const getReportData = async (reportId) => {
       reportStore.reportDataDH.tenth.second = Object.assign({}, reportData.value.tenth.second);
       reportStore.reportDataDH.tenth.second.comment = '';
 
-      reportData.value.eleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
-      reportStore.reportDataDH.eleventh = Object.assign({}, reportData.value.eleventh);
-      reportStore.reportDataDH.eleventh.comment = '';
+      // reportData.value.eleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
+      // reportStore.reportDataDH.eleventh = Object.assign({}, reportData.value.eleventh);
+      // reportStore.reportDataDH.eleventh.comment = '';
 
       reportData.value.twelfth = (await reportPartTwoService.getReportDH('12', reportId)).data;
       reportStore.reportDataDH.twelfth = Object.assign({}, reportData.value.twelfth);
@@ -1309,30 +1311,30 @@ const getReportData = async (reportId) => {
         console.log(e.message)
       }
       //-----------------11------------------------------------------
-      let dataEleventh;
-      try {
-        dataEleventh = (await reportPartTwoService.getReport('11')).data;
-        console.log(dataEleventh);
-        dataEleventh.regional_version
-          ? reportData.value.eleventh = JSON.parse(dataEleventh.regional_version)
-          : reportData.value.eleventh = dataEleventh;
+      // let dataEleventh;
+      // try {
+      //   dataEleventh = (await reportPartTwoService.getReport('11')).data;
+      //   console.log(dataEleventh);
+      //   dataEleventh.regional_version
+      //     ? reportData.value.eleventh = JSON.parse(dataEleventh.regional_version)
+      //     : reportData.value.eleventh = dataEleventh;
 
-        dataEleventh.district_version
-          ? reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version)
-          : reportStore.reportDataDH.eleventh = dataEleventh;
+      //   dataEleventh.district_version
+      //     ? reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version)
+      //     : reportStore.reportDataDH.eleventh = dataEleventh;
 
-        dataEleventh.central_version
-          ? reportStore.reportDataCH.eleventh = dataEleventh.central_version
-          : reportStore.reportDataCH.eleventh = dataEleventh;
+      //   dataEleventh.central_version
+      //     ? reportStore.reportDataCH.eleventh = dataEleventh.central_version
+      //     : reportStore.reportDataCH.eleventh = dataEleventh;
 
         // Проверка на причины отклонений отчета и вывод табов для РО
-        if (dataEleventh.rejecting_reasons && dataEleventh.verified_by_chq !== true) {
-          revisionPanels.value.push('11');
-          reportStore.isReportReject.eleventh = isTabsForRevision.value;
-        }
-      } catch (e) {
-        console.log(e.message)
-      }
+      //   if (dataEleventh.rejecting_reasons && dataEleventh.verified_by_chq !== true) {
+      //     revisionPanels.value.push('11');
+      //     reportStore.isReportReject.eleventh = isTabsForRevision.value;
+      //   }
+      // } catch (e) {
+      //   console.log(e.message)
+      // }
       //-----------------12-------------------------------------------
       let dataTwelfth;
       try {
@@ -1482,7 +1484,7 @@ const getReportData = async (reportId) => {
         dataTenthFirst.verified_by_chq &&
         dataTenthSecond.verified_by_chq &&
         isAllSixVerified && isAllNinthVerified &&
-        dataEleventh.verified_by_chq &&
+        // dataEleventh.verified_by_chq &&
         dataTwelfth.verified_by_chq
         // Добавить 14 показатель 2025 года
       ) {
@@ -1525,9 +1527,9 @@ const setData = (data, panel, number = 0) => {
         reportData.value.tenth.second = data;
       }
       break;
-    case 11:
-      reportData.value.eleventh = data
-      break;
+    // case 11:
+    //   reportData.value.eleventh = data
+      // break;
     case 12:
       reportData.value.twelfth = data
       break;
@@ -1579,9 +1581,9 @@ const setDataDH = (data, panel, number) => {
         reportDataDH.value.tenth.second = data;
       }
       break;
-    case 11:
-      reportDataDH.value.eleventh = data;
-      break;
+    // case 11:
+    //   reportDataDH.value.eleventh = data;
+    //   break;
     case 12:
       reportDataDH.value.twelfth = data;
       break;
@@ -1622,9 +1624,9 @@ const setDataCH = (data, panel, number) => {
         console.log('10-2', ...reportDataCH.value.tenth.second);
       }
       break;
-    case 11:
-      reportDataCH.value.eleventh = data;
-      break;
+    // case 11:
+    //   reportDataCH.value.eleventh = data;
+    //   break;
     case 12:
       reportDataCH.value.twelfth = data;
       break;
@@ -1733,9 +1735,9 @@ const sendReport = async () => {
         if (!reportData.value.tenth.second.is_sent) {
           await reportPartTwoService.sendMultipleReport(reportData.value.tenth.second, '10', '2');
         }
-        if (!reportData.value.eleventh.is_sent) {
-          await reportPartTwoService.sendReport(reportData.value.eleventh, '11');
-        }
+        // if (!reportData.value.eleventh.is_sent) {
+        //   await reportPartTwoService.sendReport(reportData.value.eleventh, '11');
+        // }
         if (!reportData.value.twelfth.is_sent) {
           await reportPartTwoService.sendReport(reportData.value.twelfth, '12');
         }
@@ -1834,9 +1836,9 @@ const sendReport = async () => {
         await reportPartTwoService.sendReportDHMultiply(reportDataDH.value.tenth.second, '10', '2', route.query.reportId, true)
       }
 
-      if (!reportData.value.eleventh.verified_by_dhq) {
-        await reportPartTwoService.sendReportDH(reportDataDH.value.eleventh, '11', route.query.reportId, true);
-      }
+      // if (!reportData.value.eleventh.verified_by_dhq) {
+      //   await reportPartTwoService.sendReportDH(reportDataDH.value.eleventh, '11', route.query.reportId, true);
+      // }
 
       if (!reportData.value.twelfth.verified_by_dhq) {
         await reportPartTwoService.sendReportDH(reportDataDH.value.twelfth, '12', route.query.reportId, true);
@@ -1933,9 +1935,9 @@ const reportConfirmation = async (value) => {
         await reportPartTwoService.sendMultipleReportCH(reportDataCH.value.tenth.second, '10', '2', route.query.reportId, true, reportStore.returnReport.tenth.second);
       }
 
-      if (reportStore.reportForCheckCH.eleventh.verified_by_chq === null) {
-        await reportPartTwoService.sendReportCH(reportDataCH.value.eleventh, '11', route.query.reportId, true, reportStore.returnReport.eleventh);
-      }
+      // if (reportStore.reportForCheckCH.eleventh.verified_by_chq === null) {
+      //   await reportPartTwoService.sendReportCH(reportDataCH.value.eleventh, '11', route.query.reportId, true, reportStore.returnReport.eleventh);
+      // }
 
       if (reportStore.reportForCheckCH.twelfth.verified_by_chq === null) {
         await reportPartTwoService.sendReportCH(reportDataCH.value.twelfth, '12', route.query.reportId, true, reportStore.returnReport.twelfth);
@@ -2168,19 +2170,19 @@ const checkEmptyFields = (data) => {
     return false;
   }
 
-  if (!data.eleventh || !(data.eleventh.participants_number && data.eleventh.scan_file)) {
-    isErrorPanel.value.eleventh = true;
-    swal.fire({
-      position: 'center',
-      icon: 'warning',
-      title: `Заполните обязательные поля в 11 показателе`,
-      showConfirmButton: false,
-      timer: 2500,
-    })
-    return false;
-  } else {
-    isErrorPanel.value.eleventh = false;
-  }
+  // if (!data.eleventh || !(data.eleventh.participants_number && data.eleventh.scan_file)) {
+  //   isErrorPanel.value.eleventh = true;
+  //   swal.fire({
+  //     position: 'center',
+  //     icon: 'warning',
+  //     title: `Заполните обязательные поля в 11 показателе`,
+  //     showConfirmButton: false,
+  //     timer: 2500,
+  //   })
+  //   return false;
+  // } else {
+  //   isErrorPanel.value.eleventh = false;
+  // }
 
   if (!data.twelfth || !(data.twelfth.amount_of_money && data.twelfth.number_of_members)) {
     isErrorPanel.value.twelfth = true;
