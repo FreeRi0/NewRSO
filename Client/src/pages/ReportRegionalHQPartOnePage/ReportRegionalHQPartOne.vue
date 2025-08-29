@@ -39,6 +39,16 @@ const defaultReportData = {
   employed_sop: '',
   employed_ssho: '',
   employed_top: '',
+  learned_sso: '',
+  learned_spo: '',
+  learned_sop: '',
+  learned_smo: '',
+  learned_sservo: '',
+  learned_ssho: '',
+  learned_specialized_detachments: '',
+  learned_production_detachments: '',
+  learned_top: '',
+  supporting_documents: ''
 };
 
 const reportData = ref(defaultReportData);
