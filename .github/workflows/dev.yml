@@ -23,6 +23,8 @@ jobs:
           context: ./Client/
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/rso_frontend:dev
+          build-args: |
+            BACKEND_BASE_URL=http://213.139.208.147:30000/api/v1/
   deploy:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/dev'
