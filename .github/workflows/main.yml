@@ -23,6 +23,8 @@ jobs:
           context: ./Client/
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/rso_frontend:latest
+          build-args: |
+            BACKEND_BASE_URL=https://xn--j1ab.xn--d1amqcgedd.xn--p1ai
   deploy:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
