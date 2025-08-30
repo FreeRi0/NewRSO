@@ -14,6 +14,11 @@ const hash = Math.floor(Math.random() * 90000) + 10000;
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [vue()],
+    define: {
+        'process.env': {
+            BACKEND_BASE_URL: JSON.stringify('http://213.139.208.147:30000'),
+        }
+    },
     root: './src/app',
     server: {
         port: 8080,
