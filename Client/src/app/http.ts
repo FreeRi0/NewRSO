@@ -6,15 +6,15 @@ import { ref } from 'vue';
 export const HTTP = axios.create({
 
     // baseURL: 'http://213.139.208.147:30000/api/v1/',  //https://xn--j1ab.xn--d1amqcgedd.xn--p1ai/api/v1/  //http://213.139.208.147:30000/api/v1/
-    baseURL: process.env.NODE_ENV === "development" ? process.env.BACKEND_BASE_URL_LOCAL : process.env.BACKEND_BASE_URL,
+    baseURL: import.meta.env.VITE_BACKEND_BASE_URL,
+    
     headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
     },
 });
 
-// console.log("р", process.env.NODE_ENV)
-// console.log(process.env.BACKEND_BASE_URL)
+// console.log(import.meta.env)
 
 const refreshTokenPromise = ref({});
 
