@@ -80,7 +80,7 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from "vue";
+import { ref, watchEffect, watchPostEffect } from "vue";
 import { InputReport, TextareaReport } from "@shared/components/inputs";
 import { FileBoxComponent } from "@entities/RatingRoComponents/components";
 import { reportPartTwoService } from "@services/ReportService.ts";
@@ -223,6 +223,17 @@ watchEffect(
     flush: "post",
   }
 );
+
+watchPostEffect(() => {
+  if (props.data) {
+    console.log(props.data);
+    isFirstSent.value = false;
+    seventeenthPanelData.value.comment = props.data.comment;
+    seventeenthPanelData.value.scan_file = props.data.scan_file;
+    seventeenthPanelData.value.file_size = props.data.file_size;
+    seventeenthPanelData.value.file_type = props.data.file_type;
+  }
+});
 </script>
 
 <style lang="scss" scoped>
