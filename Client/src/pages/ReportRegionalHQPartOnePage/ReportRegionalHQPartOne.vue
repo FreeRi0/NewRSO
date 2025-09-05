@@ -17,7 +17,7 @@
 import { inject, onActivated, ref, watch } from "vue";
 import { useRoleStore } from "@layouts/store/role";
 import ReportRegionalForm from "@pages/ReportRegionalHQPartOnePage/components/ReportRegionalForm.vue";
-import { createReport, getCurrentReport, getReport } from "@services/ReportService.ts";
+import {createReport, getCurrentOldReport, getCurrentReport, getReport} from "@services/ReportService.ts";
 import ReportModalSuccess from "@pages/ReportRegionalHQPartOnePage/components/ReportModalSuccess.vue";
 import ReportModalWarning from "@pages/ReportRegionalHQPartOnePage/components/ReportModalWarning.vue";
 import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
@@ -58,7 +58,8 @@ const isButtonDisabled = ref(false);
 
 onActivated(async () => {
   try {
-    const res = route.query.id ? await getCurrentReport(String(route.query.id)) : await getReport();
+    // const res = route.query.id ? await getCurrentReport(String(route.query.id)) : await getReport();
+    const res = route.query.id ? await getCurrentOldReport(String(route.query.id)) : await getReport();
     reportData.value = res.data;
     isButtonDisabled.value = true;
   } catch (e) {
