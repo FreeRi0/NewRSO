@@ -51,6 +51,15 @@ export const reportPartTwoService = {
         })
     },
 
+    // PUT вариант для обновления отчета по конкретному id РО
+    createReportIdPut(data: object, panel: string, id: string) {
+        return HTTP.put(`${APPLICATION_NAME}/reports/${panel}/${id}/`, data, {
+            headers: {
+                'Content-Type':'multipart/form-data',
+            },
+        })
+    },
+
     createReportDraft(data: object, panel: string, withFile = false) {
         return HTTP.put(`${APPLICATION_NAME}/me/reports/${panel}/`, data, {
             headers: {
