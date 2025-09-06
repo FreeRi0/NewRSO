@@ -1,5 +1,5 @@
 <template>
-    <v-expansion-panels class="area__form">
+    <v-expansion-panels class="area__form" :multiple="false">
         <v-expansion-panel>
             <v-expansion-panel-title>
                 <span class="area__name">{{ area.name }}</span>
@@ -12,35 +12,40 @@
                             <span>Общее количество обученных</span>
                             <InputReport @focusout="focusOut" v-model:value="area_from.number_trained" :is-link="false"
                                 placeholder="Введите число" id="15" name="14" class="form__input number_input"
-                                type="number" :max="32767" />
+                                type="number" :max="32767" style="width: 100%;"
+                                :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
                         </div>
                         <div class="area__form_data_number_item">
                             <span>Общее количество трудоустроенных РО по направлению</span>
                             <InputReport @focusout="focusOut" v-model:value="area_from.number_employed" :is-link="false"
                                 placeholder="Введите число" id="15" name="14" class="form__input number_input"
-                                type="number" :max="32767" />
+                                type="number" :max="32767" style="width: 100%;"
+                                :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
                         </div>
                         <div class="area__form_data_number_item">
                             <span>Самостоятельное трудоустройство</span>
                             <InputReport @focusout="focusOut" v-model:value="area_from.self_employment" :is-link="false"
                                 placeholder="Введите число" id="15" name="14" class="form__input number_input"
-                                type="number" :max="32767" />
+                                type="number" :max="32767" style="width: 100%;"
+                                :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
                         </div>
                         <div class="area__form_data_number_item">
                             <span>Общее количество не трудоустроенных</span>
                             <InputReport @focusout="focusOut" v-model:value="area_from.number_unemployed"
                                 :is-link="false" placeholder="Введите число" id="15" name="14"
-                                class="form__input number_input" type="number" :max="32767" />
+                                class="form__input number_input" type="number" :max="32767" style="width: 100%;"
+                                :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
                         </div>
                     </div>
 
                     <div class="area__form_data_file">
                         <span>Загрузите документы, подтверждающие факт трудоустройства</span>
                         <InputReport class="form-input__file-input" v-if="!area_from.file" isFile type="file"
-                            id="scan_file" name="scan_file" width="100%" @change="uploadFile($event, index)" />
+                            id="scan_file" name="scan_file" width="100%" @change="uploadFile($event)"
+                            :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
                         <FileBoxComponent v-else :file="area_from.file" :fileType="area_from.file_type"
                             :fileSize="area_from.file_size" :is-sent="isSent"
-                            :is-error-file="isErrorFile && !area_from.file_size" @click="deleteFile(index)" />
+                            :is-error-file="isErrorFile && !area_from.file_size" @click="deleteFile" />
                         <span class="area__form_data_file_text">Формат ZIP. Максимум 40 МБ</span>
                     </div>
 
@@ -51,13 +56,15 @@
                             <div class="radio-group">
                                 <label class="radio-option">
                                     <input type="radio" v-model="area_from.isFillingTableAutumn2024" :value="true"
-                                        class="custom-radio" />
+                                        class="custom-radio"
+                                        :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
                                     <span class="radio-custom"></span>
                                     Да
                                 </label>
                                 <label class="radio-option">
                                     <input type="radio" v-model="area_from.isFillingTableAutumn2024" :value="false"
-                                        class="custom-radio" />
+                                        class="custom-radio"
+                                        :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
                                     <span class="radio-custom"></span>
                                     Нет
                                 </label>
@@ -70,20 +77,22 @@
                             <div class="radio-group">
                                 <label class="radio-option">
                                     <input type="radio" v-model="area_from.isFillingTableSpring2025" :value="true"
-                                        class="custom-radio" />
+                                        class="custom-radio"
+                                        :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
                                     <span class="radio-custom"></span>
                                     Да
                                 </label>
                                 <label class="radio-option">
                                     <input type="radio" v-model="area_from.isFillingTableSpring2025" :value="false"
-                                        class="custom-radio" />
+                                        class="custom-radio"
+                                        :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
                                     <span class="radio-custom"></span>
                                     Нет
                                 </label>
                             </div>
                         </div>
                     </div>
-                    <div class="area__form_data_save-button">
+                    <div class="area__form_data_save-button" v-if="!(props.centralExpert || props.districtExpert)">
                         <button @click="clickOnButton" aria-label="Сохранить"
                             class="area__form_data_save-button_button">
                             <span class="area__form_data_save-button_label">Сохранить</span>
@@ -96,7 +105,8 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue';
+import { ref, defineProps, watchEffect } from 'vue';
+import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
 
 import { InputReport } from '@shared/components/inputs';
 import { FileBoxComponent } from '@entities/RatingRoComponents/components';
@@ -105,46 +115,87 @@ const props = defineProps({
     area: {
         type: Object,
         required: true
+    },
+    isSent: {
+        type: Boolean,
+        default: false
+    },
+    districtExpert: {
+        type: Boolean,
+        default: false
+    },
+    centralExpert: {
+        type: Boolean,
+        default: false
+    },
+    tab: {
+        type: String,
+        default: ''
     }
-})
+});
+
+const emit = defineEmits(['updateArea', 'saveData']);
+const reportStore = useReportPartTwoStore();
 
 const area_from = ref({
+    name: props.area.name,
     number_trained: '',
     number_employed: '',
     self_employment: '',
     number_unemployed: '',
-
     file: '',
-
+    file_size: null,
+    file_type: '',
     isFillingTableAutumn2024: null,
     isFillingTableSpring2025: null,
-})
+});
 
-const emit = defineEmits(['formData', 'formDataDH', 'formDataCH', 'uploadFile', 'error']);
+watchEffect(() => {
+    if (props.area) {
+        area_from.value = {
+            name: props.area.name,
+            number_trained: props.area.number_trained || '',
+            number_employed: props.area.number_employed || '',
+            self_employment: props.area.self_employment || '',
+            number_unemployed: props.area.number_unemployed || '',
+            file: props.area.file || '',
+            file_size: props.area.file_size || null,
+            file_type: props.area.file_type || '',
+            isFillingTableAutumn2024: props.area.isFillingTableAutumn2024 || null,
+            isFillingTableSpring2025: props.area.isFillingTableSpring2025 || null,
+        };
+    }
+});
 
 const focusOut = async () => {
-    emit('formData', props.area);
-}
+    emit('updateArea', area_from.value);
+};
 
-// const uploadFile = async (event, index) => {
-//     fileValidate(event.target.files[0], 7, isErrorFile);
-//     if (isErrorFile.value) {
-//         events.value[index].regulations = event.target.files[0].name
-//     } else {
-//         const { data } = await reportPartTwoService.createReportDraft(setFormData(event.target.files[0], index), '4', true);
-//         emit('getData', data, 4);
-//     }
-// };
-// const deleteFile = async (index) => {
-//     if (isFirstSent.value) {
-//         const { data } = await reportPartTwoService.createReport(setFormData(null, index, false, true), '4', true);
-//         emit('getData', data, 4);
-//     } else {
-//         const { data } = await reportPartTwoService.createReportDraft(setFormData(null, index, false, true), '4', true);
-//         emit('getData', data, 4);
-//     }
+const uploadFile = async (event) => {
+    if (!event.target.files || !event.target.files[0]) return;
+    
+    const file = event.target.files[0];
+    
+    area_from.value.file_size = (file.size / Math.pow(1024, 2));
+    area_from.value.file_type = file.type.split('/').at(-1);
+    
+    area_from.value.file = file;
+    
+    area_from.value = { ...area_from.value };
+    emit('updateArea', area_from.value);
+};
 
-// };
+const deleteFile = async () => {
+    area_from.value.file = '';
+    area_from.value.file_size = null;
+    area_from.value.file_type = '';
+    
+    emit('updateArea', area_from.value);
+};
+
+const clickOnButton = () => {
+    emit('saveData');
+};
 </script>
 
 <style scoped lang="scss">
