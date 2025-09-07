@@ -15,6 +15,7 @@ const props = defineProps({
 
 
 const goToReport = (item) => {
+  console.log('item', item)
   if (route.params.part == 'Часть 2') {
     router.push({
       name: 'ReportRegionalPartTwoComander',
@@ -29,7 +30,7 @@ const goToReport = (item) => {
       name: 'ReportRegionalPartOneComander',
       params: { part: 'Часть 1' },
       query: {
-        id: item.id,
+        id: item.regional_headquarter.id,
         headquartersName: item.regional_headquarter.name
       },
     });
