@@ -151,23 +151,23 @@ export function checkEmptyFieldsDH(data, isErrorPanel) {
         }
     }
 
-    if (
-        !data.eleventh ||
-        !data.eleventh.participants_number ||
-        !data.eleventh.comment
-    ) {
-        isErrorPanel.value.eleventh = true;
-        swal.fire({
-            position: 'center',
-            icon: 'warning',
-            title: `Заполните обязательные поля в 11 показателе`,
-            showConfirmButton: false,
-            timer: 2500,
-        });
-        return false;
-    } else {
-        isErrorPanel.value.eleventh = false;
-    }
+    // if (
+    //     !data.eleventh ||
+    //     !data.eleventh.participants_number ||
+    //     !data.eleventh.comment
+    // ) {
+    //     isErrorPanel.value.eleventh = true;
+    //     swal.fire({
+    //         position: 'center',
+    //         icon: 'warning',
+    //         title: `Заполните обязательные поля в 11 показателе`,
+    //         showConfirmButton: false,
+    //         timer: 2500,
+    //     });
+    //     return false;
+    // } else {
+    //     isErrorPanel.value.eleventh = false;
+    // }
 
     if (
         !data.twelfth ||

@@ -73,7 +73,7 @@
         v-model:value="nineteenthPanelData.comment"
         id="comment"
         name="comment"
-        placeholder="Напишите сообщение"
+        placeholder="Укажите принимающие организации и&nbsp;количество людей по&nbsp;каждой из&nbsp;них"
         :rows="1" 
         autoResize
         counter-visible

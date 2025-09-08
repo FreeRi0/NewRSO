@@ -26,6 +26,10 @@ export function getCurrentReport(id: string) {
     return HTTP.get(`${APPLICATION_NAME}/statistical_report/${id}/`)
 }
 
+export function getCurrentOldReport(id: string) {
+    return HTTP.get(`${APPLICATION_NAME}/statistical_report/old_first/${id}/`)
+}
+
 export function patchReport(data: object) {
     return HTTP.patch(`${APPLICATION_NAME}/statistical_report/me/`, data)
 }

@@ -34,6 +34,9 @@
           <div class="form__field-group">
             <slot name="firstTab"></slot>
           </div>
+
+            <slot name="firstTab_additionalSlot"></slot>
+
         </v-tabs-window-item>
         <v-tabs-window-item value="two" v-if="
           districtHeadquarterCommander ||

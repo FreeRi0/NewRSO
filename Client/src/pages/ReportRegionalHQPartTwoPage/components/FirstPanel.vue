@@ -1,5 +1,6 @@
 <template>
-  <div v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.first || reportStore.isAllReportsVerifiedByCH) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.first)">
+  <div
+      v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.first || reportStore.isAllReportsVerifiedByCH) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.first)">
     <div class="form__field-group">
       <div class="form__field-report">
         <div class="form__field">
@@ -14,7 +15,7 @@
               placeholder="Введите число"
               :maxlength="10"
               :min="0"
-              :max="9999999999"
+              :max="32767"
               :step="0.01"
               @focusout="focusOut"
               :disabled="isSent"
@@ -45,32 +46,106 @@
           ></FileBoxComponent>
         </div>
       </div>
-      <div class="form__field">
-        <label class="form__label" for="comment">Численность иностранных граждан</label>
-        <InputReport
-            v-model:value="firstPanelData.foreign_participants"
-            id="foreign_participants"
-            name="foreign_participants"
-            class="form__input"
-            type="number"
-            placeholder="Введите число"
-            :maxlength="10"
-            :min="0"
-            :max="9999999999"
-            :step="0.01"
-            @focusout="focusOut"
-            :disabled="isSent"
-            :is-error-panel="isErrorPanel"
-            style="width: 100%"
-        />
+      <div class="form__field-report">
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="comment">Количество отрядов&nbsp;<sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="firstPanelData.detachment_number"
+              id="foreign_participants"
+              name="foreign_participants"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+              style="width: 100%"
+          />
+        </div>
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="comment">Количество членов РО&nbsp;<sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="firstPanelData.participants_with_payment"
+              id="foreign_participants"
+              name="foreign_participants"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+              style="width: 100%"
+          />
+        </div>
       </div>
-      <div>
-        <v-checkbox
-            v-model="firstPanelData.top_must_pay"
-            label="ТОП освобождены от оплаты членских взносов в данном РО"
-            @change="focusOut"
-        />
+      <div class="form__field-report">
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="comment">Численность иностранных граждан</label>
+          <InputReport
+              v-model:value="firstPanelData.foreign_participants"
+              id="foreign_participants"
+              name="foreign_participants"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+              style="width: 100%"
+          />
+        </div>
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="comment">Численность ТОП</label>
+          <InputReport
+              v-model:value="firstPanelData.top_participants"
+              id="foreign_participants"
+              name="foreign_participants"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+              style="width: 100%"
+          />
+        </div>
       </div>
+
+      <div class="form__field-report">
+        <div style="width: 100%">
+          <v-checkbox
+              v-model="firstPanelData.foreign_must_pay"
+              label="Освобождены от оплаты членских взносов в данном РО"
+              @change="focusOut"
+          />
+        </div>
+        <div style="width: 100%">
+          <v-checkbox
+              v-model="firstPanelData.top_must_pay"
+              label="ТОП освобождены от оплаты членских взносов в данном РО"
+              @change="focusOut"
+          />
+        </div>
+      </div>
+
       <div class="form__field">
         <label class="form__label" for="comment">Комментарий</label>
         <TextareaReport
@@ -90,10 +165,410 @@
         />
       </div>
     </div>
+
+    <div class="form__field-group">
+      <div class="fields__title">ССО</div>
+      <div class="form__field-report">
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="amount_of_money">Количество отрядов&nbsp;<sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              style="width: 100%"
+              v-model:value="firstPanelData.sso_number"
+              id="amount_of_money"
+              name="amount_of_money"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+          />
+        </div>
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="amount_of_money">Количество человек&nbsp;<sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              style="width: 100%"
+              v-model:value="firstPanelData.sso_participants"
+              id="amount_of_money"
+              name="amount_of_money"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+          />
+        </div>
+      </div>
+
+      <div class="fields__title">СПО</div>
+      <div class="form__field-report">
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="amount_of_money">Количество отрядов&nbsp;<sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              style="width: 100%"
+              v-model:value="firstPanelData.spo_number"
+              id="amount_of_money"
+              name="amount_of_money"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+          />
+        </div>
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="amount_of_money">Количество человек&nbsp;<sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              style="width: 100%"
+              v-model:value="firstPanelData.spo_participants"
+              id="amount_of_money"
+              name="amount_of_money"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+          />
+        </div>
+      </div>
+
+      <div class="fields__title">СОП</div>
+      <div class="form__field-report">
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="amount_of_money">Количество отрядов&nbsp;<sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              style="width: 100%"
+              v-model:value="firstPanelData.sop_number"
+              id="amount_of_money"
+              name="amount_of_money"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+          />
+        </div>
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="amount_of_money">Количество человек&nbsp;<sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              style="width: 100%"
+              v-model:value="firstPanelData.sop_participants"
+              id="amount_of_money"
+              name="amount_of_money"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+          />
+        </div>
+      </div>
+
+      <div class="fields__title">СМО</div>
+      <div class="form__field-report">
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="amount_of_money">Количество отрядов&nbsp;<sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              style="width: 100%"
+              v-model:value="firstPanelData.smo_number"
+              id="amount_of_money"
+              name="amount_of_money"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+          />
+        </div>
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="amount_of_money">Количество человек&nbsp;<sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              style="width: 100%"
+              v-model:value="firstPanelData.smo_participants"
+              id="amount_of_money"
+              name="amount_of_money"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+          />
+        </div>
+      </div>
+
+      <div class="fields__title">ССервО</div>
+      <div class="form__field-report">
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="amount_of_money">Количество отрядов&nbsp;<sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              style="width: 100%"
+              v-model:value="firstPanelData.sservo_number"
+              id="amount_of_money"
+              name="amount_of_money"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+          />
+        </div>
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="amount_of_money">Количество человек&nbsp;<sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              style="width: 100%"
+              v-model:value="firstPanelData.sservo_participants"
+              id="amount_of_money"
+              name="amount_of_money"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+          />
+        </div>
+      </div>
+
+      <div class="fields__title">ССхО</div>
+      <div class="form__field-report">
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="amount_of_money">Количество отрядов&nbsp;<sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              style="width: 100%"
+              v-model:value="firstPanelData.ssho_number"
+              id="amount_of_money"
+              name="amount_of_money"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+          />
+        </div>
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="amount_of_money">Количество человек&nbsp;<sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              style="width: 100%"
+              v-model:value="firstPanelData.ssho_participants"
+              id="amount_of_money"
+              name="amount_of_money"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+          />
+        </div>
+      </div>
+
+      <div class="fields__title">Профильные отряды</div>
+      <div class="form__field-report">
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="amount_of_money">Количество отрядов&nbsp;<sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              style="width: 100%"
+              v-model:value="firstPanelData.specialized_detachment_number"
+              id="amount_of_money"
+              name="amount_of_money"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+          />
+        </div>
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="amount_of_money">Количество человек&nbsp;<sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              style="width: 100%"
+              v-model:value="firstPanelData.specialized_detachment_participants"
+              id="amount_of_money"
+              name="amount_of_money"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+          />
+        </div>
+      </div>
+
+      <div class="fields__title">Производственные отряды</div>
+      <div class="form__field-report">
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="amount_of_money">Количество отрядов&nbsp;<sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              style="width: 100%"
+              v-model:value="firstPanelData.production_detachment_number"
+              id="amount_of_money"
+              name="amount_of_money"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+          />
+        </div>
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="amount_of_money">Количество человек&nbsp;<sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              style="width: 100%"
+              v-model:value="firstPanelData.production_detachment_participants"
+              id="amount_of_money"
+              name="amount_of_money"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+          />
+        </div>
+      </div>
+
+      <div class="fields__title">ТОП</div>
+      <div class="form__field-report">
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="amount_of_money">Количество отрядов&nbsp;<sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              style="width: 100%"
+              v-model:value="firstPanelData.top_detachment_number"
+              id="amount_of_money"
+              name="amount_of_money"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+          />
+        </div>
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="amount_of_money">Количество человек&nbsp;<sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              style="width: 100%"
+              v-model:value="firstPanelData.top_detachment_participants"
+              id="amount_of_money"
+              name="amount_of_money"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+          />
+        </div>
+      </div>
+
+    </div>
     <ReportRegionalForm :reportData="reportData" :blockEditFirstReport="blockEditFirstReport"/>
   </div>
 
   <report-tabs v-else :isReject="reportStore.isReportReject.first && props.tab === 'Доработка'">
+    <!--    first-->
     <template v-slot:firstTab>
       <div class="form__field-report">
         <div class="form__field">
@@ -145,32 +620,106 @@
           </div>
         </div>
       </div>
-      <div class="form__field">
-        <label class="form__label" for="comment">Численность иностранных граждан</label>
-        <InputReport
-            v-model:value="firstPanelData.foreign_participants"
-            id="foreign_participants"
-            name="foreign_participants"
-            class="form__input"
-            type="number"
-            placeholder="Введите число"
-            :maxlength="10"
-            :min="0"
-            :max="9999999999"
-            :step="0.01"
-            @focusout="focusOut"
-            :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
-            style="width: 100%"
-        />
+
+      <div class="form__field-report">
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="comment">Количество отрядов&nbsp;<sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="firstPanelData.detachment_number"
+              id="foreign_participants"
+              name="foreign_participants"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+              @focusout="focusOut"
+              style="width: 100%"
+          />
+        </div>
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="comment">Количество членов РО&nbsp;<sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="firstPanelData.participants_with_payment"
+              id="foreign_participants"
+              name="foreign_participants"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+              @focusout="focusOut"
+              style="width: 100%"
+          />
+        </div>
       </div>
-      <div>
-        <v-checkbox
-            v-model="firstPanelData.top_must_pay"
-            label="ТОП освобождены от оплаты членских взносов в данном РО"
-            @change="focusOut"
-            :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
-        />
+
+      <div class="form__field-report">
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="comment">Численность иностранных граждан</label>
+          <InputReport
+              v-model:value="firstPanelData.foreign_participants"
+              id="foreign_participants"
+              name="foreign_participants"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+              style="width: 100%"
+          />
+        </div>
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="comment">Численность ТОП</label>
+          <InputReport
+              v-model:value="firstPanelData.top_participants"
+              id="foreign_participants"
+              name="foreign_participants"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+              style="width: 100%"
+          />
+        </div>
       </div>
+
+      <div class="form__field-report">
+        <div style="width: 100%">
+          <v-checkbox
+              v-model="firstPanelData.top_must_pay"
+              label="ТОП освобождены от оплаты членских взносов в данном РО"
+              @change="focusOut"
+              :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+          />
+        </div>
+        <div style="width: 100%">
+          <v-checkbox
+              v-model="firstPanelData.top_must_pay"
+              label="ТОП освобождены от оплаты членских взносов в данном РО"
+              @change="focusOut"
+              :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+          />
+        </div>
+      </div>
+
       <div class="form__field">
         <label class="form__label" for="comment">Комментарий</label>
         <TextareaReport
@@ -189,9 +738,392 @@
             @focusout="focusOut"
         />
       </div>
+
       <ReportRegionalForm v-if="reportData?.id" :reportData="reportData" :blockEditFirstReport="true"/>
     </template>
+    <template v-slot:firstTab_additionalSlot>
+      <div class="form__field-group">
+        <div class="fields__title">ССО</div>
+        <div class="form__field-report">
+          <div class="form__field" style="width: 100%">
+            <label class="form__label" for="amount_of_money">Количество отрядов&nbsp;<sup
+                class="valid-red">*</sup></label>
+            <InputReport
+                style="width: 100%"
+                v-model:value="firstPanelData.sso_number"
+                id="amount_of_money"
+                name="amount_of_money"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="32767"
+                :step="0.01"
+                @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+            />
+          </div>
+          <div class="form__field" style="width: 100%">
+            <label class="form__label" for="amount_of_money">Количество человек&nbsp;<sup
+                class="valid-red">*</sup></label>
+            <InputReport
+                style="width: 100%"
+                v-model:value="firstPanelData.sso_participants"
+                id="amount_of_money"
+                name="amount_of_money"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="32767"
+                :step="0.01"
+                @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+            />
+          </div>
+        </div>
 
+        <div class="fields__title">СПО</div>
+        <div class="form__field-report">
+          <div class="form__field" style="width: 100%">
+            <label class="form__label" for="amount_of_money">Количество отрядов&nbsp;<sup
+                class="valid-red">*</sup></label>
+            <InputReport
+                style="width: 100%"
+                v-model:value="firstPanelData.spo_number"
+                id="amount_of_money"
+                name="amount_of_money"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="32767"
+                :step="0.01"
+                @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+            />
+          </div>
+          <div class="form__field" style="width: 100%">
+            <label class="form__label" for="amount_of_money">Количество человек&nbsp;<sup
+                class="valid-red">*</sup></label>
+            <InputReport
+                style="width: 100%"
+                v-model:value="firstPanelData.spo_participants"
+                id="amount_of_money"
+                name="amount_of_money"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="32767"
+                :step="0.01"
+                @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+            />
+          </div>
+        </div>
+
+        <div class="fields__title">СОП</div>
+        <div class="form__field-report">
+          <div class="form__field" style="width: 100%">
+            <label class="form__label" for="amount_of_money">Количество отрядов&nbsp;<sup
+                class="valid-red">*</sup></label>
+            <InputReport
+                style="width: 100%"
+                v-model:value="firstPanelData.sop_number"
+                id="amount_of_money"
+                name="amount_of_money"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="32767"
+                :step="0.01"
+                @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+            />
+          </div>
+          <div class="form__field" style="width: 100%">
+            <label class="form__label" for="amount_of_money">Количество человек&nbsp;<sup
+                class="valid-red">*</sup></label>
+            <InputReport
+                style="width: 100%"
+                v-model:value="firstPanelData.sop_participants"
+                id="amount_of_money"
+                name="amount_of_money"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="32767"
+                :step="0.01"
+                @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+            />
+          </div>
+        </div>
+
+        <div class="fields__title">СМО</div>
+        <div class="form__field-report">
+          <div class="form__field" style="width: 100%">
+            <label class="form__label" for="amount_of_money">Количество отрядов&nbsp;<sup
+                class="valid-red">*</sup></label>
+            <InputReport
+                style="width: 100%"
+                v-model:value="firstPanelData.smo_number"
+                id="amount_of_money"
+                name="amount_of_money"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="32767"
+                :step="0.01"
+                @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+            />
+          </div>
+          <div class="form__field" style="width: 100%">
+            <label class="form__label" for="amount_of_money">Количество человек&nbsp;<sup
+                class="valid-red">*</sup></label>
+            <InputReport
+                style="width: 100%"
+                v-model:value="firstPanelData.smo_participants"
+                id="amount_of_money"
+                name="amount_of_money"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="32767"
+                :step="0.01"
+                @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+            />
+          </div>
+        </div>
+
+        <div class="fields__title">ССервО</div>
+        <div class="form__field-report">
+          <div class="form__field" style="width: 100%">
+            <label class="form__label" for="amount_of_money">Количество отрядов&nbsp;<sup
+                class="valid-red">*</sup></label>
+            <InputReport
+                style="width: 100%"
+                v-model:value="firstPanelData.sservo_number"
+                id="amount_of_money"
+                name="amount_of_money"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="32767"
+                :step="0.01"
+                @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+            />
+          </div>
+          <div class="form__field" style="width: 100%">
+            <label class="form__label" for="amount_of_money">Количество человек&nbsp;<sup
+                class="valid-red">*</sup></label>
+            <InputReport
+                style="width: 100%"
+                v-model:value="firstPanelData.sservo_participants"
+                id="amount_of_money"
+                name="amount_of_money"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="32767"
+                :step="0.01"
+                @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+            />
+          </div>
+        </div>
+
+        <div class="fields__title">ССхО</div>
+        <div class="form__field-report">
+          <div class="form__field" style="width: 100%">
+            <label class="form__label" for="amount_of_money">Количество отрядов&nbsp;<sup
+                class="valid-red">*</sup></label>
+            <InputReport
+                style="width: 100%"
+                v-model:value="firstPanelData.ssho_number"
+                id="amount_of_money"
+                name="amount_of_money"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="32767"
+                :step="0.01"
+                @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+            />
+          </div>
+          <div class="form__field" style="width: 100%">
+            <label class="form__label" for="amount_of_money">Количество человек&nbsp;<sup
+                class="valid-red">*</sup></label>
+            <InputReport
+                style="width: 100%"
+                v-model:value="firstPanelData.ssho_participants"
+                id="amount_of_money"
+                name="amount_of_money"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="32767"
+                :step="0.01"
+                @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+            />
+          </div>
+        </div>
+
+        <div class="fields__title">Профильные отряды</div>
+        <div class="form__field-report">
+          <div class="form__field" style="width: 100%">
+            <label class="form__label" for="amount_of_money">Количество отрядов&nbsp;<sup
+                class="valid-red">*</sup></label>
+            <InputReport
+                style="width: 100%"
+                v-model:value="firstPanelData.specialized_detachment_number"
+                id="amount_of_money"
+                name="amount_of_money"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="32767"
+                :step="0.01"
+                @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+            />
+          </div>
+          <div class="form__field" style="width: 100%">
+            <label class="form__label" for="amount_of_money">Количество человек&nbsp;<sup
+                class="valid-red">*</sup></label>
+            <InputReport
+                style="width: 100%"
+                v-model:value="firstPanelData.specialized_detachment_participants"
+                id="amount_of_money"
+                name="amount_of_money"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="32767"
+                :step="0.01"
+                @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+            />
+          </div>
+        </div>
+
+        <div class="fields__title">Производственные отряды</div>
+        <div class="form__field-report">
+          <div class="form__field" style="width: 100%">
+            <label class="form__label" for="amount_of_money">Количество отрядов&nbsp;<sup
+                class="valid-red">*</sup></label>
+            <InputReport
+                style="width: 100%"
+                v-model:value="firstPanelData.production_detachment_number"
+                id="amount_of_money"
+                name="amount_of_money"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="32767"
+                :step="0.01"
+                @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+            />
+          </div>
+          <div class="form__field" style="width: 100%">
+            <label class="form__label" for="amount_of_money">Количество человек&nbsp;<sup
+                class="valid-red">*</sup></label>
+            <InputReport
+                style="width: 100%"
+                v-model:value="firstPanelData.production_detachment_participants"
+                id="amount_of_money"
+                name="amount_of_money"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="32767"
+                :step="0.01"
+                @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+            />
+          </div>
+        </div>
+
+        <div class="fields__title">ТОП</div>
+        <div class="form__field-report">
+          <div class="form__field" style="width: 100%">
+            <label class="form__label" for="amount_of_money">Количество отрядов&nbsp;<sup
+                class="valid-red">*</sup></label>
+            <InputReport
+                style="width: 100%"
+                v-model:value="firstPanelData.top_detachment_number"
+                id="amount_of_money"
+                name="amount_of_money"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="32767"
+                :step="0.01"
+                @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+            />
+          </div>
+          <div class="form__field" style="width: 100%">
+            <label class="form__label" for="amount_of_money">Количество человек&nbsp;<sup
+                class="valid-red">*</sup></label>
+            <InputReport
+                style="width: 100%"
+                v-model:value="firstPanelData.top_detachment_participants"
+                id="amount_of_money"
+                name="amount_of_money"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="32767"
+                :step="0.01"
+                @focusout="focusOut"
+                :disabled="props.centralExpert || props.districtExpert || reportStore.isAllReportsVerifiedByCH"
+            />
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!--    second-->
     <template v-slot:secondTab>
       <div class="form__field-report">
         <div class="form__field">
@@ -206,7 +1138,7 @@
               placeholder="Введите число"
               :maxlength="10"
               :min="0"
-              :max="9999999999"
+              :max="32767"
               :step="0.01"
               :disabled="props.centralExpert || reportStore.isReportReject?.first || reportStore.isAllReportsVerifiedByCH"
               :is-error-panel="isErrorPanel"
@@ -224,7 +1156,7 @@
             placeholder="Введите число"
             :maxlength="10"
             :min="0"
-            :max="9999999999"
+            :max="32767"
             :step="0.01"
             :disabled="props.centralExpert || reportStore.isReportReject?.first || reportStore.isAllReportsVerifiedByCH"
             style="width: 100%"
@@ -255,6 +1187,7 @@
       </div>
     </template>
 
+    <!--    third-->
     <template v-slot:thirdTab>
       <label class="form__label">Общая сумма уплаченных членских взносов РО <sup
           class="valid-red">*</sup></label>
@@ -268,8 +1201,8 @@
         <tr>
           <td class="report-table__td">{{ firstPanelData.amount_of_money }}</td>
           <td class="report-table__td report-table__td__center">{{ firstPanelDataDH.amount_of_money }}</td>
-          <td 
-            :class="[
+          <td
+              :class="[
               'report-table__td',
               (reportStore.isReportReject?.first && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
           >
@@ -282,7 +1215,7 @@
                 placeholder="0"
                 :maxlength="10"
                 :min="0"
-                :max="9999999999"
+                :max="32767"
                 :step="0.01"
                 :is-error-panel="isErrorPanel"
                 :disabled="(reportStore.isReportReject?.first && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH"
@@ -371,8 +1304,30 @@ const firstPanelData = ref({
   scan_file: '',
   file_type: '',
   file_size: '',
+  detachment_number: '',
+  participants_with_payment: '',
   foreign_participants: '',
+  top_participants: '',
+  sso_number: '',
+  sso_participants: '',
+  spo_number: '',
+  spo_participants: '',
+  sop_number: '',
+  sop_participants: '',
+  smo_number: '',
+  smo_participants: '',
+  sservo_number: '',
+  sservo_participants: '',
+  ssho_number: '',
+  ssho_participants: '',
+  specialized_detachment_number: '',
+  specialized_detachment_participants: '',
+  production_detachment_number: '',
+  production_detachment_participants: '',
+  top_detachment_number: '',
+  top_detachment_participants: '',
   top_must_pay: false,
+  foreign_must_pay: false,
 });
 const firstPanelDataDH = ref({
   comment: '',
@@ -400,10 +1355,14 @@ const reportVerifiedByCH = ref(false);
 
 const focusOut = async () => {
   let formData = new FormData();
-  formData.append('comment', firstPanelData.value.comment || '');
-  formData.append('amount_of_money', firstPanelData.value.amount_of_money || '');
-  formData.append('foreign_participants', firstPanelData.value.foreign_participants || '');
-  formData.append('top_must_pay', firstPanelData.value.top_must_pay);
+  // formData.append('comment', firstPanelData.value.comment || '');
+  // formData.append('amount_of_money', firstPanelData.value.amount_of_money || '');
+  // formData.append('foreign_participants', firstPanelData.value.foreign_participants || '');
+  // formData.append('top_must_pay', firstPanelData.value.top_must_pay);
+  Object.keys(firstPanelData.value).forEach(key => {
+    const value = firstPanelData.value[key];
+    formData.append(key, value !== undefined && value !== null ? value : '');
+  });
 
   if (firstPanelData.value.scan_file) formData.append('scan_file', firstPanelData.value.scan_file || '');
   try {
@@ -422,12 +1381,18 @@ const focusOut = async () => {
 const uploadFile = async (event) => {
   let formData = new FormData();
 
-  formData.append('scan_file', event.target.files[0]);
-  formData.append('comment', firstPanelData.value.comment || '');
-  formData.append('amount_of_money', firstPanelData.value.amount_of_money || '');
-  formData.append('foreign_participants', firstPanelData.value.foreign_participants || '');
-  formData.append('top_must_pay', firstPanelData.value.top_must_pay);
+  // formData.append('scan_file', event.target.files[0]);
+  // formData.append('comment', firstPanelData.value.comment || '');
+  // formData.append('amount_of_money', firstPanelData.value.amount_of_money || '');
+  // formData.append('foreign_participants', firstPanelData.value.foreign_participants || '');
+  // formData.append('top_must_pay', firstPanelData.value.top_must_pay);
 
+  Object.keys(firstPanelData.value).forEach(key => {
+    const value = firstPanelData.value[key];
+    formData.append(key, value !== undefined && value !== null ? value : '');
+  });
+
+  formData.append('scan_file', event.target.files[0]);
   firstPanelData.value.file_size = (event.target.files[0].size / Math.pow(1024, 2));
   firstPanelData.value.file_type = event.target.files[0].type.split('/').at(-1);
 
@@ -468,11 +1433,16 @@ const deleteFile = async () => {
   firstPanelData.value.file_size = '';
   firstPanelData.value.file_type = '';
   let formData = new FormData();
+
+  Object.keys(firstPanelData.value).forEach(key => {
+    const value = firstPanelData.value[key];
+    formData.append(key, value !== undefined && value !== null ? value : '');
+  });
   formData.append('scan_file', '');
-  formData.append('comment', firstPanelData.value.comment || '');
-  formData.append('amount_of_money', firstPanelData.value.amount_of_money || '');
-  formData.append('foreign_participants', firstPanelData.value.foreign_participants || '');
-  formData.append('top_must_pay', firstPanelData.value.top_must_pay);
+  // formData.append('comment', firstPanelData.value.comment || '');
+  // formData.append('amount_of_money', firstPanelData.value.amount_of_money || '');
+  // formData.append('foreign_participants', firstPanelData.value.foreign_participants || '');
+  // formData.append('top_must_pay', firstPanelData.value.top_must_pay);
 
   if (isErrorFile.value) {
     firstPanelData.value.scan_file = "";
@@ -563,10 +1533,18 @@ watchEffect(async () => {
 
   if (props.data) {
     isFirstSent.value = false;
-    firstPanelData.value.comment = props.data.comment;
-    firstPanelData.value.amount_of_money = props.data.amount_of_money;
-    firstPanelData.value.foreign_participants = props.data.foreign_participants;
-    firstPanelData.value.top_must_pay = props.data.top_must_pay;
+    // firstPanelData.value.comment = props.data.comment;
+    // firstPanelData.value.amount_of_money = props.data.amount_of_money;
+    // firstPanelData.value.foreign_participants = props.data.foreign_participants;
+    // firstPanelData.value.top_must_pay = props.data.top_must_pay;
+    // firstPanelData.value.scan_file = props.data.scan_file;
+    // firstPanelData.value.file_type = props.data.file_type;
+    // firstPanelData.value.file_size = props.data.file_size;
+    Object.keys(firstPanelData.value).forEach(key => {
+      if (props.data[key] !== undefined) {
+        firstPanelData.value[key] = props.data[key];
+      }
+    });
     firstPanelData.value.scan_file = props.data.scan_file;
     firstPanelData.value.file_type = props.data.file_type;
     firstPanelData.value.file_size = props.data.file_size;
@@ -610,7 +1588,7 @@ watchEffect(async () => {
         firstPanelData.value.file_type = reportDataRH?.file_type || null;
         firstPanelData.value.file_size = reportDataRH?.file_size || null;
       }
-      
+
       // Добавление данных панели "корректировка ОШ"
       const reportDataDH = JSON.parse(reportStore.reportForCheckCH.first.district_version);
       firstPanelDataDH.value.comment = reportDataDH.comment;
@@ -649,13 +1627,20 @@ watchEffect(async () => {
 
     } else {
       const reportDataRH = JSON.parse(reportStore.reportForCheckCH.first.regional_version);
-      firstPanelData.value.comment = reportDataRH?.comment || '';
-      firstPanelData.value.amount_of_money = reportDataRH?.amount_of_money;
-      firstPanelData.value.foreign_participants = reportDataRH?.foreign_participants;
-      firstPanelData.value.top_must_pay = reportDataRH?.top_must_pay;
-      firstPanelData.value.scan_file = reportDataRH?.scan_file || null;
-      firstPanelData.value.file_type = reportDataRH?.file_type || null;
-      firstPanelData.value.file_size = reportDataRH?.file_size || null;
+      // firstPanelData.value.comment = reportDataRH?.comment || '';
+      // firstPanelData.value.amount_of_money = reportDataRH?.amount_of_money;
+      // firstPanelData.value.foreign_participants = reportDataRH?.foreign_participants;
+      // firstPanelData.value.top_must_pay = reportDataRH?.top_must_pay;
+      if (reportDataRH) {
+        Object.keys(firstPanelData.value).forEach(key => {
+          if (reportDataRH[key] !== undefined) {
+            firstPanelData.value[key] = reportDataRH[key];
+          }
+        });
+        // firstPanelData.value.scan_file = reportDataRH?.scan_file || null;
+        // firstPanelData.value.file_type = reportDataRH?.file_type || null;
+        // firstPanelData.value.file_size = reportDataRH?.file_size || null;
+      }
 
       // Добавление данных панели "корректировка ОШ"
       firstPanelDataDH.value.comment = reportStore.reportForCheckCH.first.comment;
@@ -721,10 +1706,18 @@ watchEffect(async () => {
 watchPostEffect(() => {
   if (props.data) {
     isFirstSent.value = false;
-    firstPanelData.value.comment = props.data.comment;
-    firstPanelData.value.amount_of_money = props.data.amount_of_money;
-    firstPanelData.value.foreign_participants = props.data.foreign_participants;
-    firstPanelData.value.top_must_pay = props.data.top_must_pay;
+    // firstPanelData.value.comment = props.data.comment;
+    // firstPanelData.value.amount_of_money = props.data.amount_of_money;
+    // firstPanelData.value.foreign_participants = props.data.foreign_participants;
+    // firstPanelData.value.top_must_pay = props.data.top_must_pay;
+    // firstPanelData.value.scan_file = props.data.scan_file || '';
+    // firstPanelData.value.file_type = props.data.file_type || '';
+    // firstPanelData.value.file_size = props.data.file_size || '';
+    Object.keys(firstPanelData.value).forEach(key => {
+      if (props.data[key] !== undefined) {
+        firstPanelData.value[key] = props.data[key];
+      }
+    });
     firstPanelData.value.scan_file = props.data.scan_file || '';
     firstPanelData.value.file_type = props.data.file_type || '';
     firstPanelData.value.file_size = props.data.file_size || '';
@@ -780,7 +1773,15 @@ watch(firstPanelDataCH.value, () => {
   emit('getDataCH', formData, 1);
 });
 </script>
+
 <style lang="scss" scoped>
+.fields__title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-family: Bert Sans, sans-serif;
+}
+
 .form__field {
   margin: 0;
 }
@@ -933,7 +1934,7 @@ watch(firstPanelDataCH.value, () => {
     }
 
     &--bgcolor {
-        background-color: #f9fafb;
+      background-color: #f9fafb;
     }
 
     &__center {
@@ -943,7 +1944,6 @@ watch(firstPanelDataCH.value, () => {
   }
 }
 </style>
-
 <style>
 .v-tab--selected .v-tab__slider {
   width: 216px;
