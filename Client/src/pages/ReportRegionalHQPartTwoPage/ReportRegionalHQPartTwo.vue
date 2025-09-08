@@ -355,9 +355,9 @@
               к&nbsp;общей запланированной квоте профобучения на&nbsp;текущий период.
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <calculated-panel
-                text="Показатель рассчитывается автоматически на&nbsp;основе данных из&nbsp;12&nbsp;и&nbsp;13&nbsp;показателей."
-              />
+              <fifteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data-DH="setDataDH"
+                @get-data="setData" @get-data-CH="setDataCH" :data="reportData.fifteenth"
+                :is-error-panel="isErrorPanel.fifteenth" :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('16', picked, revisionPanels)">
@@ -454,6 +454,7 @@ import {
   EighteenthPanel,
   // EleventhPanel,
   FifthPanel,
+  FifteenthPanel,
   FirstPanel,
   FourthPanel,
   NineteenthPanel,
@@ -517,6 +518,7 @@ const reportData = ref({
   twelfth: null,
   // thirteenth: null,
   fourteenth: null,
+  fifteenth: null,
   sixteenth: null,
   seventeenth: null,
   eighteenth: null,
@@ -538,6 +540,7 @@ const reportDataDH = ref({
   twelfth: null,
   // thirteenth: null,
   fourteenth: null,
+  fifteenth: null,
 });
 
 const reportDataCH = ref({
@@ -554,6 +557,7 @@ const reportDataCH = ref({
   twelfth: null,
   // thirteenth: null,
   fourteenth: null,
+  fifteenth: null,
 });
 
 const preloader = ref(true);
@@ -585,6 +589,8 @@ const isErrorPanel = ref({
   // thirteenth: false,
   fourteenth: false,
   // sixteenth: false,
+  fourteenth: false,
+  fifteenth: false
 });
 
 const setId = (id) => {
@@ -1222,6 +1228,38 @@ const getReportData = async (reportId) => {
       ) {
         revisionPanels.value.push("14");
       }
+      /* 
+      * Критерий 15
+      */
+      const dataFifteenthCH = (await reportPartTwoService.getReportDH('15', reportId)).data;
+      reportStore.reportForCheckCH.fifteenth = dataFifteenthCH;
+      if (dataFifteenthCH.rejecting_reasons && dataFifteenthCH.verified_by_chq !== true) {
+        revisionPanels.value.push('15');
+      }
+      if (dataFifteenthCH.verified_by_chq) verifiedByChqPanels.value.push('15')
+
+      dataFifteenthCH.regional_version
+        ? reportData.value.fifteenth = JSON.parse(dataFifteenthCH.regional_version)
+        : reportData.value.fifteenth = dataFifteenthCH;
+
+      dataFifteenthCH.district_version
+        ? reportStore.reportDataDH.fifteenth = JSON.parse(dataFifteenthCH.district_version)
+        : reportStore.reportDataDH.fifteenth = dataFifteenthCH;
+
+      reportStore.reportDataCH.fifteenth = Object.assign({}, dataFifteenthCH);
+      if (!dataFifteenthCH.rejecting_reasons) {
+        reportStore.reportDataCH.fifteenth.comment = ''
+      } else if (dataFifteenthCH.rejecting_reasons) {
+        reportStore.reportDataCH.fifteenth.comment = JSON.parse(reportStore.reportDataCH.fifteenth.rejecting_reasons).comment
+      }
+      if (dataFifteenthCH.verified_by_chq === true) {
+        reportStore.reportDataCH.fifteenth.comment = dataFifteenthCH.comment
+      }
+      /* 
+      * Критерий 11
+      */
+      const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
+      reportStore.reportForCheckCH.eleventh = dataEleventh;
       /*
        * Критерий 11
        * В 2025 году данный показатель рассчитывается автоматически
@@ -1387,6 +1425,11 @@ const getReportData = async (reportId) => {
         await reportPartTwoService.getReportDH("12", reportId)
       ).data;
       reportStore.reportDataDH.twelfth = Object.assign({}, reportData.value.twelfth);
+      reportStore.reportDataDH.twelfth.comment = '';
+
+      reportData.value.fifteenth = (await reportPartTwoService.getReportDH('15', reportId)).data;
+      reportStore.reportDataDH.fifteenth = Object.assign({}, reportData.value.fifteenth);
+      reportStore.reportDataDH.fifteenth.comment = '';
       reportStore.reportDataDH.twelfth.comment = "";
 
       reportData.value.thirteenth = (
@@ -1746,6 +1789,32 @@ const getReportData = async (reportId) => {
         }
       }
 
+      let dataFifteenth;
+      try {
+        dataFifteenth = (await reportPartTwoService.getReportDH('15', '1')).data;
+        if (!dataFifteenth.regional_version && !dataFifteenth.central_version) {
+          reportData.value.fifteenth = dataFifteenth;
+        } else {
+          if (dataFifteenth.rejecting_reasons) {
+            reportStore.reportReject.fifteenth = dataFifteenth;
+            if (!dataFifteenth.verified_by_chq) {
+              revisionPanels.value.push('15');
+              reportStore.isReportReject.fifteenth = isTabsForRevision.value;
+            }
+          }
+          if (dataFifteenth.central_version) {
+            reportData.value.fifteenth = dataFifteenth;
+          } else {
+            reportData.value.fifteenth = JSON.parse(dataFifteenth.regional_version);
+          }
+          if (dataFifteenth.verified_by_chq && !dataFifteenth.rejecting_reasons) {
+            reportStore.reportReject.fifteenth = dataFifteenth;
+          }
+        }
+      } catch (e) {
+        console.log(e.message)
+      }
+
       //Статистические показатели 16-20, не участвующие в рейтинге (не требуют согласования ОЩ и ЦШ) 2025 год
       try {
         reportData.value.sixteenth = (await reportPartTwoService.getReport("16")).data;
@@ -1840,6 +1909,9 @@ const setData = (data, panel, number = 0) => {
     case 16:
       reportData.value.sixteenth = data;
       break;
+    case 15: 
+      reportData.value.fifteenth = data
+      break;
     case 17:
       reportData.value.seventeenth = data;
       break;
@@ -1885,6 +1957,9 @@ const setDataDH = (data, panel, number) => {
     case 12:
       reportDataDH.value.twelfth = data;
       break;
+    case 15:
+      reportDataDH.value.fifteenth = data;
+      break;
     // case 13:
     //   reportDataDH.value.thirteenth = data;
     //   break;
@@ -1929,6 +2004,9 @@ const setDataCH = (data, panel, number) => {
     //   break;
     case 12:
       reportDataCH.value.twelfth = data;
+      break;
+    case 15:
+      reportDataCH.value.fifteenth = data;
       break;
     // case 13:
     //   reportDataCH.value.thirteenth = data;
