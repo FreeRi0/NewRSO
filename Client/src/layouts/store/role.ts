@@ -4,6 +4,12 @@ import { HTTP } from '@app/http';
 
 const isAuth = ref(!!localStorage.getItem('jwt_token'));
 
+// Для рейтинго РО 2024 года
+// const APPLICATION_NAME = "regional_competitions"
+
+// Для рейтинга РО 2025 года
+const APPLICATION_NAME = "regional_competitions_2025"
+
 export const useRoleStore = defineStore('role', {
     state: () => ({
         roles: {},
@@ -81,7 +87,7 @@ export const useRoleStore = defineStore('role', {
         },
         async getExperts() {
             try {
-                const dataExperts = await HTTP.get('/regional_competitions/user_info/', {
+                const dataExperts = await HTTP.get(`/${APPLICATION_NAME}/user_info/`, {
                 });
                 this.experts = dataExperts.data;
             } catch (err) {

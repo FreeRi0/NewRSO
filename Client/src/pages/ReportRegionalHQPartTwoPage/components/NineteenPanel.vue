@@ -4,7 +4,7 @@
     v-if="
       isSent &&
       !nineteenPanelData.employees_number &&
-      !employees &&
+      (!employees || employees.length === 0) &&
       !nineteenPanelData.officially_employed_number &&
       !nineteenPanelData.comment
     "
