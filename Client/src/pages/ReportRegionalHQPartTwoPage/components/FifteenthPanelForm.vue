@@ -9,28 +9,29 @@
                 <div class="area__form_data">
                     <div class="area__form_data_number">
                         <div class="area__form_data_number_item">
-                            <span>Общее количество обученных</span>
+                            <span>Общее количество обученных<span class="valid-red">&nbsp;*</span></span>
                             <InputReport @focusout="focusOut" v-model:value="area_from.number_trained" :is-link="false"
                                 placeholder="Введите число" id="15" name="14" class="form__input number_input"
                                 type="number" :max="32767" style="width: 100%;"
                                 :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
                         </div>
                         <div class="area__form_data_number_item">
-                            <span>Общее количество трудоустроенных РО по направлению</span>
+                            <span>Общее количество трудоустроенных РО по направлению<span
+                                    class="valid-red">&nbsp;*</span></span>
                             <InputReport @focusout="focusOut" v-model:value="area_from.number_employed" :is-link="false"
                                 placeholder="Введите число" id="15" name="14" class="form__input number_input"
                                 type="number" :max="32767" style="width: 100%;"
                                 :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
                         </div>
                         <div class="area__form_data_number_item">
-                            <span>Самостоятельное трудоустройство</span>
+                            <span>Самостоятельное трудоустройство<span class="valid-red">&nbsp;*</span></span>
                             <InputReport @focusout="focusOut" v-model:value="area_from.self_employment" :is-link="false"
                                 placeholder="Введите число" id="15" name="14" class="form__input number_input"
                                 type="number" :max="32767" style="width: 100%;"
                                 :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
                         </div>
                         <div class="area__form_data_number_item">
-                            <span>Общее количество не трудоустроенных</span>
+                            <span>Общее количество не трудоустроенных<span class="valid-red">&nbsp;*</span></span>
                             <InputReport @focusout="focusOut" v-model:value="area_from.number_unemployed"
                                 :is-link="false" placeholder="Введите число" id="15" name="14"
                                 class="form__input number_input" type="number" :max="32767" style="width: 100%;"
@@ -39,7 +40,8 @@
                     </div>
 
                     <div class="area__form_data_file">
-                        <span>Загрузите документы, подтверждающие факт трудоустройства</span>
+                        <span>Загрузите документы, подтверждающие факт трудоустройства<span
+                                class="valid-red">&nbsp;*</span></span>
                         <InputReport class="form-input__file-input" v-if="!area_from.file" isFile type="file"
                             id="scan_file" name="scan_file" width="100%" @change="uploadFile($event)"
                             :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
@@ -93,8 +95,8 @@
                         </div>
                     </div>
                     <div class="area__form_data_save-button" v-if="!(props.centralExpert || props.districtExpert)">
-                        <button @click="clickOnButton" aria-label="Сохранить"
-                            class="area__form_data_save-button_button">
+                        <button @click="clickOnButton" aria-label="Сохранить" class="area__form_data_save-button_button"
+                            :disabled="!isFormValid">
                             <span class="area__form_data_save-button_label">Сохранить</span>
                         </button>
                     </div>
@@ -105,7 +107,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, watchEffect } from 'vue';
+import { ref, defineProps, watchEffect, computed } from 'vue';
 import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
 
 import { InputReport } from '@shared/components/inputs';
@@ -193,6 +195,20 @@ const deleteFile = async () => {
     emit('updateArea', area_from.value);
 };
 
+// Computed свойство для проверки валидности формы
+const isFormValid = computed(() => {
+    // Проверяем, что все 4 числовых поля заполнены
+    const numbersFilled = area_from.value.number_trained !== '' && 
+                         area_from.value.number_employed !== '' && 
+                         area_from.value.self_employment !== '' && 
+                         area_from.value.number_unemployed !== '';
+    
+    // Проверяем, что файл прикреплен
+    const fileAttached = area_from.value.file !== '';
+    
+    return numbersFilled && fileAttached;
+});
+
 const clickOnButton = () => {
     emit('saveData');
 };
@@ -227,7 +243,6 @@ const clickOnButton = () => {
                     font-weight: 400;
                     font-style: Regular;
                     font-size: 12px;
-                    leading-trim: NONE;
                     line-height: 100%;
                     letter-spacing: 0%;
                     vertical-align: middle;
@@ -235,7 +250,6 @@ const clickOnButton = () => {
                 }
             }
 
-            &_checkbox {}
 
             &_save-button {
                 margin-top: 16px;
@@ -246,7 +260,19 @@ const clickOnButton = () => {
                     border-radius: 6px;
                     background-color: #D2E4F2;
                     height: 40px;
-                    width: 100px
+                    width: 100px;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+
+                    &:disabled {
+                        background-color: #E0E0E0;
+                        cursor: not-allowed;
+                        opacity: 0.6;
+                    }
+
+                    &:not(:disabled):hover {
+                        background-color: #B8D4E8;
+                    }
                 }
 
                 &_label {
@@ -312,10 +338,10 @@ const clickOnButton = () => {
 //     }
 // }
 
-.custom-radio {
-    // display: none;
-    /* -стандартное отображение*/
-}
+/* .custom-radio {
+    display: none;
+    -стандартное отображение
+} */
 
 .custom-radio+label {
     position: relative;
@@ -382,6 +408,9 @@ const clickOnButton = () => {
 
 .v-expansion-panel--active>.v-expansion-panel-title {
     border: 1px #BEC2C6 solid;
+}
 
+.valid-red {
+    color: #db0000;
 }
 </style>
