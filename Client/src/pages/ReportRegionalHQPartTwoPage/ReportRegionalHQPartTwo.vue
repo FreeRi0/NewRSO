@@ -355,9 +355,16 @@
               к&nbsp;общей запланированной квоте профобучения на&nbsp;текущий период.
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <fifteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data-DH="setDataDH"
-                @get-data="setData" @get-data-CH="setDataCH" :data="reportData.fifteenth"
-                :is-error-panel="isErrorPanel.fifteenth" :tab="picked" />
+              <fifteenth-panel
+                :districtExpert="districtExpert"
+                :centralExpert="centralExpert"
+                @get-data-DH="setDataDH"
+                @get-data="setData"
+                @get-data-CH="setDataCH"
+                :data="reportData.fifteenth"
+                :is-error-panel="isErrorPanel.fifteenth"
+                :tab="picked"
+              />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('16', picked, revisionPanels)">
@@ -587,10 +594,9 @@ const isErrorPanel = ref({
   // eleventh: false,
   twelfth: false,
   // thirteenth: false,
-  fourteenth: false,
   // sixteenth: false,
   fourteenth: false,
-  fifteenth: false
+  fifteenth: false,
 });
 
 const setId = (id) => {
@@ -1228,38 +1234,39 @@ const getReportData = async (reportId) => {
       ) {
         revisionPanels.value.push("14");
       }
-      /* 
-      * Критерий 15
-      */
-      const dataFifteenthCH = (await reportPartTwoService.getReportDH('15', reportId)).data;
+      /*
+       * Критерий 15
+       */
+      const dataFifteenthCH = (await reportPartTwoService.getReportDH("15", reportId))
+        .data;
       reportStore.reportForCheckCH.fifteenth = dataFifteenthCH;
       if (dataFifteenthCH.rejecting_reasons && dataFifteenthCH.verified_by_chq !== true) {
-        revisionPanels.value.push('15');
+        revisionPanels.value.push("15");
       }
-      if (dataFifteenthCH.verified_by_chq) verifiedByChqPanels.value.push('15')
+      if (dataFifteenthCH.verified_by_chq) verifiedByChqPanels.value.push("15");
 
       dataFifteenthCH.regional_version
-        ? reportData.value.fifteenth = JSON.parse(dataFifteenthCH.regional_version)
-        : reportData.value.fifteenth = dataFifteenthCH;
+        ? (reportData.value.fifteenth = JSON.parse(dataFifteenthCH.regional_version))
+        : (reportData.value.fifteenth = dataFifteenthCH);
 
       dataFifteenthCH.district_version
-        ? reportStore.reportDataDH.fifteenth = JSON.parse(dataFifteenthCH.district_version)
-        : reportStore.reportDataDH.fifteenth = dataFifteenthCH;
+        ? (reportStore.reportDataDH.fifteenth = JSON.parse(
+            dataFifteenthCH.district_version
+          ))
+        : (reportStore.reportDataDH.fifteenth = dataFifteenthCH);
 
       reportStore.reportDataCH.fifteenth = Object.assign({}, dataFifteenthCH);
       if (!dataFifteenthCH.rejecting_reasons) {
-        reportStore.reportDataCH.fifteenth.comment = ''
+        reportStore.reportDataCH.fifteenth.comment = "";
       } else if (dataFifteenthCH.rejecting_reasons) {
-        reportStore.reportDataCH.fifteenth.comment = JSON.parse(reportStore.reportDataCH.fifteenth.rejecting_reasons).comment
+        reportStore.reportDataCH.fifteenth.comment = JSON.parse(
+          reportStore.reportDataCH.fifteenth.rejecting_reasons
+        ).comment;
       }
       if (dataFifteenthCH.verified_by_chq === true) {
-        reportStore.reportDataCH.fifteenth.comment = dataFifteenthCH.comment
+        reportStore.reportDataCH.fifteenth.comment = dataFifteenthCH.comment;
       }
-      /* 
-      * Критерий 11
-      */
-      const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
-      reportStore.reportForCheckCH.eleventh = dataEleventh;
+
       /*
        * Критерий 11
        * В 2025 году данный показатель рассчитывается автоматически
@@ -1352,11 +1359,10 @@ const getReportData = async (reportId) => {
       // }
 
       /*
-       * Критерий 16-20
+       * Критерии 16-20
        */
-      const dataSeventeenth = (await reportPartTwoService.getReportDH("16", reportId))
-        .data;
-      if (dataSeventeenth.is_sent) isSentLastIndex.value = true;
+      if (reportStore.reportForCheckCH.fourteenth.is_sent) isSentLastIndex.value = true;
+
       reportData.value.sixteenth = (
         await reportPartTwoService.getReportDH("16", reportId)
       ).data;
@@ -1425,21 +1431,22 @@ const getReportData = async (reportId) => {
         await reportPartTwoService.getReportDH("12", reportId)
       ).data;
       reportStore.reportDataDH.twelfth = Object.assign({}, reportData.value.twelfth);
-      reportStore.reportDataDH.twelfth.comment = '';
-
-      reportData.value.fifteenth = (await reportPartTwoService.getReportDH('15', reportId)).data;
-      reportStore.reportDataDH.fifteenth = Object.assign({}, reportData.value.fifteenth);
-      reportStore.reportDataDH.fifteenth.comment = '';
       reportStore.reportDataDH.twelfth.comment = "";
 
-      reportData.value.thirteenth = (
-        await reportPartTwoService.getReportDH("13", reportId)
+      reportData.value.fifteenth = (
+        await reportPartTwoService.getReportDH("15", reportId)
       ).data;
-      reportStore.reportDataDH.thirteenth = Object.assign(
-        {},
-        reportData.value.thirteenth
-      );
-      reportStore.reportDataDH.thirteenth.comment = "";
+      reportStore.reportDataDH.fifteenth = Object.assign({}, reportData.value.fifteenth);
+      reportStore.reportDataDH.fifteenth.comment = "";
+
+      // reportData.value.thirteenth = (
+      //   await reportPartTwoService.getReportDH("13", reportId)
+      // ).data;
+      // reportStore.reportDataDH.thirteenth = Object.assign(
+      //   {},
+      //   reportData.value.thirteenth
+      // );
+      // reportStore.reportDataDH.thirteenth.comment = "";
 
       reportData.value.fourteenth = (
         await reportPartTwoService.getReportDH("14", reportId)
@@ -1449,7 +1456,8 @@ const getReportData = async (reportId) => {
       ).data;
       reportStore.reportDataDH.fourteenth.comment = "";
 
-      if (reportData.value.sixteenth.is_sent) isSentLastIndex.value = true; //?????????????????????????
+      if (reportData.value.fourteenth.is_sent) isSentLastIndex.value = true;
+
       reportData.value.sixteenth = (
         await reportPartTwoService.getReportDH("16", reportId)
       ).data;
@@ -1728,14 +1736,13 @@ const getReportData = async (reportId) => {
       // (в 2024 году это 16 показатель)
       let dataFourteenth;
       try {
-        //????????????????????????????????????????
-        // reportData.value.sixteenth = (await reportPartTwoService.getReport('16')).data;
-        // if (reportData.value.sixteenth.is_sent) {
-        //   blockSendButton.value = true;
-        //   blockEditFirstReport.value = true;
-        // }
-
         dataFourteenth = (await reportPartTwoService.getReport("14")).data;
+
+        if (dataFourteenth.is_sent) {
+          blockSendButton.value = true;
+          blockEditFirstReport.value = true;
+        }
+
         // if (!dataSixteenth.regional_version) {
         //   reportData.value.sixteenth = dataSixteenth;
         // } else {
@@ -1791,14 +1798,14 @@ const getReportData = async (reportId) => {
 
       let dataFifteenth;
       try {
-        dataFifteenth = (await reportPartTwoService.getReportDH('15', '1')).data;
+        dataFifteenth = (await reportPartTwoService.getReportDH("15", "1")).data;
         if (!dataFifteenth.regional_version && !dataFifteenth.central_version) {
           reportData.value.fifteenth = dataFifteenth;
         } else {
           if (dataFifteenth.rejecting_reasons) {
             reportStore.reportReject.fifteenth = dataFifteenth;
             if (!dataFifteenth.verified_by_chq) {
-              revisionPanels.value.push('15');
+              revisionPanels.value.push("15");
               reportStore.isReportReject.fifteenth = isTabsForRevision.value;
             }
           }
@@ -1812,7 +1819,7 @@ const getReportData = async (reportId) => {
           }
         }
       } catch (e) {
-        console.log(e.message)
+        console.log(e.message);
       }
 
       //Статистические показатели 16-20, не участвующие в рейтинге (не требуют согласования ОЩ и ЦШ) 2025 год
@@ -1905,12 +1912,11 @@ const setData = (data, panel, number = 0) => {
     case 14:
       reportData.value.fourteenth = data;
       break;
-    // Добавить 15 показатель
     case 16:
       reportData.value.sixteenth = data;
       break;
-    case 15: 
-      reportData.value.fifteenth = data
+    case 15:
+      reportData.value.fifteenth = data;
       break;
     case 17:
       reportData.value.seventeenth = data;
@@ -1966,7 +1972,6 @@ const setDataDH = (data, panel, number) => {
     case 14:
       reportDataDH.value.fourteenth = data;
       break;
-    // Добавить 15 показатель
   }
 };
 
@@ -2014,7 +2019,6 @@ const setDataCH = (data, panel, number) => {
     case 14:
       reportDataCH.value.fourteenth = data;
       break;
-    // Добавить 15 показатель
   }
 };
 
