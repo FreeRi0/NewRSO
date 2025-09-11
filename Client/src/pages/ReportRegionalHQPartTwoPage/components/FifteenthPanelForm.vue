@@ -50,56 +50,6 @@
                             :is-error-file="isErrorFile && !area_from.file_size" @click="deleteFile" />
                         <span class="area__form_data_file_text">Формат ZIP. Максимум 40 МБ</span>
                     </div>
-
-                    <div class="area__form_data_checkbox">
-                        <div class="checkbox-row">
-                            <span class="checkbox-label">Заполнение Таблицы по трудоустройству членов РО, обученных
-                                осенью 2024 года</span>
-                            <div class="radio-group">
-                                <label class="radio-option">
-                                    <input type="radio" v-model="area_from.isFillingTableAutumn2024" :value="true"
-                                        class="custom-radio"
-                                        :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
-                                    <span class="radio-custom"></span>
-                                    Да
-                                </label>
-                                <label class="radio-option">
-                                    <input type="radio" v-model="area_from.isFillingTableAutumn2024" :value="false"
-                                        class="custom-radio"
-                                        :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
-                                    <span class="radio-custom"></span>
-                                    Нет
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="checkbox-row">
-                            <span class="checkbox-label">Заполнение Таблицы по трудоустройству членов РО, обученных
-                                весной 2025 года</span>
-                            <div class="radio-group">
-                                <label class="radio-option">
-                                    <input type="radio" v-model="area_from.isFillingTableSpring2025" :value="true"
-                                        class="custom-radio"
-                                        :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
-                                    <span class="radio-custom"></span>
-                                    Да
-                                </label>
-                                <label class="radio-option">
-                                    <input type="radio" v-model="area_from.isFillingTableSpring2025" :value="false"
-                                        class="custom-radio"
-                                        :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
-                                    <span class="radio-custom"></span>
-                                    Нет
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="area__form_data_save-button" v-if="!(props.centralExpert || props.districtExpert)">
-                        <button @click="clickOnButton" aria-label="Сохранить" class="area__form_data_save-button_button"
-                            :disabled="!isFormValid">
-                            <span class="area__form_data_save-button_label">Сохранить</span>
-                        </button>
-                    </div>
                 </div>
             </v-expansion-panel-text>
         </v-expansion-panel>
@@ -107,7 +57,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, watchEffect, computed } from 'vue';
+import { ref, defineProps, watchEffect } from 'vue';
 import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
 
 import { InputReport } from '@shared/components/inputs';
@@ -195,23 +145,6 @@ const deleteFile = async () => {
     emit('updateArea', area_from.value);
 };
 
-// Computed свойство для проверки валидности формы
-const isFormValid = computed(() => {
-    // Проверяем, что все 4 числовых поля заполнены
-    const numbersFilled = area_from.value.number_trained !== '' && 
-                         area_from.value.number_employed !== '' && 
-                         area_from.value.self_employment !== '' && 
-                         area_from.value.number_unemployed !== '';
-    
-    // Проверяем, что файл прикреплен
-    const fileAttached = area_from.value.file !== '';
-    
-    return numbersFilled && fileAttached;
-});
-
-const clickOnButton = () => {
-    emit('saveData');
-};
 </script>
 
 <style scoped lang="scss">
@@ -299,93 +232,6 @@ const clickOnButton = () => {
     width: 16px;
     height: 16px;
     transform: rotate(180deg)
-}
-
-.checkbox-row {
-    display: flex;
-    align-items: center;
-    padding: 16px 0px 16px 0px;
-}
-
-.checkbox-label {
-    color: #1C5C94;
-    flex: 1;
-    text-decoration: underline;
-    font-weight: 500;
-    font-size: 16px;
-    max-width: max-content;
-    padding-right: 40px;
-}
-
-.radio-group {
-    display: flex;
-    gap: 40px;
-    align-items: center;
-}
-
-// .radio-option {
-//     display: flex;
-//     align-items: center;
-//     gap: 4px;
-//     cursor: pointer;
-//     font-size: 14px;
-//     color: #333333;
-//     transition: color 0.2s ease;
-//     white-space: nowrap;
-
-//     &:hover {
-//         color: #1976d2;
-//     }
-// }
-
-/* .custom-radio {
-    display: none;
-    -стандартное отображение
-} */
-
-.custom-radio+label {
-    position: relative;
-    padding-left: 30px;
-    cursor: pointer;
-    line-height: 20px;
-}
-
-.custom-radio+label::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    border: 1px solid #1F7CC0;
-    /* Внешний синий круг */
-}
-
-.custom-radio+label::after {
-    content: '';
-    position: absolute;
-    left: 5px;
-    /* Отступ от внешнего круга */
-    top: 50%;
-    transform: translateY(-50%);
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    border: 1px solid #1F7CC0;
-    /* Внутренний синий круг */
-    background-color: transparent;
-    /* Пустота внутри внутреннего круга */
-}
-
-.custom-radio:checked+label::after {
-    background-color: #1F7CC0;
-    /* Заполнение внутреннего круга синим цветом при выборе */
-}
-
-.custom-radio:disabled+label {
-    pointer-events: none;
 }
 
 .v-expansion-panel-title--active .arrow-icon {

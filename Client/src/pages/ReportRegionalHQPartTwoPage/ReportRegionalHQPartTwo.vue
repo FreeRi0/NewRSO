@@ -11,21 +11,21 @@
         <p class="preloader_info">{{ preloader_text }}</p>
       </div>
       <div v-else>
-        <div
-          class="d-flex mt-9 mb-9 active-tabs"
+        <div 
+          class="d-flex mt-9 mb-9 active-tabs" 
           v-if="
             !(
               roleStore.experts.is_district_expert || roleStore.experts.is_central_expert
             ) && isRevision
-          "
-        >
-          <button
-            class="contributorBtn"
-            :class="{ active: picked === tab.name }"
-            v-for="tab in tabs"
-            :key="tab.id"
-            @click="picked = tab.name"
-          >
+            "
+            >
+            <button 
+              class="contributorBtn" 
+              :class="{ active: picked === tab.name }" 
+              v-for="tab in tabs" 
+              :key="tab.id"
+              @click="picked = tab.name"
+              >
             {{ tab.name }}
           </button>
         </div>
@@ -589,7 +589,6 @@ const isErrorPanel = ref({
   // thirteenth: false,
   fourteenth: false,
   // sixteenth: false,
-  fourteenth: false,
   fifteenth: false
 });
 
@@ -1852,8 +1851,8 @@ const getReportData = async (reportId) => {
         isAllNinthVerified &&
         // dataEleventh.verified_by_chq &&
         dataTwelfth.verified_by_chq &&
-        dataFourteenth.verified_by_dhq
-        // Добавить 15 показатель 2025 года
+        dataFourteenth.verified_by_dhq &&
+        dataFifteenth.verified_by_chq
       ) {
         console.log("~~~~HERE");
         reportStore.isAllReportsVerifiedByCH = true;
@@ -1905,12 +1904,11 @@ const setData = (data, panel, number = 0) => {
     case 14:
       reportData.value.fourteenth = data;
       break;
-    // Добавить 15 показатель
+    case 15:
+      reportData.value.fifteenth = data;
+      break;
     case 16:
       reportData.value.sixteenth = data;
-      break;
-    case 15: 
-      reportData.value.fifteenth = data
       break;
     case 17:
       reportData.value.seventeenth = data;
@@ -1957,16 +1955,15 @@ const setDataDH = (data, panel, number) => {
     case 12:
       reportDataDH.value.twelfth = data;
       break;
-    case 15:
-      reportDataDH.value.fifteenth = data;
-      break;
     // case 13:
     //   reportDataDH.value.thirteenth = data;
     //   break;
     case 14:
       reportDataDH.value.fourteenth = data;
       break;
-    // Добавить 15 показатель
+    case 15:
+      reportDataDH.value.fifteenth = data;
+      break;
   }
 };
 
@@ -2005,16 +2002,15 @@ const setDataCH = (data, panel, number) => {
     case 12:
       reportDataCH.value.twelfth = data;
       break;
-    case 15:
-      reportDataCH.value.fifteenth = data;
-      break;
     // case 13:
     //   reportDataCH.value.thirteenth = data;
     //   break;
     case 14:
       reportDataCH.value.fourteenth = data;
       break;
-    // Добавить 15 показатель
+    case 15:
+      reportDataCH.value.fifteenth = data;
+      break;
   }
 };
 
@@ -2160,6 +2156,9 @@ const sendReport = async () => {
         }
 
         // Добавить 15 показатель
+        if (!reportData.value.fifteenth.is_sent) {
+          await reportPartTwoService.sendReport(reportData.value.fifteenth, "15");
+        }
 
         await getReportData(route.query.reportId);
         blockSendButton.value = true;
@@ -2317,7 +2316,14 @@ const sendReport = async () => {
         );
       }
 
-      // Добавить 15 показатель
+      if (!reportData.value.fifteenth.verified_by_dhq) {
+        await reportPartTwoService.sendReportDH(
+          reportDataDH.value.fifteenth,
+          "15",
+          route.query.reportId,
+          true
+        );
+      }
 
       swal.fire({
         position: "center",
@@ -2491,7 +2497,15 @@ const reportConfirmation = async (value) => {
         );
       }
 
-      // Добавить 15 показатель
+      if (reportStore.reportForCheckCH.fifteenth.verified_by_chq === null) {
+        await reportPartTwoService.sendReportCH(
+          reportDataCH.value.fifteenth,
+          "15",
+          route.query.reportId,
+          true,
+          reportStore.returnReport.fifteenth
+        );
+      }
 
       swal.fire({
         position: "center",
