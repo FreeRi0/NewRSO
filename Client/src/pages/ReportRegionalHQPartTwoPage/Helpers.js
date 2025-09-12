@@ -231,6 +231,33 @@ export function checkEmptyFieldsDH(data, isErrorPanel) {
     //     }
     // }
 
+    if (data.fifteenth && data.fifteenth.directions) {
+        const hasEmptyFields = data.fifteenth.directions.some(direction => 
+            direction.trained_total === undefined || 
+            direction.trained_total === null ||
+            direction.employed_by_direction === undefined ||
+            direction.employed_by_direction === null ||
+            direction.self_employed === undefined ||
+            direction.self_employed === null ||
+            direction.not_employed === undefined ||
+            direction.not_employed === null
+        );
+    
+        if (hasEmptyFields) {
+            isErrorPanel.value.fifteenth = true;
+            swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: `Заполните обязательные поля в 15 показателе`,
+                showConfirmButton: false,
+                timer: 2500,
+            });
+            return false;
+        }
+        
+        isErrorPanel.value.fifteenth = false;
+    }
+
     return true;
 }
 

@@ -11,44 +11,28 @@
         <p class="preloader_info">{{ preloader_text }}</p>
       </div>
       <div v-else>
-        <div
-          class="d-flex mt-9 mb-9 active-tabs"
-          v-if="
+        <div class="d-flex mt-9 mb-9 active-tabs" v-if="
             !(
               roleStore.experts.is_district_expert || roleStore.experts.is_central_expert
             ) && isRevision
-          "
-        >
-          <button
-            class="contributorBtn"
-            :class="{ active: picked === tab.name }"
-            v-for="tab in tabs"
-            :key="tab.id"
-            @click="picked = tab.name"
-          >
+            ">
+          <button class="contributorBtn" :class="{ active: picked === tab.name }" v-for="tab in tabs" :key="tab.id"
+            @click="picked = tab.name">
             {{ tab.name }}
           </button>
         </div>
         <div class="download-item" v-if="roleStore.experts.is_central_expert">
           <SvgIcon iconName="download" />
-          <button
-            type="button"
-            id="download"
-            class="download-item__report"
-            @click="downloadReportAll(route.query.reportId)"
-          >
+          <button type="button" id="download" class="download-item__report"
+            @click="downloadReportAll(route.query.reportId)">
             Скачать архив
           </button>
         </div>
 
         <div v-else class="download-item">
           <SvgIcon iconName="download" />
-          <button
-            type="button"
-            id="download"
-            class="download-item__report"
-            @click="downloadReportAll(roleStore.roles.regionalheadquarter_commander?.id)"
-          >
+          <button type="button" id="download" class="download-item__report"
+            @click="downloadReportAll(roleStore.roles.regionalheadquarter_commander?.id)">
             Скачать архив
           </button>
         </div>
@@ -59,17 +43,9 @@
               1. Численность членов РО РСО
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <first-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                @get-data-DH="setDataDH"
-                @get-data-CH="setDataCH"
-                :data="reportData.first"
-                :is-error-panel="isErrorPanel.first"
-                :blockEditFirstReport="blockEditFirstReport"
-                :tab="picked"
-              />
+              <first-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.first"
+                :is-error-panel="isErrorPanel.first" :blockEditFirstReport="blockEditFirstReport" :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('2', picked, revisionPanels)">
@@ -84,8 +60,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО."
-              />
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('3', picked, revisionPanels)">
@@ -95,8 +70,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО."
-              />
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('4', picked, revisionPanels)">
@@ -108,16 +82,9 @@
               турниры и&nbsp;прочие)
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <fourth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                @get-data-DH="setDataDH"
-                @get-data-CH="setDataCH"
-                :data="reportData.fourth"
-                :is-error-panel="isErrorPanel.fourth"
-                :tab="picked"
-              />
+              <fourth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.fourth"
+                :is-error-panel="isErrorPanel.fourth" :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('5', picked, revisionPanels)">
@@ -129,45 +96,26 @@
               проектов РСО
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <fifth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                @get-data-DH="setDataDH"
-                @get-data-CH="setDataCH"
-                :data="reportData.fifth"
-                :is-error-panel="isErrorPanel.fifth"
-                :tab="picked"
-              />
+              <fifth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.fifth"
+                :is-error-panel="isErrorPanel.fifth" :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('6', picked, revisionPanels)">
-            <v-expansion-panel-title
-              :class="
+            <v-expansion-panel-title :class="
                 Object.values(isErrorPanel.six).some((item) => item.error === true)
                   ? 'visible-error'
                   : ''
-              "
-            >
+              ">
               6. Участие бойцов студенческих отрядов РО&nbsp;РСО во&nbsp;всероссийских
               (международных) мероприятиях и&nbsp;проектах (в&nbsp;том числе
               и&nbsp;трудовых) &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <new-sixth-panel
-                @get-data="setData"
-                @get-data-DH="setDataDH"
-                @get-data-CH="setDataCH"
-                :items="six_items"
-                @getId="setId"
-                @getPanelNumber="setPanelNumber"
-                :district-headquarter-commander="districtExpert"
-                :data="reportData.six"
-                :central-headquarter-commander="centralExpert"
-                :is-error-panel="isErrorPanel.six"
-                :tab="picked"
-                :revision-panels="revisionPanels"
-              />
+              <new-sixth-panel @get-data="setData" @get-data-DH="setDataDH" @get-data-CH="setDataCH" :items="six_items"
+                @getId="setId" @getPanelNumber="setPanelNumber" :district-headquarter-commander="districtExpert"
+                :data="reportData.six" :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.six"
+                :tab="picked" :revision-panels="revisionPanels" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('7', picked, revisionPanels)">
@@ -177,8 +125,7 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО."
-              />
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('8', picked, revisionPanels)">
@@ -189,40 +136,26 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                text="Показатель рассчитывается автоматически на&nbsp;основе данных сервиса &laquo;Медиалогия&raquo;, предоставленных Аппаратом РСО."
-              />
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных сервиса &laquo;Медиалогия&raquo;, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('9', picked, revisionPanels)">
-            <v-expansion-panel-title
-              :class="
+            <v-expansion-panel-title :class="
                 Object.values(isErrorPanel.ninth).some((item) => item.error === true)
                   ? 'visible-error'
                   : ''
-              "
-            >
+              ">
               9. Организация обязательных общесистемных мероприятий РСО
               на&nbsp;региональном уровне &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <ninth-panel
-                @get-data="setData"
-                @get-data-DH="setDataDH"
-                @getId="setId"
-                @get-data-CH="setDataCH"
-                @getPanelNumber="setPanelNumber"
-                :items="ninth_items"
-                :district-headquarter-commander="districtExpert"
-                :data="reportData.ninth"
-                :central-headquarter-commander="centralExpert"
-                :is-error-panel="isErrorPanel.ninth"
-                :tab="picked"
-                :revision-panels="revisionPanels"
-              />
+              <ninth-panel @get-data="setData" @get-data-DH="setDataDH" @getId="setId" @get-data-CH="setDataCH"
+                @getPanelNumber="setPanelNumber" :items="ninth_items" :district-headquarter-commander="districtExpert"
+                :data="reportData.ninth" :central-headquarter-commander="centralExpert"
+                :is-error-panel="isErrorPanel.ninth" :tab="picked" :revision-panels="revisionPanels" />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel
-            v-if="
+          <v-expansion-panel v-if="
               roleStore.experts.is_central_expert && !revisionPanels.length
                 ? true
                 : picked === 'Доработка'
@@ -232,32 +165,20 @@
                   verifiedByChqPanels.includes('10-2')
                 ? false
                 : true
-            "
-          >
+            ">
             <v-expansion-panel-title :class="isErrorPanel.tenth ? 'visible-error' : ''">
               10. Организация РО&nbsp;РСО всероссийских (международных) добровольческих
               и&nbsp;патриотических акций &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <tenth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                @getDataDHFirst="setDataDH"
-                @getDataDHSecond="setDataDH"
-                @getDataCHFirst="setDataCH"
-                @getDataCHSecond="setDataCH"
-                :data="reportData.tenth"
-                :is-error-panel="isErrorPanel.tenth"
-                :tab="picked"
-                :revisionPanels="revisionPanels"
-              />
+              <tenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                @getDataDHFirst="setDataDH" @getDataDHSecond="setDataDH" @getDataCHFirst="setDataCH"
+                @getDataCHSecond="setDataCH" :data="reportData.tenth" :is-error-panel="isErrorPanel.tenth" :tab="picked"
+                :revisionPanels="revisionPanels" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('11', picked, revisionPanels)">
-            <v-expansion-panel-title
-              :class="isErrorPanel.eleventh ? 'visible-error' : ''"
-            >
+            <v-expansion-panel-title :class="isErrorPanel.eleventh ? 'visible-error' : ''">
               11. Активность РО&nbsp;РСО в&nbsp;социальных сетях &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
@@ -265,8 +186,7 @@
                 @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.eleventh"
                 :is-error-panel="isErrorPanel.eleventh" :tab="picked" /> -->
               <calculated-panel
-                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО."
-              />
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('12', picked, revisionPanels)">
@@ -274,16 +194,9 @@
               12. Показатель участия во&nbsp;Всероссийском дне ударного труда
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <twelfth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                @get-data-DH="setDataDH"
-                @get-data-CH="setDataCH"
-                :data="reportData.twelfth"
-                :is-error-panel="isErrorPanel.twelfth"
-                :tab="picked"
-              />
+              <twelfth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.twelfth"
+                :is-error-panel="isErrorPanel.twelfth" :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <!-- <v-expansion-panel v-if="showPanels('13', picked, revisionPanels)">
@@ -320,31 +233,21 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО."
-              />
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО." />
             </v-expansion-panel-text>
           </v-expansion-panel>
 
           <v-expansion-panel v-if="showPanels('14', picked, revisionPanels)">
             <!--            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('16') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('16') ? false : true">-->
-            <v-expansion-panel-title
-              :class="isErrorPanel.fourteenth ? 'visible-error' : ''"
-            >
+            <v-expansion-panel-title :class="isErrorPanel.fourteenth ? 'visible-error' : ''">
               14. Победители всероссийских (международных), окружных
               и&nbsp;межрегиональных трудовых проектов по&nbsp;комиссарской деятельности
               &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <sixteenth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data-DH="setDataDH"
-                @get-data="setData"
-                @get-data-CH="setDataCH"
-                :data="reportData.fourteenth"
-                :is-error-panel="isErrorPanel.fourteenth"
-                :tab="picked"
-              />
+              <sixteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data-DH="setDataDH"
+                @get-data="setData" @get-data-CH="setDataCH" :data="reportData.fourteenth"
+                :is-error-panel="isErrorPanel.fourteenth" :tab="picked" />
             </v-expansion-panel-text>
           </v-expansion-panel>
 
@@ -365,13 +268,8 @@
               16. Дислокация студенческих отрядов РО&nbsp;РСО
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <seventeenth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                :data="reportData.sixteenth"
-                :is-sent="isSentLastIndex"
-              />
+              <seventeenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.sixteenth" :is-sent="isSentLastIndex" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('17', picked, revisionPanels)">
@@ -380,25 +278,15 @@
               выпущенных в&nbsp;текущем году
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <eighteenth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                :data="reportData.seventeenth"
-                :is-sent="isSentLastIndex"
-              />
+              <eighteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.seventeenth" :is-sent="isSentLastIndex" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('18', picked, revisionPanels)">
             <v-expansion-panel-title> 18. Трудоустройство </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <nineteenth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                :data="reportData.eighteenth"
-                :is-sent="isSentLastIndex"
-              />
+              <nineteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.eighteenth" :is-sent="isSentLastIndex" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('19', picked, revisionPanels)">
@@ -406,13 +294,8 @@
               19. Количество и&nbsp;трудоустройство сотрудников РО&nbsp;РСО
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <nineteen-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                :data="reportData.nineteenth"
-                :is-sent="isSentLastIndex"
-              />
+              <nineteen-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.nineteenth" :is-sent="isSentLastIndex" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('20', picked, revisionPanels)">
@@ -420,33 +303,17 @@
               20. Инфраструктура РО&nbsp;РСО
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <twentieth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                :data="reportData.twentieth"
-                :is-sent="isSentLastIndex"
-              />
+              <twentieth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
+                :data="reportData.twentieth" :is-sent="isSentLastIndex" />
             </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
       </div>
     </div>
-    <Button
-      class="btn_report"
-      v-if="!preloader"
-      variant="text"
-      label="Отправить отчет"
-      size="large"
-      @click="sendReport"
-      :disabled="reportStore.isAllReportsVerifiedByCH"
-    />
+    <Button class="btn_report" v-if="!preloader" variant="text" label="Отправить отчет" size="large" @click="sendReport"
+      :disabled="reportStore.isAllReportsVerifiedByCH" />
   </div>
-  <ReportModalWarning
-    v-if="showModalWarning"
-    @reportConfirmation="reportConfirmation"
-    isCentral
-  />
+  <ReportModalWarning v-if="showModalWarning" @reportConfirmation="reportConfirmation" isCentral />
 </template>
 <script setup>
 import {
@@ -587,9 +454,9 @@ const isErrorPanel = ref({
   // eleventh: false,
   twelfth: false,
   // thirteenth: false,
-  fourteenth: false,
   // sixteenth: false,
   fourteenth: false,
+  fifteenth: false,
   fifteenth: false
 });
 
@@ -1228,38 +1095,39 @@ const getReportData = async (reportId) => {
       ) {
         revisionPanels.value.push("14");
       }
-      /* 
-      * Критерий 15
-      */
-      const dataFifteenthCH = (await reportPartTwoService.getReportDH('15', reportId)).data;
+      /*
+       * Критерий 15
+       */
+      const dataFifteenthCH = (await reportPartTwoService.getReportDH("15", reportId))
+        .data;
       reportStore.reportForCheckCH.fifteenth = dataFifteenthCH;
       if (dataFifteenthCH.rejecting_reasons && dataFifteenthCH.verified_by_chq !== true) {
-        revisionPanels.value.push('15');
+        revisionPanels.value.push("15");
       }
-      if (dataFifteenthCH.verified_by_chq) verifiedByChqPanels.value.push('15')
+      if (dataFifteenthCH.verified_by_chq) verifiedByChqPanels.value.push("15");
 
       dataFifteenthCH.regional_version
-        ? reportData.value.fifteenth = JSON.parse(dataFifteenthCH.regional_version)
-        : reportData.value.fifteenth = dataFifteenthCH;
+        ? (reportData.value.fifteenth = JSON.parse(dataFifteenthCH.regional_version))
+        : (reportData.value.fifteenth = dataFifteenthCH);
 
       dataFifteenthCH.district_version
-        ? reportStore.reportDataDH.fifteenth = JSON.parse(dataFifteenthCH.district_version)
-        : reportStore.reportDataDH.fifteenth = dataFifteenthCH;
+        ? (reportStore.reportDataDH.fifteenth = JSON.parse(
+            dataFifteenthCH.district_version
+          ))
+        : (reportStore.reportDataDH.fifteenth = dataFifteenthCH);
 
       reportStore.reportDataCH.fifteenth = Object.assign({}, dataFifteenthCH);
       if (!dataFifteenthCH.rejecting_reasons) {
-        reportStore.reportDataCH.fifteenth.comment = ''
+        reportStore.reportDataCH.fifteenth.comment = "";
       } else if (dataFifteenthCH.rejecting_reasons) {
-        reportStore.reportDataCH.fifteenth.comment = JSON.parse(reportStore.reportDataCH.fifteenth.rejecting_reasons).comment
+        reportStore.reportDataCH.fifteenth.comment = JSON.parse(
+          reportStore.reportDataCH.fifteenth.rejecting_reasons
+        ).comment;
       }
       if (dataFifteenthCH.verified_by_chq === true) {
-        reportStore.reportDataCH.fifteenth.comment = dataFifteenthCH.comment
+        reportStore.reportDataCH.fifteenth.comment = dataFifteenthCH.comment;
       }
-      /* 
-      * Критерий 11
-      */
-      const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
-      reportStore.reportForCheckCH.eleventh = dataEleventh;
+
       /*
        * Критерий 11
        * В 2025 году данный показатель рассчитывается автоматически
@@ -1352,11 +1220,10 @@ const getReportData = async (reportId) => {
       // }
 
       /*
-       * Критерий 16-20
+       * Критерии 16-20
        */
-      const dataSeventeenth = (await reportPartTwoService.getReportDH("16", reportId))
-        .data;
-      if (dataSeventeenth.is_sent) isSentLastIndex.value = true;
+      if (reportStore.reportForCheckCH.fourteenth.is_sent) isSentLastIndex.value = true;
+
       reportData.value.sixteenth = (
         await reportPartTwoService.getReportDH("16", reportId)
       ).data;
@@ -1425,21 +1292,22 @@ const getReportData = async (reportId) => {
         await reportPartTwoService.getReportDH("12", reportId)
       ).data;
       reportStore.reportDataDH.twelfth = Object.assign({}, reportData.value.twelfth);
-      reportStore.reportDataDH.twelfth.comment = '';
-
-      reportData.value.fifteenth = (await reportPartTwoService.getReportDH('15', reportId)).data;
-      reportStore.reportDataDH.fifteenth = Object.assign({}, reportData.value.fifteenth);
-      reportStore.reportDataDH.fifteenth.comment = '';
       reportStore.reportDataDH.twelfth.comment = "";
 
-      reportData.value.thirteenth = (
-        await reportPartTwoService.getReportDH("13", reportId)
+      reportData.value.fifteenth = (
+        await reportPartTwoService.getReportDH("15", reportId)
       ).data;
-      reportStore.reportDataDH.thirteenth = Object.assign(
-        {},
-        reportData.value.thirteenth
-      );
-      reportStore.reportDataDH.thirteenth.comment = "";
+      reportStore.reportDataDH.fifteenth = Object.assign({}, reportData.value.fifteenth);
+      reportStore.reportDataDH.fifteenth.comment = "";
+
+      // reportData.value.thirteenth = (
+      //   await reportPartTwoService.getReportDH("13", reportId)
+      // ).data;
+      // reportStore.reportDataDH.thirteenth = Object.assign(
+      //   {},
+      //   reportData.value.thirteenth
+      // );
+      // reportStore.reportDataDH.thirteenth.comment = "";
 
       reportData.value.fourteenth = (
         await reportPartTwoService.getReportDH("14", reportId)
@@ -1449,7 +1317,8 @@ const getReportData = async (reportId) => {
       ).data;
       reportStore.reportDataDH.fourteenth.comment = "";
 
-      if (reportData.value.sixteenth.is_sent) isSentLastIndex.value = true; //?????????????????????????
+      if (reportData.value.fourteenth.is_sent) isSentLastIndex.value = true;
+
       reportData.value.sixteenth = (
         await reportPartTwoService.getReportDH("16", reportId)
       ).data;
@@ -1728,14 +1597,13 @@ const getReportData = async (reportId) => {
       // (в 2024 году это 16 показатель)
       let dataFourteenth;
       try {
-        //????????????????????????????????????????
-        // reportData.value.sixteenth = (await reportPartTwoService.getReport('16')).data;
-        // if (reportData.value.sixteenth.is_sent) {
-        //   blockSendButton.value = true;
-        //   blockEditFirstReport.value = true;
-        // }
-
         dataFourteenth = (await reportPartTwoService.getReport("14")).data;
+
+        if (dataFourteenth.is_sent) {
+          blockSendButton.value = true;
+          blockEditFirstReport.value = true;
+        }
+
         // if (!dataSixteenth.regional_version) {
         //   reportData.value.sixteenth = dataSixteenth;
         // } else {
@@ -1791,14 +1659,14 @@ const getReportData = async (reportId) => {
 
       let dataFifteenth;
       try {
-        dataFifteenth = (await reportPartTwoService.getReportDH('15', '1')).data;
+        dataFifteenth = (await reportPartTwoService.getReportDH("15", "1")).data;
         if (!dataFifteenth.regional_version && !dataFifteenth.central_version) {
           reportData.value.fifteenth = dataFifteenth;
         } else {
           if (dataFifteenth.rejecting_reasons) {
             reportStore.reportReject.fifteenth = dataFifteenth;
             if (!dataFifteenth.verified_by_chq) {
-              revisionPanels.value.push('15');
+              revisionPanels.value.push("15");
               reportStore.isReportReject.fifteenth = isTabsForRevision.value;
             }
           }
@@ -1812,7 +1680,7 @@ const getReportData = async (reportId) => {
           }
         }
       } catch (e) {
-        console.log(e.message)
+        console.log(e.message);
       }
 
       //Статистические показатели 16-20, не участвующие в рейтинге (не требуют согласования ОЩ и ЦШ) 2025 год
@@ -1852,8 +1720,8 @@ const getReportData = async (reportId) => {
         isAllNinthVerified &&
         // dataEleventh.verified_by_chq &&
         dataTwelfth.verified_by_chq &&
-        dataFourteenth.verified_by_dhq
-        // Добавить 15 показатель 2025 года
+        dataFourteenth.verified_by_dhq &&
+        dataFifteenth.verified_by_chq
       ) {
         console.log("~~~~HERE");
         reportStore.isAllReportsVerifiedByCH = true;
@@ -1905,12 +1773,14 @@ const setData = (data, panel, number = 0) => {
     case 14:
       reportData.value.fourteenth = data;
       break;
-    // Добавить 15 показатель
+    case 15:
+      reportData.value.fifteenth = data;
+      break;
     case 16:
       reportData.value.sixteenth = data;
       break;
-    case 15: 
-      reportData.value.fifteenth = data
+    case 15:
+      reportData.value.fifteenth = data;
       break;
     case 17:
       reportData.value.seventeenth = data;
@@ -1957,16 +1827,15 @@ const setDataDH = (data, panel, number) => {
     case 12:
       reportDataDH.value.twelfth = data;
       break;
-    case 15:
-      reportDataDH.value.fifteenth = data;
-      break;
     // case 13:
     //   reportDataDH.value.thirteenth = data;
     //   break;
     case 14:
       reportDataDH.value.fourteenth = data;
       break;
-    // Добавить 15 показатель
+    case 15:
+      reportDataDH.value.fifteenth = data;
+      break;
   }
 };
 
@@ -2005,16 +1874,15 @@ const setDataCH = (data, panel, number) => {
     case 12:
       reportDataCH.value.twelfth = data;
       break;
-    case 15:
-      reportDataCH.value.fifteenth = data;
-      break;
     // case 13:
     //   reportDataCH.value.thirteenth = data;
     //   break;
     case 14:
       reportDataCH.value.fourteenth = data;
       break;
-    // Добавить 15 показатель
+    case 15:
+      reportDataCH.value.fifteenth = data;
+      break;
   }
 };
 
@@ -2160,6 +2028,9 @@ const sendReport = async () => {
         }
 
         // Добавить 15 показатель
+        if (!reportData.value.fifteenth.is_sent) {
+          await reportPartTwoService.sendReport(reportData.value.fifteenth, "15");
+        }
 
         await getReportData(route.query.reportId);
         blockSendButton.value = true;
@@ -2317,7 +2188,14 @@ const sendReport = async () => {
         );
       }
 
-      // Добавить 15 показатель
+      if (!reportData.value.fifteenth.verified_by_dhq) {
+        await reportPartTwoService.sendReportDH(
+          reportDataDH.value.fifteenth,
+          "15",
+          route.query.reportId,
+          true
+        );
+      }
 
       swal.fire({
         position: "center",
@@ -2491,7 +2369,15 @@ const reportConfirmation = async (value) => {
         );
       }
 
-      // Добавить 15 показатель
+      if (reportStore.reportForCheckCH.fifteenth.verified_by_chq === null) {
+        await reportPartTwoService.sendReportCH(
+          reportDataCH.value.fifteenth,
+          "15",
+          route.query.reportId,
+          true,
+          reportStore.returnReport.fifteenth
+        );
+      }
 
       swal.fire({
         position: "center",
@@ -2934,7 +2820,7 @@ onMounted(() => {
   text-align: left;
 }
 
-.v-expansion-panel--active > .v-expansion-panel-title {
+.v-expansion-panel--active>.v-expansion-panel-title {
   border-radius: 10px;
   min-height: none;
   border-left: none;
@@ -2942,7 +2828,7 @@ onMounted(() => {
 }
 
 .v-expansion-panel-title.visible-error,
-.v-expansion-panel--active > .v-expansion-panel-title.visible-error {
+.v-expansion-panel--active>.v-expansion-panel-title.visible-error {
   border-color: #db0000;
 }
 
@@ -2955,7 +2841,7 @@ onMounted(() => {
 }
 
 .v-expansion-panel--active:not(:first-child),
-.v-expansion-panel--active + .v-expansion-panel {
+.v-expansion-panel--active+.v-expansion-panel {
   margin-top: 0;
   opacity: unset;
 }
