@@ -63,7 +63,7 @@
                                 Количество человек, являвшихся членами Штаба трудового проекта
                             </p>
                             <InputReport @focusout="focusOut" v-model:value="eventData.hq_members_count"
-                                :disabled="isSentSix || (eventData.number_of_members == 0 || eventData.number_of_members === null)"
+                                :disabled="isSentSix || !eventData.is_hq_member" :is-error-panel="isErrorPanel"
                                 :is-link="false" placeholder="Введите число" id="hq_members_count"
                                 name="hq_members_count" class="form__input" type="number" :max="2147483647"
                                 width="100%" />
