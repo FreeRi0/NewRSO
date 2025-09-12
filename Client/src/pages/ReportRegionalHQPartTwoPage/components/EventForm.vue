@@ -34,8 +34,12 @@
                 <div class="bg_form">
                     <div class="top_line">
                         <div class="form__field places">
-                            <p class="form__label">
+                            <p class="form__label" v-if="isFirstPart">
                                 Количество человек, принимавших участие в мероприятии <sup class="valid-red">*</sup>
+                            </p>
+                            <p class="form__label" v-else-if="!isFirstPart">
+                                Количество человек, принимавших участие в трудовом проекте в составе ЛСО <sup
+                                    class="valid-red">*</sup>
                             </p>
                             <InputReport @focusout="focusOut" v-model:value="eventData.number_of_members"
                                 :disabled="isSentSix" :is-error-panel="isErrorPanel" :is-link="false"
@@ -47,6 +51,24 @@
                         </p>
                     </div>
 
+                    <div class="checkbox_field" v-if="!isFirstPart">
+                        <!-- <div class="checkbox_title">
+                            <input class="checkbox" type="checkbox" v-model="eventData.is_hq_member" />
+                            <p class="form__label checkbox_label">
+                                Члены РО являлись членами Штаба всероссийского трудового проекта
+                            </p>
+                        </div> -->
+                        <div>
+                            <p class="form__label">
+                                Количество человек, являвшихся членами Штаба трудового проекта
+                            </p>
+                            <InputReport @focusout="focusOut" v-model:value="eventData.hq_members_count"
+                                :disabled="isSentSix || !eventData.is_hq_member" :is-error-panel="isErrorPanel"
+                                :is-link="false" placeholder="Введите число" id="hq_members_count"
+                                name="hq_members_count" class="form__input" type="number" :max="2147483647"
+                                width="100%" />
+                        </div>
+                    </div>
 
                     <div class="form__field">
                         <label class="form__label" for="14">Ссылка на социальные сети/ электронные<br>
@@ -67,25 +89,6 @@
                                     Удалить поле ввода
                                 </div>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="checkbox_field">
-                        <div class="checkbox_title">
-                            <input class="checkbox" type="checkbox" v-model="eventData.is_hq_member" />
-                            <p class="form__label checkbox_label">
-                                Члены РО являлись членами Штаба всероссийского трудового проекта
-                            </p>
-                        </div>
-                        <div v-if="eventData.is_hq_member">
-                            <p class="form__label">
-                                Количество членов Штаба всероссийского трудового проекта от РО
-                            </p>
-                            <InputReport @focusout="focusOut" v-model:value="eventData.hq_members_count"
-                                :disabled="isSentSix || !eventData.is_hq_member" :is-error-panel="isErrorPanel"
-                                :is-link="false" placeholder="Введите число" id="hq_members_count"
-                                name="hq_members_count" class="form__input" type="number" :max="2147483647"
-                                width="100%" />
                         </div>
                     </div>
 
@@ -133,12 +136,19 @@ const props = defineProps({
     },
 })
 
+console.log(props.data)
+console.log(props.event)
+
 const eventData = ref({
     number_of_members: 0,
     links: [{ link: '' }],
     comment: '',
     is_hq_member: false,
     hq_members_count: null,
+})
+
+const isFirstPart = computed(() => {
+    return props.event.id <=56;
 })
 
 const emit = defineEmits(['collapse-form', 'delete-event', 'formData', 'formDataDH', 'formDataCH', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'deleteFileDH', 'error']);

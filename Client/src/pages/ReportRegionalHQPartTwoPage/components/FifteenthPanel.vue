@@ -13,6 +13,53 @@
           :central-expert="centralExpert" @update-area="updateArea(index, $event)" @save-data="saveData" />
       </div>
     </div>
+
+    <div class="card-form">
+      <div class="checkbox-row">
+        <span class="checkbox-label">Заполнение Таблицы по трудоустройству членов РО, обученных
+          осенью 2024 года</span>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" v-model="isFillingTableAutumn2024" :value="true" class="custom-radio"
+              :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
+            <span class="radio-custom"></span>
+            Да
+          </label>
+          <label class="radio-option">
+            <input type="radio" v-model="isFillingTableAutumn2024" :value="false" class="custom-radio"
+              :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
+            <span class="radio-custom"></span>
+            Нет
+          </label>
+        </div>
+      </div>
+
+      <div class="checkbox-row">
+        <span class="checkbox-label">Заполнение Таблицы по трудоустройству членов РО, обученных
+          весной 2025 года</span>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" v-model="isFillingTableSpring2025" :value="true" class="custom-radio"
+              :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
+            <span class="radio-custom"></span>
+            Да
+          </label>
+          <label class="radio-option">
+            <input type="radio" v-model="isFillingTableSpring2025" :value="false" class="custom-radio"
+              :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
+            <span class="radio-custom"></span>
+            Нет
+          </label>
+        </div>
+      </div>
+
+      <div class="save-button" v-if="!(props.centralExpert || props.districtExpert)">
+        <button @click="saveData" aria-label="Сохранить" class="save-button_button" :disabled="!isFormValid">
+          <span class="save-button_label">Сохранить</span>
+        </button>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -46,21 +93,36 @@
   const roleStore = useRoleStore();
 
   const areas = ref([
-    { name: "ССО", number_trained: '', number_employed: '', self_employment: '', number_unemployed: '', file: '', file_size: null, file_type: '', isFillingTableAutumn2024: null, isFillingTableSpring2025: null },
-    { name: "СПО", number_trained: '', number_employed: '', self_employment: '', number_unemployed: '', file: '', file_size: null, file_type: '', isFillingTableAutumn2024: null, isFillingTableSpring2025: null },
-    { name: "СОП", number_trained: '', number_employed: '', self_employment: '', number_unemployed: '', file: '', file_size: null, file_type: '', isFillingTableAutumn2024: null, isFillingTableSpring2025: null },
-    { name: "СМО", number_trained: '', number_employed: '', self_employment: '', number_unemployed: '', file: '', file_size: null, file_type: '', isFillingTableAutumn2024: null, isFillingTableSpring2025: null },
-    { name: "ССервО", number_trained: '', number_employed: '', self_employment: '', number_unemployed: '', file: '', file_size: null, file_type: '', isFillingTableAutumn2024: null, isFillingTableSpring2025: null },
-    { name: "ССхО", number_trained: '', number_employed: '', self_employment: '', number_unemployed: '', file: '', file_size: null, file_type: '', isFillingTableAutumn2024: null, isFillingTableSpring2025: null },
-    { name: "Профильные отряды", number_trained: '', number_employed: '', self_employment: '', number_unemployed: '', file: '', file_size: null, file_type: '', isFillingTableAutumn2024: null, isFillingTableSpring2025: null },
-    { name: "Производственные отряды", number_trained: '', number_employed: '', self_employment: '', number_unemployed: '', file: '', file_size: null, file_type: '', isFillingTableAutumn2024: null, isFillingTableSpring2025: null },
-    { name: "ТОП", number_trained: '', number_employed: '', self_employment: '', number_unemployed: '', file: '', file_size: null, file_type: '', isFillingTableAutumn2024: null, isFillingTableSpring2025: null },
+    { name: "ССО", number_trained: '', number_employed: '', self_employment: '', number_unemployed: '', file: '', file_size: null, file_type: '' },
+    { name: "СПО", number_trained: '', number_employed: '', self_employment: '', number_unemployed: '', file: '', file_size: null, file_type: '' },
+    { name: "СОП", number_trained: '', number_employed: '', self_employment: '', number_unemployed: '', file: '', file_size: null, file_type: '' },
+    { name: "СМО", number_trained: '', number_employed: '', self_employment: '', number_unemployed: '', file: '', file_size: null, file_type: '' },
+    { name: "ССервО", number_trained: '', number_employed: '', self_employment: '', number_unemployed: '', file: '', file_size: null, file_type: '' },
+    { name: "ССхО", number_trained: '', number_employed: '', self_employment: '', number_unemployed: '', file: '', file_size: null, file_type: '' },
+    { name: "Профильные отряды", number_trained: '', number_employed: '', self_employment: '', number_unemployed: '', file: '', file_size: null, file_type: '' },
+    { name: "Производственные отряды", number_trained: '', number_employed: '', self_employment: '', number_unemployed: '', file: '', file_size: null, file_type: '' },
+    { name: "ТОП", number_trained: '', number_employed: '', self_employment: '', number_unemployed: '', file: '', file_size: null, file_type: '' },
   ]);
+  const isFillingTableAutumn2024 = ref(null);
+  const isFillingTableSpring2025 = ref(null);
   
   const isFirstSent = ref(true);
   const isSent = ref(false);
   const isLoading = ref(false);
   const ID_PANEL = '15';
+
+  const isFormValid = computed(() => {
+    return areas.value.every(area => {
+      const numbersFilled = area.number_trained !== '' && 
+                           area.number_employed !== '' && 
+                           area.self_employment !== '' && 
+                           area.number_unemployed !== '';
+      
+      const fileAttached = area.file !== '';
+      
+      return numbersFilled && fileAttached;
+    });
+  });
 
   const regionalHqId = computed(() =>
     userStore.currentUser?.regional_headquarter_id ?? roleStore.roles?.regionalheadquarter_commander?.id
@@ -83,6 +145,8 @@
       formData.append('regional_headquarter', String(Number(regionalHqId.value)));
       formData.append('training_quota', String(Number(props.data?.training_quota ?? 0)));
       formData.append('score', String(Number(props.data?.score ?? 0)));
+      formData.append('employment_table_fall_2024', String(Boolean(isFillingTableAutumn2024.value)));
+      formData.append('employment_table_spring_2025', String(Boolean(isFillingTableSpring2025.value)));
 
       areas.value.forEach((area, index) => {
         formData.append(`directions[${index}][direction_name]`, area.name ?? '');
@@ -90,8 +154,6 @@
         formData.append(`directions[${index}][employed_by_direction]`, String(Number(area.number_employed) || 0));
         formData.append(`directions[${index}][self_employed]`, String(Number(area.self_employment) || 0));
         formData.append(`directions[${index}][not_employed]`, String(Number(area.number_unemployed) || 0));
-        formData.append(`directions[${index}][employment_table_fall_2024]`, String(Boolean(area.isFillingTableAutumn2024)));
-        formData.append(`directions[${index}][employment_table_spring_2025]`, String(Boolean(area.isFillingTableSpring2025)));
 
         if (area.file && typeof area.file !== 'string') {
           formData.append(`directions[${index}][zip_file]`, area.file);
@@ -204,6 +266,107 @@
     font-size: 16px;
     line-height: 100%;
     letter-spacing: 0%;
+  }
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  padding: 16px 0px 16px 0px;
+}
+
+.checkbox-label {
+  color: #1C5C94;
+  flex: 1;
+  text-decoration: underline;
+  font-weight: 600;
+  font-size: 16px;
+  max-width: max-content;
+  padding-right: 40px;
+}
+
+.radio-option {
+  font-weight: 600;
+}
+
+.radio-group {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+}
+
+.custom-radio+label {
+  position: relative;
+  padding-left: 30px;
+  cursor: pointer;
+  line-height: 20px;
+}
+
+.custom-radio+label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #1F7CC0;
+}
+
+.custom-radio+label::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid #1F7CC0;
+  background-color: transparent;
+}
+
+.custom-radio:checked+label::after {
+  background-color: #1F7CC0;
+}
+
+.custom-radio:disabled+label {
+  pointer-events: none;
+}
+
+.save-button {
+  margin-top: 16px;
+
+  &_button {
+    border: 0px #fff solid;
+    border-radius: 6px;
+    background-color: #D2E4F2;
+    height: 40px;
+    width: 100px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:disabled {
+      background-color: #E0E0E0;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    &:not(:disabled):hover {
+      background-color: #B8D4E8;
+    }
+  }
+
+  &_label {
+    font-family: Bert Sans;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-align: center;
+    color: #1F7CC0
   }
 }
 </style>
