@@ -173,7 +173,7 @@ const focusOut = async () => {
         links: eventData.value.links,
         comment: eventData.value.comment,
         is_hq_member: eventData.value.is_hq_member,
-        hq_members_count: eventData.value.is_hq_member ? eventData.value.hq_members_count : null,
+        hq_members_count: eventData.value.hq_members_count,
     });
 }
 
