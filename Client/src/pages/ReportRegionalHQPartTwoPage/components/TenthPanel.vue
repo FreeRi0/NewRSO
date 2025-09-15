@@ -9,7 +9,7 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <TenthPanelForm
-              :key="1"
+              :id="1"
               :districtExpert="districtExpert"
               :centralExpert="centralExpert"
               :data="tenthPanelDataFirst"
@@ -45,7 +45,7 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <TenthPanelForm
-              :key="2"
+              :id="2"
               :districtExpert="districtExpert"
               :centralExpert="centralExpert"
               :data="tenthPanelDataSecond"
@@ -177,7 +177,10 @@ const formData = async (reportData, reportNumber) => {
       tenthPanelDataFirst.value = {...reportData}
       formData.append('event_happened', tenthPanelDataFirst.value.event_happened);
       formData.append('comment', tenthPanelDataFirst.value.comment || '');
-      formData.append('number_members', tenthPanelDataFirst.value.number_members || '');
+      formData.append('total_participants', tenthPanelDataFirst.value.total_participants || '');
+      formData.append('new_participants', tenthPanelDataFirst.value.new_participants || '');
+      formData.append('beneficiaries', tenthPanelDataFirst.value.beneficiaries || '');
+      formData.append('settlements', tenthPanelDataFirst.value.settlements || '');
       if (tenthPanelDataFirst.value.document) formData.append('document', tenthPanelDataFirst.value.document || '');
       if (tenthPanelDataFirst.value.links.length) {
         for (let j = 0; j < tenthPanelDataFirst.value.links.length; j++) {
@@ -195,6 +198,9 @@ const formData = async (reportData, reportNumber) => {
       tenthPanelDataSecond.value = {...reportData}
       formData.append('event_happened', tenthPanelDataSecond.value.event_happened);
       formData.append('comment', tenthPanelDataSecond.value.comment || '');
+      formData.append('total_participants', tenthPanelDataSecond.value.total_participants || '');
+      formData.append('new_participants', tenthPanelDataSecond.value.new_participants || '');
+      formData.append('other_nko_participants', tenthPanelDataSecond.value.other_nko_participants || '');
       if (tenthPanelDataSecond.value.document) formData.append('document', tenthPanelDataSecond.value.document || '');
       if (tenthPanelDataSecond.value.links.length) {
         for (let j = 0; j < tenthPanelDataSecond.value.links.length; j++) {

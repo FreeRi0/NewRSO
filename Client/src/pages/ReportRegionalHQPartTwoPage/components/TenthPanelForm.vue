@@ -53,7 +53,7 @@
           <p class="form__label">
             Общее количество участников
           </p>
-          <InputReport @focusout="formData" v-model:value="tenthPanelData.number_members"
+          <InputReport @focusout="formData" v-model:value="tenthPanelData.total_participants"
                        :disabled="isSent || !tenthPanelData.event_happened"
                        placeholder="Введите число" id="15" name="14"
                        class="form__input number_input" type="number" :max="32767"/>
@@ -62,25 +62,35 @@
           <p class="form__label">
             Количество новых участников
           </p>
-          <InputReport @focusout="formData" v-model:value="tenthPanelData.number_new_members"
+          <InputReport @focusout="formData" v-model:value="tenthPanelData.new_participants"
                        :disabled="isSent || !tenthPanelData.event_happened" placeholder="Введите число"
                        id="15" name="14"
                        class="form__input number_input" type="number" :max="32767"/>
         </div>
-        <div class="item_number form__field places">
+        <div v-if="id === 1" class="item_number form__field places">
           <p class="form__label">
             Количество благополучателей
           </p>
-          <InputReport @focusout="formData" v-model:value="tenthPanelData.number_beneficiaries"
+          <InputReport @focusout="formData" v-model:value="tenthPanelData.beneficiaries"
                        :disabled="isSent || !tenthPanelData.event_happened" placeholder="Введите число"
                        id="15" name="14"
                        class="form__input number_input" type="number" :max="32767"/>
         </div>
-        <div class="item_number form__field places">
+        
+        <div v-if="id === 1" class="item_number form__field places">
           <p class="form__label">
             Количество населенных пунктов
           </p>
-          <InputReport @focusout="formData" v-model:value="tenthPanelData.number_settlements"
+          <InputReport @focusout="formData" v-model:value="tenthPanelData.settlements"
+                       :disabled="isSent || !tenthPanelData.event_happened" placeholder="Введите число" id="15"
+                       name="14"
+                       class="form__input number_input" type="number" :max="32767"/>
+        </div>
+        <div v-if="id === 2" class="item_number form__field places">
+          <p class="form__label">
+            Количество участников из других НКО
+          </p>
+          <InputReport @focusout="formData" v-model:value="tenthPanelData.other_nko_participants"
                        :disabled="isSent || !tenthPanelData.event_happened" placeholder="Введите число" id="15"
                        name="14"
                        class="form__input number_input" type="number" :max="32767"/>
@@ -306,6 +316,7 @@ import {useReportPartTwoStore} from "@pages/ReportRegionalHQPartTwoPage/store.ts
 const reportStore = useReportPartTwoStore();
 
 const props = defineProps({
+  id: Number,
   data: Object,
   districtExpert: {
     type: Boolean
@@ -336,10 +347,11 @@ const tenthPanelData = ref({
   file_size: '',
   file_type: '',
   comment: '',
-  number_members: '',
-  number_new_members: '',
-  number_beneficiaries: '',
-  number_settlements: '',
+  total_participants: '',
+  new_participants: '',
+  beneficiaries: '',
+  settlements: '',
+  other_nko_participants: '',
   links: [
     {
       link: '',
@@ -349,10 +361,11 @@ const tenthPanelData = ref({
 const tenthPanelDataDH = ref({
   event_happened: null,
   comment: '',
-  number_members: '',
-  number_new_members: '',
-  number_beneficiaries: '',
-  number_settlements: '',
+  total_participants: '',
+  new_participants: '',
+  beneficiaries: '',
+  settlements: '',
+  other_nko_participants: '',
   document: '',
   file_size: '',
   file_type: '',
@@ -360,10 +373,11 @@ const tenthPanelDataDH = ref({
 const tenthPanelDataCH = ref({
   event_happened: null,
   comment: '',
-  number_members: '',
-  number_new_members: '',
-  number_beneficiaries: '',
-  number_settlements: '',
+  total_participants: '',
+  new_participants: '',
+  beneficiaries: '',
+  settlements: '',
+  other_nko_participants: '',
   document: '',
   file_size: '',
   file_type: '',
