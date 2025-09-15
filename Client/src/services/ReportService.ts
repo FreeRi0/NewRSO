@@ -20,6 +20,7 @@ export function getReport() {
 
 export function getReportForSecond() {
     return HTTP.get(`${APPLICATION_NAME}/statistical_report/me/`)
+    // return HTTP.get(`${APPLICATION_NAME}/statistical_report/me_first/`) TODO: нужно разобраться с эндпоинтом для получения первого отчета во второй части
 }
 
 export function getCurrentReport(id: string) {
