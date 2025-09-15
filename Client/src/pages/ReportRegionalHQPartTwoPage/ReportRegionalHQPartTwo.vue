@@ -1659,7 +1659,7 @@ const getReportData = async (reportId) => {
 
       let dataFifteenth;
       try {
-        dataFifteenth = (await reportPartTwoService.getReportDH("15", "1")).data;
+        dataFifteenth = (await reportPartTwoService.getReport("15")).data;
         if (!dataFifteenth.regional_version && !dataFifteenth.central_version) {
           reportData.value.fifteenth = dataFifteenth;
         } else {

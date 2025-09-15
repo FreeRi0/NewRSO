@@ -129,9 +129,10 @@
   );
   
 
-  const updateArea = (index, updatedArea) => {
+  const updateArea = async (index, updatedArea) => {
     areas.value[index] = { ...areas.value[index], ...updatedArea };
     areas.value = areas.value.slice();
+    await saveData()
   };
   
   const saveData = async () => {
@@ -145,8 +146,8 @@
       formData.append('regional_headquarter', String(Number(regionalHqId.value)));
       formData.append('training_quota', String(Number(props.data?.training_quota ?? 0)));
       formData.append('score', String(Number(props.data?.score ?? 0)));
-      formData.append('employment_table_fall_2024', String(Boolean(isFillingTableAutumn2024.value)));
-      formData.append('employment_table_spring_2025', String(Boolean(isFillingTableSpring2025.value)));
+      if (isFillingTableAutumn2024.value !== null) formData.append('employment_table_fall_2024', String(Boolean(isFillingTableAutumn2024.value)));
+      if (isFillingTableSpring2025.value !== null) formData.append('employment_table_spring_2025', String(Boolean(isFillingTableSpring2025.value)));
 
       areas.value.forEach((area, index) => {
         formData.append(`directions[${index}][direction_name]`, area.name ?? '');
