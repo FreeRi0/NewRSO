@@ -1779,9 +1779,6 @@ const setData = (data, panel, number = 0) => {
     case 16:
       reportData.value.sixteenth = data;
       break;
-    case 15:
-      reportData.value.fifteenth = data;
-      break;
     case 17:
       reportData.value.seventeenth = data;
       break;
