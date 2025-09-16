@@ -86,7 +86,7 @@
     data: Object,
     tab: String,
   });
-  
+  console.log(props.data)
   const emit = defineEmits(['get-data']);
   const reportStore = useReportPartTwoStore();
   const userStore = useUserStore();
@@ -156,25 +156,24 @@
         formData.append(`directions[${index}][self_employed]`, String(Number(area.self_employment) || 0));
         formData.append(`directions[${index}][not_employed]`, String(Number(area.number_unemployed) || 0));
 
-        if (area.file && typeof area.file !== 'string') {
-          formData.append(`directions[${index}][zip_file]`, area.file);
-        }
+        formData.append(`directions[${index}][zip_file]`, area.file);
       });
 
       if (!regionalHqId.value) {
         throw new Error('Не удалось определить id регионального штаба пользователя');
       }
       let response;
+
       if(isFirstSent.value){
         response = await reportPartTwoService.createReport(
           formData,
           ID_PANEL
         );
       } else {
-        response = await reportPartTwoService.createReportIdPut(
+        response = await reportPartTwoService.createReportDraft(
           formData,
           ID_PANEL,
-          String(regionalHqId.value)
+          true
         );
       }
  
@@ -193,7 +192,7 @@
      isLoading.value = false;
    }
   };
-  
+
   watchEffect(async () => {
     try {
       if (props.data && Array.isArray(props.data.areas) && props.data.areas.length) {
@@ -207,8 +206,6 @@
           file: area.file || '',
           file_size: area.file_size ?? null,
           file_type: area.file_type || '',
-          isFillingTableAutumn2024: area.isFillingTableAutumn2024 ?? null,
-          isFillingTableSpring2025: area.isFillingTableSpring2025 ?? null,
         }));
       } else if (props.data && Array.isArray(props.data.directions) && props.data.directions.length) {
         isFirstSent.value = false;
@@ -221,8 +218,6 @@
           file: dir.zip_file || '',
           file_size: dir.file_size ?? null,
           file_type: dir.file_type || '',
-          isFillingTableAutumn2024: dir.employment_table_fall_2024 ?? null,
-          isFillingTableSpring2025: dir.employment_table_spring_2025 ?? null,
         }));
       }
 
