@@ -203,6 +203,11 @@ HTTP.interceptors.response.use(
                 // router.push({ name: 'mypage' });
                 return Promise.reject(err.response.data);
             }
+
+            if (err.response?.status === 404) {
+                // Не бросаем ошибку для 404, чтобы обработать в функции
+                return err.response;
+            }
         }
 
         return Promise.reject(err);

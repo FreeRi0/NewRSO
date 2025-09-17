@@ -18,9 +18,19 @@ export function getReport() {
     return HTTP.get(`${APPLICATION_NAME}/statistical_report/me_first/`)
 }
 
-export function getReportForSecond() {
-    return HTTP.get(`${APPLICATION_NAME}/statistical_report/me/`)
-    // return HTTP.get(`${APPLICATION_NAME}/statistical_report/me_first/`) TODO: нужно разобраться с эндпоинтом для получения первого отчета во второй части
+export async function getReportForSecond() {
+    try {
+        const res = await HTTP.get(`${APPLICATION_NAME}/statistical_report/me/`);
+
+        if (res.status === 404) {
+            return await HTTP.get(`${APPLICATION_NAME}/statistical_report/me_first/`);
+        }
+
+        return res;
+
+    } catch (e) {
+        console.log('error', e);
+    }
 }
 
 export function getCurrentReport(id: string) {
@@ -35,8 +45,12 @@ export function patchReport(data: object) {
     return HTTP.patch(`${APPLICATION_NAME}/statistical_report/me/`, data)
 }
 
-export function editReport(data: object) {
-    return HTTP.put(`/${APPLICATION_NAME}/statistical_report/me/`, data)
+export function editReport(data: object, withFile = false) {
+    return HTTP.put(`/${APPLICATION_NAME}/statistical_report/me/`, data, {
+        headers: {
+            'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
+        },
+    })
 }
 
 export const reportPartTwoService = {

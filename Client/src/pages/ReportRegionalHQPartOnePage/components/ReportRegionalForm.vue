@@ -294,103 +294,102 @@
       </div>
     </div>
 
-<!--    TODO: нужно разобраться с эндпоинтом для редактирования первого отчета во второй части-->
-<!--    <div v-if="isSecondReport">-->
-<!--      <div class="form-container form__field-group">-->
-<!--        <p>Количество работников:</p>-->
-<!--        <div class="form-col">-->
-<!--          <div class="form__field">-->
-<!--            <label class="form__label" for="employed_so_poo">Штабы СО ПОО <sup class="valid-red">*</sup></label>-->
-<!--            <InputReport-->
-<!--                v-model:value="reportDataChildren.employed_so_poo"-->
-<!--                id="employed_so_poo"-->
-<!--                name="employed_so_poo"-->
-<!--                class="form__input"-->
-<!--                type="number"-->
-<!--                placeholder="Введите число"-->
-<!--                @focusout="focusOut"-->
-<!--                :disabled="blockEditFirstReport"-->
-<!--            />-->
-<!--          </div>-->
-<!--          <div class="form__field">-->
-<!--            <label class="form__label" for="employed_so_oovo">Штабы СО ООВО <sup class="valid-red">*</sup></label>-->
-<!--            <InputReport-->
-<!--                v-model:value="reportDataChildren.employed_so_oovo"-->
-<!--                id="employed_so_oovo"-->
-<!--                name="employed_so_oovo"-->
-<!--                class="form__input"-->
-<!--                type="number"-->
-<!--                placeholder="Введите число"-->
-<!--                @focusout="focusOut"-->
-<!--                :disabled="blockEditFirstReport"-->
-<!--            />-->
-<!--          </div>-->
-<!--          <div class="form__field">-->
-<!--            <label class="form__label" for="employed_ro_rso">Штабы РО РСО <sup class="valid-red">*</sup></label>-->
-<!--            <InputReport-->
-<!--                v-model:value="reportDataChildren.employed_ro_rso"-->
-<!--                id="employed_ro_rso"-->
-<!--                name="employed_ro_rso"-->
-<!--                class="form__input"-->
-<!--                type="number"-->
-<!--                placeholder="Введите число"-->
-<!--                @focusout="focusOut"-->
-<!--                :disabled="blockEditFirstReport"-->
-<!--            />-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <p>Свой вариант:</p>-->
-<!--        <Button-->
-<!--            v-if="!blockEditFirstReport"-->
-<!--            class="form__add-link-button"-->
-<!--            label="+ Добавить свой вариант"-->
-<!--            @click="addAdditionalStatistics"-->
-<!--        />-->
-<!--        <div class="form-container" v-for="(statistic, i) in reportDataChildren.additional_statistics" :key="i"-->
-<!--             style="align-items: end">-->
-<!--          <div class="form-col">-->
-<!--            <div class="form__field">-->
-<!--              <label class="form__label" for="statisticName">Название подразделения: <sup-->
-<!--                  class="valid-red">*</sup></label>-->
-<!--              <InputReport-->
-<!--                  v-model:value="statistic.name"-->
-<!--                  id="statisticName"-->
-<!--                  name="statisticName"-->
-<!--                  class="form__input"-->
-<!--                  placeholder="название подразделения"-->
-<!--                  @focusout="focusOut"-->
-<!--                  :disabled="blockEditFirstReport"-->
-<!--              />-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div class="form-col">-->
-<!--            <div class="form__field">-->
-<!--              <label class="form__label" for="statisticName">Количество: <sup class="valid-red">*</sup></label>-->
-<!--              <InputReport-->
-<!--                  v-model:value="statistic.value"-->
-<!--                  id="statisticQuantity"-->
-<!--                  name="statisticQuantity"-->
-<!--                  class="form__input"-->
-<!--                  type="number"-->
-<!--                  placeholder="количество"-->
-<!--                  @focusout="focusOut"-->
-<!--                  :disabled="blockEditFirstReport"-->
-<!--              />-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div class="form-col">-->
-<!--            <div class="form__field">-->
-<!--              <Button-->
-<!--                  v-if="!blockEditFirstReport"-->
-<!--                  class="form__add-link-button"-->
-<!--                  label="Удалить свой вариант"-->
-<!--                  @click="deleteAdditionalStatistics(i)"-->
-<!--              />-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
+    <div v-if="isSecondReport">
+      <div class="form-container form__field-group">
+        <p>Количество работников:</p>
+        <div class="form-col">
+          <div class="form__field">
+            <label class="form__label" for="employed_so_poo">Штабы СО ПОО <sup class="valid-red">*</sup></label>
+            <InputReport
+                v-model:value="reportDataChildren.employed_so_poo"
+                id="employed_so_poo"
+                name="employed_so_poo"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                @focusout="focusOut"
+                :disabled="blockEditFirstReport"
+            />
+          </div>
+          <div class="form__field">
+            <label class="form__label" for="employed_so_oovo">Штабы СО ООВО <sup class="valid-red">*</sup></label>
+            <InputReport
+                v-model:value="reportDataChildren.employed_so_oovo"
+                id="employed_so_oovo"
+                name="employed_so_oovo"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                @focusout="focusOut"
+                :disabled="blockEditFirstReport"
+            />
+          </div>
+          <div class="form__field">
+            <label class="form__label" for="employed_ro_rso">Штабы РО РСО <sup class="valid-red">*</sup></label>
+            <InputReport
+                v-model:value="reportDataChildren.employed_ro_rso"
+                id="employed_ro_rso"
+                name="employed_ro_rso"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                @focusout="focusOut"
+                :disabled="blockEditFirstReport"
+            />
+          </div>
+        </div>
+        <p>Свой вариант:</p>
+        <Button
+            v-if="!blockEditFirstReport"
+            class="form__add-link-button"
+            label="+ Добавить свой вариант"
+            @click="addAdditionalStatistics"
+        />
+        <div class="form-container" v-for="(statistic, i) in reportDataChildren.additional_statistics" :key="i"
+             style="align-items: end">
+          <div class="form-col">
+            <div class="form__field">
+              <label class="form__label" for="statisticName">Название подразделения: <sup
+                  class="valid-red">*</sup></label>
+              <InputReport
+                  v-model:value="statistic.name"
+                  id="statisticName"
+                  name="statisticName"
+                  class="form__input"
+                  placeholder="название подразделения"
+                  @focusout="focusOut"
+                  :disabled="blockEditFirstReport"
+              />
+            </div>
+          </div>
+          <div class="form-col">
+            <div class="form__field">
+              <label class="form__label" for="statisticName">Количество: <sup class="valid-red">*</sup></label>
+              <InputReport
+                  v-model:value="statistic.value"
+                  id="statisticQuantity"
+                  name="statisticQuantity"
+                  class="form__input"
+                  type="number"
+                  placeholder="количество"
+                  @focusout="focusOut"
+                  :disabled="blockEditFirstReport"
+              />
+            </div>
+          </div>
+          <div class="form-col">
+            <div class="form__field">
+              <Button
+                  v-if="!blockEditFirstReport"
+                  class="form__add-link-button"
+                  label="Удалить свой вариант"
+                  @click="deleteAdditionalStatistics(i)"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </form>
   <Button
@@ -486,30 +485,50 @@ const sentReport = () => {
   emit('sentReport', reportDataChildren.value);
 };
 
-const uploadFile = (event) => {
+const uploadFile = async (event) => {
   document.value.document = event.target.files[0].name;
   document.value.file_size = (event.target.files[0].size / Math.pow(1024, 2));
   document.value.file_type = event.target.files[0].type.split('/').at(-1);
   reportDataChildren.value.supporting_documents = event.target.files[0];
+
+  let formData = new FormData();
+
+  Object.keys(reportDataChildren.value).forEach(key => {
+    const value = reportDataChildren.value[key];
+    formData.append(key, value !== undefined && value !== null ? value : '');
+  });
+
+  const {data} = await editReport(formData, true);
+  emit('sentReport', data);
 };
 
-const deleteFile = () => {
+const deleteFile = async () => {
   document.value.document = '';
   document.value.file_size = '';
   document.value.file_type = '';
   reportDataChildren.value.supporting_documents = '';
+
+  let formData = new FormData();
+
+  Object.keys(reportDataChildren.value).forEach(key => {
+    const value = reportDataChildren.value[key];
+    formData.append(key, value !== undefined && value !== null ? value : '');
+  });
+
+  const {data} = await editReport(reportDataChildren.value, true);
+  emit('sentReport', data);
 }
 
 const focusOut = async () => {
   if (isSecondReport.value) {
-    // let formData = new FormData();
-    //
-    // Object.keys(reportDataChildren.value).forEach(key => {
-    //   const value = reportDataChildren.value[key];
-    //   formData.append(key, value !== undefined && value !== null ? value : '');
-    // }); TODO: нужно разобраться с эндпоинтом для редактирования первого отчета во второй части
+    let formData = new FormData();
 
-    const {data} = await editReport(reportDataChildren.value);
+    Object.keys(reportDataChildren.value).forEach(key => {
+      const value = reportDataChildren.value[key];
+      formData.append(key, value !== undefined && value !== null ? value : '');
+    });
+
+    const {data} = await editReport(reportDataChildren.value, true);
     emit('sentReport', data);
   }
 };
@@ -524,7 +543,14 @@ const deleteAdditionalStatistics = async (index) => {
   reportDataChildren.value.additional_statistics.splice(index, 1)
 
   if (isSecondReport.value) {
-    const {data} = await editReport(reportDataChildren.value);
+    let formData = new FormData();
+
+    Object.keys(reportDataChildren.value).forEach(key => {
+      const value = reportDataChildren.value[key];
+      formData.append(key, value !== undefined && value !== null ? value : '');
+    });
+
+    const {data} = await editReport(formData, true);
     emit('sentReport', data);
   }
 }
