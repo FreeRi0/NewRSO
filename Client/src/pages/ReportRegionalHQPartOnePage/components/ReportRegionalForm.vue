@@ -536,7 +536,7 @@ const focusOut = async () => {
 const addAdditionalStatistics = () => {
   reportDataChildren.value.additional_statistics.push({
     name: '',
-    value: ''
+    value: 0,
   })
 };
 const deleteAdditionalStatistics = async (index) => {

@@ -20,16 +20,12 @@ export function getReport() {
 
 export async function getReportForSecond() {
     try {
-        const res = await HTTP.get(`${APPLICATION_NAME}/statistical_report/me/`);
-
-        if (res.status === 404) {
+        return await HTTP.get(`${APPLICATION_NAME}/statistical_report/me/`);
+    } catch (e) {
+        if (e.response && e.response.status === 404) {
             return await HTTP.get(`${APPLICATION_NAME}/statistical_report/me_first/`);
         }
-
-        return res;
-
-    } catch (e) {
-        console.log('error', e);
+        throw e;
     }
 }
 
