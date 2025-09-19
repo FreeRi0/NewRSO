@@ -21,7 +21,7 @@ export function getReport() {
 export async function getReportForSecond() {
     try {
         return await HTTP.get(`${APPLICATION_NAME}/statistical_report/me/`);
-    } catch (e) {
+    } catch (e: any) {
         if (e.response && e.response.status === 404) {
             return await HTTP.get(`${APPLICATION_NAME}/statistical_report/me_first/`);
         }
