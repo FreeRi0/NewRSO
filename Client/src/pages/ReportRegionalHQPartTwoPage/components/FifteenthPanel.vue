@@ -86,7 +86,7 @@
     data: Object,
     tab: String,
   });
-  console.log(props.data)
+
   const emit = defineEmits(['get-data']);
   const reportStore = useReportPartTwoStore();
   const userStore = useUserStore();
@@ -120,7 +120,7 @@
       
       const fileAttached = area.file !== '';
       
-      return numbersFilled && fileAttached;
+      return numbersFilled && fileAttached && isFillingTableAutumn2024.value!= null && isFillingTableSpring2025.value != null;
     });
   });
 
