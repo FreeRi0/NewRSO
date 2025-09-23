@@ -151,10 +151,10 @@
 
       areas.value.forEach((area, index) => {
         formData.append(`directions[${index}][direction_name]`, area.name ?? '');
-        formData.append(`directions[${index}][trained_total]`, String(Number(area.number_trained) || 0));
-        formData.append(`directions[${index}][employed_by_direction]`, String(Number(area.number_employed) || 0));
-        formData.append(`directions[${index}][self_employed]`, String(Number(area.self_employment) || 0));
-        formData.append(`directions[${index}][not_employed]`, String(Number(area.number_unemployed) || 0));
+        if (area.number_trained) formData.append(`directions[${index}][trained_total]`, String(Number(area.number_trained) || 0)); else formData.append(`directions[${index}][trained_total]`, '')
+        if (area.number_employed) formData.append(`directions[${index}][employed_by_direction]`, String(Number(area.number_employed) || 0)); else formData.append(`directions[${index}][employed_by_direction]`, '')
+        if (area.self_employment) formData.append(`directions[${index}][self_employed]`, String(Number(area.self_employment) || 0)); else formData.append(`directions[${index}][self_employed]`, '')
+        if (area.number_unemployed) formData.append(`directions[${index}][not_employed]`, String(Number(area.number_unemployed) || 0)); else formData.append(`directions[${index}][not_employed]`, '')
 
         formData.append(`directions[${index}][zip_file]`, area.file);
       });
