@@ -11,7 +11,7 @@
                         <div class="area__form_data_number_item">
                             <span>Общее количество обученных<span class="valid-red">&nbsp;*</span></span>
                             <InputReport @focusout="focusOut" v-model:value="area_from.number_trained" :is-link="false"
-                                placeholder="Введите число" id="15" name="14" class="form__input number_input"
+                                placeholder="Введите число" id="15" name="14" class="form__input number_input" 
                                 type="number" :max="32767" style="width: 100%;"
                                 :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
                         </div>
@@ -106,10 +106,10 @@ watchEffect(() => {
     if (props.area) {
         area_from.value = {
             name: props.area.name,
-            number_trained: props.area.number_trained || '',
-            number_employed: props.area.number_employed || '',
-            self_employment: props.area.self_employment || '',
-            number_unemployed: props.area.number_unemployed || '',
+            number_trained: props.area.number_trained ?? '',
+            number_employed: props.area.number_employed ?? '',
+            self_employment: props.area.self_employment ?? '',
+            number_unemployed: props.area.number_unemployed ?? '',
             file: props.area.file || '',
             file_size: props.area.file_size || null,
             file_type: props.area.file_type || '',
