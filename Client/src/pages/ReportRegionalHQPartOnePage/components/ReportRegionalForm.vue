@@ -491,15 +491,17 @@ const uploadFile = async (event) => {
   document.value.file_type = event.target.files[0].type.split('/').at(-1);
   reportDataChildren.value.supporting_documents = event.target.files[0];
 
-  let formData = new FormData();
+  if (isSecondReport.value) {
+    // let formData = new FormData();
+    //
+    // Object.keys(reportDataChildren.value).forEach(key => {
+    //   const value = reportDataChildren.value[key];
+    //   formData.append(key, value !== undefined && value !== null ? value : '');
+    // });
 
-  Object.keys(reportDataChildren.value).forEach(key => {
-    const value = reportDataChildren.value[key];
-    formData.append(key, value !== undefined && value !== null ? value : '');
-  });
-
-  const {data} = await editReport(formData, true);
-  emit('sentReport', data);
+    const {data} = await editReport(reportDataChildren.value, true);
+    emit('sentReport', data);
+  }
 };
 
 const deleteFile = async () => {
@@ -508,25 +510,27 @@ const deleteFile = async () => {
   document.value.file_type = '';
   reportDataChildren.value.supporting_documents = '';
 
-  let formData = new FormData();
+  if (isSecondReport.value) {
+    // let formData = new FormData();
+    //
+    // Object.keys(reportDataChildren.value).forEach(key => {
+    //   const value = reportDataChildren.value[key];
+    //   formData.append(key, value !== undefined && value !== null ? value : '');
+    // });
 
-  Object.keys(reportDataChildren.value).forEach(key => {
-    const value = reportDataChildren.value[key];
-    formData.append(key, value !== undefined && value !== null ? value : '');
-  });
-
-  const {data} = await editReport(reportDataChildren.value, true);
-  emit('sentReport', data);
+    const {data} = await editReport(reportDataChildren.value, true);
+    emit('sentReport', data);
+  }
 }
 
 const focusOut = async () => {
   if (isSecondReport.value) {
-    let formData = new FormData();
-
-    Object.keys(reportDataChildren.value).forEach(key => {
-      const value = reportDataChildren.value[key];
-      formData.append(key, value !== undefined && value !== null ? value : '');
-    });
+    // let formData = new FormData();
+    //
+    // Object.keys(reportDataChildren.value).forEach(key => {
+    //   const value = reportDataChildren.value[key];
+    //   formData.append(key, value !== undefined && value !== null ? value : '');
+    // });
 
     const {data} = await editReport(reportDataChildren.value, true);
     emit('sentReport', data);
@@ -543,14 +547,15 @@ const deleteAdditionalStatistics = async (index) => {
   reportDataChildren.value.additional_statistics.splice(index, 1)
 
   if (isSecondReport.value) {
-    let formData = new FormData();
+    // let formData = new FormData();
+    //
+    // Object.keys(reportDataChildren.value).forEach(key => {
+    //   const value = reportDataChildren.value[key];
+    //   console.log('key', value)
+    //   formData.append(key, value !== undefined && value !== null ? value : '');
+    // });
 
-    Object.keys(reportDataChildren.value).forEach(key => {
-      const value = reportDataChildren.value[key];
-      formData.append(key, value !== undefined && value !== null ? value : '');
-    });
-
-    const {data} = await editReport(formData, true);
+    const {data} = await editReport(reportDataChildren.value, true);
     emit('sentReport', data);
   }
 }
