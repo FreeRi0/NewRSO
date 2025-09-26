@@ -4,7 +4,7 @@
             <v-progress-circular v-show="!items.length" class="circleLoader" indeterminate></v-progress-circular>
             <v-expansion-panel :disabled="disabled">
                 <div class="form__field-group">
-                    <select-search-indicator :events="items" v-model="selectedEvent" class="select" />
+                    <select-search-indicator :events="filteredEvents" v-model="selectedEvent" class="select" />
                 </div>
                 <div v-if="selectedEvents.length">
                     <div v-for="event in selectedEvents" :key="event.id" class="form__field-event">
@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { ref, watch, watchEffect } from "vue";
+import { ref, watch, watchEffect, computed } from "vue";
 
 import SelectSearchIndicator from '@shared/components/selects/SelectSearchIndicator.vue'
 import EventForm from "./EventForm.vue";
@@ -45,6 +45,21 @@ const props = defineProps({
     revisionPanels: Array,
     dataDH: Object,
 });
+
+const filteredEvents = computed(() => {
+    const deletedNames = [
+        "Всероссийские трудовые проекты СПО РСО",
+        "Всероссийские трудовые проекты ВСОП",
+        "Всероссийские трудовые проекты ССхО РСО",
+        "Всероссийские студенческие стройки РСО",
+        "Всероссийские трудовые проекты СМО РСО",
+        "Всероссийские трудовые проекты ССервО РСО",
+        "Всероссийские трудовые проекты отрядов подростков",
+        "Всероссийские трудовые проекты жд транспорта"
+    ]
+
+    return props.items.filter((item) => !deletedNames.includes(item.name))
+})
 
 const disabled = ref(false);
 const selectedEvent = ref({});
