@@ -11,7 +11,7 @@
                         <div class="area__form_data_number_item">
                             <span>Общее количество обученных<span class="valid-red">&nbsp;*</span></span>
                             <InputReport @focusout="focusOut" v-model:value="area_from.number_trained" :is-link="false"
-                                placeholder="Введите число" id="15" name="14" class="form__input number_input"
+                                placeholder="Введите число" id="15" name="14" class="form__input number_input" 
                                 type="number" :max="32767" style="width: 100%;"
                                 :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
                         </div>
@@ -43,11 +43,11 @@
                         <span>Загрузите документы, подтверждающие факт трудоустройства<span
                                 class="valid-red">&nbsp;*</span></span>
                         <InputReport class="form-input__file-input" v-if="!area_from.file" isFile type="file"
-                            id="scan_file" name="scan_file" width="100%" @change="uploadFile($event)"
+                            id="scan_file" name="scan_file" width="100%" @change="uploadFile($event)" accept=".zip,application/zip,application/x-zip-compressed"
                             :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
-                        <FileBoxComponent v-else :file="area_from.file" :fileType="area_from.file_type"
-                            :fileSize="area_from.file_size" :is-sent="isSent"
-                            :is-error-file="isErrorFile && !area_from.file_size" @click="deleteFile" />
+                        <FileBoxComponent v-else :file="area_from.file" fileType="zip" :fileSize="area_from.file_size"
+                            :is-sent="isSent" :is-error-file="isErrorFile && !area_from.file_size"
+                            @click="deleteFile" />
                         <span class="area__form_data_file_text">Формат ZIP. Максимум 40 МБ</span>
                     </div>
                 </div>
@@ -106,10 +106,10 @@ watchEffect(() => {
     if (props.area) {
         area_from.value = {
             name: props.area.name,
-            number_trained: props.area.number_trained || '',
-            number_employed: props.area.number_employed || '',
-            self_employment: props.area.self_employment || '',
-            number_unemployed: props.area.number_unemployed || '',
+            number_trained: props.area.number_trained ?? '',
+            number_employed: props.area.number_employed ?? '',
+            self_employment: props.area.self_employment ?? '',
+            number_unemployed: props.area.number_unemployed ?? '',
             file: props.area.file || '',
             file_size: props.area.file_size || null,
             file_type: props.area.file_type || '',
@@ -128,6 +128,8 @@ const uploadFile = async (event) => {
     
     const file = event.target.files[0];
     
+    if(!file.name.toLowerCase().endsWith('.zip')) return
+
     area_from.value.file_size = (file.size / Math.pow(1024, 2));
     area_from.value.file_type = file.type.split('/').at(-1);
     
@@ -141,7 +143,7 @@ const deleteFile = async () => {
     area_from.value.file = '';
     area_from.value.file_size = null;
     area_from.value.file_type = '';
-    
+
     emit('updateArea', area_from.value);
 };
 

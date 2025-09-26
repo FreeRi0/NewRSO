@@ -19,6 +19,7 @@
       :maxlength="maxLength" 
       :readonly="readonly" 
       :max="max"
+      :accept="accept"
       class="form-input__report" 
       :step="step"
       :class="{ 
@@ -153,7 +154,11 @@ const props = defineProps({
   isErrorPanel: {
     type: Boolean,
   },
-  minDate: String
+  minDate: String,
+  accept: {
+    type: String,
+    default: '*/*'
+  }
 });
 
 let isLinkError = ref(false);

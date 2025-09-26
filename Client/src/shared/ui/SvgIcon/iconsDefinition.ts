@@ -29,6 +29,7 @@ export type IconName =
     | 'file-pdf'
     | 'file-jpg'
     | 'file-png'
+    | 'file-zip'
     | 'upside-down-arrow'
     | 'filter'
     | 'add-icon';
@@ -186,6 +187,11 @@ export const defaultIconSizes: IconsRecord = {
         color: '#16a086',
     },
     'file-png': {
+        width: 48,
+        height: 24,
+        color: '#16a086',
+    },
+    'file-zip': {
         width: 48,
         height: 24,
         color: '#16a086',

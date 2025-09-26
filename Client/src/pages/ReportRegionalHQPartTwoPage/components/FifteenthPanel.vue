@@ -86,7 +86,7 @@
     data: Object,
     tab: String,
   });
-  
+
   const emit = defineEmits(['get-data']);
   const reportStore = useReportPartTwoStore();
   const userStore = useUserStore();
@@ -120,7 +120,7 @@
       
       const fileAttached = area.file !== '';
       
-      return numbersFilled && fileAttached;
+      return numbersFilled && fileAttached && isFillingTableAutumn2024.value!= null && isFillingTableSpring2025.value != null;
     });
   });
 
@@ -129,9 +129,10 @@
   );
   
 
-  const updateArea = (index, updatedArea) => {
+  const updateArea = async (index, updatedArea) => {
     areas.value[index] = { ...areas.value[index], ...updatedArea };
     areas.value = areas.value.slice();
+    await saveData()
   };
   
   const saveData = async () => {
@@ -145,35 +146,34 @@
       formData.append('regional_headquarter', String(Number(regionalHqId.value)));
       formData.append('training_quota', String(Number(props.data?.training_quota ?? 0)));
       formData.append('score', String(Number(props.data?.score ?? 0)));
-      formData.append('employment_table_fall_2024', String(Boolean(isFillingTableAutumn2024.value)));
-      formData.append('employment_table_spring_2025', String(Boolean(isFillingTableSpring2025.value)));
+      if (isFillingTableAutumn2024.value !== null) formData.append('employment_table_fall_2024', String(Boolean(isFillingTableAutumn2024.value)));
+      if (isFillingTableSpring2025.value !== null) formData.append('employment_table_spring_2025', String(Boolean(isFillingTableSpring2025.value)));
 
       areas.value.forEach((area, index) => {
         formData.append(`directions[${index}][direction_name]`, area.name ?? '');
-        formData.append(`directions[${index}][trained_total]`, String(Number(area.number_trained) || 0));
-        formData.append(`directions[${index}][employed_by_direction]`, String(Number(area.number_employed) || 0));
-        formData.append(`directions[${index}][self_employed]`, String(Number(area.self_employment) || 0));
-        formData.append(`directions[${index}][not_employed]`, String(Number(area.number_unemployed) || 0));
+        if (area.number_trained) formData.append(`directions[${index}][trained_total]`, String(Number(area.number_trained) || 0)); else formData.append(`directions[${index}][trained_total]`, '')
+        if (area.number_employed) formData.append(`directions[${index}][employed_by_direction]`, String(Number(area.number_employed) || 0)); else formData.append(`directions[${index}][employed_by_direction]`, '')
+        if (area.self_employment) formData.append(`directions[${index}][self_employed]`, String(Number(area.self_employment) || 0)); else formData.append(`directions[${index}][self_employed]`, '')
+        if (area.number_unemployed) formData.append(`directions[${index}][not_employed]`, String(Number(area.number_unemployed) || 0)); else formData.append(`directions[${index}][not_employed]`, '')
 
-        if (area.file && typeof area.file !== 'string') {
-          formData.append(`directions[${index}][zip_file]`, area.file);
-        }
+        formData.append(`directions[${index}][zip_file]`, area.file);
       });
 
       if (!regionalHqId.value) {
         throw new Error('Не удалось определить id регионального штаба пользователя');
       }
       let response;
+
       if(isFirstSent.value){
         response = await reportPartTwoService.createReport(
           formData,
           ID_PANEL
         );
       } else {
-        response = await reportPartTwoService.createReportIdPut(
+        response = await reportPartTwoService.createReportDraft(
           formData,
           ID_PANEL,
-          String(regionalHqId.value)
+          true
         );
       }
  
@@ -192,7 +192,7 @@
      isLoading.value = false;
    }
   };
-  
+
   watchEffect(async () => {
     try {
       if (props.data && Array.isArray(props.data.areas) && props.data.areas.length) {
@@ -206,8 +206,6 @@
           file: area.file || '',
           file_size: area.file_size ?? null,
           file_type: area.file_type || '',
-          isFillingTableAutumn2024: area.isFillingTableAutumn2024 ?? null,
-          isFillingTableSpring2025: area.isFillingTableSpring2025 ?? null,
         }));
       } else if (props.data && Array.isArray(props.data.directions) && props.data.directions.length) {
         isFirstSent.value = false;
@@ -220,8 +218,6 @@
           file: dir.zip_file || '',
           file_size: dir.file_size ?? null,
           file_type: dir.file_type || '',
-          isFillingTableAutumn2024: dir.employment_table_fall_2024 ?? null,
-          isFillingTableSpring2025: dir.employment_table_spring_2025 ?? null,
         }));
       }
 

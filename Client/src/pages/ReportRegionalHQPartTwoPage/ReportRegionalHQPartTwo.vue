@@ -1659,7 +1659,7 @@ const getReportData = async (reportId) => {
 
       let dataFifteenth;
       try {
-        dataFifteenth = (await reportPartTwoService.getReportDH("15", "1")).data;
+        dataFifteenth = (await reportPartTwoService.getReport("15")).data;
         if (!dataFifteenth.regional_version && !dataFifteenth.central_version) {
           reportData.value.fifteenth = dataFifteenth;
         } else {
@@ -1778,9 +1778,6 @@ const setData = (data, panel, number = 0) => {
       break;
     case 16:
       reportData.value.sixteenth = data;
-      break;
-    case 15:
-      reportData.value.fifteenth = data;
       break;
     case 17:
       reportData.value.seventeenth = data;
@@ -2684,7 +2681,73 @@ const checkEmptyFields = (data) => {
     return false;
   }
 
-  // Добавить 15 показатель
+  if (data.fifteenth) {
+    const normalizedAreas = Array.isArray(data.fifteenth.areas)
+      ? data.fifteenth.areas
+      : Array.isArray(data.fifteenth.directions)
+      ? data.fifteenth.directions.map((dir) => ({
+          number_trained: dir.trained_total,
+          number_employed: dir.employed_by_direction,
+          self_employment: dir.self_employed,
+          number_unemployed: dir.not_employed,
+          file: dir.zip_file,
+        }))
+      : [];
+
+    if (!normalizedAreas.length) {
+      isErrorPanel.value.fifteenth = true;
+      swal.fire({
+        position: "center",
+        icon: "warning",
+        title: `Заполните обязательные поля в 15 показателе`,
+        showConfirmButton: false,
+        timer: 2500,
+      });
+      return false;
+    }
+
+    for (let area of normalizedAreas) {
+      const numbersFilled =
+        area.number_trained !== "" &&
+        area.number_trained !== null &&
+        area.number_trained !== undefined &&
+        area.number_employed !== "" &&
+        area.number_employed !== null &&
+        area.number_employed !== undefined &&
+        area.self_employment !== "" &&
+        area.self_employment !== null &&
+        area.self_employment !== undefined &&
+        area.number_unemployed !== "" &&
+        area.number_unemployed !== null &&
+        area.number_unemployed !== undefined;
+
+      const fileAttached = !!(area.file && area.file !== "");
+
+      if (!(numbersFilled && fileAttached)) {
+        isErrorPanel.value.fifteenth = true;
+        swal.fire({
+          position: "center",
+          icon: "warning",
+          title: `Заполните обязательные поля в 15 показателе`,
+          showConfirmButton: false,
+          timer: 2500,
+        });
+        return false;
+      }
+    }
+
+    isErrorPanel.value.fifteenth = false;
+  } else {
+    isErrorPanel.value.fifteenth = true;
+    swal.fire({
+      position: "center",
+      icon: "warning",
+      title: `Заполните обязательные поля в 15 показателе`,
+      showConfirmButton: false,
+      timer: 2500,
+    });
+    return false;
+  }
 
   return true;
 };

@@ -18,8 +18,15 @@ export function getReport() {
     return HTTP.get(`${APPLICATION_NAME}/statistical_report/me_first/`)
 }
 
-export function getReportForSecond() {
-    return HTTP.get(`${APPLICATION_NAME}/statistical_report/me/`)
+export async function getReportForSecond() {
+    try {
+        return await HTTP.get(`${APPLICATION_NAME}/statistical_report/me/`);
+    } catch (e: any) {
+        if (e.response && e.response.status === 404) {
+            return await HTTP.get(`${APPLICATION_NAME}/statistical_report/me_first/`);
+        }
+        throw e;
+    }
 }
 
 export function getCurrentReport(id: string) {
@@ -34,8 +41,12 @@ export function patchReport(data: object) {
     return HTTP.patch(`${APPLICATION_NAME}/statistical_report/me/`, data)
 }
 
-export function editReport(data: object) {
-    return HTTP.put(`/${APPLICATION_NAME}/statistical_report/me/`, data)
+export function editReport(data: object, withFile = false) {
+    return HTTP.put(`/${APPLICATION_NAME}/statistical_report/me/`, data, {
+        headers: {
+            'Content-Type': withFile ? 'multipart/form-data' : 'application/json',
+        },
+    })
 }
 
 export const reportPartTwoService = {
