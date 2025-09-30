@@ -52,12 +52,12 @@
           </label>
         </div>
       </div>
-
+<!-- 
       <div class="save-button" v-if="!(props.centralExpert || props.districtExpert)">
         <button @click="saveData" aria-label="Сохранить" class="save-button_button" :disabled="!isFormValid">
           <span class="save-button_label">Сохранить</span>
         </button>
-      </div>
+      </div> -->
     </div>
 
   </div>
@@ -194,9 +194,12 @@
   };
 
   watchEffect(async () => {
+    console.log(props.data)
     try {
       if (props.data && Array.isArray(props.data.areas) && props.data.areas.length) {
         isFirstSent.value = false;
+        isFillingTableAutumn2024.value = props.data.employment_table_fall_2024
+        isFillingTableSpring2025.value = props.data.employment_table_spring_2025
         areas.value = props.data.areas.map(area => ({
           name: area.name || '',
           number_trained: area.number_trained ?? '',
@@ -209,6 +212,8 @@
         }));
       } else if (props.data && Array.isArray(props.data.directions) && props.data.directions.length) {
         isFirstSent.value = false;
+        isFillingTableAutumn2024.value = props.data.employment_table_fall_2024
+        isFillingTableSpring2025.value = props.data.employment_table_spring_2025
         areas.value = props.data.directions.map(dir => ({
           name: dir.direction_name || '',
           number_trained: dir.trained_total ?? '',
