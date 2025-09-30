@@ -8,7 +8,7 @@
                     icon-name="file-jpg" />
             <SvgIcon v-if="fileType === 'pdf' || fileType === 'PDF'" icon-name="file-pdf" />
             <SvgIcon v-if="fileType === 'png'" icon-name="file-png" />
-            <SvgIcon v-if="fileType === 'zip'" icon-name="file-zip" />
+            <SvgIcon v-if="fileType === 'zip' || fileType === 'x-zip-compressed'" icon-name="file-zip" />
             <a target="_blank" :href=file>{{ decodeURI(file.split('/').at(-1)) }}</a>
         </div>
 
