@@ -64,7 +64,7 @@
 </template>
 
 <script setup>
-  import { ref, defineProps, watchEffect, computed } from 'vue';
+  import { ref, defineProps, watchEffect, computed, watch } from 'vue';
   import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
   import { reportPartTwoService } from "@services/ReportService.ts";
   import { useUserStore } from '@features/store/index';
@@ -192,6 +192,12 @@
      isLoading.value = false;
    }
   };
+
+  watch([isFillingTableAutumn2024, isFillingTableSpring2025], () => {
+    if (isFillingTableAutumn2024.value !== null && isFillingTableSpring2025.value !== null) {
+      saveData();
+    }
+  });
 
   watchEffect(async () => {
     console.log(props.data)
