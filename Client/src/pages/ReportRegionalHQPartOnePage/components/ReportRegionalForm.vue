@@ -500,6 +500,7 @@ const uploadFile = async (event) => {
     // });
 
     const {data} = await editReport(reportDataChildren.value, true);
+    document.value.document = data.supporting_documents;
     emit('sentReport', data);
   }
 };

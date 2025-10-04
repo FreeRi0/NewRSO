@@ -9,7 +9,11 @@
             <SvgIcon v-if="fileType === 'pdf' || fileType === 'PDF'" icon-name="file-pdf" />
             <SvgIcon v-if="fileType === 'png'" icon-name="file-png" />
             <SvgIcon v-if="fileType === 'zip' || fileType === 'x-zip-compressed'" icon-name="file-zip" />
-            <a target="_blank" :href=file>{{ decodeURI(file.split('/').at(-1)) }}</a>
+            <a
+                :href=file
+                :download="getFileName"
+                :target="props.fileType.includes('zip') ? '' : '_blank'"
+            >{{ decodeURI(file.split('/').at(-1)) }}</a>
         </div>
 
         <span class="report__file-size" v-if="fileSize">
@@ -34,6 +38,7 @@
 
 <script setup>
 import { SvgIcon } from '@shared/index';
+import {computed} from "vue";
 
 defineOptions({
     inheritAttrs: false,
@@ -65,4 +70,11 @@ const emit = defineEmits(['click']);
 const clickOnButton = () => {
     emit('click');
 };
+
+const getFileName = computed(() => {
+  if (typeof props.file === 'string') {
+    return props.file.split('/').at(-1);
+  }
+  return 'download.zip';
+});
 </script>
