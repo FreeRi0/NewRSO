@@ -40,8 +40,7 @@
                     </div>
 
                     <div class="area__form_data_file">
-                        <span>Загрузите документы, подтверждающие факт трудоустройства<span
-                                class="valid-red">&nbsp;*</span></span>
+                        <span>Загрузите документы, подтверждающие факт трудоустройства</span>
                         <InputReport class="form-input__file-input" v-if="!area_from.file" isFile type="file"
                             id="scan_file" name="scan_file" width="100%" @change="uploadFile($event)" accept=".zip,application/zip,application/x-zip-compressed"
                             :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
