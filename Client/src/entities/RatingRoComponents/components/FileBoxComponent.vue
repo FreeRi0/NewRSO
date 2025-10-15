@@ -10,7 +10,7 @@
             <SvgIcon v-if="fileType === 'png'" icon-name="file-png" />
             <SvgIcon v-if="fileType === 'zip' || fileType === 'x-zip-compressed'" icon-name="file-zip" />
             <a
-                :href=file
+                :href="isProduction ? safeFileUrl : file"
                 :download="getFileName"
                 :target="props.fileType.includes('zip') ? '' : '_blank'"
             >{{ decodeURI(file.split('/').at(-1)) }}</a>
@@ -76,5 +76,28 @@ const getFileName = computed(() => {
     return props.file.split('/').at(-1);
   }
   return 'download.zip';
+});
+
+const isProduction = computed(() => {
+  const hostname = window.location.hostname;
+
+  return hostname.includes('лк.трудкрут.рф') || hostname.includes('xn--j1ab.xn--d1amqcgedd.xn--p1ai');
+});
+
+// Замена http на https
+const safeFileUrl = computed(() => {
+  if (typeof props.file !== 'string') return props.file;
+
+  let url = props.file;
+
+  if (url.startsWith('http://')) {
+    url = url.replace('http://', 'https://');
+  }
+
+  if (url.startsWith('//')) {
+    url = 'https:' + url;
+  }
+
+  return url;
 });
 </script>
