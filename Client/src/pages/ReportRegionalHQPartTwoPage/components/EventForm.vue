@@ -46,7 +46,7 @@
                                 placeholder="Введите число" id="15" name="14" class="form__input number_input"
                                 type="number" :max="32767" />
                         </div>
-                        <p class="delete-event" @click="deleteEvent">
+                        <p class="delete-event" @click="deleteEvent" v-if="correctionTab !== 2 && correctionTab !== 3">
                             — Удалить мероприятие
                         </p>
                     </div>
@@ -70,7 +70,7 @@
                         </div>
                     </div>
 
-                    <div class="form__field">
+                    <div class="form__field" v-if="correctionTab !== 2">
                         <label class="form__label" for="14">Ссылка на социальные сети/ электронные<br>
                             СМИ, подтверждающая участие в мероприятии
                             <sup class="valid-red">*</sup></label>
@@ -134,6 +134,10 @@ const props = defineProps({
         type: String,
         default: '',
     },
+    correctionTab: {
+        type: Number,
+        default: 0,
+    }
 })
 
 console.log(props.data)
@@ -148,7 +152,7 @@ const eventData = ref({
 })
 
 const isFirstPart = computed(() => {
-    return props.event.id <=56;
+    return props.event.id <= 56;
 })
 
 const emit = defineEmits(['collapse-form', 'delete-event', 'formData', 'formDataDH', 'formDataCH', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'deleteFileDH', 'error']);
