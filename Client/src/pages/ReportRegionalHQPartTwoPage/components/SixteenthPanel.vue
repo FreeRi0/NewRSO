@@ -799,10 +799,10 @@ onMounted(() => {
   /*
   * Мапинг данных для отчета эксперта ОШ
   */
-  if (reportStore.reportDataDH.sixteenth && props.districtExpert) {
-    sixteenthPanelDataDH.value.is_project = reportStore.reportDataDH.sixteenth.is_project;
-    sixteenthPanelDataDH.value.comment = reportStore.reportDataDH.sixteenth.comment;
-    sixteenthPanelDataDH.value.projects = [...reportStore.reportDataDH.sixteenth.projects];
+  if (reportStore.reportDataDH.fourteenth && props.districtExpert) {
+    sixteenthPanelDataDH.value.is_project = reportStore.reportDataDH.fourteenth.is_project;
+    sixteenthPanelDataDH.value.comment = reportStore.reportDataDH.fourteenth.comment;
+    sixteenthPanelDataDH.value.projects = [...reportStore.reportDataDH.fourteenth.projects];
   }
 
   /*
