@@ -35,7 +35,9 @@
             <slot name="firstTab"></slot>
           </div>
 
-            <slot name="firstTab_additionalSlot"></slot>
+          <slot name="firstTab_additionalSlot"></slot>
+
+          <slot name="firstTab_additionalSlot_2"></slot>
 
         </v-tabs-window-item>
         <v-tabs-window-item value="two" v-if="
