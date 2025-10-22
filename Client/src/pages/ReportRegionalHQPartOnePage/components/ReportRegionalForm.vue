@@ -157,6 +157,7 @@
             id="scan_file"
             name="scan_file"
             @change="uploadFile"
+            :disabled="blockEditFirstReport"
         />
         <FileBoxComponent
             v-else
@@ -164,6 +165,7 @@
             :fileType="document.file_type"
             :fileSize="document.file_size"
             @click="deleteFile"
+            :disabled="blockEditFirstReport"
         />
       </div>
     </div>
@@ -468,8 +470,8 @@ const document = ref({
   file_type: ''
 });
 
-watchEffect(() => {
-  if (route.fullPath === '/reporting-ro/report-regional-two') {
+watchEffect(async () => {
+  if (route.fullPath.includes('reporting-ro/report-regional-two')) {
     isSecondReport.value = true;
   }
   reportDataChildren.value = {...props.reportData};

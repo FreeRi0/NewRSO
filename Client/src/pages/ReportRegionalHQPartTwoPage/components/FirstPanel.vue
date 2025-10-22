@@ -739,7 +739,6 @@
         />
       </div>
 
-<!--      <ReportRegionalForm v-if="reportData?.id" :reportData="reportData" :blockEditFirstReport="true"/>-->
     </template>
 
     <template v-slot:firstTab_additionalSlot>
@@ -1124,6 +1123,10 @@
       </div>
     </template>
 
+    <template v-slot:firstTab_additionalSlot_2>
+      <ReportRegionalForm :reportData="reportData" :blockEditFirstReport="true"/>
+    </template>
+
     <!--    second-->
     <template v-slot:secondTab>
       <div class="form__field-report">
@@ -1139,7 +1142,7 @@
               placeholder="Введите число"
               :maxlength="10"
               :min="0"
-              :max="32767"
+              :max="9999999999"
               :step="0.01"
               :disabled="props.centralExpert || reportStore.isReportReject?.first || reportStore.isAllReportsVerifiedByCH"
               :is-error-panel="isErrorPanel"
