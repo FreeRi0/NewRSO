@@ -31,7 +31,7 @@
                 </template>
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-                <div class="bg_form">
+                <div class="bg_form" v-if="correctionTab !== 3">
                     <div class="top_line">
                         <div class="form__field places">
                             <p class="form__label" v-if="isFirstPart">
@@ -46,7 +46,7 @@
                                 placeholder="Введите число" id="15" name="14" class="form__input number_input"
                                 type="number" :max="32767" />
                         </div>
-                        <p class="delete-event" @click="deleteEvent">
+                        <p class="delete-event" @click="deleteEvent" v-if="correctionTab !== 2 && correctionTab !== 3">
                             — Удалить мероприятие
                         </p>
                     </div>
@@ -70,7 +70,7 @@
                         </div>
                     </div>
 
-                    <div class="form__field">
+                    <div class="form__field" v-if="correctionTab !== 2">
                         <label class="form__label" for="14">Ссылка на социальные сети/ электронные<br>
                             СМИ, подтверждающая участие в мероприятии
                             <sup class="valid-red">*</sup></label>
@@ -101,6 +101,23 @@
 
                     </div>
                 </div>
+                <div class="bg_form" v-else>
+                    <ReportTable label="Количество человек, принявших участие в мероприятии" class="mb-4"
+                        name="sixPanelData.number_of_members" :dataRH="data.number_of_members"
+                        :dataDH="data.hq_number_of_members ? data.hq_number_of_members : data.number_of_members"
+                        v-model:value="sixPanelDataCH.number_of_members" :maxlength="10" :min="0" :max="2147483647"
+                        :is-error-panel="isErrorPanel">
+                    </ReportTable>
+                    <div class="form__field">
+                        <label class="form__label" for="14">Комментарий </label>
+                        <TextareaReport v-model:value="CH_comment" id="comment" name="comment" :rows="1" autoResize
+                            placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000"
+                            :max-length-text="3000" counter-visible />
+
+                    </div>
+                    <v-checkbox label="Вернуть в РО на доработку" @change="onReportReturn" />
+
+                </div>
             </v-expansion-panel-text>
         </v-expansion-panel>
     </v-expansion-panels>
@@ -112,6 +129,9 @@ import { ref, defineProps, watchEffect, computed, watch } from 'vue';
 import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { reportPartTwoService } from '@services/ReportService.ts';
+import {
+    ReportTable,
+} from '@entities/RatingRoComponents/components';
 
 const props = defineProps({
     event: {
@@ -134,11 +154,15 @@ const props = defineProps({
         type: String,
         default: '',
     },
+    correctionTab: {
+        type: Number,
+        default: 0,
+    }
 })
 
 console.log(props.data)
 console.log(props.event)
-
+const sixPanelDataCH = ref({ number_of_members: null })
 const eventData = ref({
     number_of_members: 0,
     links: [{ link: '' }],
@@ -146,9 +170,9 @@ const eventData = ref({
     is_hq_member: false,
     hq_members_count: null,
 })
-
+const CH_comment = ref();
 const isFirstPart = computed(() => {
-    return props.event.id <=56;
+    return props.event.id <= 56;
 })
 
 const emit = defineEmits(['collapse-form', 'delete-event', 'formData', 'formDataDH', 'formDataCH', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'deleteFileDH', 'error']);
@@ -168,13 +192,22 @@ const setError = (err) => {
 }
 
 const focusOut = async () => {
-    emit('formData', {
-        number_of_members: eventData.value.number_of_members,
-        links: eventData.value.links,
-        comment: eventData.value.comment,
-        is_hq_member: eventData.value.is_hq_member,
-        hq_members_count: eventData.value.hq_members_count,
-    });
+    console.log(props.correctionTab)
+    if (props.correctionTab !== 2 && props.correctionTab !== 3) {
+        emit('formData', {
+            number_of_members: eventData.value.number_of_members,
+            links: eventData.value.links,
+            comment: eventData.value.comment,
+            is_hq_member: eventData.value.is_hq_member,
+            hq_members_count: eventData.value.hq_members_count,
+        });
+    } else if (props.correctionTab == 2) {
+        console.log(123)
+        emit('formDataDH', {
+            number_of_members: eventData.value.number_of_members,
+            comment: eventData.value.comment,
+        })
+    }
 }
 
 const addLink = () => {
@@ -225,6 +258,48 @@ watch(() => eventData.value.is_hq_member, async (newVal) => {
     emit('formData', payload);
 });
 
+const onReportReturn = (event) => {
+    console.log(event)
+    // let formData = new FormData();
+    // if (event.target.checked) {
+    //     reportStore.returnReport.fourth = true;
+    //     reportStore.reportDataCH.fourth.events = [];
+    //     commonData.value.forEach(e => {
+    //         reportStore.reportDataCH.fourth.events.push(e.dataCH)
+    //     });
+
+    //     reportStore.reportDataCH.fourth.comment = commentCH.value || '';
+    //     formData.append('comment', commentCH.value || '');
+    //     formData.append('reasons[comment]', commentCH.value);
+
+    //     reportStore.reportDataCH.fourth.events.forEach((event, i) => {
+    //         if (event.participants_number) formData.append(`events[${i}][participants_number]`, event.participants_number);
+    //         if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
+    //         if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
+    //         formData.append(`events[${i}][is_interregional]`, event.is_interregional);
+    //     });
+
+    //     emit('getDataCH', formData, 4);
+    // } else {
+    //     reportStore.returnReport.fourth = false;
+    //     reportStore.reportDataCH.fourth.events = [];
+    //     commonData.value.forEach(e => {
+    //         reportStore.reportDataCH.fourth.events.push(e.dataCH)
+    //     });
+
+    //     reportStore.reportDataCH.fourth.comment = commentCH.value || '';
+    //     formData.append('comment', commentCH.value || '');
+
+    //     reportStore.reportDataCH.fourth.events.forEach((event, i) => {
+    //         if (event.participants_number) formData.append(`events[${i}][participants_number]`, event.participants_number);
+    //         if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
+    //         if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
+    //         formData.append(`events[${i}][is_interregional]`, event.is_interregional);
+    //     });
+
+    //     emit('getDataCH', formData, 4);
+    // }
+}
 </script>
 
 <style lang="scss" scoped>

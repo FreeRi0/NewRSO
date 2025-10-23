@@ -11,9 +11,9 @@
                         <div class="area__form_data_number_item">
                             <span>Общее количество обученных<span class="valid-red">&nbsp;*</span></span>
                             <InputReport @focusout="focusOut" v-model:value="area_from.number_trained" :is-link="false"
-                                placeholder="Введите число" id="15" name="14" class="form__input number_input" 
+                                placeholder="Введите число" id="15" name="14" class="form__input number_input"
                                 type="number" :max="32767" style="width: 100%;"
-                                :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
+                                :disabled="isSent || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision)" />
                         </div>
                         <div class="area__form_data_number_item">
                             <span>Общее количество трудоустроенных РО по направлению<span
@@ -21,29 +21,30 @@
                             <InputReport @focusout="focusOut" v-model:value="area_from.number_employed" :is-link="false"
                                 placeholder="Введите число" id="15" name="14" class="form__input number_input"
                                 type="number" :max="32767" style="width: 100%;"
-                                :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
+                                :disabled="isSent || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision)" />
                         </div>
                         <div class="area__form_data_number_item">
                             <span>Самостоятельное трудоустройство<span class="valid-red">&nbsp;*</span></span>
                             <InputReport @focusout="focusOut" v-model:value="area_from.self_employment" :is-link="false"
                                 placeholder="Введите число" id="15" name="14" class="form__input number_input"
                                 type="number" :max="32767" style="width: 100%;"
-                                :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
+                                :disabled="isSent || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision)" />
                         </div>
                         <div class="area__form_data_number_item">
                             <span>Общее количество не трудоустроенных<span class="valid-red">&nbsp;*</span></span>
                             <InputReport @focusout="focusOut" v-model:value="area_from.number_unemployed"
                                 :is-link="false" placeholder="Введите число" id="15" name="14"
                                 class="form__input number_input" type="number" :max="32767" style="width: 100%;"
-                                :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
+                                :disabled="isSent || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision)" />
                         </div>
                     </div>
 
                     <div class="area__form_data_file">
                         <span>Загрузите документы, подтверждающие факт трудоустройства</span>
                         <InputReport class="form-input__file-input" v-if="!area_from.file" isFile type="file"
-                            id="scan_file" name="scan_file" width="100%" @change="uploadFile($event)" accept=".zip,application/zip,application/x-zip-compressed"
-                            :disabled="(props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision) || (props.centralExpert || props.districtExpert)" />
+                            id="scan_file" name="scan_file" width="100%" @change="uploadFile($event)"
+                            accept=".zip,application/zip,application/x-zip-compressed"
+                            :disabled="isSent || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportRevision)" />
                         <FileBoxComponent v-else :file="area_from.file" fileType="zip" :fileSize="area_from.file_size"
                             :is-sent="isSent" :is-error-file="isErrorFile && !area_from.file_size"
                             @click="deleteFile" />
@@ -82,6 +83,14 @@ const props = defineProps({
     tab: {
         type: String,
         default: ''
+    },
+    isDH: {
+        type: Boolean,
+        default: false
+    },
+    isCH: {
+        type: Boolean,
+        default: false
     }
 });
 
@@ -100,6 +109,32 @@ const area_from = ref({
     isFillingTableAutumn2024: null,
     isFillingTableSpring2025: null,
 });
+
+// const area_fromDH = ref({
+//     name: props.area.name,
+//     number_trained: '',
+//     number_employed: '',
+//     self_employment: '',
+//     number_unemployed: '',
+//     file: '',
+//     file_size: null,
+//     file_type: '',
+//     isFillingTableAutumn2024: null,
+//     isFillingTableSpring2025: null,
+// });
+
+// const area_fromCH = ref({
+//     name: props.area.name,
+//     number_trained: '',
+//     number_employed: '',
+//     self_employment: '',
+//     number_unemployed: '',
+//     file: '',
+//     file_size: null,
+//     file_type: '',
+//     isFillingTableAutumn2024: null,
+//     isFillingTableSpring2025: null,
+// });
 
 watchEffect(() => {
     if (props.area) {
@@ -124,16 +159,16 @@ const focusOut = async () => {
 
 const uploadFile = async (event) => {
     if (!event.target.files || !event.target.files[0]) return;
-    
+
     const file = event.target.files[0];
-    
-    if(!file.name.toLowerCase().endsWith('.zip')) return
+
+    if (!file.name.toLowerCase().endsWith('.zip')) return
 
     area_from.value.file_size = (file.size / Math.pow(1024, 2));
     area_from.value.file_type = file.type.split('/').at(-1);
-    
+
     area_from.value.file = file;
-    
+
     area_from.value = { ...area_from.value };
     emit('updateArea', area_from.value);
 };
