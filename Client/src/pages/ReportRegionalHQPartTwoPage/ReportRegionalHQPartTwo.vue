@@ -113,8 +113,8 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <new-sixth-panel @get-data="setData" @get-data-DH="setDataDH" @get-data-CH="setDataCH" :items="six_items"
-                @getId="setId" @getPanelNumber="setPanelNumber" :district-headquarter-commander="districtExpert"
-                :data="reportData.six" :central-headquarter-commander="centralExpert" :is-error-panel="isErrorPanel.six"
+                @getId="setId" @getPanelNumber="setPanelNumber" :district-expert="districtExpert"
+                :data="reportData.six" :central-expert="centralExpert" :is-error-panel="isErrorPanel.six"
                 :tab="picked" :revision-panels="revisionPanels" />
             </v-expansion-panel-text>
           </v-expansion-panel>
