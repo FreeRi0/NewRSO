@@ -42,11 +42,12 @@
                                     class="valid-red">*</sup>
                             </p>
                             <InputReport @focusout="focusOut" v-model:value="eventData.number_of_members"
-                                :disabled="isSentSix" :is-error-panel="isErrorPanel" :is-link="false"
-                                placeholder="Введите число" id="15" name="14" class="form__input number_input"
-                                type="number" :max="32767" />
+                                :disabled="data.verified_by_dhq && correctionTab == 2 || isSentSix && !isDH && !isCH"
+                                :is-error-panel="isErrorPanel" :is-link="false" placeholder="Введите число" id="15"
+                                name="14" class="form__input number_input" type="number" :max="32767" />
                         </div>
-                        <p class="delete-event" @click="deleteEvent" v-if="correctionTab !== 2 && correctionTab !== 3">
+                        <p class="delete-event" @click="deleteEvent"
+                            v-if="correctionTab !== 2 && correctionTab !== 3 && !(correctionTab == 1 && isDH) ">
                             — Удалить мероприятие
                         </p>
                     </div>
@@ -63,14 +64,14 @@
                                 Количество человек, являвшихся членами Штаба трудового проекта
                             </p>
                             <InputReport @focusout="focusOut" v-model:value="eventData.hq_members_count"
-                                :disabled="isSentSix || (eventData.number_of_members == 0 || eventData.number_of_members === null)"
+                                :disabled="data.verified_by_dhq && correctionTab == 2 || isSentSix && !isDH && !isCH"
                                 :is-link="false" placeholder="Введите число" id="hq_members_count"
                                 name="hq_members_count" class="form__input" type="number" :max="2147483647"
                                 width="100%" />
                         </div>
                     </div>
 
-                    <div class="form__field" v-if="correctionTab !== 2">
+                    <div class="form__field">
                         <label class="form__label" for="14">Ссылка на социальные сети/ электронные<br>
                             СМИ, подтверждающая участие в мероприятии
                             <sup class="valid-red">*</sup></label>
@@ -78,7 +79,7 @@
                         <div class="form__wrapper" v-for="(item, index) in eventData.links" :key="index">
                             <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
                                 @focusout="focusOut" :is-error-panel="isErrorPanel" @error="setError"
-                                :disabled="isSentSix || (eventData.number_of_members == 0 || eventData.number_of_members === null)"
+                                :disabled="correctionTab == 2 || isSentSix || (eventData.number_of_members == 0 || eventData.number_of_members === null)"
                                 :maxlength="200" name="link" v-model:value="item.link" :is-link="true" />
 
                             <div v-if="!isSentSix && eventData.number_of_members > 0">
@@ -96,9 +97,8 @@
                         <label class="form__label" for="14">Комментарий </label>
                         <TextareaReport v-model:value="eventData.comment" id="comment" name="comment" :rows="1"
                             autoResize placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000"
-                            :disabled="isSentSix || (eventData.number_of_members == 0 || eventData.number_of_members === null)"
+                            :disabled="data.verified_by_dhq && correctionTab == 2 || isSentSix && !isDH && !isCH"
                             :max-length-text="3000" counter-visible />
-
                     </div>
                 </div>
                 <div class="bg_form" v-else>
@@ -157,11 +157,17 @@ const props = defineProps({
     correctionTab: {
         type: Number,
         default: 0,
+    },
+    isDH: {
+        type: Boolean,
+        default: false,
+    },
+    isCH: {
+        type: Boolean,
+        default: false,
     }
 })
 
-console.log(props.data)
-console.log(props.event)
 const sixPanelDataCH = ref({ number_of_members: null })
 const eventData = ref({
     number_of_members: 0,
@@ -192,7 +198,6 @@ const setError = (err) => {
 }
 
 const focusOut = async () => {
-    console.log(props.correctionTab)
     if (props.correctionTab !== 2 && props.correctionTab !== 3) {
         emit('formData', {
             number_of_members: eventData.value.number_of_members,
@@ -202,7 +207,6 @@ const focusOut = async () => {
             hq_members_count: eventData.value.hq_members_count,
         });
     } else if (props.correctionTab == 2) {
-        console.log(123)
         emit('formDataDH', {
             number_of_members: eventData.value.number_of_members,
             comment: eventData.value.comment,
@@ -257,49 +261,6 @@ watch(() => eventData.value.is_hq_member, async (newVal) => {
     };
     emit('formData', payload);
 });
-
-const onReportReturn = (event) => {
-    console.log(event)
-    // let formData = new FormData();
-    // if (event.target.checked) {
-    //     reportStore.returnReport.fourth = true;
-    //     reportStore.reportDataCH.fourth.events = [];
-    //     commonData.value.forEach(e => {
-    //         reportStore.reportDataCH.fourth.events.push(e.dataCH)
-    //     });
-
-    //     reportStore.reportDataCH.fourth.comment = commentCH.value || '';
-    //     formData.append('comment', commentCH.value || '');
-    //     formData.append('reasons[comment]', commentCH.value);
-
-    //     reportStore.reportDataCH.fourth.events.forEach((event, i) => {
-    //         if (event.participants_number) formData.append(`events[${i}][participants_number]`, event.participants_number);
-    //         if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
-    //         if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
-    //         formData.append(`events[${i}][is_interregional]`, event.is_interregional);
-    //     });
-
-    //     emit('getDataCH', formData, 4);
-    // } else {
-    //     reportStore.returnReport.fourth = false;
-    //     reportStore.reportDataCH.fourth.events = [];
-    //     commonData.value.forEach(e => {
-    //         reportStore.reportDataCH.fourth.events.push(e.dataCH)
-    //     });
-
-    //     reportStore.reportDataCH.fourth.comment = commentCH.value || '';
-    //     formData.append('comment', commentCH.value || '');
-
-    //     reportStore.reportDataCH.fourth.events.forEach((event, i) => {
-    //         if (event.participants_number) formData.append(`events[${i}][participants_number]`, event.participants_number);
-    //         if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
-    //         if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
-    //         formData.append(`events[${i}][is_interregional]`, event.is_interregional);
-    //     });
-
-    //     emit('getDataCH', formData, 4);
-    // }
-}
 </script>
 
 <style lang="scss" scoped>
