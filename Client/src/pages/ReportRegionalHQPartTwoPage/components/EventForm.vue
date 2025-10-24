@@ -46,7 +46,8 @@
                                 :is-error-panel="isErrorPanel" :is-link="false" placeholder="Введите число" id="15"
                                 name="14" class="form__input number_input" type="number" :max="32767" />
                         </div>
-                        <p class="delete-event" @click="deleteEvent" v-if="correctionTab !== 2 && correctionTab !== 3">
+                        <p class="delete-event" @click="deleteEvent"
+                            v-if="correctionTab !== 2 && correctionTab !== 3 && !(correctionTab == 1 && isDH) ">
                             — Удалить мероприятие
                         </p>
                     </div>

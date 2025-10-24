@@ -31,6 +31,7 @@
                             <div v-for="event in selectedEvents" :key="event.id" class="form__field-event">
                                 <event-form :event="event"
                                     :is-sent-six="!!(props.data && props.data[event.id] && props.data[event.id].is_sent)"
+                                    :is-d-h="districtExpert"
                                     :is-error-panel="!!(props.isErrorPanel && props.isErrorPanel[event.id] && props.isErrorPanel[event.id].error)"
                                     :data="(props.data && props.data[event.id]) ? props.data[event.id] : {}"
                                     :correction-tab="1" :tab="props.tab" @collapse-form="collapsed()"
