@@ -42,12 +42,15 @@
                     </template>
 
                     <template v-slot:secondTab>
+                        <div class="form__field-group-six">
+                            <select-search-indicator :events="items" v-model="filteredEvents" class="select" />
+                        </div>
                         <div v-if="selectedEvents.length">
                             <div v-for="event in selectedEvents" :key="event.id" class="form__field-event">
-                                <event-form :event="event"
+                                <event-form :event="event" :is-d-h="districtExpert" :is-c-h="centralExpert"
                                     :is-sent-six="!!(props.data && props.data[event.id] && props.data[event.id].is_sent)"
                                     :is-error-panel="!!(props.isErrorPanel && props.isErrorPanel[event.id] && props.isErrorPanel[event.id].error)"
-                                    :data="(props.data && props.data[event.id]) ? props.data[event.id] : {}"
+                                    :data="(props.data && reportStore.reportDataDH.six[event.id]) ? reportStore.reportDataDH.six[event.id] : {}"
                                     :correction-tab="2" :tab="props.tab" @collapse-form="collapsed()"
                                     @delete-event="eventDelete" @formData="formData($event, event.id)"
                                     @formDataDH="formDataDH($event, event.id)"
@@ -77,7 +80,7 @@
 </template>
 
 <script setup>
-import { ref, watch, watchEffect, computed, onMounted } from "vue";
+import { ref, watch, watchEffect, computed } from "vue";
 
 import SelectSearchIndicator from '@shared/components/selects/SelectSearchIndicator.vue'
 import EventForm from "./EventForm.vue";
@@ -85,10 +88,7 @@ import { ReportTabs } from './index';
 // import SeventhPanelForm from "./SeventhPanelForm.vue";
 import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
 import { reportPartTwoService } from "@services/ReportService.ts";
-import { TextareaReport } from '@shared/components/inputs';
-import {
-    ReportTable,
-} from '@entities/RatingRoComponents/components';
+
 const props = defineProps({
     districtHeadquarterCommander: {
         type: Boolean
@@ -110,7 +110,6 @@ const props = defineProps({
     dataDH: Object,
 });
 
-console.log(props.data)
 const filteredEvents = computed(() => {
     const deletedNames = [
         "Всероссийские трудовые проекты СПО РСО",
@@ -255,10 +254,15 @@ const formData = async (reportData, reportNumber) => {
     }
 };
 
-const formDataDH = (reportData, reportNumber) => {
-    console.log(reportData, reportNumber)
-    if (props.districtHeadquarterCommander) {
-        emit('getDataDH', reportData, 6, reportNumber);
+const formDataDH = async (reportData, reportNumber) => {
+    if (props.districtExpert) {
+        let formData = new FormData();
+        
+        formData.append('comment', reportData.comment || '');
+        formData.append('number_of_members', reportData.number_of_members || '');
+        if(reportData.hq_members_count) formData.append('hq_members_count', reportData.hq_members_count || '');
+
+        emit('getDataDH', formData, 6, reportNumber);
     }
 };
 
@@ -268,47 +272,47 @@ const formDataCH = (reportData, reportNumber) => {
     }
 };
 
-const onReportReturn = (event) => {
-    let formData = new FormData();
-    if (event.target.checked) {
-        reportStore.returnReport.fourth = true;
-        reportStore.reportDataCH.fourth.events = [];
-        commonData.value.forEach(e => {
-            reportStore.reportDataCH.fourth.events.push(e.dataCH)
-        });
+// const onReportReturn = (event) => {
+//     let formData = new FormData();
+//     if (event.target.checked) {
+//         reportStore.returnReport.fourth = true;
+//         reportStore.reportDataCH.fourth.events = [];
+//         commonData.value.forEach(e => {
+//             reportStore.reportDataCH.fourth.events.push(e.dataCH)
+//         });
 
-        reportStore.reportDataCH.fourth.comment = commentCH.value || '';
-        formData.append('comment', commentCH.value || '');
-        formData.append('reasons[comment]', commentCH.value);
+//         reportStore.reportDataCH.fourth.comment = commentCH.value || '';
+//         formData.append('comment', commentCH.value || '');
+//         formData.append('reasons[comment]', commentCH.value);
 
-        reportStore.reportDataCH.fourth.events.forEach((event, i) => {
-            if (event.participants_number) formData.append(`events[${i}][participants_number]`, event.participants_number);
-            if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
-            if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
-            formData.append(`events[${i}][is_interregional]`, event.is_interregional);
-        });
+//         reportStore.reportDataCH.fourth.events.forEach((event, i) => {
+//             if (event.participants_number) formData.append(`events[${i}][participants_number]`, event.participants_number);
+//             if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
+//             if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
+//             formData.append(`events[${i}][is_interregional]`, event.is_interregional);
+//         });
 
-        emit('getDataCH', formData, 4);
-    } else {
-        reportStore.returnReport.fourth = false;
-        reportStore.reportDataCH.fourth.events = [];
-        commonData.value.forEach(e => {
-            reportStore.reportDataCH.fourth.events.push(e.dataCH)
-        });
+//         emit('getDataCH', formData, 4);
+//     } else {
+//         reportStore.returnReport.fourth = false;
+//         reportStore.reportDataCH.fourth.events = [];
+//         commonData.value.forEach(e => {
+//             reportStore.reportDataCH.fourth.events.push(e.dataCH)
+//         });
 
-        reportStore.reportDataCH.fourth.comment = commentCH.value || '';
-        formData.append('comment', commentCH.value || '');
+//         reportStore.reportDataCH.fourth.comment = commentCH.value || '';
+//         formData.append('comment', commentCH.value || '');
 
-        reportStore.reportDataCH.fourth.events.forEach((event, i) => {
-            if (event.participants_number) formData.append(`events[${i}][participants_number]`, event.participants_number);
-            if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
-            if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
-            formData.append(`events[${i}][is_interregional]`, event.is_interregional);
-        });
+//         reportStore.reportDataCH.fourth.events.forEach((event, i) => {
+//             if (event.participants_number) formData.append(`events[${i}][participants_number]`, event.participants_number);
+//             if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
+//             if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
+//             formData.append(`events[${i}][is_interregional]`, event.is_interregional);
+//         });
 
-        emit('getDataCH', formData, 4);
-    }
-}
+//         emit('getDataCH', formData, 4);
+//     }
+// }
 
 // onMounted(() => {
 //     reportVerifiedByCH.value = reportStore.reportForCheckCH.six?.verified_by_chq !== null;
@@ -434,6 +438,7 @@ const onReportReturn = (event) => {
 
 .select {
     width: 340px;
+    margin-left: 40px;
 }
 
 .panel-card {
@@ -455,6 +460,9 @@ const onReportReturn = (event) => {
     border-radius: 6px;
     margin-bottom: 0px;
     margin-top: 0px;
+    height: 120px;
+    display: flex;
+    align-items: center
 }
 
 .form__field-event {

@@ -113,9 +113,9 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <new-sixth-panel @get-data="setData" @get-data-DH="setDataDH" @get-data-CH="setDataCH" :items="six_items"
-                @getId="setId" @getPanelNumber="setPanelNumber" :district-expert="districtExpert"
-                :data="reportData.six" :central-expert="centralExpert" :is-error-panel="isErrorPanel.six"
-                :tab="picked" :revision-panels="revisionPanels" />
+                @getId="setId" @getPanelNumber="setPanelNumber" :district-expert="districtExpert" :data="reportData.six"
+                :central-expert="centralExpert" :is-error-panel="isErrorPanel.six" :tab="picked"
+                :revision-panels="revisionPanels" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('7', picked, revisionPanels)">
@@ -649,7 +649,7 @@ const getMultiplyData = async (reportId) => {
         reportData.value.six[result.id] = sixData;
       }
       reportStore.reportDataDH.six[result.id] = Object.assign({}, sixData);
-      reportStore.reportDataDH.six[result.id].comment = "";
+      // reportStore.reportDataDH.six[result.id].comment = "";
     } else if (centralExpert.value) {
       reportStore.reportForCheckCH.six[result.id] = sixData;
       reportData.value.six[result.id] = sixData;
