@@ -1807,6 +1807,8 @@ const setDataDH = (data, panel, number) => {
       break;
     case 6:
       reportDataDH.value.six[number] = data;
+      reportStore.reportDataDH.six[number].comment = Object.fromEntries(data).comment
+      reportStore.reportDataDH.six[number].number_of_members = Object.fromEntries(data).number_of_members
       break;
     case 9:
       reportDataDH.value.ninth[number] = data;
