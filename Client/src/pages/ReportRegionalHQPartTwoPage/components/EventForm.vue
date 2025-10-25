@@ -42,7 +42,7 @@
                                     class="valid-red">*</sup>
                             </p>
                             <InputReport @focusout="focusOut" v-model:value="eventData.number_of_members"
-                                :disabled="data.verified_by_dhq && correctionTab == 2 || isSentSix && !isDH && !isCH"
+                                :disabled="data.verified_by_dhq && correctionTab == 2 || correctionTab == 1 && isSentSix && (isDH || isCH)"
                                 :is-error-panel="isErrorPanel" :is-link="false" placeholder="Введите число" id="15"
                                 name="14" class="form__input number_input" type="number" :max="32767" />
                         </div>
@@ -64,7 +64,7 @@
                                 Количество человек, являвшихся членами Штаба трудового проекта
                             </p>
                             <InputReport @focusout="focusOut" v-model:value="eventData.hq_members_count"
-                                :disabled="data.verified_by_dhq && correctionTab == 2 || isSentSix && !isDH && !isCH"
+                                :disabled="data.verified_by_dhq && correctionTab == 2 || correctionTab == 1 &&  isSentSix && (isDH || isCH)"
                                 :is-link="false" placeholder="Введите число" id="hq_members_count"
                                 name="hq_members_count" class="form__input" type="number" :max="2147483647"
                                 width="100%" />
@@ -97,7 +97,7 @@
                         <label class="form__label" for="14">Комментарий </label>
                         <TextareaReport v-model:value="eventData.comment" id="comment" name="comment" :rows="1"
                             autoResize placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000"
-                            :disabled="data.verified_by_dhq && correctionTab == 2 || isSentSix && !isDH && !isCH"
+                            :disabled="data.verified_by_dhq && correctionTab == 2 || correctionTab == 1 &&  isSentSix && (isDH || isCH)"
                             :max-length-text="3000" counter-visible />
                     </div>
                 </div>
