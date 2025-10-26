@@ -34,14 +34,14 @@
       <div>
         <div class="project-regulations">
           <div class="project-scope">
-            <div class="project-file">
+            <!-- <div class="project-file">
               <span class="form__label form__field-label-project">Загрузите документы, подтверждающие факт
                 трудоустройства</span>
               <InputReport class="form-input__file-input" v-if="!project.file" isFile type="file" id="scan_file"
                 name="scan_file" width="100%" @change="uploadFile($event, index)" />
               <FileBoxComponent v-else :file="project.file" :fileType="project.file_type" :fileSize="project.file_size"
                 :is-sent="isSent" :is-error-file="isErrorFile && !project.file_size" @click="deleteFile(index)" />
-            </div>
+            </div> -->
             <div class="project-radio">
               <p class="form__label form__field-label-project">Масштаб проекта <sup class="valid-red">*</sup></p>
               <div>
@@ -799,10 +799,10 @@ onMounted(() => {
   /*
   * Мапинг данных для отчета эксперта ОШ
   */
-  if (reportStore.reportDataDH.sixteenth && props.districtExpert) {
-    sixteenthPanelDataDH.value.is_project = reportStore.reportDataDH.sixteenth.is_project;
-    sixteenthPanelDataDH.value.comment = reportStore.reportDataDH.sixteenth.comment;
-    sixteenthPanelDataDH.value.projects = [...reportStore.reportDataDH.sixteenth.projects];
+  if (reportStore.reportDataDH.fourteenth && props.districtExpert) {
+    sixteenthPanelDataDH.value.is_project = reportStore.reportDataDH.fourteenth.is_project;
+    sixteenthPanelDataDH.value.comment = reportStore.reportDataDH.fourteenth.comment;
+    sixteenthPanelDataDH.value.projects = [...reportStore.reportDataDH.fourteenth.projects];
   }
 
   /*

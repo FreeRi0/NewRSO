@@ -15,7 +15,7 @@
               placeholder="Введите число"
               :maxlength="10"
               :min="0"
-              :max="32767"
+              :max="9999999999"
               :step="0.01"
               @focusout="focusOut"
               :disabled="isSent"
@@ -739,8 +739,8 @@
         />
       </div>
 
-      <ReportRegionalForm v-if="reportData?.id" :reportData="reportData" :blockEditFirstReport="true"/>
     </template>
+
     <template v-slot:firstTab_additionalSlot>
       <div class="form__field-group">
         <div class="fields__title">ССО</div>
@@ -1123,10 +1123,14 @@
       </div>
     </template>
 
+    <template v-slot:firstTab_additionalSlot_2>
+      <ReportRegionalForm :reportData="reportData" :blockEditFirstReport="true"/>
+    </template>
+
     <!--    second-->
     <template v-slot:secondTab>
       <div class="form__field-report">
-        <div class="form__field">
+        <div class="form__field" style="width: 50%">
           <label class="form__label" for="amount_of_money">Общая сумма уплаченных членских взносов РО&nbsp; <sup
               class="valid-red">*</sup></label>
           <InputReport
@@ -1138,37 +1142,58 @@
               placeholder="Введите число"
               :maxlength="10"
               :min="0"
+              :max="9999999999"
+              :step="0.01"
+              :disabled="props.centralExpert || reportStore.isReportReject?.first || reportStore.isAllReportsVerifiedByCH"
+              :is-error-panel="isErrorPanel"
+              style="width: 100%"
+          />
+        </div>
+        <div class="form__field" style="width: 50%">
+          <label class="form__label" for="comment">Количество членов РО&nbsp;<sup
+              class="valid-red">*</sup></label>
+          <InputReport
+              v-model:value="firstPanelDataDH.participants_with_payment"
+              id="foreign_participants"
+              name="foreign_participants"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
               :max="32767"
               :step="0.01"
               :disabled="props.centralExpert || reportStore.isReportReject?.first || reportStore.isAllReportsVerifiedByCH"
               :is-error-panel="isErrorPanel"
+              style="width: 100%"
           />
         </div>
       </div>
-      <div class="form__field">
-        <label class="form__label" for="comment">Численность иностранных граждан</label>
-        <InputReport
-            v-model:value="firstPanelDataDH.foreign_participants"
-            id="foreign_participants"
-            name="foreign_participants"
-            class="form__input"
-            type="number"
-            placeholder="Введите число"
-            :maxlength="10"
-            :min="0"
-            :max="32767"
-            :step="0.01"
-            :disabled="props.centralExpert || reportStore.isReportReject?.first || reportStore.isAllReportsVerifiedByCH"
-            style="width: 100%"
-        />
-      </div>
-      <div>
-        <v-checkbox
-            v-model="firstPanelDataDH.top_must_pay"
-            label="ТОП освобождены от оплаты членских взносов в данном РО"
-            :disabled="props.centralExpert || reportStore.isReportReject?.first || reportStore.isAllReportsVerifiedByCH"
-        />
-      </div>
+
+<!--      <div class="form__field">-->
+<!--        <label class="form__label" for="comment">Численность иностранных граждан</label>-->
+<!--        <InputReport-->
+<!--            v-model:value="firstPanelDataDH.foreign_participants"-->
+<!--            id="foreign_participants"-->
+<!--            name="foreign_participants"-->
+<!--            class="form__input"-->
+<!--            type="number"-->
+<!--            placeholder="Введите число"-->
+<!--            :maxlength="10"-->
+<!--            :min="0"-->
+<!--            :max="32767"-->
+<!--            :step="0.01"-->
+<!--            :disabled="props.centralExpert || reportStore.isReportReject?.first || reportStore.isAllReportsVerifiedByCH"-->
+<!--            style="width: 100%"-->
+<!--        />-->
+<!--      </div>-->
+<!--      <div>-->
+<!--        <v-checkbox-->
+<!--            v-model="firstPanelDataDH.top_must_pay"-->
+<!--            label="ТОП освобождены от оплаты членских взносов в данном РО"-->
+<!--            :disabled="props.centralExpert || reportStore.isReportReject?.first || reportStore.isAllReportsVerifiedByCH"-->
+<!--        />-->
+<!--      </div>-->
       <div class="form__field">
         <CommentFileComponent
             v-model:value="firstPanelDataDH.comment"
@@ -1362,8 +1387,9 @@ const firstPanelDataDH = ref({
   comment: '',
   amount_of_money: '',
   scan_file: '',
-  foreign_participants: '',
-  top_must_pay: false,
+  // foreign_participants: '',
+  // top_must_pay: false,
+  participants_with_payment: '',
 });
 const firstPanelDataCH = ref({
   comment: '',
@@ -1584,8 +1610,15 @@ watchEffect(async () => {
 
   // Мапинг данных для отчета эксперта ОШ
   if (reportStore.reportDataDH.first && props.districtExpert) {
-    firstPanelDataDH.value.comment = reportStore.reportDataDH.first.comment || '';
-    firstPanelDataDH.value.amount_of_money = reportStore.reportDataDH.first.amount_of_money;
+    // firstPanelDataDH.value.comment = reportStore.reportDataDH.first.comment || '';
+    // firstPanelDataDH.value.amount_of_money = reportStore.reportDataDH.first.amount_of_money;
+    // firstPanelDataDH.value.participants_with_payment = reportStore.reportDataDH.first.participants_with_payment;
+
+    Object.keys(firstPanelDataDH.value).forEach(key => {
+      if (reportStore.reportDataDH.first[key] !== undefined) {
+        firstPanelDataDH.value[key] = reportStore.reportDataDH.first[key];
+      }
+    });
 
     fileNameDH.value = reportStore.reportDataDHFile.first ? reportStore.reportDataDHFile.first.name : null;
     fileTypeDH.value = reportStore.reportDataDHFile.first ? reportStore.reportDataDHFile.first.type.split('/').at(-1) : null;

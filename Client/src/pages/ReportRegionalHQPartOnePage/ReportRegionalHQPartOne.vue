@@ -17,7 +17,7 @@
 import { inject, onActivated, ref, watch } from "vue";
 import { useRoleStore } from "@layouts/store/role";
 import ReportRegionalForm from "@pages/ReportRegionalHQPartOnePage/components/ReportRegionalForm.vue";
-import {createReport, getCurrentOldReport, getCurrentReport, getReport} from "@services/ReportService.ts";
+import {createReport, getCurrentOldReport, getReport} from "@services/ReportService.ts";
 import ReportModalSuccess from "@pages/ReportRegionalHQPartOnePage/components/ReportModalSuccess.vue";
 import ReportModalWarning from "@pages/ReportRegionalHQPartOnePage/components/ReportModalWarning.vue";
 import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";

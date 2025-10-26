@@ -21,11 +21,12 @@
     </div>
 
     <div class="form-container form__field-group">
-      <h2 v-if="isSecondReport" class="report_title-h3">Свод статистических данных по трудоустройству бойцов
-        студенческих
-        отрядов РО за 2025 год на 15 октября 2025 года</h2>
-      <p style="font-weight: bold; margin-bottom: 40px; color: black">Количество членов РО, трудоустроенных по
-        направлениям в текущем периоде:</p>
+      <h2 v-if="isSecondReport" class="report_title-h3">
+        Свод статистических данных по трудоустройству бойцов студенческих отрядов РО за 2025 год на 15 октября 2025 года
+      </h2>
+      <p style="font-weight: bold; margin-bottom: 40px; color: black">
+        Количество членов РО, трудоустроенных по направлениям в текущем периоде:
+      </p>
       <div class="form-col">
         <div class="form__field">
           <label class="form__label" for="sso">ССО <sup class="valid-red">*</sup></label>
@@ -147,8 +148,7 @@
         </div>
       </div>
       <div style="margin-bottom: 8px;">
-        <label style="display: flex; " class="form__label" for="4">Загрузите документы, подтверждающие факт
-          трудоустройства, по каждому направлению</label>
+        <label style="display: flex; " class="form__label" for="4">Загрузите документы, подтверждающие факт трудоустройства, по каждому направлению</label>
         <InputReport
             class="form-input__file-input"
             v-if="!document.document"
@@ -157,6 +157,7 @@
             id="scan_file"
             name="scan_file"
             @change="uploadFile"
+            :disabled="blockEditFirstReport"
         />
         <FileBoxComponent
             v-else
@@ -164,14 +165,14 @@
             :fileType="document.file_type"
             :fileSize="document.file_size"
             @click="deleteFile"
+            :disabled="blockEditFirstReport"
         />
       </div>
     </div>
 
     <div v-if="!isSecondReport" class="form-container form__field-group">
-      <p style="font-weight: bold; margin-bottom: 40px; color: black; max-width: 530px;">Количество членов РО, прошедших профессиональное
-        обучение от Центрального штаба
-        и трудоустроенных в текущем периоде<sup class="valid-red">*</sup></p>
+      <p style="font-weight: bold; margin-bottom: 40px; color: black; max-width: 530px;">
+        Количество членов РО, прошедших профессиональное обучение от Центрального штаба и трудоустроенных в текущем периоде<sup class="valid-red">*</sup></p>
       <div class="form-col">
         <div class="form__field">
           <label class="form__label" for="sso">ССО <sup class="valid-red">*</sup></label>
@@ -469,8 +470,8 @@ const document = ref({
   file_type: ''
 });
 
-watchEffect(() => {
-  if (route.fullPath === '/reporting-ro/report-regional-two') {
+watchEffect(async () => {
+  if (route.fullPath.includes('reporting-ro/report-regional-two')) {
     isSecondReport.value = true;
   }
   reportDataChildren.value = {...props.reportData};
@@ -491,15 +492,18 @@ const uploadFile = async (event) => {
   document.value.file_type = event.target.files[0].type.split('/').at(-1);
   reportDataChildren.value.supporting_documents = event.target.files[0];
 
-  let formData = new FormData();
+  if (isSecondReport.value) {
+    // let formData = new FormData();
+    //
+    // Object.keys(reportDataChildren.value).forEach(key => {
+    //   const value = reportDataChildren.value[key];
+    //   formData.append(key, value !== undefined && value !== null ? value : '');
+    // });
 
-  Object.keys(reportDataChildren.value).forEach(key => {
-    const value = reportDataChildren.value[key];
-    formData.append(key, value !== undefined && value !== null ? value : '');
-  });
-
-  const {data} = await editReport(formData, true);
-  emit('sentReport', data);
+    const {data} = await editReport(reportDataChildren.value, true);
+    document.value.document = data.supporting_documents;
+    emit('sentReport', data);
+  }
 };
 
 const deleteFile = async () => {
@@ -508,25 +512,27 @@ const deleteFile = async () => {
   document.value.file_type = '';
   reportDataChildren.value.supporting_documents = '';
 
-  let formData = new FormData();
+  if (isSecondReport.value) {
+    // let formData = new FormData();
+    //
+    // Object.keys(reportDataChildren.value).forEach(key => {
+    //   const value = reportDataChildren.value[key];
+    //   formData.append(key, value !== undefined && value !== null ? value : '');
+    // });
 
-  Object.keys(reportDataChildren.value).forEach(key => {
-    const value = reportDataChildren.value[key];
-    formData.append(key, value !== undefined && value !== null ? value : '');
-  });
-
-  const {data} = await editReport(reportDataChildren.value, true);
-  emit('sentReport', data);
+    const {data} = await editReport(reportDataChildren.value, true);
+    emit('sentReport', data);
+  }
 }
 
 const focusOut = async () => {
   if (isSecondReport.value) {
-    let formData = new FormData();
-
-    Object.keys(reportDataChildren.value).forEach(key => {
-      const value = reportDataChildren.value[key];
-      formData.append(key, value !== undefined && value !== null ? value : '');
-    });
+    // let formData = new FormData();
+    //
+    // Object.keys(reportDataChildren.value).forEach(key => {
+    //   const value = reportDataChildren.value[key];
+    //   formData.append(key, value !== undefined && value !== null ? value : '');
+    // });
 
     const {data} = await editReport(reportDataChildren.value, true);
     emit('sentReport', data);
@@ -536,21 +542,22 @@ const focusOut = async () => {
 const addAdditionalStatistics = () => {
   reportDataChildren.value.additional_statistics.push({
     name: '',
-    value: ''
+    value: 0,
   })
 };
 const deleteAdditionalStatistics = async (index) => {
   reportDataChildren.value.additional_statistics.splice(index, 1)
 
   if (isSecondReport.value) {
-    let formData = new FormData();
+    // let formData = new FormData();
+    //
+    // Object.keys(reportDataChildren.value).forEach(key => {
+    //   const value = reportDataChildren.value[key];
+    //   console.log('key', value)
+    //   formData.append(key, value !== undefined && value !== null ? value : '');
+    // });
 
-    Object.keys(reportDataChildren.value).forEach(key => {
-      const value = reportDataChildren.value[key];
-      formData.append(key, value !== undefined && value !== null ? value : '');
-    });
-
-    const {data} = await editReport(formData, true);
+    const {data} = await editReport(reportDataChildren.value, true);
     emit('sentReport', data);
   }
 }

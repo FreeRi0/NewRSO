@@ -31,7 +31,7 @@
                 </template>
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-                <div class="bg_form">
+                <div class="bg_form" v-if="correctionTab !== 3">
                     <div class="top_line">
                         <div class="form__field places">
                             <p class="form__label" v-if="isFirstPart">
@@ -42,11 +42,12 @@
                                     class="valid-red">*</sup>
                             </p>
                             <InputReport @focusout="focusOut" v-model:value="eventData.number_of_members"
-                                :disabled="isSentSix" :is-error-panel="isErrorPanel" :is-link="false"
-                                placeholder="Введите число" id="15" name="14" class="form__input number_input"
-                                type="number" :max="32767" />
+                                :disabled="data.verified_by_dhq && correctionTab == 2 || correctionTab == 1 && isSentSix && (isDH || isCH)"
+                                :is-error-panel="isErrorPanel" :is-link="false" placeholder="Введите число" id="15"
+                                name="14" class="form__input number_input" type="number" :max="32767" />
                         </div>
-                        <p class="delete-event" @click="deleteEvent">
+                        <p class="delete-event" @click="deleteEvent"
+                            v-if="correctionTab !== 2 && correctionTab !== 3 && !(correctionTab == 1 && isDH) ">
                             — Удалить мероприятие
                         </p>
                     </div>
@@ -63,7 +64,7 @@
                                 Количество человек, являвшихся членами Штаба трудового проекта
                             </p>
                             <InputReport @focusout="focusOut" v-model:value="eventData.hq_members_count"
-                                :disabled="isSentSix || (eventData.number_of_members == 0 || eventData.number_of_members === null)"
+                                :disabled="data.verified_by_dhq && correctionTab == 2 || correctionTab == 1 &&  isSentSix && (isDH || isCH)"
                                 :is-link="false" placeholder="Введите число" id="hq_members_count"
                                 name="hq_members_count" class="form__input" type="number" :max="2147483647"
                                 width="100%" />
@@ -78,7 +79,7 @@
                         <div class="form__wrapper" v-for="(item, index) in eventData.links" :key="index">
                             <InputReport placeholder="Введите ссылку, например, https://vk.com/cco_monolit"
                                 @focusout="focusOut" :is-error-panel="isErrorPanel" @error="setError"
-                                :disabled="isSentSix || (eventData.number_of_members == 0 || eventData.number_of_members === null)"
+                                :disabled="correctionTab == 2 || isSentSix || (eventData.number_of_members == 0 || eventData.number_of_members === null)"
                                 :maxlength="200" name="link" v-model:value="item.link" :is-link="true" />
 
                             <div v-if="!isSentSix && eventData.number_of_members > 0">
@@ -96,10 +97,26 @@
                         <label class="form__label" for="14">Комментарий </label>
                         <TextareaReport v-model:value="eventData.comment" id="comment" name="comment" :rows="1"
                             autoResize placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000"
-                            :disabled="isSentSix || (eventData.number_of_members == 0 || eventData.number_of_members === null)"
+                            :disabled="data.verified_by_dhq && correctionTab == 2 || correctionTab == 1 &&  isSentSix && (isDH || isCH)"
+                            :max-length-text="3000" counter-visible />
+                    </div>
+                </div>
+                <div class="bg_form" v-else>
+                    <ReportTable label="Количество человек, принявших участие в мероприятии" class="mb-4"
+                        name="sixPanelData.number_of_members" :dataRH="data.number_of_members"
+                        :dataDH="data.hq_number_of_members ? data.hq_number_of_members : data.number_of_members"
+                        v-model:value="sixPanelDataCH.number_of_members" :maxlength="10" :min="0" :max="2147483647"
+                        :is-error-panel="isErrorPanel">
+                    </ReportTable>
+                    <div class="form__field">
+                        <label class="form__label" for="14">Комментарий </label>
+                        <TextareaReport v-model:value="CH_comment" id="comment" name="comment" :rows="1" autoResize
+                            placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000"
                             :max-length-text="3000" counter-visible />
 
                     </div>
+                    <v-checkbox label="Вернуть в РО на доработку" @change="onReportReturn" />
+
                 </div>
             </v-expansion-panel-text>
         </v-expansion-panel>
@@ -112,6 +129,9 @@ import { ref, defineProps, watchEffect, computed, watch } from 'vue';
 import { InputReport, TextareaReport } from '@shared/components/inputs';
 import { Button } from '@shared/components/buttons';
 import { reportPartTwoService } from '@services/ReportService.ts';
+import {
+    ReportTable,
+} from '@entities/RatingRoComponents/components';
 
 const props = defineProps({
     event: {
@@ -134,11 +154,21 @@ const props = defineProps({
         type: String,
         default: '',
     },
+    correctionTab: {
+        type: Number,
+        default: 0,
+    },
+    isDH: {
+        type: Boolean,
+        default: false,
+    },
+    isCH: {
+        type: Boolean,
+        default: false,
+    }
 })
 
-console.log(props.data)
-console.log(props.event)
-
+const sixPanelDataCH = ref({ number_of_members: null })
 const eventData = ref({
     number_of_members: 0,
     links: [{ link: '' }],
@@ -146,9 +176,9 @@ const eventData = ref({
     is_hq_member: false,
     hq_members_count: null,
 })
-
+const CH_comment = ref();
 const isFirstPart = computed(() => {
-    return props.event.id <=56;
+    return props.event.id <= 56;
 })
 
 const emit = defineEmits(['collapse-form', 'delete-event', 'formData', 'formDataDH', 'formDataCH', 'uploadFile', 'getId', 'getPanelNumber', 'deleteFile', 'deleteFileDH', 'error']);
@@ -168,13 +198,20 @@ const setError = (err) => {
 }
 
 const focusOut = async () => {
-    emit('formData', {
-        number_of_members: eventData.value.number_of_members,
-        links: eventData.value.links,
-        comment: eventData.value.comment,
-        is_hq_member: eventData.value.is_hq_member,
-        hq_members_count: eventData.value.hq_members_count,
-    });
+    if (props.correctionTab !== 2 && props.correctionTab !== 3) {
+        emit('formData', {
+            number_of_members: eventData.value.number_of_members,
+            links: eventData.value.links,
+            comment: eventData.value.comment,
+            is_hq_member: eventData.value.is_hq_member,
+            hq_members_count: eventData.value.hq_members_count,
+        });
+    } else if (props.correctionTab == 2) {
+        emit('formDataDH', {
+            number_of_members: eventData.value.number_of_members,
+            comment: eventData.value.comment,
+        })
+    }
 }
 
 const addLink = () => {
@@ -224,7 +261,6 @@ watch(() => eventData.value.is_hq_member, async (newVal) => {
     };
     emit('formData', payload);
 });
-
 </script>
 
 <style lang="scss" scoped>
