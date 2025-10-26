@@ -204,10 +204,11 @@ HTTP.interceptors.response.use(
                 return Promise.reject(err.response.data);
             }
 
-            if (err.response?.status === 404) {
-                // Не бросаем ошибку для 404, чтобы обработать в функции
-                return err.response;
-            }
+            // Ломает логику работы переменной isFirstSent  в рейтинге РО
+            // if (err.response?.status === 404) {
+            //     // Не бросаем ошибку для 404, чтобы обработать в функции
+            //     return err.response;
+            // }
         }
 
         return Promise.reject(err);
