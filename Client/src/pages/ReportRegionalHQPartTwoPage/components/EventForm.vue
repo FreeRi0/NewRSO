@@ -42,7 +42,7 @@
                                     class="valid-red">*</sup>
                             </p>
                             <InputReport @focusout="focusOut" v-model:value="eventData.number_of_members"
-                                :disabled="data.verified_by_dhq && correctionTab == 2 || correctionTab == 1 && isSentSix && (isDH || isCH)"
+                                :disabled="(data.verified_by_dhq || isCH) && correctionTab == 2  || correctionTab == 1 && isSentSix && (isDH || isCH)"
                                 :is-error-panel="isErrorPanel" :is-link="false" placeholder="Введите число" id="15"
                                 name="14" class="form__input number_input" type="number" :max="32767" />
                         </div>
@@ -64,7 +64,7 @@
                                 Количество человек, являвшихся членами Штаба трудового проекта
                             </p>
                             <InputReport @focusout="focusOut" v-model:value="eventData.hq_members_count"
-                                :disabled="data.verified_by_dhq && correctionTab == 2 || correctionTab == 1 &&  isSentSix && (isDH || isCH)"
+                                :disabled="(data.verified_by_dhq || isCH) && correctionTab == 2 || correctionTab == 1 &&  isSentSix && (isDH || isCH)"
                                 :is-link="false" placeholder="Введите число" id="hq_members_count"
                                 name="hq_members_count" class="form__input" type="number" :max="2147483647"
                                 width="100%" />
@@ -97,26 +97,35 @@
                         <label class="form__label" for="14">Комментарий </label>
                         <TextareaReport v-model:value="eventData.comment" id="comment" name="comment" :rows="1"
                             autoResize placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000"
-                            :disabled="data.verified_by_dhq && correctionTab == 2 || correctionTab == 1 &&  isSentSix && (isDH || isCH)"
+                            :disabled="(data.verified_by_dhq || isCH) && correctionTab == 2 || correctionTab == 1 &&  isSentSix && (isDH || isCH)"
                             :max-length-text="3000" counter-visible />
                     </div>
                 </div>
                 <div class="bg_form" v-else>
                     <ReportTable label="Количество человек, принявших участие в мероприятии" class="mb-4"
                         name="sixPanelData.number_of_members" :dataRH="data.number_of_members"
-                        :dataDH="data.hq_number_of_members ? data.hq_number_of_members : data.number_of_members"
+                        :dataDH="reportStore.reportDataDH.six[event.id].number_of_members"
                         v-model:value="sixPanelDataCH.number_of_members" :maxlength="10" :min="0" :max="2147483647"
-                        :is-error-panel="isErrorPanel">
+                        :is-error-panel="isErrorPanel"
+                        :disabled="reportStore.reportDataCH.six[event.id].verified_by_chq">
+                    </ReportTable>
+                    <ReportTable v-if="!isFirstPart"
+                        label="Количество человек, являвшихся членами Штаба трудового проекта" class="mb-4"
+                        name="sixPanelData.hq_members_count" :dataRH="data.hq_members_count"
+                        :dataDH="reportStore.reportDataDH.six[event.id].hq_members_count"
+                        v-model:value="sixPanelDataCH.hq_members_count" :maxlength="10" :min="0" :max="2147483647"
+                        :is-error-panel="isErrorPanel"
+                        :disabled="reportStore.reportDataCH.six[event.id].verified_by_chq">
                     </ReportTable>
                     <div class="form__field">
                         <label class="form__label" for="14">Комментарий </label>
-                        <TextareaReport v-model:value="CH_comment" id="comment" name="comment" :rows="1" autoResize
-                            placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000"
-                            :max-length-text="3000" counter-visible />
+                        <TextareaReport v-model:value="sixPanelDataCH.comment" id="comment" name="comment" :rows="1"
+                            autoResize placeholder="Напишите сообщение" @focusout="focusOut" :maxlength="3000"
+                            :max-length-text="3000" counter-visible
+                            :disabled="reportStore.reportDataCH.six[event.id].verified_by_chq" />
 
                     </div>
-                    <v-checkbox label="Вернуть в РО на доработку" @change="onReportReturn" />
-
+                    <!-- <v-checkbox v-model="sixPanelDataCH.is_return" label="Вернуть в РО на доработку" /> -->
                 </div>
             </v-expansion-panel-text>
         </v-expansion-panel>
@@ -132,6 +141,8 @@ import { reportPartTwoService } from '@services/ReportService.ts';
 import {
     ReportTable,
 } from '@entities/RatingRoComponents/components';
+import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
+import {report} from 'process';
 
 const props = defineProps({
     event: {
@@ -167,8 +178,8 @@ const props = defineProps({
         default: false,
     }
 })
-
-const sixPanelDataCH = ref({ number_of_members: null })
+const reportStore = useReportPartTwoStore();
+const sixPanelDataCH = ref(reportStore.reportDataCH.six[props.event.id].verified_by_chq ? reportStore.reportDataCH.six[props.event.id] : { number_of_members: null, hq_members_count: null })
 const eventData = ref({
     number_of_members: 0,
     links: [{ link: '' }],
@@ -176,7 +187,6 @@ const eventData = ref({
     is_hq_member: false,
     hq_members_count: null,
 })
-const CH_comment = ref();
 const isFirstPart = computed(() => {
     return props.event.id <= 56;
 })
@@ -211,8 +221,26 @@ const focusOut = async () => {
             number_of_members: eventData.value.number_of_members,
             comment: eventData.value.comment,
         })
+    } else if (props.correctionTab == 3) {
+        // reportStore.returnReport.six[props.event.id] = sixPanelDataCH.value.is_return;
+        emit('formDataCH', {
+            number_of_members: sixPanelDataCH.value.number_of_members,
+            hq_members_count: sixPanelDataCH.value.hq_members_count,
+            comment: sixPanelDataCH.value.comment,
+        })
     }
 }
+
+watch(() => sixPanelDataCH.value, () => {
+    if (sixPanelDataCH.value) {
+        // reportStore.returnReport.six[props.event.id] = sixPanelDataCH.value.is_return;
+        emit('formDataCH', {
+            number_of_members: sixPanelDataCH.value.number_of_members,
+            hq_members_count: sixPanelDataCH.value.hq_members_count,
+            comment: sixPanelDataCH.value.comment,
+        })
+    }
+},{ deep: true, immediate: true })
 
 const addLink = () => {
     eventData.value.links.push({ link: '' });

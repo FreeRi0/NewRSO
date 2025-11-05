@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.six || reportStore.isAllReportsVerifiedByCH) && props.tab === 'Просмотр отправленного отчета'"
+    v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.fifteenth || reportStore.isAllReportsVerifiedByCH) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.fifteenth)"
     class="panel-form">
     <div class="card-form">
       <p class="card-form__text">
@@ -388,9 +388,11 @@ watchEffect(() => {
   background-color: #F3F4F5;
 
   &__text {
-    font-size: 16px;
-    line-height: 100%;
-    letter-spacing: 0%;
+    font-family: Akrobat;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+
   }
 }
 

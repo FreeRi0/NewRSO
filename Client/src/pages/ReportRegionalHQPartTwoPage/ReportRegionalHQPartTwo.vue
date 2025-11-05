@@ -2440,7 +2440,7 @@ const reportConfirmation = async (value) => {
         );
       }
       for (const [index, item] of Object.entries(reportStore.reportForCheckCH.six)) {
-        if (item && item.verified_by_chq === null) {
+        if (item && item.verified_by_chq === null && item.verified_by_dhq === true) {
           console.log(`Sending report for item 6-${index}:`, item);
           try {
             console.log(

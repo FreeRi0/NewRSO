@@ -164,6 +164,54 @@
             </div>
           </div>
         </div>
+        <div class="field_number">
+        <div class="item_number form__field places">
+          <p class="form__label">
+            Общее количество участников
+          </p>
+          <InputReport @focusout="formData" v-model:value="tenthPanelData.total_participants"
+                       :disabled="isSent || !tenthPanelData.event_happened"
+                       placeholder="Введите число" id="15" name="14"
+                       class="form__input number_input" type="number" :max="32767"/>
+        </div>
+        <div class="item_number form__field places">
+          <p class="form__label">
+            Количество новых участников
+          </p>
+          <InputReport @focusout="formData" v-model:value="tenthPanelData.new_participants"
+                       :disabled="isSent || !tenthPanelData.event_happened" placeholder="Введите число"
+                       id="15" name="14"
+                       class="form__input number_input" type="number" :max="32767"/>
+        </div>
+        <div v-if="id === 1" class="item_number form__field places">
+          <p class="form__label">
+            Количество благополучателей
+          </p>
+          <InputReport @focusout="formData" v-model:value="tenthPanelData.beneficiaries"
+                       :disabled="isSent || !tenthPanelData.event_happened" placeholder="Введите число"
+                       id="15" name="14"
+                       class="form__input number_input" type="number" :max="32767"/>
+        </div>
+        
+        <div v-if="id === 1" class="item_number form__field places">
+          <p class="form__label">
+            Количество населенных пунктов
+          </p>
+          <InputReport @focusout="formData" v-model:value="tenthPanelData.settlements"
+                       :disabled="isSent || !tenthPanelData.event_happened" placeholder="Введите число" id="15"
+                       name="14"
+                       class="form__input number_input" type="number" :max="32767"/>
+        </div>
+        <div v-if="id === 2" class="item_number form__field places">
+          <p class="form__label">
+            Количество участников из других НКО
+          </p>
+          <InputReport @focusout="formData" v-model:value="tenthPanelData.other_nko_participants"
+                       :disabled="isSent || !tenthPanelData.event_happened" placeholder="Введите число" id="15"
+                       name="14"
+                       class="form__input number_input" type="number" :max="32767"/>
+        </div>
+      </div>
         <div class="form__field-comment">
           <label style="display: flex; align-items: center;" class="form__label" for="comment">Комментарий <sup
               class="valid-red">*</sup></label>
