@@ -1764,6 +1764,12 @@ watchEffect(async () => {
             firstPanelDataDH.value[key] = reportDataDH[key];
           }
         });
+      } else {
+        Object.keys(firstPanelDataDH.value).forEach(key => {
+          if (reportStore.reportForCheckCH.first[key] !== undefined) {
+            firstPanelDataDH.value[key] = reportStore.reportForCheckCH.first[key];
+          }
+        });
       }
       // firstPanelDataDH.value.comment = reportStore.reportForCheckCH.first.comment;
       // firstPanelDataDH.value.amount_of_money = reportStore.reportForCheckCH.first.amount_of_money;
