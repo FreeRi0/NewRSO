@@ -388,9 +388,11 @@ watchEffect(() => {
   background-color: #F3F4F5;
 
   &__text {
-    font-size: 16px;
-    line-height: 100%;
-    letter-spacing: 0%;
+    font-family: Akrobat;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+
   }
 }
 
