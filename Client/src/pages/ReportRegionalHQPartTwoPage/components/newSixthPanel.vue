@@ -4,7 +4,7 @@
             <v-progress-circular v-show="!items.length" class="circleLoader" indeterminate></v-progress-circular>
             <v-expansion-panel :disabled="disabled">
                 <div
-                    v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.six || reportStore.isAllReportsVerifiedByCH) && props.tab === 'Просмотр отправленного отчета'">
+                    v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.six || reportStore.isAllReportsVerifiedByCH) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.six)">
                     <div class="form__field-group-six">
                         <select-search-indicator :events="items" v-model="filteredEvents" class="select" />
                     </div>
@@ -110,6 +110,8 @@ const props = defineProps({
     revisionPanels: Array,
     dataDH: Object,
 });
+
+console.log(props)
 
 const filteredEvents = computed(() => {
     const deletedNames = [
