@@ -1365,7 +1365,7 @@ const getReportData = async (reportId) => {
 
       try {
         reportData.value.sixteenth = (
-          await reportPartTwoService.getReportDH("16", reportId)
+          await reportPartTwoService.getReportDH("14", reportId)
         ).data;
       } catch (e) {
         console.log(e.message);

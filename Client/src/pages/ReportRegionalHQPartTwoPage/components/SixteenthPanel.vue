@@ -3,7 +3,7 @@
     v-if="reportStore?.isAllReportsVerifiedByCH ? false : !(props.centralExpert || props.districtExpert || reportStore.isReportReject?.sixteenth) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.sixteenth)"
     class="form__field-group">
     <div class="form__field-project-existence">
-      <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу1 <sup class="valid-red">*</sup>
+      <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу <sup class="valid-red">*</sup>
       </p>
       <div class="form__label-radio">
         <div style="display: flex; align-items: center">
@@ -109,7 +109,7 @@
     <template v-slot:firstTab>
       <div class="form__field-project-existence">
         <p class="form__label">
-          Наличие трудового проекта, в котором ЛСО РО одержал победу2 <sup class="valid-red">*</sup>
+          Наличие трудового проекта, в котором ЛСО РО одержал победу <sup class="valid-red">*</sup>
         </p>
         <div class="form__label-radio">
           <div style="display: flex; align-items: center">
@@ -212,7 +212,7 @@
 
     <template v-slot:secondTab>
       <div class="form__field-project-existence">
-        <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу3 <sup
+        <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу <sup
             class="valid-red">*</sup>
         </p>
         <div class="form__label-radio">
@@ -292,7 +292,7 @@
 
     <template v-slot:thirdTab>
       <div class="form__field-project-existence" style="margin-bottom: 30px;">
-        <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу4
+        <p class="form__label">Наличие трудового проекта, в котором ЛСО РО одержал победу
           <sup class="valid-red">*</sup>
         </p>
         <div class="form__label-radio">
@@ -738,23 +738,23 @@ const onReportReturn = (event) => {
   let formData = new FormData();
   if (event.target.checked) {
     if (isProjectCH.value) {
-      reportStore.returnReport.sixteenth = true;
-      reportStore.reportDataCH.sixteenth.projects = [];
+      reportStore.returnReport.fourteenth = true;
+      reportStore.reportDataCH.fourteenth.projects = [];
       commonData.value.forEach(e => {
-        reportStore.reportDataCH.sixteenth.projects.push(e.dataCH)
+        reportStore.reportDataCH.fourteenth.projects.push(e.dataCH)
       });
 
-      reportStore.reportDataCH.sixteenth.comment = commentCH.value || '';
+      reportStore.reportDataCH.fourteenth.comment = commentCH.value || '';
       formData.append('is_project', isProjectCH.value);
       formData.append('comment', commentCH.value || '');
       formData.append('reasons[comment]', commentCH.value || '');
 
-      reportStore.reportDataCH.sixteenth.projects.forEach((project, i) => {
+      reportStore.reportDataCH.fourteenth.projects.forEach((project, i) => {
         if (project.project_scale) formData.append(`projects[${i}][project_scale]`, project.project_scale);
         if (project.name) formData.append(`projects[${i}][name]`, project.name);
       })
     } else {
-      reportStore.returnReport.sixteenth = true;
+      reportStore.returnReport.fourteenth = true;
       formData.append('is_project', isProjectCH.value);
       formData.append('comment', commentCH.value || '');
       formData.append('reasons[comment]', commentCH.value || '');
@@ -764,25 +764,25 @@ const onReportReturn = (event) => {
     emit('getDataCH', formData, 14);
   } else {
     if (isProjectCH.value) {
-      reportStore.returnReport.sixteenth = false;
-      reportStore.reportDataCH.sixteenth.projects = [];
+      reportStore.returnReport.fourteenth = false;
+      reportStore.reportDataCH.fourteenth.projects = [];
       commonData.value.forEach(e => {
-        reportStore.reportDataCH.sixteenth.projects.push(e.dataCH)
+        reportStore.reportDataCH.fourteenth.projects.push(e.dataCH)
       });
 
-      reportStore.reportDataCH.sixteenth.comment = commentCH.value || '';
-      reportStore.reportDataCH.sixteenth.isProject = isProjectCH.value;
+      reportStore.reportDataCH.fourteenth.comment = commentCH.value || '';
+      reportStore.reportDataCH.fourteenth.isProject = isProjectCH.value;
 
       formData.append('comment', commentCH.value || '');
-      reportStore.reportDataCH.sixteenth.projects.forEach((project, i) => {
+      reportStore.reportDataCH.fourteenth.projects.forEach((project, i) => {
         if (project.project_scale) formData.append(`projects[${i}][project_scale]`, project.project_scale);
         if (project.name) formData.append(`projects[${i}][name]`, project.name);
       })
     } else {
-      reportStore.returnReport.sixteenth = false;
+      reportStore.returnReport.fourteenth = false;
 
-      reportStore.reportDataCH.sixteenth.comment = commentCH.value || '';
-      reportStore.reportDataCH.sixteenth.isProject = isProjectCH.value;
+      reportStore.reportDataCH.fourteenth.comment = commentCH.value || '';
+      reportStore.reportDataCH.fourteenth.isProject = isProjectCH.value;
 
       formData.append('is_project', isProjectCH.value);
       formData.append('comment', commentCH.value || '');
@@ -794,7 +794,7 @@ const onReportReturn = (event) => {
 }
 
 onMounted(() => {
-  reportVerifiedByCH.value = reportStore.reportForCheckCH.fifth?.verified_by_chq !== null;
+  reportVerifiedByCH.value = reportStore.reportForCheckCH.fourteenth?.verified_by_chq !== null;
 
   /*
   * Мапинг данных для отчета эксперта ОШ
@@ -808,19 +808,20 @@ onMounted(() => {
   /*
   * Мапинг данных для отчета эксперта ЦШ
   */
-  if (reportStore.reportForCheckCH.sixteenth && props.centralExpert) {
-    const projectQuantity = reportStore.reportForCheckCH.sixteenth.projects.length;
+  if (reportStore.reportForCheckCH.fourteenth && props.centralExpert) {
+    console.log('here')
+    const projectQuantity = reportStore.reportForCheckCH.fourteenth.projects.length;
 
-    if (reportStore.reportForCheckCH.sixteenth.rejecting_reasons) {
+    if (reportStore.reportForCheckCH.fourteenth.rejecting_reasons) {
       // Повторная доработка
       // Добавление данных панели "отчет РО"
-      updateProjectsSafely(reportStore.reportForCheckCH.sixteenth.projects);
-      sixteenthPanelData.value.comment = reportStore.reportForCheckCH.sixteenth.comment;
-      sixteenthPanelData.value.is_project = reportStore.reportForCheckCH.sixteenth.is_project;
+      updateProjectsSafely(reportStore.reportForCheckCH.fourteenth.projects);
+      sixteenthPanelData.value.comment = reportStore.reportForCheckCH.fourteenth.comment;
+      sixteenthPanelData.value.is_project = reportStore.reportForCheckCH.fourteenth.is_project;
       
       // Рефакторинг - добавлен код ниже, т.к. на вкл РО отображались данные ЦШ
-      if (reportStore.reportForCheckCH.sixteenth.regional_version) {
-        const reportDataRH = JSON.parse(reportStore.reportForCheckCH.sixteenth.regional_version);
+      if (reportStore.reportForCheckCH.fourteenth.regional_version) {
+        const reportDataRH = JSON.parse(reportStore.reportForCheckCH.fourteenth.regional_version);
         updateProjectsSafely(reportDataRH.projects);
         sixteenthPanelData.value.comment = reportDataRH.comment;
         sixteenthPanelData.value.is_project = reportDataRH.is_project;
@@ -828,7 +829,7 @@ onMounted(() => {
       
 
       // Добавление данных панели "корректировка ОШ"
-      const reportDataDH = JSON.parse(reportStore.reportForCheckCH.sixteenth.district_version);
+      const reportDataDH = JSON.parse(reportStore.reportForCheckCH.fourteenth.district_version);
       sixteenthPanelDataDH.value.is_project = reportDataDH.is_project;
       sixteenthPanelDataDH.value.comment = reportDataDH.comment;
       sixteenthPanelDataDH.value.projects = reportDataDH.projects;
@@ -837,19 +838,19 @@ onMounted(() => {
       let reportDataCH;
       // Проверка на верификацию отчета ЦШ. При верифицированом отчете данные берутся из общего объекта
       if (reportVerifiedByCH.value) {
-        reportDataCH = reportStore.reportForCheckCH.sixteenth
-        isProjectCH.value = reportStore.reportDataCH.sixteenth.isProject;
+        reportDataCH = reportStore.reportForCheckCH.fourteenth
+        isProjectCH.value = reportStore.reportDataCH.fourteenth.isProject;
       } else {
-        reportDataCH = reportStore.reportForCheckCH.sixteenth.central_version;
-        isProjectCH.value = reportStore.reportDataCH.sixteenth.central_version.isProject;
+        reportDataCH = reportStore.reportForCheckCH.fourteenth.central_version;
+        isProjectCH.value = reportStore.reportDataCH.fourteenth.central_version.isProject;
       }
       commentCH.value = reportDataCH.comment || '';
       // Проверяем наличие версии РО
       let reportDataRH;
-      if (reportStore.reportForCheckCH.sixteenth.regional_version) {
-        reportDataRH = JSON.parse(reportStore.reportForCheckCH.sixteenth.regional_version);
+      if (reportStore.reportForCheckCH.fourteenth.regional_version) {
+        reportDataRH = JSON.parse(reportStore.reportForCheckCH.fourteenth.regional_version);
       } else {
-        reportDataRH = reportStore.reportForCheckCH.sixteenth
+        reportDataRH = reportStore.reportForCheckCH.fourteenth
       }
       
       for (let i = 0; i < projectQuantity; i++) {
@@ -866,26 +867,35 @@ onMounted(() => {
         }
       }
     } else {
+      console.log('here2', reportStore.reportForCheckCH.fourteenth)
       // Добавление данных панели "отчет РО"
-      const reportDataRH = JSON.parse(reportStore.reportForCheckCH.sixteenth.regional_version);
-      updateProjectsSafely(reportDataRH.projects);
-      sixteenthPanelData.value.comment = reportDataRH.comment;
-      sixteenthPanelData.value.is_project = reportDataRH.is_project;
+      const reportDataRH = JSON.parse(reportStore.reportForCheckCH.fourteenth.regional_version);
+      console.log('reportDataRH', reportDataRH)
+      if (reportDataRH){
+        updateProjectsSafely(reportDataRH.projects);
+        sixteenthPanelData.value.comment = reportDataRH.comment;
+        sixteenthPanelData.value.is_project = reportDataRH.is_project;
+      } else {
+        updateProjectsSafely(reportStore.reportForCheckCH.fourteenth.projects);
+        sixteenthPanelData.value.comment = reportStore.reportForCheckCH.fourteenth.comment;
+        sixteenthPanelData.value.is_project = reportStore.reportForCheckCH.fourteenth.is_project;
+      }
+
 
       // Добавление данных панели "корректировка ОШ"
-      sixteenthPanelDataDH.value.is_project = reportStore.reportForCheckCH.sixteenth.is_project;
-      sixteenthPanelDataDH.value.comment = reportStore.reportForCheckCH.sixteenth.comment;
-      sixteenthPanelDataDH.value.projects = reportStore.reportForCheckCH.sixteenth.projects;
+      sixteenthPanelDataDH.value.is_project = reportStore.reportForCheckCH.fourteenth.is_project;
+      sixteenthPanelDataDH.value.comment = reportStore.reportForCheckCH.fourteenth.comment;
+      sixteenthPanelDataDH.value.projects = reportStore.reportForCheckCH.fourteenth.projects;
 
       // Добавление данных из стора для панели "корректировка ЦШ"
-      commentCH.value = reportStore.reportDataCH.sixteenth.comment || '';
-      isProjectCH.value = reportStore.reportDataCH.sixteenth.isProject;
+      commentCH.value = reportStore.reportDataCH.fourteenth.comment || '';
+      isProjectCH.value = reportStore.reportDataCH.fourteenth.isProject;
 
       for (let i = 0; i < projectQuantity; i++) {
         commonData.value[i] = {
           dataRH: reportDataRH.projects[i],
-          dataDH: reportStore.reportForCheckCH.sixteenth.projects[i],
-          dataCH: reportStore.reportDataCH.sixteenth.projects[i],
+          dataDH: reportStore.reportForCheckCH.fourteenth.projects[i],
+          dataCH: reportStore.reportDataCH.fourteenth.projects[i],
           // dataCH: reportStore.reportDataCH.sixteenth.projects.length ? reportStore.reportDataCH.sixteenth.projects[i] : {
           //   name: '',
           //   project_scale: null,
@@ -921,7 +931,7 @@ watchEffect(() => {
     sixteenthPanelData.value.comment = props.data.comment || '';
     isSent.value = props.data.is_sent;
 
-    isFirstSent.value = reportStore.isReportReject.sixteenth && !props.data.central_version;
+    isFirstSent.value = reportStore.isReportReject.fourteenth && !props.data.central_version;
     // console.log('isFirstSent.value for sixteenth_1::::::', isFirstSent.value)
   }
 
@@ -932,7 +942,7 @@ watchEffect(() => {
 
     reportStore.returnReport.sixteenth = true;
     // Добавление данных панели "корректировка ОШ"
-    const reportDataDH = JSON.parse(reportStore.reportReject.sixteenth.district_version);
+    const reportDataDH = JSON.parse(reportStore.reportReject.fourteenth.district_version);
 
     sixteenthPanelDataDH.value.projects = reportDataDH.projects;
     sixteenthPanelDataDH.value.comment = reportDataDH.comment;
@@ -952,16 +962,16 @@ watchEffect(() => {
       }
     } else {
       // Отчет не создан:
-      const reportDataRH = JSON.parse(reportStore.reportReject.sixteenth.regional_version);
-      commentCH.value = reportStore.reportReject.sixteenth.comment || '';
-      isProjectCH.value = reportStore.reportReject.sixteenth.is_project;
+      const reportDataRH = JSON.parse(reportStore.reportReject.fourteenth.regional_version);
+      commentCH.value = reportStore.reportReject.fourteenth.comment || '';
+      isProjectCH.value = reportStore.reportReject.fourteenth.is_project;
 
       console.log('reportDataRH', reportDataRH)
       for (let i = 0; i < props.data.projects.length; i++) {
         commonData.value[i] = {
           dataRH: reportDataRH.projects[i],
           dataDH: reportDataDH.projects[i],
-          dataCH: reportStore.reportReject.sixteenth.projects[i],
+          dataCH: reportStore.reportReject.fourteenth.projects[i],
         }
       }
     }
@@ -1016,30 +1026,30 @@ watch(() => isProjectCH.value, () => {
   if (isProjectCH.value) {
     reportStore.reportDataCH.fourteenth.projects = [];
     commonData.value.forEach(e => {
-      reportStore.reportDataCH.sixteenth.projects.push(e.dataCH)
+      reportStore.reportDataCH.fourteenth.projects.push(e.dataCH)
     });
 
-    reportStore.reportDataCH.sixteenth.comment = commentCH.value || '';
-    reportStore.reportDataCH.sixteenth.isProject = isProjectCH.value;
+    reportStore.reportDataCH.fourteenth.comment = commentCH.value || '';
+    reportStore.reportDataCH.fourteenth.isProject = isProjectCH.value;
 
     formData.append('is_project', isProjectCH.value);
     formData.append('comment', commentCH.value || '');
-    if (reportStore.returnReport.sixteenth) formData.append('reasons[comment]', commentCH.value || '');
+    if (reportStore.returnReport.fourteenth) formData.append('reasons[comment]', commentCH.value || '');
 
-    reportStore.reportDataCH.sixteenth.projects.forEach((project, i) => {
+    reportStore.reportDataCH.fourteenth.projects.forEach((project, i) => {
       if (project.project_scale) formData.append(`projects[${i}][project_scale]`, project.project_scale);
       if (project.name) formData.append(`projects[${i}][name]`, project.name);
     })
 
     emit('getDataCH', formData, 14);
   } else {
-    reportStore.reportDataCH.sixteenth.comment = commentCH.value || '';
-    reportStore.reportDataCH.sixteenth.isProject = isProjectCH.value;
+    reportStore.reportDataCH.fourteenth.comment = commentCH.value || '';
+    reportStore.reportDataCH.fourteenth.isProject = isProjectCH.value;
 
     formData.append('is_project', isProjectCH.value);
     formData.append('comment', commentCH.value || '');
     formData.append('projects', '');
-    if (reportStore.returnReport.sixteenth) formData.append('reasons[comment]', commentCH.value || '');
+    if (reportStore.returnReport.fourteenth) formData.append('reasons[comment]', commentCH.value || '');
 
     emit('getDataCH', formData, 14);
   }
@@ -1049,29 +1059,29 @@ watch([commonData, commentCH], () => {
   let formData = new FormData();
 
   if (isProjectCH.value) {
-    reportStore.reportDataCH.sixteenth.projects = [];
+    reportStore.reportDataCH.fourteenth.projects = [];
     commonData.value.forEach(e => {
-      reportStore.reportDataCH.sixteenth.projects.push(e.dataCH)
+      reportStore.reportDataCH.fourteenth.projects.push(e.dataCH)
     });
-    reportStore.reportDataCH.sixteenth.comment = commentCH.value || '';
-    reportStore.reportDataCH.sixteenth.isProject = isProjectCH.value;
+    reportStore.reportDataCH.fourteenth.comment = commentCH.value || '';
+    reportStore.reportDataCH.fourteenth.isProject = isProjectCH.value;
 
     formData.append('is_project', isProjectCH.value);
     formData.append('comment', commentCH.value || '');
-    if (reportStore.returnReport.sixteenth) formData.append('reasons[comment]', commentCH.value || '');
+    if (reportStore.returnReport.fourteenth) formData.append('reasons[comment]', commentCH.value || '');
 
-    reportStore.reportDataCH.sixteenth.projects.forEach((project, i) => {
+    reportStore.reportDataCH.fourteenth.projects.forEach((project, i) => {
       if (project.project_scale) formData.append(`projects[${i}][project_scale]`, project.project_scale);
       if (project.name) formData.append(`projects[${i}][name]`, project.name);
     })
   } else {
-    reportStore.reportDataCH.sixteenth.comment = commentCH.value || '';
-    reportStore.reportDataCH.sixteenth.isProject = isProjectCH.value;
+    reportStore.reportDataCH.fourteenth.comment = commentCH.value || '';
+    reportStore.reportDataCH.fourteenth.isProject = isProjectCH.value;
 
     formData.append('is_project', isProjectCH.value);
     formData.append('comment', commentCH.value || '');
     formData.append('projects', '');
-    if (reportStore.returnReport.sixteenth) formData.append('reasons[comment]', commentCH.value || '');
+    if (reportStore.returnReport.fourteenth) formData.append('reasons[comment]', commentCH.value || '');
   }
 
   emit('getDataCH', formData, 14);
