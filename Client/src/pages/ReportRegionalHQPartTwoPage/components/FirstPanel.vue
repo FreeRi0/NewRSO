@@ -1739,7 +1739,8 @@ watchEffect(async () => {
         fileTypeCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.type.split('/').at(-1) : reportStore.reportDataCH.first.file_type ? reportStore.reportDataCH.first.file_type : null;
       }
     } else {
-      const reportDataRH = JSON.parse(reportStore.reportForCheckCH.first.district_version);
+      // Добавление данных панели "отчет РО"
+      const reportDataRH = JSON.parse(reportStore.reportForCheckCH.first.regional_version);
       // firstPanelData.value.comment = reportDataRH?.comment || '';
       // firstPanelData.value.amount_of_money = reportDataRH?.amount_of_money;
       // firstPanelData.value.foreign_participants = reportDataRH?.foreign_participants;
@@ -1758,7 +1759,7 @@ watchEffect(async () => {
       // Добавление данных панели "корректировка ОШ"
       const reportDataDH = JSON.parse(reportStore.reportForCheckCH.first.district_version);
       if (reportDataDH) {
-        Object.keys(firstPanelData.value).forEach(key => {
+        Object.keys(firstPanelDataDH.value).forEach(key => {
           if (reportDataDH[key] !== undefined) {
             firstPanelDataDH.value[key] = reportDataDH[key];
           }
@@ -1773,18 +1774,16 @@ watchEffect(async () => {
       // fileSizeDH.value = reportStore.reportForCheckCH.first.file_size || '';
 
       // Добавление данных из стора для панели "корректировка ЦШ"
-
-      // firstPanelDataCH.value.amount_of_money = reportStore.reportDataCH.first.amount_of_money;
-      // firstPanelDataCH.value.comment = reportStore.reportDataCH.first.comment || '';
-      // firstPanelDataCH.value.foreign_participants = reportStore.reportDataCH.first.foreign_participants || '';
-      // firstPanelDataCH.value.top_must_pay = reportStore.reportDataCH.first.top_must_pay;
-
       Object.keys(firstPanelDataCH.value).forEach(key => {
         if (reportStore.reportDataCH.first[key] !== undefined) {
           firstPanelDataCH.value[key] = reportStore.reportDataCH.first[key];
         }
       });
 
+      // firstPanelDataCH.value.amount_of_money = reportStore.reportDataCH.first.amount_of_money;
+      // firstPanelDataCH.value.comment = reportStore.reportDataCH.first.comment || '';
+      // firstPanelDataCH.value.foreign_participants = reportStore.reportDataCH.first.foreign_participants || '';
+      // firstPanelDataCH.value.top_must_pay = reportStore.reportDataCH.first.top_must_pay;
       fileNameCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.name : null;
       fileSizeCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.size / Math.pow(1024, 2) : null;
       fileTypeCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.type.split('/').at(-1) : null;
