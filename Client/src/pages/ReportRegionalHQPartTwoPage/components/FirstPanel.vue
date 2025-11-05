@@ -1629,8 +1629,10 @@ watchEffect(async () => {
 
   // Мапинг данных для отчета эксперта ЦШ
   if (reportStore.reportForCheckCH.first && props.centralExpert) {
+    console.log('here1')
     // Добавление данных панели "отчет РО"
     if (reportStore.reportForCheckCH.first.rejecting_reasons) {
+      console.log('here2')
       firstPanelData.value.comment = reportStore.reportForCheckCH.first.comment;
       firstPanelData.value.amount_of_money = reportStore.reportForCheckCH.first.amount_of_money;
       firstPanelData.value.foreign_participants = reportStore.reportForCheckCH.first.foreign_participants;
@@ -1688,7 +1690,8 @@ watchEffect(async () => {
 
 
     } else {
-      const reportDataRH = JSON.parse(reportStore.reportForCheckCH.first.regional_version);
+
+      const reportDataRH = JSON.parse(reportStore.reportForCheckCH.first.district_version);
       // firstPanelData.value.comment = reportDataRH?.comment || '';
       // firstPanelData.value.amount_of_money = reportDataRH?.amount_of_money;
       // firstPanelData.value.foreign_participants = reportDataRH?.foreign_participants;
@@ -1705,13 +1708,21 @@ watchEffect(async () => {
       }
 
       // Добавление данных панели "корректировка ОШ"
-      firstPanelDataDH.value.comment = reportStore.reportForCheckCH.first.comment;
-      firstPanelDataDH.value.amount_of_money = reportStore.reportForCheckCH.first.amount_of_money;
-      firstPanelDataDH.value.foreign_participants = reportStore.reportForCheckCH.first.foreign_participants;
-      firstPanelDataDH.value.top_must_pay = reportStore.reportForCheckCH.first.top_must_pay;
-      fileNameDH.value = reportStore.reportForCheckCH.first.scan_file || '';
-      fileTypeDH.value = reportStore.reportForCheckCH.first.file_type || '';
-      fileSizeDH.value = reportStore.reportForCheckCH.first.file_size || '';
+      const reportDataDH = JSON.parse(reportStore.reportForCheckCH.first.district_version);
+      if (reportDataDH) {
+        Object.keys(firstPanelData.value).forEach(key => {
+          if (reportDataDH[key] !== undefined) {
+            firstPanelDataDH.value[key] = reportDataDH[key];
+          }
+        });
+      }
+      // firstPanelDataDH.value.comment = reportStore.reportForCheckCH.first.comment;
+      // firstPanelDataDH.value.amount_of_money = reportStore.reportForCheckCH.first.amount_of_money;
+      // firstPanelDataDH.value.foreign_participants = reportStore.reportForCheckCH.first.foreign_participants;
+      // firstPanelDataDH.value.top_must_pay = reportStore.reportForCheckCH.first.top_must_pay;
+      // fileNameDH.value = reportStore.reportForCheckCH.first.scan_file || '';
+      // fileTypeDH.value = reportStore.reportForCheckCH.first.file_type || '';
+      // fileSizeDH.value = reportStore.reportForCheckCH.first.file_size || '';
 
       // Добавление данных из стора для панели "корректировка ЦШ"
       firstPanelDataCH.value.amount_of_money = reportStore.reportDataCH.first.amount_of_money;
