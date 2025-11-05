@@ -1250,6 +1250,44 @@
         </tr>
         </tbody>
       </v-table>
+
+      <label class="form__label">Количество членов РО<sup
+          class="valid-red">*</sup></label>
+      <v-table>
+        <tbody>
+        <tr class="report-table__tr">
+          <td class="report-table__th">Данные РО</td>
+          <td class="report-table__th report-table__th__br-center">Корректировка ОШ</td>
+          <td class="report-table__th">Корректировка ЦШ</td>
+        </tr>
+        <tr>
+          <td class="report-table__td">{{ firstPanelData.participants_with_payment }}</td>
+          <td class="report-table__td report-table__td__center">{{ firstPanelDataDH.participants_with_payment }}</td>
+          <td
+              :class="[
+              'report-table__td',
+              (reportStore.isReportReject?.first && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH ? 'report-table__td--bgcolor' : '']"
+          >
+            <InputReport
+                v-model:value="firstPanelDataCH.participants_with_payment"
+                :id="'participants_with_payment'"
+                :name="'participants_with_payment'"
+                style="width: 100%;"
+                type="number"
+                placeholder="0"
+                :maxlength="10"
+                :min="0"
+                :max="32767"
+                :step="0.01"
+                :is-error-panel="isErrorPanel"
+                :disabled="(reportStore.isReportReject?.first && !props.centralExpert) || reportVerifiedByCH || reportStore.isAllReportsVerifiedByCH"
+                :is-sent="reportStore.isReportReject?.first"
+            />
+          </td>
+        </tr>
+        </tbody>
+      </v-table>
+
       <div>
         <CommentFileComponent
             v-model:value="firstPanelDataCH.comment"
@@ -1397,6 +1435,7 @@ const firstPanelDataCH = ref({
   scan_file: '',
   foreign_participants: '',
   top_must_pay: false,
+  participants_with_payment: '',
 });
 const isSent = ref(false);
 const fileNameDH = ref(null);
@@ -1629,10 +1668,8 @@ watchEffect(async () => {
 
   // Мапинг данных для отчета эксперта ЦШ
   if (reportStore.reportForCheckCH.first && props.centralExpert) {
-    console.log('here1')
     // Добавление данных панели "отчет РО"
     if (reportStore.reportForCheckCH.first.rejecting_reasons) {
-      console.log('here2')
       firstPanelData.value.comment = reportStore.reportForCheckCH.first.comment;
       firstPanelData.value.amount_of_money = reportStore.reportForCheckCH.first.amount_of_money;
       firstPanelData.value.foreign_participants = reportStore.reportForCheckCH.first.foreign_participants;
@@ -1665,32 +1702,43 @@ watchEffect(async () => {
 
       // Добавление данных из стора для панели "корректировка ЦШ"
       if (reportStore.reportDataCH.first.central_version) {
-        firstPanelDataCH.value.amount_of_money = reportStore.reportDataCH.first.central_version.amount_of_money;
-        firstPanelDataCH.value.comment = reportStore.reportDataCH.first.central_version.comment || '';
-        firstPanelDataCH.value.foreign_participants = reportStore.reportDataCH.first.central_version.foreign_participants || '';
-        firstPanelDataCH.value.top_must_pay = reportStore.reportDataCH.first.central_version.top_must_pay;
-        firstPanelDataCH.value.scan_file = reportStore.reportDataCH.first.central_version.scan_file;
-        firstPanelDataCH.value.file_size = reportStore.reportDataCH.first.central_version.file_size;
-        firstPanelDataCH.value.file_type = reportStore.reportDataCH.first.central_version.file_type;
+        // firstPanelDataCH.value.amount_of_money = reportStore.reportDataCH.first.central_version.amount_of_money;
+        // firstPanelDataCH.value.comment = reportStore.reportDataCH.first.central_version.comment || '';
+        // firstPanelDataCH.value.foreign_participants = reportStore.reportDataCH.first.central_version.foreign_participants || '';
+        // firstPanelDataCH.value.top_must_pay = reportStore.reportDataCH.first.central_version.top_must_pay;
+        // firstPanelDataCH.value.scan_file = reportStore.reportDataCH.first.central_version.scan_file;
+        // firstPanelDataCH.value.file_size = reportStore.reportDataCH.first.central_version.file_size;
+        // firstPanelDataCH.value.file_type = reportStore.reportDataCH.first.central_version.file_type;
+
+        Object.keys(firstPanelDataCH.value).forEach(key => {
+          if (reportStore.reportDataCH.first.central_version[key] !== undefined) {
+            firstPanelDataCH.value[key] = reportStore.reportDataCH.first.central_version[key];
+          }
+        });
+
         fileNameCH.value = reportStore.reportDataCH.first.central_version.scan_file;
         fileSizeCH.value = reportStore.reportDataCH.first.central_version.file_size;
         fileTypeCH.value = reportStore.reportDataCH.first.central_version.file_type;
       } else {
-        firstPanelDataCH.value.amount_of_money = reportStore.reportDataCH.first.amount_of_money;
-        firstPanelDataCH.value.comment = reportStore.reportDataCH.first.comment || '';
-        firstPanelDataCH.value.foreign_participants = reportStore.reportDataCH.first.foreign_participants || '';
-        firstPanelDataCH.value.top_must_pay = reportStore.reportDataCH.first.top_must_pay;
-        firstPanelDataCH.value.scan_file = reportStore.reportDataCH.first.scan_file;
-        firstPanelDataCH.value.file_size = reportStore.reportDataCH.first.file_size;
-        firstPanelDataCH.value.file_type = reportStore.reportDataCH.first.file_type;
+        // firstPanelDataCH.value.amount_of_money = reportStore.reportDataCH.first.amount_of_money;
+        // firstPanelDataCH.value.comment = reportStore.reportDataCH.first.comment || '';
+        // firstPanelDataCH.value.foreign_participants = reportStore.reportDataCH.first.foreign_participants || '';
+        // firstPanelDataCH.value.top_must_pay = reportStore.reportDataCH.first.top_must_pay;
+        // firstPanelDataCH.value.scan_file = reportStore.reportDataCH.first.scan_file;
+        // firstPanelDataCH.value.file_size = reportStore.reportDataCH.first.file_size;
+        // firstPanelDataCH.value.file_type = reportStore.reportDataCH.first.file_type;
+
+        Object.keys(firstPanelDataCH.value).forEach(key => {
+          if (reportStore.reportDataCH.first[key] !== undefined) {
+            firstPanelDataCH.value[key] = reportStore.reportDataCH.first[key];
+          }
+        });
+
         fileNameCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.name : reportStore.reportDataCH.first.scan_file ? reportStore.reportDataCH.first.scan_file : null;
         fileSizeCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.size / Math.pow(1024, 2) : reportStore.reportDataCH.first.file_size ? reportStore.reportDataCH.first.file_size : null;
         fileTypeCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.type.split('/').at(-1) : reportStore.reportDataCH.first.file_type ? reportStore.reportDataCH.first.file_type : null;
       }
-
-
     } else {
-
       const reportDataRH = JSON.parse(reportStore.reportForCheckCH.first.district_version);
       // firstPanelData.value.comment = reportDataRH?.comment || '';
       // firstPanelData.value.amount_of_money = reportDataRH?.amount_of_money;
@@ -1725,10 +1773,18 @@ watchEffect(async () => {
       // fileSizeDH.value = reportStore.reportForCheckCH.first.file_size || '';
 
       // Добавление данных из стора для панели "корректировка ЦШ"
-      firstPanelDataCH.value.amount_of_money = reportStore.reportDataCH.first.amount_of_money;
-      firstPanelDataCH.value.comment = reportStore.reportDataCH.first.comment || '';
-      firstPanelDataCH.value.foreign_participants = reportStore.reportDataCH.first.foreign_participants || '';
-      firstPanelDataCH.value.top_must_pay = reportStore.reportDataCH.first.top_must_pay;
+
+      // firstPanelDataCH.value.amount_of_money = reportStore.reportDataCH.first.amount_of_money;
+      // firstPanelDataCH.value.comment = reportStore.reportDataCH.first.comment || '';
+      // firstPanelDataCH.value.foreign_participants = reportStore.reportDataCH.first.foreign_participants || '';
+      // firstPanelDataCH.value.top_must_pay = reportStore.reportDataCH.first.top_must_pay;
+
+      Object.keys(firstPanelDataCH.value).forEach(key => {
+        if (reportStore.reportDataCH.first[key] !== undefined) {
+          firstPanelDataCH.value[key] = reportStore.reportDataCH.first[key];
+        }
+      });
+
       fileNameCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.name : null;
       fileSizeCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.size / Math.pow(1024, 2) : null;
       fileTypeCH.value = reportStore.reportDataCHFile.first ? reportStore.reportDataCHFile.first.type.split('/').at(-1) : null;
