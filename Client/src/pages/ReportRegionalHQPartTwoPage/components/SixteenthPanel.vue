@@ -467,15 +467,15 @@ const projects = ref([
 ]);
 const isFirstSent = ref(true);
 const isSent = ref(false);
-const finalResult = ref(0);
-const finalResultDH = ref(0);
+// const finalResult = ref(0);
+// const finalResultDH = ref(0);
 const commonData = ref([]);
 const commentCH = ref();
 const row = ref(1);
 const isProjectCH = ref(null);
 const reportVerifiedByCH = ref(false);
-const isErrorFile = ref(false);
-const isErrorsFiles = ref([]);
+// const isErrorFile = ref(false);
+// const isErrorsFiles = ref([]);
 
 const ID_PANEL = '14';
 
@@ -522,117 +522,117 @@ const deleteLink = async (projectIndex, linkIndex) => {
   emit('getData', data, 14);
 };
 
-const uploadFile = async (event, index) => {
-  if (!event.target.files || !event.target.files[0]) return;
-  
-  const file = event.target.files[0];
-  
-  // Валидация файла
-  fileValidate(file, 7, isErrorFile);
-  
-  // Сброс ошибок для всех файлов
-  for (let i = 0; i < projects.value.length; i++) {
-    isErrorsFiles.value[i] = false;
-  }
-  
-  // Обновление информации о файле
-  projects.value[index].file_size = (file.size / Math.pow(1024, 2));
-  projects.value[index].file_type = file.type.split('/').at(-1);
-  
-  if (isErrorFile.value) {
-    // Если файл не прошел валидацию, сохраняем только имя
-    isErrorsFiles.value[index] = true;
-    projects.value[index].file = file.name;
-  } else {
-    // Если файл прошел валидацию, отправляем на сервер
-    projects.value[index].file = file.name;
-    
-    let formData = new FormData();
-    formData.append('comment', sixteenthPanelData.value.comment || '');
-    formData.append('is_project', sixteenthPanelData.value.is_project);
-    
-    // Добавляем файл
-    formData.append(`projects[${index}][file]`, file);
-    
-    // Добавляем остальные данные проекта
-    projects.value.forEach((project, i) => {
-      if (project.name) formData.append(`projects[${i}][name]`, project.name);
-      if (project.project_scale) formData.append(`projects[${i}][project_scale]`, project.project_scale);
-      if (project.links && project.links.length) {
-        for (let j = 0; j < project.links.length; j++) {
-          if (project.links[j].link) {
-            formData.append(`projects[${i}][links][${j}][link]`, project.links[j].link);
-          }
-        }
-      }
-    });
-    
-    try {
-      if (isFirstSent.value) {
-        const { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
-        // Обновляем имя файла после успешной загрузки
-        if (data.projects && data.projects[index] && data.projects[index].file) {
-          projects.value[index].file = data.projects[index].file.split('/').at(-1);
-        }
-        // Не вызываем emit('getData') здесь, чтобы избежать перезаписи файлов
-      } else {
-        const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-        // Обновляем имя файла после успешной загрузки
-        if (data.projects && data.projects[index] && data.projects[index].file) {
-          projects.value[index].file = data.projects[index].file.split('/').at(-1);
-        }
-        // Не вызываем emit('getData') здесь, чтобы избежать перезаписи файлов
-      }
-    } catch (e) {
-      console.log('uploadFile error:', e);
-      // В случае ошибки сбрасываем файл
-      projects.value[index].file = '';
-      projects.value[index].file_size = '';
-      projects.value[index].file_type = '';
-    }
-  }
-};
-
-const deleteFile = async (index) => {
-  // Сбрасываем данные файла
-  projects.value[index].file = '';
-  projects.value[index].file_size = '';
-  projects.value[index].file_type = '';
-  
-  // Если файл был с ошибкой, просто сбрасываем ошибку
-  if (isErrorsFiles.value[index]) {
-    isErrorsFiles.value[index] = false;
-    return;
-  }
-  
-  // Иначе отправляем запрос на удаление файла
-  let formData = new FormData();
-  formData.append('comment', sixteenthPanelData.value.comment || '');
-  formData.append('is_project', sixteenthPanelData.value.is_project);
-  
-  // Добавляем пустой файл для удаления
-  formData.append(`projects[${index}][file]`, '');
-  
-  // Добавляем остальные данные проекта
-  projects.value.forEach((project, i) => {
-    if (project.name) formData.append(`projects[${i}][name]`, project.name);
-    if (project.project_scale) formData.append(`projects[${i}][project_scale]`, project.project_scale);
-    if (project.links && project.links.length) {
-      for (let j = 0; j < project.links.length; j++) {
-        if (project.links[j].link) {
-          formData.append(`projects[${i}][links][${j}][link]`, project.links[j].link);
-        }
-      }
-    }
-  });
-  
-  try {
-    const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
-    emit('getData', data, Number(ID_PANEL));
-  } catch (e) {
-    console.log('deleteFile error:', e);
-  }
-};
+// const uploadFile = async (event, index) => {
+//   if (!event.target.files || !event.target.files[0]) return;
+//
+//   const file = event.target.files[0];
+//
+//   // Валидация файла
+//   fileValidate(file, 7, isErrorFile);
+//
+//   // Сброс ошибок для всех файлов
+//   for (let i = 0; i < projects.value.length; i++) {
+//     isErrorsFiles.value[i] = false;
+//   }
+//
+//   // Обновление информации о файле
+//   projects.value[index].file_size = (file.size / Math.pow(1024, 2));
+//   projects.value[index].file_type = file.type.split('/').at(-1);
+//
+//   if (isErrorFile.value) {
+//     // Если файл не прошел валидацию, сохраняем только имя
+//     isErrorsFiles.value[index] = true;
+//     projects.value[index].file = file.name;
+//   } else {
+//     // Если файл прошел валидацию, отправляем на сервер
+//     projects.value[index].file = file.name;
+//
+//     let formData = new FormData();
+//     formData.append('comment', sixteenthPanelData.value.comment || '');
+//     formData.append('is_project', sixteenthPanelData.value.is_project);
+//
+//     // Добавляем файл
+//     formData.append(`projects[${index}][file]`, file);
+//
+//     // Добавляем остальные данные проекта
+//     projects.value.forEach((project, i) => {
+//       if (project.name) formData.append(`projects[${i}][name]`, project.name);
+//       if (project.project_scale) formData.append(`projects[${i}][project_scale]`, project.project_scale);
+//       if (project.links && project.links.length) {
+//         for (let j = 0; j < project.links.length; j++) {
+//           if (project.links[j].link) {
+//             formData.append(`projects[${i}][links][${j}][link]`, project.links[j].link);
+//           }
+//         }
+//       }
+//     });
+//
+//     try {
+//       if (isFirstSent.value) {
+//         const { data } = await reportPartTwoService.createReport(formData, ID_PANEL, true);
+//         // Обновляем имя файла после успешной загрузки
+//         if (data.projects && data.projects[index] && data.projects[index].file) {
+//           projects.value[index].file = data.projects[index].file.split('/').at(-1);
+//         }
+//         // Не вызываем emit('getData') здесь, чтобы избежать перезаписи файлов
+//       } else {
+//         const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+//         // Обновляем имя файла после успешной загрузки
+//         if (data.projects && data.projects[index] && data.projects[index].file) {
+//           projects.value[index].file = data.projects[index].file.split('/').at(-1);
+//         }
+//         // Не вызываем emit('getData') здесь, чтобы избежать перезаписи файлов
+//       }
+//     } catch (e) {
+//       console.log('uploadFile error:', e);
+//       // В случае ошибки сбрасываем файл
+//       projects.value[index].file = '';
+//       projects.value[index].file_size = '';
+//       projects.value[index].file_type = '';
+//     }
+//   }
+// };
+//
+// const deleteFile = async (index) => {
+//   // Сбрасываем данные файла
+//   projects.value[index].file = '';
+//   projects.value[index].file_size = '';
+//   projects.value[index].file_type = '';
+//
+//   // Если файл был с ошибкой, просто сбрасываем ошибку
+//   if (isErrorsFiles.value[index]) {
+//     isErrorsFiles.value[index] = false;
+//     return;
+//   }
+//
+//   // Иначе отправляем запрос на удаление файла
+//   let formData = new FormData();
+//   formData.append('comment', sixteenthPanelData.value.comment || '');
+//   formData.append('is_project', sixteenthPanelData.value.is_project);
+//
+//   // Добавляем пустой файл для удаления
+//   formData.append(`projects[${index}][file]`, '');
+//
+//   // Добавляем остальные данные проекта
+//   projects.value.forEach((project, i) => {
+//     if (project.name) formData.append(`projects[${i}][name]`, project.name);
+//     if (project.project_scale) formData.append(`projects[${i}][project_scale]`, project.project_scale);
+//     if (project.links && project.links.length) {
+//       for (let j = 0; j < project.links.length; j++) {
+//         if (project.links[j].link) {
+//           formData.append(`projects[${i}][links][${j}][link]`, project.links[j].link);
+//         }
+//       }
+//     }
+//   });
+//
+//   try {
+//     const { data } = await reportPartTwoService.createReportDraft(formData, ID_PANEL, true);
+//     emit('getData', data, Number(ID_PANEL));
+//   } catch (e) {
+//     console.log('deleteFile error:', e);
+//   }
+// };
 
 const addProject = () => {
   projects.value.push({
@@ -702,37 +702,37 @@ const setFormData = (index = null, isDeleteEvent = false, isLinkDelete = false, 
   return formData;
 };
 
-const calculateResult = (event) => {
-  if (event.target.checked) {
-    projects.value.forEach(e => {
-      if (e.project_scale === 'Всероссийский') {
-        finalResult.value += 2
-      } else if (e.project_scale === 'Окружной') {
-        finalResult.value += 1.5
-      } else if (e.project_scale === 'Межрегиональный') {
-        finalResult.value += 1
-      }
-    })
-  } else {
-    finalResult.value = 0
-  }
-};
-
-const calculateResultDH = (event) => {
-  if (event.target.checked) {
-    sixteenthPanelDataDH.value.projects.forEach(e => {
-      if (e.project_scale === 'Всероссийский') {
-        finalResultDH.value += 2
-      } else if (e.project_scale === 'Окружной') {
-        finalResultDH.value += 1.5
-      } else if (e.project_scale === 'Межрегиональный') {
-        finalResultDH.value += 1
-      }
-    })
-  } else {
-    finalResultDH.value = 0
-  }
-};
+// const calculateResult = (event) => {
+//   if (event.target.checked) {
+//     projects.value.forEach(e => {
+//       if (e.project_scale === 'Всероссийский') {
+//         finalResult.value += 2
+//       } else if (e.project_scale === 'Окружной') {
+//         finalResult.value += 1.5
+//       } else if (e.project_scale === 'Межрегиональный') {
+//         finalResult.value += 1
+//       }
+//     })
+//   } else {
+//     finalResult.value = 0
+//   }
+// };
+//
+// const calculateResultDH = (event) => {
+//   if (event.target.checked) {
+//     sixteenthPanelDataDH.value.projects.forEach(e => {
+//       if (e.project_scale === 'Всероссийский') {
+//         finalResultDH.value += 2
+//       } else if (e.project_scale === 'Окружной') {
+//         finalResultDH.value += 1.5
+//       } else if (e.project_scale === 'Межрегиональный') {
+//         finalResultDH.value += 1
+//       }
+//     })
+//   } else {
+//     finalResultDH.value = 0
+//   }
+// };
 
 const onReportReturn = (event) => {
   let formData = new FormData();
@@ -899,7 +899,7 @@ onMounted(() => {
 
 watch(sixteenthPanelDataDH.value, () => {
   let formData = new FormData();
-  reportStore.reportDataDH.sixteenth = sixteenthPanelDataDH.value;
+  reportStore.reportDataDH.fourteenth = sixteenthPanelDataDH.value;
 
   formData.append('comment', sixteenthPanelDataDH.value.comment || '');
   formData.append('is_project', sixteenthPanelDataDH.value.is_project);
@@ -1014,7 +1014,7 @@ watch(() => sixteenthPanelData.value.is_project, async (isProject) => {
 watch(() => isProjectCH.value, () => {
   let formData = new FormData();
   if (isProjectCH.value) {
-    reportStore.reportDataCH.sixteenth.projects = [];
+    reportStore.reportDataCH.fourteenth.projects = [];
     commonData.value.forEach(e => {
       reportStore.reportDataCH.sixteenth.projects.push(e.dataCH)
     });
