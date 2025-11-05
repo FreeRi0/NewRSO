@@ -31,7 +31,7 @@
                             <div v-for="event in selectedEvents" :key="event.id" class="form__field-event">
                                 <event-form :event="event"
                                     :is-sent-six="!!(props.data && props.data[event.id] && props.data[event.id].is_sent)"
-                                    :is-d-h="districtExpert"
+                                    :is-d-h="districtExpert" :is-c-h="centralExpert"
                                     :is-error-panel="!!(props.isErrorPanel && props.isErrorPanel[event.id] && props.isErrorPanel[event.id].error)"
                                     :data="(props.data && props.data[event.id]) ? props.data[event.id] : {}"
                                     :correction-tab="1" :tab="props.tab" @collapse-form="collapsed()"
@@ -68,8 +68,8 @@
                                     :is-error-panel="!!(props.isErrorPanel && props.isErrorPanel[event.id] && props.isErrorPanel[event.id].error)"
                                     :data="(props.data && props.data[event.id]) ? props.data[event.id] : {}"
                                     :correction-tab="3" :tab="props.tab" @collapse-form="collapsed()"
-                                    @delete-event="eventDelete" @formData="formData($event, event.id)"
-                                    @formDataDH="formDataDH($event, event.id)"
+                                    :is-c-h="centralExpert" :is-d-h="districtExpert" @delete-event="eventDelete"
+                                    @formData="formData($event, event.id)" @formDataDH="formDataDH($event, event.id)"
                                     @formDataCH="formDataCH($event, event.id)" @error="setError($event, event.id)" />
                             </div>
                         </div>
@@ -268,7 +268,14 @@ const formDataDH = async (reportData, reportNumber) => {
 };
 
 const formDataCH = (reportData, reportNumber) => {
-    if (props.centralHeadquarterCommander) {
+    if (props.centralExpert) {
+        let formData = new FormData();
+
+        formData.append('comment', reportData.comment || '');
+        formData.append('number_of_members', reportData.number_of_members || '');
+        if(reportData.hq_members_count) formData.append('hq_members_count', reportData.hq_members_count || '');
+        // if (reportStore.returnReport.six[reportNumber]) formData.append('reasons[comment]', reportData.comment);
+
         emit('getDataCH', reportData, 6, reportNumber);
     }
 };
