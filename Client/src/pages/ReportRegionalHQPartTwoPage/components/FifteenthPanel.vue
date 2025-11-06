@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="!(props.centralExpert || props.districtExpert || reportStore.isReportReject?.fifteenth || reportStore.isAllReportsVerifiedByCH) || (props.tab === 'Просмотр отправленного отчета' && reportStore.isReportReject?.fifteenth)"
+    v-if="!(props.centralExpert || props.districtExpert || JSON.stringify(reportStore.isReportReject?.fifteenth) !== '{}' && reportStore.isReportReject?.fifteenth || reportStore.isAllReportsVerifiedByCH) || (props.tab === 'Просмотр отправленного отчета' && JSON.stringify(reportStore.isReportReject?.fifteenth) !== '{}' && reportStore.isReportReject?.fifteenth)"
     class="panel-form">
     <div class="card-form">
       <p class="card-form__text">
