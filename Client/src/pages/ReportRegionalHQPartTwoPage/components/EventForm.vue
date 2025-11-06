@@ -179,7 +179,7 @@ const props = defineProps({
     }
 })
 const reportStore = useReportPartTwoStore();
-const sixPanelDataCH = ref(reportStore.reportDataCH.six[props.event.id].verified_by_chq ? reportStore.reportDataCH.six[props.event.id] : { number_of_members: null, hq_members_count: null })
+const sixPanelDataCH = ref(reportStore.reportDataCH?.six?.[props.event.id]?.verified_by_chq ? reportStore.reportDataCH.six[props.event.id] : { number_of_members: null, hq_members_count: null })
 const eventData = ref({
     number_of_members: 0,
     links: [{ link: '' }],
