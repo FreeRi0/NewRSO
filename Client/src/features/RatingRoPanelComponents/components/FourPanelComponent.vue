@@ -427,9 +427,14 @@ watch(fourthPanelDataCH.value, () => {
 </script>
 
 <style lang="scss" scoped>
+.form__field-report {
+  margin-top: 32px;
+}
+
 .valid-red {
   color: #db0000;
 }
+
 .v-tab-item--selected {
   background: #f3f4f5;
 }
