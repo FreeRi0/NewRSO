@@ -23,8 +23,8 @@
         >
           <div class="form__field-group-six">
             <select-search-indicator
-              :events="items"
-              v-model="filteredEvents"
+              :events="filteredEvents"
+              v-model="selectedEvent"
               class="select"
             />
           </div>
