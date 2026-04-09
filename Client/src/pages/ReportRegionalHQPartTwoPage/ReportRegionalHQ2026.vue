@@ -2319,16 +2319,25 @@ watch(revisionPanels.value, () => {
 });
 
 onMounted(() => {
-  if (
-    roleStore.roles.regionalheadquarter_commander &&
-    typeof route.query.reportId === "undefined" &&
-    window.performance.navigation.type === 1
-  ) {
-    preloader.value = true;
-    getReportData();
-  }
   getItems(7);
   getItems(10);
+
+  if (typeof route.query.reportId !== 'undefined') return;
+  if (roleStore.roles.regionalheadquarter_commander) {
+    preloader.value = true;
+    getReportData();
+  } else {
+    const stopWatch = watch(
+      () => roleStore.roles.regionalheadquarter_commander,
+      (isCommander) => {
+        if (isCommander) {
+          preloader.value = true;
+          getReportData();
+          stopWatch();
+        }
+      }
+    );
+  }
 });
 </script>
 <style lang="scss">
