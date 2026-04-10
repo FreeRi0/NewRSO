@@ -112,23 +112,24 @@ const formData = async (reportData, reportNumber) => {
   try {
     if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
       if (!link_err.value) {
+        const reportNum2026 = `0${reportNumber}`
         if (isFirstSent.value) {
           const { data } = await reportPartTwoService.createMultipleReport(
             reportData,
             "10",
-            reportNumber,
+            reportNum2026,
             true
           );
           isFirstSent.value = false;
-          emit("getData", data, 10, reportNumber);
+          emit("getData", data, 10, reportNum2026);
         } else {
           const { data } = await reportPartTwoService.createMultipleReportDraft(
             reportData,
             "10",
-            reportNumber,
+            reportNum2026,
             true
           );
-          emit("getData", data, 10, reportNumber);
+          emit("getData", data, 10, reportNum2026);
         }
       }
     }
@@ -138,14 +139,16 @@ const formData = async (reportData, reportNumber) => {
 };
 
 const formDataDH = (reportData, reportNumber) => {
+  const reportNum2026 = `0${reportNumber}`
   if (props.districtHeadquarterCommander) {
-    emit("getDataDH", reportData, 10, reportNumber);
+    emit("getDataDH", reportData, 10, reportNum2026);
   }
 };
 
 const formDataCH = (reportData, reportNumber) => {
+  const reportNum2026 = `0${reportNumber}`
   if (props.centralHeadquarterCommander) {
-    emit("getDataCH", reportData, 10, reportNumber);
+    emit("getDataCH", reportData, 10, reportNum2026);
   }
 };
 
@@ -154,7 +157,7 @@ const collapsed = () => {
 };
 
 const getId = (id) => {
-  el_id.value = id;
+  el_id.value = `0${id}`;
   emit("getId", id);
 };
 
@@ -164,40 +167,42 @@ const getPanelNumber = (number) => {
 
 const uploadFile = async (reportData, reportNumber) => {
   if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
+    const reportNum2026 = `0${reportNumber}`
     if (isFirstSent.value) {
       let { data } = await reportPartTwoService.createMultipleReport(
         reportData,
         "10",
-        reportNumber,
+        reportNum2026,
         true
       );
-      emit("getData", data, 10, reportNumber);
+      emit("getData", data, 10, reportNum2026);
     } else {
       let { data } = await reportPartTwoService.createMultipleReportDraft(
         reportData,
         "10",
-        reportNumber,
+        reportNum2026,
         true
       );
-      emit("getData", data, 10, reportNumber);
+      emit("getData", data, 10, reportNum2026);
     }
   }
 };
 
 const deleteFile = async (reportData, reportNumber) => {
   if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
+    const reportNum2026 = `0${reportNumber}`
     if (isFirstSent.value) {
       await reportPartTwoService.createMultipleReport(
         reportData,
         "10",
-        reportNumber,
+        reportNum2026,
         true
       );
     } else {
       await reportPartTwoService.createMultipleReportDraft(
         reportData,
         "10",
-        reportNumber,
+        reportNum2026,
         true
       );
     }

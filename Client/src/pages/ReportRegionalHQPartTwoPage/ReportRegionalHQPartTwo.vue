@@ -1623,7 +1623,7 @@ const getReportData = async (reportId) => {
       let dataTenthFirst;
       try {
         // reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
-        dataTenthFirst = (await reportPartTwoService.getMultipleReport("10", "1")).data;
+        dataTenthFirst = (await reportPartTwoService.getMultipleReport("10", "01")).data;
         // if (!dataTenthFirst.regional_version) {
         //   reportData.value.tenth.first = dataTenthFirst;
         // } else {
@@ -1661,7 +1661,7 @@ const getReportData = async (reportId) => {
       let dataTenthSecond;
       try {
         // reportData.value.tenth.second = (await reportPartTwoService.getMultipleReport('10', '2')).data;
-        dataTenthSecond = (await reportPartTwoService.getMultipleReport("10", "2")).data;
+        dataTenthSecond = (await reportPartTwoService.getMultipleReport("10", "02")).data;
         // if (!dataTenthSecond.regional_version) {
         //   reportData.value.tenth.second = dataTenthSecond;
         // } else {

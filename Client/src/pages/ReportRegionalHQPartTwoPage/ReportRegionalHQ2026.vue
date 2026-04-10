@@ -572,17 +572,18 @@ const getMultiplyData = async (reportId) => {
   });
 
   const ninthDataPromises = ninth_items.value.map(async (item) => {
+    const id2026 = `0${item.id}`
     try {
       if (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) {
         return {
-          id: item.id,
-          data: (await reportPartTwoService.getMultipleReportDH("10", item.id, reportId))
+          id: id2026,
+          data: (await reportPartTwoService.getMultipleReportDH("10", id2026, reportId))
             .data,
         };
       } else {
         return {
-          id: item.id,
-          data: (await reportPartTwoService.getMultipleReport("10", item.id)).data,
+          id: id2026,
+          data: (await reportPartTwoService.getMultipleReport("10", id2026)).data,
         };
       }
     } catch (error) {
