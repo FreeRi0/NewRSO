@@ -9,17 +9,14 @@ export const useReportPartTwoStore = defineStore('report-two', {
             first: {},
             fourth: {},
             fifth: {},
+            sixth: {},
             six: {},
             ninth: {},
-            tenth: {
+            eleventh: {
                 first: {},
                 second: {},
             },
-            eleventh: {},
             twelfth: {},
-            thirteenth: {},
-            fourteenth: {},
-            sixteenth: {},
         },
         /*
         * Объект для хранения файлов эксперта ОШ
@@ -27,15 +24,15 @@ export const useReportPartTwoStore = defineStore('report-two', {
         reportDataDHFile: {
             first: null,
             fourth: null,
+            fifth: null,
+            sixth: null,
+            six: {},
             ninth: {},
-            tenth: {
+            eleventh: {
                 first: null,
                 second: null,
             },
-            eleventh: null,
             twelfth: null,
-            thirteenth: null,
-            fourteenth: null,
         },
         /*
         * Объект для хранения данных эксперта ЦШ
@@ -44,32 +41,30 @@ export const useReportPartTwoStore = defineStore('report-two', {
             first: {},
             fourth: {},
             fifth: {},
+            sixth: {},
             six: {},
             ninth: {},
-            eleventh: {},
-            twelfth: {},
-            thirteenth: {},
-            fourteenth: {},
-            tenth: {
+            eleventh: {
                 first: {},
                 second: {},
             },
-            sixteenth: {},
+            twelfth: {},
         },
         /*
         * Объект для хранения файлов эксперта ЦШ
         */
         reportDataCHFile: {
             first: null,
+            fourth: null,
+            fifth: null,
+            sixth: null,
+            six: {},
             ninth: {},
-            eleventh: null,
-            twelfth: null,
-            thirteenth: null,
-            fourteenth: null,
-            tenth: {
+            eleventh: {
                 first: null,
                 second: null,
             },
+            twelfth: null,
         },
         /*
         * Объект для хранения подтверждения об отправке отчета на доработку экспертом ЦШ
@@ -78,17 +73,14 @@ export const useReportPartTwoStore = defineStore('report-two', {
             first: false,
             fourth: false,
             fifth: false,
+            sixth: false,
             six: {},
             ninth: {},
-            eleventh: false,
-            twelfth: false,
-            thirteenth: false,
-            fourteenth: false,
-            tenth: {
+            eleventh: {
                 first: false,
                 second: false,
             },
-            sixteenth: false,
+            twelfth: false,
         },
         /*
         * Объект для хранения полученных данных от РШ и ОШ для отчета эксперта ЦШ
@@ -97,48 +89,42 @@ export const useReportPartTwoStore = defineStore('report-two', {
             first: null,
             fourth: null,
             fifth: null,
+            sixth: null,
             six: {},
             ninth: {},
-            tenth: {
+            eleventh: {
                 first: null,
                 second: null,
             },
-            eleventh: null,
             twelfth: null,
-            fourteenth: null,
-            thirteenth: null,
-            sixteenth: null,
         },
 
         isReportReject: {
             first: false,
             fourth: false,
             fifth: false,
+            sixth: false,
             six: {},
             ninth: {},
-            tenth: {
+            eleventh: {
                 first: false,
                 second: false,
             },
-            eleventh: false,
             twelfth: false,
-            thirteenth: false,
-            fourteenth: false,
-            sixteenth: false,
         },
 
         reportReject: {
             first: null,
             fourth: null,
             fifth: null,
+            sixth: null,
             six: {},
             ninth: {},
-            tenth: {
+            eleventh: {
                 first: null,
                 second: null,
             },
-            sixteenth: null,
-            fourteenth: null,
+            twelfth: false,
         },
         isReportRevision: false,
 

@@ -1,11 +1,11 @@
 <template>
-  <form class=" Report-Regional-Form__style" @submit.prevent="sentReport">
+  <form class="Report-Regional-Form__style" @submit.prevent="sentReport">
     <!--    <h2 v-if="isSecondReport" class="report_title-h3">Свод статистических данных по трудоустройству бойцов студенческих-->
     <!--      отрядов РО за 2025 год на 15 октября 2025 года</h2>-->
     <!--    <h2 v-if="!isNewReport" class="report_title-h3">Свод статистических данных по трудоустройству бойцов-->
     <!--      студенческих отрядов РО за 2025 год на 15 октября 2025 года</h2>-->
 
-    <div v-if="!isSecondReport" class="form__field form__field-group">
+    <!-- <div v-if="!isSecondReport" class="form__field form__field-group">
       <label class="form__label" for="participants_number">Количество членов РО <sup class="valid-red">*</sup></label>
       <InputReport
           v-model:value="reportDataChildren.participants_number"
@@ -293,129 +293,217 @@
           />
         </div>
       </div>
-    </div>
+    </div> -->
 
-    <div v-if="isSecondReport">
+    <v-expansion-panels v-model="panel">
+      <v-expansion-panel>
+        <v-expansion-panel-title>
+          1.1 Из&nbsp;них: члены РО&nbsp;РСО&nbsp;&mdash; студенты очной формы обучения
+          субъекта Российской Федерации, обучающихся в&nbsp;образовательных организациях
+          высшего образования (ООВО) в&nbsp;государственных, муниципальных и&nbsp;частных
+          образовательных организациях, включая филиалы (исключения&nbsp;&mdash; учебные
+          заведения специальных ведомств, проводящих обучение на&nbsp;казарменном
+          положении)
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <div class="form__field form__field-group" style="width: 100%">
+            <p class="text">Количество членов СО</p>
+            <label class="form__label" for="comment"
+              >Штабы СО&nbsp;ООВО<sup class="valid-red">*</sup></label
+            >
+            <InputReport
+              v-model:value="reportDataChildren.oovo_participants"
+              id="foreign_participants"
+              name="foreign_participants"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+              style="width: 50%"
+            />
+          </div>
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+
+      <v-expansion-panel>
+        <v-expansion-panel-title>
+          1.2 Из&nbsp;них: члены РО&nbsp;РСО&nbsp;&mdash; студенты очной формы обучения
+          субъекта Российской Федерации, обучающихся в&nbsp;профессиональных
+          образовательных организациях (ПОО) в&nbsp;государственных, Муниципальных
+          и&nbsp;частных образовательных организациях, включая филиалы
+          (исключения&nbsp;&mdash; учебные заведения специальных ведомств, проводящих
+          обучение на&nbsp;казарменном положении)
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <div class="form__field form__field-group" style="width: 100%">
+            <p class="text">Количество членов СО</p>
+            <label class="form__label" for="comment"
+              >Штабы СО&nbsp;ПОО<sup class="valid-red">*</sup></label
+            >
+            <InputReport
+              v-model:value="reportDataChildren.poo_participants"
+              id="foreign_participants"
+              name="foreign_participants"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+              style="width: 50%"
+            />
+          </div>
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+    </v-expansion-panels>
+
+    <!-- <div v-if="isSecondReport">
       <div class="form-container form__field-group">
         <p>Количество работников:</p>
         <div class="form-col">
           <div class="form__field">
-            <label class="form__label" for="employed_so_poo">Штабы СО ПОО <sup class="valid-red">*</sup></label>
+            <label class="form__label" for="employed_so_poo"
+              >Штабы СО ПОО <sup class="valid-red">*</sup></label
+            >
             <InputReport
-                v-model:value="reportDataChildren.employed_so_poo"
-                id="employed_so_poo"
-                name="employed_so_poo"
-                class="form__input"
-                type="number"
-                placeholder="Введите число"
-                @focusout="focusOut"
-                :disabled="blockEditFirstReport"
+              v-model:value="reportDataChildren.employed_so_poo"
+              id="employed_so_poo"
+              name="employed_so_poo"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+              :disabled="blockEditFirstReport"
             />
           </div>
           <div class="form__field">
-            <label class="form__label" for="employed_so_oovo">Штабы СО ООВО <sup class="valid-red">*</sup></label>
+            <label class="form__label" for="employed_so_oovo"
+              >Штабы СО ООВО <sup class="valid-red">*</sup></label
+            >
             <InputReport
-                v-model:value="reportDataChildren.employed_so_oovo"
-                id="employed_so_oovo"
-                name="employed_so_oovo"
-                class="form__input"
-                type="number"
-                placeholder="Введите число"
-                @focusout="focusOut"
-                :disabled="blockEditFirstReport"
+              v-model:value="reportDataChildren.employed_so_oovo"
+              id="employed_so_oovo"
+              name="employed_so_oovo"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+              :disabled="blockEditFirstReport"
             />
           </div>
           <div class="form__field">
-            <label class="form__label" for="employed_ro_rso">Штабы РО РСО <sup class="valid-red">*</sup></label>
+            <label class="form__label" for="employed_ro_rso"
+              >Штабы РО РСО <sup class="valid-red">*</sup></label
+            >
             <InputReport
-                v-model:value="reportDataChildren.employed_ro_rso"
-                id="employed_ro_rso"
-                name="employed_ro_rso"
-                class="form__input"
-                type="number"
-                placeholder="Введите число"
-                @focusout="focusOut"
-                :disabled="blockEditFirstReport"
+              v-model:value="reportDataChildren.employed_ro_rso"
+              id="employed_ro_rso"
+              name="employed_ro_rso"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              @focusout="focusOut"
+              :disabled="blockEditFirstReport"
             />
           </div>
         </div>
         <p>Свой вариант:</p>
         <Button
-            v-if="!blockEditFirstReport"
-            class="form__add-link-button"
-            label="+ Добавить свой вариант"
-            @click="addAdditionalStatistics"
+          v-if="!blockEditFirstReport"
+          class="form__add-link-button"
+          label="+ Добавить свой вариант"
+          @click="addAdditionalStatistics"
         />
-        <div class="form-container" v-for="(statistic, i) in reportDataChildren.additional_statistics" :key="i"
-             style="align-items: end">
+        <div
+          class="form-container"
+          v-for="(statistic, i) in reportDataChildren.additional_statistics"
+          :key="i"
+          style="align-items: end"
+        >
           <div class="form-col">
             <div class="form__field">
-              <label class="form__label" for="statisticName">Название подразделения: <sup
-                  class="valid-red">*</sup></label>
+              <label class="form__label" for="statisticName"
+                >Название подразделения: <sup class="valid-red">*</sup></label
+              >
               <InputReport
-                  v-model:value="statistic.name"
-                  id="statisticName"
-                  name="statisticName"
-                  class="form__input"
-                  placeholder="название подразделения"
-                  @focusout="focusOut"
-                  :disabled="blockEditFirstReport"
+                v-model:value="statistic.name"
+                id="statisticName"
+                name="statisticName"
+                class="form__input"
+                placeholder="название подразделения"
+                @focusout="focusOut"
+                :disabled="blockEditFirstReport"
               />
             </div>
           </div>
           <div class="form-col">
             <div class="form__field">
-              <label class="form__label" for="statisticName">Количество: <sup class="valid-red">*</sup></label>
+              <label class="form__label" for="statisticName"
+                >Количество: <sup class="valid-red">*</sup></label
+              >
               <InputReport
-                  v-model:value="statistic.value"
-                  id="statisticQuantity"
-                  name="statisticQuantity"
-                  class="form__input"
-                  type="number"
-                  placeholder="количество"
-                  @focusout="focusOut"
-                  :disabled="blockEditFirstReport"
+                v-model:value="statistic.value"
+                id="statisticQuantity"
+                name="statisticQuantity"
+                class="form__input"
+                type="number"
+                placeholder="количество"
+                @focusout="focusOut"
+                :disabled="blockEditFirstReport"
               />
             </div>
           </div>
           <div class="form-col">
             <div class="form__field">
               <Button
-                  v-if="!blockEditFirstReport"
-                  class="form__add-link-button"
-                  label="Удалить свой вариант"
-                  @click="deleteAdditionalStatistics(i)"
+                v-if="!blockEditFirstReport"
+                class="form__add-link-button"
+                label="Удалить свой вариант"
+                @click="deleteAdditionalStatistics(i)"
               />
             </div>
           </div>
         </div>
       </div>
-    </div>
-
+    </div> -->
   </form>
-  <Button
-      v-if="isNewReport && (roleStore.experts.is_central_expert === false && roleStore.experts.is_district_expert === false)"
-      variant="text"
-      label="Отправить отчет"
-      size="large"
-      :onclick="sentReport"
-      :disabled="isButtonDisabled"
-  />
+  <!-- <Button
+    v-if="
+      isNewReport &&
+      roleStore.experts.is_central_expert === false &&
+      roleStore.experts.is_district_expert === false
+    "
+    variant="text"
+    label="Отправить отчет"
+    size="large"
+    :onclick="sentReport"
+    :disabled="isButtonDisabled"
+  /> -->
 </template>
 
 <script setup>
-import {InputReport} from '@shared/components/inputs';
-import {Button} from '@shared/components/buttons';
-import {ref, watchEffect} from "vue";
-import {useRoleStore} from '@layouts/store/role';
-import {useRoute} from "vue-router";
-import {editReport} from "@services/ReportService.ts";
-import {FileBoxComponent} from '@entities/RatingRoComponents/components';
+import { InputReport } from "@shared/components/inputs";
+// import { Button } from "@shared/components/buttons";
+import { ref, watchEffect } from "vue";
+import { useRoleStore } from "@layouts/store/role";
+import { useRoute } from "vue-router";
+import { editReport } from "@services/ReportService.ts";
+// import { FileBoxComponent } from "@entities/RatingRoComponents/components";
 
 const roleStore = useRoleStore();
 const route = useRoute();
 
-const emit = defineEmits(['sentReport']);
+const emit = defineEmits(["sentReport"]);
 const props = defineProps({
   reportData: {
     type: Object,
@@ -430,100 +518,102 @@ const props = defineProps({
   },
   blockEditFirstReport: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
-const isSecondReport = ref(false);
-
-const reportDataChildren = ref(
-    {
-      participants_number: '',
-      employed_sso: '',
-      employed_smo: '',
-      employed_specialized_detachments: '',
-      employed_spo: '',
-      employed_sservo: '',
-      employed_production_detachments: '',
-      employed_sop: '',
-      employed_ssho: '',
-      employed_top: '',
-      employed_so_poo: '',
-      employed_so_oovo: '',
-      employed_ro_rso: '',
-      additional_statistics: [],
-      learned_sso: '',
-      learned_spo: '',
-      learned_sop: '',
-      learned_smo: '',
-      learned_sservo: '',
-      learned_ssho: '',
-      learned_specialized_detachments: '',
-      learned_production_detachments: '',
-      learned_top: '',
-      supporting_documents: ''
-    }
-);
+const isSecondReport = ref(true);
+const panel = ref(false);
+const reportDataChildren = ref({
+  poo_participants: "",
+  oovo_participants: "",
+  // participants_number: "",
+  // employed_sso: "",
+  // employed_smo: "",
+  // employed_specialized_detachments: "",
+  // employed_spo: "",
+  // employed_sservo: "",
+  // employed_production_detachments: "",
+  // employed_sop: "",
+  // employed_ssho: "",
+  // employed_top: "",
+  // employed_so_poo: "",
+  // employed_so_oovo: "",
+  // employed_ro_rso: "",
+  // additional_statistics: [],
+  // learned_sso: "",
+  // learned_spo: "",
+  // learned_sop: "",
+  // learned_smo: "",
+  // learned_sservo: "",
+  // learned_ssho: "",
+  // learned_specialized_detachments: "",
+  // learned_production_detachments: "",
+  // learned_top: "",
+  // supporting_documents: "",
+});
 
 const document = ref({
-  document: '',
-  file_size: '',
-  file_type: ''
+  document: "",
+  file_size: "",
+  file_type: "",
 });
 
 watchEffect(async () => {
-  if (route.fullPath.includes('reporting-ro/report-regional-two')) {
+  if (route.fullPath.includes("reporting-ro/report-regional-two")) {
     isSecondReport.value = true;
   }
-  reportDataChildren.value = {...props.reportData};
+  reportDataChildren.value = { ...props.reportData };
 
   if (props.reportData.supporting_documents) {
     document.value.document = props.reportData.supporting_documents;
-    document.value.file_type = props.reportData.supporting_documents.split('.').slice(-1)[0];
+    document.value.file_type = props.reportData.supporting_documents
+      .split(".")
+      .slice(-1)[0];
   }
-})
+});
 
 const sentReport = () => {
-  emit('sentReport', reportDataChildren.value);
+  emit("sentReport", reportDataChildren.value);
 };
 
-const uploadFile = async (event) => {
-  document.value.document = event.target.files[0].name;
-  document.value.file_size = (event.target.files[0].size / Math.pow(1024, 2));
-  document.value.file_type = event.target.files[0].type.split('/').at(-1);
-  reportDataChildren.value.supporting_documents = event.target.files[0];
+// const uploadFile = async (event) => {
+//   document.value.document = event.target.files[0].name;
+//   document.value.file_size = event.target.files[0].size / Math.pow(1024, 2);
+//   document.value.file_type = event.target.files[0].type.split("/").at(-1);
+//   reportDataChildren.value.supporting_documents = event.target.files[0];
 
-  if (isSecondReport.value) {
-    // let formData = new FormData();
-    //
-    // Object.keys(reportDataChildren.value).forEach(key => {
-    //   const value = reportDataChildren.value[key];
-    //   formData.append(key, value !== undefined && value !== null ? value : '');
-    // });
+//   if (isSecondReport.value) {
+//     // let formData = new FormData();
+//     //
+//     // Object.keys(reportDataChildren.value).forEach(key => {
+//     //   const value = reportDataChildren.value[key];
+//     //   formData.append(key, value !== undefined && value !== null ? value : '');
+//     // });
 
-    const {data} = await editReport(reportDataChildren.value, true);
-    document.value.document = data.supporting_documents;
-    emit('sentReport', data);
-  }
-};
+//     const { data } = await editReport(reportDataChildren.value, true);
+//     document.value.document = data.supporting_documents;
+//     emit("sentReport", data);
+//   }
+// };
 
-const deleteFile = async () => {
-  document.value.document = '';
-  document.value.file_size = '';
-  document.value.file_type = '';
-  reportDataChildren.value.supporting_documents = '';
+// const deleteFile = async () => {
+//   document.value.document = "";
+//   document.value.file_size = "";
+//   document.value.file_type = "";
+//   reportDataChildren.value.supporting_documents = "";
 
-  if (isSecondReport.value) {
-    // let formData = new FormData();
-    //
-    // Object.keys(reportDataChildren.value).forEach(key => {
-    //   const value = reportDataChildren.value[key];
-    //   formData.append(key, value !== undefined && value !== null ? value : '');
-    // });
+//   if (isSecondReport.value) {
+//     // let formData = new FormData();
+//     //
+//     // Object.keys(reportDataChildren.value).forEach(key => {
+//     //   const value = reportDataChildren.value[key];
+//     //   formData.append(key, value !== undefined && value !== null ? value : '');
+//     // });
 
-    const {data} = await editReport(reportDataChildren.value, true);
-    emit('sentReport', data);
-  }
-}
+//     const { data } = await editReport(reportDataChildren.value, true);
+//     emit("sentReport", data);
+//   }
+// };
 
 const focusOut = async () => {
   if (isSecondReport.value) {
@@ -534,33 +624,33 @@ const focusOut = async () => {
     //   formData.append(key, value !== undefined && value !== null ? value : '');
     // });
 
-    const {data} = await editReport(reportDataChildren.value, true);
-    emit('sentReport', data);
+    const { data } = await editReport(reportDataChildren.value, true);
+    emit("sentReport", data);
   }
 };
 
-const addAdditionalStatistics = () => {
-  reportDataChildren.value.additional_statistics.push({
-    name: '',
-    value: 0,
-  })
-};
-const deleteAdditionalStatistics = async (index) => {
-  reportDataChildren.value.additional_statistics.splice(index, 1)
+// const addAdditionalStatistics = () => {
+//   reportDataChildren.value.additional_statistics.push({
+//     name: "",
+//     value: 0,
+//   });
+// };
+// const deleteAdditionalStatistics = async (index) => {
+//   reportDataChildren.value.additional_statistics.splice(index, 1);
 
-  if (isSecondReport.value) {
-    // let formData = new FormData();
-    //
-    // Object.keys(reportDataChildren.value).forEach(key => {
-    //   const value = reportDataChildren.value[key];
-    //   console.log('key', value)
-    //   formData.append(key, value !== undefined && value !== null ? value : '');
-    // });
+//   if (isSecondReport.value) {
+//     // let formData = new FormData();
+//     //
+//     // Object.keys(reportDataChildren.value).forEach(key => {
+//     //   const value = reportDataChildren.value[key];
+//     //   console.log('key', value)
+//     //   formData.append(key, value !== undefined && value !== null ? value : '');
+//     // });
 
-    const {data} = await editReport(reportDataChildren.value, true);
-    emit('sentReport', data);
-  }
-}
+//     const { data } = await editReport(reportDataChildren.value, true);
+//     emit("sentReport", data);
+//   }
+// };
 </script>
 <style lang="scss" scoped>
 .valid-red {
@@ -594,7 +684,7 @@ const deleteAdditionalStatistics = async (index) => {
   }
 
   &-input {
-    max-width: 340px;
+    // max-width: 340px;
     height: 40px;
   }
 }
@@ -603,7 +693,7 @@ const deleteAdditionalStatistics = async (index) => {
   display: flex;
   flex-direction: column;
   border: none;
-  background-color: #F3F4F5;
+  background-color: #f3f4f5;
   border-radius: 10px;
 
   @media (max-width: 643px) {
@@ -616,7 +706,8 @@ const deleteAdditionalStatistics = async (index) => {
 }
 
 .form__field-group p {
-  color: #6D6D6D;
+  padding-bottom: 32px;
+  color: #6d6d6d;
 }
 
 .report_title-h3 {
@@ -633,7 +724,7 @@ const deleteAdditionalStatistics = async (index) => {
   margin: 8px 0;
   border: none;
   background-color: transparent;
-  color: #1F7CC0;
+  color: #1f7cc0;
   padding: 0;
   text-align: left;
 }

@@ -4,7 +4,10 @@ import { HTTP } from '@app/http';
 // const APPLICATION_NAME = "regional_competitions"
 
 // Для рейтинга РО 2025 года
-const APPLICATION_NAME = "regional_competitions_2025"
+// const APPLICATION_NAME = "regional_competitions_2025"
+
+// Для рейтинга РО 2026 года
+const APPLICATION_NAME = "regional_competitions_2026"
 
 export function createReport(data: object, withFile = false) {
     return HTTP.post(`${APPLICATION_NAME}/statistical_report/`, data, {

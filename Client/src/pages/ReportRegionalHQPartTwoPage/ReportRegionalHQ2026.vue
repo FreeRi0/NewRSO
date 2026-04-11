@@ -2,8 +2,7 @@
   <div>
     <div class="container">
       <h1 class="title title--mb">
-        Отчет о&nbsp;деятельности регионального отделения РСО за&nbsp;2025&nbsp;год.
-        Часть&nbsp;2
+        Отчет о&nbsp;деятельности регионального отделения РСО за&nbsp;2026&nbsp;год.
       </h1>
       <p class="report_title-name">{{ route.query.headquartersName }}</p>
       <div v-if="preloader" class="text-center">
@@ -72,15 +71,16 @@
               />
             </v-expansion-panel-text>
           </v-expansion-panel>
+          <v-expansion-panel
+            v-if="showPanels('1.1', picked, revisionPanels)"
+          ></v-expansion-panel>
+          <v-expansion-panel
+            v-if="showPanels('1.2', picked, revisionPanels)"
+          ></v-expansion-panel>
           <v-expansion-panel v-if="showPanels('2', picked, revisionPanels)">
             <v-expansion-panel-title>
-              2. Отношение численности членов РО&nbsp;РСО к&nbsp;численности студентов
-              очной формы обучения субъекта Российской Федерации, обучающихся
-              в&nbsp;профессиональных образовательных организациях и&nbsp;образовательных
-              организациях высшего образования в&nbsp;государственных, муниципальных
-              и&nbsp;частных образовательных организациях, включая филиалы
-              (исключения&nbsp;&mdash; учебные заведения специальных ведомств, проводящих
-              обучение на&nbsp;казарменном положении)
+              2. Динамика численности членов РО&nbsp;РСО по&nbsp;отношению
+              к&nbsp;предыдущему году
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
@@ -90,8 +90,12 @@
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('3', picked, revisionPanels)">
             <v-expansion-panel-title>
-              3. Отношение количества трудоустроенных членов РО&nbsp;РСО к&nbsp;общей
-              численности членов РО&nbsp;РСО
+              3. Отношение численности членов РО&nbsp;РСО к&nbsp;численности студентов
+              очной формы обучения субъекта Российской Федерации, обучающихся в&nbsp;ПОО
+              и&nbsp;ООВО в&nbsp;государственных, муниципальных и&nbsp;частных
+              образовательных организациях, включая филиалы (исключения&nbsp;&mdash;
+              учебные заведения специальных ведомств, проводящих обучение
+              на&nbsp;казарменном положении)
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
@@ -100,19 +104,17 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('4', picked, revisionPanels)">
-            <!--            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('4') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('4') ? false : true"-->
-
             <v-expansion-panel-title :class="isErrorPanel.fourth ? 'visible-error' : ''">
-              4. Организация всероссийских (международных), окружных
-              и&nbsp;межрегиональных мероприятий и&nbsp;проектов (слеты, школы, фестивали,
-              турниры и&nbsp;прочие)
+              4. Отношение количества трудоустроенных членов РО&nbsp;РСО, прошедших
+              профобучение к&nbsp;общему фактическому показателю численности членов
+              РО&nbsp;РСО, прошедших профобучение в&nbsp;РО на&nbsp;текущий период
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <fourth-panel
+              <four-panel
                 :districtExpert="districtExpert"
                 :centralExpert="centralExpert"
-                @get-data="setData"
                 @get-data-DH="setDataDH"
+                @get-data="setData"
                 @get-data-CH="setDataCH"
                 :data="reportData.fourth"
                 :is-error-panel="isErrorPanel.fourth"
@@ -121,15 +123,13 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('5', picked, revisionPanels)">
-            <!--            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('5') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('5') ? false : true">-->
             <v-expansion-panel-title :class="isErrorPanel.fifth ? 'visible-error' : ''">
-              5. Организация всероссийских (международных) (организатор&nbsp;&mdash;
-              региональное отделение РСО), окружных и&nbsp;межрегиональных трудовых
-              проектов в&nbsp;соответствии с&nbsp;Положением об&nbsp;организации трудовых
-              проектов РСО
+              5. Организация межрегиональных, окружных, всероссийских и&nbsp;международных
+              мероприятий и&nbsp;проектов (слеты, школы, фестивали, турниры и&nbsp;прочие)
+              &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <fifth-panel
+              <fourth-panel
                 :districtExpert="districtExpert"
                 :centralExpert="centralExpert"
                 @get-data="setData"
@@ -142,6 +142,25 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel v-if="showPanels('6', picked, revisionPanels)">
+            <v-expansion-panel-title :class="isErrorPanel.sixth ? 'visible-error' : ''">
+              6. Организация трудовых проектов в&nbsp;соответствии с&nbsp;Положением
+              об&nbsp;организации трудовых проектов РСО (организатор&nbsp;&mdash;
+              региональное отделение РСО)
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <fifth-panel
+                :districtExpert="districtExpert"
+                :centralExpert="centralExpert"
+                @get-data="setData"
+                @get-data-DH="setDataDH"
+                @get-data-CH="setDataCH"
+                :data="reportData.sixth"
+                :is-error-panel="isErrorPanel.sixth"
+                :tab="picked"
+              />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+          <v-expansion-panel v-if="showPanels('7', picked, revisionPanels)">
             <v-expansion-panel-title
               :class="
                 Object.values(isErrorPanel.six).some((item) => item.error === true)
@@ -149,8 +168,8 @@
                   : ''
               "
             >
-              6. Участие бойцов студенческих отрядов РО&nbsp;РСО во&nbsp;всероссийских
-              (международных) мероприятиях и&nbsp;проектах (в&nbsp;том числе
+              7. Участие бойцов студенческих отрядов РО&nbsp;РСО во&nbsp;всероссийских
+              и&nbsp;международных мероприятиях и&nbsp;проектах (в&nbsp;том числе
               и&nbsp;трудовых) &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
@@ -170,10 +189,10 @@
               />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel v-if="showPanels('7', picked, revisionPanels)">
+          <v-expansion-panel v-if="showPanels('8', picked, revisionPanels)">
             <v-expansion-panel-title>
-              7. Победители студенческих отрядов РО&nbsp;РСО во&nbsp;всероссийских
-              (международных) проектах и&nbsp;конкурсах &laquo;К&raquo;
+              8. Победители студенческих отрядов РО&nbsp;РСО во&nbsp;всероссийских
+              и&nbsp;международных трудовых проектах и&nbsp;конкурсах &laquo;К&raquo;.
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
@@ -181,19 +200,18 @@
               />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel v-if="showPanels('8', picked, revisionPanels)">
+          <v-expansion-panel v-if="showPanels('9', picked, revisionPanels)">
             <v-expansion-panel-title>
-              8. Количество упоминаний в&nbsp;СМИ о&nbsp;прошедших творческих,
-              добровольческих и&nbsp;патриотических мероприятиях и&nbsp;трудовых проектах,
-              организованных РО&nbsp;РСО &laquo;К&raquo;
+              9. Победители межрегиональных, окружных, всероссийских и&nbsp;международных
+              трудовых проектов по&nbsp;комиссарской деятельности &laquo;К&raquo;.
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                text="Показатель рассчитывается автоматически на&nbsp;основе данных сервиса &laquo;Медиалогия&raquo;, предоставленных Аппаратом РСО."
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО."
               />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel v-if="showPanels('9', picked, revisionPanels)">
+          <v-expansion-panel v-if="showPanels('10', picked, revisionPanels)">
             <v-expansion-panel-title
               :class="
                 Object.values(isErrorPanel.ninth).some((item) => item.error === true)
@@ -201,7 +219,7 @@
                   : ''
               "
             >
-              9. Организация обязательных общесистемных мероприятий РСО
+              10. Организация обязательных общесистемных мероприятий РСО
               на&nbsp;региональном уровне &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
@@ -226,16 +244,18 @@
               roleStore.experts.is_central_expert && !revisionPanels.length
                 ? true
                 : picked === 'Доработка'
-                ? revisionPanels.includes('10-1') || revisionPanels.includes('10-2')
+                ? revisionPanels.includes('11-1') || revisionPanels.includes('11-2')
                 : picked === 'Просмотр отправленного отчета' &&
-                  verifiedByChqPanels.includes('10-1') &&
-                  verifiedByChqPanels.includes('10-2')
+                  verifiedByChqPanels.includes('11-1') &&
+                  verifiedByChqPanels.includes('11-2')
                 ? false
                 : true
             "
           >
-            <v-expansion-panel-title :class="isErrorPanel.tenth ? 'visible-error' : ''">
-              10. Организация РО&nbsp;РСО всероссийских (международных) добровольческих
+            <v-expansion-panel-title
+              :class="isErrorPanel.eleventh ? 'visible-error' : ''"
+            >
+              11. Организация РО&nbsp;РСО всероссийских (международных) добровольческих
               и&nbsp;патриотических акций &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
@@ -247,25 +267,10 @@
                 @getDataDHSecond="setDataDH"
                 @getDataCHFirst="setDataCH"
                 @getDataCHSecond="setDataCH"
-                :data="reportData.tenth"
-                :is-error-panel="isErrorPanel.tenth"
+                :data="reportData.eleventh"
+                :is-error-panel="isErrorPanel.eleventh"
                 :tab="picked"
                 :revisionPanels="revisionPanels"
-              />
-            </v-expansion-panel-text>
-          </v-expansion-panel>
-          <v-expansion-panel v-if="showPanels('11', picked, revisionPanels)">
-            <v-expansion-panel-title
-              :class="isErrorPanel.eleventh ? 'visible-error' : ''"
-            >
-              11. Активность РО&nbsp;РСО в&nbsp;социальных сетях &laquo;К&raquo;
-            </v-expansion-panel-title>
-            <v-expansion-panel-text>
-              <!-- <eleventh-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.eleventh"
-                :is-error-panel="isErrorPanel.eleventh" :tab="picked" /> -->
-              <calculated-panel
-                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО."
               />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -286,37 +291,21 @@
               />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <!-- <v-expansion-panel v-if="showPanels('13', picked, revisionPanels)">
-            <v-expansion-panel-title :class="isErrorPanel.thirteenth ? 'visible-error' : ''">
-              13. Охват членов РО&nbsp;РСО, принявших участие во&nbsp;Всероссийском дне ударного труда &laquo;К&raquo;
-            </v-expansion-panel-title>
-            <v-expansion-panel-text>
-              <thirteenth-panel :districtExpert="districtExpert" :centralExpert="centralExpert" @get-data="setData"
-                @get-data-DH="setDataDH" @get-data-CH="setDataCH" :data="reportData.thirteenth"
-                :is-error-panel="isErrorPanel.thirteenth" :tab="picked" />
-            </v-expansion-panel-text>
-          </v-expansion-panel> -->
-          <!-- <v-expansion-panel v-if="showPanels('14', picked, revisionPanels)">
+          <v-expansion-panel v-if="showPanels('13', picked, revisionPanels)">
             <v-expansion-panel-title>
-              14. Отношение объема средств, собранных бойцами РО&nbsp;РСО во&nbsp;Всероссийском дне ударного труда
-              к&nbsp;количеству членов
-              РО&nbsp;РСО, принявших участие во&nbsp;Всероссийском дне ударного труда
+              13. Количество упоминаний в&nbsp;СМИ о&nbsp;прошедших творческих,
+              добровольческих и&nbsp;патриотических мероприятиях и&nbsp;трудовых проектах,
+              организованных РО&nbsp;РСО &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
-                text="Показатель рассчитывается автоматически на&nbsp;основе данных из&nbsp;12&nbsp;и&nbsp;13&nbsp;показателей." />
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных сервиса &laquo;Медиалогия&raquo;, предоставленных Аппаратом РСО."
+              />
             </v-expansion-panel-text>
-          </v-expansion-panel> -->
-
-          <v-expansion-panel v-if="showPanels('13', picked, revisionPanels)">
+          </v-expansion-panel>
+          <v-expansion-panel v-if="showPanels('14', picked, revisionPanels)">
             <v-expansion-panel-title>
-              13. Исполнительская дисциплина РО&nbsp;РСО, соблюдение условий охраны труда
-              на&nbsp;трудовых проектах РСО, наличие проблемной неурегулированной
-              задолженности по&nbsp;выплате заработной платы перед бойцами РСО
-              за&nbsp;трудовой семестр предыдущего года, отсутствие отчислений
-              от&nbsp;членских взносов в&nbsp;Центральный штаб, исполнение решений
-              Центральных руководящих органов РСО, наличие ежегодного акта проверки КРК
-              РО&nbsp;РСО
+              14. Активность РО&nbsp;РСО в&nbsp;социальных сетях &laquo;К&raquo;
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <calculated-panel
@@ -324,115 +313,13 @@
               />
             </v-expansion-panel-text>
           </v-expansion-panel>
-
-          <v-expansion-panel v-if="showPanels('14', picked, revisionPanels)">
-            <!--            v-if="roleStore.experts.is_central_expert && !revisionPanels.length ? true : picked === 'Доработка' ? revisionPanels.includes('16') : picked === 'Просмотр отправленного отчета' && verifiedByChqPanels.includes('16') ? false : true">-->
-            <v-expansion-panel-title
-              :class="isErrorPanel.fourteenth ? 'visible-error' : ''"
-            >
-              14. Победители всероссийских (международных), окружных
-              и&nbsp;межрегиональных трудовых проектов по&nbsp;комиссарской деятельности
-              &laquo;К&raquo;
-            </v-expansion-panel-title>
-            <v-expansion-panel-text>
-              <sixteenth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data-DH="setDataDH"
-                @get-data="setData"
-                @get-data-CH="setDataCH"
-                :data="reportData.fourteenth"
-                :is-error-panel="isErrorPanel.fourteenth"
-                :tab="picked"
-              />
-            </v-expansion-panel-text>
-          </v-expansion-panel>
-
           <v-expansion-panel v-if="showPanels('15', picked, revisionPanels)">
             <v-expansion-panel-title>
-              15. Отношение количества трудоустроенных и&nbsp;прошедших профобучение
-              членов РО&nbsp;РСО по&nbsp;соответствующему основному направлению ЛСО
-              к&nbsp;общей запланированной квоте профобучения на&nbsp;текущий период.
+              15. Исполнительская дисциплина РО&nbsp;РСО
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <fifteenth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data-DH="setDataDH"
-                @get-data="setData"
-                @get-data-CH="setDataCH"
-                :data="reportData.fifteenth"
-                :is-error-panel="isErrorPanel.fifteenth"
-                :tab="picked"
-              />
-            </v-expansion-panel-text>
-          </v-expansion-panel>
-          <v-expansion-panel v-if="showPanels('16', picked, revisionPanels)">
-            <v-expansion-panel-title>
-              16. Дислокация студенческих отрядов РО&nbsp;РСО
-            </v-expansion-panel-title>
-            <v-expansion-panel-text>
-              <seventeenth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                :data="reportData.sixteenth"
-                :is-sent="isSentLastIndex"
-              />
-            </v-expansion-panel-text>
-          </v-expansion-panel>
-          <v-expansion-panel v-if="showPanels('17', picked, revisionPanels)">
-            <v-expansion-panel-title>
-              17. Количество научных работ и&nbsp;публикаций по&nbsp;теме&nbsp;СО,
-              выпущенных в&nbsp;текущем году
-            </v-expansion-panel-title>
-            <v-expansion-panel-text>
-              <eighteenth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                :data="reportData.seventeenth"
-                :is-sent="isSentLastIndex"
-              />
-            </v-expansion-panel-text>
-          </v-expansion-panel>
-          <v-expansion-panel v-if="showPanels('18', picked, revisionPanels)">
-            <v-expansion-panel-title> 18. Трудоустройство </v-expansion-panel-title>
-            <v-expansion-panel-text>
-              <nineteenth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                :data="reportData.eighteenth"
-                :is-sent="isSentLastIndex"
-              />
-            </v-expansion-panel-text>
-          </v-expansion-panel>
-          <v-expansion-panel v-if="showPanels('19', picked, revisionPanels)">
-            <v-expansion-panel-title>
-              19. Количество и&nbsp;трудоустройство сотрудников РО&nbsp;РСО
-            </v-expansion-panel-title>
-            <v-expansion-panel-text>
-              <nineteen-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                :data="reportData.nineteenth"
-                :is-sent="isSentLastIndex"
-              />
-            </v-expansion-panel-text>
-          </v-expansion-panel>
-          <v-expansion-panel v-if="showPanels('20', picked, revisionPanels)">
-            <v-expansion-panel-title>
-              20. Инфраструктура РО&nbsp;РСО
-            </v-expansion-panel-title>
-            <v-expansion-panel-text>
-              <twentieth-panel
-                :districtExpert="districtExpert"
-                :centralExpert="centralExpert"
-                @get-data="setData"
-                :data="reportData.twentieth"
-                :is-sent="isSentLastIndex"
+              <calculated-panel
+                text="Показатель рассчитывается автоматически на&nbsp;основе данных, предоставленных Аппаратом РСО."
               />
             </v-expansion-panel-text>
           </v-expansion-panel>
@@ -448,6 +335,10 @@
       @click="sendReport"
       :disabled="reportStore.isAllReportsVerifiedByCH"
     />
+
+    <p v-if="!preloader" class="text text-center">
+      Срок предоставления отчета — 15&nbsp;октября 2026&nbsp;года включительно.
+    </p>
   </div>
   <ReportModalWarning
     v-if="showModalWarning"
@@ -458,21 +349,13 @@
 <script setup>
 import {
   CalculatedPanel,
-  EighteenthPanel,
-  // EleventhPanel,
-  FifthPanel,
-  FifteenthPanel,
   FirstPanel,
+  FourPanel,
   FourthPanel,
-  NineteenthPanel,
+  FifthPanel,
   NinthPanel,
-  SeventeenthPanel,
-  SixteenthPanel,
   TenthPanel,
-  // ThirteenthPanel,
   TwelfthPanel,
-  NineteenPanel,
-  TwentiethPanel,
 } from "./components/index";
 import NewSixthPanel from "./components/newSixthPanel.vue";
 import { Button } from "@shared/components/buttons";
@@ -483,7 +366,7 @@ import { HTTP } from "@app/http";
 import { reportPartTwoService } from "@services/ReportService.ts";
 import { useRoute, useRouter } from "vue-router";
 import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
-import { useRegionalsStore } from "@features/store/regionals";
+// import { useRegionalsStore } from "@features/store/regionals";
 import swal from "@/library/sweetalert2/sweetalert2.esm.all.min.js";
 import {
   checkEmptyFieldsDH,
@@ -506,7 +389,7 @@ const tabs = ref([
 ]);
 
 const reportStore = useReportPartTwoStore();
-const regionalsStore = useRegionalsStore();
+// const regionalsStore = useRegionalsStore();
 
 const districtExpert = ref(false);
 const centralExpert = ref(false);
@@ -514,102 +397,84 @@ const reportData = ref({
   first: null,
   fourth: null,
   fifth: null,
+  sixth: null,
   six: {},
-  // seventh: {},
   ninth: {},
-  tenth: {
+  eleventh: {
     first: null,
     second: null,
   },
-  // eleventh: null,
   twelfth: null,
-  // thirteenth: null,
-  fourteenth: null,
-  fifteenth: null,
-  sixteenth: null,
-  seventeenth: null,
-  eighteenth: null,
-  nineteenth: null,
-  twentieth: null,
 });
 
 const reportDataDH = ref({
   first: null,
   fourth: null,
   fifth: null,
+  sixth: null,
   six: {},
   ninth: {},
-  tenth: {
+  eleventh: {
     first: null,
     second: null,
   },
-  // eleventh: null,
   twelfth: null,
-  // thirteenth: null,
-  fourteenth: null,
-  fifteenth: null,
 });
 
 const reportDataCH = ref({
-  first: {},
+  first: null,
   fourth: null,
   fifth: null,
+  sixth: null,
   six: {},
   ninth: {},
-  tenth: {
+  eleventh: {
     first: null,
     second: null,
   },
-  // eleventh: null,
   twelfth: null,
-  // thirteenth: null,
-  fourteenth: null,
-  fifteenth: null,
 });
 
 const preloader = ref(true);
 const panel_id = ref(1);
 const panel_num = ref(null);
 const six_items = ref([]);
-// const seventh_items = ref([]);
 const ninth_items = ref([]);
-const is_return_six = ref(false);
-const is_return_ninth = ref(false);
+// const is_return_six = ref(false);
+// const is_return_ninth = ref(false);
 const blockSendButton = ref(false);
 const isSentLastIndex = ref(false);
 const blockEditFirstReport = ref(false);
 const preloader_text = ref("Загрузка отчета может занять до 1 минуты.");
 
-// const swal = inject('$swal');
 const router = useRouter();
 
 const isErrorPanel = ref({
   first: false,
   fourth: false,
   fifth: false,
+  sixth: false,
   six: {},
-  // seventh: {},
   ninth: {},
-  tenth: false,
-  // eleventh: false,
+  eleventh: false,
+  // eleventh: {
+  //   first: false,
+  //   second: false,
+  // },
   twelfth: false,
-  // thirteenth: false,
-  // sixteenth: false,
-  fourteenth: false,
-  fifteenth: false,
 });
 
 const setId = (id) => {
   panel_id.value = id;
 };
 
-const handleReturnToRoSix = (checked) => {
-  is_return_six.value = checked;
-};
+// const handleReturnToRoSix = (checked) => {
+//   is_return_six.value = checked;
+// };
 
-const handleReturnToRoNinth = (checked) => {
-  is_return_ninth.value = checked;
-};
+// const handleReturnToRoNinth = (checked) => {
+//   is_return_ninth.value = checked;
+// };
 
 const setPanelNumber = (number) => {
   panel_num.value = number;
@@ -640,16 +505,13 @@ const downloadReportAll = (id) => {
 const getItems = async (number) => {
   try {
     const response = await HTTP.get(
-      `regional_competitions_2025/reports/event_names/r${number}-event-names/`
+      `regional_competitions_2026/reports/event_names/r${number}-event-names/`
     );
     switch (number) {
-      case 6:
+      case 7:
         six_items.value = response.data;
         break;
-      // case 7:
-      //   seventh_items.value = response.data;
-      //   break;
-      case 9:
+      case 10:
         ninth_items.value = response.data;
         break;
       default:
@@ -660,9 +522,9 @@ const getItems = async (number) => {
   }
 };
 
-const handleReturnToRo = (checked) => {
-  is_return_six.value = checked;
-};
+// const handleReturnToRo = (checked) => {
+//   is_return_six.value = checked;
+// };
 
 let isAllSixVerified = true;
 let isAllNinthVerified = true;
@@ -672,13 +534,13 @@ const getMultiplyData = async (reportId) => {
       if (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) {
         return {
           id: item.id,
-          data: (await reportPartTwoService.getMultipleReportDH("6", item.id, reportId))
+          data: (await reportPartTwoService.getMultipleReportDH("7", item.id, reportId))
             .data,
         };
       } else {
         return {
           id: item.id,
-          data: (await reportPartTwoService.getMultipleReport("6", item.id)).data,
+          data: (await reportPartTwoService.getMultipleReport("7", item.id)).data,
         };
       }
     } catch (error) {
@@ -709,34 +571,19 @@ const getMultiplyData = async (reportId) => {
     }
   });
 
-  // const seventhDataPromises = seventh_items.value.map(async (item) => {
-  //   try {
-  //     if (!isExpert) {
-  //       return { id: item.id, data: (await reportPartTwoService.getMultipleReport('7', item.id)).data };
-  //     } else {
-  //       return { id: item.id, data: (await reportPartTwoService.getMultipleReportDH('7', item.id, reportId)).data };
-  //     }
-  //   } catch (error) {
-  //     if (error.response && error.response.status === 404) {
-  //       return { id: item.id, data: {} };
-  //     } else {
-  //       throw error;
-  //     }
-  //   }
-  // });
-
   const ninthDataPromises = ninth_items.value.map(async (item) => {
+    const id2026 = `0${item.id}`
     try {
       if (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) {
         return {
-          id: item.id,
-          data: (await reportPartTwoService.getMultipleReportDH("9", item.id, reportId))
+          id: id2026,
+          data: (await reportPartTwoService.getMultipleReportDH("10", id2026, reportId))
             .data,
         };
       } else {
         return {
-          id: item.id,
-          data: (await reportPartTwoService.getMultipleReport("9", item.id)).data,
+          id: id2026,
+          data: (await reportPartTwoService.getMultipleReport("10", id2026)).data,
         };
       }
     } catch (error) {
@@ -769,7 +616,6 @@ const getMultiplyData = async (reportId) => {
 
   const [sixDataResults, ninthDataResults] = await Promise.all([
     Promise.all(sixDataPromises),
-    // Promise.all(seventhDataPromises),
     Promise.all(ninthDataPromises),
   ]);
 
@@ -781,7 +627,7 @@ const getMultiplyData = async (reportId) => {
         try {
           reportData.value.six[result.id] = JSON.parse(sixData.regional_version);
         } catch (error) {
-          console.error("Error parsing regional_version JSON 6-DH:", error);
+          console.error("Error parsing regional_version JSON 7-DH:", error);
           reportData.value.six[result.id] = sixData.regional_version || sixData;
         }
       } else {
@@ -795,10 +641,10 @@ const getMultiplyData = async (reportId) => {
       reportStore.reportDataDH.six[result.id] = sixData;
 
       if (sixData.rejecting_reasons && sixData.verified_by_chq !== true) {
-        if (!revisionPanels.value.find((item) => item === "6")) {
-          revisionPanels.value.push(`6`);
+        if (!revisionPanels.value.find((item) => item === "7")) {
+          revisionPanels.value.push(`7`);
         }
-        revisionPanels.value.push(`6-${result.id}`);
+        revisionPanels.value.push(`7-${result.id}`);
       }
       if (sixData?.regional_version) {
         try {
@@ -819,7 +665,7 @@ const getMultiplyData = async (reportId) => {
             throw new Error("Invalid type for regional_version");
           }
         } catch (error) {
-          console.error("Error parsing regional_version JSON 6-CH-RH:", error);
+          console.error("Error parsing regional_version JSON 7-CH-RH:", error);
           reportData.value.six[result.id] = sixData.regional_version || sixData;
         }
       } else {
@@ -829,7 +675,7 @@ const getMultiplyData = async (reportId) => {
         try {
           reportStore.reportDataDH.six[result.id] = JSON.parse(sixData.district_version);
         } catch (error) {
-          console.error("Error parsing regional_version JSON-6-CH-DH:", error);
+          console.error("Error parsing regional_version JSON-7-CH-DH:", error);
           reportStore.reportDataDH.six[result.id] = sixData.district_version || sixData;
         }
       } else {
@@ -845,7 +691,7 @@ const getMultiplyData = async (reportId) => {
       //   try {
       //     reportData.value.six[result.id] = JSON.parse(sixData?.regional_version);
       //   } catch (error) {
-      //     console.error('Error parsing regional_version JSON 6-RH:', error);
+      //     console.error('Error parsing regional_version JSON 7-RH:', error);
       //     reportData.value.six[result.id] = sixData?.regional_version || sixData;
       //   }
       // } else {
@@ -870,7 +716,7 @@ const getMultiplyData = async (reportId) => {
             throw new Error("Invalid type for regional_version");
           }
         } catch (error) {
-          console.error("Error parsing regional_version JSON 6-CH-RH:", error);
+          console.error("Error parsing regional_version JSON 7-CH-RH:", error);
           reportData.value.six[result.id] = sixData.regional_version || sixData;
         }
       } else {
@@ -881,7 +727,7 @@ const getMultiplyData = async (reportId) => {
         try {
           reportStore.reportDataDH.six[result.id] = JSON.parse(sixData?.district_version);
         } catch (error) {
-          console.error("Error parsing district_version JSON-6-RH-DH:", error);
+          console.error("Error parsing district_version JSON-7-RH-DH:", error);
           reportStore.reportDataDH.six[result.id] = sixData?.district_version || sixData;
         }
       }
@@ -891,10 +737,10 @@ const getMultiplyData = async (reportId) => {
         : (reportStore.reportDataCH.six[result.id] = sixData);
 
       if (sixData?.rejecting_reasons && sixData?.verified_by_chq !== true) {
-        if (!revisionPanels.value.find((item) => item === "6")) {
-          revisionPanels.value.push(`6`);
+        if (!revisionPanels.value.find((item) => item === "7")) {
+          revisionPanels.value.push(`7`);
         }
-        revisionPanels.value.push(`6-${result.id}`);
+        revisionPanels.value.push(`7-${result.id}`);
         // reportStore.reportDataDH.six[result.id] = JSON.parse(sixData?.district_version);
         // sixData?.central_version
         //   ? reportStore.reportDataCH.six[result.id] = sixData?.central_version
@@ -917,7 +763,7 @@ const getMultiplyData = async (reportId) => {
         try {
           reportData.value.ninth[result.id] = JSON.parse(ninthData.regional_version);
         } catch (error) {
-          console.error("Error parsing regional_version JSON 9-DH :", error);
+          console.error("Error parsing regional_version JSON 10-DH :", error);
           reportData.value.ninth[result.id] = ninthData.regional_version || ninthData;
         }
       } else {
@@ -932,10 +778,10 @@ const getMultiplyData = async (reportId) => {
     } else if (centralExpert.value) {
       reportStore.reportForCheckCH.ninth[result.id] = ninthData;
       if (ninthData.rejecting_reasons && ninthData.verified_by_chq !== true) {
-        if (!revisionPanels.value.find((item) => item === "9")) {
-          revisionPanels.value.push(`9`);
+        if (!revisionPanels.value.find((item) => item === "10")) {
+          revisionPanels.value.push(`10`);
         }
-        revisionPanels.value.push(`9-${result.id}`);
+        revisionPanels.value.push(`10-${result.id}`);
       }
       if (ninthData?.regional_version) {
         try {
@@ -952,7 +798,7 @@ const getMultiplyData = async (reportId) => {
             throw new Error("Invalid type for regional_version");
           }
         } catch (error) {
-          console.error("Error parsing regional_version JSON 9-CH-RH:", error);
+          console.error("Error parsing regional_version JSON 10-CH-RH:", error);
           reportData.value.ninth[result.id] = ninthData.regional_version || ninthData;
         }
       } else {
@@ -964,7 +810,7 @@ const getMultiplyData = async (reportId) => {
             ninthData.district_version
           );
         } catch (error) {
-          console.error("Error parsing regional_version JSON 9-CH-DH:", error);
+          console.error("Error parsing regional_version JSON 10-CH-DH:", error);
           reportStore.reportDataDH.ninth[result.id] =
             ninthData.district_version || ninthData;
         }
@@ -992,7 +838,7 @@ const getMultiplyData = async (reportId) => {
             throw new Error("Invalid type for regional_version");
           }
         } catch (error) {
-          console.error("Error parsing regional_version JSON 9-CH-RH:", error);
+          console.error("Error parsing regional_version JSON 10-CH-RH:", error);
           reportData.value.ninth[result.id] = ninthData.regional_version || ninthData;
         }
       } else {
@@ -1014,11 +860,11 @@ const getMultiplyData = async (reportId) => {
         ? (reportStore.reportDataCH.ninth[result.id] = ninthData.central_version)
         : (reportStore.reportDataCH.ninth[result.id] = ninthData);
       if (ninthData?.rejecting_reasons) {
-        if (!revisionPanels.value.find((item) => item === "9")) {
-          revisionPanels.value.push(`9`);
+        if (!revisionPanels.value.find((item) => item === "10")) {
+          revisionPanels.value.push(`10`);
         }
 
-        revisionPanels.value.push(`9-${result.id}`);
+        revisionPanels.value.push(`10-${result.id}`);
 
         reportStore.isReportReject.ninth[result.id] = isTabsForRevision.value;
       }
@@ -1036,7 +882,7 @@ const isTabsForRevision = ref(false);
 const verifiedByChqPanels = ref([]);
 const getReportData = async (reportId) => {
   try {
-    // Загрузка данных для отчета эксперта ЦШ
+    // +------------Загрузка данных для отчета эксперта ЦШ-----------------
     if (centralExpert.value && typeof reportId != "undefined") {
       /*
        * Критерий 1
@@ -1059,7 +905,6 @@ const getReportData = async (reportId) => {
       }
       if (reportStore.reportForCheckCH.first.verified_by_chq)
         verifiedByChqPanels.value.push("1");
-
       // Рефакторинг - добавлен код ниже, т.к. не отображ панельки показателей на доработке у ЦШ
       // если используем функцию showPanels обязательна проверка на 2 поля:
       if (
@@ -1068,35 +913,38 @@ const getReportData = async (reportId) => {
       ) {
         revisionPanels.value.push("1");
       }
+
       /*
        * Критерий 4
        */
-      reportStore.reportForCheckCH.fourth = (
-        await reportPartTwoService.getReportDH("4", reportId)
-      ).data;
-      // Добавление данных о проектах от ОШ в стор ЦШ
-      reportStore.reportDataCH.fourth.events = (
-        await reportPartTwoService.getReportDH("4", reportId)
-      ).data.events;
-      if (!reportStore.reportForCheckCH.fourth.verified_by_chq) {
-        if (reportStore.reportForCheckCH.fourth.rejecting_reasons) {
-          reportStore.reportDataCH.fourth.comment = JSON.parse(
-            reportStore.reportForCheckCH.fourth.rejecting_reasons
-          ).comment;
-        } else {
-          reportStore.reportDataCH.fourth.comment = "";
-        }
-      }
-      if (reportStore.reportForCheckCH.fourth.verified_by_chq)
-        verifiedByChqPanels.value.push("4");
-      // Рефакторинг - добавлен код ниже, т.к. не отображ панельки показателей на доработке у ЦШ
+      const dataFourth = (await reportPartTwoService.getReportDH("4", reportId)).data;
+      reportStore.reportForCheckCH.fourth = dataFourth;
+
       // если используем функцию showPanels обязательна проверка на 2 поля:
-      if (
-        reportStore.reportForCheckCH.fourth.rejecting_reasons &&
-        reportStore.reportForCheckCH.fourth.verified_by_chq !== true
-      ) {
+      if (dataFourth.rejecting_reasons && dataFourth.verified_by_chq !== true) {
         revisionPanels.value.push("4");
       }
+
+      dataFourth.regional_version
+        ? (reportData.value.fourth = JSON.parse(dataFourth.regional_version))
+        : (reportData.value.fourth = dataFourth);
+
+      dataFourth.district_version
+        ? (reportStore.reportDataDH.fourth = JSON.parse(dataFourth.district_version))
+        : (reportStore.reportDataDH.fourth = dataFourth);
+
+      reportStore.reportDataCH.fourth = Object.assign({}, dataFourth);
+      if (!dataFourth.rejecting_reasons) {
+        reportStore.reportDataCH.fourth.comment = "";
+      } else if (dataFourth.rejecting_reasons) {
+        reportStore.reportDataCH.fourth.comment = JSON.parse(
+          reportStore.reportDataCH.fourth.rejecting_reasons
+        ).comment;
+      }
+      if (dataFourth.verified_by_chq === true) {
+        reportStore.reportDataCH.fourth.comment = dataFourth.comment;
+      }
+
       /*
        * Критерий 5
        */
@@ -1118,9 +966,6 @@ const getReportData = async (reportId) => {
       }
       if (reportStore.reportForCheckCH.fifth.verified_by_chq)
         verifiedByChqPanels.value.push("5");
-      //   revisionPanels.value.push('5');
-      // if (reportStore.reportForCheckCH.fifth.rejecting_reasons) reportStore.isReportReject.fifth = true;
-      // console.log('reportStore.isReportReject', reportStore.isReportReject)
       // Рефакторинг - добавлен код ниже, т.к. не отображ панельки показателей на доработке у ЦШ
       // если используем функцию showPanels обязательна проверка на 2 поля:
       if (
@@ -1129,173 +974,100 @@ const getReportData = async (reportId) => {
       ) {
         revisionPanels.value.push("5");
       }
+
       /*
-       * Критерий 6 и 9
+       * Критерий 6
+       */
+      reportStore.reportForCheckCH.sixth = (
+        await reportPartTwoService.getReportDH("6", reportId)
+      ).data;
+      // Добавление данных о проектах от ОШ в стор ЦШ
+      reportStore.reportDataCH.sixth.events = (
+        await reportPartTwoService.getReportDH("6", reportId)
+      ).data.events;
+      if (!reportStore.reportForCheckCH.sixth.verified_by_chq) {
+        if (reportStore.reportForCheckCH.sixth.rejecting_reasons) {
+          reportStore.reportDataCH.sixth.comment = JSON.parse(
+            reportStore.reportForCheckCH.sixth.rejecting_reasons
+          ).comment;
+        } else {
+          reportStore.reportDataCH.sixth.comment = "";
+        }
+      }
+      if (reportStore.reportForCheckCH.sixth.verified_by_chq)
+        verifiedByChqPanels.value.push("6");
+      // Рефакторинг - добавлен код ниже, т.к. не отображ панельки показателей на доработке у ЦШ
+      // если используем функцию showPanels обязательна проверка на 2 поля:
+      if (
+        reportStore.reportForCheckCH.sixth.rejecting_reasons &&
+        reportStore.reportForCheckCH.sixth.verified_by_chq !== true
+      ) {
+        revisionPanels.value.push("6");
+      }
+
+      /*
+       * Критерий 7 и 10
        */
       await getMultiplyData(reportId);
+
       /*
-       * Критерий 10-1
+       * Критерий 11-1
        */
-      reportStore.reportForCheckCH.tenth.first = (
-        await reportPartTwoService.getMultipleReportDH("10", "1", reportId)
+      reportStore.reportForCheckCH.eleventh.first = (
+        await reportPartTwoService.getMultipleReportDH("11", "1", reportId)
       ).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
-      reportStore.reportDataCH.tenth.first = (
-        await reportPartTwoService.getMultipleReportDH("10", "1", reportId)
+      reportStore.reportDataCH.eleventh.first = (
+        await reportPartTwoService.getMultipleReportDH("11", "1", reportId)
       ).data;
-      if (!reportStore.reportForCheckCH.tenth.first.verified_by_chq) {
-        if (reportStore.reportDataCH.tenth.first.rejecting_reasons) {
-          reportStore.reportDataCH.tenth.first.comment = JSON.parse(
-            reportStore.reportDataCH.tenth.first.rejecting_reasons
+      if (!reportStore.reportForCheckCH.eleventh.first.verified_by_chq) {
+        if (reportStore.reportDataCH.eleventh.first.rejecting_reasons) {
+          reportStore.reportDataCH.eleventh.first.comment = JSON.parse(
+            reportStore.reportDataCH.eleventh.first.rejecting_reasons
           ).comment;
         } else {
-          reportStore.reportDataCH.tenth.first.comment = "";
+          reportStore.reportDataCH.eleventh.first.comment = "";
         }
       }
-
-      // reportStore.reportDataCH.tenth.first.comment = ''
-      if (reportStore.reportForCheckCH.tenth.first.verified_by_chq)
-        verifiedByChqPanels.value.push("10-1");
-
+      if (reportStore.reportForCheckCH.eleventh.first.verified_by_chq)
+        verifiedByChqPanels.value.push("11-1");
       // Рефакторинг - добавлен код ниже, т.к. не отображ панельки показателей на доработке у ЦШ
       // если используем функцию showPanels обязательна проверка на 2 поля:
       if (
-        reportStore.reportDataCH.tenth.first.rejecting_reasons &&
-        reportStore.reportForCheckCH.tenth.first.verified_by_chq !== true
+        reportStore.reportDataCH.eleventh.first.rejecting_reasons &&
+        reportStore.reportForCheckCH.eleventh.first.verified_by_chq !== true
       ) {
-        revisionPanels.value.push("10-1");
+        revisionPanels.value.push("11-1");
       }
       /*
-       * Критерий 10-2
+       * Критерий 11-2
        */
-      reportStore.reportForCheckCH.tenth.second = (
-        await reportPartTwoService.getMultipleReportDH("10", "2", reportId)
+      reportStore.reportForCheckCH.eleventh.second = (
+        await reportPartTwoService.getMultipleReportDH("11", "2", reportId)
       ).data;
       // Добавление данных о проектах от ОШ в стор ЦШ
-      reportStore.reportDataCH.tenth.second = (
-        await reportPartTwoService.getMultipleReportDH("10", "2", reportId)
+      reportStore.reportDataCH.eleventh.second = (
+        await reportPartTwoService.getMultipleReportDH("11", "2", reportId)
       ).data;
-      if (!reportStore.reportForCheckCH.tenth.second.verified_by_chq) {
-        if (reportStore.reportDataCH.tenth.second.rejecting_reasons) {
-          reportStore.reportDataCH.tenth.second.comment = JSON.parse(
-            reportStore.reportDataCH.tenth.second.rejecting_reasons
+      if (!reportStore.reportForCheckCH.eleventh.second.verified_by_chq) {
+        if (reportStore.reportDataCH.eleventh.second.rejecting_reasons) {
+          reportStore.reportDataCH.eleventh.second.comment = JSON.parse(
+            reportStore.reportDataCH.eleventh.second.rejecting_reasons
           ).comment;
         } else {
-          reportStore.reportDataCH.tenth.second.comment = "";
+          reportStore.reportDataCH.eleventh.second.comment = "";
         }
       }
-
-      // reportStore.reportDataCH.tenth.second.comment = ''
-      if (reportStore.reportForCheckCH.tenth.second.verified_by_chq)
-        verifiedByChqPanels.value.push("10-2");
-
+      if (reportStore.reportForCheckCH.eleventh.second.verified_by_chq)
+        verifiedByChqPanels.value.push("11-2");
       // Рефакторинг - добавлен код ниже, т.к. не отображ панельки показателей на доработке у ЦШ
       // если используем функцию showPanels обязательна проверка на 2 поля:
       if (
-        reportStore.reportDataCH.tenth.second.rejecting_reasons &&
-        reportStore.reportForCheckCH.tenth.second.verified_by_chq !== true
+        reportStore.reportDataCH.eleventh.second.rejecting_reasons &&
+        reportStore.reportForCheckCH.eleventh.second.verified_by_chq !== true
       ) {
-        revisionPanels.value.push("10-2");
+        revisionPanels.value.push("11-2");
       }
-      /*
-       * Критерий 14 (в 2025 году, в 2024 - это критерий 16)
-       */
-      reportStore.reportForCheckCH.fourteenth = (
-        await reportPartTwoService.getReportDH("14", reportId)
-      ).data;
-      // Добавление данных о проектах от ОШ в стор ЦШ
-      reportStore.reportDataCH.fourteenth.projects = (
-        await reportPartTwoService.getReportDH("14", reportId)
-      ).data.projects;
-      reportStore.reportDataCH.fourteenth.isProject = (
-        await reportPartTwoService.getReportDH("14", reportId)
-      ).data.is_project;
-
-      if (!reportStore.reportForCheckCH.fourteenth.verified_by_chq) {
-        if (reportStore.reportForCheckCH.fourteenth.rejecting_reasons) {
-          reportStore.reportDataCH.fourteenth.comment = JSON.parse(
-            reportStore.reportForCheckCH.fourteenth.rejecting_reasons
-          ).comment;
-          reportStore.reportDataCH.fourteenth.isProject =
-            reportStore.reportForCheckCH.fourteenth.central_version?.is_project;
-        } else {
-          reportStore.reportDataCH.fourteenth.comment = "";
-        }
-      }
-
-      if (reportStore.reportForCheckCH.fourteenth.verified_by_chq)
-        verifiedByChqPanels.value.push("14");
-
-      // Рефакторинг - добавлен код ниже, т.к. не отображ панельки показателей на доработке у ЦШ
-      // если используем функцию showPanels обязательна проверка на 2 поля:
-      if (
-        reportStore.reportForCheckCH.fourteenth.rejecting_reasons &&
-        reportStore.reportForCheckCH.fourteenth.verified_by_chq !== true
-      ) {
-        revisionPanels.value.push("14");
-      }
-      /*
-       * Критерий 15
-       */
-      const dataFifteenthCH = (await reportPartTwoService.getReportDH("15", reportId))
-        .data;
-      reportStore.reportForCheckCH.fifteenth = dataFifteenthCH;
-      if (dataFifteenthCH.rejecting_reasons && dataFifteenthCH.verified_by_chq !== true) {
-        revisionPanels.value.push("15");
-      }
-      if (dataFifteenthCH.verified_by_chq) verifiedByChqPanels.value.push("15");
-
-      dataFifteenthCH.regional_version
-        ? (reportData.value.fifteenth = JSON.parse(dataFifteenthCH.regional_version))
-        : (reportData.value.fifteenth = dataFifteenthCH);
-
-      dataFifteenthCH.district_version
-        ? (reportStore.reportDataDH.fifteenth = JSON.parse(
-            dataFifteenthCH.district_version
-          ))
-        : (reportStore.reportDataDH.fifteenth = dataFifteenthCH);
-
-      reportStore.reportDataCH.fifteenth = Object.assign({}, dataFifteenthCH);
-      if (!dataFifteenthCH.rejecting_reasons) {
-        reportStore.reportDataCH.fifteenth.comment = "";
-      } else if (dataFifteenthCH.rejecting_reasons) {
-        reportStore.reportDataCH.fifteenth.comment = JSON.parse(
-          reportStore.reportDataCH.fifteenth.rejecting_reasons
-        ).comment;
-      }
-      if (dataFifteenthCH.verified_by_chq === true) {
-        reportStore.reportDataCH.fifteenth.comment = dataFifteenthCH.comment;
-      }
-
-      /*
-       * Критерий 11
-       * В 2025 году данный показатель рассчитывается автоматически
-       */
-      // const dataEleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
-      // reportStore.reportForCheckCH.eleventh = dataEleventh;
-
-      // если используем функцию showPanels обязательна проверка на 2 поля:
-      // if (dataEleventh.rejecting_reasons && dataEleventh.verified_by_chq !== true) {
-      //   revisionPanels.value.push('11');
-      // }
-
-      // dataEleventh.regional_version
-      //   ? reportData.value.eleventh = JSON.parse(dataEleventh.regional_version)
-      //   : reportData.value.eleventh = dataEleventh;
-
-      // dataEleventh.district_version
-      //   ? reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version)
-      //   : reportStore.reportDataDH.eleventh = dataEleventh;
-
-      // reportStore.reportDataCH.eleventh = Object.assign({}, dataEleventh);
-      // if (!dataEleventh.rejecting_reasons) {
-      //   reportStore.reportDataCH.eleventh.comment = ''
-      // } else if (dataEleventh.rejecting_reasons) {
-      //   reportStore.reportDataCH.eleventh.comment = JSON.parse(reportStore.reportDataCH.eleventh.rejecting_reasons).comment
-      // }
-      // if (dataEleventh.verified_by_chq === true) {
-      //   reportStore.reportDataCH.eleventh.comment = dataEleventh.comment
-      // }
 
       /*
        * Критерий 12
@@ -1327,94 +1099,24 @@ const getReportData = async (reportId) => {
       if (dataTwelfth.verified_by_chq === true) {
         reportStore.reportDataCH.twelfth.comment = dataTwelfth.comment;
       }
-
-      /*
-       * Критерий 13
-       * !!! В 2025 году данный показатель объединен с показателем 12
-       */
-      // const dataThirteenth = (await reportPartTwoService.getReportDH('13', reportId)).data;
-      // reportStore.reportForCheckCH.thirteenth = dataThirteenth;
-
-      // // если используем функцию showPanels обязательна проверка на 2 поля:
-      // if (dataThirteenth.rejecting_reasons && dataThirteenth.verified_by_chq !== true) {
-      //   revisionPanels.value.push('13');
-      // }
-
-      // dataThirteenth.regional_version
-      //   ? reportData.value.thirteenth = JSON.parse(dataThirteenth.regional_version)
-      //   : reportData.value.thirteenth = dataThirteenth;
-
-      // dataThirteenth.district_version
-      //   ? reportStore.reportDataDH.thirteenth = JSON.parse(dataThirteenth.district_version)
-      //   : reportStore.reportDataDH.thirteenth = dataThirteenth;
-
-      // reportStore.reportDataCH.thirteenth = Object.assign({}, dataThirteenth);
-      // if (!dataThirteenth.rejecting_reasons) {
-      //   reportStore.reportDataCH.thirteenth.comment = ''
-      // } else if (dataThirteenth.rejecting_reasons) {
-      //   reportStore.reportDataCH.thirteenth.comment = JSON.parse(reportStore.reportDataCH.thirteenth.rejecting_reasons).comment
-      // }
-      // if (dataThirteenth.verified_by_chq === true) {
-      //   reportStore.reportDataCH.thirteenth.comment = dataThirteenth.comment
-      // }
-
-      /*
-       * Критерии 16-20
-       */
-      if (reportStore.reportForCheckCH.fourteenth.is_sent) isSentLastIndex.value = true;
-
-      try {
-        reportData.value.sixteenth = (
-          await reportPartTwoService.getReportDH("14", reportId)
-        ).data;
-      } catch (e) {
-        console.log(e.message);
-      }
-      try {
-        reportData.value.seventeenth = (
-          await reportPartTwoService.getReportDH("17", reportId)
-        ).data;
-      } catch (e) {
-        console.log(e.message);
-      }
-      try {
-        reportData.value.eighteenth = (
-          await reportPartTwoService.getReportDH("18", reportId)
-        ).data;
-      } catch (e) {
-        console.log(e.message);
-      }
-      try {
-        reportData.value.nineteenth = (
-          await reportPartTwoService.getReportDH("19", reportId)
-        ).data;
-      } catch (e) {
-        console.log(e.message);
-      }
-      try {
-        reportData.value.twentieth = (
-          await reportPartTwoService.getReportDH("20", reportId)
-        ).data;
-      } catch (e) {
-        console.log(e.message);
-      }
     }
-    // Загрузка данных для отчета эксперта ОШ
+    // -------------Загрузка данных для отчета эксперта ОШ-----------------
     else if (districtExpert.value && typeof reportId != "undefined") {
+      // Критерий 1
       reportData.value.first = (
         await reportPartTwoService.getReportDH("1", reportId)
       ).data;
       reportStore.reportDataDH.first = Object.assign({}, reportData.value.first);
       reportStore.reportDataDH.first.comment = "";
 
+      // Критерий 4
       reportData.value.fourth = (
         await reportPartTwoService.getReportDH("4", reportId)
       ).data;
-      reportStore.reportDataDH.fourth = (
-        await reportPartTwoService.getReportDH("4", reportId)
-      ).data;
+      reportStore.reportDataDH.fourth = Object.assign({}, reportData.value.fourth);
       reportStore.reportDataDH.fourth.comment = "";
 
+      // Критерий 5
       reportData.value.fifth = (
         await reportPartTwoService.getReportDH("5", reportId)
       ).data;
@@ -1423,103 +1125,51 @@ const getReportData = async (reportId) => {
       ).data;
       reportStore.reportDataDH.fifth.comment = "";
 
+      // Критерий 6
+      reportData.value.sixth = (
+        await reportPartTwoService.getReportDH("6", reportId)
+      ).data;
+      reportStore.reportDataDH.sixth = (
+        await reportPartTwoService.getReportDH("6", reportId)
+      ).data;
+      reportStore.reportDataDH.sixth.comment = "";
+
+      // Критерии 7 и 10
       await getMultiplyData(reportId);
 
-      reportData.value.tenth.first = (
-        await reportPartTwoService.getMultipleReportDH("10", "1", reportId)
+      // Критерий 11
+      reportData.value.eleventh.first = (
+        await reportPartTwoService.getMultipleReportDH("11", "1", reportId)
       ).data;
-      reportStore.reportDataDH.tenth.first = Object.assign(
+      reportStore.reportDataDH.eleventh.first = Object.assign(
         {},
-        reportData.value.tenth.first
+        reportData.value.eleventh.first
       );
-      reportStore.reportDataDH.tenth.first.comment = "";
+      reportStore.reportDataDH.eleventh.first.comment = "";
 
-      reportData.value.tenth.second = (
-        await reportPartTwoService.getMultipleReportDH("10", "2", reportId)
+      reportData.value.eleventh.second = (
+        await reportPartTwoService.getMultipleReportDH("11", "2", reportId)
       ).data;
-      reportStore.reportDataDH.tenth.second = Object.assign(
+      reportStore.reportDataDH.eleventh.second = Object.assign(
         {},
-        reportData.value.tenth.second
+        reportData.value.eleventh.second
       );
-      reportStore.reportDataDH.tenth.second.comment = "";
+      reportStore.reportDataDH.eleventh.second.comment = "";
 
-      // reportData.value.eleventh = (await reportPartTwoService.getReportDH('11', reportId)).data;
-      // reportStore.reportDataDH.eleventh = Object.assign({}, reportData.value.eleventh);
-      // reportStore.reportDataDH.eleventh.comment = '';
-
+      // Критерий 12
       reportData.value.twelfth = (
         await reportPartTwoService.getReportDH("12", reportId)
       ).data;
       reportStore.reportDataDH.twelfth = Object.assign({}, reportData.value.twelfth);
       reportStore.reportDataDH.twelfth.comment = "";
 
-      reportData.value.fifteenth = (
-        await reportPartTwoService.getReportDH("15", reportId)
-      ).data;
-      reportStore.reportDataDH.fifteenth = Object.assign({}, reportData.value.fifteenth);
-      reportStore.reportDataDH.fifteenth.comment = "";
-
-      // reportData.value.thirteenth = (
-      //   await reportPartTwoService.getReportDH("13", reportId)
-      // ).data;
-      // reportStore.reportDataDH.thirteenth = Object.assign(
-      //   {},
-      //   reportData.value.thirteenth
-      // );
-      // reportStore.reportDataDH.thirteenth.comment = "";
-
-      reportData.value.fourteenth = (
-        await reportPartTwoService.getReportDH("14", reportId)
-      ).data;
-      reportStore.reportDataDH.fourteenth = (
-        await reportPartTwoService.getReportDH("14", reportId)
-      ).data;
-      reportStore.reportDataDH.fourteenth.comment = "";
-
-      if (reportData.value.fourteenth.is_sent) isSentLastIndex.value = true;
-
-      try {
-        reportData.value.sixteenth = (
-          await reportPartTwoService.getReportDH("16", reportId)
-        ).data;
-      } catch (e) {
-        console.log(e.message);
-      }
-      try {
-        reportData.value.seventeenth = (
-          await reportPartTwoService.getReportDH("17", reportId)
-        ).data;
-      } catch (e) {
-        console.log(e.message);
-      }
-      try {
-        reportData.value.eighteenth = (
-          await reportPartTwoService.getReportDH("18", reportId)
-        ).data;
-      } catch (e) {
-        console.log(e.message);
-      }
-      try {
-        reportData.value.nineteenth = (
-          await reportPartTwoService.getReportDH("19", reportId)
-        ).data;
-      } catch (e) {
-        console.log(e.message);
-      }
-      try {
-        reportData.value.twentieth = (
-          await reportPartTwoService.getReportDH("20", reportId)
-        ).data;
-      } catch (e) {
-        console.log(e.message);
-      }
+      if (reportData.value.twelfth.is_sent) isSentLastIndex.value = true;
     }
-    // Загрузка данных для отчета командира РШ
+    // -------------Загрузка данных для отчета командира РШ----------------
     else {
       /*-------------1-------------*/
       let dataFirst;
       try {
-        // reportData.value.first = (await reportPartTwoService.getReport('1')).data;
         dataFirst = (await reportPartTwoService.getReport("1")).data;
         if (!dataFirst.regional_version && !dataFirst.central_version) {
           reportData.value.first = dataFirst;
@@ -1529,7 +1179,7 @@ const getReportData = async (reportId) => {
 
             if (!dataFirst.verified_by_chq) {
               revisionPanels.value.push("1");
-              reportStore.isReportReject.first = isTabsForRevision.value; // true;
+              reportStore.isReportReject.first = isTabsForRevision.value;
             }
           }
 
@@ -1547,46 +1197,37 @@ const getReportData = async (reportId) => {
       } catch (e) {
         console.log(e.message);
       }
+
       /*------------4--------------*/
       let dataFourth;
       try {
         dataFourth = (await reportPartTwoService.getReport("4")).data;
-        if (!dataFourth.regional_version && !dataFourth.central_version) {
-          reportData.value.fourth = dataFourth;
-        } else {
-          if (dataFourth.rejecting_reasons) {
-            reportStore.reportReject.fourth = dataFourth;
+        console.log("4", dataFourth);
+        dataFourth.regional_version
+          ? (reportData.value.fourth = JSON.parse(dataFourth.regional_version))
+          : (reportData.value.fourth = dataFourth);
 
-            if (!dataFourth.verified_by_chq) {
-              revisionPanels.value.push("4");
-              reportStore.isReportReject.fourth = isTabsForRevision.value; // true;
-            }
-          }
+        dataFourth.district_version
+          ? (reportStore.reportDataDH.fourth = JSON.parse(dataFourth.district_version))
+          : (reportStore.reportDataDH.fourth = dataFourth);
 
-          if (dataFourth.central_version) {
-            reportData.value.fourth = dataFourth;
-          } else {
-            reportData.value.fourth = JSON.parse(dataFourth.regional_version);
-          }
+        dataFourth.central_version
+          ? (reportStore.reportDataCH.fourth = dataFourth.central_version)
+          : (reportStore.reportDataCH.fourth = dataFourth);
 
-          /*Добавление данных для просмотра показателя который не был отклонен*/
-          if (dataFourth.verified_by_chq && !dataFourth.rejecting_reasons) {
-            reportStore.reportReject.fourth = dataFourth;
-          }
+        // Проверка на причины отклонений отчета и вывод табов для РО
+        if (dataFourth.rejecting_reasons && dataFourth.verified_by_chq !== true) {
+          revisionPanels.value.push("4");
+          reportStore.isReportReject.fourth = isTabsForRevision.value;
         }
       } catch (e) {
         console.log(e.message);
       }
+
       /*------------5--------------*/
       let dataFifth;
       try {
         dataFifth = (await reportPartTwoService.getReport("5")).data;
-        console.log("5", dataFifth);
-        // if (!dataFifth.regional_version) {
-        //   reportData.value.fifth = dataFifth;
-        // } else {
-        //   reportData.value.fifth = JSON.parse(dataFifth.regional_version);
-        // }
         if (!dataFifth.regional_version && !dataFifth.central_version) {
           reportData.value.fifth = dataFifth;
         } else {
@@ -1595,7 +1236,7 @@ const getReportData = async (reportId) => {
 
             if (!dataFifth.verified_by_chq) {
               revisionPanels.value.push("5");
-              reportStore.isReportReject.fifth = isTabsForRevision.value; // true;
+              reportStore.isReportReject.fifth = isTabsForRevision.value;
             }
           }
 
@@ -1614,117 +1255,129 @@ const getReportData = async (reportId) => {
         console.log(e.message);
       }
 
+      /*------------6--------------*/
+      let dataSixth;
+      try {
+        dataSixth = (await reportPartTwoService.getReport("6")).data;
+        console.log("6", dataSixth);
+        // if (!dataSixth.regional_version) {
+        //   reportData.value.sixth = dataSixth;
+        // } else {
+        //   reportData.value.sixth = JSON.parse(dataSixth.regional_version);
+        // }
+        if (!dataSixth.regional_version && !dataSixth.central_version) {
+          reportData.value.sixth = dataSixth;
+        } else {
+          if (dataSixth.rejecting_reasons) {
+            reportStore.reportReject.sixth = dataSixth;
+
+            if (!dataSixth.verified_by_chq) {
+              revisionPanels.value.push("6");
+              reportStore.isReportReject.sixth = isTabsForRevision.value;
+            }
+          }
+
+          if (dataSixth.central_version) {
+            reportData.value.sixth = dataSixth;
+          } else {
+            reportData.value.sixth = JSON.parse(dataSixth.regional_version);
+          }
+
+          /*Добавление данных для просмотра показателя который не был отклонен*/
+          if (dataSixth.verified_by_chq && !dataSixth.rejecting_reasons) {
+            reportStore.reportReject.sixth = dataSixth;
+          }
+        }
+      } catch (e) {
+        console.log(e.message);
+      }
+
+      /*------------7 и 10------------*/
       try {
         await getMultiplyData();
       } catch (e) {
         console.error("Error in six_items processing:", e);
       }
-      /*------------10-1--------------*/
-      let dataTenthFirst;
-      try {
-        // reportData.value.tenth.first = (await reportPartTwoService.getMultipleReport('10', '1')).data;
-        dataTenthFirst = (await reportPartTwoService.getMultipleReport("10", "01")).data;
-        // if (!dataTenthFirst.regional_version) {
-        //   reportData.value.tenth.first = dataTenthFirst;
-        // } else {
-        //   reportData.value.tenth.first = JSON.parse(dataTenthFirst.regional_version);
-        // }
-        if (!dataTenthFirst.regional_version && !dataTenthFirst.central_version) {
-          reportData.value.tenth.first = dataTenthFirst;
-        } else {
-          if (dataTenthFirst.rejecting_reasons) {
-            reportStore.reportReject.tenth.first = dataTenthFirst;
 
-            if (!dataTenthFirst.verified_by_chq) {
-              revisionPanels.value.push("10-1");
-              reportStore.isReportReject.tenth.first = isTabsForRevision.value; // true;
+      /*------------11-1--------------*/
+      let dataEleventhFirst;
+      try {
+        dataEleventhFirst = (await reportPartTwoService.getMultipleReport("11", "1"))
+          .data;
+        if (!dataEleventhFirst.regional_version && !dataEleventhFirst.central_version) {
+          reportData.value.eleventh.first = dataEleventhFirst;
+        } else {
+          if (dataEleventhFirst.rejecting_reasons) {
+            reportStore.reportReject.eleventh.first = dataEleventhFirst;
+
+            if (!dataEleventhFirst.verified_by_chq) {
+              revisionPanels.value.push("11-1");
+              reportStore.isReportReject.eleventh.first = isTabsForRevision.value;
             }
-            if (dataTenthFirst.verified_by_chq)
-              reportStore.isReportReject.tenth.first = false;
+            if (dataEleventhFirst.verified_by_chq)
+              reportStore.isReportReject.eleventh.first = false;
           }
 
-          if (dataTenthFirst.central_version) {
-            reportData.value.tenth.first = dataTenthFirst;
+          if (dataEleventhFirst.central_version) {
+            reportData.value.eleventh.first = dataEleventhFirst;
           } else {
-            reportData.value.tenth.first = JSON.parse(dataTenthFirst.regional_version);
+            reportData.value.eleventh.first = JSON.parse(
+              dataEleventhFirst.regional_version
+            );
           }
 
           /*Добавление данных для просмотра показателя который не был отклонен*/
-          if (dataTenthFirst.verified_by_chq && !dataTenthFirst.rejecting_reasons) {
-            reportStore.reportReject.tenth.first = dataTenthFirst;
+          if (dataEleventhFirst.verified_by_chq && !dataEleventhFirst.rejecting_reasons) {
+            reportStore.reportReject.eleventh.first = dataEleventhFirst;
           }
         }
       } catch (e) {
         console.log(e.message);
       }
-      /*------------10-2--------------*/
-      let dataTenthSecond;
+      /*------------11-2--------------*/
+      let dataEleventhSecond;
       try {
-        // reportData.value.tenth.second = (await reportPartTwoService.getMultipleReport('10', '2')).data;
-        dataTenthSecond = (await reportPartTwoService.getMultipleReport("10", "02")).data;
-        // if (!dataTenthSecond.regional_version) {
-        //   reportData.value.tenth.second = dataTenthSecond;
-        // } else {
-        //   reportData.value.tenth.second = JSON.parse(dataTenthSecond.regional_version);
-        // }
-        if (!dataTenthSecond.regional_version && !dataTenthSecond.central_version) {
-          reportData.value.tenth.second = dataTenthSecond;
+        dataEleventhSecond = (await reportPartTwoService.getMultipleReport("11", "2"))
+          .data;
+        if (!dataEleventhSecond.regional_version && !dataEleventhSecond.central_version) {
+          reportData.value.eleventh.second = dataEleventhSecond;
         } else {
-          if (dataTenthSecond.rejecting_reasons) {
-            reportStore.reportReject.tenth.second = dataTenthSecond;
+          if (dataEleventhSecond.rejecting_reasons) {
+            reportStore.reportReject.eleventh.second = dataEleventhSecond;
 
-            if (!dataTenthSecond.verified_by_chq) {
-              revisionPanels.value.push("10-2");
-              reportStore.isReportReject.tenth.second = isTabsForRevision.value; // true;
+            if (!dataEleventhSecond.verified_by_chq) {
+              revisionPanels.value.push("11-2");
+              reportStore.isReportReject.eleventh.second = isTabsForRevision.value;
             }
-            if (dataTenthSecond.verified_by_chq)
-              reportStore.isReportReject.tenth.second = false;
+            if (dataEleventhSecond.verified_by_chq)
+              reportStore.isReportReject.eleventh.second = false;
           }
 
-          if (dataTenthSecond.central_version) {
-            reportData.value.tenth.second = dataTenthSecond;
+          if (dataEleventhSecond.central_version) {
+            reportData.value.eleventh.second = dataEleventhSecond;
           } else {
-            reportData.value.tenth.second = JSON.parse(dataTenthSecond.regional_version);
+            reportData.value.eleventh.second = JSON.parse(
+              dataEleventhSecond.regional_version
+            );
           }
 
           /*Добавление данных для просмотра показателя который не был отклонен*/
-          if (dataTenthSecond.verified_by_chq && !dataTenthSecond.rejecting_reasons) {
-            reportStore.reportReject.tenth.second = dataTenthSecond;
+          if (
+            dataEleventhSecond.verified_by_chq &&
+            !dataEleventhSecond.rejecting_reasons
+          ) {
+            reportStore.reportReject.eleventh.second = dataEleventhSecond;
           }
         }
       } catch (e) {
         console.log(e.message);
       }
-      //-----------------11------------------------------------------
-      // let dataEleventh;
-      // try {
-      //   dataEleventh = (await reportPartTwoService.getReport('11')).data;
-      //   console.log(dataEleventh);
-      //   dataEleventh.regional_version
-      //     ? reportData.value.eleventh = JSON.parse(dataEleventh.regional_version)
-      //     : reportData.value.eleventh = dataEleventh;
 
-      //   dataEleventh.district_version
-      //     ? reportStore.reportDataDH.eleventh = JSON.parse(dataEleventh.district_version)
-      //     : reportStore.reportDataDH.eleventh = dataEleventh;
-
-      //   dataEleventh.central_version
-      //     ? reportStore.reportDataCH.eleventh = dataEleventh.central_version
-      //     : reportStore.reportDataCH.eleventh = dataEleventh;
-
-      // Проверка на причины отклонений отчета и вывод табов для РО
-      //   if (dataEleventh.rejecting_reasons && dataEleventh.verified_by_chq !== true) {
-      //     revisionPanels.value.push('11');
-      //     reportStore.isReportReject.eleventh = isTabsForRevision.value;
-      //   }
-      // } catch (e) {
-      //   console.log(e.message)
-      // }
-      //-----------------12-------------------------------------------
+      /*--------------12--------------*/
       let dataTwelfth;
       try {
         dataTwelfth = (await reportPartTwoService.getReport("12")).data;
-        console.log(dataTwelfth);
+        console.log("12", dataTwelfth);
         dataTwelfth.regional_version
           ? (reportData.value.twelfth = JSON.parse(dataTwelfth.regional_version))
           : (reportData.value.twelfth = dataTwelfth);
@@ -1745,83 +1398,8 @@ const getReportData = async (reportId) => {
       } catch (e) {
         console.log(e.message);
       }
-      //-----------------13-------------------------------------------
-      // В 2025 году данный показатель объединен с показателем 12
-      // let dataThirteenth
-      // try {
-      //   dataThirteenth = (await reportPartTwoService.getReport('13')).data;
-      //   console.log(dataThirteenth);
-      //   dataThirteenth.regional_version
-      //     ? reportData.value.thirteenth = JSON.parse(dataThirteenth.regional_version)
-      //     : reportData.value.thirteenth = dataThirteenth;
 
-      //   dataThirteenth.district_version
-      //     ? reportStore.reportDataDH.thirteenth = JSON.parse(dataThirteenth.district_version)
-      //     : reportStore.reportDataDH.thirteenth = dataThirteenth;
-
-      //   dataThirteenth.central_version
-      //     ? reportStore.reportDataCH.thirteenth = dataThirteenth.central_version
-      //     : reportStore.reportDataCH.thirteenth = dataThirteenth;
-
-      //   // Проверка на причины отклонений отчета и вывод табов для РО
-      //   if (dataThirteenth.rejecting_reasons && dataThirteenth.verified_by_chq !== true) {
-      //     revisionPanels.value.push('13');
-      //     reportStore.isReportReject.thirteenth = isTabsForRevision.value;
-      //   }
-      // } catch (e) {
-      //   console.log(e.message)
-      // }
-
-      //-----------------------------14--------------------------------
-      // (в 2024 году это 16 показатель)
-      let dataFourteenth;
-      try {
-        dataFourteenth = (await reportPartTwoService.getReport("14")).data;
-
-        if (dataFourteenth.is_sent) {
-          blockSendButton.value = true;
-          blockEditFirstReport.value = true;
-        }
-
-        // if (!dataSixteenth.regional_version) {
-        //   reportData.value.sixteenth = dataSixteenth;
-        // } else {
-        //   reportData.value.sixteenth = JSON.parse(dataSixteenth.regional_version);
-        // }
-
-        if (!dataFourteenth.regional_version && !dataFourteenth.central_version) {
-          reportData.value.fourteenth = dataFourteenth;
-        } else {
-          if (dataFourteenth.rejecting_reasons) {
-            reportStore.reportReject.fourteenth = dataFourteenth;
-
-            if (!dataFourteenth.verified_by_chq) {
-              revisionPanels.value.push("14");
-              reportStore.isReportReject.fourteenth = isTabsForRevision.value; // true;
-            }
-          }
-
-          if (dataFourteenth.central_version) {
-            reportData.value.fourteenth = dataFourteenth;
-          } else {
-            reportData.value.fourteenth = JSON.parse(dataFourteenth.regional_version);
-          }
-
-          /*Добавление данных для просмотра показателя который не был отклонен*/
-          if (dataFourteenth.verified_by_chq && !dataFourteenth.rejecting_reasons) {
-            reportStore.reportReject.fourteenth = dataFourteenth;
-          }
-        }
-
-        if (reportData.value.fourteenth.is_sent) {
-          blockSendButton.value = true;
-          blockEditFirstReport.value = true;
-          isSentLastIndex.value = true;
-        }
-      } catch (e) {
-        console.log(e.message);
-      }
-
+      //-----------------7--------------------
       for (let item in reportData.value.six) {
         if (reportData.value.six[item] !== null) {
           if (
@@ -1836,71 +1414,16 @@ const getReportData = async (reportId) => {
         }
       }
 
-      let dataFifteenth;
-      try {
-        dataFifteenth = (await reportPartTwoService.getReport("15")).data;
-        if (!dataFifteenth.regional_version && !dataFifteenth.central_version) {
-          reportData.value.fifteenth = dataFifteenth;
-        } else {
-          if (dataFifteenth.rejecting_reasons) {
-            reportStore.reportReject.fifteenth = dataFifteenth;
-            if (!dataFifteenth.verified_by_chq) {
-              revisionPanels.value.push("15");
-              reportStore.isReportReject.fifteenth = isTabsForRevision.value;
-            }
-          }
-          if (dataFifteenth.central_version) {
-            reportData.value.fifteenth = dataFifteenth;
-          } else {
-            reportData.value.fifteenth = JSON.parse(dataFifteenth.regional_version);
-          }
-          if (dataFifteenth.verified_by_chq && !dataFifteenth.rejecting_reasons) {
-            reportStore.reportReject.fifteenth = dataFifteenth;
-          }
-        }
-      } catch (e) {
-        console.log(e.message);
-      }
-
-      //Статистические показатели 16-20, не участвующие в рейтинге (не требуют согласования ОЩ и ЦШ) 2025 год
-      try {
-        reportData.value.sixteenth = (await reportPartTwoService.getReport("16")).data;
-      } catch (e) {
-        console.log(e.message);
-      }
-      try {
-        reportData.value.seventeenth = (await reportPartTwoService.getReport("17")).data;
-      } catch (e) {
-        console.log(e.message);
-      }
-      try {
-        reportData.value.eighteenth = (await reportPartTwoService.getReport("18")).data;
-      } catch (e) {
-        console.log(e.message);
-      }
-      try {
-        reportData.value.nineteenth = (await reportPartTwoService.getReport("19")).data;
-      } catch (e) {
-        console.log(e.message);
-      }
-      try {
-        reportData.value.twentieth = (await reportPartTwoService.getReport("20")).data;
-      } catch (e) {
-        console.log(e.message);
-      }
-
       if (
         dataFirst.verified_by_chq &&
         dataFourth.verified_by_chq &&
         dataFifth.verified_by_chq &&
-        dataTenthFirst.verified_by_chq &&
-        dataTenthSecond.verified_by_chq &&
+        dataSixth.verified_by_chq &&
+        dataEleventhFirst.verified_by_chq &&
+        dataEleventhSecond.verified_by_chq &&
         isAllSixVerified &&
         isAllNinthVerified &&
-        // dataEleventh.verified_by_chq &&
-        dataTwelfth.verified_by_chq &&
-        dataFourteenth.verified_by_dhq &&
-        dataFifteenth.verified_by_chq
+        dataTwelfth.verified_by_chq
       ) {
         console.log("~~~~HERE");
         reportStore.isAllReportsVerifiedByCH = true;
@@ -1925,50 +1448,23 @@ const setData = (data, panel, number = 0) => {
       reportData.value.fifth = data;
       break;
     case 6:
+      reportData.value.sixth = data;
+      break;
+    case 7:
       reportData.value.six[number] = data;
       break;
-    // case 7:
-    //   reportData.value.seventh[number] = data
-    //   break;
-    case 9:
+    case 10:
       reportData.value.ninth[number] = data;
       break;
-    case 10:
+    case 11:
       if (number === 1) {
-        reportData.value.tenth.first = data;
+        reportData.value.eleventh.first = data;
       } else {
-        reportData.value.tenth.second = data;
+        reportData.value.eleventh.second = data;
       }
       break;
-    // case 11:
-    //   reportData.value.eleventh = data
-    // break;
     case 12:
       reportData.value.twelfth = data;
-      break;
-    // case 13:
-    //   reportData.value.thirteenth = data
-    //   break;
-    case 14:
-      reportData.value.fourteenth = data;
-      break;
-    case 15:
-      reportData.value.fifteenth = data;
-      break;
-    case 16:
-      reportData.value.sixteenth = data;
-      break;
-    case 17:
-      reportData.value.seventeenth = data;
-      break;
-    case 18:
-      reportData.value.eighteenth = data;
-      break;
-    case 19:
-      reportData.value.nineteenth = data;
-      break;
-    case 20:
-      reportData.value.twentieth = data;
       break;
   }
 };
@@ -1985,36 +1481,27 @@ const setDataDH = (data, panel, number) => {
       reportDataDH.value.fifth = data;
       break;
     case 6:
+      reportDataDH.value.sixth = data;
+      break;
+    case 7:
       reportDataDH.value.six[number] = data;
       reportStore.reportDataDH.six[number].comment = Object.fromEntries(data).comment;
       reportStore.reportDataDH.six[number].number_of_members = Object.fromEntries(
         data
       ).number_of_members;
       break;
-    case 9:
+    case 10:
       reportDataDH.value.ninth[number] = data;
       break;
-    case 10:
+    case 11:
       if (number === 1) {
-        reportDataDH.value.tenth.first = data;
+        reportDataDH.value.eleventh.first = data;
       } else {
-        reportDataDH.value.tenth.second = data;
+        reportDataDH.value.eleventh.second = data;
       }
       break;
-    // case 11:
-    //   reportDataDH.value.eleventh = data;
-    //   break;
     case 12:
       reportDataDH.value.twelfth = data;
-      break;
-    // case 13:
-    //   reportDataDH.value.thirteenth = data;
-    //   break;
-    case 14:
-      reportDataDH.value.fourteenth = data;
-      break;
-    case 15:
-      reportDataDH.value.fifteenth = data;
       break;
   }
 };
@@ -2034,34 +1521,26 @@ const setDataCH = (data, panel, number) => {
       console.log("5", ...reportDataCH.value.fifth);
       break;
     case 6:
+      reportDataCH.value.sixth = data;
+      console.log("6", ...reportDataCH.value.sixth);
+      break;
+    case 7:
       reportDataCH.value.six[number] = data;
       break;
-    case 9:
+    case 10:
       reportDataCH.value.ninth[number] = data;
       break;
-    case 10:
+    case 11:
       if (number === 1) {
-        reportDataCH.value.tenth.first = data;
-        console.log("10-1", ...reportDataCH.value.tenth.first);
+        reportDataCH.value.eleventh.first = data;
+        console.log("11-1", ...reportDataCH.value.eleventh.first);
       } else {
-        reportDataCH.value.tenth.second = data;
-        console.log("10-2", ...reportDataCH.value.tenth.second);
+        reportDataCH.value.eleventh.second = data;
+        console.log("11-2", ...reportDataCH.value.eleventh.second);
       }
       break;
-    // case 11:
-    //   reportDataCH.value.eleventh = data;
-    //   break;
     case 12:
       reportDataCH.value.twelfth = data;
-      break;
-    // case 13:
-    //   reportDataCH.value.thirteenth = data;
-    //   break;
-    case 14:
-      reportDataCH.value.fourteenth = data;
-      break;
-    case 15:
-      reportDataCH.value.fifteenth = data;
       break;
   }
 };
@@ -2117,17 +1596,24 @@ const sendReport = async () => {
         if (!reportData.value.first.is_sent) {
           await reportPartTwoService.sendReport(reportData.value.first, "1");
         }
+
         if (!reportData.value.fourth.is_sent) {
-          if (reportData.value.fourth) {
-            reportData.value.fourth.events = reportData.value.fourth.events.filter(
+          await reportPartTwoService.sendReport(reportData.value.fourth, "4");
+        }
+
+        if (!reportData.value.fifth.is_sent) {
+          if (reportData.value.fifth) {
+            reportData.value.fifth.events = reportData.value.fifth.events.filter(
               (event) => event.participants_number
             );
-            await reportPartTwoService.sendReport(reportData.value.fourth, "4");
+            await reportPartTwoService.sendReport(reportData.value.fifth, "5");
           }
         }
-        if (!reportData.value.fifth.is_sent) {
-          await reportPartTwoService.sendReport(reportData.value.fifth, "5");
+
+        if (!reportData.value.sixth.is_sent) {
+          await reportPartTwoService.sendReport(reportData.value.sixth, "6");
         }
+
         for (let item in reportData.value.six) {
           if (!Object.keys(reportData.value.six[item]).length) {
             await reportPartTwoService.createMultipleReport(
@@ -2136,7 +1622,7 @@ const sendReport = async () => {
                 links: [],
                 comment: "",
               },
-              "6",
+              "7",
               item
             );
             reportData.value.six[item].event_happened = false;
@@ -2148,13 +1634,8 @@ const sendReport = async () => {
             reportData.value.six[item].event_happened = false;
           }
         }
+        await reportPartTwoService.sendReportWithSlash(reportData.value.six, "7");
 
-        await reportPartTwoService.sendReportWithSlash(reportData.value.six, "6");
-        // for (let item in filteredSeventh) {
-        //   if (filteredSeventh[item].is_sent === false) {
-        //     await reportPartTwoService.sendReportWithSlash(filteredSeventh, '7');
-        //   }
-        // }
         for (let item in reportData.value.ninth) {
           if (!Object.keys(reportData.value.ninth[item]).length) {
             await reportPartTwoService.createMultipleReport(
@@ -2166,7 +1647,7 @@ const sendReport = async () => {
                 file_type: "",
                 comment: "",
               },
-              "9",
+              "10",
               item
             );
             reportData.value.ninth[item].event_happened = false;
@@ -2178,38 +1659,25 @@ const sendReport = async () => {
             reportData.value.ninth[item].event_happened = false;
           }
         }
-        await reportPartTwoService.sendReportWithSlash(reportData.value.ninth, "9");
-        if (!reportData.value.tenth.first.is_sent) {
+        await reportPartTwoService.sendReportWithSlash(reportData.value.ninth, "10");
+
+        if (!reportData.value.eleventh.first.is_sent) {
           await reportPartTwoService.sendMultipleReport(
-            reportData.value.tenth.first,
-            "10",
+            reportData.value.eleventh.first,
+            "11",
             "1"
           );
         }
-        if (!reportData.value.tenth.second.is_sent) {
+        if (!reportData.value.eleventh.second.is_sent) {
           await reportPartTwoService.sendMultipleReport(
-            reportData.value.tenth.second,
-            "10",
+            reportData.value.eleventh.second,
+            "11",
             "2"
           );
         }
-        // if (!reportData.value.eleventh.is_sent) {
-        //   await reportPartTwoService.sendReport(reportData.value.eleventh, '11');
-        // }
+
         if (!reportData.value.twelfth.is_sent) {
           await reportPartTwoService.sendReport(reportData.value.twelfth, "12");
-        }
-        // if (!reportData.value.thirteenth.is_sent) {
-        //   await reportPartTwoService.sendReport(reportData.value.thirteenth, '13');
-        // }
-
-        if (!reportData.value.fourteenth.is_sent) {
-          await reportPartTwoService.sendReport(reportData.value.fourteenth, "14");
-        }
-
-        // Добавить 15 показатель
-        if (!reportData.value.fifteenth.is_sent) {
-          await reportPartTwoService.sendReport(reportData.value.fifteenth, "15");
         }
 
         await getReportData(route.query.reportId);
@@ -2251,7 +1719,7 @@ const sendReport = async () => {
     blockSendButton.value = true;
     preloader.value = true;
     try {
-      console.log("dataSiDh", reportDataDH.value.six, reportDataDH.value.first);
+      // console.log("dataSiDh", reportDataDH.value.six, reportDataDH.value.first);
       if (!reportData.value.first.verified_by_dhq) {
         await reportPartTwoService.sendReportDH(
           reportDataDH.value.first,
@@ -2279,99 +1747,83 @@ const sendReport = async () => {
         );
       }
 
-      for (const [index, item] of Object.entries(reportData.value.six)) {
-        if (item && item.verified_by_dhq !== true) {
-          console.log(`Sending report for item 6-${index}:`, item);
-          try {
-            const response = await reportPartTwoService.sendReportDHMultiply(
-              reportStore.reportDataDH.six[index],
-              "6",
-              index,
-              route.query.reportId
-            );
-            console.log(`Successfully sent report for item 6-${index}`);
-          } catch (error) {
-            console.error(`Error sending report for item 6-${index}:`, error);
-          }
-        } else {
-          console.log(
-            `Skipping item 6-${index} as it's already verified or doesn't exist`
-          );
-        }
-      }
-      for (const [index, item] of Object.entries(reportData.value.ninth)) {
-        if (item && item.verified_by_dhq !== true) {
-          console.log(`Sending report for item 9-${index}:`, item);
-          try {
-            reportStore.reportDataDH.ninth[index].document =
-              reportStore.reportDataDHFile.ninth[index];
-            const response = await reportPartTwoService.sendReportDHMultiply(
-              reportStore.reportDataDH.ninth[index],
-              "9",
-              index,
-              route.query.reportId,
-              true
-            );
-            console.log(`Successfully sent report for item 9-${index}`);
-          } catch (error) {
-            console.error(`Error sending report for item 9-${index}:`, error);
-          }
-        } else {
-          console.log(
-            `Skipping item 9-${index} as it's already verified or doesn't exist`
-          );
-        }
-      }
-      if (!reportData.value.tenth.first.verified_by_dhq) {
-        await reportPartTwoService.sendReportDHMultiply(
-          reportDataDH.value.tenth.first,
-          "10",
-          "1",
+      if (!reportData.value.sixth.verified_by_dhq) {
+        await reportPartTwoService.sendReportDH(
+          reportDataDH.value.sixth,
+          "6",
           route.query.reportId,
           true
         );
       }
 
-      if (!reportData.value.tenth.second.verified_by_dhq) {
+      for (const [index, item] of Object.entries(reportData.value.six)) {
+        if (item && item.verified_by_dhq !== true) {
+          console.log(`Sending report for item 7-${index}:`, item);
+          try {
+            const response = await reportPartTwoService.sendReportDHMultiply(
+              reportStore.reportDataDH.six[index],
+              "7",
+              index,
+              route.query.reportId
+            );
+            console.log(`Successfully sent report for item 7-${index}`);
+          } catch (error) {
+            console.error(`Error sending report for item 7-${index}:`, error);
+          }
+        } else {
+          console.log(
+            `Skipping item 7-${index} as it's already verified or doesn't exist`
+          );
+        }
+      }
+
+      for (const [index, item] of Object.entries(reportData.value.ninth)) {
+        if (item && item.verified_by_dhq !== true) {
+          console.log(`Sending report for item 10-${index}:`, item);
+          try {
+            reportStore.reportDataDH.ninth[index].document =
+              reportStore.reportDataDHFile.ninth[index];
+            const response = await reportPartTwoService.sendReportDHMultiply(
+              reportStore.reportDataDH.ninth[index],
+              "10",
+              index,
+              route.query.reportId,
+              true
+            );
+            console.log(`Successfully sent report for item 10-${index}`);
+          } catch (error) {
+            console.error(`Error sending report for item 10-${index}:`, error);
+          }
+        } else {
+          console.log(
+            `Skipping item 10-${index} as it's already verified or doesn't exist`
+          );
+        }
+      }
+
+      if (!reportData.value.eleventh.first.verified_by_dhq) {
         await reportPartTwoService.sendReportDHMultiply(
-          reportDataDH.value.tenth.second,
-          "10",
+          reportDataDH.value.eleventh.first,
+          "11",
+          "1",
+          route.query.reportId,
+          true
+        );
+      }
+      if (!reportData.value.eleventh.second.verified_by_dhq) {
+        await reportPartTwoService.sendReportDHMultiply(
+          reportDataDH.value.eleventh.second,
+          "11",
           "2",
           route.query.reportId,
           true
         );
       }
 
-      // if (!reportData.value.eleventh.verified_by_dhq) {
-      //   await reportPartTwoService.sendReportDH(reportDataDH.value.eleventh, '11', route.query.reportId, true);
-      // }
-
       if (!reportData.value.twelfth.verified_by_dhq) {
         await reportPartTwoService.sendReportDH(
           reportDataDH.value.twelfth,
           "12",
-          route.query.reportId,
-          true
-        );
-      }
-
-      // if (!reportData.value.thirteenth.verified_by_dhq) {
-      //   await reportPartTwoService.sendReportDH(reportDataDH.value.thirteenth, '13', route.query.reportId, true);
-      // }
-
-      if (!reportData.value.fourteenth.verified_by_dhq) {
-        await reportPartTwoService.sendReportDH(
-          reportDataDH.value.fourteenth,
-          "14",
-          route.query.reportId,
-          true
-        );
-      }
-
-      if (!reportData.value.fifteenth.verified_by_dhq) {
-        await reportPartTwoService.sendReportDH(
-          reportDataDH.value.fifteenth,
-          "15",
           route.query.reportId,
           true
         );
@@ -2403,6 +1855,7 @@ const sendReport = async () => {
     showModalWarning.value = true;
   }
 };
+
 const reportConfirmation = async (value) => {
   if (value) {
     showModalWarning.value = false;
@@ -2439,33 +1892,45 @@ const reportConfirmation = async (value) => {
           reportStore.returnReport.fifth
         );
       }
+
+      if (reportStore.reportForCheckCH.sixth.verified_by_chq === null) {
+        await reportPartTwoService.sendReportCH(
+          reportDataCH.value.sixth,
+          "6",
+          route.query.reportId,
+          true,
+          reportStore.returnReport.sixth
+        );
+      }
+
       for (const [index, item] of Object.entries(reportStore.reportForCheckCH.six)) {
         if (item && item.verified_by_chq === null && item.verified_by_dhq === true) {
-          console.log(`Sending report for item 6-${index}:`, item);
+          console.log(`Sending report for item 7-${index}:`, item);
           try {
             console.log(
-              "data 6",
+              "data 7",
               reportDataCH.value.six[index],
               reportStore.returnReport.six[index]
             );
             const response = await reportPartTwoService.sendMultipleReportCH(
               reportDataCH.value.six[index],
-              "6",
+              "7",
               index,
               route.query.reportId,
               false,
               reportStore.returnReport.six[index]
             );
-            console.log(`Successfully sent report for item 6-${index}`);
+            console.log(`Successfully sent report for item 7-${index}`);
           } catch (error) {
-            console.error(`Error sending report for item 6-${index}:`, error);
+            console.error(`Error sending report for item 7-${index}:`, error);
           }
         } else {
           console.log(
-            `Skipping item 6-${index} as it's already verified or doesn't exist`
+            `Skipping item 7-${index} as it's already verified or doesn't exist`
           );
         }
       }
+
       for (const [index, item] of Object.entries(reportStore.reportForCheckCH.ninth)) {
         console.log(
           "43",
@@ -2473,57 +1938,53 @@ const reportConfirmation = async (value) => {
           reportStore.reportForCheckCH.ninth[item]
         );
         if (item && item.verified_by_chq === null) {
-          console.log(`Sending report for item 9-${index}:`, item);
+          console.log(`Sending report for item 10-${index}:`, item);
           // reportStore.reportDataDH.ninth[index].document = reportStore.reportDataDHFile.ninth[index]
           try {
             console.log(
-              "data 9",
+              "data 10",
               reportDataCH.value.ninth[index],
               reportStore.returnReport.ninth[index]
             );
             const response = await reportPartTwoService.sendMultipleReportCH(
               reportDataCH.value.ninth[index],
-              "9",
+              "10",
               index,
               route.query.reportId,
               true,
               reportStore.returnReport.ninth[index]
             );
-            console.log(`Successfully sent report for item 9-${index}`);
+            console.log(`Successfully sent report for item 10-${index}`);
           } catch (error) {
-            console.error(`Error sending report for item 9-${index}:`, error);
+            console.error(`Error sending report for item 10-${index}:`, error);
           }
         } else {
           console.log(
-            `Skipping item 9-${index} as it's already verified or doesn't exist`
+            `Skipping item 10-${index} as it's already verified or doesn't exist`
           );
         }
       }
-      if (reportStore.reportForCheckCH.tenth.first.verified_by_chq === null) {
+
+      if (reportStore.reportForCheckCH.eleventh.first.verified_by_chq === null) {
         await reportPartTwoService.sendMultipleReportCH(
-          reportDataCH.value.tenth.first,
-          "10",
+          reportDataCH.value.eleventh.first,
+          "11",
           "1",
           route.query.reportId,
           true,
-          reportStore.returnReport.tenth.first
+          reportStore.returnReport.eleventh.first
         );
       }
-
-      if (reportStore.reportForCheckCH.tenth.second.verified_by_chq === null) {
+      if (reportStore.reportForCheckCH.eleventh.second.verified_by_chq === null) {
         await reportPartTwoService.sendMultipleReportCH(
-          reportDataCH.value.tenth.second,
-          "10",
+          reportDataCH.value.eleventh.second,
+          "11",
           "2",
           route.query.reportId,
           true,
-          reportStore.returnReport.tenth.second
+          reportStore.returnReport.eleventh.second
         );
       }
-
-      // if (reportStore.reportForCheckCH.eleventh.verified_by_chq === null) {
-      //   await reportPartTwoService.sendReportCH(reportDataCH.value.eleventh, '11', route.query.reportId, true, reportStore.returnReport.eleventh);
-      // }
 
       if (reportStore.reportForCheckCH.twelfth.verified_by_chq === null) {
         await reportPartTwoService.sendReportCH(
@@ -2532,30 +1993,6 @@ const reportConfirmation = async (value) => {
           route.query.reportId,
           true,
           reportStore.returnReport.twelfth
-        );
-      }
-
-      // if (reportStore.reportForCheckCH.thirteenth.verified_by_chq === null) {
-      //   await reportPartTwoService.sendReportCH(reportDataCH.value.thirteenth, '13', route.query.reportId, true, reportStore.returnReport.thirteenth);
-      // }
-
-      if (reportStore.reportForCheckCH.fourteenth.verified_by_chq === null) {
-        await reportPartTwoService.sendReportCH(
-          reportDataCH.value.fourteenth,
-          "14",
-          route.query.reportId,
-          true,
-          reportStore.returnReport.fourteenth
-        );
-      }
-
-      if (reportStore.reportForCheckCH.fifteenth.verified_by_chq === null) {
-        await reportPartTwoService.sendReportCH(
-          reportDataCH.value.fifteenth,
-          "15",
-          route.query.reportId,
-          true,
-          reportStore.returnReport.fifteenth
         );
       }
 
@@ -2604,43 +2041,25 @@ const checkEmptyFields = (data) => {
     isErrorPanel.value.first = false;
   }
 
-  if (data.fourth) {
-    for (let event of data.fourth.events) {
-      if (
-        event.participants_number &&
-        !(event.name && event.end_date && event.start_date && data.fourth.comment)
-      ) {
-        isErrorPanel.value.fourth = true;
-        swal.fire({
-          position: "center",
-          icon: "warning",
-          title: `Заполните обязательные поля в 4 показателе`,
-          showConfirmButton: false,
-          timer: 2500,
-        });
-        return false;
-      }
-    }
-  } else {
+  if (!data.fourth || !data.fourth.employed_after_training) {
     isErrorPanel.value.fourth = true;
     swal.fire({
       position: "center",
       icon: "warning",
-      showConfirmButton: true,
-      text:
-        "Заполните обязательные поля в 4 показателе. В случае отсутствия мероприятия, укажите 0 в количестве участников",
-      confirmButtonColor: "#3085d6",
-      confirmButtonText: "Понятно",
-      timer: 5000,
+      title: `Заполните обязательные поля в 4 показателе`,
+      showConfirmButton: false,
+      timer: 2500,
     });
     return false;
+  } else {
+    isErrorPanel.value.fourth = false;
   }
 
   if (data.fifth) {
     for (let event of data.fifth.events) {
       if (
         event.participants_number &&
-        !(event.end_date && event.start_date && event.name && data.fifth.comment)
+        !(event.name && event.end_date && event.start_date && data.fifth.comment)
       ) {
         isErrorPanel.value.fifth = true;
         swal.fire({
@@ -2658,7 +2077,39 @@ const checkEmptyFields = (data) => {
     swal.fire({
       position: "center",
       icon: "warning",
-      text: `Заполните обязательные поля в 5 показателе. В случае отсутствия трудового проекта, укажите 0 в количестве участников`,
+      showConfirmButton: true,
+      text:
+        "Заполните обязательные поля в 5 показателе. В случае отсутствия мероприятия, укажите 0 в количестве участников",
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "Понятно",
+      timer: 5000,
+    });
+    return false;
+  }
+
+  if (data.sixth) {
+    for (let event of data.sixth.events) {
+      if (
+        event.participants_number &&
+        !(event.end_date && event.start_date && event.name && data.sixth.comment)
+      ) {
+        isErrorPanel.value.sixth = true;
+        swal.fire({
+          position: "center",
+          icon: "warning",
+          title: `Заполните обязательные поля в 6 показателе`,
+          showConfirmButton: false,
+          timer: 2500,
+        });
+        return false;
+      }
+    }
+  } else {
+    isErrorPanel.value.sixth = true;
+    swal.fire({
+      position: "center",
+      icon: "warning",
+      text: `Заполните обязательные поля в 6 показателе. В случае отсутствия трудового проекта, укажите 0 в количестве участников`,
       showConfirmButton: true,
       confirmButtonColor: "#3085d6",
       confirmButtonText: "Понятно",
@@ -2676,7 +2127,7 @@ const checkEmptyFields = (data) => {
       swal.fire({
         position: "center",
         icon: "warning",
-        title: `Заполните обязательные поля в 6 показателе`,
+        title: `Заполните обязательные поля в 7 показателе`,
         showConfirmButton: false,
         timer: 2500,
       });
@@ -2694,7 +2145,7 @@ const checkEmptyFields = (data) => {
         swal.fire({
           position: "center",
           icon: "warning",
-          title: `Заполните ссылки в 6 показателе`,
+          title: `Заполните ссылки в 7 показателе`,
           showConfirmButton: false,
           timer: 2500,
         });
@@ -2702,6 +2153,7 @@ const checkEmptyFields = (data) => {
       }
     }
   }
+
   for (let item in filteredNinth) {
     if (!filteredNinth[item]?.links?.length) {
       isErrorPanel.value.ninth[item] = {
@@ -2711,7 +2163,7 @@ const checkEmptyFields = (data) => {
       swal.fire({
         position: "center",
         icon: "warning",
-        title: `Заполните обязательные поля в 9 показателе`,
+        title: `Заполните обязательные поля в 10 показателе`,
         showConfirmButton: false,
         timer: 2500,
       });
@@ -2729,7 +2181,7 @@ const checkEmptyFields = (data) => {
         swal.fire({
           position: "center",
           icon: "warning",
-          title: `Заполните ссылки в 9 показателе`,
+          title: `Заполните ссылки в 10 показателе`,
           showConfirmButton: false,
           timer: 2500,
         });
@@ -2738,14 +2190,14 @@ const checkEmptyFields = (data) => {
     }
   }
 
-  if (data.tenth.first) {
-    if (data.tenth.first.event_happened) {
-      if (!data.tenth.first.comment) {
-        isErrorPanel.value.tenth = true;
+  if (data.eleventh.first) {
+    if (data.eleventh.first.event_happened) {
+      if (!data.eleventh.first.comment) {
+        isErrorPanel.value.eleventh = true;
         swal.fire({
           position: "center",
           icon: "warning",
-          title: `Заполните обязательные поля в показателе 10-1`,
+          title: `Заполните обязательные поля в показателе 11-1`,
           showConfirmButton: false,
           timer: 2500,
         });
@@ -2753,25 +2205,25 @@ const checkEmptyFields = (data) => {
       }
     }
   } else {
-    isErrorPanel.value.tenth = true;
+    isErrorPanel.value.eleventh = true;
     swal.fire({
       position: "center",
       icon: "warning",
-      title: `Укажите информацию о проведении акции в показателе 10-1`,
+      title: `Укажите информацию о проведении акции в показателе 11-1`,
       showConfirmButton: false,
       timer: 3500,
     });
     return false;
   }
 
-  if (data.tenth.second) {
-    if (data.tenth.second.event_happened) {
-      if (!data.tenth.second.comment) {
-        isErrorPanel.value.tenth = true;
+  if (data.eleventh.second) {
+    if (data.eleventh.second.event_happened) {
+      if (!data.eleventh.second.comment) {
+        isErrorPanel.value.eleventh = true;
         swal.fire({
           position: "center",
           icon: "warning",
-          title: `Заполните обязательные поля в показателе 10-2`,
+          title: `Заполните обязательные поля в показателе 11-2`,
           showConfirmButton: false,
           timer: 2500,
         });
@@ -2779,30 +2231,16 @@ const checkEmptyFields = (data) => {
       }
     }
   } else {
-    isErrorPanel.value.tenth = true;
+    isErrorPanel.value.eleventh = true;
     swal.fire({
       position: "center",
       icon: "warning",
-      title: `Укажите информацию о проведении акции в показателе 10-2`,
+      title: `Укажите информацию о проведении акции в показателе 11-2`,
       showConfirmButton: false,
       timer: 3500,
     });
     return false;
   }
-
-  // if (!data.eleventh || !(data.eleventh.participants_number && data.eleventh.scan_file)) {
-  //   isErrorPanel.value.eleventh = true;
-  //   swal.fire({
-  //     position: 'center',
-  //     icon: 'warning',
-  //     title: `Заполните обязательные поля в 11 показателе`,
-  //     showConfirmButton: false,
-  //     timer: 2500,
-  //   })
-  //   return false;
-  // } else {
-  //   isErrorPanel.value.eleventh = false;
-  // }
 
   if (
     !data.twelfth ||
@@ -2819,107 +2257,6 @@ const checkEmptyFields = (data) => {
     return false;
   } else {
     isErrorPanel.value.twelfth = false;
-  }
-
-  // if (!data.thirteenth || !(data.thirteenth.number_of_members)) {
-  //   isErrorPanel.value.thirteenth = true;
-  //   swal.fire({
-  //     position: 'center',
-  //     icon: 'warning',
-  //     title: `Заполните обязательные поля в 13 показателе`,
-  //     showConfirmButton: false,
-  //     timer: 2500,
-  //   })
-  //   return false;
-  // } else {
-  //   isErrorPanel.value.thirteenth = false;
-  // }
-
-  if (data.fourteenth) {
-    for (let project of data.fourteenth.projects) {
-      if (
-        data.fourteenth.is_project &&
-        !(data.fourteenth.comment && project.name && project.project_scale)
-      ) {
-        isErrorPanel.value.fourteenth = true;
-        swal.fire({
-          position: "center",
-          icon: "warning",
-          title: `Заполните обязательные поля в 14 показателе`,
-          showConfirmButton: false,
-          timer: 2500,
-        });
-        return false;
-      }
-    }
-  } else {
-    isErrorPanel.value.fourteenth = true;
-    swal.fire({
-      position: "center",
-      icon: "warning",
-      title: `Укажите информацию о наличии трудового проекта в 14 показателе`,
-      showConfirmButton: false,
-      timer: 3500,
-    });
-    return false;
-  }
-
-  if (data.fifteenth) {
-    const normalizedAreas = Array.isArray(data.fifteenth.areas)
-      ? data.fifteenth.areas
-      : Array.isArray(data.fifteenth.directions)
-      ? data.fifteenth.directions.map((dir) => ({
-          number_trained: dir.trained_total,
-          number_employed: dir.employed_by_direction,
-          self_employment: dir.self_employed,
-          number_unemployed: dir.not_employed,
-          // file: dir.zip_file,
-        }))
-      : [];
-
-    if (!normalizedAreas.length) {
-      isErrorPanel.value.fifteenth = true;
-      swal.fire({
-        position: "center",
-        icon: "warning",
-        title: `Заполните обязательные поля в 15 показателе`,
-        showConfirmButton: false,
-        timer: 2500,
-      });
-      return false;
-    }
-
-    for (let area of normalizedAreas) {
-      const numbersFilled =
-        area.number_trained !== "" &&
-        area.number_trained !== null &&
-        area.number_trained !== undefined &&
-        area.number_employed !== "" &&
-        area.number_employed !== null &&
-        area.number_employed !== undefined &&
-        area.self_employment !== "" &&
-        area.self_employment !== null &&
-        area.self_employment !== undefined &&
-        area.number_unemployed !== "" &&
-        area.number_unemployed !== null &&
-        area.number_unemployed !== undefined;
-
-      // const fileAttached = !!(area.file && area.file !== "");
-
-      if (!numbersFilled) {
-        isErrorPanel.value.fifteenth = true;
-        swal.fire({
-          position: "center",
-          icon: "warning",
-          title: `Заполните обязательные поля в 15 показателе`,
-          showConfirmButton: false,
-          timer: 2500,
-        });
-        return false;
-      }
-    }
-
-    isErrorPanel.value.fifteenth = false;
   }
 
   return true;
@@ -2983,24 +2320,42 @@ watch(revisionPanels.value, () => {
 });
 
 onMounted(() => {
-  if (
-    roleStore.roles.regionalheadquarter_commander &&
-    typeof route.query.reportId === "undefined" &&
-    window.performance.navigation.type === 1
-  ) {
+  getItems(7);
+  getItems(10);
+
+  if (typeof route.query.reportId !== 'undefined') return;
+  if (roleStore.roles.regionalheadquarter_commander) {
     preloader.value = true;
     getReportData();
+  } else {
+    const stopWatch = watch(
+      () => roleStore.roles.regionalheadquarter_commander,
+      (isCommander) => {
+        if (isCommander) {
+          preloader.value = true;
+          getReportData();
+          stopWatch();
+        }
+      }
+    );
   }
-  getItems(6);
-  getItems(9);
 });
 </script>
 <style lang="scss">
 .btn_report {
+  margin: 80px auto 48px !important;
   padding: 12px 32px !important;
 
   @media (max-width: 480px) {
     width: 90% !important;
+  }
+}
+
+p.text.text-center {
+  margin-bottom: 80px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 60px;
   }
 }
 

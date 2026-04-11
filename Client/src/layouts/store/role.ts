@@ -8,7 +8,10 @@ const isAuth = ref(!!localStorage.getItem('jwt_token'));
 // const APPLICATION_NAME = "regional_competitions"
 
 // Для рейтинга РО 2025 года
-const APPLICATION_NAME = "regional_competitions_2025"
+// const APPLICATION_NAME = "regional_competitions_2025"
+
+// Для рейтинга РО 2026 года
+const APPLICATION_NAME = "regional_competitions_2026"
 
 export const useRoleStore = defineStore('role', {
     state: () => ({
