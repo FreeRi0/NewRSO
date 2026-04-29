@@ -34,7 +34,7 @@
                 <ErrorMessage :error="errors.username" />
 
                 <passwordInput class="mb-2" placeholder="Придумайте пароль" maxlength="20" minlength="8"
-                    pattern="^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d.+-_@]{1,}$"
+                    pattern="[a-zA-Z0-9.+-_@]+"
                     error-message="Введите от 8 до 20 символов на латинице, чисел и символы @ . + - _"
                     v-model:value="form.password" />
                 <ErrorMessage :error="errors.password" />
