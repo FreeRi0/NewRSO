@@ -41,7 +41,7 @@
 
                 <passwordInput placeholder="Повторите пароль" maxlength="20" minlength="8" pattern="[a-zA-Z0-9.+-_@]+"
                     error-message="Введите от 8 до 20 символов на латинице, чисел и символы @ . + - _"
-                    v-model:value="form.re_password" />
+                    v-model:value="form.re_password" :error-match=passwordMatchError />
                 <!-- <p class="error" v-if="errors.re_password">
                     {{ errors.re_password }}
                 </p>
@@ -93,7 +93,17 @@ const { form,
 const router = useRouter();
 
 const isButtonDisabled = computed(() => {
-    return isLoading.value || !form.value.personal_data_agreement || !form.value.region;
+  return isLoading.value || 
+         !form.value.personal_data_agreement || 
+         !form.value.region||
+         !!passwordMatchError.value;
+});
+
+const passwordMatchError = computed(() => {
+  if (form.value.password && form.value.re_password && form.value.password !== form.value.re_password) {
+    return 'Пароли не совпадают';
+  }
+  return null;
 });
 
 const handleSubmit = async () => {
