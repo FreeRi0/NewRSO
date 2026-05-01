@@ -105,7 +105,10 @@
       </div>
       <div class="form__field-report">
         <div class="form__field" style="width: 100%">
-          <label class="form__label" for="comment">Численность иностранных граждан</label>
+          <label class="form__label" for="comment"
+            >Численность иностранных граждан
+            <sup class="valid-red">*</sup>
+          </label>
           <InputReport
             v-model:value="firstPanelData.foreign_participants"
             id="foreign_participants"
@@ -124,7 +127,10 @@
           />
         </div>
         <div class="form__field" style="width: 100%">
-          <label class="form__label" for="comment">Численность ТОП</label>
+          <label class="form__label" for="comment"
+            >Численность ТОП
+            <sup class="valid-red">*</sup>
+          </label>
           <InputReport
             v-model:value="firstPanelData.top_participants"
             id="foreign_participants"
@@ -148,14 +154,14 @@
         <div style="width: 100%">
           <v-checkbox
             v-model="firstPanelData.foreign_must_pay"
-            label="Освобождены от оплаты членских взносов в данном РО"
+            label="Иностранные граждане освобождены от уплаты членских&nbsp;взносов"
             @change="focusOut"
           />
         </div>
         <div style="width: 100%">
           <v-checkbox
             v-model="firstPanelData.top_must_pay"
-            label="ТОП освобождены от оплаты членских взносов в данном РО"
+            label="ТОП освобождены от уплаты членских взносов"
             @change="focusOut"
           />
         </div>
@@ -764,6 +770,8 @@
     <ReportRegionalForm
       :reportData="reportData"
       :blockEditFirstReport="blockEditFirstReport"
+      @get-data-children="getDataChildren"
+      :is-error-panel-children="isErrorPanelChildren"
     />
   </div>
 
@@ -897,7 +905,10 @@
 
       <div class="form__field-report">
         <div class="form__field" style="width: 100%">
-          <label class="form__label" for="comment">Численность иностранных граждан</label>
+          <label class="form__label" for="comment"
+            >Численность иностранных граждан
+            <sup class="valid-red">*</sup>
+          </label>
           <InputReport
             v-model:value="firstPanelData.foreign_participants"
             id="foreign_participants"
@@ -919,7 +930,10 @@
           />
         </div>
         <div class="form__field" style="width: 100%">
-          <label class="form__label" for="comment">Численность ТОП</label>
+          <label class="form__label" for="comment">
+            Численность ТОП
+            <sup class="valid-red">*</sup>
+          </label>
           <InputReport
             v-model:value="firstPanelData.top_participants"
             id="foreign_participants"
@@ -946,7 +960,7 @@
         <div style="width: 100%">
           <v-checkbox
             v-model="firstPanelData.top_must_pay"
-            label="ТОП освобождены от оплаты членских взносов в данном РО"
+            label="ТОП освобождены от уплаты членских взносов"
             @change="focusOut"
             :disabled="
               props.centralExpert ||
@@ -958,7 +972,7 @@
         <div style="width: 100%">
           <v-checkbox
             v-model="firstPanelData.top_must_pay"
-            label="ТОП освобождены от оплаты членских взносов в данном РО"
+            label="ТОП освобождены от уплаты членских взносов"
             @change="focusOut"
             :disabled="
               props.centralExpert ||
@@ -1558,7 +1572,12 @@
     </template>
 
     <template v-slot:firstTab_additionalSlot_2>
-      <ReportRegionalForm :reportData="reportData" :blockEditFirstReport="true" />
+      <ReportRegionalForm
+        :reportData="reportData"
+        :blockEditFirstReport="true"
+        @get-data-children="getDataChildren"
+        :is-error-panel-children="isErrorPanelChildren"
+      />
     </template>
 
     <!--    second-->
@@ -1635,7 +1654,7 @@
       <!--      <div>-->
       <!--        <v-checkbox-->
       <!--            v-model="firstPanelDataDH.top_must_pay"-->
-      <!--            label="ТОП освобождены от оплаты членских взносов в данном РО"-->
+      <!--            label="ТОП освобождены от уплаты членских взносов"-->
       <!--            :disabled="props.centralExpert || reportStore.isReportReject?.first || reportStore.isAllReportsVerifiedByCH"-->
       <!--        />-->
       <!--      </div>-->
@@ -1833,10 +1852,15 @@ const props = defineProps({
   isErrorPanel: {
     type: Boolean,
   },
+  isErrorPanelChildren: Object,
   tab: String,
 });
 
-const emit = defineEmits(["getData", "getDataDH", "getDataCH"]);
+const emit = defineEmits(["getData", "getDataDH", "getDataCH", "getDataChildren"]);
+
+const getDataChildren = (event) => {
+  emit("getDataChildren", event);
+};
 
 const defaultReportData = {
   // participants_number: '0',

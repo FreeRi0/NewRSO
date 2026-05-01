@@ -297,7 +297,9 @@
 
     <v-expansion-panels v-model="panel">
       <v-expansion-panel>
-        <v-expansion-panel-title>
+        <v-expansion-panel-title
+          :class="isErrorPanelChildren.first ? 'visible-error' : ''"
+        >
           1.1 Из&nbsp;них: члены РО&nbsp;РСО&nbsp;&mdash; студенты очной формы обучения
           субъекта Российской Федерации, обучающихся в&nbsp;образовательных организациях
           высшего образования (ООВО) в&nbsp;государственных, муниципальных и&nbsp;частных
@@ -307,32 +309,54 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <div class="form__field form__field-group" style="width: 100%">
-            <p class="text">Количество членов СО</p>
-            <label class="form__label" for="comment"
-              >Штабы СО&nbsp;ООВО<sup class="valid-red">*</sup></label
-            >
-            <InputReport
-              v-model:value="reportDataChildren.oovo_participants"
-              id="foreign_participants"
-              name="foreign_participants"
-              class="form__input"
-              type="number"
-              placeholder="Введите число"
-              :maxlength="10"
-              :min="0"
-              :max="32767"
-              :step="0.01"
-              @focusout="focusOut"
-              :disabled="isSent"
-              :is-error-panel="isErrorPanel"
-              style="width: 50%"
-            />
+            <div>
+              <label class="form__label" for="oovo_participants"
+                >Количество членов СО&nbsp;ООВО<sup class="valid-red">*</sup></label
+              >
+              <!-- <InputReport
+                v-model:value="reportDataChildren.oovo_participants"
+                id="oovo_participants"
+                name="oovo_participants"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="32767"
+                @focusout="focusOut"
+                :disabled="blockEditFirstReport"
+                :is-error-panel="isErrorPanelChildren.first"
+                style="width: 50%"
+              /> -->
+            </div>
+            <div>
+              <label class="form__label" for="comment"
+                >Количество штабов СО&nbsp;ООВО<sup class="valid-red">*</sup></label
+              >
+              <InputReport
+                v-model:value="reportDataChildren.oovo_participants"
+                id="foreign_participants"
+                name="foreign_participants"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="32767"
+                @focusout="focusOut"
+                :disabled="blockEditFirstReport"
+                :is-error-panel="isErrorPanelChildren.first"
+                style="width: 50%"
+              />
+            </div>
           </div>
         </v-expansion-panel-text>
       </v-expansion-panel>
 
       <v-expansion-panel>
-        <v-expansion-panel-title>
+        <v-expansion-panel-title
+          :class="isErrorPanelChildren.second ? 'visible-error' : ''"
+        >
           1.2 Из&nbsp;них: члены РО&nbsp;РСО&nbsp;&mdash; студенты очной формы обучения
           субъекта Российской Федерации, обучающихся в&nbsp;профессиональных
           образовательных организациях (ПОО) в&nbsp;государственных, Муниципальных
@@ -342,26 +366,46 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <div class="form__field form__field-group" style="width: 100%">
-            <p class="text">Количество членов СО</p>
-            <label class="form__label" for="comment"
-              >Штабы СО&nbsp;ПОО<sup class="valid-red">*</sup></label
-            >
-            <InputReport
-              v-model:value="reportDataChildren.poo_participants"
-              id="foreign_participants"
-              name="foreign_participants"
-              class="form__input"
-              type="number"
-              placeholder="Введите число"
-              :maxlength="10"
-              :min="0"
-              :max="32767"
-              :step="0.01"
-              @focusout="focusOut"
-              :disabled="isSent"
-              :is-error-panel="isErrorPanel"
-              style="width: 50%"
-            />
+            <div>
+              <label class="form__label" for="comment"
+                >Количество членов СО&nbsp;ПОО<sup class="valid-red">*</sup></label
+              >
+              <!-- <InputReport
+                v-model:value="reportDataChildren.poo_participants"
+                id="foreign_participants"
+                name="foreign_participants"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="32767"
+                @focusout="focusOut"
+                :disabled="blockEditFirstReport"
+                :is-error-panel="isErrorPanelChildren.second"
+                style="width: 50%"
+              /> -->
+            </div>
+            <div>
+              <label class="form__label" for="comment"
+                >Количество штабов СО&nbsp;ПОО<sup class="valid-red">*</sup></label
+              >
+              <InputReport
+                v-model:value="reportDataChildren.poo_participants"
+                id="foreign_participants"
+                name="foreign_participants"
+                class="form__input"
+                type="number"
+                placeholder="Введите число"
+                :maxlength="10"
+                :min="0"
+                :max="32767"
+                @focusout="focusOut"
+                :disabled="blockEditFirstReport"
+                :is-error-panel="isErrorPanelChildren.second"
+                style="width: 50%"
+              />
+            </div>
           </div>
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -503,7 +547,7 @@ import { editReport } from "@services/ReportService.ts";
 const roleStore = useRoleStore();
 const route = useRoute();
 
-const emit = defineEmits(["sentReport"]);
+const emit = defineEmits(["sentReport", "getDataChildren"]);
 const props = defineProps({
   reportData: {
     type: Object,
@@ -520,12 +564,17 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  isErrorPanelChildren: Object,
 });
 const isSecondReport = ref(true);
 const panel = ref(false);
 const reportDataChildren = ref({
   poo_participants: "",
   oovo_participants: "",
+  //добавить новые поля
+  // poo_participants: "",
+  // oovo_participants: "",
+
   // participants_number: "",
   // employed_sso: "",
   // employed_smo: "",
@@ -626,6 +675,7 @@ const focusOut = async () => {
 
     const { data } = await editReport(reportDataChildren.value, true);
     emit("sentReport", data);
+    emit("getDataChildren", data);
   }
 };
 
@@ -690,8 +740,8 @@ const focusOut = async () => {
 }
 
 .form__field-group {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   border: none;
   background-color: #f3f4f5;
   border-radius: 10px;
@@ -699,6 +749,11 @@ const focusOut = async () => {
   @media (max-width: 643px) {
     align-items: center;
   }
+}
+
+.form__label {
+  display: block;
+  margin-bottom: 8px;
 }
 
 .form__field-group .form__field-group.Report-Regional-Form__style {
@@ -727,5 +782,10 @@ const focusOut = async () => {
   color: #1f7cc0;
   padding: 0;
   text-align: left;
+}
+
+.v-expansion-panel-title.visible-error,
+.v-expansion-panel--active > .v-expansion-panel-title.visible-error {
+  border-color: #db0000;
 }
 </style>
