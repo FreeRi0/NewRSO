@@ -189,14 +189,15 @@
     </div>
     <div class="form__field-comment">
       <label class="form__label" for="comment"
-        >Комментарий <sup class="valid-red">*</sup></label
-      >
+        >Комментарий
+        <!-- <sup class="valid-red">*</sup> -->
+      </label>
       <TextareaReport
         v-model:value="fifthPanelData.comment"
         id="comment"
         name="comment"
         class="form__input"
-        placeholder="Укажите наименования организованных мероприятий"
+        placeholder="Напишите сообщение"
         :rows="row"
         autoResize
         :maxlength="3000"
@@ -405,15 +406,16 @@
       </div>
       <div class="form__field-comment">
         <label class="form__label" for="comment"
-          >Комментарий <sup class="valid-red">*</sup></label
-        >
+          >Комментарий
+          <!-- <sup class="valid-red">*</sup> -->
+        </label>
         <TextareaReport
           v-model:value="fifthPanelData.comment"
           id="comment"
           name="comment"
           class="form__input"
           type="textarea"
-          placeholder="Укажите наименования организованных мероприятий"
+          placeholder="Напишите сообщение"
           style="width: 100%"
           :rows="1"
           autoResize
@@ -1796,6 +1798,7 @@ watch(
   position: relative;
   max-height: 40px;
   width: 340px;
+  font-weight: 400;
 
   @media (max-width: 568px) {
     margin: 30px auto;
@@ -2156,13 +2159,15 @@ watch(
 }
 
 .form__add-link-button {
-  width: 141px;
+  // width: 141px;
   margin: 8px 0;
   border: none;
   background-color: transparent;
   color: #1f7cc0;
   padding: 0;
   text-align: left;
+  font-weight: 400;
+  letter-spacing: 0.25px;
 }
 
 .result-checkbox {

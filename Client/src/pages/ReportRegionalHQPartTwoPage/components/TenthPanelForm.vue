@@ -1024,13 +1024,15 @@ watch(eleventhPanelDataCH.value, () => {
 }
 
 .form__add-link-button {
-  width: 141px;
+  // width: 141px;
   margin: 8px 0;
   border: none;
   background-color: transparent;
   color: #1f7cc0;
   padding: 0;
   text-align: left;
+  font-weight: 400;
+  letter-spacing: 0.25px;
 }
 
 .form-input__file-input {
