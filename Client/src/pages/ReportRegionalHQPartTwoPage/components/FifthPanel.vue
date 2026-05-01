@@ -1719,6 +1719,7 @@ watch(
   height: 40px;
   padding: 8px 32px 8px 52px;
   width: 340px;
+  font-weight: 400;
 
   @media (max-width: 1024px) {
     width: 244px;

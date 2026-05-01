@@ -572,7 +572,7 @@ const getMultiplyData = async (reportId) => {
   });
 
   const ninthDataPromises = ninth_items.value.map(async (item) => {
-    const id2026 = `0${item.id}`
+    const id2026 = `0${item.id}`;
     try {
       if (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) {
         return {
@@ -2323,7 +2323,7 @@ onMounted(() => {
   getItems(7);
   getItems(10);
 
-  if (typeof route.query.reportId !== 'undefined') return;
+  if (typeof route.query.reportId !== "undefined") return;
   if (roleStore.roles.regionalheadquarter_commander) {
     preloader.value = true;
     getReportData();
@@ -2439,6 +2439,15 @@ p.text.text-center {
 
 .v-expansion-panel:not(:first-child)::after {
   border-top-style: none;
+}
+
+.field {
+  span.v-expansion-panel-title__icon {
+    display: none;
+  }
+  .d-flex.justify-space-between {
+    column-gap: 10px;
+  }
 }
 
 .contributorBtn {
