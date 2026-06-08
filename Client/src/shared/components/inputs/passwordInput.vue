@@ -2,16 +2,17 @@
   <div class="password">
     <input 
       :type="show ? 'text' : 'password'"
+      :class="['password__input', { 'error-border': errorMatch }]"
       :style="{ height: height }"
       :maxlength="maxLength"
       :minlength="minLength"
-      class="password__input"
       :placeholder="placeholder"
       :value="value"
       @input="updateValue"
       v-bind="$attrs" 
     />
     <span class="error-text">{{ errorMessage }}</span>
+    <span v-if="errorMatch" class="error-text error-text__match">{{ errorMatch }}</span>
     <div class="eyeButton">
       <span @click="show = !show">
         <img v-show="!show" src="@app/assets/eye-slash.png" alt="eye-slash">
@@ -50,6 +51,10 @@ const props = defineProps({
     errorMessage: {
         type: String,
         default: '',
+    },
+    errorMatch: {
+      type:String,
+      default: '',
     }
 });
 const updateValue = (event) => {
@@ -109,5 +114,12 @@ const show = ref(false);
     margin-top: 5px;
     margin-bottom: 5px;
     text-align: center;
+    &__match{
+      display: block;
+    }
+}
+
+.password__input.error-border {
+  border: red solid 1px;
 }
 </style>

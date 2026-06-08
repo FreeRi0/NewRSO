@@ -65,7 +65,9 @@
                 @get-data-DH="setDataDH"
                 @get-data-CH="setDataCH"
                 :data="reportData.first"
+                @get-data-children="setDataChildren"
                 :is-error-panel="isErrorPanel.first"
+                :is-error-panel-children="isErrorPanelChildren"
                 :blockEditFirstReport="blockEditFirstReport"
                 :tab="picked"
               />
@@ -363,7 +365,7 @@ import { onMounted, ref, watch } from "vue";
 import { SvgIcon } from "@shared/ui/SvgIcon";
 import { useRoleStore } from "@layouts/store/role.ts";
 import { HTTP } from "@app/http";
-import { reportPartTwoService } from "@services/ReportService.ts";
+import { reportPartTwoService, getReportForSecond } from "@services/ReportService.ts";
 import { useRoute, useRouter } from "vue-router";
 import { useReportPartTwoStore } from "@pages/ReportRegionalHQPartTwoPage/store.ts";
 // import { useRegionalsStore } from "@features/store/regionals";
@@ -395,6 +397,7 @@ const districtExpert = ref(false);
 const centralExpert = ref(false);
 const reportData = ref({
   first: null,
+  firstChildren: null,
   fourth: null,
   fifth: null,
   sixth: null,
@@ -462,6 +465,11 @@ const isErrorPanel = ref({
   //   second: false,
   // },
   twelfth: false,
+});
+
+const isErrorPanelChildren = ref({
+  first: false,
+  second: false,
 });
 
 const setId = (id) => {
@@ -572,7 +580,7 @@ const getMultiplyData = async (reportId) => {
   });
 
   const ninthDataPromises = ninth_items.value.map(async (item) => {
-    const id2026 = `0${item.id}`
+    const id2026 = `0${item.id}`;
     try {
       if (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) {
         return {
@@ -1169,8 +1177,11 @@ const getReportData = async (reportId) => {
     else {
       /*-------------1-------------*/
       let dataFirst;
+      let dataFirstChildren;
       try {
         dataFirst = (await reportPartTwoService.getReport("1")).data;
+        dataFirstChildren = (await getReportForSecond()).data;
+        reportData.value.firstChildren = dataFirstChildren;
         if (!dataFirst.regional_version && !dataFirst.central_version) {
           reportData.value.first = dataFirst;
         } else {
@@ -1377,7 +1388,6 @@ const getReportData = async (reportId) => {
       let dataTwelfth;
       try {
         dataTwelfth = (await reportPartTwoService.getReport("12")).data;
-        console.log("12", dataTwelfth);
         dataTwelfth.regional_version
           ? (reportData.value.twelfth = JSON.parse(dataTwelfth.regional_version))
           : (reportData.value.twelfth = dataTwelfth);
@@ -1467,6 +1477,10 @@ const setData = (data, panel, number = 0) => {
       reportData.value.twelfth = data;
       break;
   }
+};
+
+const setDataChildren = (data) => {
+  reportData.value.firstChildren = data;
 };
 
 const setDataDH = (data, panel, number) => {
@@ -2027,7 +2041,37 @@ const checkEmptyFields = (data) => {
   const { filteredSix, filteredNinth } = filterPanelsData();
   console.log("data", data);
 
-  if (!data.first || !(data.first.amount_of_money && data.first.scan_file)) {
+  if (
+    !data.first ||
+    !(
+      data.first.amount_of_money &&
+      data.first.scan_file &&
+      data.first.detachment_number &&
+      data.first.participants_with_payment &&
+      data.first.foreign_participants &&
+      data.first.top_participants &&
+      data.first.sso_number &&
+      data.first.sso_participants &&
+      data.first.spo_number &&
+      data.first.spo_participants &&
+      data.first.sop_number &&
+      data.first.sop_participants &&
+      data.first.smo_number &&
+      data.first.smo_participants &&
+      data.first.sservo_number &&
+      data.first.sservo_participants &&
+      data.first.ssho_number &&
+      data.first.ssho_participants &&
+      data.first.spro_number &&
+      data.first.spro_participants &&
+      data.first.top_detachment_number &&
+      data.first.top_detachment_participants &&
+      data.first.spuo_number &&
+      data.first.spuo_participants &&
+      data.first.sozht_number &&
+      data.first.sozht_participants
+    )
+  ) {
     isErrorPanel.value.first = true;
     swal.fire({
       position: "center",
@@ -2039,6 +2083,36 @@ const checkEmptyFields = (data) => {
     return false;
   } else {
     isErrorPanel.value.first = false;
+  }
+
+  if (!data.firstChildren.oovo_participants) {
+    //--добавить новое поле
+    (isErrorPanel.value.first = true), (isErrorPanelChildren.value.first = true);
+    swal.fire({
+      position: "center",
+      icon: "warning",
+      title: `Заполните обязательные поля в 1.1 показателе`,
+      showConfirmButton: false,
+      timer: 2500,
+    });
+    return false;
+  } else {
+    (isErrorPanel.value.first = false), (isErrorPanelChildren.value.first = false);
+  }
+
+  if (!data.firstChildren.poo_participants) {
+    //--добавить новое поле
+    (isErrorPanel.value.first = true), (isErrorPanelChildren.value.second = true);
+    swal.fire({
+      position: "center",
+      icon: "warning",
+      title: `Заполните обязательные поля в 1.2 показателе`,
+      showConfirmButton: false,
+      timer: 2500,
+    });
+    return false;
+  } else {
+    (isErrorPanel.value.first = false), (isErrorPanelChildren.value.second = false);
   }
 
   if (!data.fourth || !data.fourth.employed_after_training) {
@@ -2059,7 +2133,7 @@ const checkEmptyFields = (data) => {
     for (let event of data.fifth.events) {
       if (
         event.participants_number &&
-        !(event.name && event.end_date && event.start_date && data.fifth.comment)
+        !(event.name && event.end_date && event.start_date)
       ) {
         isErrorPanel.value.fifth = true;
         swal.fire({
@@ -2323,7 +2397,7 @@ onMounted(() => {
   getItems(7);
   getItems(10);
 
-  if (typeof route.query.reportId !== 'undefined') return;
+  if (typeof route.query.reportId !== "undefined") return;
   if (roleStore.roles.regionalheadquarter_commander) {
     preloader.value = true;
     getReportData();
@@ -2439,6 +2513,15 @@ p.text.text-center {
 
 .v-expansion-panel:not(:first-child)::after {
   border-top-style: none;
+}
+
+.field {
+  span.v-expansion-panel-title__icon {
+    display: none;
+  }
+  .d-flex.justify-space-between {
+    column-gap: 10px;
+  }
 }
 
 .contributorBtn {
