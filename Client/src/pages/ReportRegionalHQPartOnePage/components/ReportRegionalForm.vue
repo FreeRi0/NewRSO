@@ -313,7 +313,7 @@
               <label class="form__label" for="oovo_participants"
                 >Количество членов СО&nbsp;ООВО<sup class="valid-red">*</sup></label
               >
-              <!-- <InputReport
+              <InputReport
                 v-model:value="reportDataChildren.oovo_participants"
                 id="oovo_participants"
                 name="oovo_participants"
@@ -327,16 +327,16 @@
                 :disabled="blockEditFirstReport"
                 :is-error-panel="isErrorPanelChildren.first"
                 style="width: 50%"
-              /> -->
+              />
             </div>
             <div>
-              <label class="form__label" for="comment"
+              <label class="form__label" for="oovo_numbers"
                 >Количество штабов СО&nbsp;ООВО<sup class="valid-red">*</sup></label
               >
               <InputReport
-                v-model:value="reportDataChildren.oovo_participants"
-                id="foreign_participants"
-                name="foreign_participants"
+                v-model:value="reportDataChildren.oovo_numbers"
+                id="oovo_numbers"
+                name="oovo_numbers"
                 class="form__input"
                 type="number"
                 placeholder="Введите число"
@@ -367,13 +367,13 @@
         <v-expansion-panel-text>
           <div class="form__field form__field-group" style="width: 100%">
             <div>
-              <label class="form__label" for="comment"
+              <label class="form__label" for="poo_participants"
                 >Количество членов СО&nbsp;ПОО<sup class="valid-red">*</sup></label
               >
-              <!-- <InputReport
+              <InputReport
                 v-model:value="reportDataChildren.poo_participants"
-                id="foreign_participants"
-                name="foreign_participants"
+                id="poo_participants"
+                name="poo_participants"
                 class="form__input"
                 type="number"
                 placeholder="Введите число"
@@ -384,16 +384,16 @@
                 :disabled="blockEditFirstReport"
                 :is-error-panel="isErrorPanelChildren.second"
                 style="width: 50%"
-              /> -->
+              />
             </div>
             <div>
-              <label class="form__label" for="comment"
+              <label class="form__label" for="poo_numbers"
                 >Количество штабов СО&nbsp;ПОО<sup class="valid-red">*</sup></label
               >
               <InputReport
-                v-model:value="reportDataChildren.poo_participants"
-                id="foreign_participants"
-                name="foreign_participants"
+                v-model:value="reportDataChildren.poo_numbers"
+                id="poo_numbers"
+                name="poo_numbers"
                 class="form__input"
                 type="number"
                 placeholder="Введите число"
@@ -571,9 +571,8 @@ const panel = ref(false);
 const reportDataChildren = ref({
   poo_participants: "",
   oovo_participants: "",
-  //добавить новые поля
-  // poo_participants: "",
-  // oovo_participants: "",
+  poo_numbers: "",
+  oovo_numbers: "",
 
   // participants_number: "",
   // employed_sso: "",
