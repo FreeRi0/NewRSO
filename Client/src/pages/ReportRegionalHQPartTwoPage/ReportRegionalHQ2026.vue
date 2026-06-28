@@ -598,7 +598,7 @@ const getMultiplyData = async (reportId) => {
       if (error.response && error.response.status === 404) {
         if (roleStore.experts.is_district_expert || roleStore.experts.is_central_expert) {
           return {
-            id: item.id,
+            id: id2026,
             data: {
               is_sent: false,
               verified_by_chq: null,
@@ -614,7 +614,7 @@ const getMultiplyData = async (reportId) => {
             },
           };
         } else {
-          return { id: item.id, data: {} };
+          return { id: id2026, data: {} };
         }
       } else {
         throw error;
