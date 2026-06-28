@@ -2165,7 +2165,7 @@ const checkEmptyFields = (data) => {
     for (let event of data.sixth.events) {
       if (
         event.participants_number &&
-        !(event.end_date && event.start_date && event.name && data.sixth.comment)
+        !(event.end_date && event.start_date && event.name)
       ) {
         isErrorPanel.value.sixth = true;
         swal.fire({

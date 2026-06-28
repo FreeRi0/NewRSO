@@ -156,7 +156,7 @@
     </div>
     <div class="form__field-comment">
       <label class="form__label" for="comment"
-        >Комментарий <sup class="valid-red">*</sup></label
+        >Комментарий</label
       >
       <TextareaReport
         v-model:value="sixthPanelData.comment"
@@ -322,7 +322,7 @@
       </div>
       <div class="form__field-comment">
         <label class="form__label" for="comment"
-          >Комментарий <sup class="valid-red">*</sup></label
+          >Комментарий</label
         >
         <TextareaReport
           v-model:value="sixthPanelData.comment"
