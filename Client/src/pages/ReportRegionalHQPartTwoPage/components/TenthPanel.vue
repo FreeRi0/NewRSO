@@ -54,7 +54,7 @@
         "
       >
         <v-expansion-panel-title>
-          Всероссийская трудовая патриотическая акция «Поклонимся великим тем годам»
+          Всероссийская патриотическая акция «Поклонимся великим тем годам»
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <TenthPanelForm
@@ -69,7 +69,7 @@
             @deleteLink="deleteLink($event, 2)"
             @clearForm="onClearForm(2)"
             :isErrorFileProp="isErrorFileSecond"
-            title="Всероссийская трудовая патриотическая акция «Поклонимся великим тем годам»"
+            title="Всероссийская патриотическая акция «Поклонимся великим тем годам»"
             :dataDH="eleventhPanelDataSecondDH"
             :dataForCheckCH="eleventhPanelDataForCheckCHSecond"
             :dataCH="eleventhPanelDataCHSecond"
