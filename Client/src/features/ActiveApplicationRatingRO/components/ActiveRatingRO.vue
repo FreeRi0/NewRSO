@@ -3,7 +3,7 @@
   <div class="grid_field">
     <div class="form__field-group" v-for="report in reports" :key=report.id>
       <router-link :to="{
-        name: 'ReportRegionalPartTwo', query: {
+        name: 'reportingRo',query: {
           reportId: report.id
         }
       }">
