@@ -21,7 +21,7 @@
               reportStore.isReportReject?.six)
           "
         >
-          <div class="form__field-group-six">
+          <div class="form__field-group-six" v-if="!isReportSent">
             <select-search-indicator
               :events="filteredEvents"
               v-model="selectedEvent"
@@ -37,6 +37,7 @@
               <event-form
                 :event="event"
                 :is-sent-six="
+                  isReportSent ||
                   !!(props.data && props.data[event.id] && props.data[event.id].is_sent)
                 "
                 :is-error-panel="
@@ -244,6 +245,7 @@ const filteredEvents = computed(() => {
 const disabled = ref(false);
 const selectedEvent = ref({});
 const selectedEvents = ref([]);
+const isReportSent = ref(false);
 
 const panel = ref(false);
 
@@ -328,6 +330,19 @@ watchEffect(() => {
       isFirstSentById.value[id] = true;
     }
   });
+});
+
+watchEffect(() => {
+  let sent = false;
+  if (props.data) {
+    for (const id in props.data) {
+      if (props.data[id]?.is_sent) {
+        sent = true;
+        break;
+      }
+    }
+  }
+  isReportSent.value = sent;
 });
 
 // Auto-select only once on initial load to avoid re-adding after user deletion
