@@ -51,6 +51,7 @@
                 @focusout="focusOut"
                 v-model:value="eventData.number_of_members"
                 :disabled="
+                  (correctionTab == 0 && isSentSix) ||
                   ((data.verified_by_dhq || isCH) && correctionTab == 2) ||
                   (correctionTab == 1 && isSentSix && (isDH || isCH))
                 "
@@ -70,7 +71,8 @@
               v-if="
                 correctionTab !== 2 &&
                 correctionTab !== 3 &&
-                !(correctionTab == 1 && isDH)
+                !(correctionTab == 1 && isDH) &&
+                !(correctionTab == 0 && isSentSix)
               "
             >
               — Удалить мероприятие
@@ -92,6 +94,7 @@
                 @focusout="focusOut"
                 v-model:value="eventData.hq_members_count"
                 :disabled="
+                  (correctionTab == 0 && isSentSix) ||
                   ((data.verified_by_dhq || isCH) && correctionTab == 2) ||
                   (correctionTab == 1 && isSentSix && (isDH || isCH))
                 "
@@ -163,6 +166,7 @@
               @focusout="focusOut"
               :maxlength="3000"
               :disabled="
+                (correctionTab == 0 && isSentSix) ||
                 ((data.verified_by_dhq || isCH) && correctionTab == 2) ||
                 (correctionTab == 1 && isSentSix && (isDH || isCH))
               "
