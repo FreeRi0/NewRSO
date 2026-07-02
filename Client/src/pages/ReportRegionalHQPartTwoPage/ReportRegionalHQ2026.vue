@@ -2264,21 +2264,7 @@ const checkEmptyFields = (data) => {
     }
   }
 
-  if (data.eleventh.first) {
-    if (data.eleventh.first.event_happened) {
-      if (!data.eleventh.first.comment) {
-        isErrorPanel.value.eleventh = true;
-        swal.fire({
-          position: "center",
-          icon: "warning",
-          title: `Заполните обязательные поля в показателе 11-1`,
-          showConfirmButton: false,
-          timer: 2500,
-        });
-        return false;
-      }
-    }
-  } else {
+  if (!data.eleventh.first) {
     isErrorPanel.value.eleventh = true;
     swal.fire({
       position: "center",
@@ -2290,21 +2276,7 @@ const checkEmptyFields = (data) => {
     return false;
   }
 
-  if (data.eleventh.second) {
-    if (data.eleventh.second.event_happened) {
-      if (!data.eleventh.second.comment) {
-        isErrorPanel.value.eleventh = true;
-        swal.fire({
-          position: "center",
-          icon: "warning",
-          title: `Заполните обязательные поля в показателе 11-2`,
-          showConfirmButton: false,
-          timer: 2500,
-        });
-        return false;
-      }
-    }
-  } else {
+  if (!data.eleventh.second) {
     isErrorPanel.value.eleventh = true;
     swal.fire({
       position: "center",
