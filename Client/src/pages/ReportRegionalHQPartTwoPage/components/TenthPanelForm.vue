@@ -188,7 +188,7 @@
           style="display: flex; align-items: center"
           class="form__label"
           for="comment"
-          >Комментарий <sup class="valid-red">*</sup></label
+          >Комментарий</label
         >
         <TextareaReport
           placeholder="Напишите сообщение"
@@ -421,7 +421,7 @@
             style="display: flex; align-items: center"
             class="form__label"
             for="comment"
-            >Комментарий <sup class="valid-red">*</sup></label
+            >Комментарий</label
           >
           <TextareaReport
             placeholder="Напишите сообщение"
