@@ -180,6 +180,7 @@ const props = defineProps({
 const LogOut = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('jwt_token');
+    localStorage.removeItem('restricted_email');
     userStore.logOut();
     emit('updateUser', {});
     router.push('/');

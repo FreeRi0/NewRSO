@@ -1,4 +1,5 @@
 import { ref, Ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { useUserStore } from '@features/store/index';
 import { useRoleStore } from '@layouts/store/role';
 import { HTTP } from '@app/http';
@@ -16,9 +17,12 @@ interface Errors {
     non_field_errors?: string[];
 }
 
+const RUSSIAN_EMAIL_ZONE_REGEX = /\.(ru|su|рф)$/i;
+
 export function useAuth() {
     const userStore = useUserStore();
     const roleStore = useRoleStore();
+    const router = useRouter();
     const formData: Ref<FormData> = ref({ username: '', password: '' });
     const errors: Ref<Errors> = ref({});
     const isLoading = ref(false);
@@ -39,6 +43,14 @@ export function useAuth() {
                 roleStore.getUserParticipantsStatus('1')
             ]);
 
+            const email = (userStore.currentUser as any)?.email;
+            if (email && !RUSSIAN_EMAIL_ZONE_REGEX.test(email)) {
+                localStorage.setItem('restricted_email', '1');
+                router.push({ name: 'RestrictedEmail', query: { email } });
+                return false;
+            }
+
+            localStorage.removeItem('restricted_email');
             showMessage('Вы успешно авторизовались!', false);
             return true;
         } catch (error: any) {

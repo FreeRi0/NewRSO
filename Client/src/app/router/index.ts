@@ -19,6 +19,7 @@ const publicRoutes: string[] = [
   'Register',
   'RecoveryPassword',
   'CreaturePassword',
+  'RestrictedEmail',
   'Competition',
   'faq',
   'actionSquads',
@@ -36,9 +37,12 @@ const publicRoutes: string[] = [
 router.beforeEach((to, _from, next) => {
   const isPublicRoute = publicRoutes.includes(to.name as string);
   const isAuthenticated = localStorage.getItem('jwt_token') !== null;
+  const isEmailRestricted = localStorage.getItem('restricted_email') === '1';
 
   if (!isPublicRoute && !isAuthenticated) {
     next({ name: 'Login' });
+  } else if (isEmailRestricted && to.name !== 'RestrictedEmail') {
+    next({ name: 'RestrictedEmail' });
   } else if (to.name === 'Login' && isAuthenticated) {
     next({ name: 'mypage' });
   } else {
