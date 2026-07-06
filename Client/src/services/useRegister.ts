@@ -49,9 +49,11 @@ export function useRegistration() {
   const { showMessage } = useMessage();
   const regexps = {
     name: /^[а-яА-ЯЁё\s]+$/,
-    email: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+$/,
+    email: /^[a-zA-Z0-9._-]+@[a-zA-Zа-яё0-9-]+(\.[a-zA-Zа-яё0-9-]+)*\.[a-zA-Zа-яё]{2,}$/i,
+    emailZone: /\.(ru|su|рф)$/i,
     username: /^[a-zA-Z0-9_@.+-]+$/,
   };
+  const RUSSIAN_EMAIL_ZONE_MESSAGE = 'В соответствии с законодательством Российской Федерации и в целях обеспечения бесперебойного доступа к вашему аккаунту регистрация возможна только с использованием почтовых адресов на российских доменах в зонах .ru, .su и .рф. Пожалуйста, укажите адрес на mail.ru, vk.ru, ya.ru или любом другом российском сервисе.';
 
   const handleTermsState = () => {
     validated.value = false;
@@ -94,6 +96,10 @@ export function useRegistration() {
   };
 
   const registerUser = async (): Promise<boolean> => {
+    if (validateInput(form.value.email, regexps.email) && !regexps.emailZone.test(form.value.email)) {
+      showMessage(RUSSIAN_EMAIL_ZONE_MESSAGE, true);
+      return false;
+    }
     if (!validateForm()) {
       showMessage('Заполните поля в соответствии с указанным форматом', true);
       return false;

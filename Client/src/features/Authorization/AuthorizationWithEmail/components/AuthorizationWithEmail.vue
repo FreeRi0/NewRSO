@@ -3,7 +3,7 @@
         <div class="Login">
             <form class="Login_form" @submit.prevent="handleSubmit">
                 <h2 class="Login_title">Вход в личный кабинет</h2>
-                <Input placeholder="Логин" name="login"  height="40px" v-model:value="formData.username"
+                <Input placeholder="Логин" name="login" height="40px" v-model:value="formData.username"
                     class="username-input mb-3 Login_input" />
                 <ErrorMessage :error="errors.username" />
 
@@ -18,6 +18,11 @@
                     color="primary" />
                 <p class="text-center Login_and">или</p>
                 <div id="VkIdSdkOAuthList"></div>
+                <p class="Login_notice">
+                    Уважаемый пользователь! Регистрация/авторизация через иностранные сервисы ограничена в
+                    соответствии с законодательством Российской Федерации. Если ранее вы входили через такие
+                    сервисы, пожалуйста, воспользуйтесь функцией «Восстановить пароль» для доступа к аккаунту
+                </p>
                 <p class="text-center goReg">
                     У вас нет аккаунта?
                     <router-link class="Login_link ml-1" to="/Register">Зарегистрироваться</router-link>
@@ -27,7 +32,7 @@
     </div>
 </template>
 
-<script  setup>
+<script setup>
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { Button } from '@shared/components/buttons';
@@ -121,6 +126,14 @@ onMounted(() => {
         font-weight: 500;
     }
 
+    &_notice {
+        margin-top: 16px;
+        font-family: 'Bert Sans';
+        font-size: 14px;
+        color: #A3A3A3;
+        text-align: center;
+    }
+
     &_input {
         border-radius: 8px !important;
     }
@@ -132,7 +145,7 @@ onMounted(() => {
 }
 
 .goReg {
-    margin-top: 40px;
+    margin-top: 20px;
 }
 
 .v-field.v-field--appended {

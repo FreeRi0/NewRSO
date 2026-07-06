@@ -44,6 +44,17 @@ const routes: RouteRecordRaw[] = [
                     ),
             },
             {
+                path: '/restricted-email',
+                name: 'RestrictedEmail',
+                meta: {
+                    hiddenBreadcrumbs: true,
+                },
+                component: () =>
+                    import(
+                        '@pages/RestrictedEmail/components/RestrictedEmailPage.vue'
+                    ),
+            },
+            {
                 path: '/terms-of-use',
                 name: 'terms_of_use',
                 component: () =>

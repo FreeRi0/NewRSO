@@ -20,10 +20,11 @@
                         v-model="form.phone_number" mask="+7(###) ###-##-##" />
                 </div>
                 <Input placeholder="Электронная почта" name="email" type="email" height="40px" maxlength="256"
-                    pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+"
-                    error-message="Введите адрес электронной почты в формате mail@example.com не более 256 символов на латинице"
+                    pattern="[a-zA-Z0-9._-]+@[a-zA-Zа-яёА-ЯЁ0-9-]+(\.[a-zA-Zа-яёА-ЯЁ0-9-]+)*\.[a-zA-Zа-яёА-ЯЁ]{2,}"
+                    error-message="Введите адрес электронной почты в формате mail@example.com, не более 256 символов"
                     v-model:value.trim="form.email" />
                 <ErrorMessage :error="errors.email" />
+                <p v-if="emailZoneError" class="error">{{ emailZoneError }}</p>
 
                 <DatePicker v-model="form.date_of_birth" placeholder="Дата рождения" name="date" />
                 <ErrorMessage :error="errors.date_of_birth" />
@@ -93,10 +94,11 @@ const { form,
 const router = useRouter();
 
 const isButtonDisabled = computed(() => {
-  return isLoading.value || 
-         !form.value.personal_data_agreement || 
+  return isLoading.value ||
+         !form.value.personal_data_agreement ||
          !form.value.region||
-         !!passwordMatchError.value;
+         !!passwordMatchError.value ||
+         !!emailZoneError.value;
 });
 
 const passwordMatchError = computed(() => {
@@ -104,6 +106,17 @@ const passwordMatchError = computed(() => {
     return 'Пароли не совпадают';
   }
   return null;
+});
+
+const EMAIL_TLD_STARTED_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-Zа-яёА-ЯЁ0-9-]+(\.[a-zA-Zа-яёА-ЯЁ0-9-]+)*\.[a-zA-Zа-яёА-ЯЁ]+$/;
+const EMAIL_ZONE_REGEX = /\.(ru|su|рф)$/i;
+
+const emailZoneError = computed(() => {
+  const email = form.value.email;
+  if (!email || !EMAIL_TLD_STARTED_REGEX.test(email) || EMAIL_ZONE_REGEX.test(email)) {
+    return '';
+  }
+  return 'В соответствии с законодательством Российской Федерации и в целях обеспечения бесперебойного доступа к вашему аккаунту регистрация возможна только с использованием почтовых адресов на российских доменах в зонах .ru, .su и .рф. Пожалуйста, укажите адрес на mail.ru, vk.ru, ya.ru или любом другом российском сервисе.';
 });
 
 const handleSubmit = async () => {

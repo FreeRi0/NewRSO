@@ -118,6 +118,7 @@ HTTP.interceptors.response.use(
                                         localStorage.removeItem('jwt_token');
                                         localStorage.removeItem('refresh_token');
                                         localStorage.removeItem('user');
+                                        localStorage.removeItem('restricted_email');
                                         router.push({ name: 'Login' });
                                     });
                             } else {
@@ -147,6 +148,7 @@ HTTP.interceptors.response.use(
                         localStorage.removeItem('jwt_token');
                         localStorage.removeItem('refresh_token');
                         localStorage.removeItem('user');
+                        localStorage.removeItem('restricted_email');
                         router.push({ name: 'Login' });
                     }
                 } catch (error) {
