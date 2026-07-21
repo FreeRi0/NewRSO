@@ -16,7 +16,7 @@ export function checkEmptyFieldsDH(data, isErrorPanel) {
         isErrorPanel.value.first = false;
     }
 
-    if (data.fourth && !(data.fourth.comment)) {
+    if (data.fourth && !(data.fourth.employed_after_training)) {
         isErrorPanel.value.fourth = true;
         swal.fire({
             position: 'center',
@@ -123,33 +123,33 @@ export function checkEmptyFieldsDH(data, isErrorPanel) {
         }
     }
 
-    if (data.tenth.first) {
-        if (!data.tenth.first.comment) {
-            isErrorPanel.value.tenth = true;
-            swal.fire({
-                position: 'center',
-                icon: 'warning',
-                title: `Заполните обязательные поля в показателе 10-1`,
-                showConfirmButton: false,
-                timer: 2500,
-            });
-            return false;
-        }
-    }
+    // if (data.tenth.first) {
+    //     if (!data.tenth.first.comment) {
+    //         isErrorPanel.value.tenth = true;
+    //         swal.fire({
+    //             position: 'center',
+    //             icon: 'warning',
+    //             title: `Заполните обязательные поля в показателе 10-1`,
+    //             showConfirmButton: false,
+    //             timer: 2500,
+    //         });
+    //         return false;
+    //     }
+    // }
 
-    if (data.tenth.second) {
-        if (!data.tenth.second.comment) {
-            isErrorPanel.value.tenth = true;
-            swal.fire({
-                position: 'center',
-                icon: 'warning',
-                title: `Заполните обязательные поля в показателе 10-2`,
-                showConfirmButton: false,
-                timer: 2500,
-            });
-            return false;
-        }
-    }
+    // if (data.tenth.second) {
+    //     if (!data.tenth.second.comment) {
+    //         isErrorPanel.value.tenth = true;
+    //         swal.fire({
+    //             position: 'center',
+    //             icon: 'warning',
+    //             title: `Заполните обязательные поля в показателе 10-2`,
+    //             showConfirmButton: false,
+    //             timer: 2500,
+    //         });
+    //         return false;
+    //     }
+    // }
 
     // if (
     //     !data.eleventh ||

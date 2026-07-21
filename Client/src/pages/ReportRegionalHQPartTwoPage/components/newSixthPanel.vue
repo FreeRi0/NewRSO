@@ -66,7 +66,7 @@
         >
           <!-- <report-tabs v-if="true" :isReject="true"> -->
           <template v-slot:firstTab>
-            <div class="form__field-group-six">
+            <div class="form__field-group-six" v-if="!(districtExpert || centralExpert)">
               <select-search-indicator
                 :events="items"
                 v-model="selectedEvent"
@@ -108,13 +108,6 @@
           </template>
 
           <template v-slot:secondTab>
-            <div class="form__field-group-six">
-              <select-search-indicator
-                :events="items"
-                v-model="filteredEvents"
-                class="select"
-              />
-            </div>
             <div v-if="selectedEvents.length">
               <div
                 v-for="event in selectedEvents"

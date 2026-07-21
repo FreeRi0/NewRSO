@@ -823,7 +823,7 @@
               <div class="places_item">
                 <input
                   v-model="ninthPanelDataDH.event_happened"
-                  id="event_happenedDH-true"
+                  id="event_happenedDH-false"
                   class="form__input places_input"
                   type="radio"
                   :value="false"
@@ -835,7 +835,7 @@
                     )
                   "
                 />
-                <label for="event_happenedDH-true">Нет</label>
+                <label for="event_happenedDH-false">Нет</label>
               </div>
             </div>
           </div>
