@@ -39,7 +39,7 @@
               @getId="getId($event)"
               @deleteFile="deleteFile($event, item.id)"
               :is-sent-ninth="isSentNinth"
-              :ninth-id="item.id"
+              :ninth-id="`0${item.id}`"
               :is-error-panel="
                 Object.values(isErrorPanel).some(
                   (i) => i.error === true && i.id == item.id

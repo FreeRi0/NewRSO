@@ -128,7 +128,7 @@
                 :is-error-panel="isErrorPanel"
                 @error="setError"
                 :disabled="
-                  correctionTab == 2 ||
+                  ((data.verified_by_dhq || isCH) && correctionTab == 2) ||
                   isSentSix ||
                   eventData.number_of_members == 0 ||
                   eventData.number_of_members === null

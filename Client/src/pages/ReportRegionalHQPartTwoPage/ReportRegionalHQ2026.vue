@@ -641,7 +641,20 @@ const getMultiplyData = async (reportId) => {
       } else {
         reportData.value.six[result.id] = sixData;
       }
-      reportStore.reportDataDH.six[result.id] = Object.assign({}, sixData);
+      if (sixData?.district_version) {
+        try {
+          reportStore.reportDataDH.six[result.id] = JSON.parse(sixData.district_version);
+        } catch (error) {
+          console.error("Error parsing district_version JSON-7-DH:", error);
+          reportStore.reportDataDH.six[result.id] =
+            sixData.district_version || Object.assign({}, reportData.value.six[result.id]);
+        }
+      } else {
+        reportStore.reportDataDH.six[result.id] = Object.assign(
+          {},
+          reportData.value.six[result.id]
+        );
+      }
       // reportStore.reportDataDH.six[result.id].comment = "";
     } else if (centralExpert.value) {
       reportStore.reportForCheckCH.six[result.id] = sixData;
@@ -777,8 +790,22 @@ const getMultiplyData = async (reportId) => {
       } else {
         reportData.value.ninth[result.id] = ninthData;
       }
-      reportStore.reportDataDH.ninth[result.id] = Object.assign({}, ninthData);
-      reportStore.reportDataDH.ninth[result.id].comment = "";
+      if (ninthData?.district_version) {
+        try {
+          reportStore.reportDataDH.ninth[result.id] = JSON.parse(
+            ninthData.district_version
+          );
+        } catch (error) {
+          console.error("Error parsing district_version JSON-10-DH:", error);
+          reportStore.reportDataDH.ninth[result.id] =
+            ninthData.district_version || Object.assign({}, reportData.value.ninth[result.id]);
+        }
+      } else {
+        reportStore.reportDataDH.ninth[result.id] = Object.assign(
+          {},
+          reportData.value.ninth[result.id]
+        );
+      }
       // isErrorPanel.value.ninth[result.id] = {
       //   id: result.id,
       //   error: false,
