@@ -2064,6 +2064,8 @@ const reportConfirmation = async (value) => {
   }
 };
 
+const isFilled = (value) => value !== null && value !== undefined && value !== "";
+
 const checkEmptyFields = (data) => {
   const { filteredSix, filteredNinth } = filterPanelsData();
   console.log("data", data);
@@ -2071,32 +2073,32 @@ const checkEmptyFields = (data) => {
   if (
     !data.first ||
     !(
-      data.first.amount_of_money &&
+      isFilled(data.first.amount_of_money) &&
       data.first.scan_file &&
-      data.first.detachment_number &&
-      data.first.participants_with_payment &&
-      data.first.foreign_participants &&
-      data.first.top_participants &&
-      data.first.sso_number &&
-      data.first.sso_participants &&
-      data.first.spo_number &&
-      data.first.spo_participants &&
-      data.first.sop_number &&
-      data.first.sop_participants &&
-      data.first.smo_number &&
-      data.first.smo_participants &&
-      data.first.sservo_number &&
-      data.first.sservo_participants &&
-      data.first.ssho_number &&
-      data.first.ssho_participants &&
-      data.first.spro_number &&
-      data.first.spro_participants &&
-      data.first.top_detachment_number &&
-      data.first.top_detachment_participants &&
-      data.first.spuo_number &&
-      data.first.spuo_participants &&
-      data.first.sozht_number &&
-      data.first.sozht_participants
+      isFilled(data.first.detachment_number) &&
+      isFilled(data.first.participants_with_payment) &&
+      isFilled(data.first.foreign_participants) &&
+      isFilled(data.first.top_participants) &&
+      isFilled(data.first.sso_number) &&
+      isFilled(data.first.sso_participants) &&
+      isFilled(data.first.spo_number) &&
+      isFilled(data.first.spo_participants) &&
+      isFilled(data.first.sop_number) &&
+      isFilled(data.first.sop_participants) &&
+      isFilled(data.first.smo_number) &&
+      isFilled(data.first.smo_participants) &&
+      isFilled(data.first.sservo_number) &&
+      isFilled(data.first.sservo_participants) &&
+      isFilled(data.first.ssho_number) &&
+      isFilled(data.first.ssho_participants) &&
+      isFilled(data.first.spro_number) &&
+      isFilled(data.first.spro_participants) &&
+      isFilled(data.first.top_detachment_number) &&
+      isFilled(data.first.top_detachment_participants) &&
+      isFilled(data.first.spuo_number) &&
+      isFilled(data.first.spuo_participants) &&
+      isFilled(data.first.sozht_number) &&
+      isFilled(data.first.sozht_participants)
     )
   ) {
     isErrorPanel.value.first = true;
@@ -2142,7 +2144,11 @@ const checkEmptyFields = (data) => {
     (isErrorPanel.value.first = false), (isErrorPanelChildren.value.second = false);
   }
 
-  if (!data.fourth || !data.fourth.employed_after_training) {
+  if (
+    !data.fourth ||
+    !data.fourth.employed_after_training ||
+    !data.fourth.employment_report_submitted
+  ) {
     isErrorPanel.value.fourth = true;
     swal.fire({
       position: "center",

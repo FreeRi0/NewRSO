@@ -29,9 +29,15 @@
       <div class="form__field-report" style="width: 75%">
         <v-checkbox
           v-model="fourthPanelData.employment_report_submitted"
-          label="Отчет о&nbsp;трудоустройстве сдан в&nbsp;отдел профобучения ЦШ&nbsp;РСО"
           @change="focusOut"
-        />
+        >
+          <template v-slot:label>
+            Отчет о&nbsp;трудоустройстве сдан в&nbsp;отдел профобучения ЦШ&nbsp;РСО<sup
+              class="valid-red"
+              >*</sup
+            >
+          </template>
+        </v-checkbox>
       </div>
     </div>
 
