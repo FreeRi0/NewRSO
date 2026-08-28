@@ -122,7 +122,6 @@
             name="14"
             class="form__input number_input"
             type="number"
-            :max="32767"
           />
         </div>
         <div class="item_number form__field places">
@@ -136,7 +135,6 @@
             name="14"
             class="form__input number_input"
             type="number"
-            :max="32767"
           />
         </div>
         <div v-if="id === 1" class="item_number form__field places">
@@ -150,7 +148,6 @@
             name="14"
             class="form__input number_input"
             type="number"
-            :max="32767"
           />
         </div>
 
@@ -165,7 +162,6 @@
             name="14"
             class="form__input number_input"
             type="number"
-            :max="32767"
           />
         </div>
         <div v-if="id === 2" class="item_number form__field places">
@@ -179,7 +175,6 @@
             name="14"
             class="form__input number_input"
             type="number"
-            :max="32767"
           />
         </div>
       </div>
@@ -355,7 +350,6 @@
               name="14"
               class="form__input number_input"
               type="number"
-              :max="32767"
             />
           </div>
           <div class="item_number form__field places">
@@ -369,7 +363,6 @@
               name="14"
               class="form__input number_input"
               type="number"
-              :max="32767"
             />
           </div>
           <div v-if="id === 1" class="item_number form__field places">
@@ -383,7 +376,6 @@
               name="14"
               class="form__input number_input"
               type="number"
-              :max="32767"
             />
           </div>
 
@@ -398,7 +390,6 @@
               name="14"
               class="form__input number_input"
               type="number"
-              :max="32767"
             />
           </div>
           <div v-if="id === 2" class="item_number form__field places">
@@ -412,7 +403,6 @@
               name="14"
               class="form__input number_input"
               type="number"
-              :max="32767"
             />
           </div>
         </div>
