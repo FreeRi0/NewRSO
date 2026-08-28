@@ -28,6 +28,7 @@
         "moment": "^2.30.1",
         "pinia": "^2.1.7",
         "primevue": "^3.43.0",
+        "sweetalert2": "11.22.4",
         "vee-validate": "^4.11.8",
         "vite-plugin-require": "^1.1.11",
         "vue": "^3.3.4",
