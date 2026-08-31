@@ -2098,7 +2098,9 @@ const checkEmptyFields = (data) => {
       isFilled(data.first.spuo_number) &&
       isFilled(data.first.spuo_participants) &&
       isFilled(data.first.sozht_number) &&
-      isFilled(data.first.sozht_participants)
+      isFilled(data.first.sozht_participants) &&
+      isFilled(data.first.sspeco_number) &&
+      isFilled(data.first.sspeco_participants)
     )
   ) {
     isErrorPanel.value.first = true;
