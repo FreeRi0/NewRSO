@@ -693,6 +693,52 @@
           />
         </div>
       </div>
+
+      <div class="fields__title">ССпецО</div>
+      <div class="form__field-report">
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="amount_of_money"
+            >Количество отрядов&nbsp;<sup class="valid-red">*</sup></label
+          >
+          <InputReport
+            style="width: 100%"
+            v-model:value="firstPanelData.sspeco_number"
+            id="amount_of_money"
+            name="amount_of_money"
+            class="form__input"
+            type="number"
+            placeholder="Введите число"
+            :maxlength="10"
+            :min="0"
+            :max="32767"
+            :step="0.01"
+            @focusout="focusOut"
+            :disabled="isSent"
+            :is-error-panel="isErrorPanel"
+          />
+        </div>
+        <div class="form__field" style="width: 100%">
+          <label class="form__label" for="amount_of_money"
+            >Количество человек&nbsp;<sup class="valid-red">*</sup></label
+          >
+          <InputReport
+            style="width: 100%"
+            v-model:value="firstPanelData.sspeco_participants"
+            id="amount_of_money"
+            name="amount_of_money"
+            class="form__input"
+            type="number"
+            placeholder="Введите число"
+            :maxlength="10"
+            :min="0"
+            :max="32767"
+            :step="0.01"
+            @focusout="focusOut"
+            :disabled="isSent"
+            :is-error-panel="isErrorPanel"
+          />
+        </div>
+      </div>
     </div>
 
     <!-- <v-expansion-panels v-model="panel">
@@ -1568,6 +1614,52 @@
             />
           </div>
         </div>
+
+        <div class="fields__title">ССпецО</div>
+        <div class="form__field-report">
+          <div class="form__field" style="width: 100%">
+            <label class="form__label" for="amount_of_money"
+              >Количество отрядов&nbsp;<sup class="valid-red">*</sup></label
+            >
+            <InputReport
+              style="width: 100%"
+              v-model:value="firstPanelData.sspeco_number"
+              id="amount_of_money"
+              name="amount_of_money"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+            />
+          </div>
+          <div class="form__field" style="width: 100%">
+            <label class="form__label" for="amount_of_money"
+              >Количество человек&nbsp;<sup class="valid-red">*</sup></label
+            >
+            <InputReport
+              style="width: 100%"
+              v-model:value="firstPanelData.sspeco_participants"
+              id="amount_of_money"
+              name="amount_of_money"
+              class="form__input"
+              type="number"
+              placeholder="Введите число"
+              :maxlength="10"
+              :min="0"
+              :max="32767"
+              :step="0.01"
+              @focusout="focusOut"
+              :disabled="isSent"
+              :is-error-panel="isErrorPanel"
+            />
+          </div>
+        </div>
       </div>
     </template>
 
@@ -1904,6 +1996,8 @@ const defaultReportData = {
   spuo_participants: "0",
   sozht_number: "0",
   sozht_participants: "0",
+  sspeco_number: "0",
+  sspeco_participants: "0",
   top_must_pay: false,
   foreign_must_pay: false,
 };
@@ -1943,6 +2037,8 @@ const firstPanelData = ref({
   spuo_participants: "",
   sozht_number: "",
   sozht_participants: "",
+  sspeco_number: "",
+  sspeco_participants: "",
   top_must_pay: false,
   foreign_must_pay: false,
 });
