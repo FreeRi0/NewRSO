@@ -1204,11 +1204,13 @@ const getReportData = async (reportId) => {
     else {
       /*-------------1-------------*/
       let dataFirst;
-      let dataFirstChildren;
+      try {
+        reportData.value.firstChildren = (await getReportForSecond()).data;
+      } catch (e) {
+        console.log(e.message);
+      }
       try {
         dataFirst = (await reportPartTwoService.getReport("1")).data;
-        dataFirstChildren = (await getReportForSecond()).data;
-        reportData.value.firstChildren = dataFirstChildren;
         if (!dataFirst.regional_version && !dataFirst.central_version) {
           reportData.value.first = dataFirst;
         } else {
@@ -2116,7 +2118,7 @@ const checkEmptyFields = (data) => {
     isErrorPanel.value.first = false;
   }
 
-  if (!data.firstChildren.oovo_participants) {
+  if (!data.firstChildren?.oovo_participants) {
     //--добавить новое поле
     (isErrorPanel.value.first = true), (isErrorPanelChildren.value.first = true);
     swal.fire({
@@ -2131,7 +2133,7 @@ const checkEmptyFields = (data) => {
     (isErrorPanel.value.first = false), (isErrorPanelChildren.value.first = false);
   }
 
-  if (!data.firstChildren.poo_participants) {
+  if (!data.firstChildren?.poo_participants) {
     //--добавить новое поле
     (isErrorPanel.value.first = true), (isErrorPanelChildren.value.second = true);
     swal.fire({
