@@ -2150,7 +2150,7 @@ const checkEmptyFields = (data) => {
 
   if (
     !data.fourth ||
-    !data.fourth.employed_after_training ||
+    !isFilled(data.fourth.employed_after_training) ||
     !data.fourth.employment_report_submitted
   ) {
     isErrorPanel.value.fourth = true;
