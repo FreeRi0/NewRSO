@@ -1220,6 +1220,7 @@ const deleteEvent = async (index) => {
   events.value.forEach((event, i) => {
     if (event.participants_number)
       formData.append(`events[${i}][participants_number]`, event.participants_number);
+    if (event.name) formData.append(`events[${i}][name]`, event.name);
     if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
     if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
     if (event.regulations)
@@ -1382,6 +1383,7 @@ const onReportReturn = (event) => {
     reportStore.reportDataCH.fifth.events.forEach((event, i) => {
       if (event.participants_number)
         formData.append(`events[${i}][participants_number]`, event.participants_number);
+      if (event.name) formData.append(`events[${i}][name]`, event.name);
       if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
       if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
       formData.append(`events[${i}][is_interregional]`, event.is_interregional);
@@ -1401,6 +1403,7 @@ const onReportReturn = (event) => {
     reportStore.reportDataCH.fifth.events.forEach((event, i) => {
       if (event.participants_number)
         formData.append(`events[${i}][participants_number]`, event.participants_number);
+      if (event.name) formData.append(`events[${i}][name]`, event.name);
       if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
       if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
       formData.append(`events[${i}][is_interregional]`, event.is_interregional);
@@ -1616,6 +1619,7 @@ watch(
     reportStore.reportDataCH.fifth.events.forEach((event, i) => {
       if (event.participants_number)
         formData.append(`events[${i}][participants_number]`, event.participants_number);
+      if (event.name) formData.append(`events[${i}][name]`, event.name);
       if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
       if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
       formData.append(`events[${i}][is_interregional]`, event.is_interregional);
