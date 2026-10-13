@@ -245,7 +245,7 @@ const focusOut = async () => {
 
   formData.append(
     "employed_after_training",
-    fourthPanelData.value.employed_after_training || ""
+    fourthPanelData.value.employed_after_training ?? ""
   );
   formData.append(
     "employment_report_submitted",
