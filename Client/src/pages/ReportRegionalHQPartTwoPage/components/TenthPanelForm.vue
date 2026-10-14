@@ -969,8 +969,41 @@ onMounted(() => {
   }
 });
 
+const EDITABLE_FIELDS = [
+  "event_happened",
+  "comment",
+  "total_participants",
+  "new_participants",
+  "beneficiaries",
+  "settlements",
+  "other_nko_participants",
+];
+let syncedData = null;
+
+const serializeLinks = (links) =>
+  JSON.stringify((links || []).filter((item) => item.link).map((item) => item.link));
+
+const isFieldChanged = (field) =>
+  field === "links"
+    ? serializeLinks(eleventhPanelData.value.links) !== serializeLinks(syncedData.links)
+    : eleventhPanelData.value[field] !== syncedData[field];
+
+watch(
+  () => ({ ...props.data }),
+  (incoming) => {
+    const merged = { ...incoming };
+    if (syncedData) {
+      [...EDITABLE_FIELDS, "links"].forEach((field) => {
+        if (isFieldChanged(field)) merged[field] = eleventhPanelData.value[field];
+      });
+    }
+    syncedData = { ...incoming, links: (incoming.links || []).map((item) => ({ ...item })) };
+    eleventhPanelData.value = merged;
+  },
+  { immediate: true }
+);
+
 watchEffect(() => {
-  eleventhPanelData.value = { ...props.data };
   isSent.value = props.data.is_sent;
   isErrorFile.value = props.isErrorFileProp;
 });
