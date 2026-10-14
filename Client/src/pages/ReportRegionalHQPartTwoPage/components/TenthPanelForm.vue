@@ -847,6 +847,10 @@ onMounted(() => {
     fileNameDH.value = props.document.name || null;
     fileSizeDH.value = props.document.size / Math.pow(1024, 2) || null;
     fileTypeDH.value = props.document.type.split("/").at(-1) || null;
+  } else if (props.dataDH?.document) {
+    fileNameDH.value = props.dataDH.document;
+    fileTypeDH.value = props.dataDH.file_type || null;
+    fileSizeDH.value = props.dataDH.file_size || null;
   }
 
   /*
