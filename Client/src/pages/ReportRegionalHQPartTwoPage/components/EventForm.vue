@@ -229,7 +229,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, watchEffect, computed, watch } from "vue";
+import { ref, defineProps, computed, watch } from "vue";
 
 import { InputReport, TextareaReport } from "@shared/components/inputs";
 import { Button } from "@shared/components/buttons";
@@ -381,18 +381,32 @@ const deleteLink = async () => {
   }
 };
 
-watchEffect(() => {
-  if (props.data && Object.keys(props.data).length) {
-    eventData.value.number_of_members = props.data.number_of_members ?? 0;
-    eventData.value.links =
-      Array.isArray(props.data.links) && props.data.links.length
-        ? props.data.links
-        : [{ link: "" }];
-    eventData.value.comment = props.data.comment ?? "";
-    eventData.value.is_hq_member = props.data.is_hq_member ?? false;
-    eventData.value.hq_members_count = props.data.hq_members_count ?? null;
-  }
-});
+let syncedData = null;
+
+watch(
+  () => props.data,
+  (data) => {
+    if (!data || !Object.keys(data).length) return;
+    const incoming = {
+      number_of_members: data.number_of_members ?? 0,
+      links:
+        Array.isArray(data.links) && data.links.length
+          ? data.links.map((item) => ({ ...item }))
+          : [{ link: "" }],
+      comment: data.comment ?? "",
+      is_hq_member: data.is_hq_member ?? false,
+      hq_members_count: data.hq_members_count ?? null,
+    };
+    Object.keys(incoming).forEach((field) => {
+      const isEditedLocally =
+        syncedData &&
+        JSON.stringify(eventData.value[field]) !== JSON.stringify(syncedData[field]);
+      if (!isEditedLocally) eventData.value[field] = incoming[field];
+    });
+    syncedData = JSON.parse(JSON.stringify(incoming));
+  },
+  { immediate: true }
+);
 
 // expose convenience bindings for template to match existing usage
 const isSentSix = computed(() => props.isSentSix);

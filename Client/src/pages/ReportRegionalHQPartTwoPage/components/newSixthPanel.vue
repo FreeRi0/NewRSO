@@ -373,30 +373,40 @@ const setError = (err, id) => {
   linkErrById.value[id] = err;
 };
 
+const saveQueueById = {};
+const lastRequestIdById = {};
+
 const formData = async (reportData, reportNumber) => {
-  console.log("reportData", reportData);
+  if (props.districtHeadquarterCommander || props.centralHeadquarterCommander) return;
+  if (linkErrById.value[reportNumber]) return;
+
+  const requestId = (lastRequestIdById[reportNumber] || 0) + 1;
+  lastRequestIdById[reportNumber] = requestId;
+
+  const task = (saveQueueById[reportNumber] || Promise.resolve()).then(async () => {
+    if (isFirstSentById.value[reportNumber]) {
+      if (!(reportData.number_of_members > 0 || props.tab == "Доработка")) return null;
+      const { data } = await reportPartTwoService.createMultipleReport(
+        reportData,
+        "7",
+        reportNumber
+      );
+      isFirstSentById.value[reportNumber] = false;
+      return data;
+    }
+    const { data } = await reportPartTwoService.createMultipleReportDraft(
+      reportData,
+      "7",
+      reportNumber
+    );
+    return data;
+  });
+  saveQueueById[reportNumber] = task.catch(() => {});
+
   try {
-    if (!(props.districtHeadquarterCommander || props.centralHeadquarterCommander)) {
-      if (!linkErrById.value[reportNumber]) {
-        if (isFirstSentById.value[reportNumber]) {
-          if (reportData.number_of_members > 0 || props.tab == "Доработка") {
-            const { data } = await reportPartTwoService.createMultipleReport(
-              reportData,
-              "7",
-              reportNumber
-            );
-            emit("getData", data, 7, reportNumber);
-            isFirstSentById.value[reportNumber] = false;
-          }
-        } else {
-          const { data } = await reportPartTwoService.createMultipleReportDraft(
-            reportData,
-            "7",
-            reportNumber
-          );
-          emit("getData", data, 7, reportNumber);
-        }
-      }
+    const data = await task;
+    if (data && requestId === lastRequestIdById[reportNumber]) {
+      emit("getData", data, 7, reportNumber);
     }
   } catch (e) {
     console.log("six panel error: ", e);
