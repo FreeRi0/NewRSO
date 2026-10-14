@@ -2190,6 +2190,10 @@ const deleteFileDH = () => {
   let formData = new FormData();
   formData.append("comment", firstPanelDataDH.value.comment);
   formData.append("amount_of_money", firstPanelDataDH.value.amount_of_money);
+  formData.append(
+    "participants_with_payment",
+    firstPanelDataDH.value.participants_with_payment ?? ""
+  );
   emit("getDataDH", formData, 1);
 };
 const deleteFileCH = () => {
@@ -2556,6 +2560,10 @@ watch(firstPanelDataDH.value, () => {
   let formData = new FormData();
   formData.append("comment", firstPanelDataDH.value.comment || "");
   formData.append("amount_of_money", firstPanelDataDH.value.amount_of_money);
+  formData.append(
+    "participants_with_payment",
+    firstPanelDataDH.value.participants_with_payment ?? ""
+  );
   formData.append("foreign_participants", firstPanelDataDH.value.foreign_participants);
   formData.append("top_must_pay", firstPanelDataDH.value.top_must_pay);
   if (reportStore.reportDataDHFile.first) {
