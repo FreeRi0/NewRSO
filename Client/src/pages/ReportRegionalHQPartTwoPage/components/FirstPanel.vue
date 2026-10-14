@@ -41,6 +41,7 @@
             v-if="!firstPanelData.scan_file"
             isFile
             type="file"
+            accept=".jpg,.jpeg,.png,.pdf"
             id="scan_file"
             name="scan_file"
             :disabled="isSent"
@@ -869,6 +870,7 @@
                 v-if="!firstPanelData.scan_file"
                 isFile
                 type="file"
+                accept=".jpg,.jpeg,.png,.pdf"
                 id="scan_file"
                 name="scan_file"
                 :disabled="
@@ -2074,12 +2076,14 @@ const focusOut = async () => {
   // formData.append('amount_of_money', firstPanelData.value.amount_of_money || '');
   // formData.append('foreign_participants', firstPanelData.value.foreign_participants || '');
   // formData.append('top_must_pay', firstPanelData.value.top_must_pay);
+  const fileKeys = ["scan_file", "file_size", "file_type"];
   Object.keys(firstPanelData.value).forEach((key) => {
+    if (isErrorFile.value && fileKeys.includes(key)) return;
     const value = firstPanelData.value[key];
     formData.append(key, value !== undefined && value !== null ? value : "");
   });
 
-  if (firstPanelData.value.scan_file)
+  if (firstPanelData.value.scan_file && !isErrorFile.value)
     formData.append("scan_file", firstPanelData.value.scan_file || "");
   try {
     if (isFirstSent.value) {
