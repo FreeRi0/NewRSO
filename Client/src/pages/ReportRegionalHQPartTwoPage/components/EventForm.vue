@@ -3,7 +3,7 @@
     <v-expansion-panel :value="0">
       <v-expansion-panel-title>
         <template v-slot:default="{ expanded }">
-          <div v-if="!expanded">
+          <div v-if="!expanded" class="title_root">
             <div class="d-flex justify-space-between">
               <div class="title_wrap">
                 <p class="form__title color-b">{{ props.event.name }}</p>
@@ -14,7 +14,7 @@
               </div>
             </div>
           </div>
-          <div v-else>
+          <div v-else class="title_root">
             <div class="d-flex justify-space-between">
               <div class="title_wrap">
                 <p class="form__title">{{ props.event.name }}</p>
@@ -537,38 +537,37 @@ input[type="radio"]:disabled {
   border-radius: 50%; // Make the border round
 }
 
+.title_root {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 .title_wrap {
-  display: grid;
-  grid-template-columns: 600px 300px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
   column-gap: 40px;
+  row-gap: 6px;
   width: 100%;
   max-width: 900px;
 
+  > .form__title {
+    flex: 1 1 320px;
+    min-width: 0;
+  }
+
   &__items {
     display: flex;
-    width: 100%;
-    column-gap: 20px;
-    max-width: 290px;
-
-    @media screen and (max-width: 578px) {
-      flex-direction: column;
-    }
-  }
-
-  @media screen and (max-width: 1024px) {
-    display: flex;
+    flex: 0 1 auto;
     flex-wrap: wrap;
-    row-gap: 6px;
-    max-width: 828px;
-    width: auto;
+    column-gap: 20px;
+    row-gap: 4px;
+    min-width: 0;
+    max-width: 100%;
   }
 
-  @media screen and (max-width: 768px) {
-    max-width: 636px;
-  }
-
-  @media screen and (max-width: 578px) {
-    max-width: 360px;
+  p {
+    overflow-wrap: anywhere;
   }
 }
 
@@ -577,8 +576,8 @@ input[type="radio"]:disabled {
 }
 
 .month {
-  width: 100%;
-  max-width: 70px;
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 
 .one_place {
@@ -586,8 +585,8 @@ input[type="radio"]:disabled {
 }
 
 .city {
-  width: 100%;
-  max-width: 200px;
+  flex: 0 1 auto;
+  min-width: 0;
 }
 
 .places {
