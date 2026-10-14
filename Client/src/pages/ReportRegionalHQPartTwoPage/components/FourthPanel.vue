@@ -1159,25 +1159,56 @@ const commentCH = ref();
 const row = ref(1);
 const reportVerifiedByCH = ref(false);
 
+const EDITABLE_EVENT_FIELDS = [
+  "participants_number",
+  "name",
+  "start_date",
+  "end_date",
+  "is_interregional",
+  "links",
+];
+let saveQueue = Promise.resolve();
+let lastRequestId = 0;
+let sentEvents = null;
+
+const sendReport = async (formData) => {
+  const requestId = ++lastRequestId;
+  sentEvents = JSON.parse(JSON.stringify(events.value));
+  const isFirst = isFirstSent.value;
+  const request = saveQueue.then(() =>
+    isFirst
+      ? reportPartTwoService.createReport(formData, "5", true)
+      : reportPartTwoService.createReportDraft(formData, "5", true)
+  );
+  saveQueue = request.catch(() => {});
+
+  const { data } = await request;
+  if (requestId === lastRequestId) emit("getData", data, 5);
+};
+
+const isValueChanged = (a, b) => JSON.stringify(a) !== JSON.stringify(b);
+
+const mergeLocalEdits = (incomingEvents) => {
+  if (!sentEvents) return incomingEvents;
+  const merged = incomingEvents.map((event, i) => {
+    const localEvent = events.value[i];
+    const sentEvent = sentEvents[i];
+    if (!localEvent || !sentEvent) return event;
+    const result = { ...event };
+    EDITABLE_EVENT_FIELDS.forEach((field) => {
+      if (isValueChanged(localEvent[field], sentEvent[field]))
+        result[field] = localEvent[field];
+    });
+    return result;
+  });
+  return merged.concat(events.value.slice(Math.max(sentEvents.length, merged.length)));
+};
+
 const focusOut = async () => {
   fifthPanelData.value.events = [...events.value];
   if (!isLinkError.value) {
     try {
-      if (isFirstSent.value) {
-        const { data } = await reportPartTwoService.createReport(
-          setFormData(),
-          "5",
-          true
-        );
-        emit("getData", data, 5);
-      } else {
-        const { data } = await reportPartTwoService.createReportDraft(
-          setFormData(),
-          "5",
-          true
-        );
-        emit("getData", data, 5);
-      }
+      await sendReport(setFormData());
     } catch (e) {
       console.log(e);
     }
@@ -1188,12 +1219,7 @@ const addLink = (index) => {
   events.value[index].links.push({ link: "" });
 };
 const deleteLink = async (eventIndex, linkIndex) => {
-  let { data } = await reportPartTwoService.createReportDraft(
-    setFormData(null, eventIndex, false, false, true, linkIndex),
-    "5",
-    true
-  );
-  emit("getData", data, 5);
+  await sendReport(setFormData(null, eventIndex, false, false, true, linkIndex));
 };
 
 const addEvent = () => {
@@ -1234,8 +1260,7 @@ const deleteEvent = async (index) => {
     }
   });
   try {
-    let { data } = await reportPartTwoService.createReportDraft(formData, "5", true);
-    emit("getData", data, 5);
+    await sendReport(formData);
   } catch (e) {
     console.log("deleteEvent error: ", e);
   }
@@ -1246,30 +1271,11 @@ const uploadFile = async (event, index) => {
   if (isErrorFile.value) {
     events.value[index].regulations = event.target.files[0].name;
   } else {
-    const { data } = await reportPartTwoService.createReportDraft(
-      setFormData(event.target.files[0], index),
-      "5",
-      true
-    );
-    emit("getData", data, 5);
+    await sendReport(setFormData(event.target.files[0], index));
   }
 };
 const deleteFile = async (index) => {
-  if (isFirstSent.value) {
-    const { data } = await reportPartTwoService.createReport(
-      setFormData(null, index, false, true),
-      "5",
-      true
-    );
-    emit("getData", data, 5);
-  } else {
-    const { data } = await reportPartTwoService.createReportDraft(
-      setFormData(null, index, false, true),
-      "5",
-      true
-    );
-    emit("getData", data, 5);
-  }
+  await sendReport(setFormData(null, index, false, true));
 };
 
 const setFormData = (
@@ -1515,10 +1521,17 @@ onMounted(() => {
   }
 });
 
+watch(
+  () => [props.data, props.data?.events],
+  () => {
+    if (props.data) events.value = mergeLocalEdits([...props.data.events]);
+  },
+  { immediate: true }
+);
+
 watchEffect(() => {
   if (props.data) {
     isFirstSent.value = false;
-    events.value = [...props.data.events];
     fifthPanelData.value.comment = props.data.comment || "";
     isSent.value = props.data.is_sent;
 
