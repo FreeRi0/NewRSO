@@ -335,7 +335,7 @@
       label="Отправить отчет"
       size="large"
       @click="sendReport"
-      :disabled="reportStore.isAllReportsVerifiedByCH"
+      :disabled="isSendButtonDisabled"
     />
 
     <p v-if="!preloader" class="text text-center">
@@ -361,7 +361,7 @@ import {
 } from "./components/index";
 import NewSixthPanel from "./components/newSixthPanel.vue";
 import { Button } from "@shared/components/buttons";
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { SvgIcon } from "@shared/ui/SvgIcon";
 import { useRoleStore } from "@layouts/store/role.ts";
 import { HTTP } from "@app/http";
@@ -446,6 +446,28 @@ const ninth_items = ref([]);
 // const is_return_six = ref(false);
 // const is_return_ninth = ref(false);
 const blockSendButton = ref(false);
+const isSentInSession = ref(false);
+const isSentByRegional = computed(() => {
+  const data = reportData.value;
+  const singleReports = [
+    data.first,
+    data.fourth,
+    data.fifth,
+    data.sixth,
+    data.eleventh.first,
+    data.eleventh.second,
+    data.twelfth,
+  ];
+  if (singleReports.some((item) => !item?.is_sent)) return false;
+  return [...Object.values(data.six), ...Object.values(data.ninth)]
+    .filter((item) => item !== null)
+    .every((item) => item?.is_sent);
+});
+const isSendButtonDisabled = computed(() => {
+  if (reportStore.isAllReportsVerifiedByCH) return true;
+  if (districtExpert.value || centralExpert.value) return false;
+  return revisionPanels.value.length ? isSentInSession.value : isSentByRegional.value;
+});
 const isSentLastIndex = ref(false);
 const blockEditFirstReport = ref(false);
 const preloader_text = ref("Загрузка отчета может занять до 1 минуты.");
@@ -1725,6 +1747,7 @@ const sendReport = async () => {
 
         await getReportData(route.query.reportId);
         blockSendButton.value = true;
+        isSentInSession.value = true;
 
         swal.fire({
           position: "center",
