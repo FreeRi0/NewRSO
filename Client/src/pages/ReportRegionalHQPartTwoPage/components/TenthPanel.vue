@@ -233,18 +233,19 @@ const buildFormData = (data, reportNumber) => {
   let formData = new FormData();
   formData.append("event_happened", data.event_happened);
   formData.append("comment", data.comment || "");
-  formData.append("total_participants", data.total_participants || "");
-  formData.append("new_participants", data.new_participants || "");
+  formData.append("total_participants", data.total_participants ?? "");
+  formData.append("new_participants", data.new_participants ?? "");
   if (reportNumber === 1) {
-    formData.append("beneficiaries", data.beneficiaries || "");
-    formData.append("settlements", data.settlements || "");
+    formData.append("beneficiaries", data.beneficiaries ?? "");
+    formData.append("settlements", data.settlements ?? "");
   } else {
-    formData.append("other_nko_participants", data.other_nko_participants || "");
+    formData.append("other_nko_participants", data.other_nko_participants ?? "");
   }
-  if (data.links?.length) {
-    for (let j = 0; j < data.links.length; j++) {
-      if (data.links[j].link) formData.append(`[links][${j}][link]`, data.links[j].link);
-    }
+  const links = (data.links || []).filter((item) => item.link);
+  if (links.length) {
+    links.forEach((item, j) => formData.append(`[links][${j}][link]`, item.link));
+  } else {
+    formData.append("[links][0][link]", "");
   }
   return formData;
 };
@@ -254,7 +255,6 @@ const formData = async (reportData, reportNumber) => {
     const panelData = getPanelData(reportNumber);
     panelData.value = { ...reportData };
     const formData = buildFormData(panelData.value, reportNumber);
-    if (panelData.value.document) formData.append("document", panelData.value.document);
     await sendReport(formData, reportNumber);
   } catch (e) {
     console.log("eleventh panel error: ", e);
