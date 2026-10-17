@@ -2347,6 +2347,8 @@ watchEffect(async () => {
       firstPanelDataDH.value.amount_of_money = reportDataDH.amount_of_money;
       firstPanelDataDH.value.foreign_participants = reportDataDH.foreign_participants;
       firstPanelDataDH.value.top_must_pay = reportDataDH.top_must_pay;
+      firstPanelDataDH.value.participants_with_payment =
+        reportDataDH.participants_with_payment;
       fileNameDH.value = reportDataDH.scan_file || "";
       fileTypeDH.value = reportDataDH.file_type || "";
       fileSizeDH.value = reportDataDH.file_size || "";
@@ -2423,22 +2425,17 @@ watchEffect(async () => {
       }
 
       // Добавление данных панели "корректировка ОШ"
-      const reportDataDH = JSON.parse(
-        reportStore.reportForCheckCH.first.district_version
-      );
-      if (reportDataDH) {
-        Object.keys(firstPanelDataDH.value).forEach((key) => {
-          if (reportDataDH[key] !== undefined) {
-            firstPanelDataDH.value[key] = reportDataDH[key];
-          }
-        });
-      } else {
-        Object.keys(firstPanelDataDH.value).forEach((key) => {
-          if (reportStore.reportForCheckCH.first[key] !== undefined) {
-            firstPanelDataDH.value[key] = reportStore.reportForCheckCH.first[key];
-          }
-        });
-      }
+      const reportDataDH =
+        JSON.parse(reportStore.reportForCheckCH.first.district_version) ||
+        reportStore.reportForCheckCH.first;
+      Object.keys(firstPanelDataDH.value).forEach((key) => {
+        if (reportDataDH[key] !== undefined) {
+          firstPanelDataDH.value[key] = reportDataDH[key];
+        }
+      });
+      fileNameDH.value = reportDataDH.scan_file || null;
+      fileTypeDH.value = reportDataDH.file_type || null;
+      fileSizeDH.value = reportDataDH.file_size || null;
       // firstPanelDataDH.value.comment = reportStore.reportForCheckCH.first.comment;
       // firstPanelDataDH.value.amount_of_money = reportStore.reportForCheckCH.first.amount_of_money;
       // firstPanelDataDH.value.foreign_participants = reportStore.reportForCheckCH.first.foreign_participants;
@@ -2484,6 +2481,8 @@ watchEffect(async () => {
     firstPanelDataDH.value.amount_of_money = reportDataDH.amount_of_money;
     firstPanelDataDH.value.foreign_participants = reportDataDH.foreign_participants;
     firstPanelDataDH.value.top_must_pay = reportDataDH.top_must_pay;
+    firstPanelDataDH.value.participants_with_payment =
+      reportDataDH.participants_with_payment;
 
     fileNameDH.value = reportDataDH.scan_file;
     fileTypeDH.value = reportDataDH.file_type;
@@ -2564,8 +2563,6 @@ watch(firstPanelDataDH.value, () => {
     "participants_with_payment",
     firstPanelDataDH.value.participants_with_payment ?? ""
   );
-  formData.append("foreign_participants", firstPanelDataDH.value.foreign_participants);
-  formData.append("top_must_pay", firstPanelDataDH.value.top_must_pay);
   if (reportStore.reportDataDHFile.first) {
     formData.append("scan_file", reportStore.reportDataDHFile.first);
 
