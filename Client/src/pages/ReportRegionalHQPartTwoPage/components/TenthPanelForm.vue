@@ -33,24 +33,24 @@
         <div style="display: flex; align-items: center">
           <input
             v-model="eleventhPanelData.event_happened"
-            id="event_happened-true"
+            :id="`event_happened-true-${id}`"
             class="custom-radio"
             type="radio"
             :value="true"
             :disabled="isSent"
           />
-          <label for="event_happened-true">Да</label>
+          <label :for="`event_happened-true-${id}`">Да</label>
         </div>
         <div style="display: flex; align-items: center">
           <input
             v-model="eleventhPanelData.event_happened"
-            id="event_happened-false"
+            :id="`event_happened-false-${id}`"
             class="custom-radio"
             type="radio"
             :value="false"
             :disabled="isSent"
           />
-          <label for="event_happened-false">Нет</label>
+          <label :for="`event_happened-false-${id}`">Нет</label>
         </div>
       </div>
       <div style="margin-bottom: 8px">
@@ -228,7 +228,7 @@
           <div style="display: flex; align-items: center">
             <input
               v-model="eleventhPanelData.event_happened"
-              id="event_happened-true"
+              :id="`event_happened-true-${id}`"
               class="custom-radio"
               type="radio"
               :value="true"
@@ -238,12 +238,12 @@
                 reportStore.isAllReportsVerifiedByCH
               "
             />
-            <label for="event_happened-true">Да</label>
+            <label :for="`event_happened-true-${id}`">Да</label>
           </div>
           <div style="display: flex; align-items: center">
             <input
               v-model="eleventhPanelData.event_happened"
-              id="event_happened-false"
+              :id="`event_happened-false-${id}`"
               class="custom-radio"
               type="radio"
               :value="false"
@@ -253,7 +253,7 @@
                 reportStore.isAllReportsVerifiedByCH
               "
             />
-            <label for="event_happened-false">Нет</label>
+            <label :for="`event_happened-false-${id}`">Нет</label>
           </div>
         </div>
         <div style="margin-bottom: 8px">
@@ -455,7 +455,7 @@
         <div style="display: flex; align-items: center">
           <input
             v-model="eleventhPanelDataDH.event_happened"
-            id="event_happenedDH-true"
+            :id="`event_happenedDH-true-${id}`"
             class="custom-radio"
             type="radio"
             :value="true"
@@ -463,12 +463,12 @@
               centralExpert || isReportReject || reportStore.isAllReportsVerifiedByCH
             "
           />
-          <label for="event_happenedDH-true">Да</label>
+          <label :for="`event_happenedDH-true-${id}`">Да</label>
         </div>
         <div style="display: flex; align-items: center">
           <input
             v-model="eleventhPanelDataDH.event_happened"
-            id="event_happenedDH-false"
+            :id="`event_happenedDH-false-${id}`"
             class="custom-radio"
             type="radio"
             :value="false"
@@ -476,7 +476,7 @@
               centralExpert || isReportReject || reportStore.isAllReportsVerifiedByCH
             "
           />
-          <label for="event_happenedDH-false">Нет</label>
+          <label :for="`event_happenedDH-false-${id}`">Нет</label>
         </div>
       </div>
 
@@ -600,7 +600,7 @@
         <div style="display: flex; align-items: center">
           <input
             v-model="eleventhPanelDataCH.event_happened"
-            id="event_happenedCH-true"
+            :id="`event_happenedCH-true-${id}`"
             class="custom-radio"
             type="radio"
             :value="true"
@@ -610,12 +610,12 @@
               reportStore.isAllReportsVerifiedByCH
             "
           />
-          <label for="event_happenedCH-true">Да</label>
+          <label :for="`event_happenedCH-true-${id}`">Да</label>
         </div>
         <div style="display: flex; align-items: center">
           <input
             v-model="eleventhPanelDataCH.event_happened"
-            id="event_happenedCH-false"
+            :id="`event_happenedCH-false-${id}`"
             class="custom-radio"
             type="radio"
             :value="false"
@@ -625,7 +625,7 @@
               reportStore.isAllReportsVerifiedByCH
             "
           />
-          <label for="event_happenedCH-false">Нет</label>
+          <label :for="`event_happenedCH-false-${id}`">Нет</label>
         </div>
       </div>
       <div>
@@ -1020,10 +1020,11 @@ watchPostEffect(() => {
 watch(
   () => eleventhPanelData.value.event_happened,
   (isEventHappened) => {
+    if (props.centralExpert || props.districtExpert) return;
     if (!isEventHappened) {
-      if (!props.centralExpert) emit("clearForm");
+      emit("clearForm");
     } else {
-      if (!props.centralExpert) emit("formData", eleventhPanelData.value);
+      emit("formData", eleventhPanelData.value);
     }
   }
 );
