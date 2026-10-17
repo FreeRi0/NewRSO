@@ -769,6 +769,7 @@ const collapseForm = () => {
 };
 
 const formData = () => {
+  if (props.centralExpert || props.districtExpert) return;
   emit("formData", eleventhPanelData.value);
 };
 
