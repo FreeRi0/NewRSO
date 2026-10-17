@@ -170,7 +170,7 @@
               >
                 + Добавить ссылку
               </div>
-              <div class="add_link" @click="deleteLink(6)" v-else>Удалить поле ввода</div>
+              <div class="add_link" @click="deleteLink(6, index)" v-else>Удалить поле ввода</div>
             </div>
           </div>
         </div>
@@ -308,7 +308,7 @@
               >
                 + Добавить ссылку
               </div>
-              <div class="add_link" @click="deleteLink(10)" v-else>
+              <div class="add_link" @click="deleteLink(10, index)" v-else>
                 Удалить поле ввода
               </div>
             </div>
@@ -1200,6 +1200,8 @@ const ninthPanelDataDH = ref({
   comment: "",
 });
 
+let lastSixData = null;
+let syncedSixData = null;
 const sixPanelData = ref({
   number_of_members: 0,
   links: [
@@ -1535,19 +1537,15 @@ const addLink = (number) => {
   }
 };
 
-const deleteLink = async (number) => {
+const deleteLink = async (number, linkIndex) => {
   if (number == 6) {
-    sixPanelData.value.links.pop();
-    await reportPartTwoService.createMultipleReportDraft(
-      sixPanelData.value,
-      "6",
-      props.id
-    );
+    sixPanelData.value.links.splice(linkIndex, 1);
+    focusOut();
     // } else if (number == 7) {
     //     seventhPanelData.value.links.pop()
     //     await reportPartTwoService.createMultipleReportDraft(seventhPanelData.value, '7', props.id, true);
   } else if (number == 10) {
-    ninthPanelData.value.links.pop();
+    ninthPanelData.value.links.splice(linkIndex, 1);
     await reportPartTwoService.createMultipleReportDraft(
       ninthPanelData.value,
       "10",
@@ -1586,7 +1584,23 @@ watchEffect(
       } else {
         if (Object.keys(props.data).length > 0) {
           isFirstSentSix.value = false;
-          sixPanelData.value = { ...props.data };
+          if (props.data !== lastSixData) {
+            lastSixData = props.data;
+            const merged = { ...props.data };
+            if (syncedSixData) {
+              ["number_of_members", "comment"].forEach((field) => {
+                if (sixPanelData.value[field] !== syncedSixData[field])
+                  merged[field] = sixPanelData.value[field];
+              });
+              if (
+                JSON.stringify(sixPanelData.value.links) !==
+                JSON.stringify(syncedSixData.links)
+              )
+                merged.links = sixPanelData.value.links;
+            }
+            syncedSixData = JSON.parse(JSON.stringify(props.data));
+            sixPanelData.value = merged;
+          }
 
           if (props.data?.rejecting_reasons !== null) {
             sixPanelDataDH.value.comment =
