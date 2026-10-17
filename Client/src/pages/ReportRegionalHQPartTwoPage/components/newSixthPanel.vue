@@ -373,12 +373,13 @@ const setError = (err, id) => {
   linkErrById.value[id] = err;
 };
 
+const LINK_REGEX = /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-/]))?/;
 const saveQueueById = {};
 const lastRequestIdById = {};
 
 const formData = async (reportData, reportNumber) => {
   if (props.districtHeadquarterCommander || props.centralHeadquarterCommander) return;
-  if (linkErrById.value[reportNumber]) return;
+  if (reportData.links?.some((item) => item.link && !LINK_REGEX.test(item.link))) return;
 
   const requestId = (lastRequestIdById[reportNumber] || 0) + 1;
   lastRequestIdById[reportNumber] = requestId;
