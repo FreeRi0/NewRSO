@@ -1195,23 +1195,35 @@ const getReportData = async (reportId) => {
       await getMultiplyData(reportId);
 
       // Критерий 11
-      reportData.value.eleventh.first = (
-        await reportPartTwoService.getMultipleReportDH("11", "1", reportId)
-      ).data;
-      reportStore.reportDataDH.eleventh.first = Object.assign(
-        {},
-        reportData.value.eleventh.first
-      );
-      reportStore.reportDataDH.eleventh.first.comment = "";
-
-      reportData.value.eleventh.second = (
-        await reportPartTwoService.getMultipleReportDH("11", "2", reportId)
-      ).data;
-      reportStore.reportDataDH.eleventh.second = Object.assign(
-        {},
-        reportData.value.eleventh.second
-      );
-      reportStore.reportDataDH.eleventh.second.comment = "";
+      for (const [key, reportNumber] of [
+        ["first", "1"],
+        ["second", "2"],
+      ]) {
+        const dataEleventh = (
+          await reportPartTwoService.getMultipleReportDH("11", reportNumber, reportId)
+        ).data;
+        const parseVersion = (version) =>
+          typeof version === "string" ? JSON.parse(version) : version;
+        reportData.value.eleventh[key] = dataEleventh.regional_version
+          ? {
+              ...parseVersion(dataEleventh.regional_version),
+              is_sent: dataEleventh.is_sent,
+              verified_by_dhq: dataEleventh.verified_by_dhq,
+              verified_by_chq: dataEleventh.verified_by_chq,
+            }
+          : dataEleventh;
+        if (dataEleventh.district_version) {
+          reportStore.reportDataDH.eleventh[key] = parseVersion(
+            dataEleventh.district_version
+          );
+        } else {
+          reportStore.reportDataDH.eleventh[key] = Object.assign(
+            {},
+            reportData.value.eleventh[key]
+          );
+          reportStore.reportDataDH.eleventh[key].comment = "";
+        }
+      }
 
       // Критерий 12
       reportData.value.twelfth = (
