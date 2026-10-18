@@ -1249,8 +1249,7 @@ const deleteEvent = async (index) => {
     if (event.name) formData.append(`events[${i}][name]`, event.name);
     if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
     if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
-    if (event.regulations)
-      formData.append(`events[${i}][regulations]`, event.regulations);
+    appendRegulations(formData, event, i);
     formData.append(`events[${i}][is_interregional]`, event.is_interregional);
     if (event.links.length) {
       for (let j = 0; j < event.links.length; j++) {
@@ -1271,11 +1270,23 @@ const uploadFile = async (event, index) => {
   if (isErrorFile.value) {
     events.value[index].regulations = event.target.files[0].name;
   } else {
+    events.value[index].pendingRegulations = event.target.files[0];
     await sendReport(setFormData(event.target.files[0], index));
   }
 };
 const deleteFile = async (index) => {
-  await sendReport(setFormData(null, index, false, true));
+  delete events.value[index].pendingRegulations;
+  const formData = setFormData(null, index, false, true);
+  isErrorFile.value = false;
+  await sendReport(formData);
+};
+
+const appendRegulations = (formData, event, i) => {
+  if (event.pendingRegulations) {
+    formData.append(`events[${i}][regulations]`, event.pendingRegulations);
+  } else if (event.regulations && !(isErrorFile.value && !event.file_size)) {
+    formData.append(`events[${i}][regulations]`, event.regulations);
+  }
 };
 
 const setFormData = (
@@ -1311,24 +1322,20 @@ const setFormData = (
       if (isLinkDelete && index === i) {
         event.links.splice(linkIndex, 1);
       }
-      if (file && index === i) {
-        formData.append(`events[${i}][regulations]`, file);
-      }
-      if (isDeleteFile && index === i) {
-        formData.append(`events[${i}][regulations]`, "");
+      if (+event.participants_number) {
+        if (file && index === i) {
+          formData.append(`events[${i}][regulations]`, file);
+        } else if (isDeleteFile && index === i) {
+          formData.append(`events[${i}][regulations]`, "");
+        } else {
+          appendRegulations(formData, event, i);
+        }
       }
       if (event.links.length) {
         for (let j = 0; j < event.links.length; j++) {
           if (event.links[j].link)
             formData.append(`events[${i}][links][${j}][link]`, event.links[j].link);
         }
-      }
-      if (reportStore.isReportReject.fifth && !isDeleteFile) {
-        console.log("here");
-        if (event.regulations)
-          formData.append(`events[${i}][regulations]`, event.regulations);
-        // if (event.file_size) formData.append(`events[${i}][file_size]`, event.file_size);
-        // if (event.file_type) formData.append(`events[${i}][file_type]`, event.file_type);
       }
     }
   });
