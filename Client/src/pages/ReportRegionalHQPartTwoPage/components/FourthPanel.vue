@@ -1239,29 +1239,23 @@ const addEvent = () => {
 };
 
 const deleteEvent = async (index) => {
-  let formData = new FormData();
   events.value = events.value.filter((el, i) => index !== i);
-
-  formData.append("comment", fifthPanelData.value.comment);
-  events.value.forEach((event, i) => {
-    if (event.participants_number)
-      formData.append(`events[${i}][participants_number]`, event.participants_number);
-    if (event.name) formData.append(`events[${i}][name]`, event.name);
-    if (event.end_date) formData.append(`events[${i}][end_date]`, event.end_date);
-    if (event.start_date) formData.append(`events[${i}][start_date]`, event.start_date);
-    appendRegulations(formData, event, i);
-    formData.append(`events[${i}][is_interregional]`, event.is_interregional);
-    if (event.links.length) {
-      for (let j = 0; j < event.links.length; j++) {
-        if (event.links[j].link)
-          formData.append(`events[${i}][links][${j}][link]`, event.links[j].link);
-      }
-    }
-  });
+  isLinkError.value = events.value.some((event) =>
+    event.links.some((link) => link.link && !isValidLink(link.link))
+  );
+  isErrorFile.value = events.value.some((event) => event.regulations && !event.file_size);
   try {
-    await sendReport(formData);
+    await sendReport(setFormData());
   } catch (e) {
-    console.log("deleteEvent error: ", e);
+    console.log("deleteEvent error: ", e.response?.data ?? e);
+  }
+};
+
+const isValidLink = (link) => {
+  try {
+    return ["http:", "https:"].includes(new URL(link).protocol);
+  } catch {
+    return false;
   }
 };
 
@@ -1284,7 +1278,7 @@ const deleteFile = async (index) => {
 const appendRegulations = (formData, event, i) => {
   if (event.pendingRegulations) {
     formData.append(`events[${i}][regulations]`, event.pendingRegulations);
-  } else if (event.regulations && !(isErrorFile.value && !event.file_size)) {
+  } else if (event.regulations && event.file_size) {
     formData.append(`events[${i}][regulations]`, event.regulations);
   }
 };
@@ -1333,7 +1327,7 @@ const setFormData = (
       }
       if (event.links.length) {
         for (let j = 0; j < event.links.length; j++) {
-          if (event.links[j].link)
+          if (isValidLink(event.links[j].link))
             formData.append(`events[${i}][links][${j}][link]`, event.links[j].link);
         }
       }
