@@ -1859,8 +1859,8 @@ const sendReport = async () => {
         if (item && item.verified_by_dhq !== true) {
           console.log(`Sending report for item 10-${index}:`, item);
           try {
-            reportStore.reportDataDH.ninth[index].document =
-              reportStore.reportDataDHFile.ninth[index];
+            const fileDH = reportStore.reportDataDHFile.ninth[index];
+            reportStore.reportDataDH.ninth[index].document = fileDH === null ? "" : fileDH;
             const response = await reportPartTwoService.sendReportDHMultiply(
               reportStore.reportDataDH.ninth[index],
               "10",
