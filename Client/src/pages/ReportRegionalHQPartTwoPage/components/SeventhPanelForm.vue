@@ -981,7 +981,9 @@
           </CommentFileComponent>
           <div>
             <v-checkbox
-              v-if="!reportStore.isAllReportsVerifiedByCH"
+              v-if="
+                !reportStore.isAllReportsVerifiedByCH && !props.isCentralHeadquarterCommander
+              "
               v-model="reportStore.returnReport.six[props.sixId]"
               @change="returnForReviewSix"
               :disabled="
@@ -1081,7 +1083,9 @@
           </CommentFileComponent>
           <div>
             <v-checkbox
-              v-if="!reportStore.isAllReportsVerifiedByCH"
+              v-if="
+                !reportStore.isAllReportsVerifiedByCH && !props.isCentralHeadquarterCommander
+              "
               v-model="reportStore.returnReport.ninth[props.ninthId]"
               @change="returnForReviewNinth"
               :disabled="

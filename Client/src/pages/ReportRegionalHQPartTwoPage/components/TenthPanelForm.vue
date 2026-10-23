@@ -650,7 +650,13 @@
           "
         />
       </div>
-      <div v-if="!reportStore.isAllReportsVerifiedByCH && !props.reportVerifiedByCH">
+      <div
+        v-if="
+          !reportStore.isAllReportsVerifiedByCH &&
+          !props.reportVerifiedByCH &&
+          !props.centralExpert
+        "
+      >
         <v-checkbox
           v-model="returnReport"
           @change="onReportReturn"

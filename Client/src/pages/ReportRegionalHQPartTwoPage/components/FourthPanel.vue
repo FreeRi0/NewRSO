@@ -1076,7 +1076,11 @@
       <!--      <div>-->
       <!--        <p>(4-1)*2+(4-2)+(4-3)=9</p>-->
       <!--      </div>-->
-      <div v-if="!reportStore.isAllReportsVerifiedByCH && !reportVerifiedByCH">
+      <div
+        v-if="
+          !reportStore.isAllReportsVerifiedByCH && !reportVerifiedByCH && !props.centralExpert
+        "
+      >
         <v-checkbox
           v-model="reportStore.returnReport.fifth"
           label="Вернуть в РО на доработку"
