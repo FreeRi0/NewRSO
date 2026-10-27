@@ -159,9 +159,7 @@
     <div>
       <v-checkbox
         v-if="
-          centralExpert
-            ? !reportStore.reportForCheckCH.fourth.verified_by_chq
-            : !reportStore.isAllReportsVerifiedByCH
+          !centralExpert && !reportStore.isAllReportsVerifiedByCH
         "
         v-model="reportStore.returnReport.fourth"
         label="Вернуть в&nbsp;РО на&nbsp;доработку"
